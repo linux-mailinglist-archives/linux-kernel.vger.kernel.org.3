@@ -2,613 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAED5A0A46
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BEA5A0A4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238058AbiHYH3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S238232AbiHYHal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiHYH3v (ORCPT
+        with ESMTP id S237962AbiHYHaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:29:51 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3340CE3A;
-        Thu, 25 Aug 2022 00:29:48 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 60789240006;
-        Thu, 25 Aug 2022 07:29:44 +0000 (UTC)
-Date:   Thu, 25 Aug 2022 09:29:43 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Shravan.Chippa@microchip.com
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
-        Prakash.Battu@microchip.com
-Subject: Re: [PATCH] media: i2c: imx334: support lower bandwidth mode
-Message-ID: <20220825072943.7jmwmlxgkuozn3t6@uno.localdomain>
-References: <20220728063044.19276-1-shravan.chippa@microchip.com>
- <20220822155303.udtb6uoizmkskjzt@uno.localdomain>
- <PH0PR11MB5611FE8093B71ED0441409EE81729@PH0PR11MB5611.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Thu, 25 Aug 2022 03:30:22 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C8099B57
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:30:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jfg0zph+Dv7TxWKbUBuo3q+auX78BWfTsFifNw6Kv/DQvLdzB5Pt/JZ2drn5S06nWhbSl6BJJYqjbW/jnCwHdOXtkemjSkD0vmyzdCQc5n64BGeJNCU3LUi29mHuG9HMVH7PXLDh9O49T4nSWIr1C8+qU9/6wvTWvnPS74VyrP8EcVy3Hfh5zLjSSDfpyA/zua53A7Gxpti1MjTeKYjg3Ipr+WPH+AV0WZlxwTK/xlh3qiQX06J5CcLrKJNBiRKoJj1mXCFkkcsRlOs8LssF9CnUI8Nxl/ibALLmC1xAiDORqY1hRUsaXmB3DtV9l3/HMlvEUA6HoWlto/A2Ihui6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vlVi8VYa/fqAVdP/k9Evx1hKt+htwdCfnxyS8Mo08e0=;
+ b=HP7SNoXm66EQeBKF+QYHKsd3jLWPLiU7x7jNhHRGuWiMJ1x8+az4pK7oIM5IyUry4/qrCj2DaV5NjPNAVEv5DmSyE7Zz8n2ULiA2ZKLOV7IHElrYIvqV9gQvF0Ygw1g1oDuTndNY55uyjkVVF1wN1U8dCys9OAfzHwiVmIyL/SggFEAae+YDtwIQ5tut3AymIKxYhUVV0bps1hQpy9JB1ZdnSgsT99KHVqIj9nk57xqC7QFM0wPtLvlzeR7yLpQ0/1FmMCPiqfMOnflwKMcRDRHTuysov3z5crReoG4PFzOpizv2ywY/GHrEwEIC8ZzShuXSFR3kq5AIbhgI3NWAFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vlVi8VYa/fqAVdP/k9Evx1hKt+htwdCfnxyS8Mo08e0=;
+ b=k10mRPPRDlMhd5Ycy1XUXyhT6WN+GodBWgkziwpjGzah5t3ltE0XWd+/DSTmDgsmBq8iK/1qwyBD4EQDX9Rf34DDrT9GO4J47OaShAplSIdRUdbW3f8hyKlKSjqbcoVim9HX3YN+FRasK1hx1wSd0PTHXLZE+ZTqa3a51POceK0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by DM5PR12MB1449.namprd12.prod.outlook.com (2603:10b6:4:10::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Thu, 25 Aug
+ 2022 07:30:18 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::54a6:6755:c7d4:4247]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::54a6:6755:c7d4:4247%4]) with mapi id 15.20.5546.023; Thu, 25 Aug 2022
+ 07:30:16 +0000
+Date:   Thu, 25 Aug 2022 13:00:03 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     Libo Chen <libo.chen@oracle.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com, mgorman@suse.de,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] sched/fair: Fix inaccurate tally of ttwu_move_affine
+Message-ID: <Ywck+3E0DyNdUJRE@BLR-5CG11610CF.amd.com>
+References: <20220810223313.386614-1-libo.chen@oracle.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5611FE8093B71ED0441409EE81729@PH0PR11MB5611.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220810223313.386614-1-libo.chen@oracle.com>
+X-ClientProxiedBy: PN2PR01CA0072.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:23::17) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ae578ffc-c960-476c-94e0-08da866ba7c7
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1449:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hKmpzcTf9MyixWEnpd8kvn/k/reulcb+okUklFGjOf9i1ItJdDlBg6zaV6nO7sGDNpgP3ek4zyigD6zuOO1xEyhwGy6BAZqi56avNPWcbI9RSsGE09IPgWj9b4l8lNZeakgJpKwJcT96YvIUPMfpe2WogkTI619lgvzmutNZ1a2DndmnUgkaHnI3qKAhNw/5uEgCGilNMu+yEueVxAr9P6+dSyJrSjtoYvA9bXq2cYkv1Iw8pTcZIQHw7Etp3dbrr0JLdE7DoASHhkN4exCXgCAwiQ+G+sxnobnbIkPUghIiy1JhuYy8Gen/meXOLWXaB5NOrTN0rS+lQSUNszChmvn1oxYbs2hZENJX6fUsPJtWWmWBjU7BhhxTJvxa950LZTh1KVkWDglKU7Gc2Qddu8ECZtkGPtBdj7DRzzeD1M+gIE6oxPU8W9/Sf6z0/ib2wEja0vAakItDOTqG5v9PJ1JXWfAfq18/NIxgd4MR3E8Z3oGdtHt/gGYl+FdBUfpyhKBTaAVuS8EYzSOy1BQf2ptlBFeeSR0adv+3mjhGxfovyEczeoXdU+jD/Ee44nhSHhOjmHs9p82qxkTkmOgiY+muE674FUjfkNHdZlmVHVerl4imBUG+7WMdIczSfm5iQs1hAnboRg+c4PLIhh5q/D8FmBYgsu7YvEjvcdrgY8hlQoc0piZQkDb3ZL0sPsZBgOZ0k0CF9EGcY/N4RapL95dKnUV78/OR+fn1qYopqusFrqr9TTXMpo26Z2mDCA7K
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(39860400002)(346002)(376002)(316002)(4326008)(8676002)(66946007)(66556008)(66476007)(86362001)(186003)(6916009)(38100700002)(41300700001)(6666004)(6506007)(26005)(6512007)(6486002)(478600001)(2906002)(5660300002)(8936002)(83380400001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eq9CAw3JXfalbfp2zf5BAxduB4+fjjkT66kqAKWjlh280+XzNhGF1slN+FNK?=
+ =?us-ascii?Q?uoyhMJqJnY0WfCh+fq7g/shlSdsob+ILxZIApmSk5owmHNZBYZFSsUJB9n7x?=
+ =?us-ascii?Q?GJWKcLBgFhgv+vVBxnWr7KcoqTecRyRu6vwD9EQ+sqpCCU4FWbQxttGm0M9h?=
+ =?us-ascii?Q?N6JfLtlDENbeaaQbnBrae7UP6I2IAN+EULr6UZQXxU6yn6lNrQb6MO9Necsz?=
+ =?us-ascii?Q?cy3b6ZXcjdU6RmXTK35FphPGK+OCMt5z4dy15DHjN0TYGSowTU9qSb04pzas?=
+ =?us-ascii?Q?MPMAm7wzt81z0xA5CzMWqwuNXH5w3GH48qSAMboCD/GZQZSRv+rRCvBM7Bdx?=
+ =?us-ascii?Q?orZn/pNQrfdClmQRxkf6cH8uYv4PUqO/j/b2bpO4H5L63f/BkHAJFYSsuLca?=
+ =?us-ascii?Q?eoY/WI30hQXlln6IIoq6azl6gwOhC1N3ZjtqjkHAGLjjzvglGSHiZMNsGJRQ?=
+ =?us-ascii?Q?oyKCAWLHqMapVEsL+k6vkXSIr+ZopvvPn00nIMnqFjnXCwqJzb1GiTsUMuPq?=
+ =?us-ascii?Q?P4DOfnI61QUyW/VPIL9vm+DdfDwgXBoGv3rql+/vr6KvEZPTFsdkVFdAjZSY?=
+ =?us-ascii?Q?0Q3hxk2aSFl73yUMp190FmhD2pOvF9P5XZlrhh8wGXu8Eq/piJNlDQwwHS75?=
+ =?us-ascii?Q?lRsCXYtkcrRMqygAu0/TztG9qcMHHUe6RyXYjce2UhINkrTC+yliMJQJBC0d?=
+ =?us-ascii?Q?1Q9SCw/GbsT6oHorVPfHrbLu0K15b5I80nkYZMO92qjPhySk0nQZbqGdSDIr?=
+ =?us-ascii?Q?c9Z6OHGWM2ubeyYurhNfSaoijLGhGB3fCcOBEsalPZJ+M0jQyWv3xclRL8KR?=
+ =?us-ascii?Q?CF1T3woYKV4PPyXV2QXIBjhTrTduyl1HeE40aqUoX7YZN/CKn802P9WIzNvt?=
+ =?us-ascii?Q?zHU8Lc+VsmELpyDobUBEEUhbiMzQr9iieILFhtULEDUkF/MbMBaAubHVcJ8j?=
+ =?us-ascii?Q?8U51jV6tHYb/7BKMzL/vU0Z6TlKYjeJsmJT+RHFn73NYGwtOKrR6/PCgeUHu?=
+ =?us-ascii?Q?5N0sl+G95bdcge0yPEG3q+YUB3Hkl0Vj7mM/i4klctjTM8x9rEgkcoE7ka8o?=
+ =?us-ascii?Q?DPUuw9e3Mtgms+Meq5SO6TVYD3lPwJPCPi2aMUKXTVL3AxuyP35+h/9HqE5N?=
+ =?us-ascii?Q?Xyd0dykc1HEtp3PxQvhFnOzhc456xn1AwaAfAmLMpLzhIdi4E5EYVJRdkScr?=
+ =?us-ascii?Q?Juv8QEhS5wRZA6Td07FgYwsjaBK0WIou1EGrcyaMPy3t0XKyHqf+E7nvnBbP?=
+ =?us-ascii?Q?zdda2KEsm2LLFUUM+psngyOmSsO+5UUfAHmiw7vCFK7Cnw5VTrl2CwVMqDee?=
+ =?us-ascii?Q?9Je0C8Ra6NgzQ1XT91UztQNrUC2Cu97pFUqVYIhcursRWDJImaK5xlSMX2M5?=
+ =?us-ascii?Q?YxhB8tY+bvYUTUUS/lp8kS6ZiTypucNny4suIZDxcuBlGwqpwb7UYObuGt5Q?=
+ =?us-ascii?Q?T01IlfbtckIq3c/jxd9WsHT+qSMHH4NuWUZVI7FOwrtT3Xmdd4FVfont2uKd?=
+ =?us-ascii?Q?KDA2Sm27Xpc9xEfjT1+9mXZyYKk2weflOp2GsSPnr9+UiVKpspBxh905Sa2e?=
+ =?us-ascii?Q?nA4XYAmHdMUrunrEygcgdbjOCy4dQa5dZoHd1eiD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae578ffc-c960-476c-94e0-08da866ba7c7
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 07:30:16.5374
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5/Ikk+ZAZTm3PE6T/WXLJTEmYrkmCj1GWHsNNtZpNkrrz4sWFsE7AMJPyEcsHti0W9BvNZ9zpYgLgg2vKG7f0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1449
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shravan
+On Wed, Aug 10, 2022 at 03:33:13PM -0700, Libo Chen wrote:
+> There are scenarios where non-affine wakeups are incorrectly counted as
+> affine wakeups by schedstats.
+> 
+> When wake_affine_idle() returns prev_cpu which doesn't equal to
+> nr_cpumask_bits, it will slip through the check: target == nr_cpumask_bits
+> in wake_affine() and be counted as if target == this_cpu in schedstats.
+> 
+> Replace target == nr_cpumask_bits with target != this_cpu to make sure
+> affine wakeups are accurately tallied.
+> 
+> Fixes: 806486c377e33 (sched/fair: Do not migrate if the prev_cpu is idle)
+> Suggested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+> ---
+>  kernel/sched/fair.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index da388657d5ac..b179da4f8105 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6114,7 +6114,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
+>  		target = wake_affine_weight(sd, p, this_cpu, prev_cpu, sync);
+>  
+>  	schedstat_inc(p->stats.nr_wakeups_affine_attempts);
+> -	if (target == nr_cpumask_bits)
+> +	if (target != this_cpu)
+>  		return prev_cpu;
 
-On Thu, Aug 25, 2022 at 07:16:22AM +0000, Shravan.Chippa@microchip.com wrote:
->
->
-> > -----Original Message-----
-> > From: Jacopo Mondi <jacopo@jmondi.org>
-> > Sent: 22 August 2022 09:23 PM
-> > To: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>
-> > Cc: paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
-> > mchehab@kernel.org; linux-media@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; Conor Dooley - M52691
-> > <Conor.Dooley@microchip.com>; Battu Prakash Reddy - I30399
-> > <Prakash.Battu@microchip.com>
-> > Subject: Re: [PATCH] media: i2c: imx334: support lower bandwidth mode
-> >
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> > content is safe
-> >
-> > Hello Shravan,
-> >
-> > On Thu, Jul 28, 2022 at 12:00:44PM +0530, shravan kumar wrote:
-> > > From: Shravan Chippa <shravan.chippa@microchip.com>
-> > >
-> > > Some platforms may not be capable of supporting the bandwidth required
-> > > for 12 bit or 3840x2160 resolutions.
-> > >
-> > > Add support for dynamically selecting 10 bit and 1920x1080 resolutions
-> > > while leaving the existing configuration as default
-> > >
-> > > CC: Conor Dooley <conor.dooley@microchip.com>
-> > > Signed-off-by: Prakash Battu <Prakash.Battu@microchip.com>
-> > > Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-> > > ---
-> > >  drivers/media/i2c/imx334.c | 306
-> > > +++++++++++++++++++++++++++++++++----
-> > >  1 file changed, 279 insertions(+), 27 deletions(-)
-> > >
-> > > diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-> > > index 062125501788..d1fa4c4d4d9e 100644
-> > > --- a/drivers/media/i2c/imx334.c
-> > > +++ b/drivers/media/i2c/imx334.c
-> > > @@ -79,7 +79,6 @@ struct imx334_reg_list {
-> > >   * struct imx334_mode - imx334 sensor mode structure
-> > >   * @width: Frame width
-> > >   * @height: Frame height
-> > > - * @code: Format code
-> > >   * @hblank: Horizontal blanking in lines
-> > >   * @vblank: Vertical blanking in lines
-> > >   * @vblank_min: Minimal vertical blanking in lines @@ -91,7 +90,6 @@
-> > > struct imx334_reg_list {  struct imx334_mode {
-> > >       u32 width;
-> > >       u32 height;
-> > > -     u32 code;
-> > >       u32 hblank;
-> > >       u32 vblank;
-> > >       u32 vblank_min;
-> > > @@ -119,6 +117,7 @@ struct imx334_mode {
-> > >   * @vblank: Vertical blanking in lines
-> > >   * @cur_mode: Pointer to current selected sensor mode
-> > >   * @mutex: Mutex for serializing sensor controls
-> > > + * @cur_code: current selected format code
-> > >   * @streaming: Flag indicating streaming state
-> > >   */
-> > >  struct imx334 {
-> > > @@ -140,6 +139,7 @@ struct imx334 {
-> > >       u32 vblank;
-> > >       const struct imx334_mode *cur_mode;
-> > >       struct mutex mutex;
-> > > +     u32 cur_code;
-> > >       bool streaming;
-> > >  };
-> > >
-> > > @@ -147,6 +147,169 @@ static const s64 link_freq[] = {
-> > >       IMX334_LINK_FREQ,
-> > >  };
-> > >
-> > > +/* Sensor mode registers */
-> > > +static const struct imx334_reg mode_1920x1080_regs[] = {
-> > > +     {0x3000, 0x01},
-> > > +     {0x3018, 0x04},
-> > > +     {0x3030, 0xCA},
-> > > +     {0x3031, 0x08},
-> > > +     {0x3032, 0x00},
-> > > +     {0x3034, 0x4C},
-> > > +     {0x3035, 0x04},
-> > > +     {0x302C, 0xF0},
-> > > +     {0x302D, 0x03},
-> > > +     {0x302E, 0x80},
-> > > +     {0x302F, 0x07},
-> > > +     {0x3074, 0xCC},
-> > > +     {0x3075, 0x02},
-> > > +     {0x308E, 0xCD},
-> > > +     {0x308F, 0x02},
-> > > +     {0x3076, 0x38},
-> > > +     {0x3077, 0x04},
-> > > +     {0x3090, 0x38},
-> > > +     {0x3091, 0x04},
-> > > +     {0x3308, 0x38},
-> > > +     {0x3309, 0x04},
-> > > +     {0x30C6, 0x00},
-> > > +     {0x30C7, 0x00},
-> > > +     {0x30CE, 0x00},
-> > > +     {0x30CF, 0x00},
-> > > +     {0x30D8, 0x18},
-> > > +     {0x30D9, 0x0A},
-> > > +     {0x304C, 0x00},
-> > > +     {0x304E, 0x00},
-> > > +     {0x304F, 0x00},
-> > > +     {0x3050, 0x00},
-> > > +     {0x30B6, 0x00},
-> > > +     {0x30B7, 0x00},
-> > > +     {0x3116, 0x08},
-> > > +     {0x3117, 0x00},
-> > > +     {0x31A0, 0x20},
-> > > +     {0x31A1, 0x0F},
-> > > +     {0x300C, 0x3B},
-> > > +     {0x300D, 0x29},
-> > > +     {0x314C, 0x29},
-> > > +     {0x314D, 0x01},
-> > > +     {0x315A, 0x0A},
-> > > +     {0x3168, 0xA0},
-> > > +     {0x316A, 0x7E},
-> > > +     {0x319E, 0x02},
-> > > +     {0x3199, 0x00},
-> > > +     {0x319D, 0x00},
-> > > +     {0x31DD, 0x03},
-> > > +     {0x3300, 0x00},
-> > > +     {0x341C, 0xFF},
-> > > +     {0x341D, 0x01},
-> > > +     {0x3A01, 0x03},
-> > > +     {0x3A18, 0x7F},
-> > > +     {0x3A19, 0x00},
-> > > +     {0x3A1A, 0x37},
-> > > +     {0x3A1B, 0x00},
-> > > +     {0x3A1C, 0x37},
-> > > +     {0x3A1D, 0x00},
-> > > +     {0x3A1E, 0xF7},
-> > > +     {0x3A1F, 0x00},
-> > > +     {0x3A20, 0x3F},
-> > > +     {0x3A21, 0x00},
-> > > +     {0x3A20, 0x6F},
-> > > +     {0x3A21, 0x00},
-> > > +     {0x3A20, 0x3F},
-> > > +     {0x3A21, 0x00},
-> > > +     {0x3A20, 0x5F},
-> > > +     {0x3A21, 0x00},
-> > > +     {0x3A20, 0x2F},
-> > > +     {0x3A21, 0x00},
-> > > +     {0x3078, 0x02},
-> > > +     {0x3079, 0x00},
-> > > +     {0x307A, 0x00},
-> > > +     {0x307B, 0x00},
-> > > +     {0x3080, 0x02},
-> > > +     {0x3081, 0x00},
-> > > +     {0x3082, 0x00},
-> > > +     {0x3083, 0x00},
-> > > +     {0x3088, 0x02},
-> > > +     {0x3094, 0x00},
-> > > +     {0x3095, 0x00},
-> > > +     {0x3096, 0x00},
-> > > +     {0x309B, 0x02},
-> > > +     {0x309C, 0x00},
-> > > +     {0x309D, 0x00},
-> > > +     {0x309E, 0x00},
-> > > +     {0x30A4, 0x00},
-> > > +     {0x30A5, 0x00},
-> > > +     {0x3288, 0x21},
-> > > +     {0x328A, 0x02},
-> > > +     {0x3414, 0x05},
-> > > +     {0x3416, 0x18},
-> > > +     {0x35AC, 0x0E},
-> > > +     {0x3648, 0x01},
-> > > +     {0x364A, 0x04},
-> > > +     {0x364C, 0x04},
-> > > +     {0x3678, 0x01},
-> > > +     {0x367C, 0x31},
-> > > +     {0x367E, 0x31},
-> > > +     {0x3708, 0x02},
-> > > +     {0x3714, 0x01},
-> > > +     {0x3715, 0x02},
-> > > +     {0x3716, 0x02},
-> > > +     {0x3717, 0x02},
-> > > +     {0x371C, 0x3D},
-> > > +     {0x371D, 0x3F},
-> > > +     {0x372C, 0x00},
-> > > +     {0x372D, 0x00},
-> > > +     {0x372E, 0x46},
-> > > +     {0x372F, 0x00},
-> > > +     {0x3730, 0x89},
-> > > +     {0x3731, 0x00},
-> > > +     {0x3732, 0x08},
-> > > +     {0x3733, 0x01},
-> > > +     {0x3734, 0xFE},
-> > > +     {0x3735, 0x05},
-> > > +     {0x375D, 0x00},
-> > > +     {0x375E, 0x00},
-> > > +     {0x375F, 0x61},
-> > > +     {0x3760, 0x06},
-> > > +     {0x3768, 0x1B},
-> > > +     {0x3769, 0x1B},
-> > > +     {0x376A, 0x1A},
-> > > +     {0x376B, 0x19},
-> > > +     {0x376C, 0x18},
-> > > +     {0x376D, 0x14},
-> > > +     {0x376E, 0x0F},
-> > > +     {0x3776, 0x00},
-> > > +     {0x3777, 0x00},
-> > > +     {0x3778, 0x46},
-> > > +     {0x3779, 0x00},
-> > > +     {0x377A, 0x08},
-> > > +     {0x377B, 0x01},
-> > > +     {0x377C, 0x45},
-> > > +     {0x377D, 0x01},
-> > > +     {0x377E, 0x23},
-> > > +     {0x377F, 0x02},
-> > > +     {0x3780, 0xD9},
-> > > +     {0x3781, 0x03},
-> > > +     {0x3782, 0xF5},
-> > > +     {0x3783, 0x06},
-> > > +     {0x3784, 0xA5},
-> > > +     {0x3788, 0x0F},
-> > > +     {0x378A, 0xD9},
-> > > +     {0x378B, 0x03},
-> > > +     {0x378C, 0xEB},
-> > > +     {0x378D, 0x05},
-> > > +     {0x378E, 0x87},
-> > > +     {0x378F, 0x06},
-> > > +     {0x3790, 0xF5},
-> > > +     {0x3792, 0x43},
-> > > +     {0x3794, 0x7A},
-> > > +     {0x3796, 0xA1},
-> > > +     {0x37B0, 0x37},
-> > > +     {0x3E04, 0x0E},
-> > > +     {0x30E8, 0x50},
-> > > +     {0x30E9, 0x00},
-> > > +     {0x3E04, 0x0E},
-> > > +     {0x3002, 0x00},
-> > > +};
-> > > +
-> > >  /* Sensor mode registers */
-> > >  static const struct imx334_reg mode_3840x2160_regs[] = {
-> > >       {0x3000, 0x01},
-> > > @@ -243,20 +406,57 @@ static const struct imx334_reg
-> > mode_3840x2160_regs[] = {
-> > >       {0x3a00, 0x01},
-> > >  };
-> > >
-> > > +static const struct imx334_reg raw10_framefmt_regs[] = {
-> > > +     {0x3050, 0x00},
-> > > +     {0x319D, 0x00},
-> > > +     {0x341C, 0xFF},
-> > > +     {0x341D, 0x01},
-> > > +};
-> > > +
-> > > +static const struct imx334_reg raw12_framefmt_regs[] = {
-> > > +     {0x3050, 0x01},
-> > > +     {0x319D, 0x01},
-> > > +     {0x341C, 0x47},
-> > > +     {0x341D, 0x00},
-> > > +};
-> > > +
-> > > +/*
-> > >
-> > > + */
-> > > +static const u32 codes[] = {
-> >
-> > Just "codes" is a little vague ? What about imx334_mbus_codes[] ?
-> >
-> > > +     MEDIA_BUS_FMT_SRGGB10_1X10,
-> > > +     MEDIA_BUS_FMT_SRGGB12_1X12,
-> > > +};
-> > > +
-> > >  /* Supported sensor mode configurations */ -static const struct
-> > > imx334_mode supported_mode = {
-> > > -     .width = 3840,
-> > > -     .height = 2160,
-> > > -     .hblank = 560,
-> > > -     .vblank = 2340,
-> > > -     .vblank_min = 90,
-> > > -     .vblank_max = 132840,
-> > > -     .pclk = 594000000,
-> > > -     .link_freq_idx = 0,
-> > > -     .code = MEDIA_BUS_FMT_SRGGB12_1X12,
-> > > -     .reg_list = {
-> > > -             .num_of_regs = ARRAY_SIZE(mode_3840x2160_regs),
-> > > -             .regs = mode_3840x2160_regs,
-> > > +static const struct imx334_mode supported_modes[] = {
-> > > +     {
-> > > +             .width = 1920,
-> > > +             .height = 1080,
-> > > +             .hblank = 280,
-> > > +             .vblank = 1170,
-> > > +             .vblank_min = 90,
-> > > +             .vblank_max = 132840,
-> > > +             .pclk = 594000000,
-> > > +             .link_freq_idx = 0,
-> > > +             .reg_list = {
-> > > +                     .num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
-> > > +                     .regs = mode_1920x1080_regs,
-> > > +             },
-> > > +     },
-> > > +     {
-> > > +             .width = 3840,
-> > > +             .height = 2160,
-> > > +             .hblank = 560,
-> > > +             .vblank = 2340,
-> > > +             .vblank_min = 90,
-> > > +             .vblank_max = 132840,
-> > > +             .pclk = 594000000,
-> > > +             .link_freq_idx = 0,
-> > > +             .reg_list = {
-> > > +                     .num_of_regs = ARRAY_SIZE(mode_3840x2160_regs),
-> > > +                     .regs = mode_3840x2160_regs,
-> > > +             },
-> >
-> > Nit: I would keep the existing formats and code in position [0] so that if
-> > additional modes are added the defaults can be kept in [0]. Also I usually see
-> > drivers listing larger modes first, but that might not be a strict rule.
-> >
-> > >       },
-> > >  };
-> > >
-> > > @@ -382,7 +582,8 @@ static int imx334_update_controls(struct imx334
-> > *imx334,
-> > >       if (ret)
-> > >               return ret;
-> > >
-> > > -     ret = __v4l2_ctrl_s_ctrl(imx334->hblank_ctrl, mode->hblank);
-> > > +     ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl,
-> > IMX334_REG_MIN,
-> > > +                                    IMX334_REG_MAX, 1, mode->hblank);
-> >
-> > I might have missed why is this change related
->
-> Hblank is readonly variable.
-> If I use __v4l2_ctrl_s_ctrl function update return error.
 
-So it's a separate fix unrelated to the introduction of the new mode ?
+This seems to be the right thing to do. However,..
 
-Probably it never triggered before as we had a single mode so the
-control was actually never updated, but it's a fix worth a patch of
-his own maybe.
+if this_cpu and prev_cpu were in the same LLC and we pick prev_cpu,
+technically is it still not an affine wakeup?
 
-I would make a separate patch before this one or clearly mention in the
-commit message that also this is changed and why.
 
-> >
-> > >       if (ret)
-> > >               return ret;
-> > >
-> > > @@ -506,10 +707,10 @@ static int imx334_enum_mbus_code(struct
-> > v4l2_subdev *sd,
-> > >                                struct v4l2_subdev_state *sd_state,
-> > >                                struct v4l2_subdev_mbus_code_enum
-> > > *code)  {
-> > > -     if (code->index > 0)
-> > > +     if (code->index >= ARRAY_SIZE(codes))
-> > >               return -EINVAL;
-> > >
-> > > -     code->code = supported_mode.code;
-> > > +     code->code = codes[code->index];
-> > >
-> > >       return 0;
-> > >  }
-> > > @@ -526,15 +727,20 @@ static int imx334_enum_frame_size(struct
-> > v4l2_subdev *sd,
-> > >                                 struct v4l2_subdev_state *sd_state,
-> > >                                 struct v4l2_subdev_frame_size_enum
-> > > *fsize)  {
-> > > -     if (fsize->index > 0)
-> > > +     int i;
-> > > +
-> > > +     if (fsize->index >= ARRAY_SIZE(supported_modes))
-> > >               return -EINVAL;
-> > >
-> > > -     if (fsize->code != supported_mode.code)
-> > > +     for (i = 0; i < ARRAY_SIZE(codes); i++) {
-> >
-> > Can we use for (unsigned int i = 0; ... ) now that C99 has been adopted ?
->
-> C99 might be adopted.
-> But I have not observered no one is started using.
+>  
+>  	schedstat_inc(sd->ttwu_move_affine);
+> -- 
+> 2.31.1
 >
 
-$ git grep -e "for (unsigned " -e "for (int " v6.0-rc2  | wc -l
-186
-
-> >
-> > > +             if (codes[i] == fsize->code)
-> > > +                     break;
-> > >               return -EINVAL;
-> >
-> > Are you sure this is right ?
-> > If the format code in fsize->code is == codes[1] you will return -EINVAL ?
->
-> I think this will break the for loop, if fsize->code is == codes[1]
-
-Yes but before getting to codes[1] you would test codes[0] and if
-fsize->code != codes[0] you will return -EINVAL
-
-Am I reading this wrong ?
-
->
-> >
-> > Does the sensor support more formats than
-> > MEDIA_BUS_FMT_SRGGB10_1X10 and MEDIA_BUS_FMT_SRGGB12_1X12 ?
-> > Because otherwise you could replace the for loop with a simple check.
-> >
-> > However support for flip might change the bayer pattern, so it's better to
-> > keep the loop maybe.
-> >
-> > What about centrlize it like you're doing in imx219_get_format_code() and
-> > use it here ? You can place the helper just after the supported mbus codes
-> > declaration maybe ?
-> >
-> Yes, it is good. But imx334 do not have direct register to do VFLIP.
->
-> >
-> > > +     }
-> > >
-> > > -     fsize->min_width = supported_mode.width;
-> > > +     fsize->min_width = supported_modes[fsize->index].width;
-> > >       fsize->max_width = fsize->min_width;
-> > > -     fsize->min_height = supported_mode.height;
-> > > +     fsize->min_height = supported_modes[fsize->index].height;
-> > >       fsize->max_height = fsize->min_height;
-> > >
-> > >       return 0;
-> > > @@ -553,7 +759,7 @@ static void imx334_fill_pad_format(struct imx334
-> > > *imx334,  {
-> > >       fmt->format.width = mode->width;
-> > >       fmt->format.height = mode->height;
-> > > -     fmt->format.code = mode->code;
-> > > +     fmt->format.code = imx334->cur_code;
-> > >       fmt->format.field = V4L2_FIELD_NONE;
-> > >       fmt->format.colorspace = V4L2_COLORSPACE_RAW;
-> > >       fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT; @@ -591,6
-> > > +797,18 @@ static int imx334_get_pad_format(struct v4l2_subdev *sd,
-> > >       return 0;
-> > >  }
-> > >
-> > > +static int imx219_get_format_code(struct imx334 *imx334, struct
-> > > +v4l2_subdev_format *fmt) {
-> > > +     int i;
-> > > +
-> > > +     for (i = 0; i < ARRAY_SIZE(codes); i++) {
-> >
-> > Ditto, unsigned int and possibily declared inside the for loop
-> >
-> > > +             if (codes[i] == fmt->format.code)
-> > > +                     return codes[i];
-> > > +     }
-> > > +
-> > > +     return -EINVAL;
-> > > +}
-> > > +
-> > >  /**
-> > >   * imx334_set_pad_format() - Set subdevice pad format
-> > >   * @sd: pointer to imx334 V4L2 sub-device structure @@ -606,10
-> > > +824,21 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
-> > >       struct imx334 *imx334 = to_imx334(sd);
-> > >       const struct imx334_mode *mode;
-> > >       int ret = 0;
-> > > +     u32 code;
-> > >
-> > >       mutex_lock(&imx334->mutex);
-> > >
-> > > -     mode = &supported_mode;
-> > > +     code = imx219_get_format_code(imx334, fmt);
-> > > +     if (code < 0)
-> > > +             return -EINVAL;
-> > > +
-> > > +     imx334->cur_code = code;
-> > > +
-> > > +     mode = v4l2_find_nearest_size(supported_modes,
-> > > +                                   ARRAY_SIZE(supported_modes),
-> > > +                                   width, height,
-> > > +                                   fmt->format.width,
-> > > + fmt->format.height);
-> > > +
-> > >       imx334_fill_pad_format(imx334, mode, fmt);
-> > >
-> > >       if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) { @@ -617,7 +846,7
-> > @@
-> > > static int imx334_set_pad_format(struct v4l2_subdev *sd,
-> > >
-> > >               framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
-> > >               *framefmt = fmt->format;
-> > > -     } else {
-> > > +     } else if (imx334->cur_mode != mode) {
-> >
-> > Is this change related ? I think it's good as it avoids an unecessary update of
-> > the controls, but maybe it's not related to this patch ?
->
-> I have updated mode[] array new set of value,
-> Insated of calling functions simply.
-> Just added a check the the mode changed then only we need to updated other parameters
-> Same as imx219 code
-
-You're right, we had a single mode before this change :)
-
->
-> Thanks,
-> Shravan
->
-> >
-> > Thanks
-> >   j
-> >
-> > >               ret = imx334_update_controls(imx334, mode);
-> > >               if (!ret)
-> > >                       imx334->cur_mode = mode; @@ -642,11 +871,26 @@
-> > > static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
-> > >       struct v4l2_subdev_format fmt = { 0 };
-> > >
-> > >       fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY :
-> > V4L2_SUBDEV_FORMAT_ACTIVE;
-> > > -     imx334_fill_pad_format(imx334, &supported_mode, &fmt);
-> > > +     imx334_fill_pad_format(imx334, &supported_modes[1], &fmt);
-> > >
-> > >       return imx334_set_pad_format(sd, sd_state, &fmt);  }
-> > >
-> > > +static int imx334_set_framefmt(struct imx334 *imx334) {
-> > > +     switch (imx334->cur_code) {
-> > > +     case MEDIA_BUS_FMT_SRGGB10_1X10:
-> > > +             return imx334_write_regs(imx334, raw10_framefmt_regs,
-> > > +
-> > > +ARRAY_SIZE(raw10_framefmt_regs));
-> > > +
-> > > +     case MEDIA_BUS_FMT_SRGGB12_1X12:
-> > > +             return imx334_write_regs(imx334, raw12_framefmt_regs,
-> > > +                                     ARRAY_SIZE(raw12_framefmt_regs));
-> > > +     }
-> > > +
-> > > +     return -EINVAL;
-> > > +}
-> > > +
-> > >  /**
-> > >   * imx334_start_streaming() - Start sensor stream
-> > >   * @imx334: pointer to imx334 device
-> > > @@ -667,6 +911,13 @@ static int imx334_start_streaming(struct imx334
-> > *imx334)
-> > >               return ret;
-> > >       }
-> > >
-> > > +     ret = imx334_set_framefmt(imx334);
-> > > +     if (ret) {
-> > > +             dev_err(imx334->dev, "%s failed to set frame format: %d\n",
-> > > +                     __func__, ret);
-> > > +             return ret;
-> > > +     }
-> > > +
-> > >       /* Setup handler will write actual exposure and gain */
-> > >       ret =  __v4l2_ctrl_handler_setup(imx334->sd.ctrl_handler);
-> > >       if (ret) {
-> > > @@ -1037,7 +1288,8 @@ static int imx334_probe(struct i2c_client *client)
-> > >       }
-> > >
-> > >       /* Set default mode to max resolution */
-> > > -     imx334->cur_mode = &supported_mode;
-> > > +     imx334->cur_mode = &supported_modes[1];
-> > > +     imx334->cur_code = codes[1];
-> > >       imx334->vblank = imx334->cur_mode->vblank;
-> > >
-> > >       ret = imx334_init_controls(imx334);
-> > > --
-> > > 2.17.1
-> > >
+--
+Thanks and Regards
+gautham.

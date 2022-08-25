@@ -2,199 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A210E5A18E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC5F5A18EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243478AbiHYSjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S242857AbiHYSk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235857AbiHYSjJ (ORCPT
+        with ESMTP id S235039AbiHYSkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:39:09 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2E2AE863
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:39:08 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id l3so1218907plb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:39:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=BS8mf7vr1cRbY/T9F78iHhpM5J/Ne5HpcQ0z+u0SBPE=;
-        b=IOotYEkZJnUHQQFBqXqRknuO2poclGrF0tnKTPKFSU/u+3AVSgkjO2U++U8ulxrWEa
-         3J6imEozR4oCV4XOa+P11VEcM/CV8rKJ+ajK1+0UZ+pJEAuspky4R9vbNpMZv4Hc7NfU
-         Nrf52g2Tjs/kf93DpXZcjTbTXfJ8pZdlbozBxRkbh0VcAheQj+rYWgKJGO26eC4Yn5lt
-         +KXdOE1S+JnRcluG3YDLN4M6nKTDzjmRCt8uuEtHcoaNg9STFN5HoJwhKljBwm7hcDJH
-         Z8vLNpT/ogYxV6HE+y4WrR31qBpY8+Hhf9fP+Wy0wRbz3GapgC5Ni8INjGhDGnURigRh
-         s9Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=BS8mf7vr1cRbY/T9F78iHhpM5J/Ne5HpcQ0z+u0SBPE=;
-        b=B/Kxn68qYYtIWPTpW1wZZpxqTFOT28J7wOmWnhTq7J0vilBc6HiV1gE2/aLgLgGc7C
-         1kHCcTedh+P10qsjDFn0NytwDbXKG2W/aPMQdE2TQYMAXYoT/hixi1oUW2JCsX7Wtj2I
-         lDGkVOfHmWH6A33puGdNj4R69iObxf0BtDGgETcKr+rz/EysCW7mJuH18WgpwI8w5vvo
-         Wv+WiQpRAZ6VsvtZ1/Bia430qrDwwLVCR5m4LDsuHsxSHY6VitXu53wFueEiE7U0pDVV
-         SoYvrtXxHw7zHoUqdlb7NPScm952jXnXGYv7LskYAxZOsgtcCTeS6Ci34vBMeoU8pDsA
-         eEPA==
-X-Gm-Message-State: ACgBeo3pPABzBvuNWFPUIe3Ix7p4005zwwI1/d/Cplc+F2jSjRbd98vx
-        9/hTKL0gGCIOtG7ECuWAWoKHWw==
-X-Google-Smtp-Source: AA6agR6It6OBHlgY6R6McDPq8cavZOGWnTCMsJysi7o10F8mX0y1+pMyrco0crpU45idH/QgUWFq7A==
-X-Received: by 2002:a17:90b:3c82:b0:1fb:8ef:5ddb with SMTP id pv2-20020a17090b3c8200b001fb08ef5ddbmr437191pjb.11.1661452747391;
-        Thu, 25 Aug 2022 11:39:07 -0700 (PDT)
-Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa7951a000000b00537b3b1422dsm261132pfp.102.2022.08.25.11.39.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:39:06 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 18:39:03 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v4 2/2] PCI: dwc: Add support for 64-bit MSI target
- address
-Message-ID: <YwfBx0q1UZVsyULD@google.com>
-References: <20220812000327.3154251-1-willmcvicker@google.com>
- <20220812000327.3154251-3-willmcvicker@google.com>
- <1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com>
+        Thu, 25 Aug 2022 14:40:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C2A3ECDC;
+        Thu, 25 Aug 2022 11:40:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 722B861CFB;
+        Thu, 25 Aug 2022 18:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BF656C433D7;
+        Thu, 25 Aug 2022 18:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661452816;
+        bh=oy+NBN9E7Uaxy3eSfIAa1sdIgOULz1blQP0IjoBk3Vg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FDmdjJgqyelrTfZ0uschjSe0H9q5nw0oYruPp6vBbi97OophCphclgyVWMYbT2aEU
+         4rVZNUdQXuFqyTHfLNaoxJgThH1E6Gqf2tsU4zjR8dwQkCbzxD7NTkVNFTtfx0JsWu
+         nNMDG8nEsgEV0x1hPLMw0NpRrCvZ00tDPvQrh0nQxaBQmMEKbehU8fxd07uQHpktAy
+         Fe4IEDfC/28kHjBhHxEPQITJ8CuJyoZGEmZm60Jc7engXUckPrYawLLDX7UcdI+XSQ
+         5xm77dyPuBVsUT7poQpZnt7e4NdMuGl4xjmYddh791Tyek9pFMh77+jOyS3l9i0IVf
+         0xUx4GZ2isY1w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A22A9C004EF;
+        Thu, 25 Aug 2022 18:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com>
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [RESEND PATCH bpf-next v9 0/5] bpf: rstat: cgroup hierarchical
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166145281665.28094.14483828352332763496.git-patchwork-notify@kernel.org>
+Date:   Thu, 25 Aug 2022 18:40:16 +0000
+References: <20220824233117.1312810-1-haoluo@google.com>
+In-Reply-To: <20220824233117.1312810-1-haoluo@google.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, tj@kernel.org,
+        lizefan.x@bytedance.com, kpsingh@kernel.org, hannes@cmpxchg.org,
+        mhocko@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
+        mkoutny@suse.com, roman.gushchin@linux.dev, rientjes@google.com,
+        sdf@google.com, shakeelb@google.com, yosryahmed@google.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/23/2022, Robin Murphy wrote:
-> On 2022-08-12 01:03, Will McVicker wrote:
-> > Since not all devices require a 32-bit MSI address, add support to the
-> > PCIe host driver to allow setting the DMA mask to 64-bits. This allows
-> > kernels to disable ZONE_DMA32 and bounce buffering (swiotlb) without
-> > risking not being able to get a 32-bit address during DMA allocation.
-> > Basically, in the slim chance that there are no 32-bit allocations
-> > available, the current PCIe host driver will fail to allocate the
-> > msi_msg page due to a DMA address overflow (seen in [1]). With this
-> > patch, the PCIe device can advertise 64-bit support via its MSI
-> > capabilities to hint to the PCIe host driver to set the DMA mask to
-> > 64-bits.
-> 
-> It doesn't matter so much what the host's own capabilities are, though, what
-> matters is that if you configure the MSI doorbell to decode some 64-bit
-> address because you can, and later an endpoint shows up whose DMA mask
-> doesn't reach that address, you've broken MSIs for that endpoint. While the
-> host is probing, it cannot possibly know what future endpoint drivers may or
-> may not do.
-> 
-> Now, in the case where no ZONE_DMA{32} is configured, there's a fair
-> likelihood that addressing-constrained endpoints are probably going to be
-> broken in general, so that should not be fatal for the host. So *if* we fail
-> to allocate a 32-bit MSI address, *then* we should fall back to a 64-bit one
-> (when the host supports it), but to preserve compatibility we still must
-> always attempt the 32-bit allocation first (oh, if there isn't a theme
-> emerging here...)
-> 
-> TBH this has come up enough times, and has enough subtle complexity, that I
-> think it's high time to factor this all out into a helper between the PCI
-> core code and the DMA API for "please give me a bus address that's
-> guaranteed not to conflict with any valid DMA address".
-> 
-> Thanks,
-> Robin.
+Hello:
 
-Hi Robin,
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Thanks for the reviews! I'm happy with your suggestion of trying a 32-bit mask
-first for the reasons you mentioned. I have tested this out on my Pixel 6 and
-db845c and will push the updated patchset as v5.
-
-Regards,
-Will
-
+On Wed, 24 Aug 2022 16:31:12 -0700 you wrote:
+> This patch series allows for using bpf to collect hierarchical cgroup
+> stats efficiently by integrating with the rstat framework. The rstat
+> framework provides an efficient way to collect cgroup stats percpu and
+> propagate them through the cgroup hierarchy.
 > 
-> > [1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Will McVicker <willmcvicker@google.com>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++++++--
-> >   drivers/pci/controller/dwc/pcie-designware.c      |  8 ++++++++
-> >   drivers/pci/controller/dwc/pcie-designware.h      |  1 +
-> >   3 files changed, 21 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > index 39f3b37d4033..d7831040791b 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > @@ -330,6 +330,8 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
-> >   	u64 *msi_vaddr;
-> >   	int ret;
-> >   	u32 ctrl, num_ctrls;
-> > +	bool msi_64bit = false;
-> > +	u16 msi_capabilities;
-> >   	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
-> >   		pp->irq_mask[ctrl] = ~0;
-> > @@ -367,9 +369,17 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
-> >   						    dw_chained_msi_isr, pp);
-> >   	}
-> > -	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> > +	msi_capabilities = dw_pcie_msi_capabilities(pci);
-> > +	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
-> > +		msi_64bit = msi_capabilities & PCI_MSI_FLAGS_64BIT;
-> > +
-> > +	dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
-> > +		msi_64bit ? "64" : "32");
-> > +	ret = dma_set_mask_and_coherent(dev, msi_64bit ?
-> > +					DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
-> >   	if (ret)
-> > -		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
-> > +		dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
-> > +			 msi_64bit ? "64" : "32");
-> >   	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
-> >   					GFP_KERNEL);
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > index c6725c519a47..650a7f22f9d0 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > @@ -82,6 +82,14 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
-> >   }
-> >   EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
-> > +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-> > +{
-> > +	u8 offset;
-> > +
-> > +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> > +	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-> > +}
-> > +
-> >   static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
-> >   					    u8 cap)
-> >   {
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> > index a871ae7eb59e..45fcdfc8c035 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.h
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> > @@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
-> >   u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
-> >   u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
-> > +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
-> >   int dw_pcie_read(void __iomem *addr, int size, u32 *val);
-> >   int dw_pcie_write(void __iomem *addr, int size, u32 val);
+> The stats are exposed to userspace in textual form by reading files in
+> bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+> cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> - walking a cgroup's descendants in pre-order.
+> - walking a cgroup's descendants in post-order.
+> - walking a cgroup's ancestors.
+> - process only a single object.
+> 
+> [...]
+
+Here is the summary with links:
+  - [RESEND,bpf-next,v9,1/5] bpf: Introduce cgroup iter
+    https://git.kernel.org/bpf/bpf-next/c/d4ccaf58a847
+  - [RESEND,bpf-next,v9,2/5] selftests/bpf: Test cgroup_iter.
+    https://git.kernel.org/bpf/bpf-next/c/fe0dd9d4b740
+  - [RESEND,bpf-next,v9,3/5] cgroup: bpf: enable bpf programs to integrate with rstat
+    https://git.kernel.org/bpf/bpf-next/c/a319185be9f5
+  - [RESEND,bpf-next,v9,4/5] selftests/bpf: extend cgroup helpers
+    https://git.kernel.org/bpf/bpf-next/c/434992bb6037
+  - [RESEND,bpf-next,v9,5/5] selftests/bpf: add a selftest for cgroup hierarchical stats collection
+    https://git.kernel.org/bpf/bpf-next/c/88886309d2e8
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

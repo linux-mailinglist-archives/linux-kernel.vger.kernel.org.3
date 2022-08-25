@@ -2,168 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF5F5A1820
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BA35A182B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242906AbiHYRsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S242927AbiHYRxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241514AbiHYRsX (ORCPT
+        with ESMTP id S233199AbiHYRxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 13:48:23 -0400
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE23B99FE;
-        Thu, 25 Aug 2022 10:48:22 -0700 (PDT)
-Received: by mail-pj1-f42.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso5717346pjk.0;
-        Thu, 25 Aug 2022 10:48:22 -0700 (PDT)
+        Thu, 25 Aug 2022 13:53:42 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6C2A4B0C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:53:41 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id t129so1807172pfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=90EPMom+jYdpBxTP3FD4EfoORY6QrTIXIC7G3bK5i0A=;
+        b=L6nxnUiDyq/nkQIZIXWZYPZH3qDP9PJR0LwIB/l3ZCG1xLCYkNuv3hLyYuI4kHqTjM
+         GuH2KQp6vq+nHI5v/UHpfFq04smWnKN1uTR+e9Ojy8RKoDE6CUQYj2uZXO1n8qiO5fGG
+         BN/gOKQvvSrmaJakEHC6SPLv93ys6f31FpPTtFjXlsH4Is9hoaUfozTtaKur/F8KED6T
+         UPTpK6y6R0VwV+MRP+ZvSbG71FqS0t0CpSBqgs20NmgV2YpuuMYH0HTDi3e5wLRYyZTH
+         BOfNbsA+TcUOd40h0QUwXc/ALQdBnv1maoA4mhdLzP2Fp/LuIl9ZMLYZMYO9x4OxulIc
+         gePA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=qBvhEEGuLxX+PJv+tbfEQq/bCO94kZfgiA0ElB3g654=;
-        b=L/rzbB8T7WniDhIYY5Wag62yhe6NJ1CyS7am8/wbxiyoH6/Kfv3LwTjWnxsnKaosa8
-         FjF1IFokoe+y2NVuGdJyUNm/uDRJLcrV5XET9x6SgQ1HOt14BJWfWIPBrKLTDTMicmtV
-         5tp1Jdv9QjfByZ0yrf6pRYIBP+qNwEIXmIHeX7zQWGZB+JSxwFxgOOw/msOOb9qyBDzS
-         BEpfm9DjDmCveLiedCZFPQREjf+huoHZ3Tkq/4Yxd/wmtq0F5sK0AuF05yaPBElgC6IO
-         GLIIUcGCKahk3+FU7EvLF5YvW6Y861RbomIPzgBbUERcdjvPChsxfFH8Gjo62yMkI73P
-         cvdQ==
-X-Gm-Message-State: ACgBeo2t0dkP+nh+knD4lKvmraLUVforVj+pVNG2evdMQrzHbS1Bfzv+
-        RPpb88BIaZ4bUjakYg4cbsI=
-X-Google-Smtp-Source: AA6agR5cGI2rlUxjZutlHyCVw4YwR2efDBuTB1Rgl/S09JMuKrd2JkNWWXHv0YFZNevkCJqE/aaSRQ==
-X-Received: by 2002:a17:90b:4ad2:b0:1fa:f9d3:df64 with SMTP id mh18-20020a17090b4ad200b001faf9d3df64mr238704pjb.19.1661449701882;
-        Thu, 25 Aug 2022 10:48:21 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:349c:3078:d005:5a7e? ([2620:15c:211:201:349c:3078:d005:5a7e])
-        by smtp.gmail.com with ESMTPSA id i14-20020a17090a2a0e00b001f3e643ebbfsm15247pjd.0.2022.08.25.10.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 10:48:21 -0700 (PDT)
-Message-ID: <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
-Date:   Thu, 25 Aug 2022 10:48:19 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=90EPMom+jYdpBxTP3FD4EfoORY6QrTIXIC7G3bK5i0A=;
+        b=McekCwAsxMHq/dli3aotKBuY7qh3tSzbqk3X9ZJGE8YVEc9xyly8EQv3U39NUAjQN5
+         /j2bYnO2jJoJ4blFZQvXbGVyrNnsMxAYY4Kuh79Br7s50j1Wzvu4V8GcsGhryOiLjUvl
+         hW21cLv0QcxAcWXrfIqlcpY7h3Y5Ij9KhQRGEjY/gcvkOgcLRztzt2CeBL3CP4A1ZH4E
+         etwtg8s5sDdcjBGU0b2257lXJZp1dxwljMZY0IV+d7C35y5DIBSXVU8dZMFjeeV1FyKI
+         SeUu/ZzViqyJMzKrsqy/GvMwQPR4jK52MmEjhY+3TpjzUn/0kUUgy7A4RvuHu/QHMxd9
+         +00g==
+X-Gm-Message-State: ACgBeo0COqD9OWCOs8uxwlwr8eroC9bX3wpuAE0QUOlGgK7QGuxZIFoN
+        4WYOFt2dRBM9LB5rf8jdRO7cLw==
+X-Google-Smtp-Source: AA6agR4zpkDCMUp1mZwYSQegasbdZPyw7MXkrTYAZpI7WXZOPru3TM4Ttm+x+vOzwr/vPWHTOnI0Lw==
+X-Received: by 2002:a63:4558:0:b0:429:b6e6:6638 with SMTP id u24-20020a634558000000b00429b6e66638mr199821pgk.83.1661450020377;
+        Thu, 25 Aug 2022 10:53:40 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id nh20-20020a17090b365400b001fbc350a223sm538783pjb.55.2022.08.25.10.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 10:53:39 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 17:53:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending
+ interrupts
+Message-ID: <Ywe3IC7OlF/jYU1X@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-2-mizhang@google.com>
+ <b03adf94-5af2-ff5e-1dbb-6dd212790083@redhat.com>
+ <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
+ <17505e309d02cf5a96e33f75ccdd6437a8c79222.camel@redhat.com>
+ <Ywa+QL/kDp9ibkbC@google.com>
+ <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
+ <YweJ+hX8Ayz11jZi@google.com>
+ <CAL715WK4eqxX9EUHzwqT4o-OX4S_1-WcTr5UuGnc-KEb7pk6EQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in blk_mq_map_swqueue
-Content-Language: en-US
-To:     Dmitry Vyukov <dvyukov@google.com>
-References: <0000000000004c3b1405e6b7de26@google.com>
-Cc:     syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <0000000000004c3b1405e6b7de26@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL715WK4eqxX9EUHzwqT4o-OX4S_1-WcTr5UuGnc-KEb7pk6EQ@mail.gmail.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/20/22 20:24, syzbot wrote:
-> Hello,
+On Thu, Aug 25, 2022, Mingwei Zhang wrote:
+> On Thu, Aug 25, 2022 at 7:41 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Wed, Aug 24, 2022, Jim Mattson wrote:
+> > > On Wed, Aug 24, 2022 at 5:11 PM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > > @google folks, what would it take for us to mark KVM_REQ_GET_NESTED_STATE_PAGES
+> > > > as deprecated in upstream and stop accepting patches/fixes?  IIUC, when we eventually
+> > > > move to userfaultfd, all this goes away, i.e. we do want to ditch this at some point.
+> > >
+> > > Userfaultfd is a red herring. There were two reasons that we needed
+> > > this when nested live migration was implemented:
+> > > 1) our netlink socket mechanism for funneling remote page requests to
+> > > a userspace listener was broken.
+> > > 2) we were not necessarily prepared to deal with remote page requests
+> > > during VM setup.
+> > >
+> > > (1) has long since been fixed. Though our preference is to exit from
+> > > KVM_RUN and get the vCPU thread to request the remote page itself, we
+> > > are now capable of queuing a remote page request with a separate
+> > > listener thread and blocking in the kernel until the page is received.
+> > > I believe that mechanism is functionally equivalent to userfaultfd,
+> > > though not as elegant.
+> > > I don't know about (2). I'm not sure when the listener thread is set
+> > > up, relative to all of the other setup steps. Eliminating
+> > > KVM_REQ_GET_NESTED_STATE_PAGES means that userspace must be prepared
+> > > to fetch a remote page by the first call to KVM_SET_NESTED_STATE. The
+> > > same is true when using userfaultfd.
+> > >
+> > > These new ordering constraints represent a UAPI breakage, but we don't
+> > > seem to be as concerned about that as we once were. Maybe that's a
+> > > good thing. Can we get rid of all of the superseded ioctls, like
+> > > KVM_SET_CPUID, while we're at it?
+> >
+> > I view KVM_REQ_GET_NESTED_STATE_PAGES as a special case.  We are likely the only
+> > users, we can (eventually) wean ourselves off the feature, and we can carry
+> > internal patches (which we are obviously already carrying) until we transition
+> > away.  And unlike KVM_SET_CPUID and other ancient ioctls() that are largely
+> > forgotten, this feature is likely to be a maintenance burden as long as it exists.
 > 
-> syzbot found the following issue on:
+> KVM_REQ_GET_NESTED_STATE_PAGES has been uniformly used in
+> KVM_SET_NESTED_STATE ioctl in VMX (including eVMCS) and SVM, it is
+> basically a two-step setting up of a nested state mechanism.
 > 
-> HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13cf3c7b080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ea55456e1ff28ef7f9ff
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com
-> 
-> scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-> BUG: unable to handle page fault for address: ffffdc0000000000
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 12026067
-> P4D 12026067 PUD 0
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> Workqueue: events_unbound async_run_entry_fn
-> RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-> Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-> RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-> RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-> R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-> R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-> FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   blk_mq_init_allocated_queue+0x1a31/0x1c20 block/blk-mq.c:4119
->   blk_mq_init_queue_data block/blk-mq.c:3908 [inline]
->   blk_mq_init_queue+0x9f/0x120 block/blk-mq.c:3918
->   scsi_alloc_sdev+0x697/0x9d0 drivers/scsi/scsi_scan.c:335
->   scsi_probe_and_add_lun+0x1d1/0x4ab0 drivers/scsi/scsi_scan.c:1191
->   __scsi_scan_target+0x1fb/0x10e0 drivers/scsi/scsi_scan.c:1673
->   scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
->   scsi_scan_host_selected+0x394/0x6c0 drivers/scsi/scsi_scan.c:1790
->   do_scsi_scan_host drivers/scsi/scsi_scan.c:1929 [inline]
->   do_scan_async+0x12e/0x7b0 drivers/scsi/scsi_scan.c:1939
->   async_run_entry_fn+0xa6/0x400 kernel/async.c:127
->   process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
->   worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
->   kthread+0x266/0x300 kernel/kthread.c:376
->   ret_from_fork+0x1f/0x30
->   </TASK>
-> Modules linked in:
-> CR2: ffffdc0000000000
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-> Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-> RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-> RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-> R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-> R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-> FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess), 5 bytes skipped:
->     0:	43 0f b6 04 37       	movzbl (%r15,%r14,1),%eax
->     5:	84 c0                	test   %al,%al
->     7:	0f 85 49 02 00 00    	jne    0x256
->     d:	41 0f b7 45 00       	movzwl 0x0(%r13),%eax
->    12:	8d 48 01             	lea    0x1(%rax),%ecx
->    15:	66 41 89 4d 00       	mov    %cx,0x0(%r13)
->    1a:	48 8d 1c c3          	lea    (%rbx,%rax,8),%rbx
->    1e:	48 89 d8             	mov    %rbx,%rax
->    21:	48 c1 e8 03          	shr    $0x3,%rax
-> * 25:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
->    2a:	4c 8b 7c 24 68       	mov    0x68(%rsp),%r15
->    2f:	74 08                	je     0x39
->    31:	48 89 df             	mov    %rbx,%rdi
->    34:	e8 36 7b c1 fd       	callq  0xfdc17b6f
->    39:	48                   	rex.W
->    3a:	8b                   	.byte 0x8b
+> We can change that, but this may have side effects and I think this
+> usage case has nothing to do with demand paging.
 
-Hi Dmitry,
+There are two uses of KVM_REQ_GET_NESTED_STATE_PAGES:
 
-This issue and also another report that has been shared recently on the
-linux-scsi mailing list look like USB issues to me. Who is the right person
-to make sure that the USB mailing list is included for USB related issues?
+  1. Defer loads when leaving SMM.
 
-Thanks,
+  2: Defer loads for KVM_SET_NESTED_STATE.
 
-Bart.
+#1 is fully solvable without a request, e.g. split ->leave_smm() into two helpers,
+one that restores whatever metadata is needed before restoring from SMRAM, and
+a second to load guest virtualization state that _after_ restoring all other guest
+state from SMRAM.
+
+#2 is done because of the reasons Jim listed above, which are specific to demand
+paging (including userfaultfd).  There might be some interactions with other
+ioctls() (KVM_SET_SREGS?) that are papered over by the request, but that can be
+solved without a full request since only the first KVM_RUN after KVM_SET_NESTED_STATE
+needs to refresh things (though ideally we'd avoid that).
+
+In other words, if the demand paging use case goes away, then KVM can get rid of
+KVM_REQ_GET_NESTED_STATE_PAGES.  
+
+> KVM_SET_NESTED_STATE in VMX, while in SVM implementation, it is simply
+> just a kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
+
+svm_set_nested_state() very rougly open codes enter_svm_guest_mode().  VMX could
+do the same, but that may or may not be a net positive.
+
+> hmm... so is the nested_vmx_enter_non_root_mode() call in vmx
+> KVM_SET_NESTED_STATE ioctl() still necessary? I am thinking that
+> because the same function is called again in nested_vmx_run().
+
+nested_vmx_run() is used only to emulate VMLAUNCH/VMRESUME and wont' be invoked
+if the vCPU is already running L2 at the time of migration.

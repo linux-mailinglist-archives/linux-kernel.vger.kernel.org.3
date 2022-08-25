@@ -2,275 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213895A1A0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE4D5A1A19
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243525AbiHYUJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 16:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S243083AbiHYUMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 16:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiHYUJl (ORCPT
+        with ESMTP id S231398AbiHYUMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 16:09:41 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ACBBFE97
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 13:09:39 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id h67so21026868vsc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 13:09:38 -0700 (PDT)
+        Thu, 25 Aug 2022 16:12:33 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67142B99E1;
+        Thu, 25 Aug 2022 13:12:32 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id cb8so16176430qtb.0;
+        Thu, 25 Aug 2022 13:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=/o5u98fJkAPGGPRvZ0JnL9MrzWUgTcXH/oohHXk3MD8=;
-        b=Ezi3cLxl5SBn+0WFQppba1X7+DdHeAZwd+3+8yyHBkZ8p32tIpXd4owl1HlE83sJlO
-         35tGqyLcydDFnVxl+CllN9bqMX9roI42WPfmwop0omLlw8YncOW+c8HsYJX/9B/vbTyJ
-         G0ggnVxnzwnyWSTVI870+xJVwDivl/otgYRGldLDtzhFC+NR8TQKY25dlVrK2AY5pxqg
-         j8+1wMEzuZoPbCH0bnMmY/aShcHogX5ZkHm8OOmT0W1plozwcVxwRnNem25RQcP/v+8v
-         cOYAMOSYJKqvLMMxImuVQpmqla9mEyo5zBXp/yPnp1NiDw1AX/9F/iOoYCV+y7vg+ryK
-         bZNg==
+        bh=pGYo7MgM4ntqJX0vqGEGbqHVguM5P8C7f8EezOlQTHg=;
+        b=HfPj2BmNqHO+f4BQZjcu7YafJWAMqQcvYdDb0aeIrS/YafRs+39ImkXbw45p0Dj1OV
+         JAG3JCDBUrWxWyYnAhkzU+Gv4KhdIgy6o0rXgpw557QT85sSkaTZF2xl9sUs6yB2hckO
+         nTfSPe8MMNUMOCbEEu8FiorTgSKsuOi1Lb+se/UqtY2pkqxUJTyb7PKGyMbPDLSfROEF
+         XGfzj2NU4zYNk7IMVMwsOePJ/YUL0XVODBDcHHn1bUf9QvzIXAW74mDCkwQHdYkaIe59
+         8trvc+VWfIiq1xNHYvKNkWFlOvno2TuWIDyahveGPzo3KFxk7a+W/+tUNRq1/D9L3Zbv
+         erZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=/o5u98fJkAPGGPRvZ0JnL9MrzWUgTcXH/oohHXk3MD8=;
-        b=hFnNvgfWsTedmBlwI7Ipdm2RViRGi49COCuzNsIH+ZRPub+UBKd/7CEgN6IZqsFBh/
-         FLGJ+66+RlXOikm2XTDrd3tYW1vR7SMl2CTfYx5CnXk+vIcekF1+7CJwwMCS6ubWd6Uu
-         rg+RJ7SlYzK2z74PdQYv3li5jXvXqMc17ivsTg8fdp7nPB2PUkQhJMHv8vifE9bqs5AR
-         TRWTeN4oVKEoacfMLnyBbJFB0I6BHY+YvOiqragL5M5/2mQoaPWmKH4/UKhywtU5NpIO
-         cYxuO3t0EZyjpB3Z918UUUtpcKnaB6+ljjdAe7VIA4JVYl3p5nlQ+brCemBq7qQNK+qF
-         VSUQ==
-X-Gm-Message-State: ACgBeo3WzKahPm5AJQ+E06+EWXz6pgBorbmoycPyVZx2At9MTkj7Di/6
-        sCO4qW0x+vcR5IDvwIC9keOLE+4+DCSBscq1s1P5cQ==
-X-Google-Smtp-Source: AA6agR7nyEzEvgpeTs849VA7+3zgZ0xGJ1Pxf0VO2EuGO24TVf9MLwl1oV6f4IzTsrHTAKLU/CRN4th7Cmzsf8Yp7TA=
-X-Received: by 2002:a67:fd0e:0:b0:390:1d9a:2455 with SMTP id
- f14-20020a67fd0e000000b003901d9a2455mr2104726vsr.78.1661458177919; Thu, 25
- Aug 2022 13:09:37 -0700 (PDT)
+        bh=pGYo7MgM4ntqJX0vqGEGbqHVguM5P8C7f8EezOlQTHg=;
+        b=PeG8Lx8EDTWCHkZk7z1G1Eyd76CmQrTaXILHmhnLLM1ngsnD+2SGWw5tre5NUvz/V6
+         cvbi/7RekRKIt1u8aW+fjLleCOZ/uyfhN+wV0YdrxxOL0Nr9xmXnyHuH7cUPHV0f6Arq
+         CqnQq8Y0eaMmTh/haDDEZ28ZWCO2VDF8oXgnv+azeNK6OpBfWG8LR5NWZ5RkdLp9p3X4
+         q7VoKKa0fUMSAQTBQRwMpXqvG7sjYejgFyM1B+8uNalvG7/k0KqZw3IGwPEEpB/NAf8c
+         gRLVegSfcvywECLwqiPX2QXnINj08aSVrgoF9IlEoJDQKscds05uHtxZwx+YBQfqEVVL
+         cjrg==
+X-Gm-Message-State: ACgBeo02aYgPsmlv2zjUzH5cCVvxNpatUTJ4TL/VLykYFiWp64xnbYal
+        3BI1iz/brl3fERZLy8ZaVGFYZ2EG6LSYkgG5M6EI7g3aQko=
+X-Google-Smtp-Source: AA6agR7FS23bQp6uuqGhFRmQ6qNFnWot94d8f/D3GbqmtaHSFbUX523BypBhI/yRwc3hRlLN/ZPGcY+U+IfsvOWmX4g=
+X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
+ n10-20020a05622a040a00b0034377ba727fmr5185305qtx.481.1661458351521; Thu, 25
+ Aug 2022 13:12:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-44-brijesh.singh@amd.com> <CAAH4kHYm1BhjJXUMH12kzR0Xun=fUTj-3Hy6At0XR_09Bf0Ccw@mail.gmail.com>
- <CAMkAt6oKQ3CnmNdrJLMWreExkN56t9vs=B883_JD+HtiNYw9HA@mail.gmail.com> <51298b17-9e12-7a08-7322-594deac52f53@amd.com>
-In-Reply-To: <51298b17-9e12-7a08-7322-594deac52f53@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Thu, 25 Aug 2022 14:09:26 -0600
-Message-ID: <CAMkAt6qBd7uoR-9NW7HbcE-N7w++3vGsviGLkhmVbnZ5TH3ZOg@mail.gmail.com>
-Subject: Re: [PATCH v12 43/46] virt: Add SEV-SNP guest driver
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:X86 KVM CPUs" <kvm@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Marc Orr <marcorr@google.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220824125203.685287-1-ramona.bolboaca@analog.com> <20220824125203.685287-3-ramona.bolboaca@analog.com>
+In-Reply-To: <20220824125203.685287-3-ramona.bolboaca@analog.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 25 Aug 2022 23:11:55 +0300
+Message-ID: <CAHp75VeP_ZLYSty2x_m27M_1HzsXx_DX=UsZopPEonAfr7_RyA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] iio: adc: add max11205 adc driver
+To:     Ramona Bolboaca <ramona.bolboaca@analog.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:54 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+On Wed, Aug 24, 2022 at 3:56 PM Ramona Bolboaca
+<ramona.bolboaca@analog.com> wrote:
 >
-> On 8/24/22 14:28, Peter Gonda wrote:
-> > On Wed, Aug 24, 2022 at 12:01 PM Dionna Amalie Glaze
-> > <dionnaglaze@google.com> wrote:
-> >>
-> >> Apologies for the necropost, but I noticed strange behavior testing my
-> >> own Golang-based wrapper around the /dev/sev-guest driver.
-> >>
-> >>> +
-> >>> +static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
-> >>> +                               u8 type, void *req_buf, size_t req_sz, void *resp_buf,
-> >>> +                               u32 resp_sz, __u64 *fw_err)
-> >>> +{
-> >>> +       unsigned long err;
-> >>> +       u64 seqno;
-> >>> +       int rc;
-> >>> +
-> >>> +       /* Get message sequence and verify that its a non-zero */
-> >>> +       seqno = snp_get_msg_seqno(snp_dev);
-> >>> +       if (!seqno)
-> >>> +               return -EIO;
-> >>> +
-> >>> +       memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
-> >>> +
-> >>> +       /* Encrypt the userspace provided payload */
-> >>> +       rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
-> >>> +       if (rc)
-> >>> +               return rc;
-> >>> +
-> >>> +       /* Call firmware to process the request */
-> >>> +       rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-> >>> +       if (fw_err)
-> >>> +               *fw_err = err;
-> >>> +
-> >>> +       if (rc)
-> >>> +               return rc;
-> >>> +
-> >>
-> >> The fw_err is written back regardless of rc, so since err is
-> >> uninitialized, you can end up with garbage written back. I've worked
-> >> around this by only caring about fw_err when the result is -EIO, but
-> >> thought that I should bring this up.
-> >
-> > I also noticed that we use a u64 in snp_guest_request_ioctl.fw_err and
-> > u32 in sev_issue_cmd.error when these should be errors from the
-> > sev_ret_code enum IIUC.
->
-> The reason for the u64 is that the Extended Guest Request can return a
-> firmware error or a hypervisor error. To distinguish between the two, a
-> firmware error is contained in the lower 32-bits, while a hypervisor error
-> is contained in the upper 32-bits (e.g. when not enough contiguous pages
-> of memory have been supplied).
+> Adding support for max11205 16-bit single-channel ultra-low power
+> delta-sigma adc.
+> The MAX11205 is compatible with the 2-wire interface and uses
+> SCLK and RDY/DOUT for serial communica- tions. In this mode, all
+> controls are implemented by tim- ing the high or low phase of the SCLK.
+> The 2-wire serial interface only allows for data to be read out through the
+> RDY/DOUT output.
 
-Ah, makes sense. I was trying to think of a way to codify the state
-described above where we error so early in the IOCTL or call that the
-PSP is never called, something like below. I think using UINT32_MAX
-still works with how u64 of Extended Guest Request is spec'd. Is this
-interesting to clean up the PSP driver and internal calls, and the new
-sev-guest driver?
+Is there any existing driver that can be extended to support this chip?
 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 63dc626627a0..d1e605567d5e 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -22,6 +22,7 @@
- #include <linux/efi.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-+#include <linux/psp-sev.h>
+...
 
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -2177,6 +2178,8 @@ int snp_issue_guest_request(u64 exit_code,
-struct snp_req_data *input, unsigned
-        if (!fw_err)
-                return -EINVAL;
+> +       st->chip_info = device_get_match_data(&spi->dev);
 
-+       fw_err = SEV_RET_NO_FW_CALL;
-+
-        /*
-         * __sev_get_ghcb() needs to run with IRQs disabled because it is using
-         * a per-CPU GHCB.
-@@ -2209,6 +2212,8 @@ int snp_issue_guest_request(u64 exit_code,
-struct snp_req_data *input, unsigned
-                *fw_err = ghcb->save.sw_exit_info_2;
+And if chip_info is NULL?
 
-                ret = -EIO;
-+       } else {
-+               *fw_err = 0;
-        }
+...
 
- e_put:
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 9f588c9728f8..e71d6e39aa2b 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -439,7 +439,7 @@ static int __sev_platform_init_locked(int *error)
- {
-        struct psp_device *psp = psp_master;
-        struct sev_device *sev;
--       int rc, psp_ret = -1;
-+       int rc, psp_ret = SEV_RET_NO_FW_CALL;
-        int (*init_function)(int *error);
+> +static void max11205_remove(struct spi_device *spi)
+> +{
+> +       struct iio_dev *indio_dev = spi_get_drvdata(spi);
+> +       struct max11205_state *st = iio_priv(indio_dev);
 
-        if (!psp || !psp->sev_data)
-diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
-index 91b4c63d5cbf..b8f2c129d63d 100644
---- a/include/uapi/linux/psp-sev.h
-+++ b/include/uapi/linux/psp-sev.h
-@@ -36,6 +36,11 @@ enum {
-  * SEV Firmware status code
-  */
-...skipping...
+> +       iio_device_unregister(indio_dev);
+> +       regulator_disable(st->vref);
+> +}
 
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -2177,6 +2178,8 @@ int snp_issue_guest_request(u64 exit_code,
-struct snp_req_data *input, unsigned
-        if (!fw_err)
-                return -EINVAL;
+Have you tested module removal?
 
-+       fw_err = SEV_RET_NO_FW_CALL;
-+
-        /*
-         * __sev_get_ghcb() needs to run with IRQs disabled because it is using
-         * a per-CPU GHCB.
-@@ -2209,6 +2212,8 @@ int snp_issue_guest_request(u64 exit_code,
-struct snp_req_data *input, unsigned
-                *fw_err = ghcb->save.sw_exit_info_2;
+> +
 
-                ret = -EIO;
-+       } else {
-+               *fw_err = 0;
-        }
+...
 
- e_put:
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 9f588c9728f8..e71d6e39aa2b 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -439,7 +439,7 @@ static int __sev_platform_init_locked(int *error)
- {
-        struct psp_device *psp = psp_master;
-        struct sev_device *sev;
--       int rc, psp_ret = -1;
-+       int rc, psp_ret = SEV_RET_NO_FW_CALL;
-        int (*init_function)(int *error);
+> +static const struct chip_info max11205_chip_info[] = {
+> +       [TYPE_MAX11205A] = {
+> +               .out_data_rate = MAX11205A_OUT_DATA_RATE,
 
-        if (!psp || !psp->sev_data)
-diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
-index 91b4c63d5cbf..b8f2c129d63d 100644
---- a/include/uapi/linux/psp-sev.h
-+++ b/include/uapi/linux/psp-sev.h
-@@ -36,6 +36,11 @@ enum {
-  * SEV Firmware status code
-  */
- typedef enum {
-+       /*
-+        * This error code is not in the SEV spec but is added to convey that
-+        * there was an error that prevented the SEV Firmware from being called.
-+        */
-+       SEV_RET_NO_FW_CALL = -1,
-        SEV_RET_SUCCESS = 0,
-        SEV_RET_INVALID_PLATFORM_STATE,
-        SEV_RET_INVALID_GUEST_STATE,
+> +               .name = "max11205a"
 
++ Comma
 
+> +       },
+> +       [TYPE_MAX11205B] = {
+> +               .out_data_rate = MAX11205B_OUT_DATA_RATE,
 
+> +               .name = "max11205b"
 
-> >
-> >>
-> >> --
-> >> -Dionna Glaze, PhD (she/her)
+Ditto.
+
+> +       }
+
+Ditto.
+
+> +};
+
+...
+
+> +
+
+Redundant blank line.
+
+> +module_spi_driver(max11205_spi_driver);
+
+-- 
+With Best Regards,
+Andy Shevchenko

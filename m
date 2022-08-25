@@ -2,107 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760035A0FEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7960D5A0FEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239566AbiHYMEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
+        id S236765AbiHYMFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237244AbiHYMEm (ORCPT
+        with ESMTP id S241072AbiHYMF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:04:42 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D55A6C70
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:04:38 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s8so1738580ljj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=/aAGWIDmltGqXOS1ncXoIYBBvj6+VUj5xGoOzvsU0MA=;
-        b=AC7iwM+IU6rZ2DikNLEp56ucV1olYMqe5wPpPx5IJcqfDfIwnjZsXq/r18dgvyR9gy
-         VpZuBNdAqojv/7IkgmQLq2E8XyGHApvRu6J8P2q3nEPrFKj1UkdMqnL5TP6VdIY7j6Mw
-         uORdf9m7tt4x4PGKy0ZA3snFXrGETle6kJDRZWR/RNcj/fawcnaYbOOzJgfBBzJbvYBy
-         tQRDi9nBlFRZB7FOip+qeTQdHflXlM5s2JaZfH60KNK60c7aujOfOuzs++8nIWce4lSk
-         /oJ/keczT8JhhPHJ1ybwzx4sm+o79v5xZU3u5Z+JzrJOTkQyTjYcX4vzv3P6u7aAnUpM
-         41Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/aAGWIDmltGqXOS1ncXoIYBBvj6+VUj5xGoOzvsU0MA=;
-        b=JWE0LrCNVOBHqKvi1vtcyeKte7uB0GAO4+mJqJJmsk663I5dt5Kp3345BpaAuQF7aR
-         Gxarg3sP1qNUqts5VTjMCTPw6AXQm7+8Jm1b9YNWjqz7gWA7xNC9Uiqi7G2xOrzDk9sD
-         Bczk6/leu+GizhveXxY244kREHvOTl0m0WDi5X8Djx+N56s0q8SwZ83EqzBhMiZGP3Q6
-         igmaQ6rrVTWCdKsm2OIIlaMS4oexhlqLKC4HuEJzC7oWUe9cJSbGG/Dk7wv0mxkbCqQg
-         jZFrFARIIVEszADv6tYfYL7v5OyxZfzvHy4zBu0UUiigaxF3NX+KecLIfZEjkEwmNYnX
-         dZlg==
-X-Gm-Message-State: ACgBeo2a8okNJzpqAQ14liCr0EFhCTqnHbkKTpbPtg4xIZDP5Uzpi9dl
-        /LImCYqTKMsRgyYC0L0e+0MiXA==
-X-Google-Smtp-Source: AA6agR42/GKcvjXHoKZTIcWaMOnISvqmUCz5H3K5w7VvlWmt0SgXX+Q+rpIDqNHTEiSTnkRLIymPBg==
-X-Received: by 2002:a05:651c:2112:b0:261:b9c1:509 with SMTP id a18-20020a05651c211200b00261b9c10509mr1078828ljq.39.1661429076514;
-        Thu, 25 Aug 2022 05:04:36 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05651211eb00b0047f647414efsm460280lfs.190.2022.08.25.05.04.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 05:04:34 -0700 (PDT)
-Message-ID: <99dfcc39-ab1b-1b24-c6b2-67de5509f5ac@linaro.org>
-Date:   Thu, 25 Aug 2022 15:04:33 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: iio: Add missing
- (unevaluated|additional)Properties on child nodes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
+        Thu, 25 Aug 2022 08:05:28 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BE667C81;
+        Thu, 25 Aug 2022 05:05:24 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oRBbh-0001K3-BL; Thu, 25 Aug 2022 14:05:09 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         linux-arm-kernel@lists.infradead.org
-References: <20220823145649.3118479-2-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823145649.3118479-2-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH 1/4] nvmem: sunxi_sid: Always use 32-bit MMIO reads
+Date:   Thu, 25 Aug 2022 14:05:08 +0200
+Message-ID: <5410996.rnE6jSC6OK@diego>
+In-Reply-To: <20220814173656.11856-2-samuel@sholland.org>
+References: <20220814173656.11856-1-samuel@sholland.org> <20220814173656.11856-2-samuel@sholland.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 17:56, Rob Herring wrote:
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
+Am Sonntag, 14. August 2022, 19:36:52 CEST schrieb Samuel Holland:
+> The SID SRAM on at least some SoCs (A64 and D1) returns different values
+> when read with bus cycles narrower than 32 bits. This is not immediately
+> obvious, because memcpy_fromio() uses word-size accesses as long as
+> enough data is being copied.
 > 
+> The vendor driver always uses 32-bit MMIO reads, so do the same here.
+> This is faster than the register-based method, which is currently used
+> as a workaround on A64. And it fixes the values returned on D1, where
+> the SRAM method was being used.
+> 
+> The special case for the last word is needed to maintain .word_size == 1
+> for sysfs ABI compatibility, as noted previously in commit de2a3eaea552
+> ("nvmem: sunxi_sid: Optimize register read-out method").
+> 
+> Fixes: 07ae4fde9efa ("nvmem: sunxi_sid: Add support for D1 variant")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+On a D1-Nezha:
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

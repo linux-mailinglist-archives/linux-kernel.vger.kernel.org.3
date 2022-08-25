@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C284D5A11A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19635A11A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242345AbiHYNMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S242344AbiHYNNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242311AbiHYNMu (ORCPT
+        with ESMTP id S242393AbiHYNNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:12:50 -0400
+        Thu, 25 Aug 2022 09:13:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3974FAF498;
-        Thu, 25 Aug 2022 06:12:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDC1B24B2;
+        Thu, 25 Aug 2022 06:13:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9B7B61CC9;
-        Thu, 25 Aug 2022 13:12:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA8BC433C1;
-        Thu, 25 Aug 2022 13:12:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A141A61B0B;
+        Thu, 25 Aug 2022 13:13:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B2BC433C1;
+        Thu, 25 Aug 2022 13:13:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661433166;
-        bh=1A8MlJBKL7ti8oE6S1Sc5dQu/847fbAMiXE+ZJuXN9U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fU3aclXUIEYOn0MawgcJtV4A3NGIP/JYDfL1LdFFrbU1kA9j0VT05sXbF8zlqj0Ue
-         yMmu1lkhWWGaM+mLsyfEezG9y3zac/xlHC9upcwTFy/9RIzpRigRYX026qTxhuZxxI
-         RlcK1Lr/SdnpXNkYZyLqqmz1svCWvyUPpzXOOztxhuHOW8rgARI/stawKmbdLQfP3G
-         7cY4YRAfAm5KwBNhbCgpbXpwk9aTeAfhCo6MZSAOrgN94ms/TCoazXYgvfnC6dX/3D
-         aMHB2LmlVDph5VveV1+ii1w6GijEibVivm5OwORRNQ8twFoihQpMgTqChOqbeMKTOp
-         6QbcK2zObaZIg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oRCfE-00051D-0x; Thu, 25 Aug 2022 15:12:52 +0200
-Date:   Thu, 25 Aug 2022 15:12:52 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
-Message-ID: <Ywd1VBjbQTUeD+vD@hovoldconsulting.com>
-References: <20220823124047.14634-1-johan+linaro@kernel.org>
- <YwUdbkyL8GgvLQJA@google.com>
- <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
- <YwZUzeCTw2BupuMm@google.com>
+        s=k20201202; t=1661433217;
+        bh=IZW5T8bTR6zlpO6HLb6mRol+oyWLXS34Ih/Xhypaguk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kMCucpv40+yoTKei7Vb+5ENQbEIz+hcPGK5+mqkpGqnhBHKfMa3V8YY2uFQPHbuWA
+         UYm5vFaTmXEg5r2azsBJFoS2ZAo6UMzg2NLcwUQdDa2jxw092nxypn31yMlnfCNP3Q
+         Pw1nYRsAV8WsH8sKUMYu5zTf3EoenvbsAMcawH6vRF2RV+7XQaZnDr/PAj1uYvX/ZD
+         uFRxcL5YalTayWJpmSZGhfFBmwSgZEjhVLT+tTIGbXFmU4yA6r1yQqPtRQBrIa7vKb
+         RDl3I2thfA3TQSNF+TGkEMf6dEvtIU37m3GXu+YeCid5kTybU1/Tr8a3CAjdBb4/QR
+         cYj9FpbGADa1Q==
+Received: by mail-vs1-f41.google.com with SMTP id m66so20787188vsm.12;
+        Thu, 25 Aug 2022 06:13:37 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2KUZUkTIvJjxXw2ILZ6V1eeJPQdMdsi+89HwYsYjq48cpwpgOl
+        vfW9fM+lrzBIdaO6KiwTv1k2Ymu0vdQtAI36sw==
+X-Google-Smtp-Source: AA6agR5HHV9M9yXhQz5Wv4Fn3tOpZtPr51oSEmjee6h8mCyA1xklEwT58PruXe9mpGP3Rkw2EvGjEX5bSYAZLj5ddgM=
+X-Received: by 2002:a67:c09c:0:b0:390:9073:1122 with SMTP id
+ x28-20020a67c09c000000b0039090731122mr1350519vsi.85.1661433216073; Thu, 25
+ Aug 2022 06:13:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwZUzeCTw2BupuMm@google.com>
+References: <20220823145649.3118479-10-robh@kernel.org> <1491c83f-cd75-4de3-ec26-86db4adb2ade@linaro.org>
+In-Reply-To: <1491c83f-cd75-4de3-ec26-86db4adb2ade@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 25 Aug 2022 08:13:24 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJx1s5ez-ojP8ZK_MPBWuuLRyekjK1qhHd6Ezaimna8JQ@mail.gmail.com>
+Message-ID: <CAL_JsqJx1s5ez-ojP8ZK_MPBWuuLRyekjK1qhHd6Ezaimna8JQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: remoteproc: Add missing (unevaluated|additional)Properties
+ on child nodes
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,76 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 09:41:49AM -0700, Matthias Kaehlcke wrote:
-> On Wed, Aug 24, 2022 at 10:27:44AM +0200, Johan Hovold wrote:
-> > On Tue, Aug 23, 2022 at 11:33:18AM -0700, Matthias Kaehlcke wrote:
-> > > Hi Johan,
-> > > 
-> > > On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
-> > > > Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
-> > > > suspend") started leaving the PHYs enabled during suspend for
-> > > > wakeup-capable controllers even though it turns out this had nothing to
-> > > > do with wakeup.
-> > > > 
-> > > > Rather, the wakeup capability flag was (ab-)used as a proxy to configure
-> > > > the suspend behaviour in an attempt to reduce power leakage on some
-> > > > platforms.
-> > > > 
-> > > > Stop abusing the wakeup configuration and restore the 5.19 behaviour of
-> > > > keeping the PHYs powered off during suspend. If needed, a dedicated
-> > > > mechanism for configuring the PHY power state during suspend can be
-> > > > added later.
-> > > > 
-> > > > Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
-> > > > Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
-> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > > ---
+On Thu, Aug 25, 2022 at 3:23 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 23/08/2022 17:56, Rob Herring wrote:
+> > In order to ensure only documented properties are present, node schemas
+> > must have unevaluatedProperties or additionalProperties set to false
+> > (typically).
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml      | 1 +
+> >  .../devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml      | 1 +
+> >  .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml     | 1 +
+> >  3 files changed, 3 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+> > index e76c861165dd..e4a7da8020f4 100644
+> > --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+> > +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+> > @@ -140,6 +140,7 @@ properties:
+> >
+> >    glink-edge:
+> >      $ref: qcom,glink-edge.yaml#
+> > +    unevaluatedProperties: false
+>
+> Is it actually needed? The qcom,glink-edge.yaml has
+> additionalProperties:false, so I expect it to complain if anything
+> appears here.
 
-> > > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > index 9a94b1ab8f7a..9995395baa12 100644
-> > > > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
-> > > >  
-> > > >  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
-> > > >  	device_init_wakeup(&pdev->dev, wakeup_source);
-> > > > -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
-> > > 
-> > > Surprisingly this part breaks wakeup on sc7x80, with the above removal
-> > > of the device_may_wakeup() checks it is not clear to me why wakeup needs
-> > > to be enabled for the core.
-> > 
-> > I can't explain that behaviour either. This change doesn't affect the
-> > wakeup_path flag and genpd, and notably wakeup still works here with
-> > sc8280xp.
+Perhaps not, but I'm trying to come up with a meta-schema to check
+these though I'm not sure I can get to no warnings which is how I
+found all these cases. The main remaining warnings are bus child node
+pattern schemas which can perhaps be handled with
+'additionalProperties: true'. The rule I have says if properties or
+patternProperties is present then unevaluatedProperties or
+additionalProperties must be. To handle this case, I think we'd have
+to walk the $ref and check it.
 
-> It turns out the dwc3 core wakeup flags are evaluated by:
-> 
-> 	int usb_phy_roothub_suspend(struct device *controller_dev,
-> 	                            struct usb_phy_roothub *phy_roothub)
-> 	{
-> 		usb_phy_roothub_power_off(phy_roothub);
-> 
-> 		/* keep the PHYs initialized so the device can wake up the system */
-> 		if (device_may_wakeup(controller_dev))
-> 			return 0;
-> 
-> 		return usb_phy_roothub_exit(phy_roothub);
-> 	}
-> 
-> 'controller_dev' is the dwc3 core. The root hub is un-initialized when wakeup is
-> disabled. That causes wakeup to fail, and also happens to be the/one cause of
-> the high power consumption of an onboard USB hub that I mentioned earlier in
-> another thread.
+Anyways, we can hold off on this one until when and if there's a
+meta-schema in place.
 
-Bah, I forgot about the USB core PHY management mess. This should be
-disabled as the dwc3 driver manages the PHYs itself.
-
-But because it currently enabled, the PHY was kept powered-on by USB
-core (unless dropping device_init_wakeup()) and this indicates that that
-is indeed needed for wakeup on your platform.
-
-So this patch should be dropped, and I'll send a patch disabling the USB
-core PHY management for dwc3 instead.
-
-Johan
+Rob

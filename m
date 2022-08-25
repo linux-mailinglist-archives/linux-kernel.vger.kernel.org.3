@@ -2,127 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DE55A1CFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67995A1D06
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239218AbiHYXR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 19:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S243980AbiHYXUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 19:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbiHYXRZ (ORCPT
+        with ESMTP id S231750AbiHYXUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 19:17:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B55B2861
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661469443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K6IqYdtlgkGTFXh/CrtZFmNhEM6cVjYadyTzynsMreE=;
-        b=fSrTb/H4Z6Isco9K8Qfq7Ve/8y2mDI5tPaY6DsYPadBumJzzDAh33xJP8XjZVg/8iewOtH
-        EJl9mxrw6tl8Nu15+iSlzCGoyRhKIyFxpLJwAnrMLmOelU1g+6jkH0sCEYfloQxes3oc0H
-        W7WnzJCYXmUIXrvhnm2bo6Zm7TlqF/Q=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-152-zWBedp3aP--a8BgB2oSVPQ-1; Thu, 25 Aug 2022 19:17:22 -0400
-X-MC-Unique: zWBedp3aP--a8BgB2oSVPQ-1
-Received: by mail-wm1-f72.google.com with SMTP id b16-20020a05600c4e1000b003a5a47762c3so14099wmq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:17:22 -0700 (PDT)
+        Thu, 25 Aug 2022 19:20:12 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D9026ADC
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:20:11 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id l33-20020a05600c1d2100b003a645240a95so3254718wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=euDQ0vrJp+rShUuElD29thuo7rdwKdtGzimujeCiDFg=;
+        b=ju5G5j7otQhLMteRP/Idhs1jAjG0AYp12tWnPcydd2V403pxSI21Q9Y9iYcDfXEPOx
+         np6rBXiJHgm3cOhRelYZnMbVZyfXPNyqJXdi4iB+A3iHiMGqMLu/6lujyauQdpfxxi+K
+         xjPgRz0c/1jPgqoehKIBmC7NzT8o5BX8zArrRrKbdxi1PPKu53pNOjBqhsWjKvbZVhbi
+         xOWSZ7uSf6lL7UWRKGfDkHCwAZF+oL0cnqIJrsPD0h+0tk/0tD0KiHxpp5Zgashp8Z4q
+         lxqrQJA+qqXO6oIW9tPAgt+KCZhLY6Oe/4tbzOzWZBNwKd81qmVd5LqQp+/qAfd8VwQW
+         vr/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=K6IqYdtlgkGTFXh/CrtZFmNhEM6cVjYadyTzynsMreE=;
-        b=XHDV0mGslS3EVXHd4S+mJbnfWX/becntRrb8ktnwRKjuSQnAaVoj0+6Gpnrlb2rKYl
-         Elran0tWrFQGw0HMsc+7wx1zE1KCkWwo+bpRG8TCqaWuDDVcQHsdAd1Pmg9JeQtPbglX
-         4A1BCpT9G0yZCPAHhhYYHxLJSVktuDP6vPq9Hye9+qZB+dJ228JRaFx16aDbVJHbka0C
-         7UAN5hbVTr/lSpoUY8BVsxTP2G1WMDCo7IYWqB1A1HxZlrYAByA80dDUSc6Cdx1funYy
-         Re6+IXkaREs0FIaoa8RFSNUtrechojq872ZgqazE2x7yBcbX6JUhpgupFsKYn8TFhc9d
-         zGKQ==
-X-Gm-Message-State: ACgBeo1EcqXX9EnYiSIuwSpm4pbyZLSPxcmI5jXg8UzYc4TuB0+Yifkc
-        tvoGXSMdrqcVtKBhTdgtcK2GfIGl92uwUEsh5LwHr9an8GKOpQ308VvR1gNFdAkhuq1NuTShKNa
-        oq7sXAhj1yCkPAv5EQRp8eUdP
-X-Received: by 2002:a5d:5985:0:b0:222:c5dd:b7c8 with SMTP id n5-20020a5d5985000000b00222c5ddb7c8mr3504031wri.511.1661469441470;
-        Thu, 25 Aug 2022 16:17:21 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR69aRJWSvroO1rYxs4Q8ah8RPjKum/nyjTtNH7rEv6bS/g//UO1WyhZxD9GFFORywOnXyXxYw==
-X-Received: by 2002:a5d:5985:0:b0:222:c5dd:b7c8 with SMTP id n5-20020a5d5985000000b00222c5ddb7c8mr3503998wri.511.1661469441183;
-        Thu, 25 Aug 2022 16:17:21 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id m5-20020a05600c4f4500b003a64f684704sm7526156wmq.40.2022.08.25.16.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 16:17:20 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH v3 3/9] bitops: Introduce find_next_andnot_bit()
-In-Reply-To: <YwfkDBl6DD+9Zjmk@yury-laptop>
-References: <20220825181210.284283-1-vschneid@redhat.com>
- <20220825181210.284283-4-vschneid@redhat.com>
- <YwfkDBl6DD+9Zjmk@yury-laptop>
-Date:   Fri, 26 Aug 2022 00:17:19 +0100
-Message-ID: <xhsmhpmgngbgg.mognet@vschneid.remote.csb>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=euDQ0vrJp+rShUuElD29thuo7rdwKdtGzimujeCiDFg=;
+        b=wssrEmi9D2hpqXpZZQKjdztO8lFAlwWxhhcs/pblsVjdMNl+YZv5AWAyVyZfcqx+UL
+         LA9wAB6oepO1jg/V0wXtvY5S7NeB3U7O4pwiTQWMzBwvMyKoAcFR6dKJ1INvNCxw7kOB
+         OuD/IZv9hf2FxaxiW2GZCjc72eEKBHmvCsHsRfgyyRlL2Le2ymUsrmDCbvpQztBu+EXn
+         NA5nVTJKx8pp/xKHhJsaxk9rveC6Oa3dIqOals/5x5lLOrYuCGr+JrY6+rltw1HoXuT7
+         b/mVScTs47C1UztEK6Hx7VH1SZEw0On/Cuyb8Ze6SesojCkDgY9RNPxXt6G0mM+0K002
+         ekiA==
+X-Gm-Message-State: ACgBeo1tvAbI6aLZUHNrL5l/XvSzDLXodKKRu7u1Hp3B4wlArQ5EWRuv
+        PdpAZ3ORdZZwzPr1lkIZdIYf330PZl+7z8RhaMNaBA==
+X-Google-Smtp-Source: AA6agR4uguH//xHSLQkoIAgbNbmZpzII5tdUKt1kz7y7Q68TP3XJkF0V9wf4YTtVxdsZIEZ4pjk+3BWGpT4ldDuXm0Y=
+X-Received: by 2002:a05:600c:224c:b0:3a6:7234:551 with SMTP id
+ a12-20020a05600c224c00b003a672340551mr3532845wmm.27.1661469609514; Thu, 25
+ Aug 2022 16:20:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220825213905.1817722-1-haoluo@google.com> <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 25 Aug 2022 16:19:33 -0700
+Message-ID: <CAJD7tkZAE_Kx9z2cXnrheFfEtSZJn4VFczhkVEb3VdcP2o_H+g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] Add CGROUP prefix to cgroup_iter_order
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Hao Luo <haoluo@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/22 14:05, Yury Norov wrote:
-> On Thu, Aug 25, 2022 at 07:12:04PM +0100, Valentin Schneider wrote:
->> In preparation of introducing for_each_cpu_andnot(), add a variant of
->> find_next_bit() that negate the bits in @addr2 when ANDing them with the
->> bits in @addr1.
->>
->> Note that the _find_next_bit() @invert argument now gets split into two:
->> @invert1 for words in @addr1, @invert2 for words in @addr2. The only
->> current users of _find_next_bit() with @invert set are:
->>   o find_next_zero_bit()
->>   o find_next_zero_bit_le()
->> and neither of these pass an @addr2, so the conversion is straightforward.
->>
->> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+On Thu, Aug 25, 2022 at 2:56 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Have you seen this series?
-> https://lore.kernel.org/lkml/YwaXvphVpy5A7fSs@yury-laptop/t/
+> On Thu, Aug 25, 2022 at 2:39 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > As suggested by Andrii, add 'CGROUP' to cgroup_iter_order. This fix is
+> > divided into two patches. Patch 1/2 fixes the commit that introduced
+> > cgroup_iter. Patch 2/2 fixes the selftest that uses the
+> > cgroup_iter_order. This is because the selftest was introduced in a
 >
-> It will significantly simplify your work for adding the
-> find_next_andnot_bit(). If you wait a week or so, you'll most likely
-> find it in -next.
+> but if you split rename into two patches, you break selftests build
+> and thus potentially bisectability of selftests regressions. So I
+> think you have to keep both in the same patch.
+
+I thought fixes to commits still in bpf-next would get squashed. Would
+you mind elaborating why we don't do this?
+
 >
-
-I hadn't seen it, it does look promising. I'm about to disappear for a
-week, so I'll have a look once I'm back.
-
-> Thanks,
-> Yury
-
+> With that:
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
+> > different commit. I tested this patchset via the following command:
+> >
+> >   test_progs -t cgroup,iter,btf_dump
+> >
+> > Hao Luo (2):
+> >   bpf: Add CGROUP to cgroup_iter order
+> >   selftests/bpf: Fix test that uses cgroup_iter order
+> >
+> >  include/uapi/linux/bpf.h                      | 10 +++---
+> >  kernel/bpf/cgroup_iter.c                      | 32 +++++++++----------
+> >  tools/include/uapi/linux/bpf.h                | 10 +++---
+> >  .../selftests/bpf/prog_tests/btf_dump.c       |  2 +-
+> >  .../prog_tests/cgroup_hierarchical_stats.c    |  2 +-
+> >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 10 +++---
+> >  6 files changed, 33 insertions(+), 33 deletions(-)
+> >
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >

@@ -2,97 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814555A1530
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9C15A1585
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241584AbiHYPFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S240860AbiHYPXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241003AbiHYPFH (ORCPT
+        with ESMTP id S239089AbiHYPXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:05:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550FDB56F3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661439905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iygQAkAgz4JDbn3KVJAwromqSNqOkmZrJ35R+TSCGBw=;
-        b=WbSg80lyvUQyENVdiNOFKKUNKeYOjb0cQAJn7tdJYmuQwBr4HYb7HCokp59/SE1IBBP4eH
-        8cjpOEWd6amp0/cVC3DySSecEallveOSCz9A9dwz4XGBkui0ufuIKD562xAdywxDuTppQE
-        d1EXedFasT5ttOZrLykSAwZ8MhEc2aY=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-ginrPMoMMPqKdkPNv7D6SA-1; Thu, 25 Aug 2022 11:05:03 -0400
-X-MC-Unique: ginrPMoMMPqKdkPNv7D6SA-1
-Received: by mail-qk1-f198.google.com with SMTP id w17-20020a05620a425100b006b97978c693so17517237qko.19
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:05:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=iygQAkAgz4JDbn3KVJAwromqSNqOkmZrJ35R+TSCGBw=;
-        b=c1R/CwWVkd1YcTyLI6kYXdchzR/8h7axo5LlG5mTohhy6jv9oC42uSakfY9hOi/r62
-         gakYQkVejX/lQjhMtG7KrqSDw+7Ffq6us96ndyx3vyidQatOgJlW54L3HV2WYnmAZb25
-         yVk39Rpur5NeSsOi8XPf+vkWm2RfBAFQXCkCQiSUXyhEfgghMBQKxmnt5VqHdDiMvdjp
-         FU289hCvaWZxrVJRJRlohyVPjlvE/ATq+j0w/Vy+iWTiZmZ40HJtYTExFOggZDkb/2H7
-         Vk8E/hcb/SD6NSlyXcYjFp1X5fJ3cdN699KeZac0e+Pb8CEL7KOnCTjjUOTPFLOihpfI
-         /wxg==
-X-Gm-Message-State: ACgBeo3ivSbW5MsuY+OCjDwZ/cEHPM1ZivvxbKCnWIk1crsAHkn6zW+j
-        XvmveCqXSoJR7e+3Z1/xmB/D9ViQOyH4cjD69ev5XjEtLz7HOolPZYMfvUW4HtUSWSOFmvOivAE
-        EQl96petPqTNwPbTHsJ5L/4sT
-X-Received: by 2002:a05:622a:20e:b0:343:7345:36cc with SMTP id b14-20020a05622a020e00b00343734536ccmr3971322qtx.669.1661439903393;
-        Thu, 25 Aug 2022 08:05:03 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5H6vUeaILfaettSLPx9OGO+p9IBfx7a4trs9PcWFxW10+WU/QvLs3nwiKRw0dOgxGyx6Uy1A==
-X-Received: by 2002:a05:622a:20e:b0:343:7345:36cc with SMTP id b14-20020a05622a020e00b00343734536ccmr3971288qtx.669.1661439903064;
-        Thu, 25 Aug 2022 08:05:03 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006b949afa980sm17692978qkb.56.2022.08.25.08.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 08:05:01 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 11:04:59 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Message-ID: <YwePm5lMSU2tsW6f@xz-m1.local>
-References: <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
- <Yv1BJKb5he3dOHdC@xz-m1.local>
- <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yv5QXkS4Bm9pTBeG@xz-m1.local>
- <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87czcqiecd.fsf@nvdebian.thelocal>
- <YwaJSBnp2eyMlkjw@xz-m1.local>
- <YwaOpj54/qUb5fXa@xz-m1.local>
- <87o7w9f7dp.fsf@nvdebian.thelocal>
- <87k06xf70l.fsf@nvdebian.thelocal>
+        Thu, 25 Aug 2022 11:23:41 -0400
+X-Greylist: delayed 1051 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 08:23:38 PDT
+Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8199DB9408;
+        Thu, 25 Aug 2022 08:23:38 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; bh=AuAC64zMFikVQyOsFvSed5o9/crqW6vUnJOdVdTX1bc=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20220801; t=1661439948; v=1; x=1661871948;
+ b=HJtHo/m3mAL67rsOyV2HRrRp7hqfGXn4hpNwNzCBGVvVx3PxMxJoruJgF//TrwTe7gyCiUzL
+ xNnKRubKcezNfRzN9LzubC0zYlARqwY5rD6tHisXvOKh3S3KDf2ibOPQI4UEdOhK0hkO0nueQHq
+ qYq7FpmKmjqlqWmkR1poCfdTwsGaqS5LLAQzNnmF9xZzDMkNI99sgQRAOolQ2+Ah5edLbzxTnIy
+ DH0RiiBhfxDGlfYYaQrYq58VTlKhEbOktgPiNdc3vbUeDpxn7EBi/PCxGR3iijV7DeAtKt3EEjy
+ /btyeTwQynOF8TMEcd4As4a/CloFyfCCp3Qi4NdZCjTyT5H69vuhpBNE0Iq8x3NPqSe9c0R6n89
+ +K86hR7XMrtHaFFwaHiziMLTH6BanuWZSt5XG08fh06WDv1LDyvyGNYjqUxHQaI/GvsbOElS8A8
+ fCJWuob2oLMnoE8bzIHnjPgVSFq8phTqR0JarONYdgrgih0LUn5YM/4gfOXsN3uSF+AAJG5TVUB
+ BDq5X6QUzkriPSr16CgI9Sp+xIxnZXcmKhPR42FMt1s4bbVwOeC8aKJYbfV+JwBFKYg9U42U6+/
+ BVDGmIHt7Msl4+k67nDuEpVozBTnuMlNZXJNskgKQvg+kl/l/UHsF67Quba2BJ9SAakn7YT4Zrm
+ buqiHEerQ4M=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 0e5fc778; Thu, 25 Aug
+ 2022 11:05:48 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87k06xf70l.fsf@nvdebian.thelocal>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Thu, 25 Aug 2022 11:05:48 -0400
+From:   matoro <matoro_mailinglist_kernel@matoro.tk>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Meelis Roos <mroos@linux.ee>, Matthew Wilcox <willy@infradead.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>, linux-alpha@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-block@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: ext4 corruption on alpha with 4.20.0-09062-gd8372ba8ce28
+In-Reply-To: <20190221132916.GA22886@quack2.suse.cz>
+References: <076b8b72-fab0-ea98-f32f-f48949585f9d@linux.ee>
+ <20190216174536.GC23000@mit.edu>
+ <e175b885-082a-97c1-a0be-999040a06443@linux.ee>
+ <20190218120209.GC20919@quack2.suse.cz>
+ <4e015688-8633-d1a0-308b-ba2a78600544@linux.ee>
+ <20190219132026.GA28293@quack2.suse.cz>
+ <20190219144454.GB12668@bombadil.infradead.org>
+ <d444f653-9b99-5e9b-3b47-97f824c29b0e@linux.ee>
+ <20190220094813.GA27474@quack2.suse.cz>
+ <2381c264-92f5-db43-b6a5-8e00bd881fef@linux.ee>
+ <20190221132916.GA22886@quack2.suse.cz>
+Message-ID: <97dbffaefa65a83b36e1ec134fd53a66@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,54 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:24:03AM +1000, Alistair Popple wrote:
-> By the way it's still an optimisation because in most cases we can avoid
-> calling try_to_migrate() and walking the rmap altogether if we install
-> the migration entries here. But I agree the comment is misleading.
+Hello all, I know this is quite an old thread.  I recently acquired some 
+alpha hardware and have run into this exact same problem on the latest 
+stable kernel (5.18 and 5.19).  CONFIG_COMPACTION seems to be totally 
+broken and causes userspace to be extremely unstable - random segfaults, 
+corruption of glibc data structures, gcc ICEs etc etc - seems most 
+noticable during tasks with heavy I/O load.
 
-There's one follow up question I forgot to ask on the trylock thing.  I
-figured maybe I should ask out loud since we're at it.
+My hardware is a DS15 (Titan), so only slightly newer than the Tsunamis 
+mentioned earlier.  The problem is greatly exacerbated when using a 
+machine-optimized kernel (CONFIG_ALPHA_TITAN) over one with 
+CONFIG_ALPHA_GENERIC.  But it still doesn't go away on a generic kernel, 
+just pops up less often, usually very I/O heavy tasks like checking out 
+a tag in the kernel repo.
 
-Since migrate_vma_setup() always only use trylock (even if before dropping
-the prepare() code), does it mean that it can randomly fail?
+However all of this seems to be dependent on CONFIG_COMPACTION.  With 
+this toggled off all problems disappear, regardless of other options.  I 
+tried reverting the commit 88dbcbb3a4847f5e6dfeae952d3105497700c128 
+mentioned earlier in the thread (the structure has moved to a different 
+file but was otherwise the same), but it unfortunately did not make a 
+difference.
 
-I looked at some of the callers, it seems not all of them are ready to
-handle that (__kvmppc_svm_page_out() or svm_migrate_vma_to_vram()).  Is it
-safe?  Do the callers need to always properly handle that (unless the
-migration is only a best-effort, but it seems not always the case).
+Since this doesn't seem to have a known cause or an easy fix, would it 
+be reasonable to just add a Kconfig dep to disable it automatically on 
+alpha?
 
-Besides, since I read the old code of prepare(), I saw this comment:
+Thank you!
 
--		if (!(migrate->src[i] & MIGRATE_PFN_LOCKED)) {
--			/*
--			 * Because we are migrating several pages there can be
--			 * a deadlock between 2 concurrent migration where each
--			 * are waiting on each other page lock.
--			 *
--			 * Make migrate_vma() a best effort thing and backoff
--			 * for any page we can not lock right away.
--			 */
--			if (!trylock_page(page)) {
--				migrate->src[i] = 0;
--				migrate->cpages--;
--				put_page(page);
--				continue;
--			}
--			remap = false;
--			migrate->src[i] |= MIGRATE_PFN_LOCKED;
--		}
+-------- Original Message --------
+Subject: Re: ext4 corruption on alpha with 4.20.0-09062-gd8372ba8ce28
+Date: 2019-02-21 08:29
+ From: Jan Kara <jack@suse.cz>
+To: Meelis Roos <mroos@linux.ee>
 
-I'm a bit curious whether that deadlock mentioned in the comment is
-observed in reality?
+On Thu 21-02-19 01:23:50, Meelis Roos wrote:
+> > > First, I found out that both the problematic alphas had memory compaction and
+> > > page migration and bounce buffers turned on, and working alphas had them off.
+> > >
+> > > Next, turing off these options makes the problematic alphas work.
+> >
+> > OK, thanks for testing! Can you narrow down whether the problem is due to
+> > CONFIG_BOUNCE or CONFIG_MIGRATION + CONFIG_COMPACTION? These are two
+> > completely different things so knowing where to look will help. Thanks!
+> 
+> Tested both.
+> 
+> Just CONFIG_MIGRATION + CONFIG_COMPACTION breaks the alpha.
+> Just CONFIG_BOUNCE has no effect in 5 tries.
 
-If the page was scanned in the same address space, logically the lock order
-should be guaranteed (if both page A&B, both threads should lock in order).
-I think the order can be changed if explicitly did so (e.g. fork() plus
-mremap() for anonymous here) but I just want to make sure I get the whole
-point of it.
+OK, so page migration is problematic. Thanks for confirmation!
 
-Thanks,
-
--- 
-Peter Xu
-
+								Honza

@@ -2,95 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C589F5A0AF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8EF5A0AF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239032AbiHYIEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S239049AbiHYIE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiHYIEH (ORCPT
+        with ESMTP id S239034AbiHYIEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:04:07 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A5558D8;
-        Thu, 25 Aug 2022 01:04:05 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id j26so9889336wms.0;
-        Thu, 25 Aug 2022 01:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:cc:to:from:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=1QLLv2yv2C5Rwl3FU5SB/pJ7Nwwb3OC8gXKx+2uAV5g=;
-        b=ZUqEuqYLWqO373UnT9Li1Ip8LxeRW4o/paM0vO0PbJAa18TU/AfLI201w7AOS7lGCe
-         Htdnbz0qNA+n4waQDvPNfoGfpGQzZpQp6fxmSDCRdR2QDerzCiwpnigr4JhIaSU2CiV3
-         kls3wDmVOkRx1toO5y9fHuG4HsN3OsT+8GHZaYXOz2iCwF+uYaq9ukM5u+jI9io3hWry
-         D8zXTjz4c6nEVxqJzNR9b4LkdiOAGPjdZlyaNSpwEt/avBY5JN8eEAUDoXgVnis6kcjW
-         A/dGsboqkeAT0n+lau0R2elqbXBGsGnwAy6jERhZ9Szyfd7qh7UeocEbx/29brm4X3Pr
-         7ImQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:cc:to:from:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=1QLLv2yv2C5Rwl3FU5SB/pJ7Nwwb3OC8gXKx+2uAV5g=;
-        b=mJe7bmYML03VFO6ULE4BGy487trlWNe98fPf8iD6kvgbEt3vtJY+HrE4CtF3928H3l
-         6IN3cjEBejladvMYKcrOXK/8+Q0sPSSpw/2sflLQck1Oj+clUHvMCurczRXD58K3wYY6
-         oKj2XHxKMxT6o/OzMnT7ayb7ed+MJwzjR5Z3XTEkMuUMTq0Q/f/ZBPbp+iDlb3CS7w+S
-         wRCAuNQPEyKIxChe4+IKZiy7BRKMCPM6HlwAg//zVZZoqmI3dxq2Czozzf+NxCJiv726
-         dHhVy1OSrSYCdF57wE7URDHTvcHXXdocVNO5FTIbfOr76y++ITgxVmQtUxbllnquPCqr
-         hYDQ==
-X-Gm-Message-State: ACgBeo1RgjYv+vaYNhyOQcmPvENW8O9VMMz3Ualxk339F/Q1oEuAZUNA
-        OxWshfjJcnRF+B07dKV//+Q=
-X-Google-Smtp-Source: AA6agR4gl9HaSapnqSYTiv7W1V6zMnM0euJI5+6mxpeJIpUGC7nKo9QKyQcmEBq/YUYHyx0gPxWAQw==
-X-Received: by 2002:a05:600c:3514:b0:3a5:dc71:d9c4 with SMTP id h20-20020a05600c351400b003a5dc71d9c4mr1491302wmq.42.1661414644521;
-        Thu, 25 Aug 2022 01:04:04 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id c10-20020adfa70a000000b0022529d3e911sm19402113wrd.109.2022.08.25.01.04.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 01:04:03 -0700 (PDT)
-Message-ID: <e8b48d52-07ef-5023-7195-173345fd6540@gmail.com>
-Date:   Thu, 25 Aug 2022 10:04:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
+        Thu, 25 Aug 2022 04:04:44 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBE257577
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661414682; x=1692950682;
+  h=message-id:date:subject:from:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=cYYolpIBMQyx/xk+u3QStX/Ue3KKtYmNmKrwe5HXCkY=;
+  b=QKeJl4QvJltikAwRVKvEKme4HYfTbrCkXkyQC+ofLvrz6iMXqu4zlnmg
+   /3wDrAN365MSDnGgX2LXymZhz7H18kun2iF0QrvayhHj8Uwzwf7jm4fDK
+   Bq3pSLs0ymCCzaGUdwH0P/IZx5OK6PAtjs8s7XbVccCyBWbOpzvjbm5d0
+   cNmhPqZh5F+b3VWiiEUsWAaSIBqhwwNng5SmURNNUTtlvXJluzC54VM2Y
+   U/G6AatTSBrVNqYx6fxZBB11OJoUT1dhlaLny3Zk5qHUi20H2Jgtoy1CV
+   TYfnMX4tdIP24gih5Z3/J8J/NRo4BSUHoLY1I+QIoiP8EGDNpFEMYvLDa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291745444"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="291745444"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 01:04:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="678364841"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Aug 2022 01:04:41 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 25 Aug 2022 01:04:41 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 25 Aug 2022 01:04:41 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 25 Aug 2022 01:04:41 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 25 Aug 2022 01:04:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GK0IfiDwXXs48szJbVGvYuh0TFUzVjVFE+brhuqFhQUwEjkJH/q9CLbq8DC9E1ZcQ865nq5wpJn3vHTESjeR8dtln1rt4I+X+gKX86E7B49F9U/p9E9eJWykVBqC7qdYXku9X9zdB8eZysP+ueYVmsb6Q8johxybuJtjI96D0VbZPTgUmYR07Wji//BYXbMQpt0C6JQ5qTT9+R1/zW+WCA5EdfmxCAyvbt9fqkzvUwazDWjOprFWw+UGc/wE917JUxjTa91pjsN0dqCFPlbzyhwu0TkZWG6BMdVMkpOC9bMc5duyf8HOeyLlr1LCWrImM8fJUtXA1tm6HSX5vuRIhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mf4oXxdrAQjmisowjcy3kqixhkCJcocCg+ROr9DtN0k=;
+ b=NbL7t+wbivjJ5IC8qo0NOqOt67jFEaoQikc2Y9oAmAHnoF5efeo+a1GflO0F4oFJVH9IWH2gyoFpapYs1Eq/vWO0OL6xUuk041DdnK7obq7Mol1G1q+gQ33kfzeBFf/5Te5ckl7qIaILkvBX3bIGJIdXS2v5M4q+RsPnMFPzpZ7vMXCm3+sJRU2vVVf3SW93o8h5eF8Qpksz9dK8Ug04L/z4Je20Hrzj9c49Ho7XiCmrLVGkizOO8vSV3q8UU0zeqOk2wOaoKFgg949ovORWqxKyz0ujesJSaNDMKI1J92X8cg+bwOW2OSLzyrwKNnxXyI1dkug9avogL+zn+IZotg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH0PR11MB5409.namprd11.prod.outlook.com (2603:10b6:610:d0::7)
+ by PH7PR11MB6005.namprd11.prod.outlook.com (2603:10b6:510:1e0::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Thu, 25 Aug
+ 2022 08:04:39 +0000
+Received: from CH0PR11MB5409.namprd11.prod.outlook.com
+ ([fe80::70e4:76ca:fc65:df73]) by CH0PR11MB5409.namprd11.prod.outlook.com
+ ([fe80::70e4:76ca:fc65:df73%4]) with mapi id 15.20.5566.014; Thu, 25 Aug 2022
+ 08:04:39 +0000
+Message-ID: <f9cc9317-044d-4f7e-a37c-a06df7262077@intel.com>
+Date:   Thu, 25 Aug 2022 17:04:26 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [Intel-gfx] [PATCH v9 2/8] util_macros: Add exact_type macro to
+ catch type mis-match while compiling
 Content-Language: en-US
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zack Weinberg <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com>
- <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
- <609e1161-87ee-bb48-d14c-dc444ddff754@gmail.com>
-In-Reply-To: <609e1161-87ee-bb48-d14c-dc444ddff754@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Jcs2SV4wGLtedSe0Cg0u0fct"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+To:     <bgolaszewski@baylibre.com>
+CC:     <intel-gfx@lists.freedesktop.org>,
+        <thomas.hellstrom@linux.intel.com>, <keescook@chromium.org>,
+        <jani.nikula@intel.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <chris@chris-wilson.co.uk>,
+        <airlied@linux.ie>, <andrzej.hajda@intel.com>,
+        <matthew.auld@intel.com>, <daniel@ffwll.ch>, <mchehab@kernel.org>,
+        <nirmoy.das@intel.com>, <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+References: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
+ <20220824084514.2261614-3-gwan-gyeong.mun@intel.com>
+In-Reply-To: <20220824084514.2261614-3-gwan-gyeong.mun@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR08CA0044.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::21) To CH0PR11MB5409.namprd11.prod.outlook.com
+ (2603:10b6:610:d0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ae70a4a2-901b-403b-997d-08da86707568
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6005:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wusLjk8QoN+E8gZjtMfZzVPfBZgT5FBujrNLWlcMv6CCgTXZiaIzFcSyGiTdhkdyOpGCblWhhce2tW51xfltn24uHG3hsxbbIfx6dtnW8QqLu/nyPEvqDa2tfJrVLkLwBK9rCfjbFN56c6/W0utzWJj4/MDF3jqD51AV33kwGgiY5SKAHwHOEeLiqRKjeaQfUWluzgKjJ+zhr8gBaaHuKrI8Tf3OV++2u0Y0asNUE22Oq5AkeAdijPLlfzdXg/RXGJfltkKrqMrTLbfcnIz17pLYNA2+FjsPudrbL5M6HQPUoKgpflrsyMEhgPfuv4kwRC5ytfuUZYsTADWwrkJifFbOukuZ/E3M/l9r+RgZh5U+8u5wKf8xi9lTniddCEyFQ/foGUjOmS6tXqfV09TjI8y4HYWYzNsSN6zXn8ul2p1TlDvd/XK8FJXh8wDEElJAe+Q2RywB/XpPRsKA45zOOEdJ+lnyS7cELa6Q8perm3vSc9MchfFyKMUEeqQzyVu+YFr9LeFoxIFY3UGDEMSkBP8S/LgjbbDgmP/3mdgPAsMGhgTql5VUSPM0+eaN9cTbGxRBX24OzyTvhP9fK0p5f2gbmtr1/rWVqgn6PryCGkYv0Wpjp6dbekaAKeOVUKoBEbQ9iUfdUEkOBUgf6Ed8gMfoofIh2e2uTHi5BKuQMWL4aMtuo7Tu7h1cg8S2GrFcAvNJ7GkDhbC/+rnvelM6pScun8tBYsvyluoGTNzajkTqwLNQTrlWDX8QLazvSBh+0m4RNNSGzlUwMmSUpaxGrNG1rBqWte3O9hFSCm8RxLw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5409.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(136003)(366004)(346002)(39860400002)(31696002)(66476007)(38100700002)(8676002)(66556008)(4326008)(5660300002)(86362001)(6916009)(31686004)(82960400001)(36756003)(66946007)(186003)(26005)(6512007)(66574015)(53546011)(6506007)(2616005)(478600001)(6486002)(6666004)(316002)(41300700001)(7416002)(8936002)(2906002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDlPQkZ0M2JKa2FSd3RobWh6YmMxdy92ZTF2RW0zVWwzNFpvOUlMcjcwM0Nn?=
+ =?utf-8?B?Qy9uYVZNakJpOHVQL2NhVFpRbmhCU01aSVIzV280Q3hOUFpySzNtdGdzMndG?=
+ =?utf-8?B?MElvREEzSWh1dGNkNituSDVGY2tIampGSy9hVCtIa0tBOWdUUy9valh6TFRk?=
+ =?utf-8?B?OXRzVEJucWkrKzJRcWdBUHVvQ1lQZERJYmdjelhnQlhZSCtaaFkvNHBGUXVH?=
+ =?utf-8?B?UDc4d3M4Zk9wNC9IWHZkMEpROEphRHhPTDFMRndranA5TXkwQTNCd1MxWHBl?=
+ =?utf-8?B?YkJ0cGs4S3dOS0lldDhkT003Nk5sdEo0TmcwM0VKczVwNDVWTE9OaVZ2SkY3?=
+ =?utf-8?B?Sk9rcmZCUzNCV0NKV0tYWVdWWFdYUDZwQTVIVzFrbS9FS2ZMckpkTXZoaUE2?=
+ =?utf-8?B?QmtzS2ltM0kwS0t1aDZ6azdiNERGMndVVWtVZHJoRktNMkhRV0NzTU1MZzhw?=
+ =?utf-8?B?TmY2dDZMRHV6Q2N1SGZvVDJxeTZhVDJSNTM3OElkeUw0T3BTemhVMC9SK0NG?=
+ =?utf-8?B?djBDK0lQYno1Z0grMEpHV0lNTlhKU1lxKzBPc1RWVk4xak11cGhiQVMrdm83?=
+ =?utf-8?B?WWpDTlNKelp2VFV5UkNHRklqaEVFak9YV1ByZ3ZJREpndzFkbGk5WTlhb244?=
+ =?utf-8?B?Z1M5UEZmNU11QnB2Zk5weGVOU0RobE1CMEc0Z1ZRZHc4MWs4N0R0VXZOb1Z0?=
+ =?utf-8?B?NS9YZ3VORXBYazRsTTd5bDFYWmtRMDRzWWI3RGpUSVIzaWx1ajRCY2ZNVVBM?=
+ =?utf-8?B?SUg5K1ZWS2dPcmFjWVcyYk9WdGh4NGJXY0lCbmNxejUrbGZXNE9WbDhjejU4?=
+ =?utf-8?B?R09TZVNBNTNWZVdsUGN3SElTeDlaWFR6akRBVHBvT1pydU9sQkZFNDZJak5M?=
+ =?utf-8?B?WS80dTlvL0pCU2tvTjNPVkU1WmQ3ekNMT0R0QVNKYzU3ME5KKzlNdkg5TmZZ?=
+ =?utf-8?B?NEw2OC9UU0xhQzd4ZGVIdW1nLytEak9iME9LM1pqc091ejk1QXg1SG5RQ01G?=
+ =?utf-8?B?aDBod0JtOERCR2x6b3cyMUtNWVpEYVAyRmwvTEs2d2daTzlqVHpPSUtGTVdR?=
+ =?utf-8?B?eHUvaXowdFROQzByOTZmUlFZZ2VYUUg1OTRkb1JJUS9xV3RESmRETU1mSFlI?=
+ =?utf-8?B?bnRXTVNyM0lFSitCb2dDdXd4MnZmZVd5RS9wRWxoNWs1RTVORlZydlpEWjR6?=
+ =?utf-8?B?ZEl6NEdBTUx3Rk9jZHJ4THVoMEgxZkxUcDFINU14QkFvU0pqVzBiZDdyTXZi?=
+ =?utf-8?B?MStoc3JhMXFBYitQVm81TG9YdVd3U1dpNldLMlErL1FLaGcwODloelZrMFd0?=
+ =?utf-8?B?aklnUmplNHk1cXRsY2pyZWVSQWlJdUJwV3VXRzZHeHpRMkNsZXBQanFmN01Q?=
+ =?utf-8?B?V1VEejJid3FTQ0g5Y3IvZ1FQT01LTlJtbTVibHRyemNPMmFyZDJieC85STFD?=
+ =?utf-8?B?anhnUVNkUjNVWEFsUmdqbllMSmpOV0w4UVluSXM2VGFLeVl5amg4ZVltSlVX?=
+ =?utf-8?B?L1RyL2RSUVAvOTNFMHdaYmkyNW04QSs1VUVvZTdhY1QwWWwxZHdkQjN2MmQy?=
+ =?utf-8?B?cmg3cnRjcytjUFR0c1BGeXlFY0dwY2taSjhDQUV1OE1qYUNRMTlDcFJmaWNm?=
+ =?utf-8?B?MHI5ZGdsdW0welZJSWRSQ21UUENZVXdUR0dpNFRIKzJBUUdMYU9WM1JOTkNl?=
+ =?utf-8?B?OUZOL3ZNeGpSVkdDU2JjRDVqZU0rMEpvUEZmRk1DZTZqWnJaYTRicHNuSm9Q?=
+ =?utf-8?B?SUhCbHFLSFZ2TS8xampvOUNLa0djby9DbGQ3WGNlT2FiTjBWTXZJWm5sWENv?=
+ =?utf-8?B?am52VmxjR3VlRFR6eGJtNTFGU01Bdk9OM2dEVHlneFk5NVRTWWhnMkZ2c1VM?=
+ =?utf-8?B?ZFRsQXZjYXlSOVFCNE0yTXFLYXREMUYxaFIzVmFGb1MrWmRtSE1sOGl1N2tW?=
+ =?utf-8?B?WXlyV09OKzJmeitoWUFheDBleUhpV25lL3pYekFkVnpVVkF0NHpveUlFbWQy?=
+ =?utf-8?B?bk1mR1hNWXNrZVRYSi9TSzFKR3ZvMmxlcTk5YmtkVTdhRFZNRXNnaFJ4Nkw3?=
+ =?utf-8?B?MDVtRTVqVzNxR01VaE90UStYTWtBdEdlL21QS0NpZmpoSFRiMy9hbENJcEdi?=
+ =?utf-8?B?NHBldmRydUlsY3NjZEFGUWx0L3A3WDJiUmtaN016bGJOZmUwNkFkdmw3dkt1?=
+ =?utf-8?B?NFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae70a4a2-901b-403b-997d-08da86707568
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5409.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 08:04:39.3562
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8BKFuHE/j0tb+FXjd+GuPmaVf0j2r5oHTAvch/vvVsC9/UMne+qNIvLu3CttxbIrgSNvJWjptNyf73l4YAJc111r1MywerdDrcU59FWm86g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6005
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,109 +169,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Jcs2SV4wGLtedSe0Cg0u0fct
-Content-Type: multipart/mixed; boundary="------------3Cr5MBcyk9uZm0r3hhGNJWm1";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Alex Colomar <alx@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- linux-man <linux-man@vger.kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Zack Weinberg <zackw@panix.com>,
- LKML <linux-kernel@vger.kernel.org>, glibc <libc-alpha@sourceware.org>,
- GCC <gcc-patches@gcc.gnu.org>, bpf <bpf@vger.kernel.org>,
- LTP List <ltp@lists.linux.it>, Linux API <linux-api@vger.kernel.org>,
- linux-arch <linux-arch@vger.kernel.org>,
- David Laight <David.Laight@aculab.com>,
- Joseph Myers <joseph@codesourcery.com>, Florian Weimer <fweimer@redhat.com>,
- Cyril Hrubis <chrubis@suse.cz>, David Howells <dhowells@redhat.com>,
- Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
- Adhemerval Zanella <adhemerval.zanella@linaro.org>,
- Michael Kerrisk <mtk.manpages@gmail.com>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <e8b48d52-07ef-5023-7195-173345fd6540@gmail.com>
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com>
- <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
- <609e1161-87ee-bb48-d14c-dc444ddff754@gmail.com>
-In-Reply-To: <609e1161-87ee-bb48-d14c-dc444ddff754@gmail.com>
+Hi Bartosz Golaszewski,
 
---------------3Cr5MBcyk9uZm0r3hhGNJWm1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+would you mind taking a look at this patch?
 
-T24gOC8yNS8yMiAwOTo0NCwgQWxlamFuZHJvIENvbG9tYXIgd3JvdGU6DQo+IEhpIEdyZWcs
-DQo+IA0KPiBPbiA4LzI1LzIyIDA3OjU3LCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+
-PiBPbiBUaHUsIEF1ZyAyNSwgMjAyMiBhdCAwMTozNjoxMEFNICswMjAwLCBBbGVqYW5kcm8g
-Q29sb21hciB3cm90ZToNCj4+PiBCdXQgZnJvbSB5b3VyIHNpZGUgd2hhdCBkbyB3ZSBoYXZl
-P8KgIEp1c3QgZGlyZWN0IE5BS3Mgd2l0aG91dCBtdWNoDQo+Pj4gZXhwbGFuYXRpb24uwqAg
-VGhlIG9ubHkgb25lIHdobyBnYXZlIHNvbWUgZXhwbGFuYXRpb24gd2FzIEdyZWcsIGFuZCBo
-ZQ0KPj4+IHZhZ3VlbHkgcG9pbnRlZCB0byBMaW51cydzIGNvbW1lbnRzIGFib3V0IGl0IGlu
-IHRoZSBwYXN0LCB3aXRoIG5vIA0KPj4+IHByZWNpc2UNCj4+PiBwb2ludGVyIHRvIGl0LsKg
-IEkgaW52ZXN0aWdhdGVkIGEgbG90IGJlZm9yZSB2MiwgYW5kIGNvdWxkIG5vdCBmaW5kIA0K
-Pj4+IGFueXRoaW5nDQo+Pj4gc3Ryb25nIGVub3VnaCB0byByZWNvbW1lbmQgdXNpbmcga2Vy
-bmVsIHR5cGVzIGluIHVzZXIgc3BhY2UsIHNvIEkgDQo+Pj4gcHVzaGVkIHYyLA0KPj4+IGFu
-ZCB0aGUgZGlzY3Vzc2lvbiB3YXMga2VwdC4NCj4+DQo+PiBTbyBkZXNwaXRlIG1lIHNheWlu
-ZyB0aGF0ICJ0aGlzIGlzIG5vdCBvayIsIGFuZCBtYW55IG90aGVyIG1haW50YWluZXJzDQo+
-PiBzYXlpbmcgInRoaXMgaXMgbm90IG9rIiwgeW91IGFwcGxpZWQgYSBwYXRjaCB3aXRoIG91
-ciBvYmplY3Rpb25zIG9uIGl0Pw0KPj4gVGhhdCBpcyB2ZXJ5IG9kZCBhbmQgYSBiaXQgcnVk
-ZS4NCj4+DQo+Pj4gSSB3b3VsZCBsaWtlIHRoYXQgaWYgeW91IHN0aWxsIG9wcG9zZSB0byB0
-aGUgcGF0Y2gsIGF0IGxlYXN0IHdlcmUgDQo+Pj4gYWJsZSB0bw0KPj4+IHByb3ZpZGUgc29t
-ZSBmYWN0cyB0byB0aGlzIGRpc2N1c3Npb24uDQo+Pg0KPj4gVGhlIGZhY3QgaXMgdGhhdCB0
-aGUga2VybmVsIGNhbiBub3QgdXNlIHRoZSBuYW1lc3BhY2UgdGhhdCB1c2Vyc3BhY2UgaGFz
-DQo+PiB3aXRoIElTTyBDIG5hbWVzLsKgIEl0J3MgdGhhdCBzaW1wbGUgYXMgdGhlIElTTyBz
-dGFuZGFyZCBkb2VzIE5PVA0KPj4gZGVzY3JpYmUgdGhlIHZhcmlhYmxlIHR5cGVzIGZvciBh
-biBBQkkgdGhhdCBjYW4gY3Jvc3MgdGhlIHVzZXIva2VybmVsDQo+PiBib3VuZHJ5Lg0KPiAN
-Cj4gSSB1bmRlcnN0YW5kIHRoYXQuwqAgQnV0IHVzZXItc3BhY2UgcHJvZ3JhbXMgYXJlIGFs
-bG93ZWQgdG8gdXNlIHRoZSANCj4gc3RhbmRhcmQgdHlwZXMgd2hlbiBjYWxsaW5nIGEgc3lz
-Y2FsbCB0aGF0IHJlYWxseSB1c2VzIGtlcm5lbCB0eXBlcy4NCj4gDQo+IElNSE8sIGl0IHNo
-b3VsZCBiZSBpcnJlbGV2YW50IGZvciB0aGUgdXNlciBob3cgdGhlIGtlcm5lbCBkZWNpZGVz
-IHRvIA0KPiBjYWxsIGEgNjQtYml0IHVuc2lnbmVkIGludGVnZXIsIHJpZ2h0Pw0KPiANCj4g
-T3IgZG8geW91IG1lYW4gdGhhdCBzb21lIG9mIHRoZSBwYWdlcyBJIG1vZGlmaWVkDQoNCi4u
-LiBhcmUgaW50ZW5kZWQgbW9zdGx5IGZvciBrZXJuZWwtc3BhY2UgcHJvZ3JhbW1lcnM/DQoN
-Cj4gDQo+Pg0KPj4gV29yayB3aXRoIHRoZSBJU08gQyBzdGFuZGFyZCBpZiB5b3Ugd2lzaCB0
-byBkb2N1bWVudCBzdWNoIHR5cGUgdXNhZ2UsDQo+PiBhbmQgZ2V0IGl0IGFwcHJvdmVkIGFu
-ZCB0aGVuIHdlIHdvdWxkIGJlIHdpbGxpbmcgdG8gY29uc2lkZXIgc3VjaCBhDQo+PiBjaGFu
-Z2UuwqAgQnV0IHVudGlsIHRoZW4sIHdlIGhhdmUgdG8gc3RpY2sgdG8gb3VyIHZhcmlhYmxl
-IG5hbWUgdHlwZXMsDQo+PiBqdXN0IGxpa2UgYWxsIG90aGVyIG9wZXJhdGluZyBzeXN0ZW1z
-IGhhdmUgdG8gKHdlIGFyZSBub3QgYWxvbmUgaGVyZS4pDQo+Pg0KPj4gUGxlYXNlIHJldmVy
-dCB5b3VyIGNoYW5nZS4NCj4gDQo+IFRoYW5rcyBmb3IgYXNraW5nIG5pY2VseS4NCj4gDQo+
-IFNpbmNlIHRoZXJlJ3Mgb25nb2luZyBkaXNjdXNzaW9uLCBhbmQgSSBkb24ndCB3YW50IHRv
-IG1ha2UgaXQgbG9vayBsaWtlIA0KPiBpZ25vcmluZyBpdCwgSSd2ZSByZXZlcnRlZCB0aGUg
-cGF0Y2ggZm9yIG5vdy7CoCBJZiBJIGFwcGx5IGl0IGFnYWluLCBJIA0KPiBob3BlIHRoYXQg
-aXQgd2lsbCBiZSB3aXRoIHNvbWUgbW9yZSBjb25zZW5zdXMsIGFzIEkndmUgYWx3YXlzIHRy
-aWVkIHRvIA0KPiBkby7CoCBTb3JyeSBpZiBJIHdhcyBhIGJpdCBpcmFzY2libGUgeWVzdGVy
-ZGF5LsKgIFNoaXQgaGFwcGVucy4NCj4gDQo+IFRMO0RSOsKgIFBhdGNoIHJldmVydGVkOyBh
-c2tpbmcgbmljZWx5IHdvcmtzLiA9KQ0KPiANCj4+DQo+PiBncmVnIGstaA0KPiANCj4gQ2hl
-ZXJzLA0KPiANCj4gQWxleA0KPiANCg0KLS0gDQpBbGVqYW5kcm8gQ29sb21hcg0KPGh0dHA6
-Ly93d3cuYWxlamFuZHJvLWNvbG9tYXIuZXMvPg0K
+Thanks,
+G.G.
 
---------------3Cr5MBcyk9uZm0r3hhGNJWm1--
-
---------------Jcs2SV4wGLtedSe0Cg0u0fct
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmMHLPEACgkQnowa+77/
-2zIJ/g/8DaBt3UpLTZvVKMjW6ELL0lD7x3FambKSQF9D4C2o51juKOgQg58Rwfs6
-4/PO5BA5itoFav3k9yMr1Ou6W7pFwovX2GCc8sFPX1NDGIpVdxxZWqo+DiCOrNNx
-zDpxZUK1FJdSZ8ofRZTWW+qyBds+eV7rrh3lzE6c4CC8vF99TtG/dR3YCJKiVjdC
-HFsySWorAhP/bGY7KRoHPomLCt2QZvEhkWZTZMRGzKMhjX+lCleQfSDdMDhQNgTx
-xayVyh2VgdoRPLtK4Cd0BxG0l2mqnCumCCjQ9yTsPdDqD0xucbeuocheV7wQsciW
-xWVMBKs10E6BDiqac5W1PlVQ1ANlCHfuUFEoLhvuJTftXSa0kfFXrCseluQnhynt
-FM1NGIsVcjXP/kmG3aRhXqHEMreBPYSYk2n1/BSCSOhqGDWPA7b/RQLXHQ2NrS7o
-Kshl/3tmdxXxIM04Bbzyv1yEh6rahvMabXyHxNitGjRCiw2EUlDJGnz6cOmQHiHa
-RDW+A5+ZDzZhwvP8LZPEv5Oa0GJUFx7Od3bYtWS74ebc9btf1+BlDhjyFT3/4zFi
-SWUu+ly1I0/AvFWSEyD0B/nXFzEVCLON8oWPEyeuC4CIZLEJP2s1g7fHy/aZPBH5
-yPAd9H1sprC06/Qmgik3YvozwZGUMaT/dG4zZaUA73T3ROGgIkI=
-=pDPZ
------END PGP SIGNATURE-----
-
---------------Jcs2SV4wGLtedSe0Cg0u0fct--
+On 8/24/22 5:45 PM, Gwan-gyeong Mun wrote:
+> It adds exact_type and exactly_pgoff_t macro to catch type mis-match while
+> compiling. The existing typecheck() macro outputs build warnings, but the
+> newly added exact_type() macro uses the BUILD_BUG_ON() macro to generate
+> a build break when the types are different and can be used to detect
+> explicit build errors.
+> 
+> v6: Move macro addition location so that it can be used by other than drm
+>      subsystem (Jani, Mauro, Andi)
+> 
+> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Cc: Matthew Auld <matthew.auld@intel.com>
+> Cc: Nirmoy Das <nirmoy.das@intel.com>
+> Cc: Jani Nikula <jani.nikula@intel.com>
+> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>   include/linux/util_macros.h | 25 +++++++++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/include/linux/util_macros.h b/include/linux/util_macros.h
+> index 72299f261b25..b6624b275257 100644
+> --- a/include/linux/util_macros.h
+> +++ b/include/linux/util_macros.h
+> @@ -2,6 +2,9 @@
+>   #ifndef _LINUX_HELPER_MACROS_H_
+>   #define _LINUX_HELPER_MACROS_H_
+>   
+> +#include <linux/types.h>
+> +#include <linux/bug.h>
+> +
+>   #define __find_closest(x, a, as, op)					\
+>   ({									\
+>   	typeof(as) __fc_i, __fc_as = (as) - 1;				\
+> @@ -38,4 +41,26 @@
+>    */
+>   #define find_closest_descending(x, a, as) __find_closest(x, a, as, >=)
+>   
+> +/**
+> + * exact_type - break compile if source type and destination value's type are
+> + * not the same
+> + * @T: Source type
+> + * @n: Destination value
+> + *
+> + * It is a helper macro for a poor man's -Wconversion: only allow variables of
+> + * an exact type. It determines whether the source type and destination value's
+> + * type are the same while compiling, and it breaks compile if two types are
+> + * not the same
+> + */
+> +#define exact_type(T, n) \
+> +	BUILD_BUG_ON(!__builtin_constant_p(n) && !__builtin_types_compatible_p(T, typeof(n)))
+> +
+> +/**
+> + * exactly_pgoff_t - helper to check if the type of a value is pgoff_t
+> + * @n: value to compare pgoff_t type
+> + *
+> + * It breaks compile if the argument value's type is not pgoff_t type.
+> + */
+> +#define exactly_pgoff_t(n) exact_type(pgoff_t, n)
+> +
+>   #endif

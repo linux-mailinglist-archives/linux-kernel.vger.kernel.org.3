@@ -2,149 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0795A1275
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE70C5A121F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241299AbiHYNhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S242004AbiHYN3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241823AbiHYNhN (ORCPT
+        with ESMTP id S239900AbiHYN3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:37:13 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E3DB275C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:37:11 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so30922824ejt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=dlm2famS8O5FqtaX9yCeRxscNO/EP4O+QRIK7hJkB2s=;
-        b=hTFwrfcekpPlwsKPKUDudDRoTVjcNhRXmh1WtgUK60PKUyBomYKetqdJodmXMyLiB0
-         dkyuV7K5eZsOuK963+nUWPUe7KCyXkJZONDwPCrivKsZT9PJDubk1TQqXKdDF6asiLn/
-         tKuc0x8bOBlRQRLCT3cu6Yw1wdke2dVeoukHTnpDK1KgGBp18+wj0ZvHkmzlWDm5xfBe
-         7fzo7likfMjdV90vpKunxdhJef3uuXRWyf+Ve8lXxcg9SOUlYCESKPN/0H+qXAmkBCTn
-         HkRXi4lc+hQbTfmsIQLyBi6byW3t6UFkkCoPxj3LYOq5bF2Nj0Yq+8g0crj8aP/TqJK5
-         Uo7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=dlm2famS8O5FqtaX9yCeRxscNO/EP4O+QRIK7hJkB2s=;
-        b=z/iwng9LAcNs31fMMvIPyE5GYenZoMGnA2zY0dbOJfrPdRqWy7Ys1uUheUTR4Lp0K4
-         S6R7G6OsaYuGdP7I2sIPv/1Cn3thqhvhCt5vbugkrFGYH8JTvT00gvieFBudwqISjpPs
-         bMelFQIMEHSgQeC0ivvVtlmEwJdAUWXweb493lNphvQ4Qvi2dkmXJrsLX1I7k0NMs1+Y
-         Z5krQ4wZ9SMoNmlaLqyfi2NAnhjIh//PXuI3FL8OiI+azhubI3ztAj82uxvu6m1olpbZ
-         5HHuWdJB0Jq7MlVTASzhJM3yXMqV2opN5JWhVtFRffufIg76GPczyIHd4CYzM+ih5TOh
-         nYCA==
-X-Gm-Message-State: ACgBeo00XlYznbOIZlFH3ZfNzZkEOJ3NwCut2Gj/ye0yW3Ji3Qv+IrtK
-        mVnijBWB33smXQrFvdqr02V59BBeso3fmY0+LngzNg==
-X-Google-Smtp-Source: AA6agR6Be+IFNm9RQjAf6ZoJJ0Gv1gRLpqln7PaJkfZ2s1Nuu2OIJL74xQl9m77k4Ch3VEJMzJNEIiUBj3SnGR8MwxQ=
-X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
- dd6-20020a1709069b8600b0073d72cf72afmr2609925ejc.440.1661434630115; Thu, 25
- Aug 2022 06:37:10 -0700 (PDT)
+        Thu, 25 Aug 2022 09:29:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62396B4EBE;
+        Thu, 25 Aug 2022 06:29:40 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MD3dB1bd4zkWKV;
+        Thu, 25 Aug 2022 21:26:06 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 21:29:38 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 25 Aug
+ 2022 21:29:37 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>
+CC:     <tony0620emma@gmail.com>, <kvalo@kernel.org>, <phhuang@realtek.com>
+Subject: [PATCH -next] wifi: rtw88: add missing destroy_workqueue() on error path in rtw_core_init()
+Date:   Thu, 25 Aug 2022 21:37:31 +0800
+Message-ID: <20220825133731.1877569-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
- <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
- <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
- <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
- <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
- <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com> <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
-In-Reply-To: <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 25 Aug 2022 15:36:58 +0200
-Message-ID: <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Alexandre Courbot <gnurou@gmail.com>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 2:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Thu, Aug 18, 2022 at 2:25 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+Add the missing destroy_workqueue() before return from rtw_core_init()
+in error path.
 
-> > git grep 'base = -1' yields these suspects:
-> >
-> > arch/arm/common/sa1111.c:       sachip->gc.base = -1;
-> > arch/arm/common/scoop.c:        devptr->gpio.base = -1;
-> > arch/powerpc/platforms/52xx/mpc52xx_gpt.c:      gpt->gc.base = -1;
-> > arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c: gc->base = -1;
-> >
-> > That's all! We could just calculate these to 512-ngpios and
-> > hardcode that instead.
->
-> How do the consumers find the numbers for these four?
+Fixes: fe101716c7c9 ("rtw88: replace tx tasklet with work queue")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/wireless/realtek/rtw88/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-For SA1111 the chip gets named "sa1111" and some consumers actually
-use proper machine descriptions, maybe all?
+diff --git a/drivers/net/wireless/realtek/rtw88/main.c b/drivers/net/wireless/realtek/rtw88/main.c
+index 790dcfed1125..557213e52761 100644
+--- a/drivers/net/wireless/realtek/rtw88/main.c
++++ b/drivers/net/wireless/realtek/rtw88/main.c
+@@ -2094,7 +2094,7 @@ int rtw_core_init(struct rtw_dev *rtwdev)
+ 	ret = rtw_load_firmware(rtwdev, RTW_NORMAL_FW);
+ 	if (ret) {
+ 		rtw_warn(rtwdev, "no firmware loaded\n");
+-		return ret;
++		goto destroy_workqueue;
+ 	}
+ 
+ 	if (chip->wow_fw_name) {
+@@ -2104,11 +2104,15 @@ int rtw_core_init(struct rtw_dev *rtwdev)
+ 			wait_for_completion(&rtwdev->fw.completion);
+ 			if (rtwdev->fw.firmware)
+ 				release_firmware(rtwdev->fw.firmware);
+-			return ret;
++			goto destroy_workqueue;
+ 		}
+ 	}
+ 
+ 	return 0;
++
++destroy_workqueue:
++	destroy_workqueue(rtwdev->tx_wq);
++	return ret;
+ }
+ EXPORT_SYMBOL(rtw_core_init);
+ 
+-- 
+2.25.1
 
-arch/arm/mach-sa1100/jornada720.c:              GPIO_LOOKUP("sa1111",
-0, "s0-power", GPIO_ACTIVE_HIGH),
-arch/arm/mach-sa1100/jornada720.c:              GPIO_LOOKUP("sa1111",
-1, "s1-power", GPIO_ACTIVE_HIGH),
-(...)
-
-For Scoop it is conditionally overridden in the code. I guess always
-overridden.
-
-For powerpc these seem to be using (old but working) device tree
-lookups, so should not be an issue.
-
-Sadly I'm not 100% sure that there are no random hard-coded
-GPIO numbers referring to whatever the framework gave them
-at the time the code was written :(
-
-Another reason the base is assigned from above (usually
-from 512 and downward) is that the primary SoC GPIO usually
-want to be at base 0 and there is no guarantee that it will
-get probed first. So hard-coded GPIO bases go from 0 -> n
-and dynamically allocateed GPIO bases from n <- 512.
-
-Then we hope they don't meet and overlap in the middle...
-
-> > and in that case it is better to delete the use of this function
-> > altogether since it can not fail.
->
-> S32_MAX might be a better upper bound. That allows to
-> just have no number assigned to a gpio chip. Any driver
-> code calling desc_to_gpio() could then get back -1
-> or a negative error code.
->
-> Making the ones that are invalid today valid sounds like
-> a step backwards to me if the goal is to stop using
-> gpio numbers and most consumers no longer need them.
-
-OK I get it...
-
-Now: who wants to write this patch? :)
-
-Christophe? Will you take a stab at it?
-
-Yours,
-Linus Walleij

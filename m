@@ -2,146 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124BB5A1443
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466C95A14E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241727AbiHYOkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S242119AbiHYOyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242190AbiHYOjw (ORCPT
+        with ESMTP id S234556AbiHYOyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:39:52 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DD8B8A6F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:38:42 -0700 (PDT)
-Received: from mail-ej1-f54.google.com ([209.85.218.54]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MjSHa-1pAlMA0fT0-00ktgm for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022
- 16:38:40 +0200
-Received: by mail-ej1-f54.google.com with SMTP id lx1so3531893ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:38:40 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3ELLj5lfWfm1SrRqOPcAiydjBOzCOhaC9UihKq1O3F9JKhs+Ti
-        ZLMcn9zXQkvaI70A0/i3oZMub8Jx5uI3f3TlvcU=
-X-Google-Smtp-Source: AA6agR51v/FeIcSJfSqlFkB+AtvglMLd5zOUyHojI8I/eQyoItC8NHpfXs4b9QXagWqWJVvpw6ReFMJBqvV8ZcPzLrw=
-X-Received: by 2002:a17:907:1c27:b0:73d:ce49:6dd7 with SMTP id
- nc39-20020a1709071c2700b0073dce496dd7mr2455549ejc.470.1661438319816; Thu, 25
- Aug 2022 07:38:39 -0700 (PDT)
+        Thu, 25 Aug 2022 10:54:11 -0400
+X-Greylist: delayed 481 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 07:54:10 PDT
+Received: from esa3.mentor.iphmx.com (esa3.mentor.iphmx.com [68.232.137.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B591FB4EB4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:54:10 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,263,1654588800"; 
+   d="scan'208";a="81807983"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa3.mentor.iphmx.com with ESMTP; 25 Aug 2022 06:38:49 -0800
+IronPort-SDR: x1Ixj9xEowfDaxB+rCmYv+GSCPnGqKWu+UVR1/d2bXu884TLkcyorKTAOJ3GIdG2sZcAKPnr8C
+ HrDpsKuUuy/7A3YVdzDaX/MsrZX96NDhq5JOA2b7iEqcFgR8p++itQnfXWYEalx8sudUp7WR3Q
+ um6mcl43b7D6ol4iQIF2NVNDO6kFKAVM4x0sDavVBXMjnIhpFoTzJo4nALK+MjLYUthu9lkmIN
+ xkDupHA97VMp7y+qdLBmrdVJnKzGutKQCtTsZdyiix3T/aUpRWC6kZou1GuriOnoXxFN8q1rQH
+ aYs=
+Date:   Thu, 25 Aug 2022 14:38:40 +0000
+From:   Joseph Myers <joseph@codesourcery.com>
+X-X-Sender: jsm28@digraph.polyomino.org.uk
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Florian Weimer <fweimer@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alex Colomar <alx@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Zack Weinberg <zackw@panix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
+        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        Cyril Hrubis <chrubis@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
+        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
+ naming
+In-Reply-To: <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2208251435370.104368@digraph.polyomino.org.uk>
+References: <20210423230609.13519-1-alx.manpages@gmail.com> <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com> <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
+ <87ilmgddui.fsf@oldenburg.str.redhat.com> <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220822194310.31796-1-rdunlap@infradead.org>
-In-Reply-To: <20220822194310.31796-1-rdunlap@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 25 Aug 2022 16:38:23 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3G2GBaPaVsQo9mJfqq7ba9mzDWQp=wjxzqd5X0Zm+qwA@mail.gmail.com>
-Message-ID: <CAK8P3a3G2GBaPaVsQo9mJfqq7ba9mzDWQp=wjxzqd5X0Zm+qwA@mail.gmail.com>
-Subject: Re: [RFC PATCH] compat: update linux/compat.h and kernel/sys_ni.c
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:vVJ2ZO6mSMejXGmcoHHljpjBAPldtw424AJoqadx7Nuy33Mrsbw
- vGU4Djl7HQ8SoJ77mlsMISbT4YuP47E/hP9mik4oJ8Vc+eaH57Z157LBrcBX+FzzGjP2FRA
- 6IPk1ytwil8InC4F55fsovgrEhags5lAo9rQLMSPk5IJPWdl1jdX3LX7aSY9lLajY+GO71H
- Jn8zRTlRWA0y6PTBQN78Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:s1gL5huOFOc=:o5ihwEqjsVrFUbNyhVqT4v
- xqRA884dH4lDf9pRDGdUQw+cjaJnFCbeTyeJqhuFt9Tyw2xCIt3YAPO8uor0CMbcDzpsC3/sl
- 0gB1G3DG+KIJR+wnWLeSp7MsWvxZLEr+zyby0j5CjdKkhJBGEOjVbamRtIGTJG/knAtjQa9eb
- y5UFmTd2KzXW51YgAA9iszMYqyazi8UmyyLBkKs2PlWnP1VgeypHuW4UokDLG6Y8KiENJ1Oqr
- 0VzaNUJBl8/ChGAOtW2YV4RL2KHdERQRIiyCiZOUCfCovq+7Kr5Be50NA71TRpamgx5yOB4bY
- v9Wfj5aX+jp7wNCdBwIOMH3yVRKS9B+MhjthXx+ik+pcrBJ15RtUex8T5meEetQlij2Vslz/w
- sMT1GdQ3I6G8uQLf2PbgVueN869rhTfDmFdkmu8+Vjg00N2bVG8R44H1hptw7jH3tBoAJd6uQ
- BB80+UKIG3m8CwYdbrYKSXYxUeFTV0xtlNVyQ5o4+cM7fltCRXPz05qNDC2YjRhskzwC/2F9c
- 5U5WtnPuStGnQzDkAYNDiiff3vAAhSg+Jr8CfVLYX2wLHHCQje8DvCLS0DNs/2+t4S13mr5+c
- vilmYk77ObPMRaYhc4LVahiT72+gpkxAb+rPzX+E6MDR2D9aTA45FQ3iHLxL5pQsAPBObsLE7
- n7Z1DjQVzbGcgD9cU8jXNmrFE6MKTRU1VjfnKtBgjBA/yh+NNifcPQ04bY1KJP18x80PAy1BB
- CkeA0vihstNlTF7cNhuumoCLoo/gaTRoYjVrltyhqYHQZB3FGnTbZLN1g4RZt0hYzVYW+Ka4v
- dmBIIro4TH1Qtbp4/k4WgpDa/MUqhV35s6YtXuG8/0+bzl78ObxKvwJHSz/CUg4Um9jxP5hLY
- YFwntT8+ZYeKfvULvFbQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-11.mgc.mentorg.com (139.181.222.11) To
+ svr-ies-mbx-10.mgc.mentorg.com (139.181.222.10)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 9:43 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Thu, 25 Aug 2022, Linus Torvalds wrote:
 
->   * Deprecated system calls which are still defined in
-> @@ -910,19 +901,13 @@ asmlinkage long compat_sys_old_select(st
-> -#ifdef CONFIG_COMPAT_OLD_SIGACTION
-> +struct compat_old_sigaction;
->  asmlinkage long compat_sys_sigaction(int sig,
->                                     const struct compat_old_sigaction __user *act,
->                                     struct compat_old_sigaction __user *oact);
-> -#endif
+> That's a small detail that yes, we've tried to avoid the absolute
+> humongous mess that the C standard library has with their horrendous
+> 'PRId*' mess, but honestly, it's just a tiny detail.
 
-All the removed #ifdef look good to me here, and I checked that there
-are no conflicting prototypes for the ones you change.
+I've not yet implemented it for glibc or for GCC format checking, but C23 
+adds 'wN' format length modifiers so you will be able to e.g. use "%w64d" 
+with printf to print an int64_t and won't need those PRI macros any more.
 
-For COND_SYSCALL_COMPAT(), I think they should not be part of
-this patch, and only added for specific optional calls that would cause
-a link failure.
-
-> @@ -94,6 +94,9 @@ COND_SYSCALL(flock);
->  /* fs/nfsctl.c */
->
->  /* fs/open.c */
-> +COND_SYSCALL_COMPAT(truncate64);
-> +COND_SYSCALL_COMPAT(ftruncate64);
-> +COND_SYSCALL_COMPAT(fallocate);
-
-COND_SYSCALL_COMPAT() doesn't really make sense for non-optional syscalls
-like these: if an architecture neither sets __ARCH_WANT_COMPAT_FALLOCATE
-nor provides its own implementation, then a link failure is the
-appropriate output, hiding it with a COND_SYSCALL_COMPAT() just turns that
-into a runtime failure that is harder to analyse.
-
->  /* fs/read_write.c */
-> +COND_SYSCALL_COMPAT(preadv64);
-> +COND_SYSCALL_COMPAT(pwritev64);
-> +COND_SYSCALL_COMPAT(pread64);
-> +COND_SYSCALL_COMPAT(pwrite64);
-
-These are specific to x32, and we don't want to ever add them to another
-architecture, so they should not get a COND_SYSCALL_COMPAT()
-either.
-
-> @@ -118,6 +125,7 @@ COND_SYSCALL_COMPAT(signalfd4);
->  /* fs/sync.c */
-> +COND_SYSCALL_COMPAT(sync_file_range);
-....
-> +COND_SYSCALL_COMPAT(readahead);
-
-Same as above, but these have an additional angle to them, as
-there are conflicting prototypes and implementations:
-
-arch/sparc/kernel/systbls.h:long compat_sys_sync_file_range(unsigned int fd,
-arch/sparc/kernel/systbls.h-                       unsigned off_high,
-unsigned off_low,
-arch/sparc/kernel/systbls.h-                       unsigned nb_high,
-unsigned nb_low,
-include/linux/compat.h:asmlinkage long compat_sys_sync_file_range(int
-fd, compat_arg_u64(pos),
-include/linux/compat.h-
-compat_arg_u64(nbytes), unsigned int flags);
-
-The current code works fine, but if you still want to improve this,
-it would be great to convert the architecture specific helpers
-to be shared with the common ones. For those that have non-matching
-prototypes like
-
-include/linux/compat.h:asmlinkage long compat_sys_pwrite64(unsigned
-int fd, const char __user *buf, size_t count,
-include/linux/compat.h-                             compat_arg_u64(pos));
-arch/powerpc/include/asm/syscalls.h:compat_ssize_t
-compat_sys_pwrite64(unsigned int fd, const char __user *ubuf,
-compat_size_t count,
-arch/powerpc/include/asm/syscalls.h-                               u32
-reg6, u32 pos1, u32 pos2);
-
-that have an extra argument in them, I would instead suggest renaming
-the nonstandard ones.
-
-       Arnd
+-- 
+Joseph S. Myers
+joseph@codesourcery.com

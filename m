@@ -2,151 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881B85A0E48
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474065A0E4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241328AbiHYKrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S241245AbiHYKrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241349AbiHYKq6 (ORCPT
+        with ESMTP id S241348AbiHYKqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:46:58 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEFB75FC1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:46:48 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PA96GM026319;
-        Thu, 25 Aug 2022 10:46:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=OWEQXYJAauWSZP2viRJzq1+pJWDzlTFoXdETe+TStVU=;
- b=vduyNdd6/bvjhXvPOSlrDnoWjmgiuZ4H/GE8B/pfiY1C/I5fMKgAAKYCuevnCRFf2fUz
- lJeU81kWrRgtyafr+hKQTouXopBgC4tTqhDribQU3Vfymd32mXlDS5HoP890/A7+EUI5
- KNon6KVzcLAn0ECYsaVrEc5+W9y1s5uWQEhPwyINIqFE6AIbq4ZeCfz954s4b45F16NR
- ElFN/0D+rSNXrygamiaWoUiS/O8sJsru00UFgAYeOaT1MvJWuUd0uN2cBQBEhPdeHVpX
- ++bCbhxLLl0h7SMbPnjlJ2uYbcMvSEeLlVgytQo0t4lqOlp2Dw6eLKCzu/J2qeuEveSW SA== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j5aww3rps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 10:46:31 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27P8Eciu028407;
-        Thu, 25 Aug 2022 10:46:30 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n4m4bc2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 10:46:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NOYjZiOQqwsmRV5+0C5CMZL/A/Kt9m7qCZIrS1qdhNVGKwuFFMbQvnDwS3bLV5FJ0PmQZgKCUWVe86eYiYb1eZT4uRQUnh0yc58TAn6CEKHPo1ndVZzZeCLVlM0y/rxKYo1QbXXKGf92E1kR/TwPzCha9BWnwLQoTzHpWIOhINfQVJpXL8yzfpZxROzLt3RbErqbzSflFpcq4j/OffANK7Jl+OFSyIXZf6Ncoj0BID1nIpBuv9q2i6TIjrQ5AD1FK2svMoobfyjSylszzvYOvcUUbB7mByw/61c/8EdHaXPaIypzH9ZIxLnEETtNP7LJh5z343jPFwe8GNoZzQKIuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OWEQXYJAauWSZP2viRJzq1+pJWDzlTFoXdETe+TStVU=;
- b=h5lLXLM9BQ1bkh4zbh7wZGf04gaIVin0nXDPcPtQBCf4hdygGUygK6/ozb0ZG7t+nmlGG4v54c2uDP+itW5VLASYt4u/1D8abgX+3u39opIiyOicrWR9l/8DQktUmXfbEXO9Zt00kO7gRPn6/LNz9I1aKaMioDUQr/Plpdl2LvJ9xQ7xzv0lWxxDSR+yvNLmUcnbDMMe+hxlXWBZklF6EliIpAW1CJU0qMPD168duo7tn/ZuhS7rq53XRWfYnscIXSOFcefFGjG1Ol04qnw+yY/JhhmWG2hM4cfboJK3EX5nANvbH3ZOm/DlO+X3+bUxDHB36Cs5/rQEF5BPkNGEyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OWEQXYJAauWSZP2viRJzq1+pJWDzlTFoXdETe+TStVU=;
- b=C/DJynw8Oez1mFWp3mPEiDoyQvDfXKEIPAvaD2M14MSmHTVOfNKyLK++oDL/Gm4y3FTHZdEAxUSLcwcGjbKd+2dA/+J+NyYhWB8VffIcxL3DlU7yOH8vERemi9QH5OGvwiWK+Ldu8Doyoh4EHgjcYnFJdg1r2SqURmO8wcoGVcU=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SN7PR10MB6523.namprd10.prod.outlook.com
- (2603:10b6:806:2a6::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Thu, 25 Aug
- 2022 10:46:28 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5546.024; Thu, 25 Aug 2022
- 10:46:28 +0000
-Date:   Thu, 25 Aug 2022 13:46:04 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Czerwacki, Eial" <eial.czerwacki@sap.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Arsh, Leonid" <leonid.arsh@sap.com>,
-        "Twaig, Oren" <oren.twaig@sap.com>,
-        SAP vSMP Linux Maintainer <linux.vsmp@sap.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Borislav Petkov <bp@suse.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Eric Biggers <ebiggers@google.com>, Fei Li <fei1.li@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: Re: [PATCH v2] drivers/virt/vSMP: new driver
-Message-ID: <20220825104604.GD2030@kadam>
-References: <PAXPR02MB731058B69D178E026C578BB481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR02MB731058B69D178E026C578BB481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0007.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::12)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Thu, 25 Aug 2022 06:46:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BDDAA37E;
+        Thu, 25 Aug 2022 03:46:36 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MD04c34cMz687DG;
+        Thu, 25 Aug 2022 18:46:08 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 12:46:33 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 25 Aug
+ 2022 11:46:32 +0100
+Date:   Thu, 25 Aug 2022 11:46:32 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [RFC PATCH 5/9] cxl/mem: Trace DRAM Event Record
+Message-ID: <20220825114632.00003fc6@huawei.com>
+In-Reply-To: <20220813053243.757363-6-ira.weiny@intel.com>
+References: <20220813053243.757363-1-ira.weiny@intel.com>
+        <20220813053243.757363-6-ira.weiny@intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3e6c19ee-6314-4c9c-4d13-08da8687101e
-X-MS-TrafficTypeDiagnostic: SN7PR10MB6523:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tVJND403FGob7EwDaRLOpoIOqzLFYv58to+36MWc6R77pn37KUcrN5e08rm5rr3xWzGqffP6Z9NeccPJgD17z6jSLVgprLE99MZXVYxhcibQATBw6ZxvIjfYodIQjgL5mncC+jL1x2+c5pJha/NMfkoprgREYOWA1MffRoWfTU3TXA/SHYvaasV5vSSloC9/KcdV95Fu8SQEfUa1z7xVJjyHwrObYwGaeiVrRDDKpLzm5vyZWS4T05E9Q9JPIoNyzgmN5z0q0TisldVAixlGRV+MrnnfbWfTUwzcGwVaMpBJFdk85QUKXwXv8iGvgFb17wrNy5jvUBAylDS92L6ZQsAeGqu2qQNxx+PzCdyKFpmtbgo3qG1+yJ1ZR25yFMcZ/fP5g5IMbBqjMmgUyWEFY0tmGV84YZXjjDmJ4IElxzTMT+WmCSRhEd2b8l2CilnlAKPcJ/x/R55d4QLfhSSWEi3nX16zqffSjO2A77TKQMuVMTU4MECJmikHxjSJoAUapY3OWioe4LtKvNsoTeSPkUu4kHBEJIOIz8N+VqNvlFRuOdWGexzkT80/00hVFVgIEgHV8wLyrYzxNbNJ2Q9aBpTdmdgTnPPr0uodD7NwD+1lv79CLLMEH3Xd0UC+6wLIbKyoacMmqxj/jUb2iPLn1G1UYW0OqGL9eYNGAI8xQG3sfOHYi3TfnGdiqfBXutb70389FrOaK6uoqYUt1F5zUEV7hMp8AoBI64xGPqGyn6SKUFQeVgEwGcwj8ieqtvjzu3DLYcjbmbJmruywfYPScg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(346002)(366004)(376002)(136003)(396003)(66556008)(186003)(38100700002)(33656002)(38350700002)(86362001)(1076003)(316002)(66476007)(44832011)(54906003)(8676002)(66946007)(7416002)(2906002)(6916009)(6666004)(41300700001)(9686003)(6506007)(26005)(4326008)(6512007)(5660300002)(478600001)(52116002)(8936002)(6486002)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?62+oHthZsVTNb4QrOauOI2erVL1jOkjYVZrecKtLK/LizrKFDr+OfNkhxLTH?=
- =?us-ascii?Q?WxH4Q0zaCNIzT5ZTev6Lpck/Q8VuG7hmzih137l9euzPxkmvTaOR8sN/kTBx?=
- =?us-ascii?Q?MtsQ7Iu7E6XqiJlZNKVBoXrXqXszJgZS+/PUUYxUnClnwsgAj5bFBoUtUyQJ?=
- =?us-ascii?Q?j7yQ+2lm0fJob/7JF+wuAZJTZOX4s09lO3ljiKsGXso6gtjWIzGAs5o4UMjL?=
- =?us-ascii?Q?8zryR7j8Oa5T+8qFmpVtaFdYwHKc9Lxcl7fyw+fVjn/fwu9LQoTJX3cmik72?=
- =?us-ascii?Q?o0zhv5rvy0DtqDVbyVluL4QWqQ9pWwLqIiTodMNkpNGO7ur127Mn+38fZMBz?=
- =?us-ascii?Q?UWdVAwOKbWRylpxddT3XIa6tMMEtI3QdaQfnI4UeAyvVg2luQ07ZOk3ltt7f?=
- =?us-ascii?Q?wc45TGiTQUSj9o4g1NTpBfzMGevKzKlLlGNJ/4gDrgIsj1QOYWxfqzn+Xsnu?=
- =?us-ascii?Q?Mgvnnslw2ErFg8kgTEi/gAqXKA+mZiX1rcNUXAUUiSYrvF8omDwWzgc7/JF/?=
- =?us-ascii?Q?u4MJPxCrr9XFnYUUvQRNPkecYr+egVI7pwjXtdSoN6NiIHMQswxtF5QZc0TC?=
- =?us-ascii?Q?SiJpggahthuQ9xuUXjeqysCwdEiyEFh7PstI2kh6VqhUKNARMgZCuuE/c1Bv?=
- =?us-ascii?Q?4bZvO4MYpMFIp8MS2inYMWbGPqjEMln/KMqmsmt+M/9srlZzTflPxdeKoikM?=
- =?us-ascii?Q?Q4ngRfc5ydiJUxXuJVrgFJT8Yqg2zMsqcqdD4MS6JhW2Iw39+NlBAbm0G0GB?=
- =?us-ascii?Q?NIhUwmgvOozHskUgbKabJ9SI2nm6du7KNiZqES4rjYQzDyEpMJ7P2BgpXN0c?=
- =?us-ascii?Q?GZ1YugnGGmz/OL43H0pY3ST9Y0MipYF2g7Kaj0TFcq0PrmirlmyNFSI9DUkk?=
- =?us-ascii?Q?gafhwX3w6fMu4zdj1lbcndt/5XPRPw6ifQuNqKeYMqNSv2P1gU9Zzjiy4Edj?=
- =?us-ascii?Q?dbBlRzSefIkGff/xlS2GmfI/ZTqmu9znbT5zejSWiM4hh1R5/QHifOrZuPrx?=
- =?us-ascii?Q?OW8qeW3jQxEkOuOqe4UplgyyzMHgn9SQKI+tvzPzG0TW7s8vPTKeB02YOYBH?=
- =?us-ascii?Q?RG1g2cDwfCtOCPjmGzjW0GzE5JOR3MfxHMSDY91v7XXZ4+sJRdDOSmc6bCys?=
- =?us-ascii?Q?GLgq5Lv17wYo7fzlWnrCk75upNdBxb0iSPEI7G5pBoReBwaZS9ZCGwAfxJDG?=
- =?us-ascii?Q?s7UT8vtdcUTu8/q748hENYP4DMzpYf8yr39WSxxTJwHflhXqysc1EC326Dpd?=
- =?us-ascii?Q?Qob0ocRJTFWt1YCIAY6uk1KnayeTTlBh58idkoTyQzaQbOc/74LfoQWfrC79?=
- =?us-ascii?Q?Dri6Q/WRNLAVQbCN+/XEQzKVUz5Nb9+RFwtBCkXnbuNlF6ZOWdyQh7d1rr66?=
- =?us-ascii?Q?d6AbfeuVWFQskMGS2+X04ER1sgbkWDL4/Zkf/zZbSBGgClG2yBVV4u0ZmbhB?=
- =?us-ascii?Q?lKN43lKxQhItL8CeHPlrOqYutwidiXCr5OQPTqGHXV03GV81jgU0a3BsOpJl?=
- =?us-ascii?Q?hxoP2HAlJcrwIpt3dImv5UrTZqcV7nh6dDoraj4j3GeNSSDD9JXfncoPhL37?=
- =?us-ascii?Q?fqgjicJjIlLU/k5v3zSA/MpQuOOSqqGvnqfb3RmB?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e6c19ee-6314-4c9c-4d13-08da8687101e
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 10:46:27.7662
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8DAi9wb8qGWxOT4E7B+uK4C59TffwyMp7BEFRp0QlkvG6r6WEMp6OUyb/UkqG9XFUF5mMdQV8ThLU4OuSoKOYP890p+WhC6yr9Wy4w08eKY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6523
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_05,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208250042
-X-Proofpoint-GUID: D0ewIpeQoIi83Ubx7vB1Sq0u8j6RssGE
-X-Proofpoint-ORIG-GUID: D0ewIpeQoIi83Ubx7vB1Sq0u8j6RssGE
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,43 +58,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 06:24:02AM +0000, Czerwacki, Eial wrote:
-> Introducing the vSMP guest driver which allows interaction with the
-> vSMP control device when running a Linux OS atop of the vSMP hypervisor.
-> vSMP is a resource aggregation hypervisor from SAP.
-> 
-> The driver comprises of api part which facilitates communication with
-> the hypervisor and version which displays the hypervisor's version.
-> 
-> This patch s based on previous patches sent to the staging tree mailing
-> lists
-> 
-> Signed-off-by: Eial Czerwacki <eial.czerwacki@sap.com>
-> Acked-by: Leonid Arsh <leonid.arsh@sap.com>
-> Acked-by: Oren Twaig <oren.twaig@sap.com>
-> CC: SAP vSMP Linux Maintainer <linux.vsmp@sap.com>
-> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> CC: Arnd Bergmann <arnd@arndb.de>
-> CC: Dan Carpenter <dan.carpenter@oracle.com>
-> CC: Andra Paraschiv <andraprs@amazon.com>
-> CC: Borislav Petkov <bp@suse.de>
-> CC: Brijesh Singh <brijesh.singh@amd.com>
-> CC: Eric Biggers <ebiggers@google.com>
-> CC: Fei Li <fei1.li@intel.com>
-> CC: Hans de Goede <hdegoede@redhat.com>
-> CC: Jens Axboe <axboe@kernel.dk>
-> CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> 
-> v1 -> v2:
-> 	- fix -0 var init in add_sysfs_entries (pointed out by Dan Carpenter)
+On Fri, 12 Aug 2022 22:32:39 -0700
+ira.weiny@intel.com wrote:
 
-Please don't resend patches the same day.  Always wait at least a day
-but probably for a new driver wait 3 days.  There are going to be a lot
-of comments on this.
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> CXL v3.0 section 8.2.9.2.1.2 defines the DRAM Event Record.
+> 
+> Determine if the event read is a DRAM event record and if so trace the
+> record.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> 
+> ---
+> This record has a very odd byte layout with 2 - 16 bit fields
+> (validity_flags and column) aligned on an odd byte boundary.  In
+> addition nibble_mask and row are oddly aligned.
+> 
+> I've made my best guess as to how the endianess of these fields should
+> be resolved.  But I'm happy to hear from other folks if what I have is
+> wrong.
+My assumption is same as you.  We should sanity check of course by
+poking relevant people.  
 
-My comment didn't even warrant a resend at all, it just something that
-made me chuckle.  It will take a while to review this properly.
+Similar comments in here to previous.  Use the get_unaligned_le24()
+accessors + consider not printing invalid fields.
+> 
+> struct cxl_evt_dram_rec {
+> 	struct cxl_event_record_hdr hdr;
+> 	__le64 phys_addr;
+> 	u8 descriptor;
+> 	u8 type;
+> 	u8 transaction_type;
+> 	u16 validity_flags;
+> 	u8 channel;
+> 	u8 rank;
+> 	u8 nibble_mask[CXL_EVT_DER_NIBBLE_MASK_SIZE];
+> 	u8 bank_group;
+> 	u8 bank;
+> 	u8 row[CXL_EVT_DER_ROW_SIZE];
+> 	u16 column;
+> 	u8 correction_mask[CXL_EVT_DER_CORRECTION_MASK_SIZE];
+> } __packed;
+> ---
+>  drivers/cxl/core/mbox.c           |  16 +++++
+>  drivers/cxl/cxlmem.h              |  24 +++++++
+>  include/trace/events/cxl-events.h | 114 ++++++++++++++++++++++++++++++
+>  3 files changed, 154 insertions(+)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index 0e433f072163..6414588a3c7b 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -717,6 +717,14 @@ static const uuid_t gen_media_event_uuid =
+>  	UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
+>  		  0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6);
+>  
+> +/*
+> + * DRAM Event Record
+> + * CXL v3.0 section 8.2.9.2.1.2; Table 8-44
+rev3.0, r3.0 or just 3.0  
 
-regards,
-dan carpenter
+> + */
+> +static const uuid_t dram_event_uuid =
+> +	UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
+> +		  0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24);
+> +
+>  static void cxl_trace_event_record(const char *dev_name,
+>  				   enum cxl_event_log_type type,
+>  				   struct cxl_get_event_payload *payload)
+> @@ -731,6 +739,14 @@ static void cxl_trace_event_record(const char *dev_name,
+>  		return;
+>  	}
+>  
+> +	if (uuid_equal(id, &dram_event_uuid)) {
+Why not else if?  Should be obvious to compiler that multiple uuid_equal
+conditions can't match, but even better to not make it try hard perhaps?
+
+> +		struct cxl_evt_dram_rec *rec =
+> +				(struct cxl_evt_dram_rec *)&payload->record;
+> +
+> +		trace_cxl_dram_event(dev_name, type, rec);
+> +		return;
+> +	}
+> +
+>  	/* For unknown record types print just the header */
+>  	trace_cxl_event(dev_name, type, &payload->record);
+>  }
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 33669459ae4b..50536c0a7850 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -421,6 +421,30 @@ struct cxl_evt_gen_media {
+>  	u8 component_id[CXL_EVT_GEN_MED_COMP_ID_SIZE];
+>  } __packed;
+>  
+> +/*
+> + * DRAM Event Record - DER
+> + * CXL v3.0 section 8.2.9.2.1.2; Table 3-44
+> + */
+> +#define CXL_EVT_DER_NIBBLE_MASK_SIZE		3
+> +#define CXL_EVT_DER_ROW_SIZE			3
+> +#define CXL_EVT_DER_CORRECTION_MASK_SIZE	0x20
+> +struct cxl_evt_dram_rec {
+> +	struct cxl_event_record_hdr hdr;
+> +	__le64 phys_addr;
+> +	u8 descriptor;
+> +	u8 type;
+> +	u8 transaction_type;
+> +	u16 validity_flags;
+I've not tried it, but can we just mark these as __le16 and use
+the unaligned accessors?  get_unaligned_le16 etc
+Also there is get_unaligned_le24() for the 3 byte ones.
+
+> +	u8 channel;
+> +	u8 rank;
+> +	u8 nibble_mask[CXL_EVT_DER_NIBBLE_MASK_SIZE];
+> +	u8 bank_group;
+> +	u8 bank;
+> +	u8 row[CXL_EVT_DER_ROW_SIZE];
+> +	u16 column;
+> +	u8 correction_mask[CXL_EVT_DER_CORRECTION_MASK_SIZE];
+> +} __packed;
+> +
+>  struct cxl_mbox_get_partition_info {
+>  	__le64 active_volatile_cap;
+>  	__le64 active_persistent_cap;
+> diff --git a/include/trace/events/cxl-events.h b/include/trace/events/cxl-events.h
+> index b51c51fd4e62..db9b34ddd240 100644
+> --- a/include/trace/events/cxl-events.h
+> +++ b/include/trace/events/cxl-events.h
+> @@ -244,6 +244,120 @@ TRACE_EVENT(cxl_gen_media_event,
+>  		)
+>  );
+>  
+> +/*
+> + * DRAM Event Record - DER
+> + *
+> + * CXL v2.0 section 8.2.9.1.1.2; Table 155
+> + */
+> +/*
+> + * DRAM Event Record defines many fields the same as the General Media Event
+> + * Record.  Reuse those definitions as appropriate.
+> + */
+> +#define CXL_DER_VALID_CHANNEL				BIT(0)
+> +#define CXL_DER_VALID_RANK				BIT(1)
+> +#define CXL_DER_VALID_NIBBLE				BIT(2)
+> +#define CXL_DER_VALID_BANK_GROUP			BIT(3)
+> +#define CXL_DER_VALID_BANK				BIT(4)
+> +#define CXL_DER_VALID_ROW				BIT(5)
+> +#define CXL_DER_VALID_COLUMN				BIT(6)
+> +#define CXL_DER_VALID_CORRECTION_MASK			BIT(7)
+> +#define show_dram_valid_flags(flags)	__print_flags(flags, "|",			   \
+> +	{ CXL_DER_VALID_CHANNEL,			"CHANNEL"		}, \
+> +	{ CXL_DER_VALID_RANK,				"RANK"			}, \
+> +	{ CXL_DER_VALID_NIBBLE,				"NIBBLE"		}, \
+> +	{ CXL_DER_VALID_BANK_GROUP,			"BANK GROUP"		}, \
+> +	{ CXL_DER_VALID_BANK,				"BANK"			}, \
+> +	{ CXL_DER_VALID_ROW,				"ROW"			}, \
+> +	{ CXL_DER_VALID_COLUMN,				"COLUMN"		}, \
+> +	{ CXL_DER_VALID_CORRECTION_MASK,		"CORRECTION MASK"	}  \
+> +)
+> +
+> +TRACE_EVENT(cxl_dram_event,
+> +
+> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
+> +		 struct cxl_evt_dram_rec *rec),
+> +
+> +	TP_ARGS(dev_name, log, rec),
+> +
+> +	TP_STRUCT__entry(
+> +		/* Common */
+> +		__string(dev_name, dev_name)
+> +		__field(int, log)
+> +		__array(u8, id, UUID_SIZE)
+> +		__field(u32, flags)
+> +		__field(u16, handle)
+> +		__field(u16, related_handle)
+> +		__field(u64, timestamp)
+> +
+> +		/* DRAM */
+> +		__field(u64, phys_addr)
+> +		__field(u8, descriptor)
+> +		__field(u8, type)
+> +		__field(u8, transaction_type)
+> +		__field(u8, channel)
+> +		__field(u16, validity_flags)
+> +		__field(u16, column)	/* Out of order to pack trace record */
+> +		__field(u32, nibble_mask)
+> +		__field(u32, row)
+> +		__array(u8, cor_mask, CXL_EVT_DER_CORRECTION_MASK_SIZE)
+> +		__field(u8, rank)	/* Out of order to pack trace record */
+> +		__field(u8, bank_group)	/* Out of order to pack trace record */
+> +		__field(u8, bank)	/* Out of order to pack trace record */
+> +	),
+> +
+> +	TP_fast_assign(
+> +		/* Common */
+> +		__assign_str(dev_name, dev_name);
+> +		memcpy(__entry->id, &rec->hdr.id, UUID_SIZE);
+> +		__entry->log = log;
+> +		__entry->flags = le32_to_cpu(rec->hdr.flags_length) >> 8;
+> +		__entry->handle = le16_to_cpu(rec->hdr.handle);
+> +		__entry->related_handle = le16_to_cpu(rec->hdr.related_handle);
+> +		__entry->timestamp = le64_to_cpu(rec->hdr.timestamp);
+> +
+> +		/* DRAM */
+> +		__entry->phys_addr = le64_to_cpu(rec->phys_addr);
+> +		__entry->descriptor = rec->descriptor;
+> +		__entry->type = rec->type;
+> +		__entry->transaction_type = rec->transaction_type;
+> +		__entry->validity_flags = le16_to_cpu(rec->validity_flags);
+> +		__entry->channel = rec->channel;
+> +		__entry->rank = rec->rank;
+> +		__entry->nibble_mask = rec->nibble_mask[0] << 24 |
+> +				       rec->nibble_mask[1] << 16 |
+> +				       rec->nibble_mask[2] << 8; /* 3 byte LE ? */
+
+Use get_unalinged_le24() ? I'd definitely expect these to be le24.
+
+
+> +		__entry->nibble_mask = le32_to_cpu(__entry->nibble_mask);
+
+That doesn't look right.  You will have unwound the endianness using
+the shifts above. Don't convert it again (noop on le systems, so you
+probably won't see a problem when testing).
+
+> +		__entry->bank_group = rec->bank_group;
+> +		__entry->bank = rec->bank;
+> +		__entry->row = rec->row[0] << 24 |
+> +			       rec->row[1] << 16 |
+> +			       rec->row[2] << 8; /* 3 byte LE ? */
+
+get_unaligned_le24()
+
+> +		__entry->row = le32_to_cpu(__entry->row);
+
+> +		__entry->column = le16_to_cpu(rec->column);
+> +		memcpy(__entry->cor_mask, &rec->correction_mask,
+> +			CXL_EVT_DER_CORRECTION_MASK_SIZE);
+> +	),
+> +
+> +	TP_printk("%s: %s time=%llu id=%pUl handle=%x related_handle=%x hdr_flags='%s': " \
+> +		  "phys_addr=%llx volatile=%s desc='%s' type='%s' trans_type='%s' channel=%u " \
+> +		  "rank=%u nibble_mask=%x bank_group=%u bank=%u row=%u column=%u " \
+> +		  "cor_mask=%s valid_flags='%s'",
+> +		__get_str(dev_name), show_log_type(__entry->log),
+> +		__entry->timestamp, __entry->id, __entry->handle,
+> +		__entry->related_handle, show_hdr_flags(__entry->flags),
+> +		__entry->phys_addr & ~CXL_GMER_PHYS_ADDR_MASK,
+> +		(__entry->phys_addr & CXL_GMER_PHYS_ADDR_VOLATILE) ? "TRUE" : "FALSE",
+> +		show_event_desc_flags(__entry->descriptor),
+As before can we not print the invalid ones based on the validity flags?
+
+Few years ago now, but I did something along those lines for the CCIX equivalent of
+this stuff.  (honestly can't remember much about it now though!)
+Was a bit fiddly but lead to nicer prints in my opinion.
+
+https://lore.kernel.org/all/20191114133919.32290-2-Jonathan.Cameron@huawei.com/
+
+
+> +		show_mem_event_type(__entry->type),
+> +		show_trans_type(__entry->transaction_type),
+> +		__entry->channel, __entry->rank, __entry->nibble_mask,
+> +		__entry->bank_group, __entry->bank,
+> +		__entry->row, __entry->column,
+> +		__print_hex(__entry->cor_mask, CXL_EVT_DER_CORRECTION_MASK_SIZE),
+> +		show_dram_valid_flags(__entry->validity_flags)
+> +		)
+> +);
+> +
+>  #endif /* _CXL_TRACE_EVENTS_H */
+>  
+>  /* This part must be outside protection */
 

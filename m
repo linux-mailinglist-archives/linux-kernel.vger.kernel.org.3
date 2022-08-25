@@ -2,163 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B485A0F9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8848F5A0F9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241188AbiHYLvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S240280AbiHYLwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiHYLv2 (ORCPT
+        with ESMTP id S229657AbiHYLv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:51:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED3E25294
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661428285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FtM1BEUnONM80EGQIlSjFJxOzxx4asObkPOcf/dUoJ4=;
-        b=Cm1A1Am06F6DLNVtWxSEGBR4Rrgn7BYThwEwstHaFwHpFM0/2QfFtZWHymvtZAE1QR449d
-        jukIEOBAlESN1a7pkdPCEbBiG/GtVd215JaVXc3XANv8NCZDQ4nhklcAAoEI5UTRpaKJ2g
-        aaTbu0GiSzHaUPlcPJABIw6aO1iv3ik=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-80-PjCaJ3hPMQmPjXsGzENbjA-1; Thu, 25 Aug 2022 07:51:19 -0400
-X-MC-Unique: PjCaJ3hPMQmPjXsGzENbjA-1
-Received: by mail-wm1-f72.google.com with SMTP id 203-20020a1c02d4000000b003a5f5bce876so2371787wmc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:51:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=FtM1BEUnONM80EGQIlSjFJxOzxx4asObkPOcf/dUoJ4=;
-        b=oTlEPhXucp8YN96H61KNdrDyiYFOiSPdd624XRx30J+bymPVnRwPsrJxwE57sEkRM1
-         w3HjArN4IBaQ69GzB3G82Z91GeLvik4lEpMK5zDmumLV0yWP3/v8xl63omrpaBEGI2SV
-         JKotwluuru6RdO5F67a/XALEEm9yHqiGKdsfwmuni70C1sOELCAYVe4+za2BUxoUDrkM
-         P8PPkbQ7ntDU+2oMl81o0CYvYJUA8cVpmZJscgcIw2UGsFcXJ4z4ubs1xVvA5axz4zsV
-         cNzOvx0N/uNvmPY+M1RFfd5NnJezildw2MY0v0tKVSj34EGd2ocrPycyd6bvkziuZ8/I
-         GHow==
-X-Gm-Message-State: ACgBeo2jdGFEniXmPGKouEjyb2kigWlrJi06KxadeGFU+In8tsHVYyVA
-        FT54I050Hjkeecv0qlL1+jCvu7KDP+ZBQYW5PDs9IMLizq9yC/uPRTicyx6O763TfUPYZCrsq4i
-        4PN8B1TL78eWd8PAhAComF3ie
-X-Received: by 2002:a5d:5711:0:b0:225:2884:cc88 with SMTP id a17-20020a5d5711000000b002252884cc88mr2042069wrv.141.1661428278223;
-        Thu, 25 Aug 2022 04:51:18 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5ItDcDX1kgqfGm06T3zwrfPTH11v1D3bxOfe8g8QfbYHQI/EKxqMNESF+ugudGdiYuS0nzTQ==
-X-Received: by 2002:a5d:5711:0:b0:225:2884:cc88 with SMTP id a17-20020a5d5711000000b002252884cc88mr2042062wrv.141.1661428277919;
-        Thu, 25 Aug 2022 04:51:17 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
-        by smtp.gmail.com with ESMTPSA id w6-20020a5d4b46000000b002205a5de337sm19282158wrs.102.2022.08.25.04.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 04:51:17 -0700 (PDT)
-Message-ID: <7d146520-52e2-bd8d-3c53-a444e93e4006@redhat.com>
-Date:   Thu, 25 Aug 2022 13:51:16 +0200
+        Thu, 25 Aug 2022 07:51:58 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DBA25294
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:51:57 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MD1XY1k81z9sJY;
+        Thu, 25 Aug 2022 11:51:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1661428317; bh=Sr5pjSHJhISC7JcB1fG9su2V6Kc+hDrY0/E0OvJrHng=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j8BSmqDzuzbJgEq6xsZfEfwsFvbwcRTTT+oImBVLn22K6jIu5QqZt5bebBq+IR6j7
+         vgRULV5AU304B+X8m21h35XrZh90+qSLC0g4PrHDXf+AHSlO2mJH3GfMMLVv7SwMch
+         n48a4Kdm+JzU8fJf854BItRIRqQyt8+/h23WwW+0=
+X-Riseup-User-ID: 8E48026DEC53D712AFD99E675A4697ED9AA7C588198C27D80EEA1E99DC66198C
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MD1XW4B9Jz1yTJ;
+        Thu, 25 Aug 2022 11:51:55 +0000 (UTC)
+Message-ID: <ffd9508c-ba24-e9ea-ced4-4ce189ef60c5@riseup.net>
+Date:   Thu, 25 Aug 2022 08:51:52 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH RFC 2/2] checkpatch: warn on usage of VM_BUG_ON() and
- friends
+Subject: Re: [PATCH] drm: Remove the unused param "struct drm_buddy *mm"
 Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        kexec@lists.infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>
-References: <20220824163100.224449-1-david@redhat.com>
- <20220824163100.224449-3-david@redhat.com>
- <3c250aa26020b2f336fd575a58d06ba26faf1f14.camel@perches.com>
- <b1103c81-0c56-0e9b-711c-246e431db151@redhat.com> <87y1vch7ll.fsf@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <87y1vch7ll.fsf@intel.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20220627085405.221435-1-cai.huoqing@linux.dev>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220627085405.221435-1-cai.huoqing@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.08.22 13:43, Jani Nikula wrote:
-> On Thu, 25 Aug 2022, David Hildenbrand <david@redhat.com> wrote:
->> On 24.08.22 18:52, Joe Perches wrote:
->>> On Wed, 2022-08-24 at 18:31 +0200, David Hildenbrand wrote:
->>>> checkpatch does not point out that VM_BUG_ON() and friends should be
->>>> avoided, however, Linus notes:
->>>>
->>>>     VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
->>>>     no different, the only difference is "we can make the code smaller
->>>>     because these are less important". [1]
->>>>
->>>> So let's warn on VM_BUG_ON() and friends as well. While at it, make it
->>>> clearer that the kernel really shouldn't be crashed.
->>>>
->>>> Note that there are some other *_BUG_ON flavors, but they are not all
->>>> bad: for example, KVM_BUG_ON() only triggers a WARN_ON_ONCE and then
->>>> flags KVM as being buggy, so we'll not care about them for now here.
->>> []
->>>> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
->>> []
->>>> @@ -4695,12 +4695,12 @@ sub process {
->>>>  			}
->>>>  		}
->>>>  
->>>> -# avoid BUG() or BUG_ON()
->>>> -		if ($line =~ /\b(?:BUG|BUG_ON)\b/) {
->>>> +# do not use BUG(), BUG_ON(), VM_BUG_ON() and friends.
->>>> +		if ($line =~ /\b(?:BUG|BUG_ON|VM_BUG_ON|VM_BUG_ON_[A-Z]+)\b/) {
->>>
->>> Perhaps better as something like the below to pick up more variants
->>>
->>
->> Trying to find more possible variants and exceptions
+Hi Cai,
+
+On 6/27/22 05:54, Cai Huoqing wrote:
+> Remove the param "struct drm_buddy *mm" which is unused in
+> the function drm_block_alloc()/drm_block_free().
 > 
->> CI_BUG_ON(
->> -> Bad with CONFIG_DRM_I915_DEBUG
->> GEM_BUG_ON(
->> -> Bad with CONFIG_DRM_I915_DEBUG_GEM_ONCE
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+
+Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+
+Best Regards,
+- Maíra Canal
+
+> ---
+>  drivers/gpu/drm/drm_buddy.c | 25 +++++++++++--------------
+>  1 file changed, 11 insertions(+), 14 deletions(-)
 > 
-> These are hidden behind debug knobs that we use in our CI to
-> specifically catch "should not happen" cases fast and loud. Should not
-> be a problem for regular users.
-> 
-
-I tend to agree but I don't think this is worth an exception.
-VM_BUG_ON also requires CONFIG_DEBUG_VM and absolutely shouldn't
-be used as I learned.
-
-Quoting Linus:
-
-   Really. BUG_ON() IS NOT FOR DEBUGGING. [1]
-
-   This kind of "I don't think this can happen" is _never_ an excuse for it. [2]
-
-
-For CI work, it might be sufficient to use WARN_ON_ONCE() combined with panic_on_warn.
-
-[1] https://lore.kernel.org/all/CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com/
-[2] https://lore.kernel.org/all/CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com/ 
-
--- 
-Thanks,
-
-David / dhildenb
-
+> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
+> index 11bb59399471..192c8b99fb43 100644
+> --- a/drivers/gpu/drm/drm_buddy.c
+> +++ b/drivers/gpu/drm/drm_buddy.c
+> @@ -11,10 +11,8 @@
+>  
+>  static struct kmem_cache *slab_blocks;
+>  
+> -static struct drm_buddy_block *drm_block_alloc(struct drm_buddy *mm,
+> -					       struct drm_buddy_block *parent,
+> -					       unsigned int order,
+> -					       u64 offset)
+> +static struct drm_buddy_block *
+> +drm_block_alloc(struct drm_buddy_block *parent, unsigned int order, u64 offset)
+>  {
+>  	struct drm_buddy_block *block;
+>  
+> @@ -32,8 +30,7 @@ static struct drm_buddy_block *drm_block_alloc(struct drm_buddy *mm,
+>  	return block;
+>  }
+>  
+> -static void drm_block_free(struct drm_buddy *mm,
+> -			   struct drm_buddy_block *block)
+> +static void drm_block_free(struct drm_buddy_block *block)
+>  {
+>  	kmem_cache_free(slab_blocks, block);
+>  }
+> @@ -131,7 +128,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+>  		root_size = rounddown_pow_of_two(size);
+>  		order = ilog2(root_size) - ilog2(chunk_size);
+>  
+> -		root = drm_block_alloc(mm, NULL, order, offset);
+> +		root = drm_block_alloc(NULL, order, offset);
+>  		if (!root)
+>  			goto out_free_roots;
+>  
+> @@ -151,7 +148,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+>  
+>  out_free_roots:
+>  	while (i--)
+> -		drm_block_free(mm, mm->roots[i]);
+> +		drm_block_free(mm->roots[i]);
+>  	kfree(mm->roots);
+>  out_free_list:
+>  	kfree(mm->free_list);
+> @@ -172,7 +169,7 @@ void drm_buddy_fini(struct drm_buddy *mm)
+>  
+>  	for (i = 0; i < mm->n_roots; ++i) {
+>  		WARN_ON(!drm_buddy_block_is_free(mm->roots[i]));
+> -		drm_block_free(mm, mm->roots[i]);
+> +		drm_block_free(mm->roots[i]);
+>  	}
+>  
+>  	WARN_ON(mm->avail != mm->size);
+> @@ -191,14 +188,14 @@ static int split_block(struct drm_buddy *mm,
+>  	BUG_ON(!drm_buddy_block_is_free(block));
+>  	BUG_ON(!drm_buddy_block_order(block));
+>  
+> -	block->left = drm_block_alloc(mm, block, block_order, offset);
+> +	block->left = drm_block_alloc(block, block_order, offset);
+>  	if (!block->left)
+>  		return -ENOMEM;
+>  
+> -	block->right = drm_block_alloc(mm, block, block_order,
+> +	block->right = drm_block_alloc(block, block_order,
+>  				       offset + (mm->chunk_size << block_order));
+>  	if (!block->right) {
+> -		drm_block_free(mm, block->left);
+> +		drm_block_free(block->left);
+>  		return -ENOMEM;
+>  	}
+>  
+> @@ -257,8 +254,8 @@ static void __drm_buddy_free(struct drm_buddy *mm,
+>  
+>  		list_del(&buddy->link);
+>  
+> -		drm_block_free(mm, block);
+> -		drm_block_free(mm, buddy);
+> +		drm_block_free(block);
+> +		drm_block_free(buddy);
+>  
+>  		block = parent;
+>  	}

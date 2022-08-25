@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2433B5A0A0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3175A0A4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237474AbiHYHWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S238375AbiHYHao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233608AbiHYHWB (ORCPT
+        with ESMTP id S237671AbiHYHaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:22:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48C998D14;
-        Thu, 25 Aug 2022 00:22:00 -0700 (PDT)
-Received: from [192.168.10.7] (unknown [39.53.61.43])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C54196601E99;
-        Thu, 25 Aug 2022 08:21:56 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661412119;
-        bh=1FJOnrm6c8hesYXgPMcGpfrEmMkWbLuf31u0r6LEn7M=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=KK82O9BRLherxYbIleAZI3kE+Iy99/KI05X6sPWP43obywSQ1feSwoJfe1LVjJr15
-         j+YZs6idJH9bPD+qiNgHootvFWxLC2uUfWebh80rXxpHp85IBxuzHYSW8Dw/dnzIPg
-         Q6JiYdEV0Io9ktDNiDZIRjlh3aSzpw5sK3cOf0VIVvsklnjBjjQXwSHzz0OOBniA5B
-         HSnMmyzQL3lJ0wyULyBRNJzJBQBI6gY0JqCX7v0fH+PQg8tqegJlwB77TpCoSMQ3lz
-         cKbrpVX7NeOayudVA47fH7PguEbK9um6eaAC98pJp932XDw68ABMYTNEuMxhUSe+rR
-         eKf5NThHo5rcg==
-Message-ID: <971109b3-3f80-c00a-1df6-12a8a3218700@collabora.com>
-Date:   Thu, 25 Aug 2022 12:21:52 +0500
+        Thu, 25 Aug 2022 03:30:21 -0400
+X-Greylist: delayed 501 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 00:30:19 PDT
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119E39A9A9;
+        Thu, 25 Aug 2022 00:30:19 -0700 (PDT)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Thu, 25 Aug 2022 09:21:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1661412116; bh=/+UC0gRCiFWQcMuy4Xj0qMCo2bQnVRVF/PnuYavamBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hI+XGEjVal0XVZcBbCZY4poHtGOSgWwflU0pGH50eFNfESJzpF/JBeerdSxtQC8dt
+         pfSdEMmRpzRgSFMDlJ/Vhl9LnWi0WTR4hL5AlWVPVltlPvGE7JDO3aM+rGgUux8CLE
+         ytGgIjK7q/QUei6W5p6w2NNb+yf+N/clLDpBm2cE=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPA id 7C5E4801AA;
+        Thu, 25 Aug 2022 09:21:56 +0200 (CEST)
+Received: by buildd.core.avm.de (Postfix, from userid 1000)
+        id 70EF318149F; Thu, 25 Aug 2022 09:21:56 +0200 (CEST)
+Date:   Thu, 25 Aug 2022 09:21:56 +0200
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Thitat Auareesuksakul <thitat@flux.ci>
+Cc:     linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts/extract-ikconfig: add zstd compression support
+Message-ID: <YwcjFCXF7lKpU3r5@buildd.core.avm.de>
+References: <20220824200340.45673-1-thitat@flux.ci>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Cc:     usama.anjum@collabora.com, Steven Noonan <steven@uplinklabs.net>,
-        kernel@collabora.com
-Subject: Re: [PATCH 1/3] x86/tsc: implement tsc=directsync for systems without
- IA32_TSC_ADJUST
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220808113954.345579-1-usama.anjum@collabora.com>
- <87v8qhybk8.ffs@tglx>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <87v8qhybk8.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220824200340.45673-1-thitat@flux.ci>
+X-purgate-ID: 149429::1661412116-8F3FE9DB-1C6824EF/0/0
+X-purgate-type: clean
+X-purgate-size: 868
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,37 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 7:13 PM, Thomas Gleixner wrote:
-> On Mon, Aug 08 2022 at 16:39, Muhammad Usama Anjum wrote:
->> From: Steven Noonan <steven@uplinklabs.net>
->>
->> AMD processors don't implement any mechanism like Intel's
->> IA32_TSC_ADJUST MSR to sync the TSC. Instead of just relying on the
->> BIOS, TSC can be synced by calculating the difference and directly
->> writing it to the TSC MSR.
+On Thu, Aug 25, 2022 at 03:03:40AM +0700, Thitat Auareesuksakul wrote:
+> Add extract-ikconfig support for kernel images compressed with zstd.
 > 
-> Why? This has been tried before and is known to be flaky and
-> unrealiable.
-I'm sorry. I was trying to find the historic attempts about this. But I
-didn't find it. Can someone point me to the history?
+> Signed-off-by: Thitat Auareesuksakul <thitat@flux.ci>
+> ---
 
-Do we have some information on how AMD synchronizes the TSC in BIOS? If
-the ADJUST MSR like Intel's isn't present in AMD, they must be syncing
-it by directly writing to the TSC MSR like this patch is doing.
+Tested-by: Nicolas Schier <n.schier@avm.de>
 
+>  scripts/extract-ikconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->> Add directsync flag to turn on the TSC sync when IA32_TSC_MSR isn't
->> available. Attempt 1000 times or for 30 seconds before giving up.
+> diff --git a/scripts/extract-ikconfig b/scripts/extract-ikconfig
+> index 3b42f255e2ba..8df33e7d6daa 100755
+> --- a/scripts/extract-ikconfig
+> +++ b/scripts/extract-ikconfig
+> @@ -62,6 +62,7 @@ try_decompress 'BZh'          xy    bunzip2
+>  try_decompress '\135\0\0\0'   xxx   unlzma
+>  try_decompress '\211\114\132' xy    'lzop -d'
+>  try_decompress '\002\041\114\030' xyy 'lz4 -d -l'
+> +try_decompress '\050\265\057\375' xxx unzstd
+>  
+>  # Bail out:
+>  echo "$me: Cannot find kernel config." >&2
+> -- 
+> 2.37.2
 > 
-> Looping 30 seconds with interrupts disabled? Seriously?
-Yeah, that's too much. Some BSD variant uses 1000 attempts. We can
-change the 1000 attempts to 5 or 10 attempts as in my experience, 5
-attempts at max were always successful every time.
-
-> 
-> Thanks,
-> 
->         tglx
-
--- 
-Muhammad Usama Anjum

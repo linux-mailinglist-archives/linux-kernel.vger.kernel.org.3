@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4B25A112F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AFA5A1132
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241408AbiHYMyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S242086AbiHYMzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240140AbiHYMyS (ORCPT
+        with ESMTP id S242083AbiHYMyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:54:18 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1015F138
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:16 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id l1so27568177lfk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:16 -0700 (PDT)
+        Thu, 25 Aug 2022 08:54:53 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29214B28
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:45 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z8so5358344edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=EOx+15ISuVM78YfbcntTjxV0FVrXSMFcqt6tM497CRo=;
-        b=yHP+BN/UKDYtDzYiq/rIXsIA18QX/NrZzsC/CPWwBgG5EYw9zcr1Hqre9vwCG5qBaZ
-         l/WruHi0u2t/doB0slX0BRaM2q+F8Uzu5G+D9dEkoVwUQjxa7EHYXsNUkXiUIsBFQvbK
-         MpWkZQZM02eStdniO3G14wGL/qxvf7RnFDfip2PHstqL7ii6tiX4wcQxz+w3NUZm39Ud
-         2y4fZW3FhbHNBZROFpKRWESv+U/bKsGF7x3NK+C+6Nv3UFvZN6imHw5TujfY22f8Jirv
-         YKQOCswFojEbNcErt+Ju+SSUnn9LJBC8jL45Tts0INAEq0s3ypoAa5k/qmwW8kDPFbvR
-         GzGw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=eTyJ5ysyBJphDxI681uzkkLxuflLaDMmY8laThwgM3s=;
+        b=ZZjLAnzUFfkR+G4v+IgfNQyxujKrroHVtRt6sLDmiBVTQl1pPP39LVWYfE+C14b7jy
+         drFFGtc6MLy9HT+qhNoOGpDmgp9Nboo9hsk8n/VBZknHf0aWOQQyO3nzK40UoyCG0HzW
+         fXNWZFVaOMNNvtkDmAdm9sA4YcRvMnM9SQnlAFfOo7DkBCBOSHh9X5DDisnwDiJP5v1w
+         3G2pmpLNsi239BmZHC5GmDihLNEHiBKMXvDnQlNHcRwVVh7BQdClm3jrRWHJhv5h6f0e
+         2nDWc2tbxe/8Dv5Tl/zjy2f33JnCJOxHzk2QC53ZDPcp/U36ngjXCxslQJEmi8JYCPPI
+         ow9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=EOx+15ISuVM78YfbcntTjxV0FVrXSMFcqt6tM497CRo=;
-        b=HebTJ014Rs9PuWsFQwycLWU5KycAZr8paMex8SqHMmmAAJZ//K9qlteeOJfOdFsJso
-         4tVYuceNnNs4Av5QKRy0PVga1IbZt+CSrkJFKgkCcC+QZO2Yfwqv2K4DS+qMm2WOfS6p
-         3Uhl3ME5XBP6B9g7MDqfMDXNFiANq/rXy0/QRe+GIJPGeqA/WAj/wGbInMnXo3N/ixLP
-         LHDYes9evakyixuUNdbIBa2TGrCQ+KGYfpe9gHf1SbgM38U6jCS0u+ZKaGoTPvMahbMx
-         0HGB/juK5qHPVGCBUwoA71Q8Yi08AYtTg7k8ilZ4IeYdA/IjZMeyjDJLFZIRmBQsRYE2
-         u1nw==
-X-Gm-Message-State: ACgBeo1SBriZ+I6cypKTBwqwBjLErKvg6SD71UNLGNpbY73AHygg1LeT
-        HEVAatylH7FXr6BX0db/SZTzMg==
-X-Google-Smtp-Source: AA6agR6BP1BgBSeSUEslZV2i7sVqW03Iw1CWgpxNG11S8Ggo1zhlJ2LC3F/gYAgRr4rC3hZIjeGYdA==
-X-Received: by 2002:a05:6512:681:b0:489:d509:e076 with SMTP id t1-20020a056512068100b00489d509e076mr1279352lfe.618.1661432054902;
-        Thu, 25 Aug 2022 05:54:14 -0700 (PDT)
-Received: from krzk-bin.starman.ee (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id z14-20020a056512370e00b00492e3a8366esm494304lfr.9.2022.08.25.05.54.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 05:54:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH RESEND - dt 2/2] dt-bindings: leds: qcom-wled: fix number of addresses
-Date:   Thu, 25 Aug 2022 15:54:10 +0300
-Message-Id: <20220825125410.232377-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220825125410.232377-1-krzysztof.kozlowski@linaro.org>
-References: <20220825125410.232377-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=eTyJ5ysyBJphDxI681uzkkLxuflLaDMmY8laThwgM3s=;
+        b=QOIo200TRuF8BkrJfVo8s/8XrMozyqsoxwGlD52A6mhIBSxjZrBkOyEvuXtAvFNoNv
+         X0v8Mm6iLBdQ5tpaL76chMt4YCfELoL1Yb8bhyD3biJjtkmwg4m+TjfKXp8hjDgtv+Cw
+         yF3S/xEjO3+EEDzglV39XkV9e76TO+qCx26gxw5YRPTVRzegE+2ZqzLhTg4VIRMs/2Y3
+         g8i09WsrkXROeurEuYXktiJ714VIwI/tHY10lqfAi/4s8Rgd/W0+NsyPcLbVqIODj7oi
+         Qm989Y3KhlXta1I7vU3LCfvRV5cwOu27xA4aO6YBYPnmd+M1qfFz7HovNt+IyoS6S9eU
+         xzzQ==
+X-Gm-Message-State: ACgBeo1YLLnBKIJHXFdvAxVutU1R2RnlCQZu6unaHfwttcx69cbr6yOq
+        ea4kmoIcEE/ct6sKRa/7G3M3pS7UFBQ7KtMG3Ju+fQ==
+X-Google-Smtp-Source: AA6agR5gBoA+DyRoVe1dyTC0LYezrrsqDvXPMxIYYWdtzgEXrzgLMkOxOeINwsG5S/OWaW8sXg9+wvi2winSXMVBq2c=
+X-Received: by 2002:a05:6402:1f8c:b0:43e:8fab:76c with SMTP id
+ c12-20020a0564021f8c00b0043e8fab076cmr3117148edc.126.1661432083303; Thu, 25
+ Aug 2022 05:54:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220818075012.20880-1-hui.liu@mediatek.com>
+In-Reply-To: <20220818075012.20880-1-hui.liu@mediatek.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 25 Aug 2022 14:54:32 +0200
+Message-ID: <CACRpkdbGjbd9Q9Chcnnc=3nD3XALsCdk7dz9mT3BfJdZs62xjA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] MediaTek pinctrl patch on mt8188
+To:     Hui Liu <hui.liu@mediatek.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        wenst@google.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jianguo.zhang@mediatek.com, zhiyong.tao@mediatek.com,
+        sean.wang@mediatek.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -81,50 +74,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PM660L, PMI8994 and PMI8998, the WLED has two address spaces.  This
-also fixes dtbs_check warnings like:
+On Thu, Aug 18, 2022 at 9:50 AM Hui Liu <hui.liu@mediatek.com> wrote:
 
-  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dtb: leds@d800: reg: [[55296], [55552]] is too long
+> Changes in patch v6:
+> 1.Update driver file's coding style.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/leds/backlight/qcom-wled.yaml    | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+No further comments on this version so patch applied. If Sean
+has further comments they can be addressed in-tree.
 
-diff --git a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
-index 5d66c3e4def5..4c15693f7a01 100644
---- a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
-+++ b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
-@@ -26,7 +26,8 @@ properties:
-       - qcom,pm8150l-wled
- 
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
- 
-   default-brightness:
-     description: |
-@@ -171,6 +172,9 @@ allOf:
- 
-     then:
-       properties:
-+        reg:
-+          maxItems: 1
-+
-         qcom,current-boost-limit:
-           enum: [ 105, 385, 525, 805, 980, 1260, 1400, 1680 ]
-           default: 805
-@@ -189,6 +193,9 @@ allOf:
- 
-     else:
-       properties:
-+        reg:
-+          minItems: 2
-+
-         qcom,current-boost-limit:
-           enum: [ 105, 280, 450, 620, 970, 1150, 1300, 1500 ]
-           default: 970
--- 
-2.34.1
+Nicolas: thanks for helping out with review!
 
+Yours,
+Linus Walleij

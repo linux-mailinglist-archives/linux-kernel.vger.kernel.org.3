@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561CC5A1861
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD025A1866
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiHYSJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
+        id S242987AbiHYSJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236470AbiHYSJD (ORCPT
+        with ESMTP id S236470AbiHYSJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:09:03 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFF8BD14F;
-        Thu, 25 Aug 2022 11:08:51 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PBLHS9015534;
-        Thu, 25 Aug 2022 18:08:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BcXe+Mq2OdbFM6VJjcOacCP0r4hwAGD5KEuc5dav7bA=;
- b=DjRS/fTc9WjBHEc0kKHaCfYy4ra7aZaRCiGTaDLH05d09kQrsQR24jwHa9aBalZZbgpR
- jnqrNFKgwsLlgfvuilo736HS+lm0orChmyNWEls5sow8awjumEyUVWFcv3FtA9HxaAPM
- 05/+uvJhdWV8OMsh+t7+dwakHE1YQkSApClHpj/OxEy+TLO+7r+//GoDyAGb77XCWcOt
- FdiUNo47TD/vf5qw712GUBeLDxOnJ9VnKQdnzLXpyD0OYagNHLO4NtITzey0ClI24pcB
- FDDZzC2qM+MCSqg1abS3iQ75YuG+i1t/493JuCk5VhrwwpmNCP0YpXfzSnyZt+CFm3WH vQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j6072bbrp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 18:08:21 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27PI8KGn008317
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 18:08:20 GMT
-Received: from [10.110.120.38] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 25 Aug
- 2022 11:08:19 -0700
-Message-ID: <fd9129d7-5688-20de-a716-738ce5076b50@quicinc.com>
-Date:   Thu, 25 Aug 2022 11:08:18 -0700
+        Thu, 25 Aug 2022 14:09:38 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B214BD08F;
+        Thu, 25 Aug 2022 11:09:36 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 72B8F2E2;
+        Thu, 25 Aug 2022 18:09:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 72B8F2E2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1661450976; bh=5vAHQVGvmhIm6rGzB0DMvadkCYOHywVDKSrP/IUHYKc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kSRWIw/Ak6lGd6CoGml8WhUs7+ybs0aOyaPwpM79tFAXB+ZjsPQkokUvdJzTK8e2o
+         ZTDYDw2bs+omShQpeS1Tv3pgL5qewxFmLKxuXcrFWBp1TmFFmcNqkr7kU4rGirYwfG
+         yVe9AY/dPLoErSUSG/RlEnxYcVOS/9PLLedrsF4fEqP53Po7Q83VRWPotXNBirPIia
+         xLIocksnTJksthlgZy1U7gZcZLMjSLGCOVrXOtL5Y96F4mjUgC33uUIHOYOc18Lqra
+         LDlwAEhYDfLE6f6VqybjDbvkeDKQ0QkAVAgXJdqJP6ECaOGU0GUDS+q5QYIVu6eK6u
+         7KY+F0xpRJNNw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
+        akpm@linux-foundation.org
+Cc:     yejiajian2018@email.szu.edu.cn, skhan@linuxfoundation.org,
+        akiyks@gmail.com, rppt@kernel.org, zhangyinan2019@email.szu.edu.cn,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+Subject: Re: [PATCH] Documentation/mm/page_owner.rst: update experimental data
+In-Reply-To: <20220825172934.4344-1-caoyixuan2019@email.szu.edu.cn>
+References: <20220825172934.4344-1-caoyixuan2019@email.szu.edu.cn>
+Date:   Thu, 25 Aug 2022 12:09:35 -0600
+Message-ID: <87ilmgyz34.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [RFC PATCH v2 1/2] scsi: ufs: Add Multi-Circular Queue support
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Can Guo <quic_cang@quicinc.com>, <quic_nguyenb@quicinc.com>,
-        <quic_xiaosenh@quicinc.com>, <stanley.chu@mediatek.com>,
-        <adrian.hunter@intel.com>, <beanhuo@micron.com>,
-        <avri.altman@wdc.com>, <mani@kernel.org>,
-        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>
-CC:     Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        jongmin jeong <jjmin.jeong@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1660213984-37793-1-git-send-email-quic_cang@quicinc.com>
- <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
- <ea877f4f-1acd-2da4-a6f5-10df02dfee74@acm.org>
- <4471ed41-516c-95d4-003d-28077df7dce4@quicinc.com>
- <3326ad2e-e82f-7254-7e6b-bb0a120288f8@acm.org>
-From:   "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>
-In-Reply-To: <3326ad2e-e82f-7254-7e6b-bb0a120288f8@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hzZhKO_tdECaID8Lg1bJzE9wMDsqwhqu
-X-Proofpoint-ORIG-GUID: hzZhKO_tdECaID8Lg1bJzE9wMDsqwhqu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_08,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
- spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208250069
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/25/2022 11:04 AM, Bart Van Assche wrote:
-> On 8/24/22 18:42, Asutosh Das (asd) wrote:
->> On 8/18/2022 7:41 PM, Bart Van Assche wrote:
->>> On 8/11/22 03:33, Can Guo wrote:
->>>> +static inline void ufshcd_mcq_process_event(struct ufs_hba *hba,
->>>> +                        struct ufs_hw_queue *hwq)
->>>> +{
->>>> +    struct cq_entry *cqe = ufshcd_mcq_cur_cqe(hwq);
->>>> +    int tag;
->>>> +
->>>> +    tag = ufshcd_mcq_get_tag(hba, hwq, cqe);
->>>> +    ufshcd_compl_one_task(hba, tag, cqe);
->>>> +}
->>>
->>> Consider changing "process_event" into "process_cqe". Consider 
->>> renaming ufshcd_compl_one_task() into ufshcd_compl_one_cqe().
->>>
->> The preparatory patch that would precede this change would define 
->> ufshcd_compl_one_task() in ufshcd.c. Since this function would be 
->> invoked both from Single Doorbell mode and MCQ mode, 
->> ufshcd_compl_one_task() sounds more relevant. What say?
-> 
-> The name "task" is confusing since in SCSI standard documents it refers 
-> to "task management" while ufshcd_compl_one_task() is not related to 
-> SCSI task management at all. So I would appreciate it if another name is 
-> chosen than ufshcd_compl_one_task().
-> 
-Ok, makes sense. Will change the name in the next version.
+Yixuan Cao <caoyixuan2019@email.szu.edu.cn> writes:
+
+> I noticed some experimental data need to be updated.
+>
+> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+> ---
+>  Documentation/mm/page_owner.rst | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
+> index f18fd8907049..8e2545bb4e17 100644
+> --- a/Documentation/mm/page_owner.rst
+> +++ b/Documentation/mm/page_owner.rst
+> @@ -41,17 +41,17 @@ size change due to this facility.
+>  - Without page owner::
+>  
+>     text    data     bss     dec     hex filename
+> -   48392   2333     644   51369    c8a9 mm/page_alloc.o
+> +   58581   3166     652   62399    f3bf mm/page_alloc.o
+>  
+>  - With page owner::
+>  
+>     text    data     bss     dec     hex filename
+> -   48800   2445     644   51889    cab1 mm/page_alloc.o
+> -   6662     108      29    6799    1a8f mm/page_owner.o
+> -   1025       8       8    1041     411 mm/page_ext.o
+> +   59085   3294     652   63031    f637 mm/page_alloc.o
+> +   7464     125      28    7617    1dc1 mm/page_owner.o
+> +   1396      32       8    1436     59c mm/page_ext.o
+>  
+> -Although, roughly, 8 KB code is added in total, page_alloc.o increase by
+> -520 bytes and less than half of it is in hotpath. Building the kernel with
+> +Although, roughly, 9 KB code is added in total, page_alloc.o increase by
+> +632 bytes and less than half of it is in hotpath. Building the kernel with
+>  page owner and turning it on if needed would be great option to debug
+>  kernel memory problem.
+
+This seems like a fine patch...but I do have to wonder if it really
+makes sense to maintain this information, which will surely be subject
+to frequent change.  Perhaps the whole thing is better replaced with a
+line saying that enabling page owner adds ~9KB?
 
 Thanks,
--asd
 
+jon

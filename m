@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD0D5A0D43
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F115A0D45
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbiHYJwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S240933AbiHYJxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241048AbiHYJug (ORCPT
+        with ESMTP id S240724AbiHYJwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:50:36 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EA9ACA10
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:48:49 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MCykN4JL2z1N7Zs;
-        Thu, 25 Aug 2022 17:45:16 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 25 Aug 2022 17:48:47 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 25 Aug 2022 17:48:47 +0800
-Message-ID: <cb9c5a05-d97d-49ff-8a69-aed0f5e73f1e@huawei.com>
-Date:   Thu, 25 Aug 2022 17:48:46 +0800
+        Thu, 25 Aug 2022 05:52:35 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ECEAD9BE
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:49:43 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id by6so18869961ljb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1kMg/2p/VcNDyKRVfg3f4w41z9TXz8csd9rtLeh30yg=;
+        b=JPJ4blOvYwitTMl23yXWeycie0bBgeSFYvPKyHK5c+DX/UV3eLOi7ipKWFd7gxSiID
+         /niOBRbGue7lXXtpqXVz9K4MC5YZOv28slYAWFSUZHe/+GGkWekd8KCqkcWim0h9C/bH
+         VOE5c2x4+8CV5xEbrPnGdWySF3I7otsX6MgXZl7BZ63oqVvmbLeqiIosca1DCN5pNoj6
+         Ko6/bOQNX4P5dKOl4Ovas5sEMXZWL1hVgWCTTrYIR23AMZMivV+7ee9XUYKnsTPzRu33
+         UX46wgmW2LtAoGwTB32nSmxubTRpMeEokfdKjGb9Cq04TO4zBxwqWLIoIlnujIMjjwvq
+         7UIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1kMg/2p/VcNDyKRVfg3f4w41z9TXz8csd9rtLeh30yg=;
+        b=m2LSMVHihFa3iglJcA6b9iosdPt7ux+MQnrGU/b+OPYDEtLScYjPaBJ8aKOKMbX1CQ
+         nuctnhk7RZwZ3tClb6hEMUjeNxYnKJbhaLbXHmog8NyJXkbN6s6dxfko9Q2l2OXtyu2u
+         EOvu2x6ZOjeGTb7oKMHmep64gmUADHbxSHCHjvH3ymNJTS27xwl7iR0RmXRQ+q3TT+4a
+         y8xXtfXFdRnmuxdjDpOvObWGyp2wGuOW4Kv+2FZFjZ0QcNED20VxqLi992KrbmvZoLYC
+         8G9X9C1E8oE6Iw6RZwjVqMKxOrbMW1+schhOtImUzUobbZk6SAq69zIxKIj7T0OMJ3lm
+         ve2A==
+X-Gm-Message-State: ACgBeo3Vs3Hww5b7fZMEtVQ9Bc2x5Fchn0PWyXzrNfPoXL1xqbnPFGp5
+        eErBiBnz4wngxiXI9koq8oOd20f+Z6vHEl5GuOPR7w==
+X-Google-Smtp-Source: AA6agR5VFuzVZBBnz6OLJeVypCiPXq+1ADkMDZL2eMmhYiYGO41+tPsO3k2IUM59LGmJN5qCZIaiCFiTYWPyb75F7o8=
+X-Received: by 2002:a2e:884c:0:b0:261:ca69:6023 with SMTP id
+ z12-20020a2e884c000000b00261ca696023mr788260ljj.300.1661420981618; Thu, 25
+ Aug 2022 02:49:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] mm: slince possible data races about pgdat->kswapd
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     <muchun.song@linux.dev>, <linux-kernel@vger.kernel.org>
-References: <20220824071909.192535-1-wangkefeng.wang@huawei.com>
- <20220824071909.192535-2-wangkefeng.wang@huawei.com>
- <e5223895-6319-1911-28bf-09449ded96c9@redhat.com>
- <fe06a35b-229f-c143-0200-33dbb315f0fe@huawei.com>
- <76d906e8-4c2b-0832-dc43-5fb49b5c6cc5@redhat.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <76d906e8-4c2b-0832-dc43-5fb49b5c6cc5@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220823143034.20543-1-wangjianli@cdjrlc.com>
+In-Reply-To: <20220823143034.20543-1-wangjianli@cdjrlc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 25 Aug 2022 11:49:05 +0200
+Message-ID: <CAPDyKFroJgv=47Q2sAn3cT4rgeu3ntk6euxJ7k-ZQOAMQpeteg@mail.gmail.com>
+Subject: Re: [PATCH] mmc/host: fix repeated words in comments
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     jh80.chung@samsung.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 Aug 2022 at 16:30, wangjianli <wangjianli@cdjrlc.com> wrote:
+>
+> Delete the redundant word 'the'.
 
-On 2022/8/25 16:22, David Hildenbrand wrote:
-> On 25.08.22 04:34, Kefeng Wang wrote:
->> On 2022/8/24 16:24, David Hildenbrand wrote:
->>> On 24.08.22 09:19, Kefeng Wang wrote:
->>>> The pgdat->kswapd could be accessed concurrently by kswapd_run() and
->>>> kcompactd(), it don't be protected by any lock, which could leads to
->>>> data races, adding READ/WRITE_ONCE() to slince it.
->>> Okay, I think this patch here makes it clearer that we really just want
->>> proper synchronization instead of hacking around it.
->>>
->>> What speaks against protecting pgdat->kswapd this using some proper
->>> locking primitive?
->> as comments about kswapd in struct pglist_data,  pgdat->kswapd should be
->>
->> protected by mem_hotplug_begin/done(), how about this way?
->>
->> diff --git a/mm/compaction.c b/mm/compaction.c
->> index 640fa76228dd..62018f35242a 100644
->> --- a/mm/compaction.c
->> +++ b/mm/compaction.c
->> @@ -1983,7 +1983,13 @@ static inline bool is_via_compact_memory(int order)
->>
->>    static bool kswapd_is_running(pg_data_t *pgdat)
->>    {
->> -       return pgdat->kswapd && task_is_running(pgdat->kswapd);
->> +       bool running;
->> +
->> +       mem_hotplug_begin();
->> +       running = pgdat->kswapd && task_is_running(pgdat->kswapd);
->> +       mem_hotplug_end();
->> +
->> +       return running;
->>    }
-> I'd much rather just use a dedicated lock that does not involve memory
-> hotplug.
+Patches that correct spelling mistakes make sense to me. However, I am
+no longer willing to pick one patch per spelling mistake, it's just
+silly and I feel like I waste my time.
 
-The issue only occurred due memory hotplug, without mem-hotplug,
+Instead, I suggest you go through all mmc host drivers and fix *all*
+of the spelling mistakes in one single patch. The similar can be done
+for the mmc core.
 
-the kswapd won't stop or re-run, there is no above issue too, add a new
-
-lock would be duplicated, but the scope of protection is smaller, I could
-
-repost with new lock if no more comment.
+Kind regards
+Uffe
 
 >
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/mmc/host/dw_mmc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
+> index 581614196a84..7f00d7d7e35e 100644
+> --- a/drivers/mmc/host/dw_mmc.c
+> +++ b/drivers/mmc/host/dw_mmc.c
+> @@ -1363,7 +1363,7 @@ static void __dw_mci_start_request(struct dw_mci *host,
+>                  * is just about to roll over.
+>                  *
+>                  * We do this whole thing under spinlock and only if the
+> -                * command hasn't already completed (indicating the the irq
+> +                * command hasn't already completed (indicating the irq
+>                  * already ran so we don't want the timeout).
+>                  */
+>                 spin_lock_irqsave(&host->irq_lock, irqflags);
+> --
+> 2.36.1
 >

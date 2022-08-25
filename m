@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5215A08BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369465A08BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiHYGQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S235397AbiHYGQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiHYGP7 (ORCPT
+        with ESMTP id S235427AbiHYGQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:15:59 -0400
+        Thu, 25 Aug 2022 02:16:16 -0400
 Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457F19F8CA
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:15:58 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id k22so3751893ljg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:15:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFA49FA96
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:16:14 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id x10so18443050ljq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=QfntWEQSpTDyvI8gHYn0S5Jpd2fjYD1CiZx7MTC/KrE=;
-        b=DvcAOKz8GbCyAUdmQkk9/3dFgH47rjnGUVOltexjeECkSMon4HqpDRiFYLAKXcYlJZ
-         WA2yFT/Hl1GydqsB2axTuFnm5AGm+lX0jhSB8DfbLBec45/3XkFohFAqxWJp0kb260c5
-         f8N9jtLxxP7yz9QS/fdPFg9dl/ZnexVQFWjXEWpct3nR2fW5pegVGudCijwzJq+h6Rdi
-         eWEqMwPN+UNQoB7MZCRKxWcF1Fkf6gU0AJm4rF5uoWcTEcTQ6cglJjlw+NJME20DWHoa
-         yyO+i4V2VvjMAfR1Dc3U0QFcgVlBs7Z3qtTFaYsVELfbcR+Ur4vzqBO/tgwYSSb9UxfO
-         nZbg==
+        bh=6eX1BCgETxpvjvzuPzcdcjI9NXTy9Ze4DX2J+5QEsZk=;
+        b=uDyBXqWr+lPD/ZmtW/w7/gh4xVS32yx21+JN2Wy4Cmt9g1koHNDeGJA9hP+dk+pQ9o
+         sfFv/qebV6A4014opoAjppk7WLd46Ed2/jE7g7+muQiSKEDrHcq1ENIxXedpdCBje8Kw
+         XTJBltrZ379R58fBjJArXmbzJFeSGZJsbrngePGfJKLe6GSdc5iRsEZdrr+C4BtfafNl
+         XMRsdulD03jv+KGxjxPEn1P2VPIIGL3fUoGWALQBwkh4uYl3kcyG3Yp2pdcrFqO/b9t0
+         0L8P+IKWwbV+BbFx9sYczk4dhfe9mAu9B7DO20XTRF+GHDysqh/mqE0ggNVvr15XB10s
+         aFrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=QfntWEQSpTDyvI8gHYn0S5Jpd2fjYD1CiZx7MTC/KrE=;
-        b=LSmcX+13wvBYy9g6TtV31DwveyJlaGXVX/pzT118oSbtQqJ9hl0tKiiW6y6ALVQYEf
-         AXKPweURiBv7ZgK6IgnF7+2nec2Xy3e00kb6LH4vEV7Np/3v/tUmx8nOoKE9c+VMKxUf
-         aNPPTduvkuQGhcQmolYlmc2uWqAVXsWyh/+khKouWg9O93HN3Wff0FFO+H204gv1EAMR
-         fKfY5wxBYGes7o7pJAM2FJxJ5GGqC1+ld0d3TR/9KD3+0rwfLN4YCruhdH2WT0w+YN4p
-         5kjrtJzpL9Qlv6Oo3BnU51rwoSD1DL5iKKc5ZUOFuZoBsR2OonQGp1gO0tHSi/5OLm+0
-         k4zw==
-X-Gm-Message-State: ACgBeo3DkRC064EV0lEbx+vohY9A+KlXgt+rwRqXdUjN+tFCsWg1I7M2
-        6ggyqlf34nMyJytTMkwy4/QChw==
-X-Google-Smtp-Source: AA6agR4+sOKC06+N9A+9hxnC1nzfJP86yWP8N1RKdOPXieGnNCPeH85sdxO03GEFWs4prufMigm7BA==
-X-Received: by 2002:a2e:bf23:0:b0:261:bd22:b2ba with SMTP id c35-20020a2ebf23000000b00261bd22b2bamr625734ljr.438.1661408156648;
-        Wed, 24 Aug 2022 23:15:56 -0700 (PDT)
+        bh=6eX1BCgETxpvjvzuPzcdcjI9NXTy9Ze4DX2J+5QEsZk=;
+        b=6j3J9mkTYJ9A/aCbGhj1Dvqe72/6WhqySqc6lyb9mfvej0/MBVmuPT9XFGATEnP9YL
+         RxGoJ8CS8tGWUZwn+x18x16pC6XWV3QDdgnk5qm0dXIqAWd6gUhw27jBGbHDuUW7b11X
+         M3jG7Uj5ygnGEAE+jqjx6zh7gupQxg8MqXm8y/UQOKy3Xu1yjxRquAMh/okzkgc5+2TC
+         2GCRKJANlAo1TpyL4Vtr2gsYtxnQl0YkaU49M1c+wi9xvO8T9LoXLygW/mh1Os5UpcA5
+         sudC9IUZIstbCHLb6rsOqKeMpQ/V54jiLBPNW+uo3+x5VpbLymhVDiNZMNyIR0N0dwuB
+         w+Ng==
+X-Gm-Message-State: ACgBeo1fWxHa0rhJEu0ujy5GG/JeTLhrflicy7Hh9PN+4wbncWip21TR
+        +h4H08kvEIFPf4DXEIQEFMb2mQ==
+X-Google-Smtp-Source: AA6agR5bwdz/qtNkVzzrjl5zRg+LBR0JoyjGsTqeu+pFcRYbZqsHQfZbNP9l4AVXS/xy6aLM8ep5gw==
+X-Received: by 2002:a2e:a170:0:b0:261:e4e9:818e with SMTP id u16-20020a2ea170000000b00261e4e9818emr689248ljl.168.1661408172993;
+        Wed, 24 Aug 2022 23:16:12 -0700 (PDT)
 Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id t3-20020ac24c03000000b0048af749c060sm316214lfq.157.2022.08.24.23.15.55
+        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004926689d410sm315205lfr.171.2022.08.24.23.16.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 23:15:55 -0700 (PDT)
-Message-ID: <a66d7c9d-7859-90af-8e93-ae2fc03b767a@linaro.org>
-Date:   Thu, 25 Aug 2022 09:15:54 +0300
+        Wed, 24 Aug 2022 23:16:12 -0700 (PDT)
+Message-ID: <8113a5d0-4029-2d0c-7c69-fa81d1b208e3@linaro.org>
+Date:   Thu, 25 Aug 2022 09:16:11 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v5 2/7] dt-bindings: net: dsa: mediatek,mt7530: fix
- description of mediatek,mcm
+Subject: Re: [PATCH v5 3/7] dt-bindings: net: dsa: mediatek,mt7530: fix reset
+ lines
 Content-Language: en-US
 To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -82,15 +82,15 @@ Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20220824104040.17527-1-arinc.unal@arinc9.com>
- <20220824104040.17527-3-arinc.unal@arinc9.com>
+ <20220824104040.17527-4-arinc.unal@arinc9.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824104040.17527-3-arinc.unal@arinc9.com>
+In-Reply-To: <20220824104040.17527-4-arinc.unal@arinc9.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,12 +98,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 24/08/2022 13:40, Arınç ÜNAL wrote:
-> Fix the description of mediatek,mcm. mediatek,mcm is not used on MT7623NI.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> - Add description for reset-gpios.
+> - Invalidate reset-gpios if mediatek,mcm is used. We cannot use multiple
+> reset lines at the same time.
+> - Invalidate mediatek,mcm if the compatible device is mediatek,mt7531.
+> There is no multi-chip module version of mediatek,mt7531.
+> - Require mediatek,mcm for mediatek,mt7621 as the compatible string is only
+> used for the multi-chip module version of MT7530.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

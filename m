@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DB25A1CB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246655A1CBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243748AbiHYWrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S244143AbiHYWux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiHYWrv (ORCPT
+        with ESMTP id S244066AbiHYWue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:47:51 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB946C6B79
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:47:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1661467670; x=1693003670;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jmZ4y9zIob46bh2rM8o4F3fEfJ+GVDi8MB3UI98H7jY=;
-  b=KcderWU977noXeR/qLqf13BCZuJQgElV62Vr4cF502rLPWVHwdy1WHN7
-   TJTJ5riDkfFVPIO65Jd5AIC8c7Ui12k4vqB/G0YWG0joAUfRG1fGDf/kW
-   7LMhJMVRYD3gc8dnmPJBwyQMduolYkiDITy7GfsziZ8/yfzdhuEY1OYC3
-   e2fca8NYAqAIMKB1uHJ7wz238JFhF1nrDPX1L3S1jB24RXra9NsZWKU2y
-   ABnZV9MUEZOBMozQNpOQKa05Y+vthNgN72VybK3HyTNtMO5Qgzu7LBRps
-   Bq2Q3KgxkT/ehFs8PYLNwfNEsyeCH8ZyZivwWKBCQjrWalzAXQ5KBlOvh
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,264,1654531200"; 
-   d="scan'208";a="214834938"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Aug 2022 06:47:49 +0800
-IronPort-SDR: fngSQLEPtiHgATeJLDvb894eGydoWE8j7Njh9ldpVGNjmHOHmOWoTnBvfDD8MHqeE9CsqqTQ3R
- 71VNQ8c5ur4Mig72EhJCdZCbTWeeBa/PviuPg3HQ/tipcZOTKUTBLffmT8rOjx37pBZ334bNF8
- RHexjNjM4EaMqqo/PX3SrDIuaT1hRByh0HPs1k/zccDMAWRMEhcPiM6eMhkGNN+CdnnS5N4Ou9
- nxYViNA1uwoDadx3UKCcAJMjkA9KcUqUKG0IWx71KwcQMDRocTfNlNXAiOZ7X4+8yPuWMaXWj/
- nF3y0kjPBe4rE0gmyJYHIabp
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Aug 2022 15:08:25 -0700
-IronPort-SDR: KCu22zCGVrEG1Z3o1D7MV8G+MA075Yzz691TizPxZe3dK59qjDYHuFok0ukOakfBFlAqIC4Qv7
- xux9mNY2Vcy5MSrDgov9vb4YcX9PkMiVQ7M3EovVGl8+QeqvNU1Jroh/Z+i8xpHrSLYZh9nN84
- h0zp3yDLwois8OUZ47+tpksXvPIS/lRPN34W7jG1zBN3oUcyQzO3b4bEuAhCFWpNVJieNbXNOa
- CvkkioiI8i59PRAM5qft8/Vxx0SWvBV5Wb7OK3Sjw8qkhbguR2gUnnDh0IJD9zSmBFxZmdIfj4
- 1eM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Aug 2022 15:47:49 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MDJ5J4hhPz1Rwnx
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:47:48 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1661467668; x=1664059669; bh=jmZ4y9zIob46bh2rM8o4F3fEfJ+GVDi8MB3
-        UI98H7jY=; b=d9Kzbemw76idps6mCmYdleMG0/8OTWdOd8eBiFkDVrx5DmCI6Nx
-        8wLUj+voNOCu2CgkNmcRsf1K+6ZhQM8idEqerXqvsUD9nuMB6ki2e/Oy4+NDh/uU
-        skkG7XTiIaBbl5fuqEMts2UjCkLsGd2kKZsl62dW/Be65ST9D5zAzVJ6UJDWWQfG
-        WLQjEb3vGxD9oH0kRKEe6Xv7LYBkQzg+zUDq3d8IzVFIYEGENwg9B5nkFOJ02qZ7
-        YpIvtoAiO1CI0uua9Aj/fWR6qZJiIRquMG3AHapQpC/m898F2/vXdYrqF82mpefJ
-        OqnKFCLExzeGLTXllHjZVaEXkhmRHiY/YQw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id U3NJC5_yRehf for <linux-kernel@vger.kernel.org>;
-        Thu, 25 Aug 2022 15:47:48 -0700 (PDT)
-Received: from [10.225.163.46] (unknown [10.225.163.46])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MDJ5H3Cjvz1RtVk;
-        Thu, 25 Aug 2022 15:47:47 -0700 (PDT)
-Message-ID: <b31200c7-4737-a4fe-45dd-83ad70892177@opensource.wdc.com>
-Date:   Fri, 26 Aug 2022 07:47:46 +0900
+        Thu, 25 Aug 2022 18:50:34 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C444E63F
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:50:24 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id d71so19085452pgc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=cgiyIbhlK0oTTb9MOi/TmiilB4y7xpSPs1MPQHO3WO0=;
+        b=hHesMge/GsZDFgpbHiRU1/UfdcLKj9rRgWjPmiami37jZ/cpClJZ6eI9QHYYYGDkCr
+         HmTw03rCd/m3DAOTUGfGhB46uLB4m6KGI7tuAnar6oihXo08kVVgTMWhPEgt3Bcm8bj2
+         ZpV+/0uNCoYPnbj9kUhcXx3xWbm0W8xrwqZNF4tejv8+tw9miDtWQGw7eKM9CN24TPjq
+         /HyFA4QNbJhzOcIzQgZWlTt9ux6uXvUjRVfwE/5FNCsTkIaVM54A6QO4heiRYgARc2DX
+         bzFthjvMGuSWsk0iQETnoHp9yMhrHwGl6RuzO0tXr/jj7bJFzNgyrhmC3zKh8c6OhIr6
+         TRpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=cgiyIbhlK0oTTb9MOi/TmiilB4y7xpSPs1MPQHO3WO0=;
+        b=O/Nfcx2j0D+Vvdm519MXt7viagzZ9hXNcnqtswsY/uUUdZvR6mOpBtAH2fIkwG+u8b
+         7rv1XrTE3CtPy8a9JEdXcFMJHAFl6Ced4ol5eDBdVZkA1MyATAdNrQlYtXYKszocEY8P
+         LYkT+jLXNVKMnAXvnnrojSrU/izqDDjQW62Z12H2B/T2JKf63QSk1hluOjRSv6Gtrjox
+         vkw5XikT9+5WAdqfp1psmFqjtD3tGNoTvclAPD8TqWh8OMW6neGoWNDHmCS+KfM5FZLE
+         YPFKq3yAwDqXkJeVTS1izPvdo7CWKbpWKxntjMcZybjzJHr22v44tvJIlOyNdYCjf+rp
+         payQ==
+X-Gm-Message-State: ACgBeo1NGo/10CNAHBzBkaGJoBmKpijhz8B64gc5GZ5+UNHYvtn9U/xz
+        QyD6K7DyUJ4ik8m8NnHCcWNQdB/JLxt3aSr193pcmg==
+X-Google-Smtp-Source: AA6agR5MbRiN7wmgXR+FaQb78huP8/LjKmNUeHKSsmltko+kS55TjDW9j8bpGNofzu7xPGMkBSxquKsRPCX686J+l5I=
+X-Received: by 2002:a65:6953:0:b0:42a:4612:2d7b with SMTP id
+ w19-20020a656953000000b0042a46122d7bmr1022618pgq.253.1661467823820; Thu, 25
+ Aug 2022 15:50:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH linux-next] ata: libata-core: remove redundant err_mask
- variable
-Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220823122914.211355-1-cui.jinpeng2@zte.com.cn>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220823122914.211355-1-cui.jinpeng2@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220825221751.258958-1-james.hilliard1@gmail.com>
+In-Reply-To: <20220825221751.258958-1-james.hilliard1@gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 25 Aug 2022 15:50:12 -0700
+Message-ID: <CAKH8qBu2B+Ac+GoB9FxtD4WGnuE9SFrBnAQY0C-EPZi0dJNwnA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,46 +75,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 21:29, cgel.zte@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> 
-> Return value from ata_exec_internal() directly instead of
-> taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Thu, Aug 25, 2022 at 3:18 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> There is a potential for us to hit a type conflict when including
+> netinet/tcp.h with sys/socket.h, we can replace both of these includes
+> with linux/tcp.h to avoid this conflict.
+>
+> Fixes errors like:
+> In file included from /usr/include/netinet/tcp.h:91,
+>                  from progs/bind4_prog.c:10:
+> /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
+>    34 | typedef __INT8_TYPE__ int8_t;
+>       |                       ^~~~~~
+> In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
+>                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
+>                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
+>                  from progs/bind4_prog.c:9:
+> /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
+>    24 | typedef __int8_t int8_t;
+>       |                  ^~~~~~
+> /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
+>    43 | typedef __INT64_TYPE__ int64_t;
+>       |                        ^~~~~~~
+> /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
+>    27 | typedef __int64_t int64_t;
+>       |                   ^~~~~~~
+> make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Applied to for-6.1. Thanks !
+Still compiles in my environment:
+
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+
+Not sure we want it for the tests, but just in case:
+
+Fixes: a999696c547f ("selftests/bpf: Rewrite test_sock_addr bind bpf into C")
+
+
+
 
 > ---
->  drivers/ata/libata-core.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-> index 864b26009eae..0ba0e692210f 100644
-> --- a/drivers/ata/libata-core.c
-> +++ b/drivers/ata/libata-core.c
-> @@ -4340,7 +4340,6 @@ static unsigned int ata_dev_set_xfermode(struct ata_device *dev)
->  unsigned int ata_dev_set_feature(struct ata_device *dev, u8 subcmd, u8 action)
->  {
->  	struct ata_taskfile tf;
-> -	unsigned int err_mask;
->  	unsigned int timeout = 0;
->  
->  	/* set up set-features taskfile */
-> @@ -4356,9 +4355,8 @@ unsigned int ata_dev_set_feature(struct ata_device *dev, u8 subcmd, u8 action)
->  	if (subcmd == SETFEATURES_SPINUP)
->  		timeout = ata_probe_timeout ?
->  			  ata_probe_timeout * 1000 : SETFEATURES_SPINUP_TIMEOUT;
-> -	err_mask = ata_exec_internal(dev, &tf, NULL, DMA_NONE, NULL, 0, timeout);
->  
-> -	return err_mask;
-> +	return ata_exec_internal(dev, &tf, NULL, DMA_NONE, NULL, 0, timeout);
->  }
->  EXPORT_SYMBOL_GPL(ata_dev_set_feature);
->  
-
-
--- 
-Damien Le Moal
-Western Digital Research
+>  tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
+>  tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
+> index 474c6a62078a..6bd20042fd53 100644
+> --- a/tools/testing/selftests/bpf/progs/bind4_prog.c
+> +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
+> @@ -6,8 +6,7 @@
+>  #include <linux/bpf.h>
+>  #include <linux/in.h>
+>  #include <linux/in6.h>
+> -#include <sys/socket.h>
+> -#include <netinet/tcp.h>
+> +#include <linux/tcp.h>
+>  #include <linux/if.h>
+>  #include <errno.h>
+>
+> diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c b/tools/testing/selftests/bpf/progs/bind6_prog.c
+> index c19cfa869f30..f37617b35a55 100644
+> --- a/tools/testing/selftests/bpf/progs/bind6_prog.c
+> +++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
+> @@ -6,8 +6,7 @@
+>  #include <linux/bpf.h>
+>  #include <linux/in.h>
+>  #include <linux/in6.h>
+> -#include <sys/socket.h>
+> -#include <netinet/tcp.h>
+> +#include <linux/tcp.h>
+>  #include <linux/if.h>
+>  #include <errno.h>
+>
+> --
+> 2.34.1
+>

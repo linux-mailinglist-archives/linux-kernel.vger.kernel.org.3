@@ -2,148 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C575A0B08
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2AE85A0B05
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239220AbiHYIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S239309AbiHYIHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbiHYIHa (ORCPT
+        with ESMTP id S239403AbiHYIHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:07:30 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292298670B;
-        Thu, 25 Aug 2022 01:07:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1661414807; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=GPPQ95Ij6UbK9cbdbMjwj3IxV6MmdWMA267hSYszjyUDLDVIWmWLieL9hwf9Si9RpkNXNC7+7yRLuyyvgIqOf1JKVOmqfa2zc9OkZp4PSpCXnF0LU71pRb4ssN9DLyaFNI5TWPFnghHI95Yd0jJQeBkdRJ1UmWLTRvJIMxLJirk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1661414807; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=4JsieqXDivmRRvE/zWwLdZw6fqOmBPCekC3LYmW4t64=; 
-        b=Q/oh6A4YvYlHfL0xTF1YvF8rL0otqnlGAn1E5jvc8DG6U0TrOvH0AGYaG5Ae+dPA9uAQmFGgS2BcQvzGN7BsxCaGyuYputrWdRDx5ULjIqub6IZ2YDuoFME34nuxK3Wy/99r5JDZ74ON9r0d4IKWlVU5CKAOo5u5mu3dFVTdSgE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661414807;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=4JsieqXDivmRRvE/zWwLdZw6fqOmBPCekC3LYmW4t64=;
-        b=F/SWD+LHEElDMK1k3KlaBPED4fBlWutYwKB9PXDF8rgMuI4KbfmzsGA4chOkWLQt
-        TV0IpYKp8DC1pZ5Acq7fzhEU5ragF51BJ3azjmeQGIzmgTDvBTnY2gs0ZCMYV5blpJo
-        nyxrL/Y8Elkx/+CbWBgBJt+KzRXEszGUqrja4fro=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1661414805043384.980663798763; Thu, 25 Aug 2022 01:06:45 -0700 (PDT)
-Message-ID: <e2679c3f-87f4-4705-a820-72b46975c851@arinc9.com>
-Date:   Thu, 25 Aug 2022 11:06:37 +0300
+        Thu, 25 Aug 2022 04:07:45 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DFCA0337
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:07:42 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b44so4801560edf.9
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=P/CzcI73c0gP0FvO61Psway+7tYvL+8/Afg+qkG5JWk=;
+        b=Siyp/zyeK/0/GkdCirhBA59wwhDLPfeLNWaIDTTwNViK4f5wodojKBwOcMCsvOu/TG
+         MuBRwm4gueU2OYRUaWwv/hgQGPNmszhCUtB05tIS702iWk+iIYHCUwiFK5m4F0U3U2p3
+         u2QDKX7VmCsbayCZPTKz8aTVw2f0mQT2RnPhM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=P/CzcI73c0gP0FvO61Psway+7tYvL+8/Afg+qkG5JWk=;
+        b=S/n4FCNGvcfuQiZ74lVPiz7s0mPMgM/K7ouPEaADrPOMA4WO5aoNYDvkaAaH+sTmbb
+         1o113Na6wqZJ/NNFu3QmyK+ZmAihEbLt8PF1oNfyVFX0p/3vKS6ZzuV5T11uthBuD98U
+         v7xKRBwB6VOu1xk+pOvH8b0CgJI51xBVlBiqIO6Py71TeQqGG//TP+50mZcuzbBH01o6
+         gkleteXYD2ZvcPh7R+/LtaDa6OsaeT7DBPnJ2gYv6NoC3ZrEP12bDosoDAM15ubCO4sw
+         GQ5IFFggr9QE2W2doBByiXgRvxx/vAfyCWZSLe2vRT5cZVUTUePLiGAha01010mPTAZw
+         xlQA==
+X-Gm-Message-State: ACgBeo2bLqzzo94lGJSLQdtq/HvJ88PxURPIeitWghhwtuNbYz24J72+
+        fallHHnr4YVQxEHrScE/RL1L1EsPDiGBqdZXL1o=
+X-Google-Smtp-Source: AA6agR48rauJ44/mn5HADtlpnDBJgNuc9qMb5ErPOurxBByQrnf56uhNmdqKl1PTneopLwwMAqb5uA==
+X-Received: by 2002:a05:6402:2d6:b0:447:ae9d:d0f1 with SMTP id b22-20020a05640202d600b00447ae9dd0f1mr1774277edx.256.1661414860786;
+        Thu, 25 Aug 2022 01:07:40 -0700 (PDT)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id k15-20020a1709063e0f00b0073c1e339a37sm2119062eji.149.2022.08.25.01.07.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 01:07:39 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so2714111wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:07:39 -0700 (PDT)
+X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
+ p23-20020a05600c065700b003a5e4e6ee24mr7114442wmm.68.1661414859275; Thu, 25
+ Aug 2022 01:07:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 4/6] dt-bindings: net: dsa: mediatek,mt7530: define
- port binding per switch
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220820080758.9829-1-arinc.unal@arinc9.com>
- <20220820080758.9829-5-arinc.unal@arinc9.com>
- <c24da513-e015-8bc6-8874-ba63c22be5d6@linaro.org>
- <ea3ceeab-d92b-6ce5-8ea9-aebb3eaa0a91@arinc9.com>
- <7248cbce-29b9-aad6-c970-8e150bc23df8@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <7248cbce-29b9-aad6-c970-8e150bc23df8@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+ <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+ <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org> <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+ <353e5bbd-cdd1-f818-6a2f-9a7c800f9879@acm.org> <CAHk-=whSZ20Hv4EyLDtUZGX4MsYmCLQ4+OOTbv1WEXfXDcxnWw@mail.gmail.com>
+ <CAHk-=wjQGnVfb4jehFR0XyZikdQvCZouE96xR_nnf5kqaM5qqQ@mail.gmail.com> <29157fcb-a2c3-ff4d-2b74-f4da860a0dbe@rasmusvillemoes.dk>
+In-Reply-To: <29157fcb-a2c3-ff4d-2b74-f4da860a0dbe@rasmusvillemoes.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 Aug 2022 01:07:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whim36a9_-5Eu4SJqiKsoXb87wUprUnn=q=xDeOGQXpHA@mail.gmail.com>
+Message-ID: <CAHk-=whim36a9_-5Eu4SJqiKsoXb87wUprUnn=q=xDeOGQXpHA@mail.gmail.com>
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.08.2022 09:33, Krzysztof Kozlowski wrote:
-> On 23/08/2022 15:29, Arınç ÜNAL wrote:
->>
->>
->> On 23.08.2022 13:47, Krzysztof Kozlowski wrote:
->>> On 20/08/2022 11:07, Arınç ÜNAL wrote:
->>>> Define DSA port binding per switch model as each switch model requires
->>>> different values for certain properties.
->>>>
->>>> Define reg property on $defs as it's the same for all switch models.
->>>>
->>>> Remove unnecessary lines as they are already included from the referred
->>>> dsa.yaml.
->>>>
->>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>> ---
->>>>    .../bindings/net/dsa/mediatek,mt7530.yaml     | 56 +++++++++++--------
->>>>    1 file changed, 34 insertions(+), 22 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>>> index 657e162a1c01..7c4374e16f96 100644
->>>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>>> @@ -130,38 +130,47 @@ properties:
->>>>          ethsys.
->>>>        maxItems: 1
->>>>    
->>>> -patternProperties:
->>>> -  "^(ethernet-)?ports$":
->>>> -    type: object
->>>> -
->>>> -    patternProperties:
->>>> -      "^(ethernet-)?port@[0-9]+$":
->>>> -        type: object
->>>> -        description: Ethernet switch ports
->>>
->>> Again, I don't understand why do you remove definitions of these nodes
->>> from top-level properties. I explained what I expect in previous
->>> discussion and I am confused to hear "this cannot be done".
->>
->> I agree it can be done, but the binding is done with less lines the
->> current way.
->>
->> I would need to add more lines than just for creating the node structure
->> since dsa.yaml is not referred.
->>
->> Then, I would have to create the node structure again for the dsa-port
->> checks.
-> 
-> I understand you can create binding more concise, but not necessarily
-> more readable. The easiest to grasp is to define all the nodes in
-> top-level and customize them in allOf:if:then. This was actually also
-> needed for earlier dtschema with additionalProperties:false. You keep
-> defining properties in allOf:if:then, even though they are all
-> applicable to all variants. That's unusual and even if it reduces the
-> lines does not make it easier to grasp.
+On Thu, Aug 25, 2022 at 12:57 AM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+>
+> One can also make the RHS not be a null pointer constant with something like
+>
+> (((t)(-1)) <= (1 ? (t)0 : (t)0))
 
-Understood. Will send v6 with respect to this.
+Oh Gods.
 
-Arınç
+Let's not go there. I'm sure some version of gcc will figure that out
+as being NULL in the end and warn about that too.
+
+I do agree that a comment about the exact choice and why (integers vs
+pointers with NULL conversions, and compilers vs sparse) for the
+particular syntax would not be misplaced.
+
+               Linus

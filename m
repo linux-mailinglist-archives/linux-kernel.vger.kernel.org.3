@@ -2,107 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756465A0A5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C39D5A0A64
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238204AbiHYHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S238179AbiHYHhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbiHYHfQ (ORCPT
+        with ESMTP id S233248AbiHYHhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:35:16 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884D04D24A;
-        Thu, 25 Aug 2022 00:35:15 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-33da3a391d8so106397057b3.2;
-        Thu, 25 Aug 2022 00:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=2wSSrVm3pa1V5hQWMblReXhBYfSvBPQ27mkT6JksCsg=;
-        b=HlJE+BfhiHh1s2VOJ9goUlxZY7vl7GOf5epTMlea1UChGhf7XOiSaeGw4FrWeIUyZI
-         vg8eYQ5OM0bOuhlbGY8kytmyjN6NXp0+mNwe9VEyFUxZ0YM2MWk975pHJRDfCpSWXzPr
-         XeePht5DUPza+81Bxjnvt+Hy26d8e0MTetBYAOKgg9HKlys9hFTC7wOt1ApHtMUd8Mqp
-         ymUhVO++7FZ0xROUDyOIAgp1QYolp6xhIExUbx7ownIu1Ch78JvHPwN/DRN8p/LxJzIF
-         FYKFXCm7tQMtTkmewldwxXqS6vfYTXTYgBjyGu9oVVQr2nsA/VD53WQWA8ntyLQJ5zRE
-         yXvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=2wSSrVm3pa1V5hQWMblReXhBYfSvBPQ27mkT6JksCsg=;
-        b=RJSc1tNE2UGL22rbr4DLBQOhpwDmLC6n39mkucRCa9bhJLj4x9xDg6Of2QD0itxPfd
-         evEJ7HkmX7PHW9TufiHqcVfJagYa2UUkiN5C6Df/UEW6ISuJs3fM7mSXv3I0B9E1fonf
-         BVLAYIK1O2hXevwrR1w0D7jtn6m2w/FkO8aMwBXncO5pzKr8GqALfT+qHp+jKj6fXiaG
-         cjnC6hBQoLN6Xprlisc/B+G7N/30GGEgw3woAmGlvY49dYFjVVjTzY7G4QUAduIbrg8O
-         VNgMVeMUy+WbAmTaneVKqNWEB607hGzMZIudWP7Qb1zhhezFy+HvZ4VyQ6Lqlf7jDr1w
-         eOXw==
-X-Gm-Message-State: ACgBeo3e605NbIKVhXChmnDaSlVNunmS43AUBHK8Qa5BwCtITTGuKoJv
-        J4BZy7sapxs2G3MRT1rm0Quvi2kLS9+d0q1Ensw=
-X-Google-Smtp-Source: AA6agR7sPU2s9bjpip6MZRNuDyBW5ZsILU+1IxceZrULNMzLenldjjYeAw9vC++G1Sx2MXw7yeV4G3k6tZA1NZZxZ5c=
-X-Received: by 2002:a05:6902:1616:b0:695:a4c6:b4e0 with SMTP id
- bw22-20020a056902161600b00695a4c6b4e0mr2355954ybb.31.1661412914690; Thu, 25
- Aug 2022 00:35:14 -0700 (PDT)
+        Thu, 25 Aug 2022 03:37:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E269C223
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661413042; x=1692949042;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=t/rbNCnmLJMpaKwBLSJzt4+Hn6aArCb+aEEP0znZZAk=;
+  b=ckLx1g4J6DQMN2HV2KCZUcG80WQPqfqlxX9ZpnIC8BA7AXaiP0V5S+qD
+   OzEHzPQnLFvPEA5SZey565pjRzODbwfQ0zrmJdVyF4ly2oJAaih31/kca
+   wMIFiqY7GxiabuTUouFQ0+gfMY1LQ+AgTCIVpfnZokxDDzLBcfq1mnBmR
+   us0vpkQkVfJ82/ia78WZKchD5oz38FyW47uc4Zqql6x5r8sAqDETc6k0j
+   Ak9mcOyuoGQVQf973DaQpKQVP93TYj61+lJojBVbrhuDIM5jsOlrLRase
+   4XAJUI52zJoqOjk9US+ZdJNxro4FthYmMZ76Exafl7kFOv9N1wFVaMdOI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355896764"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="355896764"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:37:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="639478341"
+Received: from pranavir-mobl.gar.corp.intel.com (HELO localhost) ([10.252.50.196])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:37:17 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Nathan Chancellor <nathan@kernel.org>, keescook@chromium.org
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
+        llvm@lists.linux.dev,
+        "Sripada, Radhakrishna" <radhakrishna.sripada@intel.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
+In-Reply-To: <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
+ <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+ <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+Date:   Thu, 25 Aug 2022 10:37:14 +0300
+Message-ID: <875yigixjp.fsf@intel.com>
 MIME-Version: 1.0
-References: <20220824080836.23087-1-lukas.bulwahn@gmail.com> <d5eca4a6-8a76-02e0-2f22-645341af8c2b@infradead.org>
-In-Reply-To: <d5eca4a6-8a76-02e0-2f22-645341af8c2b@infradead.org>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 25 Aug 2022 09:35:04 +0200
-Message-ID: <CAKXUXMwLofvhBXqzdoq_q_89jZ8THU0WX=DY+RnCo=PN7QqspA@mail.gmail.com>
-Subject: Re: [PATCH] docs: Update version number from 5.x to 6.x in README.rst
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 5:24 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Tue, 23 Aug 2022, =C5=81ukasz Bartosik <lb@semihalf.com> wrote:
+>>
+>> Hi all,
+>>
+>> Apologies in advance if you see this twice. I did not see the original
+>> make it to either lore.kernel.org or the freedesktop.org archives so I
+>> figured it might have been sent into the void.
+>>
+>> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
+>> > From: =C5=81ukasz Bartosik <lb@semihalf.com>
+>> >
+>> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
+>> > The root cause is null pointer defeference of bi_next
+>> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
+>> >
+>> > BUG: kernel NULL pointer dereference, address: 000000000000002e
+>> > PGD 0 P4D 0
+>> > Oops: 0002 [#1] PREEMPT SMP NOPTI
+>> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
+>> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05=
+/14/2021
+>> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
+>> > ...
+>> > [    2.554467] Call Trace:
+>> > [    2.554467]  <TASK>
+>> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
+>> > [    2.554467]  ? _printk+0x59/0x73
+>> > [    2.554467]  ? _dev_err+0x77/0x91
+>> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
+>> > [    2.554467]  i915_driver_probe+0x4c8/0x638
+>> > [    2.554467]  i915_pci_probe+0xf8/0x14e
+>> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
+>> > [    2.554467]  pci_device_probe+0xaa/0x142
+>> > [    2.554467]  really_probe+0x13f/0x2f4
+>> > [    2.554467]  __driver_probe_device+0x9e/0xd3
+>> > [    2.554467]  driver_probe_device+0x24/0x7c
+>> > [    2.554467]  __driver_attach+0xba/0xcf
+>> > [    2.554467]  ? driver_attach+0x1f/0x1f
+>> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
+>> > [    2.554467]  bus_add_driver+0x11b/0x1f7
+>> > [    2.554467]  driver_register+0x60/0xea
+>> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+>> > [    2.554467]  i915_init+0x2c/0xb9
+>> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+>> > [    2.554467]  do_one_initcall+0x12e/0x2b3
+>> > [    2.554467]  do_initcall_level+0xd6/0xf3
+>> > [    2.554467]  do_initcalls+0x4e/0x79
+>> > [    2.554467]  kernel_init_freeable+0xed/0x14d
+>> > [    2.554467]  ? rest_init+0xc1/0xc1
+>> > [    2.554467]  kernel_init+0x1a/0x120
+>> > [    2.554467]  ret_from_fork+0x1f/0x30
+>> > [    2.554467]  </TASK>
+>> > ...
+>> > Kernel panic - not syncing: Fatal exception
+>> >
+>> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
+>> > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
+>> > ---
+>> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
+>> >  1 file changed, 9 insertions(+), 7 deletions(-)
+>> >
+>> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm=
+/i915/display/intel_bw.c
+>> > index 2da4aacc956b..bd0ed68b7faa 100644
+>> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
+>> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
+>> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_priva=
+te *dev_priv, const struct intel
+>> >               int clpchgroup;
+>> >               int j;
+>> >
+>> > -             if (i < num_groups - 1)
+>> > -                     bi_next =3D &dev_priv->max_bw[i + 1];
+>> > -
+>> >               clpchgroup =3D (sa->deburst * qi.deinterleave / num_chan=
+nels) << i;
+>> >
+>> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
+>> > -                     bi_next->num_planes =3D (ipqdepth - clpchgroup) =
+/ clpchgroup + 1;
+>> > -             else
+>> > -                     bi_next->num_planes =3D 0;
+>> > +             if (i < num_groups - 1) {
+>> > +                     bi_next =3D &dev_priv->max_bw[i + 1];
+>> > +
+>> > +                     if (clpchgroup < clperchgroup)
+>> > +                             bi_next->num_planes =3D (ipqdepth - clpc=
+hgroup) /
+>> > +                                                    clpchgroup + 1;
+>> > +                     else
+>> > +                             bi_next->num_planes =3D 0;
+>> > +             }
+>> >
+>> >               bi->num_qgv_points =3D qi.num_points;
+>> >               bi->num_psf_gv_points =3D qi.num_psf_points;
+>> > --
+>> > 2.35.0.rc2.247.g8bbb082509-goog
+>> >
+>> >
+>>
+>> Was this patch ever applied or was the issue fixed in a different way?
+>> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
+>> compiler supports it), bi_next will be deterministically initialized to
+>> NULL, which means 'bi_next->num_planes =3D 0' will crash when the first =
+if
+>> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
+>> us at [1] so it impacts real users (and I have been applying this change
+>> locally for six months). I see some discussion in this thread, was it
+>> ever resolved?
+>>
+>> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
+>>
+>> Cheers,
+>> Nathan
 >
->
->
-> On 8/24/22 01:08, Lukas Bulwahn wrote:
-> > A quick 'grep "5\.x" . -R' on Documentation shows that README.rst,
-> > 2.Process.rst and applying-patches.rst all mention the version number "5.x"
-> > for kernel releases.
-> >
-> > As the next release will be version 6.0, updating the version number to 6.x
-> > in README.rst seems reasonable.
-> >
-> > The description in 2.Process.rst is just a description of recent kernel
-> > releases, it was last updated in the beginning of 2020, and can be
-> > revisited at any time on a regular basis, independent of changing the
-> > version number from 5 to 6. So, there is no need to update this document
-> > now when transitioning from 5.x to 6.x numbering.
-> >
-> > The document applying-patches.rst is probably obsolete for most users
-> > anyway, a reader will sufficiently well understand the steps, even it
-> > mentions version 5 rather than version 6. So, do not update that to a
-> > version 6.x numbering scheme.
->
-> Yeah. And I suspect that scripts/patch-kernel is even more obsolete
-> than applying-patches.rst.
->
+> The patch was not accepted by upstream. I gave up after sending two remin=
+ders
+> that the issue is still present which resulted in no upstream reaction.
+> I have been also applying that patch locally for a few months.
+> Thanks for bringing it up to upstream attention again.
 
-Randy, would you know if there are still users out there?
-Would it help to replace this script with a minimal script that only
-reports to "Please use git to obtain a recent repository. Update
-versions and apply patches with git in a controlled way.".
+Apologies for us dropping the ball here. There were objections to the
+code from Ville [1] but nobody stepped up to clean it up. I think this
+was really more about the commit being fixed c64a9a7c05be ("drm/i915:
+Update memory bandwidth formulae") than about the patch at hand.
 
-If someone complains, we revert the patch. If no one complains within
-a year or two, we could consider shutting down the infrastructure
-creating those patch archives as well, and delete the documentation
-referring to that.
+In any case, I've gone ahead and pushed this patch to drm-intel-next
+now. With the Fixes tag it should eventually find its way to stable
+v5.17+. Thank you for the patch, review - and nagging. ;)
 
-Lukas
+What still remains is cleaning up the code. But that should never have
+stalled the fix for months. Sorry again.
+
+
+BR,
+Jani.
+
+
+[1] https://lore.kernel.org/r/YgOYBfQJF7hIzEPE@intel.com
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center

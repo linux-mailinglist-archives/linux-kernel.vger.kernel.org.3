@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694915A1C71
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC3C5A1C77
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiHYWcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S239106AbiHYWex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235039AbiHYWcp (ORCPT
+        with ESMTP id S229470AbiHYWes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:32:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7385B941E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661466763;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Oy2aubXb5hLNj8VJ/ILuyIzESlVY8G+jddCf/KXjxGU=;
-        b=IL1R783ivUVb0Ucqh0UsRmD9t0HW5aENVgfYzR+yt7zElUtHU5e0/KI8Agsv06b+2LXRy1
-        riMq3fO+I8ovsh+TUnJdH7coZO/GkoO2R/xXL4KH5ecYh3HCqRU66OLoJ9NOXguNEXjdtW
-        X0Sx6Hpp6TFku6dmTLaRk6xiyhaDPSM=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-Ko_3sHnRMsC0CMh41k7E8A-1; Thu, 25 Aug 2022 18:32:42 -0400
-X-MC-Unique: Ko_3sHnRMsC0CMh41k7E8A-1
-Received: by mail-io1-f71.google.com with SMTP id b16-20020a5d8950000000b006891a850acfso11919039iot.19
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:32:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=Oy2aubXb5hLNj8VJ/ILuyIzESlVY8G+jddCf/KXjxGU=;
-        b=wPr9DNS7BZ6dTAoULZ6MgJX118G6y8HyBC8giDskxEal/1FBca3CatPN6EprSkdu+d
-         UYK4Y7l0bqGsfOs9Wx78gTyt2GsHhCDGq6X1BqaXjX0J6j/2I8Atm/Hbh1a7jtkfwVeR
-         CNW2II05YZBc3C2XqLufmDnqJJnNDENrLTmAO8ETI+ncESLAAIALeFwB4ycyuuwi+VyV
-         tjHt/Q47GuNDISk+IpXD3upQTmw+U8S8gOqMmYc/zQGEjIorAb2+FVyfV7slFD3xkKlW
-         k5x6W5YqKaWkDSaP2Abc27ZOY7jSqRmmlKhQ0V414uaN6xyevUul0T4PmWe2Ho8NGZyn
-         y6zA==
-X-Gm-Message-State: ACgBeo1whAeBo9xepMzhk/AXC1F/6JlWXcIZGx9sHS6uYGnr/1a/xRPd
-        xzjmAxTWi+OSc6edqo31gv9jELkqK8BPW+q1JEbBLsKhMOIrC9K/xNjC86MMTlvzKV4HvFITaHE
-        +icSQwEJevybFVTT75dG/m8i0
-X-Received: by 2002:a02:1d09:0:b0:33b:a8cc:17d3 with SMTP id 9-20020a021d09000000b0033ba8cc17d3mr2742327jaj.25.1661466762088;
-        Thu, 25 Aug 2022 15:32:42 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5DxfwLwJkfemFe6fofZO7Sa2Jt0xLr+PHGNw1XLZEm3kULrHFXM6KOQKsSVRF5mDTKeRkUZg==
-X-Received: by 2002:a02:1d09:0:b0:33b:a8cc:17d3 with SMTP id 9-20020a021d09000000b0033ba8cc17d3mr2742320jaj.25.1661466761898;
-        Thu, 25 Aug 2022 15:32:41 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id t14-20020a056e02010e00b002e93764c9e3sm278115ilm.54.2022.08.25.15.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 15:32:41 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 16:32:40 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 5/5] vfio/pci: Implement
- VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
-Message-ID: <20220825163240.274950c8.alex.williamson@redhat.com>
-In-Reply-To: <62e6d510-8e7c-8a31-fb7f-905bb13afe67@nvidia.com>
-References: <20220817051323.20091-1-abhsahu@nvidia.com>
-        <20220817051323.20091-6-abhsahu@nvidia.com>
-        <Yvzy0VOfKkKod0OV@nvidia.com>
-        <5363303b-30bb-3c4a-bf42-426dd7f8138d@nvidia.com>
-        <Yv0oH23UYbI/LI+X@nvidia.com>
-        <62e6d510-8e7c-8a31-fb7f-905bb13afe67@nvidia.com>
-Organization: Red Hat
+        Thu, 25 Aug 2022 18:34:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC3A1F2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:34:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47B9E61C4E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E303DC433C1;
+        Thu, 25 Aug 2022 22:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661466883;
+        bh=9MvW1+ds+HiEDTMo8oSecKFR7fbv9XBzO14GO+DL/w0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L+3k+Rr+gqFEuwpCpD5J9g7cWojXI6SNtH3GE0/cjZr93xjYYs4xoEsCjTr8tcwuI
+         YJcg7gwIfkVmPglt+LB5IOSJN0dHDgH3eWRKAEzueq3nPYdJFEc4Ig+ru9UgEJDjFB
+         n2DuNgIFAf7+KKwNLMOwtRklRBm6CQUaNdCNyr+koLZdv3FGNYbGn5aQD6BT6RzHho
+         rSSh4k+TEgSoLKwTrVfKUu/iVU82FVM5loh/uRYFDM237M0jBCodHYrF9W2JcCHDhV
+         au8CSYCJZZFwBP7W66PvRw1xb2RzcVzoz9rsEHf8eKsA4UK35zqqX5Gr/gBddngSPj
+         ONgzRBCIya6Lg==
+Date:   Thu, 25 Aug 2022 15:34:41 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     clang-built-linux <llvm@lists.linux.dev>,
+        David Airlie <airlied@linux.ie>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+Message-ID: <Ywf5ATPG7a/I0SLu@dev-arch.thelio-3990X>
+References: <YuwRyQYPCb1FD+mr@debian>
+ <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+ <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
+ <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
+ <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
+ <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X>
+ <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
+ <Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,51 +72,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 22:31:03 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+Hi AMD folks,
 
-> On 8/17/2022 11:10 PM, Jason Gunthorpe wrote:
-> > On Wed, Aug 17, 2022 at 09:34:30PM +0530, Abhishek Sahu wrote:  
-> >> On 8/17/2022 7:23 PM, Jason Gunthorpe wrote:  
-> >>> On Wed, Aug 17, 2022 at 10:43:23AM +0530, Abhishek Sahu wrote:
-> >>>  
-> >>>> +static int
-> >>>> +vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
-> >>>> +				   void __user *arg, size_t argsz)  
-> >>>
-> >>> This should be
-> >>>   struct vfio_device_low_power_entry_with_wakeup __user *arg
-> >>>  
-> >>
-> >>  Thanks Jason.
-> >>
-> >>  I can update this.
-> >>
-> >>  But if we look the existing code, for example
-> >>  (vfio_ioctl_device_feature_mig_device_state()), then there it still uses
-> >>  'void __user *arg' only. Is this a new guideline which we need to take
-> >>  care ?  
-> > 
-> > I just sent a patch that fixes that too
-> >   
+Top posting because it might not have been obvious but I was looking for
+your feedback on this message (which can be viewed on lore.kernel.org if
+you do not have the original [1]) so that we can try to get this fixed
+in some way for 6.0/6.1. If my approach is not welcome, please consider
+suggesting another one or looking to see if this is something you all
+could look into.
+
+[1]: https://lore.kernel.org/Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X/
+
+Cheers,
+Nathan
+
+On Thu, Aug 18, 2022 at 08:59:14AM -0700, Nathan Chancellor wrote:
+> Hi Arnd,
 > 
->  Thanks for the update.
->  I will change this. 
+> Doubling back around to this now since I think this is the only thing
+> breaking x86_64 allmodconfig with clang 11 through 15.
 > 
-> >>  Do we need to keep the IOCTL name alphabetically sorted in the case list.
-> >>  Currently, I have added in the order of IOCTL numbers.  
+> On Fri, Aug 05, 2022 at 09:32:13PM +0200, Arnd Bergmann wrote:
+> > On Fri, Aug 5, 2022 at 8:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > On Fri, Aug 05, 2022 at 06:16:45PM +0200, Arnd Bergmann wrote:
+> > > > On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
+> > > > While splitting out sub-functions can help reduce the maximum stack
+> > > > usage, it seems that in this case it makes the actual problem worse:
+> > > > I see 2168 bytes for the combined
+> > > > dml32_ModeSupportAndSystemConfigurationFull(), but marking
+> > > > mode_support_configuration() as noinline gives me 1992 bytes
+> > > > for the outer function plus 384 bytes for the inner one. So it does
+> > > > avoid the warning (barely), but not the problem that the warning tries
+> > > > to point out.
+> > >
+> > > I haven't had a chance to take a look at splitting things up yet, would
+> > > you recommend a different approach?
 > > 
-> > It is generally a good practice to sort lists of things.
+> > Splitting up large functions can help when you have large local variables
+> > that are used in different parts of the function, and the split gets the
+> > compiler to reuse stack locations.
 > > 
-> > Jason  
+> > I think in this particular function, the problem isn't actually local variables
+> > but either pushing variables on the stack for argument passing,
+> > or something that causes the compiler to run out of registers so it
+> > has to spill registers to the stack.
+> > 
+> > In either case, one has to actually look at the generated output
+> > and then try to rearrange the codes so this does not happen.
+> > 
+> > One thing to try would be to condense a function call like
+> > 
+> >                 dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport(
+> > 
+> > &v->dummy_vars.dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport,
+> >                         mode_lib->vba.USRRetrainingRequiredFinal,
+> >                         mode_lib->vba.UsesMALLForPStateChange,
+> > 
+> > mode_lib->vba.PrefetchModePerState[mode_lib->vba.VoltageLevel][mode_lib->vba.maxMpcComb],
+> >                         mode_lib->vba.NumberOfActiveSurfaces,
+> >                         mode_lib->vba.MaxLineBufferLines,
+> >                         mode_lib->vba.LineBufferSizeFinal,
+> >                         mode_lib->vba.WritebackInterfaceBufferSize,
+> >                         mode_lib->vba.DCFCLK,
+> >                         mode_lib->vba.ReturnBW,
+> >                         mode_lib->vba.SynchronizeTimingsFinal,
+> > 
+> > mode_lib->vba.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
+> >                         mode_lib->vba.DRRDisplay,
+> >                         v->dpte_group_bytes,
+> >                         v->meta_row_height,
+> >                         v->meta_row_height_chroma,
+> > 
+> > v->dummy_vars.DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.mmSOCParameters,
+> >                         mode_lib->vba.WritebackChunkSize,
+> >                         mode_lib->vba.SOCCLK,
+> >                         v->DCFCLKDeepSleep,
+> >                         mode_lib->vba.DETBufferSizeY,
+> >                         mode_lib->vba.DETBufferSizeC,
+> >                         mode_lib->vba.SwathHeightY,
+> >                         mode_lib->vba.SwathHeightC,
+> >                         mode_lib->vba.LBBitPerPixel,
+> >                         v->SwathWidthY,
+> >                         v->SwathWidthC,
+> >                         mode_lib->vba.HRatio,
+> >                         mode_lib->vba.HRatioChroma,
+> >                         mode_lib->vba.vtaps,
+> >                         mode_lib->vba.VTAPsChroma,
+> >                         mode_lib->vba.VRatio,
+> >                         mode_lib->vba.VRatioChroma,
+> >                         mode_lib->vba.HTotal,
+> >                         mode_lib->vba.VTotal,
+> >                         mode_lib->vba.VActive,
+> >                         mode_lib->vba.PixelClock,
+> >                         mode_lib->vba.BlendingAndTiming,
+> >                         .... /* more arguments */);
+> > 
+> > into calling conventions that take a pointer to 'mode_lib->vba' and another
+> > one to 'v', so these are no longer passed on the stack individually.
 > 
->  Sure. I will make the sorted list.
-
-The series looks good to me, so I'd suggest to rebase on Jason's
-patches[1][2] so you can easily sort out the above.  Thanks,
-
-Alex
-
-[1]https://lore.kernel.org/all/0-v1-da6fc51ee22e+562-vfio_pci_priv_jgg@nvidia.com/
-[2]https://lore.kernel.org/all/0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com/
-
+> So I took a whack at reducing this function's number of parameters and
+> ended up with the attached patch. I basically just removed any
+> parameters that were identical between the two call sites and access them
+> through the vba pointer, as you suggested.
+> 
+> AMD folks, is this an acceptable approach? It didn't take a trivial
+> amount of time so I want to make sure this is okay before I do it to
+> more functions/files.
+> 
+> Due to the potential size of these changes, I am a little weary of them
+> going into 6.0; even though they should be a simple search and replace
+> for the most part, it might be nice for them to have some decent soak
+> time in -next. One solution would be to raise the warning limit for
+> these files on 6.0 so that allmodconfig does not ship broken then reduce
+> the limit for 6.1 once these patches have been applied.
+> 
+> Additionally, I took a look at the stack usage across all compilers that
+> the kernel supports and I thought it was kind of interesting that the
+> usage really jumps from GCC 7 to 8, which I am guessing is a result of
+> commit e8a170ff9a35 ("drm/amdgpu: enable -msse2 for GCC 7.1+ users").
+> GCC 8 allmodconfig actually errors now too:
+> 
+> https://lore.kernel.org/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
+> 
+>           |-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+>           | dml30_ModeSupportAndSystemConfigurationFull() | dml31_ModeSupportAndSystemConfigurationFull() | dml32_ModeSupportAndSystemConfigurationFull() |
+> |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> | GCC 5   |                  1056 bytes                   |                   656 bytes                   |                  1040 bytes                   |
+> | GCC 6   |                  1024 bytes                   |                   672 bytes                   |                  1056 bytes                   |
+> | GCC 7   |                  1040 bytes                   |                   664 bytes                   |                  1056 bytes                   |
+> | GCC 8   |                  1760 bytes                   |                  1608 bytes                   |                  2144 bytes                   |
+> | GCC 9   |                  1664 bytes                   |                  1392 bytes                   |                  1960 bytes                   |
+> | GCC 10  |                  1648 bytes                   |                  1368 bytes                   |                  1952 bytes                   |
+> | GCC 11  |                  1680 bytes                   |                  1400 bytes                   |                  1952 bytes                   |
+> | GCC 12  |                  1680 bytes                   |                  1400 bytes                   |                  1984 bytes                   |
+> |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> | LLVM 11 |                  2104 bytes                   |                  2056 bytes                   |                  2120 bytes                   |
+> | LLVM 12 |                  2152 bytes                   |                  2200 bytes                   |                  2152 bytes                   |
+> | LLVM 13 |                  2216 bytes                   |                  2248 bytes                   |                  2168 bytes                   |
+> | LLVM 14 |                  2168 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
+> | LLVM 15 |                  2216 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
+> | LLVM 16 |                  2232 bytes                   |                  2216 bytes                   |                  2176 bytes                   |
+> |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> 
+> With the patch I have attached,
+> dml32_ModeSupportAndSystemConfigurationFull() drops from 2176 to 1944
+> for LLVM 16, which is obviously still not great but it at least avoids
+> the warning.
+> 
+> Cheers,
+> Nathan

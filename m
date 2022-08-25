@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF165A1815
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C2F5A1817
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242102AbiHYRmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S239846AbiHYRne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbiHYRmN (ORCPT
+        with ESMTP id S229804AbiHYRnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 13:42:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE44B2D9E;
-        Thu, 25 Aug 2022 10:42:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1D92B82A68;
-        Thu, 25 Aug 2022 17:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E607C433C1;
-        Thu, 25 Aug 2022 17:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661449329;
-        bh=w857NjmZvn15PF0UZAGRqvuU5wVMAAdo1gnTqJ7Yi4w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qU0rnAnuAnH9bxn1gEwWsMcPXK5ez7TiLi22yFvOmtIqE5w+j7wt81NPs4bqgFJ3u
-         0oJ+NDqTVLAdbjjxWF6qQ06pGsM/PuXFhHYV5UyDgAZ6ZA0h/I2RRDJqZSPcUuNMmy
-         +RvTBk6VwWuKo4OAw8/0b2+JZnv1G8LZjTrgmrAW3muFEb9YncoJo1r08qaKyXBjCf
-         xQeWYfDZ8ytZGauhjSawjYcHv2BQatl77q3oBsNlH2saUFurp9XgcbQoF3dLQbb0Ob
-         HrRL1kQPz7MT3UJUTHNsRywx4TP5jShjmjWvQFxJE1NPXZphYtqAk2g6tg7jYB/NhP
-         s4/rDNnZsqL/g==
-Date:   Thu, 25 Aug 2022 10:42:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "=?UTF-8?B?aW1hZ2Vkb25n?=(=?UTF-8?B?6JGj5qKm6b6Z?=)" 
-        <imagedong@tencent.com>, linux-doc@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [Internet]linux-next: build warning after merge of the net-next
- tree
-Message-ID: <20220825104208.592a2df2@kernel.org>
-In-Reply-To: <07263247-4906-4A72-A1A2-CAB41F115EB7@tencent.com>
-References: <20220825154105.534d78ab@canb.auug.org.au>
-        <07263247-4906-4A72-A1A2-CAB41F115EB7@tencent.com>
+        Thu, 25 Aug 2022 13:43:32 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2A2B6D2A;
+        Thu, 25 Aug 2022 10:43:30 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id m2so19155700pls.4;
+        Thu, 25 Aug 2022 10:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc;
+        bh=2Q9sxu1HRBMxvkcK86QE22Ms07BjEIEOP4ZDQ3uVSzc=;
+        b=FCXHKofw5D2STaFKgE47setXTxKBRs80FRNxxPkumH4L1qjSM5ciq8KO4NAysGvJuD
+         wr80KVTFsGVBIOgkAQqhEf8h4/r2Scasna7nu5ebGaoteIadBcXH9IJaAK0/262G0/LD
+         dFd0+Rtvb+tXtPz9XcAmqH/2Xr6NacQC9VJJuJ5Y0scTs5HbQ5EMrwTZIZgbyK508Jpy
+         2BIdgqsFs5pFwkCgbpFWmXsmo+RQ6CZR5yTLqRiAzcdsq65OfeFKrf4xjDyrAjPzTtFK
+         s7+0vfpVVdMUMc0aCVA10L/ZtXWrC6HSvXJE9eKqNgqvnpn0Rmu+lZ2Qp6S5yLnbroYg
+         NGBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc;
+        bh=2Q9sxu1HRBMxvkcK86QE22Ms07BjEIEOP4ZDQ3uVSzc=;
+        b=m2Ct9a+BqMKi+428omUrC+carQzGPyP8fmcPlnIPm6c+yEYuNrjKO/iirCV4r23XSw
+         dNOnzirtgR3PENUaoM0jkxwZ1/qTYk+TwwOBNd3z3D15Vp470i7mFn6oybV1B9O+II7l
+         OymcOQEIqSZtjHSFdTkz9Ej1Y026GJ1r4CqpcN/oSAbl7QcupZO1j2i4d0tsNCoAyjL1
+         ZvL+6y/hHxkXRg9+umnPXqB1lJMeVO0AGklW8U8C52tdt6Y+p3UI/PT1t7yXJb0qnea6
+         h1uFrEZl1Q5UD6C6jaEFIEZvzpnTiMXMjLW3lnou0Hcbs+1jVIFllpNKh0rRX0X0/lML
+         KCnw==
+X-Gm-Message-State: ACgBeo2LWSBoZPjGH0JQ383xe7ZeR4ld8RAdCly4P+piVXCttYEEBTHm
+        iL5otGXpwTm2qMimwcxHEj8=
+X-Google-Smtp-Source: AA6agR5TyjlWqCz/7+W7Bd1f+2e+LclerB3KYBGfN9ot+qYG8JspDm7ZIXSscqU99KN19Qh1kx/8Jg==
+X-Received: by 2002:a17:90b:17ce:b0:1fb:3b43:f6f8 with SMTP id me14-20020a17090b17ce00b001fb3b43f6f8mr269193pjb.76.1661449410138;
+        Thu, 25 Aug 2022 10:43:30 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b0016f975be2e7sm15054336plr.139.2022.08.25.10.43.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 10:43:29 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 25 Aug 2022 07:43:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: [GIT PULL] cgroup fixes #2 for v6.0-rc2
+Message-ID: <Ywe0v0YWJSVAs5FT@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 07:55:36 +0000 imagedong(=E8=91=A3=E6=A2=A6=E9=BE=99) w=
-rote:
-> > After merging the net-next tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >=20
-> > Documentation/networking/kapi:26: net/core/skbuff.c:780: WARNING: Error=
- in declarator or parameters
-> > Invalid C declaration: Expecting "(" in parameters. [error at 19]
-> >   void __fix_address kfree_skb_reason (struct sk_buff *skb, enum skb_dr=
-op_reason reason)
-> >   -------------------^
-> >=20
-> > Introduced by commit
-> >=20
-> >   c205cc7534a9 ("net: skb: prevent the split of kfree_skb_reason() by g=
-cc")
-> >  =20
->=20
-> Yeah, I commited this patch. May I ask what command did you use to
-> produce this warning? I tried the following command, but not success:
->=20
->   make V=3D2 SPHINXDIRS=3D"networking" htmldocs
->=20
-> Hmm.......what does this warning means? Does it don't like this
-> function attribute?
+The following changes since commit 763f4fb76e24959c370cdaa889b2492ba6175580:
 
-It popped up for me on a clean build of
+  cgroup: Fix race condition at rebind_subsystems() (2022-08-23 08:11:06 -1000)
 
-	make htmldocs
+are available in the Git repository at:
 
-There's a lot of other warnings but you should see this one, too.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc2-fixes-2
 
-I think you need to add the new keyword to one of the tables in
-Documentation/conf.py
+for you to fetch changes up to 43626dade36fa74d3329046f4ae2d7fdefe401c6:
+
+  cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all() (2022-08-25 07:36:30 -1000)
+
+----------------------------------------------------------------
+4f7e7236435ca0ab ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock()
+deadlock") in the previous fix pull required cgroup core to grab
+cpus_read_lock() before invoking ->attach(). Unfortunately, it missed adding
+cpus_read_lock() in cgroup_attach_task_all(). Fix it.
+
+----------------------------------------------------------------
+Tetsuo Handa (1):
+      cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
+
+ kernel/cgroup/cgroup-v1.c | 2 ++
+ 1 file changed, 2 insertions(+)

@@ -2,139 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259385A0B9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DFA5A0B9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236667AbiHYIev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S233353AbiHYIfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234415AbiHYIef (ORCPT
+        with ESMTP id S235320AbiHYIfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:34:35 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411CEA599B;
-        Thu, 25 Aug 2022 01:34:34 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id n24so16684685ljc.13;
-        Thu, 25 Aug 2022 01:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=H+0hvgnQryLyRGTLY2PSvbtKINzM1C3o/madftxyfvU=;
-        b=hUs2zEarOFOjldcG3/iN1PjdwMaKcwDVlAxhiVE1FNpVdYCy9CBiFFc0u4vGdOhtTJ
-         Zjf7OoJfwwqcqxxmkppcrILJB9/dXeYYO4zQnglsljh9LY6b31UWtcvuyN2xpMf5+91r
-         pgv+hOaa4lZvxqNvi0bAfaF/LNas8FXjjBy68uXz5htwDQqKbfvUl0XMYV7OiDZ03ZCn
-         kakLDuYy35p7tQLQr19m2+/EHNOYoK521heqvB/5pGDWO0PBTrkmq95thaBW04NEYDOp
-         f6QFGMSBJepxO1H2h7tEoGwlalN8ez1DlEJF24r4AXehRuV/Dwkl0LsnKM+ZSeK+ROZ/
-         lVIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=H+0hvgnQryLyRGTLY2PSvbtKINzM1C3o/madftxyfvU=;
-        b=WnSZHB1fuCuneXEbaaYtMHuNnT0YX4beAJLKRbxYVqsaj3kvqwXZJ0LMYtNdlCG15X
-         iqNsPOex6MEFP5x5UPYr1I2TwdJaF6OQPfdsOOVxBYOeIT+X473bd1ucYroA9cMpo4r4
-         hgsWMz8C3GUeGuH3Yxz8XqYEqxIc8G5+4Q/o77ipxpGVkcvvxXUhKEg1q7Cj1gvuQ9LO
-         y8IPGHsT/mVxXeiVkcDKf5ta1yPe1V0lyH6JX9q06/Fyw94HvzP2kIxZnZnrUcrxXPML
-         SFQyEEEi/ktO7W9YAkbAAxh4aDdzJ8lkF12ffPGyy/14AbE53Qa36WDwxYhVD5o2HPpz
-         3Oaw==
-X-Gm-Message-State: ACgBeo3M/OPwX5a+MP5ZMFHjdqEVzqC6zAdWRWlkUpxEqwSPVfbEUswR
-        wq2wXfis15HemiUy1MTP7j2STS58FsLiGj05GbI=
-X-Google-Smtp-Source: AA6agR6W86PKJOKHWZb0C5IbJSjh1Hz+Isg368Kgq9FRsMX5RsH85N8hSo46BIPNsGyMnJDj1JDAQU/Q7kmv9R4AhjA=
-X-Received: by 2002:a2e:3817:0:b0:261:cfba:ee4c with SMTP id
- f23-20020a2e3817000000b00261cfbaee4cmr732301lja.443.1661416472267; Thu, 25
- Aug 2022 01:34:32 -0700 (PDT)
+        Thu, 25 Aug 2022 04:35:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB0E76949;
+        Thu, 25 Aug 2022 01:34:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85722B826A7;
+        Thu, 25 Aug 2022 08:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED436C433D6;
+        Thu, 25 Aug 2022 08:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661416495;
+        bh=QGpTCX8/HfN5hvQze+1GDH+74QUwhn3lQzXYB2SxQr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bCmqXkhg3IBspMymlihwn/ikInT5yG/azkc9HMiuRjeKQKZ678G97a+wMasT0lE3N
+         gKK+ltUSN0jgnF2GkxIT+c/CiUPHeyC2/Nhr3ja/jRQAetHisu8ALxZS4N6KomqTm9
+         tEaq71Gd4/4STvDx4eMG+JTcUTvKspf8IHw9D0jDy77WOJnMLbrCEgPSrf/pQVmYtC
+         0l7qREbbdbflear2clSSjqDiQRd6JM64A9X44WaTLkdUknxX3mrSgmcb/qGzEqi/wR
+         h4nY0tVyi1pTjcKcU7niKEcrhD+iQY12s1hy3swTy6O7EGrVbNeD4+Vd1w7oqikE7e
+         n+167m4n4j85g==
+Date:   Thu, 25 Aug 2022 11:34:48 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, linux-sgx@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
+ ksgxd+0x1b7/0x1d0
+Message-ID: <Ywc0KNYSm4sc+lnq@kernel.org>
+References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
+ <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
+ <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
+ <04c9d5fa-5861-bbc3-3e2f-e18a73866645@molgen.mpg.de>
+ <63a60042-4a4a-3bc3-5fa1-4495d80cc06c@molgen.mpg.de>
+ <op.1rfpqgjrwjvjmi@hhuan26-mobl1.mshome.net>
+ <YwcNfpLpzk8EIT88@kernel.org>
 MIME-Version: 1.0
-References: <YwRjyx6wFLk8WTDe@dhcp22.suse.cz> <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
- <YwSQ4APOu/H7lYGL@dhcp22.suse.cz> <CAGWkznGd6mgareABseMKY5p0f1=5dkfVkj=NS7_B6OkXBYSwyw@mail.gmail.com>
- <YwS/S9Sd1OWnT81Q@dhcp22.suse.cz> <CAGWkznGYLyF+njUB0gFF3JVdThnK9JaNsqxXYFhbdSwEQpCxvA@mail.gmail.com>
- <YwXYVjRpXQjQMsxr@dhcp22.suse.cz> <CAGWkznEqX3DwHW_owiK+HuuQ-HsUYK4vKmLhSxgzGn20Vzid2A@mail.gmail.com>
- <YwX89JCQCKMMYdG9@dhcp22.suse.cz> <CAGWkznF+dBjLzAxMMXWYSZ_5q3KA-ou0P7XM7jSYN7JSRp8N0w@mail.gmail.com>
- <YwcZctA2S3Sd0LBN@dhcp22.suse.cz>
-In-Reply-To: <YwcZctA2S3Sd0LBN@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Thu, 25 Aug 2022 16:34:04 +0800
-Message-ID: <CAGWkznH5gQXigdLx=fwdL0uqdGx4WE9QP8b8cbWFxr=Rdg-CZQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YwcNfpLpzk8EIT88@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 2:40 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 25-08-22 08:43:52, Zhaoyang Huang wrote:
-> > On Wed, Aug 24, 2022 at 6:27 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Wed 24-08-22 17:34:42, Zhaoyang Huang wrote:
-> [...]
-> > > > IMHO, charging the pages which out of explicitly memory
-> > > > enabled group to root could solve all of the above constraints with no
-> > > > harm.
-> > >
-> > > This would break the hierarchical property of the controller. So a
-> > > strong no no. Consider the following example
-> > >
-> > >        root
-> > >         |
-> > >         A
-> > > controllers="memory"
-> > > memory.max = 1G
-> > > subtree_control=""
-> > > |      |      |
-> > > A1     A2     A3
-> > >
-> > > althought A1,2,3 do not have their memory controller enabled explicitly
-> > > they are still constrained by the A memcg limit. If you just charge to
-> > > the root because it doesn't have memory controller enabled explicitly
-> > > then you just evade that constrain. I hope you understand why that is a
-> > > problem.
-> > IMO, A1-A3 should be explicitly enabled via echo "+memory" >
-> > A/subtree_control since memory.max has been set.
->
-> You seem to be missing the point I've triedy to make here. It is not
-> about how the respective subtree should or shouldn't be configured. It
-> is about the hierarchical behavior. Configuration at a higher level should be
-> enforced under subtree no matter how that subtree decides to
-> enabled/disable controllers. Such subtree might have beeb delegated
-> and configured differently yet the constrain should be still applied.
-> See the point?
->
-> What you seem to be proposing is similar to cgroup v1 use_hierarchy
-> configuration. It has been decided that this is undesirable very early
-> in the cgroup v2 development because it make delegation impossible
-> (among other reasons).
-Ok, I would like to know how AA3 achieve the goal of competing with A1
-and A2 for cpu but keep memory out of control under current policy?
-        root
-         |
-         A
- controllers="memory,cpu"
- memory.max = 1G
- subtree_control="memory,cpu"
- |      |            |
- A1     A2     A3 subtree_control="cpu"
-                      |      |
-                    AA3   AA4 controllers="cpu"
->
-> --
-> Michal Hocko
-> SUSE Labs
+On Thu, Aug 25, 2022 at 08:49:53AM +0300, Jarkko Sakkinen wrote:
+> On Wed, Aug 24, 2022 at 09:12:06PM -0500, Haitao Huang wrote:
+> > Hi Paul
+> > 
+> > On Tue, 23 Aug 2022 08:48:52 -0500, Paul Menzel <pmenzel@molgen.mpg.de>
+> > wrote:
+> > 
+> > > Dear Dave,
+> > > 
+> > > 
+> > > Am 20.08.22 um 08:13 schrieb Paul Menzel:
+> > > 
+> > > > Am 19.08.22 um 20:28 schrieb Dave Hansen:
+> > > > > On 8/19/22 09:02, Paul Menzel wrote:
+> > > > > > On the Dell XPS 13 9370, Linux 5.18.16 prints the warning below:
+> > > > > > 
+> > > > > > ```
+> > > > > > [    0.000000] Linux version 5.18.0-4-amd64
+> > > > > > (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5)
+> > > > > > 11.3.0, GNU ld (GNU Binutils for Debian) 2.38.90.20220713)
+> > > > > > #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
+> > > > > > [    0.000000] Command line:
+> > > > > > BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64
+> > > > > > root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
+> > > > > > […]
+> > > > > > [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS
+> > > > > > 1.21.0 07/06/2022
+> > > > > > […]
+> > > > > > [    0.235418] sgx: EPC section 0x40200000-0x45f7ffff
+> > > > 
+> > > > > Would you be able to send the entire dmesg, along with:
+> > > >  The log message are attached to the first message, where I missed
+> > > > to carbon-copy linux-sgx@ [1].
+> > > > 
+> > > > >     cat /proc/iomem # (as root)
+> > > > > and
+> > > > >     cpuid -1 --raw
+> > > >  I am going to provide that next week. (Side note, Intel might have
+> > > > some Dell XPS 9370 test machines in some QA lab.)
+> > > 
+> > > Please find both outputs at the end of the file.
+> > > 
+> > 
+> > Could you also check output of "sudo rdmsr -x 0x3a"?
+> > Also was CONFIG_X86_SGX_KVM set?
+> > 
+> > If CONFIG_X86_SGX_KVM is not set and bit 17 (SGX_LC) of the MSR 3A not set,
+> > then I think following sequence during sgx_init is possible:
+> > 
+> > sgx_page_cache_init -> sgx_setup_epc_section
+> >                        ->put all physical EPC pages in sgx_dirty_page_list.
+> > Kick off ksgxd.
+> > Later, sgx_drv_init returns none-zero due to this check:
+> >     if (!cpu_feature_enabled(X86_FEATURE_SGX_LC))
+> >         return -ENODEV;
+> > sgx_vepc_init also returns none-zero if CONFIG_X86_SGX_KVM was not set.
+> > 
+> > And sgx_init will call kthread_stop(ksgxd_tsk):
+> >     ret = sgx_drv_init();
+> > 
+> >     if (sgx_vepc_init() && ret)
+> >         goto err_provision;
+> > ...
+> > err_provision:
+> >     misc_deregister(&sgx_dev_provision);
+> > 
+> > err_kthread:
+> >     kthread_stop(ksgxd_tsk);
+> > 
+> > 
+> > That triggers __sgx_sanitize_pages return early due to these lines:
+> >     /* dirty_page_list is thread-local, no need for a lock: */
+> >     while (!list_empty(dirty_page_list)) {
+> >         if (kthread_should_stop())
+> >             return;
+> > 
+> > And that would trigger (depends on timing?) the warning in ksgxd due to
+> > non-empty sgx_dirty_page_list
+> > at that moment.
+> 
+> You're correct, and it's not a bug but completely legit behaviour.
+> 
+> And given that non-empty dirty page list is legit behavior WARN_ON()
+> is not what should be used in here.
+> 
+> Fix coming in a bit.
+
+https://lore.kernel.org/linux-sgx/20220825080802.259528-1-jarkko@kernel.org/T/#u
+
+BR, Jarkko

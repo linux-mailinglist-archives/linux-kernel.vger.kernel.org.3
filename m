@@ -2,233 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5D35A1055
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC0B5A1026
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241690AbiHYMYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S241452AbiHYMQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiHYMXr (ORCPT
+        with ESMTP id S241090AbiHYMQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:23:47 -0400
-X-Greylist: delayed 347 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 05:23:44 PDT
-Received: from mail.aboehler.at (mail.aboehler.at [IPv6:2a01:4f8:121:5012::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52FA2B273;
-        Thu, 25 Aug 2022 05:23:44 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.aboehler.at (Postfix) with ESMTP id 6D68B3CC0D34;
-        Thu, 25 Aug 2022 14:17:53 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at aboehler.at
-Received: from mail.aboehler.at ([127.0.0.1])
-        by localhost (aboehler.at [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GqEPTD7q5yLm; Thu, 25 Aug 2022 14:17:52 +0200 (CEST)
-Received: from x390y.lan (194-166-175-3.adsl.highway.telekom.at [194.166.175.3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andreas@aboehler.at)
-        by mail.aboehler.at (Postfix) with ESMTPSA id 5ECC33CC0293;
-        Thu, 25 Aug 2022 14:17:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aboehler.at;
-        s=default; t=1661429872;
-        bh=O0sEC+U/QfY+SP3QEMdXzOiJP9TkB3o3aR4qtxie8UY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QAAbbOSgdODhh2cvaxoK7WZvLBdxT++CCEIo5FmX5kxtSTvVc1UDoRXzGUkejmCMz
-         ex64sFSabblE9a0iElFO1qmw10/b91N9xegeRy2xHylsHg2lNGXrIT5KZfiO83wLY6
-         cWOlghsOHMHuu/M9fiRpAG9VTQab67q6/x2p9Cfs=
-From:   =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>
-Cc:     dev@aboehler.at, Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: tps23861: add support for initializing the chip
-Date:   Thu, 25 Aug 2022 14:16:20 +0200
-Message-Id: <20220825121620.20907-1-dev@aboehler.at>
-X-Mailer: git-send-email 2.37.2
+        Thu, 25 Aug 2022 08:16:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CCAABF31
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661429806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=50JDuznIcplANtCCRHF9PDcl3HjI31bAhYxaYQTlejM=;
+        b=alLqyo/KOOS2Efd49QXlSmy+YbqkWXr6VvAsbCfXeyxYJjenjSyicX3dlQIRarem0PJdyh
+        BLBNrO8qGuX4NdrGS3T7cdVLT25bNLtKsWYjegQ1PiElNW5ScGanEFYKEG1/a4bZFMI6J7
+        gMqUCF6aE3/mEKkOokyG7NpF8uZfoxA=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-468-sBdoXtwBNLm0EjdZnrFT3A-1; Thu, 25 Aug 2022 08:16:45 -0400
+X-MC-Unique: sBdoXtwBNLm0EjdZnrFT3A-1
+Received: by mail-wr1-f70.google.com with SMTP id j4-20020adfa544000000b002255264474bso2185098wrb.17
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:16:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=50JDuznIcplANtCCRHF9PDcl3HjI31bAhYxaYQTlejM=;
+        b=Ee0BaQ5SLz1dPSvTENCf9IPHgrRFDpT4NjXotplzbF4n0Lkt+774MR4CaCkB/B+xud
+         rb9TfrOSQdJOboGvhrwV2Qm0BZnQ/FjO13lmQSKs1BE5kbFsEEAkJNAMDsSBppD2OmLA
+         mLQnM2eFYm0TBSpBvSG6QJ+272IVGyEgFr/rv+ed05wXHPRbTkY5DLk79JfPHGInwm9T
+         iAhsygGpJNiN8UdqjuJ52f6ws3CwIFc0BnRBUVEamANQXIALB1/rBk56/e1MoNc4i0M7
+         hraUjZveWVwqHEYrYgOqyfeYxjhITr7wDQ/NVwmQP+Kz8SmV2cnvNqeBT47xv58virIc
+         bvTA==
+X-Gm-Message-State: ACgBeo2SplX3ahJrIRITfN8SJ4widw1bk7PNP7/7hdaJfnFDbUyMAqDW
+        rS6dpyb1yRsvnBnkJTlo5zsyebNvExkggTAsqnGjBc0lz4WKDVgbAIsfUBWF+owNRTiyrtnBW2E
+        dMxgq+RRpvSWR5g8ws7NYz0ie
+X-Received: by 2002:a05:600c:2248:b0:3a5:a469:b874 with SMTP id a8-20020a05600c224800b003a5a469b874mr7854877wmm.63.1661429803951;
+        Thu, 25 Aug 2022 05:16:43 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4yMHS2Da8W3+l7WwcSWgXKwX1JSRL+OG+2q/EzEzRgH4HIZaKuOe2rXsQHEmuVi0vDa73wHQ==
+X-Received: by 2002:a05:600c:2248:b0:3a5:a469:b874 with SMTP id a8-20020a05600c224800b003a5a469b874mr7854850wmm.63.1661429803698;
+        Thu, 25 Aug 2022 05:16:43 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003a690f704absm4718162wmq.4.2022.08.25.05.16.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 05:16:43 -0700 (PDT)
+Message-ID: <0602b3b4-214f-94b1-61fe-2b2528ff529b@redhat.com>
+Date:   Thu, 25 Aug 2022 14:16:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] mm/demotion: Fix kernel error with memory hotplug
+Content-Language: en-US
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+References: <20220825092019.379069-1-aneesh.kumar@linux.ibm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220825092019.379069-1-aneesh.kumar@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tps23861 driver does not initialize the chip and relies on it being
-in auto-mode by default. On some devices, these controllers default to
-OFF-Mode and hence cannot be used at all.
+On 25.08.22 11:20, Aneesh Kumar K.V wrote:
+> On memory hot unplug, the kernel removes the node memory type
+> from the associated memory tier. Use list_del_init instead of
+> list del such that the same memory type can be added back
+> to a memory tier on hotplug.
+> 
+> Without this, we get the below warning and return error on
+> adding memory type to a new memory tier.
+> 
+> [   33.596095] ------------[ cut here ]------------
+> [   33.596099] WARNING: CPU: 3 PID: 667 at mm/memory-tiers.c:115 set_node_memory_tier+0xd6/0x2e0
+> [   33.596109] Modules linked in: kmem
+> 
+> ...
+> 
+> [   33.596126] RIP: 0010:set_node_memory_tier+0xd6/0x2e0
+> 
+> ....
+> [   33.596196]  memtier_hotplug_callback+0x48/0x68
+> [   33.596204]  blocking_notifier_call_chain+0x80/0xc0
+> [   33.596211]  online_pages+0x25e/0x280
+> [   33.596218]  memory_block_change_state+0x176/0x1f0
+> [   33.596225]  memory_subsys_online+0x37/0x40
+> [   33.596230]  online_store+0x9b/0x130
+> [   33.596236]  kernfs_fop_write_iter+0x128/0x1b0
+> [   33.596242]  vfs_write+0x24b/0x2c0
+> [   33.596249]  ksys_write+0x74/0xe0
+> [   33.596254]  do_syscall_64+0x43/0x90
+> [   33.596259]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Fixes: mm/demotion: Add hotplug callbacks to handle new numa node onlined
 
-This brings minimal support for initializing the controller in a user-
-defined mode.
+Do we have a proper 12-digit commit id as well?
 
-Tested on a TP-Link TL-SG2452P with 12x TI TPS23861 controllers.
+Do we have to cc stable?
 
-Note: The DT bindings still need to be updated.
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> ---
+>  mm/memory-tiers.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index a20795bb0e07..ba844fe9cc8c 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -451,7 +451,7 @@ static bool clear_node_memory_tier(int node)
+>  		memtype = node_memory_types[node];
+>  		node_clear(node, memtype->nodes);
+>  		if (nodes_empty(memtype->nodes)) {
+> -			list_del(&memtype->tier_sibiling);
+> +			list_del_init(&memtype->tier_sibiling);
+>  			if (list_empty(&memtier->memory_types))
+>  				destroy_memory_tier(memtier);
+>  		}
 
-Usage:
 
-tps23861@9 {
-	compatible = "ti,tps23861";
-	reg = <0x09>;
-
-	port@0 {
-		reg = <0>;
-		mode = "auto";
-		enable = <1>;
-		poe_plus = <1>;
-	};
-
-	port@1 {
-		reg = <1>;
-		mode = "auto";
-		enable = <1>;
-		poe_plus = <1>;
-	};
-
-	port@2 {
-		reg = <2>;
-		mode = "auto";
-		enable = <1>;
-		poe_plus = <1>;
-	};
-
-	port@3 {
-		reg = <3>;
-		mode = "auto";
-		enable = <1>;
-		poe_plus = <1>;
-	};
-};
-
-Signed-off-by: Andreas Böhler <dev@aboehler.at>
----
- drivers/hwmon/tps23861.c | 81 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
-
-diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-index 42762e87b014..27bf8716cf12 100644
---- a/drivers/hwmon/tps23861.c
-+++ b/drivers/hwmon/tps23861.c
-@@ -85,6 +85,8 @@
- #define PORT_DETECT_CAPACITANCE_INVALID_DELTA	11
- #define PORT_DETECT_CAPACITANCE_OUT_OF_RANGE	12
- #define POE_PLUS			0x40
-+#define POE_PLUS_MASK(_port)	\
-+	GENMASK(_port + 4, _port + 4)
- #define OPERATING_MODE			0x12
- #define OPERATING_MODE_OFF		0
- #define OPERATING_MODE_MANUAL		1
-@@ -94,9 +96,22 @@
- #define OPERATING_MODE_PORT_2_MASK	GENMASK(3, 2)
- #define OPERATING_MODE_PORT_3_MASK	GENMASK(5, 4)
- #define OPERATING_MODE_PORT_4_MASK	GENMASK(7, 6)
-+#define OPERATING_MODE_PORT(_mode, _port)	\
-+	(_mode << (_port * 2))
- 
-+#define DISCONNECT_ENABLE		0x13
-+#define DISCONNECT_ENABLE_MASK(_port)	\
-+	GENMASK(_port, _port)
-+#define DISCONNECT_MASK(_port)	\
-+	(GENMASK(_port, _port) | GENMASK(_port + 4, _port + 4))
-+
-+#define DETECT_CLASS_ENABLE		0x14
- #define DETECT_CLASS_RESTART		0x18
- #define POWER_ENABLE			0x19
-+#define POWER_ENABLE_ON_MASK(_port)	\
-+	GENMASK(_port, _port)
-+#define POWER_ENABLE_OFF_MASK(_port)	\
-+	GENMASK(_port + 4, _port + 4)
- #define TPS23861_NUM_PORTS		4
- 
- #define TPS23861_GENERAL_MASK_1		0x17
-@@ -548,7 +563,16 @@ static int tps23861_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct tps23861_data *data;
- 	struct device *hwmon_dev;
-+	struct device_node *child;
- 	u32 shunt_resistor;
-+	u32 reg;
-+	u32 temp;
-+	const char *mode;
-+	unsigned int poe_plusval;
-+	unsigned int mode_val;
-+	unsigned int power_val;
-+	unsigned int enable_val;
-+	unsigned int disconnect_enable_val;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -577,6 +601,63 @@ static int tps23861_probe(struct i2c_client *client)
- 				TPS23861_GENERAL_MASK_1,
- 				TPS23861_CURRENT_SHUNT_MASK);
- 
-+	regmap_read(data->regmap, POE_PLUS, &poe_plusval);
-+	regmap_read(data->regmap, POWER_ENABLE, &power_val);
-+	regmap_read(data->regmap, OPERATING_MODE, &mode_val);
-+	regmap_read(data->regmap, DETECT_CLASS_ENABLE, &enable_val);
-+	regmap_read(data->regmap, DISCONNECT_ENABLE, &disconnect_enable_val);
-+
-+	for_each_child_of_node(dev->of_node, child) {
-+		if (of_property_read_u32(child, "reg", &reg))
-+			continue;
-+
-+		if (reg > (TPS23861_NUM_PORTS - 1) || reg < 0)
-+			continue;
-+
-+		if (!of_property_read_string(child, "mode", &mode)) {
-+			if (!strncmp(mode, "manual", 6)) {
-+				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_MANUAL, reg);
-+			} else if (!strncmp(mode, "semiauto", 8)) {
-+				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_SEMI, reg);
-+			} else if (!strncmp(mode, "auto", 4))
-+				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+			else
-+				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+		}
-+
-+		if (!of_property_read_u32(child, "enable", &temp)) {
-+			if (temp) {
-+				enable_val |= DISCONNECT_MASK(reg);
-+				disconnect_enable_val |= DISCONNECT_ENABLE_MASK(reg);
-+			} else {
-+				enable_val &= ~DISCONNECT_MASK(reg);
-+				disconnect_enable_val &= ~DISCONNECT_ENABLE_MASK(reg);
-+			}
-+		}
-+
-+		if (!of_property_read_u32(child, "power", &temp)) {
-+			if (temp)
-+				power_val |= POWER_ENABLE_ON_MASK(reg);
-+			else
-+				power_val |= POWER_ENABLE_OFF_MASK(reg);
-+		}
-+
-+		if (!of_property_read_u32(child, "poe_plus", &temp)) {
-+			if (temp)
-+				poe_plusval |= POE_PLUS_MASK(reg);
-+			else
-+				poe_plusval &= ~POE_PLUS_MASK(reg);
-+		}
-+	}
-+
-+	regmap_write(data->regmap, POE_PLUS, poe_plusval);
-+	regmap_write(data->regmap, POWER_ENABLE, power_val);
-+	regmap_write(data->regmap, OPERATING_MODE, mode_val);
-+	regmap_write(data->regmap, DETECT_CLASS_ENABLE, enable_val);
-+	regmap_write(data->regmap, DISCONNECT_ENABLE, disconnect_enable_val);
-+
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
- 							 data, &tps23861_chip_info,
- 							 NULL);
 -- 
-2.37.2
+Thanks,
+
+David / dhildenb
 

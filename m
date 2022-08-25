@@ -2,147 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E625A1CB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB075A1CD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244049AbiHYWuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S244502AbiHYW6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243969AbiHYWtp (ORCPT
+        with ESMTP id S244311AbiHYW6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:49:45 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD14C6CC0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:49:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661467783; x=1693003783;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=N6JNWD5Gq4S10yyOmOpUW93oRz6lIATWq7O62bXOoYk=;
-  b=W7U14IdU5J1UjDOKjGcZrX6UvRHN8Ln5hih3YXbAWtWhew7QH9gjt8TJ
-   iClJa8KQpj//dEv115GOkCObZJpejppMChKY6HVcARMCaAXbiOsWp4+KB
-   /CIfZbKLZ8oKvcoPSZ9HT0dmKrzLGsdhexbYs5xE5WqVgHCibp+X09rtw
-   f+OWgQyXv1ZGdbXqXSk2okzrcEfdZvipg+JTjQZcjl/8Zj4i/2fKCmG/f
-   OEJeHar0diK4HDYynDiecCgLlXiyPpyvhh9yI5wskoyO0BB+91pQzJXf9
-   Al/z+ZIAx0q+HBz4xXSYe7x1CWnSmfP15qzEgWqMGcuOI8cku5LscKUql
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295153925"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="295153925"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 15:49:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="678642685"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Aug 2022 15:49:41 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH 4/4] x86/sched: Avoid unnecessary migrations within SMT domains
-Date:   Thu, 25 Aug 2022 15:55:29 -0700
-Message-Id: <20220825225529.26465-5-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com>
-References: <20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 25 Aug 2022 18:58:06 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E3BC6EA7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:58:05 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id k3-20020a170902c40300b001743aafd6c6so37531plk.20
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc;
+        bh=y+lzaBk65ww51hCvJgNyxoyJqrGC7YrgWGmE6om5SXc=;
+        b=ceIE676UVZGKZm2E6Mt/s5wpUNVii4s5j4u15I933eTsczM6yQlR9HER8rvL67CEBh
+         tMJiMWWqXr1cNE7tYmrfMsGab+TAx9LRvYC5yPgH/KHemrsnAr1Rb/fZTcbneTdNA0Lw
+         o25UuDmuir0bBEQkRhLbBfZWjVkYGrAmAAHGY2ziK9y7ZgwL7tSbA16Z5DDmETEzt3AI
+         JNPqxMHFjw2486Smpe56NI6yUCl9oZ/WBNQd35P1ZuBxRRAhKAxx+WkL3D+F/byUkb80
+         sGhG7iUmX/0Oux2alHWN+IyKRqPgQhT62UVR/AlBcmnVNg05eEacNyVFmD4yVD1Y7dEr
+         /ETQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=y+lzaBk65ww51hCvJgNyxoyJqrGC7YrgWGmE6om5SXc=;
+        b=Gy9QUcecviLezI3Bi5+H0ObyC6eWR0EYxagX2ACcovGjERzeRePSAOs5UeGbs3zMuY
+         C+tHCuCO7KWFF50GCRYlfzfd0IdfL9pJ5ZeMADZgDEJZGzqRd6nLC+ILjlkRjRA/JC8Q
+         rwE8eQF22iHQVEaFyw+4JNvUd2U3+s9yQ4b1/lKjdMvLLsrJl8tG+4fMt+RzmSi5Q4En
+         /LbjEjxBT17j73KTW2nwfdAcPURciTrkbdGB2QGYqx/Ji3WqFfSC8ZPlrFDN3xAItHLm
+         A9jjS/GIAMrPUykiKQjtxqzMDffRpS0GzaRh0vKnvtHBa2KHtmsKxuBkUBZp6gndNDd9
+         Dcyw==
+X-Gm-Message-State: ACgBeo1N0KhkFIQRbiPlstbo3e73932ANJEHLbNgPnLiAgSDEAZwi+a4
+        EPZLWK/XUI2YKfZeMoj7CVZPjcJy/8JV
+X-Google-Smtp-Source: AA6agR7vZwPSASd9sVEMyperT8XtrEmCG6kXiaFQSuzjtM1/GuniGBXVT5lFXlTLDnM9AW1zi/7lNtpjXqw2
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:aa7:8430:0:b0:536:5173:a2c6 with SMTP id
+ q16-20020aa78430000000b005365173a2c6mr1207357pfn.4.1661468284842; Thu, 25 Aug
+ 2022 15:58:04 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Thu, 25 Aug 2022 22:57:52 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220825225755.907001-1-mizhang@google.com>
+Subject: [PATCH v4 0/3] Extend KVM trace_kvm_nested_vmrun() to support VMX
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mingwei Zhang <mizhang@google.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having different priorities for each SMT sibling triggers unnecessary
-load balancing towards the higher-priority sibling.
+This patch set update trace_kvm_nested_vmrun() to support VMX. In
+addition, add the guest_pgd field to enrich the trace information.
 
-The scheduler now has logic to allow lower-priority CPUs to relieve load
-from scheduling groups composed of SMT siblings with more than one busy
-sibling.
+v3 -> v4:
+ - Rebase to tip of kvm/queue.
 
-Hence, it is no longer necessary to give different priorities to each of
-the SMT siblings of a physical core.
+v2 -> v3:
+ - Split the insertion of guest pgd field into a separate patch [seanjc].
+ - Update field names as suggested [seanjc].
 
-Cc: Ben Segall <bsegall@google.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Tim C. Chen <tim.c.chen@intel.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
- arch/x86/kernel/itmt.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
+v2:
+ - https://lore.kernel.org/lkml/YurMLf3MDAK0RiZc@google.com/T/
 
-diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
-index 9ff480e94511..6510883c5e81 100644
---- a/arch/x86/kernel/itmt.c
-+++ b/arch/x86/kernel/itmt.c
-@@ -174,32 +174,19 @@ int arch_asym_cpu_priority(int cpu)
- 
- /**
-  * sched_set_itmt_core_prio() - Set CPU priority based on ITMT
-- * @prio:	Priority of cpu core
-- * @core_cpu:	The cpu number associated with the core
-+ * @prio:	Priority of @cpu
-+ * @cpu:	The CPU number
-  *
-  * The pstate driver will find out the max boost frequency
-  * and call this function to set a priority proportional
-- * to the max boost frequency. CPU with higher boost
-+ * to the max boost frequency. CPUs with higher boost
-  * frequency will receive higher priority.
-  *
-  * No need to rebuild sched domain after updating
-  * the CPU priorities. The sched domains have no
-  * dependency on CPU priorities.
-  */
--void sched_set_itmt_core_prio(int prio, int core_cpu)
-+void sched_set_itmt_core_prio(int prio, int cpu)
- {
--	int cpu, i = 1;
--
--	for_each_cpu(cpu, topology_sibling_cpumask(core_cpu)) {
--		int smt_prio;
--
--		/*
--		 * Ensure that the siblings are moved to the end
--		 * of the priority chain and only used when
--		 * all other high priority cpus are out of capacity.
--		 */
--		smt_prio = prio * smp_num_siblings / (i * i);
--		per_cpu(sched_core_priority, cpu) = smt_prio;
--		i++;
--	}
-+	per_cpu(sched_core_priority, cpu) = prio;
- }
+v1 link:
+ - https://lore.kernel.org/lkml/20220708232304.1001099-2-mizhang@google.com/T/
+
+
+David Matlack (1):
+  KVM: nVMX: Add tracepoint for nested vmenter
+
+Mingwei Zhang (2):
+  KVM: x86: Update trace function for nested VM entry to support VMX
+  KVM: x86: Print guest pgd in kvm_nested_vmenter()
+
+ arch/x86/kvm/svm/nested.c |  8 ++++++--
+ arch/x86/kvm/trace.h      | 33 +++++++++++++++++++++++----------
+ arch/x86/kvm/vmx/nested.c | 10 ++++++++++
+ arch/x86/kvm/x86.c        |  2 +-
+ 4 files changed, 40 insertions(+), 13 deletions(-)
+
+
+base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
 -- 
-2.25.1
+2.37.2.672.g94769d06f0-goog
 

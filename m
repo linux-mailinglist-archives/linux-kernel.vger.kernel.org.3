@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043365A1BCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A055A1BD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244216AbiHYV7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S244210AbiHYWAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240331AbiHYV7Q (ORCPT
+        with ESMTP id S243483AbiHYWAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:59:16 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E71879A5C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:59:14 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id v14so5554573ejf.9
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:59:14 -0700 (PDT)
+        Thu, 25 Aug 2022 18:00:49 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC14501BA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:00:47 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id u6so11876488qvp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:00:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=ZWZIyKcotrv3NEmO67KClX9EqNqs0MIDHUX0uHrtkjE=;
-        b=g8/rsxUneSNTvyAX/My2MOeR5KSLY9Rg/6OmuA3mo6wuxVL4yZk8GRe4P42gRuSGYY
-         5o/riDIc3W226S/XAgbuMlSnghvwTZQj9UIRcIL71AI+lwfaqe+0yd9ZMeDrBW+XReH0
-         HeG7kNZkWgj06gz6aqBW2Pg4+wFveT436fTg0=
+        bh=pZQ/2nHQhIrhPnU1bKwTlnrZA3djIkob/YiqxMhnkcg=;
+        b=mAdzoUW7wW6FM0q0jbONT8uA9l3acX/GFHpJ7wC6WDxytlS0wUPjpaO4famr4o6UGI
+         bRb7F3jg1uTrWwJkvILebhbpdBg1kwY8Y4GY1zaNauGK7UZ0WtYg76kz9OxYmQ1y/p24
+         jE+mSSjJCthamtLl8RK3mgfcNE9Ri9yEuMGDJr/9jPm8NrkDcOCYXQEP2+Z/EEoO+lcD
+         npjYu58k2kZ/rDc0WXISd/Hqpc69fiMaHu9gC9mefIdF6UB/RJbA9gKRVpO/SnanWqKF
+         jkI11Vue+dQ0K3za7FLXgIm8E+oOsfrgmcGEOYBgAkyuy4+HL49apMopNpTMFkLJJrDi
+         afbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZWZIyKcotrv3NEmO67KClX9EqNqs0MIDHUX0uHrtkjE=;
-        b=uUuZj+9wmHlqZuwlt0f2bsFEVS5EwW1ragrtiqMsUuJgoWDJjutXpJVOXb6tCy8dFt
-         dxowOFNdhMIgt9qcYJ0JSx20Yu19LOVfpSK+CpKpbEW7WnVIKrNUq+Qmp6FFSaaKCtdK
-         oli9ghW2qWQOJBTKTxLjw9M9yfTXBN4i510WGV9srZQbSnRU2s4+E1IPGzV1eVIWJTyr
-         tVb1i2xxfVQuTMldnPDdzAbewGiIzxl31syaxvZDFD95jNnwNHgLA+ip3Y/RK3dr9kX6
-         02TQ86hl4MkS/N+40++LxzoiQ9LCVwlcGjFba7iNpiVbiu3jTfxLZOARp1xUPk2ZLoQA
-         SypA==
-X-Gm-Message-State: ACgBeo2dvBzETFEKtn9IwKrB+zUJCsRVB0+XNqD73JYd19fCSQiW9Tb0
-        pc4PtNhSyKijT+jIGOxDCAE4GfYgP+rI8chwRPE=
-X-Google-Smtp-Source: AA6agR6Ch+dY+MGn4YKAfaZT735wSL031iVkMKEm/EtaRFqRCsCjrz2Cmo8u2bvqFny/6EX4XsqBXQ==
-X-Received: by 2002:a17:907:b013:b0:73d:c708:3f22 with SMTP id fu19-20020a170907b01300b0073dc7083f22mr3541797ejc.608.1661464752628;
-        Thu, 25 Aug 2022 14:59:12 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id g8-20020a056402180800b0043d5c9281a3sm287992edy.96.2022.08.25.14.59.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 14:59:11 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so3420554wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:59:11 -0700 (PDT)
-X-Received: by 2002:a05:600c:42c3:b0:3a6:431:91bf with SMTP id
- j3-20020a05600c42c300b003a6043191bfmr9014430wme.188.1661464751060; Thu, 25
- Aug 2022 14:59:11 -0700 (PDT)
+        bh=pZQ/2nHQhIrhPnU1bKwTlnrZA3djIkob/YiqxMhnkcg=;
+        b=Wi+Ra8EowbRGF+N2CS7c/RinDCH9gKFKVjLq0qYCmlnUOvNsmvzHHduECjMh4RMIUm
+         omqw60EnZZYd1o+KB233b+O69pDRPMHwFnObzx2pkUgf129MaU5xIjQB+Z2xJ9a5BBOe
+         dsbzanIPw2/V0hjniarSZFFF3FxK03LddzBUAeekOZd5fD78fmUASrDT7FGQknk5G0Ct
+         y85+BoY37OgwBQUJF7dH1u+3QRUDTyBGm23BGJ8jFLuAuyRg4D2VFWUzSDK/P6slLv9D
+         huDrVsFzNoc6nexRepf6BLUsQNq3WHr1fF2nUO/O6O57im0RgGP97j1RRyhpSt/uxqbv
+         x6jA==
+X-Gm-Message-State: ACgBeo191xYGasmbQTTMqxjRx9ZNu/XsMQuBQPU91Rn6LHK0w7mdgqzI
+        3trzSZIO7DWV5tU+mE/lZoEW+T7sWarZZ9upURzccw==
+X-Google-Smtp-Source: AA6agR6XGAhoPsEzWX90e7VRQZdeYxFMQQX4NeTgsf+duYJt3Y7B9gdEI/cnVtfnEfrD3kJVO1DJUXmAHc0T+c4Bkpw=
+X-Received: by 2002:a0c:b31a:0:b0:473:8062:b1b4 with SMTP id
+ s26-20020a0cb31a000000b004738062b1b4mr5569946qve.85.1661464847009; Thu, 25
+ Aug 2022 15:00:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825164205.4060647-1-dianders@chromium.org>
- <20220825094155.1.Id59c32b560c4662d8b3697de2bd494d08d654806@changeid> <20220825213053.5xxiljfjkhnpy53p@halaneylaptop>
-In-Reply-To: <20220825213053.5xxiljfjkhnpy53p@halaneylaptop>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 25 Aug 2022 14:58:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VPFvMoPvdYmdXAp+oEBDyNzuaTBNd=g4=+T=itiyVoAw@mail.gmail.com>
-Message-ID: <CAD=FV=VPFvMoPvdYmdXAp+oEBDyNzuaTBNd=g4=+T=itiyVoAw@mail.gmail.com>
-Subject: Re: [PATCH 1/7] arm64: dts: qcom: sa8155p-adp: Specify which LDO
- modes are allowed
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220825213905.1817722-1-haoluo@google.com> <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 25 Aug 2022 15:00:36 -0700
+Message-ID: <CA+khW7j-OZmr3ax03CwRvtyvEMYafaWPfkiwLRe2HQcPscWkug@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] Add CGROUP prefix to cgroup_iter_order
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,53 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Aug 25, 2022 at 2:31 PM Andrew Halaney <ahalaney@redhat.com> wrote:
+On Thu, Aug 25, 2022 at 2:56 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> On Thu, Aug 25, 2022 at 09:41:59AM -0700, Douglas Anderson wrote:
-> > This board uses RPMH, specifies "regulator-allow-set-load" for LDOs,
-> > but doesn't specify any modes with "regulator-allowed-modes".
+> On Thu, Aug 25, 2022 at 2:39 PM Hao Luo <haoluo@google.com> wrote:
 > >
-> > Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
-> > get_optimum_mode(), not set_load()") the above meant that we were able
-> > to set either LPM or HPM mode. After that commit (and fixes [1]) we'll
-> > be stuck at the initial mode. Discussion of this has resulted in the
-> > decision that the old dts files were wrong and should be fixed to
-> > fully restore old functionality.
-> >
-> > Let's re-enable the old functionality by fixing the dts.
-> >
-> > [1] https://lore.kernel.org/r/20220824142229.RFT.v2.2.I6f77860e5cd98bf5c67208fa9edda4a08847c304@changeid
-> >
-> > Fixes: 5b85e8f2225c ("arm64: dts: qcom: sa8155p-adp: Add base dts file")
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >  arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 13 ++++++++++++-
-> >  1 file changed, 12 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> > index ba547ca9fc6b..ddb9cb182152 100644
-> > --- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> > @@ -43,7 +43,6 @@ vreg_s4a_1p8: smps4 {
-> >
-> >               regulator-always-on;
-> >               regulator-boot-on;
-> > -             regulator-allow-set-load;
+> > As suggested by Andrii, add 'CGROUP' to cgroup_iter_order. This fix is
+> > divided into two patches. Patch 1/2 fixes the commit that introduced
+> > cgroup_iter. Patch 2/2 fixes the selftest that uses the
+> > cgroup_iter_order. This is because the selftest was introduced in a
 >
-> I could see this deserving its own commit or a line in the commit
-> message, but not a big deal to me:
+> but if you split rename into two patches, you break selftests build
+> and thus potentially bisectability of selftests regressions. So I
+> think you have to keep both in the same patch.
 >
-> Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+> With that:
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
 
-Ah right. I mentioned it in the cover letter but forgot to mention it
-in this commit message.
+Yeah. I wasn't sure what to do. Then we need bundle this fix with
+those two commits together. Will squash the commits into one and send
+a v2.
 
-I'll assume that this isn't a big deal but if Bjorn wants a quick spin
-with this mentioned in the commit message (or broken into a separate
-commit) then I can do so. I'll wait for direction before spinning,
-though.
-
--Doug
+> > different commit. I tested this patchset via the following command:
+> >
+> >   test_progs -t cgroup,iter,btf_dump
+> >
+> > Hao Luo (2):
+> >   bpf: Add CGROUP to cgroup_iter order
+> >   selftests/bpf: Fix test that uses cgroup_iter order
+> >
+> >  include/uapi/linux/bpf.h                      | 10 +++---
+> >  kernel/bpf/cgroup_iter.c                      | 32 +++++++++----------
+> >  tools/include/uapi/linux/bpf.h                | 10 +++---
+> >  .../selftests/bpf/prog_tests/btf_dump.c       |  2 +-
+> >  .../prog_tests/cgroup_hierarchical_stats.c    |  2 +-
+> >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 10 +++---
+> >  6 files changed, 33 insertions(+), 33 deletions(-)
+> >
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >

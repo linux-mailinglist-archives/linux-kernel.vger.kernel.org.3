@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A965A1525
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF0A5A1504
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242628AbiHYPED convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 Aug 2022 11:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
+        id S240847AbiHYPCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242832AbiHYPDp (ORCPT
+        with ESMTP id S233563AbiHYPCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:03:45 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5F4B7760
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:03:33 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-6-CLGAEFtmMmq-sFQCCbZ85g-1; Thu, 25 Aug 2022 16:03:04 +0100
-X-MC-Unique: CLGAEFtmMmq-sFQCCbZ85g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Thu, 25 Aug 2022 16:01:31 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Thu, 25 Aug 2022 16:01:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joseph Myers' <joseph@codesourcery.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Florian Weimer <fweimer@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Zack Weinberg" <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "Cyril Hrubis" <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: RE: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-Thread-Topic: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-Thread-Index: AQHYuJCLMClw4u4WnUme2jwTdxYRD62/tSSA
-Date:   Thu, 25 Aug 2022 15:01:31 +0000
-Message-ID: <5e10ac07e63e41639b3113d12c264447@AcuMS.aculab.com>
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com>
- <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
- <87ilmgddui.fsf@oldenburg.str.redhat.com>
- <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
- <alpine.DEB.2.22.394.2208251435370.104368@digraph.polyomino.org.uk>
-In-Reply-To: <alpine.DEB.2.22.394.2208251435370.104368@digraph.polyomino.org.uk>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 25 Aug 2022 11:02:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F75D0FA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:02:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71202615A7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3B8C433D6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661439734;
+        bh=wjzgRFEte1JYnIbn0TO9+w6aujcip3bCGZB7ym5Hwqc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HkRRkzc9iafdkf9TMuKnfqx+MEHwzecpp3cFlYHeVXNhCy0CydbQiOhMjHVpUe1oY
+         z8ppkiRKmmBFXy8f/xvVskAEuR1DQ1GbwTz1qoYisg/Y8P4wll3wAnJK/wKYTf0nXf
+         xsJRoaTa+1V6PkhjmQOey5EARkduy8bSNR2rHEEQDuXpbw3h2n92Z92JFsPqEHUa/0
+         1jKFsx0C/45mNLfBD0fpSBeWj375DsH5odKJKfTgMGAhCTSA93C0jFG1ptbeqrC8fr
+         N2BvGI2buJudq0B41JKkljHZXQK/DCwDHSvY+vz7rLCQM2dc+APZ8lGhH/E0tvXNZM
+         /qTPFWo3Z3XIw==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11c896b879bso25204863fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:02:14 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1nmPo8tBFEzQOtgfdXPJQowydHDr/vDG4etWwyLV0htAp0Uto5
+        R5nKSSm4DIy5DLdRyvOGEttjVxSI/u/oodP65g==
+X-Google-Smtp-Source: AA6agR70oWHotJ5zvAGB1qZOQksOWhU541/A7VrzrBgK6KvY/ErP5FdHQ4RJbVcMw2k+yzFchbHSwLv1yStFufhZmaA=
+X-Received: by 2002:a05:6870:4690:b0:11c:d599:4f41 with SMTP id
+ a16-20020a056870469000b0011cd5994f41mr5866261oap.69.1661439733913; Thu, 25
+ Aug 2022 08:02:13 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+References: <20220721172727.14624-1-angelogioacchino.delregno@collabora.com> <CAGXv+5H+BQcT=JTD3Y1necym=6uLHD8HgWpjjpyTLSin9D1KNA@mail.gmail.com>
+In-Reply-To: <CAGXv+5H+BQcT=JTD3Y1necym=6uLHD8HgWpjjpyTLSin9D1KNA@mail.gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Thu, 25 Aug 2022 23:01:54 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-KS8XTqcaNRpzc0xfO23KfdTy8Gx=yGtGWLQJEcgsWjw@mail.gmail.com>
+Message-ID: <CAAOTY_-KS8XTqcaNRpzc0xfO23KfdTy8Gx=yGtGWLQJEcgsWjw@mail.gmail.com>
+Subject: Re: [PATCH] drm/mediatek: dsi: Add atomic {destroy, duplicate}_state,
+ reset callbacks
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        xinlei.lee@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,28 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joseph Myers
-> Sent: 25 August 2022 15:39
-> 
-> On Thu, 25 Aug 2022, Linus Torvalds wrote:
-> 
-> > That's a small detail that yes, we've tried to avoid the absolute
-> > humongous mess that the C standard library has with their horrendous
-> > 'PRId*' mess, but honestly, it's just a tiny detail.
-> 
-> I've not yet implemented it for glibc or for GCC format checking, but C23
-> adds 'wN' format length modifiers so you will be able to e.g. use "%w64d"
-> with printf to print an int64_t and won't need those PRI macros any more.
+Chen-Yu Tsai <wenst@chromium.org> =E6=96=BC 2022=E5=B9=B48=E6=9C=8819=E6=97=
+=A5 =E9=80=B1=E4=BA=94 =E6=99=9A=E4=B8=8A9:29=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Fri, Jul 22, 2022 at 1:27 AM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+> >
+> > Add callbacks for atomic_destroy_state, atomic_duplicate_state and
+> > atomic_reset to restore functionality of the DSI driver: this solves
+> > vblank timeouts when another bridge is present in the chain.
+> >
+> > Tested bridge chain: DSI <=3D> ANX7625 =3D> aux-bus panel
+> >
 
-Is that meant to work regardless of whether the type is
-int, long or long long provided the size is correct?
+Applied to mediatek-drm-fixes [1], thanks.
 
-Or does it require the compiler know which type inttypes.h
-uses for uint32_t and uint64_t?
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-fixes
 
-	David
+Regards,
+Chun-Kuang.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> > Fixes: 7f6335c6a258 ("drm/mediatek: Modify dsi funcs to atomic operatio=
+ns")
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
+llabora.com>
+>
+> This patch is now needed on top of v6.0-rc1, otherwise booting will
+> stall for a while waiting for display vblank, which never happens
+> because the DSI pipeline is not configured correctly.
+>
+> ChenYu
+>
+> > ---
+> >
+> > Note: The commit that has been mentioned in the Fixes tag should
+> >       *not* have my Reviewed-by tag, as the author changed it but
+> >       erroneously retained the tag that I had released for an
+> >       earlier version of that commit (which was fine, but the new
+> >       version broke mtk_dsi!).
+> >
+> >  drivers/gpu/drm/mediatek/mtk_dsi.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/media=
+tek/mtk_dsi.c
+> > index 9cc406e1eee1..5b624e0f5b0a 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > @@ -808,10 +808,13 @@ static void mtk_dsi_bridge_atomic_post_disable(st=
+ruct drm_bridge *bridge,
+> >
+> >  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs =3D {
+> >         .attach =3D mtk_dsi_bridge_attach,
+> > +       .atomic_destroy_state =3D drm_atomic_helper_bridge_destroy_stat=
+e,
+> >         .atomic_disable =3D mtk_dsi_bridge_atomic_disable,
+> > +       .atomic_duplicate_state =3D drm_atomic_helper_bridge_duplicate_=
+state,
+> >         .atomic_enable =3D mtk_dsi_bridge_atomic_enable,
+> >         .atomic_pre_enable =3D mtk_dsi_bridge_atomic_pre_enable,
+> >         .atomic_post_disable =3D mtk_dsi_bridge_atomic_post_disable,
+> > +       .atomic_reset =3D drm_atomic_helper_bridge_reset,
+> >         .mode_set =3D mtk_dsi_bridge_mode_set,
+> >  };
+> >
+> > --
+> > 2.35.1
+> >

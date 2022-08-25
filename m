@@ -2,183 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7815A1710
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13495A16DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243116AbiHYQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S242536AbiHYQlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243117AbiHYQnE (ORCPT
+        with ESMTP id S234556AbiHYQlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:43:04 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6440EBB928
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:35 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso5663629pjr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=OtUK9OLMWdL6AUc3ZfpyXK1kgh1agdbXcj5hc+979G8=;
-        b=xHJiXgBT7PEkZdMevyBPSnrJlZZCDwl6ozciskiNf9lpSMP/BhlEA/uOVlntwEOMoP
-         8AsYSYGjz+lts4hRawuyJ6l6j1hjlPAVOBqnpGUKXbtEw9ZdqEkFmWYzCoRhk5hEVMqd
-         LookuDXfD+8p7qtuCBQ2Us57jbxcmrBlqm9sBNsMnW+PY5fnbQg7FmU8Pv54Ao1pZ+jO
-         Qlv7oV81DA9EYTvqlGNwLjuuhXOAJPyHxTpLFABwb7wAi1ZGz+PtCwoQyKk7qJ6TBCwf
-         YrTIDzukpS+oc/W+qzGWsltS5E3XkCXyR6vIOWTqg9xpCYf+3ygIVs+5KfRLmrQe7Qwx
-         altQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=OtUK9OLMWdL6AUc3ZfpyXK1kgh1agdbXcj5hc+979G8=;
-        b=EF5g+YnWAMzWHn2rcDXyDe7+SDI/NCvAMLitPzsWRsC3nL71vgorFmZ1gotOrD7Q5D
-         kzIC6qzN9mjO/1WDdsVZpHrjNsWIllBCeZc8Ewo79eh0IjQSs/JpSTVvPox47EWmgDch
-         y6xCGH46j/t6D+8nmEv2dLLkWR7Ppm0MGqImQQQtH/fj+EBKw5XaGBk8nhVQbmVCrYEk
-         8cvnOGXjs9HLkOyKR1d6hOVz3pvihxExCDY8HLA2XFUBMoAZn+FNKpd9qpxEhY8J16Tf
-         cNMXiXC0uKfFkLXtBSw/uZePIdLuKsQCJohToJQY/6yBCgo3tonRaHJePH7NeBDdnmQ/
-         YHXA==
-X-Gm-Message-State: ACgBeo1Xtd7CGwld6RKMckvjIkwuzJ/hmEVvUVicHcUvwxZDodnA1Xor
-        7HYqLQd6UfrgGbcAoNGsEBL1Ig==
-X-Google-Smtp-Source: AA6agR4gxE/7slArmuUtR05sZfHFLCh81St/simPA+TXbSjCOklqEF54v1qmnT+n3VjgviN6ahhCMg==
-X-Received: by 2002:a17:902:f70f:b0:171:2572:4f5e with SMTP id h15-20020a170902f70f00b0017125724f5emr4422269plo.40.1661445754247;
-        Thu, 25 Aug 2022 09:42:34 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id b18-20020a62a112000000b005362314bf80sm12779408pff.67.2022.08.25.09.42.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 09:42:33 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     hannes@cmpxchg.org, tj@kernel.org, mkoutny@suse.com,
-        surenb@google.com
-Cc:     mingo@redhat.com, peterz@infradead.org, gregkh@linuxfoundation.org,
-        corbet@lwn.net, cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v4 00/10] sched/psi: some optimizations and extensions
-Date:   Fri, 26 Aug 2022 00:41:01 +0800
-Message-Id: <20220825164111.29534-1-zhouchengming@bytedance.com>
+        Thu, 25 Aug 2022 12:41:07 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D9FBA9C0;
+        Thu, 25 Aug 2022 09:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661445662; x=1692981662;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6L5YW6wVIrpaazRx3sSRrkRPhSy6FbkOX5mt46QUY8A=;
+  b=QozEPdJvqeNiEkKxxbQ9SSQp4wiggD/7NpJ0MjUzopx77nJffSPvvbwD
+   5I7NFljkNBaRWNg/pkcCZ2QDNaYl0PBoZCvdTTeXS6zPE3+89DmokodEc
+   neoQSxn2MTyC4s8vsKql0eQv+brRTUFUGjeM/4QR7xOpXnL1b7hmfUytT
+   n6v5QXDTBRZ3R1KTu0CEx5KBKovcjh4wSkbZpd+fqZsSh5wbBOPeWuXa1
+   ldEgX6hmO7zddVrDY1121NlxRPjm1YqcweHDbdPzizOn49NcpFJXgFGeR
+   k6eHBkw2qaPfTPfozZ7azdIqnByz3atxdlFhSnGdc9oZkgFAL+nSNZ5NV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="274689067"
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="274689067"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:41:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="855701164"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 25 Aug 2022 09:41:00 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D2A5F238; Thu, 25 Aug 2022 19:41:14 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: [PATCH v1 3/5] ACPI: bus: Refactor acpi_bus_register_driver() to get rid of 'ret'
+Date:   Thu, 25 Aug 2022 19:41:01 +0300
+Message-Id: <20220825164103.27694-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220825164103.27694-1-andriy.shevchenko@linux.intel.com>
+References: <20220825164103.27694-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+There is no need to have 'ret' variable in acpi_bus_register_driver().
+Refactor it accordingly.
 
-This patch series are some optimizations and extensions for PSI.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/acpi/bus.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-patch 1/10 fix periodic aggregation shut off problem introduced by earlier
-commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups").
-
-patch 2-4 are some misc optimizations, so put them in front of this series.
-
-patch 5/10 optimize task switch inside shared cgroups when in_memstall status
-of prev task and next task are different.
-
-patch 6/10 remove NR_ONCPU task accounting to save 4 bytes in the first
-cacheline to be used by the following patch 7/10, which introduce new
-PSI resource PSI_IRQ to track IRQ/SOFTIRQ pressure stall information.
-
-patch 8-9 cache parent psi_group in struct psi_group to speed up the
-hot iteration path.
-
-patch 10/10 introduce a per-cgroup interface "cgroup.pressure" to disable
-or re-enable PSI in the cgroup level, and we implement hiding and unhiding
-the pressure files per Tejun's suggestion[1], which depends on his work[2].
-
-[1] https://lore.kernel.org/all/YvqjhqJQi2J8RG3X@slm.duckdns.org/
-[2] https://lore.kernel.org/all/20220820000550.367085-1-tj@kernel.org/
-
-Performance test using mmtests/config-scheduler-perfpipe in
-/user.slice/user-0.slice/session-4.scope:
-
-                                 next                patched       patched/only-leaf
-Min       Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
-1st-qrtle Time        8.90 (   0.00%)        8.58 (   3.63%)        8.05 (   9.58%)
-2nd-qrtle Time        8.94 (   0.00%)        8.61 (   3.65%)        8.09 (   9.50%)
-3rd-qrtle Time        8.99 (   0.00%)        8.65 (   3.75%)        8.15 (   9.35%)
-Max-1     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
-Max-5     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
-Max-10    Time        8.84 (   0.00%)        8.55 (   3.20%)        8.04 (   9.05%)
-Max-90    Time        9.04 (   0.00%)        8.67 (   4.10%)        8.18 (   9.51%)
-Max-95    Time        9.04 (   0.00%)        8.68 (   4.03%)        8.20 (   9.26%)
-Max-99    Time        9.07 (   0.00%)        8.73 (   3.82%)        8.25 (   9.11%)
-Max       Time        9.12 (   0.00%)        8.89 (   2.54%)        8.27 (   9.29%)
-Amean     Time        8.95 (   0.00%)        8.62 *   3.67%*        8.11 *   9.43%*
-
-Big thanks to Johannes Weiner, Tejun Heo and Michal Koutný for your
-suggestions and review!
-
-
-Changes in v4:
- - Collect Acked-by tags from Johannes Weiner.
- - Add many clear comments and changelogs per Johannes Weiner.
- - Replace for_each_psi_group() with better open-code.
- - Change to use better names cgroup_pressure_show() and
-   cgroup_pressure_write().
- - Change to use better name psi_cgroup_restart() and only
-   call it on enabling.
-
-Changes in v3:
- - Rebase on linux-next and reorder patches to put misc optimizations
-   patches in the front of this series.
- - Drop patch "sched/psi: don't change task psi_flags when migrate CPU/group"
-   since it caused a little performance regression and it's just
-   code refactoring, so drop it.
- - Don't define PSI_IRQ and PSI_IRQ_FULL when !CONFIG_IRQ_TIME_ACCOUNTING,
-   in which case they are not used.
- - Add patch 8/10 "sched/psi: consolidate cgroup_psi()" make cgroup_psi()
-   can handle all cgroups including root cgroup, make patch 9/10 simpler.
- - Rename interface to "cgroup.pressure" and add some explanation
-   per Michal's suggestion.
- - Hide and unhide pressure files when disable/re-enable cgroup PSI,
-   depends on Tejun's work.
-
-Changes in v2:
- - Add Acked-by tags from Johannes Weiner. Thanks for review!
- - Fix periodic aggregation wakeup for common ancestors in
-   psi_task_switch().
- - Add patch 7/10 from Johannes Weiner, which remove NR_ONCPU
-   task accounting to save 4 bytes in the first cacheline.
- - Remove "psi_irq=" kernel cmdline parameter in last version.
- - Add per-cgroup interface "cgroup.psi" to disable/re-enable
-   PSI stats accounting in the cgroup level.
-
-
-Chengming Zhou (9):
-  sched/psi: fix periodic aggregation shut off
-  sched/psi: don't create cgroup PSI files when psi_disabled
-  sched/psi: save percpu memory when !psi_cgroups_enabled
-  sched/psi: move private helpers to sched/stats.h
-  sched/psi: optimize task switch inside shared cgroups again
-  sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
-  sched/psi: consolidate cgroup_psi()
-  sched/psi: cache parent psi_group to speed up groups iterate
-  sched/psi: per-cgroup PSI accounting disable/re-enable interface
-
-Johannes Weiner (1):
-  sched/psi: remove NR_ONCPU task accounting
-
- Documentation/admin-guide/cgroup-v2.rst |  23 ++
- include/linux/cgroup-defs.h             |   3 +
- include/linux/cgroup.h                  |   5 -
- include/linux/psi.h                     |  12 +-
- include/linux/psi_types.h               |  29 ++-
- kernel/cgroup/cgroup.c                  | 106 ++++++++-
- kernel/sched/core.c                     |   1 +
- kernel/sched/psi.c                      | 280 +++++++++++++++++-------
- kernel/sched/stats.h                    |   6 +
- 9 files changed, 362 insertions(+), 103 deletions(-)
-
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index c4d63c594d68..607e664b7976 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -972,16 +972,14 @@ EXPORT_SYMBOL_GPL(acpi_driver_match_device);
+  */
+ int acpi_bus_register_driver(struct acpi_driver *driver)
+ {
+-	int ret;
+-
+ 	if (acpi_disabled)
+ 		return -ENODEV;
++
+ 	driver->drv.name = driver->name;
+ 	driver->drv.bus = &acpi_bus_type;
+ 	driver->drv.owner = driver->owner;
+ 
+-	ret = driver_register(&driver->drv);
+-	return ret;
++	return driver_register(&driver->drv);
+ }
+ 
+ EXPORT_SYMBOL(acpi_bus_register_driver);
 -- 
-2.37.2
+2.35.1
 

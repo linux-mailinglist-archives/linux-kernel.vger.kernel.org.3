@@ -2,82 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848A35A14E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5601C5A14E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242261AbiHYOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S233370AbiHYO4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbiHYOzX (ORCPT
+        with ESMTP id S239344AbiHYO4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:55:23 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE7CA4B17;
-        Thu, 25 Aug 2022 07:55:20 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1661439316t11j3pqy
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 Aug 2022 22:55:10 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: ao4JQgu0M3/UgU+YkHy4no6bR7xESP028SxaFxkre6iLl7c8DSbTIQiTX+vGr
-        9ogW7kBebPqytQIIdwXODqpdJe51v5wZMoY3IWX1+Kldkwq4A27WB/hDHEbdltI451D2NI3
-        XiU8UQHl8PGTg9rKYCb9hd4bvDIPW+nDI+fBS8njGxhoQkYb6nMXeN20xGGo/ACpy8/OBd2
-        kV7lLazhbm2MYA/9KEzawhWiJkMRIQ+3U+T4MYEMOqilNQkuj+Iltzfu9DNQXQi84KIqpnE
-        ZBo/iFiphBYvcPgQb4IL7gdr2juZy2AYw0mZT3grpu7eRnfGos0ko7hvh2Krcfd6JWmlyyw
-        ZUUhyv8dHtRgoqzXeJmnk4tDpHecAAUHBYyKgRy62coFI4vFvS+okkcnix+lNgbzAuwNqnV
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     tony@atomide.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] bus: ti-sysc: Fix double word in comments
-Date:   Thu, 25 Aug 2022 10:55:10 -0400
-Message-Id: <20220825145510.6549-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 25 Aug 2022 10:56:37 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAF495BA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:56:34 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id og21so2530590ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=3Zv43Q0L/JzyMH3BFd/bR1lebmOlOV0+mAys2DJf9EY=;
+        b=OlsCS2HDTccliQXBk8wqgsAc9wakEKKvKEnQivOBayL/+MtlqkfN8EpMrxQuIhV30L
+         LGPLyPujCxjcz6bhT6Bj83/MGUoroqrPBtnJliuz7ArsgSaXS/elTzxBVETgheEvlTbr
+         yO6DFqiwD5BJvnSlf1LLl6qtkVMtVa7BqFZYZJGD/vWe8/lQq0Jvx7Lgbcmntrej9Pd5
+         3QlE1oykr28VQW8teNjVeB+6R1mswEPWFAnv5CbCNrd7L7vkbExQOm24bIdzGudf0f7Z
+         h1WmSDuM2cn4ln0TZZpJT47VP9WZzvC/ust/cItcD3634Dsqp69NHq9GpWuDaDJzxsQs
+         I7YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=3Zv43Q0L/JzyMH3BFd/bR1lebmOlOV0+mAys2DJf9EY=;
+        b=eFdnB/QsDGzmqaCpL/x1zbP/uJQacVpcKOe7MO3YPR/pMfKLr83FV5fu7t8PwmM1/i
+         TiaO1pmYi/AgRtmG6OcWEwbzfyJTgd+WYSE+8tzyuR/f8Ud0Nf7vPr/u8N045xjl3FoJ
+         MIDPM9UcQEkyOCGO5WTvfOmvIwAovqkIFRElSYSJ4UHZzTyoNGwLeMil9vq63lCqjEge
+         7IyDRDcjM+jvcQItVj96ZBbW/UqbW2BPelPPSMRcN7XMJn0cNCBJivChQ7MhsBjtTco3
+         bEACC1TPYGvS3ybsQd/urQHiLb9bBr/sDcPmMV4biz34imkAS7dc5Pq1mKql1CW24QqQ
+         M8/Q==
+X-Gm-Message-State: ACgBeo3qMtWG1bCbi0Pu8yHnkakqsD5qEwKHlLHowef6bh9UHwjtChVz
+        EuOlwaph9IWRCqt0tRcyT0VP0pb59C23zA==
+X-Google-Smtp-Source: AA6agR6xWvdKd0xd5MPQKrRUO/aErozSSEiPpKVZRtUS78OaSQQlZarFDE870qHcDiWgDbFgZpDI/g==
+X-Received: by 2002:a17:907:2cd8:b0:73d:8af4:e0ba with SMTP id hg24-20020a1709072cd800b0073d8af4e0bamr2845769ejc.586.1661439392729;
+        Thu, 25 Aug 2022 07:56:32 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b0073d6cfdc44dsm2561049ejm.115.2022.08.25.07.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 07:56:32 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>, kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2] smpboot: Use atomic_try_cmpxchg in cpu_wait_death and cpu_report_death
+Date:   Thu, 25 Aug 2022 16:56:03 +0200
+Message-Id: <20220825145603.5811-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the repeated word "the" in line 918.
+Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
+in cpu_wait_death and cpu_report_death. x86 CMPXCHG instruction returns
+success in ZF flag, so this change saves a compare after cmpxchg
+(and related move instruction in front of cmpxchg).
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+Also, atomic_try_cmpxchg implicitly assigns old *ptr value to "old"
+when cmpxchg fails, enabling further code simplifications.
+
+No functional change intended.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 ---
- drivers/bus/ti-sysc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v1:
+- Fix uninitialized variable in case cpu dies early.
+---
+ kernel/smpboot.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index 51d772bb8046..2386e8013e18 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -915,7 +915,7 @@ static int sysc_check_registers(struct sysc *ddata)
-  * within the interconnect target module range. For example, SGX has
-  * them at offset 0x1fc00 in the 32MB module address space. And cpsw
-  * has them at offset 0x1200 in the CPSW_WR child. Usually the
-- * the interconnect target module registers are at the beginning of
-+ * interconnect target module registers are at the beginning of
-  * the module range though.
-  */
- static int sysc_ioremap(struct sysc *ddata)
+diff --git a/kernel/smpboot.c b/kernel/smpboot.c
+index b9f54544e749..2c7396da470c 100644
+--- a/kernel/smpboot.c
++++ b/kernel/smpboot.c
+@@ -433,7 +433,7 @@ bool cpu_wait_death(unsigned int cpu, int seconds)
+ 
+ 	/* The outgoing CPU will normally get done quite quickly. */
+ 	if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
+-		goto update_state;
++		goto update_state_early;
+ 	udelay(5);
+ 
+ 	/* But if the outgoing CPU dawdles, wait increasingly long times. */
+@@ -444,16 +444,17 @@ bool cpu_wait_death(unsigned int cpu, int seconds)
+ 			break;
+ 		sleep_jf = DIV_ROUND_UP(sleep_jf * 11, 10);
+ 	}
+-update_state:
++update_state_early:
+ 	oldstate = atomic_read(&per_cpu(cpu_hotplug_state, cpu));
++update_state:
+ 	if (oldstate == CPU_DEAD) {
+ 		/* Outgoing CPU died normally, update state. */
+ 		smp_mb(); /* atomic_read() before update. */
+ 		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_POST_DEAD);
+ 	} else {
+ 		/* Outgoing CPU still hasn't died, set state accordingly. */
+-		if (atomic_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
+-				   oldstate, CPU_BROKEN) != oldstate)
++		if (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
++					&oldstate, CPU_BROKEN))
+ 			goto update_state;
+ 		ret = false;
+ 	}
+@@ -475,14 +476,14 @@ bool cpu_report_death(void)
+ 	int newstate;
+ 	int cpu = smp_processor_id();
+ 
++	oldstate = atomic_read(&per_cpu(cpu_hotplug_state, cpu));
+ 	do {
+-		oldstate = atomic_read(&per_cpu(cpu_hotplug_state, cpu));
+ 		if (oldstate != CPU_BROKEN)
+ 			newstate = CPU_DEAD;
+ 		else
+ 			newstate = CPU_DEAD_FROZEN;
+-	} while (atomic_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
+-				oldstate, newstate) != oldstate);
++	} while (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
++				     &oldstate, newstate));
+ 	return newstate == CPU_DEAD;
+ }
+ 
 -- 
-2.35.1
+2.37.1
 

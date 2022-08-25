@@ -2,140 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DB85A1BBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E178E5A1BB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244142AbiHYVya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
+        id S244042AbiHYVyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244099AbiHYVyZ (ORCPT
+        with ESMTP id S244035AbiHYVyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:54:25 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85F39E11A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:54:20 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id og21so4538304ejc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:54:20 -0700 (PDT)
+        Thu, 25 Aug 2022 17:54:15 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD3E6171D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:54:15 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 142so1979442pfu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LL7WsDHbFm5E+eXFntbV7YAH3fSJ/uBWE2CxgYTPVj4=;
-        b=H+RsnqVaIXkUild8vuZkOvOlcglKNftG6coYigDxEsYP6mD1FHEmQt2p9v1se5g6CW
-         gID96igO0YRsUG8XVCnS34RTQZMRCdVbyKVDiGFMRH8RuQzY6APzQ5Ik7akW9J9n7x5r
-         HxZokq5AaOzjYNLYiCVZjX9P/x7xEX5JYiaYY=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=/OleIMSx66/JnsrCZ+jjXELawCc210iRROOPmY8je7c=;
+        b=ONLRvHC6F9s2T6D3i95ao0TYmeZs9wPZNQ3rGerJswWz4uJNCFcXBLY1WUq7nuXfXn
+         wFcVgzzTllbGoJSdLThvdnMbzaqGRrbeo7Whjbo8hOp5WA3kbRErgDAdctjtG0bMaMnM
+         WBJiagagl112SbXF59ZvlhQX6p7nBRWHipst+ygmIrEKEgiJmjkuCAbzxn69++GGoQRb
+         UZ4TwUqblcJiO9TB2Cx8GB54RQCp8bV7SMDnvixUREIF70dwBNJpZ1+k1NqmpBnQyF7l
+         PNVOYzbAW23QVgD2LpPp4sm7fSXHgILq0wyHIumLc36frz21AWG1xGvgKEVe0MNebVCV
+         y5JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LL7WsDHbFm5E+eXFntbV7YAH3fSJ/uBWE2CxgYTPVj4=;
-        b=6dzrMUM7cd8bw0B0t9aSSgiupSgXJ7VjZ+m/Rvr37OtpwQHAvbiCJMbwPkhdlbGDuS
-         cGolpDWQLpf/+lqRF5C9LCFHBSiD6MpClRwd85TumtY6Iui4EhrFxIy3g8Cf/U+14KdK
-         NVpA0DWWvIU5Ha6297P6A9FnV1bnj+aDhlFCnewtPVqj70Ry2Xl8kRZA/4TsoF1GRj/8
-         BzhJGTRfuKzxKLZrHN0DQWVl900zyXzhJx5uweWORd29FSwydi5IeK1YGn5Y1bv0eJOC
-         qd1M0g1qrHeQsghPusrp/N8UfN0UABSppKGa9Lr5LIVzofNCGUacNSGMK+yyJNVWhb3e
-         Ctyg==
-X-Gm-Message-State: ACgBeo15xJaAsVa7zk+ylVtgZ6Sw6qudsyRNM2WA/7QiyX+npJtssZj9
-        SBc7ceuEuLJqP2EUrTAmJ8zCcQU8F6d06HbGUFc=
-X-Google-Smtp-Source: AA6agR5qqqH8LnXpWVtvVvQfgyP2ByjU0L5LPFLFs9UJ1OkMtHsjI7QZOHxlWw79WV9RWnMbjlThzA==
-X-Received: by 2002:a17:906:846f:b0:73d:710b:357e with SMTP id hx15-20020a170906846f00b0073d710b357emr3759454ejc.103.1661464458624;
-        Thu, 25 Aug 2022 14:54:18 -0700 (PDT)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id bc17-20020a056402205100b00445e1489313sm283717edb.94.2022.08.25.14.54.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 14:54:18 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so3181264wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:54:17 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ece:b0:3a6:28:bc59 with SMTP id
- g14-20020a05600c4ece00b003a60028bc59mr9253819wmq.154.1661464457383; Thu, 25
- Aug 2022 14:54:17 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=/OleIMSx66/JnsrCZ+jjXELawCc210iRROOPmY8je7c=;
+        b=V9GfTe+MzcG41UAsIpTcFZiDJs5Kq88kTp6pTYMQZuk4+cQ0WaQmXV4moRe24qk7Lb
+         EvQG3CW1k2mCz18cyxxw7dR//CjtWYsTGTZTOxmOLnrZqfxLLSKqmNy0jfrpTJ3vUVgH
+         4CGR+LSruW2wGnofIonNUkDyIM+BXbKlwP01u5tRp8thofl9dEGhKgh5jgeI1LDsbK2a
+         W1uTGHGXibIIPob4UsUUTv4xa93etN8vsIzyZ3nk1jSMGxkZFWghpjyflwacsOxv8pG3
+         XNi/XzgzO9NpuelEO5ZJ0IOYR9awI46fosahEsCn+UZ0oyJMOaCtO/612sV1QQUBUYI+
+         kp2w==
+X-Gm-Message-State: ACgBeo0z39KCtdM7LxVxr9kwvcFYE11jbX8i8YmupaDZUYPRbawsZqx9
+        AopvQnpguX9GhJGCyW4QfTHNGw==
+X-Google-Smtp-Source: AA6agR5cAdfVNLb7YOFQrie40e2QNLOCPOAnbBnU/8yFbCKQTaCITCzmT9yfS3FBawNlOJ0rBrwIMw==
+X-Received: by 2002:a65:4c48:0:b0:42b:508f:f48 with SMTP id l8-20020a654c48000000b0042b508f0f48mr852060pgr.437.1661464454571;
+        Thu, 25 Aug 2022 14:54:14 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t9-20020a17090a1c8900b001f8aee0d826sm196610pjt.53.2022.08.25.14.54.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 14:54:14 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 21:54:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com,
+        linux-kernel@vger.kernel.org, yang.zhong@intel.com
+Subject: Re: [RFC PATCH 1/2] KVM: x86: Add a new system attribute for dynamic
+ XSTATE component
+Message-ID: <YwfvgsNTz33dlwKP@google.com>
+References: <20220823231402.7839-1-chang.seok.bae@intel.com>
+ <20220823231402.7839-2-chang.seok.bae@intel.com>
+ <YwabSPpC1G9J+aRA@google.com>
+ <08e59f2d-24cb-dca8-b1b8-9e80f8a85398@intel.com>
+ <YwehLNws0WBNRDgN@google.com>
+ <e52f26d4-c52a-e20d-7bc0-663bb4979827@intel.com>
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
- <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com> <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 Aug 2022 14:54:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
-Message-ID: <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e52f26d4-c52a-e20d-7bc0-663bb4979827@intel.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 2:03 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
->
-> Here I reworked your patch, so that test_bit_acquire is defined just like
-> test_bit. There's some code duplication (in
-> include/asm-generic/bitops/generic-non-atomic.h and in
-> arch/x86/include/asm/bitops.h), but that duplication exists in the
-> test_bit function too.
+On Thu, Aug 25, 2022, Chang S. Bae wrote:
+> On 8/25/2022 9:19 AM, Sean Christopherson wrote:
+> > 
+> > Adding new uAPI and new exports to eliminate one line of userspace code is not a
+> > good tradeoff.  Am I missing something?  This really seems like solution looking
+> > for a problem.
+> 
+> Well, then that's your call.
+> 
+> Yeah, that simplification is really minor. With this, I would rather think
+> KVM wants enforcement before relaying the request to the host. That
+> enforcement is unthinkable without supported_xcr0.
 
-This looks fine to me, and I like how you fixed up buffer_uptodate()
-while at it.
+My point is that KVM needs supported_xcr0 (or similar behavior) regardless of
+whether or not the kernel further restricts feature usage.
 
-> I tested it on x86-64 and arm64. On x86-64 it generates the "bt"
-> instruction for variable-bit test and "shr; and $1" for constant bit test.
-
-That shr/and is almost certainly pessimal for small constant values at
-least, and it's better done as "movq %rax" followed by "test %rax".
-But I guess it depends on the bit value (and thus the constant size).
-
-Doing a "testb $imm8" would likely be optimal, but you'll never get
-that with smp_load_acquire() on x86 unless you use inline asm, because
-of how we're doing it with a volatile pointer.
-
-Anyway, you could try something like this:
-
-  static __always_inline bool constant_test_bit(long nr, const
-volatile unsigned long *addr)
-  {
-        bool oldbit;
-
-        asm volatile("testb %2,%1"
-                     CC_SET(nz)
-                     : CC_OUT(nz) (oldbit)
-                     : "m" (((unsigned char *)addr)[nr >> 3]),
-                       "Ir" (1 << (nr & 7))
-                      :"memory");
-        return oldbit;
-  }
-
-for both the regular test_bit() and for the acquire (since all loads
-are acquires on x86, and using an asm basically forces a memory load
-so it just does that "volatile" part.
-
-But that's a separate optimization and independent of the acquire thing.
-
-> For me, the kernel 6.0-rc2 doesn't boot in an arm64 virtual machine at all
-> (with or without this patch), so I only compile-tested it on arm64. I have
-> to bisect it.
-
-Hmm. I'm running it on real arm64 hardware (rc2+ - not your patch), so
-I wonder what's up..
-
-               Linus
+> But it looks like userspace is somehow trusted here for KVM.

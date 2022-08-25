@@ -2,233 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAF65A13AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B4B5A13AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241306AbiHYOcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S241695AbiHYOdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbiHYOcv (ORCPT
+        with ESMTP id S240474AbiHYOdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:32:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E9294EFF;
-        Thu, 25 Aug 2022 07:32:49 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2405:201:10:389d:42df:ae4c:c047:294c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 25 Aug 2022 10:33:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E458991096
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661437997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HAu4rC9CyeyNudYPR+y9tR4vVDLBYqDeDne8QlTGLbM=;
+        b=eX6J7vGC97jvonQRvB7DQVVbDYyZ3ipVlvUW74CtHdyMCSjI32aETRvkRDBGET8Pa5cg8r
+        sGp3oWdIaWELcVCLu9zAdLHzFdSaKQk02gDmVHcdVA0JtzQVpieDMkoZ2LVU84NRF3m+6O
+        S+TZ6lLA5YehNg4HYqxVHxCNjUpHQQE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-170-ryT9HQ2ANxCKwMP8lBcWpw-1; Thu, 25 Aug 2022 10:33:15 -0400
+X-MC-Unique: ryT9HQ2ANxCKwMP8lBcWpw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: shreeya)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 67D856601EA9;
-        Thu, 25 Aug 2022 15:32:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661437968;
-        bh=Y9SjdJG5J63agm4sjy+P+kvqcdgWKcX17U8CidZiIY8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jYfOV3XsDJKYBXGgRmSJujA3l5+fcIC5NDiXwSI9jkFPkqROXufCriFpuqKpkKBN7
-         n16NUfxYfOTLQ9I28KSWSx9okShtcMACN2eGBDoS5sZlZl1hreF83VPV8oOw3FL0Zl
-         uXYM5HDT8lIHOp+FK/JEIqRgd3nzj3xDPFCnoLD0jGbI4V5C7YfagGGRj5JIMLijWV
-         Pd/v7IWvayHJIryaB+rn6DU1NDwMc/iHsriSZ0MRrahqeFeiZ93fU5cnhhBCLMFLTX
-         wJRi/2r+RsL03VRddHN//p1RNpVmd18rKlSHNvjsBfC5xi/U7NCJZ8c12sKvZRLezz
-         VWOqeJiDqRZ7g==
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-To:     broonie@kernel.org, sanju.mehta@amd.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, krisman@collabora.com,
-        alvaro.soliverez@collabora.com, tanureal@opensource.cirrus.com,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH v3] spi: amd: Configure device speed
-Date:   Thu, 25 Aug 2022 20:01:32 +0530
-Message-Id: <20220825143132.253224-1-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45CA218A01D5;
+        Thu, 25 Aug 2022 14:33:03 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.192.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7CC50492CA5;
+        Thu, 25 Aug 2022 14:32:59 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Feiner <pfeiner@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Cyrill Gorcunov <gorcunov@openvz.org>,
+        Pavel Emelyanov <xemul@parallels.com>,
+        Jamie Liu <jamieliu@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH 4.9-stable -- 5.19-stable] mm/hugetlb: fix hugetlb not supporting softdirty tracking
+Date:   Thu, 25 Aug 2022 16:32:58 +0200
+Message-Id: <20220825143258.36151-1-david@redhat.com>
+In-Reply-To: <1661424546448@kroah.com>
+References: <1661424546448@kroah.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanureal@opensource.cirrus.com>
+commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
 
-Number of clock frequencies are supported by AMD controller
-which are mentioned in the amd_spi_freq structure table.
+Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
 
-Create mechanism to configure device clock frequency such
-that it is strictly less than the requested frequency.
+I observed that hugetlb does not support/expect write-faults in shared
+mappings that would have to map the R/O-mapped page writable -- and I
+found two case where we could currently get such faults and would
+erroneously map an anon page into a shared mapping.
 
-Give priority to the device transfer speed and in case
-it is not set then use the max clock speed supported
-by the device.
+Reproducers part of the patches.
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
----
+I propose to backport both fixes to stable trees.  The first fix needs a
+small adjustment.
 
-Changes in v3
-  - Make changes as per the current code and resend.
+This patch (of 2):
 
-Changes in v2
-  - Improve the commit message.
+Staring at hugetlb_wp(), one might wonder where all the logic for shared
+mappings is when stumbling over a write-protected page in a shared
+mapping.  In fact, there is none, and so far we thought we could get away
+with that because e.g., mprotect() should always do the right thing and
+map all pages directly writable.
 
- drivers/spi/spi-amd.c | 97 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+Looks like we were wrong:
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index b3b3f5167c4c..264633c5ce0b 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -36,6 +36,18 @@
- #define AMD_SPI_FIFO_SIZE	70
- #define AMD_SPI_MEM_SIZE	200
- 
-+#define AMD_SPI_ENA_REG		0x20
-+#define AMD_SPI_ALT_SPD_SHIFT	20
-+#define AMD_SPI_ALT_SPD_MASK	GENMASK(23, AMD_SPI_ALT_SPD_SHIFT)
-+#define AMD_SPI_SPI100_SHIFT	0
-+#define AMD_SPI_SPI100_MASK	GENMASK(AMD_SPI_SPI100_SHIFT, AMD_SPI_SPI100_SHIFT)
-+#define AMD_SPI_SPEED_REG	0x6C
-+#define AMD_SPI_SPD7_SHIFT	8
-+#define AMD_SPI_SPD7_MASK	GENMASK(13, AMD_SPI_SPD7_SHIFT)
-+
-+#define AMD_SPI_MAX_HZ		100000000
-+#define AMD_SPI_MIN_HZ		800000
-+
- /**
-  * enum amd_spi_versions - SPI controller versions
-  * @AMD_SPI_V1:		AMDI0061 hardware version
-@@ -46,14 +58,41 @@ enum amd_spi_versions {
- 	AMD_SPI_V2,
- };
- 
-+enum amd_spi_speed {
-+	F_66_66MHz,
-+	F_33_33MHz,
-+	F_22_22MHz,
-+	F_16_66MHz,
-+	F_100MHz,
-+	F_800KHz,
-+	SPI_SPD7,
-+	F_50MHz = 0x4,
-+	F_4MHz = 0x32,
-+	F_3_17MHz = 0x3F
-+};
-+
-+/**
-+ * struct amd_spi_freq - Matches device speed with values to write in regs
-+ * @speed_hz: Device frequency
-+ * @enable_val: Value to be written to "enable register"
-+ * @spd7_val: Some frequencies requires to have a value written at SPISPEED register
-+ */
-+struct amd_spi_freq {
-+	u32 speed_hz;
-+	u32 enable_val;
-+	u32 spd7_val;
-+};
-+
- /**
-  * struct amd_spi - SPI driver instance
-  * @io_remap_addr:	Start address of the SPI controller registers
-  * @version:		SPI controller hardware version
-+ * @speed_hz:		Device frequency
-  */
- struct amd_spi {
- 	void __iomem *io_remap_addr;
- 	enum amd_spi_versions version;
-+	unsigned int speed_hz;
- };
- 
- static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
-@@ -185,11 +224,62 @@ static int amd_spi_master_setup(struct spi_device *spi)
- 	return 0;
- }
- 
-+static const struct amd_spi_freq amd_spi_freq[] = {
-+	{ AMD_SPI_MAX_HZ,   F_100MHz,         0},
-+	{       66660000, F_66_66MHz,         0},
-+	{       50000000,   SPI_SPD7,   F_50MHz},
-+	{       33330000, F_33_33MHz,         0},
-+	{       22220000, F_22_22MHz,         0},
-+	{       16660000, F_16_66MHz,         0},
-+	{        4000000,   SPI_SPD7,    F_4MHz},
-+	{        3170000,   SPI_SPD7, F_3_17MHz},
-+	{ AMD_SPI_MIN_HZ,   F_800KHz,         0},
-+};
-+
-+static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
-+{
-+	unsigned int i, spd7_val, alt_spd;
-+
-+	if (speed_hz == amd_spi->speed_hz)
-+		return 0;
-+
-+	if (speed_hz < AMD_SPI_MIN_HZ)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(amd_spi_freq); i++)
-+		if (speed_hz >= amd_spi_freq[i].speed_hz)
-+			break;
-+
-+	if (speed_hz == amd_spi_freq[i].speed_hz)
-+		return 0;
-+
-+	amd_spi->speed_hz = amd_spi_freq[i].speed_hz;
-+
-+	alt_spd = (amd_spi_freq[i].enable_val << AMD_SPI_ALT_SPD_SHIFT)
-+		   & AMD_SPI_ALT_SPD_MASK;
-+	amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, alt_spd,
-+			       AMD_SPI_ALT_SPD_MASK);
-+
-+	if (amd_spi->speed_hz == AMD_SPI_MAX_HZ)
-+		amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, 1,
-+				       AMD_SPI_SPI100_MASK);
-+
-+	if (amd_spi_freq[i].spd7_val) {
-+		spd7_val = (amd_spi_freq[i].spd7_val << AMD_SPI_SPD7_SHIFT)
-+			    & AMD_SPI_SPD7_MASK;
-+		amd_spi_setclear_reg32(amd_spi, AMD_SPI_SPEED_REG, spd7_val,
-+				       AMD_SPI_SPD7_MASK);
-+	}
-+
-+	return 0;
-+}
-+
- static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
- 				    struct spi_master *master,
- 				    struct spi_message *message)
+--------------------------------------------------------------------------
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <errno.h>
+ #include <sys/mman.h>
+
+ #define HUGETLB_SIZE (2 * 1024 * 1024u)
+
+ static void clear_softdirty(void)
  {
- 	struct spi_transfer *xfer = NULL;
-+	struct spi_device *spi = message->spi;
- 	u8 cmd_opcode = 0, fifo_pos = AMD_SPI_FIFO_BASE;
- 	u8 *buf = NULL;
- 	u32 i = 0;
-@@ -197,6 +287,11 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+         int fd = open("/proc/self/clear_refs", O_WRONLY);
+         const char *ctrl = "4";
+         int ret;
+
+         if (fd < 0) {
+                 fprintf(stderr, "open(clear_refs) failed\n");
+                 exit(1);
+         }
+         ret = write(fd, ctrl, strlen(ctrl));
+         if (ret != strlen(ctrl)) {
+                 fprintf(stderr, "write(clear_refs) failed\n");
+                 exit(1);
+         }
+         close(fd);
+ }
+
+ int main(int argc, char **argv)
+ {
+         char *map;
+         int fd;
+
+         fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
+         if (!fd) {
+                 fprintf(stderr, "open() failed\n");
+                 return -errno;
+         }
+         if (ftruncate(fd, HUGETLB_SIZE)) {
+                 fprintf(stderr, "ftruncate() failed\n");
+                 return -errno;
+         }
+
+         map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+         if (map == MAP_FAILED) {
+                 fprintf(stderr, "mmap() failed\n");
+                 return -errno;
+         }
+
+         *map = 0;
+
+         if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
+                 fprintf(stderr, "mmprotect() failed\n");
+                 return -errno;
+         }
+
+         clear_softdirty();
+
+         if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
+                 fprintf(stderr, "mmprotect() failed\n");
+                 return -errno;
+         }
+
+         *map = 0;
+
+         return 0;
+ }
+--------------------------------------------------------------------------
+
+Above test fails with SIGBUS when there is only a single free hugetlb page.
+ # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+ # ./test
+ Bus error (core dumped)
+
+And worse, with sufficient free hugetlb pages it will map an anonymous page
+into a shared mapping, for example, messing up accounting during unmap
+and breaking MAP_SHARED semantics:
+ # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+ # ./test
+ # cat /proc/meminfo | grep HugePages_
+ HugePages_Total:       2
+ HugePages_Free:        1
+ HugePages_Rsvd:    18446744073709551615
+ HugePages_Surp:        0
+
+Reason in this particular case is that vma_wants_writenotify() will
+return "true", removing VM_SHARED in vma_set_page_prot() to map pages
+write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
+support softdirty tracking.
+
+Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
+Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
+Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
+Signed-off-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Peter Feiner <pfeiner@google.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Cyrill Gorcunov <gorcunov@openvz.org>
+Cc: Pavel Emelyanov <xemul@parallels.com>
+Cc: Jamie Liu <jamieliu@google.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Muchun Song <songmuchun@bytedance.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: <stable@vger.kernel.org>	[3.18+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ mm/mmap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 7c59ec73acc3..3b284b091bb7 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1693,8 +1693,12 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+ 	    pgprot_val(vm_pgprot_modify(vm_page_prot, vm_flags)))
+ 		return 0;
  
- 	list_for_each_entry(xfer, &message->transfers,
- 			    transfer_list) {
-+		if (xfer->speed_hz)
-+			amd_set_spi_freq(amd_spi, xfer->speed_hz);
-+		else
-+			amd_set_spi_freq(amd_spi, spi->max_speed_hz);
-+
- 		if (xfer->tx_buf) {
- 			buf = (u8 *)xfer->tx_buf;
- 			if (!tx_len) {
-@@ -313,6 +408,8 @@ static int amd_spi_probe(struct platform_device *pdev)
- 	master->num_chipselect = 4;
- 	master->mode_bits = 0;
- 	master->flags = SPI_MASTER_HALF_DUPLEX;
-+	master->max_speed_hz = AMD_SPI_MAX_HZ;
-+	master->min_speed_hz = AMD_SPI_MIN_HZ;
- 	master->setup = amd_spi_master_setup;
- 	master->transfer_one_message = amd_spi_master_transfer;
- 	master->max_transfer_size = amd_spi_max_transfer_size;
+-	/* Do we need to track softdirty? */
+-	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
++	/*
++	 * Do we need to track softdirty? hugetlb does not support softdirty
++	 * tracking yet.
++	 */
++	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY) &&
++	    !is_vm_hugetlb_page(vma))
+ 		return 1;
+ 
+ 	/* Specialty mapping? */
 -- 
-2.30.2
+2.37.1
 

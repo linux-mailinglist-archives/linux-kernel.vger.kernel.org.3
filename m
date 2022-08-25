@@ -2,64 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11F55A1626
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBE15A1629
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241859AbiHYPxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S242650AbiHYPzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242057AbiHYPxS (ORCPT
+        with ESMTP id S229560AbiHYPzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:53:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CB15FAEE;
-        Thu, 25 Aug 2022 08:53:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C24F261AE3;
-        Thu, 25 Aug 2022 15:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE96C433C1;
-        Thu, 25 Aug 2022 15:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661442797;
-        bh=lcl0vFTidpVdCOlQ3D9Yl/rRaZDjfQugFVAoRUqha8k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Jqxe7QUENdxC+gytu3TxThwit/EfLlQHnkccRGNLQOZ6PBe1Toqe3uco3h1/mcfeu
-         YyeiIVp5qWt4PUc4ibtQQwt6B5FP+PzOYIa3TQ0PC25SeAtoF/n6BqPpbXXVK4ZPYE
-         ytlxYISoDfQTnD54yCUswWcuS7kc/7dyJ7hNjQeSaNgJI564jpdxqyaCHay+0I4yJM
-         fqLdq1V+5p/mJIltMaki/RYaSbCzX88DnByrbVGWCdCa+DbArKCjxqsmIKbPcNhxSQ
-         48V/tM3s/ni3SQu9ID7dP5qE7ndI3KEdhK1Qppe3g3eW0cHvK5E5ae9o2yC2XqM797
-         GjyVnppzbeZiw==
-Received: by mail-vs1-f50.google.com with SMTP id q67so12593844vsa.1;
-        Thu, 25 Aug 2022 08:53:17 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0c5PfozBX9B7FsSqoby45WPGX9TjAIH+jM5V3/UheDjgyOseCy
-        RwVfqjIiQ3Ndw4sHC9WPIBbGxQthS8WuXc9F7A==
-X-Google-Smtp-Source: AA6agR5wMPz3vGOLHjIiEsWE1bPB5gczSr90xEz4RUDpYOFrP7ZdunCI0sCZKIwnTvt0ascTgcJfmkWLr4e/phRUu8k=
-X-Received: by 2002:a67:c09c:0:b0:390:9073:1122 with SMTP id
- x28-20020a67c09c000000b0039090731122mr1785643vsi.85.1661442796213; Thu, 25
- Aug 2022 08:53:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
- <20220407154338.4190674-14-p.zabel@pengutronix.de> <Yk9DtXO/yUIO45gN@robh.at.kernel.org>
- <BY5PR12MB55444E24360883E7AD731E77C6C29@BY5PR12MB5544.namprd12.prod.outlook.com>
-In-Reply-To: <BY5PR12MB55444E24360883E7AD731E77C6C29@BY5PR12MB5544.namprd12.prod.outlook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 25 Aug 2022 10:53:05 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+g=oXz+j-D_xpMuiaumM5akKpJcdhm8LgRhuE0Uf1_bQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+g=oXz+j-D_xpMuiaumM5akKpJcdhm8LgRhuE0Uf1_bQ@mail.gmail.com>
-Subject: Re: [PATCH 14/14] dt-bindings: reset: Convert to yaml
-To:     Stephen Warren <swarren@nvidia.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thu, 25 Aug 2022 11:55:15 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF499AFBD
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:55:14 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7263B5809BC;
+        Thu, 25 Aug 2022 11:55:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 25 Aug 2022 11:55:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661442911; x=1661450111; bh=tqptnFbA7h
+        c7h/4TDLxF1PP/YGhchwUmCeAxXxdoHRo=; b=RFffi5cPCoCoz36n0Z8bN6eFVo
+        0sldhf8QeuR3gcVvDvDA14WK7m4PCGogEN5hgOGNhMxp86aHJmN5QCxoI6JEhCbF
+        SnB2daum5piCYP9HFE0Sk47iUU1dDYq//YjNQ1YzbKqsUgYdvCJfpJ8055ay/Zoy
+        FMOQIFumgNUTa9nWhOrV6SrtiQk6Vx/wi1GE+0qlZ72ReSlAXTkUCsNMzngMBrIu
+        cQbZV5YxB9MegL+jACYJqF8sbi9DrBrZ7Fqp6Mnigl3BL5c9bw0cXZ6XUZDK0Igc
+        d8M18gBNErH4jzQ0A0iITF6KOd+qvh7IhYLUrastuhlkXfXPkbAaIGAu91kA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661442911; x=1661450111; bh=tqptnFbA7hc7h/4TDLxF1PP/YGhc
+        hwUmCeAxXxdoHRo=; b=E8A8tVJzDj9pu9GbygbxuEQP8MB41DMI91z2ueoX8nBy
+        zySUgxlsfCZSiTrHU5+aI3u6QnvYVuHp2kMEVivQlWk8zqcMXzuar6Xd0QNFm+hk
+        RyLc9PCRXMRyq7+RH2cxVzw2yFYT5JhNg6nCfs4t6MXRXpPCCSN2I/jj1EMN6Yr7
+        c5Hticfaet3zeUGcT5DDX95lN+/61APn8enJPVDcrmOcGUZM67WJ7NNUniFuqnCM
+        d9eiETS+xNIVxMbovGUiM5RwZoFKkGKeLL0fEU41xLpnhXxQF3yvKqadjfKoP8UY
+        YKG9dXlEP/QCRdsfcAIaiQgTDmAPobAl5xm48eFJFw==
+X-ME-Sender: <xms:XZsHY0xsv4iDhjXgedHZcaQ9BoeKJEsj0XKKPtURgGDvdVmCrAp2zQ>
+    <xme:XZsHY4SA0zrQVDzvrKCYS_108LKJSh88MN_v67-LfnsoEcx1f6Kgv43WwUTneaOfG
+    3Tt0KRWe6xuxjCpnkw>
+X-ME-Received: <xmr:XZsHY2WolPrgWEYiYyCgZ092JoyS0D-qIhr4rkuG2-slyMuUoj8dLuVefag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgledvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpefhkeehfedthfejfeejtdfhvddvueeigeejjeeuteegveffhfffgeffieeu
+    ueduvdenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:XpsHYyjdlVhneiSB4ustS7xDJwI1mC6wv4gJhjpJXLF3JfdGi3cf1w>
+    <xmx:XpsHY2DepCkheOhxgh4cnsdJEgcwkyRqcq23RUfJ3SWuKnwJGa16kA>
+    <xmx:XpsHYzKLY5z2Qt95j_xLe_zMkehclF39eHC4SCWy3DliPelW2Vixjg>
+    <xmx:X5sHY4ycPKM8nQmjvA_fj97WxxkhwpA3jPTgoMqJP0U0Rk2ysCJr2A>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 25 Aug 2022 11:55:09 -0400 (EDT)
+Date:   Thu, 25 Aug 2022 17:55:06 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
+Cc:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 00/35] drm: Analog TV Improvements
+Message-ID: <20220825155506.wqurh5r752qfufqs@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <987d6114-5fcb-d668-3b0d-ad6d8723dfdb@tronnes.org>
+ <20220822074800.qzyctchqn5usr55g@houat>
+ <9a15b1cf-692c-1b0d-02a6-316cbd954525@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o2rxfoydvcfezv5r"
+Content-Disposition: inline
+In-Reply-To: <9a15b1cf-692c-1b0d-02a6-316cbd954525@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,38 +106,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 8:08 PM Stephen Warren <swarren@nvidia.com> wrote:
->
-> Rob Herring <robh@kernel.org> wrote at Thursday, April 7, 2022 2:04 PM:
-> > On Thu, Apr 07, 2022 at 05:43:38PM +0200, Philipp Zabel wrote:
-> > > Convert the common reset controller and reset consumer device tree
-> > > bindings to YAML schema.
-> >
-> > In general, common bindings should go in DT schema repo:
-> >
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/reset/reset.yaml
-> >
-> > Though part of the issue is dtschema is dual licensed and all the
-> > exsting text is GPL2, so permission to relicense is needed. That's why
-> > the schemas are just the schema and little description ATM. Shouldn't
-> > be too hard here with Stephen/NVIDIA being the only copyright holder.
->
-> All the work I did for NVIDIA should be (c) NVIDIA, i.e.:
->
-> # Copyright (c) 2012, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
->
-> I have checked with NVIDIA legal etc, and NVIDIA gives permission to
-> relicense any file they hold copyright on within the
-> Documentation/devicetree/bindings directory of the Linux kernel source
-> tree to MIT-only, e.g. for inclusion into the new dtschema repository.
 
-Great! However, the license for dtschema is BSD-2-Clause. Is BSD okay?
-While MIT is similar and compatible, I'd prefer not to have a
-proliferation of different licenses simply because people don't pay
-attention when copying things.
+--o2rxfoydvcfezv5r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There's another header relicensing now[1], gpio.h, which NVIDIA contributed to.
+Hi Mateusz,
 
-Rob
+On Mon, Aug 22, 2022 at 10:57:26AM +0200, Mateusz Kwiatkowski wrote:
+> Hi Maxime,
+>=20
+> I tried testing and reviewing your changes properly over the last weekend=
+, but
+> ultimately ran into this ("flip_done timed out" etc.) issue and was unabl=
+e to
+> mitigate it, at least so far. This seems to pop up every time I try to ch=
+ange
+> modes in any way (either change the TV norm, or just try doing
+> "xrandr --output Composite-1 --off" followed by bringing it back on; it a=
+lso
+> means that the Pi goes unusable when the DE's screen saving routine kicks=
+ in).
+>=20
+> I'm using a Pi 4, and it works with the rpi-5.13.y branch
+> https://github.com/raspberrypi/linux, but seemingly nothing newer.
+> I specifically tried rpi-5.14.y, rpi-5.15.y and rpi-5.19.y - rpi-5.15.y,
+> which is the current main branch in Raspberry Pi OS, seems to be broken s=
+ince
+> forever; at least since my patches (originally written for 5.10) landed t=
+here.
+>=20
+> I'll try identifying the issue further, possibly later today, and maybe c=
+heck
+> the rpi-6.0.y branch as well.
 
-[1] https://lore.kernel.org/all/20220825104505.79718-1-etienne.carriere@linaro.org/
+I've tried it this, and I can't reproduce it here. But I'm curious, how
+did you apply this series? rpi-5.13.y is probably full of conflicts
+everywhere?
+
+Maxime
+
+--o2rxfoydvcfezv5r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwebWgAKCRDj7w1vZxhR
+xWTZAQDwNGx7ING3Lb1EnLGPTAGR3tQpH/72q4zipEWhAbBLSwEAuSVMBrPHUOys
+oIi4MLhNS5Ak7DHUrbr+dgxHf4umjwA=
+=vOq0
+-----END PGP SIGNATURE-----
+
+--o2rxfoydvcfezv5r--

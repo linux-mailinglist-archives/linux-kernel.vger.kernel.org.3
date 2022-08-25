@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AC65A152D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814555A1530
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238176AbiHYPE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S241584AbiHYPFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242600AbiHYPEi (ORCPT
+        with ESMTP id S241003AbiHYPFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:04:38 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07BCB777E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:04:35 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id k17so10402607wmr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=FjzfQgvp9Pt54PbuI+NrL+4+IIsBmjAlu5P//Rcqxr8=;
-        b=W4RDP8KJqP48Z9qNlOeWmiPifiTsPzHAXkdP8Vn/obNsP5WU6TNCdwSnvxRiLesm6I
-         uDrF/FAzWwGpvJJ4z6O31VFowRZY0oet/yZmZi0Qd1G8OPLQXyb6u6Yz+aZky7HWaxGa
-         lwEyF666GErBM0pHd6T3diDRC+HSpHE4e0UJUkuQn2Udi9FubkZGO4dgeHrRieK5X7B5
-         1ziTsch3E9h9GSIsP5Bjd9ivSDzeBkXv6Rq6AleqOc8I2EwwyBiXK4njSyfazrMm/qzi
-         Y14lAYpYQraYdnrgaEYKX39AhQfaPGHe59qiCVbd74sld9MkkqeXZjjtJUk/776np0Ea
-         /URQ==
+        Thu, 25 Aug 2022 11:05:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550FDB56F3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661439905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iygQAkAgz4JDbn3KVJAwromqSNqOkmZrJ35R+TSCGBw=;
+        b=WbSg80lyvUQyENVdiNOFKKUNKeYOjb0cQAJn7tdJYmuQwBr4HYb7HCokp59/SE1IBBP4eH
+        8cjpOEWd6amp0/cVC3DySSecEallveOSCz9A9dwz4XGBkui0ufuIKD562xAdywxDuTppQE
+        d1EXedFasT5ttOZrLykSAwZ8MhEc2aY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-652-ginrPMoMMPqKdkPNv7D6SA-1; Thu, 25 Aug 2022 11:05:03 -0400
+X-MC-Unique: ginrPMoMMPqKdkPNv7D6SA-1
+Received: by mail-qk1-f198.google.com with SMTP id w17-20020a05620a425100b006b97978c693so17517237qko.19
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:05:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=FjzfQgvp9Pt54PbuI+NrL+4+IIsBmjAlu5P//Rcqxr8=;
-        b=6r1ebwuFmj1ogBlPEzqVx+LLNwNmGw+cREf2td7VPpVgGpWIHrJzxB1gbKAN7hefz5
-         a6XtaZ1Pk8BiUr/Fn1rA/bSUqHajcQhQnTaPpJAfTGwKjtSbFblSkXSX5GNHm/0KPbXb
-         3QNLLUAUFTebWO4Emg4WEHAkMrj2KiRKCYk5zEMkwzutNNV0+sKRiwWqKRPsTYh9k98O
-         xRdMR52CnCvjqNQ+hgp+5tszn42Z9QHAA43EpHQAtdxvxfB4Po505ugpyPi75SZuA0D3
-         xACZ9DWmaOcSxNMjKrTgh5jqqaQ2fwNvVyARm2ONslKOizvMhFduPKae6KaRVpnorxBR
-         cpow==
-X-Gm-Message-State: ACgBeo2Ok/yTLZbCmg4DTs2zTqGd0JJTcT/oJ94VD4v2V7Wc8xZzdzVJ
-        51pwpW9NCYtDLI53yZLgYFo=
-X-Google-Smtp-Source: AA6agR6g4f+/nbB5a2H60OA7LKWWU9LDI4eXIcuSltTLoDctj9q1XvjqBYoYfQIjU7evtlSeCAWh7g==
-X-Received: by 2002:a05:600c:1c9a:b0:3a6:1c85:7a0c with SMTP id k26-20020a05600c1c9a00b003a61c857a0cmr2539978wms.155.1661439873552;
-        Thu, 25 Aug 2022 08:04:33 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id q11-20020a5d61cb000000b00223b8168b15sm19831396wrv.66.2022.08.25.08.04.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 08:04:32 -0700 (PDT)
-Message-ID: <b0f6a3c6-8fef-8983-fb69-6157a9859afd@gmail.com>
-Date:   Thu, 25 Aug 2022 17:04:31 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=iygQAkAgz4JDbn3KVJAwromqSNqOkmZrJ35R+TSCGBw=;
+        b=c1R/CwWVkd1YcTyLI6kYXdchzR/8h7axo5LlG5mTohhy6jv9oC42uSakfY9hOi/r62
+         gakYQkVejX/lQjhMtG7KrqSDw+7Ffq6us96ndyx3vyidQatOgJlW54L3HV2WYnmAZb25
+         yVk39Rpur5NeSsOi8XPf+vkWm2RfBAFQXCkCQiSUXyhEfgghMBQKxmnt5VqHdDiMvdjp
+         FU289hCvaWZxrVJRJRlohyVPjlvE/ATq+j0w/Vy+iWTiZmZ40HJtYTExFOggZDkb/2H7
+         Vk8E/hcb/SD6NSlyXcYjFp1X5fJ3cdN699KeZac0e+Pb8CEL7KOnCTjjUOTPFLOihpfI
+         /wxg==
+X-Gm-Message-State: ACgBeo3ivSbW5MsuY+OCjDwZ/cEHPM1ZivvxbKCnWIk1crsAHkn6zW+j
+        XvmveCqXSoJR7e+3Z1/xmB/D9ViQOyH4cjD69ev5XjEtLz7HOolPZYMfvUW4HtUSWSOFmvOivAE
+        EQl96petPqTNwPbTHsJ5L/4sT
+X-Received: by 2002:a05:622a:20e:b0:343:7345:36cc with SMTP id b14-20020a05622a020e00b00343734536ccmr3971322qtx.669.1661439903393;
+        Thu, 25 Aug 2022 08:05:03 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5H6vUeaILfaettSLPx9OGO+p9IBfx7a4trs9PcWFxW10+WU/QvLs3nwiKRw0dOgxGyx6Uy1A==
+X-Received: by 2002:a05:622a:20e:b0:343:7345:36cc with SMTP id b14-20020a05622a020e00b00343734536ccmr3971288qtx.669.1661439903064;
+        Thu, 25 Aug 2022 08:05:03 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006b949afa980sm17692978qkb.56.2022.08.25.08.04.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 08:05:01 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 11:04:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+Message-ID: <YwePm5lMSU2tsW6f@xz-m1.local>
+References: <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
+ <Yv1BJKb5he3dOHdC@xz-m1.local>
+ <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Yv5QXkS4Bm9pTBeG@xz-m1.local>
+ <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <87czcqiecd.fsf@nvdebian.thelocal>
+ <YwaJSBnp2eyMlkjw@xz-m1.local>
+ <YwaOpj54/qUb5fXa@xz-m1.local>
+ <87o7w9f7dp.fsf@nvdebian.thelocal>
+ <87k06xf70l.fsf@nvdebian.thelocal>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3,1/2] soc: mediatek: Add mmsys func to adapt to dpi
- output for MT8186
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, xinlei.lee@mediatek.com
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, rex-bc.chen@mediatek.com,
-        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
-        yongqiang.niu@mediatek.com, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Jitao Shi <jitao.shi@mediatek.com>
-References: <1661236702-30682-1-git-send-email-xinlei.lee@mediatek.com>
- <20220823201758.ffbgb5t5odoicgir@notapiano>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220823201758.ffbgb5t5odoicgir@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87k06xf70l.fsf@nvdebian.thelocal>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 25, 2022 at 11:24:03AM +1000, Alistair Popple wrote:
+> By the way it's still an optimisation because in most cases we can avoid
+> calling try_to_migrate() and walking the rmap altogether if we install
+> the migration entries here. But I agree the comment is misleading.
 
+There's one follow up question I forgot to ask on the trylock thing.  I
+figured maybe I should ask out loud since we're at it.
 
-On 23/08/2022 22:17, Nícolas F. R. A. Prado wrote:
-> On Tue, Aug 23, 2022 at 02:38:22PM +0800, xinlei.lee@mediatek.com wrote:
->> From: Xinlei Lee <xinlei.lee@mediatek.com>
->>
->> Add mmsys function to manipulate dpi output format configuration for MT8186.
->>
->> Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
->> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
->> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+Since migrate_vma_setup() always only use trylock (even if before dropping
+the prepare() code), does it mean that it can randomly fail?
 
-Patch looks fine, I'll wait for v4 as there is still some discussion on the DRM 
-part. Please try to fix the threading problem you had in sending this series.
+I looked at some of the callers, it seems not all of them are ready to
+handle that (__kvmppc_svm_page_out() or svm_migrate_vma_to_vram()).  Is it
+safe?  Do the callers need to always properly handle that (unless the
+migration is only a best-effort, but it seems not always the case).
+
+Besides, since I read the old code of prepare(), I saw this comment:
+
+-		if (!(migrate->src[i] & MIGRATE_PFN_LOCKED)) {
+-			/*
+-			 * Because we are migrating several pages there can be
+-			 * a deadlock between 2 concurrent migration where each
+-			 * are waiting on each other page lock.
+-			 *
+-			 * Make migrate_vma() a best effort thing and backoff
+-			 * for any page we can not lock right away.
+-			 */
+-			if (!trylock_page(page)) {
+-				migrate->src[i] = 0;
+-				migrate->cpages--;
+-				put_page(page);
+-				continue;
+-			}
+-			remap = false;
+-			migrate->src[i] |= MIGRATE_PFN_LOCKED;
+-		}
+
+I'm a bit curious whether that deadlock mentioned in the comment is
+observed in reality?
+
+If the page was scanned in the same address space, logically the lock order
+should be guaranteed (if both page A&B, both threads should lock in order).
+I think the order can be changed if explicitly did so (e.g. fork() plus
+mremap() for anonymous here) but I just want to make sure I get the whole
+point of it.
 
 Thanks,
-Matthias
+
+-- 
+Peter Xu
+

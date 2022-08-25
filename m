@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9A55A08E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C345A08ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbiHYGdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S235820AbiHYGfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiHYGdF (ORCPT
+        with ESMTP id S235551AbiHYGff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:33:05 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C269A0305
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:33:03 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bq23so17888815lfb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:33:03 -0700 (PDT)
+        Thu, 25 Aug 2022 02:35:35 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9469F0C0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:35:34 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id l8so9421271lfc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=jjb0wRVho1IbfKOm+QRWs6abzY2pnVDemjVYoIt+vcs=;
-        b=t5qX2ZwFRSwBn7O7CkXQqXzasT+loOrUHXDGUumDRuWD+3IBYgV+YraXQu9RHfxdCy
-         Zh71qivAjZLQwCvqAQ57NAwBop9P2lQ4skoEKRYsQH07N7UKLkiQTqbJchgvg9DNy/QA
-         1SOsoER0W3I4lj8yr6EhuArJ/mDiYDrKnrFstWDZgsCmxfHL/8TMNx4Li0bcsmuvLQKD
-         COKYjAyxuz7HUZcoBcpYMlFRHz85vO1R6mwp61pSuew8T7gC5b6pLaQC8nHpSZO9UK1R
-         jvs+xtGh6XfgFyGT9G4ulVnizIxD6h6HJrlZ/nYKvRhM4A2khL9rW3TWKpE3uVmiO44+
-         4qQA==
+        bh=EvKjZn6Jwen4vu3P72obwS4c6ve0NpMMiuM5nFUjsc4=;
+        b=hA4GPgaoc/uO4LTyPl6C3Xt+kHB33H1tgfQHneoEsl2dH6kJVkPkiVqziKkgko6psm
+         sykCnNuBjKSGW65OLNnTjZsc1gMvL8pxzST7G8ZaC26d1V9GnCb8gADMrX52Pg5WmWCC
+         MFk+i+s7g5Oj+JlpHgSvV2gIhBbpO8NKxa5qw7xPHWMlOMRk1AL6omhiRuXnNvaZnV7C
+         hzs9IqK1KglzKfqWlH1w0ETUDb9CENa5j95XHDtoTAK8Tdo/Y/REu5u5q9EduEq8Rjsd
+         lawoJlipNd21qz0GU9CDOlfVn2/cLAWisLJlvtML6nXytSjRYSh6PEQckm243xqW+hR8
+         iTUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=jjb0wRVho1IbfKOm+QRWs6abzY2pnVDemjVYoIt+vcs=;
-        b=Fz+mPqe1C1au1Iy6/zpGHkDOc7lPvEVn2pdwvSbOgt3Kb+XY656/KLCo42+uVBfxD/
-         vTANXExGvPqfDF2BIXW0cWZjkQljv3FE4M/sAkJjR01qAVgGDr+ZbC5cZAccmjS7rc5O
-         jwdeRWJ935Afbfj58AETI2zPjuk26jrKhMRXZnL8uBH2+vQ4qVk2KiG833XJBxKS0Wmc
-         8WeuBuiKeiaSSkjhC7A+ct9xLoN8Ka4Gvvj9mVq9WYIARrVDhx+hzVHmy6VgIOOIEkMS
-         mhpcuC25VJuYt8MGq9JeDgnkdE0l8sbIwUNdAJRuLuUXnRP8RxwXvEyMenJEjXwntHxn
-         Wj7Q==
-X-Gm-Message-State: ACgBeo2j7zl+UA8NCALw6vZSx5DNbpLGvD71ryaVPQixyyNUb46Ie7/1
-        RpznJZz4FnJ5CtwOrkoGe46Ghg==
-X-Google-Smtp-Source: AA6agR4I4yjF/QiNBfJc1j5Y8lITB8zsTBX7CYP2sWhLpA2MPjNjOSJwTPxzRKG69SqnrxcemVRG7A==
-X-Received: by 2002:a05:6512:159a:b0:492:8c61:1991 with SMTP id bp26-20020a056512159a00b004928c611991mr620418lfb.245.1661409181980;
-        Wed, 24 Aug 2022 23:33:01 -0700 (PDT)
+        bh=EvKjZn6Jwen4vu3P72obwS4c6ve0NpMMiuM5nFUjsc4=;
+        b=SgP9BIjkkWQqCv2LFEOd5jbRXFqaKiSdWZJGxFLu5QOJomF3sRauyH+9EC1hQkqKDt
+         ME6ZKLi/K6p5FGzrngpjGNW+lbIn0WXrcO0YWaTzJiyYhrwL+7H2B9n6j+ZwTd1CURfJ
+         SmNMxGHk46Ch/MLgq05uu74Zg41CFtjLTYcmuBIwvKIysqHHk16pT5RQkOuUUi2zIsL6
+         cGsaFgUqThVQ5eFfMDepngcO5iLOC3ww0M8v007jIOAZFhx0s/ziYo2Q6Vq/xO/pEzuH
+         20m2yMeBBNwIK0Er5ffaFtvplhoviiVCfJS1R7uztdM6t0M3/x7jlM29O6gZOwNS8s7U
+         yqhw==
+X-Gm-Message-State: ACgBeo1+CZZ5xZyWDPadRgRIM6Clrmo10CqllQMIORa5wuoJ9n04QEWT
+        87SoSab9qX6+ch59GQtkDC1BCg==
+X-Google-Smtp-Source: AA6agR4MXfi9uA9HEyxEy5/qdbVPXms4C7TdYuwdEmdffkyYQy/oAl819Jf7A8eMC6blyL3NxEOxFA==
+X-Received: by 2002:a19:6a05:0:b0:492:f775:6f43 with SMTP id u5-20020a196a05000000b00492f7756f43mr638867lfu.10.1661409332398;
+        Wed, 24 Aug 2022 23:35:32 -0700 (PDT)
 Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id h27-20020a19ca5b000000b0048af397c827sm316655lfj.218.2022.08.24.23.33.00
+        by smtp.gmail.com with ESMTPSA id k16-20020a05651c10b000b00260fdfdd23csm329602ljn.109.2022.08.24.23.35.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 23:33:01 -0700 (PDT)
-Message-ID: <7248cbce-29b9-aad6-c970-8e150bc23df8@linaro.org>
-Date:   Thu, 25 Aug 2022 09:33:00 +0300
+        Wed, 24 Aug 2022 23:35:31 -0700 (PDT)
+Message-ID: <3ea10afc-61f4-a5ac-aef9-16ddc6f845e6@linaro.org>
+Date:   Thu, 25 Aug 2022 09:35:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v4 4/6] dt-bindings: net: dsa: mediatek,mt7530: define
- port binding per switch
+Subject: Re: [PATCH] ARM: configs: replace CONFIG_NO_HZ=y with
+ CONFIG_NO_HZ_IDLE=y
 Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
+To:     Stefan Hansson <newbie13xd@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220820080758.9829-1-arinc.unal@arinc9.com>
- <20220820080758.9829-5-arinc.unal@arinc9.com>
- <c24da513-e015-8bc6-8874-ba63c22be5d6@linaro.org>
- <ea3ceeab-d92b-6ce5-8ea9-aebb3eaa0a91@arinc9.com>
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org
+References: <20220822161018.16101-1-newbie13xd@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ea3ceeab-d92b-6ce5-8ea9-aebb3eaa0a91@arinc9.com>
+In-Reply-To: <20220822161018.16101-1-newbie13xd@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -100,62 +112,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 15:29, Arınç ÜNAL wrote:
+On 22/08/2022 19:10, Stefan Hansson wrote:
+> According to https://www.kernel.org/doc/html/latest/timers/no_hz.html,
+> CONFIG_NO_HZ=y should be replaced by CONFIG_NO_HZ_IDLE=y for newer
+> kernels, so let's reflect that in the 32-bit ARM defconfigs.
 > 
-> 
-> On 23.08.2022 13:47, Krzysztof Kozlowski wrote:
->> On 20/08/2022 11:07, Arınç ÜNAL wrote:
->>> Define DSA port binding per switch model as each switch model requires
->>> different values for certain properties.
->>>
->>> Define reg property on $defs as it's the same for all switch models.
->>>
->>> Remove unnecessary lines as they are already included from the referred
->>> dsa.yaml.
->>>
->>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>> ---
->>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 56 +++++++++++--------
->>>   1 file changed, 34 insertions(+), 22 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> index 657e162a1c01..7c4374e16f96 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> @@ -130,38 +130,47 @@ properties:
->>>         ethsys.
->>>       maxItems: 1
->>>   
->>> -patternProperties:
->>> -  "^(ethernet-)?ports$":
->>> -    type: object
->>> -
->>> -    patternProperties:
->>> -      "^(ethernet-)?port@[0-9]+$":
->>> -        type: object
->>> -        description: Ethernet switch ports
->>
->> Again, I don't understand why do you remove definitions of these nodes
->> from top-level properties. I explained what I expect in previous
->> discussion and I am confused to hear "this cannot be done".
-> 
-> I agree it can be done, but the binding is done with less lines the 
-> current way.
-> 
-> I would need to add more lines than just for creating the node structure 
-> since dsa.yaml is not referred.
-> 
-> Then, I would have to create the node structure again for the dsa-port 
-> checks.
+> Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
 
-I understand you can create binding more concise, but not necessarily
-more readable. The easiest to grasp is to define all the nodes in
-top-level and customize them in allOf:if:then. This was actually also
-needed for earlier dtschema with additionalProperties:false. You keep
-defining properties in allOf:if:then, even though they are all
-applicable to all variants. That's unusual and even if it reduces the
-lines does not make it easier to grasp.
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> # Samsung
 
 Best regards,
 Krzysztof

@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ED55A0A8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456195A0A93
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237336AbiHYHnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S235424AbiHYHoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237854AbiHYHm7 (ORCPT
+        with ESMTP id S233545AbiHYHoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:42:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED3CA3D52;
-        Thu, 25 Aug 2022 00:42:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EEFAB81DF1;
-        Thu, 25 Aug 2022 07:42:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE29C433C1;
-        Thu, 25 Aug 2022 07:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661413369;
-        bh=jo4iwhN0ZYXWfv0uD+BxzoZiXf+fecbwKbdRpXmtjTc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sw1WnXQIDEUm52NyWznsDACN5zHOxRiR8BSO+G95H0m0LmNEZXoOztYX+iUY1O3ww
-         o5fioWafmGSewPg8JDP4j9PQE69d3T1USDjU+7Q3UipinBrictZbnaM3EkX8LevvOC
-         XeJgzQZHY/wJWBXkLEhW5MRAyfuPPQq8Rat861/9iPWP2DlDP3hqcsa5t04GiVAXrK
-         HGKBKeMhZ+15fMMwCf2BkmFfuFB7TtRIwdrqKTd+Xf40HMx6mzK7qqj92IfiT9ycf+
-         532EFb1Lp+5sfZDIsw2uFpNPPALcFV1aUb5x50e60kaNwxi8HW9rEwgVu3Ete9tnf8
-         ne9cHoFFPu8+g==
-Date:   Thu, 25 Aug 2022 09:42:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     luca.ceresoli@bootlin.com
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 3/3] docs: i2c: i2c-topology: reorder sections more
- logically
-Message-ID: <Ywcn9Rz887L69yS8@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, luca.ceresoli@bootlin.com,
-        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220824083104.2267000-1-luca.ceresoli@bootlin.com>
- <20220824083104.2267000-4-luca.ceresoli@bootlin.com>
+        Thu, 25 Aug 2022 03:44:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFB99D8E4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661413472; x=1692949472;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z81HgPLciv/z8OgJGdvFnLN1o7Tse/Cm47+slFWNvSY=;
+  b=MZdVuUjVGSm0mhJ38rAwi4DQiK+TJ3t38Bl2hosW/+mpFMSdWYT1yl3e
+   I59bK8wLbT8R5h/kERRI53K/FF1atXAn7ucP5qEpx41DqKHNLVPmMkOcZ
+   R0TZo0M2XwgGzq+tv9r4UBg9GY5AN0j7N8DTdKvBEmryRKJn3pMW3rs1V
+   P2CJlntSwJWSmZFk3LSuXbdeNENXz4tzwyltGV/Mu+n0NjYVmq9QOCN0K
+   BZn//ZqMU5ARVFpPUAh+HOEKMuXJuTng2DSsxdBOkeSADbgeUtt3g1DKJ
+   4zUPBE71xvFOmlM4RdNJlTUQA2aO3IzAuf525kYatq4lpAiKAcehppf7f
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="295452246"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="295452246"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:44:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="639480311"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2022 00:44:31 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oR7XS-0001t7-1o;
+        Thu, 25 Aug 2022 07:44:30 +0000
+Date:   Thu, 25 Aug 2022 15:43:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:deprecate 5/9] kismet: WARNING: unmet direct
+ dependencies detected for MEDIA_TUNER_XC5000 when selected by VIDEO_TM6000
+Message-ID: <202208251518.TurdyyAQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c+SjLRlJH9IOpbir"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220824083104.2267000-4-luca.ceresoli@bootlin.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://linuxtv.org/hverkuil/media_tree.git deprecate
+head:   31c9d3d20a0e443e6b9b493096b6f06db534fff4
+commit: 3eaffcf890f8c070048019be67c787f91fc54817 [5/9] tm6000: deprecate this driver
+config: x86_64-kismet-CONFIG_MEDIA_TUNER_XC5000-CONFIG_VIDEO_TM6000-0-0 (https://download.01.org/0day-ci/archive/20220825/202208251518.TurdyyAQ-lkp@intel.com/config)
+reproduce:
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree deprecate
+        git checkout 3eaffcf890f8c070048019be67c787f91fc54817
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_MEDIA_TUNER_XC5000 --selectors CONFIG_VIDEO_TM6000 -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
 
---c+SjLRlJH9IOpbir
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed, Aug 24, 2022 at 10:31:04AM +0200, luca.ceresoli@bootlin.com wrote:
-> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
->=20
-> The sequence of sections is a bit confusing here:
->=20
->  * we list the mux locking scheme for existing drivers before introducing
->    what mux locking schemes are
->  * we list the caveats for each locking scheme (which are tricky) before
->    the example of the simple use case
->=20
-> Restructure it entirely with the following logic:
->=20
->  * Intro ("I2C muxes and complex topologies")
->  * Locking
->    - mux-locked
->      - example
->      - caveats
->    - parent-locked
->      - example
->      - caveats
->  * Complex examples
->  * Mux type of existing device drivers
->=20
-> While there, also apply some other improvements:
->=20
->  * convert the caveat list from a table (with only one column carrying
->    content) to a bullet list.
->  * add a small introductory text to bridge the gap from listing the use
->    cases to telling about the hardware components to handle them and then
->    the device drivers that implement those.
->  * make empty lines usage more uniform
->=20
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Acked-by: Peter Rosin <peda@axentia.se>
->=20
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for MEDIA_TUNER_XC5000 when selected by VIDEO_TM6000
+   
+   WARNING: unmet direct dependencies detected for MEDIA_TUNER_XC5000
+     Depends on [n]: (MEDIA_ANALOG_TV_SUPPORT [=n] || MEDIA_DIGITAL_TV_SUPPORT [=n] || MEDIA_RADIO_SUPPORT [=n] || MEDIA_SDR_SUPPORT [=n]) && MEDIA_SUPPORT [=y] && I2C [=y]
+     Selected by [y]:
+     - VIDEO_TM6000 [=y] && STAGING [=y] && STAGING_MEDIA [=y] && MEDIA_SUPPORT [=y] && STAGING_MEDIA_DEPRECATED [=y] && VIDEO_DEV [=y] && I2C [=y] && INPUT [=y] && RC_CORE [=y] && USB [=y]
+   
+   WARNING: unmet direct dependencies detected for MEDIA_TUNER_XC2028
+     Depends on [n]: (MEDIA_ANALOG_TV_SUPPORT [=n] || MEDIA_DIGITAL_TV_SUPPORT [=n] || MEDIA_RADIO_SUPPORT [=n] || MEDIA_SDR_SUPPORT [=n]) && MEDIA_SUPPORT [=y] && I2C [=y]
+     Selected by [y]:
+     - VIDEO_TM6000 [=y] && STAGING [=y] && STAGING_MEDIA [=y] && MEDIA_SUPPORT [=y] && STAGING_MEDIA_DEPRECATED [=y] && VIDEO_DEV [=y] && I2C [=y] && INPUT [=y] && RC_CORE [=y] && USB [=y]
 
-Applied to for-current, thanks!
-
-
---c+SjLRlJH9IOpbir
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMHJ/UACgkQFA3kzBSg
-KbZCDQ/8C8jQRkpXRQPGrAWtKIAt0E0gRrAzlUyMhnCaZInSKYbVfp+J5a0UVB9M
-v3iUU0X2v57DYYBjTbIvOzfjkjJRVDl6zeIlkR1AEwXAscJs74B2tbE7qABQc2By
-8qSLbXIHv05D+Nl5pQPBxDqiHFzLLEVg8pT6vqtPJMhPv+dk0uDpix+2qvVSptdV
-TqSbQTebhg8edil7bbTYeCD2fWSQ5gnMVLxACbU/rW5WhAQNpeEpyICCbGiELa/D
-A2Vq0a4BbFJJ408NEWpyoUJzH0L05B+ZR1JFLjGtOsWJ5YbIzcyOpyTAidd6wxoW
-t83dDzSeaGlZWn/Uf643tVjYIbD2d9aCaLaOlvUBmQ7+JDpDdQYZEcXiciNUwkjg
-6nvgohKAGtgJdywJBMhi4GuZ0mT0QxIAa4+XyWdif6MACLwAy0NapsKjjHT0mnnl
-/OFc2Gw6tqElDjJHRQY+1ApcKeknq2E/y+1Pd+DbpNu4Stg2q0QeIJ3ff01vCTiX
-aL/g/C1g+bIPKBd9C0J6c5Reg0KIrlrFiCIGZBDGKN3JYwBfTtMuhTOXyFA+9RsN
-IiUJQ2OFPK6o7pLvtlwMwOXgp28Vv9hMmD087Wt+xgp1S1cBWQ1d646/qOf5WzZ5
-hS6JEEQcXhqJSI6YZQBUJ6+V6QaO09DBMmYyMsmPed8ijteDv64=
-=WKo+
------END PGP SIGNATURE-----
-
---c+SjLRlJH9IOpbir--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

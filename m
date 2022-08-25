@@ -2,223 +2,399 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7541E5A083A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 06:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCA05A083D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 06:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiHYEzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 00:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S232913AbiHYE51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 00:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiHYEzq (ORCPT
+        with ESMTP id S229510AbiHYE5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 00:55:46 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC08760EA;
-        Wed, 24 Aug 2022 21:55:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h5sw2KAd3w5H+MVocY4AA7Nn1ve++2GPnEG1VoNbdJIw6ix1P1CbK+OcCLBycYb5AXWfOD/TfAOI+UyiRMnGdRCANPzxEZN4RCbgB/JEEC9h0ZGpPZX+CF0gew+vA8C31avSNwvcRsSOg08k1BewNhbILnOZc4DFW1l+3T4NL9QtpXQBgT2/274tSBaJqvW9LApbPKkPpe9Sj+LVI3VH97dW1YRLwe808x+abtcBIfOWWoaGb3QLaZ0hiPp0OnDWd55fR195EM55OUfaJHF6Wk0XZ0JhqqZKRyjjIzEscx5CCs5C6+KSG5IeMbUJuZT+gWIXXSl9dzyC11vLV9nh3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pbK6iAyKQClxRYXTRFm332mtoj5HcFNrycmAFhEQexQ=;
- b=R7qIB02Mx+QM4tMq1Q7AWnOlY0xiVCZPyHJLvrDVWJMOimPG61KqY197mdO6/KU+oVxppa60SbB/CX2yKvZtjD1e0SbvJ7sdh89U6OjCiwPevW7DbOvyYhcEd6pIM7Uj3XbpHaRfoxVIJBH9cBvUY5vMVWSu3UO5Wanvdbwl1PmHAFNvUnGVOHmMfWfI4xJkGKK1DBWLM/pmTLIXIEjXQMK3kdm5xx/XLF6Bk/nUNff23CfUD0MfsuOZkK3OqgvHdhSLBPAjKYuHgysM2Yxvb2l1VQ9r7B3QgeTxQHpt0/p3fq7hX3+DmJJWMr65LeqQ3ENCmhiATvPUNWeptn56Ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pbK6iAyKQClxRYXTRFm332mtoj5HcFNrycmAFhEQexQ=;
- b=xANcXo1G4egj96tsP1hQRL0b83V40zw5kIfbeK7jqM10gRCA7WUM+IyjbPAscHa3nOc3aBlLlklUvyOy1AA9D2dDy8YMJfKvOoS+TU0UJeR0kRh+jXBzUs3mlWF48bsCJdfrJMpDM6jdVC1MK1LLks6pp8gu+XrdLUE/OVy410o=
-Received: from BN9P223CA0010.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::15)
- by DM6PR12MB4057.namprd12.prod.outlook.com (2603:10b6:5:213::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.20; Thu, 25 Aug
- 2022 04:55:41 +0000
-Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10b:cafe::d3) by BN9P223CA0010.outlook.office365.com
- (2603:10b6:408:10b::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14 via Frontend
- Transport; Thu, 25 Aug 2022 04:55:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Thu, 25 Aug 2022 04:55:41 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 24 Aug
- 2022 23:54:56 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>, Jiri Kosina <jikos@kernel.org>,
-        "Benjamin Tissoires" <benjamin.tissoires@redhat.com>
-CC:     Richard Gong <richard.gong@amd.com>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] HID: usbhid: Set USB mice as s2idle wakeup resources
-Date:   Wed, 24 Aug 2022 23:55:17 -0500
-Message-ID: <20220825045517.16791-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 Aug 2022 00:57:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F45B7B1E6;
+        Wed, 24 Aug 2022 21:57:24 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P0Y7Bo029865;
+        Thu, 25 Aug 2022 04:57:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=i/tdL/OqBzpmz5GlV+AB4U3tkhmbOr0CzNojWm8w4F0=;
+ b=kvXVU0EhKUb81Na/5m6sntJmEnhf89/Im/Z/WXYz+FioMs/YvFTmUO9ouDYyx6pydvD1
+ gVelxLnc8opumfJANVwEQ20vBvPhkBBQ8+UIhVaj8r9KOo+FhZSECiA6zu34FmHuNNAz
+ xK7upx2+jdK3SIEmr2fQllbidWpDOb1gjNt4I9QtJ/bzd3ZQumCZb0F4QRU273/Z2gmR
+ DafSt+Fc3ffN97hBSOaiIzcBsjGgx8psPqhInamyhSPsA0C81btAwXF1InE5rAYLYzli
+ ODCKV7SQKXuRIVvQW+RzxKLxQrgU8Zuxm/F7msOuG6zShfsewBQoHKXffzg95IkHfrAw gA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pkdj1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Aug 2022 04:57:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27P4vAAR031556
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Aug 2022 04:57:10 GMT
+Received: from [10.50.48.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 24 Aug
+ 2022 21:57:07 -0700
+Message-ID: <cb5f62ac-be4d-3f91-bd84-f8391633543c@quicinc.com>
+Date:   Thu, 25 Aug 2022 10:27:03 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 68ecc191-31fd-482c-2f26-08da86560fce
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4057:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CvKhv+HdWN6S2m0rQ5QBNHWc23PXytKH6eo6oB18RbC5P9ClxS2tpE726vYRlxORMRKuka1/W19smzExW60Q4+Ngttc2Pp/yiyUG5f55TwtsaPHdTUmwoqWW/cC45MpuAp2ZqFQZa7mZNHg9TqawB9Tjdkr4AlUNHpfSOl5HekkBQojLNxZx+LI7zqrQFW9IRtKx/eI/Wl8Qjj1yx1HFJrErs71Ka/3KjRdmi6ETc1TJ61dfwLnU3XP14kn4YoLql9sRCt/NKetjlnDhdgVplX/w0AMuBbWwSWlZ60kES8A0yJfxBI14fNsUACt+3HwANYNV84bSoKDKGY46+CSDZl7Hrtr25q6GsY1jXwP/dhHcOficpsSK2ytj+KnvY8v2RLobQ7hlwYCVtcCsWrjriZZ/QEN/1xY7kIQIE+Z6/QZpzQeXfdCQ/PYWjQaW/Gp4u4PGHzwLV+ONERpsLLL8FXIo3hdnAvfl1kjj9dwkNxPPOD7X+CJSmof1UlIRNSqwkL+Kt1G0pS37FCQRZMfxiCfS3O43A/HTJ9jBMAsFiVsAwGLrOvGfI1sNYZAdMrUzrLFDE2fceaviCuSWbR9g5V6277JuRDmHdPE0tqid6ZY0Pn/5Z1oNu+DSg0A0fHkuVLKKOuwK56Kxc7lDqEuNfcUa7Kc9Edzw5MGuXrhqjl56D0EDfXFrZCnwKOwU84cueNaxqrVNueA3Kr0tTyGEfSWUMzIPElOUqhD2uDHBjC8MjZmmazAAE9b6u6R/2JZgyGMOScD4mqepJ3DuPwYq9NhCeuv1sVuGMtYNzgkQtZiQw+6QNGqINokvm9lMUak9zT2j32b5cZcyRJNaAsNh4nmYKfrEeCN5Y8yeytGbfy3aFbHZKWklMrOu4/Kj3P8V
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(39860400002)(396003)(376002)(46966006)(36840700001)(40470700004)(966005)(70586007)(1076003)(110136005)(8676002)(70206006)(4326008)(45080400002)(316002)(186003)(6666004)(478600001)(54906003)(41300700001)(44832011)(5660300002)(2906002)(426003)(83380400001)(7696005)(47076005)(2616005)(26005)(36756003)(336012)(16526019)(86362001)(356005)(36860700001)(40460700003)(40480700001)(81166007)(8936002)(82310400005)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 04:55:41.6201
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68ecc191-31fd-482c-2f26-08da86560fce
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4057
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 3/5] EDAC/qcom: Get rid of hardcoded register offsets
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <bjorn.andersson@linaro.org>, <bp@alien8.de>, <mchehab@kernel.org>
+CC:     <james.morse@arm.com>, <rric@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>
+References: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
+ <20220825043859.30066-4-manivannan.sadhasivam@linaro.org>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220825043859.30066-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _kcTQgLFr42VZoWxEwWvzcafmCQLkTqn
+X-Proofpoint-ORIG-GUID: _kcTQgLFr42VZoWxEwWvzcafmCQLkTqn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-25_03,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 malwarescore=0
+ bulkscore=0 phishscore=0 impostorscore=0 mlxlogscore=939 spamscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208250017
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The USB HID transport layer doesn't configure mice for wakeup by default.
-Thus users can not wake system from s2idle via USB mouse. However, users
-can wake the same system from Modern Standby on Windows with the same USB
-mouse.
+On 8/25/2022 10:08 AM, Manivannan Sadhasivam wrote:
+> The LLCC EDAC register offsets varies between each SoC. Hardcoding the
+> register offsets won't work and will often result in crash due to
+> accessing the wrong locations.
+>
+> Hence, get the register offsets from the LLCC driver matching the
+> individual SoCs.
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/edac/qcom_edac.c           | 116 ++++++++++++++---------------
+>   include/linux/soc/qcom/llcc-qcom.h |   6 --
+>   2 files changed, 58 insertions(+), 64 deletions(-)
 
-Microsoft documentation indicates that all USB mice and touchpads should
-be waking the system from Modern Standby.
+Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 
-Many people who have used Windows on a PC that supports Modern Standby
-have an expectation that s2idle wakeup sources should behave the same in
-Linux. For example if your PC is configured "dual-boot" and is used docked
-it's very common to wakeup by using a USB mouse connected to your dock in
-Windows. Switching to Linux this is not enabled by default and you'll
-need to manually turn it on or use a different wakeup source than you did
-for Windows.
 
-Changes for wakeups have been made in other subsystems such as the PS/2
-keyboard driver which align how wakeup sources in Linux and Modern Standby
-in Windows behave. To align expectations from users on USB mice, make this
-behavior the same when the system is configured to default to s2idle.
-This normally happens when the FADT indicates low power idle support or the
-system doesn't support S3.
+Thanks,
+Sai
 
-This means that at a minimum supported mice will be able to wakeup by
-clicking a button. If the USB mouse is powered over the s2idle cycle (such
-as a wireless mouse with a battery) it's also possible that moving it
-may wake up the system.  This is HW dependent behavior.
-
-If the user sets the system to use S3 instead of s2idle, or the OEM ships
-the system defaulting to S3, this behavior will not be turned on by
-default.
-
-Users who have a modern laptop that supports s2idle and use s2idle but
-prefer the previous Linux kernel behavior can turn this off via a udev
-rule.
-
-Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
-Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
-Suggested-by: Richard Gong <richard.gong@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-More people keep coming to us confused that they couldn't wake a Linux system
-up from sleep using a mouse, so this patch is being revived.
-
-Microsoft documentation doesn't indicate any allowlist for this behavior, and
-they actually prescribe it for all USB mice and touchpads.
-
-changes from v3->v4:
- * Drop all changes related to pm_suspend_preferred_s2idle.
-   The direction from Rafael has been that drivers should NOT
-   use acpi_gbl.FADT to make policy decisions.
- * Instead only examine pm_suspend_default_s2idle() for policy decision.
-
-changes from v2->v3:
- * Use `pm_suspend_preferred_s2idle`
- * Drop now unnecessary acpi.h header inclusion
- * Update commit message
- * Adjust comments from v2 per thread
-
-changes from v1->v2:
- * Resubmit by Mario
- * Update commit message
- * Only activate on systems configured by user and OEM for using s2idle
----
- drivers/hid/usbhid/hid-core.c | 36 ++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 4490e2f7252a..19aa186a7e0e 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -26,6 +26,7 @@
- #include <linux/wait.h>
- #include <linux/workqueue.h>
- #include <linux/string.h>
-+#include <linux/suspend.h>
- 
- #include <linux/usb.h>
- 
-@@ -1176,17 +1177,30 @@ static int usbhid_start(struct hid_device *hid)
- 		usb_autopm_put_interface(usbhid->intf);
- 	}
- 
--	/* Some keyboards don't work until their LEDs have been set.
--	 * Since BIOSes do set the LEDs, it must be safe for any device
--	 * that supports the keyboard boot protocol.
--	 * In addition, enable remote wakeup by default for all keyboard
--	 * devices supporting the boot protocol.
--	 */
--	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
--			interface->desc.bInterfaceProtocol ==
--				USB_INTERFACE_PROTOCOL_KEYBOARD) {
--		usbhid_set_leds(hid);
--		device_set_wakeup_enable(&dev->dev, 1);
-+	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
-+		switch (interface->desc.bInterfaceProtocol) {
-+		/* Some keyboards don't work until their LEDs have been set.
-+		 * Since BIOSes do set the LEDs, it must be safe for any device
-+		 * that supports the keyboard boot protocol.
-+		 * In addition, enable remote wakeup by default for all keyboard
-+		 * devices supporting the boot protocol.
-+		 */
-+		case USB_INTERFACE_PROTOCOL_KEYBOARD:
-+			usbhid_set_leds(hid);
-+			device_set_wakeup_enable(&dev->dev, 1);
-+			break;
-+		/*
-+		 * Windows configures USB mice to be a wakeup source from Modern
-+		 * Standby, and users have expectations that s2idle wakeup sources
-+		 * behave the same.  Thus setup remote wakeup by default for mice
-+		 * supporting boot protocol if the system supports s2idle and the user
-+		 * has not disabled it on the kernel command line.
-+		 */
-+		case USB_INTERFACE_PROTOCOL_MOUSE:
-+			if (pm_suspend_default_s2idle())
-+				device_set_wakeup_enable(&dev->dev, 1);
-+			break;
-+		}
- 	}
- 
- 	mutex_unlock(&usbhid->mutex);
--- 
-2.34.1
+> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> index 97a27e42dd61..04df70b7fea3 100644
+> --- a/drivers/edac/qcom_edac.c
+> +++ b/drivers/edac/qcom_edac.c
+> @@ -21,30 +21,9 @@
+>   #define TRP_SYN_REG_CNT                 6
+>   #define DRP_SYN_REG_CNT                 8
+>   
+> -#define LLCC_COMMON_STATUS0             0x0003000c
+>   #define LLCC_LB_CNT_MASK                GENMASK(31, 28)
+>   #define LLCC_LB_CNT_SHIFT               28
+>   
+> -/* Single & double bit syndrome register offsets */
+> -#define TRP_ECC_SB_ERR_SYN0             0x0002304c
+> -#define TRP_ECC_DB_ERR_SYN0             0x00020370
+> -#define DRP_ECC_SB_ERR_SYN0             0x0004204c
+> -#define DRP_ECC_DB_ERR_SYN0             0x00042070
+> -
+> -/* Error register offsets */
+> -#define TRP_ECC_ERROR_STATUS1           0x00020348
+> -#define TRP_ECC_ERROR_STATUS0           0x00020344
+> -#define DRP_ECC_ERROR_STATUS1           0x00042048
+> -#define DRP_ECC_ERROR_STATUS0           0x00042044
+> -
+> -/* TRP, DRP interrupt register offsets */
+> -#define DRP_INTERRUPT_STATUS            0x00041000
+> -#define TRP_INTERRUPT_0_STATUS          0x00020480
+> -#define DRP_INTERRUPT_CLEAR             0x00041008
+> -#define DRP_ECC_ERROR_CNTR_CLEAR        0x00040004
+> -#define TRP_INTERRUPT_0_CLEAR           0x00020484
+> -#define TRP_ECC_ERROR_CNTR_CLEAR        0x00020440
+> -
+>   /* Mask and shift macros */
+>   #define ECC_DB_ERR_COUNT_MASK           GENMASK(4, 0)
+>   #define ECC_DB_ERR_WAYS_MASK            GENMASK(31, 16)
+> @@ -60,15 +39,6 @@
+>   #define DRP_TRP_INT_CLEAR               GENMASK(1, 0)
+>   #define DRP_TRP_CNT_CLEAR               GENMASK(1, 0)
+>   
+> -/* Config registers offsets*/
+> -#define DRP_ECC_ERROR_CFG               0x00040000
+> -
+> -/* Tag RAM, Data RAM interrupt register offsets */
+> -#define CMN_INTERRUPT_0_ENABLE          0x0003001c
+> -#define CMN_INTERRUPT_2_ENABLE          0x0003003c
+> -#define TRP_INTERRUPT_0_ENABLE          0x00020488
+> -#define DRP_INTERRUPT_ENABLE            0x0004100c
+> -
+>   #define SB_ERROR_THRESHOLD              0x1
+>   #define SB_ERROR_THRESHOLD_SHIFT        24
+>   #define SB_DB_TRP_INTERRUPT_ENABLE      0x3
+> @@ -86,9 +56,6 @@ enum {
+>   static const struct llcc_edac_reg_data edac_reg_data[] = {
+>   	[LLCC_DRAM_CE] = {
+>   		.name = "DRAM Single-bit",
+> -		.synd_reg = DRP_ECC_SB_ERR_SYN0,
+> -		.count_status_reg = DRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = DRP_ECC_ERROR_STATUS0,
+>   		.reg_cnt = DRP_SYN_REG_CNT,
+>   		.count_mask = ECC_SB_ERR_COUNT_MASK,
+>   		.ways_mask = ECC_SB_ERR_WAYS_MASK,
+> @@ -96,9 +63,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>   	},
+>   	[LLCC_DRAM_UE] = {
+>   		.name = "DRAM Double-bit",
+> -		.synd_reg = DRP_ECC_DB_ERR_SYN0,
+> -		.count_status_reg = DRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = DRP_ECC_ERROR_STATUS0,
+>   		.reg_cnt = DRP_SYN_REG_CNT,
+>   		.count_mask = ECC_DB_ERR_COUNT_MASK,
+>   		.ways_mask = ECC_DB_ERR_WAYS_MASK,
+> @@ -106,9 +70,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>   	},
+>   	[LLCC_TRAM_CE] = {
+>   		.name = "TRAM Single-bit",
+> -		.synd_reg = TRP_ECC_SB_ERR_SYN0,
+> -		.count_status_reg = TRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = TRP_ECC_ERROR_STATUS0,
+>   		.reg_cnt = TRP_SYN_REG_CNT,
+>   		.count_mask = ECC_SB_ERR_COUNT_MASK,
+>   		.ways_mask = ECC_SB_ERR_WAYS_MASK,
+> @@ -116,9 +77,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>   	},
+>   	[LLCC_TRAM_UE] = {
+>   		.name = "TRAM Double-bit",
+> -		.synd_reg = TRP_ECC_DB_ERR_SYN0,
+> -		.count_status_reg = TRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = TRP_ECC_ERROR_STATUS0,
+>   		.reg_cnt = TRP_SYN_REG_CNT,
+>   		.count_mask = ECC_DB_ERR_COUNT_MASK,
+>   		.ways_mask = ECC_DB_ERR_WAYS_MASK,
+> @@ -126,7 +84,7 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>   	},
+>   };
+>   
+> -static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
+> +static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_bcast_regmap)
+>   {
+>   	u32 sb_err_threshold;
+>   	int ret;
+> @@ -135,31 +93,31 @@ static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
+>   	 * Configure interrupt enable registers such that Tag, Data RAM related
+>   	 * interrupts are propagated to interrupt controller for servicing
+>   	 */
+> -	ret = regmap_update_bits(llcc_bcast_regmap, CMN_INTERRUPT_2_ENABLE,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
+>   				 TRP0_INTERRUPT_ENABLE,
+>   				 TRP0_INTERRUPT_ENABLE);
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = regmap_update_bits(llcc_bcast_regmap, TRP_INTERRUPT_0_ENABLE,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->trp_interrupt_0_enable,
+>   				 SB_DB_TRP_INTERRUPT_ENABLE,
+>   				 SB_DB_TRP_INTERRUPT_ENABLE);
+>   	if (ret)
+>   		return ret;
+>   
+>   	sb_err_threshold = (SB_ERROR_THRESHOLD << SB_ERROR_THRESHOLD_SHIFT);
+> -	ret = regmap_write(llcc_bcast_regmap, DRP_ECC_ERROR_CFG,
+> +	ret = regmap_write(llcc_bcast_regmap, drv->edac_reg_offset->drp_ecc_error_cfg,
+>   			   sb_err_threshold);
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = regmap_update_bits(llcc_bcast_regmap, CMN_INTERRUPT_2_ENABLE,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
+>   				 DRP0_INTERRUPT_ENABLE,
+>   				 DRP0_INTERRUPT_ENABLE);
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = regmap_write(llcc_bcast_regmap, DRP_INTERRUPT_ENABLE,
+> +	ret = regmap_write(llcc_bcast_regmap, drv->edac_reg_offset->drp_interrupt_enable,
+>   			   SB_DB_DRP_INTERRUPT_ENABLE);
+>   	return ret;
+>   }
+> @@ -173,24 +131,28 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
+>   	switch (err_type) {
+>   	case LLCC_DRAM_CE:
+>   	case LLCC_DRAM_UE:
+> -		ret = regmap_write(drv->bcast_regmap, DRP_INTERRUPT_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->drp_interrupt_clear,
+>   				   DRP_TRP_INT_CLEAR);
+>   		if (ret)
+>   			return ret;
+>   
+> -		ret = regmap_write(drv->bcast_regmap, DRP_ECC_ERROR_CNTR_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->drp_ecc_error_cntr_clear,
+>   				   DRP_TRP_CNT_CLEAR);
+>   		if (ret)
+>   			return ret;
+>   		break;
+>   	case LLCC_TRAM_CE:
+>   	case LLCC_TRAM_UE:
+> -		ret = regmap_write(drv->bcast_regmap, TRP_INTERRUPT_0_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->trp_interrupt_0_clear,
+>   				   DRP_TRP_INT_CLEAR);
+>   		if (ret)
+>   			return ret;
+>   
+> -		ret = regmap_write(drv->bcast_regmap, TRP_ECC_ERROR_CNTR_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->trp_ecc_error_cntr_clear,
+>   				   DRP_TRP_CNT_CLEAR);
+>   		if (ret)
+>   			return ret;
+> @@ -203,16 +165,54 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
+>   	return ret;
+>   }
+>   
+> +struct qcom_llcc_syn_regs {
+> +	u32 synd_reg;
+> +	u32 count_status_reg;
+> +	u32 ways_status_reg;
+> +};
+> +
+> +static void get_reg_offsets(struct llcc_drv_data *drv, int err_type,
+> +			    struct qcom_llcc_syn_regs *syn_regs)
+> +{
+> +	const struct llcc_edac_reg_offset *edac_reg_offset = drv->edac_reg_offset;
+> +
+> +	switch (err_type) {
+> +	case LLCC_DRAM_CE:
+> +		syn_regs->synd_reg = edac_reg_offset->drp_ecc_sb_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->drp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->drp_ecc_error_status0;
+> +		break;
+> +	case LLCC_DRAM_UE:
+> +		syn_regs->synd_reg = edac_reg_offset->drp_ecc_db_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->drp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->drp_ecc_error_status0;
+> +		break;
+> +	case LLCC_TRAM_CE:
+> +		syn_regs->synd_reg = edac_reg_offset->trp_ecc_sb_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->trp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->trp_ecc_error_status0;
+> +		break;
+> +	case LLCC_TRAM_UE:
+> +		syn_regs->synd_reg = edac_reg_offset->trp_ecc_db_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->trp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->trp_ecc_error_status0;
+> +		break;
+> +	}
+> +}
+> +
+>   /* Dump Syndrome registers data for Tag RAM, Data RAM bit errors*/
+>   static int
+>   dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+>   {
+>   	struct llcc_edac_reg_data reg_data = edac_reg_data[err_type];
+> +	struct qcom_llcc_syn_regs regs = { };
+>   	int err_cnt, err_ways, ret, i;
+>   	u32 synd_reg, synd_val;
+>   
+> +	get_reg_offsets(drv, err_type, &regs);
+> +
+>   	for (i = 0; i < reg_data.reg_cnt; i++) {
+> -		synd_reg = reg_data.synd_reg + (i * 4);
+> +		synd_reg = regs.synd_reg + (i * 4);
+>   		ret = regmap_read(drv->regmap, drv->offsets[bank] + synd_reg,
+>   				  &synd_val);
+>   		if (ret)
+> @@ -223,7 +223,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+>   	}
+>   
+>   	ret = regmap_read(drv->regmap,
+> -			  drv->offsets[bank] + reg_data.count_status_reg,
+> +			  drv->offsets[bank] + regs.count_status_reg,
+>   			  &err_cnt);
+>   	if (ret)
+>   		goto clear;
+> @@ -234,7 +234,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+>   		    reg_data.name, err_cnt);
+>   
+>   	ret = regmap_read(drv->regmap,
+> -			  drv->offsets[bank] + reg_data.ways_status_reg,
+> +			  drv->offsets[bank] + regs.ways_status_reg,
+>   			  &err_ways);
+>   	if (ret)
+>   		goto clear;
+> @@ -297,7 +297,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+>   	/* Iterate over the banks and look for Tag RAM or Data RAM errors */
+>   	for (i = 0; i < drv->num_banks; i++) {
+>   		ret = regmap_read(drv->regmap,
+> -				  drv->offsets[i] + DRP_INTERRUPT_STATUS,
+> +				  drv->offsets[i] + drv->edac_reg_offset->drp_interrupt_status,
+>   				  &drp_error);
+>   
+>   		if (!ret && (drp_error & SB_ECC_ERROR)) {
+> @@ -313,7 +313,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+>   			irq_rc = IRQ_HANDLED;
+>   
+>   		ret = regmap_read(drv->regmap,
+> -				  drv->offsets[i] + TRP_INTERRUPT_0_STATUS,
+> +				  drv->offsets[i] + drv->edac_reg_offset->trp_interrupt_0_status,
+>   				  &trp_error);
+>   
+>   		if (!ret && (trp_error & SB_ECC_ERROR)) {
+> @@ -340,7 +340,7 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
+>   	int ecc_irq;
+>   	int rc;
+>   
+> -	rc = qcom_llcc_core_setup(llcc_driv_data->bcast_regmap);
+> +	rc = qcom_llcc_core_setup(llcc_driv_data, llcc_driv_data->bcast_regmap);
+>   	if (rc)
+>   		return rc;
+>   
+> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
+> index bc2fb8343a94..d5b2d58e8857 100644
+> --- a/include/linux/soc/qcom/llcc-qcom.h
+> +++ b/include/linux/soc/qcom/llcc-qcom.h
+> @@ -57,9 +57,6 @@ struct llcc_slice_desc {
+>   /**
+>    * struct llcc_edac_reg_data - llcc edac registers data for each error type
+>    * @name: Name of the error
+> - * @synd_reg: Syndrome register address
+> - * @count_status_reg: Status register address to read the error count
+> - * @ways_status_reg: Status register address to read the error ways
+>    * @reg_cnt: Number of registers
+>    * @count_mask: Mask value to get the error count
+>    * @ways_mask: Mask value to get the error ways
+> @@ -68,9 +65,6 @@ struct llcc_slice_desc {
+>    */
+>   struct llcc_edac_reg_data {
+>   	char *name;
+> -	u64 synd_reg;
+> -	u64 count_status_reg;
+> -	u64 ways_status_reg;
+>   	u32 reg_cnt;
+>   	u32 count_mask;
+>   	u32 ways_mask;
 

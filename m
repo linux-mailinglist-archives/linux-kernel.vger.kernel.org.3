@@ -2,154 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882B95A10EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911CE5A10F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241465AbiHYMqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S242011AbiHYMql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiHYMqL (ORCPT
+        with ESMTP id S241971AbiHYMqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:46:11 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011E74D17E;
-        Thu, 25 Aug 2022 05:46:06 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1oRCFC-0002Ci-QW; Thu, 25 Aug 2022 14:45:58 +0200
-Message-ID: <3752b74b-74e1-00fd-d80d-41104e07fe95@maciej.szmigiero.name>
-Date:   Thu, 25 Aug 2022 14:45:53 +0200
+        Thu, 25 Aug 2022 08:46:38 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4034B861CE
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:46:37 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id l23so8283374lji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=MlAO/HOwUYxrXRzuLcbJGzJd+wKSnLDy/6np4kDoRvc=;
+        b=ePUbyYECvrWpUGdCbA3selUHBljQtCu6vs0bL7IPA2FWfs0vAKbmazxKyIeku1y/Ae
+         UiHWUXcogbQO7LJkuc6GVTnGl700mU01gdpY4/nz1h1e9R7iQD2fJq0I71QT0w73VrB2
+         yKgul7OrWD2h2NWcaFemI/Qai1zF1LvQK9uyAkFIQpqKgKdb8m+UpbsiIO7DJyu37Bwa
+         h4Ob+QvzE5Lnf+B4zux0VZ2rZMQIK19Nz2sP9Zi4TeZIxsB70tjZ4QATWyc9TxLL/ZY3
+         3Pr1+pzpaXkzBpUTk+p8PMUFUOmmuuIYTGNMsDYeHRoIlxIYdiLDkErGUI16fOBHsNXp
+         7PhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=MlAO/HOwUYxrXRzuLcbJGzJd+wKSnLDy/6np4kDoRvc=;
+        b=MEcOYeDAWByDBCGn00MGBnXq8KCmYk8/J3P2gTF+Oz2vRuYISDIJkQtNY2vYhanIRF
+         trUD9ywc8JPQzVzxYDDRzK9orgF09uOaav0LnXJBE8PWLzQf5BBDBoVm67CMs/ZjPNHZ
+         PHbCj/RAN/tIFG7JMoV3D5vhwr06i3pQJD1JlacpBARGztX9likHVJsaRAS8X4uBoHuV
+         3Z7MxyG++SvhsnfdV1Yv3/orjHe0MT+KFRT1MaHizApCvMsl5WfkOPzODF2eo/dqAKgx
+         mutLTJnBatnlEjjTV5EHDRlXH8sU+VUUKQEqRbLaCg38OKSyTfzQkvdC13noO5sgiY5V
+         xpsQ==
+X-Gm-Message-State: ACgBeo29cKQB26TSk5SdulA7x4GZ4U4V23KbQgpaXdO2NBe7G56rauxo
+        +DWBM+8FiKvvzsPgxGOcUV4iKQ==
+X-Google-Smtp-Source: AA6agR6S4ckgaNIlaLxF/iotYnqi3J7kEIilm0zoEwnO6oRfujEl4XHGQoD5BFlLb3T1jtLrbKaltw==
+X-Received: by 2002:a2e:894e:0:b0:261:ea54:6c4f with SMTP id b14-20020a2e894e000000b00261ea546c4fmr576363ljk.191.1661431595673;
+        Thu, 25 Aug 2022 05:46:35 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id p15-20020a2eb98f000000b00261e58f9883sm547143ljp.56.2022.08.25.05.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 05:46:35 -0700 (PDT)
+Message-ID: <daaf6ad7-6204-2a13-442b-05068d29e734@linaro.org>
+Date:   Thu, 25 Aug 2022 15:46:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
+ Thunderbird/91.13.0
+Subject: Re: [PATCH RESEND] dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630
+ compatibles
 Content-Language: en-US
-To:     "Shukla, Santosh" <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mlevitsk@redhat.com
-References: <20220810061226.1286-1-santosh.shukla@amd.com>
- <20220810061226.1286-6-santosh.shukla@amd.com>
- <bf9e8a9c-5172-b61a-be6e-87a919442fbd@maciej.szmigiero.name>
- <e10b3de6-2df0-1339-4574-8477a924b78e@amd.com>
- <f96b867f-4c32-4950-8508-234fe2cda7b9@maciej.szmigiero.name>
- <1062bf85-0d44-011b-2377-d6be1485ce65@amd.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCHv3 5/8] KVM: SVM: Add VNMI support in inject_nmi
-In-Reply-To: <1062bf85-0d44-011b-2377-d6be1485ce65@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>
+References: <20220720163802.7209-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720163802.7209-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.08.2022 12:56, Shukla, Santosh wrote:
-> On 8/24/2022 6:26 PM, Maciej S. Szmigiero wrote:
->> On 24.08.2022 14:13, Shukla, Santosh wrote:
->>> Hi Maciej,
->>>
->>> On 8/11/2022 2:54 AM, Maciej S. Szmigiero wrote:
->>>> On 10.08.2022 08:12, Santosh Shukla wrote:
->>>>> Inject the NMI by setting V_NMI in the VMCB interrupt control. processor
->>>>> will clear V_NMI to acknowledge processing has started and will keep the
->>>>> V_NMI_MASK set until the processor is done with processing the NMI event.
->>>>>
->>>>> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
->>>>> ---
->>>>> v3:
->>>>> - Removed WARN_ON check.
->>>>>
->>>>> v2:
->>>>> - Added WARN_ON check for vnmi pending.
->>>>> - use `get_vnmi_vmcb` to get correct vmcb so to inject vnmi.
->>>>>
->>>>>     arch/x86/kvm/svm/svm.c | 7 +++++++
->>>>>     1 file changed, 7 insertions(+)
->>>>>
->>>>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
->>>>> index e260e8cb0c81..8c4098b8a63e 100644
->>>>> --- a/arch/x86/kvm/svm/svm.c
->>>>> +++ b/arch/x86/kvm/svm/svm.c
->>>>> @@ -3479,7 +3479,14 @@ static void pre_svm_run(struct kvm_vcpu *vcpu)
->>>>>     static void svm_inject_nmi(struct kvm_vcpu *vcpu)
->>>>>     {
->>>>>         struct vcpu_svm *svm = to_svm(vcpu);
->>>>> +    struct vmcb *vmcb = NULL;
->>>>>     +    if (is_vnmi_enabled(svm)) {
->>>>
->>>> I guess this should be "is_vnmi_enabled(svm) && !svm->nmi_l1_to_l2"
->>>> since if nmi_l1_to_l2 is true then the NMI to be injected originally
->>>> comes from L1's VMCB12 EVENTINJ field.
->>>>
->>>
->>> Not sure if I understood the case fully.. so trying to sketch scenario here -
->>> if nmi_l1_to_l2 is true then event is coming from EVTINJ. .which could
->>> be one of following case -
->>> 1) L0 (vnmi enabled) and L1 (vnmi disabled)
->>
->> As far as I can see in this case:
->> is_vnmi_enabled() returns whether VMCB02's int_ctl has V_NMI_ENABLE bit set.
->>
+On 20/07/2022 19:38, Krzysztof Kozlowski wrote:
+> Document compatibles for QFPROM used on IPQ8064 and SDM630.  They are
+> compatible with generic QFPROM fallback.
 > 
-> For L1 with vnmi disabled case - is_vnmi_enabled()->get_vnmi_vmcb() will return false so the
-> execution path will opt EVTINJ model for re-injection.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-I guess by "get_vnmi_vmcb() will return false" you mean it will return NULL,
-since this function returns a pointer, not a bool.
+This was sent ~4 months ago, then resent a month ago... and still
+nothing. Bjorn does not want to pick it up, Srini seems as well. Let me
+resend without Rob's ack, so this will go via Rob's tree.
 
-I can't see however, how this will happen:
->static inline struct vmcb *get_vnmi_vmcb(struct vcpu_svm *svm)
->{
->	if (!vnmi)
->		return NULL;
-         ^ "vnmi" variable controls whether L0 uses vNMI,
-	   so this variable is true in our case
-
->
->	if (is_guest_mode(&svm->vcpu))
->		return svm->nested.vmcb02.ptr;
-		^ this should be always non-NULL.
-
-So get_vnmi_vmcb() will return VMCB02 pointer in our case, not NULL...
-
-> 
-> Thanks,
-> Santosh
-> 
->> This field in VMCB02 comes from nested_vmcb02_prepare_control() which
->> in the !nested_vnmi_enabled() case (L1 is not using vNMI) copies these bits
->> from VMCB01:
->>> int_ctl_vmcb01_bits |= (V_NMI_PENDING | V_NMI_ENABLE | V_NMI_MASK);
->>
->> So in this case (L0 uses vNMI) V_NMI_ENABLE will be set in VMCB01, right?
->>
->> This bit will then be copied to VMCB02 
-
-... and due to the above is_vnmi_enabled() will return true, so
-re-injection will attempt to use vNMI instead of EVTINJ (wrong).
-
->>> 2) L0 & L1 both vnmi disabled.
->>
->> This case is ok.
->>
->>>
->>> In both cases the vnmi check will fail for L1 and execution path
->>> will fall back to default - right?
->>>
->>> Thanks,
->>> Santosh
->>
-
-Thanks,
-Maciej
+Best regards,
+Krzysztof

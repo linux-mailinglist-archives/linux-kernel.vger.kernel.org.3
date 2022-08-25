@@ -2,176 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11DA5A1297
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1DE5A129B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242391AbiHYNoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S242433AbiHYNpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiHYNoQ (ORCPT
+        with ESMTP id S233743AbiHYNpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:44:16 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31368B5E53
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:44:12 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 19B495801FA;
-        Thu, 25 Aug 2022 09:44:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 25 Aug 2022 09:44:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661435052; x=1661442252; bh=AjAS+mxokB
-        mADly8X+bwM1z4OrzJr2RjjjUhIDL33q8=; b=aBX2Pd5RY+tOBxJp7Q9Kg9QlAE
-        xXlvpoCjmRubOY7P6I+BHGd97QgDL2AVDpf/PUw0n7ySzAAszNwsNCpT3/6eJzEW
-        ZBFbOi70av8ROP3lP1CdNz7yZvvHR/yrhtbwEMZXtNh1HL3cI89A8wGRa9C3E9UV
-        A+c4wlyqASoo87i0QjufCH7CVRVRSRpTF4nNZ+0z8qGhWYKmg0+XYW0ib5ztTETf
-        xuwCqRc6LcdjmDg3dNjTRco2xb/pl71VGwBtufxCc+xvEUJIhri0VnpUdOWsAqo7
-        mhYCwDVlz5GLR452UO+zMhnOwRTjRxovWcbVEQ9qzK6llfkPNdv4zxVP50SA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661435052; x=1661442252; bh=AjAS+mxokBmADly8X+bwM1z4OrzJ
-        r2RjjjUhIDL33q8=; b=wbLRi+/MnqRVf8XYD5hMxddwmSfrpNixFPg+0EmqSYBx
-        jwROxs3/NjSL4LioG7sMaH+N8R/T1ro+6MeZQhmS/n89Q/3oJvLaXlNTeOANhQYk
-        W6i066GwHdY+6za9liIVlBS/mMTKwUJ1LVKqRc24ThfkFz4zMBCsNU6xG4okTCZj
-        YEXbQS0vrV4RKuYPBM0zprcS2is85jC2ukDCfYhR0kK7Ci75uG10EPLAzpz1TczY
-        IyS3ORjSCMDrsJNgVegd7cn6gWbb4OlQlwBobnbEIt9Wo5ghJpCHAuM/FaSTEeen
-        BqUrteGdd4JGYA9bRf2PwsmPhm2ZQTF1aKqCLfAkvA==
-X-ME-Sender: <xms:q3wHYwJEFPKwRD-bJ0WNXQpQ6u0YGXCm5ZZAHqJAbi145PikINxAlw>
-    <xme:q3wHYwLdiP1ka_ZE7YIIi9kgJ_cUq0KUIcUngIQW9aUxkAVprI2YOaS0NAaO1vNIv
-    0HUL2DMMQ5V3h-Hhxs>
-X-ME-Received: <xmr:q3wHYws-Dltmw0Gwp92UWSQjXICrzHSGC5rZK5B0Dvbc7RqFM0P7kaZ1mIM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
-    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:q3wHY9a41ZGeJtSzfcaj6aGoJPhwlf8ciS6VwRTvQfHeJUCOksk2RA>
-    <xmx:q3wHY3a7m1F_nSW3ahQtqPfda5UN-wj-3jRwNvzxCt-5sJwCBzpMtA>
-    <xmx:q3wHY5BxaU8J5xmINtViC1twyVZYYENBvV6Erv1zpi7DQAOGQbFhlQ>
-    <xmx:rHwHY0KHVaeKaL82Q-OroPeXq2HQX9yNggQVAJkSmXZDju0qAhQ1cA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 Aug 2022 09:44:10 -0400 (EDT)
-Date:   Thu, 25 Aug 2022 15:44:08 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
+        Thu, 25 Aug 2022 09:45:09 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8FB11C2C;
+        Thu, 25 Aug 2022 06:45:07 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l23so8458579lji.1;
+        Thu, 25 Aug 2022 06:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=LNQ1P5VfR2hkrO1KVSkVyiPofBvt2GF2rWkw17ZqdPc=;
+        b=Uj3kdoKnIficr7T0mxpriXp3Bhpz+uGwLNnfEOqvw4QJBLkF1DPeQBXj12Rx9AMBHl
+         /9GbNFs8SAt20sraYH0vWtihEXigfs1Jz46PtgxQE3fCnhweauy24KnfVUNMHylbAN7q
+         488xIslKivbNcFC3fszq2p6rOXKAPj4tWhBr4T9LkyA7Vcee4QBsYWXl4wfaEruusuy0
+         HThiG1HWcPt9moxHpq1CsIqfQHvtpTKBVSbOdEOWRkVNbvYr5WzgHwriNyqvWlyeXMxP
+         havgWHIFHhQzEi88LyOBZ9EOyCS05e6rQGAVvgIqIjVh8ICOQT27pErGJzvTJxJy3dW4
+         baHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=LNQ1P5VfR2hkrO1KVSkVyiPofBvt2GF2rWkw17ZqdPc=;
+        b=mpzA2x12QaKTXcUcIxAo8ZsuHjpyjV1YhDIuCqBl0/8IengnmckaxpW1LVBjAXZSPF
+         KZSP6KocW6KVqMyePR2uv7mzFjSPdfIzfA80Dh81CQRyq2+NQA1CM+L44Dtf5tuYKmJB
+         VgwQd6f1NfwqDMCSNYcAQeNKiM9nUzGyJeVJAgnvZfOI3bVk2xOQCqKutB3xe5o1CFLC
+         EOcSIjxBR2p1xwuGGK1GWQKKpmP085UjukrXnxUM1kEsLvZs1ehjTXka6FuUspGSXUMq
+         Fvt21+WkJ5P5tWPA/vjqZw5mR0yzmYHFShmtMFmcl4ioxvUdLkAOMWBISAJdtKZo0ENO
+         61nA==
+X-Gm-Message-State: ACgBeo335xD7DC2Ou2rXe6kH3ehRt881SnHQ6hQAwZQ3EuxOIqBRwqj/
+        ep6CzKVAzGUUjI4TLtQSHU+jy7m/7M+8sw==
+X-Google-Smtp-Source: AA6agR6W/G7rOoiqL0vEYBlVB5eoB4lN8B1UfT+c7FAeskxQeqGUO6kguGNrdSz6l9Bzihl67aZmPQ==
+X-Received: by 2002:a05:651c:221e:b0:25f:f069:1c13 with SMTP id y30-20020a05651c221e00b0025ff0691c13mr1200422ljq.390.1661435105696;
+        Thu, 25 Aug 2022 06:45:05 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id a12-20020ac25e6c000000b0048af0df1041sm496671lfr.255.2022.08.25.06.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 06:45:05 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 16:45:02 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220825134408.dioj2lbycl7jm3ld@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RESEND v10 6/7] clk: baikal-t1: Add DDR/PCIe directly
+ controlled resets support
+Message-ID: <20220825134502.alxzlikv7ftir2fi@mobilestation>
+References: <20220822182934.23734-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822182934.23734-7-Sergey.Semin@baikalelectronics.ru>
+ <c3831c5a-7e10-2112-83e0-4ec2d70001c2@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ztityevrt7lawo2u"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c3831c5a-7e10-2112-83e0-4ec2d70001c2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 23, 2022 at 01:23:32PM +0300, Krzysztof Kozlowski wrote:
+> On 22/08/2022 21:29, Serge Semin wrote:
+> > Aside with a set of the trigger-like resets Baikal-T1 CCU provides two
+> > additional blocks with directly controlled reset signals. In particular it
+> > concerns DDR full and initial resets and various PCIe sub-domains resets.
+> > Let's add the direct reset assertion/de-assertion of the corresponding
+> > flags support into the Baikal-T1 CCU driver then. It will be required at
+> > least for the PCIe platform driver. Obviously the DDR controller isn't
+> > supposed to be fully reset in the kernel, so the corresponding controls
+> > are added just for the sake of the interface implementation completeness.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> > 
+> > ---
+> > 
+> > Changelog v6:
+> > - Refactor the code to support the linear reset IDs only. (@Philipp)
+> > 
+> > Changelog v7:
+> > - Drop empty line from the sys_rst_info structure initialization block.
+> >   (@Philipp)
+> > ---
+> >  drivers/clk/baikal-t1/ccu-rst.c     | 66 +++++++++++++++++++++++++++++
+> >  drivers/clk/baikal-t1/ccu-rst.h     | 10 +++++
+> >  include/dt-bindings/reset/bt1-ccu.h |  9 ++++
+> 
 
---ztityevrt7lawo2u
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Do not mix drivers and bindings. Bindings always go separately, so this
+> has to be split.
 
-Hi,
+Ok. Sigh...
 
-On Sat, Aug 20, 2022 at 10:12:46PM +0200, Noralf Tr=F8nnes wrote:
-> > diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> > index 1e9996b33cc8..78275e68ff66 100644
-> > --- a/include/drm/drm_connector.h
-> > +++ b/include/drm/drm_connector.h
-> > @@ -143,6 +143,32 @@ enum subpixel_order {
-> > =20
-> >  };
-> > =20
-> > +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
-> > +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
-> > +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
-> > +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
-> > +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
-> > +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
-> > +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
-> > +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
-> > +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
-> > +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
-> > +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
-> > +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
-> > +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
-> > +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
-> > +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
-> > +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
-> > +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
-> > +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
-> > +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
-> > +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
-> > +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
-> > +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
-> > +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
-> > +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
-> > +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
-> > +
->=20
-> This is an area where DRM overlaps with v4l2, see:
-> - include/dt-bindings/display/sdtv-standards.h
-> - v4l2_norm_to_name()
->=20
-> Maybe we should follow suit, but if we do our own thing please mention
-> why in the commit message.
+-Sergey
 
-Are you suggesting that we'd share that definition with v4l2?
-
-I've tried to share some code in the past between v4l2 and DRM, and it
-got completely shut down so it's not something I'd like to try again, if
-possible.
-
-Maxime
-
---ztityevrt7lawo2u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwd8qAAKCRDj7w1vZxhR
-xbq9AP9Ut8DrTs4R98n7uEJ4qsWpbIOQoxH89Co6dV81OZDd4AD/XTYHIrgOsCVX
-KF7npRlfSwUkz5ZgJBgTt5iDHapUmAQ=
-=Heqx
------END PGP SIGNATURE-----
-
---ztityevrt7lawo2u--
+> 
+> Best regards,
+> Krzysztof

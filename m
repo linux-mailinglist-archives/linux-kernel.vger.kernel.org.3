@@ -2,65 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9235A5A0BFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA6F5A0C00
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236319AbiHYI4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S237544AbiHYI52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiHYI4l (ORCPT
+        with ESMTP id S236917AbiHYI5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:56:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EC6A895D;
-        Thu, 25 Aug 2022 01:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661417797; x=1692953797;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zNKMrn0ocm4C3ekDPQvN7ou5Bn4K35RLPaE4whp4PAc=;
-  b=KRBWBb11oFjgm/7CU7q7EV+2lOh6ezTBg/ZK/OS9s6SAMeqFgBwI1MK9
-   h5Uw6Ui8eSVcpybir5Wk+BQPdwF7d27WdsUv8CGHADYtIlgfJUAwQl0qD
-   LhLb1BiRIlTizvRw/YXjfLOGQHU9pQId04gXR+mdDfpdX++1in5ds5Bjt
-   CQHaJsDKk/AzK7RrR2BK049iu6LrgNcwX1FnQUPOoQJcawYp70mXNjB7h
-   e7cKTap+Fwi0//8D8IhH3i2Z8CN2tj+CUF9JGJW1iKp4ri/IsM0t/b0TA
-   GGZtGXyb8mTALtHGVqU6T2bbgOBCt5jibJFz7tJ50Vbr7i6xkv9hktLMu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291756607"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="291756607"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 01:56:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="639505184"
-Received: from lxy-dell.sh.intel.com ([10.239.48.38])
-  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2022 01:56:32 -0700
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [RFC PATCH 2/2] KVM: VMX: Stop/resume host PT before/after VM entry when PT_MODE_HOST_GUEST
-Date:   Thu, 25 Aug 2022 16:56:25 +0800
-Message-Id: <20220825085625.867763-3-xiaoyao.li@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220825085625.867763-1-xiaoyao.li@intel.com>
-References: <20220825085625.867763-1-xiaoyao.li@intel.com>
+        Thu, 25 Aug 2022 04:57:10 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F53A833C;
+        Thu, 25 Aug 2022 01:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1661417814; x=1692953814;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=VVyg3I7PHghheCpl8k3+YDXCSMJ7EmMF6AEsi2N51Ks=;
+  b=PmOp8JskYg8/JgdGAis1FelDE4XbEFepS4UmbGvkUna08sEszB44RnMA
+   D1WjsQdSNP2Lr5xNfBdU7acHvOpnqio+w0uD50Osr0fozO8VJBT43dcl8
+   13bse2m8ghJezX68SSJJx24BBTLa50nWwX4F8XGSIIaRQo92yv/mS3jpo
+   BHNRs7QIMGqLCcTLxAJ6XUGYS+tlY+N7eSzYQ/0DC+GqeUbhGHv0SQBua
+   srNSkfpW3EVNofUYjyD2cn+ya2at4TeQc6XBu+vAKTPF8uFuqMQULQlGx
+   jt2fYSscfe/vtf3dmib+FIRRtmJhXXi6EX96JQRr9TUlRJog/BtGHICB6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,262,1654531200"; 
+   d="scan'208";a="210130067"
+Received: from mail-dm6nam12lp2171.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.171])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Aug 2022 16:56:51 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IvI0UIhmx7ggj5BboiccIyhZ3H2AZfq2fn97KimP83LzUtXEyrOOfjSIXyYyl5MQTY3O/JzDyAHBTBms8d8KUxjio7Q6mIOCU6CeywOYkMmm1ShfvB02DmQ/uMlH0JZ01XDTqjieIHyk93KS7W3CO+ZslKXIc1cpq7BK6zKNcykWt4nb/6ZNhRpAp/jDqITN5l1yRtojwUDiJ1YX8L1C93/0plritOb5GL3q6sgvDINATJ6C4TrQyArKm39dXc91X3LG7X1laPYBFhTvKyi9x6CH/4PCP8a1SOcZRsUYmSuDgFOGq3Oe0i//S/AtruH1BO7iMleuVQqrt6iOmB4YHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gKChf4hS7U79euBbGNgD3c+25RLaFE2r1Z8olY3eKBQ=;
+ b=GcIRXtN6FT3tWg//pulDg6qU1iHXe/CgDr8WelPmR3AT0kAAWbu925w0APMwXVDm5W8pMyFdHfjXI3KXm3uWipCv56A58RlJdNiNJkw0G2pvFM4ovUC5FILirAuJ6hHKtkPKGE7ljTB6bjMzWzjx1StqKNA3iS2MMr5nFRLJtF2AcLda/gJgZypN1bYo48h4ro4UYCnS5GV4L8oewVPQyFlDutqC1EaVoszt5jFBl4FB9kxPb2uhtfCfSZ6DKTKbaU4sJbb1VHRuJzrZEREQFowxiHv3tOkHRGzIINB5kM4ZD9JoCWFmvmEzvaGjRpg2rb6Yai1Q5QUkFGTo6KN2FA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gKChf4hS7U79euBbGNgD3c+25RLaFE2r1Z8olY3eKBQ=;
+ b=h2TGXbIfGH/OZQZ0/9s/hO/2rZp0sOcpJDKXovEoPaozu0Ebxb9SDsiDnbunlFCgMvc5EKMReIVIm91fs3x0vchVhO0eBLptz7YVSkFWyahKDXlJD0tPMIci1I9Uv59P+joUv/4xOYpndU5E4jTaKXuEfzLyXnF2uo7MmdP/MGk=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ SA0PR04MB7452.namprd04.prod.outlook.com (2603:10b6:806:e2::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5546.18; Thu, 25 Aug 2022 08:56:50 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::eca7:e175:b67:5002]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::eca7:e175:b67:5002%4]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
+ 08:56:50 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Jiaming Li <lijiamingsofine@gmail.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        lijiaming3 <lijiaming3@xiaomi.com>
+Subject: RE: [PATCH] scsi: ufs: ufsfbo: Introduce File Based Optimization
+ feature
+Thread-Topic: [PATCH] scsi: ufs: ufsfbo: Introduce File Based Optimization
+ feature
+Thread-Index: AQHYt5Yd7MdiBMU/V0WwXjppS39zs62/UTVA
+Date:   Thu, 25 Aug 2022 08:56:50 +0000
+Message-ID: <DM6PR04MB657511C55B06E40552C03378FC729@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20220824084633.14428-1-lijiamingsofine@gmail.com>
+In-Reply-To: <20220824084633.14428-1-lijiamingsofine@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c1161552-ef12-465b-05cb-08da8677bfc5
+x-ms-traffictypediagnostic: SA0PR04MB7452:EE_
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UvSBhxX26WTVmBHUlenjghSCTFXKFEKOwL2eqTgY39LhJ/M6gGfDYNY90zCN3SP0WBuFUxtCHU4pcklXi1xZ7HR9mr6Y7xVEXi5AyONJo37/LcMqc0zzsjnEsaOSBKS5DN/6jptZ9Mqlb+vVsqt/VqWdp1k0dInBiLARKteI9KP2njpzj5XWmL2ZFkVfYlyTbSBWhEs5K3BqNbnXk2NSOK9u5wCaAWpzixTlnxtnB+bE9gbFEpVQmnyzhlHM7V/4Tcjhhqbrm7S34qARfCoTtiWkNMQZIDSrrvnCqOw8YPoorXjjmaQTV2ai/xjfDMZ27Q+AbKtpODJ7z/cfDIIJlfh7wdi7se77t9MumQsQUlrhxqy1dcW33LFDwVQIz3RQm1dmDk5kEWoV7GC0UtaACzv7s5Yi7O8cldGV/htXPHjdstQFTK2L2LVE3UU97Hc/BsXiu5O+bgf5aLi+f/75Coy40ZdXUCJqf6Du6FcZAEgJC8JWZeujfk65gd8FLAOnJB9hys/ARqMrA8LZ8uf+nTWMzzfMFenLuxL+dy1cekfDXvs5QwU5HptKmMqkO+DaSlBg6OY0yuxu3rIw0fZ4D3gQBufQwkaeT6AzLDvNQH2UyIRVNFAugglzLDqkr4uT1sAq/LK1BzRfmXJseyqT1o7InCWTpKvIcpbxxUW5narK4qj+OCq+Mc3eh/KOTAtY8ZoCNhSO/kBAICv+hrlt6TAxRS7QccspuQU/MkLSdUBj0myg9YmiKPooV2TXeqQJgy31rWQUu31MTrrYn9+E5A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(39860400002)(396003)(376002)(136003)(66446008)(122000001)(82960400001)(86362001)(83380400001)(38100700002)(186003)(38070700005)(110136005)(76116006)(8936002)(33656002)(4326008)(52536014)(66556008)(2906002)(5660300002)(54906003)(66946007)(9686003)(41300700001)(71200400001)(66476007)(26005)(55016003)(8676002)(478600001)(6506007)(316002)(7696005)(64756008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Pbbn2YXWxerJh7wu8afuVQHlb0b9M66T7pmj09OeSJ79+2SuBXbXpLKd+cY3?=
+ =?us-ascii?Q?pA2Xwv6hpo5clAoUc9+Vt5AOueUXpeFbeEiq2QyC/T8ML3yk4BniLnwy1NPo?=
+ =?us-ascii?Q?u7cacc9HHXmxp/Yf5MU4r2YMhdfPYQHxbEZEUjwcHXQ7rgNqf/3jOsartZyi?=
+ =?us-ascii?Q?Mtbv1S9gmHe9Zogoj7rg3fYEEIKg1MhNAKtJ/ZntO4n4gpaeb18hewczYjIw?=
+ =?us-ascii?Q?hFMv5lbDq0NX9kScT3p7XBUk8FyQW8JW6JCyDSKiBgD/WFu5nAuuRca/LTsh?=
+ =?us-ascii?Q?XJT8l9pyFomiPLlSbjCHE0NAuR21Oti1ESTHr2yRsiFyc7uJQ1r6S7aUkfeV?=
+ =?us-ascii?Q?xQkj5e2/+3/hFOYlCFo1iZ7SS1iipMcQ7zEJbMAV6f6wMvouRGONRgg8H3kv?=
+ =?us-ascii?Q?NzCkvtMfbK+dan6zZpVB84z+hSYNr1kxQgUMYadyTj8JOweDUUiLgHK2fova?=
+ =?us-ascii?Q?LShvO2+7B7UQwHENoW0IEV4X3tOEfDU3NWVF2KFjb/q5Wu72vE2vmV2ndxte?=
+ =?us-ascii?Q?gXRU1K5yb5mHt0KAYoeAyvJmG3ueVfVEcZ0LxLmbmK8RutThET1e2qdVCL45?=
+ =?us-ascii?Q?xcyQL4ASpfGHFtEyuU+gHfhnWO5y5TUjw0wmuGkqNo9D3yXild26VPTLnRIZ?=
+ =?us-ascii?Q?bQHr0ecBRbtMjrnGSJQaB0R+sdeMbieAdu6A23WAiEBAKvGWPvDrIBXnGPgk?=
+ =?us-ascii?Q?GkH+ZEEEZCX6iVXUKo8A8xiBlrgEjoeRqbs1XH00Gb2EAwUFODcFGnsf4gdC?=
+ =?us-ascii?Q?GYEGtTY6f3eFA2INz6+3Kqcu5XvbuDoE/aYyQJIhFavqkoGcOYff77ULwRJc?=
+ =?us-ascii?Q?21Fe8MvNgRO89D/HOioqZNMZXPDof715d3uTq4HEZxVH/PJ8Bi/VGh2AZThn?=
+ =?us-ascii?Q?ctzyapWI4D/4P3bzXCrhriVpdlCc8+Tzl7kaqhF0eW2YOLOgq8tW6uLqpYsv?=
+ =?us-ascii?Q?dNPYx67IfKC/BCJTZv+ptvCXRp8x9tRwS+8NsbskBjlyjx6ReM5byoo69NpJ?=
+ =?us-ascii?Q?9FoAXo29t3iyshRod3z+QrfQXcgg8oQyqmwXTaT5NGlykJQGDNIoPbCIkzWn?=
+ =?us-ascii?Q?/MLi2LhE0SZGTn5ILsDggD6Z5kfAYmwFkSiSUTmr17Ve3OxRqEx+DeNCS6Sr?=
+ =?us-ascii?Q?H6NGfNwUCup/LAlKTv9E+Xl3f8ok84rZ7YKQLrzheqX73TABn+sZvu62X8yq?=
+ =?us-ascii?Q?tmhpr8SYtjfqid3s22ffXgpM1O3DfjdDAI1G1BeCWz57RY5QY4wOAHjpCZp9?=
+ =?us-ascii?Q?00vQPwxBC96VGA7cujml9DsodmnACo395/lJnmdudJrMNp8BEvCPQXzbSrCL?=
+ =?us-ascii?Q?afOFVRIKEQ6ZNgmbRa1zeIRuinA+RvO/n4aBZvOsZtHbTls4AtgdcZyZdzh1?=
+ =?us-ascii?Q?dBNGoYCsdQY60TxmnmeOFSaxs7PwxKZY6l/circ79lPaiUH3zwaYjEE2heSl?=
+ =?us-ascii?Q?d/Q6IjEPaKbhyATMUPQdzYiHLs9Fe6vncDhyZbWHOieoGEFcGpVd7VSk1HRN?=
+ =?us-ascii?Q?EaivtX/we21xgpTHV8VtwEbJ3TCW/jgvLfPgbIsncctIcoxPV9ur2HNInQaJ?=
+ =?us-ascii?Q?+fgJlzeiH642mm6NoEdNWlUSEz+WXzUrdmpEkuZc?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1161552-ef12-465b-05cb-08da8677bfc5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2022 08:56:50.2312
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X5YMWj4SVmRovOxKgSUkeJENsIqL9tJL/s2+4zhjN431Q2ramD7WR8jW2RAjWxj9rzrjW8OKOIlyMJPsU8SAhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR04MB7452
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,81 +138,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current implementation in pt_guest_enter() has two issues when pt mode
-is PT_MODE_HOST_GUEST.
+> +
+> +/* SYSFS DEFINE */
+> +#define define_sysfs_ro(_name) __ATTR(_name, 0444,                     \
+> +                                     ufsfbo_sysfs_show_##_name, NULL)
+> +#define define_sysfs_wo(_name) __ATTR(_name, 0200,                     \
+> +                                      NULL, ufsfbo_sysfs_store_##_name)
+> +#define define_sysfs_rw(_name) __ATTR(_name, 0644,                     \
+> +                                     ufsfbo_sysfs_show_##_name,        \
+> +                                     ufsfbo_sysfs_store_##_name)
+> +static struct ufsfbo_sysfs_entry ufsfbo_sysfs_entries[] =3D {
+> +       define_sysfs_ro(fbo_rec_lrs),
+> +       define_sysfs_ro(fbo_max_lrs),
+> +       define_sysfs_ro(fbo_min_lrs),
+> +       define_sysfs_ro(fbo_max_lrc),
+> +       define_sysfs_ro(fbo_lra),
+> +       define_sysfs_ro(fbo_prog_state),
+> +       define_sysfs_ro(fbo_get_lr_frag_level),
+> +       define_sysfs_ro(fbo_support),
+> +       define_sysfs_ro(fbo_version),
+> +       define_sysfs_wo(fbo_operation_control),
+> +       define_sysfs_wo(fbo_send_lr_list),
+> +       define_sysfs_rw(fbo_exe_threshold),
+> +       define_sysfs_rw(fbo_wholefile_enable),
+> +       /* debug */
+> +       define_sysfs_rw(debug),
+> +       /* Attribute (RAW) */
+> +       define_sysfs_rw(block_suspend),
+> +       define_sysfs_rw(auto_hibern8_enable),
+> +       __ATTR_NULL
+> +};
+Lets stick to the _store / _show naming conventions -
+people rely on that when they are grepping the code.
+Also, you need to document the ABI.
 
-1. It relies on VM_ENTRY_LOAD_IA32_RTIT_CTL to disable host's Intel PT
-   for the case that host's RTIT_CTL_TRACEEN is 1 while guest's is 0.
-
-   However, it causes VM entry failure due to violating the requirement
-   stated in SDM "VM-Execution Control Fields"
-
-   If the logical processor is operating with Intel PT enabled (if
-   IA32_RTIT_CTL.TraceEn = 1) at the time of VM entry, the "load
-   IA32_RTIT_CTL" VM-entry control must be 0.
-
-2. In the case both host and guest enable Intel PT, it disables host's
-   Intel PT by manually clearing MSR_IA32_RTIT_CTL for the purpose to
-   context switch host and guest's PT configurations.
-
-   However, PT PMI can be delivered later and before VM entry. In the PT
-   PMI handler, it will a) update the host PT MSRs which leads to what KVM
-   stores in vmx->pt_desc.host becomes stale, and b) re-enable Intel PT
-   which leads to VM entry failure as #1.
-
-To fix the above two issues, call intel_pt_stop() exposed by Intel PT
-driver to disable Intel PT of host unconditionally, it can ensure
-MSR_IA32_RTIT_CTL.TraceEn is 0 and following PT PMI does nothing.
-
-As paired, call intel_pt_resume() after VM exit.
-
-Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
----
- arch/x86/kvm/vmx/vmx.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d7f8331d6f7e..3e9ce8f600d2 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -38,6 +38,7 @@
- #include <asm/fpu/api.h>
- #include <asm/fpu/xstate.h>
- #include <asm/idtentry.h>
-+#include <asm/intel_pt.h>
- #include <asm/io.h>
- #include <asm/irq_remapping.h>
- #include <asm/kexec.h>
-@@ -1128,13 +1129,19 @@ static void pt_guest_enter(struct vcpu_vmx *vmx)
- 	if (vmx_pt_mode_is_system())
- 		return;
- 
-+	/*
-+	 * Stop Intel PT on host to avoid vm-entry failure since
-+	 * VM_ENTRY_LOAD_IA32_RTIT_CTL is set
-+	 */
-+	intel_pt_stop();
-+
- 	/*
- 	 * GUEST_IA32_RTIT_CTL is already set in the VMCS.
- 	 * Save host state before VM entry.
- 	 */
- 	rdmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
- 	if (vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN) {
--		wrmsrl(MSR_IA32_RTIT_CTL, 0);
-+		/* intel_pt_stop() ensures RTIT_CTL.TraceEn is zero */
- 		pt_save_msr(&vmx->pt_desc.host, vmx->pt_desc.num_address_ranges);
- 		pt_load_msr(&vmx->pt_desc.guest, vmx->pt_desc.num_address_ranges);
- 	}
-@@ -1156,6 +1163,8 @@ static void pt_guest_exit(struct vcpu_vmx *vmx)
- 	 */
- 	if (vmx->pt_desc.host.ctl)
- 		wrmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
-+
-+	intel_pt_resume();
- }
- 
- void vmx_set_host_fs_gs(struct vmcs_host_state *host, u16 fs_sel, u16 gs_sel,
--- 
-2.27.0
-
+Thanks,
+Avri

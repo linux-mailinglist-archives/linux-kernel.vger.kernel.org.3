@@ -2,104 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EB25A1622
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE435A15EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241656AbiHYPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S241694AbiHYPiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiHYPwz (ORCPT
+        with ESMTP id S233199AbiHYPiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:52:55 -0400
-X-Greylist: delayed 482 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 08:52:54 PDT
-Received: from esa1.mentor.iphmx.com (esa1.mentor.iphmx.com [68.232.129.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E6E1AF3A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:52:54 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,263,1654588800"; 
-   d="scan'208";a="84691156"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa1.mentor.iphmx.com with ESMTP; 25 Aug 2022 07:37:38 -0800
-IronPort-SDR: gqfyrLBj4obLayYIodUELOeYAABsqQvo8uOyOawchBB2Q8+w5UxlnjBrn460q3ycd6wHjJqmjd
- gh7T7w/QcDRQ6tORaMlE5kUTFcOMmSI30/IrpvCk5Qd/qmt7O9jkSwCyju+AieGSqCOkgrFf0W
- SQJu/53xgPnTrY4XPza5ZHuv1txMaVQqNKYA+Dwut3Ev6jvZD46k0K/9jtxIlvngRv31VMDc5g
- PzxQEqscK8aPSncjQkN92X4fOOyz2DX2qWOKXKw1t+6Wr0Z6OmFLRCVUkUOLkHjinfKI7N5oFW
- iBQ=
-Date:   Thu, 25 Aug 2022 15:37:27 +0000
-From:   Joseph Myers <joseph@codesourcery.com>
-X-X-Sender: jsm28@digraph.polyomino.org.uk
-To:     David Laight <David.Laight@ACULAB.COM>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zack Weinberg <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: RE: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-In-Reply-To: <5e10ac07e63e41639b3113d12c264447@AcuMS.aculab.com>
-Message-ID: <alpine.DEB.2.22.394.2208251533340.108545@digraph.polyomino.org.uk>
-References: <20210423230609.13519-1-alx.manpages@gmail.com> <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com> <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
- <87ilmgddui.fsf@oldenburg.str.redhat.com> <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com> <alpine.DEB.2.22.394.2208251435370.104368@digraph.polyomino.org.uk> <5e10ac07e63e41639b3113d12c264447@AcuMS.aculab.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 25 Aug 2022 11:38:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742C4B7EC4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:38:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1072461AB3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:38:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94AEEC433C1;
+        Thu, 25 Aug 2022 15:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661441929;
+        bh=pQ8yD0W3R5iU7lkK49zIJA2LO1vTB4E7TUZySfUSS+c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bmuEm7maYWepxVZ8ZhXh5YjPHa4rJr2K32C4VfQMPmzX5cj2Y0DRDEucmK3C6GZFW
+         zFwRDmdnkc6nd+2y/VpRJS+jx/hRlV5NUUkJNdYMeaYF5GpDVaMYqrG5JcIwDVpesC
+         CkeEpHKTn6TZn8OeaJBO7I055Ac4d+NZ0NLk2CBVc6W//ONKeN8iqiqrReV1IliLrW
+         Uygw4nXa42alMPQzEPR/WHlY91uwf0CRg3s4/c+ZnNfGOauJgaNiwlqZjXNWHsi+xp
+         xF2emT9sRXPwRDnRUsD6TIWqgsAATWVH6WzWUMirhz0jAF2kpQVubEqhnIpB8IcCEu
+         3MPIo01b0ZIPQ==
+Date:   Thu, 25 Aug 2022 08:38:46 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        keescook@chromium.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
+        llvm@lists.linux.dev,
+        "Sripada, Radhakrishna" <radhakrishna.sripada@intel.com>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
+Message-ID: <YweXhnusRr5ACYYd@dev-arch.thelio-3990X>
+References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
+ <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+ <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+ <875yigixjp.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Originating-IP: [137.202.0.90]
-X-ClientProxiedBy: svr-ies-mbx-15.mgc.mentorg.com (139.181.222.15) To
- svr-ies-mbx-10.mgc.mentorg.com (139.181.222.10)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <875yigixjp.fsf@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022, David Laight wrote:
-
-> From: Joseph Myers
-> > Sent: 25 August 2022 15:39
-> > 
-> > On Thu, 25 Aug 2022, Linus Torvalds wrote:
-> > 
-> > > That's a small detail that yes, we've tried to avoid the absolute
-> > > humongous mess that the C standard library has with their horrendous
-> > > 'PRId*' mess, but honestly, it's just a tiny detail.
-> > 
-> > I've not yet implemented it for glibc or for GCC format checking, but C23
-> > adds 'wN' format length modifiers so you will be able to e.g. use "%w64d"
-> > with printf to print an int64_t and won't need those PRI macros any more.
+On Thu, Aug 25, 2022 at 10:37:14AM +0300, Jani Nikula wrote:
+> On Tue, 23 Aug 2022, Łukasz Bartosik <lb@semihalf.com> wrote:
+> >>
+> >> Hi all,
+> >>
+> >> Apologies in advance if you see this twice. I did not see the original
+> >> make it to either lore.kernel.org or the freedesktop.org archives so I
+> >> figured it might have been sent into the void.
+> >>
+> >> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
+> >> > From: Łukasz Bartosik <lb@semihalf.com>
+> >> >
+> >> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
+> >> > The root cause is null pointer defeference of bi_next
+> >> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
+> >> >
+> >> > BUG: kernel NULL pointer dereference, address: 000000000000002e
+> >> > PGD 0 P4D 0
+> >> > Oops: 0002 [#1] PREEMPT SMP NOPTI
+> >> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
+> >> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05/14/2021
+> >> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
+> >> > ...
+> >> > [    2.554467] Call Trace:
+> >> > [    2.554467]  <TASK>
+> >> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
+> >> > [    2.554467]  ? _printk+0x59/0x73
+> >> > [    2.554467]  ? _dev_err+0x77/0x91
+> >> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
+> >> > [    2.554467]  i915_driver_probe+0x4c8/0x638
+> >> > [    2.554467]  i915_pci_probe+0xf8/0x14e
+> >> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
+> >> > [    2.554467]  pci_device_probe+0xaa/0x142
+> >> > [    2.554467]  really_probe+0x13f/0x2f4
+> >> > [    2.554467]  __driver_probe_device+0x9e/0xd3
+> >> > [    2.554467]  driver_probe_device+0x24/0x7c
+> >> > [    2.554467]  __driver_attach+0xba/0xcf
+> >> > [    2.554467]  ? driver_attach+0x1f/0x1f
+> >> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
+> >> > [    2.554467]  bus_add_driver+0x11b/0x1f7
+> >> > [    2.554467]  driver_register+0x60/0xea
+> >> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> >> > [    2.554467]  i915_init+0x2c/0xb9
+> >> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> >> > [    2.554467]  do_one_initcall+0x12e/0x2b3
+> >> > [    2.554467]  do_initcall_level+0xd6/0xf3
+> >> > [    2.554467]  do_initcalls+0x4e/0x79
+> >> > [    2.554467]  kernel_init_freeable+0xed/0x14d
+> >> > [    2.554467]  ? rest_init+0xc1/0xc1
+> >> > [    2.554467]  kernel_init+0x1a/0x120
+> >> > [    2.554467]  ret_from_fork+0x1f/0x30
+> >> > [    2.554467]  </TASK>
+> >> > ...
+> >> > Kernel panic - not syncing: Fatal exception
+> >> >
+> >> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
+> >> > Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
+> >> > ---
+> >> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
+> >> >  1 file changed, 9 insertions(+), 7 deletions(-)
+> >> >
+> >> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm/i915/display/intel_bw.c
+> >> > index 2da4aacc956b..bd0ed68b7faa 100644
+> >> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
+> >> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
+> >> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_private *dev_priv, const struct intel
+> >> >               int clpchgroup;
+> >> >               int j;
+> >> >
+> >> > -             if (i < num_groups - 1)
+> >> > -                     bi_next = &dev_priv->max_bw[i + 1];
+> >> > -
+> >> >               clpchgroup = (sa->deburst * qi.deinterleave / num_channels) << i;
+> >> >
+> >> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
+> >> > -                     bi_next->num_planes = (ipqdepth - clpchgroup) / clpchgroup + 1;
+> >> > -             else
+> >> > -                     bi_next->num_planes = 0;
+> >> > +             if (i < num_groups - 1) {
+> >> > +                     bi_next = &dev_priv->max_bw[i + 1];
+> >> > +
+> >> > +                     if (clpchgroup < clperchgroup)
+> >> > +                             bi_next->num_planes = (ipqdepth - clpchgroup) /
+> >> > +                                                    clpchgroup + 1;
+> >> > +                     else
+> >> > +                             bi_next->num_planes = 0;
+> >> > +             }
+> >> >
+> >> >               bi->num_qgv_points = qi.num_points;
+> >> >               bi->num_psf_gv_points = qi.num_psf_points;
+> >> > --
+> >> > 2.35.0.rc2.247.g8bbb082509-goog
+> >> >
+> >> >
+> >>
+> >> Was this patch ever applied or was the issue fixed in a different way?
+> >> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
+> >> compiler supports it), bi_next will be deterministically initialized to
+> >> NULL, which means 'bi_next->num_planes = 0' will crash when the first if
+> >> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
+> >> us at [1] so it impacts real users (and I have been applying this change
+> >> locally for six months). I see some discussion in this thread, was it
+> >> ever resolved?
+> >>
+> >> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
+> >>
+> >> Cheers,
+> >> Nathan
+> >
+> > The patch was not accepted by upstream. I gave up after sending two reminders
+> > that the issue is still present which resulted in no upstream reaction.
+> > I have been also applying that patch locally for a few months.
+> > Thanks for bringing it up to upstream attention again.
 > 
-> Is that meant to work regardless of whether the type is
-> int, long or long long provided the size is correct?
+> Apologies for us dropping the ball here. There were objections to the
+> code from Ville [1] but nobody stepped up to clean it up. I think this
+> was really more about the commit being fixed c64a9a7c05be ("drm/i915:
+> Update memory bandwidth formulae") than about the patch at hand.
 > 
-> Or does it require the compiler know which type inttypes.h
-> uses for uint32_t and uint64_t?
+> In any case, I've gone ahead and pushed this patch to drm-intel-next
+> now. With the Fixes tag it should eventually find its way to stable
+> v5.17+. Thank you for the patch, review - and nagging. ;)
+> 
+> What still remains is cleaning up the code. But that should never have
+> stalled the fix for months. Sorry again.
 
-The type passed needs to be that used for the relevant stdint.h typedef, 
-not another of the same size.  (For format checking, that means the 
-compiler needs to know what the types used in stdint.h are.)
+No worries, better late than never :) Thanks for applying the change!
 
-It's now required that if int32_t exists, int_least32_t must have the same 
-type, so int_least32_t can also be used with that format (and there are 
-'wfN' formats for int_fastN_t / uint_fastN_t as well).
-
--- 
-Joseph S. Myers
-joseph@codesourcery.com
+Cheers,
+Nathan

@@ -2,169 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E045A0A91
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A285A0A82
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236102AbiHYHnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S238445AbiHYHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238659AbiHYHnD (ORCPT
+        with ESMTP id S237510AbiHYHmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:43:03 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F37EA2D97
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:42:57 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 2so16955881edx.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=pTSOf4yZBT6vxC8cWVxq54me3auAZtvDfhz2BczVtgE=;
-        b=Ig6BLIDsaP7fwO4f2tblxSV8D0IEZ23t5746evH4pnH6oehSyZT/w7P79opUL+FnmK
-         po3y3tMhPtweDHchzB18ityI3jwyATZyGSAP0WrqhvTn5ohd5US0JPEFOAGmxSk5vacw
-         sKRqdCKWOUSMVwQEX9dCud+27HCTh3lUtbqk4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=pTSOf4yZBT6vxC8cWVxq54me3auAZtvDfhz2BczVtgE=;
-        b=espDITqiAhgNxfW/LYlsBJwYKPZ00XG5yBy7F/YtE2nZ4BKgRa8uY8DaH0U30jaKpY
-         PDWBthQoJOeLjFlPJYMYLxeZvAEqa3wDobMpdxeIA4V1+fW1k9t47XTV/Dd6byomSgdf
-         GERiY1nzeLJHgYBkbIOji7B+Q+paRaEcCRhtdVzRHaim+fEnVJ5COGBue8pHzfNOThFh
-         3oPNBg8zEF5IV8Md9nQq0pK2hp+sxWB/mEbqBWFKyB69HPnblmLmMK6jNrEUDD2DPRNw
-         m58SEID61FJ3Pt0bxrC3DJ83HEOFXreVNcR9+yAUc3zLfV6Im5OCGrDjCvKK+LRe/GOE
-         YsbQ==
-X-Gm-Message-State: ACgBeo16lHoC3XvMGRXXQHUck0KHy68q0t4Sk+cMtj17g3g4zUv5cPeN
-        goxzR9IX8MgM5yzcckAXDeXZsORrb8D6PGw/ikg=
-X-Google-Smtp-Source: AA6agR7zdxg0CUkJDfzSWKwqhWRbAI3dNsbYykAd+baE6DA3sHvahi/MrseReEBvXYORVh/3PEVsBw==
-X-Received: by 2002:aa7:cfcb:0:b0:447:b4e5:22fb with SMTP id r11-20020aa7cfcb000000b00447b4e522fbmr1296542edy.190.1661413375759;
-        Thu, 25 Aug 2022 00:42:55 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id bm2-20020a0564020b0200b0044604ad8b41sm4331256edb.23.2022.08.25.00.42.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 00:42:54 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso2180253wmh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:42:52 -0700 (PDT)
-X-Received: by 2002:a7b:c399:0:b0:3a5:f3fb:85e0 with SMTP id
- s25-20020a7bc399000000b003a5f3fb85e0mr1402129wmj.38.1661413369950; Thu, 25
- Aug 2022 00:42:49 -0700 (PDT)
+        Thu, 25 Aug 2022 03:42:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5A6A2631;
+        Thu, 25 Aug 2022 00:42:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E33F4B81DF1;
+        Thu, 25 Aug 2022 07:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCB1C433D6;
+        Thu, 25 Aug 2022 07:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661413358;
+        bh=M4NLnweQ1YO0LW8zxsidwuJ2fk8GHRwJAW3ZzBT6X3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LU0D9Jw9TIgaMHhrIPJjyWgknREgEMx/EkpkyYeY6MULuKk++EPYab5YKhzRWQ4Fv
+         80TyLG/qe1jMrh6aGJK3XOTJ/0bvJrrwxiBzdPelhKS/95tEWK+/Xk32Z9N/CqUDnx
+         tfTiE4StzhzXlTJoY7uDrWIn9gRSdGRoVRONGlAs3GH5/EqQVgtQr4s8rt8GgJ+2oO
+         fvlEt+unVm0tpe2LyO58H1FAVtBE/5lzNFmNjVoLhA/T9psfrvZuYpi9hfMflKURg7
+         gkQe5pC9tgy2sgJvsojhcFZRa9wCeqxerRbsQZJT+1oFT69axPxYo1oXNyTdWsJ13Z
+         Odj2YO2albngQ==
+Date:   Thu, 25 Aug 2022 09:42:34 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     luca.ceresoli@bootlin.com
+Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 2/3] docs: i2c: i2c-topology: fix incorrect heading
+Message-ID: <Ywcn6stNFnz7haI3@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, luca.ceresoli@bootlin.com,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220824083104.2267000-1-luca.ceresoli@bootlin.com>
+ <20220824083104.2267000-3-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
- <20d93962-538c-d2c9-1696-a1bdbffa87f8@gmail.com>
-In-Reply-To: <20d93962-538c-d2c9-1696-a1bdbffa87f8@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 Aug 2022 00:42:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgSx8O0=p18C1aQuH4Gw7xmKujBKMEiSitCA7oG2h6WLg@mail.gmail.com>
-Message-ID: <CAHk-=wgSx8O0=p18C1aQuH4Gw7xmKujBKMEiSitCA7oG2h6WLg@mail.gmail.com>
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C naming
-To:     Alejandro Colomar <alx.manpages@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zack Weinberg <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f8Lepm0VlubYzzeD"
+Content-Disposition: inline
+In-Reply-To: <20220824083104.2267000-3-luca.ceresoli@bootlin.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:20 AM Alejandro Colomar
-<alx.manpages@gmail.com> wrote:
->
-> This patch is not about kernel, but about the section 2 and 3 manual
-> pages, which are directed towards user-space readers most of the time.
 
-They are about the types to the kernel interfaces. Those types that
-the kernel defines and exposes.
+--f8Lepm0VlubYzzeD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And the kernel type in question looks like this:
+On Wed, Aug 24, 2022 at 10:31:03AM +0200, luca.ceresoli@bootlin.com wrote:
+> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+>=20
+> "Etc" here was never meant to be a heading, it became one while converting
+> to ReST.
+>=20
+> It would be easy to just convert it to plain text, but rather remove it a=
+nd
+> add an introductory text before the list that conveys the same meaning but
+> with a better reading flow.
+>=20
+> Fixes: ccf988b66d69 ("docs: i2c: convert to ReST and add to driver-api bo=
+okset")
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Acked-by: Peter Rosin <peda@axentia.se>
+>=20
 
-        struct { /* anonymous struct used by BPF_PROG_LOAD command */
-                __u32           prog_type;      /* one of enum bpf_prog_type */
-                __u32           insn_cnt;
-                __aligned_u64   insns;
-                __aligned_u64   license;
+Applied to for-current, thanks!
 
-because the kernel UAPI header wants to
 
- (a) work whether or not <stdint.h> was included
+--f8Lepm0VlubYzzeD
+Content-Type: application/pgp-signature; name="signature.asc"
 
- (b) doesn't want to include <stdint.h> so as to not pollute the namespace
+-----BEGIN PGP SIGNATURE-----
 
- (c) actually wants to use our special types
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMHJ+kACgkQFA3kzBSg
+KbaHog/+NrNCYkaXZwV/Vn278s1fsS/HYyh6wSeTLdwMvryht+iaA/zXDnpVSuef
+yUKd2ZyKSFQmubBtOQH3x7n1JsZviCQzCKg9EDxA38rOiDEo+R1wEjp+i1KHJ3gS
+2uNb2jK4keFCzUpJ0blR5ZMpY6zMxlUHgOnFYJe1YLXuyJ/xnPCmD0CG+4Qm2iew
+8Jfoc6Mzl0bYbHZ/RyziklKrhVyoqypli1SDWqY0Pg84p5VcqMXrQO7J5PYDjLOL
+k9GZnbRJEqRjz0hBorhOcZVlGOTBepYKWObK0MpjgPSJld0iS7s4B+Emeonx1Rzt
+tKqs6d/h4E+D+3BeT8MQhDM/P96o85A2UHiHq0gaAbCqgmfIVIJ6UIkVSODRArX8
+peDAxo/FYjDpvSFy8sSuinhDxJLcTFdOkWJnFwkPXOj/tTLOWT6Lsc11BXAwGAjj
+pdlTBD/EPH4s4K/Be3EwG5CBwGkodgCOzzqYc5J+O7MCFmTRk/+fa3X1WBbKpYvU
+Q6LlP0/rl6MCky+uVoGBXZyT0cLd2S5d2U9wit4vGOHFPwvb/2v90mOCILg0gaO6
+7DsfMEi1EHebpkNebmajTe/ZecozrS8YO5V/RUde0wlJqHKaZdrKPkvi20upcO53
+A/H9nfWzXHrens1H7X8Mvt3wKRbBs1VtO+5ZgwI5K+/zISkCOF8=
+=IJlc
+-----END PGP SIGNATURE-----
 
-I quoted a few more fields for that (c) reason: we've had a long
-history of getting the user space API wrong due to strange alignment
-issues, where 32-bit and 64-bit targets had different alignment for
-types. So then we ended up with various compat structures to translate
-from one to the other because they had all the same fields, but
-different padding.
-
-This happened a few times with the DRM people, and they finally got
-tired of it, and started using that "__aligned_u64" type, which is
-just the same old __u64, but explicitly aligned to its natural
-alignment.
-
-So these are the members that the interface actually uses.
-
-If you document those members, wouldn't it be good to have that
-documentation be actually accurate?
-
-Honestly, I don't think it makes a *huge* amount of difference, but
-documentation that doesn't actually match the source of the
-documentation will just confuse somebody in the end. Somebody will go
-"that's not right", and maybe even change the structure definitions to
-match the documentation.
-
-Which would be wrong.
-
-Now, you don't have to take the kernel uapi headers. We *try* to make
-those usable as-is, but hey, there has been problems in the past, and
-it's not necessarily wrong to take the kernel header and then munge it
-to be "appropriate" for user space.
-
-So I guess you can just make your own structures with the names and
-syntax you want, and say "these are *my* header files, and *my*
-documentation for them".
-
-That's fine. But I'm not surprised if the kernel maintainer then goes
-"no, that's not the interface I agreed to" if only because it's a pain
-to verify that you got it all right. Maybe it was all trivial and
-automated and there can be no errors, but it's still a "why is there a
-different copy of this complicated interface".
-
-If you really want to describe things to people, wouldn't it be nicer
-to just say "there's a 32-bit unsigned 'prog_type' member" and leave
-it at that?
-
-Do you really want to enforce your opinion of what is prettier on the
-maintainer that wrote that thing, and then argue with him when he
-doesn't agree?
-
-                  Linus
+--f8Lepm0VlubYzzeD--

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B2A5A0D95
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDE05A0D9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241182AbiHYKMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S239719AbiHYKM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241029AbiHYKMT (ORCPT
+        with ESMTP id S241075AbiHYKMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:12:19 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBDCA7A82
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:12:07 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id jm11so18083870plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:12:07 -0700 (PDT)
+        Thu, 25 Aug 2022 06:12:22 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA7BAC259
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:12:12 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id r22so17459474pgm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=N/hACB6DJOnbW9YdcxCL4bYdw5iH8tr2HnsmRUbA/2k=;
-        b=QK9DEIvE1XdTmyK0lBvfluXy8RYM/LAWM6lwGwePhGiIuALjqlWe153rtG2hWbimgP
-         tADUbPJWllZwAGBl6q1qMoG7GiVV4Zxg5mCWYr5gpaptx+0cYenTa8MYu8BxylD1BYIR
-         MuGpFgTWwlSreVJQ1YFHSoT6iayMMrkysAJwtTyc5sV4ffpifFreiRkvBdACM872Q6tU
-         dkOoQSesVJHmEDw19sbAyC6q21uVp3rx9VXqWv5ZjPzjubyss70MeyGWM9AFYgnuU659
-         NiJrSv8GF1blOGvs/AogG2NrOnNaFsFxF+R6PRJfQ+I+YGspLrVxAViyyr0Bm4Nd080+
-         d75g==
+        bh=4+N7HYlfplazgpIqzrok71tJ5+HL03OgoPpZtaJJ/JA=;
+        b=Bu7SsRr4s/1augCft2+vJK75ZrctEK6Iyfqu3Pqt47wpkqwjMjUrUC1JkgguNrwL13
+         2hwv5VLcCfH+1TdJctlmV4tEW0D5p2uuFLXfW83lWXUXrRqn7wVkKO6VfJ+TG0znQv03
+         iVFjsT+BlKjd/AFLzEoJHLCxK2LgbnhjLHjQ2I0kzLOzbt/5nN04MawaWeD4I0Qm64w2
+         E9MSbNuPJ3pLKOYKGmuvPUahHRz+8UnEMIUSOM24Pd3OQIg9OBXQ7WM9H2O2mD3CUq/L
+         a6iPYt/Xvmok3ln2e30SBo3/3tTpT4vmSws68CmrOOrJk1agvp1haB8koBrCgA4j8OJl
+         16qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=N/hACB6DJOnbW9YdcxCL4bYdw5iH8tr2HnsmRUbA/2k=;
-        b=fn/bJzgZgUcoKyIuOCNZ/krMIdaXpng9nAH/L0WHLjKdNa8a13Q6jYEK6lWTXqIyBF
-         GXmMNKfOrnBInBMcuqI+Nbxb0qQH0aRwfckQ56nhaKrLEm0kUzW3u/qjqLqFlLAbvjHn
-         B83VqWwSCtBqcftHy0NkRE5k/OAVs7NUjvK/ExAraAH+aBSkGga564Bdy2CZKE5BWkvO
-         Xv0ZTlFlX45lTWrb7SEi7De549O/KjD22uiblGC8Nqn0qhL0GTpqlAy5FXmqXS0rbfGz
-         yPVxQ1FvjATZLkmNrATXZTF10aPTCQR0FtDw4ZZC+h1wCvTixHiNftqt+4gSo+/4Freq
-         S8jA==
-X-Gm-Message-State: ACgBeo2VQlBP1V+wT81kDBzfRn88Tx3hdkBbNU80JyuHLlScqP4tL/Aj
-        8hZCDsvJ+KRKjVGnwfsBctk3Kg==
-X-Google-Smtp-Source: AA6agR5cOXU69J240S/HoYf6HtB5GQPmumANKU1IMKISK6IYS4mPO26cn0vvNtm0snnl5pnh+tc46Q==
-X-Received: by 2002:a17:90b:2496:b0:1ef:a94:7048 with SMTP id nt22-20020a17090b249600b001ef0a947048mr3877401pjb.244.1661422326951;
-        Thu, 25 Aug 2022 03:12:06 -0700 (PDT)
+        bh=4+N7HYlfplazgpIqzrok71tJ5+HL03OgoPpZtaJJ/JA=;
+        b=CObyG5vZjYIbGsWq5dQjmkYIvk9eGN307sThcjOObpIwkGNAmJPbCIs7EuYAaVRzme
+         zbwip5WXmPCbMJtk9qZVJRr4NKOg6ISFt9VbnfyjI9R+kJ8Yh6m9l89HE0SeIPFuhCDs
+         gBAK4j2C3uN6wzH+RuxRVEXgAXQihczS0uTJp0aP3J1bpljkrsUcf648ERmz653NoHiU
+         GYEydptuMOyr9m6FozsCJYFOf83Ak8D3v6cOFWqQUkRViRbbJpWMRJ9j4ngtXb5pnf73
+         x3UwAOZSD86fEtsZW9jisqgbWqaafmbCNSt3xwwU2ovhHqa/8bioxEYFHvqUCyoHjX9O
+         fUSA==
+X-Gm-Message-State: ACgBeo3JiPpNJPpDuQqC7yFtRK238dIL16KX29VUNRUt4aT53GrDN4/0
+        4j5wvWC9vcMiPrnfmLUbKprCkg==
+X-Google-Smtp-Source: AA6agR4E8A9z3wJppoQNhY57GIv03JlBORZW3VAf7AyAGpWyEGHzTY8vAaMpe8BdYq7iY2OzpCD70Q==
+X-Received: by 2002:a63:e851:0:b0:42a:3bc0:9ad1 with SMTP id a17-20020a63e851000000b0042a3bc09ad1mr2612576pgk.543.1661422332147;
+        Thu, 25 Aug 2022 03:12:12 -0700 (PDT)
 Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b001714c36a6e7sm8477581plh.284.2022.08.25.03.12.00
+        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b001714c36a6e7sm8477581plh.284.2022.08.25.03.12.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 03:12:06 -0700 (PDT)
+        Thu, 25 Aug 2022 03:12:11 -0700 (PDT)
 From:   Qi Zheng <zhengqi.arch@bytedance.com>
 To:     akpm@linux-foundation.org, david@redhat.com,
         kirill.shutemov@linux.intel.com, mika.penttila@nextfour.com,
         jgg@nvidia.com, tglx@linutronix.de, willy@infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         muchun.song@linux.dev, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [RFC PATCH 6/7] x86/mm: add x86_64 support for pte_ref
-Date:   Thu, 25 Aug 2022 18:10:36 +0800
-Message-Id: <20220825101037.96517-7-zhengqi.arch@bytedance.com>
+Subject: [RFC PATCH 7/7] mm: add proc interface to free user PTE page table pages
+Date:   Thu, 25 Aug 2022 18:10:37 +0800
+Message-Id: <20220825101037.96517-8-zhengqi.arch@bytedance.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20220825101037.96517-1-zhengqi.arch@bytedance.com>
 References: <20220825101037.96517-1-zhengqi.arch@bytedance.com>
@@ -71,77 +71,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pte_ref hooks into routines that modify user PTE page tables,
-and select ARCH_SUPPORTS_FREE_USER_PTE, so that the pte_ref code
-can be compiled and worked on this architecture.
+Add /proc/sys/vm/free_ptes file to procfs, when pid is written
+to the file, we will traverse its process address space, find
+and free empty PTE pages or zero PTE pages.
 
 Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 ---
- arch/x86/Kconfig               | 1 +
- arch/x86/include/asm/pgtable.h | 4 ++++
- include/linux/pgtable.h        | 1 +
- 3 files changed, 6 insertions(+)
+ include/linux/pte_ref.h |   5 ++
+ kernel/sysctl.c         |  12 ++++
+ mm/pte_ref.c            | 126 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 143 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 52a7f91527fe..50215b05723e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -34,6 +34,7 @@ config X86_64
- 	select SWIOTLB
- 	select ARCH_HAS_ELFCORE_COMPAT
- 	select ZONE_DMA32
-+	select ARCH_SUPPORTS_FREE_USER_PTE
+diff --git a/include/linux/pte_ref.h b/include/linux/pte_ref.h
+index ab49c7fac120..f7e244129291 100644
+--- a/include/linux/pte_ref.h
++++ b/include/linux/pte_ref.h
+@@ -16,6 +16,11 @@ void track_pte_set(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+ 		   pte_t pte);
+ void track_pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+ 		     pte_t pte);
++
++int free_ptes_sysctl_handler(struct ctl_table *table, int write,
++		void *buffer, size_t *length, loff_t *ppos);
++extern int sysctl_free_ptes_pid;
++
+ #else /* !CONFIG_FREE_USER_PTE */
  
- config FORCE_DYNAMIC_FTRACE
- 	def_bool y
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 44e2d6f1dbaa..cbfcfa497fb9 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -23,6 +23,7 @@
- #include <asm/coco.h>
- #include <asm-generic/pgtable_uffd.h>
- #include <linux/page_table_check.h>
+ static inline void pte_ref_init(pgtable_t pte)
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 35d034219513..14e1a9841cb8 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -64,6 +64,7 @@
+ #include <linux/mount.h>
+ #include <linux/userfaultfd_k.h>
+ #include <linux/pid.h>
 +#include <linux/pte_ref.h>
  
- extern pgd_t early_top_pgt[PTRS_PER_PGD];
- bool __init __early_make_pgtable(unsigned long address, pmdval_t pmd);
-@@ -1005,6 +1006,7 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
- 			      pte_t *ptep, pte_t pte)
- {
- 	page_table_check_pte_set(mm, addr, ptep, pte);
-+	track_pte_set(mm, addr, ptep, pte);
- 	set_pte(ptep, pte);
- }
+ #include "../lib/kstrtox.h"
  
-@@ -1050,6 +1052,7 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr,
- {
- 	pte_t pte = native_ptep_get_and_clear(ptep);
- 	page_table_check_pte_clear(mm, addr, pte);
-+	track_pte_clear(mm, addr, ptep, pte);
- 	return pte;
- }
+@@ -2153,6 +2154,17 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ONE,
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
++#ifdef CONFIG_FREE_USER_PTE
++	{
++		.procname	= "free_ptes",
++		.data		= &sysctl_free_ptes_pid,
++		.maxlen		= sizeof(int),
++		.mode		= 0200,
++		.proc_handler	= free_ptes_sysctl_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_INT_MAX,
++	},
++#endif
+ #ifdef CONFIG_COMPACTION
+ 	{
+ 		.procname	= "compact_memory",
+diff --git a/mm/pte_ref.c b/mm/pte_ref.c
+index 818821d068af..e7080a3100a6 100644
+--- a/mm/pte_ref.c
++++ b/mm/pte_ref.c
+@@ -6,6 +6,14 @@
+  */
+ #include <linux/pgtable.h>
+ #include <linux/pte_ref.h>
++#include <linux/mm.h>
++#include <linux/pagewalk.h>
++#include <linux/sched/mm.h>
++#include <linux/jump_label.h>
++#include <linux/hugetlb.h>
++#include <asm/tlbflush.h>
++
++#include "internal.h"
  
-@@ -1066,6 +1069,7 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
- 		 */
- 		pte = native_local_ptep_get_and_clear(ptep);
- 		page_table_check_pte_clear(mm, addr, pte);
-+		track_pte_clear(mm, addr, ptep, pte);
- 	} else {
- 		pte = ptep_get_and_clear(mm, addr, ptep);
- 	}
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index c4a6bda6e965..908636f48c95 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -276,6 +276,7 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
- 	pte_t pte = *ptep;
- 	pte_clear(mm, address, ptep);
- 	page_table_check_pte_clear(mm, address, pte);
-+	track_pte_clear(mm, address, ptep, pte);
- 	return pte;
+ #ifdef CONFIG_FREE_USER_PTE
+ 
+@@ -105,4 +113,122 @@ void track_pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
  }
- #endif
+ EXPORT_SYMBOL(track_pte_clear);
+ 
++#ifdef CONFIG_DEBUG_VM
++void pte_free_debug(pmd_t pmd)
++{
++	pte_t *ptep = (pte_t *)pmd_page_vaddr(pmd);
++	int i = 0;
++
++	for (i = 0; i < PTRS_PER_PTE; i++, ptep++) {
++		pte_t pte = *ptep;
++		BUG_ON(!(pte_none(pte) || is_zero_pfn(pte_pfn(pte))));
++	}
++}
++#else
++static inline void pte_free_debug(pmd_t pmd)
++{
++}
++#endif
++
++
++static int kfreeptd_pmd_entry(pmd_t *pmd, unsigned long addr,
++			      unsigned long next, struct mm_walk *walk)
++{
++	pmd_t pmdval;
++	pgtable_t page;
++	struct mm_struct *mm = walk->mm;
++	struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
++	spinlock_t *ptl;
++	bool free = false;
++	unsigned long haddr = addr & PMD_MASK;
++
++	if (pmd_trans_unstable(pmd))
++		goto out;
++
++	mmap_read_unlock(mm);
++	mmap_write_lock(mm);
++
++	if (mm_find_pmd(mm, addr) != pmd)
++		goto unlock_out;
++
++	ptl = pmd_lock(mm, pmd);
++	pmdval = *pmd;
++	if (pmd_none(pmdval) || pmd_leaf(pmdval)) {
++		spin_unlock(ptl);
++		goto unlock_out;
++	}
++	page = pmd_pgtable(pmdval);
++	if (!pte_mapped_count(page) || pte_zero_count(page) == PTRS_PER_PTE) {
++		pmd_clear(pmd);
++		flush_tlb_range(&vma, haddr, haddr + PMD_SIZE);
++		free = true;
++	}
++	spin_unlock(ptl);
++
++unlock_out:
++	mmap_write_unlock(mm);
++	mmap_read_lock(mm);
++
++	if (free) {
++		pte_free_debug(pmdval);
++		mm_dec_nr_ptes(mm);
++		pgtable_pte_page_dtor(page);
++		__free_page(page);
++	}
++
++out:
++	cond_resched();
++	return 0;
++}
++
++static const struct mm_walk_ops kfreeptd_walk_ops = {
++	.pmd_entry		= kfreeptd_pmd_entry,
++};
++
++int sysctl_free_ptes_pid;
++int free_ptes_sysctl_handler(struct ctl_table *table, int write,
++		void *buffer, size_t *length, loff_t *ppos)
++{
++	int ret;
++
++	ret = proc_dointvec_minmax(table, write, buffer, length, ppos);
++	if (ret)
++		return ret;
++	if (write) {
++		struct task_struct *task;
++		struct mm_struct *mm;
++
++		rcu_read_lock();
++		task = find_task_by_vpid(sysctl_free_ptes_pid);
++		if (!task) {
++			rcu_read_unlock();
++			return -ESRCH;
++		}
++		mm = get_task_mm(task);
++		rcu_read_unlock();
++
++		if (!mm) {
++			mmput(mm);
++			return -ESRCH;
++		}
++
++		do {
++			ret = -EBUSY;
++
++			if (mmap_read_trylock(mm)) {
++				ret = walk_page_range(mm, FIRST_USER_ADDRESS,
++						      ULONG_MAX,
++						      &kfreeptd_walk_ops, NULL);
++
++				mmap_read_unlock(mm);
++			}
++
++			cond_resched();
++		} while (ret == -EAGAIN);
++
++		mmput(mm);
++	}
++	return ret;
++}
++
+ #endif /* CONFIG_FREE_USER_PTE */
 -- 
 2.20.1
 

@@ -2,149 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33245A0C9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5092A5A0C92
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbiHYJ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S238146AbiHYJ2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240238AbiHYJ2k (ORCPT
+        with ESMTP id S233563AbiHYJ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:28:40 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99CA7AA4C4;
-        Thu, 25 Aug 2022 02:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6kRKP
-        EDJzd7uCW3vEmzwA/9148JjbxPPxtaTCIkn/Jk=; b=UB1taWoipwDCWnApJL0+y
-        1Gtp8t3PTwNHHK2BhtQyHjO/zj/B+qiBHJW2aN9VVcfz7labkc8CBC6rWk2rntWm
-        ZWh2Cvvcoc372k1zOO9Idqg8a39I8YQR9q4VSRpeR6vEvhN2WW5Ag23XxyiNUtQx
-        NRrAnD4QGtJ/oL++LAlN1g=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp4 (Coremail) with SMTP id HNxpCgCXduOUQAdjbzILXg--.6127S2;
-        Thu, 25 Aug 2022 17:27:49 +0800 (CST)
-From:   huhai <15815827059@163.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huhai <huhai@kylinos.cn>,
-        stable@vger.kernel.org, Jackie Liu <liuyun01@kylinos.cn>
-Subject: [PATCH] scsi: mpt3sas: Fix NULL pointer crash due to missing check device hostdata
-Date:   Thu, 25 Aug 2022 17:26:45 +0800
-Message-Id: <20220825092645.326953-1-15815827059@163.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 25 Aug 2022 05:27:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BB09E8BB;
+        Thu, 25 Aug 2022 02:27:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8BF8D5BCFF;
+        Thu, 25 Aug 2022 09:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661419669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oD2ON5ZEmElLgT4EBxpSWyu1ku5LP4DrXwfA23XWjH4=;
+        b=qknJkW1fP0r2UL8UgzODME4WEr79d6P4xEuqkMLZADrhrnaZvBgIbr/L0faRbdiu6dHJmE
+        tvkb1ptlffg/lhWil1eQZUDjhGa6bN1dyT5LO7aJKLLNCh/XcrNqoiWnPzH6p5mvmmoUDQ
+        3JAdcgDNBV8/4sIoa7uVLdV0TcindVs=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BBCD22C142;
+        Thu, 25 Aug 2022 09:27:48 +0000 (UTC)
+Date:   Thu, 25 Aug 2022 11:27:46 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] kernel: move from strlcpy with unused retval to strscpy
+Message-ID: <YwdAknZFyKxCXZuL@alley>
+References: <20220818210202.8227-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCXduOUQAdjbzILXg--.6127S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxur1UtFWrCFy8GryDCFWDCFg_yoW5KrWUpr
-        98C34Fkr4kGr42g3W7Wa1UZr15Ja13AF10gF4Iv34kWF1Uu34qqry8tr4jyF18GrW5X3WU
-        tF4qqrn5KFWDJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UEsj8UUUUU=
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/1tbiRRVohWDuxhOu4QAAsp
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818210202.8227-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huhai <huhai@kylinos.cn>
+On Thu 2022-08-18 23:02:01, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+> 
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>
+> ---
+>  kernel/acct.c                         |  2 +-
+>  kernel/bpf/preload/bpf_preload_kern.c |  4 ++--
+>  kernel/cgroup/cgroup-v1.c             |  4 ++--
+>  kernel/events/core.c                  |  6 +++---
+>  kernel/kallsyms.c                     |  4 ++--
+>  kernel/params.c                       |  2 +-
+>  kernel/printk/printk.c                |  2 +-
+>  kernel/relay.c                        |  4 ++--
+>  kernel/time/clocksource.c             |  2 +-
+>  kernel/trace/ftrace.c                 | 18 +++++++++---------
+>  kernel/trace/trace.c                  |  8 ++++----
+>  kernel/trace/trace_events.c           |  2 +-
+>  kernel/trace/trace_events_inject.c    |  4 ++--
+>  kernel/trace/trace_kprobe.c           |  2 +-
+>  kernel/trace/trace_probe.c            |  2 +-
+>  15 files changed, 33 insertions(+), 33 deletions(-)
 
-If _scsih_io_done() is called with scmd->device->hostdata=NULL, it can lead
-to the following panic:
+This fixes only small part of the kernel code. It would make sense to
+do a tree-wide change using a script.
 
-  BUG: unable to handle kernel NULL pointer dereference at 0000000000000018
-  PGD 4547a4067 P4D 4547a4067 PUD 0
-  Oops: 0002 [#1] SMP NOPTI
-  CPU: 62 PID: 0 Comm: swapper/62 Kdump: loaded Not tainted 4.19.90-24.4.v2101.ky10.x86_64 #1
-  Hardware name: Storage Server/65N32-US, BIOS SQL1041217 05/30/2022
-  RIP: 0010:_scsih_set_satl_pending+0x2d/0x50 [mpt3sas]
-  Code: 00 00 48 8b 87 60 01 00 00 0f b6 10 80 fa a1 74 09 31 c0 80 fa 85 74 02 f3 c3 48 8b 47 38 40 84 f6 48 8b 80 98 00 00 00 75 08 <f0> 80 60 18 fe 31 c0 c3 f0 48 0f ba 68 18 00 0f 92 c0 0f b6 c0 c3
-  RSP: 0018:ffff8ec22fc03e00 EFLAGS: 00010046
-  RAX: 0000000000000000 RBX: ffff8eba1b072518 RCX: 0000000000000001
-  RDX: 0000000000000085 RSI: 0000000000000000 RDI: ffff8eba1b072518
-  RBP: 0000000000000dbd R08: 0000000000000000 R09: 0000000000029700
-  R10: ffff8ec22fc03f80 R11: 0000000000000000 R12: ffff8ebe2d3609e8
-  R13: ffff8ebe2a72b600 R14: ffff8eca472707e0 R15: 0000000000000020
-  FS:  0000000000000000(0000) GS:ffff8ec22fc00000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 0000000000000018 CR3: 000000046e5f6000 CR4: 00000000003406e0
-  Call Trace:
-   <IRQ>
-   _scsih_io_done+0x4a/0x9f0 [mpt3sas]
-   _base_interrupt+0x23f/0xe10 [mpt3sas]
-   __handle_irq_event_percpu+0x40/0x190
-   handle_irq_event_percpu+0x30/0x70
-   handle_irq_event+0x36/0x60
-   handle_edge_irq+0x7e/0x190
-   handle_irq+0xa8/0x110
-   do_IRQ+0x49/0xe0
+Would you mind to create one and send it to Linus?
 
-Fix it by move scmd->device->hostdata check before _scsih_set_satl_pending
-called.
+You might want to use Coccinelle if a simple sed/awk gets too
+complicated. See
+https://www.kernel.org/doc/html/v4.15/dev-tools/coccinelle.html
 
-Other changes:
-- It looks clear to move get mpi_reply to near its check.
-
-Fixes: ffb584565894 ("scsi: mpt3sas: fix hang on ata passthrough commands")
-Cc: <stable@vger.kernel.org> # v4.9+
-Co-developed-by: Jackie Liu <liuyun01@kylinos.cn>
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-Signed-off-by: huhai <huhai@kylinos.cn>
----
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index def37a7e5980..85f5749a0421 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -5704,27 +5704,26 @@ _scsih_io_done(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index, u32 reply)
- 	struct MPT3SAS_DEVICE *sas_device_priv_data;
- 	u32 response_code = 0;
- 
--	mpi_reply = mpt3sas_base_get_reply_virt_addr(ioc, reply);
--
- 	scmd = mpt3sas_scsih_scsi_lookup_get(ioc, smid);
- 	if (scmd == NULL)
- 		return 1;
- 
-+	sas_device_priv_data = scmd->device->hostdata;
-+	if (!sas_device_priv_data || !sas_device_priv_data->sas_target ||
-+	     sas_device_priv_data->sas_target->deleted) {
-+		scmd->result = DID_NO_CONNECT << 16;
-+		goto out;
-+	}
- 	_scsih_set_satl_pending(scmd, false);
- 
- 	mpi_request = mpt3sas_base_get_msg_frame(ioc, smid);
- 
-+	mpi_reply = mpt3sas_base_get_reply_virt_addr(ioc, reply);
- 	if (mpi_reply == NULL) {
- 		scmd->result = DID_OK << 16;
- 		goto out;
- 	}
- 
--	sas_device_priv_data = scmd->device->hostdata;
--	if (!sas_device_priv_data || !sas_device_priv_data->sas_target ||
--	     sas_device_priv_data->sas_target->deleted) {
--		scmd->result = DID_NO_CONNECT << 16;
--		goto out;
--	}
- 	ioc_status = le16_to_cpu(mpi_reply->IOCStatus);
- 
- 	/*
--- 
-2.27.0
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
-
+Best Regards,
+Petr

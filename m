@@ -2,245 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751145A094A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491EA5A094F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236579AbiHYG5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S236583AbiHYG6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234669AbiHYG5b (ORCPT
+        with ESMTP id S233215AbiHYG6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:57:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72205A1A6C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661410650; x=1692946650;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lE3/OA431JWZBQm6hZRS2QninmL5R3AuF/0DvRo5AW0=;
-  b=XOkZ2xVuwk2k/1vKprJgVLDiY+rHLYCpCArMeNrmK1J/EpMV0VoWW2t8
-   FylRtO1J+gfGRfN3hgwC7tl2YcXfEnt6+AuIWIMnFFMjWrUfM3x66L4td
-   Nqlr6PqaDrSpzzzfxY2j2NkJNakahjWABEh+9a103FO60aVJ2BPy+0piT
-   TCMiI3EaZf8bBhRakqHNnhh35hkbJhwGfXlwDeDu2WPZmLngDHBvMFJ5v
-   vOADBQh4mt8uOnUZeOGieCEUxCuhhR898bZm5D1BeZqUKEUIN2hNtZP+U
-   a0q2PEy8QojvRXoOeiA4suTcFyH9M3giR0e9ItJY7QmCMxMctwO48elLG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291732235"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="291732235"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 23:57:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="610058313"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 24 Aug 2022 23:57:28 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oR6nw-0001pn-0T;
-        Thu, 25 Aug 2022 06:57:28 +0000
-Date:   Thu, 25 Aug 2022 14:57:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- c926087eb38520b268515ae1a842db6db62554cc
-Message-ID: <63071d54.f5cd0e7M0HgDOxf4%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 25 Aug 2022 02:58:40 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32031A033A;
+        Wed, 24 Aug 2022 23:58:39 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 6170AE1171;
+        Wed, 24 Aug 2022 23:58:08 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GMMjKO_RXaO4; Wed, 24 Aug 2022 23:58:07 -0700 (PDT)
+Message-ID: <2c609579d9fba41a6fcbd47788ccbcf1f4fa0f2a.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1661410687; bh=UO5XV5GOXaJUp2qheZTnBxncOA0cWICbUUFp+tuLMbo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=kTNNzvR2unUbjb/QrtWtKSeMmYzYcFAS16woPrlSBmRiA2zqPbeZXMFoteeotSVd2
+         ppqFKvvx7uXdbF2CSEkzcahDUHlhTWo7t+mteq1axuIzsIzgr4rFpRL/tyktQzvTfr
+         gdCD78kRakHzVg5aTF12FitR19ugqiI6DzKrT3B4BVV/yIbKklbOW3V8EPeTtL1d6O
+         024kx31apwQCB3/AHVgZU7PI3qjCYI84z2hhvXGli0SKptH6FlIGVNaG6MAxzHoXvi
+         0mCDg9w0r4DbdJKLAqAfDQz8fIDPXFwUpcfcrlniMnbs5Dl+nspO2khLZ8kY/Vmkfm
+         gh0HTHw33Jzxw==
+Subject: Re: [PATCH v2 3/4] Revert "PM: domains: Delete usage of
+ driver_deferred_probe_check_state()"
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peng Fan <peng.fan@nxp.com>, Luca Weiss <luca.weiss@fairphone.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+        netdev@vger.kernel.org
+Date:   Thu, 25 Aug 2022 08:57:58 +0200
+In-Reply-To: <20220819221616.2107893-4-saravanak@google.com>
+References: <20220819221616.2107893-1-saravanak@google.com>
+         <20220819221616.2107893-4-saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: c926087eb38520b268515ae1a842db6db62554cc  x86/mm: Print likely CPU at segfault time
+Am Freitag, dem 19.08.2022 um 15:16 -0700 schrieb Saravana Kannan:
+> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+> 
+> Quite a few issues have been reported [1][2][3][4][5][6] on the
+> original
+> commit. While about half of them have been fixed, I'll need to fix
+> the rest
+> before driver_deferred_probe_check_state() can be deleted. So, revert
+> the
+> deletion for now.
+> 
+> [1] -
+> https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+> [2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
+> [3] -
+> https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
+> [4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
+> [5] -
+> https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
+> [6] -
+> https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
+> 
+> Fixes: 5a46079a9645 ("PM: domains: Delete usage of
+> driver_deferred_probe_check_state()")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Reported-by: Doug Anderson <dianders@chromium.org>
+> Reported-by: Colin Foster <colin.foster@in-advantage.com>
+> Reported-by: Tony Lindgren <tony@atomide.com>
+> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/domain.c
+> b/drivers/base/power/domain.c
+> index 5a2e0232862e..55a10e6d4e2a 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2733,7 +2733,7 @@ static int __genpd_dev_pm_attach(struct device
+> *dev, struct device *base_dev,
+>                 mutex_unlock(&gpd_list_lock);
+>                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+>                         __func__, PTR_ERR(pd));
+> -               return -ENODEV;
+> +               return driver_deferred_probe_check_state(base_dev);
+>         }
+>  
+>         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
 
-elapsed time: 1181m
+Fixes imx8mq where ENODEV results in:
+[    1.048019] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed
+to attach power domain "bus"
 
-configs tested: 163
-configs skipped: 5
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                                defconfig
-sh                               allmodconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20220824
-s390                 randconfig-r044-20220824
-x86_64                        randconfig-a002
-riscv                randconfig-r042-20220824
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                              defconfig
-i386                             allyesconfig
-x86_64                               rhel-8.3
-loongarch                           defconfig
-loongarch                         allnoconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-m68k                             allmodconfig
-x86_64                           allyesconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-arc                              allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arm                       omap2plus_defconfig
-arc                          axs101_defconfig
-arc                         haps_hs_defconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-powerpc                          allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-sh                          kfr2r09_defconfig
-xtensa                          iss_defconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                             allnoconfig
-microblaze                          defconfig
-m68k                        mvme16x_defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-sh                        sh7763rdp_defconfig
-m68k                          multi_defconfig
-arc                      axs103_smp_defconfig
-m68k                            mac_defconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-arc                        nsim_700_defconfig
-sh                   sh7770_generic_defconfig
-arm                          gemini_defconfig
-arm                            lart_defconfig
-m68k                       m5249evb_defconfig
-sh                             espt_defconfig
-arm64                               defconfig
-arm                              allmodconfig
-m68k                                defconfig
-ia64                                defconfig
-mips                             allmodconfig
-i386                          randconfig-c001
-m68k                            q40_defconfig
-ia64                        generic_defconfig
-sh                             shx3_defconfig
-arc                     nsimosci_hs_defconfig
-um                                  defconfig
-microblaze                      mmu_defconfig
-arm                        realview_defconfig
-sh                          r7780mp_defconfig
-sh                        edosk7760_defconfig
-sh                           se7751_defconfig
-powerpc                      arches_defconfig
-m68k                        stmark2_defconfig
-ia64                          tiger_defconfig
-sh                           se7721_defconfig
-powerpc                      pcm030_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                            zeus_defconfig
-s390                          debug_defconfig
-ia64                            zx1_defconfig
-sh                          rsk7269_defconfig
-xtensa                         virt_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                      makalu_defconfig
-arm                            pleb_defconfig
-mips                        bcm47xx_defconfig
-csky                             alldefconfig
-ia64                      gensparse_defconfig
-arm                      integrator_defconfig
-sh                         apsh4a3a_defconfig
-sh                           se7722_defconfig
-arm                           viper_defconfig
-sh                   secureedge5410_defconfig
-sh                         ap325rxa_defconfig
-xtensa                    smp_lx200_defconfig
-sh                      rts7751r2d1_defconfig
-ia64                             allmodconfig
-sh                            titan_defconfig
-mips                         cobalt_defconfig
-powerpc                      tqm8xx_defconfig
-mips                    maltaup_xpa_defconfig
-sh                         ecovec24_defconfig
+thanks for fixing this,
 
-clang tested configs:
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220824
-hexagon              randconfig-r045-20220824
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-mips                     cu1000-neo_defconfig
-powerpc                    gamecube_defconfig
-hexagon              randconfig-r045-20220823
-riscv                randconfig-r042-20220823
-hexagon              randconfig-r041-20220823
-s390                 randconfig-r044-20220823
-mips                     decstation_defconfig
-mips                           ci20_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-k001
-riscv                            alldefconfig
-powerpc                      ppc64e_defconfig
-powerpc                 mpc8560_ads_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                     tqm8540_defconfig
-arm                      pxa255-idp_defconfig
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
+                                martin
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+

@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F1A5A1085
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD695A108C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241811AbiHYMbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S241870AbiHYMb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241807AbiHYMba (ORCPT
+        with ESMTP id S241767AbiHYMbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:31:30 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE632B2CED
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:31:25 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id s11so25865799edd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=GpfgEoOH4Bk0o03BXzXfbjZSZHr+iWqvwXSXT6fbHDg=;
-        b=aJDALMPobe0TjSh/jiJJfZku827C0K6keCQCIpXty6OvQ/1gDP0KEl3Zh1+tQCiUPN
-         FZuZW5tsnab7jNTnlMJ4YZySqHgaNfqs5mwtbjlnIYr9M6+whBK7uftBtVEyvJnSBQ7z
-         fuiyYX/H2NKWhlvR66MZOsHc3JZMgKzOBB3LkFy5M8Vo2t5aBv+i7++c3/g2BD2oq9o+
-         vRPLQAMw89+BYM2XOvmulF/NB22gpgQeTopMu9SrsN31yNX0hZOccyckJT1Dzib+QcCC
-         D2MzvJFyilBzpmtyGSDIDTWatSUSlyXjDtUXJA+JJVFR6ESHfTeqjTt9NDe1cD71Mgnn
-         4pQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GpfgEoOH4Bk0o03BXzXfbjZSZHr+iWqvwXSXT6fbHDg=;
-        b=n6Y4AHAWbNK/5S2MHI6L91F5BC97euVVklIs+VGSLuHjB/mWWISUlOrS4K50tCpBmP
-         zZoLW/VILbBMir3F1YoQNuKYMoNHVQdOG3N0m8tnjHuV6AjDmUubAnk/lKXDo7diLhyj
-         ssbQdJVKVnAj6slFMIKxG6mw2J3kxVDSH0Sp4k5h+aOQwiZRwjSdTv4E+pW8rP7Noz5d
-         gbKmPkDJmn716OZar6Q4bjqxRkGYAQPBGR5LSHKY2DqzW8Gpw+OtaNLAzIR5ADwrPEew
-         M++VMBzOvZYMH2ZAiXXSbxUI7AhdvEqPUBuOgHUMQCmaWlFK1aDi6Dw/cjm8CvGl8gZX
-         AtTA==
-X-Gm-Message-State: ACgBeo39G2vMNl+wQEcHYuEFkeShAZ4zRsSXcmOjVpxJjnHlWpJHw45Q
-        CIOF/BOfwke7wRq+ruNJme+ynG/lOlPd29T8v36Qvg==
-X-Google-Smtp-Source: AA6agR5AzWiEJVw97Qs0InhBJT1xWHu/mHYs4QXnlx7YgLLGzvNmzJPWmXmaE8ZpDzHKOuoj/4+kW5Z5Q4A2grdcxVM=
-X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
- ez23-20020a056402451700b004437fe12d60mr3051832edb.133.1661430684201; Thu, 25
- Aug 2022 05:31:24 -0700 (PDT)
+        Thu, 25 Aug 2022 08:31:45 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99D7832CE;
+        Thu, 25 Aug 2022 05:31:43 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1661430696t36rbmc5
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 Aug 2022 20:31:35 +0800 (CST)
+X-QQ-SSF: 01000000002000C0E000B00A0000000
+X-QQ-FEAT: rZJGTgY0+YNrCKbMQbGRmuxa20/awuKdg3yy4ACmHJB6CGTbP4uRYC0dQDR9c
+        ld+XeEBFwX4lrsTYq+ZvVCY1rQtsmUmlOgbdWaWmyplDrR7go0BUDstZNThRO0Lm9jc6j4Q
+        zwLkAPxH4cWgQjw9dORO9Zvow35TuwRwxdncwAOTx+RwKvfl/dd5q1igSyWYOTrcodvin90
+        dYN38oZkNnnnSvu6d8oCwznlb9yaTszjTrypsIpv75rJpkaFk7a7Vp4gHZkDMOiI5KYFDQR
+        L8TybUdY+DcqvlnS3fm01XPjdP1QhEP/mj0ckVUcFIVlVljn1pmX0P8YS1/udIQL/jMCpj0
+        Ys/1sSB2CLg7s2lMxhFtwosIW6DSG6Mc2DfM9cWwF7eEnIcrwB456hrLYxtax/v4J4u7zTZ
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] atomisp/pci: fix repeated words in comments
+Date:   Thu, 25 Aug 2022 20:31:29 +0800
+Message-Id: <20220825123129.20823-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220817113833.9625-1-srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220817113833.9625-1-srinivas.kandagatla@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 25 Aug 2022 14:31:13 +0200
-Message-ID: <CACRpkdaMyqtY+cQZSmcs6Hejoin7DKTVWbxTvfkSSM7ceo72NQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] pinctrl: add support for SM8450 LPASS LPI pinctrl
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 1:38 PM Srinivas Kandagatla
-<srinivas.kandagatla@linaro.org> wrote:
+ Delete the redundant word 'from'.
+ Delete the redundant word 'in'.
 
-> This patchset adds pinctrl driver to support pin configuration for LPASS
-> (Low Power Audio SubSystem) LPI (Low Power Island) pinctrl on SM8450.
->
-> This IP is an additional pin control block for Audio Pins on top the
-> existing SoC Top level pin-controller.
->
-> Tested this on SM8450 MTP
->
-> Thanks,
-> Srini
->
-> Changes since v2:
->         - removed unnecessary quotes in bindings
->         - remove lable in bindings
->         - fixed gpio pattern and remove an extra line
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c | 2 +-
+ drivers/staging/media/atomisp/pci/ia_css_irq.h  | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch applied, the patch looks innocent and bindings are reviewed.
-If Bjorn has any further remarks I can always pull it out (or you can make
-patches on top).
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index c932f340068f..507c0404d736 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -4525,7 +4525,7 @@ int atomisp_fixed_pattern(struct atomisp_sub_device *asd, int flag,
+ 		return 0;
+ 	}
+ 
+-	/* Add function to get black from from sensor with shutter off */
++	/* Add function to get black from sensor with shutter off */
+ 	return 0;
+ }
+ 
+diff --git a/drivers/staging/media/atomisp/pci/ia_css_irq.h b/drivers/staging/media/atomisp/pci/ia_css_irq.h
+index 26b1b3c8ba62..8f2e876a0b2b 100644
+--- a/drivers/staging/media/atomisp/pci/ia_css_irq.h
++++ b/drivers/staging/media/atomisp/pci/ia_css_irq.h
+@@ -84,11 +84,11 @@ enum ia_css_irq_info {
+ 	IA_CSS_IRQ_INFO_ISP_BINARY_STATISTICS_READY   = BIT(17),
+ 	/** ISP binary statistics are ready */
+ 	IA_CSS_IRQ_INFO_INPUT_SYSTEM_ERROR            = BIT(18),
+-	/** the input system in in error */
++	/** the input system in error */
+ 	IA_CSS_IRQ_INFO_IF_ERROR                      = BIT(19),
+-	/** the input formatter in in error */
++	/** the input formatter in error */
+ 	IA_CSS_IRQ_INFO_DMA_ERROR                     = BIT(20),
+-	/** the dma in in error */
++	/** the dma in error */
+ 	IA_CSS_IRQ_INFO_ISYS_EVENTS_READY             = BIT(21),
+ 	/** end-of-frame events are ready in the isys_event queue */
+ };
+-- 
+2.36.1
 
-Yours,
-Linus Walleij

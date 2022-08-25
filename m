@@ -2,66 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE435A15EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8525A15F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241694AbiHYPiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S242262AbiHYPkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbiHYPiv (ORCPT
+        with ESMTP id S241549AbiHYPkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:38:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742C4B7EC4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:38:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1072461AB3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:38:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94AEEC433C1;
-        Thu, 25 Aug 2022 15:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661441929;
-        bh=pQ8yD0W3R5iU7lkK49zIJA2LO1vTB4E7TUZySfUSS+c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bmuEm7maYWepxVZ8ZhXh5YjPHa4rJr2K32C4VfQMPmzX5cj2Y0DRDEucmK3C6GZFW
-         zFwRDmdnkc6nd+2y/VpRJS+jx/hRlV5NUUkJNdYMeaYF5GpDVaMYqrG5JcIwDVpesC
-         CkeEpHKTn6TZn8OeaJBO7I055Ac4d+NZ0NLk2CBVc6W//ONKeN8iqiqrReV1IliLrW
-         Uygw4nXa42alMPQzEPR/WHlY91uwf0CRg3s4/c+ZnNfGOauJgaNiwlqZjXNWHsi+xp
-         xF2emT9sRXPwRDnRUsD6TIWqgsAATWVH6WzWUMirhz0jAF2kpQVubEqhnIpB8IcCEu
-         3MPIo01b0ZIPQ==
-Date:   Thu, 25 Aug 2022 08:38:46 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        keescook@chromium.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
-        llvm@lists.linux.dev,
-        "Sripada, Radhakrishna" <radhakrishna.sripada@intel.com>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
-Message-ID: <YweXhnusRr5ACYYd@dev-arch.thelio-3990X>
-References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
- <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
- <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
- <875yigixjp.fsf@intel.com>
+        Thu, 25 Aug 2022 11:40:03 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53D413E2B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:40:01 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-33da3a391d8so138530037b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=fEQ1d/PiEHzLrmSBXGQT2W8YpNnPcaA3hRqhgrIy1b8=;
+        b=F6xZURA7pUQy2v+UOwJV2SRBjGEut5CjaZ/xUi6FcIumRsvYr32tRVL6VK+/rlWoHx
+         UKx7ihhTtIGPsJeDPQVAQEqpER/3I2NT7tZlDZC4342uPPCsBBM1YcMyvgFJt6lwqFlg
+         XN1YHVnBy2JZYsszV+IWYwr61w2KwdeOfaIX6yxyLJ1JC7QX1BLYGCe4hxspikhXhs72
+         LlOib55bwcEUaEKQmiCFgRQGvJCMgcZvugoncnNXcdNedyHR/+G7DB7ZUsduO3p+lKEL
+         GVa8yILjJVx66GDhOZPVLdOghZ5Desu4mTb7XjFYxcPVXMxvEn3d9VGqQtRRWIFhkS+C
+         5nvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=fEQ1d/PiEHzLrmSBXGQT2W8YpNnPcaA3hRqhgrIy1b8=;
+        b=MRq7HrY+YReWT1sQ1qEPGekGRP5R6eJG+lH7o2Ew5Oq1jSRkKWkszbftpcteTakhng
+         WT1D2Q576zG5nD6aX6V24BwSnmx0E3PI2DyTPYPV1GhU0QHmRU+u5ZABeJXzV3acFk4l
+         /5SiE5BY35xbYi3GrR92NoW1zI5JbFn9osMp73/E3uozLqG/NEK211YhzjM+Aq8GtLvA
+         5I3t56CpfZ5dnfiAd3CAIo7hEnJnGnrzziabsedrFjXODjF5ln08fwFR2+QVA/a+zbYG
+         f+Up7nlWwyri1pGa7L0C29/fSHgY2A2IWNOcMT08FAkQ7AM7QtAYpjai2ReTqj5WSBq6
+         OWTw==
+X-Gm-Message-State: ACgBeo1TzY2JJP4+8hgcNnrODLaY6XfXzmAyGdu5a3xgPrhRwFHCbrsa
+        uMIrX+QZ+iXqGsg9V1m+axejl1D/bkzRlpclJkcPlg==
+X-Google-Smtp-Source: AA6agR55v+DLet0yiWWCE94xVChePy5VsoHxFJfjQTURDicCdiaaIP6NeIPTzH3NruHqxBu+qCXcRybcS1En38eDdqc=
+X-Received: by 2002:a25:bc3:0:b0:673:bc78:c095 with SMTP id
+ 186-20020a250bc3000000b00673bc78c095mr3870021ybl.376.1661442001024; Thu, 25
+ Aug 2022 08:40:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <875yigixjp.fsf@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-45-glider@google.com>
+ <YsNIjwTw41y0Ij0n@casper.infradead.org>
+In-Reply-To: <YsNIjwTw41y0Ij0n@casper.infradead.org>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 25 Aug 2022 17:39:24 +0200
+Message-ID: <CAG_fn=VbvbYVPfdKXrYRTq7HwmvXPQUeUDWZjwe8x8W=ttq6KA@mail.gmail.com>
+Subject: Re: [PATCH v4 44/45] mm: fs: initialize fsdata passed to
+ write_begin/write_end interface
+To:     Matthew Wilcox <willy@infradead.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,133 +101,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:37:14AM +0300, Jani Nikula wrote:
-> On Tue, 23 Aug 2022, Łukasz Bartosik <lb@semihalf.com> wrote:
-> >>
-> >> Hi all,
-> >>
-> >> Apologies in advance if you see this twice. I did not see the original
-> >> make it to either lore.kernel.org or the freedesktop.org archives so I
-> >> figured it might have been sent into the void.
-> >>
-> >> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
-> >> > From: Łukasz Bartosik <lb@semihalf.com>
-> >> >
-> >> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
-> >> > The root cause is null pointer defeference of bi_next
-> >> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
-> >> >
-> >> > BUG: kernel NULL pointer dereference, address: 000000000000002e
-> >> > PGD 0 P4D 0
-> >> > Oops: 0002 [#1] PREEMPT SMP NOPTI
-> >> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
-> >> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05/14/2021
-> >> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
-> >> > ...
-> >> > [    2.554467] Call Trace:
-> >> > [    2.554467]  <TASK>
-> >> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
-> >> > [    2.554467]  ? _printk+0x59/0x73
-> >> > [    2.554467]  ? _dev_err+0x77/0x91
-> >> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
-> >> > [    2.554467]  i915_driver_probe+0x4c8/0x638
-> >> > [    2.554467]  i915_pci_probe+0xf8/0x14e
-> >> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
-> >> > [    2.554467]  pci_device_probe+0xaa/0x142
-> >> > [    2.554467]  really_probe+0x13f/0x2f4
-> >> > [    2.554467]  __driver_probe_device+0x9e/0xd3
-> >> > [    2.554467]  driver_probe_device+0x24/0x7c
-> >> > [    2.554467]  __driver_attach+0xba/0xcf
-> >> > [    2.554467]  ? driver_attach+0x1f/0x1f
-> >> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
-> >> > [    2.554467]  bus_add_driver+0x11b/0x1f7
-> >> > [    2.554467]  driver_register+0x60/0xea
-> >> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
-> >> > [    2.554467]  i915_init+0x2c/0xb9
-> >> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
-> >> > [    2.554467]  do_one_initcall+0x12e/0x2b3
-> >> > [    2.554467]  do_initcall_level+0xd6/0xf3
-> >> > [    2.554467]  do_initcalls+0x4e/0x79
-> >> > [    2.554467]  kernel_init_freeable+0xed/0x14d
-> >> > [    2.554467]  ? rest_init+0xc1/0xc1
-> >> > [    2.554467]  kernel_init+0x1a/0x120
-> >> > [    2.554467]  ret_from_fork+0x1f/0x30
-> >> > [    2.554467]  </TASK>
-> >> > ...
-> >> > Kernel panic - not syncing: Fatal exception
-> >> >
-> >> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
-> >> > Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
-> >> > ---
-> >> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
-> >> >  1 file changed, 9 insertions(+), 7 deletions(-)
-> >> >
-> >> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm/i915/display/intel_bw.c
-> >> > index 2da4aacc956b..bd0ed68b7faa 100644
-> >> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
-> >> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
-> >> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_private *dev_priv, const struct intel
-> >> >               int clpchgroup;
-> >> >               int j;
-> >> >
-> >> > -             if (i < num_groups - 1)
-> >> > -                     bi_next = &dev_priv->max_bw[i + 1];
-> >> > -
-> >> >               clpchgroup = (sa->deburst * qi.deinterleave / num_channels) << i;
-> >> >
-> >> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
-> >> > -                     bi_next->num_planes = (ipqdepth - clpchgroup) / clpchgroup + 1;
-> >> > -             else
-> >> > -                     bi_next->num_planes = 0;
-> >> > +             if (i < num_groups - 1) {
-> >> > +                     bi_next = &dev_priv->max_bw[i + 1];
-> >> > +
-> >> > +                     if (clpchgroup < clperchgroup)
-> >> > +                             bi_next->num_planes = (ipqdepth - clpchgroup) /
-> >> > +                                                    clpchgroup + 1;
-> >> > +                     else
-> >> > +                             bi_next->num_planes = 0;
-> >> > +             }
-> >> >
-> >> >               bi->num_qgv_points = qi.num_points;
-> >> >               bi->num_psf_gv_points = qi.num_psf_points;
-> >> > --
-> >> > 2.35.0.rc2.247.g8bbb082509-goog
-> >> >
-> >> >
-> >>
-> >> Was this patch ever applied or was the issue fixed in a different way?
-> >> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
-> >> compiler supports it), bi_next will be deterministically initialized to
-> >> NULL, which means 'bi_next->num_planes = 0' will crash when the first if
-> >> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
-> >> us at [1] so it impacts real users (and I have been applying this change
-> >> locally for six months). I see some discussion in this thread, was it
-> >> ever resolved?
-> >>
-> >> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
-> >>
-> >> Cheers,
-> >> Nathan
+On Mon, Jul 4, 2022 at 10:07 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Fri, Jul 01, 2022 at 04:23:09PM +0200, Alexander Potapenko wrote:
+> > Functions implementing the a_ops->write_end() interface accept the
+> > `void *fsdata` parameter that is supposed to be initialized by the
+> > corresponding a_ops->write_begin() (which accepts `void **fsdata`).
 > >
-> > The patch was not accepted by upstream. I gave up after sending two reminders
-> > that the issue is still present which resulted in no upstream reaction.
-> > I have been also applying that patch locally for a few months.
-> > Thanks for bringing it up to upstream attention again.
-> 
-> Apologies for us dropping the ball here. There were objections to the
-> code from Ville [1] but nobody stepped up to clean it up. I think this
-> was really more about the commit being fixed c64a9a7c05be ("drm/i915:
-> Update memory bandwidth formulae") than about the patch at hand.
-> 
-> In any case, I've gone ahead and pushed this patch to drm-intel-next
-> now. With the Fixes tag it should eventually find its way to stable
-> v5.17+. Thank you for the patch, review - and nagging. ;)
-> 
-> What still remains is cleaning up the code. But that should never have
-> stalled the fix for months. Sorry again.
+> > However not all a_ops->write_begin() implementations initialize `fsdata`
+> > unconditionally, so it may get passed uninitialized to a_ops->write_end(),
+> > resulting in undefined behavior.
+>
+> ... wait, passing an uninitialised variable to a function *which doesn't
+> actually use it* is now UB?  What genius came up with that rule?  What
+> purpose does it serve?
+>
 
-No worries, better late than never :) Thanks for applying the change!
+Hi Matthew,
 
-Cheers,
-Nathan
+There is a discussion at [1], with Segher pointing out a reason for
+this rule [2] and Linus requesting that we should be warning about the
+cases where uninitialized variables are passed by value.
+
+Right now there are only a handful cases in the kernel where such
+passing is performed (we just need one more patch in addition to this
+one for KMSAN to boot cleanly). So we are in a good position to start
+enforcing this rule, unless there's a reason not to.
+
+I am not sure standard compliance alone is a convincing argument, but
+from KMSAN standpoint, performing parameter check at callsites
+noticeably eases handling of values passed between instrumented and
+non-instrumented code. This lets us avoid some low-level hacks around
+instrumentation_begin()/instrumentation_end() (some context available
+at [4]).
+
+Let me know what you think,
+Alex
+
+[1] - https://lore.kernel.org/lkml/CAFKCwrjBjHMquj-adTf0_1QLYq3Et=gJ0rq6HS-qrAEmVA7Ujw@mail.gmail.com/T/
+[2] - https://lore.kernel.org/lkml/20220615164655.GC25951@gate.crashing.org/
+[3] - https://lore.kernel.org/lkml/CAHk-=whjz3wO8zD+itoerphWem+JZz4uS3myf6u1Wd6epGRgmQ@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/20220426164315.625149-29-glider@google.com/

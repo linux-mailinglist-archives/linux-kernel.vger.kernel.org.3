@@ -2,108 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41195A108D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2A45A1062
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241767AbiHYMcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S240304AbiHYM1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241609AbiHYMca (ORCPT
+        with ESMTP id S231438AbiHYM1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:32:30 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2349776768
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:32:29 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id t5so25873057edc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=jCJsXsDD/iNK9yC84Ot8gXJYydwvdgJYruOO+RMKvrI=;
-        b=X0emtHDFGDi9aZeHp4BbPnWfi2/2Y32/qXORcbMbYWKU3E3zW5qYD2fFIX9vkLLtbi
-         GaxVEAVJ88+KouE2ppQZ1YY/cHhojhRCMC+vYQvEyA529wnA7GZYMADaflfACAs+eo9S
-         LpWxcvfP08C6kv3IIx+pF1r2CpLfNnjV5HYFfJ98nZWa695TZCeQo9FvF7JycXV5HX1y
-         iGzw5FSl03UOLGVwYURZ1S7qSEZtxQRN3kDgZnPqXfF3F0rbcF8zK1GSKzUooOwi6vv+
-         +jCBhDdJmpvL8ugv1xyrnxp5d6WZ70yIpp6RMlwK5mHmMlwA+sOxcvkaRKaJT+f7J/0N
-         3chA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=jCJsXsDD/iNK9yC84Ot8gXJYydwvdgJYruOO+RMKvrI=;
-        b=8DrQoaAEqOGMEWQih4cZ0R/qiKS3/KeS7P/ZAKGuOt8CHrmSf+FmcCJW6O4xD22bwA
-         H8J48d6joI7oG3bHo2g95IX/7UsFZ0838suF9oZ7ameZ+8eLbvV4eLMgZnMVtb3rodaY
-         a2+Narh1AmOkTdp9kRJYy2RHiHb7pNyoXVIkpOJgWIQ+p18NoSdMvZ6oUife6eTeTZD0
-         I7m9SxAAFAIj7A9AjGb8T/fp/TJb+RRjF5hPeC59sls1BhR/Ngp5CazPiDk8FS1Xv1ks
-         bEQ241DP3kamqBtTw3HYxHVsC7J8D6cSzAR3TOQFOb7Rrgm5IQJiEWlMopNWJnceUZkU
-         qdWw==
-X-Gm-Message-State: ACgBeo26XFh2LMQAOoBKGLTSIvmmBV4iVNwT/FIBNLNZ/uxq3KjVwaE6
-        HcsT5QjSHydUrRzP58VaxRHkLlvqeTXeDad/hAujjdQYEpVgMQ==
-X-Google-Smtp-Source: AA6agR6P48JPVyPvNYYU45h+T28rV7KicTf1wAxtBzXQfFFtmoh/0TG6In5HCdF/3tGmR1cHKNPnpP1O8JBei2WPMG8=
-X-Received: by 2002:a2e:5cd:0:b0:261:a774:36d0 with SMTP id
- 196-20020a2e05cd000000b00261a77436d0mr1080313ljf.312.1661430404639; Thu, 25
- Aug 2022 05:26:44 -0700 (PDT)
+        Thu, 25 Aug 2022 08:27:06 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B8AB2871
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:27:04 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1661430412t51laxfj
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 Aug 2022 20:26:51 +0800 (CST)
+X-QQ-SSF: 01000000002000C0E000B00A0000000
+X-QQ-FEAT: ILHsT53NKPijEBeKhvrs7x4kNBMF8sdjP+lC1OBtQpIPBHG5kct3gEo0GsiFm
+        DBh2b1t5/0j76TGgiyJj9qGMDi49LEaB4HIOhRRoJnAEY2J9Lu3WmkEbE2MLdoKTHg+LOLq
+        D66Rp/iMPjXD8GKEx/xDyJQNyd3rUIO8LbyCIFHqmNICpYt6ITXIV9WJ+/fkvaPWaJQQO/r
+        +3IbMzdgT0c9wXAwPIqRn5n7+D51wsOxN5KduS3qJjYzRLFJf6xa+x9VPlXfj6kSe8Svxbq
+        6jpY31UWJqwNbPCXVxysHlJ1Otu/E4F0e276SNEV7oZl9ebnt7S0gQWOiJuy+Z3RFDjm2y3
+        L41jQYFrpVt4FTlVwT3lMLNEYtX8jA2qMxB98xl95sY9APAz6JnnWUkaaFi2A==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     gregkh@linuxfoundation.org, duoming@zju.edu.cn, dave@stgolabs.net
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] staging/rtl8192e: fix repeated words in comments
+Date:   Thu, 25 Aug 2022 20:26:45 +0800
+Message-Id: <20220825122645.27588-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Received: by 2002:a05:6520:2f81:b0:211:5365:cd04 with HTTP; Thu, 25 Aug 2022
- 05:26:43 -0700 (PDT)
-Reply-To: abdwabbom447@gmail.com
-From:   Maddah Hussain <abdwabbomaddah93@gmail.com>
-Date:   Thu, 25 Aug 2022 05:26:43 -0700
-Message-ID: <CAHUCj6ePPKO2fZ8N5TaAgUZpdqdMe+kBm_RVpKXi-1araOz89w@mail.gmail.com>
-Subject: Get Back to me (URGENT)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: again.it]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah93[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah93[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [abdwabbom447[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
+ Delete the redundant word 'new'.
 
-Maddah Hussain
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/staging/rtl8192e/rtllib_softmac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+index b5f4d35954a9..9e6d7c5716ff 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+@@ -1611,7 +1611,7 @@ inline void rtllib_softmac_new_net(struct rtllib_device *ieee,
+ 
+ 	short apset, ssidset, ssidbroad, apmatch, ssidmatch;
+ 
+-	/* we are interested in new new only if we are not associated
++	/* we are interested in new only if we are not associated
+ 	 * and we are not associating / authenticating
+ 	 */
+ 	if (ieee->state != RTLLIB_NOLINK)
+-- 
+2.36.1
+

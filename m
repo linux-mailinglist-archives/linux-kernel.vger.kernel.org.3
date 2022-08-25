@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D405A185B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CACF5A185F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243034AbiHYSID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S243090AbiHYSIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243003AbiHYSH7 (ORCPT
+        with ESMTP id S243085AbiHYSIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:07:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03608BD139;
-        Thu, 25 Aug 2022 11:07:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A5AE61CBD;
-        Thu, 25 Aug 2022 18:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C7CC433D6;
-        Thu, 25 Aug 2022 18:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661450878;
-        bh=P7IaUuILhRlBKJWD1XTENmsK+U18RlbZ9W1q2qOV2Gg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MVyN+2QvVESzlEmFSFTsVrR1t5Tqw+qRrxpT5tXMtmxn8ppIOxbunQ5WNV1Wm3P+Y
-         Izhe8Cbh7go0eWf4DqWDADgKMsygr4M8MqPF6vtAatwOHFFxSPzPwo68+OG8h4vxtw
-         49Fu/DDDcP9iqwqPF3TLW02e8HVlcu8qRU2vK4T7G299Qlqn7i7bkKqL5lTeTGFEJU
-         xaeEbMxF8VMljf550nbqb/r7Kbhz28r4yioODHsFrNFhAt1UP9lh87DIFu4mgxXHWQ
-         bK1dDgQK6o0D6z4e06maZXZpqA0ux/+KKbXqUPiInXACcq5cQJWiiDF5RsFrZxIKAq
-         NLAs7VdTtPZ3g==
-Date:   Thu, 25 Aug 2022 11:07:56 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v2 6/7] ethtool: add interface to interact with
- Ethernet Power Equipment
-Message-ID: <20220825110756.6361fff7@kernel.org>
-In-Reply-To: <20220825130211.3730461-7-o.rempel@pengutronix.de>
-References: <20220825130211.3730461-1-o.rempel@pengutronix.de>
-        <20220825130211.3730461-7-o.rempel@pengutronix.de>
+        Thu, 25 Aug 2022 14:08:10 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F69ABD152;
+        Thu, 25 Aug 2022 11:08:07 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11dca1c9c01so9010001fac.2;
+        Thu, 25 Aug 2022 11:08:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc;
+        bh=v+fUzPKTBLo/xaSs+aR0X2ElL8HrWumep9vTvCPKeLE=;
+        b=TgV7/3YennBwbnxrEU3LnuAHDFnrdq+iuUirCygRY3EaIQ+sz+zJ2qrC3hOV6AfSBF
+         Y3f5ii244HDqWy90X6tdjDQ/OSU+5gqE/SMHvbzHjPdqo/ioZEEonQKYwtliDKVicb4l
+         YqbCRJopj9kXciuXEOhEg4z4YFAMdM2uV2HPSUUm0vr5V9soKIpAa9lU0ImL+DTH9T47
+         BRFK2NOV13oYEhxooXDezNUwm8YRhMBnb5s0vrr7sX5XTT9cLS38omiRWBUoy3XDqm87
+         QadHt1wWI52eohmwlJgN4D9EgwpEySHq4SJIlxHO13nDMPlA3hi9Ra7gD706GEqGwu/E
+         jxPA==
+X-Gm-Message-State: ACgBeo2m9+jb9mRwIka/74UyjRMkOlV6OzhexnCZ5H5DRg3YpgdhVHvv
+        wTV6P6cRC374D8l5RMEOjA==
+X-Google-Smtp-Source: AA6agR7V/D12+M0rcUDZwYriOVTlu4Mpyh8xu222QitGATB0iU90TF5GONbh5E0yejp8vi8K/+Sbxg==
+X-Received: by 2002:a05:6870:618b:b0:11c:455e:eb18 with SMTP id a11-20020a056870618b00b0011c455eeb18mr124187oah.264.1661450886244;
+        Thu, 25 Aug 2022 11:08:06 -0700 (PDT)
+Received: from [127.0.1.1] (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id t26-20020a0568080b3a00b003434b221a17sm5000231oij.52.2022.08.25.11.08.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 11:08:05 -0700 (PDT)
+Subject: [PATCH RFC v1 0/3] perf: Arm SPEv1.2 support
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 25 Aug 2022 13:07:59 -0500
+Message-Id: <20220825-arm-spe-v8-7-v1-0-c75b8d92e692@kernel.org>
+X-b4-tracking: H4sIAIS6B2MC/w3LOw6AIAwA0KuYzjbB+iPeBrAICaKhkcV4dxnf8F4QLpEFtu6FwjVKvHLD0Hfggs
+ kHY9ybgRSR0jSjKSfKzVg1ruh592riYfE0QivWCKMtJrvQUn5S+r4fNUeZHGMAAAA=
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+X-Mailer: b4 0.10.0-dev
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 15:02:10 +0200 Oleksij Rempel wrote:
-> +void ethtool_set_ethtool_pse_ops(const struct ethtool_pse_ops *ops)
-> +{
-> +	rtnl_lock();
-> +	ethtool_pse_ops = ops;
-> +	rtnl_unlock();
-> +}
-> +EXPORT_SYMBOL_GPL(ethtool_set_ethtool_pse_ops);
+This series adds support for Arm SPEv1.2 which is part of the
+Armv8.7/Armv9.2 architecture. There's 2 new features that affect the 
+kernel: a new event filter bit, branch 'not taken', and an inverted 
+event filter register. 
 
-Do we really need the loose linking on the PSE ops?
-It's not a lot of code, and the pcdev->ops should be 
-enough to decouple drivers, it seems.
+RFC as this is compile tested only.
 
-> +static int pse_set_pse_config(struct net_device *dev,
-> +			      struct netlink_ext_ack *extack,
-> +			      struct nlattr **tb)
-> +{
-> +	struct phy_device *phydev = dev->phydev;
-> +	struct pse_control_config config = {};
-> +	const struct ethtool_pse_ops *ops;
-> +	int ret;
-> +
-> +	if (!tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL])
-> +		return 0;
+---
+Rob Herring (3):
+      perf: arm_spe: Support new SPEv1.2/v8.7 'not taken' event
+      perf: Add perf_event_attr::config3
+      perf: arm_spe: Add support for SPEv1.2 inverted event filtering
 
-If SET has no useful attrs the usual response is -EINVAL.
+ arch/arm64/include/asm/sysreg.h       |  5 ++++
+ drivers/perf/arm_spe_pmu.c            | 47 ++++++++++++++++++++++++++++++++++-
+ include/uapi/linux/perf_event.h       |  3 +++
+ tools/include/uapi/linux/perf_event.h |  3 +++
+ 4 files changed, 57 insertions(+), 1 deletion(-)
+---
+base-commit: 1c23f9e627a7b412978b4e852793c5e3c3efc555
+change-id: 20220825-arm-spe-v8-7-fedf04e16f23
 
-> +	ops = ethtool_pse_ops;
-> +	if (!ops || !ops->set_config)
-> +		return -EOPNOTSUPP;
-> +
-> +	config.admin_cotrol = nla_get_u8(tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL]);
-> +
-> +	if (!phydev)
-> +		return -EOPNOTSUPP;
-> +
-> +	// todo resolve phydev dependecy
+Best regards,
+--
+Rob Herring <robh@kernel.org>
 
-My lack of phydev understanding and laziness are likely the cause,
-but I haven't found an explanation for this todo. What is it about?
-
-> +	if (!phydev->psec)
-> +		ret = -EOPNOTSUPP;
-> +	else
-> +		ret = ops->set_config(phydev->psec, extack, &config);
-> +
-> +	return ret;
-> +}
+-- 
+b4 0.10.0-dev

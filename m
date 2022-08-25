@@ -2,130 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FA55A12B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0795A1275
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242843AbiHYNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S241299AbiHYNhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242802AbiHYNuB (ORCPT
+        with ESMTP id S241823AbiHYNhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:50:01 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459FC4D26F;
-        Thu, 25 Aug 2022 06:49:56 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l33-20020a05600c1d2100b003a645240a95so2561165wms.1;
-        Thu, 25 Aug 2022 06:49:56 -0700 (PDT)
+        Thu, 25 Aug 2022 09:37:13 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E3DB275C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:37:11 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u15so30922824ejt.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:37:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:message-id:date:content-transfer-encoding
-         :mime-version:to:from:subject:cc:from:to:cc;
-        bh=yCz3oQJFqTwqovrPNYSJ6P9F0BIA6bLL58cK1Awy8hY=;
-        b=ZvM8pw8sLdgOhDwhD3L3X2Xo+tUKO2zIu/Fh5YypqWrZbY9BQzjbeNy05SEZFhqmhF
-         tejsgMntHg4uahyjwkiZw+eUpmI+GpFQLrra1lAt1FyGNiQWi6wPbgwyw2mm7t1lhBNE
-         H1uyDZt7q4uM7U4nCGL0ErWtM79kUCIeHnUpyh89NyTR2hWnTluX09hPBb6JsNROWzHV
-         aSf8CdZ32X+1HxkZb0ZouguH83iX1xRQxlVhyEosMcPOEIcR6cgdEilY0Y/PpM75Jj8T
-         0ZtUfr1AGU5ezcPW2z7uZTErB7N5YoSILS3cA8TbiSKAEJBVZEo1mLwEYTbEEOKbyoiE
-         ip4Q==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=dlm2famS8O5FqtaX9yCeRxscNO/EP4O+QRIK7hJkB2s=;
+        b=hTFwrfcekpPlwsKPKUDudDRoTVjcNhRXmh1WtgUK60PKUyBomYKetqdJodmXMyLiB0
+         dkyuV7K5eZsOuK963+nUWPUe7KCyXkJZONDwPCrivKsZT9PJDubk1TQqXKdDF6asiLn/
+         tKuc0x8bOBlRQRLCT3cu6Yw1wdke2dVeoukHTnpDK1KgGBp18+wj0ZvHkmzlWDm5xfBe
+         7fzo7likfMjdV90vpKunxdhJef3uuXRWyf+Ve8lXxcg9SOUlYCESKPN/0H+qXAmkBCTn
+         HkRXi4lc+hQbTfmsIQLyBi6byW3t6UFkkCoPxj3LYOq5bF2Nj0Yq+8g0crj8aP/TqJK5
+         Uo7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:message-id:date:content-transfer-encoding
-         :mime-version:to:from:subject:cc:x-gm-message-state:from:to:cc;
-        bh=yCz3oQJFqTwqovrPNYSJ6P9F0BIA6bLL58cK1Awy8hY=;
-        b=tsx6CIZJtnYkFZVtTixhkGcmz6T2+m2KNutZG3znxzqarIRYOp5yyFTxeRYPyUPApa
-         yk72RP9hOe1qDZyXNbcvgTwvnEF2nB33XhyrUNxwhA5kL6eLcDRQFELihe68AB3AawnK
-         gwGQ5P/7hQI9La3FwT0upeJ9b13vqFbW6BdojbahDWu87mbHhq/QeP7FFNTxKSIu/NHl
-         79dFh7G9X8T0ZLHoXi94s0xG9P0O59+2+SPyYUc4WabHgsdP/LjwTjguNiv1S+g0RS/S
-         Ng6eMAYzlh8wp/iw/0v6SheM2IHtKCtq4CW2pAM5YugTpjvoam8/98lb4EDSZHNwcBCp
-         lARw==
-X-Gm-Message-State: ACgBeo3pnJDXnQPW25Zhwxw+6jmqLzVhJKdop4LCK7mI0Msl1jbCd0MJ
-        a4oJn8jA9VFpAypnqjzX08w=
-X-Google-Smtp-Source: AA6agR7vn7Mg6lNsxvU/jEi0ZnXITi/xAhNlK2vPyJCKYaCSO6EVnNSc3FsatM3Rjn/+i8fYnNtO4A==
-X-Received: by 2002:a05:600c:4fcd:b0:3a6:2694:e3ba with SMTP id o13-20020a05600c4fcd00b003a62694e3bamr2529473wmq.160.1661435395114;
-        Thu, 25 Aug 2022 06:49:55 -0700 (PDT)
-Received: from localhost (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id y11-20020a5d470b000000b0022584ab85a8sm1080964wrq.17.2022.08.25.06.49.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 06:49:54 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, "Felix Fietkau" <nbd@nbd.name>,
-        "Toke Hoiland-Jorgensen" <toke@redhat.com>,
-        "Linus Lussing" <linus.luessing@c0d3.blue>,
-        "Kalle Valo" <kvalo@kernel.org>
-Subject: Re: [RFC/RFT v5 3/4] mac80211: add busy time factor into expected
- throughput
-From:   "Nicolas Escande" <nico.escande@gmail.com>
-To:     "Baligh Gasmi" <gasmibal@gmail.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 25 Aug 2022 15:36:34 +0200
-Message-Id: <CMF5ERVFCDM9.G96GZB43SEWO@syracuse>
-X-Mailer: aerc 0.11.0
-References: <20220719123525.3448926-1-gasmibal@gmail.com>
- <20220719123525.3448926-4-gasmibal@gmail.com>
-In-Reply-To: <20220719123525.3448926-4-gasmibal@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=dlm2famS8O5FqtaX9yCeRxscNO/EP4O+QRIK7hJkB2s=;
+        b=z/iwng9LAcNs31fMMvIPyE5GYenZoMGnA2zY0dbOJfrPdRqWy7Ys1uUheUTR4Lp0K4
+         S6R7G6OsaYuGdP7I2sIPv/1Cn3thqhvhCt5vbugkrFGYH8JTvT00gvieFBudwqISjpPs
+         bMelFQIMEHSgQeC0ivvVtlmEwJdAUWXweb493lNphvQ4Qvi2dkmXJrsLX1I7k0NMs1+Y
+         Z5krQ4wZ9SMoNmlaLqyfi2NAnhjIh//PXuI3FL8OiI+azhubI3ztAj82uxvu6m1olpbZ
+         5HHuWdJB0Jq7MlVTASzhJM3yXMqV2opN5JWhVtFRffufIg76GPczyIHd4CYzM+ih5TOh
+         nYCA==
+X-Gm-Message-State: ACgBeo00XlYznbOIZlFH3ZfNzZkEOJ3NwCut2Gj/ye0yW3Ji3Qv+IrtK
+        mVnijBWB33smXQrFvdqr02V59BBeso3fmY0+LngzNg==
+X-Google-Smtp-Source: AA6agR6Be+IFNm9RQjAf6ZoJJ0Gv1gRLpqln7PaJkfZ2s1Nuu2OIJL74xQl9m77k4Ch3VEJMzJNEIiUBj3SnGR8MwxQ=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr2609925ejc.440.1661434630115; Thu, 25
+ Aug 2022 06:37:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
+ <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+ <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
+ <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
+ <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com> <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
+In-Reply-To: <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 25 Aug 2022 15:36:58 +0200
+Message-ID: <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Jul 19, 2022 at 2:35 PM CEST, Baligh Gasmi wrote:
-> When estimating the expected throughput, take into account the busy time
-> of the current channel.
->
-> Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
-> ---
->  net/mac80211/sta_info.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/net/mac80211/sta_info.c b/net/mac80211/sta_info.c
-> index 201aab465234..7e32c06ae771 100644
-> --- a/net/mac80211/sta_info.c
-> +++ b/net/mac80211/sta_info.c
-> @@ -2000,6 +2000,8 @@ void ieee80211_sta_update_tp(struct ieee80211_local=
- *local,
->  			     bool ack, int retry)
->  {
->  	unsigned long diff;
-> +	struct ieee80211_sub_if_data *sdata;
-> +	u32 avg_busy;
->  	struct rate_control_ref *ref =3D NULL;
->
->  	if (!skb || !sta || !tx_time_est)
-> @@ -2014,6 +2016,7 @@ void ieee80211_sta_update_tp(struct ieee80211_local=
- *local,
->  	if (local->ops->get_expected_throughput)
->  		return;
->
-> +	sdata =3D sta->sdata;
->  	tx_time_est +=3D ack ? 4 : 0;
->  	tx_time_est +=3D retry ? retry * 2 : 2;
->
-> @@ -2022,6 +2025,10 @@ void ieee80211_sta_update_tp(struct ieee80211_loca=
-l *local,
->
->  	diff =3D jiffies - sta->deflink.status_stats.last_tp_update;
->  	if (diff > HZ / 10) {
-> +		avg_busy =3D ewma_avg_busy_read(&sdata->avg_busy) >> 1;
-> +		sta->deflink.tx_stats.tp_tx_time_est +> +			(sta->deflink.tx_stats.tp_=
-tx_time_est * avg_busy) / 100;
-Once again div_u64() ?
-> +
->  		ewma_avg_est_tp_add(&sta->deflink.status_stats.avg_est_tp,
->  				    sta->deflink.tx_stats.tp_tx_size /
->  				    sta->deflink.tx_stats.tp_tx_time_est);
-> --
-> 2.37.1
+On Thu, Aug 18, 2022 at 2:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Thu, Aug 18, 2022 at 2:25 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
+> > git grep 'base = -1' yields these suspects:
+> >
+> > arch/arm/common/sa1111.c:       sachip->gc.base = -1;
+> > arch/arm/common/scoop.c:        devptr->gpio.base = -1;
+> > arch/powerpc/platforms/52xx/mpc52xx_gpt.c:      gpt->gc.base = -1;
+> > arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c: gc->base = -1;
+> >
+> > That's all! We could just calculate these to 512-ngpios and
+> > hardcode that instead.
+>
+> How do the consumers find the numbers for these four?
+
+For SA1111 the chip gets named "sa1111" and some consumers actually
+use proper machine descriptions, maybe all?
+
+arch/arm/mach-sa1100/jornada720.c:              GPIO_LOOKUP("sa1111",
+0, "s0-power", GPIO_ACTIVE_HIGH),
+arch/arm/mach-sa1100/jornada720.c:              GPIO_LOOKUP("sa1111",
+1, "s1-power", GPIO_ACTIVE_HIGH),
+(...)
+
+For Scoop it is conditionally overridden in the code. I guess always
+overridden.
+
+For powerpc these seem to be using (old but working) device tree
+lookups, so should not be an issue.
+
+Sadly I'm not 100% sure that there are no random hard-coded
+GPIO numbers referring to whatever the framework gave them
+at the time the code was written :(
+
+Another reason the base is assigned from above (usually
+from 512 and downward) is that the primary SoC GPIO usually
+want to be at base 0 and there is no guarantee that it will
+get probed first. So hard-coded GPIO bases go from 0 -> n
+and dynamically allocateed GPIO bases from n <- 512.
+
+Then we hope they don't meet and overlap in the middle...
+
+> > and in that case it is better to delete the use of this function
+> > altogether since it can not fail.
+>
+> S32_MAX might be a better upper bound. That allows to
+> just have no number assigned to a gpio chip. Any driver
+> code calling desc_to_gpio() could then get back -1
+> or a negative error code.
+>
+> Making the ones that are invalid today valid sounds like
+> a step backwards to me if the goal is to stop using
+> gpio numbers and most consumers no longer need them.
+
+OK I get it...
+
+Now: who wants to write this patch? :)
+
+Christophe? Will you take a stab at it?
+
+Yours,
+Linus Walleij

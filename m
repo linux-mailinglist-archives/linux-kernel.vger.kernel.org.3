@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3B45A1122
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944C55A1130
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238317AbiHYMyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
+        id S241345AbiHYMyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238276AbiHYMyP (ORCPT
+        with ESMTP id S240377AbiHYMyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:54:15 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6089C58092
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:14 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id n15so7025291lfe.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:14 -0700 (PDT)
+        Thu, 25 Aug 2022 08:54:17 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826175D0D5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:15 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id k22so4662871ljg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=S3SutAB1J4Kb12rqzo8+qQuuCiQhbu1bFQAHyt9SB6M=;
-        b=dYjtx8g4GgRergvoaiFBiWUr5mp8xRc3ajTrabyMa3BOgh/UVTKQun5yXKMMauJRMc
-         0+eMWOZNpd+3omG8H8DsIx+7J/08M1obW4O6HuN1/6XLZ7QuOwCY1q+xfn6tJ+0Xi14+
-         ksNb9HYycX9JV7LSoOaOjrls83z6BtK7RxIHe3ALGiTFz8yuJpE4sPI1e86PN7lUIzGK
-         S8tSB5c0ljyYXthRQu2jA7GyvpLd+heV1qrFqZCGJBjiEVJ6Vy6J+YZ24ODQg1o2U+IP
-         Dze5Q7iBwMGW9rsKKt87+CJsHJHv0w9JrU4MyWUPP+KZqYEF+MoQG0xlpjAQYO0XCqSZ
-         jISg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=D/ccOsbml4jzjSuaN6Ect5+wP3SbE22HAifCrGPULww=;
+        b=FVWi5xKPF5jzZCW1H9revypI8JzpEg8PzHlOM4EejMA8fJV0y53TPDVzqVtdLiXN+f
+         IC4X4qKTdFy3Ctj8t8tvs9stoC47gcEMdprPtqvNgvV5JVoNNHfZxndYNEhqXkXXFA60
+         KRm3q3Zs94o6/bU/GLtNxrpgiv3uTtkzQI0B1/2d+CkxZruVYvhYxmlGr5YiJFsCnZsw
+         u2EKWnORW0KcimWVcask0+FYGYwHiGWmrHDBXDvM+AkayGQgfcMzSaIg8ZlMw98hTHHC
+         TlFDjz9VTTaFpyI0mTQBKZU6NWUQ4VAnDDsln+XNN+SVI5oOff4vjXL7h2CGTYl/8a10
+         uPjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=S3SutAB1J4Kb12rqzo8+qQuuCiQhbu1bFQAHyt9SB6M=;
-        b=SKpO6KjZqq/Oi/Bc18FBRyekn3IPnP80wK+CZk3tBMp5R6/WtQli4c8VkMliJaV5i5
-         1hk6HkyjY+x5s8Zrs1lkhN/+CdvEsYADl5FiBIJo6pTcVnK+J+sFc6k9WDXNqPe75EQK
-         yXJvyGA3E/7NGf9N/FO4TzJ1mhCxO9Rnvjh191ZZGuwv0WJRIDyigWrqppAT6NiTkFG+
-         MOyfiiqKQAE/rdu2n88a8K3KyFuvUgYOcf8ItYcKA5/pu6WW/p42piqHrjab15V9sY1u
-         BphwMyhejBy5dWvqaqqUEvKXkFUj6kiJVdXffelIvpds766Hc2KjPcCIfyvBeL/Cxkds
-         uzBA==
-X-Gm-Message-State: ACgBeo25rW4hLTClqa5IWer7fuV8ir8IigQfBkhxCRRozO2W6q4QWiWt
-        j6Vtr9F8lcBu4hMSlwcCGuct5Q==
-X-Google-Smtp-Source: AA6agR6Beh4p+rci4zh/hhXKnzTrbCflB3h0vAEJeLxMjM0OmsBCjw8pY7pJZ0BeP5ai02rnqARMJQ==
-X-Received: by 2002:a05:6512:b08:b0:492:87ad:5f5c with SMTP id w8-20020a0565120b0800b0049287ad5f5cmr1269359lfu.293.1661432052713;
-        Thu, 25 Aug 2022 05:54:12 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=D/ccOsbml4jzjSuaN6Ect5+wP3SbE22HAifCrGPULww=;
+        b=XwkV4LlNfes4aUJacBsKwWyw0PuIK+9NG7Y6pIKuskW3l2CO0nGisNKfBVq7tx/ycu
+         DsWd2MShqLUMt5mSxr8qkY4RwQS5SH3wS0WcTvuy3IznSPxQpkHz5eJMXMCMvLeReO9G
+         UqrbhLmULYzEGE+S37hfAWVOMdv69/hhkFWnBo2W3mbqzZDMajGTjLepfVlDlij3SZom
+         1r12e+uMyraDza9dwmUTFMHQB0w9jGKMRm73Wikb6tky//iSd5vZg8qvX4vpOhE6ZgAf
+         HecAt9peMMapXeRI22wE4o+/UZhaMfr/KcXzl7UR9U3TxdX/7Pod4URu1RSnxge3HT3J
+         bCzA==
+X-Gm-Message-State: ACgBeo3S0eVAtyaxy6+IKGIK+9R3X9v6cwJFo8FGvkdlwJemmA/Wyky7
+        MrA0KYT28hTCeycMzN+d7fbhkA==
+X-Google-Smtp-Source: AA6agR5kjCthwco3jfPkTHcbllpiDHBj4Vg74du9SANxf9zhAAh/e85DVBU/WRdGZ5i9gCiEB3383g==
+X-Received: by 2002:a05:651c:19a7:b0:261:d7af:5d4f with SMTP id bx39-20020a05651c19a700b00261d7af5d4fmr1125100ljb.51.1661432053808;
+        Thu, 25 Aug 2022 05:54:13 -0700 (PDT)
 Received: from krzk-bin.starman.ee (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id z14-20020a056512370e00b00492e3a8366esm494304lfr.9.2022.08.25.05.54.11
+        by smtp.gmail.com with ESMTPSA id z14-20020a056512370e00b00492e3a8366esm494304lfr.9.2022.08.25.05.54.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 05:54:12 -0700 (PDT)
+        Thu, 25 Aug 2022 05:54:13 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Lee Jones <lee@kernel.org>,
         Daniel Thompson <daniel.thompson@linaro.org>,
@@ -63,10 +63,12 @@ To:     Lee Jones <lee@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH RESEND - dt 0/2] dt-bindings: left-overs for DT tree
-Date:   Thu, 25 Aug 2022 15:54:08 +0300
-Message-Id: <20220825125410.232377-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH RESEND - dt 1/2] dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630 compatibles
+Date:   Thu, 25 Aug 2022 15:54:09 +0300
+Message-Id: <20220825125410.232377-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220825125410.232377-1-krzysztof.kozlowski@linaro.org>
+References: <20220825125410.232377-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,26 +81,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Document compatibles for QFPROM used on IPQ8064 and SDM630.  They are
+compatible with generic QFPROM fallback.
 
-These were sent some months ago, then resent and still were not applied.
-
-You already reviewed them (I removed your tag here). Can you apply them to your tree?
-
-https://lore.kernel.org/all/20220720163720.7099-1-krzysztof.kozlowski@linaro.org/
-https://lore.kernel.org/all/daaf6ad7-6204-2a13-442b-05068d29e734@linaro.org/
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (2):
-  dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630 compatibles
-  dt-bindings: leds: qcom-wled: fix number of addresses
-
- .../devicetree/bindings/leds/backlight/qcom-wled.yaml    | 9 ++++++++-
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
  Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 2 ++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ 1 file changed, 2 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+index dede8892ee01..b4163086a5be 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+@@ -18,6 +18,7 @@ properties:
+       - enum:
+           - qcom,apq8064-qfprom
+           - qcom,apq8084-qfprom
++          - qcom,ipq8064-qfprom
+           - qcom,msm8974-qfprom
+           - qcom,msm8916-qfprom
+           - qcom,msm8996-qfprom
+@@ -25,6 +26,7 @@ properties:
+           - qcom,qcs404-qfprom
+           - qcom,sc7180-qfprom
+           - qcom,sc7280-qfprom
++          - qcom,sdm630-qfprom
+           - qcom,sdm845-qfprom
+       - const: qcom,qfprom
+ 
 -- 
 2.34.1
 

@@ -2,112 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2D75A184D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6BC5A1851
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbiHYSFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S243035AbiHYSGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243016AbiHYSF3 (ORCPT
+        with ESMTP id S243143AbiHYSFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:05:29 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DE47CB42
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:05:28 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso2925842wmr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=vL5A1E76Veik6n5XYhBLm8foWbkD11MRUns8HQxABwE=;
-        b=JBu5IQX8xe8tZjdbGeompjkIOFOyxa8s4kf8oTt5/4iy+ew9NtRcz93SqBwZKVTH44
-         XSdAW+mE0EBfMORK/DcJ/HhDfbIXtj/PbZ5sea2exMk16ewDx2KqpZnwbgdEXC4ytHiG
-         wNZOaW7Kn0mUT/o9KM/1CeOxe8k2BqedSQwU7Vmdxw7S6o6J1QBYVnljbRYUHtL8Fq/C
-         zWMboFXBmamwDWcfekdax/A2hGXwxPEtCBAUymQ89xqCr+PqaSKOnDPnBvJn0RxTHdFB
-         5uLa1/gbuGWjSGVhwBx0x0USLViBAK/Vcsatsl0X0NYVcwgcFSMO/DMn14PsnKLejou7
-         7keQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=vL5A1E76Veik6n5XYhBLm8foWbkD11MRUns8HQxABwE=;
-        b=3rJF3pPSLPN/Y47bFhDRk8csdTf9HlvE2t94Z4ds1tOY9L/zHjv/7UxI4H5Yd9In6/
-         Bnh1PuQ0cEwbQ1Pizu9JOaaBfsy6pUUhnFwhkjoiMnq/zvjx/ksyvkRtbaK4Kb+IQJvm
-         EDEzLAKbu8zRI1O86c2cQLCRIxMoHvlcq1CURBtFq+u3gKO0BY/7l18YSFpc8tHh/9ei
-         XPPApynGkLAuO3DxRLWjaFjV9qEVIttcpkRivxMGiw9jI4/CverHkctYLluJYd4Lz0KX
-         YI6P/0/RHOCNvHneswQHYrq+HdX5XedIoxX5GgHfPZpBCZWgpu2sO9nWMRB5DZ5o1mpd
-         OJgQ==
-X-Gm-Message-State: ACgBeo0ib/wHj5Ru7+tQPAIQPNp53BBcydk7gbcrLoBp1+qyF5TDcut0
-        rPnDKmKg13UzLIMV9fingLMjrA==
-X-Google-Smtp-Source: AA6agR7Iv4zB7rXpV1buE/jjnhbKekVEkxkgj8UkRFjcXWAe8us7XcoEngBVxTPwI+UzghxBpBOk8w==
-X-Received: by 2002:a05:600c:17d0:b0:3a6:8235:504e with SMTP id y16-20020a05600c17d000b003a68235504emr2881496wmo.58.1661450727396;
-        Thu, 25 Aug 2022 11:05:27 -0700 (PDT)
-Received: from henark71.. ([51.37.149.245])
-        by smtp.gmail.com with ESMTPSA id j4-20020a5d6044000000b002254a7f4b9csm14967970wrt.48.2022.08.25.11.05.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:05:27 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>
-Cc:     Sagar Kadam <sagar.kadam@sifive.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] riscv: dts: microchip: use an mpfs specific l2 compatible
-Date:   Thu, 25 Aug 2022 19:04:18 +0100
-Message-Id: <20220825180417.1259360-3-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220825180417.1259360-1-mail@conchuod.ie>
-References: <20220825180417.1259360-1-mail@conchuod.ie>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 Aug 2022 14:05:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24639A9ED;
+        Thu, 25 Aug 2022 11:05:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BAD8B82852;
+        Thu, 25 Aug 2022 18:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05109C433C1;
+        Thu, 25 Aug 2022 18:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661450747;
+        bh=3ZuOga+eFaa4Aovlwmx6KLUY7DZ240ln98+mlNDNJDc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZlK20PywEnex3bZQJJ3QlkmMN8ph+WV0YTKmYVueotIPG92BVPrRPWfbf2MqFDWtv
+         6xzUJNf3PKGeqkuR2CUWIScmy6v/KUxWqGeSA0+Q5MWwIMr3CZhPGM0c6OBC3chI8n
+         5gBrpvD1nlAqO7jJ19r/CD3KWW+Tf9iTMQEh9j1mC2pj+yFhG7NZGebTQIuND3yheI
+         iLKKWr+qgXF9fPsPJGTIzw3zaV3H1eOYN178QkD8LQ/FpIt2uZZymGpXSJv+T3Yp7K
+         XDN24h0y2gGRI6uMqKqgv7ElRw55cGmZD01jnr3FNxeIgjCxF8NwRkby6JIvZ4/hNb
+         QsHFWgk1jh5Tg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oRHEe-005k35-JZ;
+        Thu, 25 Aug 2022 19:05:44 +0100
+Date:   Thu, 25 Aug 2022 19:05:44 +0100
+Message-ID: <875yigw64n.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip/gic-v3-its: Remove cpumask_var_t allocation
+In-Reply-To: <20220825152348.1634133-1-pierre.gondois@arm.com>
+References: <20220825152348.1634133-1-pierre.gondois@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pierre.gondois@arm.com, linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, 25 Aug 2022 16:23:48 +0100,
+Pierre Gondois <pierre.gondois@arm.com> wrote:
+> 
+> In KvmTool, on a ThunderX2, when running a preemp_rt kernel based on
 
-PolarFire SoC does not have the same l2 cache controller as the fu540,
-featuring an extra interrupt. Appease the devicetree checker overlords
-by adding a PolarFire SoC specific compatible to fix the below sort of
-warnings:
+How is this specific to kvmtool? Or to running as a guest?
 
-mpfs-polarberry.dtb: cache-controller@2010000: interrupts: [[1], [3], [4], [2]] is too long
+> v5.19-rc3-rt4, the following happens:
+> [    4.070739] [ BUG: Invalid wait context ]
+> [    4.070740] 5.19.0-rc3-rt4-00001-g1a6597c0bdcf #153 Not tainted
+> [    4.070742] -----------------------------
+> [    4.070743] swapper/0/1 is trying to lock:
+> [    4.070744] ffff0000ab7405d8 ((&c->lock)){+.+.}-{3:3}, at: ___slab_alloc (mm/slub.c:2954)
+> [    4.070757] other info that might help us debug this:
+> [    4.070758] context-{5:5}
+> [    4.070759] 5 locks held by swapper/0/1:
+> [    4.070760] #0: ffff0000811491e0 (&dev->mutex){....}-{4:4}, at: __device_driver_lock (drivers/base/dd.c:1055)
+> [    4.070769] #1: ffff0000846c5670 (&desc->request_mutex){+.+.}-{4:4}, at: __setup_irq (kernel/irq/internals.h:147)
+> [    4.070778] #2: ffff0000846c54c8 (&irq_desc_lock_class){....}-{2:2}, at: __setup_irq (kernel/irq/manage.c:1612)
+> [    4.070784] #3: ffff80000b23ea78 (mask_lock){....}-{2:2}, at: irq_setup_affinity (./include/linux/irq.h:381)
+> [    4.070791] #4: ffff80000b23ea38 (tmp_mask_lock){....}-{2:2}, at: irq_do_set_affinity (./include/linux/irq.h:381)
+> [    4.070797] stack backtrace:
+> [    4.070801] CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc3-rt4-00001-g1a6597c0bdcf #153
+> [    4.070805] Call trace:
+> [    4.070806] dump_backtrace (arch/arm64/kernel/stacktrace.c:200)
+> [    4.070811] show_stack (arch/arm64/kernel/stacktrace.c:207)
+> [    4.070813] dump_stack_lvl (lib/dump_stack.c:107)
+> [    4.070818] dump_stack (lib/dump_stack.c:114)
+> [    4.070820] __lock_acquire (kernel/locking/lockdep.c:4707)
+> [    4.070823] lock_acquire (kernel/locking/lockdep.c:466)
+> [    4.070825] rt_spin_lock (./arch/arm64/include/asm/current.h:19 (discriminator 4))
+> [    4.070830] ___slab_alloc (mm/slub.c:2954)
+> [    4.070832] __slab_alloc.isra.0 (mm/slub.c:3116)
+> [    4.070835] __kmalloc_node (mm/slub.c:3207)
+> [    4.070837] alloc_cpumask_var_node (lib/cpumask.c:115)
+> [    4.070843] alloc_cpumask_var (lib/cpumask.c:147)
+> [    4.070846] its_select_cpu (drivers/irqchip/irq-gic-v3-its.c:1580)
+> [    4.070850] its_set_affinity (drivers/irqchip/irq-gic-v3-its.c:1659)
+> [    4.070853] msi_domain_set_affinity (kernel/irq/msi.c:501)
+> [    4.070857] irq_do_set_affinity (kernel/irq/manage.c:276)
+> [    4.070860] irq_setup_affinity (kernel/irq/manage.c:633)
+> [    4.070863] irq_startup (kernel/irq/chip.c:280)
+> [    4.070865] __setup_irq (kernel/irq/manage.c:1777)
+> [    4.070869] request_threaded_irq (kernel/irq/manage.c:2206)
+> [    4.070872] vp_find_vqs_msix (./include/linux/interrupt.h:168)
+> [    4.070876] vp_find_vqs (drivers/virtio/virtio_pci_common.c:400)
+> [    4.070878] vp_modern_find_vqs (drivers/virtio/virtio_pci_modern.c:259)
+> [    4.070880] init_vq (./include/linux/virtio_config.h:213)
+> [    4.070885] virtblk_probe (drivers/block/virtio_blk.c:936)
+> [    4.070887] virtio_dev_probe (drivers/virtio/virtio.c:303)
+> [    4.070892] really_probe (drivers/base/dd.c:555)
+> [    4.070895] __driver_probe_device (drivers/base/dd.c:764)
+> [    4.070897] driver_probe_device (drivers/base/dd.c:794)
+> [    4.070899] __driver_attach (drivers/base/dd.c:1164)
+> [    4.070901] bus_for_each_dev (drivers/base/bus.c:301)
+> [    4.070904] driver_attach (drivers/base/dd.c:1181)
+> [    4.070906] bus_add_driver (drivers/base/bus.c:618)
+> [    4.070908] driver_register (drivers/base/driver.c:240)
+> [    4.070910] register_virtio_driver (drivers/virtio/virtio.c:356 (discriminator 4))
+> [    4.070913] virtio_blk_init (drivers/block/virtio_blk.c:1218)
+> [    4.070918] do_one_initcall (init/main.c:1295)
+> [    4.070921] kernel_init_freeable (init/main.c:1367)
+> [    4.070924] kernel_init (init/main.c:1503)
+> [    4.070927] ret_from_fork (arch/arm64/kernel/entry.S:868)
 
-Fixes: 0fa6107eca41 ("RISC-V: Initial DTS for Microchip ICICLE board")
-Fixes: 34fc9cc3aebe ("riscv: dts: microchip: correct L2 cache interrupts")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/boot/dts/microchip/mpfs.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Consider trimming the trace to the useful part.
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-index 718d077b2549..3a00e4c765a5 100644
---- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -185,7 +185,7 @@ soc {
- 		ranges;
- 
- 		cctrllr: cache-controller@2010000 {
--			compatible = "sifive,fu540-c000-ccache", "cache";
-+			compatible = "microchip,mpfs-ccache", "sifive,fu540-c000-ccache", "cache";
- 			reg = <0x0 0x2010000 0x0 0x1000>;
- 			cache-block-size = <64>;
- 			cache-level = <2>;
+> 
+> commit cba4235e6031e ("genirq: Remove mask argument from
+> setup_affinity()")
+> and
+> commit 11ea68f553e24 ("genirq, sched/isolation: Isolate from handling
+> managed interrupts")
+> overcome this issue by defining a static struct cpumask and protecting
+> it by a raw spinlock. The code in these commits is executed with IRQs
+> disabled.
+> its_select_cpu() can be executed with IRQs enabled or disabled. Thus
+> disabling IRQs is necesserary to avoid deadlocking.
+
+Only if this code can be preempted by an interrupt and subsequently
+called from interrupt context. Can you describe this code path?
+
+> 
+> This patch:
+
+Please refer to the documentation and the section about avoiding
+things like "this patch" in a commit message.
+
+> - makes tmpmask a 'static struct cpumask'. This prevents storing it on
+>   the stack and having to dynamically allocate it
+> - protects tmpmask with a raw spinlock
+> - disables IRQs around the spinlock for the case its_select_cpu() is
+>   called with IRQs enabled
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 34 +++++++++++++++++---------------
+>  1 file changed, 18 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 5ff09de6c48f..3cf89e59b036 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -1574,14 +1574,15 @@ static int its_select_cpu(struct irq_data *d,
+>  			  const struct cpumask *aff_mask)
+>  {
+>  	struct its_device *its_dev = irq_data_get_irq_chip_data(d);
+> -	cpumask_var_t tmpmask;
+> +	static DEFINE_RAW_SPINLOCK(tmpmask_lock);
+> +	static struct cpumask tmpmask;
+> +	unsigned long flags;
+>  	int cpu, node;
+> -
+> -	if (!alloc_cpumask_var(&tmpmask, GFP_ATOMIC))
+> -		return -ENOMEM;
+> -
+>  	node = its_dev->its->numa_node;
+>  
+> +	local_irq_save(flags);
+> +	raw_spin_lock(&tmpmask_lock);
+
+Why is this done in two steps? What is wrong with raw_spin_lock_irqsave()?
+
+More importantly, a number of call paths reaching its_set_affinity()
+already execute under a raw spinlock, with interrupts disabled. Is it
+worth not hitting this lock at all times?
+
+> +
+>  	if (!irqd_affinity_is_managed(d)) {
+>  		/* First try the NUMA node */
+>  		if (node != NUMA_NO_NODE) {
+> @@ -1589,8 +1590,8 @@ static int its_select_cpu(struct irq_data *d,
+>  			 * Try the intersection of the affinity mask and the
+>  			 * node mask (and the online mask, just to be safe).
+>  			 */
+> -			cpumask_and(tmpmask, cpumask_of_node(node), aff_mask);
+> -			cpumask_and(tmpmask, tmpmask, cpu_online_mask);
+> +			cpumask_and(&tmpmask, cpumask_of_node(node), aff_mask);
+> +			cpumask_and(&tmpmask, &tmpmask, cpu_online_mask);
+
+Consider reducing the churn by writing something like:
+
+	static struct cpumask __tmpmask;
+	struct cpumask *tmpmask = &__tmpmask;
+
+which is strictly equivalent, and makes the patch much smaller.
+
+Thanks,
+
+	M.
+
 -- 
-2.37.1
-
+Without deviation from the norm, progress is not possible.

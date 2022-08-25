@@ -2,47 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC325A1839
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898E35A1841
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbiHYSBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S239959AbiHYSDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiHYSBK (ORCPT
+        with ESMTP id S232070AbiHYSC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:01:10 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A01BC121;
-        Thu, 25 Aug 2022 11:01:06 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id c651a619d1409391; Thu, 25 Aug 2022 20:01:03 +0200
-Received: from kreacher.localnet (unknown [213.134.169.168])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 6788C66D1C6;
-        Thu, 25 Aug 2022 20:01:02 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2] ata: ahci: Do not check ACPI_FADT_LOW_POWER_S0
-Date:   Thu, 25 Aug 2022 20:01:01 +0200
-Message-ID: <5607133.DvuYhMxLoT@kreacher>
+        Thu, 25 Aug 2022 14:02:58 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CECBBCC2E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:02:56 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id l3so1143126plb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=fJGUNeVle9qIpaakWxtZxkW5gSPVt+D2sQZmSrc7TA0=;
+        b=oengml8Fa9j59y9yWSmjkxR81+UYyoViuvtrfcnVuJh8ACXlyCYukM8Pp4cMAFNZ+L
+         e/JOM7rSu42VUq5KndusGcP4dW6FpitIMI/bQ/jJevbikwZUWydWJIN581Le1+W8XOFd
+         kvWL2eftehGMlCsNpWpmBmnAkTUrPn0jZblCiGM6vw8wDlxfYUIX4VHFMj6mkFmxweXA
+         8wvMkZUAQhOsoONNKH78LzyLMiOHLjydO/alV1C0HdCKTiuUOvondOT2G5j70JtqM3Om
+         LI4zvr1YTjBs0zwYkLGMfqrX/uwnxxOW0eEzw8TMLhHLVq6+5DwjQHibp6d0KHmQcXEc
+         nKBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=fJGUNeVle9qIpaakWxtZxkW5gSPVt+D2sQZmSrc7TA0=;
+        b=qJBZZWg5iFKFN9LvwhgMpipZwNGnR7IkV+q7QipwkDFHdKkk2O5KovpMncjNwwoujC
+         NgahHIatxzjpAl2Uht983xiPJvK1WwFwJquM55E5oMKnmwv0csQEKLcOz7tSjYBwj5XU
+         80noecvH4438W6n8+qSTuxMU9yPRXuvjuSSDcvW9bPdZDA4IEaWmv+VG1M4R5KcdobPJ
+         SE/CVCx+CLEo18ZGL1gjjHDGqKsL/2N6WAe5+hX+nd/+YZ/TBfNj0xzw1zX7J03U0h2g
+         QLxHy3c1JjcVDGv4CZa5rfuBq+VWvLDgw7p/qynTOjbrVjJtPKVcK3g0kLnduCFSaPek
+         LBVQ==
+X-Gm-Message-State: ACgBeo1Kyj+b/S1wEdeDo/fh+UP2nFAU0S2hNcafhtoo38zy+CmtsKTS
+        8xGI+Df/AZ2EDl5pCjqsFjg=
+X-Google-Smtp-Source: AA6agR6m4fwczP0E+SNqMtL/4nYaQsgnUK6fVOmRYOvBR0wpEkmzIfu8clnTc6MFQzLfYDxu5z2gwA==
+X-Received: by 2002:a17:903:2c5:b0:172:d1f2:401d with SMTP id s5-20020a17090302c500b00172d1f2401dmr286243plk.56.1661450575837;
+        Thu, 25 Aug 2022 11:02:55 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b0016dc6243bb2sm15152565plr.143.2022.08.25.11.02.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 11:02:55 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 25 Aug 2022 08:02:54 -1000
+From:   "tj@kernel.org" <tj@kernel.org>
+To:     "Xue, Zhan" <zhan.xue@intel.com>
+Cc:     "florian@mickler.org" <florian@mickler.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Regarding WQ_MEM_RECLAIM
+Message-ID: <Ywe5TlXr2cR3inuG@slm.duckdns.org>
+References: <PH0PR11MB50451B7F2F155AD8A893E9E894709@PH0PR11MB5045.namprd11.prod.outlook.com>
+ <YwUb8UmXvKNHgSrP@slm.duckdns.org>
+ <PH0PR11MB5045D2FF3C98EAE995F7897194739@PH0PR11MB5045.namprd11.prod.outlook.com>
+ <PH0PR11MB50456E21C95359B57223F23994739@PH0PR11MB5045.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.168
-X-CLIENT-HOSTNAME: 213.134.169.168
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeiledrudeikeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdduieekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepuggrmhhivghnrdhlvghmohgrlhesohhpvghnshhouhhrtggvrdifuggtrdgtohhmpdhrtghpthhtoheplhhinhhugidqihguvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
- nhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB50456E21C95359B57223F23994739@PH0PR11MB5045.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,66 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Aug 24, 2022 at 06:10:56AM +0000, Xue, Zhan wrote:
+> Convert to plain text..
 
-The ACPI_FADT_LOW_POWER_S0 flag merely means that it is better to
-use low-power S0 idle on the given platform than S3 (provided that
-the latter is supported) and it doesn't preclude using either of
-them (which of them will be used depends on the choices made by user
-space).
+The email's formatting is too painful to reply directly.
 
-For this reason, there is no benefit from checking that flag in
-ahci_update_initial_lpm_policy().
+Here are two brief points:
 
-First off, it cannot be a bug to do S3 with policy set to either
-ATA_LPM_MIN_POWER_WITH_PARTIAL or ATA_LPM_MIN_POWER, because S3 can be
-used on systems with ACPI_FADT_LOW_POWER_S0 set and it must work if
-really supported, so the ACPI_FADT_LOW_POWER_S0 check is not needed to
-protect the S3-capable systems from failing.
+* Just don't share the same workqueue between work items which need forward
+  progress guarantee and ones which don't.
 
-Second, suspend-to-idle can be carried out on a system with
-ACPI_FADT_LOW_POWER_S0 unset and it is expected to work, so if setting
-policy to either ATA_LPM_MIN_POWER_WITH_PARTIAL or ATA_LPM_MIN_POWER is
-needed to handle that case correctly, it should be done regardless of
-the ACPI_FADT_LOW_POWER_S0 value.
+* If something can block memory reclaim, it is in the memory reclaim path by
+  definition.
 
-Accordingly, drop the ACPI_FADT_LOW_POWER_S0 check from
-ahci_update_initial_lpm_policy() along with the CONFIG_ACPI #ifdef
-around it that is not necessary any more.
+Thanks.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v2:
-   * Adjust subject (Damien).
-   * Drop #ifdef CONFIG_ACPI that is not necessary any more (Mario).
-   * Update the changelog.
-
----
- drivers/ata/ahci.c |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-Index: linux-pm/drivers/ata/ahci.c
-===================================================================
---- linux-pm.orig/drivers/ata/ahci.c
-+++ linux-pm/drivers/ata/ahci.c
-@@ -1609,15 +1609,12 @@ static void ahci_update_initial_lpm_poli
- 		goto update_policy;
- 	}
- 
--#ifdef CONFIG_ACPI
--	if (policy > ATA_LPM_MED_POWER &&
--	    (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)) {
-+	if (policy > ATA_LPM_MED_POWER) {
- 		if (hpriv->cap & HOST_CAP_PART)
- 			policy = ATA_LPM_MIN_POWER_WITH_PARTIAL;
- 		else if (hpriv->cap & HOST_CAP_SSC)
- 			policy = ATA_LPM_MIN_POWER;
- 	}
--#endif
- 
- update_policy:
- 	if (policy >= ATA_LPM_UNKNOWN && policy <= ATA_LPM_MIN_POWER)
-
-
-
+-- 
+tejun

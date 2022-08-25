@@ -2,136 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FBF5A04F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4815A04FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiHYAGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S231185AbiHYAHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiHYAFr (ORCPT
+        with ESMTP id S230185AbiHYAHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:05:47 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC9F6B15D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:05:40 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id s129-20020a632c87000000b00411564fe1feso8198518pgs.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:05:39 -0700 (PDT)
+        Wed, 24 Aug 2022 20:07:50 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3865E6E2FA
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:07:49 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id s3-20020a17090a2f0300b001facfc6fdbcso3133796pjd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:07:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=3ANOEI0BBXDszhHsMjNjVkJxW2dSCbobxCznkiQMg0M=;
-        b=M8tSmqMgyZLVy2Ldt7OEwatTGNnYnfDpQ69BuMQNcXOyVDB1zOG1S5rA/96I/PJKxE
-         4+npbWP3pWJ08Qbrxcia+8i6j7Gu69xnnOJNpGf1qEh/CTh6F27WQ4nVQLW4A9J5Lhh9
-         wZHGTsioVx7toZiUJ8cHixmiZOFP7E6zdyNZLONxSLuMdImMycE2Fyt+XuqZ+8IhLHsR
-         C6dFsjW4r02bqFmtyRS3Kq6G3VP5sgtlfNBMT7ztQEx6AL13xu9pwUVXfdMd6YEAnByA
-         YGozttZzHIvY64hF0IBSZ5RbI4tZvRxI5hd9vrRa+K0+Wr8X++i6Jrnvoe/mNBWb+0ko
-         v09Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=WlReJOzXIhJda4pOzoMrXx4sIl9Gr6GJEZHVhKhAxDw=;
+        b=sFLM7eUbKU/KhGvAGerbONDAG9bYO8/C6iet2osSA5CKkfGBb8b3bsLDxlswjPndHA
+         r6K/vHYr9o0JjM3YZPhD0ZjM1cHtKkRuI7O5u0h1ALQeilZjCr+FYFMA9PBmYz+X9rCO
+         9RDi0Oy4cXT2WHXflnou1PkrhNwAsg6rC8l0VsnPuKsFpnKXxS2kCxsFmjCWXiKq9H4s
+         RlTSNCw/AyhD68xJ02R2MP2wKtu2EF0dG3OUsg2/Y9i3UD6gnmBy7b9wnx57So54GGoA
+         lvzAnwgti2JmeFcyJsmx/rEiXXqJujLacGGj7NMtVBcZHxWLexWVNTAqwhOH7XDUIaym
+         M5yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=3ANOEI0BBXDszhHsMjNjVkJxW2dSCbobxCznkiQMg0M=;
-        b=rtIzbmub67orbjIfiJzcaEEhQLsP2uN9lK6Y2IOxul2VvnLxIU3H6cRVUiS0anMK1A
-         6b2fFiVPHsr35Y7UKPuCPYxA4os4xGovleG04Hymg7i/YOHXxt+LQsTg70QGhCL6EOqG
-         E7XCHwBUCiZUtTRGpz3uKiQ/UYdXpNhgXcux/i+c1KnZhH2TsjAicUSuP68Tkshf0yeS
-         Injb5J9Vx7iWY8gHhz4V+gAMbGg/FbWoRg0wiuej+Obs1GqHmVmfZvQoGGdUbn7FpqJG
-         07ajc3cOmfPeEsNMp3JBCry3OAjg7feOoF8Z+KChB4laO+/OR3YbN72FGUquTjv8zpbO
-         nabA==
-X-Gm-Message-State: ACgBeo1wro3dBk9KQoKEmvqypJPgamwyCKuG/fyES2YAzbiXttuxW6Wl
-        LwCExRUBiYpan6dAVB/lfYAhJPdg50gsTQ==
-X-Google-Smtp-Source: AA6agR4pbPM00Y2dhBDzDYXIyyPDDsgaDbSO1VcMlYVbQBY5g87vni0ByGdo33smXqzxyN0vznInx5Zn2YarNQ==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a05:6a00:1803:b0:536:e9a4:89d4 with SMTP
- id y3-20020a056a00180300b00536e9a489d4mr1451224pfa.28.1661385939060; Wed, 24
- Aug 2022 17:05:39 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 00:05:06 +0000
-In-Reply-To: <20220825000506.239406-1-shakeelb@google.com>
-Message-Id: <20220825000506.239406-4-shakeelb@google.com>
-Mime-Version: 1.0
-References: <20220825000506.239406-1-shakeelb@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2 3/3] memcg: increase MEMCG_CHARGE_BATCH to 64
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=WlReJOzXIhJda4pOzoMrXx4sIl9Gr6GJEZHVhKhAxDw=;
+        b=2iGOdrTKYY3n5KUnkwfMRw2EYKs+kce8O3z+kS5dZl67w8DCYUkTBpmL5sbM5Yk5J6
+         ZgZEY3C7u6mQi9dQLMdX+NVqVS/UaAMUg4Q2+c/wPzetj4GAxzDvP1x+j7TjdSsD5/ZJ
+         yRqLzL4p4YZkdXniFsapuZ4u+yvHFba7bGBdiSHdKD1B6UDPJmP9IR+qdkTlU3Fn+S1+
+         Z4RsXST85VxE23Iir9tuvX4dqlULkbWB8eP0BzmPCZb3m5t8hykY6uZ/XCjCciWkcJkn
+         FD3OreW646HQHmLZ14RNuOFkcG8jpU/qievCaQq9oldSpS4hiSUkaFSFkX32TErKGG/g
+         jowA==
+X-Gm-Message-State: ACgBeo3LJ5SMBXT6uGijiyTDd4wyxuN7SETQwB3X+yklwq9XHQjdnsZJ
+        gz8xFxC1YZU7lx2u1xOWlByThhSvJUWwUw==
+X-Google-Smtp-Source: AA6agR7zyFfJLWQrfdcZw9WG1Kf4ywDr9plgd+qVapIXnOH6WASsi2qbJZUwIlN1QobfxpJpuzdzLg==
+X-Received: by 2002:a17:90b:3655:b0:1fb:8ef:5da6 with SMTP id nh21-20020a17090b365500b001fb08ef5da6mr1584603pjb.81.1661386067904;
+        Wed, 24 Aug 2022 17:07:47 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s124-20020a625e82000000b0052d87b76d12sm13671415pfb.68.2022.08.24.17.07.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 17:07:47 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 00:07:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Subject: Re: [RFC V3 PATCH 4/6] selftests: kvm: x86: Execute hypercall as per
+ the cpu
+Message-ID: <Ywa9T+jKUpaHLu/l@google.com>
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-5-vannapurve@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819174659.2427983-5-vannapurve@google.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For several years, MEMCG_CHARGE_BATCH was kept at 32 but with bigger
-machines and the network intensive workloads requiring througput in
-Gbps, 32 is too small and makes the memcg charging path a bottleneck.
-For now, increase it to 64 for easy acceptance to 6.0. We will need to
-revisit this in future for ever increasing demand of higher performance.
+On Fri, Aug 19, 2022, Vishal Annapurve wrote:
+> Add support for executing vmmcall/vmcall instruction on amd/intel cpus.
+> In general kvm patches the instruction according to the cpu
+> implementation at runtime. While executing selftest vms from private
+> memory KVM will not be able to update the private memory of the guest.
+> 
+> Hypercall parameters are fixed to explicitly populate hypercall number
+> in eax. Otherwise inlined function calls to kvm_hypercall would call
+> vmmcall/vmcall instruction without updating eax with hypercall number.
 
-Please note that the memcg charge path drain the per-cpu memcg charge
-stock, so there should not be any oom behavior change. Though it does
-have impact on rstat flushing and high limit reclaim backoff.
+Can you send a seperate non-RFC series to clean up the selftests mess?  kvm_hypercall()
+isn't the only culprit.
 
-To evaluate the impact of this optimization, on a 72 CPUs machine, we
-ran the following workload in a three level of cgroup hierarchy.
+  git grep \"vmcall | wc -l
+  16
 
- $ netserver -6
- # 36 instances of netperf with following params
- $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+I'm pretty sure things work only because of KVM's dubious behavior of patching
+VMCALL/VMMCALL by default.
 
-Results (average throughput of netperf):
-Without (6.0-rc1)       10482.7 Mbps
-With patch              17064.7 Mbps (62.7% improvement)
+Note, svm_vmcall_test.c intentionally uses the wrong instructions and shouldn't
+be converted.  Actually, we can and should just delete that test, it's superseded
+by the wonderfully named fix_hypercall_test.
 
-With the patch, the throughput improved by 62.7%.
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  .../testing/selftests/kvm/lib/x86_64/processor.c  | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 53b115876417..09d757a0b148 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1254,10 +1254,21 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+>  		       uint64_t a3)
+>  {
+>  	uint64_t r;
+> +	static bool is_cpu_checked;
+> +	static bool is_cpu_amd;
+>  
+> -	asm volatile("vmcall"
+> +	if (!is_cpu_checked)
+> +		is_cpu_amd = is_amd_cpu();
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
-Reviewed-by: Feng Tang <feng.tang@intel.com>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
----
-Changes since v1:
-- Updated commit message
+This can be done using a single int, e.g.
 
- include/linux/memcontrol.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+	static bool is_cpu_amd = -1;
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 4d31ce55b1c0..70ae91188e16 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -354,10 +354,11 @@ struct mem_cgroup {
- };
- 
- /*
-- * size of first charge trial. "32" comes from vmscan.c's magic value.
-- * TODO: maybe necessary to use big numbers in big irons.
-+ * size of first charge trial.
-+ * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
-+ * workload.
-  */
--#define MEMCG_CHARGE_BATCH 32U
-+#define MEMCG_CHARGE_BATCH 64U
- 
- extern struct mem_cgroup *root_mem_cgroup;
- 
--- 
-2.37.1.595.g718a3a8f04-goog
+	if (is_cpu_amd < 0)
+		is_cpu_amd = is_amd_cpu();
 
+Although... what if we declare main() in lib/kvm_util.c (or maybe a dedicated
+file?) and rename all tests to use __main()?  Then add an arch hook to do global
+initialization and avoid the "did we check CPUID?!?!?" altogether.
+
+That would allow us to dedup all of the hilarious copy paste:
+
+	/* Tell stdout not to buffer its content */
+	setbuf(stdout, NULL);
+
+and we could turn is_amd_cpu() and is_intel_cpu() into bools.
+
+E.g.
+
+int main(int argc, char *argv[])
+{
+	/* Tell stdout not to buffer its content */
+	setbuf(stdout, NULL);
+
+	kvm_arch_main();
+
+	return __main(argc, argv);
+}
+
+void kvm_arch_main(void)
+{
+	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
+	is_cpu_intel = cpu_vendor_string_is("AuthenticAMD");
+}
+
+
+And then we just need macro magic to emit the right VMCALL/VMMCALL instruction.

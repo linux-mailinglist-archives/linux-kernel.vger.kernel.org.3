@@ -2,133 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9292B5A1779
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C315A177F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242240AbiHYRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S242800AbiHYRBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242451AbiHYRBf (ORCPT
+        with ESMTP id S242462AbiHYRBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 Aug 2022 13:01:35 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E18B81C9;
-        Thu, 25 Aug 2022 10:01:11 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id by6so20041215ljb.11;
-        Thu, 25 Aug 2022 10:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=u+jxhx+TSXPwELwibZ9Ne8VEDzLYziqSPOhWXeVK9NQ=;
-        b=g9icTPKZ50C2aRv1cQ/Eg4ys7nTZSRiFcJ2zCAb+gJrKiHTVoTmYR/NHsdjcORcX5A
-         CMUMLyquYZLCz0a1nk6MvZkE+BgSPL0R2GQXFyluZxqpYdFowdG3e1wiKG1QbZo6i7i4
-         un8avm4qBll+hR0duL6iuN8Yp/v3f4u7bfe/xZ0ZZXBhwqx8b25NruDqeUf5geiYy0Sq
-         Uw0rZL2Y4WgivqDNhK95SR14yBf7eX3o8onD8VN/qus5WHihysKYD+L6QbTFZrGwI09v
-         ZtrcS8HB4kUDEJQ+k2ospOievXGHuLA5IT5J1MQaEUBr0ICdQPcvokFxFiwWkLVhtkKt
-         p+7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=u+jxhx+TSXPwELwibZ9Ne8VEDzLYziqSPOhWXeVK9NQ=;
-        b=u7I4IFsYgwgAFfzhF9aVLGHO55AfKbqV+JgQ79HDkQTlrDCJCLphtzwHsRuUldJwZ+
-         nqD5TDj6Cxu9Xk0IT9ZYO5lA10Vciu/xxeOOvZHcjRnAX6bfgDe+jaKvaoWw9x378SW0
-         JsCjEE+wHbZdN8NR1JfOLBe5Qa1Xw9wSZu9Moqpo5RSav0ly+B1NiAvY2e+ubR5E1erp
-         8I6mYFyE7qooWZsPdOZv4kDUCPEViA+kLP5A+WXFW8APJMu8tLVnz28GJupYfWMn+rue
-         Ps5upFKMOszyYhhHe9QOw6JcD3rYrVhobcAHoXr26oEouKMxdec9Y4YbXOCs619dgic7
-         dx2A==
-X-Gm-Message-State: ACgBeo3icBD78oJky10e08L4Ps6GVawSM9JpcXfBTZXDdapdROQC6LtJ
-        SUWVPYJwwZ7jLVGQhBT1t/912bmeHIhq+aerzGE=
-X-Google-Smtp-Source: AA6agR64ijqW88UieVoX/rrMRhMfRu/88/uDBRBGdOyjRgRF1a/EKjXyz8jeKBvTjdCRJYMbC6H3bPX8Coye3e6TQ0Q=
-X-Received: by 2002:a05:651c:215:b0:261:d01e:2c1f with SMTP id
- y21-20020a05651c021500b00261d01e2c1fmr1280309ljn.345.1661446869891; Thu, 25
- Aug 2022 10:01:09 -0700 (PDT)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C5B8A6D;
+        Thu, 25 Aug 2022 10:01:15 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 645D7484;
+        Thu, 25 Aug 2022 19:01:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661446873;
+        bh=FCUk4UJs1rAXkD8yKTUi2xkLbxR8BSJnGHMDu6Tlv+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vVP5b4Ckd32ZmkRmIQfXChFT5SUW6KhbWgJ0Se0q3FUd+rZN8UrRZ2+P4aSo1gIUT
+         TIqEDNB6jZGLySOL9TllsKec8hnvyTPHEw2LLRQjUezztg1py516hwnmr+5WlHG+86
+         p0WCAxjma9wDigMZDbXgA+6PpdwztKRuLxVBwkxU=
+Date:   Thu, 25 Aug 2022 20:01:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Marek Vasut <marex@denx.de>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 3/5] dt-bindings: clock: drop minItems equal to maxItems
+Message-ID: <Yweq0zrChN+dSwYM@pendragon.ideasonboard.com>
+References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
+ <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-From:   Zixuan Tan <tanzixuan.me@gmail.com>
-Date:   Fri, 26 Aug 2022 01:00:58 +0800
-Message-ID: <CABwm_eTnARC1GwMD-JF176k8WXU1Z0+H190mvXn61yr369qt6g@mail.gmail.com>
-Subject: [PATCH] perf/genelf: Switch deprecated openssl MD5_* functions to new
- EVP API
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zixuan Tan <tanzixuan.me@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to the flavored EVP API like in test-libcrypto.c, and remove the
-bad gcc #pragma.
+Hi Krzysztof,
 
-Inspired-By: 5b245985a6de ("tools build: Switch to new openssl API for
-test-libcrypto")
-Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
----
- tools/perf/util/genelf.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+Thank you for the patch.
 
-diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
-index 953338b9e887..ed28a0dbcb7f 100644
---- a/tools/perf/util/genelf.c
-+++ b/tools/perf/util/genelf.c
-@@ -30,10 +30,6 @@
+On Thu, Aug 25, 2022 at 02:33:32PM +0300, Krzysztof Kozlowski wrote:
+> minItems, if missing, are implicitly equal to maxItems, so drop
+> redundant piece to reduce size of code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
- #define BUILD_ID_URANDOM /* different uuid for each run */
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
--// FIXME, remove this and fix the deprecation warnings before its removed and
--// We'll break for good here...
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--
- #ifdef HAVE_LIBCRYPTO_SUPPORT
-
- #define BUILD_ID_MD5
-@@ -45,6 +41,7 @@
- #endif
-
- #ifdef BUILD_ID_MD5
-+#include <openssl/evp.h>
- #include <openssl/md5.h>
- #endif
- #endif
-@@ -142,15 +139,20 @@ gen_build_id(struct buildid_note *note,
- static void
- gen_build_id(struct buildid_note *note, unsigned long load_addr,
-const void *code, size_t csize)
- {
--       MD5_CTX context;
-+       EVP_MD_CTX *mdctx;
-
-        if (sizeof(note->build_id) < 16)
-                errx(1, "build_id too small for MD5");
-
--       MD5_Init(&context);
--       MD5_Update(&context, &load_addr, sizeof(load_addr));
--       MD5_Update(&context, code, csize);
--       MD5_Final((unsigned char *)note->build_id, &context);
-+       mdctx = EVP_MD_CTX_new();
-+       if (!mdctx)
-+               errx(2, "failed to create EVP_MD_CTX");
-+
-+       EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
-+       EVP_DigestUpdate(mdctx, &load_addr, sizeof(load_addr));
-+       EVP_DigestUpdate(mdctx, code, csize);
-+       EVP_DigestFinal_ex(mdctx, (unsigned char *)note->build_id, NULL);
-+       EVP_MD_CTX_free(mdctx);
- }
- #endif
+> ---
+>  Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 1 -
+>  .../devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml  | 2 --
+>  Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml    | 1 -
+>  3 files changed, 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+> index 0abd6ba82dfd..82836086cac1 100644
+> --- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+> +++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+> @@ -23,7 +23,6 @@ properties:
+>    clocks:
+>      description:
+>        Common clock binding for CLK_IN, XTI/REF_CLK
+> -    minItems: 2
+>      maxItems: 2
+>  
+>    clock-names:
+> diff --git a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
+> index 6eaabb4d82ec..81f09df7147e 100644
+> --- a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
+> +++ b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
+> @@ -47,7 +47,6 @@ properties:
+>      maxItems: 1
+>  
+>    clocks:
+> -    minItems: 4
+>      maxItems: 4
+>  
+>    clock-names:
+> @@ -64,7 +63,6 @@ properties:
+>      maxItems: 1
+>  
+>    resets:
+> -    minItems: 2
+>      maxItems: 2
+>  
+>    reset-names:
+> diff --git a/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml b/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+> index 9248bfc16d48..d5296e6053a1 100644
+> --- a/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+> +++ b/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+> @@ -34,7 +34,6 @@ properties:
+>      const: 1
+>  
+>    clock-output-names:
+> -    minItems: 3
+>      maxItems: 3
+>      description: Names for AP, CP and BT clocks.
+>  
 
 -- 
-2.34.1
+Regards,
+
+Laurent Pinchart

@@ -2,85 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D495A1B90
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D09B5A1B91
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244234AbiHYVrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S244191AbiHYVsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244109AbiHYVpt (ORCPT
+        with ESMTP id S244190AbiHYVro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:45:49 -0400
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF4AC2F87;
-        Thu, 25 Aug 2022 14:45:12 -0700 (PDT)
-Received: by mail-pl1-f171.google.com with SMTP id d12so926813plr.6;
-        Thu, 25 Aug 2022 14:45:12 -0700 (PDT)
+        Thu, 25 Aug 2022 17:47:44 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F27DC57B8;
+        Thu, 25 Aug 2022 14:46:00 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id s23so10823617wmj.4;
+        Thu, 25 Aug 2022 14:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=mE/4YBZh38TyYLhC6G5fQYeRHrAbzB7JvF8agv/vdQg=;
+        b=P6++xFNR1j0FfYdfcet9OwwFkgk8uW+QeGrsGedHWY32iLGlB2WTWHd0wEKUvrLfyw
+         8PIs4gz3vkR9Mxv5wfuXVMTHU5ZYIkrj2GBHeqM27WwzY2tF1tPpbagfTsmfbx5BWVPp
+         DOePwUjptMdp2mN1L2K2lS6WdQXAd6gNyRoxaMAiNlGePB3owtm/aCrRQguMiHKITf/4
+         VuMJC7mvsdos057Hw1T5i8rDb58UF3RBi40wqWBJpnN75SZxCwMjbhaogevZ3kXA+BN8
+         RsJ9P04/SH/PsScmrAk2cxLYQ7MuPMUBB5HUnXSfEKoNqoNx3PVdxp0gvFUiBwB/zH5t
+         Jpjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=lGNBkkp4BBDEjfSCq8/qdn5/LeotKxcjg6+Pkd51G6g=;
-        b=fw7WX3t0mljUOYfMItQ9ZAi4Il5fTgPpijnMA+E6WYeWMrIagvMQ75nkJ7LcRi9fy3
-         T8n1jUaJAhCre0WsEm950W6PidbraeAcpnJOu8Ki9d3b38XRX9GK/BoTQRxX6hHULq8U
-         H8F7scvc+NK1xa7Y6sZ8KFUY5mdgyZ31xD5LcgtEPIvGTVTFV6Qw9TMYDjSlbJ9x8Ihi
-         DOH4v3TXg4tx7yVvW0OqStYMsmSgyLWzslAYaXiqg5tJGpfa0hl3iwI9T47Bj4ybnaCL
-         wmgckCtztJ62Z5hToQRyEUr8UgNcZawY+SPvF1HZR696TiKQS+X5N6h+xR6AKDOv5Pw5
-         1A4Q==
-X-Gm-Message-State: ACgBeo0kaqJMtl8Ggk70rOCzJR9U8moesuvJ8MnCs1OggWR0rHNCp+tE
-        vQehv/vi5UdGALDTA3Wsc/c=
-X-Google-Smtp-Source: AA6agR58tZ3AbGEr4+IDC4kJWx8+thB6yGtM5mk3JNCEDcPv9jIHtgQv1Iqu8vhglb6GJZCV3zC9Ag==
-X-Received: by 2002:a17:903:2310:b0:173:10e1:3a76 with SMTP id d16-20020a170903231000b0017310e13a76mr991620plh.160.1661463909550;
-        Thu, 25 Aug 2022 14:45:09 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:349c:3078:d005:5a7e? ([2620:15c:211:201:349c:3078:d005:5a7e])
-        by smtp.gmail.com with ESMTPSA id oe3-20020a17090b394300b001f5513f6fb9sm209053pjb.14.2022.08.25.14.45.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 14:45:08 -0700 (PDT)
-Message-ID: <66c80b87-da28-bc9c-11c3-7a9f7354fa15@acm.org>
-Date:   Thu, 25 Aug 2022 14:45:06 -0700
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=mE/4YBZh38TyYLhC6G5fQYeRHrAbzB7JvF8agv/vdQg=;
+        b=2KutgZh1XuQzq9269azltC5iTxWchSx6IervfQGXF/GH12+kJdRO3EdN0yki9cyuYv
+         3iYVr7HPWgMi7jfhdEMalS5vLrj5LSdwNV1yOd/xw+xBOmQokZTparZ6nKqEpWlJ/8hB
+         M6WRb82zsXovtkzZ+ZcvV+bJry6cYxVnyy6MMSxWO9UVS8BnwjQAaoFN3PDTYQbFHg8o
+         RWzaLrePkVOnUF/UiN1tVm5AzhGaVogWC/3di1GB0EskQBeBkxaIqd9mghZai1dfE2kY
+         QvtN2ayM2m3uIoVnFpl34Ytgqnm0u+ioDc0bV1fKadOzhXdtSsUMULkbesfyB+pbojlg
+         ySXA==
+X-Gm-Message-State: ACgBeo2ukbfk6Tv+K/pc32LDVjKpz4ZA75xkIt3/rIpr6bjML8jGtfTd
+        lZAETDacNZCh7e+L+iBkzew=
+X-Google-Smtp-Source: AA6agR7230MGbs821+A8YN82pus383ho1o4vUi1fAFFJ5dzUVRhvyyd967MFX7/eyIwgOmyNIlfCpQ==
+X-Received: by 2002:a05:600c:4ed0:b0:3a6:de8:5e7d with SMTP id g16-20020a05600c4ed000b003a60de85e7dmr9320639wmq.181.1661463957948;
+        Thu, 25 Aug 2022 14:45:57 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id az41-20020a05600c602900b003a60bc8ae8fsm466499wmb.21.2022.08.25.14.45.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 14:45:57 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH] clk: sunxi-ng: d1: Limit PLL rates to stable ranges
+Date:   Thu, 25 Aug 2022 23:45:56 +0200
+Message-ID: <1870351.taCxCBeP46@kista>
+In-Reply-To: <2839208.e9J7NaK4W3@jernej-laptop>
+References: <20220812080050.59850-1-samuel@sholland.org> <2839208.e9J7NaK4W3@jernej-laptop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v12 02/13] block:rearrange
- bdev_{is_zoned,zone_sectors,get_queue} helpers in blkdev.h
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, agk@redhat.com,
-        snitzer@kernel.org, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de
-Cc:     pankydev8@gmail.com, Johannes.Thumshirn@wdc.com,
-        linux-block@vger.kernel.org, dm-devel@redhat.com, hare@suse.de,
-        jaegeuk@kernel.org, linux-kernel@vger.kernel.org,
-        matias.bjorling@wdc.com, gost.dev@samsung.com,
-        linux-nvme@lists.infradead.org
-References: <20220823121859.163903-1-p.raghav@samsung.com>
- <CGME20220823121903eucas1p230518b312d5260d28e356ba911a27469@eucas1p2.samsung.com>
- <20220823121859.163903-3-p.raghav@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220823121859.163903-3-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 05:18, Pankaj Raghav wrote:
-> Define bdev_is_zoned(), bdev_zone_sectors() and bdev_get_queue() earlier
-> in the blkdev.h include file. Simplify bdev_is_zoned() by removing the
-> superfluous NULL check for request queue while we are at it.
-> 
-> This commit has no functional change, and it is a prep patch for allowing
-> zoned devices with non-power-of-2 zone sizes in the block layer.
+Dne nedelja, 14. avgust 2022 ob 09:47:42 CEST je Jernej =C5=A0krabec napisa=
+l(a):
+> Dne petek, 12. avgust 2022 ob 10:00:49 CEST je Samuel Holland napisal(a):
+> > Set the min/max rates for audio and video PLLs to keep them from going
+> > outside their documented stable ranges. Use the most restrictive of the
+> > "stable" and "actual" frequencies listed in the manual.
+> >=20
+> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+>=20
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-It seems like a space is missing in the patch subject after the colon? 
-Anyway:
+Applied, thanks!
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Best regards,
+Jernej
+
+
+

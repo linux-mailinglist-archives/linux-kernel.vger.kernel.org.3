@@ -2,110 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788B85A0B44
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63675A0B6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234518AbiHYIXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S229834AbiHYI0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235036AbiHYIXV (ORCPT
+        with ESMTP id S235946AbiHYIZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:23:21 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A93A598B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:23:19 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id k22so4011855ljg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=QcYaN0JPky1EGXbRY64NqWC+vf4pbZdpI3za5tFR27Y=;
-        b=R6+bJKdroxxLZUeNX914wnlRmrBnu6dnYD5EjdF8U/Fu7DzRIGzlImTazksz7MMUE+
-         AtYJCGUm2qYs2ilZeWHBntZNyFAgv/64O/Q3WuNZ23BwxjUACbevkfowc+3UN52EvTk/
-         I2UxdF2QChDaiSduTt5APgjpVYLTTZ0WvNNnd3bxttbBn1TnZkgU/Syw4DI8wLeLaxXT
-         4RaxgB2NrE0LukyVvLOJzaMXXKUcLcTj4SqG8OORdb+VquhoJUuNYd3+U1ppcEe3ZJ4p
-         fKvSBT72f7NpcwIJlLNxO1tuBXskIFyFncojPfy3ahZbUoEpX316AcmPWVra2cbdWfYa
-         rECg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=QcYaN0JPky1EGXbRY64NqWC+vf4pbZdpI3za5tFR27Y=;
-        b=XD8EXDT0kmFtoBVnS6qx9va6Zwa6sgIchL5fMf4ilmaupVQyTm7IqN5/RA6BMMqY9r
-         x/AQOxB2tBBMa0uUkdA1gurffkeOOSAwjFxyZzHyDwnpPgBy6GtWyPbFtmgTm7rABfx+
-         o6B2CmMlEBGPPd/rV9xUquAWEhd1+/vxdYlvWV8EFY7+RvWbSAm3V9n7tDySKkejlGk+
-         SIDE8xmMg38DomGHZ452LKGibjsEJI/eomKbs66Vt7pHZUYauqntyhRN/LWJE+SCqVWn
-         WWZLMXRa0JxcfzAYiibPwDFfVTGNcNlUDVbf2wjg28HEXSpd8Os2snmPGztWIeq7V4Cv
-         km3A==
-X-Gm-Message-State: ACgBeo1z7yphBdGmXdTH0zphmIYPW8RZxdJmn1k0orGMdJuKG7vi4dfb
-        ephX7rvFDlSzCSDdsvs+3KrwHw==
-X-Google-Smtp-Source: AA6agR78g9/aWyse4FQH581ZrbhVy37gSTslIw8h/JN2EkuNfJP5xOpXkmesnAnV+MzF5s5aBmGV0A==
-X-Received: by 2002:a2e:bf11:0:b0:261:9343:fb2 with SMTP id c17-20020a2ebf11000000b0026193430fb2mr770866ljr.47.1661415797930;
-        Thu, 25 Aug 2022 01:23:17 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056512074b00b0048a7c162bbesm356757lfs.279.2022.08.25.01.23.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 01:23:17 -0700 (PDT)
-Message-ID: <1491c83f-cd75-4de3-ec26-86db4adb2ade@linaro.org>
-Date:   Thu, 25 Aug 2022 11:23:16 +0300
+        Thu, 25 Aug 2022 04:25:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A674378;
+        Thu, 25 Aug 2022 01:25:09 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 10:25:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661415906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=I+OR5YB+BLFNevDPHUusJLUnA4AAkcWyBeiJfeMJGqo=;
+        b=3IBTa8m0hYX4g47RaiT/8j8T78Oa8GCMeWBExbrcwFPwlNixTGZHdPyk8R7VZquIIC80wr
+        H6RmoQrIcPVa4H/h/93KAfDCL3hxfKONW3wp2MYvaFs3atU9uhl+6WiYdRYcHRid1QerLu
+        +hVKpdbrUHUp1h3DNx02k03TncLw98ur4aZoJ6LkSsRb2ORchWoqrEtkTc37dz456Z3BD7
+        wTYUuuCNSZSGn0AO3JgapjpUscP1fq9xXEjUTjmdA1NlsK7m3XtvWEdE+3+2hj6tSpl+i9
+        FLLfCJrZoNEm03/BcgXG8UsndhQVK4jTyAHPTt15wq1JOpmucrPRjg9TuUHISQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661415906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=I+OR5YB+BLFNevDPHUusJLUnA4AAkcWyBeiJfeMJGqo=;
+        b=qdOsv/2fa3HTVE2Xit7I736gOQEAJKwmF4VVbOVradxW8PYfqmDnSqxUbjhHENWiyBYRCB
+        8EIV+CPZ3fm43FAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v2 REPOST] asm-generic: Conditionally enable
+ do_softirq_own_stack() via Kconfig.
+Message-ID: <Ywcx4QBdYNIBLJiy@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: remoteproc: Add missing
- (unevaluated|additional)Properties on child nodes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220823145649.3118479-10-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823145649.3118479-10-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 17:56, Rob Herring wrote:
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml      | 1 +
->  .../devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml      | 1 +
->  .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml     | 1 +
->  3 files changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
-> index e76c861165dd..e4a7da8020f4 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
-> @@ -140,6 +140,7 @@ properties:
->  
->    glink-edge:
->      $ref: qcom,glink-edge.yaml#
-> +    unevaluatedProperties: false
+Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
+do_softirq_own_stack() and move it to Kconfig instead.
 
-Is it actually needed? The qcom,glink-edge.yaml has
-additionalProperties:false, so I expect it to complain if anything
-appears here.
+Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
+HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
+This ensures that softirq stacks are not used on PREEMPT_RT and avoids
+a 'select' statement on an option which has a 'depends' statement.
 
-Best regards,
-Krzysztof
+Link: https://lore.kernel.org/YvN5E%2FPrHfUhggr7@linutronix.de
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+
+Arnd, could you please route it via your tree?=20
+
+v1=E2=80=A6v2:
+   - Use "def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT"
+
+ arch/Kconfig                          |    3 +++
+ arch/arm/kernel/irq.c                 |    2 +-
+ arch/parisc/kernel/irq.c              |    2 +-
+ arch/powerpc/kernel/irq.c             |    4 ++--
+ arch/s390/include/asm/softirq_stack.h |    2 +-
+ arch/sh/kernel/irq.c                  |    2 +-
+ arch/sparc/kernel/irq_64.c            |    2 +-
+ arch/x86/include/asm/irq_stack.h      |    2 +-
+ arch/x86/kernel/irq_32.c              |    2 +-
+ include/asm-generic/softirq_stack.h   |    2 +-
+ 10 files changed, 13 insertions(+), 10 deletions(-)
+
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -923,6 +923,9 @@ config HAVE_SOFTIRQ_ON_OWN_STACK
+ 	  Architecture provides a function to run __do_softirq() on a
+ 	  separate stack.
+=20
++config SOFTIRQ_ON_OWN_STACK
++	def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT
++
+ config ALTERNATE_USER_ADDRESS_SPACE
+ 	bool
+ 	help
+--- a/arch/arm/kernel/irq.c
++++ b/arch/arm/kernel/irq.c
+@@ -70,7 +70,7 @@ static void __init init_irq_stacks(void)
+ 	}
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ static void ____do_softirq(void *arg)
+ {
+ 	__do_softirq();
+--- a/arch/parisc/kernel/irq.c
++++ b/arch/parisc/kernel/irq.c
+@@ -480,7 +480,7 @@ static void execute_on_irq_stack(void *f
+ 	*irq_stack_in_use =3D 1;
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	execute_on_irq_stack(__do_softirq, 0);
+--- a/arch/powerpc/kernel/irq.c
++++ b/arch/powerpc/kernel/irq.c
+@@ -199,7 +199,7 @@ static inline void check_stack_overflow(
+ 	}
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ static __always_inline void call_do_softirq(const void *sp)
+ {
+ 	/* Temporarily switch r1 to sp, call __do_softirq() then restore r1. */
+@@ -335,7 +335,7 @@ void *mcheckirq_ctx[NR_CPUS] __read_most
+ void *softirq_ctx[NR_CPUS] __read_mostly;
+ void *hardirq_ctx[NR_CPUS] __read_mostly;
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	call_do_softirq(softirq_ctx[smp_processor_id()]);
+--- a/arch/s390/include/asm/softirq_stack.h
++++ b/arch/s390/include/asm/softirq_stack.h
+@@ -5,7 +5,7 @@
+ #include <asm/lowcore.h>
+ #include <asm/stacktrace.h>
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ static inline void do_softirq_own_stack(void)
+ {
+ 	call_on_stack(0, S390_lowcore.async_stack, void, __do_softirq);
+--- a/arch/sh/kernel/irq.c
++++ b/arch/sh/kernel/irq.c
+@@ -149,7 +149,7 @@ void irq_ctx_exit(int cpu)
+ 	hardirq_ctx[cpu] =3D NULL;
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	struct thread_info *curctx;
+--- a/arch/sparc/kernel/irq_64.c
++++ b/arch/sparc/kernel/irq_64.c
+@@ -855,7 +855,7 @@ void __irq_entry handler_irq(int pil, st
+ 	set_irq_regs(old_regs);
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	void *orig_sp, *sp =3D softirq_stack[smp_processor_id()];
+--- a/arch/x86/include/asm/irq_stack.h
++++ b/arch/x86/include/asm/irq_stack.h
+@@ -203,7 +203,7 @@
+ 			      IRQ_CONSTRAINTS, regs, vector);		\
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ /*
+  * Macro to invoke __do_softirq on the irq stack. This is only called from
+  * task context when bottom halves are about to be reenabled and soft
+--- a/arch/x86/kernel/irq_32.c
++++ b/arch/x86/kernel/irq_32.c
+@@ -132,7 +132,7 @@ int irq_init_percpu_irqstack(unsigned in
+ 	return 0;
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	struct irq_stack *irqstk;
+--- a/include/asm-generic/softirq_stack.h
++++ b/include/asm-generic/softirq_stack.h
+@@ -2,7 +2,7 @@
+ #ifndef __ASM_GENERIC_SOFTIRQ_STACK_H
+ #define __ASM_GENERIC_SOFTIRQ_STACK_H
+=20
+-#if defined(CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK) && !defined(CONFIG_PREEMPT_R=
+T)
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void);
+ #else
+ static inline void do_softirq_own_stack(void)

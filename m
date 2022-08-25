@@ -2,75 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C34E5A1564
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29F55A1569
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbiHYPP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        id S234820AbiHYPPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242245AbiHYPPV (ORCPT
+        with ESMTP id S241453AbiHYPPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:15:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0990F558D8
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661440516;
+        Thu, 25 Aug 2022 11:15:37 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D4A13F6A;
+        Thu, 25 Aug 2022 08:15:34 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 61991240009;
+        Thu, 25 Aug 2022 15:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661440530;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gVvHoDnKDdIYQv1Tk0myCNHOeNmZIUPmw6v6LQZ79ZU=;
-        b=Icx+QiX2tgUhmmaaiL+c9FQLF9d0DPilK3Mltk73KcAH6zSen7v3XVzxnx8otfz1CsCNmM
-        Bf0YKi/SlwV8qVUq4gHozQNqShiqQwQLNR9zfWuOyqQyifNQYAHk/QrJp/yyNguusecPdp
-        evNGcf7cSDLxHjw3OKD77TbktWNJ7TE=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-paa1RsL7OpyduPe3lS03zw-1; Thu, 25 Aug 2022 11:15:14 -0400
-X-MC-Unique: paa1RsL7OpyduPe3lS03zw-1
-Received: by mail-qt1-f199.google.com with SMTP id fv24-20020a05622a4a1800b003445e593889so15237280qtb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:15:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gVvHoDnKDdIYQv1Tk0myCNHOeNmZIUPmw6v6LQZ79ZU=;
-        b=6SFNGIwODHIosCJDBUPNRZ7lb8kfb4fIIqTRc4LIluGHd2d/ZL5u33RWl0ijzMDGnC
-         Uck/mawNw1b9hD7gxXfAVlV4/QLt5+9JbMjYF5mEAvLxjqhuyLECFkN3mTnLxzsEshIo
-         y8/If59Exl2GIjqaPBLUooTVe7Spb1RvH7S6l5mOdlMkm2AUtV2baVRREV0T53trtHCk
-         jSkHTcu2W4Zy7zXv1IFD3WewP234cmEO0wDLTav4eXabnK5g/OOAXkoh+0W3pg3PyhLc
-         GJp0+HZvrT0IPaXI6nr3UBnxStFhpmsagFR715leI+2I2zcoVnii+l0LPSalyAnsc4FC
-         bNoA==
-X-Gm-Message-State: ACgBeo1ZZpjt2ow34xMsR5TWAYipXUKMwHUhi4ki4lg8ofXMMU+HkpHE
-        AmlyoblQYWd7p0Tza+peDOddassy93wX5RMGFazAhT8NOJsF3pLtKmChD0b1qUiF+LXJmLMvyJi
-        0a3sR5RP0NGaOkI6GqQiwzmqU
-X-Received: by 2002:ac8:5d92:0:b0:344:6f74:4d17 with SMTP id d18-20020ac85d92000000b003446f744d17mr3971755qtx.227.1661440514316;
-        Thu, 25 Aug 2022 08:15:14 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6wIxKi2ag6eKK2FoQEFD6XKL8J9kIp/IY8vCMrH41X/QcaR95W90qq/dNi32PFVaknpb06TA==
-X-Received: by 2002:ac8:5d92:0:b0:344:6f74:4d17 with SMTP id d18-20020ac85d92000000b003446f744d17mr3971731qtx.227.1661440514106;
-        Thu, 25 Aug 2022 08:15:14 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::48])
-        by smtp.gmail.com with ESMTPSA id bk26-20020a05620a1a1a00b006bb29d932e1sm16831654qkb.105.2022.08.25.08.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 08:15:13 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 10:15:11 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH v2 1/2] regulator: core: Require regulator drivers to
- check uV for get_optimum_mode()
-Message-ID: <20220825151511.6nihkswhqz2ei6dc@halaneylaptop>
-References: <20220824142229.RFT.v2.1.I137e6bef4f6d517be7b081be926059321102fd3d@changeid>
+        bh=84ZmLwDIKgsqnnt6/JKYNVV5p2wu7p/YXThFoSbG1zY=;
+        b=VU3rmFmycNvDDl419/SEf0QRNmaG9UlRucXib33CWOC19YV6EhHGf9uBfMvc/wIvwepCJx
+        uLJ5DabslAp8P+CZi5Yt9azkF0Zuidg90TwXriVB7hyZ9/MZ7XZnXGiQkCIhQa/jLeliur
+        jnvajkcEMVRIt8wr95tO/nTNl0otD570bkLNjol/AURDYEH18p0mHymvFX8NW8DaHYDVk2
+        qiScBKfQWCb8XS3ooFkBciBHraGmG7jfs66dajbmyIr7/DIhdjIa7jcCWpuXGN2qr6yT5f
+        4YkYd+vY04gMkpOhRf+jApAhGxCglZvN7sd8wqH28pZ1j4U6j55MJ+PSsSvPwA==
+Date:   Thu, 25 Aug 2022 17:15:29 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: Re: [RESEND] rtc: hym8563: try multiple times to init device
+Message-ID: <YweSEVYJtSY6G/98@mail.local>
+References: <20220821122613.245026-1-linux@fw-web.de>
+ <5fd3f684-1d20-c646-04a4-09f32d765f8d@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220824142229.RFT.v2.1.I137e6bef4f6d517be7b081be926059321102fd3d@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <5fd3f684-1d20-c646-04a4-09f32d765f8d@arm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,49 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 02:22:56PM -0700, Douglas Anderson wrote:
-> The get_optimum_mode() for regulator drivers is passed the input
-> voltage and output voltage as well as the current. This is because, in
-> theory, the optimum mode can depend on all three things.
-> 
-> It turns out that for all regulator drivers in mainline only the
-> current is looked at when implementing get_optimum_mode(). None of the
-> drivers take the input or output voltage into account. Despite the
-> fact that none of the drivers take the input or output voltage into
-> account, though, the regulator framework will error out before calling
-> into get_optimum_mode() if it doesn't know the input or output
-> voltage.
-> 
-> The above behavior turned out to be a probelm for some boards when we
-> landed commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
-> get_optimum_mode(), not set_load()"). Before that change we'd have no
-> problems running drms_uA_update() for RPMH regulators even if a
-> regulator's input or output voltage was unknown. After that change
-> drms_uA_update() started to fail. This is because typically boards
-> using RPMH regulators don't model the input supplies of RPMH
-> regulators. Input supplies for RPMH regulators nearly always come from
-> the output of other RPMH regulators (or always-on regulators) and RPMH
-> firmware is initialized with this knowledge and handles enabling (and
-> adjusting the voltage of) input supplies. While we could model the
-> parent/child relationship of the regulators in Linux, many boards
-> don't bother since it adds extra overhead.
-> 
-> Let's change the regulator core to make things work again. Now if we
-> fail to get the input or output voltage we'll still call into
-> get_optimum_mode() and we'll just pass error codes in for input_uV
-> and/or output_uV parameters.
-> 
-> Since no existing regulator drivers even look at input_uV and
-> output_uV we don't need to add this error handling anywhere right
-> now. We'll add some comments in the core so that it's obvious that (if
-> regulator drivers care) it's up to them to add the checks.
-> 
-> Reported-by: Andrew Halaney <ahalaney@redhat.com>
-> Fixes: efb0cb50c427 ("regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Hello,
 
-Tested-by: Andrew Halaney <ahalaney@redhat.com>
+On 25/08/2022 15:19:02+0100, Robin Murphy wrote:
+> On 2022-08-21 13:26, Frank Wunderlich wrote:
+> > From: Peter Geis <pgwipeout@gmail.com>
+> > 
+> > RTC sometimes does not respond the first time in init.
+> > Try multiple times to get a response.
+> > 
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> > discussion from v1
+> > https://patchwork.kernel.org/project/linux-rockchip/patch/20220608161150.58919-2-linux@fw-web.de/
+> > 
+> > On Fri, Jul 8, 2022 at 12:18 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> > > FWIW, given that HYM8563 is fairly common on RK3288 boards - I can't say
+> > > I've ever noticed an issue with mine, for instance - it seems dubious
+> > > that this would be a general issue of the chip itself. Are you sure it's
+> > > not a SoC or board-level issue with the I2C bus being in a funny initial
+> > > state, timings being marginal, or suchlike?
+> > 
+> > Peter Geis <pgwipeout@gmail.com>:
+> > I don't think this is an SoC issue since this is the first instance
+> > I've encountered it. Mind you we don't have the reset lines hooked up
+> > at all for the Rockchip i2c driver, so it's possible that's the case,
+> > but I'd imagine it would be observed more broadly if that was the
+> > case. I've tried pushing the timings out pretty far as well as bumping
+> > up the drive strength to no change. It seems to occur only with the
+> > hym rtc used on this board. I suspect it's a new variant of the hym
+> > that has slightly different behavior.
+> 
+> Sure, if it's documented somewhere that Hayou (or if the BPI-R2 Pro
+> schematic is to be believed, AnalogTek) decided to innovate a new "sometimes
+> doesn't work" feature for a chip that's been in production for a decade or
+> more, and that 2 retries at 20ms intervals is what's recommended, then I'm
+> open to believing that this isn't a complete hack. Or at least if someone
+> can say they've scoped the pins and confirmed that nothing looks suspect at
+> the protocol level when this happens that could explain it.
+> 
 
-Thanks again for the quick patches!
- - Andrew
+Just to be clear, this is also my opinion and I'm not going to apply
+that, especially since the IP of the RTC is not just a decade old, it is
+actually from 1999. It doesn't suddenly stop working.
 
+> Otherwise, I'll remain unconvinced that it isn't a coincidence that this has
+> shown up while bringing up a new board with a new SoC, and hacking a mature
+> common driver to bodge around an issue that isn't fully understood, and
+> could very conceivably lie elsewhere, is not the right answer. Especially
+> when it involves a board vendor... let's say, whose reputation proceeds
+> them.
+> 
+> Since I'm not above wasting 20 minutes of my time to prove a point, for
+> starters the schematic seems to imply that it's using a variant of RK809
+> where LDO4, used as the I/O supply for i2c3, is off by default, so on the
+> face of it it could be something as stupidly simple as the RTC probe racing
+> with the PMIC or I/O domain probe. Sure, the DT claims it's already on at
+> boot, but *is* it? Maybe that was true with some downstream bootloader, but
+> do we know that's what you're using to boot mainline? Maybe this something
+> so obvious that you've already confirmed and taken it for granted, but the
+> patch as presented doesn't give me the confidence to rule *anything* out.
+> 
+
+Thanks for your input!
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

@@ -2,109 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6115A1CC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AE35A1CC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244182AbiHYWwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S231790AbiHYWxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244166AbiHYWwK (ORCPT
+        with ESMTP id S243874AbiHYWxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:52:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7B57FE66;
-        Thu, 25 Aug 2022 15:52:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 25 Aug 2022 18:53:35 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EF2BE38;
+        Thu, 25 Aug 2022 15:53:34 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98f5329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98f5:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MDJB75nWmz4x1N;
-        Fri, 26 Aug 2022 08:51:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1661467920;
-        bh=QzUqfZa0fF0JU5NNb8XHyYrURc4kns7FREDr0t9N9RQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OuII/6zhB03t1wPs832ZkI3lcWzdiIItZjGhSLzkzJUP6iCub2TDgLLw6zyaSU1LL
-         R9CKaFW1D8hwbQSLlAL0VzYUFjedsaDAFHvIueylf4Z7PeWh+5B6XKgWUAjxyZ6zn9
-         1nF9yTtv3VkSqO90eWNXcCnpkDNqX8f4v3GuRzPp+5Uj1hAATTXWVSMKkXL1G7owKk
-         g8hcb2wANfp3nqk8x0dsJwHnVlwlzjI+8YOfFYstdh4reXKyWTvI2IAeY+E6zrZuvi
-         Hcf20vWe+CfT1tiItcCVkuWbl2+PvpJrgNk80SuHpsZQfC0TGGb56w6l/QKrf2/ih9
-         Iq4RLS+LHqpEw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: align syscall table for ppc32
-In-Reply-To: <CAK7LNAQ8ZQHYzoJTPxiRYBsdVXdYUt=bxyrag-d7UnwQ9r7q=w@mail.gmail.com>
-References: <20220820165129.1147589-1-masahiroy@kernel.org>
- <874jy0lpy9.fsf@mpe.ellerman.id.au>
- <CAK7LNAQ8ZQHYzoJTPxiRYBsdVXdYUt=bxyrag-d7UnwQ9r7q=w@mail.gmail.com>
-Date:   Fri, 26 Aug 2022 08:51:55 +1000
-Message-ID: <87wnawj5ro.fsf@mpe.ellerman.id.au>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CC97D1EC0559;
+        Fri, 26 Aug 2022 00:53:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661468008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jW+8OpoivxfthSyTUh2opIqlkm3EYhh8/L9WZPGddVo=;
+        b=AKOfeu2Lcan6dJoga4BrOeUCztkFyyoBPV3WpXePKesuaytAFI1vagg2EFKPgxzuYsD/di
+        0aFnDEOYbz2ZmSXW8g4g5H6q6drWlI7wW9jM3ciYzZJoREg+uAjQ8a7UnsVp19pshUkNEO
+        R8CGJu68c2Uuyb/d/cM73jepp7s0Bzc=
+Date:   Fri, 26 Aug 2022 00:53:24 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
+Subject: Re: [PATCH v7] x86/mce: retrieve poison range from hardware
+Message-ID: <Ywf9ZL6zjzSf5pdF@zn.tnic>
+References: <20220802195053.3882368-1-jane.chu@oracle.com>
+ <YwUFlo3+my6bJHWj@zn.tnic>
+ <b3880db6-6731-1d1b-144f-1080a033ad01@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b3880db6-6731-1d1b-144f-1080a033ad01@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Masahiro Yamada <masahiroy@kernel.org> writes:
-> On Thu, Aug 25, 2022 at 4:53 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->>
->> Masahiro Yamada <masahiroy@kernel.org> writes:
->> > Christophe Leroy reported that commit 7b4537199a4a ("kbuild: link
->> > symbol CRCs at final link,  removing CONFIG_MODULE_REL_CRCS") broke
->> > mpc85xx_defconfig + CONFIG_RELOCATABLE=y.
->> >
->> >     LD      vmlinux
->> >     SYSMAP  System.map
->> >     SORTTAB vmlinux
->> >     CHKREL  vmlinux
->> >   WARNING: 451 bad relocations
->> >   c0b312a9 R_PPC_UADDR32     .head.text-0x3ff9ed54
->> >   c0b312ad R_PPC_UADDR32     .head.text-0x3ffac224
->> >   c0b312b1 R_PPC_UADDR32     .head.text-0x3ffb09f4
->> >   c0b312b5 R_PPC_UADDR32     .head.text-0x3fe184dc
->> >   c0b312b9 R_PPC_UADDR32     .head.text-0x3fe183a8
->> >       ...
->> >
->> > The compiler emits a bunch of R_PPC_UADDR32, which is not supported by
->> > arch/powerpc/kernel/reloc_32.S.
->> >
->> > The reason is there exists an unaligned symbol.
->> >
->> >   $ powerpc-linux-gnu-nm -n vmlinux
->> >     ...
->> >   c0b31258 d spe_aligninfo
->> >   c0b31298 d __func__.0
->> >   c0b312a9 D sys_call_table
->> >   c0b319b8 d __func__.0
->> >
->> > Commit 7b4537199a4a is not the root cause. Even before that, I can
->> > reproduce the same issue for mpc85xx_defconfig + CONFIG_RELOCATABLE=y
->> > + CONFIG_MODVERSIONS=n.
->> >
->> > It is just that nobody did not notice it because when CONFIG_MODVERSIONS
->
-> I wrote weird English (double negation)
->
-> nobody did not notice   --> nobody noticed
->
-> Please fix it if you have not yet.
+On Thu, Aug 25, 2022 at 04:29:47PM +0000, Jane Chu wrote:
+> Tony has replied.
 
-Yeah I did fix it up when applying :)
+Do you really think that I can't look up what field means?
 
-  It is just that nobody noticed because when CONFIG_MODVERSIONS is
-  enabled, a __crc_* symbol inserted before sys_call_table was hiding the
-  unalignment issue.
+What I said was
 
-cheers
+"What I'm missing from this text here is... "
+
+IOW, what I'm trying to say is, you should formulate your commit message
+better, more human-friendly. Right now it reads like for insiders only.
+But that's not its purpose.
+
+Do you catch my drift?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

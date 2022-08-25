@@ -2,214 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2095A182D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7DF5A1832
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242885AbiHYRzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
+        id S231437AbiHYR6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234807AbiHYRz2 (ORCPT
+        with ESMTP id S240713AbiHYR6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 13:55:28 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95BEA1D2D;
-        Thu, 25 Aug 2022 10:55:27 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3376851fe13so528500397b3.6;
-        Thu, 25 Aug 2022 10:55:27 -0700 (PDT)
+        Thu, 25 Aug 2022 13:58:39 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F71BD0B3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:58:38 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id f14so15807574qkm.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=/GYRroV0j1HQtttqGy5ikwY0tvszI/gqxle1gBMtBi8=;
+        b=ck2vOHHo88Dym2Eg5dmOrOFWsd+DiRYzQswvx+qDw/AaR6oiFaBJuXUDozxFm5NdeY
+         RyIHT6ucnHWVYW6HD8rQ+SaVdPk0knVAyhXIGj5w8crdLz6PBdvQtFIIaAYJdupUr7Jf
+         m1xm1ISYsse8LApnX9JzNrTmopx1LnHBt+ZKHiKPVL0+L8GUr6VeP3JxqlvNj8ckaxzE
+         V4nu1m+hX8cIclMyiKgMwCNn4rkZdPf3FccCw+8fdv7PtEeMjXwsvWy9eT3Gia6EroBO
+         DE334U1ACpqjXh+T9+MFSK12LcnccR145icds02vQe0SfVkKnQiwa6FtY2yGHSVjM2t+
+         KwEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JuYAb54FA4P2yLGLZeyXrMW7j/lrP0AgN+iorFj+61Q=;
-        b=AM/HNHMNcSOVpr63bwc79Hs4q/G2CrO3MtqNM7TPogCt3c3GIolj1wO+JvW2GB1gTE
-         uos9/LRo8h98au90TWuVwkRhDQ5yjCn6IuyJZnDSilzdYlP2DGp3K1FAQbP6a2lg9kSY
-         9W7n7NOGnKAyH1Kn99YnzVvuruLgYGrnxL2NzY76EGLCjHk31lyCsWJDuKWLYkq6ZaNO
-         4WkcYCQEHA2Jq/C+Gn79fhPyfIWafqd+k0uTZiUCdq+g/xNIPqCA3mczg76e+CAiNcBX
-         TwSieVzcYK+/9uOrX1TbE461xeU462vq06EmZEOZk962LVl+WyRnsShq4R48VhsZZj7c
-         Dbbg==
-X-Gm-Message-State: ACgBeo11TmeeL9XH9+AtI1PGYreAxHbJYIzVCAIFIsWeNmzK2UU+wNx3
-        KtGQ8BPpniRIm9r+PlZi5dmFEqJ4At3SwJnDEZw=
-X-Google-Smtp-Source: AA6agR4f6szUO1v4FcOW9D1xe1744DXP1mD+jUX8OQySh7WrxslfFrVCtHSS7d8qdF6spgxK6WnwpFUFMhSvZoQZNDE=
-X-Received: by 2002:a0d:e701:0:b0:336:90d7:c67a with SMTP id
- q1-20020a0de701000000b0033690d7c67amr4921528ywe.7.1661450126920; Thu, 25 Aug
- 2022 10:55:26 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=/GYRroV0j1HQtttqGy5ikwY0tvszI/gqxle1gBMtBi8=;
+        b=O1atg1zuHPAdtQucODphZtGAcQOHG0ryqIkKelOW6uPjYTLYUZZIZDIe09gppe7ibK
+         BYsaJnlCwFe6jk+POaD5vvrY5wCji0ypf/6N0iuCQhQgeukiLAQeULGRnLL/RcGymQB6
+         kL2zlxlP3xcCaoZH9uGOUrVzNkNqPS1ynHnmD0BAv5LeQpTlnkfT39wiQjbpz8GjFBPC
+         hJHhy5cmSCeKhEECM9SbalpkL0tYetqYCxrVd808YeF1XshLRyNJrpyvMugBfvH7cpLB
+         Uw1Uc3ELxw2heZEPSGgKCoteJVI8gZNfQFpSHv5U+4uAggsiVlItgfmu9yf5yjKADIlx
+         G/Mw==
+X-Gm-Message-State: ACgBeo2cSNXQuTXQKsdE1V+O6eeQOM/OGri7b7bE8UQIlVNg8GyUUr8T
+        kVzMXuldkoRAa6rh0Wwv4GkcxDYOsQxybIoRzQEGLA==
+X-Google-Smtp-Source: AA6agR6ELzGCme7sNE+BR81Sm1mE1ctCXPEA2yfDoucsxgkqNCq0OsDtN/7qgdFikCJXE381jvngdogkJXIw9FJc8Ew=
+X-Received: by 2002:a05:620a:458c:b0:6bb:848a:b86b with SMTP id
+ bp12-20020a05620a458c00b006bb848ab86bmr3882934qkb.267.1661450317552; Thu, 25
+ Aug 2022 10:58:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825173457.23298-1-vimal.kumar32@gmail.com>
-In-Reply-To: <20220825173457.23298-1-vimal.kumar32@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 25 Aug 2022 19:55:15 +0200
-Message-ID: <CAJZ5v0j_0VAG9tP2+D-vqnG962JZRWnOPXO9z2ZrCbgkHmBG=g@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: runtime: Add support to disable wakeup sources
-To:     Vimal Kumar <vimal.kumar32@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220824030031.1013441-1-haoluo@google.com> <20220824030031.1013441-2-haoluo@google.com>
+ <20220825152455.GA29058@blackbody.suse.cz>
+In-Reply-To: <20220825152455.GA29058@blackbody.suse.cz>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 25 Aug 2022 10:58:26 -0700
+Message-ID: <CA+khW7hKk8yMvsQCQjnEoR3=G9=77F2TgAEDa+uSVedoOE=NsA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 1/5] bpf: Introduce cgroup iter
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 7:35 PM Vimal Kumar <vimal.kumar32@gmail.com> wrote:
+On Thu, Aug 25, 2022 at 8:24 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
+:
 >
-> User could find many wakeup sources available in the bsp, which
-> they won't be using. Currently users can only get the status and
-> list of enabled wakeup sources, but users can't disable it runtime.
-
-What about using the wakeup attribute for devices in sysfs?  That
-effectively disables/enables a wakeup source.
-
-> It's very difficult to find the driver for each wakeup sources from
-> where it's getting enabled and make the changes for disabling it.
-
-Why do you need to enable/disable them individually, though?
-
-> This will help users to disable any wakeup sources at runtime,
-> avoiding any code change and re-compilation. A new class attribute
-> "disable_ws" will be added in the wakeup calss. If user want to disable
-> any wakeup sources, user need to find the wakeup dev node associated
-> with the particular wakeup source and write the devnode name to the
-> class attribute "disable_ws".
+> Hello.
 >
-> Example:
-> Need to disable the wakeup source '1c08000.qcom,pcie'. The dev node
-> associated with this wakeup source is:
-> cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie", then for disabling
-> this wakeup source :
->         echo wakeup3 > /sys/class/wakeup/disable_ws
+> On Tue, Aug 23, 2022 at 08:00:27PM -0700, Hao Luo <haoluo@google.com> wro=
+te:
+> > +static int bpf_iter_attach_cgroup(struct bpf_prog *prog,
+> > +                               union bpf_iter_link_info *linfo,
+> > +                               struct bpf_iter_aux_info *aux)
+> > +{
+> > +     int fd =3D linfo->cgroup.cgroup_fd;
+> > +     u64 id =3D linfo->cgroup.cgroup_id;
+> > +     int order =3D linfo->cgroup.order;
+> > +     struct cgroup *cgrp;
+> > +
+> > +     if (order !=3D BPF_ITER_DESCENDANTS_PRE &&
+> > +         order !=3D BPF_ITER_DESCENDANTS_POST &&
+> > +         order !=3D BPF_ITER_ANCESTORS_UP &&
+> > +         order !=3D BPF_ITER_SELF_ONLY)
+> > +             return -EINVAL;
+> > +
+> > +     if (fd && id)
+> > +             return -EINVAL;
+> > +
+> > +     if (fd)
+> > +             cgrp =3D cgroup_get_from_fd(fd);
+> > +     else if (id)
+> > +             cgrp =3D cgroup_get_from_id(id);
+> > +     else /* walk the entire hierarchy by default. */
+> > +             cgrp =3D cgroup_get_from_path("/");
+> > +
+> > +     if (IS_ERR(cgrp))
+> > +             return PTR_ERR(cgrp);
+>
+> This section caught my eye.
+>
+> Perhaps the simpler way for the default hierachy fallback would be
+>
+>                 cgrp =3D &cgrp_dfl_root.cgrp;
+>                 cgroup_get(cgroup)
+>
+> But maybe it's not what is the intention if cgroup NS should be taken
+> into account and cgroup_get_from_path() is buggy in this regard.
+>
+> Would it make sense to prepend the patch below to your series?
 
-Wouldn't it be more straightforward to add a "disable" attribute for
-wakeup sources?
+Yep. Being able to take cgroup NS into account is my intention here.
+Right now, I imagine the control plane who uses this default option is
+the system daemon which lives in the init cgroup ns. They could always
+specify a particular cgroup using ID or FD. Printing the whole
+hierarchy is something a system daemon would do. Anyhow, can I add the
+appended patch if there is going to be a v10 of this patch series? If
+v9 is ok to merge, I can send the appended patch separately. Does that
+sound good? The appended patch looks good to me, thanks!
 
-> Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-> Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-> Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
-> Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-> Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+>
+> Also, that makes me think about iter initialization with ID. In contrast
+> with FD passing (that's subject to some permissions and NS checks), the
+> retrieval via ID is not equipped with that, ids are not unguessable and
+> I'd consider cgroup IDs an implementation detail.
+>
+> So, is the ID initialization that much useful? (I have no idea about
+> permissions model of BPF here, so it might be just fine but still it'd
+> be good to take cgroup NS into account. Likely for BPF_ITER_ANCESTORS_UP
+> too.)
+>
+
+Permission is a valid point about FD. There was discussion in an
+earlier version of this patch series [0]. The good thing about ID is
+that it can be passed across processes and it's meaningful to appear
+in logs. It's more user-friendly. So we decided to support both.
+
+[0] https://lore.kernel.org/netdev/YuK+eg3lgwJ2CJnJ@slm.duckdns.org/
+
+> HTH,
+> Michal
+>
+> ----8<----
+> From 1098e60e89d4d901b7eef04e531f2c889309a91b Mon Sep 17 00:00:00 2001
+> From: =3D?UTF-8?q?Michal=3D20Koutn=3DC3=3DBD?=3D <mkoutny@suse.com>
+> Date: Thu, 25 Aug 2022 15:19:04 +0200
+> Subject: [PATCH] cgroup: Honor caller's cgroup NS when resolving path
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=3DUTF-8
+> Content-Transfer-Encoding: 8bit
+>
+> cgroup_get_from_path() is not widely used function. Its callers presume
+> the path is resolved under cgroup namespace. (There is one caller
+> currently and resolving in init NS won't make harm (netfilter). However,
+> future users may be subject to different effects when resolving
+> globally.)
+> Since, there's currently no use for the global resolution, modify the
+> existing function to take cgroup NS into account.
+>
+> Fixes: a79a908fd2b0 ("cgroup: introduce cgroup namespaces")
+> Signed-off-by: Michal Koutn=C3=BD <mkoutny@suse.com>
 > ---
->  Documentation/ABI/testing/sysfs-class-wakeup | 16 +++++
->  drivers/base/power/wakeup_stats.c            | 65 +++++++++++++++++++-
->  2 files changed, 80 insertions(+), 1 deletion(-)
+>  kernel/cgroup/cgroup.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/ABI/testing/sysfs-class-wakeup b/Documentation/ABI/testing/sysfs-class-wakeup
-> index 754aab8b6dcd..75b9a6fe737a 100644
-> --- a/Documentation/ABI/testing/sysfs-class-wakeup
-> +++ b/Documentation/ABI/testing/sysfs-class-wakeup
-> @@ -74,3 +74,19 @@ Contact:     Tri Vo <trong@android.com>
->  Description:
->                 The file contains the total amount of time this wakeup source
->                 has been preventing autosleep, in milliseconds.
-> +
-> +What:          /sys/class/wakeup/disable_ws
-> +Date:          Aug 2022
-> +Contact:       Vimal Kumar <vimal.kumar@gmail.com>
-> +Description:
-> +               This file can be used to disable a wakeup source at runtime.
-> +               If user want to disable any wakeup sources, user need to find
-> +               the wakeup dev node associated with the particular wakeup source
-> +               and write the devnode name to this file "disable_ws".
-> +
-> +               Example:
-> +               If user Need to disable the wakeup source '1c08000.qcom,pcie', and
-> +               the wakeup dev node associated with this wakeup source is:
-> +                       cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie"
-> +               Then for disabling this wakeup source :
-> +                       echo wakeup3 > /sys/class/wakeup/disable_ws
-> diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
-> index 924fac493c4f..497402a28028 100644
-> --- a/drivers/base/power/wakeup_stats.c
-> +++ b/drivers/base/power/wakeup_stats.c
-> @@ -15,6 +15,7 @@
->  #include <linux/kobject.h>
->  #include <linux/slab.h>
->  #include <linux/timekeeping.h>
-> +#include <linux/uaccess.h>
->
->  #include "power.h"
->
-> @@ -208,9 +209,71 @@ void wakeup_source_sysfs_remove(struct wakeup_source *ws)
->         device_unregister(ws->dev);
->  }
->
-> +static ssize_t disable_ws_store(struct class *class,
-> +                               struct class_attribute *attr,
-> +                               const char *buf, size_t len)
-> +{
-> +       struct device           *dev;
-> +       struct wakeup_source    *ws;
-> +       char                    *ws_name;
-> +       int                     status;
-> +
-> +       ws_name = kzalloc(len+1, GFP_KERNEL);
-> +       if (!ws_name)
-> +               return -ENOMEM;
-> +
-> +       if (sscanf(buf, "%s", ws_name) != 1)
-> +               return -EFAULT;
-> +
-> +       dev = class_find_device_by_name(wakeup_class, ws_name);
-> +       if (!dev) {
-> +               pr_err("%s : wakeup device not found\n", __func__);
-> +               return -EINVAL;
-> +       }
-> +
-> +       ws = dev_get_drvdata(dev);
-> +       if (ws->dev->parent != NULL) {
-> +
-> +               status = device_wakeup_disable(ws->dev->parent);
-> +               if (status < 0) {
-> +                       /* In case of virtual device, return code will be -EINVAL
-> +                        * then unregister the wakeup source associated with it
-> +                        */
-> +                       wakeup_source_unregister(ws);
-> +               }
-> +       } else
-> +               /* If the parent device is NULL, just unregister the wakeup source */
-> +               wakeup_source_unregister(ws);
-> +
-> +       return len;
-> +}
-> +
-> +static CLASS_ATTR_WO(disable_ws);
-> +
-> +static struct attribute *wakeup_class_attrs[] = {
-> +       &class_attr_disable_ws.attr,
-> +       NULL,
-> +};
-> +ATTRIBUTE_GROUPS(wakeup_class);
-> +
->  static int __init wakeup_sources_sysfs_init(void)
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index ffaccd6373f1..9280f4b41d8b 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -6603,8 +6603,12 @@ struct cgroup *cgroup_get_from_path(const char *pa=
+th)
 >  {
-> -       wakeup_class = class_create(THIS_MODULE, "wakeup");
-> +       int status;
-> +
-> +       wakeup_class = kzalloc(sizeof(*wakeup_class), GFP_KERNEL);
-> +       if (!wakeup_class)
-> +               return -ENOMEM;
-> +
-> +       wakeup_class->name = "wakeup";
-> +       wakeup_class->owner = THIS_MODULE;
-> +       wakeup_class->class_groups = wakeup_class_groups;
-> +
-> +       status = class_register(wakeup_class);
-> +
-> +       if (status < 0) {
-> +               pr_err("%s: class register failed %d\n", __func__, status);
-> +               return status;
-> +       }
+>         struct kernfs_node *kn;
+>         struct cgroup *cgrp =3D ERR_PTR(-ENOENT);
+> +       struct cgroup *root_cgrp;
 >
->         return PTR_ERR_OR_ZERO(wakeup_class);
->  }
+> -       kn =3D kernfs_walk_and_get(cgrp_dfl_root.cgrp.kn, path);
+> +       spin_lock_irq(&css_set_lock);
+> +       root_cgrp =3D current_cgns_cgroup_from_root(&cgrp_dfl_root);
+> +       kn =3D kernfs_walk_and_get(root_cgrp->kn, path);
+> +       spin_unlock_irq(&css_set_lock);
+>         if (!kn)
+>                 goto out;
+>
+>
+> base-commit: 3cc40a443a04d52b0c95255dce264068b01e9bfe
 > --
-> 2.25.1
+> 2.37.0
 >

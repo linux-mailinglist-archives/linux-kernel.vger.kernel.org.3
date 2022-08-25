@@ -2,80 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1345A0C80
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E935A0C84
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238201AbiHYJZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S239810AbiHYJ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbiHYJZE (ORCPT
+        with ESMTP id S235388AbiHYJ0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:25:04 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484D72C135
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:24:57 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by xavier.telenet-ops.be with bizsmtp
-        id BlQu280064C55Sk01lQuug; Thu, 25 Aug 2022 11:24:54 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oR96b-002VXD-NG; Thu, 25 Aug 2022 11:24:53 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oR96b-005VhA-4g; Thu, 25 Aug 2022 11:24:53 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] arm64: dts: renesas: r8a779g0: Fix HSCIF0 interrupt number
-Date:   Thu, 25 Aug 2022 11:24:47 +0200
-Message-Id: <751dcef40d4534e856ed49b1d5b3a3e8d365ec42.1661419377.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 Aug 2022 05:26:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8960961730;
+        Thu, 25 Aug 2022 02:26:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4081E5BCEF;
+        Thu, 25 Aug 2022 09:26:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661419563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=BYfTZFURvyLCFYVU3ltFgIRHLc50Lkg36j+xzInhtWI=;
+        b=qrtmchGnpdx4Li2CexVjMJHXy+6yN4kZSUZagt6K/wEDzX6fbtPxLO/TYsa0ADZmPk6Dkt
+        K0+ZYizhPYlyPeCuLO6HdEAkq3cpYHG7QUUP+BVo8f0nR91Gcn3E9LNVZPgqPttUFJTOUk
+        uepJ+vC6hOLcHab0OG+L32V3qNARRgs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 059DC13517;
+        Thu, 25 Aug 2022 09:26:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id luA+OypAB2M1RgAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 25 Aug 2022 09:26:02 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>
+Subject: [PATCH v2] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
+Date:   Thu, 25 Aug 2022 11:26:00 +0200
+Message-Id: <20220825092600.7188-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt number for the HSCIF0 serial port, which serves as the
-serial console on the White Hawk board, is incorrect, causing userspace
-to hang immediately as soon as it tries to print something.
-Kernel output is unaffected, as it is printed using polling.
+The error exit of privcmd_ioctl_dm_op() is calling unlock_pages()
+potentially with pages being NULL, leading to a NULL dereference.
 
-Fixes: 987da486d84a5643 ("arm64: dts: renesas: Add Renesas R8A779G0 SoC support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Additionally lock_pages() doesn't check for pin_user_pages_fast()
+having been completely successful, resulting in potentially not
+locking all pages into memory. This could result in sporadic failures
+when using the related memory in user mode.
+
+Fix all of that by calling unlock_pages() always with the real number
+of pinned pages, which will be zero in case pages being NULL, and by
+checking the number of patches pinned by pin_user_pages_fast()
+matching the expected number of pages.
+
+Cc: <stable@vger.kernel.org>
+Fixes: ab520be8cd5d ("xen/privcmd: Add IOCTL_PRIVCMD_DM_OP")
+Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
-Oops, I must have been looking at the wrong datasheet while reviewing
-https://lore.kernel.org/r/CAMuHMdVffc4iqX6wAKwyq_eTX5c0H3-tqs_pvsec7v1_q6hS3g@mail.gmail.com
-
-To be queued in renesas-fixes.
+V2:
+- use "pinned" as parameter for unlock_pages() (Jan Beulich)
+- drop label "unlock" again (Jan Beulich)
+- add check for complete success of pin_user_pages_fast()
 ---
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/xen/privcmd.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-index 7cbb0de060ddc03b..1c15726cff8bf10f 100644
---- a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-@@ -85,7 +85,7 @@ hscif0: serial@e6540000 {
- 				     "renesas,rcar-gen4-hscif",
- 				     "renesas,hscif";
- 			reg = <0 0xe6540000 0 96>;
--			interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cpg CPG_MOD 514>,
- 				 <&cpg CPG_CORE R8A779G0_CLK_S0D3_PER>,
- 				 <&scif_clk>;
+diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
+index 3369734108af..7dc62510635e 100644
+--- a/drivers/xen/privcmd.c
++++ b/drivers/xen/privcmd.c
+@@ -602,6 +602,10 @@ static int lock_pages(
+ 		*pinned += page_count;
+ 		nr_pages -= page_count;
+ 		pages += page_count;
++
++		/* Exact reason isn't known, EFAULT is one possibility. */
++		if (page_count < requested)
++			return -EFAULT;
+ 	}
+ 
+ 	return 0;
+@@ -677,10 +681,8 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
+ 	}
+ 
+ 	rc = lock_pages(kbufs, kdata.num, pages, nr_pages, &pinned);
+-	if (rc < 0) {
+-		nr_pages = pinned;
++	if (rc < 0)
+ 		goto out;
+-	}
+ 
+ 	for (i = 0; i < kdata.num; i++) {
+ 		set_xen_guest_handle(xbufs[i].h, kbufs[i].uptr);
+@@ -692,7 +694,7 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
+ 	xen_preemptible_hcall_end();
+ 
+ out:
+-	unlock_pages(pages, nr_pages);
++	unlock_pages(pages, pinned);
+ 	kfree(xbufs);
+ 	kfree(pages);
+ 	kfree(kbufs);
 -- 
-2.25.1
+2.35.3
 

@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EDF5A0535
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10055A0538
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiHYAel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S230234AbiHYAgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiHYAej (ORCPT
+        with ESMTP id S229948AbiHYAgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:34:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71A78E0D9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:34:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C5D4618F4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:34:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE545C433C1;
-        Thu, 25 Aug 2022 00:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661387677;
-        bh=6rO/XxD//LiN2RORNhJRyZlrqCjCiNFU5ZqLFHkHtNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B3p67HJkV0EKVu9Ql4aU6rN4FWSudcUq8hTiKSO6udZF3bH7AGH1nWFY1y5lHwjj3
-         EstmZVfWlFeJzSmjMnbbfRCB84S1fglxGWbzlS4gwUTGwjHM0LFuZ+Z5ai2T7N4Wrg
-         KTC+WzypNZQc4+CLSsjGf9qJRoEV4R9sUaoodN8sRM4Z2wbesK6dIYkOVTKnxwrSRO
-         a91HqRTnBUa9Ov9lf2TDzKl/RPBCbztStS2gbhBAzLUYYXlwG9Yt9vh11j2qoMFMsS
-         R5PCjMjwRy7qtEbL9ErJIgzvwxYUVKfu5s/S8vVRR9j2PQDTJotJs03StTU0SXMKUh
-         ckM2AOQ1j2ZaQ==
-Date:   Thu, 25 Aug 2022 01:34:32 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v13 57/70] mm/mlock: use vma iterator and maple state
- instead of vma linked list
-Message-ID: <YwbDmKyQxWHfRg97@sirena.org.uk>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-58-Liam.Howlett@oracle.com>
+        Wed, 24 Aug 2022 20:36:49 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812E884ECF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=fklRrjV9yUeNECa0TwWmaGNUeOqWz4zg/ddmBlOBBTU=; b=ZCC6OZuBjQQVzdEw4mEhWFGSdl
+        2k79r0XYHyiPiOBjqjjSNIfebC4khSoCDt2lyQNQVKSap5eaqR9fyl7pN92tHqjqClRJIyEF/KuVw
+        Y2z0cTsJ9Rh/lavSEJ7S4jaF1JBT82e1lmc+OME1n3QXW3+ZuY3aAa9gHM1E939FFyz4IxOWSs44B
+        VNboHd0GN8dcUkbyakl3sEzHANw8mWSCLJonLKARkZrK6ak9hdSeEajyWf+lSRh7wlqHCpVKKDAbS
+        Cj5+ztDSjBNELM2tHrTr8IxM1kwjDwzjLx2GrB2w6+Pthz/fatTYKDZiS2ew5c2/XizsPQBONtDc/
+        4V5Dgaww==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oR0rW-003Xa7-3k; Thu, 25 Aug 2022 00:36:46 +0000
+Message-ID: <07ad2ab8-ed96-21a6-8ace-e5f168712872@infradead.org>
+Date:   Wed, 24 Aug 2022 17:36:45 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3kTHvGW/5bDFz7Zb"
-Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-58-Liam.Howlett@oracle.com>
-X-Cookie: Who is John Galt?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH] compat: update linux/compat.h and kernel/sys_ni.c
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <20220822194310.31796-1-rdunlap@infradead.org>
+ <20220822134614.aeb6f3ce279ded4559037de1@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220822134614.aeb6f3ce279ded4559037de1@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,48 +54,27 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---3kTHvGW/5bDFz7Zb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 22, 2022 at 03:06:30PM +0000, Liam Howlett wrote:
-> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
->=20
-> Handle overflow checking in count_mm_mlocked_page_nr() differently.
+On 8/22/22 13:46, Andrew Morton wrote:
+> On Mon, 22 Aug 2022 12:43:10 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+> 
+>> Add conditional syscalls entries in kernel/sys_ni.c
+>> for any syscalls that are arch- or config-dependent.
+> 
+> What is the reason for this?  What effects does it have?
 
-Our QA team found that since next-20220823 we're seeing a couple of test
-failures in the check_mmap_options kselftest on arm64 platforms with MTE
-that aren't present in mainline:
+Hi Andrew,
 
-# # FAIL: mprotect not ignoring clear PROT_MTE property
-# not ok 21 Check clear PROT_MTE flags with private mapping, sync error mod=
-e and mmap memory
-# # FAIL: mprotect not ignoring clear PROT_MTE property
-# not ok 22 Check clear PROT_MTE flags with private mapping and sync error =
-mode and mmap/mprotect memory
+For <linux/compat.h> it's mostly a cleanup/completeness change,
+as suggested by Arnd here:
+  https://lore.kernel.org/lkml/CAK8P3a140FFhCvrOXbCtYKCW6BR6tEz6uy8Wqd0aG3DdHiZSXg@mail.gmail.com/
 
-I bisected this using qemu[1] which landed on 4ceb4bca479d41a
-("mm/mprotect: use maple tree navigation instead of vma linked list"),
-though I'm not 100% sure I trust the specific identification of the
-commit I'm pretty confident it's at the very least in this series.  I've
-not done any analysis of the failure beyond getting this bisect result.
 
-[1] qemu -smp cpus=3D4 -cpu max -machine virt,gic-version=3D3,mte=3Don
+For kernel/sys_ni.c, it adds compat syscalls that are arch- or
+config-dependent, to prevent the possibility of linker errors.
 
---3kTHvGW/5bDFz7Zb
-Content-Type: application/pgp-signature; name="signature.asc"
+I have successfully built allnoconfig, defconfig, and allmodconfig for around 20
+architectures with this patch applied.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMGw5cACgkQJNaLcl1U
-h9CETwf+LuiyCa2vnhNkK0FYpnS/7LqL3rzOSWV7goeH7LToVBr2BjbzSjnGlxIO
-BJ9L4MP6RC8a/0ss3fPm36g/IwOB/aSaHfsmseWji86aUFb6XonfAKj6qugMsNwe
-LWEcjrMSj3RSLXfNfAdI0M0OLBfJ04VkFLrJABQYl48Yrb2QwMQlvgWvwSokHM84
-f5QNWnlcvS1o58/QVZhwn7kk/JvFVIrX3Fuiae6L+nLSfEVPCeOwJohjyCZB9+3m
-z7YIA89zBRIeVJUpDIGvGKHAX8RovKSrlMWKsW8vhbffjp4c7Td9VYG3wP7GfFAU
-t3xQm17IiUShPZga22HlekJlUr+USg==
-=DFuJ
------END PGP SIGNATURE-----
-
---3kTHvGW/5bDFz7Zb--
+-- 
+~Randy

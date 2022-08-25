@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB195A18A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D07E5A18A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiHYSRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S237660AbiHYSRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243478AbiHYSQo (ORCPT
+        with ESMTP id S243460AbiHYSQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:16:44 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31862BD1FF;
-        Thu, 25 Aug 2022 11:16:00 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:35250)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oRHOW-005Rga-9i; Thu, 25 Aug 2022 12:15:56 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:36814 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oRHOU-00DcQ7-Hr; Thu, 25 Aug 2022 12:15:55 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        tixxdz@gmail.com
-In-Reply-To: <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
-        (Paul Moore's message of "Fri, 19 Aug 2022 17:10:29 -0400")
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
-        <8735dux60p.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
-        <871qte8wy3.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
-        <8735du7fnp.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
-        <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
-        <20220818140521.GA1000@mail.hallyn.com>
-        <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
-        <20220819144537.GA16552@mail.hallyn.com>
-        <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Thu, 25 Aug 2022 13:15:46 -0500
-Message-ID: <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+        Thu, 25 Aug 2022 14:16:42 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C3EBD1FD;
+        Thu, 25 Aug 2022 11:15:50 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso5785323pjk.0;
+        Thu, 25 Aug 2022 11:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=fcKBwzQ+3FvK05e8vJPVdEnteLULk8JgW8p1pB9U+CI=;
+        b=TCOluU41yS0PIH//NJHewas8S7wRDMNMpr/FhfdfFjPVI1OJTelfGc75wL+HbxGtYw
+         qytzyT5kAvTVBteRm8wHc5E25sn9+dH9JCzPNsMr73279vyf+7/pTZY6YH276OmkzNjN
+         iElud98mzag7VV76DPmVTZET+w6ftAKVSrX9oEOpnnlvY5iTxNyMKI4FqKd6Y9RJYWRl
+         yaOfDsKM22jhDLZxX6KOXBjRO/hBeN/WZ2ZMFLsqglTyIm+1nSSkbRYv8c/yun9DAJJh
+         WqttI/0IE8EWDAAiiF91zwBeIW4Jhcqjy0lx9ZTekF5fSSuRE8/X8f2u/VN/rGcT4+c2
+         PNfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=fcKBwzQ+3FvK05e8vJPVdEnteLULk8JgW8p1pB9U+CI=;
+        b=xhRnj6LOcfFOHgot6teeVoVCaRzW/J4WceZraoGGm3Yk1d0SMKEjq5vx41yOlI9pHg
+         hQeQgXm1EnvhM3KZTFcUsaLW/8RmEaTPYMnIFQkInfx9avd9Z4EO0oZFDFnxL5xukawL
+         LZwmLu6KldDCpP8W5A5A3XtMOtn4UFQoDXRONdcOmWPS0Zm6lqONc+ZiFo8AeyY1K0pX
+         mP82SesGe3RcuEbM1H99cEQkYwUhD5IIemoXeMYZ8OqT8E3HguFk4fToNt1+20m5SVCs
+         e2XgiqpCXBn2F9XmpEBHyf7XxgCce5r+nHh/C9NdulRaTEXG90b8CdMQkrcqEiVbQZfX
+         Hh9A==
+X-Gm-Message-State: ACgBeo1DsIYMcRVkMkt8AWuy8wshcUwcELTqMFCot+vhhaKxKc3gJm7f
+        F/dN5/I3oYxnyCY6zxj60hE=
+X-Google-Smtp-Source: AA6agR42sCFi5m76EhmM46dr9XtMi4BgiG1jbj/a53PbpcP2U/WiONaOHS42yTBkALMuUxcVuqjfMg==
+X-Received: by 2002:a17:902:694a:b0:16e:e270:1f84 with SMTP id k10-20020a170902694a00b0016ee2701f84mr207011plt.89.1661451349742;
+        Thu, 25 Aug 2022 11:15:49 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170903024f00b0015e8d4eb1d7sm15158837plh.33.2022.08.25.11.15.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 11:15:49 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 25 Aug 2022 08:15:47 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, ming.lei@redhat.com, mkoutny@suse.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v8 1/4] blk-throttle: fix that io throttle can only work
+ for single bio
+Message-ID: <Ywe8Uz4Gy6j/EsUg@slm.duckdns.org>
+References: <20220823033130.874230-1-yukuai1@huaweicloud.com>
+ <20220823033130.874230-2-yukuai1@huaweicloud.com>
+ <YwUXTL+8E/sPcEUB@slm.duckdns.org>
+ <73c72914-e27d-b261-e040-2dd31e8a6b9f@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oRHOU-00DcQ7-Hr;;;mid=<875yigp4tp.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+SG3YsTIgmOSCWJtea0hxDJibtwIu7XJw=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73c72914-e27d-b261-e040-2dd31e8a6b9f@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1139 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 9 (0.8%), b_tie_ro: 8 (0.7%), parse: 1.08 (0.1%),
-        extract_message_metadata: 15 (1.3%), get_uri_detail_list: 1.83 (0.2%),
-        tests_pri_-1000: 9 (0.8%), tests_pri_-950: 1.31 (0.1%),
-        tests_pri_-900: 1.08 (0.1%), tests_pri_-90: 178 (15.6%), check_bayes:
-        166 (14.5%), b_tokenize: 9 (0.8%), b_tok_get_all: 10 (0.9%),
-        b_comp_prob: 3.1 (0.3%), b_tok_touch_all: 139 (12.2%), b_finish: 1.00
-        (0.1%), tests_pri_0: 912 (80.0%), check_dkim_signature: 0.67 (0.1%),
-        check_dkim_adsp: 4.0 (0.4%), poll_dns_idle: 0.44 (0.0%), tests_pri_10:
-        1.75 (0.2%), tests_pri_500: 7 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
+On Wed, Aug 24, 2022 at 09:15:32AM +0800, Yu Kuai wrote:
+> This patch actually set two flags when bio is throttled and
+> dispatched, and only iops flag is cleared after the original bio is
+> split. If only one flag can be used, the way that I come up with is
+> that let iops limit become default, which means bio is always counted
+> for iops limit each time blk_throtl_bio() is called. I'm not quite
+> sure yet if iops limit can be counted excessively this way in some
+> special scenario...
 
-> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
->>  I am hoping we can come up with
->> "something better" to address people's needs, make everyone happy, and
->> bring forth world peace.  Which would stack just fine with what's here
->> for defense in depth.
->>
->> You may well not be interested in further work, and that's fine.  I need
->> to set aside a few days to think on this.
->
-> I'm happy to continue the discussion as long as it's constructive; I
-> think we all are.  My gut feeling is that Frederick's approach falls
-> closest to the sweet spot of "workable without being overly offensive"
-> (*cough*), but if you've got an additional approach in mind, or an
-> alternative approach that solves the same use case problems, I think
-> we'd all love to hear about it.
+I don't think we have a path where we clone and re-submit other than
+splitting. What do you think about renaming the flag to BIO_BPS_THROTTLED
+and just assuming that IOPS is always applied?
 
-I would love to actually hear the problems people are trying to solve so
-that we can have a sensible conversation about the trade offs.
+Thanks.
 
-As best I can tell without more information people want to use
-the creation of a user namespace as a signal that the code is
-attempting an exploit.
-
-As such let me propose instead of returning an error code which will let
-the exploit continue, have the security hook return a bool.  With true
-meaning the code can continue and on false it will trigger using SIGSYS
-to terminate the program like seccomp does.
-
-I am not super fond of that idea, but it means that userspace code is
-not expected to deal with the situation, and the only conversation a
-userspace application developer needs to enter into with a system
-administrator or security policy developer is one to prove they are not
-exploit code.  Plus it makes much more sense to kill an exploit
-immediately instead of letting it run.
-
-
-In general when addressing code coverage concerns I think it makes more
-sense to use the security hooks to implement some variety of the principle
-of least privilege and only give applications access to the kernel
-facilities they are known to use.
-
-As far as I can tell creating a user namespace does not increase the
-attack surface.  It is the creation of the other namespaces from a user
-namespace that begins to do that.  So in general I would think
-restrictions should be in places they matter.
-
-Just like the bugs that have exploits that involve the user namespace
-are not user namespace bugs, but instead they are bugs in other
-subsystems that just happen to go through the user namespace as the
-easiest path to the buggy code, not the only path to the buggy code.
-
-Eric
-
+-- 
+tejun

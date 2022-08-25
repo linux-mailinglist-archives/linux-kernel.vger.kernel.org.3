@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC6C5A0775
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B1B5A0777
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiHYCvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 22:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S232268AbiHYCwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 22:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiHYCvw (ORCPT
+        with ESMTP id S232051AbiHYCwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 22:51:52 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298D89C8FF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:51:51 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11c9af8dd3eso22904216fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:51:51 -0700 (PDT)
+        Wed, 24 Aug 2022 22:52:02 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3C39D105
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:52:00 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id m5so15798036lfj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=ventanamicro.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=cZ5gzNCrmdm3hLAPODSo3m8ewJ0Yui1XSuajAwlxh4E=;
-        b=JQ4b7CBxWO7nskQf5m+6YvtLrJeNJcHsCNDT7BpIszut0+dYBhEt+GVITxHEMQyCGS
-         a1IsOxh/8/92ZfwljodwkTWc4Nv+tnPKeMdGHX6M8uqQuf5950C03dhiyRVoWrSY6kn+
-         Tdb1qY/XexGGue2BHOyvHrYYM4x3AyQ+THW4IL6pnIIktKXE7u9E7pDYguV/Sr89OoRj
-         aIk/b3HE5dH+DkcSgKKpM1InPEpSXnSPOPpTOlOJJ00i22Cq/Je9rJs2UbhAKYs0kU8j
-         h9SEe31FmmJ2jOvaa4z+ZpVOSUGzo7kSgUxwiquPw99yLyzHtkcUCPEudegUNbt8cnHw
-         cluQ==
+        bh=Ky9f3zT08S4ZXNjlyA5qGbsFiUvNGJziEqTyRMY4jSw=;
+        b=jo31VNDUXR8dbKvXYPyNa0M/tQAX3KyHNSSjuFpuQh9mB7Xyhvbs0IHAU7OaCjVSmy
+         paWWTAVL9yz28LlBaaiv0rcb1ANcvdrTDPc8Gdm9qCupJCdajV6g7LylrLp0zy+TRHXO
+         8RCmkbQWnxKFnqzAtL2EMCkPBOFwmxSk8z47W1tAVynQW41vlnUx8XPQuggBgXUa19kr
+         bbyNO5C3paJoU0yujCZqslCm3QZ1VHbb9cVm7UjKJn9VZ9V6GX/cnuyOP5cUHDG0Opbk
+         UY3qGBaQnJ4e8qBwBGdNaHoMYBLiDKgUA83URBqoVG2xXZQ2mBpo9Od8PptIxB3pafCD
+         Kmdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=cZ5gzNCrmdm3hLAPODSo3m8ewJ0Yui1XSuajAwlxh4E=;
-        b=ym9LPU7C1kbtf58qhB8DOup5MIOlFKvLP7twxntAd5pEbLsjnhDwbaU8gPZ7PzPPV1
-         9+ZTMG/Nhn/zZ7sJDnzZf6DybPcOZ0VGB/O4mtiJxgS6fGs5lYK4cnsmMH71BHuTjPcN
-         DfWtIwPMXIK5kjI/9DPazySJMUaM0WC81cVc96zmLKzKZXva5Dg+XLI65zeyxxONQ2Mo
-         HHbvYD+mrVzcA4xE9LQ+/Dfd44dmZEoJTb/uq1XQcumlwQhDjjSsSS1ccV6+Zyj+2yMK
-         ocgpHlZfINgs1JvpKbFDKX7R0IG4CBGZhHNVLsHWOJIqN0S6cEeGl73LmsdGe913J0rD
-         hymA==
-X-Gm-Message-State: ACgBeo0tAFSO/ZTXhhX7KwBXgMELZsb6Wnoy3E3HBMZDMpcmsdcCS42i
-        JrgsrX5UoaUT0v8Ejyg1VEX9Rb9r3sgmavBdKHBd3Q==
-X-Google-Smtp-Source: AA6agR7vXKkTOGXcGEwZmzfAc5VUk0nraiOrDnZju3zQi5V4WprV0/ul8/7Z0aqc6ZWW6iZJyMIiYITSg9m+8k1wtME=
-X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
- ba22-20020a056870c59600b001016409ae62mr5053901oab.112.1661395910321; Wed, 24
- Aug 2022 19:51:50 -0700 (PDT)
+        bh=Ky9f3zT08S4ZXNjlyA5qGbsFiUvNGJziEqTyRMY4jSw=;
+        b=IHBLbvd/XWR/pRtbVSHbGJ3WoA/MFTWnwSaqrC2/nhRpke5ecACK8PRhI03bwTAeUX
+         Qyf+U+TJyeZkoWeO5XvWHc9jPiGSrLkhSR//2VtClj7h5nJjvzQ5XS3Rexcp2Q5wobrh
+         UZAnApyD8KESLZuot9UP77nRDwbCXej+/w71NLf23UTf5VRMlzNgmUALCCzeqCoPf8v+
+         PFosLdBkchRlAFjPVdEoloBT8O8Uf61SKtNn3A+Rcdozx9AoaGbdxwmv1pLKiQt2R9rn
+         q5RGztSKBf+pe8w5lkIGrshDMgWqgoCxeI2b0CeCIrEgG2TVO57W2DqEF5Q+tstTYS/q
+         TeRA==
+X-Gm-Message-State: ACgBeo1ooLUIht0fzJgys0gHP5D1H+z8FMkdvw4q7JMchfo9x0g2IQ/F
+        MXQ14pDp/pI4S7cv512PHqv9GgTit6yR4PcYzBWEKw==
+X-Google-Smtp-Source: AA6agR5adGSfvPjHNArIdRKeBP7Ky4mhYot3mSpYxhseCkqeFsMTRtBGNQP5s8bnvWkGLT62qwXl2P+zEWQfbLRaDug=
+X-Received: by 2002:a05:6512:3b0f:b0:492:ef21:33a0 with SMTP id
+ f15-20020a0565123b0f00b00492ef2133a0mr462100lfv.419.1661395918227; Wed, 24
+ Aug 2022 19:51:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220802230718.1891356-1-mizhang@google.com> <20220802230718.1891356-2-mizhang@google.com>
- <b03adf94-5af2-ff5e-1dbb-6dd212790083@redhat.com> <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
- <17505e309d02cf5a96e33f75ccdd6437a8c79222.camel@redhat.com> <Ywa+QL/kDp9ibkbC@google.com>
-In-Reply-To: <Ywa+QL/kDp9ibkbC@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 24 Aug 2022 19:51:39 -0700
-Message-ID: <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
-Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending interrupts
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oliver Upton <oupton@google.com>
+References: <20220817111348.745527-1-heiko@sntech.de> <CAOnJCUJu1fr2qxOkX4Sz-kLhB64xkcjAbBAeTkp214ZHAa0btA@mail.gmail.com>
+ <CAK9=C2U3OvUZmYTJ-C0wkSp8ViPA1+Nj2L6pd4CHTCuzaVtDJg@mail.gmail.com> <13084187.uLZWGnKmhe@phil>
+In-Reply-To: <13084187.uLZWGnKmhe@phil>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 25 Aug 2022 08:21:46 +0530
+Message-ID: <CAK9=C2WhbguLxKuJ6jVZZQUvsv30iuORviDZ4sT9imvwwzNY2w@mail.gmail.com>
+Subject: Re: [PATCH] drivers/perf: riscv_pmu_sbi: add support for PMU variant
+ on T-Head C9xx cores
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Atish Patra <atishp@atishpatra.org>, anup@brainfault.org,
+        will@kernel.org, mark.rutland@arm.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        philipp.tomsich@vrull.eu, cmuellner@linux.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,32 +71,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 5:11 PM Sean Christopherson <seanjc@google.com> wrote:
+On Thu, Aug 25, 2022 at 7:34 AM Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> Am Donnerstag, 18. August 2022, 10:24:33 CEST schrieb Anup Patel:
+> > On Thu, Aug 18, 2022 at 1:03 AM Atish Patra <atishp@atishpatra.org> wrote:
+> > >
+> > > On Wed, Aug 17, 2022 at 4:13 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> > > >
+> > > > With the T-HEAD C9XX cores being designed before or during the ratification
+> > > > to the SSCOFPMF extension, they implement functionality very similar but
+> > > > not equal to it. So add some adaptions to allow the C9XX to still handle
+> > > > its PMU through the regular SBI PMU interface instead of defining new
+> > > > interfaces or drivers.
+> > > >
+> > >
+> > > IMO, vendor specific workarounds in the generic implementation is not
+> > > a good idea.
+> > > If we have to support it, I think we should just put the IRQ number in
+> > > the DT and parse from the DT.
+> > > The initial sscofpmf series was based on the DT. It was removed later
+> > > as there was no need for it at that time.
+> > > We can always revive it.
+> > >
+> > > Regarding the CSR number difference and static key enablement, can we
+> > > use code patching techniques here as well ?
+> > > At least all the T-HEAD C9XX core erratas are in one place.
+> > >
+> > > The alternate would be just to say T-HEAD C9XX support SSCOFPMF but
+> > > with erratas. I don't prefer this approach
+> > > but it keeps the vendor specific checks out of the generic code.
+> >
+> > Whether to have a DT node (or not) was already discussed and concluded
+> > in the past.
+> >
+> > We don't need a DT node just to get the IRQ number. The T-HEAD custom
+> > IRQ number can be derived based on mvendorid.
+>
+> Yeah, I remember reading that discussion and thus went with the mvendorid
+> way in this patch.
+>
+> > Also, all these T-HEAD specific changes in SBI PMU driver should be
+> > implemented as erratas using ALTERNATIVE() macros.
+>
+> (1) "All these T-HEAD specific changes ..."
+> Actually the only T-HEAD-specific change is reading that different CSR
+> for the overflow information, the rest only makes the irq-number variable
 
-> @google folks, what would it take for us to mark KVM_REQ_GET_NESTED_STATE_PAGES
-> as deprecated in upstream and stop accepting patches/fixes?  IIUC, when we eventually
-> move to userfaultfd, all this goes away, i.e. we do want to ditch this at some point.
+If it is just overflow CSR then it is simpler to do instruction patching
+in drivers/perf/riscv_pmu_sbi.c itself.
 
-Userfaultfd is a red herring. There were two reasons that we needed
-this when nested live migration was implemented:
-1) our netlink socket mechanism for funneling remote page requests to
-a userspace listener was broken.
-2) we were not necessarily prepared to deal with remote page requests
-during VM setup.
+>
+> (2) ALTERNATIVE macros are working on assembler instructions, so are you
+> sugesting to replace the generic csr_read() for the overflow-csr with a
+> custom copy like
+>
+> #define sbi_pmu_read_overflow(void)                                             \
+> ({                                                              \
+>         register unsigned long __v;                             \
+>         ALT_THEAD_PMU_OVERFLOW(__v); \
+>         __v;                                                    \
+> })
+>
+> and then in errata_list.h
+>
+> #define ALT_THEAD_PMU_OVERFLOW(__ovl) \
+> __asm__ __volatile__ (alternative(
+>         "csrr %0, " __ASM_STR(CSR_SSCOUNTOVF),  \
+>         "csrr %0, " __ASM_STR(THEAD_C9XX_CSR_SCOUNTEROF), THEAD_VENDOR_ID, \
+>                 ERRATA_THEAD_PMU, CONFIG_ERRATA_THEAD_PMU) \
+>                               : "=r" (__ovl) :                  \
+>                               : "memory");
+>
+> I'm not yet seeing what you're gaining by going with this approach:
+> - that the overflow-csr is the same bitwise but only at a different
+>   address is specific to the c9xx, other deviants might implement things
+>   completely different
+> - you're not getting rid of the thead mention
+> - and we're now duplicating the generic csr-read code
+>
+> Is this the preferred way or what am I overlooking?
 
-(1) has long since been fixed. Though our preference is to exit from
-KVM_RUN and get the vCPU thread to request the remote page itself, we
-are now capable of queuing a remote page request with a separate
-listener thread and blocking in the kernel until the page is received.
-I believe that mechanism is functionally equivalent to userfaultfd,
-though not as elegant.
-I don't know about (2). I'm not sure when the listener thread is set
-up, relative to all of the other setup steps. Eliminating
-KVM_REQ_GET_NESTED_STATE_PAGES means that userspace must be prepared
-to fetch a remote page by the first call to KVM_SET_NESTED_STATE. The
-same is true when using userfaultfd.
+Yes, better to have special sbi_pmu_read_overflow() in
+drivers/perf/riscv_pmu_sbi.c itself which is based on ALTERNATIVES.
 
-These new ordering constraints represent a UAPI breakage, but we don't
-seem to be as concerned about that as we once were. Maybe that's a
-good thing. Can we get rid of all of the superseded ioctls, like
-KVM_SET_CPUID, while we're at it?
+I am suggesting ALTERNATIVEs only because overflow CSR is
+accessed in the interrupt handler which is in hot-path when we run
+"perf record".
+
+Regards,
+Anup

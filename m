@@ -2,190 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBC15A0DDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14715A0DE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239171AbiHYK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S240506AbiHYK1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235442AbiHYK0W (ORCPT
+        with ESMTP id S235442AbiHYK1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:26:22 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B01252DF8;
-        Thu, 25 Aug 2022 03:26:19 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C669D200006;
-        Thu, 25 Aug 2022 10:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661423178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nZkhegChjWaWBJwEW1/N43DiTL0N1XMc1RWqnxCrZsk=;
-        b=YOt1JWVSh6Ki9doHJpzHkp8QI3qfB0CD0Yw8z3OZnBSeV9pHJH5bXqq12+5xPfisKbFKjx
-        xkqK4rV8cjhXwxS5ErtrHnmmyIJ7QO1P9MjuI807pqx7ST9YhvP/m7mzybTbVJ/NNXGd6F
-        bOmwy/kqH04s05mQFdUJTvfacBl6CDe6xMsbPK319NkiE7vTXTw8litr1xld7l8Yrhlmoh
-        F0q43cEYW18F7zIqO8qTRLUgbpy35YXscqwpqWuxxC5uvBPSIVaCW9lYCgFS3AfU2U1bJE
-        1JDOrYAuWLHL3TD784m5DleTImOLUksX2+uO66TBtWXdl09A/KYoPfVKRZdyhQ==
-Date:   Thu, 25 Aug 2022 12:26:15 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 6/8] phy: allwinner: phy-sun6i-mipi-dphy: Set enable bit
- last
-Message-ID: <YwdORxO4K8mV5Hc9@aptenodytes>
-References: <20220812075603.59375-1-samuel@sholland.org>
- <20220812075603.59375-7-samuel@sholland.org>
- <YvZBmZ+SfrJuAzAs@aptenodytes>
- <b3a2dc61-7384-17f7-2f4f-4b6bb86bcced@sholland.org>
+        Thu, 25 Aug 2022 06:27:08 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BA9BB62;
+        Thu, 25 Aug 2022 03:27:03 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 4C64118849A5;
+        Thu, 25 Aug 2022 10:27:01 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 35EB525032B7;
+        Thu, 25 Aug 2022 10:27:01 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 2BD179EC0003; Thu, 25 Aug 2022 10:27:01 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fO1GowFtZadczY0o"
-Content-Disposition: inline
-In-Reply-To: <b3a2dc61-7384-17f7-2f4f-4b6bb86bcced@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 25 Aug 2022 12:27:01 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <Ywc/qTNqVbS4E7zS@shredder>
+References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+ <YvkM7UJ0SX+jkts2@shredder>
+ <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
+ <YwHZ1J9DZW00aJDU@shredder>
+ <7016ed2ce9a30537e4278e37878900d8@kapio-technology.com>
+ <Ywc/qTNqVbS4E7zS@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <7dfe15571370dfb5348a3d0e5478f62c@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-25 11:23, Ido Schimmel wrote:
+>> 
+>> 
+>> Ido, I am not so known to the selftests, so I am wondering why I don't 
+>> see
+>> either check_err or check_fail fail, whichever I use, when I think 
+>> they
+>> should and then they are not really checking...
+>> 
+>> 
+>>         local mac=10:20:30:30:20:10
+>> 
+>> 
+>>         $MZ $h1 -t udp -a $mac -b rand
+>>         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
+>> locked"
+>>         check_err $? "MAB station move: no locked entry on first 
+>> injection"
+>> 
+>>         $MZ $h2 -t udp -a $mac -b rand
+>>         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
+>> locked"
+>>         check_err $? "MAB station move: locked entry did not move"
+>> 
+>> What is wrong here?
+> 
+> Did you try adding a sleep between mausezahn and the FDB dump? At least
+> that is what learning_test() is doing. It is possible that the packet 
+> is
+> not sent / processed fast enough for the bridge to learn it before the
+> dump.
+> 
 
---fO1GowFtZadczY0o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I missed the call to log_test at the end of the test.
 
-Hi Samuel,
+>> 
+>> For a mv88e6xxx test I guess I can make a check to verify that this 
+>> driver
+>> is in use?
+> 
+> Not in a generic forwarding test. Maybe in
+> tools/testing/selftests/drivers/net/dsa/
+> 
+> My preference would be to get as much tests as possible in
+> tools/testing/selftests/net/forwarding/bridge_locked_port.sh.
 
-On Fri 12 Aug 22, 17:31, Samuel Holland wrote:
-> Hi Paul,
->=20
-> On 8/12/22 7:03 AM, Paul Kocialkowski wrote:
-> > On Fri 12 Aug 22, 02:56, Samuel Holland wrote:
-> >> The A100 variant of the DPHY requires configuring the analog registers
-> >> before setting the global enable bit. Since this order also works on t=
-he
-> >> other variants, always use it, to minimize the differences between the=
-m.
-> >=20
-> > Did you get a chance to actually test this with either DSI/CSI-2 hardwa=
-re?
->=20
-> I have tested DSI output with the Clockwork DevTerm (D1 SoC) and Pine64
-> PinePhone (A64 SoC). I do not have any MIPI CSI hardware to test with.
+I now have a roaming test in 
+tools/testing/selftests/net/forwarding/bridge_locked_port.sh, but it 
+will not pass with mv88e6xxx as it is meant for the SW bridge.
 
-Sounds good to me then!
+I can check if the sticky flag is set on the locked entry and then skip 
+the test if it is.
 
-> > I vaguely remember that the order mattered. Do you have an idea of what=
- the
-> > Allwinner BSP does too?
->=20
-> The Allwinner BSP makes the same change as this commit in its "lowlevel_v=
-2x"
-> copy of the code, which is used for R40 and T7 (original DPHY) and A100 a=
-nd D1
-> (updated DPHY). It does not make the change in "lowlevel_sun50iw1" (A64 S=
-oC,
-> original DPHY), but I tested A64 with this change, and it works fine.
+The bridge_locked_port.sh test is linked in 
+tools/testing/selftests/drivers/net/dsa/, but if I cannot check if the 
+mv88e6xxx driver or other switchcores are in use, I cannot do more.
 
-Great, thanks for details.
-
-> > Otherwise I could give it a try, at least with my MIPI CSI-2 setup
-> > that uses the driver.
->=20
-> This commit only changes sun6i_dphy_tx_power_on(). The code for RX is unc=
-hanged
-> -- in fact, it already sets SUN6I_DPHY_GCTL_REG last.
-
-Ah yes you're right, actually I remember being tempted to change this too w=
-hen
-adding the rx path, but didn't have hardware to easily test.
-
-Thanks for the details, this is:
-
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-Cheers,
-
-Paul
-
-> Regards,
-> Samuel
->=20
-> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> >> ---
-> >>
-> >>  drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 8 ++++----
-> >>  1 file changed, 4 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy=
-/allwinner/phy-sun6i-mipi-dphy.c
-> >> index 625c6e1e9990..9698d68d0db7 100644
-> >> --- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-> >> +++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-> >> @@ -183,10 +183,6 @@ static int sun6i_dphy_tx_power_on(struct sun6i_dp=
-hy *dphy)
-> >>  		     SUN6I_DPHY_TX_TIME4_HS_TX_ANA0(3) |
-> >>  		     SUN6I_DPHY_TX_TIME4_HS_TX_ANA1(3));
-> >> =20
-> >> -	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG,
-> >> -		     SUN6I_DPHY_GCTL_LANE_NUM(dphy->config.lanes) |
-> >> -		     SUN6I_DPHY_GCTL_EN);
-> >> -
-> >>  	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG,
-> >>  		     SUN6I_DPHY_ANA0_REG_PWS |
-> >>  		     SUN6I_DPHY_ANA0_REG_DMPC |
-> >> @@ -244,6 +240,10 @@ static int sun6i_dphy_tx_power_on(struct sun6i_dp=
-hy *dphy)
-> >>  			   SUN6I_DPHY_ANA2_EN_P2S_CPU_MASK,
-> >>  			   SUN6I_DPHY_ANA2_EN_P2S_CPU(lanes_mask));
-> >> =20
-> >> +	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG,
-> >> +		     SUN6I_DPHY_GCTL_LANE_NUM(dphy->config.lanes) |
-> >> +		     SUN6I_DPHY_GCTL_EN);
-> >> +
-> >>  	return 0;
-> >>  }
-> >> =20
-> >> --=20
-> >> 2.35.1
-> >>
-> >=20
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---fO1GowFtZadczY0o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMHTkcACgkQ3cLmz3+f
-v9ET3gf+Ijb5TZR/JJTlXSoSHvPCNhJtFL0m999ze+30++wX0mEhS3H8StSKy/C1
-I2AsGVYGmUzuOru1lsIKl0Z5snU4tf0TxasrHk902JIWQ77vCuNWnKlXVYDwvDdz
-7P19vaDeMhTGePAPvoubS4g9pPsmCNwixL5Roe5mCrDK0ZLu/LWTYHydcSLqKu/Q
-x/LuE2wRx4RRFwNXuz0NXmwOZdIq41Gi2S0kx6fkbw/uHzKA30koHoy+M0Wb7vVK
-H9Ypu69YUgz8twTsvDRbid/ctfIb3wPQegbRO+S80Irf8owgD9qU6MKXIjK30qT7
-+KZHOywGvjsZtMZepWV6+VqCGgugaw==
-=xe8Q
------END PGP SIGNATURE-----
-
---fO1GowFtZadczY0o--
+> 
+> I'm not sure which tests you are planning for mv88e6xxx, but we can 
+> pass
+> / fail test cases based on the flags we observe in the FDB dump. For
+> example, if the entry has the "sticky" flag, then the expectation is
+> that the roaming test will fail. Otherwise, it should pass.

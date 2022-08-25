@@ -2,59 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEE75A156A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA8E5A1572
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiHYPP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
+        id S237099AbiHYPSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241797AbiHYPPz (ORCPT
+        with ESMTP id S229909AbiHYPS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:15:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E5E6564F;
-        Thu, 25 Aug 2022 08:15:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60360B82A18;
-        Thu, 25 Aug 2022 15:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1078C433D7;
-        Thu, 25 Aug 2022 15:15:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661440544;
-        bh=UngkZdFzUgm4+n+1n85c2FXf5joe08toOBXh1ldxmWI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u8N2eMGdOhh7ENZv9DdL7qFZogCam9mxgAxif9+llXeD5WORcI6rUXbNw7ikE8Ybh
-         0udwwNJI6tiILpSpzffzzPIdCMsGOsshCf9E4EfKiZXDG4abPHvZ/uEQmhG2vVKoUT
-         DHZxOKiT7lwb/xp8u7Pl41E34NhUixMtLr3wTht/kGf2k3pnNd7zKDDAbCXJCqJpUc
-         Ffg6kmuApdhFCvTZzOUqlr4ac4Hqb8bSaucX5XxO+MXzOXiKt03QlNxlOTvdSy/g8e
-         kVy4vVdBgz8I4yXAOjvicHBmGIGJ4wbkaX6D8M8aMTbveWP8SyatF6CAJD8OfzmlEw
-         Mtu6e+1qY/IBg==
-Date:   Thu, 25 Aug 2022 17:15:36 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Mauri Sandberg <maukka@ext.kapsi.fi>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bhelgaas@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
-        sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
-        linux@armlinux.org.uk, kw@linux.com, thomas.petazzoni@bootlin.com,
-        pali@kernel.org
-Subject: Re: [PATCH v2 2/2] PCI: mvebu: add support for orion5x
-Message-ID: <YweSGDN7rei2Ugwp@lpieralisi>
-References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
- <20220802173423.47230-1-maukka@ext.kapsi.fi>
- <20220802173423.47230-3-maukka@ext.kapsi.fi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220802173423.47230-3-maukka@ext.kapsi.fi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 25 Aug 2022 11:18:28 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9220B8F01
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:18:23 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id q2so24417291edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=LR+ftCEuqGGlJGbieRZTMPUW+OKd3Cv5TGWT0UDVsQ0=;
+        b=mSY8/kwQjbQefRboOZq1NtBa7P5KH4ZGMTal7wYL2jkcCwAPEfHe1lt7A5DiR+8slj
+         SOKJPNvtuvJzJu1cJjkCsvHMDNZZef7aeTqnhdOOx6ZvAujEDz824afBM/YR33JoY2QO
+         VqasciQAY217h3hXMDN52Vv4W8jGtTFR2D6/BCIFZD0jDn2v8eRLdHUBi6ApCuN0CbyN
+         7VNXJoN0ip2rGviSReV7ikqQT8snVw+AK8+5OSgz+r9/U4Q+OOP7dygSyRVD5n8Kq4EM
+         Aiu3F737lTWTz+C8ezaOXkFjIgpDbbLBXMtYgFAR8nrKdEBU9vAO47tYTiM1SmdnxBVW
+         9XPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=LR+ftCEuqGGlJGbieRZTMPUW+OKd3Cv5TGWT0UDVsQ0=;
+        b=lN63ZmEzTMcUI9ZwE+O1xD/vch/2Fj9SNYCVtr8hRYw03p3jtl+5kflc0z09u47Z5c
+         iQQA48p98oIcwj+9CBuGTvqdzW+ubXw8nYHwjiips64WB/FdbpCX3FCdEFidSalps/lE
+         vL/9h2QP5cC53EUVwJmdqteHuSazBNIjeW3lkjQwVbxnsmCktwGCbxr4/Xj2ggwqKGQI
+         Ql7z9bs1wvV4+z75oX/ud3IAmxsBhMBU3wy6jwxZjaA7QOJBWWdS/VJ6J36m4B5SgqJR
+         rxE3yhurpEIz5EjLwWuwfEZQTYkFFI/H9irRH1mkBpCmcfH8ucyW+//Z57Pr7vPpSwG6
+         fkHA==
+X-Gm-Message-State: ACgBeo2BV8jgUzcqSqTEHmjoueZ82+1qTo9XOitIVF8sMSBIzZlndkte
+        vqqbk+ek0SkepAKo89hxGgcWHg==
+X-Google-Smtp-Source: AA6agR6rXtjTOoklgiguMLmicVUBp31e6BzGWHAVb2e5NQ7FaAnGL6R1cn29JpOEB3X37ujNdkRkAg==
+X-Received: by 2002:a05:6402:134e:b0:445:d389:266e with SMTP id y14-20020a056402134e00b00445d389266emr3702755edw.97.1661440702387;
+        Thu, 25 Aug 2022 08:18:22 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id cx26-20020a05640222ba00b0043e35ae2610sm4987369edb.27.2022.08.25.08.18.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Aug 2022 08:18:21 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v4] regulator: core: Resolve supply name earlier to
+ prevent double-init
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <a78822d5-f0a1-6c42-8269-e8168ea5cd5b@samsung.com>
+Date:   Thu, 25 Aug 2022 17:18:20 +0200
+Cc:     =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>, wens@kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <932DEB17-70FB-4416-80B3-C48A7C31848F@kohlschutter.com>
+References: <YvorNPDQQr2SH/NF@sirena.org.uk>
+ <20220818124646.6005-1-christian@kohlschutter.com>
+ <CGME20220825113251eucas1p247c3d57de823da148ca4790975a4aba8@eucas1p2.samsung.com>
+ <58b92e75-f373-dae7-7031-8abd465bb874@samsung.com>
+ <YwdpOX0xCzYwhjmx@sirena.org.uk>
+ <a78822d5-f0a1-6c42-8269-e8168ea5cd5b@samsung.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,187 +87,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 08:34:23PM +0300, Mauri Sandberg wrote:
-> Add support for orion5x PCIe controller.
-> 
-> There is Orion-specific errata that config space via CF8/CFC registers
-> is broken. Workaround documented in errata documented (linked from above
-> documentation) does not work when DMA is used and instead other
+> On 25. Aug 2022, at 16:23, Marek Szyprowski <m.szyprowski@samsung.com> =
+wrote:
+>=20
+> Hi Mark,
+>=20
+> On 25.08.2022 14:21, Mark Brown wrote:
+>> On Thu, Aug 25, 2022 at 01:32:50PM +0200, Marek Szyprowski wrote:
+>>=20
+>>> This patch landed recently in linux next as commit 8a866d527ac0
+>>> ("regulator: core: Resolve supply name earlier to prevent =
+double-init").
+>>> Unfortunately it breaks booting of Samsung Exynos 5800 based =
+Peach-Pi
+>>> (arch/arm/boot/dts/exynos5800-peach-pi.dts) and Peach-Pit
+>>> (arch/arm/boot/dts/exynos5420-peach-pit.dts) Chromebooks. The last
+>>> message in the kernel log is a message about disabling 'vdd_1v2'
+>>> regulator. This regulator is not used directly, however it is a =
+supply
+>>> for other critical regulators.
+>> This suggests that supplies are ending up not getting bound.  Could =
+you
+>> perhaps add logging to check that we're attempting to resolve the =
+supply
+>> (in the
+>>=20
+>>=20
+>> +       if ((rdev->supply_name && !rdev->supply) &&
+>> +                       (rdev->constraints->always_on ||
+>> +                        rdev->constraints->boot_on)) {
+>>=20
+>> block)?
+>=20
+>=20
+> I've spent a little time debugging this issue and here are my =
+findings.=20
+> The problem is during the 'vdd_mif' regulator registration. It has one=20=
 
-Linked to which documentation ?
+> supply called 'inb1' and provided by 'vdd_1v2' regulator. Both =
+'vdd_mif'=20
+> and 'vdd_1v2' regulators are provided by the same PMIC.
+>=20
+> The problem is that 'inb1' supply is being routed to dummy regulator=20=
 
-> undocumented workaround is needed which maps config space to memory
-> (and therefore avoids usage of broken CF8/CFC memory mapped registers).
-> 
-> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
-> Cc: Pali Rohár <pali@kernel.org>
-> ---
-> v1 -> v2:
->  - do pcie related mvebu windows and remaps in pcie_setup()
-> ---
->  arch/arm/mach-orion5x/common.c     | 13 -------
->  arch/arm/mach-orion5x/pci.c        | 14 +++++++
->  drivers/pci/controller/Kconfig     |  2 +-
->  drivers/pci/controller/pci-mvebu.c | 59 ++++++++++++++++++++++++++++++
->  4 files changed, 74 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/arm/mach-orion5x/common.c b/arch/arm/mach-orion5x/common.c
-> index 7bcb41137bbf..9d8be5ce1266 100644
-> --- a/arch/arm/mach-orion5x/common.c
-> +++ b/arch/arm/mach-orion5x/common.c
-> @@ -231,19 +231,6 @@ void __init orion5x_init_early(void)
->  
->  void orion5x_setup_wins(void)
->  {
-> -	/*
-> -	 * The PCIe windows will no longer be statically allocated
-> -	 * here once Orion5x is migrated to the pci-mvebu driver.
-> -	 */
-> -	mvebu_mbus_add_window_remap_by_id(ORION_MBUS_PCIE_IO_TARGET,
-> -					  ORION_MBUS_PCIE_IO_ATTR,
-> -					  ORION5X_PCIE_IO_PHYS_BASE,
-> -					  ORION5X_PCIE_IO_SIZE,
-> -					  ORION5X_PCIE_IO_BUS_BASE);
-> -	mvebu_mbus_add_window_by_id(ORION_MBUS_PCIE_MEM_TARGET,
-> -				    ORION_MBUS_PCIE_MEM_ATTR,
-> -				    ORION5X_PCIE_MEM_PHYS_BASE,
-> -				    ORION5X_PCIE_MEM_SIZE);
->  	mvebu_mbus_add_window_remap_by_id(ORION_MBUS_PCI_IO_TARGET,
->  					  ORION_MBUS_PCI_IO_ATTR,
->  					  ORION5X_PCI_IO_PHYS_BASE,
-> diff --git a/arch/arm/mach-orion5x/pci.c b/arch/arm/mach-orion5x/pci.c
-> index 9574c73f3c03..7c4e2f355cc7 100644
-> --- a/arch/arm/mach-orion5x/pci.c
-> +++ b/arch/arm/mach-orion5x/pci.c
-> @@ -150,6 +150,20 @@ static int __init pcie_setup(struct pci_sys_data *sys)
->  	 */
->  	orion_pcie_setup(PCIE_BASE);
->  
-> +	/*
-> +	 * The PCIe windows will no longer be statically allocated
-> +	 * here once Orion5x is migrated to the pci-mvebu driver.
-> +	 */
+> after this change. The regulator_resolve_supply(), which is just after=20=
 
-Is this comment still relevant ? And more importantly, may I ask
-you why this code move in this hunk ? I think, whatever the reason
-is, that deserves a comment.
+> the above mentioned check, returns 0 and bounds 'vdd_mif' supply to=20
+> dummy-regulator. This happens because regulator_dev_lookup() called in=20=
 
-> +	mvebu_mbus_add_window_remap_by_id(ORION_MBUS_PCIE_IO_TARGET,
-> +					  ORION_MBUS_PCIE_IO_ATTR,
-> +					  ORION5X_PCIE_IO_PHYS_BASE,
-> +					  ORION5X_PCIE_IO_SIZE,
-> +					  ORION5X_PCIE_IO_BUS_BASE);
-> +	mvebu_mbus_add_window_by_id(ORION_MBUS_PCIE_MEM_TARGET,
-> +				    ORION_MBUS_PCIE_MEM_ATTR,
-> +				    ORION5X_PCIE_MEM_PHYS_BASE,
-> +				    ORION5X_PCIE_MEM_SIZE);
-> +
->  	/*
->  	 * Check whether to apply Orion-1/Orion-NAS PCIe config
->  	 * read transaction workaround.
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index b8d96d38064d..a249375837f0 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -5,7 +5,7 @@ menu "PCI controller drivers"
->  
->  config PCI_MVEBU
->  	tristate "Marvell EBU PCIe controller"
-> -	depends on ARCH_MVEBU || ARCH_DOVE || COMPILE_TEST
-> +	depends on ARCH_MVEBU || ARCH_DOVE || ARCH_ORION5X || COMPILE_TEST
->  	depends on MVEBU_MBUS
->  	depends on ARM
->  	depends on OF
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index c1ffdb06c971..1d3052aa7e49 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -1487,6 +1487,54 @@ static int mvebu_pcie_parse_request_resources(struct mvebu_pcie *pcie)
->  	return 0;
->  }
->  
-> +static int orion_pcie_rd_conf_wa(void __iomem *wa_base, struct pci_bus *bus,
-> +			  u32 devfn, int where, int size, u32 *val)
-> +{
-> +	*val = readl(wa_base + (PCIE_CONF_BUS(bus->number) |
-> +				PCIE_CONF_DEV(PCI_SLOT(devfn)) |
-> +				PCIE_CONF_FUNC(PCI_FUNC(devfn)) |
-> +				PCIE_CONF_REG(where)));
-> +
-> +	if (size == 1)
-> +		*val = (*val >> (8 * (where & 3))) & 0xff;
-> +	else if (size == 2)
-> +		*val = (*val >> (8 * (where & 3))) & 0xffff;
-> +
-> +	return PCIBIOS_SUCCESSFUL;
-> +}
-> +
-> +/* Relevant only for Orion-1/Orion-NAS */
-> +#define ORION5X_PCIE_WA_PHYS_BASE	0xf0000000
-> +#define ORION5X_PCIE_WA_VIRT_BASE	IOMEM(0xfd000000)
-> +#define ORION5X_PCIE_WA_SIZE		SZ_16M
-> +#define ORION_MBUS_PCIE_WA_TARGET	0x04
-> +#define ORION_MBUS_PCIE_WA_ATTR		0x79
-> +
-> +static int mvebu_pcie_child_rd_conf_wa(struct pci_bus *bus, u32 devfn, int where, int size, u32 *val)
-> +{
-> +	struct mvebu_pcie *pcie = bus->sysdata;
-> +	struct mvebu_pcie_port *port;
-> +
-> +	port = mvebu_pcie_find_port(pcie, bus, devfn);
-> +	if (!port)
-> +		return PCIBIOS_DEVICE_NOT_FOUND;
-> +
-> +	if (!mvebu_pcie_link_up(port))
-> +		return PCIBIOS_DEVICE_NOT_FOUND;
-> +
-> +	/*
-> +	 * We only support access to the non-extended configuration
-> +	 * space when using the WA access method (or we would have to
-> +	 * sacrifice 256M of CPU virtual address space.)
+> regulator_resolve_supply() returns -19, what in turn lets the code to=20=
 
-Please expand the comment - future reviewers and developers may need
-this information to understand this choice, me included.
+> use dummy-regulator. I didn't check why it doesn't return =
+-EPROBE_DEFER=20
+> in that case yet.
+>=20
+>> I'd also note that it's useful to paste the actual error
+>> messages you're seeing rather than just a description of them.
+>=20
+> There is really nothing more that I can paste here:
+>=20
+> [   32.306264] systemd-logind[1375]: New seat seat0.
+> [   32.331790] systemd-logind[1375]: Watching system buttons on=20
+> /dev/input/event1 (gpio-keys)
+> [   32.550686] systemd-logind[1375]: Watching system buttons on=20
+> /dev/input/event0 (cros_ec)
+> [   32.570493] systemd-logind[1375]: Failed to start user service,=20
+> ignoring: Unknown unit: user@0.service
+> [   32.750913] systemd-logind[1375]: New session c1 of user root.
+> [   35.070357] vdd_1v2:
+>=20
+> --- EOF ---
+>=20
 
-Lorenzo
+I can reproduce these findings (also see the difference in "cat =
+/sys/kernel/debug/regulator/regulator_summary")
 
-> +	 */
-> +	if (where >= 0x100) {
-> +		*val = 0xffffffff;
-> +		return PCIBIOS_DEVICE_NOT_FOUND;
-> +	}
-> +
-> +	return orion_pcie_rd_conf_wa(ORION5X_PCIE_WA_VIRT_BASE, bus, devfn, where, size, val);
-> +}
-> +
->  static int mvebu_pcie_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -1663,6 +1711,16 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
->  	bridge->align_resource = mvebu_pcie_align_resource;
->  	bridge->map_irq = mvebu_pcie_map_irq;
->  
-> +	if (of_machine_is_compatible("marvell,orion5x-88f5181")) {
-> +		dev_info(dev, "Applying Orion-1/Orion-NAS PCIe config read transaction workaround\n");
-> +
-> +		mvebu_pcie_child_ops.read = mvebu_pcie_child_rd_conf_wa;
-> +		mvebu_mbus_add_window_by_id(ORION_MBUS_PCIE_WA_TARGET,
-> +					    ORION_MBUS_PCIE_WA_ATTR,
-> +					    ORION5X_PCIE_WA_PHYS_BASE,
-> +					    ORION5X_PCIE_WA_SIZE);
-> +	}
-> +
->  	return pci_host_probe(bridge);
->  }
->  
-> @@ -1733,6 +1791,7 @@ static const struct of_device_id mvebu_pcie_of_match_table[] = {
->  	{ .compatible = "marvell,armada-370-pcie", },
->  	{ .compatible = "marvell,dove-pcie", },
->  	{ .compatible = "marvell,kirkwood-pcie", },
-> +	{ .compatible = "marvell,orion5x-pcie", },
->  	{},
->  };
->  
-> -- 
-> 2.25.1
-> 
+The check "if (have_full_constraints())" in "regulator_resolve_supply" =
+is called even though regulator_dev_lookup returned -ENODEV (-19).
+Since my patch now calls "regulator_resolve_supply" twice, the first =
+round should really treat ENODEV as "defer".
+
+I propose adding a boolean defer argument to regulator_resolve_supply =
+(with defer=3Dtrue in the first, opportunistic run, and false in any =
+other situation). I'll have a patch ready later tonight.
+
+Thanks!
+Christian
+

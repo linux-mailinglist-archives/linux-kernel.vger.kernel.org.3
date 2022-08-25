@@ -2,101 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274995A10AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2C15A10B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241899AbiHYMhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S241912AbiHYMix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240735AbiHYMhG (ORCPT
+        with ESMTP id S239689AbiHYMiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:37:06 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3D8AF0D6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:37:01 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1661431014thbakx3i
+        Thu, 25 Aug 2022 08:38:50 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B193B3B1E;
+        Thu, 25 Aug 2022 05:38:48 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1661431090txmhb4ok
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 Aug 2022 20:36:53 +0800 (CST)
+        id ; Thu, 25 Aug 2022 20:38:09 +0800 (CST)
 X-QQ-SSF: 01000000002000C0E000B00A0000000
-X-QQ-FEAT: QityeSR92A277cprjEdE58AmL0aKFx5S4Ev5Sj1v6E8ILwe73gcDUDlfjFYZs
-        USbltP7C6HH+wf6J7wKyXKZtehWDxL6esDOAH3oFQ94aTNcYnzZCLPeKqJ//Oj8dKRoJ0Fo
-        pChZOJt+l3rh8dT3cjLzT5yLd9NAMM5u7AFQRkZNEkUViqXvNLoYk6DOVgZ6V6fDNjV+2oE
-        KFLrbLUoz8yWBrsbpBnSxO5m/CXdWlj1fbKvNpoQeKnTeNLFLWrsqgoEk3/gjahJsvBqCbm
-        n+N8qKNX4d209tVkFnRYg7+UZZ22b0B8v49IOtjshXD1e8RdhOttF9zIcVZSTpWrhsron1Y
-        qDcA28jvpzJBFxX+g5XBsBIXcv5GGqQyQeWPx/ULHxBJc8F4ikTARe8PZMQ0StLd9BzLAMp
+X-QQ-FEAT: ILHsT53NKPjHCKbWdw2Ev9EVOZkckTajdXNKIoVDHKFC8mkV2NCBS1YiLQE+J
+        duLxQUm3VXowAki1j6+kLJwB59UuHwi9IrgCGT4GC5I4rtriw4sHTNwIhOECzQp3bxTTa7v
+        9r2Om2WTtaRS63+jx3ZZb7rqaXP/05h7yFIKyBSnNXjwNNRwTfRX7d4kvFH6Zsz0SoCxouE
+        ognTIKSH9/EQpvXmr/4gPJzd1MC15rmnvh7YXg7CsQWGLd2A5qA36B2jXr7j0TytLxQDyrg
+        zEcPOiHNQifR55PfSQyolCaqKR30bn8ZAVzeljAq1bdy7mL93HJz2D/mOk+w3xFRB+imfLM
+        1M9JahCQDu8an/UvQThVPxCy3OqS6QyRZkvB/AnPG2h63ujbkUWw7F8WHlhIUQER9t7ARAa
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     damien.lemoal@opensource.wdc.com, s.shtylyov@omp.r
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drivers/ata: fix repeated words in comments
-Date:   Thu, 25 Aug 2022 20:36:44 +0800
-Message-Id: <20220825123644.9082-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] drivers/fpga: fix repeated words in comments
+Date:   Thu, 25 Aug 2022 20:38:03 +0800
+Message-Id: <20220825123803.13979-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'in'.
- Delete the redundant word 'to'.
+ Delete the redundant word 'if'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/ata/libata-eh.c      | 2 +-
- drivers/ata/pata_macio.c     | 2 +-
- drivers/ata/sata_dwc_460ex.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/fpga/stratix10-soc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index 7c128c89b454..ca865a95cf24 100644
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -863,7 +863,7 @@ void ata_eh_fastdrain_timerfn(struct timer_list *t)
-  *
-  *	Set ATA_PFLAG_EH_PENDING and activate fast drain if @fastdrain
-  *	is non-zero and EH wasn't pending before.  Fast drain ensures
-- *	that EH kicks in in timely manner.
-+ *	that EH kicks in timely manner.
-  *
-  *	LOCKING:
-  *	spin_lock_irqsave(host lock)
-diff --git a/drivers/ata/pata_macio.c b/drivers/ata/pata_macio.c
-index bfea2be2959a..076212fdb9d9 100644
---- a/drivers/ata/pata_macio.c
-+++ b/drivers/ata/pata_macio.c
-@@ -666,7 +666,7 @@ static u8 pata_macio_bmdma_status(struct ata_port *ap)
- 	 * a multi-block transfer.
- 	 *
- 	 * - The dbdma fifo hasn't yet finished flushing to
--	 * to system memory when the disk interrupt occurs.
-+	 * system memory when the disk interrupt occurs.
- 	 *
- 	 */
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 357cea58ec98..e4f2e83a615b 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -285,7 +285,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
  
-diff --git a/drivers/ata/sata_dwc_460ex.c b/drivers/ata/sata_dwc_460ex.c
-index e3263e961045..a4c83a6e5631 100644
---- a/drivers/ata/sata_dwc_460ex.c
-+++ b/drivers/ata/sata_dwc_460ex.c
-@@ -1087,7 +1087,7 @@ static struct scsi_host_template sata_dwc_sht = {
  	/*
- 	 * test-only: Currently this driver doesn't handle NCQ
- 	 * correctly. We enable NCQ but set the queue depth to a
--	 * max of 1. This will get fixed in in a future release.
-+	 * max of 1. This will get fixed in a future release.
+ 	 * Loop waiting for buffers to be returned.  When a buffer is returned,
+-	 * reuse it to send more data or free if if all data has been sent.
++	 * reuse it to send more data or free if all data has been sent.
  	 */
- 	.sg_tablesize		= LIBATA_MAX_PRD,
- 	/* .can_queue		= ATA_MAX_QUEUE, */
+ 	while (count > 0 || s10_free_buffer_count(mgr) != NUM_SVC_BUFS) {
+ 		reinit_completion(&priv->status_return_completion);
 -- 
 2.36.1
 

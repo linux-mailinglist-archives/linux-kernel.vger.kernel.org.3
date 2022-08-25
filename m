@@ -2,187 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0C45A0F03
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E265A0EFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241562AbiHYL0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S241533AbiHYLZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241548AbiHYL0Z (ORCPT
+        with ESMTP id S241516AbiHYLZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:26:25 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959886BD53;
-        Thu, 25 Aug 2022 04:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=K3VpJkw9tEa+HvAMHqXTLzBe8mZdLAZPPmOrPYfRi5w=;
-        b=BA35LFrTyCY/ChguZvkx78iWYyF1KyFWpbxhBencG3JvOjeKUHYHtmU045W33E18TGRyJpF1n3peQ
-         CTIE6ZWWNC9kAr6/qQmzIOII/xsI9W63kd6YaJtdPOKKWgBbAuzUgZw4z1bvB5+3d+0LnN5XJNJOWS
-         afRAG7L9dobiqxBvPdsifZhJFxwc9/sMmJa7mgISxblezCxQTvE2NmTf6xJ+mYsfCp8N/OhoiQGzTF
-         kx6Sq16Q5zJXTOxIn4P+hBkI7b7GlUiVAwx2MBXnHZNM107C7EKIPn2a4/2892dDR+7clkxR1l5jWW
-         7T45Klr+I2rO4yFfrcSz538m1fFGL4g==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000012,0.014863)], BW: [Enabled, t: (0.000016,0.000001)], RTDA: [Enabled, t: (0.085401), Hit: No, Details: v2.41.0; Id: 15.52k4qu.1gbac0kml.7isp; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 25 Aug 2022 14:25:49 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: [PATCH v8 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Thu, 25 Aug 2022 14:24:33 +0300
-Message-Id: <20220825112433.14583-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220825112433.14583-1-i.bornyakov@metrotek.ru>
-References: <20220825112433.14583-1-i.bornyakov@metrotek.ru>
+        Thu, 25 Aug 2022 07:25:14 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48A1F59F;
+        Thu, 25 Aug 2022 04:25:10 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oRAyx-0007pK-9U; Thu, 25 Aug 2022 13:25:07 +0200
+Message-ID: <822ed6b6-fd3a-3873-cdf0-543340fd4103@leemhuis.info>
+Date:   Thu, 25 Aug 2022 13:25:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Content-Language: en-US
+Cc:     Utkarsh Verma <utkarsh.naveen@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Yan-Hsuan Chuang <tony0620emma@gmail.com>
+Subject: [regression] Bug 216386 - rtw_8822be: Wifi stops working after resume
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661426712;52236dad;
+X-HE-SMSGID: 1oRAyx-0007pK-9U
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 and MachXO2
-FPGAs over Slave SPI sysCONFIG interface.
+Hi, this is your Linux kernel regression tracker.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 109 ++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported. That's why I decided to forward it by
+mail to those that afaics should handle this.
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..3ea338a05bb5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,109 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Lattice Slave SPI sysCONFIG FPGA manager
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+  Programming of MachXO2 is done by writing configuration data into device's
-+  internal non-volatile Flash memory, then Self-Download of data from Flash
-+  into SRAM is issued.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,ecp5-fpga-mgr
-+      - lattice,machxo2-fpga-mgr
-+
-+  reg:
-+    maxItems: 1
-+
-+  program-gpios:
-+    description:
-+      A GPIO line connected to PROGRAMN (active low) pin of the device.
-+      Initiates configuration sequence.
-+    maxItems: 1
-+
-+  init-gpios:
-+    description:
-+      A GPIO line connected to INITN (active low) pin of the device.
-+      Indicates that the FPGA is ready to be configured.
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      A GPIO line connected to DONE (active high) pin of the device.
-+      Indicates that the configuration sequence is complete.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,machxo2-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 66000000
-+        program-gpios: false
-+        init-gpios: false
-+        done-gpios: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,ecp5-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+      required:
-+        - program-gpios
-+        - init-gpios
-+        - done-gpios
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,ecp5-fpga-mgr";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        fpga-mgr@1 {
-+            compatible = "lattice,machxo2-fpga-mgr";
-+            reg = <1>;
-+            spi-max-frequency = <20000000>;
-+        };
-+    };
--- 
-2.37.2
+To quote from https://bugzilla.kernel.org/show_bug.cgi?id=216386 :
 
+>  Utkarsh Verma 2022-08-20 09:16:41 UTC
+> 
+> I have an ASUS TUF FX505DT which has the RTL8822BE wifi card. I recently upgraded to kernel 5.19 and this issue started popping up.
+> 
+> When I close my laptop lid and let it sleep for a considerable amount of time, the wifi stops working the next time I open it, and I have to reboot my PC to get internet. This is annoying because I suspended my PC to continue with my work after some time quickly, and having to reboot defeats the purpose.
+> 
+> I tried removing and reloading the kernel module for this device as well, and it fails with the following dmesg log.
+> 
+> ```
+> [ 4914.877037] rtw_8822be 0000:04:00.0: Unable to change power state from D3cold to D0, device inaccessible
+> [ 4914.886333] rtw_8822be 0000:04:00.0: mac power on failed
+> [ 4914.886342] rtw_8822be 0000:04:00.0: failed to power on mac
+> [ 4914.886344] rtw_8822be 0000:04:00.0: failed to setup chip efuse info
+> [ 4914.886348] rtw_8822be 0000:04:00.0: failed to setup chip information
+> [ 4914.892027] rtw_8822be 0000:04:00.0: Firmware version 27.2.0, H2C version 13
+> [ 4914.922150] rtw_8822be: probe of 0000:04:00.0 failed with error -114
+> ```
 
+See the ticket for details and further comments.
+
+Please look into the issue if you're among the main recipients of this
+mail (and not just CCed). I hope I picked the right people to sent this
+to, if not just let everyone know.
+
+Anyway, to ensure this is not forgotten lets get this tracked by the the
+Linux kernel regression tracking bot:
+
+#regzbot introduced: https://bugzilla.kernel.org/show_bug.cgi?id=216386
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report in bugzilla, as the kernel's documentation calls
+for; above page explains why this is important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

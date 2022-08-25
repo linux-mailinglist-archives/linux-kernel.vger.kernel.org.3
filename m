@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7960D5A0FEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB355A0FF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236765AbiHYMFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S240849AbiHYMGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241072AbiHYMF2 (ORCPT
+        with ESMTP id S236230AbiHYMGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:05:28 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BE667C81;
-        Thu, 25 Aug 2022 05:05:24 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oRBbh-0001K3-BL; Thu, 25 Aug 2022 14:05:09 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/4] nvmem: sunxi_sid: Always use 32-bit MMIO reads
-Date:   Thu, 25 Aug 2022 14:05:08 +0200
-Message-ID: <5410996.rnE6jSC6OK@diego>
-In-Reply-To: <20220814173656.11856-2-samuel@sholland.org>
-References: <20220814173656.11856-1-samuel@sholland.org> <20220814173656.11856-2-samuel@sholland.org>
+        Thu, 25 Aug 2022 08:06:14 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9394FA9C3E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:06:13 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z8so5183888edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Oc9XG7GPSCxnXnM95Iom9pMyD1+5Et6qnFByyd79xxQ=;
+        b=clML/k7uO70cjZosomYnlrfu7Hk/7+IrQFqn3myTXjoUJFZSxafIE+zAKKGx7GCKv7
+         nmZmkXh+KDxftT+cWcuBhYaXp5gM0qOuEXBPLUbEQ0bEApYPZ57YzVI3ou/hkquYdf02
+         SOkj/AiI5Hr+P6P8KcRXNwyeWnwiBHXoX3/cEx8rtqCDzS0HBOcbuBuxdmCni0IwGcSM
+         TRcF3d7kP/EAIR//kxokOuXtmNZrZ5LF0zz6ZUFUciVs7IEsJ23QQJdJow9JfZ4l5bhO
+         3WudeBVKFA9derID2Irc+1YY0EfObX6XcO6t48WbS+V3VXVNhCrOQYmXAMUPQXKEuveF
+         pWZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Oc9XG7GPSCxnXnM95Iom9pMyD1+5Et6qnFByyd79xxQ=;
+        b=kxlEPjZWJiw6qsn+JqqEoCWH2IDKDsA3NcZPaQWex008U6Ac2QsnS74fVrBAe0WcFH
+         QnuddJd7Z2xynplQU/IVIDo8POpSCUsb85VnV9+5p/TefuEWXlyVAu0/+1QmyWHFCxTs
+         WKs0uUeFv5+RgzkXqx+G7G9xtrktXKrNCS+MF4S+i//pD+fLle2QU6HTCHDVmnuyDc5a
+         ojH0i16DK6IXNcMtAZCnr+t/K47cY6tKkgGAQCgI4L9OmxGfIP/HPBr+PwRdPNAm//D4
+         CZHlQ9FcwRXvpke4EchmVXSVQQb11AErJL5k2KOtbPeShd/9vG3ZA/TsUgQGxiTVTUBH
+         TAvA==
+X-Gm-Message-State: ACgBeo3Ye2cmkceEbzNWT4WEjY9v+4Nzdguf+eDPkFJxJhVHx0QXsELB
+        Bb4VR07fGNfxeOQrCeI8Bp+WyNWTTJtxq2nXUEtAI45zL/uQ/w==
+X-Google-Smtp-Source: AA6agR6qKygK87NYbnGl66G8ErlJcVvZntTxHv2dOKGoYqAv+o1h3jteBWKRfNKH8hPkutu/oXU4XzTI2X8F0xu4iMk=
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id
+ ew4-20020a056402538400b004316d84b451mr2939099edb.46.1661429172173; Thu, 25
+ Aug 2022 05:06:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220816090903.19558-1-Will.Shiu@mediatek.com>
+In-Reply-To: <20220816090903.19558-1-Will.Shiu@mediatek.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 25 Aug 2022 14:06:01 +0200
+Message-ID: <CACRpkdYX4xjG-UfuZ05KpOJJudVuuw+A_TB0U=zRP2+e7ZwndQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Pinctrl: Add in zero check
+To:     Will Shiu <Will.Shiu@mediatek.com>
+Cc:     stanley.chu@mediatek.com, matthias.bgg@gmail.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsd_upstream@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 14. August 2022, 19:36:52 CEST schrieb Samuel Holland:
-> The SID SRAM on at least some SoCs (A64 and D1) returns different values
-> when read with bus cycles narrower than 32 bits. This is not immediately
-> obvious, because memcpy_fromio() uses word-size accesses as long as
-> enough data is being copied.
-> 
-> The vendor driver always uses 32-bit MMIO reads, so do the same here.
-> This is faster than the register-based method, which is currently used
-> as a workaround on A64. And it fixes the values returned on D1, where
-> the SRAM method was being used.
-> 
-> The special case for the last word is needed to maintain .word_size == 1
-> for sysfs ABI compatibility, as noted previously in commit de2a3eaea552
-> ("nvmem: sunxi_sid: Optimize register read-out method").
-> 
-> Fixes: 07ae4fde9efa ("nvmem: sunxi_sid: Add support for D1 variant")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Tue, Aug 16, 2022 at 11:09 AM Will Shiu <Will.Shiu@mediatek.com> wrote:
 
-On a D1-Nezha:
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+> add in check of buffer offset to avoid the exception when input 0 size.
+>
+> Signed-off-by: Will Shiu <Will.Shiu@mediatek.com>
 
+Looks good to me, patch applied!
 
+Yours,
+Linus Walleij

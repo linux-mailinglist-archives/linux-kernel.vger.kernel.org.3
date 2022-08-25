@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90435A0D86
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B385A0D88
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240076AbiHYKIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S239750AbiHYKKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240558AbiHYKIa (ORCPT
+        with ESMTP id S238181AbiHYKKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:08:30 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02399AB4F4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:08:28 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id R9mjo8BOznj75R9mkodWvg; Thu, 25 Aug 2022 12:08:26 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 25 Aug 2022 12:08:26 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mike Turquette <mturquette@linaro.org>,
-        Gabriel FERNANDEZ <gabriel.fernandez@st.com>,
-        Pankaj Dev <pankaj.dev@st.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-clk@vger.kernel.org
-Subject: [PATCH] clk: st: Fix some error handling path in st_of_quadfs_setup()
-Date:   Thu, 25 Aug 2022 12:08:24 +0200
-Message-Id: <dfa8886d700395249851f237ee0b783063168ec7.1661422054.git.christophe.jaillet@wanadoo.fr>
+        Thu, 25 Aug 2022 06:10:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD15DA9;
+        Thu, 25 Aug 2022 03:10:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47EC6B8282D;
+        Thu, 25 Aug 2022 10:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC73C433C1;
+        Thu, 25 Aug 2022 10:09:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661422201;
+        bh=pLCRAXfPiIRyhyrD58YN67FVazY1HzSautKpvNIgroc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=azsa8nRZuRWsheTGZDoXgB6MDvAxTfbm3EnVhJFX4AKzKIZP1LY8j+bZBNSa0vl2N
+         hOHzyGhtB04naOZJ5V/+tejgaKqMA7ek5y1Z+9BwnZevab9LPmPOljiC+vDxuiVR2j
+         qiVWpwtkyCsC2lU2iP6MntrwOrRlcsFTx13Y5uo13T4ErFGmtvXUyD+0AxF3hmXNrw
+         32PgH4rEqJBKcg0nrKPa0O4Vg+fIaPiBNC9XrSvG3I0CCNN511n1ie7TRudklDwROA
+         p+sSv8i1gylXCC+sIJ3DB3GjR8b3+nfLhMyD4mpTJiOaRhAYytqQ7WOqRZMU9BexM9
+         xA1N2tPxaFclA==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: Re: [PATCH v3] PCI: pci-bridge-emul: Set position of PCI capabilities to real HW value
+Date:   Thu, 25 Aug 2022 12:09:54 +0200
+Message-Id: <166142217602.128276.10729379597803060542.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220824112124.21675-1-pali@kernel.org>
+References: <20220703104627.27058-1-pali@kernel.org> <20220824112124.21675-1-pali@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,81 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs, some resources still need to be released.
+On Wed, 24 Aug 2022 13:21:24 +0200, Pali Rohár wrote:
+> mvebu and aardvark HW have PCIe capabilities on different offset in PCI
+> config space. Extend pci-bridge-emul.c code to allow setting custom driver
+> custom value where PCIe capabilities starts.
+> 
+> With this change PCIe capabilities of both drivers are reported at the same
+> location as where they are reported by U-Boot - in their real HW offset.
+> 
+> [...]
 
-Add the corresponding error handing path.
+Applied to pci/bridge-emul, thanks!
 
-Fixes: 5f7aa9071e93 ("clk: st: Support for QUADFS inside ClockGenB/C/D/E/F")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is NOT compile tested.
-I don't have the needed build tool chain.
----
- drivers/clk/st/clkgen-fsyn.c | 28 +++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+[1/1] PCI: pci-bridge-emul: Set position of PCI capabilities to real HW value
+      https://git.kernel.org/lpieralisi/pci/c/658aea35ab88
 
-diff --git a/drivers/clk/st/clkgen-fsyn.c b/drivers/clk/st/clkgen-fsyn.c
-index d820292a381d..d1b3a4162682 100644
---- a/drivers/clk/st/clkgen-fsyn.c
-+++ b/drivers/clk/st/clkgen-fsyn.c
-@@ -984,7 +984,7 @@ static void __init st_of_quadfs_setup(struct device_node *np,
- 		struct clkgen_quadfs_data_clks *datac)
- {
- 	struct clk *clk;
--	const char *pll_name, *clk_parent_name;
-+	const char *pll_name = NULL, *clk_parent_name;
- 	void __iomem *reg;
- 	spinlock_t *lock;
- 	struct device_node *parent_np;
-@@ -1006,32 +1006,38 @@ static void __init st_of_quadfs_setup(struct device_node *np,
- 
- 	clk_parent_name = of_clk_get_parent_name(np, 0);
- 	if (!clk_parent_name)
--		return;
-+		goto err_unmap;
- 
- 	pll_name = kasprintf(GFP_KERNEL, "%pOFn.pll", np);
- 	if (!pll_name)
--		return;
-+		goto err_unmap;
- 
- 	lock = kzalloc(sizeof(*lock), GFP_KERNEL);
- 	if (!lock)
--		goto err_exit;
-+		goto err_unmap;
- 
- 	spin_lock_init(lock);
- 
- 	clk = st_clk_register_quadfs_pll(pll_name, clk_parent_name, datac->data,
- 			reg, lock);
- 	if (IS_ERR(clk))
--		goto err_exit;
--	else
--		pr_debug("%s: parent %s rate %u\n",
--			__clk_get_name(clk),
--			__clk_get_name(clk_get_parent(clk)),
--			(unsigned int)clk_get_rate(clk));
-+		goto err_free_lock;
-+
-+	pr_debug("%s: parent %s rate %u\n",
-+		 __clk_get_name(clk), __clk_get_name(clk_get_parent(clk)),
-+		 (unsigned int)clk_get_rate(clk));
- 
- 	st_of_create_quadfs_fsynths(np, pll_name, datac, reg, lock);
- 
--err_exit:
-+out:
- 	kfree(pll_name); /* No longer need local copy of the PLL name */
-+	return;
-+
-+err_free_lock:
-+	kfree(lock);
-+err_unmap:
-+	iounmap(reg);
-+	goto out;
- }
- 
- static void __init st_of_quadfs660C_setup(struct device_node *np)
--- 
-2.34.1
-
+Thanks,
+Lorenzo

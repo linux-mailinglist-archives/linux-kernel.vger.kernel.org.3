@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198855A1231
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEE95A122C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242640AbiHYNaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        id S242653AbiHYNaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242676AbiHYNaC (ORCPT
+        with ESMTP id S242667AbiHYNaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:30:02 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FD96BCC8
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:29:57 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id y127so16806577pfy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=dTFw9x7UWEYWmcpi8QQ3ADKhSd2hLCnt4Nb7ZML9r2c=;
-        b=pOJV7py+1gmdPby1+qgIJXeyyz4vq0Y6SLPWPk9C8wUZ3jbdpsjj+uYWZc4U5ah1p+
-         yuDLAenPGiZt6i2y5O9Yjy3d+66C3b0XSxLsquozHv/qZWsspon/9kgcx0Slj2iTSp1k
-         tf1pbn+dGkU5JKNE6CsKL0XkZsCaDBaP57N3oUk7avUm45JecCZgR0w917DxONm4foP9
-         xOgSNwfIZVy54TaQXWB3pMJ3kszwkTpW+JZncbc3bnLEpumsNiR5JaB77HhsTQGz+MOu
-         ozcglXwiMk+OTMLGHZ8euypblNhMuH8XJxn2qewzILgRw3UqQ1IkQCC86Z7Hg5aEY57Y
-         POfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=dTFw9x7UWEYWmcpi8QQ3ADKhSd2hLCnt4Nb7ZML9r2c=;
-        b=gC47AMkRp3rN7KSBJq3OUrEKvzSoGD/BiQqr0HDBwBdX88ZuCch1/B0eTVS0+X5p1R
-         CXxbGSIpK7bP+GgTDeoLI14RKc3gs7LaM/ID9SpeZypcxwSpGHuXWIxiLm271AkW3Tnp
-         77P6b1Qt5O2AWTXkXYhUNTIkHI7WWcqUfOEzIzj+0eBpsBIpWOHG1aUdx/ypzmW1Zza+
-         o6J4A3dAje1rMEEmvqSP/ZBhOq+PqwgJZ5izahhpKSf/4c7epvEFekUwJBfYXW3MvIYs
-         WbcY4zjMIMaYkoETz6F0ARvHhCbneAHw39EZyM04fomidM27uS64yOitmX86Cqk2W0FY
-         0XgA==
-X-Gm-Message-State: ACgBeo3YVUgfdAalbIngi1p9+WUx6d5s4zAH+kUV1SUPaLb+pKClIsYJ
-        EcBSpZtbxFD+vm2OcgkGlOyzVQ==
-X-Google-Smtp-Source: AA6agR49xMvUT/izcMy5D0EpEk6DPB8yIxNuV5ufRx18BJi72MgIWrhVUECm9Ioz1lXHqW96DaFZkw==
-X-Received: by 2002:a65:6bca:0:b0:420:712f:ab98 with SMTP id e10-20020a656bca000000b00420712fab98mr3331215pgw.350.1661434196720;
-        Thu, 25 Aug 2022 06:29:56 -0700 (PDT)
-Received: from [10.254.35.15] ([139.177.225.252])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902f15100b00172ef499c83sm7990449plb.32.2022.08.25.06.29.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 06:29:56 -0700 (PDT)
-Message-ID: <5165abfc-9f42-93ea-a888-11eaa4ab3420@bytedance.com>
-Date:   Thu, 25 Aug 2022 21:29:48 +0800
+        Thu, 25 Aug 2022 09:30:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A4D258DDC
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:29:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF31BD6E;
+        Thu, 25 Aug 2022 06:29:59 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.47.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08F6B3F71A;
+        Thu, 25 Aug 2022 06:29:53 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 14:29:51 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@armlinux.org.uk
+Subject: Re: [PATCH 1/2] arm64/traps: Replace this_cpu_* with raw_cpu_* in
+ panic_bad_stack()
+Message-ID: <Ywd5T0+APXqP5PXp@FVFF77S0Q05N>
+References: <20220825063154.69-1-thunder.leizhen@huawei.com>
+ <20220825063154.69-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v3 10/10] sched/psi: per-cgroup PSI accounting
- disable/re-enable interface
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     tj@kernel.org, mkoutny@suse.com, surenb@google.com,
-        gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
-        peterz@infradead.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824081829.33748-1-zhouchengming@bytedance.com>
- <20220824081829.33748-11-zhouchengming@bytedance.com>
- <YwX2jC2UQ/zeY2E8@cmpxchg.org>
- <324b1d0f-42e5-8947-68cb-a3d20135f2c6@bytedance.com>
- <Ywd3K1+5blotUEtU@cmpxchg.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <Ywd3K1+5blotUEtU@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825063154.69-2-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/25 21:20, Johannes Weiner wrote:
-> On Thu, Aug 25, 2022 at 08:28:39PM +0800, Chengming Zhou wrote:
->> On 2022/8/24 17:59, Johannes Weiner wrote:
->>> Hi Chengming,
->>>
->>> Thanks for incorporating all the feedback. I have a few nitpicks
->>> below, but with those considered, please add:
->>>
->>> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
->>>
->>> On Wed, Aug 24, 2022 at 04:18:29PM +0800, Chengming Zhou wrote:
->>>> @@ -5171,12 +5220,19 @@ static struct cftype cgroup_base_files[] = {
->>>>  	{
->>>>  		.name = "irq.pressure",
->>>>  		.flags = CFTYPE_PRESSURE,
->>>> +		.file_offset = offsetof(struct cgroup, psi_files[PSI_IRQ]),
->>>>  		.seq_show = cgroup_irq_pressure_show,
->>>>  		.write = cgroup_irq_pressure_write,
->>>>  		.poll = cgroup_pressure_poll,
->>>>  		.release = cgroup_pressure_release,
->>>>  	},
->>>>  #endif
->>>> +	{
->>>> +		.name = "cgroup.pressure",
->>>> +		.flags = CFTYPE_PRESSURE,
->>>> +		.seq_show = cgroup_psi_show,
->>>> +		.write = cgroup_psi_write,
->>>
->>> To match the naming convention, these should be called
->>> cgroup_pressure_show() and cgroup_pressure_write().
->>
->> I just find cgroup_pressure_write() already exists, so I change the names
->> to cgroup_pressure_enable_show() and cgroup_pressure_enable_write(),
->> since this file name is simplified from "cgroup.pressure.enable".
+On Thu, Aug 25, 2022 at 02:31:53PM +0800, Zhen Lei wrote:
+> The hardware automatically disable the IRQ interrupt before jumping to the
+> interrupt or exception vector. Therefore, the preempt_disable() operation
+> in this_cpu_read() after macro expansion is unnecessary. In fact, before
+> commit 8168f098867f ("arm64: entry: split bad stack entry"), the operation
+> this_cpu_read() precedes arm64_enter_nmi(). If set_preempt_need_resched()
+> is called before stack overflow, this_cpu_read() may trigger scheduling,
+> see pseudocode below.
 > 
-> That makes two outliers instead of one. It's probably better to steal
-> cgroup_pressure_write for cgroup.pressure, and rename the currently
-> misnamed helper. How about do_pressure_write()? pressure_write()?
+> Pseudocode of this_cpu_read(xx) when CONFIG_PREEMPTION=y:
+> preempt_disable_notrace();
+> raw_cpu_read(xx);
+> if (unlikely(__preempt_count_dec_and_test()))
+> 	__preempt_schedule_notrace();
 
-Ok, I will change that helper to pressure_write().
+Ok, but in mainline we have commit 8168f098867f; so we cannot reach here
+without having fiddled with the preempt count.
 
-Thanks.
+Are you saying that some stable kernel is broken because it lacks commit
+8168f098867f? Is so, I think the right fix is to backport commit 8168f098867f,
+and that is then irrelevant to this change.
 
+> Therefore, use raw_cpu_* instead of this_cpu_* to eliminate potential
+> hazards. At the very least, it reduces a few lines of assembly code.
+
+I'm happy to use raw_cpu_*() here, to minimize the work we have to do, any any
+risks with e.g. instrumentation, but as above I don't think the case mentioned
+in the commit message is relevant.
+
+Thanks,
+Mark.
+
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  arch/arm64/kernel/traps.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index b7fed33981f7b76..e6b6f4650e3d895 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -871,8 +871,8 @@ DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+>  void panic_bad_stack(struct pt_regs *regs, unsigned long esr, unsigned long far)
+>  {
+>  	unsigned long tsk_stk = (unsigned long)current->stack;
+> -	unsigned long irq_stk = (unsigned long)this_cpu_read(irq_stack_ptr);
+> -	unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> +	unsigned long irq_stk = (unsigned long)raw_cpu_read(irq_stack_ptr);
+> +	unsigned long ovf_stk = (unsigned long)raw_cpu_ptr(overflow_stack);
+>  
+>  	console_verbose();
+>  	pr_emerg("Insufficient stack space to handle exception!");
+> -- 
+> 2.25.1
+> 

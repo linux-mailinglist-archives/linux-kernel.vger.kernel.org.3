@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F945A1068
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B4C5A1069
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239596AbiHYM14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S241706AbiHYM2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241057AbiHYM1m (ORCPT
+        with ESMTP id S241223AbiHYM1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:27:42 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718EDB2CD1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:27:38 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bs25so24426986wrb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:27:38 -0700 (PDT)
+        Thu, 25 Aug 2022 08:27:43 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E07B2CE5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:27:40 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id a4so24445762wrq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:27:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc;
-        bh=3bBUsI0/teu1SGpGTa+Jbt56cw9thfDxAuVHauIJcr4=;
-        b=wDcdvn9n+ukcoBqV1qJlvuH5bk4MBjNC0WGzpX+j68yBvwUlNF45KAf1BfBuI8A4jB
-         adSZf4/KKaWAVAnKxv/HWdUemw/1Uc3nnNBFm3EOmvihVsrAuopXeBjJ+CM4UJ41axnO
-         nL0vIAeOWwV4Q+XsFIBLWjvtBuG0v1bLDkA4PMof6vi6QJh4LVzWSxfGX53J1LqmkNF4
-         9pb6MMfSgV2OwiFio512IB9WZEf//+LiIgDtAzr44uYjlSBTzt2+D1rVl15fSIeColnF
-         7ZJs/KvCsSK1xtKBneh4XfdhWw5Lz/+0xud+/FjKc+2XKJMvfi7QpGY4qC+eg1W5Taul
-         fiMw==
+        bh=OicpysW7udmsv4B07ks66/QAA2RjLzfuKutZRyo1XJE=;
+        b=vfLmlICKCQ/ZWNvLSXgoFzeF4gHctCgY+Npj5h2sAzoyAVyTKWIbyhYQF30J/SZoYX
+         UxJd0tggPT98340Ffr50EINkMtWMxqk/Qle7dj89A0bp7E1s+jpfS8X91AggWHk7aKPe
+         CiXrFz/+ghAf3DXH5+kahul45rCVMiBoOd/QEbXTmUJqpDaV8tu0ZIywZb/hI4dFqwhe
+         7H/LlpAp9NIywK6+VY3NsrAK2NBU4VBmbzJ3txZtcoDjb1pVxaIxx9DelShndtFHAaUf
+         kNEpNkDsSJ75iCgoiAhvop8CXYRBGVidRoUX28dFKtl9Ht728pNDY40/TyyZ49zqH9tK
+         stqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=3bBUsI0/teu1SGpGTa+Jbt56cw9thfDxAuVHauIJcr4=;
-        b=1YpnnuZXGaU74hv71v8TF/j0mI35UUrWm68dNoc8MiqKS8G/tK2vQn58s0/zr2z/eH
-         V2wAVyJ0Pia2d9Usl+LtPky2g1lmxP94+KkmrzwmeA6VoN52F6lmuMvKhwz14UoSanLp
-         5G2Y9nLT2hdaZzDfnRGORyzNAMNRCfetviLUoiycAKO+wbb+Rd8AouUojkDhUbyqscpF
-         5WDMdgPODexmabqNwYwgsmOKdfwkaJFjwRRljcJeQo61rH4k5p2/0fPQ2FOV2pqBJ7BL
-         41nost3kINEKoYrykeRG4EccXawpG0C3ovrEbGaVLt5DA2DNXPpIhPmiXOKvSy6VyypE
-         ef2g==
-X-Gm-Message-State: ACgBeo2rKN4t+n7YPi7on5FOK7tRzuF7bzyRINpP3NfF0hPcfb1j7ZnO
-        kB82RFmk5D7ldxhSVOnm4+zJdw==
-X-Google-Smtp-Source: AA6agR7wn5PGajPD4/BbEjbqGbOm6JA3c4Unu2o8aL5mYu4gaY6cWdew2B7umdMm4FwK2sp4GgtsCw==
-X-Received: by 2002:a5d:64cf:0:b0:220:6d8e:1db0 with SMTP id f15-20020a5d64cf000000b002206d8e1db0mr2081414wri.564.1661430456817;
-        Thu, 25 Aug 2022 05:27:36 -0700 (PDT)
+        bh=OicpysW7udmsv4B07ks66/QAA2RjLzfuKutZRyo1XJE=;
+        b=TmG97tKhnBWeJTSSx9nqtKX3OC2ltJg89XWv2uQ90lnJyGGLR2kzuNigFrRgL1dr17
+         KbxagrRs/lJTxVcumsOSkwUMjM2wHOF0++M55qNHvO147iTJTKr/s0bHz7Y6UenDY2no
+         br5VEmld3BGmclNw3t1BH4TT6dZRLP2MGZbTrxa2Lok9tbaVUhY/zWorLmrh33azGhKg
+         1Z2oYuIxf8QwdNgmwsENiCIp9HYelOK0pihUwZg+vC28itsMZctD3LP32ShLgdBd1Jbt
+         CbGpe+fh9wjqkw6XN9YIroD/ihW65Iy+wSvAymnAJCIJfonv5/kAA0xvh5rFjZ1N0hXe
+         K/Sw==
+X-Gm-Message-State: ACgBeo0ybTDJl439n9cchYoZj0oj5YxzjGRcc+0rkbWY2NuLeTPgwTLW
+        3JNEVsSGxjBv3j5xZIVpuKQxcw==
+X-Google-Smtp-Source: AA6agR4LranD4hpHty2xtQQcuuwqnjLOPL6610SQl/HOXmdHnUkyyz9P/+Ee3wX6/IPtf8y1sC+wqg==
+X-Received: by 2002:a5d:5402:0:b0:225:3a78:4d2c with SMTP id g2-20020a5d5402000000b002253a784d2cmr2251680wrv.675.1661430458875;
+        Thu, 25 Aug 2022 05:27:38 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:f:6020:55dd:3519:10d3:b07b])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003a5ee64cc98sm5417809wmr.33.2022.08.25.05.27.34
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003a5ee64cc98sm5417809wmr.33.2022.08.25.05.27.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 05:27:35 -0700 (PDT)
+        Thu, 25 Aug 2022 05:27:37 -0700 (PDT)
 From:   Vincent Guittot <vincent.guittot@linaro.org>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -55,9 +55,9 @@ To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         linux-kernel@vger.kernel.org
 Cc:     zhangqiao22@huawei.com,
         Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 3/4] sched/fair: move call to list_last_entry() in detach_tasks
-Date:   Thu, 25 Aug 2022 14:27:25 +0200
-Message-Id: <20220825122726.20819-4-vincent.guittot@linaro.org>
+Subject: [PATCH 4/4] sched/fair: limit sched slice duration
+Date:   Thu, 25 Aug 2022 14:27:26 +0200
+Message-Id: <20220825122726.20819-5-vincent.guittot@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220825122726.20819-1-vincent.guittot@linaro.org>
 References: <20220825122726.20819-1-vincent.guittot@linaro.org>
@@ -71,36 +71,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the call to list_last_entry() in detach_tasks() after testing
-loop_max and loop_break.
+In presence of a lot of small weight tasks like sched_idle tasks, normal
+or high weight tasks can see their ideal runtime (sched_slice) to increase
+to hundreds ms whereas it normally stays below sysctl_sched_latency.
+
+2 normal tasks running on a CPU will have a max sched_slice of 12ms
+(half of the sched_period). This means that they will make progress
+every sysctl_sched_latency period.
+
+If we now add 1000 idle tasks on the CPU, the sched_period becomes
+3006 ms and the ideal runtime of the normal tasks becomes 609 ms.
+It will even become 1500ms if the idle tasks belongs to an idle cgroup.
+This means that the scheduler will look for picking another waiting task
+after 609ms running time (1500ms respectively). The idle tasks change
+significantly the way the 2 normal tasks interleave their running time
+slot whereas they should have a small impact.
+
+Such long sched_slice can delay significantly the release of resources
+as the tasks can wait hundreds of ms before the next running slot just
+because of idle tasks queued on the rq.
+
+Cap the ideal_runtime to sysctl_sched_latency when comparing to the next
+waiting task to make sure that tasks will regularly make progress and will
+not be significantly impacted by idle/background tasks queued on the rq.
 
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- kernel/sched/fair.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+
+While studying the problem, I have also considered to substract
+cfs.idle_h_nr_running before computing the sched_slice but we can have
+quite similar problem with low weight bormal task/cgroup so I have decided
+to keep this solution.
+
+Also, this solution doesn't completly remove the impact of idle tasks
+in the scheduling pattern but cap the running slice of a task to a max
+value of 2*sysctl_sched_latency.
+
+ kernel/sched/fair.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6972a1a29a48..260a55ac462f 100644
+index 260a55ac462f..96fedd0ab5fa 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -8047,8 +8047,6 @@ static int detach_tasks(struct lb_env *env)
- 		if (env->idle != CPU_NOT_IDLE && env->src_rq->nr_running <= 1)
- 			break;
+@@ -4599,6 +4599,8 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+ 	if (delta < 0)
+ 		return;
  
--		p = list_last_entry(tasks, struct task_struct, se.group_node);
--
- 		env->loop++;
- 		/*
- 		 * We've more or less seen every task there is, call it quits
-@@ -8065,6 +8063,8 @@ static int detach_tasks(struct lb_env *env)
- 			break;
- 		}
- 
-+		p = list_last_entry(tasks, struct task_struct, se.group_node);
++	ideal_runtime =  min_t(u64, ideal_runtime, sysctl_sched_latency);
 +
- 		if (!can_migrate_task(p, env))
- 			goto next;
- 
+ 	if (delta > ideal_runtime)
+ 		resched_curr(rq_of(cfs_rq));
+ }
 -- 
 2.17.1
 

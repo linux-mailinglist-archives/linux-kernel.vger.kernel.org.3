@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17355A191C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AF75A191D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243671AbiHYSvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S243660AbiHYSvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243591AbiHYSve (ORCPT
+        with ESMTP id S243590AbiHYSve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 Aug 2022 14:51:34 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93ED1BEB4;
-        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so14513343otd.12;
-        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6273BD14F;
+        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-11c59785966so26045016fac.11;
+        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=Cg1AwP/ac5z/ltjeY4oKjrPpLfroVx5J9d1V+I/zl7Y=;
-        b=PVnuEj/kcC7v+LYtHJvlqzPAXS+dp5MDkKsX2my7FKLC6Nw8yl+edMre1vfuB6CAif
-         bxPhNHXqN2V8/Eo2ZTZh9a3+Dp0laeIfHWEqyBGSjhu0Ocq0ydO+aQmNIbEo3J5VUtEt
-         uMBcA/eSjduTT8DFhaYVLqOZRny4M7YceTCrtPgAmCJVtJZ0hTFRzeeX4B8aLwFvrypV
-         Mb+C3suPBBom+ElP5Am7mMmu5nqVrx7fHEzUIB3RRMijOe9aXhaSTxs0otLKU3ON+9Xx
-         ZpwynoACg0pcCKh3WXxzrBR05U1yPkwikpL8k0ss8Vklrt+YCmQ2d80bYxUdvJscziFa
-         VmJg==
-X-Gm-Message-State: ACgBeo3hZK/RttPefvmXZbMqAdY/rT16GjX3eiBYtVko/7mIvtkzVxph
-        6m2jBiLgs3K+CHjto/5idA==
-X-Google-Smtp-Source: AA6agR6ZiLQ5mKRIj8fQ1S1XR92OpZji2uNcYFZ7mkpk99hTwFk8xqDeu5bgdcWPR4OY3N9LrYVW7w==
-X-Received: by 2002:a05:6830:60c:b0:637:2636:eaf2 with SMTP id w12-20020a056830060c00b006372636eaf2mr179994oti.358.1661453482963;
-        Thu, 25 Aug 2022 11:51:22 -0700 (PDT)
+        bh=/mQxvQUe1gZvztnNOjvvy0GAYtv4p8n82bdrYuXSJNc=;
+        b=SmxtThvt0xullVIzo+tu58M3kfxDoeNbYY3oomu4YexB98wxnj+U11QlSSavL+gpnq
+         qVgR7UoiqMwzENeVO4p3TW+H7NefI9L0PhfNGhkdSrW7+D4D+ic3xhNtP4tHzE0ekB9R
+         YJmxOEjEeebX4OuyfQElNtV5YYbRAoa5tKCyMEJLCMeaJZo1m0JHsIt4aW1uVLBz3WSL
+         YsPBLCU2y7Bt/tE9uZ5OS5iRqjZwAJv6iYAWL8Af+FauW365zPrPX4FePzJ14vLmdKSD
+         t72jaJZsxK8dvkVfSnJATRhI1SBnxT9v0sDdELOJ961BWsEKX+wubMDT3tPxRLj0lEL2
+         POOw==
+X-Gm-Message-State: ACgBeo2foa7Cx8BHXBOjvLfxv23ooDAcliJppRIIdySI2QOZ570aU99L
+        1x1yIB+HKTba3NjRt6yMQA==
+X-Google-Smtp-Source: AA6agR7VmIvwrjdERFhI9ibJJis5Ad/n5EP/mLtA9FAraPED+0yZNGZaOa0d6weoNURMUb/qtIHNOA==
+X-Received: by 2002:a05:6871:96:b0:11d:ca1b:db19 with SMTP id u22-20020a056871009600b0011dca1bdb19mr259813oaa.74.1661453485513;
+        Thu, 25 Aug 2022 11:51:25 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a4ab508000000b004358b15cfe8sm41000ooo.13.2022.08.25.11.51.21
+        by smtp.gmail.com with ESMTPSA id n16-20020a056870971000b0011d2ec94fcasm3737802oaq.36.2022.08.25.11.51.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:51:22 -0700 (PDT)
-Received: (nullmailer pid 1486940 invoked by uid 1000);
+        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
+Received: (nullmailer pid 1486944 invoked by uid 1000);
         Thu, 25 Aug 2022 18:51:19 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     =?utf-8?q?Andreas_B=C3=B6hler?= <dev@aboehler.at>
-Cc:     devicetree@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Robert Marko <robert.marko@sartura.hr>,
+Cc:     linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org
-In-Reply-To: <20220825141043.75354-1-dev@aboehler.at>
-References: <20220825141043.75354-1-dev@aboehler.at>
-Subject: Re: [PATCH v2] hwmon: tps23861: add support for initializing the chip
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20220825143737.77732-1-dev@aboehler.at>
+References: <20220825143737.77732-1-dev@aboehler.at>
+Subject: Re: [PATCH v3 1/2] Documentation: devicetree: update bindings for tps23861
 Date:   Thu, 25 Aug 2022 13:51:19 -0500
-Message-Id: <1661453479.990270.1486939.nullmailer@robh.at.kernel.org>
+Message-Id: <1661453480.004870.1486943.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 16:10:42 +0200, Andreas Böhler wrote:
+On Thu, 25 Aug 2022 16:37:36 +0200, Andreas Böhler wrote:
 > The tps23861 driver does not initialize the chip and relies on it being
 > in auto-mode by default. On some devices, these controllers default to
 > OFF-Mode and hence cannot be used at all.
@@ -73,13 +72,10 @@ On Thu, 25 Aug 2022 16:10:42 +0200, Andreas Böhler wrote:
 > This brings minimal support for initializing the controller in a user-
 > defined mode.
 > 
-> Tested on a TP-Link TL-SG2452P with 12x TI TPS23861 controllers.
-> 
 > Signed-off-by: Andreas Böhler <dev@aboehler.at>
 > ---
->  .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++
->  drivers/hwmon/tps23861.c                      | 81 +++++++++++++++++++
->  2 files changed, 157 insertions(+)
+>  .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'

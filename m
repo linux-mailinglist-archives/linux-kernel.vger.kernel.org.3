@@ -2,102 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95375A0A3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19C15A0AAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238137AbiHYH2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S238496AbiHYHry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238143AbiHYH2f (ORCPT
+        with ESMTP id S229909AbiHYHru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:28:35 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B2076440;
-        Thu, 25 Aug 2022 00:28:33 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x14-20020a17090a8a8e00b001fb61a71d99so4045837pjn.2;
-        Thu, 25 Aug 2022 00:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=o4ZPaiscy7+RYaipvTVXhM3gfUJGfdg1a2QcIEgV5dQ=;
-        b=Ygd4c7iUeHIcrXqOuUXT6yh8eKwHGxQg7mUCsomyr/2FfttbnZ2UZylWq1xNuU+I0S
-         yuoeXisb4bLFYL4p5/7uTKO+O72HFRDRpusIKvIv4wQM0uxkvuLxKg3pBDZeGmTqmtry
-         JPYs7cNfXp0/7xCFdL4q5PHULvolYepaxJVvLkM2TRteW0MZ0t9I2xFSuppSbDXhlYSL
-         mrJZ6UPhbgOIUzDPcInWKSGMsGVeKJGlQpBS3SMPe9x6752FgsEdZzBrd+Lk03ex9r7O
-         EvQiLQXMCYuoK/ojfZgaapl89NX8JqMrHFpYZ6naRGovYYfB1QWd5BFPy1bKk0FoGBCg
-         D63w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=o4ZPaiscy7+RYaipvTVXhM3gfUJGfdg1a2QcIEgV5dQ=;
-        b=n2J5vsdD5fyoS7xWyDwiG51sSgHVMg3KAEA3H+i7OkQWfRyrDtzWHNacQPA3rwVNMm
-         ZCn26/vTEbm58N8w7Xyj0vxrOnY/M4ryPxPMVNl/CfNyQOmMuaAJmNdkDpOoy6NYSFl0
-         k1QGg9WG8DC2R/ARGOX3CB+9Pijt7PcOXWAm9MWhUNcoMxrcGuWcwZrgauZhxO/+IHtX
-         7+1YNlCKq/fYgZkL8PvO9aLJvxk6KHqxn2DZggtpevx6rJviadTMxwSMpdNVUiZ00zhI
-         esboMN448u9Lf96WLHlDhbwjDK+2zqpnGnaq5ALgaVuQaK3SgdjlF+dz8xkZUBkfTM57
-         E3vw==
-X-Gm-Message-State: ACgBeo2hbqnHWPXV9lqmS/8yvuduKi67IbFkztXyagBHZ3HbwRNhtvy7
-        +tbpgr5LAv0KyxVImTYfIQU=
-X-Google-Smtp-Source: AA6agR7Ev/Ch8MSTyvzH0nVCJleuwkC4U9TzWiA35FvJDp2BTholaHOWIKqofQ7f0d355BHvVuHWHQ==
-X-Received: by 2002:a17:90b:1c0d:b0:1fb:7c92:1373 with SMTP id oc13-20020a17090b1c0d00b001fb7c921373mr7967786pjb.24.1661412513039;
-        Thu, 25 Aug 2022 00:28:33 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m14-20020a62a20e000000b0052d4afc4302sm14672131pff.175.2022.08.25.00.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 00:28:32 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     broonie@kernel.org
-Cc:     daniel@zonque.org, haojian.zhuang@gmail.com,
-        robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] spi: pxa2xx: Remove the unneeded result variable
-Date:   Thu, 25 Aug 2022 07:28:28 +0000
-Message-Id: <20220825072828.229294-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 Aug 2022 03:47:50 -0400
+X-Greylist: delayed 596 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 00:47:49 PDT
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B30C9C204;
+        Thu, 25 Aug 2022 00:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1661412519;
+        bh=9K2f0e10ZANjjOudPs4B7euHG9H2+iiRuaYv5ZJbA1k=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nmfnx0FO7b7ckLx4wu28ch41hPeeFb8cw/Rec9LmSdOzvBzyZRKWr29E2ij+mZidq
+         p+PyBUS94RPQ8ZVOQohv/ssSTzNWvFVIBOAK2oXYYvF8PxE+ncWh8Qc0BRBwiC+nYu
+         1x1J2Ybes6HSKUHLHDFj3IlLEWTGqKVW0tWQGC4U=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 1A8FD6684B;
+        Thu, 25 Aug 2022 03:28:33 -0400 (EDT)
+Message-ID: <5a3ce36a284fe988694d2e75117aca5f9af66194.camel@xry111.site>
+Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
+ naming
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-man <linux-man@vger.kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Zack Weinberg <zackw@panix.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alex Colomar <alx@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
+        GCC <gcc-patches@gcc.gnu.org>, LTP List <ltp@lists.linux.it>,
+        Florian Weimer <fweimer@redhat.com>,
+        glibc <libc-alpha@sourceware.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Date:   Thu, 25 Aug 2022 15:28:32 +0800
+In-Reply-To: <20d93962-538c-d2c9-1696-a1bdbffa87f8@gmail.com>
+References: <20210423230609.13519-1-alx.manpages@gmail.com>
+         <20220824185505.56382-1-alx.manpages@gmail.com>
+         <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
+         <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com>
+         <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
+         <20d93962-538c-d2c9-1696-a1bdbffa87f8@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Thu, 2022-08-25 at 09:20 +0200, Alejandro Colomar via Gcc-patches
+wrote:
+> I don't know for sure, and I never pretended to say otherwise.=C2=A0 But =
+what=20
+> IMHO the kernel could do is to make the types compatible, by typedefing=
+=20
+> to the same fundamental types (i.e., long or long long) that user-space=
+=20
+> types do.
 
-Return the value clk_prepare_enable() directly instead of storing it in
-another redundant variable.
+In user-space things are already inconsistent as we have multiple libc
+implementations.  Telling every libc implementation to sync their
+typedef w/o a WG14 decision will only cause "aggressive discussion" (far
+more aggressive than this thread, I'd say).
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/spi/spi-pxa2xx.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+If int64_t etc. were defined as builtin types since epoch, things would
+be a lot easier.  But we can't change history.
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 838d12e65144..986ffc4bf1ed 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1873,10 +1873,8 @@ static int pxa2xx_spi_runtime_suspend(struct device *dev)
- static int pxa2xx_spi_runtime_resume(struct device *dev)
- {
- 	struct driver_data *drv_data = dev_get_drvdata(dev);
--	int status;
- 
--	status = clk_prepare_enable(drv_data->ssp->clk);
--	return status;
-+	return clk_prepare_enable(drv_data->ssp->clk);
- }
- #endif
- 
--- 
-2.25.1
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

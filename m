@@ -2,180 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72425A0B0A
+	by mail.lfdr.de (Postfix) with ESMTP id 22C575A0B08
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239390AbiHYIGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S239220AbiHYIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239335AbiHYIGo (ORCPT
+        with ESMTP id S234467AbiHYIHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:06:44 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F795D105
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:06:36 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id bh13so17224170pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=eOMnW4XRMv9i7Jz+s+vzPHDgE9J0PdEgB49b5OhgITs=;
-        b=RWng7N5PTYTg8iG2OuCR4VQEdNEj3/8z3epffY25IzHVo9/8oyXM+D6pNM89JJtFCh
-         B1I1KZ+aeQPqg6uQv6koBzL1yrV/fYDw/3CKWsvI4Em4/mX1bMltBPqxsenl68u2jJKG
-         yuHG4BmVX4ds3dsDZhe2kIEymT9YXEeljlMtU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=eOMnW4XRMv9i7Jz+s+vzPHDgE9J0PdEgB49b5OhgITs=;
-        b=lAf3qoJ2PT/hRJ8DauCJh738F2g2kbBIbiOq59Oqug1bvmO5UGfiH8a/pIiFI8Ogpm
-         S8CClrimMKz30Ra6nMpL6afZ7dLBC4GuQWbnygA9BuJBN+9IWjJws/l3ImMKWJnpRTCh
-         355ayY+/i663HhPTF5DYXq2mDBABQB6KNE8jyVdjV1IvBgJDgvufB0Knij4DKJBGcruC
-         tYBAPDGqXweDQw4MekB6W5Ci4cXmKv6PEr9rHDoJpl9WGgzkPkOeyAOCT8pzQCutXu+n
-         HypLM6xJ4/JS1UFltc0sDKPRJldr2msno4yaUjYXB3QVSAdDZiO1QFPgm1ydl65rsgoF
-         lttA==
-X-Gm-Message-State: ACgBeo0zYZsvwYKOYhVR9wwFoSbUcMIiBbrvpWtUT1148WXs8kqVEXkf
-        i0P6+0/Y0/V02naINsBSgJinHg==
-X-Google-Smtp-Source: AA6agR6+mJ1Wc1D3WsfiNeQ/QQf/aq+KsYyd8aXpMNYK85PM6dK+q9VbcqdMfMEdiWPQbCe0Be46uw==
-X-Received: by 2002:a05:6a00:b8a:b0:537:f81:203a with SMTP id g10-20020a056a000b8a00b005370f81203amr2736459pfj.80.1661414795595;
-        Thu, 25 Aug 2022 01:06:35 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:fba3:9861:f694:5325])
-        by smtp.gmail.com with UTF8SMTPSA id h16-20020a170902f55000b00172ad292b6bsm5441073plf.116.2022.08.25.01.06.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 01:06:35 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 01:06:32 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rajat Jain <rajatja@google.com>
-Subject: Re: [PATCH v6] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <YwctiEJpydiFdIds@google.com>
-References: <1657886421-779-1-git-send-email-quic_krichai@quicinc.com>
- <20220726074954.GB5522@workstation>
+        Thu, 25 Aug 2022 04:07:30 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292298670B;
+        Thu, 25 Aug 2022 01:07:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1661414807; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=GPPQ95Ij6UbK9cbdbMjwj3IxV6MmdWMA267hSYszjyUDLDVIWmWLieL9hwf9Si9RpkNXNC7+7yRLuyyvgIqOf1JKVOmqfa2zc9OkZp4PSpCXnF0LU71pRb4ssN9DLyaFNI5TWPFnghHI95Yd0jJQeBkdRJ1UmWLTRvJIMxLJirk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1661414807; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=4JsieqXDivmRRvE/zWwLdZw6fqOmBPCekC3LYmW4t64=; 
+        b=Q/oh6A4YvYlHfL0xTF1YvF8rL0otqnlGAn1E5jvc8DG6U0TrOvH0AGYaG5Ae+dPA9uAQmFGgS2BcQvzGN7BsxCaGyuYputrWdRDx5ULjIqub6IZ2YDuoFME34nuxK3Wy/99r5JDZ74ON9r0d4IKWlVU5CKAOo5u5mu3dFVTdSgE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661414807;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=4JsieqXDivmRRvE/zWwLdZw6fqOmBPCekC3LYmW4t64=;
+        b=F/SWD+LHEElDMK1k3KlaBPED4fBlWutYwKB9PXDF8rgMuI4KbfmzsGA4chOkWLQt
+        TV0IpYKp8DC1pZ5Acq7fzhEU5ragF51BJ3azjmeQGIzmgTDvBTnY2gs0ZCMYV5blpJo
+        nyxrL/Y8Elkx/+CbWBgBJt+KzRXEszGUqrja4fro=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1661414805043384.980663798763; Thu, 25 Aug 2022 01:06:45 -0700 (PDT)
+Message-ID: <e2679c3f-87f4-4705-a820-72b46975c851@arinc9.com>
+Date:   Thu, 25 Aug 2022 11:06:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220726074954.GB5522@workstation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 4/6] dt-bindings: net: dsa: mediatek,mt7530: define
+ port binding per switch
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220820080758.9829-1-arinc.unal@arinc9.com>
+ <20220820080758.9829-5-arinc.unal@arinc9.com>
+ <c24da513-e015-8bc6-8874-ba63c22be5d6@linaro.org>
+ <ea3ceeab-d92b-6ce5-8ea9-aebb3eaa0a91@arinc9.com>
+ <7248cbce-29b9-aad6-c970-8e150bc23df8@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <7248cbce-29b9-aad6-c970-8e150bc23df8@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 01:19:54PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Jul 15, 2022 at 05:30:12PM +0530, Krishna chaitanya chundru wrote:
-> > In ASPM driver, LTR threshold scale and value are updated based on
-> > tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
-> > LTR threshold scale and value are greater values than max snoop/non-snoop
-> > value.
-> > 
-> > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> > reported snoop/no-snoop values is greather than or equal to
-> > LTR_L1.2_THRESHOLD value.
-> > 
-> > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On 25.08.2022 09:33, Krzysztof Kozlowski wrote:
+> On 23/08/2022 15:29, Arınç ÜNAL wrote:
+>>
+>>
+>> On 23.08.2022 13:47, Krzysztof Kozlowski wrote:
+>>> On 20/08/2022 11:07, Arınç ÜNAL wrote:
+>>>> Define DSA port binding per switch model as each switch model requires
+>>>> different values for certain properties.
+>>>>
+>>>> Define reg property on $defs as it's the same for all switch models.
+>>>>
+>>>> Remove unnecessary lines as they are already included from the referred
+>>>> dsa.yaml.
+>>>>
+>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>> ---
+>>>>    .../bindings/net/dsa/mediatek,mt7530.yaml     | 56 +++++++++++--------
+>>>>    1 file changed, 34 insertions(+), 22 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>> index 657e162a1c01..7c4374e16f96 100644
+>>>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>> @@ -130,38 +130,47 @@ properties:
+>>>>          ethsys.
+>>>>        maxItems: 1
+>>>>    
+>>>> -patternProperties:
+>>>> -  "^(ethernet-)?ports$":
+>>>> -    type: object
+>>>> -
+>>>> -    patternProperties:
+>>>> -      "^(ethernet-)?port@[0-9]+$":
+>>>> -        type: object
+>>>> -        description: Ethernet switch ports
+>>>
+>>> Again, I don't understand why do you remove definitions of these nodes
+>>> from top-level properties. I explained what I expect in previous
+>>> discussion and I am confused to hear "this cannot be done".
+>>
+>> I agree it can be done, but the binding is done with less lines the
+>> current way.
+>>
+>> I would need to add more lines than just for creating the node structure
+>> since dsa.yaml is not referred.
+>>
+>> Then, I would have to create the node structure again for the dsa-port
+>> checks.
 > 
-> Bjorn, any update on this patch?
+> I understand you can create binding more concise, but not necessarily
+> more readable. The easiest to grasp is to define all the nodes in
+> top-level and customize them in allOf:if:then. This was actually also
+> needed for earlier dtschema with additionalProperties:false. You keep
+> defining properties in allOf:if:then, even though they are all
+> applicable to all variants. That's unusual and even if it reduces the
+> lines does not make it easier to grasp.
 
-ping: can this be landed or are any further changes needed?
+Understood. Will send v6 with respect to this.
 
-> Thanks,
-> Mani
-> 
-> > ---
-> > 
-> > I am taking this patch forward as prasad is no more working with our org.
-> > changes since v5:
-> > 	- no changes, just reposting as standalone patch instead of reply to
-> > 	  previous patch.
-> > Changes since v4:
-> > 	- Replaced conditional statements with min and max.
-> > changes since v3:
-> > 	- Changed the logic to include this condition "snoop/nosnoop
-> > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> > Changes since v2:
-> > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> > Changes since v1:
-> > 	- Added missing variable declaration in v1 patch
-> > ---
-> >  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > index a96b742..676c03e 100644
-> > --- a/drivers/pci/pcie/aspm.c
-> > +++ b/drivers/pci/pcie/aspm.c
-> > @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >  {
-> >  	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> >  	u32 val1, val2, scale1, scale2;
-> > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
-> >  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
-> >  	u32 ctl1 = 0, ctl2 = 0;
-> >  	u32 pctl1, pctl2, cctl1, cctl2;
-> >  	u32 pl1_2_enables, cl1_2_enables;
-> > +	u16 ltr;
-> > +	u16 max_snoop_lat, max_nosnoop_lat;
-> >  
-> >  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
-> >  		return;
-> >  
-> > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> > +	if (!ltr)
-> > +		return;
-> > +
-> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> > +
-> > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> > +
-> > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> > +
-> > +	/* choose the greater max scale value between snoop and no snoop value*/
-> > +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> > +
-> > +	/* choose the greater max value between snoop and no snoop scales */
-> > +	max_val = max(max_snp_val, max_nsnp_val);
-> > +
-> >  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
-> >  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> >  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >  	 */
-> >  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
-> >  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> > +
-> > +	/*
-> > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> > +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
-> > +	 */
-> > +	scale = min(scale, max_scale);
-> > +	value = min(value, max_val);
-> > +
-> >  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
-> >  
-> >  	/* Some broken devices only support dword access to L1 SS */
-> > -- 
-> > 2.7.4
-> > 
+Arınç

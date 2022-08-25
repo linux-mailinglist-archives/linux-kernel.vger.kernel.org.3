@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3620E5A1577
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1445A5A157A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239876AbiHYPTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S239855AbiHYPUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiHYPTv (ORCPT
+        with ESMTP id S230523AbiHYPUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:19:51 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2377332A8F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:19:49 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id u9so11217023ejy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=rUvL/+byhm9aX0IoB++4OAREur0xLEPwmq4mJRFHNjc=;
-        b=wY8Q+FVjX2xxTtU/xPWdr4joxoRR83qdgwwS3pw3GuVR4PK0CxM/ugqidKl9B3X0FD
-         UsFNKAN8ekHQxOq4eK/ial4UP2fbJI3EALOcAPJmvFbPWXZhiqcysnBvmeN+NVLkNTwJ
-         8q3HTjizgvw/d0VTfVfFi+GxHGd60G9ZuoQi7dzY3Jifuk/Mms39iXRiczCoADST4znr
-         DbBOxBVuNCROJnjNC46vkC1F14q0QIYoiXl1G1YAonGCy7pmv1gP5p0JBzGaIGYy6gfA
-         iQHnAtwHXs7J9GQ9aorOAm1ip7At2LCPV2c+W7RWeSmPVDPyedwDGA4tWbAJ4smJjLrQ
-         sJ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=rUvL/+byhm9aX0IoB++4OAREur0xLEPwmq4mJRFHNjc=;
-        b=27nzyIkFyhS/ifTkxLbjqm6tkyRQmM3umcjCiTVaEfyHD7aJaUCNM8jHc0E5/fWb96
-         n7L5dggpVxsNi+ddwFcI5fnbpcz9D3TzoS6QEWlYbMNLLQhotqjVjYorC7xNJLKJeD+u
-         iMmgazTnZ9Y7/0R3iY4uNe22VjQ+dxnwTdnssWvt4o9t8R4B1ZEnbwRLnd4nyKpYosFu
-         cxKUSVT2ROMG4iUC/11ltD0O4HCuvk/mzkswflA3YMkd3dtLkoNDV9M6th+AH/vYTddZ
-         QVPDwKN2VaMWEFIHOhR/G2bj2StBtiI1cEMxUFccP+N+MtwaWapLE+Uok1cT0wW0UMcL
-         E1iQ==
-X-Gm-Message-State: ACgBeo1X/tJLPi5gGdP6AdVGcXw/l6R/zgH2kYsBWVOKFywGFezpHQaV
-        lkpZaEfKYHuQIj9lKb1oAOmpaA==
-X-Google-Smtp-Source: AA6agR6a90sENW/c5DSyaYDY85E3bwabjpXstRpLC21buvEiy+L9HE9ZewDrX8jgt6an16mF+yfI8g==
-X-Received: by 2002:a17:907:868b:b0:73d:83c3:2bf with SMTP id qa11-20020a170907868b00b0073d83c302bfmr2857695ejc.747.1661440787724;
-        Thu, 25 Aug 2022 08:19:47 -0700 (PDT)
-Received: from localhost ([2a02:8070:6389:a4c0:2ca9:6d59:782b:fff3])
-        by smtp.gmail.com with ESMTPSA id la18-20020a170907781200b0073de0506745sm19486ejc.197.2022.08.25.08.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 08:19:47 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 11:19:46 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        Thu, 25 Aug 2022 11:20:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3262D2BB2C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:20:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4D88615A7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E045C433D6;
+        Thu, 25 Aug 2022 15:20:12 +0000 (UTC)
+Date:   Thu, 25 Aug 2022 16:20:08 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
-Message-ID: <YweTEpvgi7/QviYt@cmpxchg.org>
-References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v13 57/70] mm/mlock: use vma iterator and maple state
+ instead of vma linked list
+Message-ID: <YweTKGvxzpUnbTkk@arm.com>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-58-Liam.Howlett@oracle.com>
+ <YwbDmKyQxWHfRg97@sirena.org.uk>
+ <20220825132054.ymenz4cewiemsxw7@revolver>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwScVmVofIZkopkF@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220825132054.ymenz4cewiemsxw7@revolver>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,7 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:22:30AM +0200, Michal Hocko wrote:
-> Signed-off-by: Michal Hocko <mhocko@suse.com>
+On Thu, Aug 25, 2022 at 01:21:01PM +0000, Liam Howlett wrote:
+> * Mark Brown <broonie@kernel.org> [220824 20:34]:
+> > On Mon, Aug 22, 2022 at 03:06:30PM +0000, Liam Howlett wrote:
+> > > From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> > > 
+> > > Handle overflow checking in count_mm_mlocked_page_nr() differently.
+> > 
+> > Our QA team found that since next-20220823 we're seeing a couple of test
+> > failures in the check_mmap_options kselftest on arm64 platforms with MTE
+> > that aren't present in mainline:
+> > 
+> > # # FAIL: mprotect not ignoring clear PROT_MTE property
+> > # not ok 21 Check clear PROT_MTE flags with private mapping, sync error mode and mmap memory
+> > # # FAIL: mprotect not ignoring clear PROT_MTE property
+> > # not ok 22 Check clear PROT_MTE flags with private mapping and sync error mode and mmap/mprotect memory
+> 
+> Thanks.
+> 
+> > I bisected this using qemu[1] which landed on 4ceb4bca479d41a
+> > ("mm/mprotect: use maple tree navigation instead of vma linked list"),
+> > though I'm not 100% sure I trust the specific identification of the
+> > commit I'm pretty confident it's at the very least in this series.  I've
+> > not done any analysis of the failure beyond getting this bisect result.
+> > 
+> > [1] qemu -smp cpus=4 -cpu max -machine virt,gic-version=3,mte=on
+> 
+> This helps a lot.  I think your bisect is accurate:
+> 
+> ...
+>         struct mmu_gather tlb;
+> +       MA_STATE(mas, &current->mm->mm_mt, start, start);
+>  
+>         start = untagged_addr(start);
+> ...
+> 
+> It looks like I search against the tagged address.  I should initialize
+> the state to 0 and mas_set(&mas, start) after untagging the address.
+> 
+> I'll send out a patch once I have recreated and verified this is the
+> issue.
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Thanks. I did a quick test and untagging start seems to fix the issue (I
+was wondering why mprotect() returned -ENOMEM when failing).
+
+-- 
+Catalin

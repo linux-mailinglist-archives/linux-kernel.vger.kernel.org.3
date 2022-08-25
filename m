@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092265A0505
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD735A0509
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiHYAPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
+        id S231872AbiHYAPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiHYAPH (ORCPT
+        with ESMTP id S232051AbiHYAPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:15:07 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9C5642DD
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:15:06 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id io24so3804036plb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=n+ySj59iuhXBdH7RwhR2A/p3y2hpdOt74I5f5GJbaSQ=;
-        b=QF/70eGuJb/+uVaUM/C1aTb4BKXUu8qGyIWbycD3aNYqZVoYgui+EaP1SK14zpiLmM
-         MVlYHYvRaEf69gvlUZ+Nm96rL5vChHjU7ul3wBflss7VGE58g0hsTnzdpxrF6rmDk+PW
-         zrzxEvVVHUX8AJpyWF1WQA+4FIHevPQecQNYjRxbdT0u3ClM/IpXsDHTcSae4mdTBCnX
-         4TMhqgI6wzURR46zugKlk4K3hpu6AWPtclYZnnme7yilUEPb5xSIg5Jo+AI+WyH41VyO
-         z0t4HY94631pjfPV16IioFxfecbZwDDvhU6TiYgYrLSzZlXm703V53r9TN4fB2SExUnd
-         X9ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=n+ySj59iuhXBdH7RwhR2A/p3y2hpdOt74I5f5GJbaSQ=;
-        b=S3yv7eoymRq5EJm851ip7N8XMk3YHpRNwmDIBcDrwyy8qLnO6AnEDAdWE76BR9A/Zc
-         1FEkGHyGgA4GFeQlKZe/Dx2TeVHx+q6VRCyaWKR5clfOh+RQsw9/DTyge3s2lawROHwM
-         dDrgXMns/X8Pd/oCVvB1eVR/txAAspfiWBIWUCQVivaLc8B/FJAe17wB88UG5yXtROuJ
-         8sZ19YvIqPOSyonTHv4Okv9YXOJeYlUV1ZscAJ72pfXoWL2Nw2awbwzLT9f3lXoxFrO5
-         lf6zDsW+qLYciBZFSTloYswOFXzjSdfvLAoZw4X6oXwk1Gon8ACcRiA2vzv89/Gzt/Jn
-         YUIQ==
-X-Gm-Message-State: ACgBeo3qJPqtDziimDZXlmQ8H2mchNyw0gObq90z5EovwYyymnF71jty
-        ScjaXjkAkM8mJk0ZJNA/gIjgYg==
-X-Google-Smtp-Source: AA6agR4J8b4pMIkDlsiPr/WCKybp/istJCAy5D2HjF5oCz7I/g5txBHuvEBaB1b4xOcgMRPirjrw+g==
-X-Received: by 2002:a17:90b:918:b0:1fa:ad32:57f3 with SMTP id bo24-20020a17090b091800b001faad3257f3mr1719911pjb.28.1661386505798;
-        Wed, 24 Aug 2022 17:15:05 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w185-20020a6230c2000000b0052ac12e7596sm13540564pfw.114.2022.08.24.17.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 17:15:05 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 00:15:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH 3/5] selftests: KVM: Introduce vcpu_run_interruptable()
-Message-ID: <Ywa/BaYIdBi7N0iR@google.com>
-References: <20220802230718.1891356-1-mizhang@google.com>
- <20220802230718.1891356-4-mizhang@google.com>
+        Wed, 24 Aug 2022 20:15:34 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269B16D559
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1661386533; x=1692922533;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NQ6YMt/Gh3taRCiJQmF6o9X3VadrlfeoDwP2+Ym6YvI=;
+  b=dskWFTBkGPuqy6TbRW9GMvVdMafsfiTJ4aOKIAnBeNH9sYGUOQYc2KB0
+   nTbmlIrDm0qGdpf5QGbAOw+b1gjRy552NZYLiE1afomDO4lrs41FpF3lv
+   M83qQTZbR3VxV0U6jXlMCbvsSeq/Sxxs5Fv8HolAsy+bBckDYH1yHDTmP
+   ZhoJByUP02vQZQhnF2/7bgjvXcOn2CbJixLBJTZl7Fz7gBcGUo9mE7OYN
+   vz1oEggCxvo4X6WwGHJ6MtbB76pX4EWt7xOza49DogXQVCkTsV7NTJwQG
+   QOMvYX6Vwl6MnvXAxaslWNw9LL8nrCGZdLHz/8CD0iKC7KuN2abIIP2Jx
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,261,1654531200"; 
+   d="scan'208";a="214736286"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Aug 2022 08:15:32 +0800
+IronPort-SDR: BHNl10OPRQGvQ1N0dFBIx4ZVvLTjJpa96Ic05T3MI2aHoJlZyXAOIpKph7uUTWf0jviHgFho8d
+ JV3i5LoftyOg5jAKd53DxbYedpVkUCn350H4o1kTPOrMitevbi/7gH5KEK21D7ggXx+2CPCmvd
+ fGcRbV2+2goRhwpZSI25Sje8WrM2zJQWJR8MV/oLHEkgRTnIQ2YocUS9PNb+Gjxu4qZBQCCtLH
+ vx9IXA1a/ENvqWLmk+BB+Dk3Vr5Zbd+LTWQXqVEk/p+J8wTE7/bwW5JCSUnDxLF+yoXsGA4Agm
+ c/FpHFHZ4HN+0fn/q9eD5bKT
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Aug 2022 16:30:48 -0700
+IronPort-SDR: UgOomNyD8ZNbGFfRo7A6+3cyJqtih4ANYJN0a/f195UL+8VR/YXs/i3gC/T4uCEFN8FM0RILnu
+ 5C7CwB71pVOUj+XMwKN4glCozT+PjudSpdT++fb9gGvLDQmMnaH0pWNzqDHoYUvN0XPTrKwego
+ nRB3XaXtmUnwolLjbsY3g54XHsrpnUSdYwDiFax3n+FO2ZC6j8kwtiCVCJEZSATU+uyc5Zns52
+ 5tApY+Vf4TIE1MW7+Tsc82dJk4w2gx0zO2L8EzOmPeWUnsjvdy6ta0lOFrUL/2nGJ+jnzI3xcw
+ Nr8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Aug 2022 17:15:32 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MCk5033BRz1Rwnl
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:15:32 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1661386531; x=1663978532; bh=NQ6YMt/Gh3taRCiJQmF6o9X3VadrlfeoDwP
+        2+Ym6YvI=; b=f5MKhf91jeWoqx69eVdOIig+38dZxi+8cPTnEjrYiTHKWYrPk+B
+        a5kmyUfMwt6cEXwxmhQk4QvPfXUcoAUSAWGQloBjtsLUEqN8ktQppXAD8ZtClzdE
+        NE1uwE3jShdZDkNxMS0jTSHBnqYOpDEen6hEuUVxAvdlHgFio2LzxtyYeZLBnwvo
+        irB64osQy9PBKQZ/YmKia3WZ18mfysJO5HX2a/s290hL2x5c1bSWYO+t6n9JDRD1
+        oihFUUTCk+/B6eKFKrb96lGnlP3DXrLv14Qmu8tvqBSHNlJ6HxAyKEd8Nt1lte5Y
+        cWcNGao12pCCDQMmnzINr/JEXDp25pWqshQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ENxTQQeVzbrJ for <linux-kernel@vger.kernel.org>;
+        Wed, 24 Aug 2022 17:15:31 -0700 (PDT)
+Received: from [10.89.82.240] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.82.240])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MCk4x5QNsz1RtVk;
+        Wed, 24 Aug 2022 17:15:29 -0700 (PDT)
+Message-ID: <589cb29e-d2aa-085f-db83-fa718f4fbef2@opensource.wdc.com>
+Date:   Wed, 24 Aug 2022 17:15:28 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802230718.1891356-4-mizhang@google.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [ANNOUNCE] CFP: Zoned Storage Microconference - Linux Plumbers
+ Conference 2022
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "hare@suse.de" <hare@suse.de>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>
+References: <CGME20220522220139uscas1p1e3426b4457e0753c701e9917fe3ec6d2@uscas1p1.samsung.com>
+ <20220522220128.GA347919@bgt-140510-bm01>
+ <89b2bb4b-1848-22cc-9814-6cb6726afc18@acm.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <89b2bb4b-1848-22cc-9814-6cb6726afc18@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, Mingwei Zhang wrote:
-> Introduce vcpu_run_interruptable() to allow selftests execute their own
-> code when a vcpu is kicked out of KVM_RUN on receiving a POSIX signal.
-
-But that's what __vcpu_run() is for.  Clearing "immediate_exit" after KVM_RUN does
-not scream "interruptible" to me.
-
-There's only one user after this series, just clear vcpu->run->immediate_exit
-manually in that test (a comment on _why_ it's cleared would be helpful).
-
-> +int vcpu_run_interruptable(struct kvm_vcpu *vcpu)
-> +{
-> +	int rc;
-> +
-> +	rc = __vcpu_run(vcpu);
-> +
-> +	vcpu->run->immediate_exit = 0;
-> +
-> +	return rc;
-> +}
-> +
->  int _vcpu_run(struct kvm_vcpu *vcpu)
->  {
->  	int rc;
-> -- 
-> 2.37.1.455.g008518b4e5-goog
+On 2022/08/24 16:43, Bart Van Assche wrote:
+> On 5/22/22 15:01, Adam Manzanares wrote:
+>> Zoned Storage Devices (SMR HDDs and ZNS SSDs) have demonstrated that they can
+>> improve storage capacity, throughput, and latency over conventional storage
+>> devices for many workloads. Zoned storage technology is deployed at scale in
+>> some of the largest data centers in the world. There's already a
+>> well-established set of storage vendors with increasing device availability and
+>> a mature software foundation for interacting with zoned storage devices is
+>> available. Zoned storage software support is evolving and their is room for
+>> increased file-system support and additional userspace applications.
+>>
+>> The Zoned Storage microconference focuses on evolving the Linux zoned
+>> storage ecosystem by improving kernel support, file systems, and applications.
+>> In addition, the forum allows us to open the discussion to incorporate and grow
+>> the zoned storage community making sure to meet everyone's needs and
+>> expectations. Finally, it is an excellent opportunity for anyone interested in
+>> zoned storage devices to meet and discuss how we can move the ecosystem forward
+>> together.
 > 
+> Hi Adam,
+> 
+> On https://lpc.events/event/16/contributions/1147/ I see four speakers 
+> but no agenda? Will an agenda be added before the microconference starts?
+
+And the speaker list is not up-to-date either. I am a speaker too :)
+
+> 
+> Thanks,
+> 
+> Bart.
+
+
+-- 
+Damien Le Moal
+Western Digital Research

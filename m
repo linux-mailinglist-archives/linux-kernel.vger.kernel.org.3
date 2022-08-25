@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1D95A0899
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668105A08A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbiHYF7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 01:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S232773AbiHYGEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiHYF7o (ORCPT
+        with ESMTP id S229577AbiHYGEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 01:59:44 -0400
-Received: from gandalf.ozlabs.org (unknown [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDA9F779;
-        Wed, 24 Aug 2022 22:59:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCsjz4LPtz4xDn;
-        Thu, 25 Aug 2022 15:59:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661407176;
-        bh=POsJV3a/Z8MX+zPOO3Iy3ED/REn0HtuttgOVgg5uNoQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LjyApFDXSBkBU7Th4okxow694BJlIEXx0Li/zgR4LLTgyuCgqW9qZ3lZR0cgw2Fig
-         2uoBMzfMqWkPTotffrFsB9huvfXGtPOaV2JfZ+ncSGXQeGtRDlmn9QftLi8qWl3XSn
-         mxH4rvvR7+gh7zo/4C+oW4pZcPWT6Rfplrn5HXN6cGBVVMj/f/IsPvgKyz8S9/ZkTy
-         3oPcSc/qeBpSqffaXhTMrc7c7kId5VAJPmvbcDv8NHmlbU3eMhMPchjnC/QbdOwlw1
-         SGqT13pE51bILqNpBvay+je/1GkrletdW6DD+bTDir66GiIhhVlS6cX/QHsWA4fE8O
-         GVBxND7NK+ZCw==
-Date:   Thu, 25 Aug 2022 15:59:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20220825155934.0e983733@canb.auug.org.au>
+        Thu, 25 Aug 2022 02:04:33 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580F49F77A;
+        Wed, 24 Aug 2022 23:04:32 -0700 (PDT)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P5vOCC004173;
+        Wed, 24 Aug 2022 23:04:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PPS06212021;
+ bh=faTEiM2JXFLbZRmgbMJeeabYaB8qDwx444+BAMfW2UI=;
+ b=VdGhr0kEfk1QLU455brEhATO6uISCYAVTmeKypcNjG/e/MqYo6PEyXW4jzp/Sqpr5NlZ
+ jkzrHTgVCjFQiXodJIgjB3xItr1iVOnxH5Wu40XubWhJjZWHPfKKpeQ6L8f5A5LeT2B0
+ 4F9wQNhPi41qW5tV006mRH2A5dGL7c9Z8FkKA/IznJnOUsYhIsa7XqChEEnDTdwp0qBR
+ yKu6PXYIoHigKt/ueO8eyxQIMSlPq+Z7eI3DKwuIUyafcihnKRa/YFn0paXyD089M//G
+ 0t7+ZsP177ZLW9SexdlrklFpjKs0C943NdUmGRMEJ7qXOGrHhW5HGhwrLCN10cnCpNj0 4g== 
+Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3j53rvhf0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 24 Aug 2022 23:04:11 -0700
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Wed, 24 Aug 2022 23:04:10 -0700
+Received: from otp-azaharia-l2.corp.ad.wrs.com (128.224.78.230) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Wed, 24 Aug 2022 23:04:08 -0700
+From:   Adrian Zaharia <Adrian.Zaharia@windriver.com>
+To:     <linux-mtd@lists.infradead.org>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <jani.nurminen@windriver.com>, <adrian.zaharia@windriver.com>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH 0/1] mtd: mtdpart: Fix cosmetic print
+Date:   Thu, 25 Aug 2022 09:04:06 +0300
+Message-ID: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/epF2YdGp_uvJAA_Spic0v1U";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: yXX5wKaTX_POmSS2U_h6-5Z60LOu4GHN
+X-Proofpoint-ORIG-GUID: yXX5wKaTX_POmSS2U_h6-5Z60LOu4GHN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-25_03,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ spamscore=0 phishscore=0 adultscore=0 mlxlogscore=579 mlxscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208250020
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/epF2YdGp_uvJAA_Spic0v1U
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The print of the MTD partitions during boot are off-by-one for the size.
+This patch fixes this issue and shows the real last offset.
 
-Hi all,
+Jani Nurminen (1):
+  mtd: mtdpart: Fix cosmetic print
 
-In commit
+ drivers/mtd/mtdpart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  00cd7bf9f9e0 ("netfilter: nf_defrag_ipv6: allow nf_conntrack_frag6_high_t=
-hresh increases")
 
-Fixes tag
+base-commit: 072e51356cd5a4a1c12c1020bc054c99b98333df
+-- 
+2.37.2
 
-  Fixes: 8db3d41569bb ("netfilter: nf_defrag_ipv6: use net_generic infra")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 8b0adbe3e38d ("netfilter: nf_defrag_ipv6: use net_generic infra")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/epF2YdGp_uvJAA_Spic0v1U
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMHD8YACgkQAVBC80lX
-0Gz34AgAg9pJWLHRzLwJdnIl2hBZp7/K8UVa9GEAamLQHkfV4NMnGconkiZbOsHA
-MnvE/7iOW9saibYLbEjRhJHWg2n2w7R82AZ8PmEH7oSlyKn2OFcxpcJDcuYY3624
-b5DN4wvEqCf7RsxDDY8yfk9YDFNC5KA52rOdebk1pbKqWsD5k29vFDPT7KMwItcd
-0u0vvVGkMEYdBaf4NNnqo8x+0Z6E9/r75baJnCo4vPHgORNcDNvrG+F/lFZSTPB2
-TCefu8YlwUpmLe2W+BvhYkH6WvvSNtf5KFPp5zcwFsz/EoKSlZ6FRx1j3xKK6cM0
-70EEH4dDonK0XC2rSgmrI710v1zfUg==
-=ZmRj
------END PGP SIGNATURE-----
-
---Sig_/epF2YdGp_uvJAA_Spic0v1U--

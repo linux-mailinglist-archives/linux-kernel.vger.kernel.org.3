@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDC75A0CB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CD15A0CBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240383AbiHYJdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S240411AbiHYJfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbiHYJdK (ORCPT
+        with ESMTP id S239083AbiHYJfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:33:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2418A1D7B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661419983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f93As8t+AUZuoeXw4IPmjspMtTl9iyRz8DSCXtau4WA=;
-        b=TXGsJNu25VAJKv6EpKJ0++AQMCX+LAAmQAMG58HGsajsJ+z7wNDC2ELAhLENMp4i7cSWf+
-        KKOYugp/6awE6IAbS1+k0/5CsbjVKFFb+Ad5qf9ObYPsMm1pH1ZMABdf1AdIUHXSKpI8i8
-        2Mk3zGqAXJ72SUo5K9CILxqCe7xMOU4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-644-QMc-4VkRMkmXoKB4MvejaA-1; Thu, 25 Aug 2022 05:33:01 -0400
-X-MC-Unique: QMc-4VkRMkmXoKB4MvejaA-1
-Received: by mail-qv1-f72.google.com with SMTP id dh19-20020ad458d3000000b00496bf7e4a72so10554711qvb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:33:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=f93As8t+AUZuoeXw4IPmjspMtTl9iyRz8DSCXtau4WA=;
-        b=x8P2CxUJrRnks20y2pNGTzxTjlgPVRFsnEPHuf083rw0LRMestOAaifLa6+rm1xxX9
-         7+S4swtvMpQoq9bN32u0pA6W3My5SY0slXK9TwTfQJla57ZgyFpF93aKGyG6Wi/vgh8h
-         ER/3SS8DQADyOpConwk47zpe1l39ylVRM4pa7VOEVuJ9JdQC5BlnToecr64letBctY3W
-         f5DdQg1nA5FoSZzS7Qpe0JblxKJC2TMSobfqeyrb+fKmudqZPYCJmdRUlXhvk15MYKkk
-         czPMfTQVx3zcxRAD1Z3RkKJNfrsI1KdZIkrjDT9cz2U8WMCkF5z/jiHcAOwgFYuyV3tC
-         Zylw==
-X-Gm-Message-State: ACgBeo1q0HAEr+tMKcDl08AQdrXcLRD0TanrytRkOHyXsnWbSx4nrdVV
-        a3CIUPbSx44EPauztTPkGs5cYYzIbLkE+M0pai9Fk896sLXs6UPVQ+MnM9Q9kcWhlK993mpbcGz
-        4McsU3dx/mxgMVIe4obPZ7rFt
-X-Received: by 2002:a05:620a:f83:b0:6bb:ac26:e566 with SMTP id b3-20020a05620a0f8300b006bbac26e566mr2204231qkn.779.1661419981137;
-        Thu, 25 Aug 2022 02:33:01 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5CMv5jYuA/JegCZgF/AkLiAH2iQsQFomqiCX+y/Zu+/FOx28tVRoV8HXTM6lhhC0eY1djUvQ==
-X-Received: by 2002:a05:620a:f83:b0:6bb:ac26:e566 with SMTP id b3-20020a05620a0f8300b006bbac26e566mr2204217qkn.779.1661419980956;
-        Thu, 25 Aug 2022 02:33:00 -0700 (PDT)
-Received: from [192.168.1.165] (cpc76484-cwma10-2-0-cust967.7-3.cable.virginm.net. [82.31.203.200])
-        by smtp.gmail.com with ESMTPSA id k8-20020ac80748000000b0031ee918e9f9sm13368029qth.39.2022.08.25.02.32.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 02:33:00 -0700 (PDT)
-Message-ID: <d53a4672-d068-c394-6ab1-058b2d72701f@redhat.com>
-Date:   Thu, 25 Aug 2022 10:32:58 +0100
+        Thu, 25 Aug 2022 05:35:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D06EA6AC8;
+        Thu, 25 Aug 2022 02:35:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E9DAB8275C;
+        Thu, 25 Aug 2022 09:35:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFB6C433C1;
+        Thu, 25 Aug 2022 09:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661420113;
+        bh=wnNNBsD21VnG36hN5SKAwoYJpViNkoDmHGgamkOXTX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=noKJxVfTAQ2GCyTeZoWzR8amLMUyagJJlWlIJ+SVwZtrXBU9S+7hpgdg11Al6u3+1
+         8uomz1mTLp67XPDEcMGikPYawoc6qk7+ITVL9tqKJW8Gn68fic1AvQm/fd4GpaylC2
+         07sHSA1EEfbOnbNjNw7LMrYDBFe3Nux52RGKCEp8=
+Date:   Thu, 25 Aug 2022 11:35:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     zhouzhixiu <zhouzhixiu@huawei.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "slade@sladewatkins.com" <slade@sladewatkins.com>
+Subject: Re: [PATCH 5.4 000/389] 5.4.211-rc1 review
+Message-ID: <YwdCTk+2ouwZkO6u@kroah.com>
+References: <20220823080115.331990024@linuxfoundation.org>
+ <3d191fcd-62bb-323f-ea2b-cf5599a75b07@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Cluster-devel] [PATCH] gfs2: move from strlcpy with unused
- retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20220818210144.7915-1-wsa+renesas@sang-engineering.com>
- <bd7275c6-4ebe-de99-75c2-400cfa2e5026@redhat.com> <YwaFRvWw5hi/uWYs@shikoro>
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>
-From:   Andrew Price <anprice@redhat.com>
-In-Reply-To: <YwaFRvWw5hi/uWYs@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d191fcd-62bb-323f-ea2b-cf5599a75b07@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,37 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 21:08, Wolfram Sang wrote:
-> Hi Andy.
+On Thu, Aug 25, 2022 at 05:20:46PM +0800, zhouzhixiu wrote:
 > 
->>> -	strlcpy(sdp->sd_proto_name, proto, GFS2_FSNAME_LEN);
->>> -	strlcpy(sdp->sd_table_name, table, GFS2_FSNAME_LEN);
->>> +	strscpy(sdp->sd_proto_name, proto, GFS2_FSNAME_LEN);
->>> +	strscpy(sdp->sd_table_name, table, GFS2_FSNAME_LEN);
->>
->> Perhaps the size should be changed to GFS2_LOCKNAME_LEN to match the size of
->> the destination, too.
->>
->> With that addition, this patch fixes this syzkaller report:
->>
->> https://listman.redhat.com/archives/cluster-devel/2022-August/022755.html
+> On 2022/8/23 16:21, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.4.211 release.
+> > There are 389 patches in this series, all will be posted as a response
+> > to this one. If anyone has any issues with these being applied, please
+> > let me know. Responses should be made by Thu, 25 Aug 2022 08:00:15
+> > +0000. Anything received after that time might be too late. The whole
+> > patch series can be found in one patch at: https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.211-rc1.gz
+> > or in the git tree and branch at:
+> > git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> > linux-5.4.y and the diffstat can be found below. thanks, greg k-h
 > 
-> Linus wrote another summary about strlcpy vs. strscpy use[1]. So, the
-> size argument should be the size of the smaller buffer if the buffers
-> are of different size. GFS2_LOCKNAME_LEN is smaller, so that looks
-> suitable. Shall I resend the patch with the suggested change?
+> Tested on arm64 and x86 for 5.4.211-rc1,
+> 
+> Kernel repo:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> 
+> Branch: linux-5.10.yVersion:
+> 5.4.211-rc1Commit:1cece69eaa889a27cf3e9f2051fcc57eda957271Compiler: gcc
+> version 7.3.0 (GCC) arm64:--------------------------------------------------------------------Testcase
+> Result Summary:total: 9017passed: 9017failed: 0timeout: 0--------------------------------------------------------------------x86:--------------------------------------------------------------------Testcase
+> Result Summary:total: 9017passed: 9017failed: 0timeout: 0--------------------------------------------------------------------Tested-by:
+> Hulk Robot <hulkrobot@huawei.com>
 
-Yes, please. I can't speak for the gfs2 maintainers but I think it would 
-be a good plan, as the combination of strscpy and the size change fixes 
-a bug.
+Your emails are being sent in html format and not being accepted by the
+mialing list.
 
-Andy
-
-> 
-> All the best,
-> 
->     Wolfram
-> 
-> [1] https://lore.kernel.org/lkml/CAHk-=wi+xbVq++uqW9YgWpHjyBHNB8a-xad+Xp23-B+eodLCEA@mail.gmail.com/
-> 
-
+Also this response is very odd :(

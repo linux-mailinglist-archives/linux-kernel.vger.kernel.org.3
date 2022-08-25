@@ -2,239 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C92A5A0DBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1234A5A0DB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236315AbiHYKSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S238181AbiHYKS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239263AbiHYKSF (ORCPT
+        with ESMTP id S240587AbiHYKST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:18:05 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB59C1F1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:18:04 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c2so18133031plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:18:04 -0700 (PDT)
+        Thu, 25 Aug 2022 06:18:19 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F150B9E883
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:18:16 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id k22so4273380ljg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:18:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=8LG2k05DJnROOgkztDstbFKzneVj919DKMEfXnvnzsM=;
-        b=n4nC6fEstNpQ5VksawW3D5+VIkf821LpaSwu2aXWQVYPUOaNKPFmBLHLwvddNiuSP0
-         0luatI6rGvAF9CKvfiUbZyDDdl5lSWMS4LnN5sN3uAw2TjUODaqefdh9TC/j15Uz3g+g
-         rGgN/TSDJh+9oQtjg/VGF35uXeoglCwy8UN+6Z7VqYvSajDRzpkclrGC2i6OmsMt2JSf
-         LfKQpREoiQKnlRtFNoNctDHTOkQ2xcCa1wPjizz1b52oNQqhq5x7v34KoqiioOGGYrn4
-         PiTfueyisb3xqlxmVd6IBC7ESfENTbecqfiWMdxb8FIOWhk7ePTb6p3aEpVXB4RrtKJD
-         w5tA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=putxVl9ENmbhHrXSWcl6FyJE/X5QiuAAPDl5QaFWSQM=;
+        b=j3CEyDHc+li48xfu710HLfep4UWJhRuCHnOy/zy54nW5oprSJYRpFQ6yGucLGyQRhM
+         qYclPbp3Uvzd9EhZydOnGQ0acDpkeiAbd4B8Ng4YHv99/KiU5zaVmLHMxyTj30FPSrO5
+         +qztjXyJhJBL6htQk3n7d0fjSZY3NrgEIx3cCTpYNVmhEJe0Zzv7HKB7TqFd0Y+RKePb
+         PZV4w+vTdJwVEKvBiIaxK9RZJdIGZHl2ShnMVPr4tB1quwbL7OcOQkJ8JD2uezATUiuS
+         K2CE5q7oKj3fp84jOQIULopWBsonYfA8hb9IEQXsxI0TBcM1DP6CuX2V3zq6fT7uwrxT
+         a+0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=8LG2k05DJnROOgkztDstbFKzneVj919DKMEfXnvnzsM=;
-        b=kun9+HSrF6nbhabYoSn4QgA2IWsaVYp8tN8GXh9gb6vhFQFrWzB+uog7vnD8NWdbwM
-         rFBOmnjTcoCZJawWjqnJF7uDeuHL+bbtnPqQvGngm5rXI+bcVHzUqTAxB57dmSEIpWqG
-         m+IKShf0eUhxYxXIJOiPn+uL7uG2XgabLjT92uZ7WdyHPpKnIq7j6gX+Db3nFYMZ9A+u
-         Gb45JJdLIqnZGEolsFgDaJKB4SHMBk1zYa1JyGQvXcKhoAbYDWpIdKx8ftFhnVZXBuxo
-         7ox3jRUPsDpARnph11c+AzHU6pi1m9qeXPATaDqN0fp8gaMsKowcVKi5Z5jVaipJKgNc
-         B01g==
-X-Gm-Message-State: ACgBeo3789pEPwhWKX4lA7XTUQsOkGyyVCMrS75rmABthIoLZdSAhYHG
-        Z383LJXHDk2rIqztKOi9CCGqxA==
-X-Google-Smtp-Source: AA6agR5vhKPF2KV/Q8bvIk9C+97LnKamRRKl0+wKKCHuaqeeLvTDZeVe/b/CzpyAVXvl7LYMKwPn5w==
-X-Received: by 2002:a17:90b:380f:b0:1fb:3286:79b0 with SMTP id mq15-20020a17090b380f00b001fb328679b0mr3942482pjb.170.1661422684009;
-        Thu, 25 Aug 2022 03:18:04 -0700 (PDT)
-Received: from MacBook-Pro.local.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id s2-20020a170902ea0200b0016ed20eacd2sm14463615plg.150.2022.08.25.03.17.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Aug 2022 03:18:03 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     vbabka@suse.cz
-Cc:     Jason@zx2c4.com, akpm@linux-foundation.org, corbet@lwn.net,
-        keescook@chromium.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com, lizhe.67@bytedance.com,
-        mark-pk.tsai@mediatek.com, mhiramat@kernel.org, mhocko@suse.com,
-        rostedt@goodmis.org, yuanzhu@bytedance.com
-Subject: Re: [PATCH v3] page_ext: introduce boot parameter 'early_page_ext'
-Date:   Thu, 25 Aug 2022 18:17:50 +0800
-Message-Id: <20220825101750.303-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <4a6385a9-8432-21dc-a070-66236c78457b@suse.cz>
-References: <4a6385a9-8432-21dc-a070-66236c78457b@suse.cz>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=putxVl9ENmbhHrXSWcl6FyJE/X5QiuAAPDl5QaFWSQM=;
+        b=EOIfO3PrJnZDfKImyGzOK4fgVigZ/VbJkixWiIGgow4TK3W6bdubJprxCx8o9618g/
+         DHN3ztxe0Y8mEftl/9kTKhMwoH3ZrKE6E58Zmxkcv5BFnjj9XAwJ4ezunDydS2lVW4Pc
+         P/0lm1H5R4pa2m4+rbZWCaNaHxBubv8SysFNv0lLydx8EzZYoX+XsH36H5frzuhFAHZA
+         F353VdhC0JJ2EwJQRk/SLMc3lijX0ewpmJnSQuDR9OdGuq0TWP3DA7HY19kipUADffTJ
+         pc7lG7jGF/XCpo60yVwGyucQ6xTwIm3sCJjQz1Y9L6uUbeVr75Z6GQxUmRKZH4j6QqAz
+         jMUQ==
+X-Gm-Message-State: ACgBeo1T1Mg6VvX/JsIOKcMyx/o5Rwnp1DcPsHL13ggeQg+tvkL1Nqez
+        zKR/RepCiL5zZp/d12Ia3f/s9A==
+X-Google-Smtp-Source: AA6agR5HjSwLvMnQV8ANmtvhW9Y87E0VDeBurvMiO4LcD0gOZG16AqGWvtNAwBpyt5bVZ2elfs2nwQ==
+X-Received: by 2002:a2e:80c9:0:b0:261:e8f2:542d with SMTP id r9-20020a2e80c9000000b00261e8f2542dmr537264ljg.430.1661422695101;
+        Thu, 25 Aug 2022 03:18:15 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id x25-20020a056512131900b00492c59a4bccsm413248lfu.206.2022.08.25.03.18.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 03:18:14 -0700 (PDT)
+Message-ID: <0454105e-38f5-ea8f-0c1f-1d1fd835ea6c@linaro.org>
+Date:   Thu, 25 Aug 2022 13:18:13 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] dt-bindings: arm: mediatek: mmsys: change compatible
+ for MT8195
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
+Cc:     jason-jh.lin@mediatek.com, nancy.lin@mediatek.com,
+        ck.hu@mediatek.com, chunkuang.hu@kernel.org,
+        angelogioacchino.delregno@collabora.com, hsinyi@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220825091448.14008-1-rex-bc.chen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220825091448.14008-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25 Aug 2022 11:36:31 +0200, vbabka@suse.cz wrote:
->On 8/25/22 08:31, lizhe.67@bytedance.com wrote:
->> From: Li Zhe <lizhe.67@bytedance.com>
->> 
->> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
->> we call page_ext_init() after page_alloc_init_late() to avoid some panic
->> problem. It seems that we cannot track early page allocations in current
->> kernel even if page structure has been initialized early.
->> 
->> This patch introduce a new boot parameter 'early_page_ext' to resolve this
->> problem. If we pass it to kernel, function page_ext_init() will be moved
->> up and feature 'deferred initialization of struct pages' will be disabled.
->> It can help us to catch early page allocations. This is useful especially
->> when we find that the free memory value is not the same right after
->> different kernel booting.
->> 
->> Changelogs:
->> 
->> v1->v2:
->> - use a cmd line parameter to move up function page_ext_init() instead of
->>   using CONFIG_DEFERRED_STRUCT_PAGE_INIT
->> - fix oom problem[1]
->> 
->> v2->v3:
->> - make adjustments suggested by Michal Hocko
->> 
->> v1 patch: https://lore.kernel.org/lkml/Yv3r6Y1vh+6AbY4+@dhcp22.suse.cz/T/
->
->IIRC v1 failed to boot in some automatic bot test. Will this not fail with
->the same config/hw combination when the parameter is passed?
+On 25/08/2022 12:14, Bo-Chen Chen wrote:
+> From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
+> 
+> For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> pipelines binding to 1 mmsys with the same power domain, the same
+> clock driver and the same mediatek-drm driver.
+> 
+> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
+> 2 different power domains, different clock drivers and different
+> mediatek-drm drivers.
+> 
+> Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
+> CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture Quality)
+> and they makes VDOSYS0 supports PQ function while they are not
+> including in VDOSYS1.
+> 
+> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+> component). It makes VDOSYS1 supports the HDR function while it's not
+> including in VDOSYS0.
+> 
+> To summarize0:
+> Only VDOSYS0 can support PQ adjustment.
+> Only VDOSYS1 can support HDR adjustment.
+> 
+> Therefore, we need to separate these two different mmsys hardwares to
+> 2 different compatibles for MT8195.
+> 
+> Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding")
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-There is no problem with or without the parameter now.
 
->
->> v2 patch: https://lore.kernel.org/lkml/20220824065058.81051-1-lizhe.67@bytedance.com/T/
->> 
->> [1]: https://lore.kernel.org/linux-mm/YwHmXLu5txij+p35@xsang-OptiPlex-9020/
->> 
->> Suggested-by: Michal Hocko <mhocko@suse.com>
->> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
->> ---
->>  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
->>  include/linux/page_ext.h                        | 11 +++++++++++
->>  init/main.c                                     |  6 +++++-
->>  mm/page_alloc.c                                 |  2 ++
->>  mm/page_ext.c                                   | 12 ++++++++++++
->>  5 files changed, 36 insertions(+), 1 deletion(-)
->> 
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
->> index d7f30902fda0..7b5726828ac0 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -1471,6 +1471,12 @@
->>  			Permit 'security.evm' to be updated regardless of
->>  			current integrity status.
->>  
->> +	early_page_ext [KNL] Boot-time early page_ext initializing option.
->> +			This boot parameter disables the deferred initialization
->> +			of struct page and move up function page_ext_init() in
->> +			order to catch early page allocations. Available with
->> +			CONFIG_PAGE_EXTENSION=y.
->> +
->>  	failslab=
->>  	fail_usercopy=
->>  	fail_page_alloc=
->> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
->> index fabb2e1e087f..68d690649234 100644
->> --- a/include/linux/page_ext.h
->> +++ b/include/linux/page_ext.h
->> @@ -36,9 +36,15 @@ struct page_ext {
->>  	unsigned long flags;
->>  };
->>  
->> +extern bool early_page_ext;
->>  extern unsigned long page_ext_size;
->>  extern void pgdat_page_ext_init(struct pglist_data *pgdat);
->>  
->> +static inline bool early_page_ext_enable(void)
->> +{
->> +	return early_page_ext;
->> +}
->
->I think it should better be named early_page_ext_enabled() as it returns the
->status, not sets it to true?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yes you are right. I will fix it in my v4 patch. Thanks!
 
->
->> +
->>  #ifdef CONFIG_SPARSEMEM
->>  static inline void page_ext_init_flatmem(void)
->>  {
->> @@ -67,6 +73,11 @@ static inline struct page_ext *page_ext_next(struct page_ext *curr)
->>  #else /* !CONFIG_PAGE_EXTENSION */
->>  struct page_ext;
->>  
->> +static inline bool early_page_ext_enable(void)
->> +{
->> +	return false;
->> +}
->> +
->>  static inline void pgdat_page_ext_init(struct pglist_data *pgdat)
->>  {
->>  }
->> diff --git a/init/main.c b/init/main.c
->> index 91642a4e69be..d95edb67a499 100644
->> --- a/init/main.c
->> +++ b/init/main.c
->> @@ -849,6 +849,9 @@ static void __init mm_init(void)
->>  	pgtable_init();
->>  	debug_objects_mem_init();
->>  	vmalloc_init();
->> +	/* Should be run after vmap initialization */
->> +	if (early_page_ext_enable())
->> +		page_ext_init();
->>  	/* Should be run before the first non-init thread is created */
->>  	init_espfix_bsp();
->>  	/* Should be run after espfix64 is set up. */
->> @@ -1606,7 +1609,8 @@ static noinline void __init kernel_init_freeable(void)
->>  	padata_init();
->>  	page_alloc_init_late();
->>  	/* Initialize page ext after all struct pages are initialized. */
->> -	page_ext_init();
->> +	if (!early_page_ext_enable())
->> +		page_ext_init();
->>  
->>  	do_basic_setup();
->>  
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index e5486d47406e..e580b197aa1e 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -482,6 +482,8 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
->>  {
->>  	static unsigned long prev_end_pfn, nr_initialised;
->>  
->> +	if (early_page_ext_enable())
->> +		return false;
->>  	/*
->>  	 * prev_end_pfn static that contains the end of previous zone
->>  	 * No need to protect because called very early in boot before smp_init.
->> diff --git a/mm/page_ext.c b/mm/page_ext.c
->> index 3dc715d7ac29..bf4f2a12d7dc 100644
->> --- a/mm/page_ext.c
->> +++ b/mm/page_ext.c
->> @@ -85,6 +85,18 @@ unsigned long page_ext_size = sizeof(struct page_ext);
->>  
->>  static unsigned long total_usage;
->>  
->> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
->> +bool early_page_ext __meminitdata;
->> +#else
->> +bool early_page_ext __meminitdata = true;
->> +#endif
->> +static int __init setup_early_page_ext(char *str)
->> +{
->> +	early_page_ext = true;
->> +	return 0;
->> +}
->> +early_param("early_page_ext", setup_early_page_ext);
->> +
->>  static bool __init invoke_need_callbacks(void)
->>  {
->>  	int i;
-
+Best regards,
+Krzysztof

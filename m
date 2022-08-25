@@ -2,88 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67675A102B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D715A1031
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241167AbiHYMSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S241194AbiHYMTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHYMSD (ORCPT
+        with ESMTP id S240169AbiHYMTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:18:03 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E32B08AD;
-        Thu, 25 Aug 2022 05:18:02 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id l6so563226qvu.2;
-        Thu, 25 Aug 2022 05:18:02 -0700 (PDT)
+        Thu, 25 Aug 2022 08:19:03 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8D1B0B06
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:19:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id q7so24284060lfu.5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WBcITNJBSrLnWAUXSign9aduSen7RhKmozXyR+8rTuI=;
-        b=CLD3X2uN00bHSFMcKrgvXXYVx6qG1NnVFgY44zQ31UMpvVRKgVfi5LjI2cnTUNWPbG
-         +lsVcEdavbIWxHjOPZV93IqxtKhpbYBf668aREfvWAUtMhlmMmOdI7ailjgmvJujpRg+
-         8zIye1N99yJUDc+HWHFirPUwXTPZnW6k5viLvCFSrWI6Hc5K1mi8AmKY0a2Hpr6wd9Kg
-         56OBb+F3WcQXp1VxQHhowpuD3C351pP+FThyUc6KKzHf3VrwD02FfoQFplxNJXg0yT/3
-         KZHz+bQw5OKsw2SNp2KxF/Hs7GeM0fg2e7oISxEee2OucU+xtryTUp0CMtzR53vacPce
-         hbqg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=SueU0ylS/DGZHRhMphFGlXlkKWtYfDHwqJySfC5KFDc=;
+        b=rXY3SbT3cDcqrgjAuDNQxDR6r+z03Hgm1PNGI54Ch92dMwTsawQ93+4+2trhU4kJDJ
+         lfRNvvl0nCvOmbgR7S8Mo/sXnKbKbgvfjbLYrgpp04kdhcIznUA1zie8BU1Y8/LnPZZT
+         qQE6jvN9f30ECZOE8+bf1KRcH2GM1+hZ7s5IiiM1ctFgXv1FGX5UEdp+GFUxyXiPOiu5
+         U3uN9i3V2zb7OADc44QfocmWjfKH7g9IChWHTkorl4miUSUvbzkHBomd74q6TdGvUpXs
+         oxy78rrSsUoOoQvP45F0/6UnLimg5JGH+/jG7Q4Iudyd33LpUvQy7xcYJN+3xzqSWXUU
+         Z89w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WBcITNJBSrLnWAUXSign9aduSen7RhKmozXyR+8rTuI=;
-        b=5WiXzeV6K7VBgUWgi9Rr80FVNVj2CaJ95UsQf1Jp52AlEA98P3b3XLHPwMGDPE07Wn
-         /Pi38uwFPx/gJEtvgeDrOpA8/E2w9DHjnubSjnHo9rW9br7w4RknmS9sE1Ny1LfuygJ3
-         Kl7/7nT/Xw1el16/feFystX9bnX0iE1ecAtT3gZk0X18nkNMpqY9/Or+AK5wBU2A/462
-         DKzUyqVYYo+iksrPYAIKOKrTO06QY7NB9/QgFg7jWqrGJt1IRx9aZmVJuOm23o2Ly5hB
-         mRGIt+49H3BpChvGfQI28bf3IVkVBV5QcxtO5VxpKIRKPoP+IVLB25ShBj0W5lbXliu6
-         1huQ==
-X-Gm-Message-State: ACgBeo0DDuvcnHZ4+ggPuiGl09MJ4kG93bKelIDw0XY0x+cXejCVImFc
-        NAd0nSi1GwFHMzuSIcZtS5k+bia3HdO0Pn2BRM0=
-X-Google-Smtp-Source: AA6agR4wiLw8J+XrF8gziIjbkez3gEwsrEmBv+XNvnS8xETV9UlOuLBcNtMNwCHAxbPfJv2BM6tEFV5pwyTuNl7spBk=
-X-Received: by 2002:a05:6214:c22:b0:497:10a8:3067 with SMTP id
- a2-20020a0562140c2200b0049710a83067mr3151644qvd.48.1661429881414; Thu, 25 Aug
- 2022 05:18:01 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=SueU0ylS/DGZHRhMphFGlXlkKWtYfDHwqJySfC5KFDc=;
+        b=khO6/bQmTuMfFsVavk99lMPbq+Ecsz3UJTPi/LhSymCHG3F9Of0OirIqRFFAATW/m8
+         fTQj16OV7P85rGS7S0rC284sFhuPbKp1NdpNKf9ygFNTeTqFlsfSNy/0vg8xn1UEzcfJ
+         MQP0s4R2sk0X6zfddPrAxQVZvXQB3eF6H+93OuAcbZPOdpK+BlRF8VXuODg3uNRjRuXW
+         gszn3KvwTfavVd74ZiVT6qDkcdP2x7TfDlVGClk49haOzG63xFUK8PEZmZ5dTGv6H+i3
+         5DdDXeWW3lmOZbVpb6+c+sQpP31VXZvhOh9Q5npbymV/2BwtIC9hCiZFHwOOAmoF4yfY
+         AoxA==
+X-Gm-Message-State: ACgBeo2/2nt/8mHlY7nSPAYFNNcyyD9dz41XcjuuVxnPrEwHeZaCbkVu
+        ntl6hFcTStWsK1lv+q961FY33Q==
+X-Google-Smtp-Source: AA6agR4pM2U0ex+E+y7JbIyjJJSaYib0fDTzmJk0bBUBzl9hF/aW7Gvrcig///9p44oQVBaMjMyJjQ==
+X-Received: by 2002:a05:6512:31c6:b0:48b:2771:d0d2 with SMTP id j6-20020a05651231c600b0048b2771d0d2mr1029195lfe.382.1661429940494;
+        Thu, 25 Aug 2022 05:19:00 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id i1-20020a2ea221000000b00261c30d71e5sm510243ljm.67.2022.08.25.05.18.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 05:18:59 -0700 (PDT)
+Message-ID: <59ec69e7-7eb4-b50d-e6bb-6e4348b2eddb@linaro.org>
+Date:   Thu, 25 Aug 2022 15:18:58 +0300
 MIME-Version: 1.0
-References: <20220816090903.19558-1-Will.Shiu@mediatek.com> <CACRpkdYX4xjG-UfuZ05KpOJJudVuuw+A_TB0U=zRP2+e7ZwndQ@mail.gmail.com>
-In-Reply-To: <CACRpkdYX4xjG-UfuZ05KpOJJudVuuw+A_TB0U=zRP2+e7ZwndQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 25 Aug 2022 15:17:25 +0300
-Message-ID: <CAHp75Vf20piKwGTwCN2xbvvFZqzA60a7QWqWTEw=fgrS-5Nv_w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Pinctrl: Add in zero check
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Will Shiu <Will.Shiu@mediatek.com>, stanley.chu@mediatek.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RESEND v5 0/7] Update ADSP pil loader for SC7280 platform
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        devicetree@vger.kernel.org
+References: <1661156523-22611-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1661156523-22611-1-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 3:07 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Tue, Aug 16, 2022 at 11:09 AM Will Shiu <Will.Shiu@mediatek.com> wrote:
->
-> > add in check of buffer offset to avoid the exception when input 0 size.
-> >
-> > Signed-off-by: Will Shiu <Will.Shiu@mediatek.com>
->
-> Looks good to me, patch applied!
+On 22/08/2022 11:21, Srinivasa Rao Mandadapu wrote:
+> Update ADSP pil loader driver for SC7280 platforms.
+> 
 
-Sorry, but it seems the author didn't pay much attention and didn't
-really work on it. What does the < 0 comparison mean here?
+Since you did not CC me, maybe you based your patch on some old tree?
+This has to be then rebased on current Linux source.
 
-I would ask if there is _real_ issue with the code? What is the use
-case and why is this check needed?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof

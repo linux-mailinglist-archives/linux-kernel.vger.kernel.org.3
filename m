@@ -2,192 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981995A1915
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DCB5A190F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243552AbiHYSvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S243390AbiHYSue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243511AbiHYSvK (ORCPT
+        with ESMTP id S229564AbiHYSub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:51:10 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3EBB4E83
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:51:09 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id m34-20020a634c62000000b0042aff6dff12so3795904pgl.14
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc;
-        bh=lGAqB/GNmrDPPkV5jr9OoJ3q9SKii5qWo4ibcFCW7eo=;
-        b=DeaANBLOlr0ppKzAtlWXDTLwAmUNq9XIpss/f40nbT0JHkuWGR7LsYXfdKztC0j5gG
-         HiOL2Xh6qQRXSJDdzCKZi86XRNjr6lrlmT4k65meiRrXvQq5u8rPZ3QJXOLKt7FeYyJa
-         5M/Z7/erNaZfGrGdUgBr3uSIceCSe5Ul3oByGVVKVt8shq0Uyl3ye9j5cfxJrHtAGBLi
-         n8Xc1I5FWqMB/sqcuTWOL44ocC8VC8HYMbmx2Ut8ILk4wYhQrwRDmBf/8XaIc0Xt+vg/
-         vt0P6bTefJ956in4EEkcFKuJfzj8EmfCd7DSYWZ8D+2hdwGwyr4t4fewwhKKY6ql0aes
-         YuxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=lGAqB/GNmrDPPkV5jr9OoJ3q9SKii5qWo4ibcFCW7eo=;
-        b=T0W0hcyPigxKEkCJjwoh04zF1MV3mb3bkKbXMnz2D5JM+LUhkcn7HLv6/B3a9TSZdw
-         e/RxBecxOjSB5SLwLowxu1CIJJcCX5OTkGN/MJZPd+GyukJ9HP9BglS23dqpXIUkTsHn
-         Ctw0klEWoTTQNt+yAQ+b2zPnJKc+5umSkHj74FZCFftuNvQ9Xkp0NQaXr/PwwM0f5KjZ
-         1kLR6XdkHSofil3ncGsoep/iYt+GM8rEqcOpgUL/M7r/WHUBSMpjB8M2X+734OtPZrot
-         5mqcRDe1+ReoJpCo0wfPGddlALNii8BZxjGQxjyJc9+CgHL0iT5Ckl0aGXEzOiVltlhw
-         1ung==
-X-Gm-Message-State: ACgBeo0GRw1PpAKLkSINRZaCNNfXN49OLHieqh1mUIQOnpyqFvlSmH2c
-        Dw8G/GnrH/18abEI6vhgwbFU/T0G/TPuZkkVJWI=
-X-Google-Smtp-Source: AA6agR6e/9WCXUqGwvrKzxvLN5CnU2/oDCiswJkCrhOMct7DE+11zW5i2jVa12mcZbU1eqo8VEXW5A18uJTrWpZYsoU=
-X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
- (user=willmcvicker job=sendgmr) by 2002:a17:90a:e558:b0:1fb:c4b7:1a24 with
- SMTP id ei24-20020a17090ae55800b001fbc4b71a24mr19452pjb.1.1661453467971; Thu,
- 25 Aug 2022 11:51:07 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 18:50:25 +0000
-In-Reply-To: <20220825185026.3816331-1-willmcvicker@google.com>
-Mime-Version: 1.0
-References: <20220825185026.3816331-1-willmcvicker@google.com>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220825185026.3816331-3-willmcvicker@google.com>
-Subject: [PATCH v5 2/2] PCI: dwc: Add support for 64-bit MSI target address
-From:   Will McVicker <willmcvicker@google.com>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will McVicker <willmcvicker@google.com>
-Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Thu, 25 Aug 2022 14:50:31 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FC8AB05F;
+        Thu, 25 Aug 2022 11:50:30 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id CC6232E2;
+        Thu, 25 Aug 2022 18:50:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CC6232E2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1661453430; bh=y42Jf/ag9rU15ToKoopXiKAz4rUlonTv87e8xUVPCd0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RVEMFYtlAdcfdp9M02F2cjSEDTIPcvvWhZlWJbRfuME+Dmdal3T5IUCFQapXOB1VB
+         bWZBFis1jPQqM0li0LPjmGGpfVHpN4rXWMQl7fKBY6JCRz9qTHT+TqwwlDeZJ/N9Qa
+         J/XMyJz20DRhUzhFYbmC+uBBl/O5jDkW8jOwTGtirHakP5MZroVIAd45KsI+/6I8tk
+         b/GHl9/XTl7xMTkFnMhGrjbLOPjg9xvuMUFOqCD0rs99y+jR4xQ4AMK9kE2SVJ8j88
+         vr0qvHZrcosA5i7D/KsvAkeZxvh016DI7/h1qHS87UPxKgHzvPREG9ugDHYFt17u0h
+         otT7y//sAhkpQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Kairui Song <ryncsn@gmail.com>, damon@lists.linux.dev
+Cc:     SeongJae Park <sj@kernel.org>, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH v2] Docs/admin-guide/mm/damon/usage: fix the example
+ code snip
+In-Reply-To: <20220823114053.53305-1-ryncsn@gmail.com>
+References: <20220823114053.53305-1-ryncsn@gmail.com>
+Date:   Thu, 25 Aug 2022 12:50:29 -0600
+Message-ID: <875yigyx6y.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since not all devices require a 32-bit MSI address, add support to the
-PCIe host driver to allow setting the DMA mask to 64-bits if the 32-bit
-allocation fails. This allows kernels to disable ZONE_DMA32 and bounce
-buffering (swiotlb) without risking not being able to get a 32-bit address
-during DMA allocation.
+Kairui Song <ryncsn@gmail.com> writes:
 
-Basically, in the slim chance that there are no 32-bit allocations
-available, the current PCIe host driver will fail to allocate the msi_msg
-page due to a DMA address overflow (seen in [1]). With this patch, the
-PCIe host can retry the allocation with a 64-bit DMA mask if the current
-PCIe device advertises 64-bit support via its MSI capabilities.
+> From: Kairui Song <kasong@tencent.com>
+>
+> The workflow example code is not working since it got the file names
+> wrong. So fix this.
+>
+> Fixes: b18402726bd1 ("Docs/admin-guide/mm/damon/usage: document DAMON sysfs interface")
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> Signed-off-by: Kairui Song <kasong@tencent.com>
+> ---
+>  Documentation/admin-guide/mm/damon/usage.rst | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 
-[1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+I've gone ahead and applied this, thanks.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Will McVicker <willmcvicker@google.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Acked-by: Jingoo Han <jingoohan1@gmail.com>
----
- .../pci/controller/dwc/pcie-designware-host.c | 38 ++++++++++++++-----
- drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
- drivers/pci/controller/dwc/pcie-designware.h  |  1 +
- 3 files changed, 38 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 39f3b37d4033..8928a9a29d58 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -330,6 +330,9 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 	u64 *msi_vaddr;
- 	int ret;
- 	u32 ctrl, num_ctrls;
-+	bool msi_64bit = false;
-+	bool retry_64bit = false;
-+	u16 msi_capabilities;
- 
- 	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
- 		pp->irq_mask[ctrl] = ~0;
-@@ -367,16 +370,33 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 						    dw_chained_msi_isr, pp);
- 	}
- 
--	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
--	if (ret)
--		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
-+	msi_capabilities = dw_pcie_msi_capabilities(pci);
-+	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
-+		msi_64bit = msi_capabilities & PCI_MSI_FLAGS_64BIT;
- 
--	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
--					GFP_KERNEL);
--	if (!msi_vaddr) {
--		dev_err(dev, "Failed to alloc and map MSI data\n");
--		dw_pcie_free_msi(pp);
--		return -ENOMEM;
-+	while (true) {
-+		dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
-+			retry_64bit ? "64" : "32");
-+		ret = dma_set_mask_and_coherent(dev, retry_64bit ?
-+						DMA_BIT_MASK(64) :
-+						DMA_BIT_MASK(32));
-+		if (ret)
-+			dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
-+				 retry_64bit ? "64" : "32");
-+
-+		msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
-+						GFP_KERNEL);
-+		if (!msi_vaddr) {
-+			dev_err(dev, "Failed to alloc and map MSI data\n");
-+			if (msi_64bit && !retry_64bit) {
-+				retry_64bit = true;
-+				continue;
-+			}
-+
-+			dw_pcie_free_msi(pp);
-+			return -ENOMEM;
-+		}
-+		break;
- 	}
- 
- 	return 0;
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index c6725c519a47..650a7f22f9d0 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -82,6 +82,14 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
- }
- EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
- 
-+u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-+{
-+	u8 offset;
-+
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-+	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-+}
-+
- static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
- 					    u8 cap)
- {
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index a871ae7eb59e..45fcdfc8c035 100644
---- a/drivers/pci/controller/dwc/pcie-designware.h
-+++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
- 
- u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
- u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
-+u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
- 
- int dw_pcie_read(void __iomem *addr, int size, u32 *val);
- int dw_pcie_write(void __iomem *addr, int size, u32 val);
--- 
-2.37.2.672.g94769d06f0-goog
-
+jon

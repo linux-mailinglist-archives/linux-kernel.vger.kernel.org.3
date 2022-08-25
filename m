@@ -2,111 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6ED5A0EC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B475A0EC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240587AbiHYLLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S240924AbiHYLMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236708AbiHYLLl (ORCPT
+        with ESMTP id S236708AbiHYLMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:11:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550ECA263E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661425899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q6R2kOFpSZu9B1r8tOPgQwwbnj/1FHfHwXqHb6Dl3U0=;
-        b=VealhEOHfiAOIn/GfF+fTRSCbLPMW+jLw6ZUAwbEuAAV7xhI7Rwcnp9YruZnJXspxD2esF
-        cyH3QRCUEfaplonhaEss4DXSzNHKLYLsXJigkfpdhEpAo2moFGDLXL4gRzoweh0nGV4O1/
-        CnRfoz8FmMiMWEFkNfjhHZ3+ugks4ds=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-132-jZVf9OXDN_Cfuh7ovrW-lQ-1; Thu, 25 Aug 2022 07:11:38 -0400
-X-MC-Unique: jZVf9OXDN_Cfuh7ovrW-lQ-1
-Received: by mail-wm1-f72.google.com with SMTP id r10-20020a1c440a000000b003a538a648a9so10787449wma.5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:11:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=Q6R2kOFpSZu9B1r8tOPgQwwbnj/1FHfHwXqHb6Dl3U0=;
-        b=c4p9Iz2qBRcIT2Tfj7RflJ1m56cf0Lp6oRm+X4NESj+gOoNOIG048+nJ3OpL6sNy7o
-         WNPbt0zhf7QQAlye6UeTuNAQpXHka9/JVUxSb5b06fTF+EQ0nGqFb26iy+lSuLdvgRXV
-         Oh8TCHSJsudU1Gn8gA3dq+lnXreSm2iemjV6Im6PdTUjr1qkNXUlc+68lzW7mU4bWeZ0
-         YVYV4+LPafkzScOWRx+p2Xq3/bNCj40cUeAEeIDfRxfn7QWno8wEAZTWBH3QuMrPTTls
-         kv8BRJCVQMk27aAwTlpcM9tsLiAJb/+XeUMwmyQnCWRvUDnBRueBfW4EUDw5SZmrjmGx
-         /IEg==
-X-Gm-Message-State: ACgBeo16Rdp0O6guOJdFcoSB11LVjwDwQXX8hdKG6ov+C1vz5r67FCsB
-        krEI+nBFQgZ9zlfwr2O0lZ7v5lx8tAy04hgjZBPQwjOnxi91Ok94tnHs75JNGVIJX6Eandm0k7n
-        9VMTyr8B3hhJVhyKezGaih1ph
-X-Received: by 2002:a05:600c:2114:b0:3a5:4f31:3063 with SMTP id u20-20020a05600c211400b003a54f313063mr8238470wml.50.1661425897036;
-        Thu, 25 Aug 2022 04:11:37 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7m/LFh6KSjkSq7Lqgq/TVqkGBP1qeEks7lCgy4C/9MLYkzDLRcCb5wnUXKkDz3PgYGt0jMPA==
-X-Received: by 2002:a05:600c:2114:b0:3a5:4f31:3063 with SMTP id u20-20020a05600c211400b003a54f313063mr8238453wml.50.1661425896852;
-        Thu, 25 Aug 2022 04:11:36 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-97-176.dyn.eolo.it. [146.241.97.176])
-        by smtp.gmail.com with ESMTPSA id c3-20020a7bc843000000b003a32297598csm4817740wml.43.2022.08.25.04.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 04:11:36 -0700 (PDT)
-Message-ID: <200cb2f98ca159003ed4deb51163e5f8859d4f8b.camel@redhat.com>
-Subject: Re: [PATCH net-next 1/3] net: prestera: acl: extract matchall logic
- into a separate file
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Serhiy Boiko <serhiy.boiko@plvision.eu>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Date:   Thu, 25 Aug 2022 13:11:35 +0200
-In-Reply-To: <20220823113958.2061401-2-maksym.glubokiy@plvision.eu>
-References: <20220823113958.2061401-1-maksym.glubokiy@plvision.eu>
-         <20220823113958.2061401-2-maksym.glubokiy@plvision.eu>
+        Thu, 25 Aug 2022 07:12:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC25DAE857;
+        Thu, 25 Aug 2022 04:12:13 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PAlhbb016632;
+        Thu, 25 Aug 2022 11:11:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=n538U2wM0cJf+DwolmG0+fphd+7c2U2jME2cTAmu5mU=;
+ b=A2z/eBTsTaFYeq0OO9inHGzYVkCA+/Qw+2xAjXfmB3UvRGivBFDTp2MwtUdFhomd2vW3
+ UD5zxO0/7/5MM3l4TFOLqqvaRaurPBxF3F7MiHOMvJSWHq8KLd3ylFfTp2IwfKRyWtJE
+ pCaJaor4ErJDxDmzgwz1S1mYbj5TGH8lgq5XlMro5hJkEBFqMUKDcZciMtfQq6dvtt1j
+ f+2gNq7eD+QaHgd7ViWvNaoUplaon+yt+cw3vS/mx2KmLfXzzActgrOpyUI/47REPlKD
+ 8Ft6kV+ZOsG4RXY+URTpteWcDXxWgI1EyRMQ1ihYg6taUQR8matJvSppQnseTQE/aZZi vw== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j67mt0pp4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Aug 2022 11:11:54 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27PB50Aq007361;
+        Thu, 25 Aug 2022 11:11:52 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma02fra.de.ibm.com with ESMTP id 3j2q88vmr1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Aug 2022 11:11:52 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27PBBnEc42271030
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Aug 2022 11:11:49 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06B00A404D;
+        Thu, 25 Aug 2022 11:11:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35351A4040;
+        Thu, 25 Aug 2022 11:11:48 +0000 (GMT)
+Received: from sig-9-145-54-205.uk.ibm.com (unknown [9.145.54.205])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Aug 2022 11:11:48 +0000 (GMT)
+Message-ID: <69b7b496c3658b385f2404d6e3209970b3677c08.camel@linux.ibm.com>
+Subject: Re: [PATCH] iommu/s390: Fix race with release_device ops
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, svens@linux.ibm.com,
+        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        jgg@nvidia.com, linux-kernel@vger.kernel.org
+Date:   Thu, 25 Aug 2022 13:11:47 +0200
+In-Reply-To: <YwcjIPcT1b0uyyFn@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220823203059.81919-1-mjrosato@linux.ibm.com>
+         <a6e42442-d9cb-0d63-bb71-da78a5669a51@linux.ibm.com>
+         <04644ee5-2386-1f3d-c1a3-fc4227570cf7@linux.ibm.com>
+         <YwcjIPcT1b0uyyFn@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cac7hgFlkSPbnmZdVKuRu-7ODdEIF00-
+X-Proofpoint-GUID: cac7hgFlkSPbnmZdVKuRu-7ODdEIF00-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-25_05,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 clxscore=1011 mlxlogscore=672 lowpriorityscore=0
+ suspectscore=0 adultscore=0 malwarescore=0 mlxscore=0 phishscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208250043
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, 2022-08-23 at 14:39 +0300, Maksym Glubokiy wrote:
-> From: Serhiy Boiko <serhiy.boiko@plvision.eu>
+On Thu, 2022-08-25 at 09:22 +0200, Alexander Gordeev wrote:
+> On Wed, Aug 24, 2022 at 04:25:19PM -0400, Matthew Rosato wrote:
+> > > > @@ -90,15 +90,39 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+> > > >       struct zpci_dev *zdev = to_zpci_dev(dev);
+> > > >       struct s390_domain_device *domain_device;
+> > > >       unsigned long flags;
+> > > > -    int cc, rc;
+> > > > +    int cc, rc = 0;
+> > > >         if (!zdev)
+> > > >           return -ENODEV;
+> > > >   +    /* First check compatibility */
+> > > > +    spin_lock_irqsave(&s390_domain->list_lock, flags);
+> > > > +    /* First device defines the DMA range limits */
+> > > > +    if (list_empty(&s390_domain->devices)) {
+> > > > +        domain->geometry.aperture_start = zdev->start_dma;
+> > > > +        domain->geometry.aperture_end = zdev->end_dma;
+> > > > +        domain->geometry.force_aperture = true;
+> > > > +    /* Allow only devices with identical DMA range limits */
+> > > > +    } else if (domain->geometry.aperture_start != zdev->start_dma ||
+> > > > +           domain->geometry.aperture_end != zdev->end_dma) {
+> > > > +        rc = -EINVAL;
+> > > > +    }
+> > > > +    spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> > > > +    if (rc)
+> > > > +        return rc;
+> > > > +
+> > > >       domain_device = kzalloc(sizeof(*domain_device), GFP_KERNEL);
+> > > >       if (!domain_device)
+> > > >           return -ENOMEM;
+> > > >   +    /* Leave now if the device has already been released */
+> > > > +    spin_lock_irqsave(&zdev->dma_domain_lock, flags);
+> > > > +    if (!dev_iommu_priv_get(dev)) {
+> > > > +        spin_unlock_irqrestore(&zdev->dma_domain_lock, flags);
+> > > > +        kfree(domain_device);
+> > > > +        return 0;
+> > > > +    }
+> > > > +
+> > > >       if (zdev->dma_table && !zdev->s390_domain) {
+> > > >           cc = zpci_dma_exit_device(zdev);
+> > > >           if (cc) {
+> > > 
+> > > Am I wrong? It seems to me that zpci_dma_exit_device here is called with the spin_lock locked but this function zpci_dma_exit_device calls vfree which may sleep.
+> > > 
+> > 
+> > Oh, good point, I just enabled lockdep to verify that.
+> > 
+> > I think we could just replace this with a mutex instead, it's not a performance path.  I've been running tests successfully today with this patch modified to instead use a mutex for dma_domain_lock.
 > 
-> This commit adds more clarity to handling of TC_CLSMATCHALL_REPLACE and
-> TC_CLSMATCHALL_DESTROY events by calling newly added *_mall_*() handlers
-> instead of directly calling SPAN API.
+> But your original version uses irq-savvy spinlocks.
+> Are there data that need to be protected against interrupts?
 > 
-> This also extracts matchall rules management out of SPAN API since SPAN
-> is a hardware module which is used to implement 'matchall egress mirred'
-> action only.
-> 
-> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
-> Signed-off-by: Serhiy Boiko <serhiy.boiko@plvision.eu>
-> Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+> Thanks!
 
-This SoB chain is not clear to me. Did Taras co-developed the patch? In
-that case a Co-developed-by: tag is missing, as the first tag in the
-list. Otherwise why is Taras' SoB there?
-
-Thanks!
-
-Paolo
+I think that was a carry over from my original attempt that used the
+zdev->dma_domain_lock in some more places including in interrupt
+context. I think these are gone now so I think Matt is right in his
+version this can be a mutex.
 

@@ -2,201 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE1D5A148A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78205A148D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242689AbiHYOmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S242343AbiHYOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242670AbiHYOmK (ORCPT
+        with ESMTP id S242584AbiHYOmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:42:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0278D7CB6E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661438427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9gl8JtwHu2ieQqvlFlp3IZDIk+riOkODkt1dgMqEPWw=;
-        b=YYnh7VN+NUhs83NDJ9kojKNUJNRwYCu3LOgqHIX8IGl6uhwQhwQETmdcMK//+fizqcBUxS
-        tRQ77MjKvkCPaCdBvqI/8nKxefKmJTv6YA9s6Ba0dupVh+CXJNe9osxPOj7nWmEmC+JVUN
-        lr4NnaF8c+RRatRnieviFDYMwxJXUHU=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-1-jkjHTOkIO0-Ybzl6NWqMzw-1; Thu, 25 Aug 2022 10:40:25 -0400
-X-MC-Unique: jkjHTOkIO0-Ybzl6NWqMzw-1
-Received: by mail-qv1-f71.google.com with SMTP id ea4-20020ad458a4000000b0049682af0ca8so11954290qvb.21
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:40:25 -0700 (PDT)
+        Thu, 25 Aug 2022 10:42:43 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38635B81F5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:41:04 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 67so11791969pfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=ZbQl5zmcQJYLrJInunPEiMFIWd9Xor7csOXerZPZEys=;
+        b=Y5yVxnEfhqYg2VzNtwH3XMv1GhyAfwGAK9sKYjHECt3tGSTlM8/jHpaJ/RPHG9QSz0
+         to4y3mp5uLhUUXaLCxd/nkp+Hmjce8XXsze0vkJhV0dwKK9DUt7jHaQCYY27ATKLgS7A
+         jtaiS6QU0ypyCmP0meBxTp6VRT9g6u5PDKGQXpZKgwkpeX5B07/FpfLyetM8EhKI0TdP
+         4fHkOuv7ceFmC/Wrbxbmn17N5OPQETlK4iaNPXONDzpmbLTfwtPlwdVHQcxmntM0VBmC
+         1pnrH7IlaJ0TqdXPjM/NsN5epj8IIt2UcdiQ0kJc+B9yezkUPKD7RoX6wNmjPMjFgEld
+         trXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9gl8JtwHu2ieQqvlFlp3IZDIk+riOkODkt1dgMqEPWw=;
-        b=6vLTMmVleJC+VMf4lv3wLu0ByQgEN9ty958Sj+sHcjMW4trln/bDBoXbqs/WwKyHjY
-         YiAuCTo3ktDNG8Os6a/a/tW+pdydBdXKkTw+502huo6YSYr/asLbXQ5LydS1SR1OO/ZC
-         +NhK36szfKdOZXIpIzeLtXDZbJNTOBhiMJ7jnGEl1npvpR94VLBS5lETqs9tSHDyaIZZ
-         cBBytubz7GRsLoNNMDtHBbO/Q2OWvRMkXVPkGYvgqRRrYZ44BtycGMO9w+pA+8DIXKIe
-         CAzySKMlGjPz8FAUbOGM+niYj2gVN/IqBge4fsO7ERTC8V+GR2D2SW9vxKVwn8xX+cgb
-         7BeA==
-X-Gm-Message-State: ACgBeo30fGtEB56xSyvoWyo7jUuTbuJjz8e35g5mVZLOKxNMzZv3vRB/
-        pgEqBnLh7F8QYOaMRP2ZbFb+hHWumQ5FEvhE9rNa+g5YAfYC8sr454s7m+UN2F8XV5256wP0I+O
-        /ZshpN6xSiT5VIn1MsVqe/vEK
-X-Received: by 2002:a05:622a:170d:b0:344:646b:73e with SMTP id h13-20020a05622a170d00b00344646b073emr3753335qtk.138.1661438425289;
-        Thu, 25 Aug 2022 07:40:25 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7TKKJVMyGiS6bNr+tzF2JYvmP3XOGV8sOgN2jBYX27NWJFP8fCLQ0t520JEVxHIVaRHT/sEQ==
-X-Received: by 2002:a05:622a:170d:b0:344:646b:73e with SMTP id h13-20020a05622a170d00b00344646b073emr3753302qtk.138.1661438425022;
-        Thu, 25 Aug 2022 07:40:25 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id j20-20020a05620a411400b006b9a24dc9d7sm17831800qko.7.2022.08.25.07.40.22
+        bh=ZbQl5zmcQJYLrJInunPEiMFIWd9Xor7csOXerZPZEys=;
+        b=VEl9yxaTGArzka4xijPXfonaRLPXivqPqGnCWkUBm4Rl8BrRNWjUDAx8bKlYHRfyuu
+         J8nyaE9Y8Yvmc6YGrGAepeVZAzJmCdc2WCbK00mPvnr/35TCzvcTYIOhLT5ukuYAAbKw
+         RJNMa4jprRIMZxud8LrHEr64H01foHINEx8ngVaTEtgw9/CcfAykN/FbDjSkh4RANZJA
+         DTmb8XNcZim+osdz7YL5jaIe/Sz72ZHzkhKUdWj01v0Ka5mO1al84tP+ZM1rbhVdgBQr
+         fiCsdJhxJlqrh9HOqV8IQCZsrJvWmsoyj7qEgeTTMtmNlUQWl9fpFd9HOgataa3zAPaQ
+         Vgyg==
+X-Gm-Message-State: ACgBeo0YFV18YLWCUjqnI9chkRhGaDRr3ZcQ7lvz9JwyYPnpaZMiRNGL
+        umjv3dLamHaRABOGy+yt3Tkyvw==
+X-Google-Smtp-Source: AA6agR4Ka0ia2RlVLxccKqyQLqGJRXHZxx+pW2ufMgWCmxj1CFpAQiHUKWE3BTbxQkewk98fa1GugQ==
+X-Received: by 2002:a63:5c42:0:b0:42b:452f:8e66 with SMTP id n2-20020a635c42000000b0042b452f8e66mr3578134pgm.323.1661438463043;
+        Thu, 25 Aug 2022 07:41:03 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id v68-20020a626147000000b0052e6c058bccsm13273939pfb.61.2022.08.25.07.41.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 07:40:24 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 10:40:21 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 25 Aug 2022 07:41:02 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 14:40:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Message-ID: <YweJ1QSChgNQnFyY@xz-m1.local>
-References: <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
- <Yv1BJKb5he3dOHdC@xz-m1.local>
- <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yv5QXkS4Bm9pTBeG@xz-m1.local>
- <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87czcqiecd.fsf@nvdebian.thelocal>
- <YwaJSBnp2eyMlkjw@xz-m1.local>
- <YwaOpj54/qUb5fXa@xz-m1.local>
- <87o7w9f7dp.fsf@nvdebian.thelocal>
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending
+ interrupts
+Message-ID: <YweJ+hX8Ayz11jZi@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-2-mizhang@google.com>
+ <b03adf94-5af2-ff5e-1dbb-6dd212790083@redhat.com>
+ <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
+ <17505e309d02cf5a96e33f75ccdd6437a8c79222.camel@redhat.com>
+ <Ywa+QL/kDp9ibkbC@google.com>
+ <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o7w9f7dp.fsf@nvdebian.thelocal>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:42:41AM +1000, Alistair Popple wrote:
+On Wed, Aug 24, 2022, Jim Mattson wrote:
+> On Wed, Aug 24, 2022 at 5:11 PM Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Peter Xu <peterx@redhat.com> writes:
+> > @google folks, what would it take for us to mark KVM_REQ_GET_NESTED_STATE_PAGES
+> > as deprecated in upstream and stop accepting patches/fixes?  IIUC, when we eventually
+> > move to userfaultfd, all this goes away, i.e. we do want to ditch this at some point.
 > 
-> > On Wed, Aug 24, 2022 at 04:25:44PM -0400, Peter Xu wrote:
-> >> On Wed, Aug 24, 2022 at 11:56:25AM +1000, Alistair Popple wrote:
-> >> > >> Still I don't know whether there'll be any side effect of having stall tlbs
-> >> > >> in !present ptes because I'm not familiar enough with the private dev swap
-> >> > >> migration code.  But I think having them will be safe, even if redundant.
-> >> >
-> >> > What side-effect were you thinking of? I don't see any issue with not
-> >> > TLB flushing stale device-private TLBs prior to the migration because
-> >> > they're not accessible anyway and shouldn't be in any TLB.
-> >>
-> >> Sorry to be misleading, I never meant we must add them.  As I said it's
-> >> just that I don't know the code well so I don't know whether it's safe to
-> >> not have it.
-> >>
-> >> IIUC it's about whether having stall system-ram stall tlb in other
-> >> processor would matter or not here.  E.g. some none pte that this code
-> >> collected (boosted both "cpages" and "npages" for a none pte) could have
-> >> stall tlb in other cores that makes the page writable there.
-> >
-> > For this one, let me give a more detailed example.
+> Userfaultfd is a red herring. There were two reasons that we needed
+> this when nested live migration was implemented:
+> 1) our netlink socket mechanism for funneling remote page requests to
+> a userspace listener was broken.
+> 2) we were not necessarily prepared to deal with remote page requests
+> during VM setup.
 > 
-> Thanks, I would have been completely lost about what you were talking
-> about without this :-)
+> (1) has long since been fixed. Though our preference is to exit from
+> KVM_RUN and get the vCPU thread to request the remote page itself, we
+> are now capable of queuing a remote page request with a separate
+> listener thread and blocking in the kernel until the page is received.
+> I believe that mechanism is functionally equivalent to userfaultfd,
+> though not as elegant.
+> I don't know about (2). I'm not sure when the listener thread is set
+> up, relative to all of the other setup steps. Eliminating
+> KVM_REQ_GET_NESTED_STATE_PAGES means that userspace must be prepared
+> to fetch a remote page by the first call to KVM_SET_NESTED_STATE. The
+> same is true when using userfaultfd.
 > 
-> > It's about whether below could happen:
-> >
-> >        thread 1                thread 2                 thread 3
-> >        --------                --------                 --------
-> >                           write to page P (data=P1)
-> >                             (cached TLB writable)
-> >   zap_pte_range()
-> >     pgtable lock
-> >     clear pte for page P
-> >     pgtable unlock
-> >     ...
-> >                                                      migrate_vma_collect
-> >                                                        pte none, npages++, cpages++
-> >                                                        allocate device page
-> >                                                        copy data (with P1)
-> >                                                        map pte as device swap
-> >                           write to page P again
-> >                           (data updated from P1->P2)
-> >   flush tlb
-> >
-> > Then at last from processor side P should have data P2 but actually from
-> > device memory it's P1. Data corrupt.
-> 
-> In the above scenario migrate_vma_collect_pmd() will observe pte_none.
-> This will mark the src_pfn[] array as needing a new zero page which will
-> be installed by migrate_vma_pages()->migrate_vma_insert_page().
-> 
-> So there is no data to be copied hence there can't be any data
-> corruption. Remember these are private anonymous pages, so any
-> zap_pte_range() indicates the data is no longer needed (eg.
-> MADV_DONTNEED).
+> These new ordering constraints represent a UAPI breakage, but we don't
+> seem to be as concerned about that as we once were. Maybe that's a
+> good thing. Can we get rid of all of the superseded ioctls, like
+> KVM_SET_CPUID, while we're at it?
 
-My bad to have provided an example but invalid. :)
-
-So if the trylock in the function is the only way to migrate this page,
-then I agree stall tlb is fine.
-
-> 
-> >>
-> >> When I said I'm not familiar with the code, it's majorly about one thing I
-> >> never figured out myself, in that migrate_vma_collect_pmd() has this
-> >> optimization to trylock on the page, collect if it succeeded:
-> >>
-> >>   /*
-> >>    * Optimize for the common case where page is only mapped once
-> >>    * in one process. If we can lock the page, then we can safely
-> >>    * set up a special migration page table entry now.
-> >>    */
-> >>    if (trylock_page(page)) {
-> >>           ...
-> >>    } else {
-> >>           put_page(page);
-> >>           mpfn = 0;
-> >>    }
-> >>
-> >> But it's kind of against a pure "optimization" in that if trylock failed,
-> >> we'll clear the mpfn so the src[i] will be zero at last.  Then will we
-> >> directly give up on this page, or will we try to lock_page() again
-> >> somewhere?
-> 
-> That comment is out dated. We used to try locking the page again but
-> that was removed by ab09243aa95a ("mm/migrate.c: remove
-> MIGRATE_PFN_LOCKED"). See
-> https://lkml.kernel.org/r/20211025041608.289017-1-apopple@nvidia.com
-> 
-> Will post a clean-up for it.
-
-That'll help, thanks.
-
--- 
-Peter Xu
-
+I view KVM_REQ_GET_NESTED_STATE_PAGES as a special case.  We are likely the only
+users, we can (eventually) wean ourselves off the feature, and we can carry
+internal patches (which we are obviously already carrying) until we transition
+away.  And unlike KVM_SET_CPUID and other ancient ioctls() that are largely
+forgotten, this feature is likely to be a maintenance burden as long as it exists.

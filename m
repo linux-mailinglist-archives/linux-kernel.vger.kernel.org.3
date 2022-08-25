@@ -2,137 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E159C5A085E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07835A0861
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbiHYFPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 01:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S231425AbiHYFQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 01:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiHYFPO (ORCPT
+        with ESMTP id S229642AbiHYFQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 01:15:14 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06A55FAE5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 22:15:13 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id s206so16929533pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 22:15:13 -0700 (PDT)
+        Thu, 25 Aug 2022 01:16:21 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C3E9E699;
+        Wed, 24 Aug 2022 22:16:19 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w22so3378143ljg.7;
+        Wed, 24 Aug 2022 22:16:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=IoTGWLwyvop2rVJHP5oZfbgjn5SZOhi7mBp2mLs3b8o=;
-        b=hWS35hzvkklbPcmzwr0ke1xSxxNLIZKEBgu4EdC6aCEgE6xHVkCoEu2kno5YJ6tfXm
-         8kVoPTREEk7eK5hr/lSMQHfXsHXXJrTryQ5SQuOYIMm1SxLSGqxQaj5cxlwMFR7NVMUA
-         J+9VxSCRchN1w/+Nl0TqCDp8XsDn+ieiGDZemsR78I7kLEd9Xv2+/uwr1JUvdqDJcOIW
-         dheI0IvamqlSUVySz9mq5CJM7QA+N+r8QkOHViKrdXOyfS/FAD3OND17l86YOmln2Mgb
-         uxVlZ27HeQ1GGSTVTUs/pWpqZRyfZMdKCr0ejgTmPmh5aOWXZR92En4revU68HT6uMt2
-         pgWw==
+        bh=73A3PA1tNcUNvJjHON3380nOXGx0PNBXSH7q3EuDDnc=;
+        b=MSOUpNVA4XHFH69NPXNfDD+PzQipjFZJrr6m+fuMun0+uboEjchC3kOVMlWTsy+Nil
+         99XY2GTd+zwb27lqrzHWlzYlmHTXNzk21iUcvhPVqnwPCViwBwrV3a6jUC1GJlmYeluo
+         8LFr4j/Npd1AoQ6uzX5NbyMnq5bVkotv/FW4+2Q2SV0WbS7H7f3PfvYvz2ZKW2jqwWZ6
+         wNz+KFldLjcTQzrkQZN785gLo32i9kdf6RLCPxlQh/2XNBLB7JHwEnRRwaNjctvBNLFE
+         cprJEue28HKS9YftmFVyU63/LukdVWVoi1O/bKwdh2C5GCxruiN20iB1X7FXknXryKco
+         tAhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=IoTGWLwyvop2rVJHP5oZfbgjn5SZOhi7mBp2mLs3b8o=;
-        b=PBfGJHJvCRID3kfMWSK8eeCJLod3/KTMm7RB71bMY2/BMQAw8+an7JmPyN1PjSw2HK
-         PsjbuJQpbLLzKkXJwR/7J5Ln5DLhV+whb105Vz2GMGMcMRsOLF4QUi3MoioDJ2P5jJSk
-         GzhiSqNXnxujMtAy+41J8fXgbSYoBkp06LDICneNtvsJ393DnAVjXVINidE/CX2+8UWV
-         +PnLMP8OP03X4qux2FiYG+3k3t4QrjxNnxorAtPDUqs0PqFnC3CKIIRbd8SfLktObTeT
-         WgvyeupQIz3Bp9ab/56J4pFfhxPCPgdIjRXtdjJbm8Shw6v8/IW1sfe/RLBK/RnrdUnV
-         rgNg==
-X-Gm-Message-State: ACgBeo1StgttvA0OTstoZHZFdZC0ybCBCGROQkAJbhBJNpBmkBI474EG
-        BHSFFo+EFMLuqYCqdKjysQ8=
-X-Google-Smtp-Source: AA6agR4r1V9IbnMNeexhhTPrl4XJ3D41ExWsIOPUH4wsZ2kpePU5MZBWLgwlH6ZGFjXh5lysPMXwLQ==
-X-Received: by 2002:a05:6a00:4393:b0:52f:3603:e62f with SMTP id bt19-20020a056a00439300b0052f3603e62fmr2492716pfb.23.1661404513144;
-        Wed, 24 Aug 2022 22:15:13 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id h20-20020aa796d4000000b0053671a241a5sm8763912pfq.191.2022.08.24.22.15.08
+        bh=73A3PA1tNcUNvJjHON3380nOXGx0PNBXSH7q3EuDDnc=;
+        b=ou28Sgf3O9CMrWL9TO54TS0Pr4jbc5bakVafEok+LCO+TzyLmrWlHpVBfu4ULesE4E
+         nLkUYfx8/2CKhqh8JqVWGC0BWqsZM3hP5IlLmv9ZvUw+GQ1N9JFzTUswbP9AknVNHSpS
+         7TuAFsSgm+g6IUSSKe0yImYrbbPmgAL+fAw+kHP9wy0AkT5ibKYIqNThKna8C8+KldHP
+         KfYDMQScFyyLh5Tb8RhVDsinW/KmIUHNEAmgnkWAg1W8SsAhV81d8ph4kQL0f/IcAKMw
+         EtuSouuacSd7RpA4oo0DcDc531C5sZB0whkHXmSP7+GU54HzLVzUsB1G53kolzGUOtQ2
+         4GDw==
+X-Gm-Message-State: ACgBeo3qwA1w+T8qqcqwtQSvz7sVHD8NsMxYeP4S6Q/fnyqcQfkBY9Cl
+        tFU96YwncP5trrsr7s7zeMw=
+X-Google-Smtp-Source: AA6agR4WRI0UJiBuMep34NFqjfH/hvCWrJ7Fr7Y1Rn+iMfWxh60aGcJMk8I9GiGN2sPUGumxU5TD/w==
+X-Received: by 2002:a2e:a587:0:b0:25f:e6ac:c287 with SMTP id m7-20020a2ea587000000b0025fe6acc287mr548687ljp.416.1661404577724;
+        Wed, 24 Aug 2022 22:16:17 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id s9-20020ac24649000000b0048b03d1ca4asm292529lfo.161.2022.08.24.22.16.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 22:15:12 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 14:15:06 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH 1/9] slub: Make PREEMPT_RT support less convoluted
-Message-ID: <YwcFWsO/iNE534dp@hyeyoo>
-References: <20220817162703.728679-1-bigeasy@linutronix.de>
- <20220817162703.728679-2-bigeasy@linutronix.de>
- <alpine.DEB.2.22.394.2208181136560.1901102@gentwo.de>
- <5679405a-b3c3-6dc5-783f-7ebeda7c9bf0@suse.cz>
- <alpine.DEB.2.22.394.2208191655540.2139415@gentwo.de>
+        Wed, 24 Aug 2022 22:16:17 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 08:16:14 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 24/24] PCI: dwc: Add DW eDMA engine support
+Message-ID: <20220825051614.kfify5fbqlhurvdn@mobilestation>
+References: <20220824181319.wkj4256a5jp2xjlp@mobilestation>
+ <20220824181754.GA2794837@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2208191655540.2139415@gentwo.de>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220824181754.GA2794837@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 05:04:31PM +0200, Christoph Lameter wrote:
-> On Thu, 18 Aug 2022, Vlastimil Babka wrote:
+On Wed, Aug 24, 2022 at 01:17:54PM -0500, Bjorn Helgaas wrote:
+> On Wed, Aug 24, 2022 at 09:13:19PM +0300, Serge Semin wrote:
+> > On Wed, Aug 24, 2022 at 11:51:18AM -0500, Bjorn Helgaas wrote:
+> > > On Mon, Aug 22, 2022 at 09:53:32PM +0300, Serge Semin wrote:
 > 
-> > On 8/18/22 11:42, Christoph Lameter wrote:
-> > > On Wed, 17 Aug 2022, Sebastian Andrzej Siewior wrote:
-> > >
-> > >> + *   On PREEMPT_RT, the local lock neither disables interrupts nor preemption
-> > >> + *   which means the lockless fastpath cannot be used as it might interfere with
-> > >> + *   an in-progress slow path operations. In this case the local lock is always
-> > >> + *   taken but it still utilizes the freelist for the common operations.
-> > >
-> > > The slub fastpath does not interfere with slow path operations and the
-> >
-> > That's true on !PREEMPT_RT because a slowpath operation under
-> > local_lock_irqsave() will disable interrupts, so there can't be a
-> > fastpath operation in an interrupt handler appearing in the middle of a
-> > slowpath operation.
-> >
-> > On PREEMPT_RT local_lock_irqsave() doesn't actually disable interrupts,
-> > so that can happen. IIRC we learned that the hard way when Mike
-> > Galbraith was testing early versions of my PREEMPT_RT changes for SLUB.
+> > > > +	val = dw_pcie_readl_dbi(pci, PCIE_DMA_VIEWPORT_BASE + PCIE_DMA_CTRL);
+> > > > +	if (val == 0xFFFFFFFF && pci->edma.reg_base) {
+> > > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
+> > > > +
+> > > > +		val = dw_pcie_readl_dma(pci, PCIE_DMA_CTRL);
+> > > > +	} else if (val != 0xFFFFFFFF) {
+> > > 
+> > 
+> > > Consider PCI_POSSIBLE_ERROR() as an annotation about the meaning of
+> > > 0xFFFFFFFF and something to grep for.
+> > 
+> > In this case FFs don't mean an error but a special value, which
+> > indicates that the eDMA is mapped via the unrolled CSRs space. The
+> > similar approach has been implemented for the iATU legacy/unroll setup
+> > auto-detection. So I don't see much reasons to have it grepped, so as
+> > to have a macro-based parametrization since the special value will
+> > unluckily change while having the explicit literal utilized gives a
+> > better understanding of the way the algorithm works.
 > 
-> Well yes if you enable interrupts during the slowpath then interrupts may
-> use the fastpath. That is a basic design change to the way concurrency is
-> handled in the allocators.
-> 
-> There needs to be some fix here to restore the exclusion of the fastpath
-> during slow path processing. This could be
-> 
-> A) Exclude the fastpath during slowpath operations
-> 
-> This can be accomplished by setting things up like in the debug mode
-> that also excludes the fastpath.
 
-I think we can do that by disabling preemption (for a short period, I think)
-in slowpath on RT (like disabling irq in non-RT)
+> If 0xFFFFFFFF is the result of a successful PCIe Memory Read,
 
-But I wonder if RT guys will prefer that?
+Right. It is.
 
-> B) Force interrupt allocations to the slowpath.
-> 
-> Check some flag that indicates an interrupt allocation is occurring and
-> then bypass the fastpath.
+> and not
+> something synthesized by the host bridge when it handles an
+> Unsupported Request completion,
 
-There is nothing special about interrupt allocation on RT.
-All users of SLUB on RT must not be in hardirq context.
+No it isn't. To be clear 0xFFs don't indicate some PCIe bus/controller
+malfunction, but they are a result of reading the
+DMA_CTRL_VIEWPORT_OFF register which doesn't exist. The manual
+explicitly says: "Note - When register does not exist, value is fixed
+to 32'hFFFF_FFFF". The register doesn't exist if either eDMA is
+unavailable or the eDMA CSRs are mapped via the unrolled state. That
+logic is used to auto-detect the eDMA availability and the way of it's
+CSRs mapping.
 
-So I don't think it is possible to distingush between a thread being preempted
-and another thread that preempts it.
+> I'm fine with keeping it as is.
 
--- 
-Thanks,
-Hyeonggon
+Ok. Thanks.
+
+-Sergey

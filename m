@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B195A08D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23C75A08DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbiHYG14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S235391AbiHYGaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiHYG1z (ORCPT
+        with ESMTP id S235203AbiHYGaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:27:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437439F77C;
-        Wed, 24 Aug 2022 23:27:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F1F205C825;
-        Thu, 25 Aug 2022 06:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661408873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0spxPtpuY4nMM9lIZ8wJ8lR+BxR1fXRkfAOF1d5glCI=;
-        b=eq/4tfrvxgvx73IX4ZqhksV9e/s3wS8AVykgXRb7pBPsKA4slFdbEyupVAc1d9czG9R3ZE
-        BCB3DiYpY7h9NYjSnG8XdYVLhzSjt4V01q5kNiiFB0qUvA0Zk3Y30HvAyWW7Am7WEC4Nbi
-        dxP6HrKPqeuZvUS6KKdQ0KCOaapCA0g=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB50813A89;
-        Thu, 25 Aug 2022 06:27:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3hX5LmgWB2N/NwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 06:27:52 +0000
-Date:   Thu, 25 Aug 2022 08:27:52 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     lizhe.67@bytedance.com
-Cc:     Jason@zx2c4.com, akpm@linux-foundation.org, corbet@lwn.net,
-        keescook@chromium.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com, mark-pk.tsai@mediatek.com,
-        mhiramat@kernel.org, rostedt@goodmis.org, vbabka@suse.cz,
-        yuanzhu@bytedance.com
-Subject: Re: [PATCH v2] page_ext: introduce boot parameter 'early_page_ext'
-Message-ID: <YwcWaO1Z5pSRRokc@dhcp22.suse.cz>
-References: <YwXczj8Dh0uI0EA9@dhcp22.suse.cz>
- <20220825062129.92091-1-lizhe.67@bytedance.com>
+        Thu, 25 Aug 2022 02:30:14 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E197B1CE
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:30:12 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z6so26911008lfu.9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=06xW1jLI62seO9Abhqf7FvVwnPtCd5zQbyZloWjUVF8=;
+        b=Xp1VJitjfneppA5ItyJbrwobLKiJktUPWTA3Y1e1m8wRQrWcEUDLziByK6pc4otLjj
+         WfLxaGtsT9q2g+Pf/M9H6mCz9mwaVGySTC2KCsil15m19xi0KzeJQmmaZGg1evoc5IxO
+         mcuVCcZ8H+ZAksS/LnZNZGjsOdf4mrk7+wtqUvSsD2XfExoNatAshEygSvmYd90xKNyC
+         +73IxW2mSkX/spKZzU80B48EZ5YPWpnVhbUVx7VjEMGb9FMeRVsOQiMv3r5ueN9aPhMP
+         JhpO2ZCNHy80Dk8qZgubo0tF1HwcqmaaCDZ05OX01xcbFrXXR9bFHiGdzTRrvaqfH3yM
+         /GwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=06xW1jLI62seO9Abhqf7FvVwnPtCd5zQbyZloWjUVF8=;
+        b=pbi7QqQHCfGb8frMIz174tM+pVx6gMBaX1E4z4FqwUhglQcx4J/7qyldn9OOSQAXJF
+         pLN/YxTjyBU0+1bsWQ+aBbMx1r+QIR6cY5E6cPmKatHvM6X1p9/G5OcB3FrkzTUUGBIb
+         DtQGPZuDfzYcZepCV8YBKuk2/eeceJwVumhxpU1JGHRJZ8bITghkYRfxoz4NgjEhslb+
+         zmKEubzD5mSFfrdurrs8Ih7BhpCHHTILRwgvPizNDxR0idaCHvM9q5UVoOPViGvi3dP9
+         VtxvEJox3XagY68+ATUC/dZGFkcknJGeshnzwqaTjE9xlHupVymNkm46aLtV4EPLbY2M
+         Ic3w==
+X-Gm-Message-State: ACgBeo1HiD3VCAUs9kPfSRYdfoWv2+FqUghixK/1+Iv4BA6iIEHlXEkS
+        kFB1yCfBpiL8GtW6v1S3Oa/Wzg==
+X-Google-Smtp-Source: AA6agR5voLFMZFTTgJvhNlxJQbRcDTQfj4hRCUGwRZmiTfWs0TLDdpCmpd7u6VEOeHEanOx6DfWmwA==
+X-Received: by 2002:a05:6512:c12:b0:48d:231c:3099 with SMTP id z18-20020a0565120c1200b0048d231c3099mr634468lfu.462.1661409010359;
+        Wed, 24 Aug 2022 23:30:10 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id x4-20020ac24884000000b00492c2394ea5sm321001lfc.165.2022.08.24.23.30.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 23:30:09 -0700 (PDT)
+Message-ID: <7c502652-983b-f282-f989-b224942f27bb@linaro.org>
+Date:   Thu, 25 Aug 2022 09:30:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825062129.92091-1-lizhe.67@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: Add missing
+ (unevaluated|additional)Properties on child nodes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20220823145649.3118479-6-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220823145649.3118479-6-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 25-08-22 14:21:29, lizhe.67@bytedance.com wrote:
-> On 2022-08-24 8:09 UTC, mhocko@suse.com wrote:
-[...]
-> >> diff --git a/init/main.c b/init/main.c
-> >> index 91642a4e69be..3760c0326525 100644
-> >> --- a/init/main.c
-> >> +++ b/init/main.c
-> >> @@ -849,6 +849,8 @@ static void __init mm_init(void)
-> >>  	pgtable_init();
-> >>  	debug_objects_mem_init();
-> >>  	vmalloc_init();
-> >> +	/* Should be run after vmap initialization */
-> >> +	page_ext_init(true);
-> >
-> >you can just 
-> >	if (early_page_ext)
-> >		page_ext_init();
-> >
-> >>  	/* Should be run before the first non-init thread is created */
-> >>  	init_espfix_bsp();
-> >>  	/* Should be run after espfix64 is set up. */
-> >> @@ -1606,7 +1608,7 @@ static noinline void __init kernel_init_freeable(void)
-> >>  	padata_init();
-> >>  	page_alloc_init_late();
-> >>  	/* Initialize page ext after all struct pages are initialized. */
-> >> -	page_ext_init();
-> >> +	page_ext_init(false);
-> >
-> >	if (!early_page_ext)
-> >		page_ext_init();
+On 23/08/2022 17:56, Rob Herring wrote:
+> In order to ensure only documented properties are present, node schemas
+> must have unevaluatedProperties or additionalProperties set to false
+> (typically).
 > 
-> I think we can use an inline function instead of 'early_page_ext' here. The
-> reason is that if CONFIG_PAGE_EXTENSION=n, 'early_page_ext' is undefined.
-> Thought we can #define early_page_ext as false, it is ugly.
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Agreed!
 
--- 
-Michal Hocko
-SUSE Labs
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

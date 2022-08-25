@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07835A0861
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329375A0865
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiHYFQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 01:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S230512AbiHYFSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 01:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiHYFQV (ORCPT
+        with ESMTP id S229577AbiHYFSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 01:16:21 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C3E9E699;
-        Wed, 24 Aug 2022 22:16:19 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id w22so3378143ljg.7;
-        Wed, 24 Aug 2022 22:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=73A3PA1tNcUNvJjHON3380nOXGx0PNBXSH7q3EuDDnc=;
-        b=MSOUpNVA4XHFH69NPXNfDD+PzQipjFZJrr6m+fuMun0+uboEjchC3kOVMlWTsy+Nil
-         99XY2GTd+zwb27lqrzHWlzYlmHTXNzk21iUcvhPVqnwPCViwBwrV3a6jUC1GJlmYeluo
-         8LFr4j/Npd1AoQ6uzX5NbyMnq5bVkotv/FW4+2Q2SV0WbS7H7f3PfvYvz2ZKW2jqwWZ6
-         wNz+KFldLjcTQzrkQZN785gLo32i9kdf6RLCPxlQh/2XNBLB7JHwEnRRwaNjctvBNLFE
-         cprJEue28HKS9YftmFVyU63/LukdVWVoi1O/bKwdh2C5GCxruiN20iB1X7FXknXryKco
-         tAhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=73A3PA1tNcUNvJjHON3380nOXGx0PNBXSH7q3EuDDnc=;
-        b=ou28Sgf3O9CMrWL9TO54TS0Pr4jbc5bakVafEok+LCO+TzyLmrWlHpVBfu4ULesE4E
-         nLkUYfx8/2CKhqh8JqVWGC0BWqsZM3hP5IlLmv9ZvUw+GQ1N9JFzTUswbP9AknVNHSpS
-         7TuAFsSgm+g6IUSSKe0yImYrbbPmgAL+fAw+kHP9wy0AkT5ibKYIqNThKna8C8+KldHP
-         KfYDMQScFyyLh5Tb8RhVDsinW/KmIUHNEAmgnkWAg1W8SsAhV81d8ph4kQL0f/IcAKMw
-         EtuSouuacSd7RpA4oo0DcDc531C5sZB0whkHXmSP7+GU54HzLVzUsB1G53kolzGUOtQ2
-         4GDw==
-X-Gm-Message-State: ACgBeo3qwA1w+T8qqcqwtQSvz7sVHD8NsMxYeP4S6Q/fnyqcQfkBY9Cl
-        tFU96YwncP5trrsr7s7zeMw=
-X-Google-Smtp-Source: AA6agR4WRI0UJiBuMep34NFqjfH/hvCWrJ7Fr7Y1Rn+iMfWxh60aGcJMk8I9GiGN2sPUGumxU5TD/w==
-X-Received: by 2002:a2e:a587:0:b0:25f:e6ac:c287 with SMTP id m7-20020a2ea587000000b0025fe6acc287mr548687ljp.416.1661404577724;
-        Wed, 24 Aug 2022 22:16:17 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id s9-20020ac24649000000b0048b03d1ca4asm292529lfo.161.2022.08.24.22.16.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 22:16:17 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 08:16:14 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 24/24] PCI: dwc: Add DW eDMA engine support
-Message-ID: <20220825051614.kfify5fbqlhurvdn@mobilestation>
-References: <20220824181319.wkj4256a5jp2xjlp@mobilestation>
- <20220824181754.GA2794837@bhelgaas>
+        Thu, 25 Aug 2022 01:18:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7666D9E69A;
+        Wed, 24 Aug 2022 22:18:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23F28B826BE;
+        Thu, 25 Aug 2022 05:18:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0D4C433C1;
+        Thu, 25 Aug 2022 05:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661404717;
+        bh=fxlXoI0BcD8fsY3aXrOKEQ/2X/05DBMUWFtJX8AD4Pw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Mlo8Lc6memWV3g/OVDBSFHdaKPkoXWyN5Bk6d2hIDAXVbDkLwFq/pOvdkR3zhlIn7
+         KfcK3pO48mJ5r+Tzs87UFaVg4oqRF0qT5J2zGAGeu0u+9PlRBCO+omo7ZMPtDYR6NA
+         61ndSbqHbrHG2shPJ1NhPOxwItwaCETHWnBeADsH7goCKsBYlm3ESAOF076k62DfyY
+         KzhJKdniISxznAuEIEaGgFcio2dxNSxUSl6AdTtP0r4mrnIny1ZNvcsjnaOSv4PT7Y
+         /Iba5z4cAeUKX8nNVPV0dXdmGilkG9uIQl1E9tKl6VCPjYp2N6bihAuy9eXUbCPDaT
+         0K2VijtR9H58Q==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH] x86/sgx: Print EREMOVE return value in __sgx_sanitize_pages()
+Date:   Thu, 25 Aug 2022 08:18:27 +0300
+Message-Id: <20220825051827.246698-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824181754.GA2794837@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 01:17:54PM -0500, Bjorn Helgaas wrote:
-> On Wed, Aug 24, 2022 at 09:13:19PM +0300, Serge Semin wrote:
-> > On Wed, Aug 24, 2022 at 11:51:18AM -0500, Bjorn Helgaas wrote:
-> > > On Mon, Aug 22, 2022 at 09:53:32PM +0300, Serge Semin wrote:
-> 
-> > > > +	val = dw_pcie_readl_dbi(pci, PCIE_DMA_VIEWPORT_BASE + PCIE_DMA_CTRL);
-> > > > +	if (val == 0xFFFFFFFF && pci->edma.reg_base) {
-> > > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
-> > > > +
-> > > > +		val = dw_pcie_readl_dma(pci, PCIE_DMA_CTRL);
-> > > > +	} else if (val != 0xFFFFFFFF) {
-> > > 
-> > 
-> > > Consider PCI_POSSIBLE_ERROR() as an annotation about the meaning of
-> > > 0xFFFFFFFF and something to grep for.
-> > 
-> > In this case FFs don't mean an error but a special value, which
-> > indicates that the eDMA is mapped via the unrolled CSRs space. The
-> > similar approach has been implemented for the iATU legacy/unroll setup
-> > auto-detection. So I don't see much reasons to have it grepped, so as
-> > to have a macro-based parametrization since the special value will
-> > unluckily change while having the explicit literal utilized gives a
-> > better understanding of the way the algorithm works.
-> 
+In the 2nd run of __sgx_sanitize_pages() print the error
+message. All EREMOVE's should succeed. This will allow to
+provide some additional clues, if not.
 
-> If 0xFFFFFFFF is the result of a successful PCIe Memory Read,
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ arch/x86/kernel/cpu/sgx/main.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Right. It is.
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 515e2a5f25bb..33354921c59f 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -50,7 +50,7 @@ static LIST_HEAD(sgx_dirty_page_list);
+  * from the input list, and made available for the page allocator. SECS pages
+  * prepending their children in the input list are left intact.
+  */
+-static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
++static void __sgx_sanitize_pages(struct list_head *dirty_page_list, bool verbose)
+ {
+ 	struct sgx_epc_page *page;
+ 	LIST_HEAD(dirty);
+@@ -90,6 +90,9 @@ static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
+ 			list_del(&page->list);
+ 			sgx_free_epc_page(page);
+ 		} else {
++			if (verbose)
++				pr_err_ratelimited(EREMOVE_ERROR_MESSAGE, ret, ret);
++
+ 			/* The page is not yet clean - move to the dirty list. */
+ 			list_move_tail(&page->list, &dirty);
+ 		}
+@@ -394,8 +397,8 @@ static int ksgxd(void *p)
+ 	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
+ 	 * required for SECS pages, whose child pages blocked EREMOVE.
+ 	 */
+-	__sgx_sanitize_pages(&sgx_dirty_page_list);
+-	__sgx_sanitize_pages(&sgx_dirty_page_list);
++	__sgx_sanitize_pages(&sgx_dirty_page_list, false);
++	__sgx_sanitize_pages(&sgx_dirty_page_list, true);
+ 
+ 	/* sanity check: */
+ 	WARN_ON(!list_empty(&sgx_dirty_page_list));
+-- 
+2.37.1
 
-> and not
-> something synthesized by the host bridge when it handles an
-> Unsupported Request completion,
-
-No it isn't. To be clear 0xFFs don't indicate some PCIe bus/controller
-malfunction, but they are a result of reading the
-DMA_CTRL_VIEWPORT_OFF register which doesn't exist. The manual
-explicitly says: "Note - When register does not exist, value is fixed
-to 32'hFFFF_FFFF". The register doesn't exist if either eDMA is
-unavailable or the eDMA CSRs are mapped via the unrolled state. That
-logic is used to auto-detect the eDMA availability and the way of it's
-CSRs mapping.
-
-> I'm fine with keeping it as is.
-
-Ok. Thanks.
-
--Sergey

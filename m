@@ -2,284 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D9B5A127E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4955A1280
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241172AbiHYNjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S241402AbiHYNkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240817AbiHYNjv (ORCPT
+        with ESMTP id S240817AbiHYNkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:39:51 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CC2124
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:39:45 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F18DC5802D2;
-        Thu, 25 Aug 2022 09:39:41 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 25 Aug 2022 09:39:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661434781; x=1661441981; bh=xufXNQfWsW
-        5YMPwr77PxDXziEf7hBPLQzvXQIo3+2+Y=; b=KRY3ZJmLUrz8S7afTCwjV+6oVP
-        hTtlebvUk7hjY/8s8PwqdJ3R9Z0EwogT5IbBAVEgOBSZdEtrSbrxTFN7gEX61ztq
-        cidK+o2bTLG8i+LOdAXUqS1tE4UryHbuz7CY1fbrzvsuPUUomb5r1A6txmAcTMpW
-        dWs/kEzOME+WWG3iOdu/czo1E7VQBI0qFo5hTRu9UBxucz43OTruG8RdlfPshahK
-        fsPYnLq/KywCkzc9uQgpaQxoFy5bDDDUOeTEipfnBiFLR4EXkGr2YTU4v/7UBKXG
-        U6S9ryjKeoVFgO2SKJbMuuVo7c3bXNgvxwVvGAw5Ly9kTCz1DWnyeEycm7ag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661434781; x=1661441981; bh=xufXNQfWsW5YMPwr77PxDXziEf7h
-        BPLQzvXQIo3+2+Y=; b=RZH4Z4XZhMW0HQ0yV+K9lv2Xk6n+odMvjRg4xiem1unP
-        y44V2lmeJSbc3J3Yf/Z58mYGcwKGkz/x4S0mRomdYq+JMe0Klp6+OpSo0D5oWp2g
-        yQBPMbNY+RMZRW1tyrMPJp4zn+JFk4xCfVCdZVQMLnj0zMjU881wkyt0XZbxtxoM
-        Sord2tDZWNYw4fXxTms0I7824hrZwosPGAWDWMDy+CU6/PRuutKgEcAMD5yU+pwR
-        gq41cv3QRCbf+fp64eaTAAk32G7yPKeAyTtApBqz5HJWboB/D/pnpALfx4V6lIz2
-        zItw1gBXht3MnRipo0H1OztZu77gosZPc9GL6fkmIA==
-X-ME-Sender: <xms:nHsHY5s2vftPC2fJhSn4gpJtwz4fOESWnfOfu07gKIx-GB--5tQHqA>
-    <xme:nHsHYyeeeTdDs9LacFBL_0S0SJboXaCpM-VBAeeXrSBiih5JMqSA-JsmCM3J1mag1
-    6rd_v4k66_nMEfdVoA>
-X-ME-Received: <xmr:nHsHY8y4M3jNYujUgbrqOFMIk7kslWNaitxFL2XvYpnemhsJeoz8sG8zazo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgieehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:nHsHYwNjAC9XUpKy3wxGujpnkTEOCb1wnSjXt5yLrjifYdyxOwQ0ew>
-    <xmx:nHsHY5-eJnmHvThPIanhcforvzimJwOeDcU_e3GqzdNq3AhAHYe5pQ>
-    <xmx:nHsHYwUAb-WC1XeDLe00NVdGozPbgF-GEgHoL__q6yTSs6zm03lKGg>
-    <xmx:nXsHY1u6EAo8Vb9fzDWEOXCOGN4Su2VXt3qFk_It84MuFO_R8OQELw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 Aug 2022 09:39:39 -0400 (EDT)
-Date:   Thu, 25 Aug 2022 15:39:36 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220825133936.gnpgdtx4jedei5a6@houat>
-References: <20220817074710.w4c4xwj7edly2b5p@houat>
- <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
- <20220817111454.pn2iltvyo2drebq7@houat>
- <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
- <20220817131854.jwmhqvhfhp77bbr3@houat>
- <CAMuHMdXrfH9MArXesfNCvqayiq17u7XaqtSvXTNt4V10=obSHQ@mail.gmail.com>
- <20220818145436.vqojnhmvhjxdzooe@houat>
- <CAMuHMdW5kTUeg59fym7QxfN5oisTZHWbiAPeSYKJVShZWduJcA@mail.gmail.com>
- <20220818153442.u4knumkfbe7j6zj3@houat>
- <CAMuHMdUNYErf4PJLbSFFdB1EhvzbscqxHE74FnsjYQXLy8DLZA@mail.gmail.com>
+        Thu, 25 Aug 2022 09:40:16 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBA4AE5D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:40:15 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r4so26143896edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=C3elOk/LV3mnV2ehruMejhTIIEkQ+o9YVKjS0Rdu5gY=;
+        b=KxoHAR5Gnx7WnM53USU+UWe+NsORBkYmqzRsUncx3r7cO7fjjBh/HRqs/K8EVAd6l1
+         IxIxV5P1dQt4NICnaEJNKMhprjTNQc9Y2Ph8LJfMco2J8nodI582ZtRYcmXtNbl7bme9
+         lzS17HGWOfFnn4u7hTC7W6B4dWQs4STFGudQWy0lI6sSx46wGX7Dsw9acQ2+d4cLfYBZ
+         jXFkPkkppC+AxMnUAgRqfBBuHvEJ0xN6DUW7w07g5/FEUohayOPvQR03No7z9lJB78lQ
+         riU8pcammoIQgmwJ1nwGuJpE+rU/8RFPQu+de3jgvNf00R9ORAWOpKz1To2x9bQvSsny
+         GkGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=C3elOk/LV3mnV2ehruMejhTIIEkQ+o9YVKjS0Rdu5gY=;
+        b=I5imVysJeW23LETCfBsCIgDZ/KEVCBMVsR+HNJ7AKlLTUcQ/JTIapm7lWJ+Nv/Esom
+         yLlc574Prf8zmFgYdAc6k8+dNGOmBuAVJDvBDJiC/5oyiL4F958KbdrX0B6eXawQgfNt
+         pvvNwqyjFbvWCtOa6hG8c9EkjrxQ233Rni3Hp1hAz/xlPO+yAGJJbtTnY6V5ETQ+rEfp
+         dL2oq5r9hISxYlKiTA068V0FbCwfaIniejdITWxm9OK6jTBOY2BRXo6CZAvgh8qlB6Tn
+         O16e4X8rmzOzMwmgmBUE3GfFZM1gaRw+9kseISgA+wxeaRUowRHRGminj9IIi33pIUhU
+         /Xjw==
+X-Gm-Message-State: ACgBeo0FJLAvBg0AFwzaT6GSQMFqragYccbdG8a7C0n61a1wCqwHS3om
+        tw4SIk+f7GO3AaQE4Z8r1efeLkCsnXIK26Jq2sSgUQ==
+X-Google-Smtp-Source: AA6agR43gxImzSfY1ti7ho1ZHcUy3o57rrqq5Jay0sPfgAmtytCI6sCMZQ0L885wu9pZ8Zvuqk9VoPa/tutbIdm9gC0=
+X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
+ ez23-20020a056402451700b004437fe12d60mr3301565edb.133.1661434813903; Thu, 25
+ Aug 2022 06:40:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="abetw7tfzbu2b4iz"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUNYErf4PJLbSFFdB1EhvzbscqxHE74FnsjYQXLy8DLZA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220818135522.3143514-1-arnd@kernel.org> <20220818135737.3143895-1-arnd@kernel.org>
+In-Reply-To: <20220818135737.3143895-1-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 25 Aug 2022 15:40:02 +0200
+Message-ID: <CACRpkda+sV+Hh+aTUj7FCtJgoXEn7eweMj6gyNJ7CdMwbwwM_A@mail.gmail.com>
+Subject: Re: [PATCH 02/11] ARM: defconfig: clean up multi_v4t and multi_v5 configs
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 18, 2022 at 3:57 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
---abetw7tfzbu2b4iz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Integrator now selects the regulators and versatile selects the
+> reset driver, so the correspondig options can be dropped from
+> the defconfig files.
+>
+> Fixes: d2854bbe5f5c ("ARM: integrator: Add some Kconfig selections")
+> Fixes: 1c6e288da6cc ("ARM: versatile: move restart to the device tree")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Hi,
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-On Fri, Aug 19, 2022 at 11:35:42AM +0200, Geert Uytterhoeven wrote:
-> On Thu, Aug 18, 2022 at 5:34 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > On Thu, Aug 18, 2022 at 05:20:42PM +0200, Geert Uytterhoeven wrote:
-> > > On Thu, Aug 18, 2022 at 4:54 PM Maxime Ripard <maxime@cerno.tech> wro=
-te:
-> > > > On Wed, Aug 17, 2022 at 04:04:24PM +0200, Geert Uytterhoeven wrote:
-> > > > > On Wed, Aug 17, 2022 at 3:19 PM Maxime Ripard <maxime@cerno.tech>=
- wrote:
-> > > > > > On Wed, Aug 17, 2022 at 03:05:52PM +0200, Geert Uytterhoeven wr=
-ote:
-> > > > > > > On Wed, Aug 17, 2022 at 1:15 PM Maxime Ripard <maxime@cerno.t=
-ech> wrote:
-> > > > > > > > On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeve=
-n wrote:
-> > > > > > > > > On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cer=
-no.tech> wrote:
-> > > > > > > > > > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterh=
-oeven wrote:
-> > > > > > > > > > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime=
-@cerno.tech> wrote:
-> > > > > > > > > > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uyt=
-terhoeven wrote:
-> > > > > > > > > > > > > > > > > Either you have to add them here (e.g. "h=
-d720p50" and "hd720p60"), or
-> > > > > > > > > > > > > > > > > handle them through "@<refresh>".  The la=
-tter would impact "[PATCH v1
-> > > > > > > > > > > > > > > > > 09/35] drm/modes: Move named modes parsin=
-g to a separate function", as
-> > > > > > > > > > > > > > > > > currently a named mode and a refresh rate=
- can't be specified both.
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > I think the former would make more sense. I=
-t simplifies a bit the
-> > > > > > > > > > > > > > > > parser, and we're going to use a named mode=
- anyway.
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce=
- the tv_mode property as a
-> > > > > > > > > > > > > > > > > command-line option" uses a separate "tv_=
-mode" option, and not the main
-> > > > > > > > > > > > > > > > > mode name, I think you want to add them h=
-ere.
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > It's a separate story I think, we could hav=
-e a named mode hd720p50,
-> > > > > > > > > > > > > > > > which would be equivalent to 1280x720,tv_mo=
-de=3Dhd720p
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > So where's the field rate in "1280x720,tv_mod=
-e=3Dhd720p"?
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Above you said "I think the former would make mor=
-e sense", so that
-> > > > > > > > > > > > > should be "1280x720,tv_mode=3Dhd720p50"?
-> > > > > > > > > > > >
-> > > > > > > > > > > > No, 720p at 50Hz would be either hd720p50 or 1280x7=
-20@50,tv_mode=3Dhd720p
-> > > > > > > > > > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=
-=3Dhd720p
-> > > > > > > > > > >
-> > > > > > > > > > > I disagree: hd720p50 and hd720p60 are different TV mo=
-des.
-> > > > > > > > > >
-> > > > > > > > > > I agree, and I don't see how that command-line doesn't =
-express that?
-> > > > > > > > >
-> > > > > > > > > Oh, I see what you mean: yes, it expresses that.
-> > > > > > > > > But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576=
-}[ip] modes,
-> > > > > > > > > where the TV mode specifies both number of lines and fram=
-e rate.
-> > > > > > > >
-> > > > > > > > Only if we're using a named mode, and naming is hard :)
-> > > > > > >
-> > > > > > > That's not true: "640x480,tv_mode=3DPAL-N" would give me a mo=
-de with
-> > > > > > > 625 lines and 25 frames/s, "640x480,tv_mode=3DPAL-M" would gi=
-ve me a
-> > > > > > > mode with 525 lines and 30 frames/s.
-> > > > > >
-> > > > > > In that series, "640x480,tv_mode=3DPAL-N" would be rejected as =
-invalid:
-> > > > > >
-> > > > > > https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-proper=
-ties-v1-14-3d53ae722097@cerno.tech/
-> > > > >
-> > > > > It would become supported once the ideas from thread "[PATCH v1 0=
-4/35]
-> > > > > drm/modes: Introduce 480i and 576i modes" are implemented...
-> > > >
-> > > > Indeed, but I'm still not sure what your concern is here.
-> > > > "640x480,tv_mode=3DPAL-N" and "640x480,tv_mode=3DPAL-M" are both fa=
-irly
-> > > > obvious.
-> > > >
-> > > > You were initially saying that you had concern over the inconsisten=
-cy of
-> > > > NTSC/PAL/SECAM where the TV mode would specify a number of lines and
-> > > > frame rate, but hd720p50 also specifies a number of line and frame =
-rate?
-> > >
-> > > My concern is that you want to call the TV mode "hd720p", which
-> > > does not dictate the frame rate.
-> > > I would like to have both "720p50" and "720p60", as they do dictate
-> > > the frame rate, like all the non-hd modes.
-> >
-> > But they don't?
-> >
-> > The refresh rate is part of the drm_display_mode, whereas that property
-> > is metadata and entirely separate from the display mode.
-> >
-> > You can even change it without changing the mode at all
->=20
-> Yes, the refresh rate is part of drm_display_mode.  Vdisplay also
-> is, but that doesn't mean you can set it to e.g. 700 when using
-> "tv_mode=3DPAL-B". Some (combination of) parameters in drm_display_mode
-> are dictated by the tv_mode.
-
-But the opposite is also true: PAL-B and SECAM-B would be two different
-TV mode, but (could) have the same display mode.
-
-There's no equivalence or implication in that relationship, except for a
-smaller set of those parameters. But it's the entire display mode that
-we should compare.
-
-> Perhaps the meaning of "tv_mode" should be clarified? What does it
-> really mean, and what parameters does it (not) constrain?
-
-As far as I'm concerned, it's only about the encoding. We can check
-after the fact that, say, you don't try to use a mode line with than 525
-lines and some NTSC variant, but the mode has precedence over the
-property.
-
-> For e.g. "PAL-B", I know it's a mode with 625 lines and 30 frames/s
-> (60 fields/s).
-> For "hd720p" I know it is an analog mode with 750 lines, but it's still
-> ambiguous, as I don't know if it is the variant with 60 or 50 frames/s.
-
-As far as the TV mode property is concerned, it doesn't encode neither
-whether it has 750 lines, nor the refresh rate.
-
-If you're talking about a named mode, then yeah, it's basically an alias
-for a mode + a property, so it does, but we can choose names that aren't
-ambiguous.
-
-Maxime
-
---abetw7tfzbu2b4iz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwd7mAAKCRDj7w1vZxhR
-xZkBAQDrEXnDTiQIDw7WVDdGrymHTzA68O6aoUE0nXlp+5E0EAEAzwBa5cUcNh9j
-iMwk3ETvnvqMbV5kyg5f+gPHMuMLswM=
-=NZmB
------END PGP SIGNATURE-----
-
---abetw7tfzbu2b4iz--
+Yours,
+Linus Walleij

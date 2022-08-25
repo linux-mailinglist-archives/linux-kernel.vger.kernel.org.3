@@ -2,144 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF0A5A1504
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A78B5A150A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240847AbiHYPCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S233563AbiHYPCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbiHYPCQ (ORCPT
+        with ESMTP id S241658AbiHYPCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:02:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F75D0FA
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:02:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71202615A7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:02:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3B8C433D6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661439734;
-        bh=wjzgRFEte1JYnIbn0TO9+w6aujcip3bCGZB7ym5Hwqc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HkRRkzc9iafdkf9TMuKnfqx+MEHwzecpp3cFlYHeVXNhCy0CydbQiOhMjHVpUe1oY
-         z8ppkiRKmmBFXy8f/xvVskAEuR1DQ1GbwTz1qoYisg/Y8P4wll3wAnJK/wKYTf0nXf
-         xsJRoaTa+1V6PkhjmQOey5EARkduy8bSNR2rHEEQDuXpbw3h2n92Z92JFsPqEHUa/0
-         1jKFsx0C/45mNLfBD0fpSBeWj375DsH5odKJKfTgMGAhCTSA93C0jFG1ptbeqrC8fr
-         N2BvGI2buJudq0B41JKkljHZXQK/DCwDHSvY+vz7rLCQM2dc+APZ8lGhH/E0tvXNZM
-         /qTPFWo3Z3XIw==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11c896b879bso25204863fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:02:14 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1nmPo8tBFEzQOtgfdXPJQowydHDr/vDG4etWwyLV0htAp0Uto5
-        R5nKSSm4DIy5DLdRyvOGEttjVxSI/u/oodP65g==
-X-Google-Smtp-Source: AA6agR70oWHotJ5zvAGB1qZOQksOWhU541/A7VrzrBgK6KvY/ErP5FdHQ4RJbVcMw2k+yzFchbHSwLv1yStFufhZmaA=
-X-Received: by 2002:a05:6870:4690:b0:11c:d599:4f41 with SMTP id
- a16-20020a056870469000b0011cd5994f41mr5866261oap.69.1661439733913; Thu, 25
- Aug 2022 08:02:13 -0700 (PDT)
+        Thu, 25 Aug 2022 11:02:33 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3635B07C0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:02:31 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so23059429ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=KQTIg5jCKpBCPFk2L7wdYoB1lmJQPzPoMVtc6KYHvS4=;
+        b=pdmdfMkJpnHiZtIS6VJA51oFwb0n0D7fvAsuYwQEkJ9JL8Yufc70yS7IXmmwGsgo1B
+         T0djDZRs4rGK46gqGaKl9yJeI7HWy3eIKe5DPwn0hiKP84qb6RfgP0TwKrXc6cDl5vQe
+         FvFJLLQCr6bl9x1YIXap/s3P8N5w/J1AGn/7oLd+r5pIvJUxreMS/Stenguh6oeudnfM
+         DpsVUZ652iOywehY0U/jLPrRe//StG6j63RqBVUhFxzNka5L83UPShrEqjKRKxb/3bXa
+         Ckp3ZBSgU4ShYj6/dnYHzQH95JtSRVMlCoj1QwqfqbU+McbAOVCL1dt4F7RzkB20UL3j
+         XLZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=KQTIg5jCKpBCPFk2L7wdYoB1lmJQPzPoMVtc6KYHvS4=;
+        b=E53NM4IYk7q9DUz2jgCKq+OPdXWdT9KyRS3lp5zYp7FnTnA1vOAfGmZrnKGDPNb7na
+         8XHRHBCDI9MRaVKCafqgSVRRu0vJZ3uBVdD7nlqJJecIcO4Ln7xVvr4AEnMy41IYC+yI
+         BZnTUa3PXLdV0IxeO9f/Ce8Hd1YjqcM4RMNyWTsSr2TfgFiWMAONS1fA/+ca3VDoZyRN
+         7kgT0ahRP/b4ym7w2RCN7lXakJXrYZisc5XPwQ+b93uRgI9wZRpx1XnpD2Nvil1suUUv
+         6bB+nKxPKbgDH0EK+PxRS6+S8EEb4qal7pDlF4+n+zSgL/RBXpYW8w8W3WShC8/fG0uU
+         4yow==
+X-Gm-Message-State: ACgBeo2dwuZA0PXQYyuUeCRH2xyhjFQSqjSTJrJ2dRQuPa7fubaXGb0B
+        foayZSc65YNZ11036ZvS2Djb9hWkGQNv4w==
+X-Google-Smtp-Source: AA6agR5CXljSDCvli5lhhrm6AxqnYomGfl3hTxXo0GFubNcs4OJPNfK9hzK+WGrCGZuV52m/ZjorBg==
+X-Received: by 2002:a17:906:dc90:b0:73d:670d:5975 with SMTP id cs16-20020a170906dc9000b0073d670d5975mr2695541ejc.515.1661439750061;
+        Thu, 25 Aug 2022 08:02:30 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4090:a245:8020:2658:1f7c:362:3e99])
+        by smtp.gmail.com with ESMTPSA id r10-20020a17090609ca00b00732e3d94f4fsm2548771eje.124.2022.08.25.08.02.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 08:02:29 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        nm@ti.com, kristo@kernel.org
+Cc:     Jerome Neanne <jneanne@baylibre.com>, khilman@baylibre.com,
+        narmstrong@baylibre.com, j-keerthy@ti.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v4 0/6] Add support for TI TPS65219 PMIC.
+Date:   Thu, 25 Aug 2022 17:02:18 +0200
+Message-Id: <20220825150224.826258-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220721172727.14624-1-angelogioacchino.delregno@collabora.com> <CAGXv+5H+BQcT=JTD3Y1necym=6uLHD8HgWpjjpyTLSin9D1KNA@mail.gmail.com>
-In-Reply-To: <CAGXv+5H+BQcT=JTD3Y1necym=6uLHD8HgWpjjpyTLSin9D1KNA@mail.gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Thu, 25 Aug 2022 23:01:54 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-KS8XTqcaNRpzc0xfO23KfdTy8Gx=yGtGWLQJEcgsWjw@mail.gmail.com>
-Message-ID: <CAAOTY_-KS8XTqcaNRpzc0xfO23KfdTy8Gx=yGtGWLQJEcgsWjw@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: dsi: Add atomic {destroy, duplicate}_state,
- reset callbacks
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        xinlei.lee@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chen-Yu Tsai <wenst@chromium.org> =E6=96=BC 2022=E5=B9=B48=E6=9C=8819=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E6=99=9A=E4=B8=8A9:29=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, Jul 22, 2022 at 1:27 AM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
-> >
-> > Add callbacks for atomic_destroy_state, atomic_duplicate_state and
-> > atomic_reset to restore functionality of the DSI driver: this solves
-> > vblank timeouts when another bridge is present in the chain.
-> >
-> > Tested bridge chain: DSI <=3D> ANX7625 =3D> aux-bus panel
-> >
+Hi everyone,
 
-Applied to mediatek-drm-fixes [1], thanks.
+I am submitting this update for Jerome, he will probably do the next
+version again.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-fixes
+v4 is a lot smaller now as I squashed some patches as requested and
+some were applied. It is mainly the fixes of the things that Lee Jones
+pointed out in his review on v2, thanks for that.
 
-Regards,
-Chun-Kuang.
+It is now based on the regulator tree branch for-6.1:
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git
 
-> > Fixes: 7f6335c6a258 ("drm/mediatek: Modify dsi funcs to atomic operatio=
-ns")
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
-llabora.com>
->
-> This patch is now needed on top of v6.0-rc1, otherwise booting will
-> stall for a while waiting for display vblank, which never happens
-> because the DSI pipeline is not configured correctly.
->
-> ChenYu
->
-> > ---
-> >
-> > Note: The commit that has been mentioned in the Fixes tag should
-> >       *not* have my Reviewed-by tag, as the author changed it but
-> >       erroneously retained the tag that I had released for an
-> >       earlier version of that commit (which was fine, but the new
-> >       version broke mtk_dsi!).
-> >
-> >  drivers/gpu/drm/mediatek/mtk_dsi.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/media=
-tek/mtk_dsi.c
-> > index 9cc406e1eee1..5b624e0f5b0a 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > @@ -808,10 +808,13 @@ static void mtk_dsi_bridge_atomic_post_disable(st=
-ruct drm_bridge *bridge,
-> >
-> >  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs =3D {
-> >         .attach =3D mtk_dsi_bridge_attach,
-> > +       .atomic_destroy_state =3D drm_atomic_helper_bridge_destroy_stat=
-e,
-> >         .atomic_disable =3D mtk_dsi_bridge_atomic_disable,
-> > +       .atomic_duplicate_state =3D drm_atomic_helper_bridge_duplicate_=
-state,
-> >         .atomic_enable =3D mtk_dsi_bridge_atomic_enable,
-> >         .atomic_pre_enable =3D mtk_dsi_bridge_atomic_pre_enable,
-> >         .atomic_post_disable =3D mtk_dsi_bridge_atomic_post_disable,
-> > +       .atomic_reset =3D drm_atomic_helper_bridge_reset,
-> >         .mode_set =3D mtk_dsi_bridge_mode_set,
-> >  };
-> >
-> > --
-> > 2.35.1
-> >
+Best,
+Markus
+
+Previous versions:
+v3 - https://lore.kernel.org/lkml/20220805121852.21254-1-jneanne@baylibre.com/
+v2 - https://lore.kernel.org/lkml/20220726103355.17684-1-jneanne@baylibre.com/
+v1 - https://lore.kernel.org/lkml/20220719091742.3221-1-jneanne@baylibre.com/
+
+Jerome Neanne (5):
+  DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC support for AM642 SK
+    board.
+  DONOTMERGE: arm64: dts: ti: Add pinmux and irq mapping for TPS65219
+    external interrupts
+  DONOTMERGE: arm64: dts: ti: k3-am642-sk: Enable tps65219 power-button
+  mfd: drivers: Add TI TPS65219 PMIC support
+  arm64: defconfig: Add tps65219 as modules
+
+Markus Schneider-Pargmann (1):
+  Input: Add tps65219 interrupt driven powerbutton
+
+ MAINTAINERS                             |   1 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts  | 115 ++++++++
+ arch/arm64/configs/defconfig            |   3 +
+ drivers/input/misc/Kconfig              |  10 +
+ drivers/input/misc/Makefile             |   1 +
+ drivers/input/misc/tps65219-pwrbutton.c | 149 ++++++++++
+ drivers/mfd/Kconfig                     |  14 +
+ drivers/mfd/Makefile                    |   1 +
+ drivers/mfd/tps65219.c                  | 357 ++++++++++++++++++++++++
+ include/linux/mfd/tps65219.h            | 345 +++++++++++++++++++++++
+ 10 files changed, 996 insertions(+)
+ create mode 100644 drivers/input/misc/tps65219-pwrbutton.c
+ create mode 100644 drivers/mfd/tps65219.c
+ create mode 100644 include/linux/mfd/tps65219.h
+
+-- 
+2.37.2
+

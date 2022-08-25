@@ -2,82 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6A15A1A04
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F7C5A1A08
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243445AbiHYUIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 16:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S243492AbiHYUIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 16:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiHYUH6 (ORCPT
+        with ESMTP id S229493AbiHYUIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 16:07:58 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28219B777E;
-        Thu, 25 Aug 2022 13:07:58 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so26295642fac.12;
-        Thu, 25 Aug 2022 13:07:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=dcjkA8oR36peP3szO6S9L8w7MpN9/Fk3Gid3MLuZnfs=;
-        b=ymyLYMTrtpUudoanDrvWMDQ5ZfriCjgJBhgv6SHIkAAdLYJKg1VlQb32xQjM0wBLru
-         qCJc3zXvHOqDKHJLM6L1OcsT4r1htp6JPUbl/Rt3h5IhfNRAhwwIdHran8S8nu4fYZ6x
-         CZ7R1AHXxkOmkROMIUdrriudlBWb0E4f8KmltOmBObnjHJp0oQLSfk9kOUmgW9zoYceh
-         ZBzIAZHUbqNiRRZVdANDFxP9xHaFJh8JWoPcz2E/WnYWJd9OZl5lUNESgHyxETSD+RFg
-         S2lRdY97IrpTNR8YVMs37xr2sz5p10ipbSQPEoaCOfKZdIqVP/XlUe2Twg9iIsupfL0s
-         6tmw==
-X-Gm-Message-State: ACgBeo35OKH1GxFWezwaj3uZAvXQqdl3fjxcn5pvt4Gn9czdzNNsR78j
-        tKTf8T+msjXiiibJHLeOqg==
-X-Google-Smtp-Source: AA6agR5PXbEwCG8AwialgepZdugBrmMEZdowrhrFPXaxg+wjPbVy2Oz6dHDL8A5G0BoeyqvlBsw2Bg==
-X-Received: by 2002:a05:6870:5820:b0:11c:b6d0:b84c with SMTP id r32-20020a056870582000b0011cb6d0b84cmr307885oap.236.1661458077465;
-        Thu, 25 Aug 2022 13:07:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t38-20020a05687063a600b0011bde9f5745sm79713oap.23.2022.08.25.13.07.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 13:07:57 -0700 (PDT)
-Received: (nullmailer pid 1604965 invoked by uid 1000);
-        Thu, 25 Aug 2022 20:07:55 -0000
-Date:   Thu, 25 Aug 2022 15:07:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Landen Chao <Landen.Chao@mediatek.com>, erkin.bozoglu@xeront.com,
-        linux-mediatek@lists.infradead.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, netdev@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v6 1/6] dt-bindings: net: dsa: mediatek,mt7530: make
- trivial changes
-Message-ID: <20220825200755.GA1604801-robh@kernel.org>
-References: <20220825082301.409450-1-arinc.unal@arinc9.com>
- <20220825082301.409450-2-arinc.unal@arinc9.com>
+        Thu, 25 Aug 2022 16:08:38 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D8DBFC5B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 13:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0be4Uw3fqExuolOVBE3ibWXBVDsYnkBq1CTcgz9rF6A=; b=FgGt0+ky9aSTj26GPlq9wqiUkc
+        Nf9n0rEzsvWTnUVVCDjkll/C3DyY6cg4nK9XIJGslmgdIESeh7Xt/pwLE81q0hyeKS/3wc2BTBnG6
+        XsfSRZR03AUi6rSK5+y/+IeS71+8FT9QfnyDZMRKVO9p2vqhRYtp2Ydmdca/SBUni30nXQtEVnXaO
+        L/UflEmb1P8C7ICyiKUe8KBub2IaQbh+alE8Iu1dkXDkiazoTYBEkSE82ChK/hARnZnQT8e7df7IQ
+        TRqFoptMgb0gYpmYO9NpLzBHWsCkdxGe9lfdSvBj695/WhF1eEqzmZO80xggAabLkJN19i0m1ZRhl
+        gJbYrPsw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oRJ9Q-006653-Oj; Thu, 25 Aug 2022 20:08:31 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C018E9800E6; Thu, 25 Aug 2022 22:08:27 +0200 (CEST)
+Date:   Thu, 25 Aug 2022 22:08:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, bhelgaas@google.com,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH] earlyprintk: Clean up pciserial
+Message-ID: <YwfWu5Gz/Ouv8I8f@worktop.programming.kicks-ass.net>
+References: <YwfPQ1cmzBZ2uP2o@worktop.programming.kicks-ass.net>
+ <20220825195143.GA2867872@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220825082301.409450-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220825195143.GA2867872@bhelgaas>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,23 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 11:22:56 +0300, Arınç ÜNAL wrote:
-> Make trivial changes on the binding.
+On Thu, Aug 25, 2022 at 02:51:43PM -0500, Bjorn Helgaas wrote:
+> On Thu, Aug 25, 2022 at 09:36:35PM +0200, Peter Zijlstra wrote:
+> > On Thu, Aug 25, 2022 at 12:39:59PM -0500, Bjorn Helgaas wrote:
+> > 
+> > > > -	   (((classcode >> 8) & 0xff) != 0x02)) /* 16550 I/F at BAR0 */ {
+> > 
+> > > > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> > > > index 6feade66efdb..1d2c7df8cd41 100644
+> > > > --- a/include/linux/pci_ids.h
+> > > > +++ b/include/linux/pci_ids.h
+> > > > @@ -75,6 +75,9 @@
+> > > >  #define PCI_CLASS_COMMUNICATION_MODEM	0x0703
+> > > >  #define PCI_CLASS_COMMUNICATION_OTHER	0x0780
+> > > >  
+> > > > +/* I/F for SERIAL/MODEM */
+> > > 
+> > > I/F?  Grep says it's fairly common, but doesn't seem completely
+> > > obvious.  I guess it means "interface"?
+> > 
+> > It does, I carried the nomenclature from the above line; happy to change
+> > it if you want.
+> > 
+> >   https://wiki.osdev.org/PCI#Class_Codes
+> > 
+> > Calls it 'Prog IF'.
 > 
-> - Update title to include MT7531 switch.
-> - Add me as a maintainer. List maintainers in alphabetical order by first
-> name.
-> - Add description to compatible strings.
-> - Stretch descriptions up to the 80 character limit.
-> - Remove lists for single items.
-> - Remove requiring reg as it's already required by dsa-port.yaml.
-> - Define acceptable reg values for the CPU ports.
-> - Remove quotes from $ref: "dsa.yaml#".
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/net/dsa/mediatek,mt7530.yaml     | 50 ++++++++++++-------
->  1 file changed, 31 insertions(+), 19 deletions(-)
-> 
+> Personally, I would spell it out just to make it less arcane.  I
+> wouldn't know where to find the definition, and the PCI specs don't
+> seem to use the abbreviation.  But no big deal either way.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Ok,
+
+/* Interface for SERIAL/MODEM */
+
+it is.

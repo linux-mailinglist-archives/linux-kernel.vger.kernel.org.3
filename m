@@ -2,62 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBF55A1158
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706145A1176
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbiHYNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S242182AbiHYNFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242143AbiHYNCr (ORCPT
+        with ESMTP id S242354AbiHYNEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:02:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D5689838
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:02:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRCUz-0007za-9f; Thu, 25 Aug 2022 15:02:17 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRCUw-001uGW-Bf; Thu, 25 Aug 2022 15:02:14 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRCUv-00FeV0-5J; Thu, 25 Aug 2022 15:02:13 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH net-next v2 7/7] net: pse-pd: add generic PSE driver
-Date:   Thu, 25 Aug 2022 15:02:11 +0200
-Message-Id: <20220825130211.3730461-8-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220825130211.3730461-1-o.rempel@pengutronix.de>
-References: <20220825130211.3730461-1-o.rempel@pengutronix.de>
+        Thu, 25 Aug 2022 09:04:50 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA913AFAE2;
+        Thu, 25 Aug 2022 06:03:46 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id u5so16728687wrt.11;
+        Thu, 25 Aug 2022 06:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
+        bh=5Luts5GEZA9PcqRIIAUh6yjwcNrrObsoa2UHgSUmbng=;
+        b=kVtgvdG48xazTFLfxuGcsMJfy9z51VfOwQ583IS0YpmWqhk5K2XwLzwGUUFByXU/uF
+         T8fEDyh/V8Jid1XJ3lW6IXae7CcySf3lqCPf7RXzsp3DxF7GHs9EgKD1i/r822AKzljC
+         FFWBeniwt6aXvr59TboeIrhIubm4yJGa0FAMZGJgFMXODrDgjfSV/khe0TAl9cFsjy0k
+         um7bTSRUdo7oPKRwKj15L41JproTH9en07SUnNlw0ArVdeJMlQurhRAAFmcCMgVngE6v
+         /0an5pI7JL/2Di3EWMM7rYsxQ1+7V+d44qTdppjt6CzNsK9LVYQfJWAJtGPhrJLGfP4+
+         FYog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=5Luts5GEZA9PcqRIIAUh6yjwcNrrObsoa2UHgSUmbng=;
+        b=tpbc72XpE+UL7awrmWGr4xsswQtOBHFN2X1Hx3iG85ayH8HBjkL0nCleGGcjmTGrB5
+         Kil5AKwyZK7GNXrtVp0IbYrfr3NxLXUtMwJHjCB7cWCY1WSXG7Vb6/kAGBpX5+Y9Muog
+         KucCGfh0z/QVQ7/jizzTQhtlgtJJ4wwXwJaoZ5vaIDH50nTqcINI3LJaFicBfh79tb5N
+         hQh8Waxhc6x4RBbCswRT+Q/iHlwaYrwkDM8g5JL8jYG4EW/vkqwSLcTopHwIWy6O/9BK
+         5DxdlQoCywvEeqrm6O5TIY7/gN/yvLunPidYUFlsYBzd7PpknLJ2xrevdIeVy59nPWSP
+         ccNA==
+X-Gm-Message-State: ACgBeo0dYG6zQZuxzW0hjxUg868Kw8PmknmdHn4M27894DTLuQ/4PhPD
+        Xn1DQwyH5JVkyQnzhTHz7Pw=
+X-Google-Smtp-Source: AA6agR5ukxuM0sgzKs6kswETJQECh4QnJIkYVbfzcsGqX9G3WFVzIFwWhttfJ0G3HXT4sy5iAA0qzA==
+X-Received: by 2002:adf:d202:0:b0:225:4aee:d7d6 with SMTP id j2-20020adfd202000000b002254aeed7d6mr2210222wrh.364.1661432624222;
+        Thu, 25 Aug 2022 06:03:44 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id s7-20020a5d6a87000000b0021ef34124ebsm19812406wru.11.2022.08.25.06.03.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 06:03:43 -0700 (PDT)
+Message-ID: <83f5f34f-6e71-3d36-e715-71896f0ac9a4@gmail.com>
+Date:   Thu, 25 Aug 2022 15:03:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "hsinyi@google.com" <hsinyi@google.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20220825055658.12429-1-rex-bc.chen@mediatek.com>
+ <3ff08ae9-a4b6-2b74-23cb-69ea1d7e1033@linaro.org>
+ <d5a00dc88bed1680caa8af895a1140324b9d079e.camel@mediatek.com>
+ <f7ec45b8-ccd7-4776-0524-269e3188883d@gmail.com>
+ <781356a88b502661ec23b3869679d80cf682017d.camel@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH] dt-bindings: arm: mediatek: mmsys: change compatible for
+ MT8195
+In-Reply-To: <781356a88b502661ec23b3869679d80cf682017d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,206 +97,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic driver to support simple Power Sourcing Equipment without
-automatic classification support.
 
-This driver was tested on 10Bast-T1L switch with regulator based PoDL PSE.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v2:
-- add regulator_enable test to the probe
-- migrate to the new PSE ethtool API
----
- drivers/net/pse-pd/Kconfig       |  11 +++
- drivers/net/pse-pd/Makefile      |   2 +
- drivers/net/pse-pd/pse_generic.c | 148 +++++++++++++++++++++++++++++++
- 3 files changed, 161 insertions(+)
- create mode 100644 drivers/net/pse-pd/pse_generic.c
+On 25/08/2022 13:06, Bo-Chen Chen wrote:
+> On Thu, 2022-08-25 at 18:55 +0800, Matthias Brugger wrote:
+>>
+>> On 25/08/2022 08:59, Bo-Chen Chen wrote:
+>>> On Thu, 2022-08-25 at 14:11 +0800, Krzysztof Kozlowski wrote:
+>>>> On 25/08/2022 08:56, Bo-Chen Chen wrote:
+>>>>> From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
+>>>>>
+>>>>> For previous MediaTek SoCs, such as MT8173, there are 2 display
+>>>>> HW
+>>>>> pipelines binding to 1 mmsys with the same power domain, the
+>>>>> same
+>>>>> clock driver and the same mediatek-drm driver.
+>>>>>
+>>>>> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
+>>>>> binding
+>>>>> to
+>>>>> 2 different power domains, different clock drivers and
+>>>>> different
+>>>>> mediatek-drm drivers.
+>>
+>> drop clock driver example here.
+>>
+> 
+> Hello Matthias,
+> 
+> Thanks for your review.
+> I am not sure what do you mean.
+> Could you explain more detailedly?
+> 
 
-diff --git a/drivers/net/pse-pd/Kconfig b/drivers/net/pse-pd/Kconfig
-index 49c7f0bcff526..a804c9f1af2bc 100644
---- a/drivers/net/pse-pd/Kconfig
-+++ b/drivers/net/pse-pd/Kconfig
-@@ -9,3 +9,14 @@ menuconfig PSE_CONTROLLER
- 	  Generic Power Sourcing Equipment Controller support.
- 
- 	  If unsure, say no.
-+
-+if PSE_CONTROLLER
-+
-+config PSE_GENERIC
-+	tristate "Generic PSE driver"
-+	help
-+	  This module provides support for simple Ethernet Power Sourcing
-+	  Equipment without automatic classification support. For example for
-+	  PoDL (802.3bu) specification.
-+
-+endif
-diff --git a/drivers/net/pse-pd/Makefile b/drivers/net/pse-pd/Makefile
-index cfa780c7801dd..e3f2f434a9e5c 100644
---- a/drivers/net/pse-pd/Makefile
-+++ b/drivers/net/pse-pd/Makefile
-@@ -2,3 +2,5 @@
- # Makefile for Linux PSE drivers
- 
- obj-$(CONFIG_PSE_CONTROLLER) += pse_core.o
-+
-+obj-$(CONFIG_PSE_GENERIC) += pse_generic.o
-diff --git a/drivers/net/pse-pd/pse_generic.c b/drivers/net/pse-pd/pse_generic.c
-new file mode 100644
-index 0000000000000..2be1a8bf45b48
---- /dev/null
-+++ b/drivers/net/pse-pd/pse_generic.c
-@@ -0,0 +1,148 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Driver for the Generic Ethernet Power Sourcing Equipment, without
-+// auto classification support.
-+//
-+// Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+//
-+
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pse-pd/pse.h>
-+#include <linux/regulator/consumer.h>
-+
-+struct gen_pse_priv {
-+	struct pse_controller_dev pcdev;
-+	struct regulator *ps; /*power source */
-+	enum ethtool_podl_pse_admin_state admin_state;
-+};
-+
-+static struct gen_pse_priv *to_gen_pse(struct pse_controller_dev *pcdev)
-+{
-+	return container_of(pcdev, struct gen_pse_priv, pcdev);
-+}
-+
-+static int
-+gen_pse_ethtool_set_config(struct pse_controller_dev *pcdev, unsigned long id,
-+			   struct netlink_ext_ack *extack,
-+			   const struct pse_control_config *config)
-+{
-+	struct gen_pse_priv *priv = to_gen_pse(pcdev);
-+	int ret;
-+
-+	if (priv->admin_state == config->admin_cotrol)
-+		return 0;
-+
-+	switch (config->admin_cotrol) {
-+	case ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED:
-+		ret = regulator_enable(priv->ps);
-+		break;
-+	case ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED:
-+		ret = regulator_disable(priv->ps);
-+		break;
-+	default:
-+		dev_err(pcdev->dev, "Unknown admin state %i\n",
-+			config->admin_cotrol);
-+		ret = -ENOTSUPP;
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	priv->admin_state = config->admin_cotrol;
-+
-+	return 0;
-+}
-+
-+static int
-+gen_pse_ethtool_get_status(struct pse_controller_dev *pcdev, unsigned long id,
-+			   struct netlink_ext_ack *extack,
-+			   struct pse_control_status *status)
-+{
-+	struct gen_pse_priv *priv = to_gen_pse(pcdev);
-+	int ret;
-+
-+	ret = regulator_is_enabled(priv->ps);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!ret)
-+		status->podl_pw_status = ETHTOOL_PODL_PSE_PW_D_STATUS_DISABLED;
-+	else
-+		status->podl_pw_status =
-+			ETHTOOL_PODL_PSE_PW_D_STATUS_DELIVERING;
-+
-+	status->podl_admin_state = priv->admin_state;
-+
-+	return 0;
-+}
-+
-+static const struct pse_controller_ops gen_pse_ops = {
-+	.ethtool_get_status = gen_pse_ethtool_get_status,
-+	.ethtool_set_config = gen_pse_ethtool_set_config,
-+};
-+
-+static int
-+gen_pse_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct gen_pse_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	if (!pdev->dev.of_node)
-+		return -ENOENT;
-+
-+	priv->ps = devm_regulator_get_exclusive(dev, "ieee802.3-pse");
-+	if (IS_ERR(priv->ps)) {
-+		dev_err(dev, "failed to get PSE regulator (%pe)\n", priv->ps);
-+		return PTR_ERR(priv->ps);
-+	}
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = regulator_is_enabled(priv->ps);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret)
-+		priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED;
-+	else
-+		priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED;
-+
-+	priv->pcdev.owner = THIS_MODULE;
-+	priv->pcdev.ops = &gen_pse_ops;
-+	priv->pcdev.dev = dev;
-+	ret = devm_pse_controller_register(dev, &priv->pcdev);
-+	if (ret) {
-+		dev_err(dev, "failed to register PSE controller (%pe)\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id gen_pse_of_match[] = {
-+	{ .compatible = "ieee802.3-pse", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, gen_pse_of_match);
-+
-+static struct platform_driver gen_pse_driver = {
-+	.probe		= gen_pse_probe,
-+	.driver		= {
-+		.name		= "generic PSE",
-+		.of_match_table = of_match_ptr(gen_pse_of_match),
-+	},
-+};
-+module_platform_driver(gen_pse_driver);
-+
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_DESCRIPTION("Generic Ethernet Power Sourcing Equipment");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:pse-generic");
--- 
-2.30.2
+Never mind, it's not that important.
 
+Regards,
+Matthias
+
+>>>>
+>>>> I don't see binding to different clock drivers and anyway that's
+>>>> not
+>>>> really an argument here. Please focus in description on hardware
+>>>> properties, IOW, are devices compatible or different. What is the
+>>>> incompatible difference between VDOSYS0 and 1?
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>
+>>> Hello Krzysztof,
+>>>
+>>> Thanks for yor review.
+>>>
+>>>   From the functions perspective:
+>>>
+>>> Hardware pipeline of VDOSYS0 has these components: COLOR, CCORR,
+>>> AAL,
+>>> GAMMA, DITHER.
+>>> They are related to PQ (Picture Quality) functions and they makes
+>>> VDOSYS0 supports PQ function while they are not including in
+>>> VDOSYS1.
+>>>
+>>> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+>>> component).
+>>> It makes VDOSYS1 supports the HDR function while it's not including
+>>> in
+>>> VDOSYS0.
+>>>
+>>
+>> Please include a description of this in the commit message.
+>>
+> 
+> Yes, I have sent v2 and add these to commit meesage.
+> 
+> https://lore.kernel.org/all/20220825091448.14008-1-rex-bc.chen@mediatek.com/
+> 
+> BRs,
+> Bo-chen
+> 
+>>> About mediatek ETHDR, you can refer to this series:
+>>>
+>>>
+> https://lore.kernel.org/all/20220819061456.8042-2-nancy.lin@mediatek.com/
+>>>
+>>> To summary:
+>>> Only VDOSYS0 can support PQ adjustment.
+>>> Only VDOSYS1 can support HDR adjustment.
+>>>
+>>> Is this description ok for you?
+>>> If it is ok, I will put them into commit message in next version.
+>>>
+>>> BRs,
+>>> Bo-Chen
+>>>
+> 

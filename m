@@ -2,194 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F9C5A050F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CAC5A0527
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiHYARW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S229721AbiHYAZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiHYART (ORCPT
+        with ESMTP id S229437AbiHYAZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:17:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1DC6D559;
-        Wed, 24 Aug 2022 17:17:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9F0D55C167;
-        Thu, 25 Aug 2022 00:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661386636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=se5jWXIzFtpgRYm/ZgsUL2TuX6cQdVJ2jx4NrHnS5Qo=;
-        b=QJuIpxPKfyh2tlQhlVwToDBZZTeevLVIMa4GUkq0MvKSOAYs3AkmuxXPszKu9s/p1RPRDb
-        TfAJ1+TL3nFnoDE+teRnQtl4ti3H+UECG7S+PyOx6OKmCZDEr1NzLaciqxaw/g6ypyez5g
-        xxgVSbdo4p1PZzICsnsrARPfGAkP+HM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661386636;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=se5jWXIzFtpgRYm/ZgsUL2TuX6cQdVJ2jx4NrHnS5Qo=;
-        b=J+HbTfCHYrnr78czRZrbfy8ON9Uv8NH80LcoLBmC/GUseZqk1slWtu2vfxWC9lti3CYJgW
-        c/vID/+Kx2QfKPBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71D9D13A47;
-        Thu, 25 Aug 2022 00:17:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id I9TiCom/BmM/TgAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 25 Aug 2022 00:17:13 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 Aug 2022 20:25:02 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E764457F
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661387100; x=1692923100;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lTR8Aua53Hrg1CIsD9Rc3773VnkmtC85xsQjT06tgf4=;
+  b=A6MDgeqeXdqqI1p8ZAeMrsWicnpHkaao2njlpOLUar5vdgUoP/QqvAF9
+   BB3bDXSZT7hECUuEPjQpy/P6LmilXP3CcIJCMzMrIKlwX8x0farp9d7s4
+   Jus/HAiL8LcyXitzVR7Va4ZQxLnMKugSg90BLbONXt39kMPAkhH72RTd5
+   rkJc/MOQ5xHM5MMHwje+s3KsBJrWrB15G7TBm4SDvmvZVyvqSsGw9s0iK
+   PPD8UzZAMgBZf6unO9LfWzeZiI24Q56yeysDS74SmjGBIMQ8NqaHWxm5t
+   OlCTR/TPDwnbyMgn8EX/8DaiBh9BA2WbuG3G0PdlWhRyIpCpFTdlQ806V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291675854"
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="291675854"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 17:24:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="586643669"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 24 Aug 2022 17:24:56 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oR0g3-0001RD-37;
+        Thu, 25 Aug 2022 00:24:55 +0000
+Date:   Thu, 25 Aug 2022 08:24:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: sound/soc/codecs/tlv320adc3xxx.c:1209:50: error: use of undeclared
+ identifier 'GPIOD_OUT_LOW'
+Message-ID: <202208250802.7310sfQR-lkp@intel.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "Dave Chinner" <david@fromorbit.com>,
-        "Mimi Zohar" <zohar@linux.ibm.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org,
-        "Trond Myklebust" <trondmy@hammerspace.com>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-In-reply-to: <5f248d934ec5d2345986fd75d7d12bcd9e2f32b9.camel@kernel.org>
-References: <20220822133309.86005-1-jlayton@kernel.org>,
- <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>,
- <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>,
- <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>,
- <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>,
- <20220822233231.GJ3600936@dread.disaster.area>,
- <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>,
- <166125468756.23264.2859374883806269821@noble.neil.brown.name>,
- <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>,
- <166129348704.23264.10381335282721356873@noble.neil.brown.name>,
- <5f248d934ec5d2345986fd75d7d12bcd9e2f32b9.camel@kernel.org>
-Date:   Thu, 25 Aug 2022 10:17:09 +1000
-Message-id: <166138662999.27490.2273361647379875097@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022, Jeff Layton wrote:
-> On Wed, 2022-08-24 at 08:24 +1000, NeilBrown wrote:
-> > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > On Tue, 2022-08-23 at 21:38 +1000, NeilBrown wrote:
-> > > > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > > > So, we can refer to that and simply say:
-> > > > >=20
-> > > > > "If the function updates the mtime or ctime on the inode, then the
-> > > > > i_version should be incremented. If only the atime is being updated,
-> > > > > then the i_version should not be incremented. The exception to this=
- rule
-> > > > > is explicit atime updates via utimes() or similar mechanism, which
-> > > > > should result in the i_version being incremented."
-> > > >=20
-> > > > Is that exception needed? utimes() updates ctime.
-> > > >=20
-> > > > https://man7.org/linux/man-pages/man2/utimes.2.html
-> > > >=20
-> > > > doesn't say that, but
-> > > >=20
-> > > > https://pubs.opengroup.org/onlinepubs/007904875/functions/utimes.html
-> > > >=20
-> > > > does, as does the code.
-> > > >=20
-> > >=20
-> > > Oh, good point! I think we can leave that out. Even better!
-> >=20
-> > Further, implicit mtime updates (file_update_time()) also update ctime.
-> > So all you need is
-> >  If the function updates the ctime, then i_version should be
-> >  incremented.
-> >=20
-> > and I have to ask - why not just use the ctime? Why have another number
-> > that is parallel?
-> >=20
-> > Timestamps are updated at HZ (ktime_get_course) which is at most every
-> > millisecond.
-> > xfs stores nanosecond resolution, so about 20 bits are currently wasted.
-> > We could put a counter like i_version in there that only increments
-> > after it is viewed, then we can get all the precision we need but with
-> > exactly ctime semantics.
-> >=20
-> > The 64 change-id could comprise
-> >  35 bits of seconds (nearly a millenium)
-> >  16 bits of sub-seconds (just in case a higher precision time was wanted
-> >  one day)
-> >  13 bits of counter. - 8192 changes per tick
->=20
-> We'd need a "seen" flag too, so maybe only 4096 changes per tick...
+Hi Mark,
 
-The "seen" flag does not need to be visible to NFSv4.
-Nor does it need to be appear on storage.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Though it may still be easier to include it with the counter bits.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c40e8341e3b3bb27e3a65b06b5b454626234c4f0
+commit: 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f ASoC: simple-amplifier: Remove spurious gpiolib select
+date:   7 months ago
+config: hexagon-randconfig-r045-20220825 (https://download.01.org/0day-ci/archive/20220825/202208250802.7310sfQR-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
 
->=20
-> >=20
-> > The value exposed in i_ctime would hide the counter and just show the
-> > timestamp portion of what the filesystem stores. This would ensure we
-> > never get changes on different files that happen in one order leaving
-> > timestamps with the reversed order (the timestamps could be the same,
-> > but that is expected).
-> >=20
-> > This scheme could be made to handle a sustained update rate of 1
-> > increment every 8 nanoseconds (if the counter were allowed to overflow
-> > into unused bits of the sub-second field). This is one ever 24 CPU
-> > cycles. Incrementing a counter and making it visible to all CPUs can
-> > probably be done in 24 cycles. Accessing it and setting the "seen" flag
-> > as well might just fit with faster memory. Getting any other useful
-> > work done while maintaining that rate on a single file seems unlikely.
->=20
-> This is an interesting idea.
->=20
-> So, for NFSv4 you'd just mask off the counter bits (and "seen" flag) to
-> get the ctime, and for the change attribute we'd just mask off the
-> "seen" flag and put it all in there.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Obviously it isn't just NFSv4 that needs the ctime, it is also the
-vfs...
+All errors (new ones prefixed by >>):
 
-I imagine that the counter would be separate in the in-memory inode.  It
-would be split out when read from storage, and merge in when written to
-storage.
+   sound/soc/codecs/tlv320adc3xxx.c:1209:21: error: implicit declaration of function 'devm_gpiod_get' [-Werror,-Wimplicit-function-declaration]
+           adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+                              ^
+   sound/soc/codecs/tlv320adc3xxx.c:1209:21: note: did you mean 'devm_gpio_free'?
+   include/linux/gpio.h:243:20: note: 'devm_gpio_free' declared here
+   static inline void devm_gpio_free(struct device *dev, unsigned int gpio)
+                      ^
+>> sound/soc/codecs/tlv320adc3xxx.c:1209:50: error: use of undeclared identifier 'GPIOD_OUT_LOW'
+           adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+                                                           ^
+   sound/soc/codecs/tlv320adc3xxx.c:1257:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
+           gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
+           ^
+   sound/soc/codecs/tlv320adc3xxx.c:1257:2: note: did you mean 'gpio_set_value_cansleep'?
+   include/linux/gpio.h:188:20: note: 'gpio_set_value_cansleep' declared here
+   static inline void gpio_set_value_cansleep(unsigned gpio, int value)
+                      ^
+   3 errors generated.
 
->=20
->  * Implementing that for all filesystems would be a huge project though.
->    If we were implementing the i_version counter from scratch, I'd
->    probably do something along these lines. Given that we already have
->    an existing i_version counter, would there be any real benefit to
->    pursuing this avenue instead?
 
-i_version is currently only supported by btrfs, ext4, and xfs.  Plus
-cephfs which has its own internal ideas.
-So "all filesystems" isn't needed.  Let's just start with xfs.
+vim +/GPIOD_OUT_LOW +1209 sound/soc/codecs/tlv320adc3xxx.c
 
-All we need is for xfs store in ->i_version a value that meets the
-semantics that we specify for ->i_version.
-So we need to change xfs to use somewhere else to store its internal
-counter that is used for forensics, and then arrange that ->i_version
-stores the ctime combined with a counter that resets whenever the ctime
-changes.
-I think most of this would be done in xfs_vn_update_time(), but probably
-some changes would be needed in iversion.h to provide useful support.
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1196  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1197  static int adc3xxx_i2c_probe(struct i2c_client *i2c,
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1198  			     const struct i2c_device_id *id)
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1199  {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1200  	struct device *dev = &i2c->dev;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1201  	struct adc3xxx *adc3xxx = NULL;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1202  	int ret;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1203  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1204  	adc3xxx = devm_kzalloc(dev, sizeof(struct adc3xxx), GFP_KERNEL);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1205  	if (!adc3xxx)
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1206  		return -ENOMEM;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1207  	adc3xxx->dev = dev;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1208  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15 @1209  	adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1210  	if (IS_ERR(adc3xxx->rst_pin)) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1211  		return dev_err_probe(dev, PTR_ERR(adc3xxx->rst_pin),
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1212  				     "Failed to request rst_pin\n");
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1213  	}
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1214  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1215  	adc3xxx->mclk = devm_clk_get(dev, NULL);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1216  	if (IS_ERR(adc3xxx->mclk)) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1217  		/*
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1218  		 * The chip itself supports running off the BCLK either
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1219  		 * directly or via the PLL, but the driver does not (yet), so
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1220  		 * having a specified mclk is required. Otherwise, we could
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1221  		 * use the lack of a clocks property to indicate when BCLK is
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1222  		 * intended as the clock source.
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1223  		 */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1224  		return dev_err_probe(dev, PTR_ERR(adc3xxx->mclk),
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1225  				     "Failed to acquire MCLK\n");
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1226  	} else if (adc3xxx->mclk) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1227  		ret = clk_prepare_enable(adc3xxx->mclk);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1228  		if (ret < 0)
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1229  			return ret;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1230  		dev_dbg(dev, "Enabled MCLK, freq %lu Hz\n", clk_get_rate(adc3xxx->mclk));
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1231  	}
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1232  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1233  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmdin-gpio1", &adc3xxx->gpio_cfg[0]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1234  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1235  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1236  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmclk-gpio2", &adc3xxx->gpio_cfg[1]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1237  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1238  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1239  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias1-vg", &adc3xxx->micbias_vg[0]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1240  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1241  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1242  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias2-vg", &adc3xxx->micbias_vg[1]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1243  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1244  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1245  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1246  	adc3xxx->regmap = devm_regmap_init_i2c(i2c, &adc3xxx_regmap);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1247  	if (IS_ERR(adc3xxx->regmap)) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1248  		ret = PTR_ERR(adc3xxx->regmap);
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1249  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1250  	}
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1251  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1252  	i2c_set_clientdata(i2c, adc3xxx);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1253  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1254  	adc3xxx->type = id->driver_data;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1255  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1256  	/* Reset codec chip */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1257  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1258  	usleep_range(2000, 100000); /* Requirement: > 10 ns (datasheet p13) */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1259  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 0);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1260  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1261  	/* Potentially set up pins used as GPIOs */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1262  	adc3xxx_init_gpio(adc3xxx);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1263  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1264  	ret = snd_soc_register_component(dev,
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1265  			&soc_component_dev_adc3xxx, &adc3xxx_dai, 1);
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1266  	if (ret < 0) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1267  		dev_err(dev, "Failed to register codec: %d\n", ret);
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1268  		goto err_unprepare_mclk;
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1269  	}
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1270  
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1271  	return 0;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1272  
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1273  err_unprepare_mclk:
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1274  	clk_disable_unprepare(adc3xxx->mclk);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1275  	return ret;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1276  }
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1277  
 
-If ext4's current use of i_version provides the semantics that we need,
-there would be no need to change it.  Ditto for btrfs.
+:::::: The code at line 1209 was first introduced by commit
+:::::: e9a3b57efd28fe889a98171bdc1e9e0dd7eb9a50 ASoC: codec: tlv320adc3xxx: New codec driver
 
-NeilBrown
+:::::: TO: Ricard Wanderlof <ricardw@axis.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

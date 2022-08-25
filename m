@@ -2,127 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AC75A053A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B175A0540
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiHYAki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S231164AbiHYAmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiHYAkf (ORCPT
+        with ESMTP id S229665AbiHYAmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:40:35 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2268D7B283
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:40:34 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id gb36so36558294ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:40:34 -0700 (PDT)
+        Wed, 24 Aug 2022 20:42:32 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A1A8D3E9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:42:30 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id m5so14052606qkk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=nIrwbzjVPwR86UIbrzDHfa+rwrBPUHe0L91ULQSuDXc=;
-        b=BGlAVXTSXs+iHzo5okyca9opwOfI2k+bCnq9C13rvW9w9O7zi4EF+ei6QHyYkFpOzA
-         ztW4WXKGmB2tWclYzgQiuFlQxfszReeLGXZNujm3HiRsSIEls5zy9fc/EM7xcqDtX9M2
-         O6eXyOnW5S0vVn6UW9twmpipce7h/FqqIP0m8=
+        bh=Wpl+c4YfOpabx/QJ3AnuJKzBxyiE9VbZKz/xHkTKLAk=;
+        b=r7iSTSO5N8EX5GHy2qXheBkYDaCDsoumn505Dy+CVk71CvcADRVPavVRi4XQL41YpW
+         nddUiAQlihuhdYgf94AKk17bP/Lg4DS8ALSrWHJaU/mW2rCqXqPEHTnGcF9m9TMHdXX8
+         4ZdDcMEP7/0zTw+yec8Oo4ycG2RGwygPL66RjvWJ0nF+8FlQ21yYvGdhT+k5HKUjHdOp
+         eRaB7I5AEZq2x2O2rCKYAM4aqUXZ31HsS+FwTsQVkUZOt6S+cZ9sCZRUVTRdDhExxG4l
+         dP0IqFDo49hZ+tPyCYzcAt68UlxzNa6nqGWFhN7Qo8lNrdqTfwr8XombersmaWN+ksBW
+         GsPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=nIrwbzjVPwR86UIbrzDHfa+rwrBPUHe0L91ULQSuDXc=;
-        b=iyT5gCoEP66poMNM9UerkMyeOrq8FgYIFo8jO7fewPiIE72uu08iuhK1QmefbmNKN8
-         cNd6pHsjrD9AkzWxj5Wvrcz/Z2yn17JeTXPUpNq+OA96lC4UzEo50qSfKjKoHPR5hAMk
-         EmzzF/vAkwHjabKYV7kJtbf9VIPIQ/olXpV6BB/9YjXXtH/ZOTiQmuU6wDgJt7TTQ20k
-         KfR0AtBVcf2sCBg1DWp8vLjlre5C2lIuo3JR1JrLkxyKkQn+cQWtKYhcuVfzLIq//3FY
-         +RtI91CzWUVBwZN3giqmKP0ReaMi5b5QhHOTWByPCnRx0Xl94UDWul5vGQgMqK3ODOBX
-         mFLQ==
-X-Gm-Message-State: ACgBeo3RMnUsLZ4glm+/yYPBHJic5a3HsiXIWZ25GMXiEytzqaSp1IKw
-        wHQ4ipAjliiQgH2pGHpJawzHN4DlKhkj775N
-X-Google-Smtp-Source: AA6agR4q/gfYNlxc7COfloHv4p6GPvkxNsUjTqP6ihShm6UPdss77NLSeakd3uNkQ7mjjoxt5f0O+Q==
-X-Received: by 2002:a17:907:c10:b0:73d:90ae:f7fd with SMTP id ga16-20020a1709070c1000b0073d90aef7fdmr877772ejc.52.1661388032448;
-        Wed, 24 Aug 2022 17:40:32 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id y21-20020a170906559500b0073d685a2985sm1745403ejp.108.2022.08.24.17.40.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 17:40:28 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id k9so22687139wri.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:40:28 -0700 (PDT)
-X-Received: by 2002:adf:b343:0:b0:225:1a75:2a9a with SMTP id
- k3-20020adfb343000000b002251a752a9amr719380wrd.281.1661388027693; Wed, 24 Aug
- 2022 17:40:27 -0700 (PDT)
+        bh=Wpl+c4YfOpabx/QJ3AnuJKzBxyiE9VbZKz/xHkTKLAk=;
+        b=AuTmZ/OrlyUEMGpy7TpNhUsJpordc1HMIvOu1MK3YZvwtwnU9S9zEShLTferusyTgv
+         E8zyKMEZROILCzldTxQj8YiOrcwd9PTVVV50JxwtBcD3kEVnFifnRxPAc1tI4Y2jSj8l
+         un4TsYmFRUauzJpnFYmwiO3l69t2asn0PI4sp/L6HXVve6Ui8LrD1oyYSt4DoOlRLM9p
+         g6zs1wH1QVeFtQpaJ6/GWCw1FPDqtqotW98nxDvFOrqTrEylBGeugoeVS9+i7GFzKNQy
+         iub7Z6UiwC9wHWAL42oIyP+5WB+D6uS6c4qF6i4owx/bUtFd2hXsRrjMap957iaTZDkU
+         ERCQ==
+X-Gm-Message-State: ACgBeo3bBzrwcLmPkqRwYlSUkhl7LQ58RNVyMYtYoOVaOOrgmBV353oB
+        lpAEI0k6r1bfzbdNwURb99rVOW0KNF2ELmqXwSvW8g==
+X-Google-Smtp-Source: AA6agR7knBbdeFoqDGkHsplIJWoJqzu7ZyrCa96vf+uBJ7VxVkfiTHoOoqQNmmSlaEL57z3V58dRrlcwl4ze9iPXBtQ=
+X-Received: by 2002:a37:e118:0:b0:6ba:e5ce:123b with SMTP id
+ c24-20020a37e118000000b006bae5ce123bmr1382909qkm.221.1661388149595; Wed, 24
+ Aug 2022 17:42:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
- <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
- <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
- <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
- <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
- <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org> <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
- <353e5bbd-cdd1-f818-6a2f-9a7c800f9879@acm.org> <CAHk-=whSZ20Hv4EyLDtUZGX4MsYmCLQ4+OOTbv1WEXfXDcxnWw@mail.gmail.com>
-In-Reply-To: <CAHk-=whSZ20Hv4EyLDtUZGX4MsYmCLQ4+OOTbv1WEXfXDcxnWw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 Aug 2022 17:40:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjQGnVfb4jehFR0XyZikdQvCZouE96xR_nnf5kqaM5qqQ@mail.gmail.com>
-Message-ID: <CAHk-=wjQGnVfb4jehFR0XyZikdQvCZouE96xR_nnf5kqaM5qqQ@mail.gmail.com>
-Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
- triggered by is_signed_type()
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
+References: <20220824233117.1312810-1-haoluo@google.com> <CAADnVQLT3JE8LtOYrs30mL88PNs+NaSeXgQqAPEAup5LUC+BPQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLT3JE8LtOYrs30mL88PNs+NaSeXgQqAPEAup5LUC+BPQ@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 24 Aug 2022 17:42:18 -0700
+Message-ID: <CA+khW7gQi+BK7Qy4Khk=Ro72nfNQaR2kNkwZemB9ELnDo4Nk3Q@mail.gmail.com>
+Subject: Re: [RESEND PATCH bpf-next v9 0/5] bpf: rstat: cgroup hierarchical
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 5:30 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Wed, Aug 24, 2022 at 5:29 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Let me think about this.
+> On Wed, Aug 24, 2022 at 4:31 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > This patch series allows for using bpf to collect hierarchical cgroup
+> > stats efficiently by integrating with the rstat framework. The rstat
+> > framework provides an efficient way to collect cgroup stats percpu and
+> > propagate them through the cgroup hierarchy.
+> >
+> > The stats are exposed to userspace in textual form by reading files in
+> > bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+> > cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> > - walking a cgroup's descendants in pre-order.
+> > - walking a cgroup's descendants in post-order.
+> > - walking a cgroup's ancestors.
+> > - process only a single object.
+> >
+> > When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+> > created from attaching. This cgroup can be passed either as a file
+> > descriptor or a cgroup id. That cgroup serves as the starting point of
+> > the walk.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+> >
+> > ** Background on rstat for stats collection **
+> > (I am using a subscriber analogy that is not commonly used)
+> >
+> > The rstat framework maintains a tree of cgroups that have updates and
+> > which cpus have updates. A subscriber to the rstat framework maintains
+> > their own stats. The framework is used to tell the subscriber when
+> > and what to flush, for the most efficient stats propagation. The
+> > workflow is as follows:
+> >
+> > - When a subscriber updates a cgroup on a cpu, it informs the rstat
+> >   framework by calling cgroup_rstat_updated(cgrp, cpu).
+> >
+> > - When a subscriber wants to read some stats for a cgroup, it asks
+> >   the rstat framework to initiate a stats flush (propagation) by calling
+> >   cgroup_rstat_flush(cgrp).
+> >
+> > - When the rstat framework initiates a flush, it makes callbacks to
+> >   subscribers to aggregate stats on cpus that have updates, and
+> >   propagate updates to their parent.
+> >
+> > Currently, the main subscribers to the rstat framework are cgroup
+> > subsystems (e.g. memory, block). This patch series allow bpf programs to
+> > become subscribers as well.
+> >
+> > Patches in this series are organized as follows:
+> > * Patches 1-2 introduce cgroup_iter prog, and a selftest.
+> > * Patches 3-5 allow bpf programs to integrate with rstat by adding the
+> >   necessary hook points and kfunc. A comprehensive selftest that
+> >   demonstrates the entire workflow for using bpf and rstat to
+> >   efficiently collect and output cgroup stats is added.
+> >
+> > ---
+> > Changelog:
+> > v8 -> v9:
+> > - Make UNSPEC (an invalid option) as the default order for cgroup_iter.
+> > - Use enum for specifying cgroup_iter order, instead of u32.
+> > - Add BPF_ITER_RESHCED to cgroup_iter.
+> > - Add cgroup_hierarchical_stats to s390x denylist.
+>
+> What 'RESEND' is for?
+> It seems to confuse patchwork and BPF CI.
+>
+> The v9 series made it to patchwork...
+>
+> Please just bump the version to v10 next time.
+> Don't add things to subject, since automation cannot recognize
+> that yet.
 
-Actually, thinking about it, that was simple enough.
+Sorry about that. I thought it was RESEND because no content has
+changed. It was just adding an entry in s390 denylist.
 
-  -#define is_signed_type(type)   (((type)(-1)) < (type)1)
-  +#define is_signed_type(type)   (((type)(-1)) < (__force type)1)
-
-should work.
-
-It looks a bit odd, because we only force one side.
-
-But we only need to force one side, because the '-1' doesn't have any
-issues with bitwise types, the same way 0 doesn't.
-
-So only '1' needs to be force-cast to avoid a warning about casting an
-integer to a bitwise type.
-
-And since that -1 counts as an unrestricted value after a cast, now
-the ordered comparison doesn't warn either.
-
-Now, admittedly I think sparse should also allow a forced cast of an
-unrestricted value to be unrestricted, so I think I should do this
-
- static int restricted_value(struct expression *v, struct symbol *type)
- {
--       if (v->type == EXPR_CAST)
-+       if (v->type == EXPR_CAST || v->type = EXPR_FORCE_CAST)
-                v = v->cast_expression;
-
-in sparse, but even without that the above "is_signed_type()" macro
-should make sparse happy (with that current tree of mine).
-
-And since we don't now need to cast 0, gcc won't complain about that
-NULL pointer comparison.
-
-Does that solve things for you?
-
-             Linus
+Are we good now? Or I need to send a v10?

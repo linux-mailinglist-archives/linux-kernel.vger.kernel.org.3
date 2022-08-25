@@ -2,273 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1525A1294
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11DA5A1297
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242287AbiHYNnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+        id S242391AbiHYNoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242394AbiHYNnm (ORCPT
+        with ESMTP id S233165AbiHYNoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE78B5E5F;
-        Thu, 25 Aug 2022 06:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 511D7B81DF1;
-        Thu, 25 Aug 2022 13:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 236F8C433C1;
-        Thu, 25 Aug 2022 13:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661435016;
-        bh=5JLuURgLlHoOj/DTpUcWL0Zj4664Y5H4qqY395xv84I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eN8HSXcwzOCSExYnG2xLUQnzQDZFDjDENE81beqrGQ8goxw8Iz6pu4s0WSHK2xCku
-         cxgbjCymkVE1AG1slxA3/gYaTsoTMAxM74p1gyOkFSqnzipl0qvzfqayBb6DczfHc8
-         NBljR2eDw4ooez0L3PDy0+qMGFwvoS2LprzspSAgh66tugm55TUSZc1IKOSVQPsOuI
-         zQiZo9XIeKOyuXFkSzMGbzM6sjpErYlAsnAoxttp+vhLEF6I/TPQ56Vhd/dE1h7gG+
-         1T6qO4/WvPJ2Pgr+cMIdCMbwn38BLMR3/1nbUemRHF2pCmdsIupX6+vqaUfWyGBj5d
-         djaQzxQDvhSOA==
-Date:   Thu, 25 Aug 2022 15:43:28 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-Subject: Re: [PATCH] PCI: mvebu: Dispose INTx irqs prior to removing INTx
- domain
-Message-ID: <Ywd8gDMdQJwhkeKo@lpieralisi>
-References: <20220808184418.brjntz26kalathig@pali>
- <20220809020042.GA1260418@bhelgaas>
- <20220809133911.hqi7eyskcq2sojia@pali>
+        Thu, 25 Aug 2022 09:44:16 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31368B5E53
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:44:12 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 19B495801FA;
+        Thu, 25 Aug 2022 09:44:12 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 25 Aug 2022 09:44:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661435052; x=1661442252; bh=AjAS+mxokB
+        mADly8X+bwM1z4OrzJr2RjjjUhIDL33q8=; b=aBX2Pd5RY+tOBxJp7Q9Kg9QlAE
+        xXlvpoCjmRubOY7P6I+BHGd97QgDL2AVDpf/PUw0n7ySzAAszNwsNCpT3/6eJzEW
+        ZBFbOi70av8ROP3lP1CdNz7yZvvHR/yrhtbwEMZXtNh1HL3cI89A8wGRa9C3E9UV
+        A+c4wlyqASoo87i0QjufCH7CVRVRSRpTF4nNZ+0z8qGhWYKmg0+XYW0ib5ztTETf
+        xuwCqRc6LcdjmDg3dNjTRco2xb/pl71VGwBtufxCc+xvEUJIhri0VnpUdOWsAqo7
+        mhYCwDVlz5GLR452UO+zMhnOwRTjRxovWcbVEQ9qzK6llfkPNdv4zxVP50SA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661435052; x=1661442252; bh=AjAS+mxokBmADly8X+bwM1z4OrzJ
+        r2RjjjUhIDL33q8=; b=wbLRi+/MnqRVf8XYD5hMxddwmSfrpNixFPg+0EmqSYBx
+        jwROxs3/NjSL4LioG7sMaH+N8R/T1ro+6MeZQhmS/n89Q/3oJvLaXlNTeOANhQYk
+        W6i066GwHdY+6za9liIVlBS/mMTKwUJ1LVKqRc24ThfkFz4zMBCsNU6xG4okTCZj
+        YEXbQS0vrV4RKuYPBM0zprcS2is85jC2ukDCfYhR0kK7Ci75uG10EPLAzpz1TczY
+        IyS3ORjSCMDrsJNgVegd7cn6gWbb4OlQlwBobnbEIt9Wo5ghJpCHAuM/FaSTEeen
+        BqUrteGdd4JGYA9bRf2PwsmPhm2ZQTF1aKqCLfAkvA==
+X-ME-Sender: <xms:q3wHYwJEFPKwRD-bJ0WNXQpQ6u0YGXCm5ZZAHqJAbi145PikINxAlw>
+    <xme:q3wHYwLdiP1ka_ZE7YIIi9kgJ_cUq0KUIcUngIQW9aUxkAVprI2YOaS0NAaO1vNIv
+    0HUL2DMMQ5V3h-Hhxs>
+X-ME-Received: <xmr:q3wHYws-Dltmw0Gwp92UWSQjXICrzHSGC5rZK5B0Dvbc7RqFM0P7kaZ1mIM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:q3wHY9a41ZGeJtSzfcaj6aGoJPhwlf8ciS6VwRTvQfHeJUCOksk2RA>
+    <xmx:q3wHY3a7m1F_nSW3ahQtqPfda5UN-wj-3jRwNvzxCt-5sJwCBzpMtA>
+    <xmx:q3wHY5BxaU8J5xmINtViC1twyVZYYENBvV6Erv1zpi7DQAOGQbFhlQ>
+    <xmx:rHwHY0KHVaeKaL82Q-OroPeXq2HQX9yNggQVAJkSmXZDju0qAhQ1cA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 25 Aug 2022 09:44:10 -0400 (EDT)
+Date:   Thu, 25 Aug 2022 15:44:08 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+Message-ID: <20220825134408.dioj2lbycl7jm3ld@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ztityevrt7lawo2u"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220809133911.hqi7eyskcq2sojia@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+Marc]
 
-On Tue, Aug 09, 2022 at 03:39:11PM +0200, Pali Rohár wrote:
+--ztityevrt7lawo2u
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+Hi,
 
-> > Then we'll need either a strong argument that this is safe even if
-> > drivers for endpoints below fail to dispose of their IRQ info
-> > correctly, or an argument that the benefit of making the PCI
-> > controller drivers removable outweighs that risk.
-> > 
-> > I haven't been paying close attention recently, so I may have missed
-> > the details here, but my superficial opinion is that removability of
-> > PCI controller drivers is primarily useful to developers, not to end
-> > users.
-> 
-> For developers it is strong need. Hajo needed this patch for debugging
-> SATA related issue.
-> 
-> For end-users in more cases it is also needed because cards, card
-> drivers or controller drivers can be buggy and calling rmmod && modprobe
-> is the way how to reload PCIe bus with controller without need to reboot
-> whole machine. This approach is lot of times suggested by admins and
-> also on user forums, because it really helps.
-> 
-> In my opinion, if hotplug capable kernel driver (for what ever reasons)
-> leaks resources on unbind procedure, it is an big issue. It basically
-> disallow proper next bind procedure; which is required for hotplug
-> capable drivers and buses, which PCIe is. memory and interrupts are just
-> example of resources which drivers use lot of.
-> 
-> So I consider a bug if driver does not release resource properly and
-> "parent" driver should not expect that something like it is normal.
-> 
-> This particular patch was tested at least by two people that is really
-> fixes resource-free issue with more endpoint drivers.
-> 
-> I think that in this case for pci-mvebu.c it is safe because: At the
-> first step of unbind procedure is called unregistraction of PCIe bus
-> with all devices bound on it. This ensures that all PCIe endpoint
-> drivers are unbind, devices removed and no new driver or device and
-> appear. After that there should not be any remaining usage of PCIe
-> resources (if there is then whole PCIe hotplug code is broken and we
-> have other and bigger issue...). Next pci-mvebu.c manually disposes all
-> remaining legacy interrupts (which PCI core code does not because legacy
-> interrupts are shared and it does not know if they are used or not).
-> This is safe because at these stage there are no PCI drivers bound,
-> there is no PCI device for that controller registered. And after that is
-> removed IRQ domain (which has finally disposed all interrupts).
-> If you see there some logical issue, please let me know.
-> 
-> Note that allowing doing device unbind and disallowing rmmod is useless
-> as the whole issue happens during unbind, not during rmmod. So the
-> discussion should have been about device unbinding, not rmmoding.
-> 
-> I see very big benefit for both developers and end users to allow doing
-> unbind procedure as explained above.
-> 
-> But if you decide that unbind should be disallowed, then doing it
-> properly should probably imply to also disallow doing PCIe hog-unplug.
-> As unplugging device means to unbind endpoint card drivers. And I think
-> hot-plug and hot-unplug is a PCIe feature which could be supported. But
-> well, this is decision for you as maintainer.
+On Sat, Aug 20, 2022 at 10:12:46PM +0200, Noralf Tr=F8nnes wrote:
+> > diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> > index 1e9996b33cc8..78275e68ff66 100644
+> > --- a/include/drm/drm_connector.h
+> > +++ b/include/drm/drm_connector.h
+> > @@ -143,6 +143,32 @@ enum subpixel_order {
+> > =20
+> >  };
+> > =20
+> > +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
+> > +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
+> > +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
+> > +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
+> > +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
+> > +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
+> > +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
+> > +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
+> > +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
+> > +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
+> > +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
+> > +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
+> > +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
+> > +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
+> > +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
+> > +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
+> > +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
+> > +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
+> > +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
+> > +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
+> > +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
+> > +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
+> > +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
+> > +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
+> > +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
+> > +
+>=20
+> This is an area where DRM overlaps with v4l2, see:
+> - include/dt-bindings/display/sdtv-standards.h
+> - v4l2_norm_to_name()
+>=20
+> Maybe we should follow suit, but if we do our own thing please mention
+> why in the commit message.
 
-I think that this is the right thing to do - CC'ed Marc here
-in case I am missing something - I think this ought to be fixed,
-for this controller and all others that are missing the
-irq_dispose_mapping() call.
+Are you suggesting that we'd share that definition with v4l2?
 
-Lorenzo
+I've tried to share some code in the past between v4l2 and DRM, and it
+got completely shut down so it's not something I'd like to try again, if
+possible.
 
-> > Bjorn
-> > 
-> > > On Saturday 09 July 2022 18:18:58 Pali Rohár wrote:
-> > > > Documentation for irq_domain_remove() says that all mapping within the
-> > > > domain must be disposed prior to domain remove.
-> > > > 
-> > > > Currently INTx irqs are not disposed in pci-mvebu.c device unbind callback
-> > > > which cause that kernel crashes after unloading driver and trying to read
-> > > > /sys/kernel/debug/irq/irqs/<num> or /proc/interrupts.
-> > > > 
-> > > > Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
-> > > > Reported-by: Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
-> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > > ---
-> > > > Depends on patch:
-> > > > https://lore.kernel.org/linux-pci/20220524122817.7199-1-pali@kernel.org/
-> > > > 
-> > > > Here is the captured kernel crash which happens without this patch:
-> > > > 
-> > > > $ cat /sys/kernel/debug/irq/irqs/64
-> > > > [  301.571370] 8<--- cut here ---
-> > > > [  301.574496] Unable to handle kernel paging request at virtual address 0a00002a
-> > > > [  301.581736] [0a00002a] *pgd=00000000
-> > > > [  301.585323] Internal error: Oops: 80000005 [#1] SMP ARM
-> > > > [  301.590560] Modules linked in:
-> > > > [  301.593621] CPU: 1 PID: 4641 Comm: cat Not tainted 5.16.0-rc1+ #192
-> > > > [  301.599905] Hardware name: Marvell Armada 380/385 (Device Tree)
-> > > > [  301.605836] PC is at 0xa00002a
-> > > > [  301.608896] LR is at irq_debug_show+0x210/0x2d4
-> > > > [  301.613440] pc : [<0a00002a>]    lr : [<c018ca40>]    psr: 200000b3
-> > > > [  301.619721] sp : c797fdd8  ip : 0000000b  fp : 0a00002b
-> > > > [  301.624957] r10: c0d9a364  r9 : 00000001  r8 : 00000000
-> > > > [  301.630192] r7 : c18fee18  r6 : c0da2a74  r5 : c18fee00  r4 : c66ec050
-> > > > [  301.636734] r3 : 00000001  r2 : c18fee18  r1 : 00000000  r0 : c66ec050
-> > > > [  301.643275] Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-> > > > [  301.650689] Control: 10c5387d  Table: 0790c04a  DAC: 00000051
-> > > > [  301.656446] Register r0 information: slab seq_file start c66ec050 pointer offset 0
-> > > > [  301.664040] Register r1 information: NULL pointer
-> > > > [  301.668755] Register r2 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
-> > > > [  301.677480] Register r3 information: non-paged memory
-> > > > [  301.682543] Register r4 information: slab seq_file start c66ec050 pointer offset 0
-> > > > [  301.690133] Register r5 information: slab kmalloc-256 start c18fee00 pointer offset 0 size 256
-> > > > [  301.698770] Register r6 information: non-slab/vmalloc memory
-> > > > [  301.704442] Register r7 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
-> > > > [  301.713165] Register r8 information: NULL pointer
-> > > > [  301.717879] Register r9 information: non-paged memory
-> > > > [  301.722941] Register r10 information: non-slab/vmalloc memory
-> > > > [  301.728699] Register r11 information: non-paged memory
-> > > > [  301.733848] Register r12 information: non-paged memory
-> > > > [  301.738997] Process cat (pid: 4641, stack limit = 0xf591166e)
-> > > > [  301.744756] Stack: (0xc797fdd8 to 0xc7980000)
-> > > > [  301.749123] fdc0:                                                       0000000a 830d3f3e
-> > > > [  301.757321] fde0: c1004f48 c0d9a374 c7a9cc10 c66ec050 00000000 c88af900 c797fe80 7ffff000
-> > > > [  301.765518] fe00: 00400cc0 c66ec068 00000001 c02c5cb8 00000000 00000000 c66ec078 c797fe68
-> > > > [  301.773715] fe20: c1cdf6c0 c7a9cc10 ffffffea c88af900 00000010 00000000 00000000 c88af900
-> > > > [  301.781911] fe40: c1004f48 c797ff78 00001000 00004004 c03efcb8 c02c6100 00001000 00000000
-> > > > [  301.790108] fe60: bec73e04 00001000 00000000 00000000 00001000 c797fe60 00000001 00000000
-> > > > [  301.798304] fe80: c88af900 00000000 00000000 00000000 00000000 00000000 00000000 40040000
-> > > > [  301.806501] fea0: 00000000 00000000 c1004f48 830d3f3e c88af900 c02c6018 c1c7a770 bec73e04
-> > > > [  301.814697] fec0: 00001000 c797ff78 00000001 c03efd0c 00001000 c88af900 00000000 bec73e04
-> > > > [  301.822894] fee0: c1004f48 c797ff78 00000001 c029c728 c887ca20 01100cca 0000004f 0045f000
-> > > > [  301.831091] ff00: 00000254 c790c010 c790c010 00000000 00000000 00000000 c5f6117c eeece9b8
-> > > > [  301.839288] ff20: 00000000 830d3f3e 00000000 c797ffb0 c79fc000 80000007 0045f5b8 00000254
-> > > > [  301.847484] ff40: c79fc040 00000004 c887ca20 830d3f3e 00000000 c1004f48 c88af900 00000000
-> > > > [  301.855681] ff60: 00000000 c88af900 bec73e04 00001000 00000000 c029cd68 00000000 00000000
-> > > > [  301.863877] ff80: 00000000 830d3f3e 00000000 00000000 01000000 00000003 c0100284 c1b8abc0
-> > > > [  301.872074] ffa0: 00000003 c0100060 00000000 00000000 00000003 bec73e04 00001000 00000000
-> > > > [  301.880270] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
-> > > > [  301.888468] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410 60000010 00000003 00000000 00000000
-> > > > [  301.896666] [<c018ca40>] (irq_debug_show) from [<c02c5cb8>] (seq_read_iter+0x1a4/0x504)
-> > > > [  301.904700] [<c02c5cb8>] (seq_read_iter) from [<c02c6100>] (seq_read+0xe8/0x12c)
-> > > > [  301.912117] [<c02c6100>] (seq_read) from [<c03efd0c>] (full_proxy_read+0x54/0x70)
-> > > > [  301.919623] [<c03efd0c>] (full_proxy_read) from [<c029c728>] (vfs_read+0xa0/0x2c8)
-> > > > [  301.927214] [<c029c728>] (vfs_read) from [<c029cd68>] (ksys_read+0x58/0xd0)
-> > > > [  301.934195] [<c029cd68>] (ksys_read) from [<c0100060>] (ret_fast_syscall+0x0/0x54)
-> > > > [  301.941785] Exception stack(0xc797ffa8 to 0xc797fff0)
-> > > > [  301.946849] ffa0:                   00000000 00000000 00000003 bec73e04 00001000 00000000
-> > > > [  301.955045] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
-> > > > [  301.963241] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410
-> > > > [  301.968304] Code: bad PC value
-> > > > [  301.971365] ---[ end trace fe25fd26d042b605 ]---
-> > > > [  301.975992] Kernel panic - not syncing: Fatal exception
-> > > > [  301.981229] CPU0: stopping
-> > > > [  301.983946] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G      D           5.16.0-rc1+ #192
-> > > > [  301.991884] Hardware name: Marvell Armada 380/385 (Device Tree)
-> > > > [  301.997817] [<c010e120>] (unwind_backtrace) from [<c010a170>] (show_stack+0x10/0x14)
-> > > > [  302.005587] [<c010a170>] (show_stack) from [<c0bbf108>] (dump_stack_lvl+0x40/0x4c)
-> > > > [  302.013179] [<c0bbf108>] (dump_stack_lvl) from [<c010c3f8>] (do_handle_IPI+0xf4/0x128)
-> > > > [  302.021117] [<c010c3f8>] (do_handle_IPI) from [<c010c444>] (ipi_handler+0x18/0x20)
-> > > > [  302.028707] [<c010c444>] (ipi_handler) from [<c0185c5c>] (handle_percpu_devid_irq+0x78/0x124)
-> > > > [  302.037256] [<c0185c5c>] (handle_percpu_devid_irq) from [<c017ffb8>] (generic_handle_domain_irq+0x44/0x88)
-> > > > [  302.046938] [<c017ffb8>] (generic_handle_domain_irq) from [<c05f051c>] (gic_handle_irq+0x74/0x88)
-> > > > [  302.055839] [<c05f051c>] (gic_handle_irq) from [<c0bc7ef8>] (generic_handle_arch_irq+0x34/0x44)
-> > > > [  302.064564] [<c0bc7ef8>] (generic_handle_arch_irq) from [<c0100b10>] (__irq_svc+0x50/0x68)
-> > > > [  302.072851] Exception stack(0xc1001f00 to 0xc1001f48)
-> > > > [  302.077916] 1f00: 000d6830 00000000 00000001 c0116be0 c1004f90 c1004fd4 00000001 00000000
-> > > > [  302.086114] 1f20: c1004f48 c0f5d2a8 c1009e80 00000000 00000000 c1001f50 c01076f4 c01076f8
-> > > > [  302.094309] 1f40: 60000013 ffffffff
-> > > > [  302.097804] [<c0100b10>] (__irq_svc) from [<c01076f8>] (arch_cpu_idle+0x38/0x3c)
-> > > > [  302.105223] [<c01076f8>] (arch_cpu_idle) from [<c0bcf3a0>] (default_idle_call+0x1c/0x2c)
-> > > > [  302.113338] [<c0bcf3a0>] (default_idle_call) from [<c015db34>] (do_idle+0x1c8/0x218)
-> > > > [  302.121106] [<c015db34>] (do_idle) from [<c015de40>] (cpu_startup_entry+0x18/0x20)
-> > > > [  302.128697] [<c015de40>] (cpu_startup_entry) from [<c0f00fec>] (start_kernel+0x650/0x694)
-> > > > [  302.136901] Rebooting in 3 seconds..
-> > > > ---
-> > > >  drivers/pci/controller/pci-mvebu.c | 9 ++++++++-
-> > > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > > index 31f53a019b8f..951030052358 100644
-> > > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > > @@ -1713,8 +1713,15 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
-> > > >  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
-> > > >  
-> > > >  		/* Remove IRQ domains. */
-> > > > -		if (port->intx_irq_domain)
-> > > > +		if (port->intx_irq_domain) {
-> > > > +			int virq, j;
-> > > > +			for (j = 0; j < PCI_NUM_INTX; j++) {
-> > > > +				virq = irq_find_mapping(port->intx_irq_domain, j);
-> > > > +				if (virq > 0)
-> > > > +					irq_dispose_mapping(virq);
-> > > > +			}
-> > > >  			irq_domain_remove(port->intx_irq_domain);
-> > > > +		}
-> > > >  
-> > > >  		/* Free config space for emulated root bridge. */
-> > > >  		pci_bridge_emul_cleanup(&port->bridge);
-> > > > -- 
-> > > > 2.20.1
-> > > > 
-> > > 
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Maxime
+
+--ztityevrt7lawo2u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwd8qAAKCRDj7w1vZxhR
+xbq9AP9Ut8DrTs4R98n7uEJ4qsWpbIOQoxH89Co6dV81OZDd4AD/XTYHIrgOsCVX
+KF7npRlfSwUkz5ZgJBgTt5iDHapUmAQ=
+=Heqx
+-----END PGP SIGNATURE-----
+
+--ztityevrt7lawo2u--

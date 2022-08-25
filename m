@@ -2,160 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F285A1D55
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769145A1D5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243576AbiHYXpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 19:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S243933AbiHYXyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 19:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244131AbiHYXpf (ORCPT
+        with ESMTP id S243737AbiHYXyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 19:45:35 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578F0BCC1A;
-        Thu, 25 Aug 2022 16:45:32 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x93so57196ede.6;
-        Thu, 25 Aug 2022 16:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=0iK/pr4xLo47HopX4u5r1hckwLvpwxEltSBciwBAkLw=;
-        b=F40/IIhXL+okTAOvuMUTbRHs1eRxX4jt1qHNsfhzL/qyEdMeNr6n+MwIh4ud5gzQOx
-         ebIq6oVnsWYA+vFz5MBM230qyweOAw/JK2iPqBy5uS2k+EVsRtCAdPkD6IDaV98+l/3b
-         HOjkQyUmzPsYh8D5Z6niQuMNmvz0hlSGg5JBG+pFkhFSaRk1kCO6uttZWhStt5VAKCgL
-         CVCND+VQJSt+ih9iXWQR5h94gJS4AGkD2N0Tct07n7ux8D043IjWj4PFSIg4F0J6c3Xk
-         HGVi0A6U7EXE4PgaogBrGUS0tHkuiNgoLnb1pQS5IONWP9AW234mo6miR9O3wXzNDG91
-         3yTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=0iK/pr4xLo47HopX4u5r1hckwLvpwxEltSBciwBAkLw=;
-        b=KAjXBuA2dLbOztb6YglSQqG9yxkbXJUS0kXx2LiadqX2OvGFCQuxHG1AvQLDu8bSfu
-         MOIDbE3Ii8LvDpscDWofftNTd2bjFTmlXdpUFRIHxP21E349zhgDBUefreCvUzzUwgBr
-         puef1/3Tp23gVw0DPi6ADqOEhzQLUm/lHwEeTTBZT4k9hOECUcC2lcgebwwoTGD7eskr
-         4EaKMjCbwf/TZlLUX+jiqD4lWMv0wYgUexuyMynGmebdTxQVwjhNkj0HVO/SWeSjuTSE
-         e6X91We30bIgZVfG06yECU8GlpMvf0MLY5alivMplzl/MAkYM0YPzXvvCfaGBtAPYkQK
-         HBFg==
-X-Gm-Message-State: ACgBeo1T0Xn0RDZNgS73pplXHSkQRg/rhWK3FGVEsLUGz7MY3CSOwLk0
-        p2A4oK8FI8KGJnYbzGDgSQM=
-X-Google-Smtp-Source: AA6agR6uBX8x4bxD0y+4dlwc6pOEoMy9eIA5OmWNt07mWOfaHlCuXhEXd1OGurb5rZ3u7SmCNzcEOQ==
-X-Received: by 2002:a05:6402:5106:b0:440:3693:e67b with SMTP id m6-20020a056402510600b004403693e67bmr5030743edd.226.1661471129803;
-        Thu, 25 Aug 2022 16:45:29 -0700 (PDT)
-Received: from skbuf ([188.27.185.241])
-        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b007317f017e64sm205036ejb.134.2022.08.25.16.45.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 16:45:29 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 02:45:26 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/11] net: phy: Add 1000BASE-KX interface mode
-Message-ID: <20220825234526.f6pjq56sab4pm6u4@skbuf>
-References: <20220725153730.2604096-3-sean.anderson@seco.com>
- <20220818165303.zzp57kd7wfjyytza@skbuf>
- <8a7ee3c9-3bf9-cfd1-67ab-bb11c1a0c82a@seco.com>
- <35779736-8787-f4cb-4160-4ff35946666d@seco.com>
- <20220818171255.ntfdxasulitkzinx@skbuf>
- <cfe3d910-adee-a3bf-96e2-ce1c10109e58@seco.com>
- <20220818195151.3aeaib54xjdhk3ch@skbuf>
- <b858932a-3e34-7365-f64b-63decfe83b41@seco.com>
- <68b28596-cd16-2485-87df-b659060b0b0b@seco.com>
- <68b28596-cd16-2485-87df-b659060b0b0b@seco.com>
+        Thu, 25 Aug 2022 19:54:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DF9C59EA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661471644; x=1693007644;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YUtcZHJ7ojap9hkLRd86QK/XgC47Wnac7regS6SVDlM=;
+  b=cp4goS+lptYvf7Wc8Fm3WhXbBxJaX3tfX2AZv5xre1iU4JoWHKiXeXTZ
+   Bbg7/nn+JayPpTsrzE1+0HQ/9nqXmSm24czFWjynNnJdwlMvbrB5H27Do
+   emBlviIrf/8vtiHzG6CawwjsZQmGNslc9x4Pmok40GEb4mpwXR0Onc9va
+   uAFO7EEODZkdepqtoxYSHA9cdTlg+nl5RGlBap6rJBCHmQRYcQGqDe7ZG
+   KrUFN/UhyIJsHSS2PziDDcU8UeyiK0+LaM0lft2ofDVDJ5bIVzonbmsqg
+   N3FhWCYqjKVc0q+eOf7gB6hsA2+XO8K4vo6L9YzSWdKlyQ5LbNcBXjvHR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="320475188"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="320475188"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 16:54:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="587091109"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 25 Aug 2022 16:54:00 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRMfg-00035a-0K;
+        Thu, 25 Aug 2022 23:54:00 +0000
+Date:   Fri, 26 Aug 2022 07:53:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.rewrite 8/8] drivers/perf/arm_pmu.c:560:26:
+ error: 'struct arm_pmu' has no member named 'filter_match'
+Message-ID: <202208260705.BOEvaIqD-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <68b28596-cd16-2485-87df-b659060b0b0b@seco.com>
- <68b28596-cd16-2485-87df-b659060b0b0b@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 06:50:23PM -0400, Sean Anderson wrote:
-> > The problem is that our current model looks something like
-> > 
-> > 1. MAC <--               A              --> phy (ethernet) --> B <-- far end
-> > 2. MAC <-> "PCS" <-> phy (serdes) --> C <-- phy (ethernet) --> B <-- far end
-> > 3.                                --> C <-- transciever    --> B <-- far end
-> > 4.                                -->           D                <-- far end
-> > 
-> > Where 1 is the traditional MAC+phy architecture, 2 is a MAC connected to
-> > a phy over a serial link, 3 is a MAC connected to an optical
-> > transcievber, and 4 is a backplane connection. A is the phy interface
-> > mode, and B is the ethtool link mode. C is also the "phy interface
-> > mode", except that sometimes it is highly-dependent on the link mode
-> > (e.g. 1000BASE-X) and sometimes it is not (SGMII). The problem is case
-> > 4. Here, there isn't really a phy interface mode; just a link mode.
-> >
-> > Consider the serdes driver. It has to know how to configure itself.
-> > Sometimes this will be the phy mode (cases 2 and 3), and sometimes it
-> > will be the link mode (case 4). In particular, for a link mode like
-> > 1000BASE-SX, it should be configured for 1000BASE-X. But for
-> > 1000BASE-KX, it has to be configured for 1000BASE-KX. I suppose the
-> > right thing to do here is rework the phy subsystem to use link modes and
-> > not phy modes for phy_mode_ext, since it seems like there is a
-> > 1000BASE-X link mode. But what should be passed to mac_prepare and
-> > mac_select_pcs?
-> > 
-> > As another example, consider the AQR113C. It supports the following
-> > (abbreviated) interfaces on the MAC side:
-> > 
-> > - 10GBASE-KR
-> > - 1000BASE-KX
-> > - 10GBASE-R
-> > - 1000BASE-X
-> > - USXGMII
-> > - SGMII
-> > 
-> > This example of what phy-mode = "1000base-kx" would imply. I would
-> > expect that selecting -KX over -X would change the electrical settings
-> > to comply with clause 70 (instead of the SFP spec).
-> 
-> Do you have any comments on the above?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.rewrite
+head:   b149fd14e2fb487c8d8b07d353421101c33bbf2b
+commit: b149fd14e2fb487c8d8b07d353421101c33bbf2b [8/8] Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+config: arm-randconfig-r016-20220823 (https://download.01.org/0day-ci/archive/20220826/202208260705.BOEvaIqD-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=b149fd14e2fb487c8d8b07d353421101c33bbf2b
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.rewrite
+        git checkout b149fd14e2fb487c8d8b07d353421101c33bbf2b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
-What comments do you expect? My message was just don't get sidetracked
-by trying to tackle problems you don't need to solve, thinking they're
-just there, along the way.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-"The problem" of wanting to describe an electrical using phy-mode was
-discussed before, with debatable degrees of success and the following
-synopsis:
+All errors (new ones prefixed by >>):
 
-| phy_interface_t describes the protocol *only*, it doesn't describe
-| the electrical characteristics of the interface.  So, if we exclude
-| the electrical characteristics of SFI, we're back to 10GBASE-R,
-| 10GBASE-W, 10GFC or 10GBASE-R with FEC.  That's what phy_interface_t
-| is, not SFI.
-|
-| So, I propose that we add 10GBASE-R to the list and *not* SFI.
+   drivers/perf/arm_pmu.c: In function 'armpmu_filter_match':
+>> drivers/perf/arm_pmu.c:560:26: error: 'struct arm_pmu' has no member named 'filter_match'
+     560 |         if (ret && armpmu->filter_match)
+         |                          ^~
+   drivers/perf/arm_pmu.c:561:30: error: 'struct arm_pmu' has no member named 'filter_match'
+     561 |                 return armpmu->filter_match(event);
+         |                              ^~
+   drivers/perf/arm_pmu.c: In function '__armpmu_alloc':
+>> drivers/perf/arm_pmu.c:888:18: error: 'struct pmu' has no member named 'filter_match'
+     888 |                 .filter_match   = armpmu_filter_match,
+         |                  ^~~~~~~~~~~~
+>> drivers/perf/arm_pmu.c:888:35: error: initialization of 'void (*)(struct pmu *, unsigned int)' from incompatible pointer type 'int (*)(struct perf_event *)' [-Werror=incompatible-pointer-types]
+     888 |                 .filter_match   = armpmu_filter_match,
+         |                                   ^~~~~~~~~~~~~~~~~~~
+   drivers/perf/arm_pmu.c:888:35: note: (near initialization for '(anonymous).start_txn')
+   cc1: some warnings being treated as errors
 
-https://lore.kernel.org/netdev/20191223105719.GM25745@shell.armlinux.org.uk/
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+   Selected by [y]:
+   - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
 
-I don't have access to 802.3 right now to double check, but I think this
-is a similar case here - between 1000Base-SX and 1000Base-KX, only the
-PMA/PMD is different, otherwise they are still both 1000Base-X in terms
-of protocol/coding.
 
-As for the second "example". I had opened my copy of the AQR113C manual
-and IIRC it listed 10GBASE-KR in the system interfaces, but I don't
-recall seeing 1000Base-KX. And even for 10GBASE-KR, there weren't a lot
-of details, like what is configurable about it, is there C73 available etc.
-Not extremely clear what that is about, tbh. Something that has
-10GBase-KR on system side and 10GBase-T on media side sounds like a
-media converter to me. Not sure how we model those in phylib (I think
-the answer is we don't).
+vim +560 drivers/perf/arm_pmu.c
+
+1b8873a0c6ec51 arch/arm/kernel/perf_event.c Jamie Iles   2010-02-02  547  
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  548  /*
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  549   * In heterogeneous systems, events are specific to a particular
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  550   * microarchitecture, and aren't suitable for another. Thus, only match CPUs of
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  551   * the same microarchitecture.
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  552   */
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  553  static int armpmu_filter_match(struct perf_event *event)
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  554  {
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  555  	struct arm_pmu *armpmu = to_arm_pmu(event->pmu);
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  556  	unsigned int cpu = smp_processor_id();
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05  557  	int ret;
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05  558  
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05  559  	ret = cpumask_test_cpu(cpu, &armpmu->supported_cpus);
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05 @560  	if (ret && armpmu->filter_match)
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05  561  		return armpmu->filter_match(event);
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05  562  
+ca2b497253ad01 drivers/perf/arm_pmu.c       Will Deacon  2018-10-05  563  	return ret;
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  564  }
+c904e32a69b7c7 arch/arm/kernel/perf_event.c Mark Rutland 2015-05-13  565  
+
+:::::: The code at line 560 was first introduced by commit
+:::::: ca2b497253ad01c80061a1f3ee9eb91b5d54a849 arm64: perf: Reject stand-alone CHAIN events for PMUv3
+
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Will Deacon <will.deacon@arm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

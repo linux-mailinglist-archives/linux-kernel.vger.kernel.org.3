@@ -2,196 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C4F5A0CA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFA85A0CB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiHYJbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S240237AbiHYJbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiHYJba (ORCPT
+        with ESMTP id S240297AbiHYJbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:31:30 -0400
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DAC785A9
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:31:27 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MCyQP1P46zMqDVD;
-        Thu, 25 Aug 2022 11:31:25 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MCyQN3ghkzlh8TL;
-        Thu, 25 Aug 2022 11:31:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1661419885;
-        bh=CkxqIj5ppbkjqi2GIhMLEArRVaHpESPBLrlgJrYmOqs=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=jh+9OLvqNwAbhISkiftw4MmTNT4pHs+fZpj4FpkmLFc/cc5INadRj05vaTMzHp0TH
-         MvRiVzPfi6dOPgpD+tkdN3pFsU85X2TTYnFfpbStn8bH6D1OhxGceky3/XxV8wRXBv
-         lZX5WzTRP7ylhT5IzCo7lcWDuYKM2LnNYyFQLImA=
-Message-ID: <eeb34913-5930-3e82-3d8f-a00e20798e4a@digikod.net>
-Date:   Thu, 25 Aug 2022 11:31:23 +0200
+        Thu, 25 Aug 2022 05:31:45 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB7694EC7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:31:44 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id io24so4741123plb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=FkF/ieW9DrmFPlYn4kxhbKZWUjDQxs4hOhq1nOWUbV8=;
+        b=v6DiykumEFWXgdqMcMhIspfDE1oja9wFVIrnV8rqLwVwlnY39s+EM5gzT9vhmoBeLo
+         v6VwF77QU0XGq5IBHzHQZKNHBfq/yAcsBgDuE1tGHxpG8CCU0YwxK/4ljpdJb6+5YF82
+         VXR5kUA7A0IHQG+kJc8soAaPclxYNsbm98MqP6J03BSWjz1Jd0EedEHmyjQn1vf6WSMz
+         SZhGOyJ61vUsjs2XzLlvTfNpQQIePS1f/2ofHVhTxICx1JkcOAmgbCD9IfwDNze4WNon
+         FJ9Zsx23eV0KGVkqm+Sz1DhRhI9a/jeETIL+KNiQffsbqBsbWJwDOm1FwkQtWlP9Td7V
+         7keg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=FkF/ieW9DrmFPlYn4kxhbKZWUjDQxs4hOhq1nOWUbV8=;
+        b=N0Zyna1NlzCcoM3iN9YO8BN4/4W7Ybkj+S80A2f6xqz3iivMInvA3XW90oE1xY2HuZ
+         FsndaWe4roJJJH4Z3eAPKeV0rYbD+QtIQIGVLRub0aqVAIrlIeINzVinx80qnFH35ez2
+         wAgyjyBOChKL2qLjEtQMbKtEY4iJVzxipfi6VMI2DpxnYNEzKKVqbZgxQ0S4XRzI2jGF
+         Zx96yc4kZRUCcgUTbxYxLO7RZ2KWHN48V/pLXlNNJ2Bz24pQ5WMGw7WD1Tey3HOtc1wQ
+         VbSn/zWUhnDWBYRxTpzWFOc+7D+ry/h8XWz7j56Jr3F+PHi6eyuOUxW9KyGbjByd81nD
+         C1Gw==
+X-Gm-Message-State: ACgBeo1Lx8ZFZQ0ohlT6HMyxwOqi0Yjydi3MnrZAtK+LMK9SvgOCQeLt
+        a+ibLqtuA1WmuY9a1u1NSq2QcA==
+X-Google-Smtp-Source: AA6agR64FNDVCcY/q1Ls1c6co+VRCiun2r+tsha4TZ/3lAU+XvQ+Fla9eV7HgK3GzB4+tLAwjARlyw==
+X-Received: by 2002:a17:902:9894:b0:172:ca00:f305 with SMTP id s20-20020a170902989400b00172ca00f305mr3136942plp.107.1661419903738;
+        Thu, 25 Aug 2022 02:31:43 -0700 (PDT)
+Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902e54900b00172f4835f53sm7205389plf.192.2022.08.25.02.31.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Aug 2022 02:31:43 -0700 (PDT)
+From:   lizhe.67@bytedance.com
+To:     mhocko@suse.com
+Cc:     Jason@zx2c4.com, akpm@linux-foundation.org, corbet@lwn.net,
+        keescook@chromium.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lizefan.x@bytedance.com, lizhe.67@bytedance.com,
+        mark-pk.tsai@mediatek.com, mhiramat@kernel.org,
+        rostedt@goodmis.org, vbabka@suse.cz, yuanzhu@bytedance.com
+Subject: Re: [PATCH v3] page_ext: introduce boot parameter early_page_ext
+Date:   Thu, 25 Aug 2022 17:31:30 +0800
+Message-Id: <20220825093130.98332-1-lizhe.67@bytedance.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <YwcgoZfw4RhZ1Bl6@dhcp22.suse.cz>
+References: <YwcgoZfw4RhZ1Bl6@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Guillaume <guillaume.tucker@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
- <CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com>
- <e4843a98-0bde-829c-f77a-56d45ba324d7@digikod.net>
- <CADYN=9+CFEV9QpNbhi6gKqJr1V5Jc8Q5hGhCD_ESkRXP2X3gbQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH] selftests/landlock: fix broken include of
- linux/landlock.h
-In-Reply-To: <CADYN=9+CFEV9QpNbhi6gKqJr1V5Jc8Q5hGhCD_ESkRXP2X3gbQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25 Aug 2022 09:11:29 +0200, mhocko@suse.com wrote:
+>On Thu 25-08-22 14:31:02, lizhe.67@bytedance.com wrote:
+>> From: Li Zhe <lizhe.67@bytedance.com>
+>> 
+>> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
+>> we call page_ext_init() after page_alloc_init_late() to avoid some panic
+>> problem. It seems that we cannot track early page allocations in current
+>> kernel even if page structure has been initialized early.
+>> 
+>> This patch introduce a new boot parameter 'early_page_ext' to resolve this
+>> problem. If we pass it to kernel, function page_ext_init() will be moved
+>> up and feature 'deferred initialization of struct pages' will be disabled.
+>
+>will be disabled to initialize the page allocator early and prevent from
+>the OOM mentioned above.
+>
+>> It can help us to catch early page allocations. This is useful especially
+>> when we find that the free memory value is not the same right after
+>> different kernel booting.
+>> 
+>> Changelogs:
+>> 
+>> v1->v2:
+>> - use a cmd line parameter to move up function page_ext_init() instead of
+>>   using CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>> - fix oom problem[1]
+>> 
+>> v2->v3:
+>> - make adjustments suggested by Michal Hocko
+>> 
+>> v1 patch: https://lore.kernel.org/lkml/Yv3r6Y1vh+6AbY4+@dhcp22.suse.cz/T/
+>> v2 patch: https://lore.kernel.org/lkml/20220824065058.81051-1-lizhe.67@bytedance.com/T/
+>> 
+>> [1]: https://lore.kernel.org/linux-mm/YwHmXLu5txij+p35@xsang-OptiPlex-9020/
+>
+>the changelog is usually not part of the changelog and goes under ---
 
-On 22/08/2022 16:00, Anders Roxell wrote:
-> On Sat, 13 Aug 2022 at 14:31, Mickaël Salaün <mic@digikod.net> wrote:
->>
->>
->> On 13/08/2022 12:01, Anders Roxell wrote:
->>> On Wed, 3 Aug 2022 at 22:14, Guillaume Tucker
->>> <guillaume.tucker@collabora.com> wrote:
->>>>
->>>> Revert part of the earlier changes to fix the kselftest build when
->>>> using a sub-directory from the top of the tree as this broke the
->>>> landlock test build as a side-effect when building with "make -C
->>>> tools/testing/selftests/landlock".
->>>>
->>>> Reported-by: Mickaël Salaün <mic@digikod.net>
->>>> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
->>>> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
->>>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->>>
->>> Building with this patch doesn't work, it gives this output:
->>> make[3]: Entering directory
->>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
->>> make[3]: Leaving directory
->>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
->>> make[3]: *** No rule to make target
->>> '/home/anders/.cache/tuxmake/builds/78/build/kselftest/landlock/base_test',
->>> needed by 'all'.  Stop.
->>>
->>> I'm building like this:
->>> tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-12
->>> --kconfig defconfig kselftest
->>>
->>> which translates into this make command:
->>> make --silent --keep-going --jobs=32
->>> O=/home/anders/.cache/tuxmake/builds/78/build
->>> INSTALL_PATH=/home/anders/.cache/tuxmake/builds/78/build/kselftest_install
->>> ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- kselftest-install
->>
->> This works well for me.
-> 
-> Interesting
+Thanks for correcting my mistake!
 
-I used this command (inspired by yours):
+>> 
+>> Suggested-by: Michal Hocko <mhocko@suse.com>
+>> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
+>
+>I still have few comments below before I am going to ack. But this looks
+>much better already.
+>
+>> ---
+>>  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
+>>  include/linux/page_ext.h                        | 11 +++++++++++
+>>  init/main.c                                     |  6 +++++-
+>>  mm/page_alloc.c                                 |  2 ++
+>>  mm/page_ext.c                                   | 12 ++++++++++++
+>>  5 files changed, 36 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index d7f30902fda0..7b5726828ac0 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -1471,6 +1471,12 @@
+>>  			Permit 'security.evm' to be updated regardless of
+>>  			current integrity status.
+>>  
+>> +	early_page_ext [KNL] Boot-time early page_ext initializing option.
+>> +			This boot parameter disables the deferred initialization
+>> +			of struct page and move up function page_ext_init() in
+>> +			order to catch early page allocations. Available with
+>> +			CONFIG_PAGE_EXTENSION=y.
+>
+>For admins it would likely be more easier to understand something like
+>following
+>	early_page_ext [KNL] Enforces page_ext initialization to earlier
+>			stages so cover more early boot allocations.
+>			Please note that as side effect some 
+>			optimizations might be disabled to achieve that
+>			(e.g. parallelized memory initialization is
+>			disabled) so the boot process might take longer,
+>			especially on systems with a lot of memory.
+>			Available with CONFIG_PAGE_EXTENSION=y
 
-make --silent --keep-going --jobs=32 "O=${HOME}/build" 
-"INSTALL_PATH=${HOME}/build/kselftest_install" ARCH=x86_64 
-CROSS_COMPILE=x86_64-linux-gnu- kselftest-install
+Great, I will use this description in my v4 patch. It is much more easier
+for us to understand. Thanks!
 
-Can you run this command without using tuxmake?
+>[...]
+>> diff --git a/mm/page_ext.c b/mm/page_ext.c
+>> index 3dc715d7ac29..bf4f2a12d7dc 100644
+>> --- a/mm/page_ext.c
+>> +++ b/mm/page_ext.c
+>> @@ -85,6 +85,18 @@ unsigned long page_ext_size = sizeof(struct page_ext);
+>>  
+>>  static unsigned long total_usage;
+>>  
+>> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>> +bool early_page_ext __meminitdata;
+>> +#else
+>> +bool early_page_ext __meminitdata = true;
+>> +#endif
+>
+>Why should default depend on DEFERRED_STRUCT_PAGE_INIT at all. This is
+>just confusing and I do not see how it serves a purpose. We might grow
+>more optimizations which would prefent early page_ext init.
+>
+>Let's just have default false and only enforce with the parameter. This
+>is more predictable and easier to understand.
 
-
-> 
->> Which commit is checkout?
-> 
-> I used the latest next tag, I tried to on todays tag as well
-> next-20220822 and I see
-> the same issue.
-> building without 'O=...' I can build the landlock tests...
-
-Can you test it with Linux v5.19 and v6.0-rc2 and see if there is a 
-difference?
-
-Is your workspace clean?
-What is the version of your make?
-
-Can you replace this line from the Makefile with static names?
-"src_test := $(wildcard *_test.c)"
-
-
-
-> 
->>
->>
->>>
->>> building without this patch works, see below:
->>>
->>> make[3]: Entering directory
->>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
->>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
->>> /home/anders/.cache/tuxmake/builds/77/build/usr/include    base_test.c
->>>    -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/base_test
->>> -lcap
->>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
->>> /home/anders/.cache/tuxmake/builds/77/build/usr/include    fs_test.c
->>> -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/fs_test
->>> -lcap
->>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
->>> /home/anders/.cache/tuxmake/builds/77/build/usr/include
->>> ptrace_test.c  -o
->>> /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/ptrace_test
->>> -lcap
->>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
->>> /home/anders/.cache/tuxmake/builds/77/build/usr/include    true.c  -o
->>> /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/true
->>> -static
->>> make[3]: Leaving directory
->>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
->> Does this work if you revert this patch, commit a917dd94b832
->> ("selftests/landlock: drop deprecated headers dependency") and commit
->> f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")?
->>
->> This patch mainly revert commit a917dd94b832, so I don't see the issue.
->>
->>
->>>
->>> Cheers,
->>> Anders
->>>
->>>> ---
->>>>    tools/testing/selftests/landlock/Makefile | 7 +++++--
->>>>    1 file changed, 5 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
->>>> index a6959df28eb0..02868ac3bc71 100644
->>>> --- a/tools/testing/selftests/landlock/Makefile
->>>> +++ b/tools/testing/selftests/landlock/Makefile
->>>> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
->>>>    TEST_GEN_PROGS_EXTENDED := true
->>>>
->>>>    OVERRIDE_TARGETS := 1
->>>> +top_srcdir := ../../../..
->>>>    include ../lib.mk
->>>>
->>>> +khdr_dir = $(top_srcdir)/usr/include
->>>> +
->>>>    $(OUTPUT)/true: true.c
->>>>           $(LINK.c) $< $(LDLIBS) -o $@ -static
->>>>
->>>> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
->>>> -       $(LINK.c) $< $(LDLIBS) -o $@ -lcap
->>>> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
->>>> +       $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
->>>> --
->>>> 2.30.2
->>>>
+Yes, this is confusing. Without depending on DEFERRED_STRUCT_PAGE_INIT, the
+logic here will be more clear. I will remove it from my v4 patch. Thanks!

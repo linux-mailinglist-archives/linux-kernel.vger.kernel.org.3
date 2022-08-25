@@ -2,223 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F105A08DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DBC5A08E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiHYGbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S235680AbiHYGcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiHYGbT (ORCPT
+        with ESMTP id S235252AbiHYGcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:31:19 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928E29DB5D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:31:18 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q9so7985069pgq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=OWcpDS3y0WzhcfF5raQouDMQPAkhS16J5NV4eoiKDsQ=;
-        b=WqFbHTP4BGdjc26PDYuuMeCvolj2BrklFCImw6aTmhTFFITU+gjOLWY5pkAhh+7lQG
-         kL9rvN932+Nb0C6y0o3NfBChJMwhu+xC0tnwevPx00VRXom+a7THOWCJK+TNuhhYAqdy
-         kIKDex53XcrrGy+AG/QaAI8PD6qX+A68p5qP8wAmmhOcnHTGL6q16xtHfgO6PmPh+PCw
-         zGiJW3SJnQdzvMEtdBityxZ/5KECPl87kuMf4EiNgnPkLLfIL5FdNqHBnvvLErcdQ4oD
-         WJqhDVEjH5JPxl92gdvHUzC3YKf/v4ITOacgWudu5zc81QKoDiXknfce5CGnh4WoIOpF
-         ag2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=OWcpDS3y0WzhcfF5raQouDMQPAkhS16J5NV4eoiKDsQ=;
-        b=lEqQOA8/kPKquSc0j6DfLezfO18rG+OO7ykYgzAnUpUoRWuucSrKUTWX8tzlXXNVoN
-         Sr7tqvl1gxWMk6Wpvez3hhlFUTGukz5pxQepSBnWGN25BxTZ7YgXZP2xHz+9dDJtPCMZ
-         h6MxUf2eDNuMk1jtOz5R0qJglGGSQ6w5YefhuPfV4FBJTF9NROLdS1t2oiMpCEpf4Ewb
-         8VRRjBUSVLAedt+drTwqO6wL/eB2QGruqtS5upeVxsv6p3/e7WdMs/pMjNEofSecFqJu
-         wxrbSYaav8H3Bbg1QDi8Y1lSHh6h0bekCal8FNYyNTlKznHsCTtyg9vw3VGVr12S+ldU
-         MYVg==
-X-Gm-Message-State: ACgBeo0yyqxmLsJqq6jgLVhxA59+8kC9QTutmxJZE8ku4EiolQCmVENh
-        pykoK0oDUtNcKS19IYMxa1oAiQ==
-X-Google-Smtp-Source: AA6agR4vxV+bi3X4AQEc5eY9u8Qvekg1e8gDjihGISwHEUpL5vYhjFWWSgfegJ3ExdxawaJjyUDDmw==
-X-Received: by 2002:a63:1e5c:0:b0:41d:b225:9ee1 with SMTP id p28-20020a631e5c000000b0041db2259ee1mr2036452pgm.245.1661409078008;
-        Wed, 24 Aug 2022 23:31:18 -0700 (PDT)
-Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id f184-20020a6238c1000000b00536b3fe1300sm7563032pfa.13.2022.08.24.23.31.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Aug 2022 23:31:17 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        mhiramat@kernel.org, keescook@chromium.org, Jason@zx2c4.com,
-        mark-pk.tsai@mediatek.com, rostedt@goodmis.org, corbet@lwn.net
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com, yuanzhu@bytedance.com,
-        lizhe.67@bytedance.com
-Subject: [PATCH v3] page_ext: introduce boot parameter 'early_page_ext'
-Date:   Thu, 25 Aug 2022 14:31:02 +0800
-Message-Id: <20220825063102.92307-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 25 Aug 2022 02:32:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1B59FA9F
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:32:43 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MCtPR4tZqznTkB;
+        Thu, 25 Aug 2022 14:30:19 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 14:32:39 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 14:32:39 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <patches@armlinux.org.uk>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 0/2] arm: Replace this_cpu_* with raw_cpu_* in panic_bad_stack()
+Date:   Thu, 25 Aug 2022 14:31:52 +0800
+Message-ID: <20220825063154.69-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Zhe <lizhe.67@bytedance.com>
+I'm analyzing a strange problem these days, and I find that there are some areas in
+panic_bad_stack() that can be optimized. That is, replace this_cpu_* with raw_cpu_* .
 
-In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
-we call page_ext_init() after page_alloc_init_late() to avoid some panic
-problem. It seems that we cannot track early page allocations in current
-kernel even if page structure has been initialized early.
+Just optimization, it is unlikely to cause the following exception nesting, because of
+"lr : __bad_stack+0x88/0x8c".
 
-This patch introduce a new boot parameter 'early_page_ext' to resolve this
-problem. If we pass it to kernel, function page_ext_init() will be moved
-up and feature 'deferred initialization of struct pages' will be disabled.
-It can help us to catch early page allocations. This is useful especially
-when we find that the free memory value is not the same right after
-different kernel booting.
+[20220819163739]Unable to handle kernel paging request at virtual address f7ffff94901b8048
+[20220819163739]Mem abort info:
+[20220819163739]  ESR = 0x96000004
+[20220819163739]  EC = 0x25: DABT (current EL), IL = 32 bits
+[20220819163739]  SET = 0, FnV = 0
+[20220819163739]  EA = 0, S1PTW = 0
+[20220819163739]Data abort info:
+[20220819163739]  ISV = 0, ISS = 0x00000004
+[20220819163739]  CM = 0, WnR = 0
+[20220819163739][f7ffff94901b8048] address between user and kernel address ranges
+[20220819163739]Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[20220819163739]Modules linked in: ...
+[20220819163740]CPU: 2 PID: 1272 Comm: 00002SWDLMain Tainted: G        W  O      5.10.0 #1
+[20220819163740]Hardware name: hisilicon,hi1213-fpga (DT)
+[20220819163740]pstate: 000003c5 (nzcv DAIF -PAN -UAO -TCO BTYPE=--)
+[20220819163740]pc : __bad_stack+0x4c/0x8c
+[20220819163740]lr : __bad_stack+0x88/0x8c
+[20220819163740]sp : ffffff953ffa8160
+[20220819163740]x29: f7ffff953ffa8120 x28: f7ffff94901b8040 
+[20220819163740]x27: ffffffeb72ea6940 x26: ffffffebeee6cf10 
+[20220819163740]x25: ffffffebef627000 x24: 0000000000000000 
+[20220819163740]x23: 00000000600003c5 x22: f7ffffebeee11904 
+[20220819163740]x21: ffffff953ffa82b0 x20: 0000007fffffffff 
+[20220819163740]x19: f7ffffc0133ab898 x18: 0000000000000000 
+[20220819163740]x17: 0000000000000000 x16: ffffffebef32f0a0 
+[20220819163740]x15: 00000000624057a0 x14: 953325a7da350fb3 
+[20220819163740]x13: 09bbbe32ce2b3c11 x12: c15a0e2d1991997b 
+[20220819163740]x11: 0bc8be839e7850d0 x10: cafa1cb223203045 
+[20220819163740]x9 : f36bed299e5840dc x8 : ffffffc0133aba48 
+[20220819163740]x7 : ffffff953b1b0480 x6 : ffffffebef3e1000 
+[20220819163740]x5 : 0000000000000000 x4 : 0000000000000001 
+[20220819163740]x3 : f7ffffc0133ab750 x2 : 0000000000000025 
+[20220819163740]x1 : 0000000096000004 x0 : ffffff953ffa8160 
+[20220819163740]Call trace:
+[20220819163740] __bad_stack+0x4c/0x8c
+[20220819163740]Code: a90d6ffa a90e77fc 910543f5 d538411c (f9400794) 
+[20220819163740]---[ end trace 07532bfa2c24851c ]---
+[20220819163740]Kernel panic - not syncing: Oops: Fatal exception
 
-Changelogs:
 
-v1->v2:
-- use a cmd line parameter to move up function page_ext_init() instead of
-  using CONFIG_DEFERRED_STRUCT_PAGE_INIT
-- fix oom problem[1]
+Zhen Lei (2):
+  arm64/traps: Replace this_cpu_* with raw_cpu_* in panic_bad_stack()
+  ARM: Replace this_cpu_* with raw_cpu_* in panic_bad_stack()
 
-v2->v3:
-- make adjustments suggested by Michal Hocko
+ arch/arm/kernel/traps.c   | 4 ++--
+ arch/arm64/kernel/traps.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-v1 patch: https://lore.kernel.org/lkml/Yv3r6Y1vh+6AbY4+@dhcp22.suse.cz/T/
-v2 patch: https://lore.kernel.org/lkml/20220824065058.81051-1-lizhe.67@bytedance.com/T/
-
-[1]: https://lore.kernel.org/linux-mm/YwHmXLu5txij+p35@xsang-OptiPlex-9020/
-
-Suggested-by: Michal Hocko <mhocko@suse.com>
-Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
----
- Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
- include/linux/page_ext.h                        | 11 +++++++++++
- init/main.c                                     |  6 +++++-
- mm/page_alloc.c                                 |  2 ++
- mm/page_ext.c                                   | 12 ++++++++++++
- 5 files changed, 36 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index d7f30902fda0..7b5726828ac0 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1471,6 +1471,12 @@
- 			Permit 'security.evm' to be updated regardless of
- 			current integrity status.
- 
-+	early_page_ext [KNL] Boot-time early page_ext initializing option.
-+			This boot parameter disables the deferred initialization
-+			of struct page and move up function page_ext_init() in
-+			order to catch early page allocations. Available with
-+			CONFIG_PAGE_EXTENSION=y.
-+
- 	failslab=
- 	fail_usercopy=
- 	fail_page_alloc=
-diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
-index fabb2e1e087f..68d690649234 100644
---- a/include/linux/page_ext.h
-+++ b/include/linux/page_ext.h
-@@ -36,9 +36,15 @@ struct page_ext {
- 	unsigned long flags;
- };
- 
-+extern bool early_page_ext;
- extern unsigned long page_ext_size;
- extern void pgdat_page_ext_init(struct pglist_data *pgdat);
- 
-+static inline bool early_page_ext_enable(void)
-+{
-+	return early_page_ext;
-+}
-+
- #ifdef CONFIG_SPARSEMEM
- static inline void page_ext_init_flatmem(void)
- {
-@@ -67,6 +73,11 @@ static inline struct page_ext *page_ext_next(struct page_ext *curr)
- #else /* !CONFIG_PAGE_EXTENSION */
- struct page_ext;
- 
-+static inline bool early_page_ext_enable(void)
-+{
-+	return false;
-+}
-+
- static inline void pgdat_page_ext_init(struct pglist_data *pgdat)
- {
- }
-diff --git a/init/main.c b/init/main.c
-index 91642a4e69be..d95edb67a499 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -849,6 +849,9 @@ static void __init mm_init(void)
- 	pgtable_init();
- 	debug_objects_mem_init();
- 	vmalloc_init();
-+	/* Should be run after vmap initialization */
-+	if (early_page_ext_enable())
-+		page_ext_init();
- 	/* Should be run before the first non-init thread is created */
- 	init_espfix_bsp();
- 	/* Should be run after espfix64 is set up. */
-@@ -1606,7 +1609,8 @@ static noinline void __init kernel_init_freeable(void)
- 	padata_init();
- 	page_alloc_init_late();
- 	/* Initialize page ext after all struct pages are initialized. */
--	page_ext_init();
-+	if (!early_page_ext_enable())
-+		page_ext_init();
- 
- 	do_basic_setup();
- 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e5486d47406e..e580b197aa1e 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -482,6 +482,8 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
- {
- 	static unsigned long prev_end_pfn, nr_initialised;
- 
-+	if (early_page_ext_enable())
-+		return false;
- 	/*
- 	 * prev_end_pfn static that contains the end of previous zone
- 	 * No need to protect because called very early in boot before smp_init.
-diff --git a/mm/page_ext.c b/mm/page_ext.c
-index 3dc715d7ac29..bf4f2a12d7dc 100644
---- a/mm/page_ext.c
-+++ b/mm/page_ext.c
-@@ -85,6 +85,18 @@ unsigned long page_ext_size = sizeof(struct page_ext);
- 
- static unsigned long total_usage;
- 
-+#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-+bool early_page_ext __meminitdata;
-+#else
-+bool early_page_ext __meminitdata = true;
-+#endif
-+static int __init setup_early_page_ext(char *str)
-+{
-+	early_page_ext = true;
-+	return 0;
-+}
-+early_param("early_page_ext", setup_early_page_ext);
-+
- static bool __init invoke_need_callbacks(void)
- {
- 	int i;
 -- 
-2.20.1
+2.25.1
 

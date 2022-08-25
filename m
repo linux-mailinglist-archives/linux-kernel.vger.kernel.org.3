@@ -2,44 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE68D5A0569
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216FD5A0570
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiHYAyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S231476AbiHYA4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiHYAy3 (ORCPT
+        with ESMTP id S229437AbiHYA4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:54:29 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11818E4EB;
-        Wed, 24 Aug 2022 17:54:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VNAfI6D_1661388864;
-Received: from 30.97.48.44(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VNAfI6D_1661388864)
-          by smtp.aliyun-inc.com;
-          Thu, 25 Aug 2022 08:54:25 +0800
-Message-ID: <472ee15f-b89a-dc5a-548d-f2374f99dda0@linux.alibaba.com>
-Date:   Thu, 25 Aug 2022 08:54:35 +0800
+        Wed, 24 Aug 2022 20:56:38 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C53144540;
+        Wed, 24 Aug 2022 17:56:37 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id r4so24141391edi.8;
+        Wed, 24 Aug 2022 17:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Fb8xGD4kaa92dvVnQPrRFtkQAV3xtlSQACdU3g7w0Yo=;
+        b=OrYgLPE69cuXrh8bm5isYc18fYjBF2hdQdbz+PZ6qzP1YKTeUMrFrv69AgJXZM4XyC
+         7DksdJb97ITyn4r0kKmuv77uIP+h0edJeuSoVPqeZelsFQczF4TIEOrPp0geqRY0k1n5
+         5zVLxs9ck0E7hDRGNZYdvlr83XGYat+sECsSfn/du1TJ4hZi5YUajOq0z4DozqzadTzA
+         XRt5OXJpkiXgOB4zuBpZUC9GGwDMHR+JE1ImeKsOFmNp9VU3gzTPOiOf7a/4yrmVcW78
+         mnEuVc1WSggGWrmqd1oKxppmNI61xMGqt+WPCj1I58DkSF/jazpyyrH0WXubYIP0QLGv
+         nCJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Fb8xGD4kaa92dvVnQPrRFtkQAV3xtlSQACdU3g7w0Yo=;
+        b=fzixKzimTo+s6AcD9s0sSwyEBi1awnuxj0X6p5Zdi77GMYdhBWtsIvAX2LfH0bAyw4
+         +b6EKqlg+Mtym7rw9beBqwUCe21UIV5kaeMxEMuWZ/sMVkSOXkT3DikzXM4XbcG3xH8n
+         8UVWvJs8TrOsUQg6DIYy1v2fsbJiE2iq5160jbDIzvatVBzD+YeYJDI/rcdKxuITtCT7
+         mgp08dxUpZWiKTmiBT+p8Al3USVYP3BYA53GoLarq6x2+TKHyWd2da8KibFZSsJywS9Q
+         3PiMmONvIY+GBtK2iXcBsSF7UiW2/Fz8h73gDrcEhcwpCUyZ+D8MIkpiSBeg4kX9EIlX
+         e7PQ==
+X-Gm-Message-State: ACgBeo1a031yF+Aup5qvuNZ2KkplusJcqmmDSBbKIg/SMEumcmQIstM4
+        SOhMsk2Rc2Ii9pGIpK+6+nEK5dL//O335hxplk8aB3z6
+X-Google-Smtp-Source: AA6agR5Vptc/+u0DKWCDlF23ms6GUEpk7kcZM3dVULL9AL7cqxrFGEiy/U1dRol/prPYEdh8P8YsN8uPAugncZRu9IY=
+X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
+ ef11-20020a05640228cb00b0043bc6d7ef92mr1188312edb.333.1661388996135; Wed, 24
+ Aug 2022 17:56:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] hwspinlock: sprd: Use devm_clk_get_enabled() helper
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-References: <f962d22bfdbd09133d8923152133eeff9213dcee.1661324434.git.christophe.jaillet@wanadoo.fr>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <f962d22bfdbd09133d8923152133eeff9213dcee.1661324434.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <20220824150051.54eb7748@canb.auug.org.au> <CAP01T74GyRjXRZaDA-E5CXeaoKaf+FegQFxNP9k6kt8cvbt+EA@mail.gmail.com>
+In-Reply-To: <CAP01T74GyRjXRZaDA-E5CXeaoKaf+FegQFxNP9k6kt8cvbt+EA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 24 Aug 2022 17:56:24 -0700
+Message-ID: <CAADnVQJsGudS7W=GcJGQyrzwsZ26=uCDQUW7MGDZ-RVpdsOH6A@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the bpf-next tree
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,81 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 10:05 AM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Wed, 24 Aug 2022 at 07:00, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > In commit
+> >
+> >   2e5e0e8ede02 ("bpf: Fix reference state management for synchronous callbacks")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 69c87ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+> >
+> > Maybe you meant
+> >
+> > Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+> >
+>
+> Ugh, really sorry, I must have fat fingered and pressed 'x' in vim
+> while editing the commit message. I always generate these using a git
+> fixes alias.
 
+Since that was caught quickly there weren't that many commits on top.
+Fixed and force pushed bpf-next.
 
-On 8/24/2022 3:55 PM, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->     - calls devm_clk_get()
->     - calls clk_prepare_enable() and registers what is needed in order to
->       call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code, the error handling paths and avoid the need of
-> a dedicated function used with devm_add_action_or_reset().
-> 
-> Based on my test with allyesconfig, this reduces the .o size from:
->     text	   data	    bss	    dec	    hex	filename
->     3423	   1528	      0	   4951	   1357	drivers/hwspinlock/sprd_hwspinlock.o
-> down to:
->     3025	   1392	      0	   4417	   1141	drivers/hwspinlock/sprd_hwspinlock.o
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-LGTM. Thanks.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-> ---
-> devm_clk_get_enabled() is new and is part of 6.0-rc1
-> ---
->   drivers/hwspinlock/sprd_hwspinlock.c | 23 ++---------------------
->   1 file changed, 2 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
-> index 22e2ffb91743..cb37706f61be 100644
-> --- a/drivers/hwspinlock/sprd_hwspinlock.c
-> +++ b/drivers/hwspinlock/sprd_hwspinlock.c
-> @@ -76,18 +76,11 @@ static const struct hwspinlock_ops sprd_hwspinlock_ops = {
->   	.relax = sprd_hwspinlock_relax,
->   };
->   
-> -static void sprd_hwspinlock_disable(void *data)
-> -{
-> -	struct sprd_hwspinlock_dev *sprd_hwlock = data;
-> -
-> -	clk_disable_unprepare(sprd_hwlock->clk);
-> -}
-> -
->   static int sprd_hwspinlock_probe(struct platform_device *pdev)
->   {
->   	struct sprd_hwspinlock_dev *sprd_hwlock;
->   	struct hwspinlock *lock;
-> -	int i, ret;
-> +	int i;
->   
->   	if (!pdev->dev.of_node)
->   		return -ENODEV;
-> @@ -102,24 +95,12 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
->   	if (IS_ERR(sprd_hwlock->base))
->   		return PTR_ERR(sprd_hwlock->base);
->   
-> -	sprd_hwlock->clk = devm_clk_get(&pdev->dev, "enable");
-> +	sprd_hwlock->clk = devm_clk_get_enabled(&pdev->dev, "enable");
->   	if (IS_ERR(sprd_hwlock->clk)) {
->   		dev_err(&pdev->dev, "get hwspinlock clock failed!\n");
->   		return PTR_ERR(sprd_hwlock->clk);
->   	}
->   
-> -	ret = clk_prepare_enable(sprd_hwlock->clk);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = devm_add_action_or_reset(&pdev->dev, sprd_hwspinlock_disable,
-> -				       sprd_hwlock);
-> -	if (ret) {
-> -		dev_err(&pdev->dev,
-> -			"Failed to add hwspinlock disable action\n");
-> -		return ret;
-> -	}
-> -
->   	/* set the hwspinlock to record user id to identify subsystems */
->   	writel(HWSPINLOCK_USER_BITS, sprd_hwlock->base + HWSPINLOCK_RECCTRL);
->   
+We actually have a script that checks such sha-s. Not sure how we missed it.

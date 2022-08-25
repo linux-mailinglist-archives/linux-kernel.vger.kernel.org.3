@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DE15A170A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3225A16F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243081AbiHYQn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S243340AbiHYQoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243225AbiHYQnP (ORCPT
+        with ESMTP id S243244AbiHYQnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:43:15 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E38BBA6A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:41 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w2so648401pld.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:41 -0700 (PDT)
+        Thu, 25 Aug 2022 12:43:18 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69031BC101
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:43 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id hf17so2260643pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=1iSoarUuZghqoZ9BO4yPvK2wOsr6euij1iIMl2wEkF0=;
-        b=dn9VNFyC2mvOz+uMJuyG2QsZ4uQ6N4cyWaWpG+hO49Ft6/ndiFximzKeHO9zu4fbRz
-         ymcUzje6WLdgRFROIJWbgW4Yd6SHWZDIlrnl9z76xFLv/FmImwYLoWxHdWak/dhQZJyL
-         ggYcbDzlkl+gP7fcgc9DKYHT+wayT1BUILgxw=
+        bh=0DBKrfU7DKgiI1KvvX+nAyw8m6/xO7rbgXWQBFaRlQ0=;
+        b=Szgb9TcjMgWUBloz/Bd70+z+Ca4DwaJwdHfO79Q4ccB7TeuASUY6ak87QH11edK4Ar
+         ZhDZbV9bFwyl+XMz2l9Thhddo/w3Bg6h/HLOPzZ8JGBeK1RmCoB7HbjSgexqN/rI1uVS
+         uBDsyK14RegRz4UTjO/Jd1zv1isEVpQUNOkd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=1iSoarUuZghqoZ9BO4yPvK2wOsr6euij1iIMl2wEkF0=;
-        b=YkKS76np+Z7BY8XeoW96qcRY+HZvkWarydcJLfDEb1VXWISspVe2ttAiR1XmAdwqlp
-         dcSaiOZX+bUvK1amIOc8eXz5Pl0lF+APmHoLBx4Q+aTbdpSERq5x/FUb7ao/ZnccN80d
-         nCU0TDLLImAUQluU4SmkWxlWGsDQfJHgGcdfESqkgV9Kc7/+DJp1iC8RcVpShYMUGsw9
-         jAM8J9cSRt8HxZ3RynK/nwzLHt+QNmrznbSWuh/jbyRBeU3yRfOdZW4LoA2oBqHIb2go
-         81J3MQoYwSbHPXzcsRW7H9lnFCxjjMMNUqffT9XTVZ5MPpdKUeAkdFT7uInF4NjsCH2E
-         pYkQ==
-X-Gm-Message-State: ACgBeo0Bnzoku7t5tI0kAVkPCWmFoNDx93+7pdeuqz5xdlL7vkqRfaFc
-        Y5zb5aalDlCJKpX0YPQsk9dIQQ==
-X-Google-Smtp-Source: AA6agR6gIvPcI+zjJol/aTiQLzWV37Iywk46MfGMUttZNyfnd9mNkax4MDZzVRrO2F1uXUjDuZxTfw==
-X-Received: by 2002:a17:902:c40e:b0:172:dee4:882e with SMTP id k14-20020a170902c40e00b00172dee4882emr4472238plk.11.1661445759868;
-        Thu, 25 Aug 2022 09:42:39 -0700 (PDT)
+        bh=0DBKrfU7DKgiI1KvvX+nAyw8m6/xO7rbgXWQBFaRlQ0=;
+        b=7iVOhsHrAVxvI8Kc4NjvPjvEB9mr5x4AN0avOyEswoYvPSc2IZ0P+MehOGPyJSFyK5
+         peaAWwKvq41YxRmfHAkuS5oDMs1BMjltVA2XijBmLqwo9krLYQBXJ0ULXWUHhq1ybiDu
+         4QrbX59hQoIItVjYTbIafznbr2tGETabrKpptbt81KnpTDJR6t2tQFr4LnoRqYXsv5ZD
+         JUrg6dw+d5LF2XcDmaoxfL0MF57It96k6pIfdPdW/UeOx5hnH69UUmpZwLZ043HKgdY6
+         R12nce4qLFRT9hRZ1u8k7ogSPA9n+ftTJHRHA7u5xumMtjie1/6y2RMETQJwfLoRGxim
+         s+dw==
+X-Gm-Message-State: ACgBeo0tM7HuswbyNyWGCoqoSItfClOcxy36LDwjTXc84dHRwQ4+tiAY
+        pV+XaPn3ZvXOSuqgNb+UvfmDyQ==
+X-Google-Smtp-Source: AA6agR48VwQ1Xt0g/fUB0eDVNvZ2JmBrdgqoaBEuMTjDRP86CaSN8IWRrY57abEO3okNsLrgA9tilg==
+X-Received: by 2002:a17:90b:3c82:b0:1fb:8ef:5ddb with SMTP id pv2-20020a17090b3c8200b001fb08ef5ddbmr14404195pjb.11.1661445762064;
+        Thu, 25 Aug 2022 09:42:42 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:b7f2:d739:e847:6e53])
-        by smtp.gmail.com with ESMTPSA id y13-20020a17090a154d00b001f2ef3c7956sm3775799pja.25.2022.08.25.09.42.38
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090a154d00b001f2ef3c7956sm3775799pja.25.2022.08.25.09.42.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 09:42:39 -0700 (PDT)
+        Thu, 25 Aug 2022 09:42:41 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Andrew Halaney <ahalaney@redhat.com>,
         Mark Brown <broonie@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] arm64: dts: qcom: sm8150-xperia-kumano: Specify which LDO modes are allowed
-Date:   Thu, 25 Aug 2022 09:42:03 -0700
-Message-Id: <20220825094155.5.I51d60414a42ba9e3008e208d60a04c9ffc425fa7@changeid>
+Subject: [PATCH 6/7] arm64: dts: qcom: sm8250-xperia-edo: Specify which LDO modes are allowed
+Date:   Thu, 25 Aug 2022 09:42:04 -0700
+Message-Id: <20220825094155.6.Ie446d5183d8b1e9ec4e32228ca300e604e3315eb@changeid>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
 In-Reply-To: <20220825164205.4060647-1-dianders@chromium.org>
 References: <20220825164205.4060647-1-dianders@chromium.org>
@@ -89,18 +87,18 @@ Let's re-enable the old functionality by fixing the dts.
 
 [1] https://lore.kernel.org/r/20220824142229.RFT.v2.2.I6f77860e5cd98bf5c67208fa9edda4a08847c304@changeid
 
-Fixes: d0a6ce59ea4e ("arm64: dts: qcom: sm8150: Add support for SONY Xperia 1 / 5 (Kumano platform)")
+Fixes: 69cdb97ef652 ("arm64: dts: qcom: sm8250: Add support for SONY Xperia 1 II / 5 II (Edo platform)")
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
-index 014fe3a31548..fb6e5a140c9f 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
-@@ -348,6 +348,9 @@ vreg_l6c_2p9: ldo6 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+index 549e0a2aa9fe..5428aab3058d 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+@@ -317,6 +317,9 @@ vreg_l6c_2p9: ldo6 {
  			regulator-max-microvolt = <2960000>;
  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
  			regulator-allow-set-load;
@@ -109,8 +107,8 @@ index 014fe3a31548..fb6e5a140c9f 100644
 +			     RPMH_REGULATOR_MODE_HPM>;
  		};
  
- 		vreg_l7c_3p0: ldo7 {
-@@ -367,6 +370,9 @@ vreg_l9c_2p9: ldo9 {
+ 		vreg_l7c_2p85: ldo7 {
+@@ -339,6 +342,9 @@ vreg_l9c_2p9: ldo9 {
  			regulator-max-microvolt = <2960000>;
  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
  			regulator-allow-set-load;

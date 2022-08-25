@@ -2,134 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D705A195D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 21:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E2F5A1961
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 21:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243624AbiHYTTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 15:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S243628AbiHYTUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 15:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240803AbiHYTTW (ORCPT
+        with ESMTP id S241530AbiHYTUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 15:19:22 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7F3AF0E0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 12:19:21 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-11d7a859b3aso14945050fac.4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 12:19:21 -0700 (PDT)
+        Thu, 25 Aug 2022 15:20:14 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BE366A44
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 12:20:12 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id l1so28977900lfk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 12:20:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=e8Gq1eg55USHCL83Reobt5ibzPL8cvMuV1NX5De9ZYY=;
-        b=O7VCw6m6DYZ9SRwwETgBSqa1zuOS859jqBgpBIVSG63HOg7KKdU/QyOTg3x2mMKLlZ
-         /sk+enC4j9MprDEgOepuTKPmBoZ+sG3JQUyandbIfwWBmTyew+NcfQNlQxrCLf562JLt
-         CBDBuBCbwtrJNQe3ltgbUG8+lxI+qESJLbZ0QjttHTgIelL4DCFUrpjqekdSpJmnnmqw
-         5+qWUz8Dkm4iat2Vs0aOfyU5R/QMPzUhEaDtsp239vjwfrvwNLroQmHWmjQKOUL6AgDf
-         0aK+BsUrax9MV0QeahftRbTrPT7WR2Q4AhsrTUIGzz3L/CutBwNsczdrnoWMGQfm8Wko
-         Shzw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=kF9MhVcSbXaljKbuFL1RJfsDNuyI/P+cFQh4/nvdssI=;
+        b=Z3O9KnWdeGQQyHdKD6xIdD1D3F7D3Mq4205E1Ze3dba3OzOQFo4hCla/cv6O7CqHen
+         gw6iHhjSoXMnen0FA0JFZdPukmDfzHCV3wrGTpQiytxViMwv77Pm+ZSkpVM4Bgc254cA
+         MV79FMi5QDtdWGthf0ov2Z3f+XwSr9lgVvNqH52cr6kR42jASUXKUJoQtFmhMJKf9tfW
+         gDOpZBdUcAclHbWxBn8wVAr8ALnpdsli+8Q+tOxU3DVotBlQilW7wkA5tYiHUQyxtui5
+         VARtKp/QoeUyWt5z7MWOjP1NkhVovHuLXlLWNkwEZLvdQMo0ofXo3aIn7jjImr5M9bJI
+         cFww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=e8Gq1eg55USHCL83Reobt5ibzPL8cvMuV1NX5De9ZYY=;
-        b=cUwXOwT6Tq1Vg0EocsfBKpYJOsS5sgZ1oaAxP/L7TtieVDqpKWV42ey2E7s34NqH9D
-         HvylcEeEUqSVhGZ1SDfAUrWIPOLXdAd5XNhgJyB5G7G39pzAI1rmm9+dWSDl1y0yPz1C
-         OpWfPIvjnQGsE4Pmlw/5IkDD/ypBq2OMUUClmIGdEUWqDTPTxEZJYf5ztJcwnUIy0rcj
-         /gPKv7fnQjSEXwjEcOxQ5UD9bZRrsft0uXHwa+xbhRMSDa2sFwRkP43paAOwFsaSQz6H
-         GjXLSGQxnMyMPr4V5aEzyCAUcs2luKAUOZa2F0Kr/nAtGjv2WeqPGWDvqf7GmpKcHtmk
-         Qolw==
-X-Gm-Message-State: ACgBeo0canYYQyH6HHVzbfFaSxUCm/ZNkrMtKiqjfJvVEfikYSNQ2ce1
-        S7Snp/H13ksxArk8VyBKQodqnwW32DM6Di3r2Xg+
-X-Google-Smtp-Source: AA6agR6ZnOvsjUOSNSEGS0LaKYyBUDvqU+sEg8pLS8j9NOxMj3Auk1GEnVJgv+Dn6EqNkIafEGAYyEbTIhKpOvto32I=
-X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
- x13-20020a056870a78d00b0011c437bec70mr257186oao.136.1661455160511; Thu, 25
- Aug 2022 12:19:20 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=kF9MhVcSbXaljKbuFL1RJfsDNuyI/P+cFQh4/nvdssI=;
+        b=r2zKnhDCy+CyJFn63CUlbEHmL8wMYZl02FOOlR46ee2YTiUDu+kihr3npqxpwIfFmo
+         Ipv1nzlAXe35nNXvxrQZaI0GXvnE/WIxCU1XdYGF/j1cWW9Kt/bNNYycphAnV3FQjpIW
+         wzijkdrfz4uXjnt8cFO+BzSQjVxDviw2/FIjml53HQy4Lv4uL9t6JwV4o40nW+/NJenR
+         YM/Gz9tVrCyvtvd/oORBwaQJoo3T8F3R62nbTuSn7OWehYxrxN/WKpiJmwM4iBXp/8UV
+         YrIbP9AIGYfe99Mkqn8GElQQ6DY74Jp2pcqhXoakw3JSEelQa97EZXdKdHMcsZwz8iAV
+         SU2w==
+X-Gm-Message-State: ACgBeo0sbmCFevnwlfStQBnl5UoGMZcJ+XkEbe98m6glWUeUAB3ZX4sN
+        DST3bT8s4tQ8E1mn5onQwWw=
+X-Google-Smtp-Source: AA6agR4S1Vt+QCpWxNLHgv/Ec0zp+VC3W/CaIotz+EYe+34gokNpcyUEQFEkIxH7EgSp966JtsnMAQ==
+X-Received: by 2002:ac2:5225:0:b0:493:7fd:58ef with SMTP id i5-20020ac25225000000b0049307fd58efmr1462808lfl.330.1661455211212;
+        Thu, 25 Aug 2022 12:20:11 -0700 (PDT)
+Received: from localhost.localdomain (79.191.37.241.ipv4.supernova.orange.pl. [79.191.37.241])
+        by smtp.gmail.com with ESMTPSA id z20-20020a2eb534000000b00261b58cbf03sm30896ljm.87.2022.08.25.12.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 12:20:10 -0700 (PDT)
+From:   Maccraft123 <maccraft123mc@gmail.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Maya Matuszczyk <maccraft123mc@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: panel-orientation-quirks: Add quirk for Aya Neo Air
+Date:   Thu, 25 Aug 2022 21:19:47 +0200
+Message-Id: <20220825191946.1678798-1-maccraft123mc@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
- <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
- <875yigp4tp.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <875yigp4tp.fsf@email.froward.int.ebiederm.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 25 Aug 2022 15:19:09 -0400
-Message-ID: <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        tixxdz@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Paul Moore <paul@paul-moore.com> writes:
-> > On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> >>  I am hoping we can come up with
-> >> "something better" to address people's needs, make everyone happy, and
-> >> bring forth world peace.  Which would stack just fine with what's here
-> >> for defense in depth.
-> >>
-> >> You may well not be interested in further work, and that's fine.  I need
-> >> to set aside a few days to think on this.
-> >
-> > I'm happy to continue the discussion as long as it's constructive; I
-> > think we all are.  My gut feeling is that Frederick's approach falls
-> > closest to the sweet spot of "workable without being overly offensive"
-> > (*cough*), but if you've got an additional approach in mind, or an
-> > alternative approach that solves the same use case problems, I think
-> > we'd all love to hear about it.
->
-> I would love to actually hear the problems people are trying to solve so
-> that we can have a sensible conversation about the trade offs.
+From: Maya Matuszczyk <maccraft123mc@gmail.com>
 
-Here are several taken from the previous threads, it's surely not a
-complete list, but it should give you a good idea:
+Yet another x86 gaming handheld.
 
-https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+This one has many SKUs with quite a few of DMI strings,
+so let's just use a catchall, just as with Aya Neo Next.
 
-> As best I can tell without more information people want to use
-> the creation of a user namespace as a signal that the code is
-> attempting an exploit.
+Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+---
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Some use cases are like that, there are several other use cases that
-go beyond this; see all of our previous discussions on this
-topic/patchset.  As has been mentioned before, there are use cases
-that require improved observability, access control, or both.
-
-> As such let me propose instead of returning an error code which will let
-> the exploit continue, have the security hook return a bool.  With true
-> meaning the code can continue and on false it will trigger using SIGSYS
-> to terminate the program like seccomp does.
-
-Having the kernel forcibly exit the process isn't something that most
-LSMs would likely want.  I suppose we could modify the hook/caller so
-that *if* an LSM wanted to return SIGSYS the system would kill the
-process, but I would want that to be something in addition to
-returning an error code like LSMs normally do (e.g. EACCES).
-
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index fc1728d46ac2..0b011b615495 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -103,6 +103,12 @@ static const struct drm_dmi_panel_orientation_data lcd800x1280_rightside_up = {
+ 	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+ };
+ 
++static const struct drm_dmi_panel_orientation_data lcd1080x1920_leftside_up = {
++	.width = 1080,
++	.height = 1920,
++	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
++};
++
+ static const struct drm_dmi_panel_orientation_data lcd1200x1920_rightside_up = {
+ 	.width = 1200,
+ 	.height = 1920,
+@@ -152,6 +158,12 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "AYA NEO 2021"),
+ 		},
+ 		.driver_data = (void *)&lcd800x1280_rightside_up,
++	}, {	/* AYA NEO AIR */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
++		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
++		},
++		.driver_data = (void *)&lcd1080x1920_leftside_up,
+ 	}, {	/* AYA NEO NEXT */
+ 		.matches = {
+ 		  DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
 -- 
-paul-moore.com
+2.37.2
+

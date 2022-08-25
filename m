@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59625A08FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2201F5A08FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbiHYGkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S235734AbiHYGk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbiHYGkh (ORCPT
+        with ESMTP id S235887AbiHYGkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:40:37 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF4465F4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:40:33 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id by6so18460457ljb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Hxs/x32k0wl5TtEJWin9IF/OZYyYHuwn2WA9sVkAPH4=;
-        b=ggHLVlPzMVeo5o60HoxiBTPeE4b7XvUvw7wCzxVRNSSxvZrDzA0vum3fttHKJZb1fR
-         ST8lBPut9MqchJJeAk+l32ls+cCSMyClhfXUvVYMKIEhPoNwHBoIrhjkvVDI2hc/QbDh
-         pgjS3TRKKqt46IeSOS3sTeECjqy8EEbXyu7dFuu5GTwYGmOMnU7ROusgefK8z35FK/e4
-         0i7ICMCPQxxrz3krhI1mirSmSzgAmZGdmZM6HYzcNk4VNzZvSWefNz2tttcalQl43l/V
-         lqnW25YgvOxlavOf3rM4vrivoTNbdMcBJLeQRPCXEiwVKsJ3WVtb88F7aCzDu2UXWzKs
-         F5/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Hxs/x32k0wl5TtEJWin9IF/OZYyYHuwn2WA9sVkAPH4=;
-        b=5v6MCYIfPa66tSX3d90qT+V77OgYaeLt7rqFNuRsxXrxvBgBK3fNeSJsYjBdqnZ3ci
-         p4EplJ+kQPXBjHn5Uj4eZulEah+xdblZ7yBLHRJ8DlfF6YN6uxMUSG0LhTlrh70a+6Ik
-         U6SYhMlaqa3rHN8xlXZ1XlWr04DoZzlvd44JNehEIonTo3oHQHNm7YFxzxYsCiS38b4b
-         f/VmWx6FuK47WwlWIaesRThVB7VXLabtMtyaKrAxB5cQHCwPx5cqjyzEpN8mchBBi/fX
-         MpiKkzZrtZGuAxxc+QFlN4eJArdF7PxHdqxltQ6QIiiIYs13gBHpCTU7d2Teps6fkxJe
-         IYvQ==
-X-Gm-Message-State: ACgBeo3IWml3NPWBGJkivhCCJRcbMY+ffa30vxE2620F9F6VkXaZEjKN
-        TFKRAvw2+YL/FgJbvtcP8F3ZRA==
-X-Google-Smtp-Source: AA6agR4sp9L/aoyZrx2uYhRDhFUfFvBZsJbtMUKU/6yfJBjXbHfPdGvgpeQbd0c1lWSvZ8iGu6FKYQ==
-X-Received: by 2002:a05:651c:b2c:b0:261:d82f:75b8 with SMTP id b44-20020a05651c0b2c00b00261d82f75b8mr601195ljr.266.1661409632356;
-        Wed, 24 Aug 2022 23:40:32 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b00492d7a7b4e3sm339246lfg.4.2022.08.24.23.40.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 23:40:31 -0700 (PDT)
-Message-ID: <e5239fb9-07fd-3263-76a8-afb2f89b7d7e@linaro.org>
-Date:   Thu, 25 Aug 2022 09:40:30 +0300
+        Thu, 25 Aug 2022 02:40:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAB9E03F;
+        Wed, 24 Aug 2022 23:40:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D76AE5BE15;
+        Thu, 25 Aug 2022 06:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661409650; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8tP0U7uO6jkjoWoaVJTMGffTLHsMTAeM7ZO+0Ttzpnc=;
+        b=Rlq2EbXz/KoWktPrNnKN7AIXIeIrydmCssc+ZXhRb8K/2E3gz3XlPnDJOGqi2IIcPcmtAO
+        /gA127K196XnzQb58YhLdftTVYTGJzLNuLnqgaP2dPun3n3mKuze7iKY/qiq73UzJvHzsO
+        XCPRI/PrCt8PtA7mhOsqkjocr6NW3hs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8D2C13A47;
+        Thu, 25 Aug 2022 06:40:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SRPaKnIZB2OIOwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 06:40:50 +0000
+Date:   Thu, 25 Aug 2022 08:40:50 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
+Message-ID: <YwcZctA2S3Sd0LBN@dhcp22.suse.cz>
+References: <YwRjyx6wFLk8WTDe@dhcp22.suse.cz>
+ <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
+ <YwSQ4APOu/H7lYGL@dhcp22.suse.cz>
+ <CAGWkznGd6mgareABseMKY5p0f1=5dkfVkj=NS7_B6OkXBYSwyw@mail.gmail.com>
+ <YwS/S9Sd1OWnT81Q@dhcp22.suse.cz>
+ <CAGWkznGYLyF+njUB0gFF3JVdThnK9JaNsqxXYFhbdSwEQpCxvA@mail.gmail.com>
+ <YwXYVjRpXQjQMsxr@dhcp22.suse.cz>
+ <CAGWkznEqX3DwHW_owiK+HuuQ-HsUYK4vKmLhSxgzGn20Vzid2A@mail.gmail.com>
+ <YwX89JCQCKMMYdG9@dhcp22.suse.cz>
+ <CAGWkznF+dBjLzAxMMXWYSZ_5q3KA-ou0P7XM7jSYN7JSRp8N0w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] ARM: configs: replace CONFIG_NO_HZ=y with
- CONFIG_NO_HZ_IDLE=y
-Content-Language: en-US
-To:     Stefan Hansson <newbie13xd@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org
-References: <20220822161018.16101-1-newbie13xd@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220822161018.16101-1-newbie13xd@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGWkznF+dBjLzAxMMXWYSZ_5q3KA-ou0P7XM7jSYN7JSRp8N0w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/08/2022 19:10, Stefan Hansson wrote:
-> According to https://www.kernel.org/doc/html/latest/timers/no_hz.html,
-> CONFIG_NO_HZ=y should be replaced by CONFIG_NO_HZ_IDLE=y for newer
-> kernels, so let's reflect that in the 32-bit ARM defconfigs.
-> 
+On Thu 25-08-22 08:43:52, Zhaoyang Huang wrote:
+> On Wed, Aug 24, 2022 at 6:27 PM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Wed 24-08-22 17:34:42, Zhaoyang Huang wrote:
+[...]
+> > > IMHO, charging the pages which out of explicitly memory
+> > > enabled group to root could solve all of the above constraints with no
+> > > harm.
+> >
+> > This would break the hierarchical property of the controller. So a
+> > strong no no. Consider the following example
+> >
+> >        root
+> >         |
+> >         A
+> > controllers="memory"
+> > memory.max = 1G
+> > subtree_control=""
+> > |      |      |
+> > A1     A2     A3
+> >
+> > althought A1,2,3 do not have their memory controller enabled explicitly
+> > they are still constrained by the A memcg limit. If you just charge to
+> > the root because it doesn't have memory controller enabled explicitly
+> > then you just evade that constrain. I hope you understand why that is a
+> > problem.
+> IMO, A1-A3 should be explicitly enabled via echo "+memory" >
+> A/subtree_control since memory.max has been set.
 
-Thanks for the patch. You did not send it to ARM SoC maintainers and
-their Patchwork mailbox, so I don't think it will be picked up. Please
-resend with proper Cc list to ARM AND ARM64 SoC SUB-ARCHITECTURES
-(COMMON PARTS)
+You seem to be missing the point I've triedy to make here. It is not
+about how the respective subtree should or shouldn't be configured. It
+is about the hierarchical behavior. Configuration at a higher level should be
+enforced under subtree no matter how that subtree decides to
+enabled/disable controllers. Such subtree might have beeb delegated
+and configured differently yet the constrain should be still applied.
+See the point?
 
-Best regards,
-Krzysztof
+What you seem to be proposing is similar to cgroup v1 use_hierarchy
+configuration. It has been decided that this is undesirable very early
+in the cgroup v2 development because it make delegation impossible
+(among other reasons).
+
+-- 
+Michal Hocko
+SUSE Labs

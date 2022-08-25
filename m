@@ -2,81 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934925A18DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5917D5A18E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243056AbiHYSiR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 Aug 2022 14:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S242925AbiHYSjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237742AbiHYSiN (ORCPT
+        with ESMTP id S235857AbiHYSjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:38:13 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F7597B0C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:38:12 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-213-vv3swLJCMT6Ji3unTrfcKg-1; Thu, 25 Aug 2022 19:38:09 +0100
-X-MC-Unique: vv3swLJCMT6Ji3unTrfcKg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Thu, 25 Aug 2022 19:38:08 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Thu, 25 Aug 2022 19:38:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: ip netns exec namespace ls -l /proc/pid/fd prepends "/root" to the
- filename.
-Thread-Topic: ip netns exec namespace ls -l /proc/pid/fd prepends "/root" to
- the filename.
-Thread-Index: Adi4sCQiWHPDQxzJSJeo8ZJGzIAAZg==
-Date:   Thu, 25 Aug 2022 18:38:08 +0000
-Message-ID: <4c5a2ef5827f471cba84a7c74279f53a@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 25 Aug 2022 14:39:05 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46FF97514
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:39:04 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-334dc616f86so563980287b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=B+6GHANqVGrhre1yIICjUKUVABFJYsXY9KlsXWrq0g0=;
+        b=B85LgmnE6J6rXg7BVngfQTw4IEjIKrGKdqIeDIjR3AWtFqojLHLJcIFpUb/kio7nLp
+         Q+Ui7InM8EeA6fFs7Ovf0/ZosbdTVjCy7D8cMlV6fDhzod2KJN/4nk9mVhQ0FZQbE+Ky
+         QstKO/uftXpVDD4tBNkWiPAMtu3ZT8/ej/ZSvGUcLEWZFY0lt12Otkn4bzRlVnhh1rx6
+         v1MWHoVRbsz20H7ZjCC6iSK7MQfC7xupNt5YGgKQ0K9Dy210qTIgMkNTvPpIjL3nfH+N
+         uZ86ViMYJrB57R5lrqCVZJvZgKRj3BRPaPN1gFz3nUQyy9V9YzX1BsykChMTGDUfqP+t
+         jUKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=B+6GHANqVGrhre1yIICjUKUVABFJYsXY9KlsXWrq0g0=;
+        b=IrMQptJFYQnF+DrpME/4H+KfOVFWb7/R4cvVutpNLYPUvKof1OrBXcj64ASlxCsCN1
+         svKH06/O2B7cR9Xi99JyLEvaRDwbbFtQJnU1iRHRias84i5fzy5H6E5X3Ok/E5JPh8Vr
+         /Elk8CxNoeh9HdkrjZ0VMa8eM5BySvQoKszCJahy+rt3kpPW/5PV7RoE+zyFQ/OrpEK1
+         k5OGaR2BYy5zyE0OguEFkCm5Htdtm13TT0aOiQpRNaABaqnQi/DToqr7a2ahejWFzXmT
+         Dh7XGZP+y77wJSnRVfkjaRB/7nhCWaXMQrBc2Xi953sJ5jabG1lpyBjgqdofjjfCNxMU
+         i9og==
+X-Gm-Message-State: ACgBeo0NeU62eNZ+HnX73nTmvHtDcWRUKKuqm6figQhLrxVLQl3pktOt
+        NTSQhPvhyeQh6BVP2snew6l3mr67PeSnZmuVLLnXFQ==
+X-Google-Smtp-Source: AA6agR7rapIlRr0/fCZEKhWKbo6XO2p0rUFCMJJnqLNETdiYbschnHcx4RcKE15j7E+GKxzg5bqk9rgOYhmm6A46bj4=
+X-Received: by 2002:a25:94b:0:b0:68f:4e05:e8f0 with SMTP id
+ u11-20020a25094b000000b0068f4e05e8f0mr4506829ybm.115.1661452743474; Thu, 25
+ Aug 2022 11:39:03 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220803122655.100254-1-nipun.gupta@amd.com> <20220817150542.483291-1-nipun.gupta@amd.com>
+ <20220817150542.483291-3-nipun.gupta@amd.com> <Yv0KHROjESUI59Pd@kroah.com>
+ <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <YwOEv6107RfU5p+H@kroah.com> <DM6PR12MB3082B4BDD39632264E7532B8E8739@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <YwYVhJCSAuYcgj1/@kroah.com> <20220824233122.GA4068@nvidia.com>
+In-Reply-To: <20220824233122.GA4068@nvidia.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 25 Aug 2022 11:38:27 -0700
+Message-ID: <CAGETcx846Pomh_DUToncbaOivHMhHrdt-MTVYqkfLUKvM8b=6w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a process inside a network namespace calls readlink() on
-/proc/pid/fd/n (for any pid) then the returned string is
-prefixed by "/root".
+On Wed, Aug 24, 2022 at 4:31 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> On Wed, Aug 24, 2022 at 02:11:48PM +0200, Greg KH wrote:
+> > > We can share the RFC in case you are interested in looking at code flow
+> > > using the of_dynamic approach.
+> >
+> > Please no more abuse of the platform device.
+>
+> Last time this came up there was some disagreement from the ARM folks,
+> they were not keen on having xx_drivers added all over the place to
+> support the same OF/DT devices just discovered in a different way. It is
+> why ACPI is mapped to platform_device even in some cases.
+>
+> I think if you push them down this path they will get resistance to
+> get the needed additional xx_drivers into the needed places.
+>
+> > If your device can be discovered by scanning a bus, it is not a platform
+> > device.
+>
+> A DT fragment loaded during boot binds a driver using a
+> platform_driver, why should a DT fragment loaded post-boot bind using
+> an XX_driver and further why should the CDX way of getting the DT
+> raise to such importantance that it gets its own cdx_driver ?
+>
+> In the end the driver does not care about how the DT was loaded.
+> None of these things are on a discoverable bus in any sense like PCI
+> or otherwise. They are devices described by a DT fragement and they
+> take all their parameters from that chunk of DT.
+>
+> How the DT was loaded into the system is not a useful distinction that
+> raises the level of needing an entire new set of xx_driver structs all
+> over the tree, IMHO.
 
-So you get "/root/sys/console" or "/root/var/log/fred" etc.
+Jason, I see your point or rather the point the ARM folks might have
+made. But in this case, why not use DT overlays to add these devices?
+IIRC there's an in kernel API to add DT overlays. If so, should this
+be more of a FPGA driver that reads FPGA stuff and adds DT overlays?
+That'd at least make a stronger case for why this isn't a separate
+bus.
 
-There seems to be an extra call to prepend_name() called
-from prepend_path() from d_path().
 
-This seems decidedly wrong, especially since /root usually
-exists.
-
-Even it is were reporting a file outside a chroot (opened
-before the chroot) prepending "/root" would be wrong.
-
-Kernel is 5.10.132 (LTS before the retbleed breakages!)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-Saravana

@@ -2,149 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325D55A1975
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 21:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A921B5A1976
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 21:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243633AbiHYTWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 15:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        id S243670AbiHYTW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 15:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243631AbiHYTWV (ORCPT
+        with ESMTP id S243132AbiHYTWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 15:22:21 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CDEBD131;
-        Thu, 25 Aug 2022 12:22:20 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PHK5ZQ022330;
-        Thu, 25 Aug 2022 19:22:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=4OExE7/j1GF9DglWOSxq+7pg6RSVkS6FfZdQPfvxlJc=;
- b=kE/eEyMQYfb/ger5GqaTkpcF9UThEhUVT964mU0pxKxmZdFnXOgKyxx8jbwN150QSYpI
- Mzz3GIYSPc0e1W7I3O2IcMDhCL4Cg6z8JmCpekACWFwepWiG42kJRxB2z1gU6YkOL+sc
- 1rSOqlP346ST4LrzqbLWY3s/XJ2iNwRd9dyHcuwhuVZIGsVGjAu5UM4e/ilplJPgSEpf
- GYrURPf0Av1Yx59uP+prasamTsqREhFXRx35MTUm1Ke8vzIeGMswF9gi7bKCI07b/Frx
- BG75rqj8MidBKodkwmN4rdbtTT7ihdeKAXeufmDvHS/U/ayuUL+xaYAj6foHYMF/S7FR 2w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j63v0jxt3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 19:22:05 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27PJM3Hn027595
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 19:22:03 GMT
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 25 Aug
- 2022 12:22:03 -0700
-Date:   Thu, 25 Aug 2022 12:22:01 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David Heidelberg" <david@ixit.cz>,
-        Robert Marko <robimarko@gmail.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-Subject: Re: [PATCH v2 4/5] firmware: qcom: scm: Add wait-queue helper
- functions
-Message-ID: <20220825192201.GA9699@quicinc.com>
-References: <1658529438-9234-1-git-send-email-quic_gurus@quicinc.com>
- <1658529438-9234-5-git-send-email-quic_gurus@quicinc.com>
- <1f284b9c-257b-a127-55c0-e6cc8c07a9eb@quicinc.com>
- <20220811030022.GA18104@quicinc.com>
- <456915bf-b7ff-efaa-72aa-62fd05344270@quicinc.com>
+        Thu, 25 Aug 2022 15:22:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7E9BD1C8;
+        Thu, 25 Aug 2022 12:22:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAEA061DA3;
+        Thu, 25 Aug 2022 19:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E7DC433D6;
+        Thu, 25 Aug 2022 19:22:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661455341;
+        bh=cbnjw+nmYBdustDSdUgYDOKhxw2LS64OH7/cKsDUrmA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mipFgfRiYf4a0mu8jEr2ykZM3NitOZKoAefxySh0OMIfioMmOZbLk9U3EfyjWgRml
+         zJ9jhkoHTLLLzYraB2bi956xVPzc4IZ7JVgYu6QvT4YmZdx9Ml3HeZwvkQ8pePEwGi
+         uzBYimNGG77kMiPkEnCYjz2f8UtsD/rIsPqzKhGplWjwstQx2f1Pq3EbkgDC9dBZpx
+         7Pqu9s5xQhs7moQ5kmDw3mJiag9gtv8QUjv3U6HLMl40jOog9M7EZvUd919uE6VKNh
+         MEUonSBUUg49ipToiZwsOr99beVO2zXq1DWQbtPO1MI+oGluNX5QYoGkFOOb8N8G6U
+         h/oe/AFkjhKHg==
+Date:   Thu, 25 Aug 2022 22:22:14 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-sgx@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] x86/sgx: Do not consider unsanitized pages an error
+Message-ID: <YwfL5oZ8pjWmten0@kernel.org>
+References: <20220825080802.259528-1-jarkko@kernel.org>
+ <88d0f48a-d845-b0ca-b34d-5e22ae82b047@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <456915bf-b7ff-efaa-72aa-62fd05344270@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UJT53_FmyfyTz6mG95JP9R66bjyHXtKp
-X-Proofpoint-ORIG-GUID: UJT53_FmyfyTz6mG95JP9R66bjyHXtKp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_08,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1011 malwarescore=0 mlxlogscore=550 adultscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208250073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <88d0f48a-d845-b0ca-b34d-5e22ae82b047@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 11 2022 11:13, Rajendra Nayak wrote:
+On Thu, Aug 25, 2022 at 11:51:18AM -0700, Dave Hansen wrote:
+> On 8/25/22 01:08, Jarkko Sakkinen wrote:
+> > +	/* Can happen, when the initialization is retracted: */
+> > +	if (verbose && dirty_count > 0)
+> > +		pr_info("%d unsanitized pages\n", dirty_count);
+> >  }
+> >  
+> >  static bool sgx_reclaimer_age(struct sgx_epc_page *epc_page)
+> > @@ -394,11 +403,8 @@ static int ksgxd(void *p)
+> >  	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
+> >  	 * required for SECS pages, whose child pages blocked EREMOVE.
+> >  	 */
+> > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
+> > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
+> > -
+> > -	/* sanity check: */
+> > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
+> > +	__sgx_sanitize_pages(&sgx_dirty_page_list, false);
+> > +	__sgx_sanitize_pages(&sgx_dirty_page_list, true);
 > 
-> On 8/11/2022 8:30 AM, Guru Das Srinagesh wrote:
-> >On Aug 02 2022 17:07, Rajendra Nayak wrote:
-> >>
-> >>On 7/23/2022 4:07 AM, Guru Das Srinagesh wrote:
-> >>>When the firmware (FW) supports multiple requests per VM, and the VM
-> >>>also supports it via the `allow-multi-call` device tree flag, the
-> >>>floodgates are thrown open for them to all reach the firmware at the
-> >>>same time.
-> >
-> >[...]
-> >
-> >>>   2) SCM_WAITQ_WAKE:
-> >>>
-> >>>   	When an SCM call receives this return value instead of success
-> >>>   	or error, FW wishes to signal HLOS to wake up a (different)
-> >>>   	previously sleeping call.
-> >>>
-> >>>   	FW tells HLOS which call to wake up via the additional return
-> >>>   	values `wq_ctx`, `smc_call_ctx` and `flags`. The first two have
-> >>>   	already been explained above.
-> >>>
-> >>>   	`flags` can be either WAKE_ONE or WAKE_ALL. Meaning, wake either
-> >>>   	one, or all, of the SCM calls that HLOS is associating with the
-> >>>   	given `wq_ctx`.
-> >>>
-> >>>A sleeping SCM call can be woken up by either an interrupt that FW
-> >>>raises, or via a SCM_WAITQ_WAKE return value for a new SCM call.
-> >>
-> >>Do you know why the FW was not designed to always use an interrupt?
-> >>That would have made the handling of this in kernel a lot less complicated.
-> >
-> >Because:
-> >
-> >1. Our firmware in TrustZone cannot raise interrupts on its own - it needs the
-> >hypervisor to do that.
-> >
-> >2. Thus, in platforms where there is no hypervisor, there is no interrupt
-> >possible - only SMC_WAITQ_WAKE.
-> >
-> >Therefore, relying only on an interrupt would render the driver unable to
-> >support platforms without a hypervisor, which we didn't want to do.
+> This is backwards, IMNHO.
 > 
-> Thanks Guru for the clarification, however what problem are we really solving
-> with this on platforms _without_ a hypervisor?
+> Make __sgx_sanitize_pages() return the number of pages that it leaves
+> dirty.
 > 
-> Your cover letter said
-> 'The problem this feature is fixing is as follows. In a scenario where there is
-> a VM in addition to HLOS (and an underlying hypervisor):'
-> 
-> So I assumed this was primarily for platforms _with_ a VM/Hypervisor?
-> 
-> I understand that even with just the HLOS and no VM, if we can get these requests
-> processed concurrently it still adds value, but eventually Trustzone will
-> still process these requests sequentially right?
+> 	__sgx_sanitize_pages(&sgx_dirty_page_list)
+> 	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
+> 	if (left_dirty)
+> 		pr_warn(...);
 
-The Trustzone (TZ) firmware doesn't process all requests sequentially - there are a
-few that require a "callback" back to HLOS. In such cases, the original SCM
-call releases the TZ serialization lock, thereby allowing a new call to enter
-TZ. It is better to have requests sleep and wake via WAITQ_SLEEP and WAITQ_WAKE
-rather than the alternative - retrying an arbitrary amount of times via -EBUSY.
+I like this and my patch has already the counter in place
+so why not.
+
+> That rids us of the mystery true/false and puts the pr_warn() in a place
+> that makes logical sense.  Then, let's either *not* do the
+> 
+> 	pr_err_ratelimited(EREMOVE_ERROR_MESSAGE, ret, ret);
+> 
+> at all, or make it an unconditional pr_warn_ratelimited().  They're not
+> going to be common and multiple messages are virtually worthless anyway.
+> 
+> I actually think a common tracepoint, or out-of-line ENCLS/ENCLU
+> functions that can be easily ftraced are a much better idea than a
+> one-off pr_whatever().
+
+I like the tracepoint idea more than out-of-line ENCLS/ENCLU
+because out-of-line is more "intrusive" change to the code
+semantics than a tracepoint.
+
+BR, Jarkko

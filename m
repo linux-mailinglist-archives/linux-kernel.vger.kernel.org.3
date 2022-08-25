@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EAC5A09A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C675B5A09A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiHYHK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S237376AbiHYHL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237197AbiHYHKF (ORCPT
+        with ESMTP id S237676AbiHYHLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:10:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF4C31379;
-        Thu, 25 Aug 2022 00:10:02 -0700 (PDT)
-Received: from lenovo.Home (unknown [39.53.61.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E66546601E9C;
-        Thu, 25 Aug 2022 08:09:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661411401;
-        bh=qFwfAW+YdGQMEoUt1Jsqu4meeyL+SBRRa4jSpOBxxag=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bx/9rVPU+JTiTRGq6yKLfsVSVb5l7v9f/qPpy7CBWa0cJUDj+xYFFMRaY1jmAeFth
-         nuqIe9jNrr3lohnEK9M67it9OomP2JbkAK3gTNI4/s8h/d1MGjm54kIIKSI682fQNy
-         oSDyudVxA60s1YOELUYREVVfC033R1ILywyNy7kWoJG5YzPobioz9IYw6SJ0IXuOfR
-         EKByu1vasxgHu5DwxLGW1nnNS2Aq4WIjnkwuBi0HN3BSqIdsMDZ5YXi51yyES4bzGM
-         cO++TskZMNgLzfDHY9BIz/vrEtu/h+VRL6qGJt4tgZpPCrafRy6THV4q/2NMCekJDc
-         D7i43/jy/FPJw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list),
-        linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM),
-        linux-mm@kvack.org (open list:MEMORY MANAGEMENT),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v2 4/4] mm: add documentation of the new ioctl on pagemap
-Date:   Thu, 25 Aug 2022 12:09:26 +0500
-Message-Id: <20220825070926.2922471-5-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220825070926.2922471-1-usama.anjum@collabora.com>
-References: <20220825070926.2922471-1-usama.anjum@collabora.com>
+        Thu, 25 Aug 2022 03:11:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A869D13D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661411446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gQTYhaP5ZnTyiRUCghuMXgfnJiby9YFa/3gZ89MmFuY=;
+        b=AnlWMQrwo8qzxtE/58edHFocemL6zTtO+EDhnjr409ZAPSso6dfNYHRS9JDr+CQRGvMFV8
+        XVGBuwhSLomZzOhCTIE4tAu2GORHtYJHe7M5tcpO1lZ9HRC042T7S9a1d/coJbD5TeXu/i
+        WZhuyXw3LhZpHiEwcKYb1W+yYGYOQP0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-628-xMrIv3yUO_2vhtO8Z2vx_w-1; Thu, 25 Aug 2022 03:10:44 -0400
+X-MC-Unique: xMrIv3yUO_2vhtO8Z2vx_w-1
+Received: by mail-wm1-f69.google.com with SMTP id c25-20020a05600c0ad900b003a5ebad295aso826461wmr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:10:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=gQTYhaP5ZnTyiRUCghuMXgfnJiby9YFa/3gZ89MmFuY=;
+        b=XNRYadtyGARSHkbhdo2Jfqc81egm59di3ApVyP0PWFUTbPZvuQ6KLdqxwYGLI1H2BM
+         X0fW4yDJJaPncWMzYpYUm6ZE+mYopj1VDo7TQSZ0Ar1rS4u5YP9DPvs31iq8OhiGCKTi
+         KwJxxoo3eV8FsLcTmeYg1IDMz+gP23pG8tYfWNI3ROwew1gYvG/2TqP4hlpV2IwB9Y5k
+         HeUiPo9POr454avsHj9l+rMIw6NiVnVO1ma/Awk9HDm3mzLvUynz5FJAdbRM6w1cyiz0
+         bhMS1iv+XsolthrpQUwSFLuq4sDN9Eq3yvbgTJpDMYmqSOUFYlDn07C73wgmtX/JLWN7
+         7TNA==
+X-Gm-Message-State: ACgBeo24nqIJjhqZYpttrJK4Ql0yZ12P+6XTN4vuPmqgfNwYInZ5eBbd
+        CDDC/PIcab7mDik9JiBJBvAvmQM6SCbsOkO4BBkEijcBNv5/TVx/QxveQv3zU1beukAovold0bM
+        GQ6HCr2G8MHULFL6iFSfo0MIq
+X-Received: by 2002:a05:600c:1593:b0:3a6:36fc:842f with SMTP id r19-20020a05600c159300b003a636fc842fmr1338396wmf.52.1661411443555;
+        Thu, 25 Aug 2022 00:10:43 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5XoJixQYfG32LnLM3/aYR9OzTmTQ041m8y1GB2FP9gmQ278aMA24LJl4o9WYJrTrHrm9yUsA==
+X-Received: by 2002:a05:600c:1593:b0:3a6:36fc:842f with SMTP id r19-20020a05600c159300b003a636fc842fmr1338376wmf.52.1661411443252;
+        Thu, 25 Aug 2022 00:10:43 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id q3-20020a05600000c300b00225285b8136sm18377611wrx.38.2022.08.25.00.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 00:10:42 -0700 (PDT)
+Message-ID: <50703dda-bbee-7484-97ff-87d6ea75bf80@redhat.com>
+Date:   Thu, 25 Aug 2022 09:10:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+ <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+ <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com> <YwVo7xSO+VebkIfQ@monkey>
+ <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
+ <7ee73879-e402-9175-eae8-41471d80d59e@redhat.com>
+ <f7544713-d856-0875-41dd-52a5c27ba015@linux.alibaba.com>
+ <Ywa1jp/6naTmUh42@monkey>
+ <f3ee3581-5d0b-f564-7016-783a0d91fea2@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <f3ee3581-5d0b-f564-7016-783a0d91fea2@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the explanation of the added ioctl on pagemap file. It can be used
-to get, clear or both soft-dirty PTE bit of the specified range.
-or both at the same time.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Changes in v2:
-- Update documentation to mention ioctl instead of the syscall
----
- Documentation/admin-guide/mm/soft-dirty.rst | 42 ++++++++++++++++++++-
- 1 file changed, 41 insertions(+), 1 deletion(-)
+>> +		/*
+>> +		 * try_grab_page() should always succeed here, because we hold
+>> +		 * the ptl lock and have verified pte_present().
+>> +		 */
+>> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+>> +			page = NULL;
+>> +			goto out;
+>> +		}
+>> +	} else {
+> 
+> Should add FOLL_MIGRATION validation before waiting a migration entry.
 
-diff --git a/Documentation/admin-guide/mm/soft-dirty.rst b/Documentation/admin-guide/mm/soft-dirty.rst
-index cb0cfd6672fa..d3d33e63a965 100644
---- a/Documentation/admin-guide/mm/soft-dirty.rst
-+++ b/Documentation/admin-guide/mm/soft-dirty.rst
-@@ -5,7 +5,12 @@ Soft-Dirty PTEs
- ===============
- 
- The soft-dirty is a bit on a PTE which helps to track which pages a task
--writes to. In order to do this tracking one should
-+writes to.
-+
-+Using Proc FS
-+-------------
-+
-+In order to do this tracking one should
- 
-   1. Clear soft-dirty bits from the task's PTEs.
- 
-@@ -20,6 +25,41 @@ writes to. In order to do this tracking one should
-      64-bit qword is the soft-dirty one. If set, the respective PTE was
-      written to since step 1.
- 
-+Using IOCTL
-+-----------
-+
-+The IOCTL on the ``/proc/PID/pagemap`` can be can be used to find the dirty pages
-+atomically. The following commands are supported::
-+
-+	MEMWATCH_SD_GET
-+		Get the page offsets which are soft dirty.
-+
-+	MEMWATCH_SD_CLEAR
-+		Clear the pages which are soft dirty.
-+
-+	MEMWATCH_SD_GET_AND_CLEAR
-+		Get and clear the pages which are soft dirty.
-+
-+The struct :c:type:`pagemap_sd_args` is used as the argument. In this struct:
-+
-+  1. The range is specified through start and len. The len argument need not be
-+     the multiple of the page size, but since the information is returned for the
-+     whole pages, len is effectively rounded up to the next multiple of the page
-+     size.
-+
-+  2. The output buffer and size is specified in vec and vec_len. The offsets of
-+     the dirty pages from start are returned in vec. The ioctl returns when the
-+     whole range has been searched or vec is completely filled. The whole range
-+     isn't cleared if vec fills up completely.
-+
-+  3. The flags can be specified in flags field. Currently only one flag,
-+     PAGEMAP_SD_NO_REUSED_REGIONS is supported which can be specified to ignore
-+     the VMA dirty flags for better performance. This flag shows only those pages
-+     dirty which have been written to by the user. All new allocations aren't returned
-+     to be dirty.
-+
-+Explanation
-+-----------
- 
- Internally, to do this tracking, the writable bit is cleared from PTEs
- when the soft-dirty bit is cleared. So, after this, when the task tries to
+We really only need FOLL_MIGRATION for KSM. As hugetlb pages cannot be
+KSM pages, we don't need this.
+
+Actually, I do have patches in the works that rip out FOLL_MIGRATION
+completely by adjusting KSM code.
+
+So let's try to not add dead code (although it would make sense for
+feature completeness as is -- but then, FOLL_MIGRATION really needs to go).
+
 -- 
-2.30.2
+Thanks,
+
+David / dhildenb
 

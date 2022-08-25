@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5092A5A0C92
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747915A0C96
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238146AbiHYJ2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S240020AbiHYJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbiHYJ1v (ORCPT
+        with ESMTP id S237349AbiHYJ2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:27:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BB09E8BB;
-        Thu, 25 Aug 2022 02:27:50 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8BF8D5BCFF;
-        Thu, 25 Aug 2022 09:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661419669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oD2ON5ZEmElLgT4EBxpSWyu1ku5LP4DrXwfA23XWjH4=;
-        b=qknJkW1fP0r2UL8UgzODME4WEr79d6P4xEuqkMLZADrhrnaZvBgIbr/L0faRbdiu6dHJmE
-        tvkb1ptlffg/lhWil1eQZUDjhGa6bN1dyT5LO7aJKLLNCh/XcrNqoiWnPzH6p5mvmmoUDQ
-        3JAdcgDNBV8/4sIoa7uVLdV0TcindVs=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BBCD22C142;
-        Thu, 25 Aug 2022 09:27:48 +0000 (UTC)
-Date:   Thu, 25 Aug 2022 11:27:46 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] kernel: move from strlcpy with unused retval to strscpy
-Message-ID: <YwdAknZFyKxCXZuL@alley>
-References: <20220818210202.8227-1-wsa+renesas@sang-engineering.com>
+        Thu, 25 Aug 2022 05:28:02 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4E3A4B0A;
+        Thu, 25 Aug 2022 02:28:01 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id q18so17833125ljg.12;
+        Thu, 25 Aug 2022 02:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=bHJbCxqGrMvRJ8HABrOLQY8kdlTtP1fT6llzjdoahEI=;
+        b=F6dgYpp2CWa9EjXLyNUb2hkEr++WEmvoD1Es9jHGjD3nl2s+cUcKf5qo2cYDMhDudh
+         IMnajyC+ijg09SfazUHsyiO0CJsRSfB0wPEfyb0993Y1r4EIbJi/1LdCi3HDAa2NJJ8x
+         +zC5tDOVxxCwf6bf8VbNmzwnczL/SPqiYvkU52CUK7TS4elW2cXs3FEUXudhl83S8u0e
+         SrcF8UkWbV35NopLBg8rBAeTUzSBCzzYntRNyOVr8P409yXN8j/WZFl0g97yIgcnKXs1
+         p38SZYMTy2HmGrbnncEsoQwuSsGvytdaxcgP4HxRFbYOOD0lP9V8LJKk3fFJvFeIQvoT
+         SqiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=bHJbCxqGrMvRJ8HABrOLQY8kdlTtP1fT6llzjdoahEI=;
+        b=R70juOU0TZ9gLbX2BipB38LuUSDYFWfiARCxU9idVW5wvqDp4piQ0V+Cc/RAz5MTod
+         rUxqbSLs53l9TkzUwAQ/ZGqJL/T+LrQrUgYvIT9xoV2vkIiKdcqMdVm4JW2JjMUuQKr6
+         sycDa5QQVuvgbpoqPtIIY3oP9k2Nh9mf0Fj15LE74zx0pkaCaGHNB1GAsvQVhR/Ws0mE
+         I+/SJbvM3zsbRPrkF/mE7ztNDQ72iIxh4oEoWwmKMsHovB44Tfd8MEAch6RsHfdzQ00x
+         21rzPuN7281bQffBfVX6AY28ce9Dtwf9hASyNCjrhhnpZDS2V/qHQ1cOQ2k0ykj+T6YP
+         QPPA==
+X-Gm-Message-State: ACgBeo2SEXae4RP46q+6S/Tj+qclO6MOprNmYSv5uIUYTyb5dD+Enpt+
+        VpWaM5LLZxHl7VF49ynvtBgcowwCC6RXXpt7AZ8=
+X-Google-Smtp-Source: AA6agR450TIsqiag2S5eMHMXUw3UgJhUL8vxaf3i2cYKpNtvBGspRhj5eXNHGG8OC2gIZZGSa5KIZ8mmRqy62CUTnLU=
+X-Received: by 2002:a2e:b0ca:0:b0:261:d46a:4672 with SMTP id
+ g10-20020a2eb0ca000000b00261d46a4672mr775822ljl.460.1661419679767; Thu, 25
+ Aug 2022 02:27:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818210202.8227-1-wsa+renesas@sang-engineering.com>
+References: <20220719123525.3448926-1-gasmibal@gmail.com> <20220719123525.3448926-3-gasmibal@gmail.com>
+ <a3361036446058fe386634a9016c6925146a078e.camel@sipsolutions.net>
+In-Reply-To: <a3361036446058fe386634a9016c6925146a078e.camel@sipsolutions.net>
+From:   Baligh GASMI <gasmibal@gmail.com>
+Date:   Thu, 25 Aug 2022 11:27:48 +0200
+Message-ID: <CALxDnQYpA+cpUufxkpyqT=JjZUap-i==bn=r2Z3K2Oayh9QhTQ@mail.gmail.com>
+Subject: Re: [RFC/RFT v5 2/4] mac80211: add periodic monitor for channel busy time
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Toke Hoiland-Jorgensen <toke@redhat.com>,
+        Linus Lussing <linus.luessing@c0d3.blue>,
+        Kalle Valo <kvalo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-08-18 23:02:01, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
-> 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Ok, noted !
+I will try to find a way or maybe remove this part, since the busy
+time is not trivial to be used in the estimation, as I thought.
+Thanks for your reply.
+
+
+Le jeu. 25 ao=C3=BBt 2022 =C3=A0 10:58, Johannes Berg
+<johannes@sipsolutions.net> a =C3=A9crit :
 >
-> ---
->  kernel/acct.c                         |  2 +-
->  kernel/bpf/preload/bpf_preload_kern.c |  4 ++--
->  kernel/cgroup/cgroup-v1.c             |  4 ++--
->  kernel/events/core.c                  |  6 +++---
->  kernel/kallsyms.c                     |  4 ++--
->  kernel/params.c                       |  2 +-
->  kernel/printk/printk.c                |  2 +-
->  kernel/relay.c                        |  4 ++--
->  kernel/time/clocksource.c             |  2 +-
->  kernel/trace/ftrace.c                 | 18 +++++++++---------
->  kernel/trace/trace.c                  |  8 ++++----
->  kernel/trace/trace_events.c           |  2 +-
->  kernel/trace/trace_events_inject.c    |  4 ++--
->  kernel/trace/trace_kprobe.c           |  2 +-
->  kernel/trace/trace_probe.c            |  2 +-
->  15 files changed, 33 insertions(+), 33 deletions(-)
-
-This fixes only small part of the kernel code. It would make sense to
-do a tree-wide change using a script.
-
-Would you mind to create one and send it to Linus?
-
-You might want to use Coccinelle if a simple sed/awk gets too
-complicated. See
-https://www.kernel.org/doc/html/v4.15/dev-tools/coccinelle.html
-
-Best Regards,
-Petr
+> On Tue, 2022-07-19 at 14:35 +0200, Baligh Gasmi wrote:
+> > Add a worker scheduled periodicaly to calculate the busy time average o=
+f
+> > the current channel.
+> >
+> > This will be used in the estimation for expected throughput.
+> >
+>
+> I really don't think you should/can do this - having a 1-second periodic
+> timer (for each interface even!) is going to be really bad for power
+> consumption.
+>
+> Please find a way to inline the recalculation with statistics updates
+> and/or queries.
+>
+> johannes

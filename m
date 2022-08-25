@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8945A1651
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F3F5A1654
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242365AbiHYQE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S242918AbiHYQFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiHYQEy (ORCPT
+        with ESMTP id S242120AbiHYQFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:04:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916D61F600;
-        Thu, 25 Aug 2022 09:04:53 -0700 (PDT)
+        Thu, 25 Aug 2022 12:05:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E80B72BF;
+        Thu, 25 Aug 2022 09:05:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2025E61B95;
-        Thu, 25 Aug 2022 16:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62F8C433D6;
-        Thu, 25 Aug 2022 16:04:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEEDCB82A2C;
+        Thu, 25 Aug 2022 16:05:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16BFC43470;
+        Thu, 25 Aug 2022 16:05:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661443492;
-        bh=O0BnzaPjcOf8VQ7QriQaGUwPP2OlVk6+QnLO3EHZZlQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cdtqKDzFlvkB6++IJWR2enAQZB3BUuhPQ8FEeJ+YSgCC/MJBqDjCZSIGqi08V++ox
-         MOlvQU0ylYBtQbvvbtF+lw90Zqz3924Qpw3jfnmrzZoeKPEqBvwRe316cQ39WIrEL2
-         LGNTwQaWdfgIAwL6+tVyRmOhoy6ZvDtjIS0cOy6ZVsfo/0Mo3IIn5d89mvcuDhLwPe
-         6uIVb3aqMIYmLhP8aYH18XwuRdVfvhdhM7qCjeUj5uv74+xheG8HoxFH3X06FWwpmG
-         dseDBO5LQ5q9JRXFtMTKKmqeQ6Wu9m7efKhtxu74DxEKI/HPtaTY061iLo9aFnS8Sz
-         BoHY6LkRWqdeA==
-Date:   Thu, 25 Aug 2022 11:04:43 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 24/24] PCI: dwc: Add DW eDMA engine support
-Message-ID: <20220825160443.GA2854084@bhelgaas>
+        s=k20201202; t=1661443510;
+        bh=6iCpl0Hcs3sEp5yCjW0MZq2TPzAobeG7OT/sl8vuJnk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tjKD/WBK2xg9bSRHOp7laO2gkYDoqPH3/vVbGtN5jVqRUpKFaZrHQ7J39rznD0dWf
+         Q8upnWyH0eDXiu46LyFkDAg+f1B1s+XbBxfxOwZWT2J/Dpuf8QH6JE6wN6x90rU0J5
+         ggRU7gJJdr+tmJUGYHvtdgWUUSeU3VS89bWadNC2VtxvQh+B3g3HCwZ8YxPBkq6yom
+         Au8232gLSw5ae5uO7uYLsmrVBXlm4UCHLSCEVdH161iPWw/b8VIt1IQAaObnDAkJDp
+         rORO6LwRVV3BfRuK6LxjQibbJll+KMZxbvboI7RoyWD31X+Zih7IKFvWRKgMIUj7NM
+         0gDi/JHsnE1nA==
+Received: by mail-vs1-f44.google.com with SMTP id 190so13116662vsz.7;
+        Thu, 25 Aug 2022 09:05:10 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1YDsD6viQBZAJc6pXxjimlqpo7kNdRb8WyuktbO9s6aZTk4QmI
+        bNCEvc+y5r19CEvyrwybDEzzquyFWANGzlo6CQ==
+X-Google-Smtp-Source: AA6agR6++ST1e9+x73UkATqQpmOKAHJYkkfidUHtKFPnK8KzTQGUzp235lErg/ikL/FVEQG/vhuoz9apf53yKGV+Jpo=
+X-Received: by 2002:a67:c182:0:b0:390:3fa6:6afd with SMTP id
+ h2-20020a67c182000000b003903fa66afdmr1905098vsj.53.1661443509560; Thu, 25 Aug
+ 2022 09:05:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825051614.kfify5fbqlhurvdn@mobilestation>
+References: <20220825104505.79718-1-etienne.carriere@linaro.org>
+In-Reply-To: <20220825104505.79718-1-etienne.carriere@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 25 Aug 2022 11:04:58 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLWQC-drkWdgiM4TnsZCa6h6vcMmCvrUC_E7z5=gYtcJw@mail.gmail.com>
+Message-ID: <CAL_JsqLWQC-drkWdgiM4TnsZCa6h6vcMmCvrUC_E7z5=gYtcJw@mail.gmail.com>
+Subject: Re: [PATCH] dt-binding: gpio: publish binding IDs under dual license
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Stephen Warren <swarren@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,56 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 08:16:14AM +0300, Serge Semin wrote:
-> On Wed, Aug 24, 2022 at 01:17:54PM -0500, Bjorn Helgaas wrote:
-> > On Wed, Aug 24, 2022 at 09:13:19PM +0300, Serge Semin wrote:
-> > > On Wed, Aug 24, 2022 at 11:51:18AM -0500, Bjorn Helgaas wrote:
-> > > > On Mon, Aug 22, 2022 at 09:53:32PM +0300, Serge Semin wrote:
-> > 
-> > > > > +	val = dw_pcie_readl_dbi(pci, PCIE_DMA_VIEWPORT_BASE + PCIE_DMA_CTRL);
-> > > > > +	if (val == 0xFFFFFFFF && pci->edma.reg_base) {
-> > > > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
-> > > > > +
-> > > > > +		val = dw_pcie_readl_dma(pci, PCIE_DMA_CTRL);
-> > > > > +	} else if (val != 0xFFFFFFFF) {
-> > > > 
-> > > 
-> > > > Consider PCI_POSSIBLE_ERROR() as an annotation about the meaning of
-> > > > 0xFFFFFFFF and something to grep for.
-> > > 
-> > > In this case FFs don't mean an error but a special value, which
-> > > indicates that the eDMA is mapped via the unrolled CSRs space. The
-> > > similar approach has been implemented for the iATU legacy/unroll setup
-> > > auto-detection. So I don't see much reasons to have it grepped, so as
-> > > to have a macro-based parametrization since the special value will
-> > > unluckily change while having the explicit literal utilized gives a
-> > > better understanding of the way the algorithm works.
-> 
-> > If 0xFFFFFFFF is the result of a successful PCIe Memory Read,
-> 
-> Right. It is.
-> 
-> > and not
-> > something synthesized by the host bridge when it handles an
-> > Unsupported Request completion,
-> 
-> No it isn't. To be clear 0xFFs don't indicate some PCIe bus/controller
-> malfunction, but they are a result of reading the
-> DMA_CTRL_VIEWPORT_OFF register which doesn't exist. The manual
-> explicitly says: "Note - When register does not exist, value is fixed
-> to 32'hFFFF_FFFF". The register doesn't exist if either eDMA is
-> unavailable or the eDMA CSRs are mapped via the unrolled state.
+On Thu, Aug 25, 2022 at 5:45 AM Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> Changes gpio.h DT binding header file to be published under GPLv2 or
+> BSD-3-Clause license terms. This change allows these GPIO generic
+> bindings header file to be used in software components as bootloaders
+> and OSes that are not published under GPLv2 terms.
+>
+> All contributors to gpio.h file in copy.
+>
+> Cc: Stephen Warren <swarren@nvidia.com>
 
-OK.  I don't think that's worded very well in the manual.  A register
-that does not exist does not have a value, and attempts to read it
-should fail.  If they want to say the register always exists and
-contains 0xFFFFFFFF for versions earlier than X, that would make
-sense.  Wouldn't be the first time a manual is ambiguous ;)
+We have NVIDIA permission for anything in bindings and NVIDIA
+relicensed the irq headers, so I think it shouldn't be a problem.
 
-If the device itself, i.e., not the Root Complex, is fabricating this
-0xFFFFFFFF value, reading it should not cause any AER or other error
-status bits to be set.
+> Cc: Linus Walleij <linus.walleij@linaro.org>
 
-If the Root Complex fabricates 0xFFFFFFFF upon receipt of a Completion
-with Unsupported Request status, I would expect bits like Received
-Master Abort to be set in the Root Port's Secondary Status register.
+FYI, There is blanket approval from Linaro to relicense DT files.
+
+> Cc: Laxman Dewangan <ldewangan@nvidia.com>
+> Cc: Charles Keepax <ckeepax@opensource.wolfsonmicro.com>
+
+I don't think a blank line is copyrightable.
+
+> Cc: Andrew Jeffery <andrew@aj.id.au>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Nuno S=C3=A1 <nuno.sa@analog.com>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  include/dt-bindings/gpio/gpio.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)

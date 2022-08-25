@@ -2,158 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A005A08BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8680D5A08C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbiHYGR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
+        id S232972AbiHYGSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiHYGR1 (ORCPT
+        with ESMTP id S232970AbiHYGSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:17:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605DE9F8CA;
-        Wed, 24 Aug 2022 23:17:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD3886190F;
-        Thu, 25 Aug 2022 06:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14E1C433C1;
-        Thu, 25 Aug 2022 06:17:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661408245;
-        bh=H/5r/QpdAo5BW4BPKN593MzBeyF0N/Ah4GhagLkmtEk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NoSoHZ+bb8AOwEHsI8XSEsceCwr+1d0xvZoNF+y8hFZwng+RmjkixeNkhbxhjgeQL
-         +P8Yc/3aiA1MPXe+2QKQtqeOZpJW8YCbFUX3+GiWqoWnMlz0eDKAq1Mrb3Dkf5EcN9
-         y8OD7wUFH6FgdyS4VIFgPWJLLhLGkbR2IzbTDxriszWZGoCRX55YgxOrirgwpWTmLK
-         T/bjyPlrGd7ot5HCe78wt8CtQxQMYQsBWszyh+A1mgX1RVYqXIsdNup1ec6SvqZHzq
-         DMNaJGUlaqKY/JEv+WQLDSYdw7SaRg5eOD9mXZe84A9IsvEU8VyPszw6a3epwEcrIp
-         uL3uSIjlMvF7w==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH v2] x86/sgx: Do not consider unsanitized pages an error
-Date:   Thu, 25 Aug 2022 09:17:10 +0300
-Message-Id: <20220825061710.256125-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Thu, 25 Aug 2022 02:18:42 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F137CA00E6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:18:40 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bt10so13921925lfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=LCeRgAr90AjP72BARFiQs5/0imRongy9yblqwBgpMJw=;
+        b=c3RlXRDaCp4vYWxqcyLpXjoAHiDJ0wrIIcONyeaAraWpAjQYEC51alebj1AQrr5xJ3
+         0JCZnlpUQtsKJjJiTgWDccNqR6NMnrbXCDj6LAnTJ6rw9OFPRtR5zWwLrhJFNhECVhBz
+         UOunN4yWD7EJvjCey/CBpxxnCxhmToSfFIgqj4U0BuArgrJYUp+NZ8aYfT5EZkeTBjEt
+         fnvIoiqL9uoXq6oYoaeSf7SFQXkoBLaowtzcRdPB62ZimXRQh0OvG09QjFjQE2k1SyUK
+         PSGe3qgXUg0uN95oS5On0SV6qM7neLlUYfAPe5iG5411BzKn1lvKoSeZYwmAX8HLAkev
+         7Dqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=LCeRgAr90AjP72BARFiQs5/0imRongy9yblqwBgpMJw=;
+        b=wFtUhfQ1FjHIFbE6OBSSmwbWs6b++sbjr8z9oeMfpq/aLu0i14rNIuarRYyZz/nVDp
+         AGGeOY4hZzoGM35e+jZopQACJ7KBJYI1MpNvvifYCavngE3+2pLQXa9uiBB4a9cCASjf
+         QHiwaPsHBgb4/r0MLiYHJXTo8HfASPuj7OrTomvQx/X1psIokXgCrybyukf23YhbNbnP
+         V2HYN+3T5SwmEbUfXHuuUT1Qd5b0gkz6XHrGDYX1Zp44rL2kuCHpQxIqTEmrpgopcMr5
+         k7qtrlLBTkCpcqQdJ6U0Vj8TnIaQQRoVLC+4UOVfhVtyPjPV6mKSWcPR6GJ0g+45nGCA
+         /TWg==
+X-Gm-Message-State: ACgBeo2NUFKKVwjewL3S9eTqvLPIMYGN74VJDmeeiWlHwyxYvJ9fTAFA
+        fXRftx6qurgyjoEIw/Fkrt7mGw==
+X-Google-Smtp-Source: AA6agR75ynzRVgvfBbdqJ2QkXycl9WBPmjwpM9MQUP9CsZJX93WYal3zBWqrzkkwzk66jgGdDVldhw==
+X-Received: by 2002:a05:6512:2302:b0:492:ce48:1bab with SMTP id o2-20020a056512230200b00492ce481babmr612617lfu.266.1661408319341;
+        Wed, 24 Aug 2022 23:18:39 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id o13-20020ac25e2d000000b00492b7d7ee20sm323634lfg.87.2022.08.24.23.18.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 23:18:38 -0700 (PDT)
+Message-ID: <0eea5c56-534a-aec6-b9f1-dd306fccf282@linaro.org>
+Date:   Thu, 25 Aug 2022 09:18:37 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 5/7] dt-bindings: net: dsa: mediatek,mt7530: define
+ port binding per switch
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220824104040.17527-1-arinc.unal@arinc9.com>
+ <20220824104040.17527-6-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220824104040.17527-6-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If sgx_dirty_page_list ends up being non-empty, currently this triggers
-WARN_ON(), which produces a lot of noise, and can potentially crash the
-kernel, depending on the kernel command line.
+On 24/08/2022 13:40, Arınç ÜNAL wrote:
+> Define DSA port binding per switch model as each switch model requires
+> different values for certain properties.
+> 
+> Define reg property on $defs as it's the same for all switch models.
+> 
+> Remove unnecessary lines as they are already included from the referred
+> dsa.yaml.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 55 +++++++++++--------
+>  1 file changed, 33 insertions(+), 22 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index 8dfc307e6e1b..a6003db87113 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -127,37 +127,45 @@ properties:
+>        ethsys.
+>      maxItems: 1
+>  
+> -patternProperties:
+> -  "^(ethernet-)?ports$":
+> -    type: object
+> -
+> -    patternProperties:
+> -      "^(ethernet-)?port@[0-9]+$":
+> -        type: object
+> -        description: Ethernet switch ports
+> -
 
-However, if the SGX subsystem initialization is retracted, the sanitization
-process could end up in the middle, and sgx_dirty_page_list be left
-non-empty for legit reasons.
+I don't see improvements here. We might have here misunderstanding,
+because I mentioned it several times yet no effect.
 
-Replace this faulty behavior with more verbose version
-__sgx_sanitize_pages(), which can optionally print EREMOVE error code and
-the number of unsanitized pages.
+This hunk with reg and maybe few other properties which are always
+applicable should stay. You do not need any defs for this binding...
 
-Link: https://lore.kernel.org/linux-sgx/20220825051827.246698-1-jarkko@kernel.org/T/#u
-Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Fixes: 51ab30eb2ad4 ("x86/sgx: Replace section->init_laundry_list with sgx_dirty_page_list")
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Cc: Haitao Huang <haitao.huang@linux.intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>
----
-v2:
-- Replaced WARN_ON() with optional pr_info() inside
-  __sgx_sanitize_pages().
-- Rewrote the commit message.
-- Added the fixes tag.
----
- arch/x86/kernel/cpu/sgx/main.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 515e2a5f25bb..b57118f8641d 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -50,16 +50,17 @@ static LIST_HEAD(sgx_dirty_page_list);
-  * from the input list, and made available for the page allocator. SECS pages
-  * prepending their children in the input list are left intact.
-  */
--static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
-+static void __sgx_sanitize_pages(struct list_head *dirty_page_list, bool verbose)
- {
- 	struct sgx_epc_page *page;
-+	int dirty_count = 0;
- 	LIST_HEAD(dirty);
- 	int ret;
- 
- 	/* dirty_page_list is thread-local, no need for a lock: */
- 	while (!list_empty(dirty_page_list)) {
- 		if (kthread_should_stop())
--			return;
-+			break;
- 
- 		page = list_first_entry(dirty_page_list, struct sgx_epc_page, list);
- 
-@@ -90,14 +91,27 @@ static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
- 			list_del(&page->list);
- 			sgx_free_epc_page(page);
- 		} else {
-+			if (verbose)
-+				pr_err_ratelimited(EREMOVE_ERROR_MESSAGE, ret, ret);
-+
- 			/* The page is not yet clean - move to the dirty list. */
- 			list_move_tail(&page->list, &dirty);
-+			dirty_count++;
- 		}
- 
- 		cond_resched();
- 	}
- 
- 	list_splice(&dirty, dirty_page_list);
-+
-+	/*
-+	 * In addition to the kexec usual scenario, if the driver and/or KVM
-+	 * does not initialize, ksgx will be stopped, which can leave pages
-+	 * unsanitized. It's legit behaviour but it does not hurt to make it
-+	 * visible.
-+	 */
-+	if (verbose && dirty_count > 0)
-+		pr_info("%d unsanitized pages\n", dirty_count);
- }
- 
- static bool sgx_reclaimer_age(struct sgx_epc_page *epc_page)
-@@ -394,8 +408,8 @@ static int ksgxd(void *p)
- 	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
- 	 * required for SECS pages, whose child pages blocked EREMOVE.
- 	 */
--	__sgx_sanitize_pages(&sgx_dirty_page_list);
--	__sgx_sanitize_pages(&sgx_dirty_page_list);
-+	__sgx_sanitize_pages(&sgx_dirty_page_list, false);
-+	__sgx_sanitize_pages(&sgx_dirty_page_list, true);
- 
- 	/* sanity check: */
- 	WARN_ON(!list_empty(&sgx_dirty_page_list));
--- 
-2.37.1
-
+Best regards,
+Krzysztof

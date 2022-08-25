@@ -2,215 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA635A1809
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859FE5A1807
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242711AbiHYRfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
+        id S242347AbiHYRfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242577AbiHYRfS (ORCPT
+        with ESMTP id S232030AbiHYRfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 13:35:18 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92634A803;
-        Thu, 25 Aug 2022 10:35:16 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f4so16645471pgc.12;
-        Thu, 25 Aug 2022 10:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=G4/totSXnLF4OIexpkONKiVFqcUNM6MV/u0KynK+Ngw=;
-        b=KzJQ0G+219CI0rf2+YYLdSHRNlmcUIv8amjH7VFxdu55tS8n3CrqE6RQLvF61ytAiN
-         SBgfiLyqfO9mMjbxWmTcS/I61O5KlJYlLDTVYBySdnSWVvKBZvIrR1Ym3BjnHc7F1eVb
-         yL4IVn2l9sLadtLS6rWsF3aShUhyga/fZPGC4dSUi/0G2d9O3cb6X/P/bxvjUPYkcCQa
-         RWhXt3mztUOTKZkUf4MbLUZIOEhJF8SlVnIaUFseQynWqhoxe0aipU9f593yk8rSz6Lo
-         JuV2yQq5Zy6AH799+nSIN5b8Wp7yULiBVy97W3aHw1+ZPBikX4/TXI+DajAr3fyVTpKK
-         ey+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=G4/totSXnLF4OIexpkONKiVFqcUNM6MV/u0KynK+Ngw=;
-        b=elgHIzTBqjkjG28rQA2xpcuzN5Ng06jhHbWBkxoqCxQEB1Z2sej0LWJemluaPHJCsD
-         WYYgV3yS50SjS761/lfWtqIiX81kN5dTsSYK3YFpEW9U1vsm4ldSDZZrEdOUVNEd+5ue
-         BEfHiX/lWPaQmXoHvOABmqPbFVQajIWbRsTJ4qZ0aN/TQUhr0We5ddAl+ALJXesZ5FAW
-         +UDi8qRbHd0NZ5oRr4m7dH6bIhEAm19LEdd/rbVb95NZVBEqeUeFMc3XcCqlSWou8tCa
-         4IPj20jF1YkTj1aW138Bd19iShcu0jEyuJ/ZxdlflQqxmyD8TSSbsvkbGhmvk0DmiIcd
-         HTqQ==
-X-Gm-Message-State: ACgBeo092NlMAD4cT1QLRT6fVPHzn9is57K8xPB30DAiCUJuaVjw4k6D
-        zOftWjwb4MiYIFuTKij2SNs=
-X-Google-Smtp-Source: AA6agR6QqA2E2sYym2KZRyGTf9HFsQrvhZKE8JqQlg4PKzKbVlup5/Vgk+L9aIprKB6N2L7KFxg6FA==
-X-Received: by 2002:a05:6a00:850:b0:536:341b:99b7 with SMTP id q16-20020a056a00085000b00536341b99b7mr61373pfk.47.1661448916001;
-        Thu, 25 Aug 2022 10:35:16 -0700 (PDT)
-Received: from DESKTOP-KA7F9LU.localdomain ([223.186.22.215])
-        by smtp.googlemail.com with ESMTPSA id w7-20020a170902e88700b001725d542190sm15170110plg.181.2022.08.25.10.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 10:35:15 -0700 (PDT)
-From:   Vimal Kumar <vimal.kumar32@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     chinmoyghosh2001@gmail.com, Vimal Kumar <vimal.kumar32@gmail.com>,
-        Mintu Patel <mintupatel89@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2] PM: runtime: Add support to disable wakeup sources
-Date:   Thu, 25 Aug 2022 23:04:41 +0530
-Message-Id: <20220825173457.23298-1-vimal.kumar32@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 Aug 2022 13:35:11 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC8B3DBE5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:35:08 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27PHYuuj082659;
+        Thu, 25 Aug 2022 12:34:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661448896;
+        bh=hy51x9fD99O2MZ+OanUOy7HMr+gQi3UUqpdFlYEaeb0=;
+        h=From:To:CC:Subject:Date;
+        b=uBDy2JwwCTzy5iCQqN6mGRpW9QeOUWy2X6Xyl+3UQ2LW1v7SGHFqrFVC4gAvDKXoF
+         MB5KBbZuJ1aVtQHWPRoiNW3p0XjA+kRE4z/oW19wKc60iKob6iHeqOYLPj+iBoioOi
+         54G486ebSez21iEd9OBQsEUHcy+D6OxVJgBjSrxA=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27PHYu04052728
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 25 Aug 2022 12:34:56 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 25
+ Aug 2022 12:34:55 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 25 Aug 2022 12:34:56 -0500
+Received: from ula0226330.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27PHYtZk073604;
+        Thu, 25 Aug 2022 12:34:55 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Davis <afd@ti.com>
+Subject: [PATCH v2] drm: Move radeon and amdgpu Kconfig options into their directories
+Date:   Thu, 25 Aug 2022 12:34:55 -0500
+Message-ID: <20220825173455.23155-1-afd@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-User could find many wakeup sources available in the bsp, which
-they won't be using. Currently users can only get the status and
-list of enabled wakeup sources, but users can't disable it runtime.
-It's very difficult to find the driver for each wakeup sources from
-where it's getting enabled and make the changes for disabling it.
+Most Kconfig options to enable a driver are in the Kconfig file
+inside the relevant directory, move these two to the same.
 
-This will help users to disable any wakeup sources at runtime,
-avoiding any code change and re-compilation. A new class attribute
-"disable_ws" will be added in the wakeup calss. If user want to disable
-any wakeup sources, user need to find the wakeup dev node associated
-with the particular wakeup source and write the devnode name to the
-class attribute "disable_ws".
-
-Example:
-Need to disable the wakeup source '1c08000.qcom,pcie'. The dev node
-associated with this wakeup source is:
-cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie", then for disabling
-this wakeup source :
-	echo wakeup3 > /sys/class/wakeup/disable_ws
-
-Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
-Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+Signed-off-by: Andrew Davis <afd@ti.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
 ---
- Documentation/ABI/testing/sysfs-class-wakeup | 16 +++++
- drivers/base/power/wakeup_stats.c            | 65 +++++++++++++++++++-
- 2 files changed, 80 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-wakeup b/Documentation/ABI/testing/sysfs-class-wakeup
-index 754aab8b6dcd..75b9a6fe737a 100644
---- a/Documentation/ABI/testing/sysfs-class-wakeup
-+++ b/Documentation/ABI/testing/sysfs-class-wakeup
-@@ -74,3 +74,19 @@ Contact:	Tri Vo <trong@android.com>
- Description:
- 		The file contains the total amount of time this wakeup source
- 		has been preventing autosleep, in milliseconds.
-+
-+What:		/sys/class/wakeup/disable_ws
-+Date:		Aug 2022
-+Contact:	Vimal Kumar <vimal.kumar@gmail.com>
-+Description:
-+		This file can be used to disable a wakeup source at runtime.
-+		If user want to disable any wakeup sources, user need to find
-+		the wakeup dev node associated with the particular wakeup source
-+		and write the devnode name to this file "disable_ws".
-+
-+		Example:
-+		If user Need to disable the wakeup source '1c08000.qcom,pcie', and
-+		the wakeup dev node associated with this wakeup source is:
-+			cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie"
-+		Then for disabling this wakeup source :
-+			echo wakeup3 > /sys/class/wakeup/disable_ws
-diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
-index 924fac493c4f..497402a28028 100644
---- a/drivers/base/power/wakeup_stats.c
-+++ b/drivers/base/power/wakeup_stats.c
-@@ -15,6 +15,7 @@
- #include <linux/kobject.h>
- #include <linux/slab.h>
- #include <linux/timekeeping.h>
-+#include <linux/uaccess.h>
+Changes from v1:
+ - Fix whitespace issue pointed out by Randy
+
+ drivers/gpu/drm/Kconfig            | 42 ------------------------------
+ drivers/gpu/drm/amd/amdgpu/Kconfig | 22 ++++++++++++++++
+ drivers/gpu/drm/radeon/Kconfig     | 22 ++++++++++++++++
+ 3 files changed, 44 insertions(+), 42 deletions(-)
+
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index 6c2256e8474be..24fa9ccd92a4e 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -234,50 +234,8 @@ source "drivers/gpu/drm/i2c/Kconfig"
  
- #include "power.h"
+ source "drivers/gpu/drm/arm/Kconfig"
  
-@@ -208,9 +209,71 @@ void wakeup_source_sysfs_remove(struct wakeup_source *ws)
- 	device_unregister(ws->dev);
- }
+-config DRM_RADEON
+-	tristate "ATI Radeon"
+-	depends on DRM && PCI && MMU
+-	depends on AGP || !AGP
+-	select FW_LOADER
+-	select DRM_DISPLAY_DP_HELPER
+-	select DRM_DISPLAY_HELPER
+-        select DRM_KMS_HELPER
+-        select DRM_TTM
+-	select DRM_TTM_HELPER
+-	select POWER_SUPPLY
+-	select HWMON
+-	select BACKLIGHT_CLASS_DEVICE
+-	select INTERVAL_TREE
+-	help
+-	  Choose this option if you have an ATI Radeon graphics card.  There
+-	  are both PCI and AGP versions.  You don't need to choose this to
+-	  run the Radeon in plain VGA mode.
+-
+-	  If M is selected, the module will be called radeon.
+-
+ source "drivers/gpu/drm/radeon/Kconfig"
  
-+static ssize_t disable_ws_store(struct class *class,
-+				struct class_attribute *attr,
-+				const char *buf, size_t len)
-+{
-+	struct device		*dev;
-+	struct wakeup_source	*ws;
-+	char                    *ws_name;
-+	int                     status;
-+
-+	ws_name = kzalloc(len+1, GFP_KERNEL);
-+	if (!ws_name)
-+		return -ENOMEM;
-+
-+	if (sscanf(buf, "%s", ws_name) != 1)
-+		return -EFAULT;
-+
-+	dev = class_find_device_by_name(wakeup_class, ws_name);
-+	if (!dev) {
-+		pr_err("%s : wakeup device not found\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	ws = dev_get_drvdata(dev);
-+	if (ws->dev->parent != NULL) {
-+
-+		status = device_wakeup_disable(ws->dev->parent);
-+		if (status < 0) {
-+			/* In case of virtual device, return code will be -EINVAL
-+			 * then unregister the wakeup source associated with it
-+			 */
-+			wakeup_source_unregister(ws);
-+		}
-+	} else
-+		/* If the parent device is NULL, just unregister the wakeup source */
-+		wakeup_source_unregister(ws);
-+
-+	return len;
-+}
-+
-+static CLASS_ATTR_WO(disable_ws);
-+
-+static struct attribute *wakeup_class_attrs[] = {
-+	&class_attr_disable_ws.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(wakeup_class);
-+
- static int __init wakeup_sources_sysfs_init(void)
- {
--	wakeup_class = class_create(THIS_MODULE, "wakeup");
-+	int status;
-+
-+	wakeup_class = kzalloc(sizeof(*wakeup_class), GFP_KERNEL);
-+	if (!wakeup_class)
-+		return -ENOMEM;
-+
-+	wakeup_class->name = "wakeup";
-+	wakeup_class->owner = THIS_MODULE;
-+	wakeup_class->class_groups = wakeup_class_groups;
-+
-+	status = class_register(wakeup_class);
-+
-+	if (status < 0) {
-+		pr_err("%s: class register failed %d\n", __func__, status);
-+		return status;
-+	}
+-config DRM_AMDGPU
+-	tristate "AMD GPU"
+-	depends on DRM && PCI && MMU
+-	select FW_LOADER
+-	select DRM_DISPLAY_DP_HELPER
+-	select DRM_DISPLAY_HDMI_HELPER
+-	select DRM_DISPLAY_HELPER
+-	select DRM_KMS_HELPER
+-	select DRM_SCHED
+-	select DRM_TTM
+-	select DRM_TTM_HELPER
+-	select POWER_SUPPLY
+-	select HWMON
+-	select BACKLIGHT_CLASS_DEVICE
+-	select INTERVAL_TREE
+-	select DRM_BUDDY
+-	help
+-	  Choose this option if you have a recent AMD Radeon graphics card.
+-
+-	  If M is selected, the module will be called amdgpu.
+-
+ source "drivers/gpu/drm/amd/amdgpu/Kconfig"
  
- 	return PTR_ERR_OR_ZERO(wakeup_class);
- }
+ source "drivers/gpu/drm/nouveau/Kconfig"
+diff --git a/drivers/gpu/drm/amd/amdgpu/Kconfig b/drivers/gpu/drm/amd/amdgpu/Kconfig
+index 7777d55275de8..36b1206124cff 100644
+--- a/drivers/gpu/drm/amd/amdgpu/Kconfig
++++ b/drivers/gpu/drm/amd/amdgpu/Kconfig
+@@ -1,4 +1,26 @@
+ # SPDX-License-Identifier: MIT
++
++config DRM_AMDGPU
++	tristate "AMD GPU"
++	depends on DRM && PCI && MMU
++	select FW_LOADER
++	select DRM_DISPLAY_DP_HELPER
++	select DRM_DISPLAY_HDMI_HELPER
++	select DRM_DISPLAY_HELPER
++	select DRM_KMS_HELPER
++	select DRM_SCHED
++	select DRM_TTM
++	select DRM_TTM_HELPER
++	select POWER_SUPPLY
++	select HWMON
++	select BACKLIGHT_CLASS_DEVICE
++	select INTERVAL_TREE
++	select DRM_BUDDY
++	help
++	  Choose this option if you have a recent AMD Radeon graphics card.
++
++	  If M is selected, the module will be called amdgpu.
++
+ config DRM_AMDGPU_SI
+ 	bool "Enable amdgpu support for SI parts"
+ 	depends on DRM_AMDGPU
+diff --git a/drivers/gpu/drm/radeon/Kconfig b/drivers/gpu/drm/radeon/Kconfig
+index 52819e7f1fca1..5b0201cbf6b32 100644
+--- a/drivers/gpu/drm/radeon/Kconfig
++++ b/drivers/gpu/drm/radeon/Kconfig
+@@ -1,4 +1,26 @@
+ # SPDX-License-Identifier: MIT
++
++config DRM_RADEON
++	tristate "ATI Radeon"
++	depends on DRM && PCI && MMU
++	depends on AGP || !AGP
++	select FW_LOADER
++	select DRM_DISPLAY_DP_HELPER
++	select DRM_DISPLAY_HELPER
++	select DRM_KMS_HELPER
++	select DRM_TTM
++	select DRM_TTM_HELPER
++	select POWER_SUPPLY
++	select HWMON
++	select BACKLIGHT_CLASS_DEVICE
++	select INTERVAL_TREE
++	help
++	  Choose this option if you have an ATI Radeon graphics card.  There
++	  are both PCI and AGP versions.  You don't need to choose this to
++	  run the Radeon in plain VGA mode.
++
++	  If M is selected, the module will be called radeon.
++
+ config DRM_RADEON_USERPTR
+ 	bool "Always enable userptr support"
+ 	depends on DRM_RADEON
 -- 
-2.25.1
+2.36.1
 

@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552095A0B04
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67BE5A0B13
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239403AbiHYIH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S239417AbiHYIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239267AbiHYIHw (ORCPT
+        with ESMTP id S231615AbiHYII1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:07:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248729F748;
-        Thu, 25 Aug 2022 01:07:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 25 Aug 2022 04:08:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA2A286F;
+        Thu, 25 Aug 2022 01:08:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B0133337D2;
-        Thu, 25 Aug 2022 08:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661414867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VSnJsW614eoN98hwUcGZAIUy0ZpD071hooa/76ULZt8=;
-        b=r8i1qdeeaSAmHmUcueXLXw+qALbH0UYbew0hSHlqMd0V8yfjVydX4FjPnh32JCI5pZuXpB
-        S4CYREAPO3G1MP1MFKxX5fAy8k6b6GAQ/am3JEg2Rl+K1aAJOn+vr+9KBOCqdcmudZ4ad+
-        05VQBeWa/9h5YuDjEJGEsK0EHZUbcVg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6AA3413A8E;
-        Thu, 25 Aug 2022 08:07:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GJOiF9MtB2McJAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 25 Aug 2022 08:07:47 +0000
-Message-ID: <7d7af96c-5373-b23c-3d89-faf9c9d4ecb6@suse.com>
-Date:   Thu, 25 Aug 2022 10:07:46 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C722B8275D;
+        Thu, 25 Aug 2022 08:08:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88BFC433C1;
+        Thu, 25 Aug 2022 08:08:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661414903;
+        bh=XfOFqfzXCa+k6af03iVwJecCGx56YZxl1KlR3f3DDwo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k7a8g6XEzoLLalTff7jdXR7oSs5dsEF5weJVHSYu2BF1hpeWN+/X7jsgozSdbvSnB
+         ReC+X45k6PHHHFn0DipHpSjyHzMV63uAhLIw6DWFlFKgl6HKZnVKzbA1LvfAMhdRIf
+         DRdKaYfeYc9TVf1ck/xLK2sKM/blZ+3PvFrsnuNrc5rBKrcgzQKLtzyzHymL3UmPWr
+         4fsP1912cmlmoe0FtM3uFidIgLI9xE6+nt42KDeyLFHXnGfz98vIJRMCsRjWrH9HyD
+         TggA+jXNRdx+G0vYdZIlnUMDcop8C1DLzHsI7/JihiwmwfpOwq8dni2HE8WK61WHDS
+         N/5ftX8RLPYZQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH v3] x86/sgx: Do not consider unsanitized pages an error
+Date:   Thu, 25 Aug 2022 11:08:02 +0300
+Message-Id: <20220825080802.259528-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
-Content-Language: en-US
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        stable@vger.kernel.org,
-        Rustam Subkhankulov <subkhankulov@ispras.ru>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-References: <20220824142634.20966-1-jgross@suse.com>
- <396156e8-304e-ed68-8596-ee544dce0373@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <396156e8-304e-ed68-8596-ee544dce0373@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------b6b0qdBxOtbEO4tXkfZJViOt"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,137 +61,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------b6b0qdBxOtbEO4tXkfZJViOt
-Content-Type: multipart/mixed; boundary="------------zWOJ3PCd3WjMk9LP2KcU87s9";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Jan Beulich <jbeulich@suse.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- stable@vger.kernel.org, Rustam Subkhankulov <subkhankulov@ispras.ru>,
- xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Message-ID: <7d7af96c-5373-b23c-3d89-faf9c9d4ecb6@suse.com>
-Subject: Re: [PATCH] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
-References: <20220824142634.20966-1-jgross@suse.com>
- <396156e8-304e-ed68-8596-ee544dce0373@suse.com>
-In-Reply-To: <396156e8-304e-ed68-8596-ee544dce0373@suse.com>
+If sgx_dirty_page_list ends up being non-empty, currently this triggers
+WARN_ON(), which produces a lot of noise, and can potentially crash the
+kernel, depending on the kernel command line.
 
---------------zWOJ3PCd3WjMk9LP2KcU87s9
-Content-Type: multipart/mixed; boundary="------------MdFpeP08AYCMR9QQClmKfH70"
+However, if the SGX subsystem initialization is retracted, the sanitization
+process could end up in the middle, and sgx_dirty_page_list be left
+non-empty for legit reasons.
 
---------------MdFpeP08AYCMR9QQClmKfH70
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Replace this faulty behavior with more verbose version
+__sgx_sanitize_pages(), which can optionally print EREMOVE error code and
+the number of unsanitized pages.
 
-T24gMjUuMDguMjIgMDk6MzgsIEphbiBCZXVsaWNoIHdyb3RlOg0KPiBPbiAyNC4wOC4yMDIy
-IDE2OjI2LCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4gVGhlIGVycm9yIGV4aXQgb2YgcHJp
-dmNtZF9pb2N0bF9kbV9vcCgpIGlzIGNhbGxpbmcgdW5sb2NrX3BhZ2VzKCkNCj4+IHBvdGVu
-dGlhbGx5IHdpdGggcGFnZXMgYmVpbmcgTlVMTCwgbGVhZGluZyB0byBhIE5VTEwgZGVyZWZl
-cmVuY2UuDQo+Pg0KPj4gRml4IHRoYXQgYnkgY2FsbGluZyB1bmxvY2tfcGFnZXMgb25seSBp
-ZiBsb2NrX3BhZ2VzKCkgd2FzIGF0IGxlYXN0DQo+PiBwYXJ0aWFsbHkgc3VjY2Vzc2Z1bC4N
-Cj4+DQo+PiBDYzogPHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc+DQo+PiBGaXhlczogYWI1MjBi
-ZThjZDVkICgieGVuL3ByaXZjbWQ6IEFkZCBJT0NUTF9QUklWQ01EX0RNX09QIikNCj4+IFJl
-cG9ydGVkLWJ5OiBSdXN0YW0gU3Via2hhbmt1bG92IDxzdWJraGFua3Vsb3ZAaXNwcmFzLnJ1
-Pg0KPj4gU2lnbmVkLW9mZi1ieTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0K
-PiANCj4gUmV2aWV3ZWQtYnk6IEphbiBCZXVsaWNoIDxqYmV1bGljaEBzdXNlLmNvbT4NCj4g
-YWxiZWl0IEkgd29uZGVyIHdoZXRoZXIgeW91IGRpZCBjb25zaWRlciB0aGUgdmFyaWFudCBh
-Y3R1YWxseQ0KPiByZWR1Y2luZyBjb2RlIHNpemUgKGFuZCBhdm9pZGluZyB0aGUgbmVlZCBm
-b3IgeWV0IGFub3RoZXIgbGFiZWwpLA0KPiAuLi4NCj4gDQo+PiAtLS0gYS9kcml2ZXJzL3hl
-bi9wcml2Y21kLmMNCj4+ICsrKyBiL2RyaXZlcnMveGVuL3ByaXZjbWQuYw0KPj4gQEAgLTY3
-OSw3ICs2NzksNyBAQCBzdGF0aWMgbG9uZyBwcml2Y21kX2lvY3RsX2RtX29wKHN0cnVjdCBm
-aWxlICpmaWxlLCB2b2lkIF9fdXNlciAqdWRhdGEpDQo+PiAgIAlyYyA9IGxvY2tfcGFnZXMo
-a2J1ZnMsIGtkYXRhLm51bSwgcGFnZXMsIG5yX3BhZ2VzLCAmcGlubmVkKTsNCj4+ICAgCWlm
-IChyYyA8IDApIHsNCj4+ICAgCQlucl9wYWdlcyA9IHBpbm5lZDsNCj4gDQo+IC4uLiBkcm9w
-cGluZyB0aGlzIGxpbmUgYW5kIC4uLg0KPiANCj4+IC0JCWdvdG8gb3V0Ow0KPj4gKwkJZ290
-byB1bmxvY2s7DQo+PiAgIAl9DQo+PiAgIA0KPj4gICAJZm9yIChpID0gMDsgaSA8IGtkYXRh
-Lm51bTsgaSsrKSB7DQo+PiBAQCAtNjkxLDggKzY5MSw5IEBAIHN0YXRpYyBsb25nIHByaXZj
-bWRfaW9jdGxfZG1fb3Aoc3RydWN0IGZpbGUgKmZpbGUsIHZvaWQgX191c2VyICp1ZGF0YSkN
-Cj4+ICAgCXJjID0gSFlQRVJWSVNPUl9kbV9vcChrZGF0YS5kb20sIGtkYXRhLm51bSwgeGJ1
-ZnMpOw0KPj4gICAJeGVuX3ByZWVtcHRpYmxlX2hjYWxsX2VuZCgpOw0KPj4gICANCj4+IC1v
-dXQ6DQo+PiArIHVubG9jazoNCj4+ICAgCXVubG9ja19wYWdlcyhwYWdlcywgbnJfcGFnZXMp
-Ow0KPiANCj4gLi4uIHBhc3NpbmcgInBpbm5lZCIgaGVyZS4NCg0KTG9va2luZyBpbnRvIHRo
-aXMgSSBmb3VuZCBhbm90aGVyIHByb2JsZW06IE5PVCB1c2luZyBwaW5uZWQgaXMgd3Jvbmcs
-IGFzDQpsb2NrX3BhZ2VzKCkgZG9lc24ndCBndWFyYW50ZWUgdGhhdCBhbGwgcGFnZXMgd2Vy
-ZSByZWFsbHkgbG9ja2VkLiBJIHRoaW5rDQpsb2NrX3BhZ2VzKCkgc2hvdWxkIHJldHVybiBh
-biBlcnJvciwgaW4gY2FzZSBwaW5fdXNlcl9wYWdlc19mYXN0KCkgZGlkbid0DQpsb2NrIGFz
-IG1hbnkgcGFnZXMgZXMgZXhwZWN0ZWQuDQoNCg0KSnVlcmdlbg0K
---------------MdFpeP08AYCMR9QQClmKfH70
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Link: https://lore.kernel.org/linux-sgx/20220825051827.246698-1-jarkko@kernel.org/T/#u
+Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Fixes: 51ab30eb2ad4 ("x86/sgx: Replace section->init_laundry_list with sgx_dirty_page_list")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Cc: Haitao Huang <haitao.huang@linux.intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+---
+v3:
+- Remove WARN_ON().
+- Tuned comments and the commit message a bit.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+v2:
+- Replaced WARN_ON() with optional pr_info() inside
+  __sgx_sanitize_pages().
+- Rewrote the commit message.
+- Added the fixes tag.
+---
+ arch/x86/kernel/cpu/sgx/main.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
---------------MdFpeP08AYCMR9QQClmKfH70--
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 515e2a5f25bb..d204520a5e26 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -50,16 +50,17 @@ static LIST_HEAD(sgx_dirty_page_list);
+  * from the input list, and made available for the page allocator. SECS pages
+  * prepending their children in the input list are left intact.
+  */
+-static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
++static void __sgx_sanitize_pages(struct list_head *dirty_page_list, bool verbose)
+ {
+ 	struct sgx_epc_page *page;
++	int dirty_count = 0;
+ 	LIST_HEAD(dirty);
+ 	int ret;
+ 
+ 	/* dirty_page_list is thread-local, no need for a lock: */
+ 	while (!list_empty(dirty_page_list)) {
+ 		if (kthread_should_stop())
+-			return;
++			break;
+ 
+ 		page = list_first_entry(dirty_page_list, struct sgx_epc_page, list);
+ 
+@@ -90,14 +91,22 @@ static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
+ 			list_del(&page->list);
+ 			sgx_free_epc_page(page);
+ 		} else {
++			if (verbose)
++				pr_err_ratelimited(EREMOVE_ERROR_MESSAGE, ret, ret);
++
+ 			/* The page is not yet clean - move to the dirty list. */
+ 			list_move_tail(&page->list, &dirty);
++			dirty_count++;
+ 		}
+ 
+ 		cond_resched();
+ 	}
+ 
+ 	list_splice(&dirty, dirty_page_list);
++
++	/* Can happen, when the initialization is retracted: */
++	if (verbose && dirty_count > 0)
++		pr_info("%d unsanitized pages\n", dirty_count);
+ }
+ 
+ static bool sgx_reclaimer_age(struct sgx_epc_page *epc_page)
+@@ -394,11 +403,8 @@ static int ksgxd(void *p)
+ 	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
+ 	 * required for SECS pages, whose child pages blocked EREMOVE.
+ 	 */
+-	__sgx_sanitize_pages(&sgx_dirty_page_list);
+-	__sgx_sanitize_pages(&sgx_dirty_page_list);
+-
+-	/* sanity check: */
+-	WARN_ON(!list_empty(&sgx_dirty_page_list));
++	__sgx_sanitize_pages(&sgx_dirty_page_list, false);
++	__sgx_sanitize_pages(&sgx_dirty_page_list, true);
+ 
+ 	while (!kthread_should_stop()) {
+ 		if (try_to_freeze())
+-- 
+2.37.1
 
---------------zWOJ3PCd3WjMk9LP2KcU87s9--
-
---------------b6b0qdBxOtbEO4tXkfZJViOt
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMHLdIFAwAAAAAACgkQsN6d1ii/Ey8F
-vQf/begmdo9vfeilma7NyHZ1wW3LxiRrHtCaaxdCE4ertLAiYkgr4vogWsa0S6zgwKCQjGT/Hruv
-Iu74RiOrlXh9qHVGSbpiVZYfh23xqL4lk9uV4ytPV7s8b9im0a6R0pahV5jrvQKVRpsSQmjaiX6Q
-+rPgoVMp97W/m6f4EnT4/Tk+PXH6l2i75yZmzVzO/x45awG7IwNC0dWYAMFZ4J5XaIkWMEDDS4Gz
-T0QBj5uD8l1//44SnuKvw1u/rM3VRHH0/t7uW7A5iGX0QvWAG935SgTexijlg8JjHy3nEyLg2Foc
-6RpYii6bSHAYO4oB0pT3Cy2erShbQ431UnML9MY6zQ==
-=Px2J
------END PGP SIGNATURE-----
-
---------------b6b0qdBxOtbEO4tXkfZJViOt--

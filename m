@@ -2,155 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347A75A0F6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887C25A0F78
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbiHYLkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S239962AbiHYLmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236917AbiHYLkI (ORCPT
+        with ESMTP id S231529AbiHYLm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:40:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A322A25EB3;
-        Thu, 25 Aug 2022 04:40:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2240D33FAB;
-        Thu, 25 Aug 2022 11:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661427606; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=dwYP6pNMJ0bm8xlxtVpMlGoTLHlcq559EPLF7XX0wWg=;
-        b=C+MPh8mLFnN9CLM7FjKQOWdgVZYRDFXFB5CoDv9yeClqcY0jYdkWN9NppQSYqOGtsFRPo9
-        llIVVfYKHqCMkvMFoXXzJLHOUxQsCIuE1TSrgfoXYc80a6jPEMgghctgM2MdCM7R3fZLqu
-        fsBv5JQ9zYRfGwnkpB3TE73sX55oOoM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D754213517;
-        Thu, 25 Aug 2022 11:40:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wBBAM5VfB2OhfwAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 25 Aug 2022 11:40:05 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        stable@vger.kernel.org,
-        Rustam Subkhankulov <subkhankulov@ispras.ru>
-Subject: [PATCH v3] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
-Date:   Thu, 25 Aug 2022 13:40:04 +0200
-Message-Id: <20220825114004.24843-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 25 Aug 2022 07:42:29 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BB1AB197
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:42:26 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 27PBeRiT006924
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Thu, 25 Aug 2022 19:40:27 +0800 (CST)
+        (envelope-from Xuewen.Yan@unisoc.com)
+Received: from BJ10918PCW.spreadtrum.com (10.0.74.50) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 25 Aug 2022 19:40:28 +0800
+From:   Xuewen Yan <xuewen.yan@unisoc.com>
+To:     <viresh.kumar@linaro.org>, <lukasz.luba@arm.com>,
+        <amit.kachhap@gmail.com>, <daniel.lezcano@linaro.org>,
+        <rafael@kernel.org>
+CC:     <amitk@kernel.org>, <rui.zhang@intel.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuewen.yan94@gmail.com>, <di.shen@unisoc.com>
+Subject: [PATCH] thermal: Check the policy first in cpufreq_cooling_register
+Date:   Thu, 25 Aug 2022 19:40:17 +0800
+Message-ID: <20220825114018.1715-1-xuewen.yan@unisoc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.74.50]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 27PBeRiT006924
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error exit of privcmd_ioctl_dm_op() is calling unlock_pages()
-potentially with pages being NULL, leading to a NULL dereference.
+Since the policy needs to be accessed first when obtaining cpu devices,
+first check whether the policy is legal before this.
 
-Additionally lock_pages() doesn't check for pin_user_pages_fast()
-having been completely successful, resulting in potentially not
-locking all pages into memory. This could result in sporadic failures
-when using the related memory in user mode.
-
-Fix all of that by calling unlock_pages() always with the real number
-of pinned pages, which will be zero in case pages being NULL, and by
-checking the number of pages pinned by pin_user_pages_fast() matching
-the expected number of pages.
-
-Cc: <stable@vger.kernel.org>
-Fixes: ab520be8cd5d ("xen/privcmd: Add IOCTL_PRIVCMD_DM_OP")
-Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
 ---
-V2:
-- use "pinned" as parameter for unlock_pages() (Jan Beulich)
-- drop label "unlock" again (Jan Beulich)
-- add check for complete success of pin_user_pages_fast()
-V3:
-- continue after partial success of pin_user_pages_fast() (Jan Beulich)
----
- drivers/xen/privcmd.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+ drivers/thermal/cpufreq_cooling.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
-index 3369734108af..1ca7e3ea6fd4 100644
---- a/drivers/xen/privcmd.c
-+++ b/drivers/xen/privcmd.c
-@@ -581,7 +581,7 @@ static int lock_pages(
- 	struct privcmd_dm_op_buf kbufs[], unsigned int num,
- 	struct page *pages[], unsigned int nr_pages, unsigned int *pinned)
- {
--	unsigned int i;
-+	unsigned int i, off = 0;
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index b76293cc989c..7838b6e2dba5 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -501,17 +501,17 @@ __cpufreq_cooling_register(struct device_node *np,
+ 	struct thermal_cooling_device_ops *cooling_ops;
+ 	char *name;
  
- 	for (i = 0; i < num; i++) {
- 		unsigned int requested;
-@@ -589,19 +589,23 @@ static int lock_pages(
- 
- 		requested = DIV_ROUND_UP(
- 			offset_in_page(kbufs[i].uptr) + kbufs[i].size,
--			PAGE_SIZE);
-+			PAGE_SIZE) - off;
- 		if (requested > nr_pages)
- 			return -ENOSPC;
- 
- 		page_count = pin_user_pages_fast(
--			(unsigned long) kbufs[i].uptr,
-+			(unsigned long)kbufs[i].uptr + off * PAGE_SIZE,
- 			requested, FOLL_WRITE, pages);
--		if (page_count < 0)
--			return page_count;
-+		if (page_count <= 0)
-+			return page_count ? : -EFAULT;
- 
- 		*pinned += page_count;
- 		nr_pages -= page_count;
- 		pages += page_count;
++	if (IS_ERR_OR_NULL(policy)) {
++		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
++		return ERR_PTR(-EINVAL);
++	}
 +
-+		off = requested - page_count;
-+		if (off)
-+			i--;
+ 	dev = get_cpu_device(policy->cpu);
+ 	if (unlikely(!dev)) {
+ 		pr_warn("No cpu device for cpu %d\n", policy->cpu);
+ 		return ERR_PTR(-ENODEV);
  	}
  
- 	return 0;
-@@ -677,10 +681,8 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
- 	}
- 
- 	rc = lock_pages(kbufs, kdata.num, pages, nr_pages, &pinned);
--	if (rc < 0) {
--		nr_pages = pinned;
-+	if (rc < 0)
- 		goto out;
+-	if (IS_ERR_OR_NULL(policy)) {
+-		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
+-		return ERR_PTR(-EINVAL);
 -	}
- 
- 	for (i = 0; i < kdata.num; i++) {
- 		set_xen_guest_handle(xbufs[i].h, kbufs[i].uptr);
-@@ -692,7 +694,7 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
- 	xen_preemptible_hcall_end();
- 
- out:
--	unlock_pages(pages, nr_pages);
-+	unlock_pages(pages, pinned);
- 	kfree(xbufs);
- 	kfree(pages);
- 	kfree(kbufs);
+-
+ 	i = cpufreq_table_count_valid_entries(policy);
+ 	if (!i) {
+ 		pr_debug("%s: CPUFreq table not found or has no valid entries\n",
 -- 
-2.35.3
+2.25.1
 

@@ -2,66 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60805A1077
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716C95A1074
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238826AbiHYM36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S241632AbiHYM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241687AbiHYM3t (ORCPT
+        with ESMTP id S236033AbiHYM31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:29:49 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A006B2D9F;
-        Thu, 25 Aug 2022 05:29:42 -0700 (PDT)
-Received: from mail-ed1-f50.google.com ([209.85.208.50]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MJEtx-1ok5OA0BXX-00KkXr; Thu, 25 Aug 2022 14:29:41 +0200
-Received: by mail-ed1-f50.google.com with SMTP id z2so25904378edc.1;
-        Thu, 25 Aug 2022 05:29:40 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0LSyn14gF097vrNh3SQOMtuu9lYgzAfAI49h+16QRrqEdypkty
-        bOPjpK9K5L2vLBXG7CsqzpRIr7XUTWXtVNoRyxk=
-X-Google-Smtp-Source: AA6agR7KLEkAM4h39WPvK1n/vrpN5oyAY305pogjb5TjxCoIxGhtM1grQtWxFDj0eVYDz8/thf8BgPF1EzfN/sp1J84=
-X-Received: by 2002:a05:6402:5241:b0:447:47:5bf1 with SMTP id
- t1-20020a056402524100b0044700475bf1mr3109096edd.227.1661430580695; Thu, 25
- Aug 2022 05:29:40 -0700 (PDT)
+        Thu, 25 Aug 2022 08:29:27 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A49EB2CDC;
+        Thu, 25 Aug 2022 05:29:25 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MD2Hg4kgtz1N7WY;
+        Thu, 25 Aug 2022 20:25:51 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 20:29:22 +0800
+Received: from [10.174.176.245] (10.174.176.245) by
+ kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 20:29:21 +0800
+Message-ID: <fc76cc5d-e1ee-e84e-c47b-8daa4dea43a0@huawei.com>
+Date:   Thu, 25 Aug 2022 20:29:21 +0800
 MIME-Version: 1.0
-References: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
-In-Reply-To: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 25 Aug 2022 14:29:21 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3rteX8N2A-K-8bmvWaUhLJjXLV_8JNLCY0ezBzkQODUg@mail.gmail.com>
-Message-ID: <CAK8P3a3rteX8N2A-K-8bmvWaUhLJjXLV_8JNLCY0ezBzkQODUg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
-To:     Arminder Singh <arminders208@outlook.com>
-Cc:     linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:qvPLYgiha1jlBb0JrK6hiHWGeSURlujUywUeocgI9ZEDAtJYvGr
- wVB1YHXLUgPgdOxl0e2hFuHetCzWp4mgjPAZajlxfxEIW41JEMAjCi/oALI82XmS2/dqdSy
- acD3ogFEdkhoEs3OM4HaJqsRh9LCDxBmm5PVWk5ywbZn0SIhkRqXRYHDffDNvF6T/eyS2er
- k+Pql3k9Mq1L8nvcSrH0Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qZTU8vXY4lc=:sQ+HRRq0VCpNFsqrcu+2SF
- 22HwveonHAxEDBDAKM3M1avy3tQF+gwf1H81eCWlyjAgJA7/q8mqioynq6eq1FKhYZnXcByD/
- nPPrRaVBAGiHyN5H02PWGThDLxcZpNjuhdWAqkeB0DV39QY9fmcdKWq6rPUlx8wnr9SHUJ74J
- NToXw2SlpO/eyvitO0SnDIdthLVDXOGz0a3aJqFJSKluTwbzYIWYLJLypaGKi5HBJnRpimH4n
- CWfLZkHtaqjnnBz0CBOK6N1mrFHtbW1jd4/W9tz2t3rhUPZGt2iP3NxEC+Bi76rvPQL6ttKII
- 1Ym54Bg0xosj+jT89ZD8+y/SYEBsS/FgFhwSgZwDj/43tMn+GBNZoHUGOn2Yujm8PKjmViyzt
- e2OzRMNRUTYabIYHPAa88iQAQhovzNzirSqncusdohlf8FnDw/klfH3f0nui+d42FRQlAfqps
- mhuyQlMJRH6Nd5uamvqBDRDqCbnEiaSJTMrG3rmBLLJjEICmPNcXl6CtPICibiUUgM2zOSICs
- b6THRbirHH5EMOPr78Z3DB4uC0PQDGcpC8e6HDr6ZqLDgPHqo+jiRwn1soLWDxMxoLzoMayei
- 0K73jIN3NnA8/3kKdzaTDM6K5J5Kjv3cC/JolI3k8nf3WANLj0BH56vKIbRK/ocuu38oloYHS
- yj0B3zyUthTPaSkABN11lHZQr+C65Kole1DEnFNP/kg8OB8wCLoQ3MIZuTEyqrVsByPwgV6Hu
- gPx/+27MF0FE5S44YS1pg/k5KA4mnBEHRgWIng==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net] net/sched: fix netdevice reference leaks in
+ attach_one_default_qdisc()
+From:   "wanghai (M)" <wanghai38@huawei.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <brouer@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220817104646.22861-1-wanghai38@huawei.com>
+ <20220818105642.6d58e9d4@kernel.org>
+ <d1463bc2-6abd-7b01-5aac-8b7780b94cca@huawei.com>
+In-Reply-To: <d1463bc2-6abd-7b01-5aac-8b7780b94cca@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.245]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,57 +58,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 9:45 PM Arminder Singh <arminders208@outlook.com> wrote:
+
+在 2022/8/19 23:58, wanghai (M) 写道:
 >
-> I also fixed a quick checkpatch warning on line 303. "i ++" is now "i++".
-
-In general, anything that is mentioned in the changelog as "also done this"
-is worth splitting into a separate patch, or dropping from the patch, to
-make reviewing easier.
-
-In this case, I would just not do the trivial change. Alternatively you
-can consider doing a larger patch for coding style cleanup on the
-patch, as there are possibly other issues as well. Usually it's not worth
-changing things unless they hurt readability.
-
-> @@ -80,14 +81,21 @@ static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
->  {
->         int timeout = 10;
->         unsigned int status;
-> +       unsigned int bitmask = SMSTA_XEN | SMSTA_MTN;
+> 在 2022/8/19 1:56, Jakub Kicinski 写道:
+>> On Wed, 17 Aug 2022 18:46:46 +0800 Wang Hai wrote:
+>>> In attach_default_qdiscs(), when attach default qdisc (fq_codel) fails
+>>> and fallback to noqueue, if the original attached qdisc is not released
+>>> and a new one is directly attached, this will cause netdevice reference
+>>> leaks.
+>> Could you provide more details on the failure path? My preference would
+>> be to try to clean up properly there, if possible.
+> Hi Jakub.
 >
-> +       if (smbus->use_irq) {
-> +               reinit_completion(&smbus->irq_completion);
-> +               reg_write(smbus, REG_IMASK, bitmask);
-> +               wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
->                 status = reg_read(smbus, REG_SMSTA);
->         }
+> Here are the details of the failure. Do I need to do cleanup under the 
+> failed path?
 >
-> +
->         /* Got NACK? */
->         if (status & SMSTA_MTN)
->                 return -ENXIO;
-...
-> @@ -356,3 +366,12 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
+> If a dev has multiple queues and queue 0 fails to attach qdisc
+> because there is no memory in attach_one_default_qdisc(). Then
+> dev->qdisc will be noop_qdisc by default. But the other queues
+> may be able to successfully attach to default qdisc.
 >
->         return 0;
->  }
-> +
-> +irqreturn_t pasemi_irq_handler(int irq, void *dev_id)
-> +{
-> +       struct pasemi_smbus *smbus = (struct pasemi_smbus *)dev_id;
-> +
-> +       reg_write(smbus, REG_IMASK, 0);
-> +       complete(&smbus->irq_completion);
-> +       return IRQ_HANDLED;
-> +}
+> In this case, the fallback to noqueue process will be triggered
+>
+> static void attach_default_qdiscs(struct net_device *dev)
+> {
+>     ...
+>     if (!netif_is_multiqueue(dev) ||
+>         dev->priv_flags & IFF_NO_QUEUE) {
+>             ...
+>             netdev_for_each_tx_queue(dev, attach_one_default_qdisc, 
+> NULL); // queue 0 attach failed because -ENOBUFS, but the other queues 
+> attach successfully
+>             qdisc = txq->qdisc_sleeping;
+>             rcu_assign_pointer(dev->qdisc, qdisc); // dev->qdisc = 
+> &noop_qdisc
+>             ...
+>     }
+>     ...
+>     if (qdisc == &noop_qdisc) {
+>         ...
+>         netdev_for_each_tx_queue(dev, attach_one_default_qdisc, NULL); 
+> // Re-attach, but not release the previously created qdisc
+>         ...
+>     }
+> }
+>
+Hi Jakub.
+Do you have any other suggestions for this patch? Any replies would be 
+appreciated.
 
-I think the completion structure gets out of sync if you run into a
-timeout here,
-so a subsequent wait_for_completion will never complete after we missed one
-interrupt.
+>>> The following is the bug log:
+>>>
+>>> veth0: default qdisc (fq_codel) fail, fallback to noqueue
+>>> unregister_netdevice: waiting for veth0 to become free. Usage count 
+>>> = 32
+>>> leaked reference.
+>>>   qdisc_alloc+0x12e/0x210
+>>>   qdisc_create_dflt+0x62/0x140
+>>>   attach_one_default_qdisc.constprop.41+0x44/0x70
+>>>   dev_activate+0x128/0x290
+>>>   __dev_open+0x12a/0x190
+>>>   __dev_change_flags+0x1a2/0x1f0
+>>>   dev_change_flags+0x23/0x60
+>>>   do_setlink+0x332/0x1150
+>>>   __rtnl_newlink+0x52f/0x8e0
+>>>   rtnl_newlink+0x43/0x70
+>>>   rtnetlink_rcv_msg+0x140/0x3b0
+>>>   netlink_rcv_skb+0x50/0x100
+>>>   netlink_unicast+0x1bb/0x290
+>>>   netlink_sendmsg+0x37c/0x4e0
+>>>   sock_sendmsg+0x5f/0x70
+>>>   ____sys_sendmsg+0x208/0x280
+>>>
+>>> In attach_one_default_qdisc(), release the old one before attaching
+>>> a new qdisc to fix this bug.
+>>>
+>>> Fixes: bf6dba76d278 ("net: sched: fallback to qdisc noqueue if 
+>>> default qdisc setup fail")
+>>> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+>>> ---
+>>>   net/sched/sch_generic.c | 5 +++++
+>>>   1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+>>> index d47b9689eba6..87b61ef14497 100644
+>>> --- a/net/sched/sch_generic.c
+>>> +++ b/net/sched/sch_generic.c
+>>> @@ -1140,6 +1140,11 @@ static void attach_one_default_qdisc(struct 
+>>> net_device *dev,
+>>>         if (!netif_is_multiqueue(dev))
+>>>           qdisc->flags |= TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
+>>> +
+>>> +    if (dev_queue->qdisc_sleeping &&
+>>> +        dev_queue->qdisc_sleeping != &noop_qdisc)
+>>> +        qdisc_put(dev_queue->qdisc_sleeping);
+>>> +
+>>>       dev_queue->qdisc_sleeping = qdisc;
+>>>   }
+>> .
+>
+-- 
+Wang Hai
 
-Since this already causes a bus reset, I think you can just do
-reinit_completion() at the end of pasemi_reset() to avoid this.
-
-        Arnd

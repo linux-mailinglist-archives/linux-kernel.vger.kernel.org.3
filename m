@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C885A157D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C09C5A1581
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbiHYPU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S238624AbiHYPXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHYPUz (ORCPT
+        with ESMTP id S229454AbiHYPXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:20:55 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917E65E573;
-        Thu, 25 Aug 2022 08:20:54 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id y3so13839153ejc.1;
-        Thu, 25 Aug 2022 08:20:54 -0700 (PDT)
+        Thu, 25 Aug 2022 11:23:08 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B77FB69E7;
+        Thu, 25 Aug 2022 08:23:07 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id v4so18161956pgi.10;
+        Thu, 25 Aug 2022 08:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=WZ8MQtJvC/KpySjQ3aROp2zGmulLJPZErMxtsAeIFY8=;
-        b=leK+enpXEtB2wG033uP8ZGyjWLkAvT6bOnLKtKm8FQqsLCEGaMyEdAmDY+RbiC4b2Y
-         7LiDN4/bZSuLYDOWkVIRRlGcgIjeVDx52aCik96/+w2Wb7o9BiD8sOSbcoe1ahmxGrR/
-         oKQZuVDMci+Qm/zXV+8/KjxSe9QRX7gka2oF+Puo2SfvFiJXmmVQe+JH8IXB48BJMnSV
-         0Zehu0CRsEoAYLSBRMNxGZR0fVrUv/Xq5dnDDL7HTd7KeJYBsrDHxjaaxBEbOIVpbUeI
-         e8wUJSjGRWFZaJ1/2Ahr7jePwlaobNoN1dMpLLAHc5XDryTBRKlkgWDSQt/SUPi7msm0
-         Nu/w==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=sERSCfKpMmgiaBBPRfCq70Yp+FzXmqp9Gg4aLfwlsec=;
+        b=hnBMUgTu1qgmDE+P4BqRtyUQlZTWTsKiHQYBl5qdKHkmcjvh5s7xse+dXLZXJanm0H
+         1/1ojUZwYlj8afQjz4dGYIev/ip9MaoFQAK/fOLUVMzLCLqb/8NLmNrigoreFcTIxZwW
+         ChyfGHBfeh9MUIrBaXADmBjOVNhWoSaqZPlaScNQk+T+UKVy78kQKiAEMYcYui/oyfC7
+         K9sDDpB8AQDlqemEKTmikiWX2icYayhkSQwnT0zDBBKTv9SAfVig/MQIBFNkk44Bqp/4
+         Kh++PTp2XbVVTvgpYcxgg4NCjwsNvlehEUnC4tUopXwuTy5IwZ4QYDLUcILs35uHaega
+         +tMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=WZ8MQtJvC/KpySjQ3aROp2zGmulLJPZErMxtsAeIFY8=;
-        b=cCfWKZjkQvZWXRVbNPvTjiOjjsodH8l4UtVHDPnxvo2SkcRbfWItRLbfj0Ptt9jgOK
-         ATYepuEu1Dh6Sq4D/haUix/yskAI8SZgoUY3GUF0LmaeHvHWbsJ7DnmfPKIAyDfHMNDQ
-         n0INaozOln7C40SLxP0uh2C80RYt0yJpD2nhrnxKgdIBfde65qb+N8wdqiuhFi6JS0yo
-         Px6xdPaBUnLt6NcBR7v9wUSeOwnxUPXFIrm097w+SFLtrDDyBv1i31UtHfnYtO5Z+hm5
-         8uUmkKlLY/h+Pu07Q3hZYvCsM5egAdOwhiJt8VtM5Ww6lO2aUsHHXJEiErYzq0sK+huw
-         uYUA==
-X-Gm-Message-State: ACgBeo0rYddu3WtRCjxmQAfbd/8FpLRHpRBYuVtvaUKIb5CmdTOCuGNy
-        ftbQl0oW/G1Sz0NJw9eoFKRKAa+C45M=
-X-Google-Smtp-Source: AA6agR6i4DjhSEw5Gp1aeR1LlFSo+e1tW7M06AcHbsbz4bR53X/cpd8jeUi0ALEfMH444LQ7sCPKYw==
-X-Received: by 2002:a17:907:6eaa:b0:73d:81db:64d0 with SMTP id sh42-20020a1709076eaa00b0073d81db64d0mr2745039ejc.334.1661440853040;
-        Thu, 25 Aug 2022 08:20:53 -0700 (PDT)
-Received: from felia.fritz.box (200116b8261c3400c04988a24c54b107.dip.versatel-1u1.de. [2001:16b8:261c:3400:c049:88a2:4c54:b107])
-        by smtp.gmail.com with ESMTPSA id a24-20020a170906369800b00730979f568fsm2566580ejc.150.2022.08.25.08.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 08:20:52 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-spdx@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: add spdxexclude to LICENSES and SPDX stuff
-Date:   Thu, 25 Aug 2022 17:20:29 +0200
-Message-Id: <20220825152029.12660-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=sERSCfKpMmgiaBBPRfCq70Yp+FzXmqp9Gg4aLfwlsec=;
+        b=VihGWCxT0H57xIz9YYiX+a2lchUL1S4prUrNzkXYdDvg4ToUdLOP67uiZ/mkZPZTiy
+         +jb6Sphzh8Rwnfm4E1YlOFfSAH5pym9qW3wL3Pnwl5XeUk2G9P/Nlp19n6RJthkoqDsv
+         ifkBRVPd5afCvOFmY/J5qSWpniCfwELa8s5XzGcxA00Ya8/0h2cCSAoZabm0MYuP6BXs
+         tGTJyKq+M+Y+/oiGsHMFvfdwQBoQ9u4qJQETbJukMUIV1gROySvHfWJ4UF3Yd19L8Qng
+         ioTMpNBMstQUTVYn9m3OYzUX8qODoQ7AqjB0FfmAjxglxluRPPaOekhdLm9BxD8IKGPg
+         Ntdg==
+X-Gm-Message-State: ACgBeo3s5MOr2FhqNaDhSBQSy5sq439/hmOwKqSIhInEpCsv+hT9tDcO
+        Q8mSTw4WXBzPoBZ4DlyuFW50/WVtuBuezL1dO6ethE+w
+X-Google-Smtp-Source: AA6agR6U9SLlrt3DTF4rqwvHO9B2zZAcSk8TEg+ykZLSaeShpevNYMyikrace7g1C+FJQdG/+F1NL7tROG7YPqf+E0Y=
+X-Received: by 2002:a63:d84e:0:b0:42b:5834:fd73 with SMTP id
+ k14-20020a63d84e000000b0042b5834fd73mr2170721pgj.506.1661440987087; Thu, 25
+ Aug 2022 08:23:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220816183911.2517173-1-robh@kernel.org>
+In-Reply-To: <20220816183911.2517173-1-robh@kernel.org>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Thu, 25 Aug 2022 17:22:55 +0200
+Message-ID: <CAOiHx=k1=GG7JNBJ-mqySSqv3d2OeLzWP+Vf1fXKtf0t-O+Kpg@mail.gmail.com>
+Subject: Re: [RFC] dt-bindings: pinctrl: brcm: Ensure all child node
+ properties are documented
+To:     Rob Herring <robh@kernel.org>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
+        linux-gpio@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 0509b270a358 ("scripts/spdxcheck: Put excluded files and directories
-into a separate file") moved excluded files to the new file
-scripts/spdxexclude, but did not adjust the MAINTAINERS section. The file
-scripts/spdxexclude clearly belongs to LICENSES and SPDX stuff.
+On Tue, 16 Aug 2022 at 20:39, Rob Herring <robh@kernel.org> wrote:
+>
+> The Broadcom pinctrl bindings are incomplete for child nodes as they are
+> missing 'unevaluatedProperties: false' to prevent unknown properties.
+> Fixing this reveals many warnings including having grandchild nodes in some
+> cases.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> This recursive schema requires a fix not yet committed in dtschema.
+>
+> I'm looking for feedback on whether group->pins or group->groups is the
+> right fix here. There's more warnings with this change in the gpio-sysctl
+> bindings.
 
-Add a corresponding file entry.
+The answer is "yes", though pins is probably the closest for most.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+bcm6318 has multiple field-per-pin registers, where each pin is
+controlled separately, with more fields than available GPIOs, and the
+pins outside the GPIO range controlling other functions, like
+switching the second USB port between host and client mode.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8022a4dd2ef3..b1b6e6ee2a0c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11622,6 +11622,7 @@ F:	Documentation/process/license-rules.rst
- F:	LICENSES/
- F:	scripts/spdxcheck-test.sh
- F:	scripts/spdxcheck.py
-+F:	scripts/spdxexclude
- 
- LINEAR RANGES HELPERS
- M:	Mark Brown <broonie@kernel.org>
--- 
-2.17.1
+bcm6328/6362/6368/63268 have two registers. The first one enables an
+alternative function for the first 32 GPIOs, with a 1:1 mapping of
+bits to GPIO. The second one enables a function for whole, arbitrary
+groups. These groups can overlap, and may also target pins outside the
+first 32 GPIOs. The actual pins in use are not documented, and can
+sometimes be guessed/inferred by the function names (e.g. "GPIO35"),
+sometimes not ("NAND", "UTOPIA").
 
+bcm6358 has only the groups register, which also includes non GPIO
+related functions, like inversing the MII clocks for the integrated
+macs.
+
+Not supported is bcm6348, which would be the only one where groups
+would definitely make more sense: there are 5 groups of 8 GPIOs, where
+each group can be set to a certain function (but not all functions are
+valid for all groups). E.g. for PCI support, you would need to set the
+fields to PCI for groups 0, 1 and 3 (and 2 and 5 could be set to a
+different function). You can ignore this though, as bcm6348 is ancient
+(doesn't even support ADSL2+).
+
+Hope that helps a bit.
+
+Best regards,
+Jonas

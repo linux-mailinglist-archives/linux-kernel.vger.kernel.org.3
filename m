@@ -2,118 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF705A0CA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C4F5A0CA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240074AbiHYJbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S237540AbiHYJbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiHYJbJ (ORCPT
+        with ESMTP id S238202AbiHYJba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:31:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0483874DEF;
-        Thu, 25 Aug 2022 02:31:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6070B827DC;
-        Thu, 25 Aug 2022 09:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56736C433D6;
-        Thu, 25 Aug 2022 09:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661419865;
-        bh=plUt9uMkO0KE9Ug185awFHVbd+XLpzhEW8EZU+WPwdI=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=gqHYU93y5S1V9afV+Fb301SVrj38bUxYiBnCmzv80PNF/rfxbw6VEKcGtNIm6lgzA
-         FzV4RrxBUQ5WH5wzreUErNhfU2Toi01OiX0D7VMwZYSSN7PS6ObxqJs2JjSq1+LuuW
-         zlIz+TanoZKGu+0tjaf6FsyJtYMiW9Fe5Z+viJOvYJ0PzKLqkxdC1rTp0muh/B5riu
-         1f7OpaFdgWDCWbUp9HbTJnQdAqRUD0YmZn2d+SLJA/YvZn/FaV5JtgU2Y8JCwJ24gh
-         /RtJrd1XSnbssBUgFJ44+qocx71uf7a3F9UV6BJ9zN/vT5hJ8Ju1Qwo6LXclOwCaae
-         pZGyaRtMKGF6Q==
-Date:   Thu, 25 Aug 2022 11:31:01 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Karthik Alapati <mail@karthek.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: hidraw: fix memory leak in hidraw_release()
-In-Reply-To: <YuKuldGx55BB+hrd@karthik-strix-linux.karthek.com>
-Message-ID: <nycvar.YFH.7.76.2208251130510.19850@cbobk.fhfr.pm>
-References: <YuKuldGx55BB+hrd@karthik-strix-linux.karthek.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 25 Aug 2022 05:31:30 -0400
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DAC785A9
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:31:27 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MCyQP1P46zMqDVD;
+        Thu, 25 Aug 2022 11:31:25 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MCyQN3ghkzlh8TL;
+        Thu, 25 Aug 2022 11:31:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661419885;
+        bh=CkxqIj5ppbkjqi2GIhMLEArRVaHpESPBLrlgJrYmOqs=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=jh+9OLvqNwAbhISkiftw4MmTNT4pHs+fZpj4FpkmLFc/cc5INadRj05vaTMzHp0TH
+         MvRiVzPfi6dOPgpD+tkdN3pFsU85X2TTYnFfpbStn8bH6D1OhxGceky3/XxV8wRXBv
+         lZX5WzTRP7ylhT5IzCo7lcWDuYKM2LnNYyFQLImA=
+Message-ID: <eeb34913-5930-3e82-3d8f-a00e20798e4a@digikod.net>
+Date:   Thu, 25 Aug 2022 11:31:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Guillaume <guillaume.tucker@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+ <CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com>
+ <e4843a98-0bde-829c-f77a-56d45ba324d7@digikod.net>
+ <CADYN=9+CFEV9QpNbhi6gKqJr1V5Jc8Q5hGhCD_ESkRXP2X3gbQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH] selftests/landlock: fix broken include of
+ linux/landlock.h
+In-Reply-To: <CADYN=9+CFEV9QpNbhi6gKqJr1V5Jc8Q5hGhCD_ESkRXP2X3gbQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022, Karthik Alapati wrote:
 
-> Free the buffered reports before deleting the list entry.
+On 22/08/2022 16:00, Anders Roxell wrote:
+> On Sat, 13 Aug 2022 at 14:31, Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>>
+>> On 13/08/2022 12:01, Anders Roxell wrote:
+>>> On Wed, 3 Aug 2022 at 22:14, Guillaume Tucker
+>>> <guillaume.tucker@collabora.com> wrote:
+>>>>
+>>>> Revert part of the earlier changes to fix the kselftest build when
+>>>> using a sub-directory from the top of the tree as this broke the
+>>>> landlock test build as a side-effect when building with "make -C
+>>>> tools/testing/selftests/landlock".
+>>>>
+>>>> Reported-by: Mickaël Salaün <mic@digikod.net>
+>>>> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
+>>>> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+>>>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>>>
+>>> Building with this patch doesn't work, it gives this output:
+>>> make[3]: Entering directory
+>>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+>>> make[3]: Leaving directory
+>>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+>>> make[3]: *** No rule to make target
+>>> '/home/anders/.cache/tuxmake/builds/78/build/kselftest/landlock/base_test',
+>>> needed by 'all'.  Stop.
+>>>
+>>> I'm building like this:
+>>> tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-12
+>>> --kconfig defconfig kselftest
+>>>
+>>> which translates into this make command:
+>>> make --silent --keep-going --jobs=32
+>>> O=/home/anders/.cache/tuxmake/builds/78/build
+>>> INSTALL_PATH=/home/anders/.cache/tuxmake/builds/78/build/kselftest_install
+>>> ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- kselftest-install
+>>
+>> This works well for me.
 > 
-> BUG: memory leak
-> unreferenced object 0xffff88810e72f180 (size 32):
->   comm "softirq", pid 0, jiffies 4294945143 (age 16.080s)
->   hex dump (first 32 bytes):
->     64 f3 c6 6a d1 88 07 04 00 00 00 00 00 00 00 00  d..j............
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff814ac6c3>] kmemdup+0x23/0x50 mm/util.c:128
->     [<ffffffff8357c1d2>] kmemdup include/linux/fortify-string.h:440 [inline]
->     [<ffffffff8357c1d2>] hidraw_report_event+0xa2/0x150 drivers/hid/hidraw.c:521
->     [<ffffffff8356ddad>] hid_report_raw_event+0x27d/0x740 drivers/hid/hid-core.c:1992
->     [<ffffffff8356e41e>] hid_input_report+0x1ae/0x270 drivers/hid/hid-core.c:2065
->     [<ffffffff835f0d3f>] hid_irq_in+0x1ff/0x250 drivers/hid/usbhid/hid-core.c:284
->     [<ffffffff82d3c7f9>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1670
->     [<ffffffff82d3cc26>] usb_hcd_giveback_urb+0x1b6/0x1d0 drivers/usb/core/hcd.c:1747
->     [<ffffffff82ef1e14>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
->     [<ffffffff812f50a8>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1474
->     [<ffffffff812f5586>] expire_timers kernel/time/timer.c:1519 [inline]
->     [<ffffffff812f5586>] __run_timers.part.0+0x316/0x430 kernel/time/timer.c:1790
->     [<ffffffff812f56e4>] __run_timers kernel/time/timer.c:1768 [inline]
->     [<ffffffff812f56e4>] run_timer_softirq+0x44/0x90 kernel/time/timer.c:1803
->     [<ffffffff848000e6>] __do_softirq+0xe6/0x2ea kernel/softirq.c:571
->     [<ffffffff81246db0>] invoke_softirq kernel/softirq.c:445 [inline]
->     [<ffffffff81246db0>] __irq_exit_rcu kernel/softirq.c:650 [inline]
->     [<ffffffff81246db0>] irq_exit_rcu+0xc0/0x110 kernel/softirq.c:662
->     [<ffffffff84574f02>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1106
->     [<ffffffff84600c8b>] asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
->     [<ffffffff8458a070>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
->     [<ffffffff8458a070>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
->     [<ffffffff8458a070>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
->     [<ffffffff8458a070>] acpi_idle_do_entry+0xc0/0xd0 drivers/acpi/processor_idle.c:554
+> Interesting
+
+I used this command (inspired by yours):
+
+make --silent --keep-going --jobs=32 "O=${HOME}/build" 
+"INSTALL_PATH=${HOME}/build/kselftest_install" ARCH=x86_64 
+CROSS_COMPILE=x86_64-linux-gnu- kselftest-install
+
+Can you run this command without using tuxmake?
+
+
 > 
-> Link: https://syzkaller.appspot.com/bug?id=19a04b43c75ed1092021010419b5e560a8172c4f
-> Reported-by: syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com
-> Signed-off-by: Karthik Alapati <mail@karthek.com>
-> ---
->  drivers/hid/hidraw.c | 2 ++
->  1 file changed, 2 insertions(+)
+>> Which commit is checkout?
 > 
-> diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
-> index 681614a8302a..197b1e7bf029 100644
-> --- a/drivers/hid/hidraw.c
-> +++ b/drivers/hid/hidraw.c
-> @@ -350,6 +350,8 @@ static int hidraw_release(struct inode * inode, struct file * file)
->  	down_write(&minors_rwsem);
->  
->  	spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
-> +	for (int i = list->tail; i < list->head; i++)
-> +		kfree(list->buffer[i].value);
->  	list_del(&list->node);
->  	spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
->  	kfree(list);
+> I used the latest next tag, I tried to on todays tag as well
+> next-20220822 and I see
+> the same issue.
+> building without 'O=...' I can build the landlock tests...
 
-Applied, thank you.
+Can you test it with Linux v5.19 and v6.0-rc2 and see if there is a 
+difference?
 
--- 
-Jiri Kosina
-SUSE Labs
+Is your workspace clean?
+What is the version of your make?
 
+Can you replace this line from the Makefile with static names?
+"src_test := $(wildcard *_test.c)"
+
+
+
+> 
+>>
+>>
+>>>
+>>> building without this patch works, see below:
+>>>
+>>> make[3]: Entering directory
+>>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+>>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
+>>> /home/anders/.cache/tuxmake/builds/77/build/usr/include    base_test.c
+>>>    -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/base_test
+>>> -lcap
+>>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
+>>> /home/anders/.cache/tuxmake/builds/77/build/usr/include    fs_test.c
+>>> -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/fs_test
+>>> -lcap
+>>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
+>>> /home/anders/.cache/tuxmake/builds/77/build/usr/include
+>>> ptrace_test.c  -o
+>>> /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/ptrace_test
+>>> -lcap
+>>> x86_64-linux-gnu-gcc -Wall -O2 -isystem
+>>> /home/anders/.cache/tuxmake/builds/77/build/usr/include    true.c  -o
+>>> /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/true
+>>> -static
+>>> make[3]: Leaving directory
+>>> '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+>> Does this work if you revert this patch, commit a917dd94b832
+>> ("selftests/landlock: drop deprecated headers dependency") and commit
+>> f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")?
+>>
+>> This patch mainly revert commit a917dd94b832, so I don't see the issue.
+>>
+>>
+>>>
+>>> Cheers,
+>>> Anders
+>>>
+>>>> ---
+>>>>    tools/testing/selftests/landlock/Makefile | 7 +++++--
+>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+>>>> index a6959df28eb0..02868ac3bc71 100644
+>>>> --- a/tools/testing/selftests/landlock/Makefile
+>>>> +++ b/tools/testing/selftests/landlock/Makefile
+>>>> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
+>>>>    TEST_GEN_PROGS_EXTENDED := true
+>>>>
+>>>>    OVERRIDE_TARGETS := 1
+>>>> +top_srcdir := ../../../..
+>>>>    include ../lib.mk
+>>>>
+>>>> +khdr_dir = $(top_srcdir)/usr/include
+>>>> +
+>>>>    $(OUTPUT)/true: true.c
+>>>>           $(LINK.c) $< $(LDLIBS) -o $@ -static
+>>>>
+>>>> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+>>>> -       $(LINK.c) $< $(LDLIBS) -o $@ -lcap
+>>>> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
+>>>> +       $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+>>>> --
+>>>> 2.30.2
+>>>>

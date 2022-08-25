@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4655A08AD
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFD85A08AB
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiHYGLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S234145AbiHYGLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiHYGLh (ORCPT
+        with ESMTP id S232439AbiHYGLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 Aug 2022 02:11:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9400B9C8E0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:11:34 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MCsvj2bFQz1N7Yq;
-        Thu, 25 Aug 2022 14:08:01 +0800 (CST)
-Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 25 Aug
- 2022 14:11:31 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>, <samuel@sholland.org>,
-        <brgl@bgdev.pl>, <andy.shevchenko@gmail.com>,
-        <mikelley@microsoft.com>, <lvjianmin@loongson.cn>,
-        <mark.rutland@arm.com>
-CC:     <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>
-Subject: [PATCH 2/2] irqchip/gic-v3-its: Release the allocated but unmapped bits in LPI maps
-Date:   Thu, 25 Aug 2022 14:08:19 +0800
-Message-ID: <20220825060819.74303-2-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220825060819.74303-1-liaochang1@huawei.com>
-References: <20220825060819.74303-1-liaochang1@huawei.com>
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82A09E2CD
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:11:36 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id d23so22524748lfl.13
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ummFVBGk0kSJ29azYUV4PMm88NyQ23LzzWJDNGG28Ko=;
+        b=OFtTB6mVUJ7bt1R90wBtz2Y6zQCVFUpiOuFR6YC6KJ3Y15humtnaF40mxEMcSq4Fj3
+         IeH6p4VgBaGRevW24zfAkORoqg6d9zBGd5onw0wtuYYPkQHJQpswVnr9XfDncaoaTd1p
+         ZK2EXKpA3/xUw6k0OJmc5V7raAnoKDI02lHDche9JSt9hLHI0mUD2+QjMezZtQIwVU/V
+         vqyuT8OcjcO+wXnsvv8i7QvZRwTkspGofiAtPDY4AXFeftS1ZNh3UKQ09+/7rp89BaR2
+         su15G0IEwNyOs9QPcqpJs8W5d7Vb6KjH4Oj72OaOfYFKNcVNOvf21ELAEMX/URcT2Fow
+         sYwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ummFVBGk0kSJ29azYUV4PMm88NyQ23LzzWJDNGG28Ko=;
+        b=3wek9uK5Gg4HUpp7NuAWOU+KW4zbqVxFAE0GmyuI1FSXHNxgJotdAvS80eH+/+eWh4
+         Po8HM7iflzQGBtJoZIoBE3i48F+2WCHswS+nWeHXv/x5zWGRKCm0/zEhG2iO0TmRE3LQ
+         4Lzyy6WCCOSYI1Ibuc/KIrbwE0vS37mP7CmsXRe3fFNOypiSqZLyyynLx4CeuJJyBNKU
+         22iEKor9lEBLVKmW2wpEdzScwmo3RW+N2a4vYNATgb8oo8hho3aWWLj8fJQrsEmb7E7d
+         +YTTgLmVCPiiodRmesj6NrkbW+2ITFfm1NK6Lgh7WaQrTWZw83YEd+VOzcese2Ro6Lzy
+         AI7Q==
+X-Gm-Message-State: ACgBeo2SgFimz0RARENyGsY05vFH8Niy7Uual9DDc+3QbmDUe9yMZfFT
+        FOoU5oqSdBgvAyy/1jf+MJfhcw==
+X-Google-Smtp-Source: AA6agR4niBBOUXc8ecge5sCF13gIkJ6mIJGsa30laM0Wak9E8xVD2qZSPleZA9pDzcn970EDeqF0YQ==
+X-Received: by 2002:a05:6512:220e:b0:492:db7f:e0b3 with SMTP id h14-20020a056512220e00b00492db7fe0b3mr618143lfu.142.1661407895137;
+        Wed, 24 Aug 2022 23:11:35 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id t19-20020a195f13000000b004896ed8dce3sm325213lfb.2.2022.08.24.23.11.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 23:11:34 -0700 (PDT)
+Message-ID: <3ff08ae9-a4b6-2b74-23cb-69ea1d7e1033@linaro.org>
+Date:   Thu, 25 Aug 2022 09:11:33 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.53]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: arm: mediatek: mmsys: change compatible for
+ MT8195
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
+Cc:     jason-jh.lin@mediatek.com, nancy.lin@mediatek.com,
+        ck.hu@mediatek.com, chunkuang.hu@kernel.org,
+        angelogioacchino.delregno@collabora.com, hsinyi@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220825055658.12429-1-rex-bc.chen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220825055658.12429-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If one hwirq allocated in ITS domain followed by some unmapped bits, the
-number of unmapped bits will be recorded, so that this hwirq and
-following unmapped bits could be released both.
+On 25/08/2022 08:56, Bo-Chen Chen wrote:
+> From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
+> 
+> For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> pipelines binding to 1 mmsys with the same power domain, the same
+> clock driver and the same mediatek-drm driver.
+> 
+> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
+> 2 different power domains, different clock drivers and different
+> mediatek-drm drivers.
 
-Reported-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
-Link: https://lore.kernel.org/lkml/3d3d0155e66429968cb4f6b4feeae4b3@kernel.org/
----
- drivers/irqchip/irq-gic-v3-its.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+I don't see binding to different clock drivers and anyway that's not
+really an argument here. Please focus in description on hardware
+properties, IOW, are devices compatible or different. What is the
+incompatible difference between VDOSYS0 and 1?
 
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 5ff09de6c48f..36a1bc88e832 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -3572,11 +3572,19 @@ static int its_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 		irqd = irq_get_irq_data(virq + i);
- 		irqd_set_single_target(irqd);
- 		irqd_set_affinity_on_activate(irqd);
-+		irqd_set_dangling(irqd, 0);
- 		pr_debug("ID:%d pID:%d vID:%d\n",
- 			 (int)(hwirq + i - its_dev->event_map.lpi_base),
- 			 (int)(hwirq + i), virq + i);
- 	}
- 
-+	/*
-+	 * In order to free dangling hwirq bits, kernel uses the irq_data
-+	 * of hwirq which is followed by dangling bits to record dangling
-+	 * number.
-+	 */
-+	irqd_set_dangling(irqd, (1 << get_count_order(nr_irqs)) - nr_irqs);
-+
- 	return 0;
- }
- 
-@@ -3617,12 +3625,16 @@ static void its_irq_domain_free(struct irq_domain *domain, unsigned int virq,
- 	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
- 	struct its_device *its_dev = irq_data_get_irq_chip_data(d);
- 	struct its_node *its = its_dev->its;
-+	unsigned int pos = its_get_event_id(d);
- 	int i;
- 
--	bitmap_release_region(its_dev->event_map.lpi_map,
--			      its_get_event_id(irq_domain_get_irq_data(domain, virq)),
-+	bitmap_release_region(its_dev->event_map.lpi_map, pos,
- 			      get_count_order(nr_irqs));
- 
-+	for (i = 0; i < d->dangling; i++)
-+		bitmap_release_region(its_dev->event_map.lpi_map,
-+				      pos + nr_irqs + i, get_count_order(1));
-+
- 	for (i = 0; i < nr_irqs; i++) {
- 		struct irq_data *data = irq_domain_get_irq_data(domain,
- 								virq + i);
--- 
-2.17.1
-
+Best regards,
+Krzysztof

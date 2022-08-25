@@ -2,127 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E935A0C84
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C945A0C85
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239810AbiHYJ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S239870AbiHYJ0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235388AbiHYJ0G (ORCPT
+        with ESMTP id S239645AbiHYJ0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:26:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8960961730;
-        Thu, 25 Aug 2022 02:26:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4081E5BCEF;
-        Thu, 25 Aug 2022 09:26:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661419563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=BYfTZFURvyLCFYVU3ltFgIRHLc50Lkg36j+xzInhtWI=;
-        b=qrtmchGnpdx4Li2CexVjMJHXy+6yN4kZSUZagt6K/wEDzX6fbtPxLO/TYsa0ADZmPk6Dkt
-        K0+ZYizhPYlyPeCuLO6HdEAkq3cpYHG7QUUP+BVo8f0nR91Gcn3E9LNVZPgqPttUFJTOUk
-        uepJ+vC6hOLcHab0OG+L32V3qNARRgs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 059DC13517;
-        Thu, 25 Aug 2022 09:26:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id luA+OypAB2M1RgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 25 Aug 2022 09:26:02 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        stable@vger.kernel.org,
-        Rustam Subkhankulov <subkhankulov@ispras.ru>
-Subject: [PATCH v2] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
-Date:   Thu, 25 Aug 2022 11:26:00 +0200
-Message-Id: <20220825092600.7188-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 25 Aug 2022 05:26:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA6B6B8EB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BdGxFPL+KIjC21nQmAX2fmTz8ytQukNeGAle/8e6kIU=; b=ab80gZrN8TMd/Waalzztpddtqh
+        Jf6ePkBfIX3m5JgX4qf1Si4kdzGAI8G4X+d+4+VuTC7gsy+rq+9BXQjJ2Ww3kAnakaAE9i54luaRW
+        o67REmBuocLyb8+5Bq538wmog6zUeO7zWJOdFjJMoTli53qnjyb+4L5TRW92nZCVYxKpShGmCeVDc
+        /WtkV/SY9xuCHtdfpV2YGvGrJsfVPchDPlOJD6CC42c3BjRPcxfhvHmBw/neuro7B7he2X6Vc2ZJp
+        erPHCisJVI1FXMSZSO/RFsiGqt5NZBbxrWwBOx8Tz1qRQeDOWM1BwES3fe3z7XDvogY1jgngUtIu5
+        6VWKYo+w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oR980-00H8Gx-9L; Thu, 25 Aug 2022 09:26:20 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2074298014D; Thu, 25 Aug 2022 11:26:19 +0200 (CEST)
+Date:   Thu, 25 Aug 2022 11:26:19 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, kan.liang@intel.com,
+        ak@linux.intel.com, namhyung.kim@kernel.org, irogers@google.com
+Subject: Re: [PATCH] perf/x86/intel/uncore: fix broken read_counter() for SNB
+ IMC PMU
+Message-ID: <YwdAOwS7AK/KrOfJ@worktop.programming.kicks-ass.net>
+References: <20220803160031.1379788-1-eranian@google.com>
+ <4cad9f06-f24d-a6e6-477b-5a00f64600ed@linux.intel.com>
+ <CABPqkBSGXwm_OFWt9tDq2WuXpuLtOJzekhiqH=c0_rOX6ZM2=g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABPqkBSGXwm_OFWt9tDq2WuXpuLtOJzekhiqH=c0_rOX6ZM2=g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error exit of privcmd_ioctl_dm_op() is calling unlock_pages()
-potentially with pages being NULL, leading to a NULL dereference.
+On Mon, Aug 15, 2022 at 03:28:36PM -0700, Stephane Eranian wrote:
+> On Thu, Aug 4, 2022 at 6:09 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> >
+> >
+> >
+> > On 2022-08-03 12:00 p.m., Stephane Eranian wrote:
+> > > Existing code was generating bogus counts for the SNB IMC bandwidth counters:
+> > >
+> > > $ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
+> > >      1.000327813           1,024.03 MiB  uncore_imc/data_reads/
+> > >      1.000327813              20.73 MiB  uncore_imc/data_writes/
+> > >      2.000580153         261,120.00 MiB  uncore_imc/data_reads/
+> > >      2.000580153              23.28 MiB  uncore_imc/data_writes/
+> > >
+> > > The problem was introduced by commit:
+> > >   07ce734dd8ad ("perf/x86/intel/uncore: Clean up client IMC")
+> > >
+> > > Where the read_counter callback was replace to point to the generic
+> > > uncore_mmio_read_counter() function.
+> > >
+> > > The SNB IMC counters are freerunnig 32-bit counters laid out contiguously in
+> > > MMIO. But uncore_mmio_read_counter() is using a readq() call to read from
+> > > MMIO therefore reading 64-bit from MMIO. Although this is okay for the
+> > > uncore_perf_event_update() function because it is shifting the value based
+> > > on the actual counter width to compute a delta, it is not okay for the
+> > > uncore_pmu_event_start() which is simply reading the counter  and therefore
+> > > priming the event->prev_count with a bogus value which is responsible for
+> > > causing bogus deltas in the perf stat command above.
+> > >
+> > > The fix is to reintroduce the custom callback for read_counter for the SNB
+> > > IMC PMU and use readl() instead of readq(). With the change the output of
+> > > perf stat is back to normal:
+> > > $ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
+> > >      1.000120987             296.94 MiB  uncore_imc/data_reads/
+> > >      1.000120987             138.42 MiB  uncore_imc/data_writes/
+> > >      2.000403144             175.91 MiB  uncore_imc/data_reads/
+> > >      2.000403144              68.50 MiB  uncore_imc/data_writes/
+> > >
+> > > Signed-off-by: Stephane Eranian <eranian@google.com>
+> >
+> > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> >
+> Any further comments?
 
-Additionally lock_pages() doesn't check for pin_user_pages_fast()
-having been completely successful, resulting in potentially not
-locking all pages into memory. This could result in sporadic failures
-when using the related memory in user mode.
-
-Fix all of that by calling unlock_pages() always with the real number
-of pinned pages, which will be zero in case pages being NULL, and by
-checking the number of patches pinned by pin_user_pages_fast()
-matching the expected number of pages.
-
-Cc: <stable@vger.kernel.org>
-Fixes: ab520be8cd5d ("xen/privcmd: Add IOCTL_PRIVCMD_DM_OP")
-Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- use "pinned" as parameter for unlock_pages() (Jan Beulich)
-- drop label "unlock" again (Jan Beulich)
-- add check for complete success of pin_user_pages_fast()
----
- drivers/xen/privcmd.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
-index 3369734108af..7dc62510635e 100644
---- a/drivers/xen/privcmd.c
-+++ b/drivers/xen/privcmd.c
-@@ -602,6 +602,10 @@ static int lock_pages(
- 		*pinned += page_count;
- 		nr_pages -= page_count;
- 		pages += page_count;
-+
-+		/* Exact reason isn't known, EFAULT is one possibility. */
-+		if (page_count < requested)
-+			return -EFAULT;
- 	}
- 
- 	return 0;
-@@ -677,10 +681,8 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
- 	}
- 
- 	rc = lock_pages(kbufs, kdata.num, pages, nr_pages, &pinned);
--	if (rc < 0) {
--		nr_pages = pinned;
-+	if (rc < 0)
- 		goto out;
--	}
- 
- 	for (i = 0; i < kdata.num; i++) {
- 		set_xen_guest_handle(xbufs[i].h, kbufs[i].uptr);
-@@ -692,7 +694,7 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
- 	xen_preemptible_hcall_end();
- 
- out:
--	unlock_pages(pages, nr_pages);
-+	unlock_pages(pages, pinned);
- 	kfree(xbufs);
- 	kfree(pages);
- 	kfree(kbufs);
--- 
-2.35.3
-
+Got lost in the holiday pile-up, applied!

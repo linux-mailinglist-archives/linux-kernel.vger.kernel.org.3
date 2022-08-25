@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488655A0A6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512305A0A74
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbiHYHjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S237119AbiHYHkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiHYHjc (ORCPT
+        with ESMTP id S235412AbiHYHkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:39:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4817AA1D50;
-        Thu, 25 Aug 2022 00:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=5mnLs7Y4Gk47LvAXvC/O24OQ7FRB6zlzOuskP6v5zy4=; b=wEPrqSQy5sJountzamcVS24FEQ
-        wKvk8qbmQszXnkHNSLAGAAwW/i/VCHJiUPG5BhlISz6hEGrWxTSlbEXar20E86djAeXShIK41hkYP
-        HFg2SbCaSxMEQQcglVP5GSzc/YmshCbDTT+EqPhiPVbpe3f+4eiuJcOEil7CzTLTZN+KQm4K+DXpL
-        mZkMl1LoRc1/h+D8dI0G9pYoqI6ia7A1yXYZASNepZcPM4OWquyPG1uPgz5OqYGkMCxJrCBcbWipk
-        ZG8rPiVEPZFfJTfnUY7KIWR42jM26GzanWo9FiH8965dZ1iyPW2QXhHdiQypYeCvIjI1bm7u4YlOd
-        7PWwtVtQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oR7Sa-009PZe-3G; Thu, 25 Aug 2022 07:39:28 +0000
-Message-ID: <59ae46dd-7fa3-a48f-58cb-a7a58d4e33ab@infradead.org>
-Date:   Thu, 25 Aug 2022 00:39:26 -0700
+        Thu, 25 Aug 2022 03:40:13 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA489A6B7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:40:11 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id w20so9221709edd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=RU54cpq6xFDfYIiWI0hjya9fxH7V6i4vjs7uIhxYr4o=;
+        b=hkghtKvrZenKgXZaC63trBWiQ+6Um1lBE9pUPkORWtKMQQW1/7mqvH6gmV65qY/wwZ
+         5njyRbUSsIS2WeD7dEKpvJR0sYG9kBUAh1wnKPTwZYGLmBeKMHvqp+Z3ATk4xsFDxXh6
+         0v+WbxpXU+ZYkAgqCzHZlwQW51CX1ceTU0l3Fo5EBdijTrAauS2Y7pNebEBBnWlcI+DG
+         /r9PZs4uHUR5JpyYMmGZBYCrvdE1leRV+BGvEdMEjDHYCDLE8k6E91BLmoqiAqeaPPZn
+         ZOieuFCWDMF2zfjQp5lv+d/SbRdOaI6Vb1m+vK4U+Uwyt1qUqX/3IcF8x/Hth0PfqDRj
+         KNaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=RU54cpq6xFDfYIiWI0hjya9fxH7V6i4vjs7uIhxYr4o=;
+        b=uXtX02V3cQvdz9AqaqgpB19s4ZLnLc9rrk7n/k4FPU0ucGRyyhMOxpaaXq36s9FlTs
+         Zf5qnz7XB1NoyEMe9cgyCFZ7k8hXIyrBHXMIqP7/Lrn7tDUbOJhILdoukVHd422jJ7X9
+         YiymEa7whcW9IQ5XxO6AXq9Bt6aiKPxdCNCy33GcZ/w2fVat1XGRiroBxZ+1/RtMkXue
+         g0gXgipTFfKQxqESSmz47QpKER+VGRcBsGb2y5vtIOB3jiezm8WKnXZHxCSsjBlH6MCq
+         Gd6LOnyg1P/FXWGjzJSHR6oRs/eR7zYth7obNgIRl1KYxp69hmrlkFlJViUcYOan65to
+         QRmg==
+X-Gm-Message-State: ACgBeo2whTAc0DytGfKBsM9xzFx9DfhxmNjAnq+WfikDy/tATSoMSFRh
+        bamZNn1qwR1iPSsQVQlFWn43Kg==
+X-Google-Smtp-Source: AA6agR6UIpby530LFJIjlq4/dasFIE0oy3awaLabyiNM3p7RD/h5t86m4/Vjyk1nnS01CCrVBVeL7Q==
+X-Received: by 2002:a05:6402:26c3:b0:446:c642:6b9c with SMTP id x3-20020a05640226c300b00446c6426b9cmr2126019edd.385.1661413210485;
+        Thu, 25 Aug 2022 00:40:10 -0700 (PDT)
+Received: from lb02065.fritz.box ([2001:9e8:142d:a900:eab:b5b1:a064:1d0d])
+        by smtp.gmail.com with ESMTPSA id jg31-20020a170907971f00b0072b3406e9c2sm2106267ejc.95.2022.08.25.00.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 00:40:09 -0700 (PDT)
+From:   Jack Wang <jinpu.wang@ionos.com>
+To:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] mmc: meson-mx-sdhc: Fix error check for dma_map_sg
+Date:   Thu, 25 Aug 2022 09:40:07 +0200
+Message-Id: <20220825074008.33349-2-jinpu.wang@ionos.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220825074008.33349-1-jinpu.wang@ionos.com>
+References: <20220825074008.33349-1-jinpu.wang@ionos.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] docs: Update version number from 5.x to 6.x in README.rst
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20220824080836.23087-1-lukas.bulwahn@gmail.com>
- <d5eca4a6-8a76-02e0-2f22-645341af8c2b@infradead.org>
- <CAKXUXMwLofvhBXqzdoq_q_89jZ8THU0WX=DY+RnCo=PN7QqspA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAKXUXMwLofvhBXqzdoq_q_89jZ8THU0WX=DY+RnCo=PN7QqspA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+dma_map_sg return 0 on error, also change the type for dma_len
+from int to unsigned int.
 
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-mmc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-amlogic@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
 
-On 8/25/22 00:35, Lukas Bulwahn wrote:
-> On Thu, Aug 25, 2022 at 5:24 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 8/24/22 01:08, Lukas Bulwahn wrote:
->>> A quick 'grep "5\.x" . -R' on Documentation shows that README.rst,
->>> 2.Process.rst and applying-patches.rst all mention the version number "5.x"
->>> for kernel releases.
->>>
->>> As the next release will be version 6.0, updating the version number to 6.x
->>> in README.rst seems reasonable.
->>>
->>> The description in 2.Process.rst is just a description of recent kernel
->>> releases, it was last updated in the beginning of 2020, and can be
->>> revisited at any time on a regular basis, independent of changing the
->>> version number from 5 to 6. So, there is no need to update this document
->>> now when transitioning from 5.x to 6.x numbering.
->>>
->>> The document applying-patches.rst is probably obsolete for most users
->>> anyway, a reader will sufficiently well understand the steps, even it
->>> mentions version 5 rather than version 6. So, do not update that to a
->>> version 6.x numbering scheme.
->>
->> Yeah. And I suspect that scripts/patch-kernel is even more obsolete
->> than applying-patches.rst.
->>
-> 
-> Randy, would you know if there are still users out there?
-> Would it help to replace this script with a minimal script that only
-> reports to "Please use git to obtain a recent repository. Update
-> versions and apply patches with git in a controlled way.".
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+---
+ drivers/mmc/host/meson-mx-sdhc-mmc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I have no idea, but I haven't seen any comments or references about it
-in many years. I think it would be safe to remove it, at least on a
-trial basis.
-
-
-> If someone complains, we revert the patch. If no one complains within
-> a year or two, we could consider shutting down the infrastructure
-> creating those patch archives as well, and delete the documentation
-> referring to that.
-
-Yes, something like that is probably in our future.
-
+diff --git a/drivers/mmc/host/meson-mx-sdhc-mmc.c b/drivers/mmc/host/meson-mx-sdhc-mmc.c
+index e92e63cb5641..da85c2f2acb8 100644
+--- a/drivers/mmc/host/meson-mx-sdhc-mmc.c
++++ b/drivers/mmc/host/meson-mx-sdhc-mmc.c
+@@ -381,14 +381,14 @@ static void meson_mx_sdhc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ static int meson_mx_sdhc_map_dma(struct mmc_host *mmc, struct mmc_request *mrq)
+ {
+ 	struct mmc_data *data = mrq->data;
+-	int dma_len;
++	unsigned int dma_len;
+ 
+ 	if (!data)
+ 		return 0;
+ 
+ 	dma_len = dma_map_sg(mmc_dev(mmc), data->sg, data->sg_len,
+ 			     mmc_get_dma_dir(data));
+-	if (dma_len <= 0) {
++	if (!dma_len) {
+ 		dev_err(mmc_dev(mmc), "dma_map_sg failed\n");
+ 		return -ENOMEM;
+ 	}
 -- 
-~Randy
+2.34.1
+

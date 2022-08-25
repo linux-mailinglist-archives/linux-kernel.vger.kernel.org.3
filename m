@@ -2,102 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4255A16D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7815A1710
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242073AbiHYQlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S243116AbiHYQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238069AbiHYQlH (ORCPT
+        with ESMTP id S243117AbiHYQnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:41:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F941B99D8;
-        Thu, 25 Aug 2022 09:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661445663; x=1692981663;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bK5Pr9tx4aF8qD5Hm5yfT5c8GZSZbo0EmA54sQj8Dug=;
-  b=O9nFwkyJR28qcCsHGsaFnXXfDxMoHFRZiuEw3h5ykINYQkWMqq+mAipx
-   dXIdAwka1OsO0WcArBJ0Z63zmcRzmjzPixb88nHVoVtyVNyeacjzH4N2f
-   gR6xWMMMnDcGWqDAeWHvbH25ubCOBerE4Xucpkut3kRA2Sfcn6G5utrxl
-   c3k03n+6YymJoBL3QCOKZBZE+gMAWkAn/zIS2HENO/R/0ogoxP4V8Az//
-   3JfyxFtjMx0sP0LetNzKf2ccKRSkgeZ183Et10mngXUftnpdpHRLrsNWH
-   R0IMLtgqZY5KVDrEnQQ3UD+YOkf2vrrR8v1ki9wQw6X724j6znWVChxpd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="380586964"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="380586964"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:41:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="786072443"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 25 Aug 2022 09:41:00 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 71E621C3; Thu, 25 Aug 2022 19:41:14 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: [PATCH v1 2/5] ACPI: bus: Refactor acpi_driver_match_device() for better readability
-Date:   Thu, 25 Aug 2022 19:41:00 +0300
-Message-Id: <20220825164103.27694-2-andriy.shevchenko@linux.intel.com>
+        Thu, 25 Aug 2022 12:43:04 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6440EBB928
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:35 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso5663629pjr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=OtUK9OLMWdL6AUc3ZfpyXK1kgh1agdbXcj5hc+979G8=;
+        b=xHJiXgBT7PEkZdMevyBPSnrJlZZCDwl6ozciskiNf9lpSMP/BhlEA/uOVlntwEOMoP
+         8AsYSYGjz+lts4hRawuyJ6l6j1hjlPAVOBqnpGUKXbtEw9ZdqEkFmWYzCoRhk5hEVMqd
+         LookuDXfD+8p7qtuCBQ2Us57jbxcmrBlqm9sBNsMnW+PY5fnbQg7FmU8Pv54Ao1pZ+jO
+         Qlv7oV81DA9EYTvqlGNwLjuuhXOAJPyHxTpLFABwb7wAi1ZGz+PtCwoQyKk7qJ6TBCwf
+         YrTIDzukpS+oc/W+qzGWsltS5E3XkCXyR6vIOWTqg9xpCYf+3ygIVs+5KfRLmrQe7Qwx
+         altQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=OtUK9OLMWdL6AUc3ZfpyXK1kgh1agdbXcj5hc+979G8=;
+        b=EF5g+YnWAMzWHn2rcDXyDe7+SDI/NCvAMLitPzsWRsC3nL71vgorFmZ1gotOrD7Q5D
+         kzIC6qzN9mjO/1WDdsVZpHrjNsWIllBCeZc8Ewo79eh0IjQSs/JpSTVvPox47EWmgDch
+         y6xCGH46j/t6D+8nmEv2dLLkWR7Ppm0MGqImQQQtH/fj+EBKw5XaGBk8nhVQbmVCrYEk
+         8cvnOGXjs9HLkOyKR1d6hOVz3pvihxExCDY8HLA2XFUBMoAZn+FNKpd9qpxEhY8J16Tf
+         cNMXiXC0uKfFkLXtBSw/uZePIdLuKsQCJohToJQY/6yBCgo3tonRaHJePH7NeBDdnmQ/
+         YHXA==
+X-Gm-Message-State: ACgBeo1Xtd7CGwld6RKMckvjIkwuzJ/hmEVvUVicHcUvwxZDodnA1Xor
+        7HYqLQd6UfrgGbcAoNGsEBL1Ig==
+X-Google-Smtp-Source: AA6agR4gxE/7slArmuUtR05sZfHFLCh81St/simPA+TXbSjCOklqEF54v1qmnT+n3VjgviN6ahhCMg==
+X-Received: by 2002:a17:902:f70f:b0:171:2572:4f5e with SMTP id h15-20020a170902f70f00b0017125724f5emr4422269plo.40.1661445754247;
+        Thu, 25 Aug 2022 09:42:34 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id b18-20020a62a112000000b005362314bf80sm12779408pff.67.2022.08.25.09.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:42:33 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     hannes@cmpxchg.org, tj@kernel.org, mkoutny@suse.com,
+        surenb@google.com
+Cc:     mingo@redhat.com, peterz@infradead.org, gregkh@linuxfoundation.org,
+        corbet@lwn.net, cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v4 00/10] sched/psi: some optimizations and extensions
+Date:   Fri, 26 Aug 2022 00:41:01 +0800
+Message-Id: <20220825164111.29534-1-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220825164103.27694-1-andriy.shevchenko@linux.intel.com>
-References: <20220825164103.27694-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With temporary variables for OF and ACPI IDs, it's easier to read
-the code. No functional change intended.
+Hi all,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/acpi/bus.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+This patch series are some optimizations and extensions for PSI.
 
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 8e87996607ec..c4d63c594d68 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -948,14 +948,13 @@ EXPORT_SYMBOL(acpi_match_device_ids);
- bool acpi_driver_match_device(struct device *dev,
- 			      const struct device_driver *drv)
- {
--	if (!drv->acpi_match_table)
--		return acpi_of_match_device(ACPI_COMPANION(dev),
--					    drv->of_match_table,
--					    NULL);
--
--	return __acpi_match_device(acpi_companion_match(dev),
--				   drv->acpi_match_table, drv->of_match_table,
--				   NULL, NULL);
-+	const struct acpi_device_id *acpi_ids = drv->acpi_match_table;
-+	const struct of_device_id *of_ids = drv->of_match_table;
-+
-+	if (!acpi_ids)
-+		return acpi_of_match_device(ACPI_COMPANION(dev), of_ids, NULL);
-+
-+	return __acpi_match_device(acpi_companion_match(dev), acpi_ids, of_ids, NULL, NULL);
- }
- EXPORT_SYMBOL_GPL(acpi_driver_match_device);
- 
+patch 1/10 fix periodic aggregation shut off problem introduced by earlier
+commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups").
+
+patch 2-4 are some misc optimizations, so put them in front of this series.
+
+patch 5/10 optimize task switch inside shared cgroups when in_memstall status
+of prev task and next task are different.
+
+patch 6/10 remove NR_ONCPU task accounting to save 4 bytes in the first
+cacheline to be used by the following patch 7/10, which introduce new
+PSI resource PSI_IRQ to track IRQ/SOFTIRQ pressure stall information.
+
+patch 8-9 cache parent psi_group in struct psi_group to speed up the
+hot iteration path.
+
+patch 10/10 introduce a per-cgroup interface "cgroup.pressure" to disable
+or re-enable PSI in the cgroup level, and we implement hiding and unhiding
+the pressure files per Tejun's suggestion[1], which depends on his work[2].
+
+[1] https://lore.kernel.org/all/YvqjhqJQi2J8RG3X@slm.duckdns.org/
+[2] https://lore.kernel.org/all/20220820000550.367085-1-tj@kernel.org/
+
+Performance test using mmtests/config-scheduler-perfpipe in
+/user.slice/user-0.slice/session-4.scope:
+
+                                 next                patched       patched/only-leaf
+Min       Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+1st-qrtle Time        8.90 (   0.00%)        8.58 (   3.63%)        8.05 (   9.58%)
+2nd-qrtle Time        8.94 (   0.00%)        8.61 (   3.65%)        8.09 (   9.50%)
+3rd-qrtle Time        8.99 (   0.00%)        8.65 (   3.75%)        8.15 (   9.35%)
+Max-1     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+Max-5     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+Max-10    Time        8.84 (   0.00%)        8.55 (   3.20%)        8.04 (   9.05%)
+Max-90    Time        9.04 (   0.00%)        8.67 (   4.10%)        8.18 (   9.51%)
+Max-95    Time        9.04 (   0.00%)        8.68 (   4.03%)        8.20 (   9.26%)
+Max-99    Time        9.07 (   0.00%)        8.73 (   3.82%)        8.25 (   9.11%)
+Max       Time        9.12 (   0.00%)        8.89 (   2.54%)        8.27 (   9.29%)
+Amean     Time        8.95 (   0.00%)        8.62 *   3.67%*        8.11 *   9.43%*
+
+Big thanks to Johannes Weiner, Tejun Heo and Michal Koutný for your
+suggestions and review!
+
+
+Changes in v4:
+ - Collect Acked-by tags from Johannes Weiner.
+ - Add many clear comments and changelogs per Johannes Weiner.
+ - Replace for_each_psi_group() with better open-code.
+ - Change to use better names cgroup_pressure_show() and
+   cgroup_pressure_write().
+ - Change to use better name psi_cgroup_restart() and only
+   call it on enabling.
+
+Changes in v3:
+ - Rebase on linux-next and reorder patches to put misc optimizations
+   patches in the front of this series.
+ - Drop patch "sched/psi: don't change task psi_flags when migrate CPU/group"
+   since it caused a little performance regression and it's just
+   code refactoring, so drop it.
+ - Don't define PSI_IRQ and PSI_IRQ_FULL when !CONFIG_IRQ_TIME_ACCOUNTING,
+   in which case they are not used.
+ - Add patch 8/10 "sched/psi: consolidate cgroup_psi()" make cgroup_psi()
+   can handle all cgroups including root cgroup, make patch 9/10 simpler.
+ - Rename interface to "cgroup.pressure" and add some explanation
+   per Michal's suggestion.
+ - Hide and unhide pressure files when disable/re-enable cgroup PSI,
+   depends on Tejun's work.
+
+Changes in v2:
+ - Add Acked-by tags from Johannes Weiner. Thanks for review!
+ - Fix periodic aggregation wakeup for common ancestors in
+   psi_task_switch().
+ - Add patch 7/10 from Johannes Weiner, which remove NR_ONCPU
+   task accounting to save 4 bytes in the first cacheline.
+ - Remove "psi_irq=" kernel cmdline parameter in last version.
+ - Add per-cgroup interface "cgroup.psi" to disable/re-enable
+   PSI stats accounting in the cgroup level.
+
+
+Chengming Zhou (9):
+  sched/psi: fix periodic aggregation shut off
+  sched/psi: don't create cgroup PSI files when psi_disabled
+  sched/psi: save percpu memory when !psi_cgroups_enabled
+  sched/psi: move private helpers to sched/stats.h
+  sched/psi: optimize task switch inside shared cgroups again
+  sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+  sched/psi: consolidate cgroup_psi()
+  sched/psi: cache parent psi_group to speed up groups iterate
+  sched/psi: per-cgroup PSI accounting disable/re-enable interface
+
+Johannes Weiner (1):
+  sched/psi: remove NR_ONCPU task accounting
+
+ Documentation/admin-guide/cgroup-v2.rst |  23 ++
+ include/linux/cgroup-defs.h             |   3 +
+ include/linux/cgroup.h                  |   5 -
+ include/linux/psi.h                     |  12 +-
+ include/linux/psi_types.h               |  29 ++-
+ kernel/cgroup/cgroup.c                  | 106 ++++++++-
+ kernel/sched/core.c                     |   1 +
+ kernel/sched/psi.c                      | 280 +++++++++++++++++-------
+ kernel/sched/stats.h                    |   6 +
+ 9 files changed, 362 insertions(+), 103 deletions(-)
+
 -- 
-2.35.1
+2.37.2
 

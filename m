@@ -2,108 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2AC5A1CEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0130E5A1CED
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243868AbiHYXBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 19:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
+        id S238913AbiHYXDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 19:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237680AbiHYXB0 (ORCPT
+        with ESMTP id S229990AbiHYXDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 19:01:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34D02F38D;
-        Thu, 25 Aug 2022 16:01:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75222B82ED6;
-        Thu, 25 Aug 2022 23:01:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07CF3C433D7;
-        Thu, 25 Aug 2022 23:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661468483;
-        bh=N9/OkBdSri03Qzc+4rkRzs+yO6Yj2dmrnrsBxRJtJkA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Ah2YD2HhZ1OrzztkUliUk/p7ynvLyqyqpmGJkdpkIZ6PmjppuJJLmDEqVokgvdrQn
-         PKBGzBB/H7cLvFxLwO194fgJzJnOo7/6+Tt1Bh0KlTOw/426psUnV7QEa+0EKOlx9g
-         dQT4q8GFyssoZGz2rcgSN0oiMADrQw97RNllV02FEq4EcLseQbpBeUL6D7O2i/FClZ
-         E0ULcJoHPd1p9XDzrDSD+vgKpNphoOvHgpOUUSdiN6OBKGtxSmcGutjjFR17iJ+MKR
-         q7EerHOBxF2IqY1ArbP2R1/2oscYC1kB7H9llbo/c5wnlCOGuY5blKUqQ/+nPD1LQB
-         9CEhCMT80SinA==
-Date:   Thu, 25 Aug 2022 18:01:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, Lukasz Majczak <lma@semihalf.com>,
-        Rajat Jain <rajatja@google.com>,
-        Ben Chuang <benchuanggli@gmail.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
-        kenny@panix.com, treding@nvidia.com, jonathanh@nvidia.com,
-        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-Message-ID: <20220825230121.GA2879965@bhelgaas>
+        Thu, 25 Aug 2022 19:03:42 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4902C2F87;
+        Thu, 25 Aug 2022 16:03:37 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z8so183754edb.0;
+        Thu, 25 Aug 2022 16:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=uy4eH0cBiH6VU7iDFo4rGPAwd8NTm7jEGdIZq3tRJxM=;
+        b=d4FVXcH8g22QdNUlTFXYjsz3gDlyRAh4ZnMhVQbhaR8KUSAMJ1t7SnnuMeH28v3bMy
+         C/lwGiKZhGz9mAOTqe1lhnNUCOrfy89en1XSHEBwNPrMyd9IURQjIskBNV+5XNJTq+w6
+         zctifzwtpvMOmGlMv45gtFv8jmbLReyKdFUb65e+RXmZyUSdohxNOvDk13+1F0fBlB7p
+         3TYK+PuN51hFJICB4S4lAVJsRSHEnHACp82xGHDkmWgGN+iIA1gJvVBwAl2BSMpntqDq
+         RaV9WFjttTSWOfvKfAis3/8AQKnAtaIidtIHWIJONlUcKfgH5U973PFdAC8YALVazAK3
+         7TTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=uy4eH0cBiH6VU7iDFo4rGPAwd8NTm7jEGdIZq3tRJxM=;
+        b=Y53WNirwpIowSQ6rVN0t5Odqv5V3Uo2IAR1IlWLORiqOdhDFxGUEkxw+2c3Ie4nggz
+         DOA39DCeR0DfznEafjy3TK5olGR15jkP+6uBTWO0ewyXw/HDGHFdvZ75poQdnoYKXdhr
+         BYtjuw/Csz5olQ/XulbBNdgjEJI5YTThLjqeNLUjVNBu8z9bCDNgrIjNokPBZlPmdzJH
+         9Ii/gVIUqYSxG6lxtJQMbnYKzUOLYIPJjuBSzTZojgrgtJPTYy1HVpSi/ydeeqvEZtwm
+         akOq21pOoTRAI0dcOWHikDvLiu2pu8MA962egm7DmLgSDgg1hcYA821M7YB57KRORqjX
+         Myew==
+X-Gm-Message-State: ACgBeo2BHnhuoD7zccCRvbEtNwA0/Qi3kBPuRiT4vJrc8VJBqwC99rGn
+        zkrCn7WY3mn1MtERpoF72y5CliIHqhGp63Or8cg=
+X-Google-Smtp-Source: AA6agR4RdyM3LN7R9+lXS9ivos/4rO05SuMvNAdDk2Xg3cZd9pdH4WAX7BiPOZIDwdUUrIU9vuK5JpLPjSLNdYKBruY=
+X-Received: by 2002:a05:6402:24a4:b0:440:8c0c:8d2b with SMTP id
+ q36-20020a05640224a400b004408c0c8d2bmr4677996eda.311.1661468616191; Thu, 25
+ Aug 2022 16:03:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p7WWxyvvB54ADkFSZE1oJweaoNK25g6YNcNxCqkeWiVKg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
+ <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com>
+In-Reply-To: <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 25 Aug 2022 16:03:24 -0700
+Message-ID: <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:55:01PM +0800, Kai-Heng Feng wrote:
-> On Tue, Aug 9, 2022 at 12:17 AM Vidya Sagar <vidyas@nvidia.com> wrote:
+On Thu, Aug 25, 2022 at 3:08 PM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Aug 25, 2022, at 2:33 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 > >
-> > Thanks Lukasz for the update.
-> > I think confirms that there is no issue with the patch as such.
-> > Bjorn, could you please define the next step for this patch?
-> 
-> I think the L1SS cap went away _after_ L1SS registers are restored,
-> since your patch already check the cap before doing any write:
-> +       aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
-> +       if (!aspm_l1ss)
-> +               return;
-> 
-> That means it's more likely to be caused by the following change:
-> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap++);
-> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *cap++);
-> 
-> So is it possible to clear PCI_L1SS_CTL1 before setting PCI_L1SS_CTL2,
-> like what aspm_calc_l1ss_info() does?
+> > On Tue, Aug 23, 2022 at 2:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >>
+> >> The helper is for BPF programs attached to perf_event in order to read
+> >> event-specific raw data.  I followed the convention of the
+> >> bpf_read_branch_records() helper so that it can tell the size of
+> >> record using BPF_F_GET_RAW_RECORD flag.
+> >>
+> >> The use case is to filter perf event samples based on the HW provided
+> >> data which have more detailed information about the sample.
+> >>
+> >> Note that it only reads the first fragment of the raw record.  But it
+> >> seems mostly ok since all the existing PMU raw data have only single
+> >> fragment and the multi-fragment records are only for BPF output attached
+> >> to sockets.  So unless it's used with such an extreme case, it'd work
+> >> for most of tracing use cases.
+> >>
+> >> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> >> ---
+> >> I don't know how to test this.  As the raw data is available on some
+> >> hardware PMU only (e.g. AMD IBS).  I tried a tracepoint event but it was
+> >> rejected by the verifier.  Actually it needs a bpf_perf_event_data
+> >> context so that's not an option IIUC.
+> >>
+> >> include/uapi/linux/bpf.h | 23 ++++++++++++++++++++++
+> >> kernel/trace/bpf_trace.c | 41 ++++++++++++++++++++++++++++++++++++++++
+> >> 2 files changed, 64 insertions(+)
+> >>
+> >> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> >> index 934a2a8beb87..af7f70564819 100644
+> >> --- a/include/uapi/linux/bpf.h
+> >> +++ b/include/uapi/linux/bpf.h
+> >> @@ -5355,6 +5355,23 @@ union bpf_attr {
+> >>  *     Return
+> >>  *             Current *ktime*.
+> >>  *
+> >> + * long bpf_read_raw_record(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
+> >> + *     Description
+> >> + *             For an eBPF program attached to a perf event, retrieve the
+> >> + *             raw record associated to *ctx* and store it in the buffer
+> >> + *             pointed by *buf* up to size *size* bytes.
+> >> + *     Return
+> >> + *             On success, number of bytes written to *buf*. On error, a
+> >> + *             negative value.
+> >> + *
+> >> + *             The *flags* can be set to **BPF_F_GET_RAW_RECORD_SIZE** to
+> >> + *             instead return the number of bytes required to store the raw
+> >> + *             record. If this flag is set, *buf* may be NULL.
+> >
+> > It looks pretty ugly from a usability standpoint to have one helper
+> > doing completely different things and returning two different values
+> > based on BPF_F_GET_RAW_RECORD_SIZE.
+>
+> Yeah, I had the same thought when I first looked at it. But that's the
+> exact syntax with bpf_read_branch_records(). Well, we still have time
+> to fix the new helper..
+>
+> >
+> > I'm not sure what's best, but I have two alternative proposals:
+> >
+> > 1. Add two helpers: one to get perf record information (and size will
+> > be one of them). Something like bpf_perf_record_query(ctx, flags)
+> > where you pass perf ctx and what kind of information you want to read
+> > (through flags), and u64 return result returns that (see
+> > bpf_ringbuf_query() for such approach). And then have separate helper
+> > to read data.
+> >
+> > 2. Keep one helper, but specify that it always returns record size,
+> > even if user specified smaller size to read. And then allow passing
+> > buf==NULL && size==0. So passing NULL, 0 -- you get record size.
+> > Passing non-NULL buf -- you read data.
+>
+> AFAICT, this is also confusing.
+>
 
-Sorry, I've totally lost track of where we are with this.  I guess the
-object is to save/restore L1SS state.
+this is analogous to snprintf() behavior, so not that new and
+surprising when you think about it. But if query + read makes more
+sense, then it's fine by me
 
-And there are two problems that aren't understood yet?
-
-  1) Lukasz's 01:00.0 wifi device didn't work immediately after
-  resume, but seemed to be hot-added later? [1]
-
-  2) The 00:14.0 Root Port L1SS capability was present before
-  suspend/resume but not after? [2,3]
-
-I thought Lukasz's latest emails [4,5] indicated that problem 1) still
-happened and presumably only happens with Vidya's patch, and 2) also
-still happens, but happens even *without* Vidya's patch.  Do I have
-that right?
-
-If adding the patch causes 1), obviously we would need to fix that.
-It would certainly be good to understand 2) as well, but I guess if
-that's a pre-existing problem, ...
-
-Bjorn
-
-[1] https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911109dfb91ab0fc0e3#file-dmesg-L1762
-[2] https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911109dfb91ab0fc0e3#file-lspci-before-suspend-log-L136
-[3] https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911109dfb91ab0fc0e3#file-lspci-after-suspend-log-L136
-[4] https://lore.kernel.org/r/CAFJ_xbr5NjoV1jC3P93N4UgooUuNdCRnrX7HuK=xLtPM5y7EjA@mail.gmail.com
-[5] https://lore.kernel.org/r/CAFJ_xboyQyEaDeQ+pZH_YqN52-ALGNqzmmzeyNt6X_Cz-c1w9Q@mail.gmail.com
+> Maybe we should use two kfuncs for this?
+>
+> Thanks,
+> Song
+>
+> >
+> >
+> > And also, "read_raw_record" is way too generic. We have
+> > bpf_perf_prog_read_value(), let's use "bpf_perf_read_raw_record()" as
+> > a name. We should have called bpf_read_branch_records() as
+> > bpf_perf_read_branch_records(), probably, as well. But it's too late.
+> >
+> >> + *
+> >> + *             **-EINVAL** if arguments invalid or **size** not a multiple
+> >> + *             of **sizeof**\ (u64\ ).
+> >> + *
+> >> + *             **-ENOENT** if the event does not have raw records.
+> >>  */
+> >> #define __BPF_FUNC_MAPPER(FN)          \
+> >>        FN(unspec),                     \
+> >> @@ -5566,6 +5583,7 @@ union bpf_attr {
+> >>        FN(tcp_raw_check_syncookie_ipv4),       \
+> >>        FN(tcp_raw_check_syncookie_ipv6),       \
+> >>        FN(ktime_get_tai_ns),           \
+> >> +       FN(read_raw_record),            \
+> >>        /* */
+> >>
+> >
+> > [...]
+>

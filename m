@@ -2,234 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4596B5A0872
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E159C5A085E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbiHYF1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 01:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        id S231986AbiHYFPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 01:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiHYF1q (ORCPT
+        with ESMTP id S229642AbiHYFPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 01:27:46 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8DF9E6BD;
-        Wed, 24 Aug 2022 22:27:45 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P3AB66007269;
-        Thu, 25 Aug 2022 05:27:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=u2Gkmj5V4DLfOx9YRRaR1k3C2BrSI3oo9A9oeQegpts=;
- b=AkpqIKrBCM1op3+i0RNVyUyfI1A9WkOoyIKJIOB1ZIQis9VsBmmaEVPKl493W0lAIZ8X
- Jn7hXGIxzoPk2YEdrX5beLL3pc+xYy9z+etvI0L/2mLh25RZhnVMGaat6N0XSNbvev9h
- nyjOeEnXgJB/QAdHr3BFaxkznrUfZz0TnhEvgl1Ph9lCyuXHXvkb8eD7s5eLxhbxuo5J
- pKNzI8WeKGHUuG4FDxq84hE/Ce8G3+OUeG6T3tYkF2a4/9mS+Uoa5QdG7NS5bVLK1bc3
- v6NOnJzPy2EieVLP6rWkb13GTsWbIBmpV4Ng67/CanvHitsQmhy/gaB1cpw/nopXTftM Ug== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j5xcugkc3-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 05:27:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27P5DehQ029387
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 05:13:40 GMT
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 24 Aug
- 2022 22:13:37 -0700
-Subject: Re: [PATCH v8 3/3] arm64: dts: qcom: Add LTE SKUs for sc7280-villager
- family
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Jimmy Chen <jinghung.chen3@hotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20220726094549.263899-1-jinghung.chen3@hotmail.com>
- <SG2PR03MB5006B0C3E57803E3B1E0EDBCCC949@SG2PR03MB5006.apcprd03.prod.outlook.com>
- <93bf8a59-34e3-e461-35c9-4f0f344dee32@quicinc.com>
- <CAD=FV=VNUh7NT5bx0uRT259CKk2ndbji6nh2=xoRNBEC1yg-XA@mail.gmail.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <7c60fcfa-9df8-dcb3-e5d8-f24b520c55d2@quicinc.com>
-Date:   Thu, 25 Aug 2022 10:43:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 25 Aug 2022 01:15:14 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06A55FAE5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 22:15:13 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id s206so16929533pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 22:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IoTGWLwyvop2rVJHP5oZfbgjn5SZOhi7mBp2mLs3b8o=;
+        b=hWS35hzvkklbPcmzwr0ke1xSxxNLIZKEBgu4EdC6aCEgE6xHVkCoEu2kno5YJ6tfXm
+         8kVoPTREEk7eK5hr/lSMQHfXsHXXJrTryQ5SQuOYIMm1SxLSGqxQaj5cxlwMFR7NVMUA
+         J+9VxSCRchN1w/+Nl0TqCDp8XsDn+ieiGDZemsR78I7kLEd9Xv2+/uwr1JUvdqDJcOIW
+         dheI0IvamqlSUVySz9mq5CJM7QA+N+r8QkOHViKrdXOyfS/FAD3OND17l86YOmln2Mgb
+         uxVlZ27HeQ1GGSTVTUs/pWpqZRyfZMdKCr0ejgTmPmh5aOWXZR92En4revU68HT6uMt2
+         pgWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IoTGWLwyvop2rVJHP5oZfbgjn5SZOhi7mBp2mLs3b8o=;
+        b=PBfGJHJvCRID3kfMWSK8eeCJLod3/KTMm7RB71bMY2/BMQAw8+an7JmPyN1PjSw2HK
+         PsjbuJQpbLLzKkXJwR/7J5Ln5DLhV+whb105Vz2GMGMcMRsOLF4QUi3MoioDJ2P5jJSk
+         GzhiSqNXnxujMtAy+41J8fXgbSYoBkp06LDICneNtvsJ393DnAVjXVINidE/CX2+8UWV
+         +PnLMP8OP03X4qux2FiYG+3k3t4QrjxNnxorAtPDUqs0PqFnC3CKIIRbd8SfLktObTeT
+         WgvyeupQIz3Bp9ab/56J4pFfhxPCPgdIjRXtdjJbm8Shw6v8/IW1sfe/RLBK/RnrdUnV
+         rgNg==
+X-Gm-Message-State: ACgBeo1StgttvA0OTstoZHZFdZC0ybCBCGROQkAJbhBJNpBmkBI474EG
+        BHSFFo+EFMLuqYCqdKjysQ8=
+X-Google-Smtp-Source: AA6agR4r1V9IbnMNeexhhTPrl4XJ3D41ExWsIOPUH4wsZ2kpePU5MZBWLgwlH6ZGFjXh5lysPMXwLQ==
+X-Received: by 2002:a05:6a00:4393:b0:52f:3603:e62f with SMTP id bt19-20020a056a00439300b0052f3603e62fmr2492716pfb.23.1661404513144;
+        Wed, 24 Aug 2022 22:15:13 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id h20-20020aa796d4000000b0053671a241a5sm8763912pfq.191.2022.08.24.22.15.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 22:15:12 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 14:15:06 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH 1/9] slub: Make PREEMPT_RT support less convoluted
+Message-ID: <YwcFWsO/iNE534dp@hyeyoo>
+References: <20220817162703.728679-1-bigeasy@linutronix.de>
+ <20220817162703.728679-2-bigeasy@linutronix.de>
+ <alpine.DEB.2.22.394.2208181136560.1901102@gentwo.de>
+ <5679405a-b3c3-6dc5-783f-7ebeda7c9bf0@suse.cz>
+ <alpine.DEB.2.22.394.2208191655540.2139415@gentwo.de>
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=VNUh7NT5bx0uRT259CKk2ndbji6nh2=xoRNBEC1yg-XA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lCqq5dObxE7uDtAvtxrkCnUc_sHziyjH
-X-Proofpoint-ORIG-GUID: lCqq5dObxE7uDtAvtxrkCnUc_sHziyjH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_03,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- adultscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999 impostorscore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208250018
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2208191655540.2139415@gentwo.de>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/24/22 8:55 PM, Doug Anderson wrote:
-> Hi,
+On Fri, Aug 19, 2022 at 05:04:31PM +0200, Christoph Lameter wrote:
+> On Thu, 18 Aug 2022, Vlastimil Babka wrote:
 > 
-> On Wed, Aug 24, 2022 at 3:11 AM Sibi Sankar <quic_sibis@quicinc.com> wrote:
->>
->> Hey Jimmy,
->>
->> Thanks for the patch.
->>
->> On 7/26/22 3:15 PM, Jimmy Chen wrote:
->>> This adds LTE skus for villager device tree files.
->>>
->>> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
->>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->>> ---
->>>
->>> (no changes since v6)
->>>
->>> Changes in v6:
->>> - Remove v5 accidentally added sc7280-herobrine-herobrine-r1-lte.dts
->>>
->>> Changes in v5:
->>> - Reorder '.dtb' in Makefile
->>> - Put the "interconnects" line back
->>>
->>> Changes in v4:
->>> - Reorder 'status' last
->>>
->>>    arch/arm64/boot/dts/qcom/Makefile               |  2 ++
->>>    .../boot/dts/qcom/sc7280-chrome-common.dtsi     | 11 -----------
->>>    .../boot/dts/qcom/sc7280-herobrine-crd.dts      |  1 +
->>>    .../dts/qcom/sc7280-herobrine-herobrine-r1.dts  |  1 +
->>>    .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi | 17 +++++++++++++++++
->>>    .../qcom/sc7280-herobrine-villager-r0-lte.dts   | 14 ++++++++++++++
->>>    .../qcom/sc7280-herobrine-villager-r1-lte.dts   | 14 ++++++++++++++
->>>    arch/arm64/boot/dts/qcom/sc7280-idp.dts         |  1 +
->>>    8 files changed, 50 insertions(+), 11 deletions(-)
->>>    create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->>>    create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
->>>    create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->>> index 2c1605e00d349..24eacbf330880 100644
->>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>> @@ -103,7 +103,9 @@ dtb-$(CONFIG_ARCH_QCOM)   += sc7180-trogdor-r1-lte.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-crd.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-herobrine-r1.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-villager-r0.dtb
->>> +dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r0-lte.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-villager-r1.dtb
->>> +dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r1-lte.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-idp.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-idp2.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)     += sc7280-crd-r3.dtb
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
->>> index cfe2741456a1a..25f31c81b2b74 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
->>> @@ -83,17 +83,6 @@ spi_flash: flash@0 {
->>>        };
->>>    };
->>>
->>> -/* Modem setup is different on Chrome setups than typical Qualcomm setup */
->>> -&remoteproc_mpss {
->>> -     status = "okay";
->>> -     compatible = "qcom,sc7280-mss-pil";
->>> -     iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
->>> -     interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
->>> -     memory-region = <&mba_mem>, <&mpss_mem>;
->>> -     firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
->>> -                     "qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
->>> -};
->>> -
->>>    &remoteproc_wpss {
->>>        status = "okay";
->>>        firmware-name = "ath11k/WCN6750/hw1.0/wpss.mdt";
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> index e9ca6c5d24a16..921eccfec39ae 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> @@ -9,6 +9,7 @@
->>>
->>>    #include "sc7280-herobrine.dtsi"
->>>    #include "sc7280-herobrine-audio-wcd9385.dtsi"
->>> +#include "sc7280-herobrine-lte-sku.dtsi"
->>>
->>>    / {
->>>        model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
->>> index c1647a85a371a..c1a6719687252 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
->>> @@ -8,6 +8,7 @@
->>>    /dts-v1/;
->>>
->>>    #include "sc7280-herobrine.dtsi"
->>> +#include "sc7280-herobrine-lte-sku.dtsi"
->>>
->>>    / {
->>>        model = "Google Herobrine (rev1+)";
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->>> new file mode 100644
->>> index 0000000000000..a92eeccd2b2a9
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->>> @@ -0,0 +1,17 @@
->>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->>> +/*
->>> + * Google Herobrine dts fragment for LTE SKUs
->>> + *
->>> + * Copyright 2022 Google LLC.
->>> + */
->>> +/* Modem setup is different on Chrome setups than typical Qualcomm setup */
->>> +
->>> +&remoteproc_mpss {
->>> +     compatible = "qcom,sc7280-mss-pil";
->>> +     iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
->>> +     interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
->>> +     memory-region = <&mba_mem>, <&mpss_mem>;
->>> +     firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
->>> +                     "qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
->>> +     status = "okay";
->>> +};
->>
->> We shoud probably move the mpss_mem, mba_mem and rmtfs_mem here as
->> well, that way we save an additional ~255M.
+> > On 8/18/22 11:42, Christoph Lameter wrote:
+> > > On Wed, 17 Aug 2022, Sebastian Andrzej Siewior wrote:
+> > >
+> > >> + *   On PREEMPT_RT, the local lock neither disables interrupts nor preemption
+> > >> + *   which means the lockless fastpath cannot be used as it might interfere with
+> > >> + *   an in-progress slow path operations. In this case the local lock is always
+> > >> + *   taken but it still utilizes the freelist for the common operations.
+> > >
+> > > The slub fastpath does not interfere with slow path operations and the
+> >
+> > That's true on !PREEMPT_RT because a slowpath operation under
+> > local_lock_irqsave() will disable interrupts, so there can't be a
+> > fastpath operation in an interrupt handler appearing in the middle of a
+> > slowpath operation.
+> >
+> > On PREEMPT_RT local_lock_irqsave() doesn't actually disable interrupts,
+> > so that can happen. IIRC we learned that the hard way when Mike
+> > Galbraith was testing early versions of my PREEMPT_RT changes for SLUB.
 > 
-> That sounds like a great idea. I wonder if it would be possible for
-> Bjorn to land Jimmy's patches as-is and perhaps you could send a
-> follow-up patch?
-
-ack
-
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-
+> Well yes if you enable interrupts during the slowpath then interrupts may
+> use the fastpath. That is a basic design change to the way concurrency is
+> handled in the allocators.
 > 
-> -Doug
+> There needs to be some fix here to restore the exclusion of the fastpath
+> during slow path processing. This could be
 > 
+> A) Exclude the fastpath during slowpath operations
+> 
+> This can be accomplished by setting things up like in the debug mode
+> that also excludes the fastpath.
+
+I think we can do that by disabling preemption (for a short period, I think)
+in slowpath on RT (like disabling irq in non-RT)
+
+But I wonder if RT guys will prefer that?
+
+> B) Force interrupt allocations to the slowpath.
+> 
+> Check some flag that indicates an interrupt allocation is occurring and
+> then bypass the fastpath.
+
+There is nothing special about interrupt allocation on RT.
+All users of SLUB on RT must not be in hardirq context.
+
+So I don't think it is possible to distingush between a thread being preempted
+and another thread that preempts it.
+
+-- 
+Thanks,
+Hyeonggon

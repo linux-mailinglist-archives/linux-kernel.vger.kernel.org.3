@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664945A154D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962285A1551
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240377AbiHYPMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
+        id S241771AbiHYPNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiHYPMC (ORCPT
+        with ESMTP id S230072AbiHYPNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:12:02 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5E6A8978;
-        Thu, 25 Aug 2022 08:11:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cIZEuRpUsQ6uWrjc4I0kqZwaYHZjX0vXWgiTe1UbtVh1SDG0t6lOtvfrPizeygKXvJ5L4myIsbcNqh38L2oqh9mhEdELxZY/0LuXuDL9NnfEZDGgqwcCM7n2sPeSEPB79wWgLXkRAs/XZtfs8LXcyT9MATckHv7N9gunUmyN1wSoUNtAsv9CcrrlhO3kCjR0Da2vJpHhLZtfIcR3fRyxP3OMmYXNGSrynkW3oP6IHooPb1IJMDd9QY4RoPngzZHfYgtUwEkBHYqtw2yXwWTZaKRIBWP4sMLKz9g2kSiz88qrCmZ72C+gHwvUuzblUenXjLJGmp0nr/2myn1vvcpd4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wseQfJTUsdgaQraVbpuFQUR6REnr+KDXznt0NfzSob4=;
- b=ACC+UX8/Y6gv5cODrNdXPbTizdYPV6gqDmv6Z0hlFbgEgo9+m9jd6KoaFVEU9LKOfqyspaNrQ2ijlsBb6N78uQbM3PJ+4RaL3nJXM4yhtHRMHjSp+gs6kkCsM2C7/TSRo1+yX6gv1A2EHRnwFmpVAhjqGJDbUicM0QKVn9M2DNsb/D6057Q5mB67zBI9poxIe7WfeJg9+SLC2UKwet8XZMf5HuCgvPofVGlLeyLtIb+Q0KB52J3wVMwLMZjEyETF22LjOLCNFcXhyOTym5TkqsEql7sbtQ7bJiqwefciJ7RgFamBYzdZvZWblgPHuR27uSlwHIN95wGhyklBdcE9qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wseQfJTUsdgaQraVbpuFQUR6REnr+KDXznt0NfzSob4=;
- b=SKCvp4/yJRzb4A8G8yuZd/8GBkGLiZfISGDZQYP0q/O4gYNM+lA2DDnDM5xr+Ik4YkXrbcMwBA9O/1Z39nMlzth4CUq5Iq8cmQ4q1zNxNyX6nS7HVlxYUHyvnmTocD2lpwnAtgT/OqcywEqM4T7v7MKR0Q5THrHO34fQxPyg93k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by CH2PR12MB5003.namprd12.prod.outlook.com (2603:10b6:610:68::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
- 2022 15:11:56 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::88f:a211:8c98:a973]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::88f:a211:8c98:a973%7]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
- 15:11:56 +0000
-Message-ID: <5d650c6c-2f17-6013-f63f-49a182961494@amd.com>
-Date:   Thu, 25 Aug 2022 10:11:50 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v3 06/10] x86/resctrl: Introduce mon_configurable to
- detect Bandwidth Monitoring Event Configuration
-Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
-Cc:     eranian@google.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, bagasdotme@gmail.com
-References: <166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu>
- <166117582698.6695.3458866624522799072.stgit@bmoger-ubuntu>
- <575bf1d7-8780-8c54-851c-e9849d1815f8@intel.com>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <575bf1d7-8780-8c54-851c-e9849d1815f8@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0013.namprd13.prod.outlook.com
- (2603:10b6:208:256::18) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
+        Thu, 25 Aug 2022 11:13:19 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765DE5A3E4;
+        Thu, 25 Aug 2022 08:13:18 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id d8so16266685lfq.0;
+        Thu, 25 Aug 2022 08:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=X/HJjwysbwPY5lP7z2XNqzIAkb64JXray4RDUjSnQ/E=;
+        b=eqUAj/ulLGt9fKA9X2CPCHPQjf16XH6ZbfZynema2QyRMvKMwPMqa1nQf/nm/j0Yer
+         GaqnozYsFW7kX/T00PRfVhchF/6CMdCQ1kVqktnNEiTweJ/xbQ/efxECtWGsz2k6MH57
+         Q7BFrsZUYMEBmYVPtOQcPkDOZ4nCwv4mMFhhsoOw671PL+gmQEKVBXH3kfvhF0M0zpuO
+         5l5A6lG/iLRbAHHcqkI44HNnVUIV5t6SVeHTAQ77Bc2E8hKr9r+s0yUCM9Wyroa3Xym7
+         jET8lru2kRRlSonG2xONqxvPYYkeJm0sa7UD3gqhTRgpy8KrXhyqbEp/w+AM++IWu2Kn
+         nvKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=X/HJjwysbwPY5lP7z2XNqzIAkb64JXray4RDUjSnQ/E=;
+        b=v0X3dxlZvffChl14AnQ2Nx9Ohwj4Pgx8OTntD9gU7zjst+LvfuYoN7R5ThN+c+04VU
+         O9eP3OJffx3m1GsU1fw1OvU0ZpEs5UYIVv6xXu//X8PFELOmooEIp1acADEyfDoHsqEg
+         o2RY8dT73/IoBzIyJfQTHCCzpWSuZIDqMtcAEufNukwXArkvhV1OlfvtokaJG8niyoRs
+         GWh9uIM0y1p0tV2a6EKoZ8B5ei6TTh50WCZ4EKWoV006lYpNYGTbSEX+fr0c3m9+2pya
+         IY+aRSWoQaxIe66WDRqSwtCSprIkxNGC27HaKqxvo2iRg3lIpgRxmQfyyu25KoXd7tP1
+         UHtA==
+X-Gm-Message-State: ACgBeo1itz09/9U9naasWsz6JHUpaDqVHAD44sWriywBrKsd1MkMH1zb
+        VM48swgcz/FnG0zeuJAr1R4=
+X-Google-Smtp-Source: AA6agR4h1iWUpc20LQ+4wYlO85M6Cr5yt6RX+MQK1HeajaoyfhxIAa55vq9Ftczgq4dODFiIrLVNHw==
+X-Received: by 2002:a05:6512:b9d:b0:48b:2567:4bad with SMTP id b29-20020a0565120b9d00b0048b25674badmr1325505lfv.9.1661440396732;
+        Thu, 25 Aug 2022 08:13:16 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id 19-20020a2eb953000000b00261d623d9ffsm297018ljs.134.2022.08.25.08.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 08:13:15 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 18:13:13 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Subject: Re: [PATCH v5 05/20] dt-bindings: PCI: dwc: Add phys/phy-names
+ common properties
+Message-ID: <20220825151313.lyjhc3g3udabvr2r@mobilestation>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-6-Sergey.Semin@baikalelectronics.ru>
+ <1661205444.106003.931361.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 098a430f-f3e5-4907-6902-08da86ac266a
-X-MS-TrafficTypeDiagnostic: CH2PR12MB5003:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5uv6NN4i0eXGW/oQH4xjxjwKNNetxvARl/2YnczSzZxpK3ejyhPRQDSxZpIFwwu8tLZ9gGW+asJJ4lGBks8IzgnaRRu0iRie4yYLF6ZYBYGuISNix51Qb+DTgiPdO3v5AWI1/pIk5NdDhJFoj11iqp0weFPLU4IWC3B1xDYzK5KR4xyVJ5fEZTOHNgw5UBYcVw1EEXFyDLQ6ykAL91WahN8NO7M5m0RwQmBUHQnU8hc4UuEVw4TNT2n/WXkVrsH8gp3ROXOGbkQ7QEJO4fCV+8orsbP566toEyCLNTz1gMTUYyUIKiuveaeyGns//w6RQzS6gw8j/9AGJ5f4BZPqqt0GKgR8kifOCwD+qHQTdWCDdMFaPg6xyzvk5+ysJw9jZl0Vp4UVeP8iedRzYQGLY8m2kQOvVSIQBzu7Jt5Vo+JEWKlAaFtig6Zy6lHQeJ55GDWHNU9v6vDmOcypkUgU75WIZXaqHECMWd4KPWa2R5fGLuPiDgkxH5bCydbB68p6YhMy3OI/oKBOYhVG5wSvIK3u61YdBJ1N5vRkqFTtNyapZ2IqC5FSS6klIaefvEHMOLvFRTr3+RMvBkP+e/gPyb/p4d4INbkP+ITjyP2xL580r4lBSPp+0L4HDkEKra6d/aSwagQDI2EQ3QFwwdPQj3QgH73EOyAVbl4VAZpoOBqItbLof7Y08MiwbmjVCFEmY8GOOhcmrRZeIyDx7orlUydiYTI0uDh+iJcDnPz18A+Y8W59sof01qpGs76fMgLYUutx8FaTYFSglyPwtNjRbZQ3B4T+hmA/HCzBWEYlB7M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(376002)(396003)(136003)(366004)(83380400001)(31686004)(26005)(6666004)(6512007)(316002)(41300700001)(6506007)(478600001)(6486002)(38100700002)(8676002)(66476007)(66556008)(5660300002)(66946007)(7416002)(36756003)(4326008)(3450700001)(2616005)(186003)(53546011)(86362001)(31696002)(8936002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVFVeGt4WlllRFBJcUFnL3laeXY4Z1JMSHlxbnEwSkl0LzI4WDF3Tjc1K3Zs?=
- =?utf-8?B?eE1vQXlmWjUzQVBqN3JwTWpxUDNRa29hQXZ5d0RraHNpQkR4TVVmakxpZDRi?=
- =?utf-8?B?TENYQ3ZEclBVbjZTbmNpZWQvTmY0RU4zbjhLa0xRenUvNmE4S0pxbzRzZmNi?=
- =?utf-8?B?enhveXgxUHJTME41cmZLK1B5SG1JNEtPQ0tMNGhOVnFYMWVtaXJJQS82Q3NB?=
- =?utf-8?B?TGdQdXZuRXZ3V0Y1UENZemtFZHFqMTdaTU5VMzhsQVAxQ0s3M2c4amp2TVdn?=
- =?utf-8?B?ekgxbHg5Sm90bHJMOEdRd2hLSDgrOXpib3YwT1RULzNLSm5zdDZSK0s3L3I5?=
- =?utf-8?B?QjVGZjk1OHQ1TkZvMnlYNmthSVhITkZMdnpZdm04ZWRlYy9sd2xmZzlyNlVi?=
- =?utf-8?B?a3VIbjk1SVZiTE9FQ2pMM2RNVkQrVldwWnNoQVc2cnRGb2h5VjRCbW4yUDBU?=
- =?utf-8?B?d2F6TUI3ZTdEWmdQSk9XajlkWXlQWllzSjJoSjgyNmFDWW5GK1dJcVVCN2Zt?=
- =?utf-8?B?bkg2MFhld0RGSWh4amNHSER5K1E1a2ZXbE5iWTF3TE5UeHIwTXBuVEhDZEdl?=
- =?utf-8?B?MWFhNk9PT25JemFHSlkyVTlDN1BRa3ZhNkxEaE01MW5MVE4zczl6aHVnaCtX?=
- =?utf-8?B?ajk1MG1KZlVSbGRZWm05cms5Mkl6R1Ria2NBYzI5dHowZFRBam9aNjlQT1Mz?=
- =?utf-8?B?cUU1M3p6Y29HcEk0N1A2dTA1OW1BN0I0YTZheWV5Z1Voc2JXUHZPWnlUajZn?=
- =?utf-8?B?UlArMWsrWDRKT1RTTU1vTzRqMkxSNHRoNXVzbmRiYW5hdjhKeFZLeTdsNUFV?=
- =?utf-8?B?Q0w0ZGFDcE5KdlMxeXZjTzlFdm56dGFwM3Z6ejE5YVFvRjE2WEd3VVVjQTlF?=
- =?utf-8?B?ZkljRHNvWHpaMFU3c0tjakRhNmlBcVpncmtOTXlycFd4SjBNSWkyNzRhZHUr?=
- =?utf-8?B?UWJNNFNBaElwOENEeXkyVXd3Mm9VeGlmNm9QL2cvZ21kczBhY3NBdVAySEtj?=
- =?utf-8?B?dkhEeGo4Y2NWc0UrWWRpcitEVGY4aVpMTENoT3ZKT0JqbHIrUk01UzdhVFEv?=
- =?utf-8?B?bExQcGFSVmhFR3pDWFRVaHFKbHdhVWFYMWNZTVZmVlMvQ29UdWx0L0wzQWox?=
- =?utf-8?B?QVFhZGdIZGQ1VHNiY3JiNVNENXc4SmlBZSt6ZXlLMllWT0labU5lQTNhYjY2?=
- =?utf-8?B?V3UxNlcyZzVIdmh5V1FTdFFzYzl5Mk55eXcvRDNaOFYwdDNydmVJVTZHZHFO?=
- =?utf-8?B?dWg2UW1ZZWNEUjNXcEo5OFcweGNUM1FWVDh4cDI1Y0ZmYWw3N256UUJwWmNU?=
- =?utf-8?B?ZFR6OFI0aHI0ajNTZThzVm15YVhjWkFPS1lMdVc4MW5jcGtTTXNJV1dpL0ZI?=
- =?utf-8?B?dXlTSG5ETzdWNFdFVFBVRWVZTU4xNDN0TVpxMTJXcVUwc1ZQQkF2cUNXYk55?=
- =?utf-8?B?em5JeERmQ0pML0Q3UWhJajZOWDRVOG1wNlBHeDlGbzZiWUZLT0VKNTgwL1hq?=
- =?utf-8?B?NHNEZ2VQWjdLTjRLK0Z4eE5tOVRqRjBQU3JqaVNrK2lncVNKYlMrMEFaTFVr?=
- =?utf-8?B?N3lLeUxKaGdoZ0t4ZzNHNGM4dlBDbUVGTVFwcytxbXZnOFpTMmtyQnY1RERI?=
- =?utf-8?B?aXJFSk9BMXRWQVBVSVE4ajNlWEFvaWNWTXY0VExEUGo4ZGloTUY2ZXhjQ2FX?=
- =?utf-8?B?cGhQa0J0dkJSOTBNR1Rxb0M5b1V3R3REU3FxUkgvd1lWWnN6T0J3KzFPNk92?=
- =?utf-8?B?M0wxd3N4YStrTStyMTgxZS84UHNmUnhYOGcwZWtLY1c5ZzFzNUlLT2g0clZm?=
- =?utf-8?B?REpmMnZXeTNLRGwxVW13cGxNRkp5VzhISXE2ekVHRXlBZmZTZHlwcTNtZHJF?=
- =?utf-8?B?K3FiWWsxQ1ZtZWNsTllrS1N0NjF0YUVnMkFQc24zaE5yeUxyTU9HYnIwS2xH?=
- =?utf-8?B?TEtrMEhrcUx0WlgxR0k2MzVFazZ5WjRwRXJOdDJNUUhpa2xuWGRqaVhGRjBL?=
- =?utf-8?B?emFtOUtwQTdnZktOSS9RRGF1TTdGV2FCWmZ3aitwaFVQRTNyeHVLYkRRSGdD?=
- =?utf-8?B?OUxSSmk1d1JRZWdScjRkZkZ1WS9hQWZQV1ZzTk9SZ0JwUlV2cXo4RmUxR3cv?=
- =?utf-8?Q?fnUk=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 098a430f-f3e5-4907-6902-08da86ac266a
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 15:11:56.5400
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fZx2c/PKNEjQcVilnfZnFX3OS2M8tBEKbBryqvHIDVxbiWjD+77CxEM/srhcULkT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5003
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1661205444.106003.931361.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,103 +85,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+On Mon, Aug 22, 2022 at 04:57:24PM -0500, Rob Herring wrote:
+> On Mon, 22 Aug 2022 21:46:46 +0300, Serge Semin wrote:
+> > It's normal to have the DW PCIe RP/EP DT-nodes equipped with the explicit
+> > PHY phandle references. There can be up to 16 PHYs attach in accordance
+> > with the maximum number of supported PCIe lanes. Let's extend the common
+> > DW PCIe controller schema with the 'phys' and 'phy-names' properties
+> > definition. The PHY names are defined with the regexp pattern
+> > '^pcie([0-9]+|-?phy[0-9]*)?$' so to match the names currently supported by
+> > the DW PCIe platform drivers ("pcie": meson; "pciephy": qcom, imx6;
+> > "pcie-phy": uniphier, rockchip, spear13xx; "pcie": intel-gw; "pcie-phy%d":
+> > keystone, dra7xx; "pcie": histb, etc). Though the "pcie%d" format would
+> > the most preferable in this case.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Changelog v3:
+> > - This is a new patch unpinned from the next one:
+> >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+> >   by the Rob' request. (@Rob)
+> > 
+> > Changelog v5:
+> > - Add a note about having line-based PHY phandles order. (@Rob)
+> > - Prefer 'pcie[0-9]+' PHY-names over the rest of the cases. (@Rob)
+> > ---
+> >  .../bindings/pci/snps,dw-pcie-common.yaml     | 19 +++++++++++++++++++
+> >  .../bindings/pci/snps,dw-pcie-ep.yaml         |  3 +++
+> >  .../devicetree/bindings/pci/snps,dw-pcie.yaml |  3 +++
+> >  3 files changed, 25 insertions(+)
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
 
-On 8/24/22 16:15, Reinette Chatre wrote:
-> Hi Babu,
->
-> On 8/22/2022 6:43 AM, Babu Moger wrote:
->> Newer AMD processors support the new feature Bandwidth Monitoring Event
->> Configuration (BMEC). The events mbm_total_bytes and mbm_local_bytes
->> are configurable when this feature is present.
->>
->> Set mon_configurable if the feature is available.
->>
->> Signed-off-by: Babu Moger <babu.moger@amd.com>
->> Reviewed-by: Ingo Molnar <mingo@kernel.org>
->> ---
->>  arch/x86/kernel/cpu/resctrl/monitor.c  |   14 ++++++++++++++
->>  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   17 +++++++++++++++++
->>  include/linux/resctrl.h                |    1 +
->>  3 files changed, 32 insertions(+)
->>
->> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
->> index eaf25a234ff5..b9de417dac1c 100644
->> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
->> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
->> @@ -682,6 +682,16 @@ static void l3_mon_evt_init(struct rdt_resource *r)
->>  		list_add_tail(&mbm_local_event.list, &r->evt_list);
->>  }
->>  
->> +
->> +void __rdt_get_mon_l3_config_amd(struct rdt_resource *r)
->> +{
->> +	/*
->> +	 * Check if CPU supports the Bandwidth Monitoring Event Configuration
->> +	 */
->> +	if (boot_cpu_has(X86_FEATURE_BMEC))
->> +		r->mon_configurable = true;
->> +}
-> Could this rather use rdt_cpu_has() with the added support for disabling
-> the feature via kernel parameter?
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14180000: phy-names: 'oneOf' conditional failed, one must be fixed:
+> 	'p2u-0' does not match '^pcie[0-9]+$'
+> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-1' does not match '^pcie[0-9]+$'
+> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-2' does not match '^pcie[0-9]+$'
+> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-3' does not match '^pcie[0-9]+$'
+> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
 
-Yes, That is possible. We could do that.
+Right. I've missed the Nvidia Tegra194 phy-names. I'll mark them as
+deprecated too. Meanwhile @Rob could you review the rest of the
+series?
 
+-Sergey
 
->
->
->> +
->>  int rdt_get_mon_l3_config(struct rdt_resource *r)
->>  {
->>  	unsigned int mbm_offset = boot_cpu_data.x86_cache_mbm_width_offset;
->> @@ -714,6 +724,10 @@ int rdt_get_mon_l3_config(struct rdt_resource *r)
->>  	if (ret)
->>  		return ret;
->>  
->> +	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
->> +		__rdt_get_mon_l3_config_amd(r);
->> +
->> +
-> Why is this vendor check needed? Is X86_FEATURE_BMEC not sufficient?
-Yes. I can remove the vendor check.
->
->>  	l3_mon_evt_init(r);
->>  
->>  	r->mon_capable = true;
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index fc5286067201..855483b297a8 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -995,6 +995,16 @@ static int rdt_num_rmids_show(struct kernfs_open_file *of,
->>  	return 0;
->>  }
->>  
->> +static int rdt_mon_configurable_show(struct kernfs_open_file *of,
->> +				     struct seq_file *seq, void *v)
->> +{
->> +	struct rdt_resource *r = of->kn->parent->priv;
->> +
->> +	seq_printf(seq, "%d\n", r->mon_configurable);
-> Why is this file needed? It seems that the next patches also introduce
-> files in support of this new feature that will make the actual configuration
-> data accessible - those files are only created if this feature is supported.
-> Would those files not be sufficient for user space to learn about the feature
-> support?
-
-This is part of /sys/fs/resctrl/info/L3_MON# directory which basically has
-the information about all the monitoring features. As this is one of the
-mon features, I have added it there. Also, this can be used from the
-utility(like pqos or rdtset) to check if the configuring the monitor is
-supported without looking at individual files. It makes things easier.
-
-Thanks
-
-Babu
-
-
-> Reinette
-
--- 
-Thanks
-Babu Moger
-
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14180000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'bus-range', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'linux,pci-domain', 'num-lanes', 'ranges', 'supports-clkreq' were unexpected)
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14160000: phy-names: 'oneOf' conditional failed, one must be fixed:
+> 	'p2u-0' does not match '^pcie[0-9]+$'
+> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-1' does not match '^pcie[0-9]+$'
+> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-2' does not match '^pcie[0-9]+$'
+> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-3' does not match '^pcie[0-9]+$'
+> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14160000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'bus-range', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'linux,pci-domain', 'num-lanes', 'num-viewport', 'ranges' were unexpected)
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: phy-names: 'oneOf' conditional failed, one must be fixed:
+> 	'p2u-0' does not match '^pcie[0-9]+$'
+> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-1' does not match '^pcie[0-9]+$'
+> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-2' does not match '^pcie[0-9]+$'
+> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-3' does not match '^pcie[0-9]+$'
+> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-4' does not match '^pcie[0-9]+$'
+> 	'p2u-4' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-5' does not match '^pcie[0-9]+$'
+> 	'p2u-5' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-6' does not match '^pcie[0-9]+$'
+> 	'p2u-6' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-7' does not match '^pcie[0-9]+$'
+> 	'p2u-7' does not match '^pcie(-?phy[0-9]*)?$'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: Unevaluated properties are not allowed ('num-lanes' was unexpected)
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: phy-names: 'oneOf' conditional failed, one must be fixed:
+> 	'p2u-0' does not match '^pcie[0-9]+$'
+> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-1' does not match '^pcie[0-9]+$'
+> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-2' does not match '^pcie[0-9]+$'
+> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-3' does not match '^pcie[0-9]+$'
+> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-4' does not match '^pcie[0-9]+$'
+> 	'p2u-4' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-5' does not match '^pcie[0-9]+$'
+> 	'p2u-5' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-6' does not match '^pcie[0-9]+$'
+> 	'p2u-6' does not match '^pcie(-?phy[0-9]*)?$'
+> 	'p2u-7' does not match '^pcie[0-9]+$'
+> 	'p2u-7' does not match '^pcie(-?phy[0-9]*)?$'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: Unevaluated properties are not allowed ('num-lanes' was unexpected)
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 

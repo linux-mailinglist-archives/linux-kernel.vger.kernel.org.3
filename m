@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9E45A1635
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78415A1638
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241894AbiHYP66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S242874AbiHYP7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiHYP64 (ORCPT
+        with ESMTP id S242451AbiHYP7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:58:56 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFEE895EB
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:58:55 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id r1-20020a056830418100b0063938f634feso6992129otu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=j+VXQR5pjPp1qqY+mCv39sQii/lw0V0SoJNg1H+SGfM=;
-        b=eWFooHpe7iAYZmgL7/qWvc3KXLQmoiNDPoqUHkukC19j0wOKbMKmemC1mTNeKVXUso
-         ojxe6R/tAxrGpuTv2oVQGI8T8jcsPUTWUwZbj4lcH4lfph/FD5riUcepD6gfaCZtN9JM
-         +ofJfbxfxa9de+xdocWonrlW6B9Lqvbt7x4NwkTPIx/Hfb+j4uIrlSJc71VRxgJ5mYm8
-         FDzIeN7sfeAB4zugNatkQelVC7etlJlwrQLNU9G5esvOtepXQZDNJuP+Vj+JFhH73JML
-         FxjChEAlOgpw9PBR8eK3M6Rfa2LpPpDhD9Hv4F+kL0gz5HRE+pQtp4bB+kP8VJAhcWUq
-         2NiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=j+VXQR5pjPp1qqY+mCv39sQii/lw0V0SoJNg1H+SGfM=;
-        b=Q/qzGdMK5nY2HJyfZIKpRzDj0pWrqUtawUQxyQ6KKVje28W0rluyy69B+Kypcsx9/I
-         aXjGqK2OGyCYWDLSwBWRDAkHio2zyUgH212yo6Gp/SxXMCn0r+pov8qSIoKETVZ1HE+6
-         RZEMlidk9mAtKSMtIaLnHCz+5RlLNrZ3NiyF7MlC5GWiGNY8UeW0Ddj3UoEjmDXGSjJM
-         kyQQSR2cRHkO/gmz8mkDczupJmlWaYqd7L57LpBZnM3o5F+3SlB2Q8vBZuyYnLi/a2TG
-         atkSElhOkPl3ZlG/zHpzE0IXIXi49RDZMx/k9k/LkOld5nWfUCrWY7y9lVPcx9ddfO/c
-         dchQ==
-X-Gm-Message-State: ACgBeo1Wva3c6Tz0EPOXwlFfMWWzDrNd/FO3ulB7TTpI6TGUPi+RnaJ7
-        RxBJzXGq0c3ml5xTKUFdSP49Wd7Bg9ptJ4BlWD0=
-X-Google-Smtp-Source: AA6agR5gQk9VJ4uU/OnL5wnN7qnr9Nq4p4F+5UpRJRWTSJCq+qbC+iFjKzMZbsJ0AxbXpriG6R0vjPjd5JF445MBg64=
-X-Received: by 2002:a9d:6ad7:0:b0:636:f76b:638a with SMTP id
- m23-20020a9d6ad7000000b00636f76b638amr1649240otq.233.1661443134560; Thu, 25
- Aug 2022 08:58:54 -0700 (PDT)
+        Thu, 25 Aug 2022 11:59:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991F2895EB;
+        Thu, 25 Aug 2022 08:59:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 570D5B82A39;
+        Thu, 25 Aug 2022 15:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B01C5C433C1;
+        Thu, 25 Aug 2022 15:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661443148;
+        bh=ZfeKWeixSO0jSL608lHkwjyEVMv1W3X2t4lL2j2+rPU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XaMI0D9+XksYktJaqp2eD9dyLP+zDC1k91BgXn8/rqPwLGoPa/pED4w4qOYLd4QeL
+         /w+R3XnPZUHYCCgsbErOu8MAnJNnVk/uFvssZ4r/72KafijyAKBcHELbB9tUvdKRdY
+         JIPJ2WXxUYvNYYybtGtpgmE4kO5pQOlzWAsWgX/IAG4LM6owe4ZRKgalrRhenr4yLn
+         Kq840obUMTic2UqPZqN60ADk84aw6/Yzu2M8SH6cqdT35StBczyxZQjCDeoyxzZhme
+         7NCqAQrgJkHwc02hNdXgvMJzs1WVunpjJrk229J9CZPa1l9/rfPo+szS+rbC7k8RoU
+         tz0SwdCk8G/ZQ==
+Date:   Thu, 25 Aug 2022 08:59:06 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "wanghai (M)" <wanghai38@huawei.com>
+Cc:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <brouer@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net/sched: fix netdevice reference leaks in
+ attach_one_default_qdisc()
+Message-ID: <20220825085906.35704ce5@kernel.org>
+In-Reply-To: <fc76cc5d-e1ee-e84e-c47b-8daa4dea43a0@huawei.com>
+References: <20220817104646.22861-1-wanghai38@huawei.com>
+        <20220818105642.6d58e9d4@kernel.org>
+        <d1463bc2-6abd-7b01-5aac-8b7780b94cca@huawei.com>
+        <fc76cc5d-e1ee-e84e-c47b-8daa4dea43a0@huawei.com>
 MIME-Version: 1.0
-References: <20220823065001.16872-1-bernard@vivo.com>
-In-Reply-To: <20220823065001.16872-1-bernard@vivo.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 25 Aug 2022 11:58:43 -0400
-Message-ID: <CADnq5_NsRSFb18pE1m-eUtPW_Y2z0arm0U5wzaBh=VUr978ZJw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd: fix potential memory leak
-To:     Bernard Zhao <bernard@vivo.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>,
-        Michael Strauss <michael.strauss@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Melissa Wen <mwen@igalia.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, zhaojunkui2008@126.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Thu, 25 Aug 2022 20:29:21 +0800 wanghai (M) wrote:
+> =E5=9C=A8 2022/8/19 23:58, wanghai (M) =E5=86=99=E9=81=93:
+> > Here are the details of the failure. Do I need to do cleanup under the=
+=20
+> > failed path?
+> >
+> > If a dev has multiple queues and queue 0 fails to attach qdisc
+> > because there is no memory in attach_one_default_qdisc(). Then
+> > dev->qdisc will be noop_qdisc by default. But the other queues
+> > may be able to successfully attach to default qdisc.
+> >
+> > In this case, the fallback to noqueue process will be triggered
+> >
+> > static void attach_default_qdiscs(struct net_device *dev)
+> > {
+> > =C2=A0=C2=A0 =C2=A0...
+> > =C2=A0=C2=A0 =C2=A0if (!netif_is_multiqueue(dev) ||
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 dev->priv_flags & IFF_NO_QUEUE) {
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ...
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 netdev_for_eac=
+h_tx_queue(dev, attach_one_default_qdisc,=20
+> > NULL); // queue 0 attach failed because -ENOBUFS, but the other queues=
+=20
+> > attach successfully
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 qdisc =3D txq-=
+>qdisc_sleeping;
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 rcu_assign_poi=
+nter(dev->qdisc, qdisc); // dev->qdisc =3D=20
+> > &noop_qdisc
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ...
+> > =C2=A0=C2=A0 =C2=A0}
+> > =C2=A0=C2=A0 =C2=A0...
+> > =C2=A0=C2=A0 =C2=A0if (qdisc =3D=3D &noop_qdisc) {
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 netdev_for_each_tx_queue(dev, att=
+ach_one_default_qdisc, NULL);=20
+> > // Re-attach, but not release the previously created qdisc
+> > =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > =C2=A0=C2=A0 =C2=A0}
+> > }
+>
+> Do you have any other suggestions for this patch? Any replies would be=20
+> appreciated.
 
-On Tue, Aug 23, 2022 at 3:29 AM Bernard Zhao <bernard@vivo.com> wrote:
->
-> This patch fix potential memory leak (clk_src) when function run
-> into last return NULL.
->
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-> index 85f32206a766..76f263846c6b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-> @@ -1715,6 +1715,7 @@ static struct clock_source *dcn30_clock_source_create(
->         }
->
->         BREAK_TO_DEBUGGER();
-> +       free(clk_src);
->         return NULL;
->  }
->
-> --
-> 2.33.1
->
+Sorry for the silence and thanks for a solid explanation!
+
+Can we do a:
+
+netdev_for_each_tx_queue(dev, shutdown_scheduler_queue, &noop_qdisc);
+
+before trying to re-attach, to clear out any non-noop qdisc that may
+have gotten assigned?

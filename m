@@ -2,93 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8915A186D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ED95A1870
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243249AbiHYSKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S243278AbiHYSKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243193AbiHYSKZ (ORCPT
+        with ESMTP id S243250AbiHYSK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:10:25 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A430AFAC7;
-        Thu, 25 Aug 2022 11:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wst73/cqMwGjmGOJVyTXlZ5/UsYnUHBn/q0HBx+aY7s=; b=cg3wfIx3/SAJL4Yd459Y6lAe/H
-        SGTYmVSI4dZx78f7Y4jGujK9aM8Bns2ShgvhZuCixt4gDlc7kqtTZrxv9r98Jb/NrXytIPDpoMHLG
-        ipPtV4XVokk8uocHif+fItWyFzFkt5Zls7VkpSOXgxx31l57HFzm4MVdw97pR9i+hBUGo27vYgrCf
-        Y6sbMl8Iezqit1navLC1raBHcdSTyxIta7UWAJViJBVSIA5Zw3U6e65d1Qyfeo5/R2pWKqFZ3JSiu
-        gfcUkZLBA4iCPxJCVp5C2G5xVC5xITcSD3yxZgljYHYU97tuvd3nKCCRQBpQBl7wZHVBTAzRDKGjh
-        lBmHxf0g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33936)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oRHIz-0005S4-JW; Thu, 25 Aug 2022 19:10:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oRHIq-0005J3-Pm; Thu, 25 Aug 2022 19:10:04 +0100
-Date:   Thu, 25 Aug 2022 19:10:04 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     'Ard Biesheuvel' <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-        'Alexandre Belloni' <alexandre.belloni@bootlin.com>,
-        linux-samsung-soc@vger.kernel.org,
-        'Tomer Maimon' <tmaimon77@gmail.com>,
-        linux-omap@vger.kernel.org, 'Avi Fishman' <avifishman70@gmail.com>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, 'Tali Perry' <tali.perry1@gmail.com>,
-        'Nancy Yuen' <yuenn@google.com>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski@linaro.org>,
-        'Alan Stern' <stern@rowland.harvard.edu>,
-        'Patrice Chotard' <patrice.chotard@foss.st.com>,
-        'Patrick Venture' <venture@google.com>,
-        'Vladimir Zapolskiy' <vz@mleia.com>,
-        'Claudiu Beznea' <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        'Benjamin Fair' <benjaminfair@google.com>
-Subject: Re: [RFC PATCH] usb: reduce kernel log spam on driver registration
-Message-ID: <Ywe6/AKzVL/77Fhi@shell.armlinux.org.uk>
-References: <CGME20220825170354epcas5p28a5f1a4b13507b5c40ca235560a6ba56@epcas5p2.samsung.com>
- <20220825170327.674446-1-ardb@kernel.org>
- <065601d8b8a7$6fee5850$4fcb08f0$@samsung.com>
+        Thu, 25 Aug 2022 14:10:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FA4A927A;
+        Thu, 25 Aug 2022 11:10:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CD716CE292B;
+        Thu, 25 Aug 2022 18:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D623C433C1;
+        Thu, 25 Aug 2022 18:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661451021;
+        bh=Er8V9jNbcvkm1yktE0q1q+gaOywFHNbKENwzjuzsnpk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c3UkDop3oO43oJhqNyBuSPAFSouev7/BICPgYp4oeVQB4vqSSZ3dTBFcoHV3jR1eg
+         02FgisMPYnCaKBwXe2JuSpOLV/FrZsifmSq5LDmChTtAZUsp/BQOKdfdGgclTziAfn
+         skf6YPayTB9zEuhxk3tqYH0FpwKxra/psXWasHQUrk5QJ9TMt35wbw38k3jTUe0G/Z
+         LVaZKqorz5gAvzX7bm81C1ngf63fn4uGWm1EfZsptc1k5GAFONdPWkN7hoPfBDDRvt
+         mEAbxWTNsIfpJY8y1110qJwW1nuFR8rqMT9x/IUgNZjkgigBvkBhjsVWuxQSvksJKD
+         8q1z61szHCW5w==
+Date:   Thu, 25 Aug 2022 11:10:19 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v2 6/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <20220825111019.1dc3dae0@kernel.org>
+In-Reply-To: <20220825130211.3730461-7-o.rempel@pengutronix.de>
+References: <20220825130211.3730461-1-o.rempel@pengutronix.de>
+        <20220825130211.3730461-7-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <065601d8b8a7$6fee5850$4fcb08f0$@samsung.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:53:44PM +0530, Alim Akhtar wrote:
-> >Drivers are typically supposed to be quiet unless they are actually probed,
-> but
-> >for some reason, USB host controllers seem to be exempt from this rule, and
-> >happily broadcast their existence into the kernel log at boot even if the
-> >hardware in question is nowhere to be found.
-> >
-> >Let's fix that, and remove these pr_info() calls.
-> >
-> How about just change pr_info() to pr_debug() instead? 
+On Thu, 25 Aug 2022 15:02:10 +0200 Oleksij Rempel wrote:
+> +enum ethtool_podl_pse_admin_state {
+> +	ETHTOOL_PODL_PSE_ADMIN_STATE_UNKNOWN = 1,
 
-Do the messages serve a useful purpose that the initcall_debug kernel
-parameter (that doesn't require #define DEBUG to be set while compiling
-and thus can be used with any kernel) doesn't provide? 
+Why define UNKNOWN.. as 1? No real objection here, just in my head
+somehow UNKNOWN = 0 or just start from 1.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> +	ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED,
+> +	ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED,
+> +
+> +	/* add new constants above here */
+> +	ETHTOOL_PODL_PSE_ADMIN_STATE_COUNT
+
+Why define count for a value enum like this? For attrs we define it
+because it's used to size tables, don't think anyone will size tables
+based on states.
+
+There's a bunch of kdoc warnings in the patches as well.

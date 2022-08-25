@@ -2,267 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1E25A12B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D955A1264
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242723AbiHYNtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S242803AbiHYNe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiHYNtS (ORCPT
+        with ESMTP id S240693AbiHYNeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:49:18 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56947B5A47;
-        Thu, 25 Aug 2022 06:49:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id u14so24694089wrq.9;
-        Thu, 25 Aug 2022 06:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:message-id:date:content-transfer-encoding
-         :mime-version:to:from:subject:cc:from:to:cc;
-        bh=WPCuzAnadlF8Wne0s3IEnoZsdJC/bDxJQFxU3psjTgs=;
-        b=FlzrknLGLaeo9haic8LHkTVXed//r/Uo1Mj7KNs51LotXqhLgM/Ilu3eDKHQqK9br8
-         6Sddvm0nb/xLwiZFDnlQLuITzFEBpo8/GHwfL/M4SZ/kEr1FvLW8zxNdwpKcT3wqgL7p
-         Mbp5VON84T1YqhX23l4HXBuMGSAPCjg9Qbz56Q8w6m8zfYc227zADS36fPcOkOXDDCAC
-         s92gjUpEWDNp5jQR2tPmgIoc889z4aFNvLIdMJ3Ldut85qfr2yUe7XLSYhAjEbEiyi38
-         5lVbz/rYIA5a+rwTlPpHsvfwoVMifIDK0sa+4r+VIX/N4iFm9nplkZkquiPUsL6E1i3K
-         o0tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:message-id:date:content-transfer-encoding
-         :mime-version:to:from:subject:cc:x-gm-message-state:from:to:cc;
-        bh=WPCuzAnadlF8Wne0s3IEnoZsdJC/bDxJQFxU3psjTgs=;
-        b=iML32XsYisAACYB30kdLN3JzuUcARtG0bHz9Dh1RuDN07kItFuJAOUHfNupIGPNFc1
-         rGFoudBuv/9HhirorKdENHZecFoD1cNHvtmPPL0M/v0nALUIMgLR8QU6h5oLfiF7NPJk
-         9xEp+veewFcbLe/s+JxjmkHzGylqnCfEUm5d20KRw4AGOmLtEO65HCcP4nWGw9D2HAYP
-         Q7nGzXZL5Hhlx1OluE/xcgOE5jmM4WanPUew1ST6f3MypKPJ8WsEeW4hCl8VVs0wONlg
-         AWDuJDpcTlzZIDKId+Eefwl0sWMmtax7zhvutLm++ZwIfPlygPXOCZLKnJ6wV7uqgdy9
-         o6PA==
-X-Gm-Message-State: ACgBeo0adF3XlicxLTerSEBSVtNit1sT5WNLU+wWZKz8dbEUh3kkSHOy
-        eziQW/Zrvhd3KCfPc1AttGE=
-X-Google-Smtp-Source: AA6agR7kjY0ltpAQVeo1IG40uFqkihwFv8LQMkodTNb2FD6raSMp1Eq8kIiXtR3mIHx1AJFokJrDcw==
-X-Received: by 2002:a5d:58ca:0:b0:225:24a8:8861 with SMTP id o10-20020a5d58ca000000b0022524a88861mr2440759wrf.316.1661435355789;
-        Thu, 25 Aug 2022 06:49:15 -0700 (PDT)
-Received: from localhost (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id n7-20020a5d4207000000b002253fd19a6asm19648458wrq.18.2022.08.25.06.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 06:49:14 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, "Felix Fietkau" <nbd@nbd.name>,
-        "Toke Hoiland-Jorgensen" <toke@redhat.com>,
-        "Linus Lussing" <linus.luessing@c0d3.blue>,
-        "Kalle Valo" <kvalo@kernel.org>,
-        "kernel test robot" <lkp@intel.com>
-Subject: Re: [RFC/RFT v5 1/4] mac80211: use AQL airtime for expected
- throughput.
-From:   "Nicolas Escande" <nico.escande@gmail.com>
-To:     "Baligh Gasmi" <gasmibal@gmail.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 25 Aug 2022 15:31:40 +0200
-Message-Id: <CMF5B109JKDQ.R3G4GDYBLZT6@syracuse>
-X-Mailer: aerc 0.11.0
-References: <20220719123525.3448926-1-gasmibal@gmail.com>
- <20220719123525.3448926-2-gasmibal@gmail.com>
-In-Reply-To: <20220719123525.3448926-2-gasmibal@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 Aug 2022 09:34:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C14DB7280
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:33:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6ABA3D6E;
+        Thu, 25 Aug 2022 06:32:52 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.47.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 902443F71A;
+        Thu, 25 Aug 2022 06:32:46 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 14:32:43 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@armlinux.org.uk
+Subject: Re: [PATCH 2/2] ARM: Replace this_cpu_* with raw_cpu_* in
+ panic_bad_stack()
+Message-ID: <Ywd5+2UpWv4M5K6t@FVFF77S0Q05N>
+References: <20220825063154.69-1-thunder.leizhen@huawei.com>
+ <20220825063154.69-3-thunder.leizhen@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825063154.69-3-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Baligh,
+On Thu, Aug 25, 2022 at 02:31:54PM +0800, Zhen Lei wrote:
+> The hardware automatically disable the IRQ interrupt before jumping to the
+> interrupt or exception vector. Therefore, the preempt_disable() operation
+> in this_cpu_read() after macro expansion is unnecessary. In fact, function
+> this_cpu_read() may trigger scheduling, see pseudocode below.
+> 
+> Pseudocode of this_cpu_read(xx):
+> preempt_disable_notrace();
+> raw_cpu_read(xx);
+> if (unlikely(__preempt_count_dec_and_test()))
+> 	__preempt_schedule_notrace();
+> 
+> Therefore, use raw_cpu_* instead of this_cpu_* to eliminate potential
+> hazards. At the very least, it reduces a few lines of assembly code.
 
-On Tue Jul 19, 2022 at 2:35 PM CEST, Baligh Gasmi wrote:
-> Since the integration of AQL, packet TX airtime estimation is
-> calculated and counted to be used for the dequeue limit.
->
-> Use this estimated airtime to compute expected throughput for
-> each station.
->
-> It will be a generic mac80211 implementation. that can be used if the
-> driver do not have get_expected_throughput implementation.
->
-> Useful for L2 routing protocols, like B.A.T.M.A.N.
->
-> Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> CC: Felix Fietkau <nbd@nbd.name>
+I think if scheduling is a problem here, something should increment the
+preempt_count as is done on arm64, since any other operation in this function
+could end up causing preemption.
+
+Regardless, I also think it's sensible to use raw_cpu_*() here, but I don't
+think that actually fixes the problem the commit message describes.
+
+Thanks,
+Mark.
+
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > ---
->  net/mac80211/driver-ops.h |  2 ++
->  net/mac80211/sta_info.c   | 39 +++++++++++++++++++++++++++++++++++++++
->  net/mac80211/sta_info.h   | 11 +++++++++++
->  net/mac80211/status.c     |  2 ++
->  net/mac80211/tx.c         |  8 +++++++-
->  5 files changed, 61 insertions(+), 1 deletion(-)
->
-> diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
-> index 4e2fc1a08681..fa9952154795 100644
-> --- a/net/mac80211/driver-ops.h
-> +++ b/net/mac80211/driver-ops.h
-> @@ -1142,6 +1142,8 @@ static inline u32 drv_get_expected_throughput(struc=
-t ieee80211_local *local,
->  	trace_drv_get_expected_throughput(&sta->sta);
->  	if (local->ops->get_expected_throughput && sta->uploaded)
->  		ret =3D local->ops->get_expected_throughput(&local->hw, &sta->sta);
-> +	else
-> +		ret =3D ewma_avg_est_tp_read(&sta->deflink.status_stats.avg_est_tp);
->  	trace_drv_return_u32(local, ret);
->
->  	return ret;
-> diff --git a/net/mac80211/sta_info.c b/net/mac80211/sta_info.c
-> index e04a0905e941..201aab465234 100644
-> --- a/net/mac80211/sta_info.c
-> +++ b/net/mac80211/sta_info.c
-> @@ -1993,6 +1993,45 @@ void ieee80211_sta_update_pending_airtime(struct i=
-eee80211_local *local,
->  			       tx_pending, 0);
->  }
->
-> +void ieee80211_sta_update_tp(struct ieee80211_local *local,
-> +			     struct sta_info *sta,
-> +			     struct sk_buff *skb,
-> +			     u16 tx_time_est,
-> +			     bool ack, int retry)
-> +{
-> +	unsigned long diff;
-> +	struct rate_control_ref *ref =3D NULL;
-> +
-> +	if (!skb || !sta || !tx_time_est)
-> +		return;
-> +
-> +	if (test_sta_flag(sta, WLAN_STA_RATE_CONTROL))
-> +		ref =3D sta->rate_ctrl;
-> +
-> +	if (ref && ref->ops->get_expected_throughput)
-> +		return;
-> +
-> +	if (local->ops->get_expected_throughput)
-> +		return;
-> +
-> +	tx_time_est +=3D ack ? 4 : 0;
-> +	tx_time_est +=3D retry ? retry * 2 : 2;
-> +
-> +	sta->deflink.tx_stats.tp_tx_size +=3D (skb->len * 8) * 1000;
-> +	sta->deflink.tx_stats.tp_tx_time_est +=3D tx_time_est;
-> +
-> +	diff =3D jiffies - sta->deflink.status_stats.last_tp_update;
-> +	if (diff > HZ / 10) {
-> +		ewma_avg_est_tp_add(&sta->deflink.status_stats.avg_est_tp,
-> +				    sta->deflink.tx_stats.tp_tx_size /
-> +				    sta->deflink.tx_stats.tp_tx_time_est);
-This needs a div_u64(), the arch may not have native 64 bits div support
-> +
-> +		sta->deflink.tx_stats.tp_tx_size =3D 0;
-> +		sta->deflink.tx_stats.tp_tx_time_est =3D 0;
-> +		sta->deflink.status_stats.last_tp_update =3D jiffies;
-> +	}
-> +}
-> +
->  int sta_info_move_state(struct sta_info *sta,
->  			enum ieee80211_sta_state new_state)
+> KernelVersion: v6.0-rc2
+>  arch/arm/kernel/traps.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+> index 1518a1f443ff866..d5903d790cf3b7e 100644
+> --- a/arch/arm/kernel/traps.c
+> +++ b/arch/arm/kernel/traps.c
+> @@ -927,9 +927,9 @@ asmlinkage void handle_bad_stack(struct pt_regs *regs)
 >  {
-> diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
-> index 35c390bedfba..4200856fefcd 100644
-> --- a/net/mac80211/sta_info.h
-> +++ b/net/mac80211/sta_info.h
-> @@ -123,6 +123,7 @@ enum ieee80211_sta_info_flags {
->  #define HT_AGG_STATE_STOP_CB		7
->  #define HT_AGG_STATE_SENT_ADDBA		8
->
-> +DECLARE_EWMA(avg_est_tp, 8, 16)
->  DECLARE_EWMA(avg_signal, 10, 8)
->  enum ieee80211_agg_stop_reason {
->  	AGG_STOP_DECLINED,
-> @@ -157,6 +158,12 @@ void ieee80211_register_airtime(struct ieee80211_txq=
- *txq,
->
->  struct sta_info;
->
-> +void ieee80211_sta_update_tp(struct ieee80211_local *local,
-> +			     struct sta_info *sta,
-> +			     struct sk_buff *skb,
-> +			     u16 tx_time_est,
-> +			     bool ack, int retry);
-> +
->  /**
->   * struct tid_ampdu_tx - TID aggregation information (Tx).
->   *
-> @@ -549,6 +556,8 @@ struct link_sta_info {
->  		s8 last_ack_signal;
->  		bool ack_signal_filled;
->  		struct ewma_avg_signal avg_ack_signal;
-> +		struct ewma_avg_est_tp avg_est_tp;
-> +		unsigned long last_tp_update;
->  	} status_stats;
->
->  	/* Updated from TX path only, no locking requirements */
-> @@ -558,6 +567,8 @@ struct link_sta_info {
->  		struct ieee80211_tx_rate last_rate;
->  		struct rate_info last_rate_info;
->  		u64 msdu[IEEE80211_NUM_TIDS + 1];
-> +		u64 tp_tx_size;
-> +		u64 tp_tx_time_est;
->  	} tx_stats;
->
->  	enum ieee80211_sta_rx_bandwidth cur_max_bandwidth;
-> diff --git a/net/mac80211/status.c b/net/mac80211/status.c
-> index e69272139437..1fb93abc1709 100644
-> --- a/net/mac80211/status.c
-> +++ b/net/mac80211/status.c
-> @@ -1152,6 +1152,8 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *h=
-w,
->  	ack_signal_valid >  		!!(info->status.flags & IEEE80211_TX_STATUS_ACK_S=
-IGNAL_VALID);
->
-> +	ieee80211_sta_update_tp(local, sta, skb, tx_time_est, acked, retry_coun=
-t);
-> +
->  	if (pubsta) {
->  		struct ieee80211_sub_if_data *sdata =3D sta->sdata;
->
-> diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-> index c425f4fb7c2e..beb79b04c287 100644
-> --- a/net/mac80211/tx.c
-> +++ b/net/mac80211/tx.c
-> @@ -3617,6 +3617,7 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee802=
-11_hw *hw,
->  	struct ieee80211_tx_data tx;
->  	ieee80211_tx_result r;
->  	struct ieee80211_vif *vif =3D txq->vif;
-> +	struct rate_control_ref *ref =3D NULL;
->
->  	WARN_ON_ONCE(softirq_count() =3D=3D 0);
->
-> @@ -3775,8 +3776,13 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80=
-211_hw *hw,
->  encap_out:
->  	IEEE80211_SKB_CB(skb)->control.vif =3D vif;
->
-> +	if (tx.sta && test_sta_flag(tx.sta, WLAN_STA_RATE_CONTROL))
-> +		ref =3D tx.sta->rate_ctrl;
-> +
->  	if (vif &&
-> -	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)) =
-{
-> +	    ((!local->ops->get_expected_throughput &&
-> +	     (!ref || !ref->ops->get_expected_throughput)) ||
-> +	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)))=
- {
->  		bool ampdu =3D txq->ac !=3D IEEE80211_AC_VO;
->  		u32 airtime;
->
-> --
-> 2.37.1
-
+>  	unsigned long tsk_stk = (unsigned long)current->stack;
+>  #ifdef CONFIG_IRQSTACKS
+> -	unsigned long irq_stk = (unsigned long)this_cpu_read(irq_stack_ptr);
+> +	unsigned long irq_stk = (unsigned long)raw_cpu_read(irq_stack_ptr);
+>  #endif
+> -	unsigned long ovf_stk = (unsigned long)this_cpu_read(overflow_stack_ptr);
+> +	unsigned long ovf_stk = (unsigned long)raw_cpu_read(overflow_stack_ptr);
+>  
+>  	console_verbose();
+>  	pr_emerg("Insufficient stack space to handle exception!");
+> -- 
+> 2.25.1
+> 

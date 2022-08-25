@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73765A081C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 06:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FF55A0825
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 06:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbiHYEkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 00:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S232077AbiHYEl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 00:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiHYEjs (ORCPT
+        with ESMTP id S231177AbiHYElz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 00:39:48 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10769E0F0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 21:39:30 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id io24so4221023plb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 21:39:30 -0700 (PDT)
+        Thu, 25 Aug 2022 00:41:55 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E27A61129
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 21:41:54 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x63-20020a17090a6c4500b001fabbf8debfso3632010pjj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 21:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ev+//6osdR20vXmjWVObFi6l/lAHjsPO3JFHLib7qgk=;
-        b=VbuUYXbO7e5MzGlXMzi2enXFgW1KN4hN/nL+aVWGyDW8ItLK1OiZEOIEqXagAWVRev
-         +8+Vj2xgGZ0tHQLU2vVpoBg0s0sMYlF7y9ktoFJgEy1GOd56dS1tQvmSQGBD+Wwz+0mn
-         ViPZYRK/fs/n2NhohftHfFvqTA0OZWPDWbmhOviAe1DAM06qoAj02iyB5sIrlR+a12vw
-         w1ckz3RwjHhJBjVC1rA6qqf84ZjEVtTP5sS51YW6EPx3juwsW+OCjaWUJShdMwhn0rxI
-         H+v6q+XVrIfMCpV2cA9lVzgpzwT+EZKIJTvJvtNgkC3TL2JYsR+cdCG4W1HmgQKClg9f
-         7IWw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=INrevp61jvgo3SuTdlwO6+Vd1zseXzdZ0ssScT78usc=;
+        b=kAHRzLJrcnUVbYLKrg/c7FYPqutwG9JKgj8uA6KK3PV+CyzNUEY6/mtraAJVl9Ty5E
+         zfi9COFC1b5FEzcFfHSUPx2evppPqH2TIgm5fh0j1Gf9PfpoXw6zUcDMmjRAjbNEpjmo
+         UWWJEkMK3ebPfk5TIcE5PqztVYrSkkAKjsKEMEiHVKHfIPpYeNRabgnvsrRrs0z+DE45
+         TE08FVwAYgW6arUGrYUuDTWTdjQy8k/78moOETYNMTUHIvR7e3542FJmr+s5Yvtszs9T
+         hgG+bNxFT3c/GJT05S/xY/IOvz4k+c8rXLJrJHiiVMt9QzfvL38envLwAT5cvVYbsmLR
+         2uBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ev+//6osdR20vXmjWVObFi6l/lAHjsPO3JFHLib7qgk=;
-        b=rtI7H4q83cZ2SPGYKCPkw84K+cdndUKuFlrG0nXFlecQ/47MNc3J9Dp1gzs6dBb2k/
-         Sl0+RMBs7mjdu4HDDouYWtzri9d5KEoPWA5Ws0u+sZ8nVBhOAIB4YxEQOMb/KKJiwUTF
-         mhtHMImRf+INWyJmDPpgx0EzqNjTkaZUKlDDHgHhELp1d/E3SWz94OTOAtE+D5Ostsqq
-         yqtdbKZ1WCqj7VGmPESxvcIo9MAtpSPUmmwK4xsgNd0yxs6mY8e/fY0KinUJxHgI0WvX
-         KT7osL5xQEvB6ctjJ/LDK3zkKffMizIHch8q1Qc9NFrg+xGku5dbNcxkgwo6uDiMLPJR
-         unmA==
-X-Gm-Message-State: ACgBeo3ejmwbyyHn37ssbfvsGS3zbe6MiTYfdno+zCDjnsY8jwze/2Fr
-        IYCtEQxNf0X8FSOkgYuw2MS7
-X-Google-Smtp-Source: AA6agR7uSvrEL9loMv2SaYVbtilMYhslUHMb+lZ4qjEowHtxCfa+nmdlp4yNcRWxe4e/wF7QWpJ5iA==
-X-Received: by 2002:a17:90b:1b4a:b0:1f5:5578:6398 with SMTP id nv10-20020a17090b1b4a00b001f555786398mr2609753pjb.122.1661402370341;
-        Wed, 24 Aug 2022 21:39:30 -0700 (PDT)
-Received: from localhost.localdomain ([117.207.24.28])
-        by smtp.gmail.com with ESMTPSA id i11-20020a17090a64cb00b001fa9f86f20csm2294296pjm.49.2022.08.24.21.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 21:39:29 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org
-Cc:     james.morse@arm.com, rric@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
-        quic_saipraka@quicinc.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 5/5] MAINTAINERS: Add myself as the maintainer for qcom_edac driver
-Date:   Thu, 25 Aug 2022 10:08:59 +0530
-Message-Id: <20220825043859.30066-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
-References: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=INrevp61jvgo3SuTdlwO6+Vd1zseXzdZ0ssScT78usc=;
+        b=VMNYDTv850n9T6Qqir2/MP5cT+ccUX4SE+9XsyIxmXHtuMpdXtuWVGGOT03fvXiS2k
+         /Kf4ParMNFiLwEUIK0uJgGnVXTzvi9Iqc4HeQhjevOexsLxY/7/Z5E33rLwhZuAwfzr0
+         nPO5Zd3Yv8OaB5w057KceGljPfNC9PYoDXJ1yB4VgMf6YJdyEj9PDbRdTN7FoBjQJ8Ta
+         ViQIYM3nKWy4bNH1MXGDgm62pwQGAQavTP8KDs27G82BzpJ86YuIqVMMSwWJ4G4VrLtI
+         5+yV2lQmMJUGKuBKTr3GFuPzDuzJIg9SJVin3ukYn+lQJdPz4eU2g01h05W7Fr4muZsT
+         mC9g==
+X-Gm-Message-State: ACgBeo12Qn5j3u0ikd0YWktjXj31Wyre0K9dFrdKJmPt5ff5LnoS0reS
+        4ZPtHT0P/yjnMNgWv9MUY+jirMZ/zL11i5yL9IMM5g==
+X-Google-Smtp-Source: AA6agR6hGN7BmkhP+Mw6B4QHFjCHWsgU7DDwEvi0UkEo46L6L55OpTIH8uF2pm+kufP7PumEiqap+MCob1VMq/R3zgE=
+X-Received: by 2002:a17:902:b410:b0:172:c9d1:7501 with SMTP id
+ x16-20020a170902b41000b00172c9d17501mr2099534plr.106.1661402513848; Wed, 24
+ Aug 2022 21:41:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220825000506.239406-1-shakeelb@google.com> <20220825000506.239406-3-shakeelb@google.com>
+ <20220824173330.2a15bcda24d2c3c248bc43c7@linux-foundation.org>
+In-Reply-To: <20220824173330.2a15bcda24d2c3c248bc43c7@linux-foundation.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 24 Aug 2022 21:41:42 -0700
+Message-ID: <CALvZod6+Y1yvp8evMLTeEwKnQyoXJmzjO7xLN9w=EPcOUH6BHQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] mm: page_counter: rearrange struct page_counter fields
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>, lkp@lists.01.org,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current maintainers have left Qualcomm and their email addresses were
-bouncing. Since I couldn't get hold of them now, I'm volunteering myself
-to maintain this driver.
+On Wed, Aug 24, 2022 at 5:33 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Thu, 25 Aug 2022 00:05:05 +0000 Shakeel Butt <shakeelb@google.com> wrote:
+>
+> > With memcg v2 enabled, memcg->memory.usage is a very hot member for
+> > the workloads doing memcg charging on multiple CPUs concurrently.
+> > Particularly the network intensive workloads. In addition, there is a
+> > false cache sharing between memory.usage and memory.high on the charge
+> > path. This patch moves the usage into a separate cacheline and move all
+> > the read most fields into separate cacheline.
+> >
+> > To evaluate the impact of this optimization, on a 72 CPUs machine, we
+> > ran the following workload in a three level of cgroup hierarchy.
+> >
+> >  $ netserver -6
+> >  # 36 instances of netperf with following params
+> >  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+> >
+> > Results (average throughput of netperf):
+> > Without (6.0-rc1)     10482.7 Mbps
+> > With patch            12413.7 Mbps (18.4% improvement)
+> >
+> > With the patch, the throughput improved by 18.4%.
+> >
+> > One side-effect of this patch is the increase in the size of struct
+> > mem_cgroup. For example with this patch on 64 bit build, the size of
+> > struct mem_cgroup increased from 4032 bytes to 4416 bytes. However for
+> > the performance improvement, this additional size is worth it. In
+> > addition there are opportunities to reduce the size of struct
+> > mem_cgroup like deprecation of kmem and tcpmem page counters and
+> > better packing.
+>
+> Did you evaluate the effects of using a per-cpu counter of some form?
 
-Acked-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- MAINTAINERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6ff9..026dd33b106c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7432,8 +7432,7 @@ S:	Maintained
- F:	drivers/edac/pnd2_edac.[ch]
- 
- EDAC-QCOM
--M:	Channagoud Kadabi <ckadabi@codeaurora.org>
--M:	Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>
-+M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
- L:	linux-arm-msm@vger.kernel.org
- L:	linux-edac@vger.kernel.org
- S:	Maintained
--- 
-2.25.1
-
+Do you mean per-cpu counter for usage or something else? The usage
+needs to be compared against the limits and accumulating per-cpu is
+costly particularly on larger machines, so, no easy way to make usage
+a per-cpu counter. Or maybe I misunderstood you and you meant
+something else.

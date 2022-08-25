@@ -2,136 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166875A0960
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA285A095B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbiHYG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
+        id S236874AbiHYHAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236593AbiHYG71 (ORCPT
+        with ESMTP id S236625AbiHYHAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:59:27 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6391A1D13;
-        Wed, 24 Aug 2022 23:59:25 -0700 (PDT)
-X-UUID: 1457bb8bcaca4f6b9983a606c598a6c1-20220825
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ownQ93bhTx2wCDrHvGFfWGNUedELMU2o04x/3pYfzZ8=;
-        b=GdlFEJ7Bmjk3CS2AwYowhLKNixUS52ntwyIZ29Yxab+JA0IAqLBsT6QIK01ZfWPFRi825XyZkxbxCQ9ntBIq0pRc/BncE4Tau2zR9D2h8xe5hpUyvnv+3JKg4DkbinRSm1pXNqC8ha0zWHMCP+NFtDYQOTUZ00TDel4ZLo8SMhY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:c1c5b8f9-c37e-4c26-9f54-11c631d61410,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:e2ed0f20-1c20-48a5-82a0-25f9c331906d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 1457bb8bcaca4f6b9983a606c598a6c1-20220825
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1789223745; Thu, 25 Aug 2022 14:59:22 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 25 Aug 2022 14:59:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 25 Aug 2022 14:59:20 +0800
-Message-ID: <d5a00dc88bed1680caa8af895a1140324b9d079e.camel@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: arm: mediatek: mmsys: change compatible
- for MT8195
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-CC:     Jason-JH Lin =?UTF-8?Q?=28=E6=9E=97=E7=9D=BF=E7=A5=A5=29?= 
-        <Jason-JH.Lin@mediatek.com>,
-        Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?= 
-        <Nancy.Lin@mediatek.com>,
-        "CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?=" 
-        <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 25 Aug 2022 14:59:20 +0800
-In-Reply-To: <3ff08ae9-a4b6-2b74-23cb-69ea1d7e1033@linaro.org>
-References: <20220825055658.12429-1-rex-bc.chen@mediatek.com>
-         <3ff08ae9-a4b6-2b74-23cb-69ea1d7e1033@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 25 Aug 2022 03:00:23 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A2A8C2F3A3;
+        Thu, 25 Aug 2022 00:00:16 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Thu, 25 Aug 2022 14:59:50
+ +0800 (GMT+08:00)
+X-Originating-IP: [218.12.16.111]
+Date:   Thu, 25 Aug 2022 14:59:50 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Brian Norris" <briannorris@chromium.org>,
+        "Linux Kernel" <linux-kernel@vger.kernel.org>,
+        "Johannes Berg" <johannes@sipsolutions.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "amit karwar" <amitkarwar@gmail.com>,
+        "Ganapathi Bhat" <ganapathi017@gmail.com>,
+        "Sharvari Harisangam" <sharvari.harisangam@nxp.com>,
+        "Xinming Hu" <huxinming820@gmail.com>, kvalo@kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v8 0/2] Add new APIs of devcoredump and fix bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <YwcPxT2JLQHXbdFI@kroah.com>
+References: <cover.1661252818.git.duoming@zju.edu.cn>
+ <CA+ASDXNf5JV9mj8mbm1OGZ_zd4d8srFc=E++Amg4MoQjqjS_TA@mail.gmail.com>
+ <27a2a8a7.99f01.182d2758bc9.Coremail.duoming@zju.edu.cn>
+ <YwcPxT2JLQHXbdFI@kroah.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,URIBL_CSS autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <261bd1c5.9ab83.182d3cccd91.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgCXnP3nHQdjPPfoAw--.51580W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwNAVZdtbKGFwBgs-
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-08-25 at 14:11 +0800, Krzysztof Kozlowski wrote:
-> On 25/08/2022 08:56, Bo-Chen Chen wrote:
-> > From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
-> > 
-> > For previous MediaTek SoCs, such as MT8173, there are 2 display HW
-> > pipelines binding to 1 mmsys with the same power domain, the same
-> > clock driver and the same mediatek-drm driver.
-> > 
-> > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding
-> > to
-> > 2 different power domains, different clock drivers and different
-> > mediatek-drm drivers.
-> 
-> I don't see binding to different clock drivers and anyway that's not
-> really an argument here. Please focus in description on hardware
-> properties, IOW, are devices compatible or different. What is the
-> incompatible difference between VDOSYS0 and 1?
-> 
-> Best regards,
-> Krzysztof
-
-Hello Krzysztof,
-
-Thanks for yor review.
-
-From the functions perspective:
-
-Hardware pipeline of VDOSYS0 has these components: COLOR, CCORR, AAL,
-GAMMA, DITHER.
-They are related to PQ (Picture Quality) functions and they makes
-VDOSYS0 supports PQ function while they are not including in VDOSYS1.
-
-Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
-component).
-It makes VDOSYS1 supports the HDR function while it's not including in
-VDOSYS0.
-
-About mediatek ETHDR, you can refer to this series:
-
-https://lore.kernel.org/all/20220819061456.8042-2-nancy.lin@mediatek.com/
-
-To summary:
-Only VDOSYS0 can support PQ adjustment.
-Only VDOSYS1 can support HDR adjustment.
-
-Is this description ok for you?
-If it is ok, I will put them into commit message in next version.
-
-BRs,
-Bo-Chen
-
+SGVsbG8sCgpPbiBUaHUsIDI1IEF1ZyAyMDIyIDA3OjU5OjMzICswMjAwIEdyZWcgS3JvYWgtSGFy
+dG1hbiB3cm90ZToKIAo+ID4gT24gV2VkLCAyNCBBdWcgMjAyMiAxMzo0MjowOSAtMDcwMCBCcmlh
+biBOb3JyaXMgd3JvdGU6Cj4gPiAKPiA+ID4gT24gVHVlLCBBdWcgMjMsIDIwMjIgYXQgNDoyMSBB
+TSBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4gd3JvdGU6Cj4gPiA+ID4KPiA+ID4g
+PiBUaGUgZmlyc3QgcGF0Y2ggYWRkcyBuZXcgQVBJcyB0byBzdXBwb3J0IG1pZ3JhdGlvbiBvZiB1
+c2Vycwo+ID4gPiA+IGZyb20gb2xkIGRldmljZSBjb3JlZHVtcCByZWxhdGVkIEFQSXMuCj4gPiA+
+ID4KPiA+ID4gPiBUaGUgc2Vjb25kIHBhdGNoIGZpeCBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBi
+dWdzIG9mIG13aWZpZXgKPiA+ID4gPiBjYXVzZWQgYnkgZGV2X2NvcmVkdW1wdigpLgo+ID4gPiA+
+Cj4gPiA+ID4gRHVvbWluZyBaaG91ICgyKToKPiA+ID4gPiAgIGRldmNvcmVkdW1wOiBhZGQgbmV3
+IEFQSXMgdG8gc3VwcG9ydCBtaWdyYXRpb24gb2YgdXNlcnMgZnJvbSBvbGQKPiA+ID4gPiAgICAg
+ZGV2aWNlIGNvcmVkdW1wIHJlbGF0ZWQgQVBJcwo+ID4gPiA+ICAgbXdpZmlleDogZml4IHNsZWVw
+IGluIGF0b21pYyBjb250ZXh0IGJ1Z3MgY2F1c2VkIGJ5IGRldl9jb3JlZHVtcHYKPiA+ID4gCj4g
+PiA+IEkgd291bGQgaGF2ZSBleHBlY3RlZCBhIHRoaXJkIHBhdGNoIGluIGhlcmUsIHRoYXQgYWN0
+dWFsbHkgY29udmVydHMKPiA+ID4gZXhpc3RpbmcgdXNlcnMuIFRoZW4gaW4gdGhlIGZvbGxvd2lu
+ZyByZWxlYXNlIGN5Y2xlLCBjbGVhbiB1cCBhbnkgbmV3Cj4gPiA+IHVzZXJzIG9mIHRoZSBvbGQg
+QVBJIHRoYXQgcG9wIHVwIGluIHRoZSBtZWFudGltZSBhbmQgZHJvcCB0aGUgb2xkIEFQSS4KPiA+
+ID4gCj4gPiA+IEJ1dCBJJ2xsIGRlZmVyIHRvIHRoZSBwZW9wbGUgd2hvIHdvdWxkIGFjdHVhbGx5
+IGJlIG1lcmdpbmcgeW91ciBjb2RlLgo+ID4gPiBUZWNobmljYWxseSBpdCBjb3VsZCBhbHNvIHdv
+cmsgdG8gc2ltcGx5IHByb3ZpZGUgdGhlIEFQSSB0aGlzIGN5Y2xlLAo+ID4gPiBhbmQgY29udmVy
+dCBldmVyeW9uZSBpbiB0aGUgbmV4dC4KPiA+IAo+ID4gVGhhbmsgeW91ciBmb3IgeW91ciB0aW1l
+IGFuZCByZXBseS4KPiA+IAo+ID4gSWYgdGhpcyBwYXRjaCBzZXQgaXMgbWVyZ2VkIGludG8gdGhl
+IGxpbnV4LW5leHQgdHJlZSwgSSB3aWxsIHNlbmQgdGhlIAo+ID4gdGhpcmQgcGF0Y2ggd2hpY2gg
+dGFyZ2V0cyBhdCBsaW51eC1uZXh0IHRyZWUgYW5kIGNvbnZlcnRzIGV4aXN0aW5nIHVzZXJzIAo+
+ID4gYXQgbGF0ZXIgdGltZXIgb2YgdGhpcyByZWxlYXNlIGN5Y2xlLiBCZWNhdXNlIHRoZXJlIGFy
+ZSBuZXcgdXNlcnMgdGhhdCAKPiA+IG1heSB1c2UgdGhlIG9sZCBBUElzIGNvbWVzIGludG8gbGlu
+dXgtbmV4dCB0cmVlIGR1cmluZyB0aGUgcmVtYWluaW5nIHRpbWUKPiA+IG9mIHRoaXMgcmVsZWFz
+ZSBjeWNsZS4KPiAKPiBObywgdGhhdCdzIG5vdCBob3cgdGhpcyB3b3Jrcywgd2UgY2FuJ3QgYWRk
+IHBhdGNoZXMgd2l0aCBuZXcgZnVuY3Rpb25zCj4gdGhhdCBubyBvbmUgdXNlcy4gIEFuZCBpdCdz
+IG5vdCBob3cgSSBhc2tlZCBmb3IgdGhpcyBhcGkgdG8gYmUgbWlncmF0ZWQKPiBvdmVyIHRpbWUg
+cHJvcGVybHkuICBJJ2xsIHRyeSB0byByZXNwb25kIHRvIHlvdXIgcGF0Y2ggd2l0aCBtb3JlIGRl
+dGFpbHMKPiBpbiBhIHdlZWsgb3Igc28gd2hlbiBJIGNhdGNoIHVwIG9uIHBhdGNoIHJldmlldy4u
+LgoKVGhhbmsgeW91IGZvciB5b3VyIHRpbWUgYW5kIEkgbG9vayBmb3J3YXJkIHRvIHlvdXIgcmVw
+bHkuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==

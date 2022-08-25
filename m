@@ -2,119 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A055A1BD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C505A1BD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244210AbiHYWAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        id S244225AbiHYWBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243483AbiHYWAt (ORCPT
+        with ESMTP id S244152AbiHYWBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:00:49 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC14501BA
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:00:47 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id u6so11876488qvp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=pZQ/2nHQhIrhPnU1bKwTlnrZA3djIkob/YiqxMhnkcg=;
-        b=mAdzoUW7wW6FM0q0jbONT8uA9l3acX/GFHpJ7wC6WDxytlS0wUPjpaO4famr4o6UGI
-         bRb7F3jg1uTrWwJkvILebhbpdBg1kwY8Y4GY1zaNauGK7UZ0WtYg76kz9OxYmQ1y/p24
-         jE+mSSjJCthamtLl8RK3mgfcNE9Ri9yEuMGDJr/9jPm8NrkDcOCYXQEP2+Z/EEoO+lcD
-         npjYu58k2kZ/rDc0WXISd/Hqpc69fiMaHu9gC9mefIdF6UB/RJbA9gKRVpO/SnanWqKF
-         jkI11Vue+dQ0K3za7FLXgIm8E+oOsfrgmcGEOYBgAkyuy4+HL49apMopNpTMFkLJJrDi
-         afbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=pZQ/2nHQhIrhPnU1bKwTlnrZA3djIkob/YiqxMhnkcg=;
-        b=Wi+Ra8EowbRGF+N2CS7c/RinDCH9gKFKVjLq0qYCmlnUOvNsmvzHHduECjMh4RMIUm
-         omqw60EnZZYd1o+KB233b+O69pDRPMHwFnObzx2pkUgf129MaU5xIjQB+Z2xJ9a5BBOe
-         dsbzanIPw2/V0hjniarSZFFF3FxK03LddzBUAeekOZd5fD78fmUASrDT7FGQknk5G0Ct
-         y85+BoY37OgwBQUJF7dH1u+3QRUDTyBGm23BGJ8jFLuAuyRg4D2VFWUzSDK/P6slLv9D
-         huDrVsFzNoc6nexRepf6BLUsQNq3WHr1fF2nUO/O6O57im0RgGP97j1RRyhpSt/uxqbv
-         x6jA==
-X-Gm-Message-State: ACgBeo191xYGasmbQTTMqxjRx9ZNu/XsMQuBQPU91Rn6LHK0w7mdgqzI
-        3trzSZIO7DWV5tU+mE/lZoEW+T7sWarZZ9upURzccw==
-X-Google-Smtp-Source: AA6agR6XGAhoPsEzWX90e7VRQZdeYxFMQQX4NeTgsf+duYJt3Y7B9gdEI/cnVtfnEfrD3kJVO1DJUXmAHc0T+c4Bkpw=
-X-Received: by 2002:a0c:b31a:0:b0:473:8062:b1b4 with SMTP id
- s26-20020a0cb31a000000b004738062b1b4mr5569946qve.85.1661464847009; Thu, 25
- Aug 2022 15:00:47 -0700 (PDT)
+        Thu, 25 Aug 2022 18:01:44 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F55CB4E8F
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:01:43 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E221E5C0112;
+        Thu, 25 Aug 2022 18:01:42 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 25 Aug 2022 18:01:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1661464902; x=1661551302; bh=5f8892CWhzB/Oa681ruXsO/BK
+        kD7Nk+PX7cFrRgrLVc=; b=hk4VJ+YexUBwOHzG4aA16vzBzPvU+wREaGuKhODwa
+        7+BG/ynaoOpykU5tSOtwllnZ9wE/BgveCAdU3QXs3TtXMpfiEbAPtVtZ0CSB+pgA
+        zTvMto2fVFnrZ5Fb8WUUrP/EITsH1zmV9oYx2jwNq1bvZ9BKLTtInyFsz2X/dWzi
+        JuCO33Ml7aJJgPdrOTkriR3FMsh4lo4zBTN6y1syw+XKSZf/YNO7SYOj4tO2n88p
+        KGWU3J2DksqHWo4/wUWICRs1TK5FRrvTORkoCUIM9ZkkWSjhb9dZxMYVPClKJAZ0
+        Umk19Iobl3khkShXFtXoJ16L8kfPhbcZOsDatxsFb0vlw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1661464902; x=1661551302; bh=5f8892CWhzB/Oa681ruXsO/BKkD7Nk+PX7c
+        FrRgrLVc=; b=lnk6COYF3alDsMqezini1tHb933FgoAt8nf1R5cG38IIfuAEDPD
+        n2frG1KYwwXNgndUiVk8Clpzc262Mqzr7mRI7qtthrXO+rqBatTVOK77oVDxLZVX
+        ybeTpqnBTMXou+2v/SVBOZsu2o12H3J0HKc6o4yaNmwYng0KpR8mM1h09vojIEbM
+        tzhQ4qMvYVwCPl+LdX9u81GBN0tY1EQbiSU3ejlmzUYLOJmH2bOpsOO+2CVSIHVG
+        UGTsVxMz/oCdKCCcTJn1tyjqs4b5jEBCNmF3496HAhsNPi/gn4/DKlWXm9nBvVXG
+        klMgNv8TgcgC32S4QMTqI3FdG7aOD1VjSSw==
+X-ME-Sender: <xms:RvEHY6pqqDeCHJCSjsUj6B3IWSqUtE-qwyyn4V16jGH7mSkaax7T5A>
+    <xme:RvEHY4pCOAu331NblctThs866oTe3LgkJT1yY7xAMWkv29rl1y7QgZszhyWPHg_R9
+    bHQh7-_k3neQw3jUb4>
+X-ME-Received: <xmr:RvEHY_OoVE2VldNZxdoRHMx2DO0vfhebBnfCSS6pWX8-5kj-c_nma9noyils>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgedgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:RvEHY56tvbtIiyLNUbL1NIu4z9xHzdZ0r4MLN-T55LuiLbvugdj4Yg>
+    <xmx:RvEHY56kqqcf_S-1dYMIvLXZsGdHbVw08yMlIdZXx0WnbYkRr-hpqQ>
+    <xmx:RvEHY5inHPqtu8k9yG_oKCs8E-EmOx_ZNtuqAXavK1Vc7U0PscalHQ>
+    <xmx:RvEHYzloaZDGKlS2dWHqa4GmqfJC60BC1qAGsY0jbIG3JSnwZ08arQ>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 25 Aug 2022 18:01:38 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     tiwai@suse.com
+Cc:     kai.heng.feng@canonical.com, andy.chi@canonical.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH 1/2] sound: realtek: Add pincfg for ASUS G533Z
+Date:   Fri, 26 Aug 2022 10:01:29 +1200
+Message-Id: <20220825220130.331371-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220825213905.1817722-1-haoluo@google.com> <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 25 Aug 2022 15:00:36 -0700
-Message-ID: <CA+khW7j-OZmr3ax03CwRvtyvEMYafaWPfkiwLRe2HQcPscWkug@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] Add CGROUP prefix to cgroup_iter_order
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 2:56 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Aug 25, 2022 at 2:39 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > As suggested by Andrii, add 'CGROUP' to cgroup_iter_order. This fix is
-> > divided into two patches. Patch 1/2 fixes the commit that introduced
-> > cgroup_iter. Patch 2/2 fixes the selftest that uses the
-> > cgroup_iter_order. This is because the selftest was introduced in a
->
-> but if you split rename into two patches, you break selftests build
-> and thus potentially bisectability of selftests regressions. So I
-> think you have to keep both in the same patch.
->
-> With that:
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
->
+Fixes up the pincfg for ASUS ROG Strix G15 (G533Z) laptop.
 
-Yeah. I wasn't sure what to do. Then we need bundle this fix with
-those two commits together. Will squash the commits into one and send
-a v2.
+Signed-off-by: Luke D. Jones <luke@ljones.dev>
+---
+ sound/pci/hda/patch_realtek.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-> > different commit. I tested this patchset via the following command:
-> >
-> >   test_progs -t cgroup,iter,btf_dump
-> >
-> > Hao Luo (2):
-> >   bpf: Add CGROUP to cgroup_iter order
-> >   selftests/bpf: Fix test that uses cgroup_iter order
-> >
-> >  include/uapi/linux/bpf.h                      | 10 +++---
-> >  kernel/bpf/cgroup_iter.c                      | 32 +++++++++----------
-> >  tools/include/uapi/linux/bpf.h                | 10 +++---
-> >  .../selftests/bpf/prog_tests/btf_dump.c       |  2 +-
-> >  .../prog_tests/cgroup_hierarchical_stats.c    |  2 +-
-> >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 10 +++---
-> >  6 files changed, 33 insertions(+), 33 deletions(-)
-> >
-> > --
-> > 2.37.2.672.g94769d06f0-goog
-> >
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index fd630d62b5a0..e9cad49ee2a5 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -5828,7 +5828,7 @@ static void alc_fixup_headset_mode_alc255_no_hp_mic(struct hda_codec *codec,
+ 		struct alc_spec *spec = codec->spec;
+ 		spec->parse_flags |= HDA_PINCFG_HEADSET_MIC;
+ 		alc255_set_default_jack_type(codec);
+-	} 
++	}
+ 	else
+ 		alc_fixup_headset_mode(codec, fix, action);
+ }
+@@ -7022,6 +7022,7 @@ enum {
+ 	ALC294_FIXUP_ASUS_GX502_HP,
+ 	ALC294_FIXUP_ASUS_GX502_PINS,
+ 	ALC294_FIXUP_ASUS_GX502_VERBS,
++	ALC285_FIXUP_ASUS_G533Z_PINS,
+ 	ALC294_FIXUP_ASUS_GU502_HP,
+ 	ALC294_FIXUP_ASUS_GU502_PINS,
+ 	ALC294_FIXUP_ASUS_GU502_VERBS,
+@@ -8363,6 +8364,17 @@ static const struct hda_fixup alc269_fixups[] = {
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc294_fixup_gu502_hp,
+ 	},
++	[ALC285_FIXUP_ASUS_G533Z_PINS] = {
++		.type = HDA_FIXUP_PINS,
++		.v.pins = (const struct hda_pintbl[]) {
++			{ 0x14, 0x90170120 },
++			{ 0x19, 0x03A11050 }, /* front HP mic */
++			{ 0x1B, 0x03A11C30 }, /* rear external mic */
++			{ 0x21, 0x03211420 }, /* front HP out */
++			{ }
++		},
++		.chained = false,
++	},
+ 	[ALC294_FIXUP_ASUS_COEF_1B] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		.v.verbs = (const struct hda_verb[]) {
+@@ -9294,6 +9306,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1043, 0x1881, "ASUS Zephyrus S/M", ALC294_FIXUP_ASUS_GX502_PINS),
++	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x18b1, "Asus MJ401TA", ALC256_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x18f1, "Asus FX505DT", ALC256_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x194e, "ASUS UX563FD", ALC294_FIXUP_ASUS_HPE),
+-- 
+2.37.2
+

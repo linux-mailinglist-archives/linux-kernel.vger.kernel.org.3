@@ -2,155 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF5F5A0770
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC6C5A0775
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiHYCmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 22:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S231864AbiHYCvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 22:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbiHYCmI (ORCPT
+        with ESMTP id S230104AbiHYCvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 22:42:08 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13E69DFB6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:41:59 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id j26so9603880wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:41:59 -0700 (PDT)
+        Wed, 24 Aug 2022 22:51:52 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298D89C8FF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:51:51 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11c9af8dd3eso22904216fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=doFUHdVPTABkZsDuf0MJLhPZVm+o4dycrmtaBb1zaGg=;
-        b=ljEZc6yMBm22SLRA96eNiZ8zgNwa6AiCs/mIj4MH8Lu0ITLXCDbw1rPAThOIFT6Hls
-         ospWapMqLKqRDIfRiC+dCGUxBR5sBvXQ26YTcthtauabE4uJitMLdbltOEAcI4UYmaD8
-         j1f06IYOrOaeiFBdUe+UDv9Lah3WVcDkkdi7vs8AauhaW43RVxrNEy24rmWtaAHHHM+u
-         h7B3HLp+8WRyddXXmzTHtWjnkO1iV1aa6u2vo0XFu1N8LA90hsMIcwYJkyIP72cSCzHn
-         Oy6w8nNGH41msDEU6rjbzxVYJQG80prf38WQ/d2GRWv/I5OlSZFlOdPtahy7/ehSx+7F
-         8fAg==
+        bh=cZ5gzNCrmdm3hLAPODSo3m8ewJ0Yui1XSuajAwlxh4E=;
+        b=JQ4b7CBxWO7nskQf5m+6YvtLrJeNJcHsCNDT7BpIszut0+dYBhEt+GVITxHEMQyCGS
+         a1IsOxh/8/92ZfwljodwkTWc4Nv+tnPKeMdGHX6M8uqQuf5950C03dhiyRVoWrSY6kn+
+         Tdb1qY/XexGGue2BHOyvHrYYM4x3AyQ+THW4IL6pnIIktKXE7u9E7pDYguV/Sr89OoRj
+         aIk/b3HE5dH+DkcSgKKpM1InPEpSXnSPOPpTOlOJJ00i22Cq/Je9rJs2UbhAKYs0kU8j
+         h9SEe31FmmJ2jOvaa4z+ZpVOSUGzo7kSgUxwiquPw99yLyzHtkcUCPEudegUNbt8cnHw
+         cluQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=doFUHdVPTABkZsDuf0MJLhPZVm+o4dycrmtaBb1zaGg=;
-        b=7Q2Xp5l6u4Jn1348oiHuPN+LA8jduu22q4jiYQnhv+hudDI5c9BGcpXokPxZdMRtf4
-         FCfxlAEayMpE3ozKP+qa3kQPDHpi2C/fAm6cHT+3WpdH/8V9c2tlEEOL3N9EVudFDboc
-         RvH3QTVqmK2bsqQMakPqIgMEKo8DxQQckTtGWF+Y7i7o6pQOIBiz2KbjapbNxT2uQQCi
-         Qqk2lU8HZS13D+dHe5BEICj7Hr0MYXuxgK/3H5yO21VZdoqSCmtXl/qC/VVImD412jnp
-         TeyTy4LOuzS8WpjkiZO5s26reU/U7PLtALyQkxYuWLTkFZNtPQYbVwxh33j6cxFHqpj2
-         /D4g==
-X-Gm-Message-State: ACgBeo1EIBwoFMpW9hEhsiskjOffbQIqfvmBZHPGTDEmyqkomPmy1CKf
-        TuiMva7Yt09RDT1AQFExE29RdeFbLNkU86gREpQI5Q==
-X-Google-Smtp-Source: AA6agR5GPEqqnND+ToMCQEGITdPdIK1ZE/Wm2wUBTGxdKJhYUMI7lrl6GTXYj8E7Tr2c5EbngEn6ZtlnS1UXQr145V8=
-X-Received: by 2002:a05:600c:1e05:b0:3a5:b441:e9c with SMTP id
- ay5-20020a05600c1e0500b003a5b4410e9cmr794100wmb.24.1661395317923; Wed, 24 Aug
- 2022 19:41:57 -0700 (PDT)
+        bh=cZ5gzNCrmdm3hLAPODSo3m8ewJ0Yui1XSuajAwlxh4E=;
+        b=ym9LPU7C1kbtf58qhB8DOup5MIOlFKvLP7twxntAd5pEbLsjnhDwbaU8gPZ7PzPPV1
+         9+ZTMG/Nhn/zZ7sJDnzZf6DybPcOZ0VGB/O4mtiJxgS6fGs5lYK4cnsmMH71BHuTjPcN
+         DfWtIwPMXIK5kjI/9DPazySJMUaM0WC81cVc96zmLKzKZXva5Dg+XLI65zeyxxONQ2Mo
+         HHbvYD+mrVzcA4xE9LQ+/Dfd44dmZEoJTb/uq1XQcumlwQhDjjSsSS1ccV6+Zyj+2yMK
+         ocgpHlZfINgs1JvpKbFDKX7R0IG4CBGZhHNVLsHWOJIqN0S6cEeGl73LmsdGe913J0rD
+         hymA==
+X-Gm-Message-State: ACgBeo0tAFSO/ZTXhhX7KwBXgMELZsb6Wnoy3E3HBMZDMpcmsdcCS42i
+        JrgsrX5UoaUT0v8Ejyg1VEX9Rb9r3sgmavBdKHBd3Q==
+X-Google-Smtp-Source: AA6agR7vXKkTOGXcGEwZmzfAc5VUk0nraiOrDnZju3zQi5V4WprV0/ul8/7Z0aqc6ZWW6iZJyMIiYITSg9m+8k1wtME=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr5053901oab.112.1661395910321; Wed, 24
+ Aug 2022 19:51:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824233117.1312810-1-haoluo@google.com> <20220824233117.1312810-6-haoluo@google.com>
- <CAADnVQKC_USyXe1RyWL+EY0q=x=c88opvPW-rWZ5znGJOq63CQ@mail.gmail.com>
-In-Reply-To: <CAADnVQKC_USyXe1RyWL+EY0q=x=c88opvPW-rWZ5znGJOq63CQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 24 Aug 2022 19:41:21 -0700
-Message-ID: <CAJD7tkZGxkV8_3qNy_Q=k-DT2=aGknzT08WiVtESpzur1JxCwA@mail.gmail.com>
-Subject: Re: [RESEND PATCH bpf-next v9 5/5] selftests/bpf: add a selftest for
- cgroup hierarchical stats collection
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Hao Luo <haoluo@google.com>, LKML <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com> <20220802230718.1891356-2-mizhang@google.com>
+ <b03adf94-5af2-ff5e-1dbb-6dd212790083@redhat.com> <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
+ <17505e309d02cf5a96e33f75ccdd6437a8c79222.camel@redhat.com> <Ywa+QL/kDp9ibkbC@google.com>
+In-Reply-To: <Ywa+QL/kDp9ibkbC@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 24 Aug 2022 19:51:39 -0700
+Message-ID: <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
+Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending interrupts
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oliver Upton <oupton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 7:09 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Aug 24, 2022 at 4:31 PM Hao Luo <haoluo@google.com> wrote:
-> > +
-> > +       for (i = 0; i < N_CGROUPS; i++) {
-> > +               fd = create_and_get_cgroup(cgroups[i].path);
-> > +               if (!ASSERT_GE(fd, 0, "create_and_get_cgroup"))
-> > +                       return fd;
-> > +
-> > +               cgroups[i].fd = fd;
-> > +               cgroups[i].id = get_cgroup_id(cgroups[i].path);
-> > +
-> > +               /*
-> > +                * Enable memcg controller for the entire hierarchy.
-> > +                * Note that stats are collected for all cgroups in a hierarchy
-> > +                * with memcg enabled anyway, but are only exposed for cgroups
-> > +                * that have memcg enabled.
-> > +                */
-> > +               if (i < N_NON_LEAF_CGROUPS) {
-> > +                       err = enable_controllers(cgroups[i].path, "memory");
-> > +                       if (!ASSERT_OK(err, "enable_controllers"))
-> > +                               return err;
-> > +               }
-> > +       }
->
-> It passes BPF CI, but fails in my setup with:
->
-> # ./test_progs -t cgroup_hier -vv
-> bpf_testmod.ko is already unloaded.
-> Loading bpf_testmod.ko...
-> Successfully loaded bpf_testmod.ko.
-> setup_bpffs:PASS:mount 0 nsec
-> setup_cgroups:PASS:setup_cgroup_environment 0 nsec
-> setup_cgroups:PASS:get_root_cgroup 0 nsec
-> setup_cgroups:PASS:create_and_get_cgroup 0 nsec
-> (cgroup_helpers.c:92: errno: No such file or directory) Enabling
-> controller memory:
-> /mnt/cgroup-test-work-dir6526//test/cgroup.subtree_control
-> setup_cgroups:FAIL:enable_controllers unexpected error: 1 (errno 2)
-> cleanup_bpffs:FAIL:rmdir /sys/fs/bpf/vmscan/ unexpected error: -1 (errno 2)
-> #36      cgroup_hierarchical_stats:FAIL
-> Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
->
-> How do I debug it?
+On Wed, Aug 24, 2022 at 5:11 PM Sean Christopherson <seanjc@google.com> wrote:
 
-The failure with ENOENT happens when we try to write "+memory" to
-/mnt/cgroup-test-work-dir6526//test/cgroup.subtree_control, not when
-we try to open it. So the file is there. AFAICT, ENOENT can be
-returned from this write if the memory controller is not enabled on
-this cgroup.
+> @google folks, what would it take for us to mark KVM_REQ_GET_NESTED_STATE_PAGES
+> as deprecated in upstream and stop accepting patches/fixes?  IIUC, when we eventually
+> move to userfaultfd, all this goes away, i.e. we do want to ditch this at some point.
 
-In setup_cgroup_environment(), we should be enabling all available
-controllers on /mnt and /mnt/cgroup-test-work-dir6526 by this line:
+Userfaultfd is a red herring. There were two reasons that we needed
+this when nested live migration was implemented:
+1) our netlink socket mechanism for funneling remote page requests to
+a userspace listener was broken.
+2) we were not necessarily prepared to deal with remote page requests
+during VM setup.
 
-        if (__enable_controllers(CGROUP_MOUNT_PATH, NULL) ||
-              __enable_controllers(cgroup_workdir, NULL))
-                  return 1;
+(1) has long since been fixed. Though our preference is to exit from
+KVM_RUN and get the vCPU thread to request the remote page itself, we
+are now capable of queuing a remote page request with a separate
+listener thread and blocking in the kernel until the page is received.
+I believe that mechanism is functionally equivalent to userfaultfd,
+though not as elegant.
+I don't know about (2). I'm not sure when the listener thread is set
+up, relative to all of the other setup steps. Eliminating
+KVM_REQ_GET_NESTED_STATE_PAGES means that userspace must be prepared
+to fetch a remote page by the first call to KVM_SET_NESTED_STATE. The
+same is true when using userfaultfd.
 
-The first thing that comes to mind is that maybe the memory controller
-is not enabled on your setup at all? Can you check
-/sys/fs/cgroup/cgroup.controllers (or wherever your global cgroup
-mount is)?
-
-I don't know much about namespaces, so I am not sure if the privately
-mounted /mnt directory here would be the same as the cgroup root or
-not. Maybe we can add a pause() somewhere and check
-/mnt/cgroup.controllers as well?
+These new ordering constraints represent a UAPI breakage, but we don't
+seem to be as concerned about that as we once were. Maybe that's a
+good thing. Can we get rid of all of the superseded ioctls, like
+KVM_SET_CPUID, while we're at it?

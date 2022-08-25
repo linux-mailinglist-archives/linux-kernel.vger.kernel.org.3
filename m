@@ -2,145 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491EA5A094F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0645A0962
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236583AbiHYG6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
+        id S236647AbiHYG7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbiHYG6k (ORCPT
+        with ESMTP id S236602AbiHYG6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:58:40 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32031A033A;
-        Wed, 24 Aug 2022 23:58:39 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 6170AE1171;
-        Wed, 24 Aug 2022 23:58:08 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GMMjKO_RXaO4; Wed, 24 Aug 2022 23:58:07 -0700 (PDT)
-Message-ID: <2c609579d9fba41a6fcbd47788ccbcf1f4fa0f2a.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1661410687; bh=UO5XV5GOXaJUp2qheZTnBxncOA0cWICbUUFp+tuLMbo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=kTNNzvR2unUbjb/QrtWtKSeMmYzYcFAS16woPrlSBmRiA2zqPbeZXMFoteeotSVd2
-         ppqFKvvx7uXdbF2CSEkzcahDUHlhTWo7t+mteq1axuIzsIzgr4rFpRL/tyktQzvTfr
-         gdCD78kRakHzVg5aTF12FitR19ugqiI6DzKrT3B4BVV/yIbKklbOW3V8EPeTtL1d6O
-         024kx31apwQCB3/AHVgZU7PI3qjCYI84z2hhvXGli0SKptH6FlIGVNaG6MAxzHoXvi
-         0mCDg9w0r4DbdJKLAqAfDQz8fIDPXFwUpcfcrlniMnbs5Dl+nspO2khLZ8kY/Vmkfm
-         gh0HTHw33Jzxw==
-Subject: Re: [PATCH v2 3/4] Revert "PM: domains: Delete usage of
- driver_deferred_probe_check_state()"
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Saravana Kannan <saravanak@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Peng Fan <peng.fan@nxp.com>, Luca Weiss <luca.weiss@fairphone.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-        netdev@vger.kernel.org
-Date:   Thu, 25 Aug 2022 08:57:58 +0200
-In-Reply-To: <20220819221616.2107893-4-saravanak@google.com>
-References: <20220819221616.2107893-1-saravanak@google.com>
-         <20220819221616.2107893-4-saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 25 Aug 2022 02:58:53 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E448A1D2B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:58:51 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id s6so15775303lfo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ru9SpbqH38i+/HCULGGRRkwAB5xZGhAPPEBe8VIbuVY=;
+        b=grbaP9d3L824VTVSPhpmGWtTulHg7jns+IAx4lpJsJOqyLymPeeFFU5dqLxIPNJwhJ
+         024mT8CasogSt2BX33fxd3nik+37FvmstNMi02rolF4bz0tZJOVC4H0naYVwkieoN+o1
+         A+oa31wiAe5yHC8o359JEwwkrxK9fvgtKNmb0cffoJXJJOWqpBhsJe4oST+eNSaaWbkB
+         YOD3n4iLS21QNiA0DYteZp1Bc/y0yr9RuTbMG9S1j7CEPVagcsx0XCpQgLiTXCzpkCKN
+         iT3tqDO/r/cxJ+e73ACO1brs02Rl/m4vRIgrkeg954zY71o8LAaTiO3Edu9+XcRTnGGy
+         lqCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ru9SpbqH38i+/HCULGGRRkwAB5xZGhAPPEBe8VIbuVY=;
+        b=zsAo2xGNtr82nRtoL1oPrmhMmCLTGmDXKkXWeIU3FXFYFC+itHyBTP5GntTXQRDnu+
+         8DfhmA0Otjdv05zp3QT3FANCzBgAjmXpuwB0+KTkeJVgewFnnclL4ayzvnnsJJ6lNexZ
+         gW23u4SKl+SQB/Q7YYBP1I+WIkKZr3POMLqNf65SVbNFjE+qzjpjuIpSop3YGq1IX43g
+         W4ZNUSMY0s2DdSIAZauTl53vLP8+h2Mv23it+Puhv/G9bi8DUA7ySyUgijJVjmiJ6Iqn
+         oR5J4fEuJ5yK7cUGTmqVqqj5CcXWDgHO/19NG6MiHpJMilwC8t6yb1I1wWo7xfj7yGi1
+         j11A==
+X-Gm-Message-State: ACgBeo1M3fFtnvUmsjNqyNwTETFnGcCeWyrkwxmuTHO/K2R5TCmdksKe
+        B1CQvqyjzfmDtHvZoj1ncQBQ0A==
+X-Google-Smtp-Source: AA6agR7EbTEOcaW559NfuYrmueSa1EcTuokes0+mBX/MzT3e/12MgVlIf1TsZJXwfRkZjD4TJC2VHw==
+X-Received: by 2002:ac2:5d2c:0:b0:493:221:f011 with SMTP id i12-20020ac25d2c000000b004930221f011mr674330lfb.349.1661410729501;
+        Wed, 24 Aug 2022 23:58:49 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id g5-20020a056512118500b00492f1755d8bsm327259lfr.243.2022.08.24.23.58.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 23:58:49 -0700 (PDT)
+Message-ID: <bd3f90cd-865a-3119-c416-9654db0805da@linaro.org>
+Date:   Thu, 25 Aug 2022 09:58:48 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: serial: samsung: Add 'power-domains'
+ property
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220823145649.3118479-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220823145649.3118479-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 19.08.2022 um 15:16 -0700 schrieb Saravana Kannan:
-> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+On 23/08/2022 17:56, Rob Herring wrote:
+> Some Samsung UARTs are in a power domain, so allow 'power-domains'
+> property.
 > 
-> Quite a few issues have been reported [1][2][3][4][5][6] on the
-> original
-> commit. While about half of them have been fixed, I'll need to fix
-> the rest
-> before driver_deferred_probe_check_state() can be deleted. So, revert
-> the
-> deletion for now.
-> 
-> [1] -
-> https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
-> [2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
-> [3] -
-> https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
-> [4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
-> [5] -
-> https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
-> [6] -
-> https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
-> 
-> Fixes: 5a46079a9645 ("PM: domains: Delete usage of
-> driver_deferred_probe_check_state()")
-> Reported-by: Peng Fan <peng.fan@nxp.com>
-> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-> Reported-by: Doug Anderson <dianders@chromium.org>
-> Reported-by: Colin Foster <colin.foster@in-advantage.com>
-> Reported-by: Tony Lindgren <tony@atomide.com>
-> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Tested-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/base/power/domain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/domain.c
-> b/drivers/base/power/domain.c
-> index 5a2e0232862e..55a10e6d4e2a 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2733,7 +2733,7 @@ static int __genpd_dev_pm_attach(struct device
-> *dev, struct device *base_dev,
->                 mutex_unlock(&gpd_list_lock);
->                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
->                         __func__, PTR_ERR(pd));
-> -               return -ENODEV;
-> +               return driver_deferred_probe_check_state(base_dev);
->         }
->  
->         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-
-Fixes imx8mq where ENODEV results in:
-[    1.048019] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed
-to attach power domain "bus"
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
 
-Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-thanks for fixing this,
-
-                                martin
-
-
+Best regards,
+Krzysztof

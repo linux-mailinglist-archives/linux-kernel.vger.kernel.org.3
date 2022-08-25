@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BDA5A0B35
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE745A0B3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239682AbiHYIVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S237076AbiHYIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239604AbiHYIV2 (ORCPT
+        with ESMTP id S238053AbiHYIV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:21:28 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5F573905
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:21:27 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id d8so14847261lfq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:21:26 -0700 (PDT)
+        Thu, 25 Aug 2022 04:21:56 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FA69E0D7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:21:53 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id k22so4008952ljg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=Z1nM8n9D4cKIWi39fJN2NwqcjbnvD6EFp1Fh0bxjzc4=;
-        b=zKvXhEoMGYI3l852NLhEwpl6HPPN91tW+1ZWbDNNuuno1Ezt7N9mJB/0nb62jn+hHN
-         XBfcmH+L03F8muHLoHV4qBW45Ii2Wx2t+3YKlKo97/K6HfEgW1fXiCpRKd/v8ssWsD2u
-         dbBmQ6yGYYC7GCfkx4+8i5Kzny1HpVCoNeboGwjTBUUUps6en14nuaf2L+v3ekUWV5at
-         9Nc6SzCdXq0c9D+myo7trD1egs/Zbhy2DZYj2r0BsrUo29J+60T8vdh/NijMFItWyfMa
-         5tMInURSNqBP2FEqZLxDlYVNNrAXKAEpsdyvCQuRccxD1GyIA3A+Y2GK7bKu6ehuVbZB
-         5Kug==
+        bh=5ngialnJweWTxFhnpS3C9ddQCugujDSZYGR0J8FTnHk=;
+        b=rvGQEUqW0aqnj4g1kHRRzHHqlMVtjORIUuoL99n5tztXvYQ1FqengLIcpF/CE4LkYd
+         /A5dX+AuvNVj8NyUiyA2ObQuqaIAMikguTsvB8dSlUfAgfn8Qazy6/bZhVRzYztl0mjk
+         1nKb9AL+hyG+fw23Mvb7zVRRIPqXyLfzRe7zMmBA84NtTJPPyxxUtB+rln+3F9Wl3STt
+         5mgv0hUK58wVfIIOQ/A+aVWceH58Egv8idp/ywj1Vd6nErZhjHleuGjunZr9IxMauUVU
+         5P5nJj1ul2KKrW33/ZNCihGHkEqz/L8qRjj4knDNA9l+4TYNeqMFWvV+Wg9103Mqrmg3
+         Ez8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Z1nM8n9D4cKIWi39fJN2NwqcjbnvD6EFp1Fh0bxjzc4=;
-        b=XYCp+61V8oSarXc/PtS48mCF5xMQcQI/TdubMd5Rq3agALq3OwKjAohVqT3QpFNsls
-         QXii/eRbc1hcnPA7G847y4lF/0XZmDTom8COOyk4dsKecaCVUspLS10b0cjRgFxKr/Ol
-         lpaFNsAmwfoEamMHLJ1GEh0qoDDaR6GyStLM0YpgLIs7wvASMIGBsWQPo/b4F0xmaNUz
-         aISEFYYN6ypijxcwArw0h9KVx+iBbpERJbe/Cm2p4wPEEsejRXx8d/QSkl5VddWd2EHI
-         aucMfHNxtINP/EJC9hA/QNE/Dq+ryqOAGB4WUhoj3RGNxYYBA4VclOOORjTuzoiPqRi6
-         dpwQ==
-X-Gm-Message-State: ACgBeo0QEBJgLXjFNAtkLrF7mA9C9HFLojLDwj6Bm1KtCkgwW46iVso5
-        O/Uu5pyGi8pE4XpXsf/BF/qJeA==
-X-Google-Smtp-Source: AA6agR6ol+lhYcwHGquYyRD488ENUODevQrg2XnsiwkwKcu1tkCUCDfBrlpUf5Qc+GZRwuny3dwfTQ==
-X-Received: by 2002:a05:6512:986:b0:492:eb2c:cd4e with SMTP id w6-20020a056512098600b00492eb2ccd4emr783474lft.222.1661415685418;
-        Thu, 25 Aug 2022 01:21:25 -0700 (PDT)
+        bh=5ngialnJweWTxFhnpS3C9ddQCugujDSZYGR0J8FTnHk=;
+        b=WsIyL6YZ1UJfvQwr6l4X+sUWtjbRyCR6Bl0PviaEeMMdwuGZ2Ejq2Rh4obOTOV3bML
+         xRtKWWTFIuYhBTas+dVPAjmy4SMHyAGMdBNq2WZ67uITEgMj7EyMFvP1rEMqvu1mR5dI
+         rIe0zDbLUvLK0X0HNjtSulnSC0PdmM8bF76uchRfqGKTbN0H1vwCbD3eSVFcMz3CW95a
+         v0E7kRWMv2oCI0uMyfPU8zNdsFgsBzAIyUfwtSOJ/3Ec8N8L9ibIake35n/1hJF7GM2g
+         D9Qzt9k8tE1yYm6wKSoqprZnSCkRD1YELZzIbY4LOsUF26+zGy4f+DHuBzv11+Y1kiYx
+         b+ZQ==
+X-Gm-Message-State: ACgBeo030B6AKVdb/uQJPG79sNYkIuUwxs4GtEaETj53HF+nWTZHYUbM
+        /RnU8CVJ8HjxK1saXCfl7RJY7w==
+X-Google-Smtp-Source: AA6agR7uT7Su4lHGAOiQyY9ljhllP8dx9Y2jhf2/BSPJmxMpA6d0kWUyMQOHjKrcw3F7GMJy7Oyt4g==
+X-Received: by 2002:a05:651c:a04:b0:25e:753b:db42 with SMTP id k4-20020a05651c0a0400b0025e753bdb42mr737611ljq.529.1661415712008;
+        Thu, 25 Aug 2022 01:21:52 -0700 (PDT)
 Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id a1-20020a19ca01000000b0048ceb3836d4sm379293lfg.6.2022.08.25.01.21.23
+        by smtp.gmail.com with ESMTPSA id o18-20020a05651205d200b0048afe02c925sm363108lfo.219.2022.08.25.01.21.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 01:21:24 -0700 (PDT)
-Message-ID: <5c183ccd-d582-e47a-0919-76398e523fa5@linaro.org>
-Date:   Thu, 25 Aug 2022 11:21:22 +0300
+        Thu, 25 Aug 2022 01:21:51 -0700 (PDT)
+Message-ID: <022a60e0-17a4-cf13-d8d6-af342468acab@linaro.org>
+Date:   Thu, 25 Aug 2022 11:21:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: power: Add missing
+Subject: Re: [PATCH] dt-bindings: phy: Add missing
  (unevaluated|additional)Properties on child nodes
 Content-Language: en-US
 To:     Rob Herring <robh@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220823145649.3118479-15-robh@kernel.org>
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     Ray Jui <ray.jui@broadcom.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org
+References: <20220823145649.3118479-14-robh@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823145649.3118479-15-robh@kernel.org>
+In-Reply-To: <20220823145649.3118479-14-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,8 +98,6 @@ On 23/08/2022 17:56, Rob Herring wrote:
 > In order to ensure only documented properties are present, node schemas
 > must have unevaluatedProperties or additionalProperties set to false
 > (typically).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

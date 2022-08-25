@@ -2,212 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962285A1551
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BE95A1553
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241771AbiHYPNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S242239AbiHYPNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiHYPNT (ORCPT
+        with ESMTP id S230072AbiHYPNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:13:19 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765DE5A3E4;
-        Thu, 25 Aug 2022 08:13:18 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id d8so16266685lfq.0;
-        Thu, 25 Aug 2022 08:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=X/HJjwysbwPY5lP7z2XNqzIAkb64JXray4RDUjSnQ/E=;
-        b=eqUAj/ulLGt9fKA9X2CPCHPQjf16XH6ZbfZynema2QyRMvKMwPMqa1nQf/nm/j0Yer
-         GaqnozYsFW7kX/T00PRfVhchF/6CMdCQ1kVqktnNEiTweJ/xbQ/efxECtWGsz2k6MH57
-         Q7BFrsZUYMEBmYVPtOQcPkDOZ4nCwv4mMFhhsoOw671PL+gmQEKVBXH3kfvhF0M0zpuO
-         5l5A6lG/iLRbAHHcqkI44HNnVUIV5t6SVeHTAQ77Bc2E8hKr9r+s0yUCM9Wyroa3Xym7
-         jET8lru2kRRlSonG2xONqxvPYYkeJm0sa7UD3gqhTRgpy8KrXhyqbEp/w+AM++IWu2Kn
-         nvKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=X/HJjwysbwPY5lP7z2XNqzIAkb64JXray4RDUjSnQ/E=;
-        b=v0X3dxlZvffChl14AnQ2Nx9Ohwj4Pgx8OTntD9gU7zjst+LvfuYoN7R5ThN+c+04VU
-         O9eP3OJffx3m1GsU1fw1OvU0ZpEs5UYIVv6xXu//X8PFELOmooEIp1acADEyfDoHsqEg
-         o2RY8dT73/IoBzIyJfQTHCCzpWSuZIDqMtcAEufNukwXArkvhV1OlfvtokaJG8niyoRs
-         GWh9uIM0y1p0tV2a6EKoZ8B5ei6TTh50WCZ4EKWoV006lYpNYGTbSEX+fr0c3m9+2pya
-         IY+aRSWoQaxIe66WDRqSwtCSprIkxNGC27HaKqxvo2iRg3lIpgRxmQfyyu25KoXd7tP1
-         UHtA==
-X-Gm-Message-State: ACgBeo1itz09/9U9naasWsz6JHUpaDqVHAD44sWriywBrKsd1MkMH1zb
-        VM48swgcz/FnG0zeuJAr1R4=
-X-Google-Smtp-Source: AA6agR4h1iWUpc20LQ+4wYlO85M6Cr5yt6RX+MQK1HeajaoyfhxIAa55vq9Ftczgq4dODFiIrLVNHw==
-X-Received: by 2002:a05:6512:b9d:b0:48b:2567:4bad with SMTP id b29-20020a0565120b9d00b0048b25674badmr1325505lfv.9.1661440396732;
-        Thu, 25 Aug 2022 08:13:16 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id 19-20020a2eb953000000b00261d623d9ffsm297018ljs.134.2022.08.25.08.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 08:13:15 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 18:13:13 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Subject: Re: [PATCH v5 05/20] dt-bindings: PCI: dwc: Add phys/phy-names
- common properties
-Message-ID: <20220825151313.lyjhc3g3udabvr2r@mobilestation>
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-6-Sergey.Semin@baikalelectronics.ru>
- <1661205444.106003.931361.nullmailer@robh.at.kernel.org>
+        Thu, 25 Aug 2022 11:13:38 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DDA5A3E4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ds1ED9/E8RnGTPOcmFhmM3nxfl6XFIk5DEUz5wvPIYY=; b=XM7AfOD/00Npw2p+NjBfouwELf
+        I9bRHc2R4q55W61qDwzprV6raEBmp4A4jIPmklgYwmujyF0ZIsrepW67YNfWDpYTQejiqU9UfqPgu
+        mLwLWAV5zakGYqrErCtzYBGrEqWkK/I2qst6oBbL5qVI12WDJ14XSDOOvRgSJlxheFZKfmjx5bf4n
+        Gk+1H7L8wo6G2gMVjrLOhbMm1TG24aLDoJYl7EU+tXEf21icteOQdosRQJ5RsbGNc2n6g9FGV4VH8
+        RrJn1xVGCUvZumcitD1aHU1U76EUa9VdCG9QH08Xd74yBAyeiWBUMrUxhU5cSSEYP/n3RhqRonkjf
+        lUzM52kQ==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=49886)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oREY2-0007oo-36; Thu, 25 Aug 2022 17:13:34 +0200
+Message-ID: <863beb42-1012-b38a-0c3d-89b7e035aa82@tronnes.org>
+Date:   Thu, 25 Aug 2022 17:13:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1661205444.106003.931361.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
+ <20220825134408.dioj2lbycl7jm3ld@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220825134408.dioj2lbycl7jm3ld@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 04:57:24PM -0500, Rob Herring wrote:
-> On Mon, 22 Aug 2022 21:46:46 +0300, Serge Semin wrote:
-> > It's normal to have the DW PCIe RP/EP DT-nodes equipped with the explicit
-> > PHY phandle references. There can be up to 16 PHYs attach in accordance
-> > with the maximum number of supported PCIe lanes. Let's extend the common
-> > DW PCIe controller schema with the 'phys' and 'phy-names' properties
-> > definition. The PHY names are defined with the regexp pattern
-> > '^pcie([0-9]+|-?phy[0-9]*)?$' so to match the names currently supported by
-> > the DW PCIe platform drivers ("pcie": meson; "pciephy": qcom, imx6;
-> > "pcie-phy": uniphier, rockchip, spear13xx; "pcie": intel-gw; "pcie-phy%d":
-> > keystone, dra7xx; "pcie": histb, etc). Though the "pcie%d" format would
-> > the most preferable in this case.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v3:
-> > - This is a new patch unpinned from the next one:
-> >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
-> >   by the Rob' request. (@Rob)
-> > 
-> > Changelog v5:
-> > - Add a note about having line-based PHY phandles order. (@Rob)
-> > - Prefer 'pcie[0-9]+' PHY-names over the rest of the cases. (@Rob)
-> > ---
-> >  .../bindings/pci/snps,dw-pcie-common.yaml     | 19 +++++++++++++++++++
-> >  .../bindings/pci/snps,dw-pcie-ep.yaml         |  3 +++
-> >  .../devicetree/bindings/pci/snps,dw-pcie.yaml |  3 +++
-> >  3 files changed, 25 insertions(+)
-> > 
+
+
+Den 25.08.2022 15.44, skrev Maxime Ripard:
+> Hi,
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> On Sat, Aug 20, 2022 at 10:12:46PM +0200, Noralf Trønnes wrote:
+>>> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+>>> index 1e9996b33cc8..78275e68ff66 100644
+>>> --- a/include/drm/drm_connector.h
+>>> +++ b/include/drm/drm_connector.h
+>>> @@ -143,6 +143,32 @@ enum subpixel_order {
+>>>  
+>>>  };
+>>>  
+>>> +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
+>>> +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
+>>> +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
+>>> +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
+>>> +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
+>>> +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
+>>> +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
+>>> +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
+>>> +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
+>>> +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
+>>> +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
+>>> +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
+>>> +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
+>>> +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
+>>> +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
+>>> +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
+>>> +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
+>>> +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
+>>> +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
+>>> +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
+>>> +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
+>>> +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
+>>> +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
+>>> +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
+>>> +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
+>>> +
+>>
+>> This is an area where DRM overlaps with v4l2, see:
+>> - include/dt-bindings/display/sdtv-standards.h
+>> - v4l2_norm_to_name()
+>>
+>> Maybe we should follow suit, but if we do our own thing please mention
+>> why in the commit message.
 > 
-> yamllint warnings/errors:
+> Are you suggesting that we'd share that definition with v4l2?
 > 
 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14180000: phy-names: 'oneOf' conditional failed, one must be fixed:
-> 	'p2u-0' does not match '^pcie[0-9]+$'
-> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-1' does not match '^pcie[0-9]+$'
-> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-2' does not match '^pcie[0-9]+$'
-> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-3' does not match '^pcie[0-9]+$'
-> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
+If possible, yes.
 
-Right. I've missed the Nvidia Tegra194 phy-names. I'll mark them as
-deprecated too. Meanwhile @Rob could you review the rest of the
-series?
+> I've tried to share some code in the past between v4l2 and DRM, and it
+> got completely shut down so it's not something I'd like to try again, if
+> possible.
+> 
 
--Sergey
+But that is a good enough reason not to do so. I just got the impression
+from some of Laurent's emails a while back that there was some
+cooperativ atmosphere, but I might be mistaken in my reading/understanding.
 
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14180000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'bus-range', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'linux,pci-domain', 'num-lanes', 'ranges', 'supports-clkreq' were unexpected)
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14160000: phy-names: 'oneOf' conditional failed, one must be fixed:
-> 	'p2u-0' does not match '^pcie[0-9]+$'
-> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-1' does not match '^pcie[0-9]+$'
-> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-2' does not match '^pcie[0-9]+$'
-> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-3' does not match '^pcie[0-9]+$'
-> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.example.dtb: pcie@14160000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'bus-range', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'linux,pci-domain', 'num-lanes', 'num-viewport', 'ranges' were unexpected)
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: phy-names: 'oneOf' conditional failed, one must be fixed:
-> 	'p2u-0' does not match '^pcie[0-9]+$'
-> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-1' does not match '^pcie[0-9]+$'
-> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-2' does not match '^pcie[0-9]+$'
-> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-3' does not match '^pcie[0-9]+$'
-> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-4' does not match '^pcie[0-9]+$'
-> 	'p2u-4' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-5' does not match '^pcie[0-9]+$'
-> 	'p2u-5' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-6' does not match '^pcie[0-9]+$'
-> 	'p2u-6' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-7' does not match '^pcie[0-9]+$'
-> 	'p2u-7' does not match '^pcie(-?phy[0-9]*)?$'
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: Unevaluated properties are not allowed ('num-lanes' was unexpected)
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: phy-names: 'oneOf' conditional failed, one must be fixed:
-> 	'p2u-0' does not match '^pcie[0-9]+$'
-> 	'p2u-0' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-1' does not match '^pcie[0-9]+$'
-> 	'p2u-1' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-2' does not match '^pcie[0-9]+$'
-> 	'p2u-2' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-3' does not match '^pcie[0-9]+$'
-> 	'p2u-3' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-4' does not match '^pcie[0-9]+$'
-> 	'p2u-4' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-5' does not match '^pcie[0-9]+$'
-> 	'p2u-5' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-6' does not match '^pcie[0-9]+$'
-> 	'p2u-6' does not match '^pcie(-?phy[0-9]*)?$'
-> 	'p2u-7' does not match '^pcie[0-9]+$'
-> 	'p2u-7' does not match '^pcie(-?phy[0-9]*)?$'
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: Unevaluated properties are not allowed ('num-lanes' was unexpected)
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+It is ofc possible to just copy the values from sdtv-standards.h, but I
+see that hd* is missing from that list, so not sure if there's much
+point if it has to be extended without changing the source.
+
+We can at least use the names from v4l2_norm_to_name(), but from a quick
+look it seems you already do so.
+
+Noralf.

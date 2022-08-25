@@ -2,73 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EFC5A106E
+	by mail.lfdr.de (Postfix) with ESMTP id EC5A55A1071
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241364AbiHYM24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S241528AbiHYM26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241430AbiHYM2l (ORCPT
+        with ESMTP id S238468AbiHYM2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:28:41 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157C2B2CDA;
-        Thu, 25 Aug 2022 05:28:37 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1661430511t5hhop1q
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 Aug 2022 20:28:30 +0800 (CST)
-X-QQ-SSF: 01000000002000C0E000B00A0000000
-X-QQ-FEAT: zT6n3Y95oi3eGr0MMkYqB3kxaKnzlkS5GT+bOs+NBYTVns1qjQqzbDIQMbT1F
-        63tMrJD2If/d5eI8IDoj5svIMbrJpJgaw7g3RTuFI+CwEBQZyWoNSKv+j79JH2/I2H+yCSz
-        N+aud243pbTjiSYKZ9KTVlqrKtEX5umlf6ovNQO9GwtpLeDg1S9kseqGJqB4ORifAMTVXjB
-        rQqDv+fPG5MY5ha+1CGNKcU6zzR2DAemmxM50cxrWl3emoDKlg07pbGvnkgXyJaCM0sgyjl
-        4wUCSz1KN+PnINT+qaHL1PrcB69bmszbrw8k8W9EjQCnui89iE5AMJ9N54c1bD/H5CqNszE
-        PSKhhkYIL/w4RgBAQKNA2eubaauUk4qwG77TIN1VrbuM8d5tGEj8LJfmptE04ACVtOEGXXn
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] atomisp/pci: fix repeated words in comments
-Date:   Thu, 25 Aug 2022 20:28:23 +0800
-Message-Id: <20220825122824.42425-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 25 Aug 2022 08:28:49 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E5B2CD4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:28:48 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id p18so18381341plr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=o0E7YiHeVex1u0X6qaV95zV+IU6KmVTedW0VAfovtx8=;
+        b=TRE19aRmzYeY60KDN1wOIIp3s3WQh2s1UiPVHSyC4h+toJTUn/oTh2+z/rhBhbwT6W
+         NDeigQr3uEpitwebXfV935zr/yRXP0JDTsxyCSUw5JTINtlHZjKYcXG60i6fqttjH68I
+         t/JoB4QAa0mGRFYYhWlznz5OiKOMTjBRy4TqgPJjFO3js0EKBC00oSRYeJ9dt11uCmeQ
+         yhsE7wjOUDL3v6ZJEMykJvR8hjQvqCmRxoMTKurdisC/z/bcw3fE3F1j2ylZpsZaL9dH
+         BBdloD+tLoAovOt6PQUfWLddZQetzIFhFIh3cfkO+ADUTA1v0pEvgxbuWN2v4QJxcGNj
+         cjIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=o0E7YiHeVex1u0X6qaV95zV+IU6KmVTedW0VAfovtx8=;
+        b=jiTw286tNNI7AGyQ0A5RS0d/KnzCWkscVwe0BTGtMAf3Lke5AjmhNcvbbTDjg75HDk
+         TQFw1nlY63kBl7sJTQJ4kXZittwL7tFLbjllVHzSTpnWjn/zQeQWUqMM87mX0ZdQLMr9
+         dPvlaq8EBtHKNt094rlfzPefow647e0ceyKa4JoukqNTBUZG54S37+lQqeHCxo9J7wKg
+         1Y/6ThG1gKSwFtKS93YxfnrmH9QgpTRq4WVTta6gPxJ2DMsEZ+STjY3JD/Wj8nyo/E9s
+         BwRVhakOWS4yYtWoMB4wJjkQtRPQob1+XbXDTA212CKqqm/XdPGZScKGLzpM4xOPbIs5
+         NiDA==
+X-Gm-Message-State: ACgBeo0CwZ49Ie9tL3QLtvKWSHkdArbMfyGewBHB5y6seGfC+X9lGcUw
+        9Md97EM7wQiCBHoilmNMcpObBg==
+X-Google-Smtp-Source: AA6agR6sM22N0p77QoFew7d776bTlmOcjbDP3P0nFDZUEv4yLZSU4Xsgwzh4MlgCqwFivfw0t507fw==
+X-Received: by 2002:a17:90a:2b0f:b0:1fa:d73f:ce92 with SMTP id x15-20020a17090a2b0f00b001fad73fce92mr13508804pjc.60.1661430527863;
+        Thu, 25 Aug 2022 05:28:47 -0700 (PDT)
+Received: from [10.254.35.15] ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id w16-20020a170902e89000b0016f196209c9sm10948960plg.123.2022.08.25.05.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 05:28:47 -0700 (PDT)
+Message-ID: <324b1d0f-42e5-8947-68cb-a3d20135f2c6@bytedance.com>
+Date:   Thu, 25 Aug 2022 20:28:39 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v3 10/10] sched/psi: per-cgroup PSI accounting
+ disable/re-enable interface
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     tj@kernel.org, mkoutny@suse.com, surenb@google.com,
+        gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
+        peterz@infradead.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220824081829.33748-1-zhouchengming@bytedance.com>
+ <20220824081829.33748-11-zhouchengming@bytedance.com>
+ <YwX2jC2UQ/zeY2E8@cmpxchg.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YwX2jC2UQ/zeY2E8@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'of'.
+On 2022/8/24 17:59, Johannes Weiner wrote:
+> Hi Chengming,
+> 
+> Thanks for incorporating all the feedback. I have a few nitpicks
+> below, but with those considered, please add:
+> 
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> 
+> On Wed, Aug 24, 2022 at 04:18:29PM +0800, Chengming Zhou wrote:
+>> @@ -5171,12 +5220,19 @@ static struct cftype cgroup_base_files[] = {
+>>  	{
+>>  		.name = "irq.pressure",
+>>  		.flags = CFTYPE_PRESSURE,
+>> +		.file_offset = offsetof(struct cgroup, psi_files[PSI_IRQ]),
+>>  		.seq_show = cgroup_irq_pressure_show,
+>>  		.write = cgroup_irq_pressure_write,
+>>  		.poll = cgroup_pressure_poll,
+>>  		.release = cgroup_pressure_release,
+>>  	},
+>>  #endif
+>> +	{
+>> +		.name = "cgroup.pressure",
+>> +		.flags = CFTYPE_PRESSURE,
+>> +		.seq_show = cgroup_psi_show,
+>> +		.write = cgroup_psi_write,
+> 
+> To match the naming convention, these should be called
+> cgroup_pressure_show() and cgroup_pressure_write().
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/staging/media/atomisp/pci/isp2400_input_system_public.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I just find cgroup_pressure_write() already exists, so I change the names
+to cgroup_pressure_enable_show() and cgroup_pressure_enable_write(),
+since this file name is simplified from "cgroup.pressure.enable".
 
-diff --git a/drivers/staging/media/atomisp/pci/isp2400_input_system_public.h b/drivers/staging/media/atomisp/pci/isp2400_input_system_public.h
-index 85cb61e34192..19a00d569398 100644
---- a/drivers/staging/media/atomisp/pci/isp2400_input_system_public.h
-+++ b/drivers/staging/media/atomisp/pci/isp2400_input_system_public.h
-@@ -200,7 +200,7 @@ STORAGE_CLASS_INPUT_SYSTEM_H void receiver_port_reg_store(
-     const hrt_address			reg,
-     const hrt_data				value);
- 
--/*! Read from a control register PORT[port_ID] of of RECEIVER[ID]
-+/*! Read from a control register PORT[port_ID] of RECEIVER[ID]
- 
-  \param	ID[in]				RECEIVER identifier
-  \param	port_ID[in]			mipi PORT identifier
--- 
-2.36.1
+Thanks.
 
+> 
+>> @@ -745,6 +745,14 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>>  		if (set & (1 << t))
+>>  			groupc->tasks[t]++;
+>>  
+>> +	if (!group->enabled) {
+>> +		if (groupc->state_mask & (1 << PSI_NONIDLE))
+>> +			record_times(groupc, now);
+> 
+> Thanks for the explanation in the other thread, it made sense. But can
+> you please add a comment to document it? Something like:
+> 
+> 	/*
+> 	 * On the first group change after disabling PSI, conclude
+> 	 * the current state and flush its time. This is unlikely
+> 	 * to matter to the user, but aggregation (get_recent_times)
+> 	 * may have already incorporated the live state into times_prev;
+> 	 * avoid a delta sample underflow when PSI is later re-enabled.
+> 	 */
+> 
+> An unlikely() would also make sense on that branch.
+> 
+>> @@ -1081,6 +1092,40 @@ void cgroup_move_task(struct task_struct *task, struct css_set *to)
+>>  
+>>  	task_rq_unlock(rq, task, &rf);
+>>  }
+>> +
+>> +void psi_cgroup_enabled_sync(struct psi_group *group)
+>> +{
+>> +	int cpu;
+>> +
+>> +	/*
+>> +	 * After we disable psi_group->enabled, we don't actually
+>> +	 * stop percpu tasks accounting in each psi_group_cpu,
+>> +	 * instead only stop test_state() loop, record_times()
+>> +	 * and averaging worker, see psi_group_change() for details.
+>> +	 *
+>> +	 * When disable cgroup PSI, this function has nothing to sync
+>> +	 * since cgroup pressure files are hidden and percpu psi_group_cpu
+>> +	 * would see !psi_group->enabled and only do task accounting.
+>> +	 *
+>> +	 * When re-enable cgroup PSI, this function use psi_group_change()
+>> +	 * to get correct state mask from test_state() loop on tasks[],
+>> +	 * and restart groupc->state_start from now, use .clear = .set = 0
+>> +	 * here since no task status really changed.
+>> +	 */
+>> +	if (!group->enabled)
+>> +		return;
+> 
+> Thanks for adding the comment, that's helpful.
+> 
+> I think the function would be a tad clearer and self-documenting if
+> you called it psi_cgroup_restart(), and only call it on enabling.
+> 
+>> +	for_each_possible_cpu(cpu) {
+>> +		struct rq *rq = cpu_rq(cpu);
+>> +		struct rq_flags rf;
+>> +		u64 now;
+>> +
+>> +		rq_lock_irq(rq, &rf);
+>> +		now = cpu_clock(cpu);
+>> +		psi_group_change(group, cpu, 0, 0, now, true);
+>> +		rq_unlock_irq(rq, &rf);
+>> +	}
+>> +}
+>>  #endif /* CONFIG_CGROUPS */
+> 
+> Thanks,
+> Johannes

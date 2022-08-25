@@ -2,164 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1382B5A11DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8035A11DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240735AbiHYNVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
+        id S242510AbiHYNVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242509AbiHYNVA (ORCPT
+        with ESMTP id S241005AbiHYNVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:21:00 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B23AA345
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:20:57 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so2511563wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:20:57 -0700 (PDT)
+        Thu, 25 Aug 2022 09:21:07 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895F2861EC
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:21:05 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id g5-20020a4ac4c5000000b0044af7c8c4b3so3325634ooq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=9Q+jKUSpU6kYeBsMhMpzIZThK1oQ2j5LfED+1XJW8bo=;
-        b=NPOrDfXwhQw13PErVkRE/qRVT+13aqvs70sZW34P8u5ZPw3Xg8SlXtHWqoOR/28iAK
-         ens5U16cjddk8184UsFHVQhwzz5bB/TV3Nq2ltCHUKTZ/srPrswr7HgSxFnNVwIFMJ6A
-         oakgyqARdIGK7CEl7/nLf0eNdZ0SZ4iTO+hgwFUm1iUZqa/lrohhntohUrbNJF2/nS5F
-         t4+c7OvfrG7QraiIfXRRN7PxBWjhqbzsWv/XOvwG8YtJ1jwm0V9TWsiXlR4Mamkt5Rlz
-         E7XPGy0o9iUF7DHOu9Oszj4aU8seHqthrZu8kUFXvoun4MqDZ3zy60Tgf2qZLrEAlg2m
-         KuAw==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=RYfcE0fHbsYfCm925mmzXTeOyIgSjTH+lzz/HesrSwE=;
+        b=pXlh8cnISVMRKbifEbB9amx8hAOt4i1RjAnztyXNY5c8RijPqY+YmKt/4uUTlvrTvi
+         mU4m2p2ILH8JGMmRKvPHr60RMKah9/zpF4DQ5kic8Xr2tmAInrPYCwXMZ8twWPISJGFI
+         HgmvI/PfzRHA2gVBKRWQvcgx//9CmbuozN9qzbRrwmp2D7MLjGL94dYoQdELivYY3sdy
+         D8W1Dh6EQeucw1mWCkuXjgih1U4ByXzFmmKmgvzzPShmLBAZE9WKaUjGmokZZyClRkBP
+         X+UUS0LHF1MOEM03BqTIIP4WoQ1ZSVlIyTAc6e1Ix3ByquHIJSP3eSxmAItTTt6ILsrf
+         dnuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=9Q+jKUSpU6kYeBsMhMpzIZThK1oQ2j5LfED+1XJW8bo=;
-        b=TRGKoQM8PB1FsCERGW5FxfrsoKS1nOAF0ZyJDmpFpG/8CEZ8L/2OalG/C29YsY0eZu
-         9Zq69gbWpogEuxfAQjcOREkQ4fIl0FMrwfs5hKoXBYHycswcIx7yA5WI0Ee7J3q5lSZh
-         WiKG2ES0zK44VXNjTbZMjuG9WQKMQ0W9jkQmIPZM7O1eRsOWq31P7E2AKZJNArB2NO5b
-         vqQCPJIj2Y+H3LWtD4f47YlX9iMBM1QdGQ9AShaLcWxw5Zko05XrauUNnMz3Troiuw7l
-         ytS/9Zs1vgyziC+Rquhjl53MAFaKYc2qGMfZ9B3EWgYiwzpinJnWBJqv4Li6MoEwR+QJ
-         s6AA==
-X-Gm-Message-State: ACgBeo1fNoWJyVqgN72JoQYk8HwZVUVOSbjj2mmRFu/YdYGjDbEwW4CC
-        pK8jyEqhbBFqzF34wBQLAwQ=
-X-Google-Smtp-Source: AA6agR73Jf/8yWY2aQLwOFfOqTij7LcqWKBfMA6FeN1t3BfqeohIqdN4nIfexvaK23Z1rLt6dImShA==
-X-Received: by 2002:a1c:a4c6:0:b0:3a6:539b:a820 with SMTP id n189-20020a1ca4c6000000b003a6539ba820mr8251907wme.128.1661433656162;
-        Thu, 25 Aug 2022 06:20:56 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l28-20020a056000023c00b00225213fd4a9sm19548439wrz.33.2022.08.25.06.20.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 06:20:55 -0700 (PDT)
-Message-ID: <ceddc502-0176-cff8-f4f6-06606c42a662@gmail.com>
-Date:   Thu, 25 Aug 2022 15:20:53 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RYfcE0fHbsYfCm925mmzXTeOyIgSjTH+lzz/HesrSwE=;
+        b=t5VMqp6hr24VHpAQ+m3q3Eb9b8wmAb7u/X39ewjewsk9tDGpsozFXAnJE4sA3756XO
+         P9rAMWU6IW1/7x7JNaaMR3HYqZUQCWL8uOahrq1VZST/BNELT9Z9tsCX3W8+esXGYj9W
+         4ufocCgMinVV4KMZ1nKnVE5mv6Z/jOoUdGFgrXgwUlQjgXHAV8oRdrgTTxbFzOB+shO/
+         9XBjaKn07azR178O/NE/LyCujMAfMjPfuIP1IpigCPcg2rFMN7DVzYomp5LPQBX2cNLY
+         LtFunl1uUJhdrlsVcQln+H6wEr4i+YgC23QHm24iJA/HA8MlIC+MsPqabbYBAcmuNORQ
+         Nleg==
+X-Gm-Message-State: ACgBeo28B9UPQU6qjgUy7UXvnkOY2hJaiyY//56Z2BeWuLhCYQDxnbBW
+        mjZcMlLzrjYA62LpcKqreN4686xFwXFcAOvVpDOt
+X-Google-Smtp-Source: AA6agR7wMiMhHe1IemPPRVMhRwOnfZzrbmmR2q5jE/SChnxUxqGq5obVgbFDptTfHH0b7S5ABAynadwsc3q9jfG1x7s=
+X-Received: by 2002:a05:6820:508:b0:44a:abd8:6d59 with SMTP id
+ m8-20020a056820050800b0044aabd86d59mr1270145ooj.11.1661433664375; Thu, 25 Aug
+ 2022 06:21:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2] soc: mediatek: Let PMIC Wrapper and SCPSYS depend on
- OF
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>, linux-mediatek@lists.infradead.org
-Cc:     Sean Wang <sean.wang@mediatek.com>,
+References: <7cff118972930ccb650bd62fbf0d2e8e452d729a.1661395017.git.rgb@redhat.com>
+In-Reply-To: <7cff118972930ccb650bd62fbf0d2e8e452d729a.1661395017.git.rgb@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 25 Aug 2022 09:20:53 -0400
+Message-ID: <CAHC9VhTzJT4qBtthQ=ynUHEJY=UJNRFr4wD9G56UaLS_6n+pNg@mail.gmail.com>
+Subject: Re: [PATCH ghak138] audit: move audit_return_fixup before the filters
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Chenglin Xu <chenglin.xu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20220730144833.0a0d9825@endymion.delvare>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220730144833.0a0d9825@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, scorreia@redhat.com,
+        omosnace@redhat.com, omoris@redhat.com,
+        Eric Paris <eparis@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30/07/2022 14:48, Jean Delvare wrote:
-> With the following configuration options:
-> CONFIG_OF is not set
-> CONFIG_MTK_PMIC_WRAP=y
-> CONFIG_MTK_SCPSYS=y
-> we get the following build warnings:
-> 
->    CC      drivers/soc/mediatek/mtk-pmic-wrap.o
-> drivers/soc/mediatek/mtk-pmic-wrap.c:2138:34: warning: ‘of_pwrap_match_tbl’ defined but not used [-Wunused-const-variable=]
-> drivers/soc/mediatek/mtk-pmic-wrap.c:1953:34: warning: ‘of_slave_match_tbl’ defined but not used [-Wunused-const-variable=]
->    CC      drivers/soc/mediatek/mtk-scpsys.o
-> drivers/soc/mediatek/mtk-scpsys.c:1084:34: warning: ‘of_scpsys_match_tbl’ defined but not used [-Wunused-const-variable=]
-> 
-> Looking at the code, both drivers can only bind to OF-defined device
-> nodes, so these drivers are useless without OF and should therefore
-> depend on it.
-> 
-> Also drop of_match_ptr() from both drivers. We already know what it
-> will resolve to, so we might as well save cpp some work.
-> 
-> Developers or QA teams who wish to test-build the code can still do
-> so by enabling CONFIG_OF, which is available on all architectures and
-> has no dependencies.
-> 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202207240252.ZY5hSCNB-lkp@intel.com/
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Chenglin Xu <chenglin.xu@mediatek.com>
-
-Applied, thanks!
-
+On Wed, Aug 24, 2022 at 11:10 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>
+> The success and return_code are needed by the filters.  Move
+> audit_return_fixup() before the filters.
+>
+> The pid member of struct audit_context is never used.  Remove it.
+>
+> The audit_reset_context() comment about unconditionally resetting
+> "ctx->state" should read "ctx->context".
+>
+> The proctitle is intentionally stored between syscalls.  Only free it in
+> audit_free_context().
+>
+> Be explicit in checking the struct audit_context "context" member  enum
+> value rather than assuming the order of context enum values.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 12c5e81d3fd0 ("audit: prepare audit_context for use in calling contexts beyond syscalls")
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 > ---
-> Changes since v1:
->   * Drop of_match_ptr() (suggested by AngeloGioacchino Del Regno
-> 
->   drivers/soc/mediatek/Kconfig         |    2 ++
->   drivers/soc/mediatek/mtk-pmic-wrap.c |    2 +-
->   drivers/soc/mediatek/mtk-scpsys.c    |    2 +-
->   3 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> --- linux-5.18.orig/drivers/soc/mediatek/Kconfig	2022-07-28 11:22:23.098393325 +0200
-> +++ linux-5.18/drivers/soc/mediatek/Kconfig	2022-07-28 11:23:58.635687065 +0200
-> @@ -37,6 +37,7 @@ config MTK_INFRACFG
->   config MTK_PMIC_WRAP
->   	tristate "MediaTek PMIC Wrapper Support"
->   	depends on RESET_CONTROLLER
-> +	depends on OF
->   	select REGMAP
->   	help
->   	  Say yes here to add support for MediaTek PMIC Wrapper found
-> @@ -46,6 +47,7 @@ config MTK_PMIC_WRAP
->   config MTK_SCPSYS
->   	bool "MediaTek SCPSYS Support"
->   	default ARCH_MEDIATEK
-> +	depends on OF
->   	select REGMAP
->   	select MTK_INFRACFG
->   	select PM_GENERIC_DOMAINS if PM
-> --- linux-5.18.orig/drivers/soc/mediatek/mtk-pmic-wrap.c	2022-07-30 11:20:22.221919946 +0200
-> +++ linux-5.18/drivers/soc/mediatek/mtk-pmic-wrap.c	2022-07-30 11:41:14.073038643 +0200
-> @@ -2347,7 +2347,7 @@ static int pwrap_probe(struct platform_d
->   static struct platform_driver pwrap_drv = {
->   	.driver = {
->   		.name = "mt-pmic-pwrap",
-> -		.of_match_table = of_match_ptr(of_pwrap_match_tbl),
-> +		.of_match_table = of_pwrap_match_tbl,
->   	},
->   	.probe = pwrap_probe,
->   };
-> --- linux-5.18.orig/drivers/soc/mediatek/mtk-scpsys.c	2022-07-30 11:20:22.221919946 +0200
-> +++ linux-5.18/drivers/soc/mediatek/mtk-scpsys.c	2022-07-30 11:41:22.466154796 +0200
-> @@ -1141,7 +1141,7 @@ static struct platform_driver scpsys_drv
->   		.name = "mtk-scpsys",
->   		.suppress_bind_attrs = true,
->   		.owner = THIS_MODULE,
-> -		.of_match_table = of_match_ptr(of_scpsys_match_tbl),
-> +		.of_match_table = of_scpsys_match_tbl,
->   	},
->   };
->   builtin_platform_driver(scpsys_drv);
-> 
+>  kernel/audit.h   |  2 +-
+>  kernel/auditsc.c | 12 ++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+
+[NOTE: dropped the stable kernel alias from my reply]
+
+A couple of things:
+
+* I know you like to CC a lot of people on your patches Richard, but
+just a heads-up that you are likely to get a nastygram back from Greg
+about CC'ing the stable kernel alias directly.  It's probably worth
+re-reading the Documentation/process/stable-kernel-rules.rst docs if
+you haven't done so in a while, it's a quick read and I do it myself
+every few months.
+
+* I generally ask that people *not* directly add the 'Cc: stable@...`
+tag to patches they send to the list, I prefer to add/remove those as
+needed.  It's not a hard rule, just something I prefer (and don't
+respin patches *only* to remove the tag, but keep this in mind for
+future submissions/respins).  If there is ever any concern about the
+stable tag I bring that up for discussion on-list, although that has
+only ever happened once (twice?) that I can recall; it's usually
+pretty obvious.
+
+* Despite what I said about the stable tagging, please continue to add
+the 'Fixes: ...' tags for serious bugs, those are good and welcome.
+
+* The audit_return_fixup() is definitely -rc/stable material, which
+means it should be split into its own patch.
+
+* The proctitle free change *might* be stable worthy, but I'd like to
+hear some more justification of this from you either in a reply on
+this thread or in a commit description.  Regardless, just like the
+return fix, this should be in a separate patch.
+
+* The enum comparison should be its own patch, with an appropriate
+'Fixes:' tag in case the -stable folks want to merge it, but as we
+haven't seen any problems with it (and they aren't likely) I wouldn't
+tag this for -stable.
+
+* I would suggest the audit_context::pid removal and the comment fix
+be separate patches as well.  I would also suggest omitting a 'Fixes:'
+tag here as these are far from critical, and things with a fixes tag
+tend to get pulled into -stable kernels which I believe would be a
+mistake here.
+
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index 58b66543b4d5..d6eb7b59c791 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -133,7 +133,7 @@ struct audit_context {
+>         struct sockaddr_storage *sockaddr;
+>         size_t sockaddr_len;
+>                                 /* Save things to print about task_struct */
+> -       pid_t               pid, ppid;
+> +       pid_t               ppid;
+>         kuid_t              uid, euid, suid, fsuid;
+>         kgid_t              gid, egid, sgid, fsgid;
+>         unsigned long       personality;
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 9226746dcf0a..9f8c05228d6d 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -965,7 +965,7 @@ static void audit_reset_context(struct audit_context *ctx)
+>         if (!ctx)
+>                 return;
+>
+> -       /* if ctx is non-null, reset the "ctx->state" regardless */
+> +       /* if ctx is non-null, reset the "ctx->context" regardless */
+>         ctx->context = AUDIT_CTX_UNUSED;
+>         if (ctx->dummy)
+>                 return;
+> @@ -1002,7 +1002,7 @@ static void audit_reset_context(struct audit_context *ctx)
+>         kfree(ctx->sockaddr);
+>         ctx->sockaddr = NULL;
+>         ctx->sockaddr_len = 0;
+> -       ctx->pid = ctx->ppid = 0;
+> +       ctx->ppid = 0;
+>         ctx->uid = ctx->euid = ctx->suid = ctx->fsuid = KUIDT_INIT(0);
+>         ctx->gid = ctx->egid = ctx->sgid = ctx->fsgid = KGIDT_INIT(0);
+>         ctx->personality = 0;
+> @@ -1016,7 +1016,6 @@ static void audit_reset_context(struct audit_context *ctx)
+>         WARN_ON(!list_empty(&ctx->killed_trees));
+>         audit_free_module(ctx);
+>         ctx->fds[0] = -1;
+> -       audit_proctitle_free(ctx);
+>         ctx->type = 0; /* reset last for audit_free_*() */
+>  }
+>
+> @@ -1077,6 +1076,7 @@ static inline void audit_free_context(struct audit_context *context)
+>  {
+>         /* resetting is extra work, but it is likely just noise */
+>         audit_reset_context(context);
+> +       audit_proctitle_free(context);
+>         free_tree_refs(context);
+>         kfree(context->filterkey);
+>         kfree(context);
+> @@ -1940,6 +1940,7 @@ void __audit_uring_exit(int success, long code)
+>                 goto out;
+>         }
+>
+> +       audit_return_fixup(ctx, success, code);
+>         if (ctx->context == AUDIT_CTX_SYSCALL) {
+>                 /*
+>                  * NOTE: See the note in __audit_uring_entry() about the case
+> @@ -1981,7 +1982,6 @@ void __audit_uring_exit(int success, long code)
+>         audit_filter_inodes(current, ctx);
+>         if (ctx->current_state != AUDIT_STATE_RECORD)
+>                 goto out;
+> -       audit_return_fixup(ctx, success, code);
+>         audit_log_exit();
+>
+>  out:
+> @@ -2065,13 +2065,13 @@ void __audit_syscall_exit(int success, long return_code)
+>         if (!list_empty(&context->killed_trees))
+>                 audit_kill_trees(context);
+>
+> +       audit_return_fixup(context, success, return_code);
+>         /* run through both filters to ensure we set the filterkey properly */
+>         audit_filter_syscall(current, context);
+>         audit_filter_inodes(current, context);
+> -       if (context->current_state < AUDIT_STATE_RECORD)
+> +       if (context->current_state != AUDIT_STATE_RECORD)
+>                 goto out;
+>
+> -       audit_return_fixup(context, success, return_code);
+>         audit_log_exit();
+>
+>  out:
+> --
+> 2.27.0
+
+-- 
+paul-moore.com

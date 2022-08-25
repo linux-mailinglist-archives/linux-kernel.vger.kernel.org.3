@@ -2,101 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80565A08A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FBD5A08A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiHYGEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S233614AbiHYGGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiHYGEd (ORCPT
+        with ESMTP id S233215AbiHYGGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:04:33 -0400
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF1D9F779;
-        Wed, 24 Aug 2022 23:04:32 -0700 (PDT)
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P60AUR011000;
-        Wed, 24 Aug 2022 23:04:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PPS06212021;
- bh=X9RNAuRl48yKaT3FZoepRQ1FjmBaxmqyZCz8sO6VjWs=;
- b=CQ/qfPU+0h5ddUlGDmeqyHjQ/quRKmF9eO4mnzYTdMSGBe0VDGMAgApI/EOzGAT269H2
- IbrUU29uQhNsJBNfTuat0VQjydR18zLLVVlVVgxtEls1/sWy1GcRieAj/VJJHxLoL2Pc
- S2dJsyxDRgH2FAQ7xfugBIXZiIURo5hxjb0aDw1vGfHIBDlD7/lMOtheofRTbtXIzbxG
- 6/dY91glVBekz9it01iJKBykUBW1LK3ZfOmXofNYXjCNYliRCL+OyWvCLdSKJM+FZEg3
- 4nzjoN1VBIz/N31vXjpdZ9s+ycuh5uf60MsI87XekvNpE4Hux9V65eXjxqU97yoSy4FT sA== 
-Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3j53rvhf0d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 24 Aug 2022 23:04:13 -0700
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Wed, 24 Aug 2022 23:04:13 -0700
-Received: from otp-azaharia-l2.corp.ad.wrs.com (128.224.78.230) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Wed, 24 Aug 2022 23:04:11 -0700
-From:   Adrian Zaharia <Adrian.Zaharia@windriver.com>
-To:     <linux-mtd@lists.infradead.org>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <jani.nurminen@windriver.com>, <adrian.zaharia@windriver.com>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH 1/1] mtd: mtdpart: Fix cosmetic print
-Date:   Thu, 25 Aug 2022 09:04:07 +0300
-Message-ID: <20220825060407.335475-2-Adrian.Zaharia@windriver.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
-References: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
+        Thu, 25 Aug 2022 02:06:47 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474B69F753
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:06:46 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bx38so18391822ljb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=olx/ATZA2V0ZzWbXgDfIkW1Q9WuG7O6K9lzCa3iTnVQ=;
+        b=K7hkRlQGQAhrZwDVl0snou7VU3K79DIdp+9pBegNC7RbACR4+X7EJs3kPP14UHgsyE
+         pxVZVQb1T42Zf6Bddds/dlIvsLtZmSWY7IjO8uY8tTAaoiEIXuO/ijNF6cC4EpIBQ0kb
+         3nwcDAjmh7ns4PtwRfudGTkQqhe4mFeUlSt4t5FoF1ONA5nb9NpSU1B+jmvwyAwN3Wig
+         3qBjzJRG0U4O/p3BR0XWhrcZhZL9P+XW50t44CW53Gmtw3RaRQbMJiXweTTpRcQMhpJr
+         6uXstAIrkvvtxIhT43ZHV0jnuP0ujcBthinSkEz94Nu0J2ocvdibhRNJRDLEQGKyIYYr
+         fuIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=olx/ATZA2V0ZzWbXgDfIkW1Q9WuG7O6K9lzCa3iTnVQ=;
+        b=bina/eLr9R/2b/x/3lERppHJeKp8XshM0mgkgi0P5pvEBnc7yIuq/3RnA5mFxPbYXu
+         JIar5qPHEHECcC6RXOHCxaZINw+tbu5BwThzpRWCMCdKht1smQbCS6+56cmcNxFI9+Zr
+         pJzb6ld3k6eshi/KNgJY6nyxtn8GQNkfKddVVovCiTNrFpFk3FTlr+emGeNPcaNoPA0e
+         YIl8MkXQKp76CUyG1pH07zQ31VbM9OilUb1aoR2EbgQY+A6e1Dg4KF/CbcvWJRnIotVh
+         vfe8XGdZXnZkF4OYZCZRfcqaYnJ9JhGSrLph9RGru0mf8rqLvKBzAFNczbcHUOvx4omp
+         hFiQ==
+X-Gm-Message-State: ACgBeo18OzTj6CHnOv9ZOB31O4q+yA3tsM5IhLth1MSlbgL9V9dWpTFC
+        7qAKf60b2Tr/pzaj5I8wX7UN5Q==
+X-Google-Smtp-Source: AA6agR5QBRKXZanSA8gmZ93Z6gOnhbSvg9XlOxZ5KCEOkCJ1wttIow4xsE77cP3aGxYyw1o/Zm4siw==
+X-Received: by 2002:a05:651c:4d1:b0:261:c74b:ca6a with SMTP id e17-20020a05651c04d100b00261c74bca6amr609991lji.294.1661407604483;
+        Wed, 24 Aug 2022 23:06:44 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id s16-20020a056512215000b0048b17852938sm312759lfr.162.2022.08.24.23.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 23:06:43 -0700 (PDT)
+Message-ID: <a04f6b56-4bca-cc86-c51f-3a7c6c7ef02a@linaro.org>
+Date:   Thu, 25 Aug 2022 09:06:42 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 8ZGl-Ddu7gZ63T_cH1hE1rLUZ2vFDtif
-X-Proofpoint-ORIG-GUID: 8ZGl-Ddu7gZ63T_cH1hE1rLUZ2vFDtif
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_03,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- spamscore=0 phishscore=0 adultscore=0 mlxlogscore=824 mlxscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208250020
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+ <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+ <20220823083243.aovlgu22j7uv73qv@mobilestation>
+ <166c0198-17c4-3b19-77fe-632d65f17cb0@linaro.org>
+ <20220823114516.4mcufkbmzy5gjdcr@mobilestation>
+ <6661dcc1-cc93-efbb-b248-0d93f681a1bf@linaro.org>
+ <20220824172724.ny2xpryn76h6ftv6@mobilestation>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220824172724.ny2xpryn76h6ftv6@mobilestation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nurminen <jani.nurminen@windriver.com>
+On 24/08/2022 20:27, Serge Semin wrote:
 
-The print of the MTD partitions during boot are off-by-one for the size.
-Fix this and show the real last offset.
+> 
+> Note what Rob said concerned the generic compatible "fallback" case,
+> not the generic compatible string in general. It's ok to have a
+> generic device name defined irrespective to the platform vendor.
+> Moreover it's applicable in case of the DW uMCTL2 DDRC IP-core since
+> first IP-core version is auto-detectable starting from v3.20a and
+> second I managed to implement auto-detection solutions for almost
+> all the DDR/ECC-specific parameters. So I am more inclined to the
+> solution 1) suggested by me in the previous email message:
+> - deprecate "snps,ddrc-3.80a" string.
+> - add new generic "snps,dw-umctl2-ddrc" compatible string.
+> - rename the DT-bindings file.
 
-Fixes: 3d6f657ced2b ("mtd: mtdpart: Fix cosmetic print")
-Signed-off-by: Jani Nurminen <jani.nurminen@windriver.com>
-Signed-off-by: Adrian Zaharia <Adrian.Zaharia@windriver.com>
----
- drivers/mtd/mtdpart.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sounds ok.
 
-diff --git a/drivers/mtd/mtdpart.c b/drivers/mtd/mtdpart.c
-index d442fa94c872..fab10e6d4171 100644
---- a/drivers/mtd/mtdpart.c
-+++ b/drivers/mtd/mtdpart.c
-@@ -118,7 +118,7 @@ static struct mtd_info *allocate_partition(struct mtd_info *parent,
- 		child->part.size = parent_size - child->part.offset;
- 
- 	printk(KERN_NOTICE "0x%012llx-0x%012llx : \"%s\"\n",
--	       child->part.offset, child->part.offset + child->part.size,
-+	       child->part.offset, child->part.offset + child->part.size - 1,
- 	       child->name);
- 
- 	/* let's do some sanity checks */
--- 
-2.37.2
+> 
+>>
+>> Here the Linux driver also binds to generic synopsys compatible, so I
+>> would assume it has a meaning and use case on its own.
+> 
+> Please see my messages above regarding the current Synopsys DW uMCTL2
+> EDAC driver implementation.
+> 
+>>
+>>>
+>>> What do you think?
+>>>
+>>> * Note I've got it you'd prefer the renaming being performed in a
+>>> separate patch.
+>>
+>> The rename could be in the split patch as here, but then I assume the
+>> rename part to be detected by git and be a pure rename. However:
+>> 1. The git did not mark it as rename (you might need to use custom
+>> arguments to -M/-B/-C),
+> 
+> Of course git hasn't detected it as rename, because aside with renaming
+> I've split the bindings up. Splitting these two updates up into two
+> patches will give us what you said. So to speak I suggest the next
+> updates for v2:
+> PATCH X. Detach the Zynq A05 DDRC DT-bindings to a separate schema.
+> PATCH X + 1. Rename the Synopsys DW uMCTL2 DDRC bindings file and add a more
+> descriptive generic compatible string name.
+> 
+> What do you think?
 
+Regardless of the split the rename can be and should be detected by Git.
+That's why we have these options. If it is not detected, you changed too
+much during rename, so it is not a rename anymore. Relatively small
+amount of changes would still be detected.
+
+> 
+>> 2. There were also changes in the process (allOf:if:then).
+> 
+> Right. But this is in another patchset. I'll address your notes in there.
+
+
+Best regards,
+Krzysztof

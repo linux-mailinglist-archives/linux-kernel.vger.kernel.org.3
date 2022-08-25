@@ -2,160 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658185A1843
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B285A184E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242120AbiHYSER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S243025AbiHYSFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiHYSEP (ORCPT
+        with ESMTP id S242983AbiHYSF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:04:15 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9711AAB06F;
-        Thu, 25 Aug 2022 11:04:14 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so5724003pjj.4;
-        Thu, 25 Aug 2022 11:04:14 -0700 (PDT)
+        Thu, 25 Aug 2022 14:05:28 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD517286E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:05:27 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so2933941wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=JUTRY4gaK8Gdeip+jNVieK44Ohhk3yQH8niH5zENkSw=;
+        b=UQRwsSKSQOopSzPEnfGl08Wcz8NArorGUNMK0W1lv9/M3NFHsrXasUoP/8N6hnNLyh
+         Db+QzkVDzRMXC3hgUyXq0p/ra8hm2s0axZjgkn5/xzjO73xUBq3NWFs8zslI3FobG/9q
+         ElabZvviGU6oh6mONYgE7ezidVx0xJSjXX7zA3rtbmtllF1f27STAnj3DnA+VfAXUkMl
+         Da7Z8W1c5erVgM2O39G0VW5VS1MZds4EV6uliQXvj/E8xFQyQSOgSyjZyifITgzLG8Ka
+         oMAd0Sich0b0OCAAyxB0J9XknMkajEdI82BQg3Gwbo/HoD4VPnFnOKOAkEkcJMZH3M23
+         2JKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Gh8pLFldO50fiVci0OdL141TCfxkxDjEugbgeSSI8T8=;
-        b=DpavOZv0Kd7uDbBG/kQdksF0FCw9jMLRT+e/zQTS/v/DFh4Bdb1vy/Gui7J/q1gew2
-         DOBTczcdVMdgr5Uol7pwesoSd2gPpgf4UE2gzH3lq2iL9KCla1c6Tp90wxnMVyIuHI6h
-         FgO2Sx/Vh/Y5DQlroifac/ZTnsYfWN20SBJL9HtCzNVVBZfu986/tDIVVChtKXFqjcyh
-         K5nroixuw7oQJaegcRq+1aBGrUgZ8bqBgJjzlPDteMaW1VMysDx8CR5sBEcjE9tGq62U
-         R/oA7H34n8GH8BAkKLqPKOmv/EvQKWSujMNlMc9PlVk3jI9zeuc1rn/+yKWc2KE+qt87
-         93Jg==
-X-Gm-Message-State: ACgBeo1hcf5buKoFwV/YyYpMS1ZfZ1xIGnMzf/qq3kiZKlU/oaZFizhr
-        GpJI4lfc1KDXOoI4ukg7KDM=
-X-Google-Smtp-Source: AA6agR7CFU2aM79N22sDwIWnfty4wO7V1f3b8vn4mHtGQRUYT2S9jgvjfervFyydp7hyA4QOghlj2Q==
-X-Received: by 2002:a17:90b:33d2:b0:1fb:971b:c5e9 with SMTP id lk18-20020a17090b33d200b001fb971bc5e9mr251237pjb.90.1661450653976;
-        Thu, 25 Aug 2022 11:04:13 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:349c:3078:d005:5a7e? ([2620:15c:211:201:349c:3078:d005:5a7e])
-        by smtp.gmail.com with ESMTPSA id s16-20020a170902a51000b00172b8e60019sm291701plq.249.2022.08.25.11.04.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 11:04:13 -0700 (PDT)
-Message-ID: <3326ad2e-e82f-7254-7e6b-bb0a120288f8@acm.org>
-Date:   Thu, 25 Aug 2022 11:04:10 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=JUTRY4gaK8Gdeip+jNVieK44Ohhk3yQH8niH5zENkSw=;
+        b=4qhPw8D15vJpRBc6MDxPh6bnSaOWcKTWF1tziXCBIIClofCvt+MM0Y9i912gOouLBL
+         vUw8yDH3mu+i/C8AI8/ItC3CACkLAJ2qEQAx5yPKfemkP1Ssn721iL7rlYVmzHLwwHFp
+         pnhVzRUD9q3tYzu+HYplPD5ZUbOqN2Q4MtQImUKa0PRoEYuc1IYxzQRZ0pWMjlQoakx3
+         TUWmvw1tvSlS/WvESWHtcVCuVctMwTBSv/MCGg68lFDJMHUFEfTkScrNKnlrG+Js8i5x
+         TfRDq9EHj53A8ypIv03Fnk1UMtY7DukV8H+9prXfCmQ+rwx5Lbt/ep0bRt6kbIy9S9cd
+         71tw==
+X-Gm-Message-State: ACgBeo3olN4cfuirCGLWWuiHdlM4YJMli7Mgi8ox7/YLj9DLuzu6wq3O
+        3UN6YBMCElmiZnOe5J5ZJEtYRw==
+X-Google-Smtp-Source: AA6agR5biMHZOOviA7RBIh8sODjlp+ZpN4gWA6662c/obgpPYUJW3Xon/lSc/ip8BcNFU0lBj4jAww==
+X-Received: by 2002:a05:600c:3d09:b0:3a5:e408:ca19 with SMTP id bh9-20020a05600c3d0900b003a5e408ca19mr3121650wmb.135.1661450725527;
+        Thu, 25 Aug 2022 11:05:25 -0700 (PDT)
+Received: from henark71.. ([51.37.149.245])
+        by smtp.gmail.com with ESMTPSA id j4-20020a5d6044000000b002254a7f4b9csm14967970wrt.48.2022.08.25.11.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 11:05:25 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Cc:     Sagar Kadam <sagar.kadam@sifive.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Add a PolarFire SoC l2 compatible
+Date:   Thu, 25 Aug 2022 19:04:16 +0100
+Message-Id: <20220825180417.1259360-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v2 1/2] scsi: ufs: Add Multi-Circular Queue support
-Content-Language: en-US
-To:     "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>,
-        Can Guo <quic_cang@quicinc.com>, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        mani@kernel.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        jongmin jeong <jjmin.jeong@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1660213984-37793-1-git-send-email-quic_cang@quicinc.com>
- <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
- <ea877f4f-1acd-2da4-a6f5-10df02dfee74@acm.org>
- <4471ed41-516c-95d4-003d-28077df7dce4@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <4471ed41-516c-95d4-003d-28077df7dce4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 18:42, Asutosh Das (asd) wrote:
-> On 8/18/2022 7:41 PM, Bart Van Assche wrote:
->> On 8/11/22 03:33, Can Guo wrote:
->>> +static inline void ufshcd_mcq_process_event(struct ufs_hba *hba,
->>> +                        struct ufs_hw_queue *hwq)
->>> +{
->>> +    struct cq_entry *cqe = ufshcd_mcq_cur_cqe(hwq);
->>> +    int tag;
->>> +
->>> +    tag = ufshcd_mcq_get_tag(hba, hwq, cqe);
->>> +    ufshcd_compl_one_task(hba, tag, cqe);
->>> +}
->>
->> Consider changing "process_event" into "process_cqe". Consider 
->> renaming ufshcd_compl_one_task() into ufshcd_compl_one_cqe().
->>
-> The preparatory patch that would precede this change would define 
-> ufshcd_compl_one_task() in ufshcd.c. Since this function would be 
-> invoked both from Single Doorbell mode and MCQ mode, 
-> ufshcd_compl_one_task() sounds more relevant. What say?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-The name "task" is confusing since in SCSI standard documents it refers 
-to "task management" while ufshcd_compl_one_task() is not related to 
-SCSI task management at all. So I would appreciate it if another name is 
-chosen than ufshcd_compl_one_task().
+Whilst re-running checks before sending my dt-fixes PR today I noticed
+that I had introduced another dtbs_check warning by applying one of the
+patches in it.
 
->>> +static irqreturn_t ufshcd_handle_mcq_cq_events(struct ufs_hba *hba)
->>> +{
->>> +    struct ufs_hw_queue *hwq;
->>> +    unsigned long outstanding_cqs;
->>> +    unsigned int nr_queues;
->>> +    int i, ret;
->>> +    u32 events;
->>> +
->>> +    ret = ufshcd_vops_get_outstanding_cqs(hba, &outstanding_cqs);
->>> +    if (ret)
->>> +        outstanding_cqs = (1U << hba->nr_hw_queues) - 1;
->>> +
->>> +    /* Exclude the poll queues */
->>> +    nr_queues = hba->nr_hw_queues - hba->nr_queues[HCTX_TYPE_POLL];
->>> +    for_each_set_bit(i, &outstanding_cqs, nr_queues) {
->>> +        hwq = &hba->uhq[i];
->>> +
->>> +        events = ufshcd_mcq_read_cqis(hba, i);
->>> +        if (events)
->>> +            ufshcd_mcq_write_cqis(hba, events, i);
->>> +
->>> +        if (events & UFSHCD_MCQ_CQIS_TEPS)
->>> +            ufshcd_mcq_poll_cqe_nolock(hba, hwq);
->>> +    }
->>> +
->>> +    return IRQ_HANDLED;
->>> +}
->>
->> Why the loop over the completion queues? Shouldn't UFSHCI 4.0 
->> compliant controllers support one interrupt per completion queue?
->>
-> MCQ specification doesn't define that UFSHCI 4.0 compliant HC should 
-> support one interrupt per completion queue. I guess it would depend on 
-> HC vendors. But it specifies ESI as an alternate method; which is 
-> implemented in this patch.
+PolarFire SoC has 4 cache interrupts, unlike the fu540 (which the dts
+re-uses the compatible of currently) which only has 3. Add a new string
+to the binding like should've been done in the first place...
 
-It is unfortunate that support for the ESI mechanism is optional in the 
-UFSHCI 4.0 specification since I consider this as one of the most 
-important UFSHCI 4.0 features. I wouldn't mind if MCQ would only be 
-supported for UFSHCI 4.0 controllers that support ESI.
+The driver does not care which compatible it matches against, and just
+uses as many interrupts as are in the dts so will happily work away
+without any needed changes there.
 
->>> +    if (hba->nutrs != old_nutrs) {
->>> +        ufshcd_release_sdb_queue(hba, old_nutrs);
->>> +        ret = ufshcd_memory_alloc(hba);
->>> +        if (ret)
->>> +            return ret;
->>> +        ufshcd_host_memory_configure(hba);
->>> +    }
->>
->> Can this freeing + reallocating be avoided?
->>
-> Umm, we thought about this. Only after reading the device params, the 
-> ext_iid support and the device queue depth be determined. So didn't look 
-> like there's any other way than this. If you have any ideas, please let 
-> us know.
+@Palmer, you can take this directly as long as my fixes PR for rc3 is
+merged if you like, since the application path for the binding is via
+you anyway. I suppose I could take both too, but whatever works best
+for you (:
+
+Thanks,
+Conor.
+
+Conor Dooley (2):
+  dt-bindings: riscv: sifive-l2: add a PolarFire SoC compatible
+  riscv: dts: microchip: use an mpfs specific l2 compatible
+
+ .../bindings/riscv/sifive-l2-cache.yaml       | 79 ++++++++++++-------
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |  2 +-
+ 2 files changed, 50 insertions(+), 31 deletions(-)
+
+-- 
+2.37.1
 

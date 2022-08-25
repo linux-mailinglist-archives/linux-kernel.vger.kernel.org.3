@@ -2,213 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E192D5A1753
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFEF5A175C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242769AbiHYQ6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S242912AbiHYQ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242513AbiHYQ6h (ORCPT
+        with ESMTP id S240358AbiHYQ7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:58:37 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B253B2DA1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:58:37 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PGhkT8023815;
-        Thu, 25 Aug 2022 16:58:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=SxlVpM8XRG/92ZQTn0KqThMeLlIYMQrQfiWWkqUX7uk=;
- b=IHHvWJ/tro7JrPm6Fvs/RA8bN6810/bwNCNPYV/U2hJLAVdIuOXAISGFsnHUOjLmZfoX
- F8jzyAGG8FAkv2OmDAcX2epMFb8BlYkZPyq5Y+58f2plcw0LlYe9SbsZCgvVOiMvwAQS
- hEVWBQ9waqIT29JHwj8aRwD4Tm/XUsBtLMyLjaAeRKlAPE+eulNSHlZxIkLbQkfrrgP9
- jZZUqLKQi0XjTyjNtKaIryNnwybPqZ43rgGxSXQgo7fTx9sXfUt0dAla3pxqzJOz5D9z
- a3gLSzigLftg3ot7mYBI9hKH/zJjRJjIj68q9m09G9aLr05yZwrVikJNWtqGAIEuVBUH VQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4w25q1a7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 16:58:27 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27PFJIh5016685;
-        Thu, 25 Aug 2022 16:58:26 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n57uk55-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 16:58:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i9+Cq/8b+sexw4jswOYbjfK1kIKTNxSjhwz2916v4hbvjHJad6jBJ11ItmGDjtx44K4zchj7sC+oKqPKtcUgsgzuLoT1cjSfZBW1y/IGgO/l9vcCWduBjSrxuYVYZD5wGyij8KkBPIifoDXaxDXvbbBg/ZC2Y3kDbiQenE6sHGbQyOVzW5FHOd6lQHCODa5vTQ1JS1QWF3ms4ctcAgBoHWQ67pOUedEIu8WCP+fuO6wOQ7xfZlc6FINRBQTPoHrZaXMGDv3Mot+bRn3G3jnmPfQG28gLjfp707fPfKRt5VrkhF5aL7I69zJKh91f9qppdYmj56gkW7Ewg9k2FFehiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SxlVpM8XRG/92ZQTn0KqThMeLlIYMQrQfiWWkqUX7uk=;
- b=j+8uYkRrysoORZHF8CmQ0Iw5e4byBka6Zvi1DmN732pWuzfuynqP3ec76PhBYoENfTZx5GWF2f23wYSrPNzKfAo23HafvKqETefb5B6MqDoU+2UsGd93XNEf9dbWw5Qhus87+1MZPJeK2B5bb4Ui3oScc9XNj6Bk0T2XctzMhq0jf1Ugg+c85AOwLs5JOAQ/DzkuPBOMQxQru3QDh7xI2ZNCn6jsuyVmGa19wWz2HLbIU5VSUjOoBt6M1CBHVJ3WqmEe5X+czkxbv00wuUhH4bVSRTASR1V5+p8HHjgsp54/eq76eVmfil8eLNDirMLf3PYbPyzSJx5XRg4PlGbF8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SxlVpM8XRG/92ZQTn0KqThMeLlIYMQrQfiWWkqUX7uk=;
- b=Wai8vd6ak1Gou29AFeF5C5sn9fd1SuhQM6jNonrCGB9lGRKhbHowSRZDEm/AvGPb60OikEkeef5dFh0gn+xZf41Uaq7i4cWpDtSaQhBzVaWCnMvHby8nlmKbHkvpkegYVKIp4vhV2J+MuQ0lLGi23anVKG8IyFLhBmWO0yOIbTI=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by BY5PR10MB4179.namprd10.prod.outlook.com (2603:10b6:a03:206::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Thu, 25 Aug
- 2022 16:58:24 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::3d34:ebb5:d9df:98b3]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::3d34:ebb5:d9df:98b3%5]) with mapi id 15.20.5546.025; Thu, 25 Aug 2022
- 16:58:24 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] fs/proc/base: use maple tree iterators in place of linked
- list
-Thread-Topic: [PATCH] fs/proc/base: use maple tree iterators in place of
- linked list
-Thread-Index: AQHYt8v0Vq3Ph7IqdUqrxirJlcBD3q2/yEsAgAAP2gA=
-Date:   Thu, 25 Aug 2022 16:58:24 +0000
-Message-ID: <20220825165816.fisg2infeoec54c3@revolver>
-References: <20220824012121.aj2qkzrmdyywu45t@offworld>
- <20220824151129.2023451-1-Liam.Howlett@oracle.com>
- <20220825160132.w4bphicoifyh2an5@offworld>
-In-Reply-To: <20220825160132.w4bphicoifyh2an5@offworld>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: db16b92e-cc0f-4a1b-b773-08da86bb05d5
-x-ms-traffictypediagnostic: BY5PR10MB4179:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 896OlLTGSAF4j67JpswWnLDbxXhW/KN70sBllq+3xKpT2Lc8J43szU4Jo7LoaH6dExODTeDG/No7CeTIjOhSmZicGFq7bo3m3buh9JSLMjp+Mkt7hoaCZbejkq/JnOkL/eSwLoqmVfUX/jUkQB9XiPEoyj6l3NBI5578V5wN/s2tP1iOlnFD46qDy5iaJwsh9EEhbyeRKCfx3JbWsH7m5OMTiDLRlLQ7MpWc/ck8OZRZE/wOm6rnyvIONdwISj7g99oZV50X0Y743cHO4Eb8D4oZszwY+XfnVZyDiFqa9E5LZttZzPg6pZ/UG5uz6dgyPshHsgBMcQXwib0InY6Yw8V7UAlnU1m3NFmr9fJfh2W/qHZu+wTi0Jhibay1GFxOhvHE2mgsSnxYHmRKg4HoSnmeakRCvSnkAZv9XbWklqBJlVSFogw6PBYW8dxOsZ72uk3ekQeMAbHjXBC1bUjgi74P9OcbiUR37HTHJ/9A6QndryfwrId0IGItbKq9ySCf9BB9qrsfpq3uQ/+P9RY6ljhTA/C/uv4XTB7SJIZ/e9oyW/H1cLrtYUbovArbGfXB+5fXWz8dy/HKPKH73TdDM7chSj+krOHTEjNoB8F2NjqNMDgTdukjSqWDAoeRhLJhtz6kGI5juc88BqdhLcMRdDYZ7A/IRVe++u2E27jbV/JUxOrtjjLJOCX6tQasgBciNbojKG5kuoIm0KrAgnxlzeLc62ZoDdIBQPcUUw/U5DfmQaf6iQxjFhrX6gd31v8RDa5lbxXtwlj52HOWHHq/1Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(376002)(396003)(366004)(346002)(39860400002)(41300700001)(44832011)(9686003)(33716001)(2906002)(478600001)(6512007)(6506007)(91956017)(110136005)(26005)(6486002)(86362001)(71200400001)(316002)(122000001)(38100700002)(186003)(1076003)(38070700005)(66476007)(66556008)(5660300002)(8936002)(66446008)(8676002)(76116006)(64756008)(83380400001)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eweV3unVAkR8y+EJEn+7wEfJxsHb7Cf1DU2jAaaNerwStDd1CrvbKhQP1Q+3?=
- =?us-ascii?Q?goxEKUYsEwtfcN93xsgYvQfH5udNQTLedCCNLolssTt3t4tEku+u+mAKcYHz?=
- =?us-ascii?Q?/SYCKCPGa7501XXyZ4f+sHv0PcxxERFhMjmLZcI6U2eob5en4JleNDgByAAT?=
- =?us-ascii?Q?TDeFN6wpamDkQTma2G9vcZDjCKDgyBvZJf09LjAUX9JoIz/A0Wfz752poqNK?=
- =?us-ascii?Q?6elB70os/Mz5hUe0ahzqD6kxDRArvEGT3+XdeFk9g/AiZTo1h8/DDYBLnoin?=
- =?us-ascii?Q?dF4Ja6lJ9iSv9ywPnDBHQFClFBp3jK4A3gNADVaCMXwtoGoFk6fzf9BOWAVE?=
- =?us-ascii?Q?5FnVZ5JgmRgKU/kNOeBypxLqadmNReb/vYGyc7+T1u0Pg6qfTK/ZctaaylmD?=
- =?us-ascii?Q?9mffHuGJlBf6PN3Lc3hF5Hkewz2kNkzDrCIZ3FcWUyINOLPb12UmyY640NwO?=
- =?us-ascii?Q?h2iOQRfRcQtOJPPvbQMy5QgIupvYxMut1lEoDIAS11XulTvjK2GKI8G7Fe8H?=
- =?us-ascii?Q?H4e3Bcif6exC7iHIwnBzBYg11q2gHd9oNn+sFYB7ueREhQXjOWT/bR9xUIkb?=
- =?us-ascii?Q?xHHE8IieKBpqiSBqFhCxkbkUa6CQjzy7B0T5dcFYg9cQl47e3mN1ArqUuQBA?=
- =?us-ascii?Q?MHXY5JQPq8u1rVa29sEwcNnZenGFDxnpTBWiVcvrnhG+njDAfk01gYnlhY0d?=
- =?us-ascii?Q?X+OE/HQcBV0n1bVjOL51mlr0y9i+0hbpjMqBkciQ+wYT6ZMfdugCzs9+qWW/?=
- =?us-ascii?Q?/ECmjg5/bJVf1PkRWQRJ4wPVvwxfxtBsl5Wj3ojf8n/tnHZ57GrC1/7JV+Uo?=
- =?us-ascii?Q?HVtlgcFf4zj8r5MpU33WaUHnk2jQVkTinsICzdkoKoNgVUBao/ZTmO38lYyJ?=
- =?us-ascii?Q?b0g1nBDGQ1z+5x1p8hj049O+nSC8SRVNroHRXuurxBFojiBqONOA1odIoDIL?=
- =?us-ascii?Q?5+88U4EsJSv9wM5OOo2KL9n0m7OjNutpk4EQNdKncIZG+CCZeY1Lg+U1U8UF?=
- =?us-ascii?Q?kU8nbK9G4/81UTnMvQXmCOpYW2tw9rpZ9ia3Zg2VDpgIVJdwilPz+N+K/zod?=
- =?us-ascii?Q?61TXjGHajZPs+h75t9aO1emg05WiBbnskaM9Skm3YoPMDyfYI8uL/qeUl2Rf?=
- =?us-ascii?Q?45TPlxkuWP87DTh7lOwSq3s9J3yTz2q0QuTa5peM1YVCLqboBFAM6+Oj22dZ?=
- =?us-ascii?Q?Q/rlVDfXhEgY/7+YbYcolKODRv7qW/aR8b1JSfz3jw2Cg3AFA5tKHiDF3Iz5?=
- =?us-ascii?Q?fem/nrt4DIOIvdqp36Lf0Hl2HWWS8YJs+vXKQj3MTRn3OAx5eercZhHwzucJ?=
- =?us-ascii?Q?SfkAwcPFkJ9qUeqKFQKSEwjbznPJNPKQbyMYclrfF1NLBX0jOqBNz9NJGio3?=
- =?us-ascii?Q?E6zlbO+eaSrdQ2inK4HKRnMvylDMGSFxb+oRWpkCPyNAuDONbMz2D3pV3o89?=
- =?us-ascii?Q?n27e6ZAOn1igQUswHtABYJXYwCldz+gjyDCfegTsmOW6WEw0Q2uI+oUITerl?=
- =?us-ascii?Q?uB1LfRSao8QfQVeqfBouvEY5mWEH2JLXlCJ2tqqjCoWsjkYrTI3UrmTMdPSR?=
- =?us-ascii?Q?avFGsAUHmZVuxus+ewzlREHqQ0rhdjq6Ey2NkJTyoYgAh5j3fgC3QV7q9z95?=
- =?us-ascii?Q?nQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5A567C6B68A3104CBE541BA66771CB0C@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 25 Aug 2022 12:59:02 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517D9B028A;
+        Thu, 25 Aug 2022 09:58:59 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220825165853epoutp0376c7fc9145c4cbd0e89f42de1de29f31~OpQBu3S_U0527805278epoutp03q;
+        Thu, 25 Aug 2022 16:58:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220825165853epoutp0376c7fc9145c4cbd0e89f42de1de29f31~OpQBu3S_U0527805278epoutp03q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1661446733;
+        bh=OMyDqczPCjBQ5hZ5/u7crpFO3U2v0uzdYp2Hee2GiXE=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=KLlmvA6iBkGaJfHVkjrgAiOmx/cbbjRu6KeNG232POEwMC1hoCtkLAolisykmbpfQ
+         pvew6z9R3GTwPxfPKOG3ZB9G1uVXi97IA2XTGcEmvcjcgbAQnVpH112N5r+HL0GXBr
+         d+cHIU4FokBlYPqzrKdPDimeevqpPEiFx1sMb3M4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220825165853epcas5p433396725314642f23d47ce218efe29f5~OpQBdbDvd1748817488epcas5p47;
+        Thu, 25 Aug 2022 16:58:53 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4MD8Lf4Lmlz4x9Pt; Thu, 25 Aug
+        2022 16:58:50 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        94.45.53458.A4AA7036; Fri, 26 Aug 2022 01:58:50 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220825165849epcas5p2a0a1aac7792d9381224c80115b4b7964~OpP9utYva0308503085epcas5p2e;
+        Thu, 25 Aug 2022 16:58:49 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220825165849epsmtrp259aa9e06d50ff43e8719ed90427ff89e~OpP9p0Dk-0656806568epsmtrp2E;
+        Thu, 25 Aug 2022 16:58:49 +0000 (GMT)
+X-AuditID: b6c32a4a-a5bff7000000d0d2-a5-6307aa4a428d
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        23.04.14392.94AA7036; Fri, 26 Aug 2022 01:58:49 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220825165839epsmtip200d6a12a7d79ea5649d0edd621977dbe~OpP0i7oRW0488104881epsmtip22;
+        Thu, 25 Aug 2022 16:58:39 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Kunihiko Hayashi'" <hayashi.kunihiko@socionext.com>,
+        "'Masami Hiramatsu'" <mhiramat@kernel.org>,
+        "'Damien Le Moal'" <damien.lemoal@opensource.wdc.com>,
+        "'Michael Turquette'" <mturquette@baylibre.com>,
+        "'Stephen Boyd'" <sboyd@kernel.org>,
+        "'Geert Uytterhoeven'" <geert+renesas@glider.be>,
+        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
+        "'Tomasz Figa'" <tomasz.figa@gmail.com>,
+        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
+        "'Vladimir Zapolskiy'" <vz@mleia.com>,
+        "'Herbert Xu'" <herbert@gondor.apana.org.au>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        "'Andrzej Hajda'" <andrzej.hajda@intel.com>,
+        "'Neil Armstrong'" <neil.armstrong@linaro.org>,
+        "'Robert Foss'" <robert.foss@linaro.org>,
+        "'Laurent Pinchart'" <Laurent.pinchart@ideasonboard.com>,
+        "'Jonas Karlman'" <jonas@kwiboo.se>,
+        "'Jernej Skrabec'" <jernej.skrabec@gmail.com>,
+        "'David Airlie'" <airlied@linux.ie>,
+        "'Daniel Vetter'" <daniel@ffwll.ch>,
+        "'Rob Clark'" <robdclark@gmail.com>,
+        "'Abhinav Kumar'" <quic_abhinavk@quicinc.com>,
+        "'Dmitry Baryshkov'" <dmitry.baryshkov@linaro.org>,
+        "'Sean Paul'" <sean@poorly.run>,
+        "'Inki Dae'" <inki.dae@samsung.com>,
+        "'Seung-Woo Kim'" <sw0312.kim@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'Thierry Reding'" <thierry.reding@gmail.com>,
+        "'Jonathan Hunter'" <jonathanh@nvidia.com>,
+        "'Masahiro Yamada'" <yamada.masahiro@socionext.com>,
+        "'Florian Fainelli'" <f.fainelli@gmail.com>,
+        "'Linus Walleij'" <linus.walleij@linaro.org>,
+        "'Andre Przywara'" <andre.przywara@arm.com>,
+        "'Kuninori Morimoto'" <kuninori.morimoto.gx@renesas.com>,
+        "'Yoshihiro Shimoda'" <yoshihiro.shimoda.uh@renesas.com>,
+        "'Marek Vasut'" <marex@denx.de>,
+        "'Krishna Manikandan'" <quic_mkrishn@quicinc.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <linux-tegra@vger.kernel.org>
+In-Reply-To: <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH 3/5] dt-bindings: clock: drop minItems equal to maxItems
+Date:   Thu, 25 Aug 2022 22:28:38 +0530
+Message-ID: <065101d8b8a3$f25534c0$d6ff9e40$@samsung.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db16b92e-cc0f-4a1b-b773-08da86bb05d5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2022 16:58:24.0776
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pQDXfobQOicxXhJgMxskOT9cI0N38H9MMU3ZN8axzeuL42tBBnJl6Ae8IbS9BkNdCutixETV60/5UfxRY9je+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4179
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_08,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
- adultscore=0 phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208250064
-X-Proofpoint-ORIG-GUID: BptywlIqtlh-Z932u1QAaDFRV1Hl2ovf
-X-Proofpoint-GUID: BptywlIqtlh-Z932u1QAaDFRV1Hl2ovf
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGXYWyYQPva3C8wcpr5uE47k6l8qAEvQs6pAVXFqBGuLlvmkA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA02TbUxTVxjHd25vbyuueq0yj/jW1WGCDqRYugcnviDO69tSmcmWZQlrypUy
+        Stu14HRfhoJARR1VY7AgChhBwjQyQUU6y6uiQ+YQFIOAwoatBRSQUURd4eLmt/9znt//PC8n
+        R8gTnxP6CGN08axRp9JKKS+yrNrPz39TkUAdWOGeCwdv1xNQmONG0JE/SMK9oR4+vGxo5MGb
+        MgsPshuTSThZc5sPlkY3BXdf9FMw2lcjgOyeBgQnsg4jqL6/F0G6cx4c7sggoefkOQT1rmYS
+        kq15JBx68ogHtqelAnBWlyNo2OsSgNlyWgBHxwoIKOlq8Vx8rUEAzw+086Gj3U1A3eXHBDSV
+        Z1NQ6ugjILPxNwLMQ1YKXCl7EOQXLIY7N9dD/5UHCFyVGXw4MPRYAD25IzwYsHpq7bN5mqt2
+        pfLhdcsFEh4eqUGQecRBgbs8h4Si8jEEb0aTPD21DyJ4YRuk1siZ4pxixPTf3ydgLp5tJZgc
+        6w2SsQ2fIhlLgz9zxfpQwJTZfZmstON8Jr/CQTAlRWaKuZHxJ8G0tVRQzKXhTj7TkX6dYH49
+        /ZNyztexKzWsKoo1SlidWh8Vo4sOlW7+InJdZLAiUOYvC4FPpBKdKo4NlYZvUfp/FqP1vIxU
+        slOlTfAcKVUmk3TZqpVGfUI8K9HoTfGhUtYQpTXIDQEmVZwpQRcdoGPjV8gCA4OCPeC3sZo9
+        lXl8Q9miXfZrhVQiyl24H00RYlqO25qdvP3ISyimryL8j31sMhhA2NXbJOCCYYQHbqYSby0H
+        R12TCRvCd1rvTgYOhNuSnk5QFO2PL+enUOOJWfSbGfjKHwf444kp9Hr8t6VzQs+kt2Bn9diE
+        gaR9sWOEY0R0CB44fXRSz8D1x7vJcc2jF+JLvdk8rg0Jdv91ZoKZRYfh4v5WimNmY0dtjYBj
+        Eqdi96UwTofjyqEixOmZ2Hn94iTjgwf7bB6v0KMZnDfmwx1rcG/B+Ul8NbbfzSbHER7th8+X
+        L+MqTcMHX3YTnFOE01LEHO2Lk/qaSU7PxZb0dD6nGdydZeZzq2pCuOlxOcpAEus7Q1rfGdL6
+        zjDW/yufQmQRmsMaTHHRrCnYEKRjf/jvwdX6uBI08XGXbLqMHnU+C6hChBBVISzkSWeJVtSR
+        arEoSrX7R9aojzQmaFlTFQr2bN7C8/FW6z0/XxcfKZOHBMoVCoU8ZLlCJp0tOroUqcV0tCqe
+        jWVZA2t86yOEU3wSiY120/a2D96L7p938ZVeoTwRcXb+q+alUb8wle9D6+6PnD8/mJ90XbzO
+        qyT0jmF6dJctjV+2YKZ5jXyqLjyo1vnNvEDv9DFDrqT0tmJ7i70w4ssjg7F1ibU3d9WHGfSf
+        31L+vvyMd2RXKml96mf4vvXjkSHzVUrbl9aVXCd/1TXityHzw+T2J4YZKZ8WdHducw7QayoC
+        XnfFlKQe29YS8exE0VrJhu6s3vNTF6hH98dOz5ftUIoVdrAMPB/WnDvmW6xZfW1x354drsKt
+        mZYq1LLX7NWzsXHRoYpbDr9tO+O+K/mqobQxYrP3etGocrhsU5gWpa0ipj2ff29r7YVIzbHw
+        oELRVilp0qhkS3hGk+pf6qEjq0EFAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se1BUdRTH+903zFC31dy76Ay2RY00LBBYx6LHWOrN0YacsdSmdIM7YC4P
+        d4UoNZCEZAFhXWeUFRdhGYUNHUF5JsHyEmxgy1wEBllds2VxleQVu/KIVxP/fed8v+dzvn8c
+        BhelU97M3pgDgjJGrpBSnkRlk9TH/yMjHR6oaRNBVmc7BsV6FwKrYYSA26N2Ep52mHGYqdTg
+        kGc+SkB+cycJGrOLgltjQxS4HzfTkGfvQHD2zAkETd0pCDIGV8EJaw4B9vxLCNqdFgKO6goJ
+        OD5wD4e6hxU0DDbVIuhIcdKQrimi4eTkBQzK73fNgus7aHiS2U+Ctd+FQWu1DYM/avMoqHA8
+        xuC0+RcM0kd1FDjTjiAwXHgFfr+xAYZqehE4TTkkZI7aaLAXTOAwrJu9lVo3W67J+SMJ011l
+        BNzRNiM4rXVQ4KrVE2CsnUQw4/5htlP/CIKxuhHq/RC+VF+K+KHuVJq/WtKD8XpdG8HXjZ8j
+        eE2HP1+ju0PzlQ2+/JljuSRvuObA+HJjOsW35dzE+L6uaxRfNX6X5K0Z1zH+SlFSmGSXZ2iE
+        oNibICgD3t3jGXXEVEjGVb6U2FBfTCWjAh818mA4NoTLcjtpNfJkROzPiEuZqMAXjJXc7bIc
+        ekEv40qm7YshO+LOD02iOYNi/blqQxo1p5ezBhGnzY9fCJkRN3XWNh/yYDdwf2nuknN6GbuF
+        G2yaxOY0wfpyjonM+bkXu44bLjq5qJ/n2nP/JNSIYXBWxqWVzWNw1oerepS3WG4153pwnly4
+        u54rHeqhFjJiztHSTOcgkW4JSfc/SbeEpFuycQ4RRiQR4lTRkdGqoLigGOEbmUoerYqPiZSF
+        x0aXo/lv9VtTjaqMf8saEcagRsQxuHS511utRLjIK0L+7XeCMna3Ml4hqBrRSoaQir1+U7fv
+        FrGR8gPCPkGIE5T/uRjj4Z2MtTy8sv6F7Fc3iddad7FVM7KLhCqJLM5VUtXW1e5AanpfZtVA
+        7GduS5RYbpR9EWN+5nt3fO+aG//05X2V25JhORg8lfJpyZf73QEE+/HUdoeCv0lrj7l2hFV7
+        Pxvek2o7eGh76HhWiOnSG/UKS6rpTW3Uh2GKnS9GvLPftuKiwbLOEKBsiP0g2yzr85XUX06s
+        77aJX1t7VevXKj/MDDR73N/69eSDwGTpqdeDJMOHtv6a1hp8vHWV4afLuhTpxudaYsMLPe8J
+        vcHbkvS0YuOW8c7QFYlPbr0syQ5JV2/TH35bLZrakVBQLg7YU5MQmbq51rbz87Hr/uJPcJOF
+        lhS/F/oo7KmUUEXJg/xwpUr+LzHx7rgcBAAA
+X-CMS-MailID: 20220825165849epcas5p2a0a1aac7792d9381224c80115b4b7964
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220825113348epcas5p35a52fd40abce06847a43de45ea156df6
+References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
+        <CGME20220825113348epcas5p35a52fd40abce06847a43de45ea156df6@epcas5p3.samsung.com>
+        <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Davidlohr Bueso <dave@stgolabs.net> [220825 12:19]:
-> On Wed, 24 Aug 2022, Liam Howlett wrote:
->=20
-> > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> >=20
-> > Use mas_for_each to iterate the list of VMAs instead of a for loop
-> > across the linked list.
->=20
-> Hmm so why isn't this using the standard VMA_ITERATOR?
 
-the VMA_ITERATOR is for the easy cases.  This one was probably skipped
-due to the pos =3D 2 in the for loop and the unknown mm_struct.  I worked
-around that in my patch and I think we could switch to the vma iterator,
-but it won't be any better than what is there now.  We will need to
-declare the struct and call vma_iter_init() once the mm_struct is known.
-It would get rid of the ULONG_MAX in the mas_for_each() line though.
 
->=20
-> >=20
-> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> > ---
-> > fs/proc/base.c | 5 ++++-
-> > 1 file changed, 4 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/fs/proc/base.c b/fs/proc/base.c
-> > index 93f7e3d971e4..0b72a6d8aac3 100644
-> > --- a/fs/proc/base.c
-> > +++ b/fs/proc/base.c
-> > @@ -2350,6 +2350,7 @@ proc_map_files_readdir(struct file *file, struct =
-dir_context *ctx)
-> > 	GENRADIX(struct map_files_info) fa;
-> > 	struct map_files_info *p;
-> > 	int ret;
-> > +	MA_STATE(mas, NULL, 0, 0);
-> >=20
-> > 	genradix_init(&fa);
-> >=20
-> > @@ -2377,6 +2378,7 @@ proc_map_files_readdir(struct file *file, struct =
-dir_context *ctx)
-> > 	}
-> >=20
-> > 	nr_files =3D 0;
-> > +	mas.tree =3D &mm->mm_mt;
-> >=20
-> > 	/*
-> > 	 * We need two passes here:
-> > @@ -2388,7 +2390,8 @@ proc_map_files_readdir(struct file *file, struct =
-dir_context *ctx)
-> > 	 * routine might require mmap_lock taken in might_fault().
-> > 	 */
-> >=20
-> > -	for (vma =3D mm->mmap, pos =3D 2; vma; vma =3D vma->vm_next) {
-> > +	pos =3D 2;
-> > +	mas_for_each(&mas, vma, ULONG_MAX) {
-> > 		if (!vma->vm_file)
-> > 			continue;
-> > 		if (++pos <=3D ctx->pos)
-> > --=20
-> > 2.35.1=
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+>Sent: Thursday, August 25, 2022 5:04 PM
+>To: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+><krzysztof.kozlowski+dt@linaro.org>; Kunihiko Hayashi
+><hayashi.kunihiko@socionext.com>; Masami Hiramatsu
+><mhiramat@kernel.org>; Damien Le Moal
+><damien.lemoal@opensource.wdc.com>; Michael Turquette
+><mturquette@baylibre.com>; Stephen Boyd <sboyd@kernel.org>; Geert
+>Uytterhoeven <geert+renesas@glider.be>; Sylwester Nawrocki
+><s.nawrocki@samsung.com>; Tomasz Figa <tomasz.figa@gmail.com>;
+>Chanwoo Choi <cw00.choi@samsung.com>; Alim Akhtar
+><alim.akhtar@samsung.com>; Vladimir Zapolskiy <vz@mleia.com>; Herbert
+>Xu <herbert@gondor.apana.org.au>; David S. Miller
+><davem@davemloft.net>; Andrzej Hajda <andrzej.hajda@intel.com>; Neil
+>Armstrong <neil.armstrong@linaro.org>; Robert Foss
+><robert.foss@linaro.org>; Laurent Pinchart
+><Laurent.pinchart@ideasonboard.com>; Jonas Karlman <jonas@kwiboo.se>;
+>Jernej Skrabec <jernej.skrabec@gmail.com>; David Airlie <airlied@linux.ie>;
+>Daniel Vetter <daniel@ffwll.ch>; Rob Clark <robdclark@gmail.com>; Abhinav
+>Kumar <quic_abhinavk@quicinc.com>; Dmitry Baryshkov
+><dmitry.baryshkov@linaro.org>; Sean Paul <sean@poorly.run>; Inki Dae
+><inki.dae@samsung.com>; Seung-Woo Kim <sw0312.kim@samsung.com>;
+>Kyungmin Park <kyungmin.park@samsung.com>; Thierry Reding
+><thierry.reding@gmail.com>; Jonathan Hunter <jonathanh@nvidia.com>;
+>Masahiro Yamada <yamada.masahiro@socionext.com>; Florian Fainelli
+><f.fainelli@gmail.com>; Linus Walleij <linus.walleij@linaro.org>; Andre
+>Przywara <andre.przywara@arm.com>; Kuninori Morimoto
+><kuninori.morimoto.gx@renesas.com>; Yoshihiro Shimoda
+><yoshihiro.shimoda.uh@renesas.com>; Marek Vasut <marex@denx.de>;
+>Krishna Manikandan <quic_mkrishn@quicinc.com>;
+>devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>kernel@vger.kernel.org; linux-ide@vger.kernel.org; linux-
+>clk@vger.kernel.org; linux-renesas-soc@vger.kernel.org; linux-samsung-
+>soc@vger.kernel.org; linux-crypto@vger.kernel.org; dri-
+>devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
+>freedreno@lists.freedesktop.org; linux-tegra@vger.kernel.org
+>Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>Subject: [PATCH 3/5] dt-bindings: clock: drop minItems equal to maxItems
+>
+>minItems, if missing, are implicitly equal to maxItems, so drop redundant
+>piece to reduce size of code.
+>
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>---
+
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+> Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 1 -
+> .../devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml  | 2 --
+> Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml    | 1 -
+> 3 files changed, 4 deletions(-)
+>
+>diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+>b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+>index 0abd6ba82dfd..82836086cac1 100644
+>--- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+>+++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+>@@ -23,7 +23,6 @@ properties:
+>   clocks:
+>     description:
+>       Common clock binding for CLK_IN, XTI/REF_CLK
+>-    minItems: 2
+>     maxItems: 2
+>
+>   clock-names:
+>diff --git a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-
+>clock-sel.yaml b/Documentation/devicetree/bindings/clock/renesas,rcar-
+>usb2-clock-sel.yaml
+>index 6eaabb4d82ec..81f09df7147e 100644
+>--- a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-
+>sel.yaml
+>+++ b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-se
+>+++ l.yaml
+>@@ -47,7 +47,6 @@ properties:
+>     maxItems: 1
+>
+>   clocks:
+>-    minItems: 4
+>     maxItems: 4
+>
+>   clock-names:
+>@@ -64,7 +63,6 @@ properties:
+>     maxItems: 1
+>
+>   resets:
+>-    minItems: 2
+>     maxItems: 2
+>
+>   reset-names:
+>diff --git a/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+>b/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+>index 9248bfc16d48..d5296e6053a1 100644
+>--- a/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+>+++ b/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+>@@ -34,7 +34,6 @@ properties:
+>     const: 1
+>
+>   clock-output-names:
+>-    minItems: 3
+>     maxItems: 3
+>     description: Names for AP, CP and BT clocks.
+>
+>--
+>2.34.1
+
+

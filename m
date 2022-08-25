@@ -2,76 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEE05A19CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 21:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D205A19D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 21:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242980AbiHYTsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 15:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S242047AbiHYTtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 15:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237407AbiHYTsd (ORCPT
+        with ESMTP id S243313AbiHYTs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 15:48:33 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F515FAEB;
-        Thu, 25 Aug 2022 12:48:32 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 142so1690499pfu.10;
-        Thu, 25 Aug 2022 12:48:32 -0700 (PDT)
+        Thu, 25 Aug 2022 15:48:58 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D9B753AD;
+        Thu, 25 Aug 2022 12:48:57 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id n17so1278570wrm.4;
+        Thu, 25 Aug 2022 12:48:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=OaWDF3tpGoRU6/AyqqMW1f8xc8xe3+LZ3UaQBdMhu3Q=;
-        b=WCHeoWbSf1BohfDyzd2zo93eEPPd8iwfLlbtwZkoab5FdZ1UdnKuf6zi6qtolgo8Ey
-         LSJwtiaW60/iAEXoYZobmBHVjzbgV2TC7pOHtziyD9corHwWfIiBqu38D8HdKVx3wYUW
-         WrcI3rfAXg0Tw8+i+aEaXbEKoZ8r+apcq5FOZ5Tp81H/Keuk7pBaHYba8aw06y5hSIy9
-         SfVW63p7UQdaGNdyjGhbsKVFtJ4KU0stUnhfnu90oHS7qMwGLNgfLVe7N9Et5268H+UG
-         q849NA46Ap4HeXO8daH2i9l0BCSxwn05ad33ptRyM06BNtZkNgXJVRVpEux7M5wIKI1V
-         EdUQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=EEQaOMPMio1TV/1T2nsXijwtVuTW2Re2GSl+fTHb2hE=;
+        b=EOSwTGoA0nee7KFDbY0hqShMabo5lvAZLhzj+GVpXhf++Nzj9OmUn1OmWPoyWldHhh
+         dbnv+/P4Q5eGuNwR8TRpA5vnA71y/Ce1/+KcGBQ6tdxjU8neWPGCvfemSOgYsxBw8wWD
+         /r9CrCVNubmy7oRWc7HuFASont4/bo0USnvpHoPD4sH8l2EyTnNC/e/T0T/K21K+q93v
+         ZgCFsmmoNiygJD27wzIH2Y0gk2krAVmjCcEsgBCs8+912zcjpv5PrvliOdMBJuwshUXM
+         5AuVZDl8hY1dUgNxix/rwOXM95rTapj4RVl6B2/HXjH88mM8Vf/D4YhYMVe3E0VrWWyE
+         q9Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=OaWDF3tpGoRU6/AyqqMW1f8xc8xe3+LZ3UaQBdMhu3Q=;
-        b=wbSs/h1/aCfMqj1vS2sYaYDLGihod74KB7N55ofbBD1XrLYmBX+SSWwiDg0xMD5rUy
-         SCVTW690Wqnm29axDA2b1woT2fHMcwxB1+goGBRal2qWwU8cJQKLo6u2LtEhmQzQQgoV
-         t0tXfisge17XI4vvjUNLtqkAfU4EcgyJKpsU1/3Y6qjE7tmfcjGEGb5JK/Vm13rE/JJ7
-         XWB6Nbzxbn+26z1dVRilDHKWeQqUyFqevjEq6ISaU6To3vAEHOqRxWI9hIobGOKmCfty
-         pGwh36jPGNA3jmWIn8NEWUJJ8u39Oi4Gtry6I3FbepMVCGm/6vCqOAmhQ4Vg5Yp60ppx
-         mTqQ==
-X-Gm-Message-State: ACgBeo2Csp6o2eudrBB85Wt4Ul55zb9K/Ki1cC6nDqbQR2odYDo+lRMr
-        ZlYziDI8afWGJyyLuSpt+qU=
-X-Google-Smtp-Source: AA6agR7nPfIyGzudfXlCB8kQRsVjW8mcqYegG9oGUzyJ33skMukzMcWIEgc8+8mazIXS2dw4sByPYg==
-X-Received: by 2002:a63:4c:0:b0:42b:2673:2180 with SMTP id 73-20020a63004c000000b0042b26732180mr514022pga.491.1661456911653;
-        Thu, 25 Aug 2022 12:48:31 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id g10-20020a17090a67ca00b001fa79c1de15sm106388pjm.24.2022.08.25.12.48.30
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=EEQaOMPMio1TV/1T2nsXijwtVuTW2Re2GSl+fTHb2hE=;
+        b=j+pyGv0GL5IDSommsaBkXxuF6HWewVQJ/l01KChEAqZsxaucuJ/vgntbGyt+gum0Jf
+         KRsIxpi6nCst9okm+ZbiNov6kCaguQKPKwxp3QIHG/fTZ7DZKlFQpb77R7NKnqzN8nMT
+         5LFxbmN0ijwaupvtpf/Cbld4wYrucKisyyUXB93jPPOKM0uw4KvZPqXJIgltUZ8vljfQ
+         h6GMkjGqzLrfvruOf1qHCgTznojjRrk9zMcX2XEm9SjIX+VLbLE/BTPJdVcLmz0zVBcd
+         bujz55uFW3ck7zd++uNsZy74x4MV5j9KqkkFIEwcJkFrSlto6RQI2YnVVg9fXawrna2i
+         Ry0Q==
+X-Gm-Message-State: ACgBeo2cgwnl5/FdXOefNGxUBj2+AS18NOaq8VPcBdDXsNGz7KyQgc9s
+        Nr6PVJwMkfpX80QN04aEdVY=
+X-Google-Smtp-Source: AA6agR6a+jB85i972kXbhLkKKpllW7496fpWqVVpOsWOvIO65uvf0tz0QQyG4Bto1DkO00QbeWBtGA==
+X-Received: by 2002:a5d:514d:0:b0:225:3507:79e6 with SMTP id u13-20020a5d514d000000b00225350779e6mr3063920wrt.85.1661456935527;
+        Thu, 25 Aug 2022 12:48:55 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id f5-20020a5d4dc5000000b002235eb9d200sm120536wru.10.2022.08.25.12.48.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 12:48:31 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 12:48:29 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v8 002/103] Partially revert "KVM: Pass kvm_init()'s
- opaque param to additional arch funcs"
-Message-ID: <20220825194829.GA2538772@ls.amr.corp.intel.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <3af25cc7502769b98755920807bc8a1010de1d45.1659854790.git.isaku.yamahata@intel.com>
- <c2e61778ca549e8ee4cb44194df367455a20f645.camel@intel.com>
+        Thu, 25 Aug 2022 12:48:54 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, Stefan Hansson <newbie13xd@gmail.com>
+Cc:     Stefan Hansson <newbie13xd@gmail.com>
+Subject: Re: [RESEND PATCH] ARM: configs: replace CONFIG_NO_HZ=y with CONFIG_NO_HZ_IDLE=y
+Date:   Thu, 25 Aug 2022 21:48:52 +0200
+Message-ID: <2642863.mvXUDI8C0e@kista>
+In-Reply-To: <20220825162034.5901-1-newbie13xd@gmail.com>
+References: <20220825162034.5901-1-newbie13xd@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c2e61778ca549e8ee4cb44194df367455a20f645.camel@intel.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,70 +107,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 09:59:34AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+Dne =C4=8Detrtek, 25. avgust 2022 ob 18:20:35 CEST je Stefan Hansson napisa=
+l(a):
+> According to https://www.kernel.org/doc/html/latest/timers/no_hz.html,
+> CONFIG_NO_HZ=3Dy should be replaced by CONFIG_NO_HZ_IDLE=3Dy for newer
+> kernels, so let's reflect that in the 32-bit ARM defconfigs.
+>=20
+> Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> # Samsung
+> ---
+>  arch/arm/configs/bcm2835_defconfig       | 2 +-
+>  arch/arm/configs/cm_x300_defconfig       | 2 +-
+>  arch/arm/configs/davinci_all_defconfig   | 2 +-
+>  arch/arm/configs/dove_defconfig          | 2 +-
+>  arch/arm/configs/exynos_defconfig        | 2 +-
+>  arch/arm/configs/ezx_defconfig           | 2 +-
+>  arch/arm/configs/hisi_defconfig          | 2 +-
+>  arch/arm/configs/imx_v4_v5_defconfig     | 2 +-
+>  arch/arm/configs/imx_v6_v7_defconfig     | 2 +-
+>  arch/arm/configs/integrator_defconfig    | 2 +-
+>  arch/arm/configs/lpc32xx_defconfig       | 2 +-
+>  arch/arm/configs/magician_defconfig      | 2 +-
+>  arch/arm/configs/milbeaut_m10v_defconfig | 2 +-
+>  arch/arm/configs/moxart_defconfig        | 2 +-
+>  arch/arm/configs/multi_v5_defconfig      | 2 +-
+>  arch/arm/configs/multi_v7_defconfig      | 2 +-
+>  arch/arm/configs/mv78xx0_defconfig       | 2 +-
+>  arch/arm/configs/mvebu_v5_defconfig      | 2 +-
+>  arch/arm/configs/mxs_defconfig           | 2 +-
+>  arch/arm/configs/omap1_defconfig         | 2 +-
+>  arch/arm/configs/omap2plus_defconfig     | 2 +-
+>  arch/arm/configs/orion5x_defconfig       | 2 +-
+>  arch/arm/configs/oxnas_v6_defconfig      | 2 +-
+>  arch/arm/configs/pcm027_defconfig        | 2 +-
+>  arch/arm/configs/pxa168_defconfig        | 2 +-
+>  arch/arm/configs/pxa910_defconfig        | 2 +-
+>  arch/arm/configs/pxa_defconfig           | 2 +-
+>  arch/arm/configs/qcom_defconfig          | 2 +-
+>  arch/arm/configs/s5pv210_defconfig       | 2 +-
+>  arch/arm/configs/shmobile_defconfig      | 2 +-
+>  arch/arm/configs/sunxi_defconfig         | 2 +-
 
-> On Sun, 2022-08-07 at 15:00 -0700, isaku.yamahata@intel.com wrote:
-> > From: Chao Gao <chao.gao@intel.com>
-> > 
-> > This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
-> > param to additional arch funcs") remove opaque from
-> > kvm_arch_check_processor_compat because no one uses this opaque now.
-> > Address conflicts for ARM (due to file movement) and manually handle RISC-V
-> > which comes after the commit.  The change about kvm_arch_hardware_setup()
-> > in original commit are still needed so they are not reverted.
-> > 
-> > The current implementation enables hardware (e.g. enable VMX on all CPUs),
-> > arch-specific initialization for VM creation, 
-> > 
-> 
-> I guess you need to point out _first_ VM?
+=46or sunxi:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Yes. I'll add "first".
+Best regards,
+Jernej
 
-> 
-> > and disables hardware (in
-> > x86, disable VMX on all CPUs) for last VM destruction.
-> > 
-> > TDX requires its initialization on loading KVM module with VMX enabled on
-> > all available CPUs. It needs to enable/disable hardware on module
-> > initialization.  To reuse the same logic, one way is to pass around the
-> 
-> To reuse the same logic for what?  I think you need to be specific (and focus)
-> on why we need this patch:  we will opportunistically move CPU compatibility
-> check to hardware_enable_nolock(), which doesn't take any argument, and this
-> patch is a preparation to do that.
-> 
-> 
-> > unused opaque argument, another way is to remove the unused opaque
-> > argument.  This patch is a preparation for the latter by removing the
-> > argument
-> 
-> So how about replacing the last two paragraphs with:
-> 
-> "
-> Initializing TDX will be done during module loading time, and in order to do
-> that hardware_enable_all() will be done during module loading time too, as
-> initializing TDX requires all cpus being in VMX operation.  As a result, CPU
-> compatibility check will be opportunistically moved to hardware_enable_nolock(),
-> which doesn't take any argument.  Instead of passing 'opaque' around to
-> hardware_enable_nolock() and hardware_enable_all(), just remove the unused
-> 'opaque' argument from kvm_arch_check_processor_compat().
-> "
-> 
-> Or even simpler:
-> 
-> "
-> To support TDX, hardware_enable_all() will be done during module loading time. 
-> As a result, CPU compatibility check will be opportunistically moved to
-> hardware_enable_nolock(), which doesn't take any argument.  Instead of passing
-> 'opaque' around to hardware_enable_nolock() and hardware_enable_all(), just
-> remove the unused 'opaque' argument from kvm_arch_check_processor_compat().
-> "
-> 
-> With changelog updated:
+>  arch/arm/configs/tegra_defconfig         | 2 +-
+>  arch/arm/configs/vt8500_v6_v7_defconfig  | 2 +-
+>  arch/arm/configs/xcep_defconfig          | 2 +-
+>  34 files changed, 34 insertions(+), 34 deletions(-)
 
-Thanks, I'll adapt the simpler one.
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+

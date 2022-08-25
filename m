@@ -2,256 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD6D5A1010
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C425A1015
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241427AbiHYMMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
+        id S241358AbiHYMNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241365AbiHYMMG (ORCPT
+        with ESMTP id S240415AbiHYMM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:12:06 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33210AA34E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:12:04 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id f21so20153112pjt.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Ru17QDTLZvKnteLwuwlcrhPpoXkw+kU/p+9HVxWpvik=;
-        b=ddXRGumEtI5cvbDqla6xXpQt/f+vJ4upmi9506EMxPBgan3p/dL5rC2hLdofmquSQ7
-         uqFbKf8QYNW8XLU2MD2MC/TYwg5fXQNid8nSQLg6IBLCm/zAXE0TQ8n8l05yAOjRyl55
-         k4AyKQTag/PdpGM6VOVlINWxo8lnOMVoa5qc9XsWVCeeKM3XwNFFRQf5o2jVGYCyo/yH
-         icBETHtiPWyoNGXlaeRC4VjpVJTlOkkILZHVP/jMaxvwnk3X/ngxsMRdSf2EtXtlLOA1
-         iun+FIXvjVwQn5JUBXNhBkdCiKGJFR5/hcToNIhDJn2WzDeXk3daicN7+HsfClbl+E69
-         Ef/Q==
+        Thu, 25 Aug 2022 08:12:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0087DAB04A
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661429576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8i+ljzn6MB/eBmFGfmQrAmtwmX21MBronF2Ff991Uq0=;
+        b=Tl5wIROAqgc9Dkm7P5xVsAYHwqvgQwSk1weoR6fyalKSXuCholJ1x3FqTlUAGvqkr+oTXY
+        R76JYi/VbJ9keacoAykNaTMx39TsyR2uHemJwAFR+1lAe3KbYJV9/rBqZDqgtC+PA8Buvz
+        F5JSUBYkDpIbtHzruGAxDJ0CbzXK00s=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-654-OGkpsr8CO02np5SZcR8xcg-1; Thu, 25 Aug 2022 08:12:53 -0400
+X-MC-Unique: OGkpsr8CO02np5SZcR8xcg-1
+Received: by mail-wr1-f72.google.com with SMTP id i29-20020adfa51d000000b002251fd0ff14so3334578wrb.16
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:12:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Ru17QDTLZvKnteLwuwlcrhPpoXkw+kU/p+9HVxWpvik=;
-        b=hyay7tk9r5S3Mo07LGUlN79nOyYbO+MSfHsOfgBv9ZmVMqlxbEfCxk2EXIAa1SndPQ
-         ydKvgKP1UR3b2E5Zs2X+L+tep5vT0YpFDpqAMh7tw6cAlRrTMkLFxs499BLDO7oG/6t9
-         xTOZAhAOQg9NBas4pvP+4/UOy+7zZGEd7TXcEjpv5kMDBDhto/qCYc8O9vc8Bk9DzLpx
-         yZHIxf92L+WoOHVBg52d4mRqV3oQVLU5KCCCs0KT2QAViH0CVDOJcmXveRPUONuoKqOa
-         FKuD8Lq/IkrpVN0YrmIJ2jSlmXx9PPad68kZrYo5ZrM8xr+UBkbiDWpUuCdvUeyEqh4F
-         s8aA==
-X-Gm-Message-State: ACgBeo2YMP0NZTwAAcsCmL42CfOunUgpYKkiR7vTNo9pwDSVhtYrbPwb
-        Et6fFyxyHCR1hXsTCPQA/R64EugIGLa3Gg==
-X-Google-Smtp-Source: AA6agR40vL7N5tG6TitaeoauM03j2rAqbHCgyVmBp2OtC3EIGiiNiDlYKH+Vi6GkjfM5KiOqfDx18w==
-X-Received: by 2002:a17:902:dac7:b0:172:e189:f717 with SMTP id q7-20020a170902dac700b00172e189f717mr3803922plx.129.1661429523649;
-        Thu, 25 Aug 2022 05:12:03 -0700 (PDT)
-Received: from [10.254.35.15] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id z17-20020aa79591000000b0052aaff953aesm15137111pfj.115.2022.08.25.05.12.00
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=8i+ljzn6MB/eBmFGfmQrAmtwmX21MBronF2Ff991Uq0=;
+        b=x5rAOVgZzHxmvfcr0gWDnXv2K73mKi5oStI53sfHHqn1/Dd5gkKS90iS1LA9f9jSRY
+         rUAvkFlvCHEuTYQGehMvhubhqhZANQHbThWzqfMDhLrjTH8SwsZ4hOFezr4qhDvjKFhz
+         ePcLyfrp6RvnHgdZLbfWCG+KyjjoJqQxkocmzEr1tdGVKDalH67uIQ2VzXXdBMtFBjC0
+         nnovSzl2HQlC9R9KBU00PuyXbgKim4LVsTntFZlV7cltQj29EOSRGo8SfeKjItQXDx2B
+         Fog9ZrZPN1ol8sTa+Ch3JVBls4npDuBvxfhTLEL6suklJ97jFYVnY7fdYK/rG8Rfr/IR
+         doBA==
+X-Gm-Message-State: ACgBeo14tJp5BpY1tGluU8qzMhIUxlzLNcZtld6M8IdSyNEYWZPkF0xc
+        07VykA7xbWCvKVMCXeAIi4ocrN9iMGY7Pcff7PwrIFBzBZPXYv2GavkDW46g6q3vDkF/kVipLmh
+        BjNDeH/YZmbgX8LsVUlmogNp8
+X-Received: by 2002:a05:6000:250:b0:225:624b:13 with SMTP id m16-20020a056000025000b00225624b0013mr2006738wrz.127.1661429572666;
+        Thu, 25 Aug 2022 05:12:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4XU9Thjdw3dtY8hDYFZgZjn5H98wAmkQlzCVmgXAIYgtj8pToIYo+QGnxLFtQp8Qh/i6f5kw==
+X-Received: by 2002:a05:6000:250:b0:225:624b:13 with SMTP id m16-20020a056000025000b00225624b0013mr2006717wrz.127.1661429572383;
+        Thu, 25 Aug 2022 05:12:52 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b003a601a1c2f7sm5259554wmq.19.2022.08.25.05.12.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 05:12:03 -0700 (PDT)
-Message-ID: <42d482dc-be96-a624-2ecf-3d22f5baed1c@bytedance.com>
-Date:   Thu, 25 Aug 2022 20:11:57 +0800
+        Thu, 25 Aug 2022 05:12:51 -0700 (PDT)
+Message-ID: <ea380cf0-acda-aaba-fb63-2834da91b66b@redhat.com>
+Date:   Thu, 25 Aug 2022 14:12:51 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH 4/7] kernfs: Skip kernfs_drain_open_files() more
- aggressively
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
 Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
-References: <20220820000550.367085-1-tj@kernel.org>
- <20220820000550.367085-5-tj@kernel.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220820000550.367085-5-tj@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        kexec@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>
+References: <20220824163100.224449-1-david@redhat.com>
+ <20220824163100.224449-2-david@redhat.com>
+ <0db131cf-013e-6f0e-c90b-5c1e840d869c@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 1/2] coding-style.rst: document BUG() and WARN() rules
+ ("do not crash the kernel")
+In-Reply-To: <0db131cf-013e-6f0e-c90b-5c1e840d869c@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/20 08:05, Tejun Heo wrote:
-> Track the number of mmapped files and files that need to be released and
-> skip kernfs_drain_open_file() if both are zero, which are the precise
-> conditions which require draining open_files. The early exit test is
-> factored into kernfs_should_drain_open_files() which is now tested by
-> kernfs_drain_open_files()'s caller - kernfs_drain().
+On 24.08.22 23:59, John Hubbard wrote:
+> On 8/24/22 09:30, David Hildenbrand wrote:
+>> diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+>> index 03eb53fd029a..a6d81ff578fe 100644
+>> --- a/Documentation/process/coding-style.rst
+>> +++ b/Documentation/process/coding-style.rst
+>> @@ -1186,6 +1186,33 @@ expression used.  For instance:
+>>  	#endif /* CONFIG_SOMETHING */
+>>  
 > 
-> This isn't a meaningful optimization on its own but will enable future
-> stand-alone kernfs_deactivate() implementation.
+> I like the idea of adding this documentation, and this is the right
+> place. Naturally, if one likes something, one must immediately change
+> it. :) Therefore, here is an alternative writeup that I think captures
+> what you and the email threads were saying.
 > 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> ---
->  fs/kernfs/dir.c             |  3 ++-
->  fs/kernfs/file.c            | 51 +++++++++++++++++++++++++------------
->  fs/kernfs/kernfs-internal.h |  1 +
->  3 files changed, 38 insertions(+), 17 deletions(-)
+> How's this sound?
+
+Much better, thanks! :)
+
 > 
-> diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-> index 1cc88ba6de90..8ae44db920d4 100644
-> --- a/fs/kernfs/dir.c
-> +++ b/fs/kernfs/dir.c
-> @@ -489,7 +489,8 @@ static void kernfs_drain(struct kernfs_node *kn)
->  		rwsem_release(&kn->dep_map, _RET_IP_);
->  	}
+> diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+> index 03eb53fd029a..32df0d503388 100644
+> --- a/Documentation/process/coding-style.rst
+> +++ b/Documentation/process/coding-style.rst
+> @@ -1185,6 +1185,53 @@ expression used.  For instance:
+>         ...
+>         #endif /* CONFIG_SOMETHING */
 >  
-> -	kernfs_drain_open_files(kn);
-> +	if (kernfs_should_drain_open_files(kn))
-> +		kernfs_drain_open_files(kn);
->  
->  	down_write(&root->kernfs_rwsem);
->  }
-> diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-> index 7060a2a714b8..b510589af427 100644
-> --- a/fs/kernfs/file.c
-> +++ b/fs/kernfs/file.c
-> @@ -23,6 +23,8 @@ struct kernfs_open_node {
->  	atomic_t		event;
->  	wait_queue_head_t	poll;
->  	struct list_head	files; /* goes through kernfs_open_file.list */
-> +	unsigned int		nr_mmapped;
-> +	unsigned int		nr_to_release;
->  };
->  
->  /*
-> @@ -527,6 +529,7 @@ static int kernfs_fop_mmap(struct file *file, struct vm_area_struct *vma)
->  
->  	rc = 0;
->  	of->mmapped = true;
-> +	of_on(of)->nr_mmapped++;
->  	of->vm_ops = vma->vm_ops;
->  	vma->vm_ops = &kernfs_vm_ops;
->  out_put:
-> @@ -574,6 +577,8 @@ static int kernfs_get_open_node(struct kernfs_node *kn,
->  	}
-
-The current code use kmalloc() to alloc kernfs_open_node, leave nr_to_release and
-nr_mmapped uninitialized.
-
-Found by below stress test:
-
-```
-cd /sys/fs/cgroup
-
-while true; do echo 0 > cgroup.pressure; echo 1 > cgroup.pressure; done
-
-while true; do cat *.pressure; done
-
-```
-
-Thanks.
-
->  
->  	list_add_tail(&of->list, &on->files);
-> +	if (kn->flags & KERNFS_HAS_RELEASE)
-> +		on->nr_to_release++;
->  
->  	mutex_unlock(mutex);
->  	return 0;
-> @@ -606,8 +611,12 @@ static void kernfs_unlink_open_file(struct kernfs_node *kn,
->  		return;
->  	}
->  
-> -	if (of)
-> +	if (of) {
-> +		WARN_ON_ONCE((kn->flags & KERNFS_HAS_RELEASE) && !of->released);
-> +		if (of->mmapped)
-> +			on->nr_mmapped--;
->  		list_del(&of->list);
-> +	}
->  
->  	if (list_empty(&on->files)) {
->  		rcu_assign_pointer(kn->attr.open, NULL);
-> @@ -766,6 +775,7 @@ static void kernfs_release_file(struct kernfs_node *kn,
->  		 */
->  		kn->attr.ops->release(of);
->  		of->released = true;
-> +		of_on(of)->nr_to_release--;
->  	}
->  }
->  
-> @@ -790,25 +800,30 @@ static int kernfs_fop_release(struct inode *inode, struct file *filp)
->  	return 0;
->  }
->  
-> -void kernfs_drain_open_files(struct kernfs_node *kn)
-> +bool kernfs_should_drain_open_files(struct kernfs_node *kn)
->  {
->  	struct kernfs_open_node *on;
-> -	struct kernfs_open_file *of;
-> -	struct mutex *mutex;
-> -
-> -	if (!(kn->flags & (KERNFS_HAS_MMAP | KERNFS_HAS_RELEASE)))
-> -		return;
-> +	bool ret;
->  
->  	/*
-> -	 * lockless opportunistic check is safe below because no one is adding to
-> -	 * ->attr.open at this point of time. This check allows early bail out
-> -	 * if ->attr.open is already NULL. kernfs_unlink_open_file makes
-> -	 * ->attr.open NULL only while holding kernfs_open_file_mutex so below
-> -	 * check under kernfs_open_file_mutex_ptr(kn) will ensure bailing out if
-> -	 * ->attr.open became NULL while waiting for the mutex.
-> +	 * @kn being deactivated guarantees that @kn->attr.open can't change
-> +	 * beneath us making the lockless test below safe.
->  	 */
-> -	if (!rcu_access_pointer(kn->attr.open))
-> -		return;
-> +	WARN_ON_ONCE(atomic_read(&kn->active) != KN_DEACTIVATED_BIAS);
+> +22) Do not crash the kernel
+> +---------------------------
 > +
-> +	rcu_read_lock();
-> +	on = rcu_dereference(kn->attr.open);
-> +	ret = on && (on->nr_mmapped || on->nr_to_release);
-> +	rcu_read_unlock();
+> +Use WARN() rather than BUG()
+> +****************************
 > +
-> +	return ret;
-> +}
+> +Do not add new code that uses any of the BUG() variants, such as BUG(),
+> +BUG_ON(), or VM_BUG_ON(). Instead, use a WARN*() variant, preferably
+> +WARN_ON_ONCE(), and possibly with recovery code. Recovery code is not required
+> +if there is no reasonable way to at least partially recover.
+
+I'll tend to keep in this section:
+
+"Unavoidable data corruption / security issues might be a very rare
+exception to this rule and need good justification."
+
+Because there are rare exceptions, and I'd much rather document the
+clear exception to this rule.
+
 > +
-> +void kernfs_drain_open_files(struct kernfs_node *kn)
-> +{
-> +	struct kernfs_open_node *on;
-> +	struct kernfs_open_file *of;
-> +	struct mutex *mutex;
->  
->  	mutex = kernfs_open_file_mutex_lock(kn);
->  	on = kernfs_deref_open_node_locked(kn);
-> @@ -820,13 +835,17 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
->  	list_for_each_entry(of, &on->files, list) {
->  		struct inode *inode = file_inode(of->file);
->  
-> -		if (kn->flags & KERNFS_HAS_MMAP)
-> +		if (of->mmapped) {
->  			unmap_mapping_range(inode->i_mapping, 0, 0, 1);
-> +			of->mmapped = false;
-> +			on->nr_mmapped--;
-> +		}
->  
->  		if (kn->flags & KERNFS_HAS_RELEASE)
->  			kernfs_release_file(kn, of);
->  	}
->  
-> +	WARN_ON_ONCE(on->nr_mmapped || on->nr_to_release);
->  	mutex_unlock(mutex);
->  }
->  
-> diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-> index 3ae214d02d44..fc5821effd97 100644
-> --- a/fs/kernfs/kernfs-internal.h
-> +++ b/fs/kernfs/kernfs-internal.h
-> @@ -157,6 +157,7 @@ struct kernfs_node *kernfs_new_node(struct kernfs_node *parent,
->   */
->  extern const struct file_operations kernfs_file_fops;
->  
-> +bool kernfs_should_drain_open_files(struct kernfs_node *kn);
->  void kernfs_drain_open_files(struct kernfs_node *kn);
->  
->  /*
+> +Use WARN_ON_ONCE() rather than WARN() or WARN_ON()
+> +**************************************************
+> +
+> +WARN_ON_ONCE() is generally preferred over WARN() or WARN_ON(), because it is
+> +common for a given warning condition, if it occurs at all, to occur multiple
+> +times. (For example, once per file, or once per struct page.) This can fill up
+
+I'll drop the "For example" part. I feel like this doesn't really need
+an example -- most probably we've all been there already when the kernel
+log was flooded :)
+
+> +and wrap the kernel log, and can even slow the system enough that the excessive
+> +logging turns into its own, additional problem.
+> +
+> +Do not WARN lightly
+> +*******************
+> +
+> +WARN*() is intended for unexpected, this-should-never-happen situations. WARN*()
+> +macros are not to be used for anything that is expected to happen during normal
+> +operation. These are not pre- or post-condition asserts, for example. Again:
+> +WARN*() must not be used for a condition that is expected to trigger easily, for
+> +example, by user space actions. pr_warn_once() is a possible alternative, if you
+> +need to notify the user of a problem.
+> +
+> +Do not worry about panic_on_warn users
+> +**************************************
+> +
+> +A few more words about panic_on_warn: Remember that ``panic_on_warn`` is an
+> +available kernel option, and that many users set this option. This is why there
+> +is a "Do not WARN lightly" writeup, above. However, the existence of
+> +panic_on_warn users is not a valid reason to avoid the judicious use WARN*().
+> +That is because, whoever enables panic_on_warn has explicitly asked the kernel
+> +to crash if a WARN*() fires, and such users must be prepared to deal with the
+> +consequences of a system that is somewhat more likely to crash.
+
+Side note: especially with kdump() I feel like we might see much more
+widespread use of panic_on_warn to be able to actually extract debug
+information in a controlled manner -- for example on enterprise distros.
+... which would then make these systems more likely to crash, because
+there is no way to distinguish a rather harmless warning from a severe
+warning :/ . But let's see if some kdump() folks will share their
+opinion as reply to the cover letter.
+
+-- 
+Thanks,
+
+David / dhildenb
+

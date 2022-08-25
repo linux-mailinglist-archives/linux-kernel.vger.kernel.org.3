@@ -2,136 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EA45A1BA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761C75A1BA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244207AbiHYVvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S240574AbiHYVvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243938AbiHYVut (ORCPT
+        with ESMTP id S243975AbiHYVuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:50:49 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32F537FB4;
-        Thu, 25 Aug 2022 14:50:39 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id c16-20020a17090aa61000b001fb3286d9f7so6288102pjq.1;
-        Thu, 25 Aug 2022 14:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=oY0tNLrjkd5YgY3aWBYHAk6kQ9OhNbI0PlnggsGRwxM=;
-        b=apUXk2Vdt1u8UfuIzCKBlLkoMylgqryp2WcVDo2jJCbE0G7IuCr1QydUEXN4leDG7M
-         rWaeO11jGuzEZddRu89jOIB5GC6vd4be5qKqm5Y3lOtP+O6vXj4nohPuPYc0UKbDXjKY
-         xnDK9ulIHT1+996YDHtqCoh4Z9edaQy7t4Z4LV/wT1XlUbaWhCjJ0iusy0XZH/6SuNMC
-         kdYkkMIzyU34ZXi9ny+13ajzcjKtMYmYaQlsVzTjANFM51KSw/ce9I7XJzori6cmb67v
-         RGkwmj9lyFQJzlb8QoBEvEEIgCz3aUnCt/grk43AeEJHmJaT8uOjzI97l7ukzhTSDSIR
-         FhVA==
+        Thu, 25 Aug 2022 17:50:51 -0400
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9F474D7;
+        Thu, 25 Aug 2022 14:50:49 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id z187so21056872pfb.12;
+        Thu, 25 Aug 2022 14:50:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=oY0tNLrjkd5YgY3aWBYHAk6kQ9OhNbI0PlnggsGRwxM=;
-        b=q+XlKUmjiawrnh9NIk8zSK+9Zeb5FX7j9Z/tTeh2CGZdzMs9tQ5W+D/eUBKQSI0ir4
-         EPRD1MzTtI2QeWBpLEau0wGlsNzD3Mtph8juU/4acx4UtQ2SCyXOHRRVmWa0oOB8uBHH
-         taeMbS6qBd2bwJVLhs6/8qiy8JiCOz4Qc4rSmOkJ7BSQTnSbExmNdy8rkKwuSgZQL6zx
-         Ex9WSQfb9M0ZALH98D4SPkm/PnXc3i2la5ylLzWteBwiFtYomuDqZRFG5gGFpIdBm2uN
-         W79SeinEt6wnnqUlW8uB0AH8t9gs92VxbhsnPv28TgwEdxa6rodB1uvhSh9Hn1Q2jZQL
-         UMAA==
-X-Gm-Message-State: ACgBeo15kLGuwD2Qgx76I6yka7LY6xZXt2XMw+VYMnf4Z4shKCFSY2iJ
-        28WiyXY5DIDY08zE81nV9dw=
-X-Google-Smtp-Source: AA6agR6qzbjch6VtkC6HGZDhGdLInWEDI1F+Y8+raM9ySWmx4FObyOEuW9+Brs5t6bLDOjRDNc0XLw==
-X-Received: by 2002:a17:902:cec7:b0:172:b20d:e666 with SMTP id d7-20020a170902cec700b00172b20de666mr881479plg.154.1661464239248;
-        Thu, 25 Aug 2022 14:50:39 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id p7-20020a17090a348700b001f260b1954bsm216299pjb.13.2022.08.25.14.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 14:50:38 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 14:50:38 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v8 013/103] KVM: TDX: Define TDX architectural definitions
-Message-ID: <20220825215038.GD2538772@ls.amr.corp.intel.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <f6bbcf4fb65a3de2ee7d4b2baa2965e24b0ede90.1659854790.git.isaku.yamahata@intel.com>
- <b19f28ac-07e0-2bd2-1b2e-abf7373b0960@linux.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=A1GDSS4ZswYZdPLm/xFYMxcSzWgFZQdBzdkCHj25ONs=;
+        b=UzP0SV502OQyMH0z5e5q2Pfzjbt3o026Cb9KKFiRT3cC7mFHxxA09x5qJBlhrZtyyD
+         SbaeOOHm9vJktEaN93j/n6aiJ7rUhQ48cBCXBfSbwhV8hUvRXs0mFjPuUpatPdZW30mz
+         omw4rJs3xm/VdrjB21SkX3QMi7UwQxAUWw6FkZ+orBEfsJHnC8epVRMj4vLC9fu2qxlw
+         iqIAoI6WkYc7Vn0EbW33TS03lAwAcwK31+6Nya04JeILNIKwnj7qMj71BhDc7ZHBFch4
+         gQ8LBrqQ3NVhrCSxrTygFBPw5l2H8HvYfR2KSgw3zd7ebv4JXBlcicbkmM09MLMDY1tq
+         1w+w==
+X-Gm-Message-State: ACgBeo1l9gKykkRX+AXo0JDoS0T19xyTlKFozQvFlBRZM4GUyfS5JGNY
+        QMa7GjZKunbj+F+hg9j5eJU=
+X-Google-Smtp-Source: AA6agR4mlNQNlswjcYi/OOqa2VKdvYxaaS8E9JPwi6wD85RRMAlmfsBiW/v3/FllaJ/9tjyjR3F0Cw==
+X-Received: by 2002:a63:e20c:0:b0:42b:4467:e0f4 with SMTP id q12-20020a63e20c000000b0042b4467e0f4mr874532pgh.576.1661464248859;
+        Thu, 25 Aug 2022 14:50:48 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:349c:3078:d005:5a7e? ([2620:15c:211:201:349c:3078:d005:5a7e])
+        by smtp.gmail.com with ESMTPSA id i12-20020a17090332cc00b001713af9e85dsm36928plr.180.2022.08.25.14.50.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 14:50:48 -0700 (PDT)
+Message-ID: <1dcffde8-ded6-b665-58a4-0f9f091b2a8e@acm.org>
+Date:   Thu, 25 Aug 2022 14:50:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b19f28ac-07e0-2bd2-1b2e-abf7373b0960@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [dm-devel] [PATCH v12 08/13] dm-zoned: ensure only power of 2
+ zone sizes are allowed
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, agk@redhat.com,
+        snitzer@kernel.org, axboe@kernel.dk,
+        damien.lemoal@opensource.wdc.com, hch@lst.de
+Cc:     pankydev8@gmail.com, Johannes.Thumshirn@wdc.com,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        gost.dev@samsung.com, jaegeuk@kernel.org, matias.bjorling@wdc.com,
+        Luis Chamberlain <mcgrof@kernel.org>
+References: <20220823121859.163903-1-p.raghav@samsung.com>
+ <CGME20220823121909eucas1p113c0c29f7e28d0ee3e1161f7da243baf@eucas1p1.samsung.com>
+ <20220823121859.163903-9-p.raghav@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220823121859.163903-9-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 11:15:07AM +0800,
-Binbin Wu <binbin.wu@linux.intel.com> wrote:
-
-> > +/* @field is any of enum tdx_guest_other_state */
-> > +#define TDVPS_STATE(field)		BUILD_TDX_FIELD(17, (field))
-> > +#define TDVPS_STATE_NON_ARCH(field)	BUILD_TDX_FIELD_NON_ARCH(17, (field))
-> > +
-> > +/* Management class fields */
-> > +enum tdx_guest_management {
+On 8/23/22 05:18, Pankaj Raghav wrote:
+> From: Luis Chamberlain <mcgrof@kernel.org>
 > 
-> More accurate to use tdx_vcpu_management?
+> dm-zoned relies on the assumption that the zone size is a
+> power-of-2(po2) and the zone capacity is same as the zone size.
+> 
+> Ensure only po2 devices can be used as dm-zoned target until a native
+> support for zoned devices with non-po2 zone size is added.
 
-Thanks for pointing it out.  I cleaned up it as follows for more consitency
-and better match with the TDX module.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-/* Class code for TD */
-#define TD_CLASS_EXECUTION_CONTROLS     17ULL
-
-/* Class code for TDVPS */
-#define TDVPS_CLASS_VMCS                0ULL
-#define TDVPS_CLASS_GUEST_GPR           16ULL
-#define TDVPS_CLASS_OTHER_GUEST         17ULL
-#define TDVPS_CLASS_MANAGEMENT          32ULL
-
-enum tdx_tdcs_execution_control {
-        TD_TDCS_EXEC_TSC_OFFSET = 10,
-};
-
-/* @field is any of enum tdx_tdcs_execution_control */
-#define TDCS_EXEC(field)                BUILD_TDX_FIELD(TD_CLASS_EXECUTION_CONTROLS, (field))
-
-/* @field is the VMCS field encoding */
-#define TDVPS_VMCS(field)               BUILD_TDX_FIELD(TDVPS_CLASS_VMCS, (field))
-
-enum tdx_vcpu_guest_other_state {
-        TD_VCPU_STATE_DETAILS_NON_ARCH = 0x100,
-};
-
-union tdx_vcpu_state_details {
-        struct {
-                u64 vmxip       : 1;
-                u64 reserved    : 63;
-        };
-        u64 full;
-};
-
-/* @field is any of enum tdx_guest_other_state */
-#define TDVPS_STATE(field)              BUILD_TDX_FIELD(TDVPS_CLASS_OTHER_GUEST, (field))
-#define TDVPS_STATE_NON_ARCH(field)     BUILD_TDX_FIELD_NON_ARCH(TDVPS_CLASS_OTHER_GUEST, (field))
-
-/* Management class fields */
-enum tdx_vcpu_guest_management {
-        TD_VCPU_PEND_NMI = 11,
-};
-
-/* @field is any of enum tdx_vcpu_guest_management */
-#define TDVPS_MANAGEMENT(field)         BUILD_TDX_FIELD(TDVPS_CLASS_MANAGEMENT, (field))
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>

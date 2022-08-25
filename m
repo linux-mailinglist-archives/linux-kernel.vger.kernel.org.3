@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3246E5A0C7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434245A0C79
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbiHYJYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S239651AbiHYJYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239693AbiHYJYS (ORCPT
+        with ESMTP id S229741AbiHYJYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:24:18 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41890A9C3E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:24:17 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P9GUBA018022;
-        Thu, 25 Aug 2022 09:23:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=X7s1R2edoGHobonvf5SDINGwSZCVZM7N9IyraazotsQ=;
- b=l8F9wuKGg3+y5hD+Q5ZBC0+/Z6FKBbdeTF3UEMPgefM/PKVa+BDvt52i4X97JtTKlk51
- U6qpCwkl/sqN/V580ml+W+K/QclHp4Bymo3+916b4tK00EvZwtSeZjhR0X7BNFUtqcnL
- r3aS9pxkAwxCvOYjvwsdni828LsWTWdvV60jkQ4SBUmWRzFi6vyF1jx5buUuBQnd2f4h
- 3c49Bv9QkKe23ZT3WmFSi9DtOtIR/wMWRAEYA2wmxqzUBdonjo2epE9grAZ6pIgHLVQs
- e5jPNPNDRrxkf/3LtDXp53cu3o29x3AISIyju97GE/+PixG65+njuUWgLce/JxaG0a6C Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j66ab0brk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 09:23:54 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27P9K7P5026733;
-        Thu, 25 Aug 2022 09:23:54 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j66ab0bqk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 09:23:53 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27P9KFKc031688;
-        Thu, 25 Aug 2022 09:23:53 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02wdc.us.ibm.com with ESMTP id 3j2q8aenkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 09:23:53 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27P9NqAL2163434
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 09:23:52 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D9A713604F;
-        Thu, 25 Aug 2022 09:23:52 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D995313605D;
-        Thu, 25 Aug 2022 09:23:45 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.43.112.25])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 25 Aug 2022 09:23:45 +0000 (GMT)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [RFC PATCH 2/2] mm/demotion: Expose memory tier details via sysfs
-Date:   Thu, 25 Aug 2022 14:53:25 +0530
-Message-Id: <20220825092325.381517-2-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220825092325.381517-1-aneesh.kumar@linux.ibm.com>
-References: <20220825092325.381517-1-aneesh.kumar@linux.ibm.com>
+        Thu, 25 Aug 2022 05:24:06 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DB0A99D1;
+        Thu, 25 Aug 2022 02:24:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nz1FuwE5cbgprXXMzh2qs1qtFV6mCDOM7iDcAFWJHl2N7iDQzGpjJIoUT48efp7Kj7rNXE9JHvEfZe3PdPdhiUqZDr2URL/DE2vA0r7Z1fEyKOmhJUWHfAAVJmcVX1OPk9KZP/CpMZG+Nns6J5VkF9Opi9nlg4aEtHnyjkBKB6dsPqU7c72+FR7iwgmTkzbowbR/ncdRxV1iUQXqvka0oilsns27NalV/cA8QUzqNzu82y1a07YpnZHoZ/yQtCxyXutnavUuD7bGkW6phRy9H29uLSH9+VBReT4qt9lv+TyD3x6KEULSNBBnwchQjVKg62O5R4/E4IvMnbRJDv/WSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+2DNsbfIJrNbp61vIf1+hTet7jNQs1B8avgYMskci7s=;
+ b=K0A0w24dIH6BAmGdTQaMTUZGUMZAWJZGMnxIBq3X5bIZXtldAyMxLN5UULcf1qkvx8q85oGFbLxTS2V+GArLv9LWGDa+ilT0QEf8WTZ5e7tjnTjlPhmUlwNtgPcWdVOLaGmik7nFbRQ64VYhbhCFMRBPDvfCXrwyzlvGQ1BPcpPLoWXUEWPqZ3nJRpoN0Ry2WS3o2aPJrmd37O2Etf1lmQs4no91BgZKtgOisA10pAM9SJRL5j0ls6hp4riRYVEp7OSnuX0DN8T2bBtZkV0ISjCCNmX1+/EdlsMmMav0ZXvPuwB+ywN62k6uKqLXF4yUVnd1INCv+BUf0O/iICZffw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+2DNsbfIJrNbp61vIf1+hTet7jNQs1B8avgYMskci7s=;
+ b=KKGOTphDMoOP/eK6gSicAnHHMIqRfhXUTns9PTW8E/TJTSw1AIRh6LKU25v36L6sfNBI4V2yo+ua22cosgJ4a9P4AGoCNB+pct7g/O0og4lscfWJy/0VU35UMajv0Sse7WHzDmaR8Os+PxyuKit5Koa+NWAfU+xW7xXg8MDUchB69eLO3SntOVC9xloNIjzG/sRZ/Kpw6QoY+bkxtFOpz6ZZFnnwhdQp07NDUwU2rXSMUN3QHggCWzfdceuOgm9iPqXbr9NOFkHNYEWrPqq3hOjcJGkdYexV71Lw7cseFPrFVesYanHAdDOk7aOCC1xzqeiwHk38LS8Y3tUiyrWwAg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7SPRMB0001.namprd12.prod.outlook.com (2603:10b6:510:13c::20)
+ by BN6PR12MB1921.namprd12.prod.outlook.com (2603:10b6:404:fe::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
+ 2022 09:24:01 +0000
+Received: from PH7SPRMB0001.namprd12.prod.outlook.com
+ ([fe80::3ca6:ba11:2893:980e]) by PH7SPRMB0001.namprd12.prod.outlook.com
+ ([fe80::3ca6:ba11:2893:980e%6]) with mapi id 15.20.5504.025; Thu, 25 Aug 2022
+ 09:24:00 +0000
+Date:   Thu, 25 Aug 2022 12:23:53 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     netdev@kapio-technology.com
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <Ywc/qTNqVbS4E7zS@shredder>
+References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+ <YvkM7UJ0SX+jkts2@shredder>
+ <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
+ <YwHZ1J9DZW00aJDU@shredder>
+ <7016ed2ce9a30537e4278e37878900d8@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7016ed2ce9a30537e4278e37878900d8@kapio-technology.com>
+X-ClientProxiedBy: VI1P18901CA0016.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:801::26) To PH7SPRMB0001.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CfOm5ZXVUAj_3-qYYNfb2PirpQdNuulp
-X-Proofpoint-ORIG-GUID: V9gQKqZzFXge2-eO-h-6a-lpTiKAK6L7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_03,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 adultscore=0
- spamscore=0 phishscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208250034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 490bf4eb-eeb9-4a9c-233a-08da867b8b5c
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1921:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TMvj5cuC4eNHo1HtQAcO89UPjkxlAijWRTl78MvZIFNb1epcZ5RzD+bYPK3QjocmWMEwErb+sHBXaowdZy+Flc8+S7Wf3hMqn7fdNNesbgnNSKftzp8ZT3pubNa8u810HBmI4coctnyu/qf6Nov1+PXJJAGJoJ9nAc7PK8GhUOd7i41uFcfojp0A6roWqyT1pjim62T9GS9SJ53DRfQ8eIsNterSDWhouM2UdzKPVYy4kAOaxwW3g4xCQsSIVl4WGFTF+d1fcIDRWOp7akwsOqgE0XPaQjq/1vCzlA5WC5X+QLB86uV6nkYnBYYUYquWnUfCtFWwHlUGV4OWi4mptmB2eR5IAliYrMmsXpwFpeWu6yjASXeNOzmuSBJC9BLipelDxrKB/2XhsX1jGgXPWIRY85CE/o456Dbf7b4qc43Ci+UZdAm3OeNimTM8sQSo4LltrCqTQbwqZQjkHBJQUKlhM/zBSOJiBu/H1z6dlW0wVCOLzwQQhi4E15v8xVXv1R2v7O5rWD5zpKRAxCWb93qEqWRoHrVy5sRFyRjri8LVHzD9Trj3E4xMeYw+WbvFB0ja5lO8fCnJlkVdsV5Ni4QRqmVE4ZeQJ3t8bctAyvUno4bkkpMfwP9AVKgw5lxmpsr7Liqz/SfyNNubWN8Vnw5PgyI424R0UAoxs6eeBQbVsQPcG2/uaJJO2Xzgaozf1gGgv4NyJ8w4IO58kWnyYw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(136003)(346002)(376002)(39860400002)(366004)(396003)(4326008)(186003)(83380400001)(38100700002)(7416002)(5660300002)(8936002)(8676002)(66946007)(478600001)(66476007)(66556008)(33716001)(6512007)(2906002)(6486002)(9686003)(6506007)(53546011)(6666004)(26005)(41300700001)(6916009)(316002)(54906003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bynClLP/vGzJSUAaWfNzEl66VZkw1eBQ1ZLudgkI6UbDWLzilGjUq4Tr5Y/v?=
+ =?us-ascii?Q?tdu5fAqBmrxFBHYNcjfv5J1nzmT6tWkReqkXpUBJ61EqQ7/TYBjtk5w/oIIM?=
+ =?us-ascii?Q?7hkCyqD2FBHtZvAIv6ZVdATqmLHySMECLW9IapkHrrUUiJklfGGHm5yL2M6z?=
+ =?us-ascii?Q?zSEAtI4sdxTO3I4427kvyUOci81NJWF529mEbqZBKxLKA0eCnq8KAFzLXVa6?=
+ =?us-ascii?Q?xnn9CkimhUnMphLc62JFs8iDSUuQ+QAUAtV2QZrlAiGXJ4MFxJNWZevZWJ/b?=
+ =?us-ascii?Q?wN5SZs+hr+QC8esPN5PpeRWO8xqsJUiwGN+c8bZf/KICeqq5Sy0tHAXhJphE?=
+ =?us-ascii?Q?YFjS7gzAbI4MuXdXMCfGzcLtgQ/vp6DNv+9q0Pw7M0v1yfjHGoprN71cCaOX?=
+ =?us-ascii?Q?YhILEY6jn5Wgm7e/ABbfjOxY7SFAdA2mss+BG/abDXHMfmdCuFb569gx2anV?=
+ =?us-ascii?Q?4ykF56xi0oCWtmMlFeYBu5NWrlhs2evJZqXQU9Kmm+d7t5+SKJk+rKWVwW8C?=
+ =?us-ascii?Q?Z6fhSmMJk07rYBL1+HP3Uqmvy0fqkdyD6s6fVhkcqE/XqneWosf7aIXbEYna?=
+ =?us-ascii?Q?FfCvm3glbLYRLiYAXhOYZsYiUTH9tx8JSwd6wDzVEtzPOIYrNE3ejxL9KvxZ?=
+ =?us-ascii?Q?iuf6Wtsszjko5cSIW6ppLu2OTnGe0g93G4SeN0Yxyz5sI1ldhW63hdMMnUKN?=
+ =?us-ascii?Q?iZAQ7D4z/S+CvzhwbYWdK9GAtgfhvK+PxDr2dDgxCEBe4VnfQfLFosUKT/QP?=
+ =?us-ascii?Q?FlpGXkwlkF66CekLejiuTMT8Upb6HgAM+Aoo2I+9A1WWljIASaIrUya+y5mq?=
+ =?us-ascii?Q?qT+4q9M8G5RFIKtBXn3E87pIjCIsnhRZoRuwlqwy7Au8QcOpIMfuTQ/1Wv9U?=
+ =?us-ascii?Q?Gus0rYuDLzsCAIwzYIIGOEZXjSlbwUJvW0HcAafVvMBfwHZEaq2A3/grn+JZ?=
+ =?us-ascii?Q?lZXOtt4M9MMlCJIhuAZynxOxGFKoZ/1jSWstag53Z0tJJBTX23LbquwcqUBQ?=
+ =?us-ascii?Q?UAOUEN88osIDukhd6WzoyEZqizzjaHP+Cddr93RhF6Bg9mevp3zuLg4TNzcU?=
+ =?us-ascii?Q?Qppzz6kn+YqrxLpRTUgk7cA8ijM0++Y+ExkC6XkYWmPhruGdLR1EI4IB0ZPv?=
+ =?us-ascii?Q?+pgwBUWNHlT7ZW6t640huhaJfb3RkTHX8X2ctPmI2utm7WsNL5s8KSFFR6F7?=
+ =?us-ascii?Q?rmEa+E7XnPwOBsqr8D4buzt3rRZVwcjuVI5Tr2e4OpqaAMinYDSzWOJiXjrB?=
+ =?us-ascii?Q?wCgH/Qc49ayAQIom6Iw0iqhpld1G88X2OJjQ41o48uFPR+cZCKZmjqMiuBLT?=
+ =?us-ascii?Q?WiR+ZMbFomx4Me5vryJ6zlKhU29Ay6toBsV/gggdE8co9pWNoIgAmUUivUNk?=
+ =?us-ascii?Q?7kmh9gVcdlcZ533BlbgSBAiGgkeSe/aXmSCk48n6U4NQgD181htFDxhNuU5s?=
+ =?us-ascii?Q?W817azYEeTyDvCyGEd8ePVhG99omr/C0J2jvuUCj7k1n2TgMWwfUE2fZje/3?=
+ =?us-ascii?Q?B5QUN8Lf/XteN1R1eZrvgszI3x0vubt9g0IkH3Ly0a6NSozX3dqu+byDOLHd?=
+ =?us-ascii?Q?I9kgGycJOtIgDJBFMQkNYyK4SXVNfGPn5aXhk3Cl?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 490bf4eb-eeb9-4a9c-233a-08da867b8b5c
+X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0001.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 09:24:00.7266
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ft8o5Yow1bBrLTIaAjFG+/MkNp36qJoMDkJiB4ZevUVlfHvjbTWHt9OuP5IR7GzV5ZOQAlVMuZIBG/9+QhI+Ow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1921
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,153 +131,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All allocated memory tiers will be listed as
-/sys/devices/virtual/memtier/memtierN/
+On Wed, Aug 24, 2022 at 10:29:20PM +0200, netdev@kapio-technology.com wrote:
+> On 2022-08-21 09:08, Ido Schimmel wrote:
+> > 
+> > I assume you want a hub to simulate multiple MACs behind the same port.
+> > You don't need a hub for that. You can set the MAC using mausezahn. See
+> > '-a' option:
+> > 
+> > "
+> >    -a <src-mac|keyword>
+> >        Use specified source MAC address with hexadecimal notation such
+> > as 00:00:aa:bb:cc:dd.  By default the interface MAC address will be
+> > used. The  keywords  ''rand''
+> >        and  ''own''  refer to a random MAC address (only unicast
+> > addresses are created) and the own address, respectively. You can also
+> > use the keywords mentioned below
+> >        although broadcast-type source addresses are officially invalid.
+> > "
+> > 
+> 
+> 
+> Ido, I am not so known to the selftests, so I am wondering why I don't see
+> either check_err or check_fail fail, whichever I use, when I think they
+> should and then they are not really checking...
+> 
+> 
+>         local mac=10:20:30:30:20:10
+> 
+> 
+>         $MZ $h1 -t udp -a $mac -b rand
+>         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 locked"
+>         check_err $? "MAB station move: no locked entry on first injection"
+> 
+>         $MZ $h2 -t udp -a $mac -b rand
+>         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 locked"
+>         check_err $? "MAB station move: locked entry did not move"
+> 
+> What is wrong here?
 
-Each memtier directory contains symbolic link for the memory types
-that are part of the memory tier. A directory hierarchy looks like
+Did you try adding a sleep between mausezahn and the FDB dump? At least
+that is what learning_test() is doing. It is possible that the packet is
+not sent / processed fast enough for the bridge to learn it before the
+dump.
 
-:/sys/devices/virtual/memtier# tree memtier512/
-memtier512/
-├── memtype1 -> ../memtype1
-├── memtype2 -> ../memtype2
-├── subsystem -> ../../../../bus/memtier
-└── uevent
+> 
+> For a mv88e6xxx test I guess I can make a check to verify that this driver
+> is in use?
 
-The nodes which are part of a specific memory type can be listed via
-/sys/devices/system/memtier/memtypeN/nodes.
+Not in a generic forwarding test. Maybe in
+tools/testing/selftests/drivers/net/dsa/
 
-The adistance value of a specific memory type can be listed via
-/sys/devices/system/memtier/memtypeN/adistance.
+My preference would be to get as much tests as possible in
+tools/testing/selftests/net/forwarding/bridge_locked_port.sh.
 
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
----
- mm/memory-tiers.c | 62 +++++++++++++++++++++++++++++++++++------------
- 1 file changed, 47 insertions(+), 15 deletions(-)
-
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index 9eef3bd8d134..4005c3124ff0 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -20,6 +20,7 @@ struct memory_tier {
- 	 * adistance_start .. adistance_start + MEMTIER_CHUNK_SIZE
- 	 */
- 	int adistance_start;
-+	struct device dev;
- 	/* All the nodes that are part of all the lower memory tiers. */
- 	nodemask_t lower_tier_mask;
- };
-@@ -36,6 +37,7 @@ static struct memory_dev_type *default_dram_type;
- #define MAX_MEMORY_TYPE_ID	20
- static DEFINE_IDR(memory_type_idr);
- #define to_memory_type(device) container_of(device, struct memory_dev_type, dev)
-+#define to_memory_tier(device) container_of(device, struct memory_tier, dev)
- static struct bus_type memory_tier_subsys = {
- 	.name = "memtier",
- 	.dev_name = "memtier",
-@@ -103,8 +105,25 @@ static int top_tier_adistance;
- static struct demotion_nodes *node_demotion __read_mostly;
- #endif /* CONFIG_MIGRATION */
- 
-+static void memory_tier_device_release(struct device *dev)
-+{
-+	struct memory_tier *tier = to_memory_tier(dev);
-+	/*
-+	 * synchronize_rcu in clear_node_memory_tier makes sure
-+	 * we don't have rcu access to this memory tier.
-+	 */
-+	kfree(tier);
-+}
-+
-+static void destroy_memory_tier(struct memory_tier *memtier)
-+{
-+	list_del(&memtier->list);
-+	device_unregister(&memtier->dev);
-+}
-+
- static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memtype)
- {
-+	int ret;
- 	bool found_slot = false;
- 	struct memory_tier *memtier, *new_memtier;
- 	int adistance = memtype->adistance;
-@@ -128,15 +147,14 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
- 
- 	list_for_each_entry(memtier, &memory_tiers, list) {
- 		if (adistance == memtier->adistance_start) {
--			list_add(&memtype->tier_sibiling, &memtier->memory_types);
--			return memtier;
-+			goto link_memtype;
- 		} else if (adistance < memtier->adistance_start) {
- 			found_slot = true;
- 			break;
- 		}
- 	}
- 
--	new_memtier = kmalloc(sizeof(struct memory_tier), GFP_KERNEL);
-+	new_memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
- 	if (!new_memtier)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -147,8 +165,30 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
- 		list_add_tail(&new_memtier->list, &memtier->list);
- 	else
- 		list_add_tail(&new_memtier->list, &memory_tiers);
--	list_add(&memtype->tier_sibiling, &new_memtier->memory_types);
--	return new_memtier;
-+
-+	new_memtier->dev.id = adistance;
-+	new_memtier->dev.bus = &memory_tier_subsys;
-+	new_memtier->dev.release = memory_tier_device_release;
-+
-+	ret = device_register(&new_memtier->dev);
-+	if (ret) {
-+		list_del(&memtier->list);
-+		put_device(&memtier->dev);
-+		return ERR_PTR(ret);
-+	}
-+	memtier = new_memtier;
-+
-+link_memtype:
-+	list_add(&memtype->tier_sibiling, &memtier->memory_types);
-+	/*
-+	 * ignore error below because the driver creating the device can get
-+	 * unloaded and hence the below sysfs create link can fail. We continue
-+	 * with the in memory representation.
-+	 */
-+	ret = sysfs_create_link(&memtier->dev.kobj,
-+				&memtype->dev.kobj, kobject_name(&memtype->dev.kobj));
-+
-+	return memtier;
- }
- 
- static struct memory_tier *__node_get_memory_tier(int node)
-@@ -424,16 +464,6 @@ static struct memory_tier *set_node_memory_tier(int node)
- 	return memtier;
- }
- 
--static void destroy_memory_tier(struct memory_tier *memtier)
--{
--	list_del(&memtier->list);
--	/*
--	 * synchronize_rcu in clear_node_memory_tier makes sure
--	 * we don't have rcu access to this memory tier.
--	 */
--	kfree(memtier);
--}
--
- static bool clear_node_memory_tier(int node)
- {
- 	bool cleared = false;
-@@ -462,6 +492,8 @@ static bool clear_node_memory_tier(int node)
- 		node_clear(node, memtype->nodes);
- 		if (nodes_empty(memtype->nodes)) {
- 			list_del_init(&memtype->tier_sibiling);
-+			sysfs_delete_link(&memtier->dev.kobj,
-+					  &memtype->dev.kobj, kobject_name(&memtype->dev.kobj));
- 			if (list_empty(&memtier->memory_types))
- 				destroy_memory_tier(memtier);
- 		}
--- 
-2.37.2
-
+I'm not sure which tests you are planning for mv88e6xxx, but we can pass
+/ fail test cases based on the flags we observe in the FDB dump. For
+example, if the entry has the "sticky" flag, then the expectation is
+that the roaming test will fail. Otherwise, it should pass.

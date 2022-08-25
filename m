@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0555A11BE
+	by mail.lfdr.de (Postfix) with ESMTP id 767415A11BF
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242373AbiHYNSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S240532AbiHYNSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiHYNR4 (ORCPT
+        with ESMTP id S241790AbiHYNSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:17:56 -0400
+        Thu, 25 Aug 2022 09:18:00 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6518A1F2EC;
-        Thu, 25 Aug 2022 06:17:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540C9A9255;
+        Thu, 25 Aug 2022 06:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661433475; x=1692969475;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5Tkt0emKTD/W/l04ivHhimAciuJqMZHXGJRNb9l5I0c=;
-  b=IEsjrnc3Fl8Jszb/HkeD+ZwO+aYy5KPBTpv+Uyasa2xes62OjrnpN+8s
-   7EI86Eh1gjuY+nceSgGZ17LyJQyo0kVuOPCNWdnat2s6zOT7Rl9dhYBm9
-   zP7pUYXH7/HCva/Mouho/ZcKb1rhjcog1rAuMPxC1h7mMhib6HTpLoYmo
-   gFOovrOLO9pyHJiMMMrWIbc8d0v3Cda/c4YmzwOUJboLTDPt4QCz3+iln
-   mREDM22mG8ChD4NygIb8ic7TP1OW6PUvzMPeZIP1zY/pAYBNZOZqu7GQT
-   qy2Ya5phj2K24Kgx8nq2DoFEDtg5rME86Vbg1E3ytctslWxBZHQG5zzNz
+  t=1661433479; x=1692969479;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7Xldrfug7F3ZOc/ocWfpppxI2d2k/b5ME9FwiEpzFJw=;
+  b=aZECd8zZRTCO79N9nJ7RYDBmRfZ0mjfaHqy7LcWoh8sm4jA3niEh1Agv
+   peTKpr7zwI1jT5V/CWjL1MzOYkBFfH9JNiMgKdy97lnO1ELNSAoOQ8xFK
+   1qoueoy7ZCsfz7W7bG1RBUM0Ck0U53BDLK/mkFT3iQWCOyp57A9Qs6sMf
+   yvfqEW4Ls17p1sVilVpvMpA+BY7LmrJbQZH0ffp2NLmV5PUkMY6Q6PGY/
+   nPKfuIbN3JxALQY7AzOilLqlOXYSdc3MiQwoiwq+r8tlj30CHqewV1Sjv
+   E9090eowZINiL17lb6I7fvXAfIjUVLkNiyntrpW2R+VYLhvd1j1IDLXEr
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="294234910"
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="294234923"
 X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="294234910"
+   d="scan'208";a="294234923"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:17:55 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:17:59 -0700
 X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="670974551"
+   d="scan'208";a="670974568"
 Received: from mblazque-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.101])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:17:53 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:17:57 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         linux-serial@vger.kernel.org,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 0/2] serial: dz: UART_XMIT_SIZE/WAKEUP_CHARS cleanups
-Date:   Thu, 25 Aug 2022 16:17:44 +0300
-Message-Id: <20220825131746.21257-1-ilpo.jarvinen@linux.intel.com>
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 1/2] serial: dz: xmit buffer is UART_XMIT_SIZE'd
+Date:   Thu, 25 Aug 2022 16:17:45 +0300
+Message-Id: <20220825131746.21257-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220825131746.21257-1-ilpo.jarvinen@linux.intel.com>
+References: <20220825131746.21257-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,21 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2: 
+Instead of DZ_XMIT_SIZE, use the normal UART_XMIT_SIZE directly as it's
+the correct size of the xmit circular buffer.
 
-- Make separate patch out of xmit mask change (which, in theory, is
-a fix but due to lack of issue reports, likely doesn't occur for real).
-- Replace also DZ_WAKEUP_CHARS with the normal WAKEUP_CHARS (matching
-to n_tty_poll)
+In theory, the Tx code would be buggy if UART_XMIT_SIZE differs from
+4096 (occurs when PAGE_SIZE > 4k), however, given the lack of issue
+reports such configuration likely doesn't occur with any real platform
+with dz HW. The inconsisted sizes would cause missing characters and
+never-ending bogus Tx when ->head reaches the region above 4k. The
+issue, if it would be real, would predate git days.
 
-Ilpo Järvinen (2):
-  serial: dz: xmit buffer is UART_XMIT_SIZE'd
-  serial: dz: Remove custom DZ_WAKEUP_CHARS
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/dz.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/tty/serial/dz.c | 4 ++--
- drivers/tty/serial/dz.h | 3 ---
- 2 files changed, 2 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
+index 2e21acf39720..5d2588f3e6a9 100644
+--- a/drivers/tty/serial/dz.c
++++ b/drivers/tty/serial/dz.c
+@@ -279,7 +279,7 @@ static inline void dz_transmit_chars(struct dz_mux *mux)
+ 	 * so we go one char at a time) :-<
+ 	 */
+ 	tmp = xmit->buf[xmit->tail];
+-	xmit->tail = (xmit->tail + 1) & (DZ_XMIT_SIZE - 1);
++	xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+ 	dz_out(dport, DZ_TDR, tmp);
+ 	dport->port.icount.tx++;
+ 
 -- 
 2.30.2
 

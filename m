@@ -2,136 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C19E5A0980
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4635A0995
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbiHYHJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S237269AbiHYHKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236826AbiHYHJM (ORCPT
+        with ESMTP id S231259AbiHYHJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:09:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6200F7B297
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:09:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661411350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QSUsmhrntyYlE4q4EIuSMo8SwjVSMcRRvXJOMV3jSHQ=;
-        b=h1+yoEUsBO9Kaqy2UIDsTNuejubux+AuQLnGkZRh+f2ifwpxNEdenclexJ9p2SV7X+oIFD
-        YGkGrrr40iPDalw3pZRvtkjsC+wDyvHNuJGyd/7cU2v2lSQ1UYlXsiMhhokc1RU3P0zqUD
-        Bm/ctrA847ePAvIKY2DrS7o3TuftFYE=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-52-4XXX32hHMtKyiYQaZrzwiQ-1; Thu, 25 Aug 2022 03:09:07 -0400
-X-MC-Unique: 4XXX32hHMtKyiYQaZrzwiQ-1
-Received: by mail-pg1-f199.google.com with SMTP id g9-20020a636b09000000b0042a98c614f9so5683808pgc.20
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:09:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=QSUsmhrntyYlE4q4EIuSMo8SwjVSMcRRvXJOMV3jSHQ=;
-        b=EP6cOdxUN8SO5OAxG6czFPTHmPtD3Z/Liz4wPZX49nKdU7Puq6kgm26QHrIXmDnAJ4
-         kxgICdun4BdItHZkU43IWkQ3u3l5/tDXU0gYDL0ewrjvSF0SHUmRsXUo3SBJyZgCcvO6
-         F+s79LSRggzDFPkSMdAvaMe0Q49YTPUlYb6UBpUi2TR0MP8kH2BX/uoepSaU+K4NlOQX
-         DeePzsde6+zaJrSxcKDBcDh4W6fuq8jbo27jaJNqnCM/fLw+8HoXgCv6qsG0qnkjGlqp
-         g/KxD5G1yE1K84GXC5U10ChgrjGJ4JAaQkfv877mO4yplMUPylNXT0VBS5JMqpreM/zr
-         i+FA==
-X-Gm-Message-State: ACgBeo1ZAzout5jzD3bobvOTrCGtUCJ3Vcl4Mb7+1tPKmTe26qRRlTfx
-        R0R4S3jbCzqldcqyrbD4ZbhpGVKV0svDyeCrJSv4V7xY9vO05v5/V5NOSNhrMKij0ga+jtfmsMr
-        SeE3MjaYKQ3Y/7HI+H1GCUWDx
-X-Received: by 2002:a17:902:eac3:b0:172:ff31:bb3c with SMTP id p3-20020a170902eac300b00172ff31bb3cmr2446547pld.48.1661411345718;
-        Thu, 25 Aug 2022 00:09:05 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7OChChMg/kNoqJvKmBhroiYu863PvIINaRSgGceUgxIbVI8dEwE1UrA/8XZGCf2a1ChdudKQ==
-X-Received: by 2002:a17:902:eac3:b0:172:ff31:bb3c with SMTP id p3-20020a170902eac300b00172ff31bb3cmr2446532pld.48.1661411345488;
-        Thu, 25 Aug 2022 00:09:05 -0700 (PDT)
-Received: from [10.72.12.107] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a9-20020a62d409000000b0053645475a6dsm10698425pfh.66.2022.08.25.00.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 00:09:04 -0700 (PDT)
-Message-ID: <13f97c76-bc8b-1509-d854-89d0d62138fa@redhat.com>
-Date:   Thu, 25 Aug 2022 15:08:58 +0800
+        Thu, 25 Aug 2022 03:09:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572A9140D1;
+        Thu, 25 Aug 2022 00:09:51 -0700 (PDT)
+Received: from lenovo.Home (unknown [39.53.61.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E84A6601E99;
+        Thu, 25 Aug 2022 08:09:46 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661411389;
+        bh=j2W8EeQvSSOtxMkUxdLP/kkS/KxzJIviqT++SVI8Ttc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SjkrzxNxL5GPnmnC+LFq+Z7FtEW0ucz2fB45xPJqAwBTWile6e7ghOutTdstbv8kd
+         s5se7SjQlIXbGr6d7hCPIBFqwNlcArDDFFV4DeUE9eRc/cvBi4G/6h0l8d1s2xq8hA
+         AaCM0MT2MEU8KY9UcxnAyG0QfD9pHn0RkBKBvJyO/wh5yVgziN3cich8fk4g8AoLi7
+         NvogVZ6038OLw7HDSuAITaHnxdgWx0o/pQTcYHz66pmhN7tt0SjMfSeR+7hETFq7vJ
+         Bm0ialhlHED6EeRt49PjaJiPbU4giMFYWQwfhpos2xQMr4+eu9F+ycgGYZYeRFFrU9
+         S2rSHn/QG5+Mw==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM),
+        linux-mm@kvack.org (open list:MEMORY MANAGEMENT),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>
+Subject: [PATCH v2 0/4] Implement IOCTL to get and clear soft dirty PTE
+Date:   Thu, 25 Aug 2022 12:09:22 +0500
+Message-Id: <20220825070926.2922471-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [RFC v2 3/7] vsock: batch buffers in tx
-Content-Language: en-US
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>, eperezma@redhat.com,
-        sgarzare@redhat.com, mst@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn>
- <20220817135718.2553-4-qtxuning1999@sjtu.edu.cn>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220817135718.2553-4-qtxuning1999@sjtu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-在 2022/8/17 21:57, Guo Zhi 写道:
-> Vsock uses buffers in order, and for tx driver doesn't have to
-> know the length of the buffer. So we can do a batch for vsock if
-> in order negotiated, only write one used ring for a batch of buffers
->
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->   drivers/vhost/vsock.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> index 368330417bde..b0108009c39a 100644
-> --- a/drivers/vhost/vsock.c
-> +++ b/drivers/vhost/vsock.c
-> @@ -500,6 +500,7 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work *work)
->   	int head, pkts = 0, total_len = 0;
->   	unsigned int out, in;
->   	bool added = false;
-> +	int last_head = -1;
->   
->   	mutex_lock(&vq->mutex);
->   
-> @@ -551,10 +552,16 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work *work)
->   		else
->   			virtio_transport_free_pkt(pkt);
->   
-> -		vhost_add_used(vq, head, 0);
-> +		if (!vhost_has_feature(vq, VIRTIO_F_IN_ORDER))
-> +			vhost_add_used(vq, head, 0);
-> +		else
-> +			last_head = head;
->   		added = true;
->   	} while(likely(!vhost_exceeds_weight(vq, ++pkts, total_len)));
->   
-> +	/* If in order feature negotiaged, we can do a batch to increase performance */
-> +	if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER) && last_head != -1)
-> +		vhost_add_used(vq, last_head, 0);
+This patch series implements a new ioctl on the pagemap proc fs file to
+get, clear and perform both get and clear at the same time atomically on
+the specified range of the memory.
 
+Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+procfs file. The soft-dirty PTE bit for the whole memory range of the
+process can be cleared by writing to the clear_refs file. This series
+adds features that weren't present earlier.
+- There is no atomic get soft-dirty PTE bit status and clear operation
+  present.
+- The soft-dirty PTE bit of only a part of memory cannot be cleared.
 
-I may miss something but spec said "The device then skips forward in the 
-ring according to the size of the batch. ".
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The proc fs interface is enough for that as I think the process
+is frozen. We have the use case where we need to track the soft-dirty
+PTE bit for the running processes. We need this tracking and clear
+mechanism of a region of memory while the process is running to emulate
+the getWriteWatch() syscall of Windows. This syscall is used by games to
+keep track of dirty pages and keep processing only the dirty pages. This
+new ioctl can be used by the CRIU project and other applications which
+require soft-dirty PTE bit information.
 
-I don't see how it is done here.
+As in the current kernel there is no way to clear a part of memory (instead
+of clearing the Soft-Dirty bits for the entire process) and get+clear
+operation cannot be performed atomically, there are other methods to mimic
+this information entirely in userspace with poor performance:
+- The mprotect syscall and SIGSEGV handler for bookkeeping
+- The userfaultfd syscall with the handler for bookkeeping
+Some benchmarks can be seen [1].
 
-Thanks
+This ioctl can be used by the CRIU project and other applications which
+require soft-dirty PTE bit information. The following operations are
+supported in this ioctl:
+- Get the pages that are soft-dirty.
+- Clear the pages which are soft-dirty.
+- The optional flag to ignore the VM_SOFTDIRTY and only track per page
+soft-dirty PTE bit
 
+There are two decisions which have been taken about how to get the output
+from the syscall.
+- Return offsets of the pages from the start in the vec
+- Stop execution when vec is filled with dirty pages
+These two arguments doesn't follow the mincore() philosophy where the
+output array corresponds to the address range in one to one fashion, hence
+the output buffer length isn't passed and only a flag is set if the page
+is present. This makes mincore() easy to use with less control. We are
+passing the size of the output array and putting return data consecutively
+which is offset of dirty pages from the start. The user can convert these
+offsets back into the dirty page addresses easily. Suppose, the user want
+to get first 10 dirty pages from a total memory of 100 pages. He'll
+allocate output buffer of size 10 and the ioctl will abort after finding the
+10 pages. This behaviour is needed to support Windows' getWriteWatch(). The
+behaviour like mincore() can be achieved by passing output buffer of 100
+size. This interface can be used for any desired behaviour.
 
->   no_more_replies:
->   	if (added)
->   		vhost_signal(&vsock->dev, vq);
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Cc: Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Peter Enderborg <peter.enderborg@sony.com>
+
+Muhammad Usama Anjum (4):
+  fs/proc/task_mmu: update functions to clear the soft-dirty bit
+  fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
+  selftests: vm: add pagemap ioctl tests
+  mm: add documentation of the new ioctl on pagemap
+
+ Documentation/admin-guide/mm/soft-dirty.rst |  42 +-
+ fs/proc/task_mmu.c                          | 337 ++++++++++-
+ include/uapi/linux/fs.h                     |  13 +
+ tools/include/uapi/linux/fs.h               |  13 +
+ tools/testing/selftests/vm/.gitignore       |   1 +
+ tools/testing/selftests/vm/Makefile         |   2 +
+ tools/testing/selftests/vm/pagemap_ioctl.c  | 629 ++++++++++++++++++++
+ 7 files changed, 1005 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+
+-- 
+2.30.2
 

@@ -2,77 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB625A1BDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C9A5A1BE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244251AbiHYWDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S244265AbiHYWGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244097AbiHYWDa (ORCPT
+        with ESMTP id S242951AbiHYWGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:03:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CC2792C3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:03:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 25 Aug 2022 18:06:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6925D10D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:06:09 -0700 (PDT)
+Received: from localhost (unknown [188.27.54.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B512B82EB5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:03:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938A6C433C1;
-        Thu, 25 Aug 2022 22:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661465006;
-        bh=qqj1sPuIU2M5if+JbH3KWWswkdV/0dNUDeh0IvSKFtg=;
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D20966601EB5;
+        Thu, 25 Aug 2022 23:06:07 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661465168;
+        bh=Q5+Bi1B/SMTx6MvZqr40BzbPGKrMBPLeIBYyqLazQ/8=;
         h=From:To:Cc:Subject:Date:From;
-        b=fsl6BuPVos27L0w8g+6EOItCVKILp9mDLjbYEWiXKpjPO+US7EgJrrgvD7M82zf+e
-         yzgwyTgBaJYJ8VyOu14Fs2/mchkB0bYgblVjP1jpwPd0bA82CWAKYl8okkcyNhv0hs
-         wdhtzlBMoNbJSTpd34G3zGz+1Oid0KIFlPAUNybcdekzx11Gxa9S4++7P7oUlTIxT5
-         oM2iio9FnF+NEJwPhANiOzEvNxBK5ZygJkM7Bvyx9rK4HldxCcTVhhHOVI0XXCdfI7
-         MrG85m38Lp/IfTj2/6/KDAc3lUow6xOcADZRTN/IInjPa3YG7TF84csTeIO1LZuqo7
-         zmtLmQL8iohzw==
-From:   SeongJae Park <sj@kernel.org>
-To:     damon@lists.linux.dev
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [Reminder] DAMON debugfs interface will be removed
-Date:   Thu, 25 Aug 2022 22:03:19 +0000
-Message-Id: <20220825220319.95226-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        b=gh6ftKJIVQLKO5dOmvcFnfcDOzXHWNzMS9IHXZj2byYLR8MxxEqTYAsGt7UmckXyl
+         bNx2FSRFzzKbrfrDQPx6UsRpdJzjGrAmb/9nJaOD7OyndFWU9x8WtENvd0aq2JYNCU
+         bPGGD1LMHXMtMYWqcN5i4vXfXi22vq0EBK+8kOSD3fhMnY+jvLDCWJcbmLIKl+Ziix
+         K1i8wgWCxzjORxZbhRZfNBwhZcWkjOk8niA0b8YiCI3TO+V2Wn0igc3DyunWYxm2Rv
+         u/Jv9Xoc1Sj8wL6TXlsie24cwPDe+Q6TpC9WzjpCN1VGketA87UoLR8asvOE78Hy1F
+         kxoL511toqAlQ==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Vlad Karpovich <Vlad.Karpovich@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: [PATCH v2] ASoC: wm_adsp: Handle optional legacy support
+Date:   Fri, 26 Aug 2022 01:05:30 +0300
+Message-Id: <20220825220530.1205141-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The tracing capabilities for the speaker protection fw enabled via
+commit c55b3e46cb99 ("ASoC: wm_adsp: Add trace caps to speaker
+protection FW") are not be available on all platforms, such as the
+Valve's Steam Deck which is based on the Halo Core DSP.
 
+As a consequence, whenever the firmware is loaded, a rather misleading
+'Failed to parse legacy: -19' error message is written to the kernel
+ring buffer:
 
-As announced before via the DAMON sysfs interface patchset[1] and also noted
-in the document[2], DAMON debugfs interface already in new-feature-frozen state
-and will be removed once next LTS kernel is released.  As there could be some
-users who still depends on the debugfs interface and forgot about the
-announcement, I just wanted to remind.
+[  288.977412] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Firmware version: 3
+[  288.978002] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: cs35l41-dsp1-spk-prot.wmfw: Fri 02 Apr 2021 21:03:50 W. Europe Daylight Time
+[  289.094065] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Firmware: 400a4 vendor: 0x2 v0.33.0, 2 algorithms
+[  289.095073] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: 0: ID cd v29.53.0 XM@94 YM@e
+[  289.095665] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: 1: ID f20b v0.0.1 XM@170 YM@0
+[  289.096275] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Protection: C:\Users\ocanavan\Desktop\cirrusTune_july2021.bin
+[  291.172383] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Failed to parse legacy: -19
 
-DAMON user-space tool, damo[3], has supported both interfaces since the
-introduction of the sysfs interface and defaults to sysfs interface now, so the
-users of damo would have no problem.  If you are still using the debugfs
-interface, you could refer to that to know how you could use sysfs instead.
+Update wm_adsp_buffer_init() to print a more descriptive info message
+when wm_adsp_buffer_parse_legacy() returns -ENODEV.
 
-That said, there is no problem at extending the timeline if there is any
-critical user issue, of course.  If you have such a critical issue, please let
-me know.
+Fixes: c55b3e46cb99 ("ASoC: wm_adsp: Add trace caps to speaker protection FW")
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+---
+Changes in v2:
+ - Add a generic handling of the issue, not bound to a particular
+   firmware, as suggested by Charles
+ - Update commit message, including the subject, to reflect the changes
 
-[1] https://lore.kernel.org/all/20220228081314.5770-1-sj@kernel.org/
-[2] https://docs.kernel.org/admin-guide/mm/damon/usage.html
-[3] https://github.com/awslabs/damo
+ sound/soc/codecs/wm_adsp.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
+index cfaa45ede916..8a2e9771bb50 100644
+--- a/sound/soc/codecs/wm_adsp.c
++++ b/sound/soc/codecs/wm_adsp.c
+@@ -1602,7 +1602,9 @@ static int wm_adsp_buffer_init(struct wm_adsp *dsp)
+ 	if (list_empty(&dsp->buffer_list)) {
+ 		/* Fall back to legacy support */
+ 		ret = wm_adsp_buffer_parse_legacy(dsp);
+-		if (ret)
++		if (ret == -ENODEV)
++			adsp_info(dsp, "Legacy support not available\n");
++		else if (ret)
+ 			adsp_warn(dsp, "Failed to parse legacy: %d\n", ret);
+ 	}
+ 
 
-Thanks,
-SJ
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.37.2
+

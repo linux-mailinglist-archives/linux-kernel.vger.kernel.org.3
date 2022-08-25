@@ -2,143 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A675A135F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FC55A1357
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240343AbiHYOUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S240875AbiHYOUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239604AbiHYOTK (ORCPT
+        with ESMTP id S237432AbiHYOTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:19:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49547B2DAC;
-        Thu, 25 Aug 2022 07:19:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 954A4D6E;
-        Thu, 25 Aug 2022 07:19:13 -0700 (PDT)
-Received: from [10.57.16.12] (unknown [10.57.16.12])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CEFB73F67D;
-        Thu, 25 Aug 2022 07:19:07 -0700 (PDT)
-Message-ID: <5fd3f684-1d20-c646-04a4-09f32d765f8d@arm.com>
-Date:   Thu, 25 Aug 2022 15:19:02 +0100
+        Thu, 25 Aug 2022 10:19:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3A1AA4EF;
+        Thu, 25 Aug 2022 07:19:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C8D465BE56;
+        Thu, 25 Aug 2022 14:19:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661437160; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=sNKQlGDAZqQferZnNmp0WSqatXflduAzkdFeb31EiP0=;
+        b=sZhw/MifAZ9FmVNdpEIeJr63FRoVAiv5dCw037wAAehLMI2JBd1YOH7DY7jAQvDEFppZS5
+        Zutm6Gs1TXuG7MekvCt8ADUq28/EbOU5OjEgnfDVPV583ehUMykLGYu14gmz/0EDjqm8kR
+        R7km1sxINwFnA7KxTi+0X0MlcG9X2l8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E14413517;
+        Thu, 25 Aug 2022 14:19:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XCoxIeiEB2M8SAAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 25 Aug 2022 14:19:20 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>
+Subject: [PATCH v4] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
+Date:   Thu, 25 Aug 2022 16:19:18 +0200
+Message-Id: <20220825141918.3581-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [RESEND] rtc: hym8563: try multiple times to init device
-Content-Language: en-GB
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>
-References: <20220821122613.245026-1-linux@fw-web.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220821122613.245026-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-21 13:26, Frank Wunderlich wrote:
-> From: Peter Geis <pgwipeout@gmail.com>
-> 
-> RTC sometimes does not respond the first time in init.
-> Try multiple times to get a response.
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> discussion from v1
-> https://patchwork.kernel.org/project/linux-rockchip/patch/20220608161150.58919-2-linux@fw-web.de/
-> 
-> On Fri, Jul 8, 2022 at 12:18 PM Robin Murphy <robin.murphy@arm.com> wrote:
->> FWIW, given that HYM8563 is fairly common on RK3288 boards - I can't say
->> I've ever noticed an issue with mine, for instance - it seems dubious
->> that this would be a general issue of the chip itself. Are you sure it's
->> not a SoC or board-level issue with the I2C bus being in a funny initial
->> state, timings being marginal, or suchlike?
-> 
-> Peter Geis <pgwipeout@gmail.com>:
-> I don't think this is an SoC issue since this is the first instance
-> I've encountered it. Mind you we don't have the reset lines hooked up
-> at all for the Rockchip i2c driver, so it's possible that's the case,
-> but I'd imagine it would be observed more broadly if that was the
-> case. I've tried pushing the timings out pretty far as well as bumping
-> up the drive strength to no change. It seems to occur only with the
-> hym rtc used on this board. I suspect it's a new variant of the hym
-> that has slightly different behavior.
+The error exit of privcmd_ioctl_dm_op() is calling unlock_pages()
+potentially with pages being NULL, leading to a NULL dereference.
 
-Sure, if it's documented somewhere that Hayou (or if the BPI-R2 Pro 
-schematic is to be believed, AnalogTek) decided to innovate a new 
-"sometimes doesn't work" feature for a chip that's been in production 
-for a decade or more, and that 2 retries at 20ms intervals is what's 
-recommended, then I'm open to believing that this isn't a complete hack. 
-Or at least if someone can say they've scoped the pins and confirmed 
-that nothing looks suspect at the protocol level when this happens that 
-could explain it.
+Additionally lock_pages() doesn't check for pin_user_pages_fast()
+having been completely successful, resulting in potentially not
+locking all pages into memory. This could result in sporadic failures
+when using the related memory in user mode.
 
-Otherwise, I'll remain unconvinced that it isn't a coincidence that this 
-has shown up while bringing up a new board with a new SoC, and hacking a 
-mature common driver to bodge around an issue that isn't fully 
-understood, and could very conceivably lie elsewhere, is not the right 
-answer. Especially when it involves a board vendor... let's say, whose 
-reputation proceeds them.
+Fix all of that by calling unlock_pages() always with the real number
+of pinned pages, which will be zero in case pages being NULL, and by
+checking the number of pages pinned by pin_user_pages_fast() matching
+the expected number of pages.
 
-Since I'm not above wasting 20 minutes of my time to prove a point, for 
-starters the schematic seems to imply that it's using a variant of RK809 
-where LDO4, used as the I/O supply for i2c3, is off by default, so on 
-the face of it it could be something as stupidly simple as the RTC probe 
-racing with the PMIC or I/O domain probe. Sure, the DT claims it's 
-already on at boot, but *is* it? Maybe that was true with some 
-downstream bootloader, but do we know that's what you're using to boot 
-mainline? Maybe this something so obvious that you've already confirmed 
-and taken it for granted, but the patch as presented doesn't give me the 
-confidence to rule *anything* out.
+Cc: <stable@vger.kernel.org>
+Fixes: ab520be8cd5d ("xen/privcmd: Add IOCTL_PRIVCMD_DM_OP")
+Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+V2:
+- use "pinned" as parameter for unlock_pages() (Jan Beulich)
+- drop label "unlock" again (Jan Beulich)
+- add check for complete success of pin_user_pages_fast()
+V3:
+- continue after partial success of pin_user_pages_fast() (Jan Beulich)
+V4:
+- fix case of multiple partial successes for one buffer (Jan Beulich)
+---
+ drivers/xen/privcmd.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-Thanks,
-Robin.
+diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
+index 3369734108af..e88e8f6f0a33 100644
+--- a/drivers/xen/privcmd.c
++++ b/drivers/xen/privcmd.c
+@@ -581,27 +581,30 @@ static int lock_pages(
+ 	struct privcmd_dm_op_buf kbufs[], unsigned int num,
+ 	struct page *pages[], unsigned int nr_pages, unsigned int *pinned)
+ {
+-	unsigned int i;
++	unsigned int i, off = 0;
+ 
+-	for (i = 0; i < num; i++) {
++	for (i = 0; i < num; ) {
+ 		unsigned int requested;
+ 		int page_count;
+ 
+ 		requested = DIV_ROUND_UP(
+ 			offset_in_page(kbufs[i].uptr) + kbufs[i].size,
+-			PAGE_SIZE);
++			PAGE_SIZE) - off;
+ 		if (requested > nr_pages)
+ 			return -ENOSPC;
+ 
+ 		page_count = pin_user_pages_fast(
+-			(unsigned long) kbufs[i].uptr,
++			(unsigned long)kbufs[i].uptr + off * PAGE_SIZE,
+ 			requested, FOLL_WRITE, pages);
+-		if (page_count < 0)
+-			return page_count;
++		if (page_count <= 0)
++			return page_count ? : -EFAULT;
+ 
+ 		*pinned += page_count;
+ 		nr_pages -= page_count;
+ 		pages += page_count;
++
++		off = (requested == page_count) ? 0 : off + page_count;
++		i += !off;
+ 	}
+ 
+ 	return 0;
+@@ -677,10 +680,8 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
+ 	}
+ 
+ 	rc = lock_pages(kbufs, kdata.num, pages, nr_pages, &pinned);
+-	if (rc < 0) {
+-		nr_pages = pinned;
++	if (rc < 0)
+ 		goto out;
+-	}
+ 
+ 	for (i = 0; i < kdata.num; i++) {
+ 		set_xen_guest_handle(xbufs[i].h, kbufs[i].uptr);
+@@ -692,7 +693,7 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
+ 	xen_preemptible_hcall_end();
+ 
+ out:
+-	unlock_pages(pages, nr_pages);
++	unlock_pages(pages, pinned);
+ 	kfree(xbufs);
+ 	kfree(pages);
+ 	kfree(kbufs);
+-- 
+2.35.3
 
-> ---
->   drivers/rtc/rtc-hym8563.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
-> index cc710d682121..d9d0b6615a07 100644
-> --- a/drivers/rtc/rtc-hym8563.c
-> +++ b/drivers/rtc/rtc-hym8563.c
-> @@ -13,6 +13,7 @@
->   #include <linux/clk-provider.h>
->   #include <linux/i2c.h>
->   #include <linux/bcd.h>
-> +#include <linux/delay.h>
->   #include <linux/rtc.h>
->   
->   #define HYM8563_CTL1		0x00
-> @@ -438,10 +439,16 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
->   
->   static int hym8563_init_device(struct i2c_client *client)
->   {
-> -	int ret;
-> +	int ret, i;
->   
->   	/* Clear stop flag if present */
-> -	ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
-> +	for (i = 0; i < 3; i++) {
-> +		ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
-> +		if (ret == 0)
-> +			break;
-> +		msleep(20);
-> +	}
-> +
->   	if (ret < 0)
->   		return ret;
->   

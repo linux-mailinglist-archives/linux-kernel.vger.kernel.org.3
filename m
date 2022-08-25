@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03D85A0D6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50C85A0D66
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239718AbiHYJ5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S237652AbiHYJ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238311AbiHYJ52 (ORCPT
+        with ESMTP id S235388AbiHYJ5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:57:28 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A285C12D33;
-        Thu, 25 Aug 2022 02:57:25 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id g14so5224400qto.11;
-        Thu, 25 Aug 2022 02:57:25 -0700 (PDT)
+        Thu, 25 Aug 2022 05:57:12 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189592124D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:57:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bq23so18471618lfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Ms4JRfp4bbqLAxumr6FHHMASRC9sUuDO9ip+t7Y80b4=;
-        b=mQWGNEnRt44gWKCKTu/e1dqeZ2eg33XAX635iw8mSscZzw1ZOOPAfCuH0WQ29khJ3X
-         07hEdzqMcrkPN1PFLuTDvUPGplDryxZvRmaeYHXUGORC75sAvi5InL5D5VfC6AFKlgGC
-         Pjp3H6+0OGNI6mdAJHB10IwPJk+GurFUzjHbbFVRCpDA3hRtcHsZg6pBcPEik6zSKTZB
-         Jk4yPJQl+NK2hb1+rLdH2AJ0Ww8p33HeHf+8MJF2I6tVCoMrYle70VPWEFmWBMGw2+0/
-         BqMwLy9vs+wBXXRbNB07Wp3YkYuK9AC6dKUyfWSvtSgrTI5DYP/tsrcNX08yiKrbCQKP
-         rAdA==
+        d=linaro.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=yPQTjek19dVxANcg2e3WvPol3YwRVRICz8w3fymbirY=;
+        b=ahhl9xUT7wWMaxQJsVd/s12OzETtJzJFtjCcd2xC/A415hBGBmjvEelSL4KaeG/5eQ
+         QPgCLbWagwJn/qtv5HclgmhTZp1Pxh2R0Igvz1AZDiggkWJaXnY9IGDKU1GNf1mYMn0I
+         gLXLBva7qKA62qcxMVcJEj6T25tv1rCywpWodT4//PHvXItxVSoC0d/XbdtB7wDOTWMH
+         61pnT1doMDledkZQYI4TfOlH9Z8TNhnjo+NvkshX9szI935uLCkZC4wtYNu9mEprOUL4
+         E418SN71jLRgA8NCwQRv17MkCOhL1c0svsGewijZZbdMCHc7QTV0BoJWCOvYeg8hLq0G
+         yitA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Ms4JRfp4bbqLAxumr6FHHMASRC9sUuDO9ip+t7Y80b4=;
-        b=ty1MrL9qs87w3H7LPep4HNkKf9wTNMgita0CHemLHRoRK/kBeJ0M7ZdiBUgaThejUW
-         Xarwiz3StdwnZ7B25o+K7/hLuJBOu+xBNFUzIMta1E/h0duaK5DafPc+F3hkmQsWiwEh
-         oY21tjoVMzzXDHs7LtHbEJkNcrQnPzOD1GJHoeAZtQ13XSSsItNPYXipWoT2peTLEBqB
-         KDPh76IbpUiivYy/MssQFLxhw2HOvHqP/GFOCiEHBpzFaukXgG/2zEANcpr3ac0dF65E
-         7LY5lJSr2N+icHtexQOcU2tG/Kq6g832I2P3c6PNPlXMjqCzqUti53Z9mD1Ua0Heueh1
-         mQCw==
-X-Gm-Message-State: ACgBeo3kfIS2g4hIWcB5AhvFMlsqsPyiXgfXH90azL9Th+e/CXfzKOL8
-        O6Vfcjcis8vSO+CzXsi1G0MTGHgJ+I3etYLEQswibIO/n6s=
-X-Google-Smtp-Source: AA6agR51alYCj4efz+VyYGYy5PubYizLbdoNZA1k6++6vnrSNEIwwqAjq+B1jpZk3eJgyVLnXN0vhaVi/Nr9uQ0nu2w=
-X-Received: by 2002:ac8:7dd0:0:b0:344:afc1:b11d with SMTP id
- c16-20020ac87dd0000000b00344afc1b11dmr2698470qte.195.1661421444713; Thu, 25
- Aug 2022 02:57:24 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=yPQTjek19dVxANcg2e3WvPol3YwRVRICz8w3fymbirY=;
+        b=j3BN4VkGYPKIRRomg0RMiSGge1EnPWs6LFYwW/KIDJXoqf/77HIz1xqFVjfj4oU5um
+         gBmc94lCgzzeFVEHuhK1GbmPvLMBmjpI4Y3jFFuC0rYXE6wIA8eODCgnSts2IpVyEJty
+         fpoEpGe1VowRmiOeBpFvJVWGTgnIOkuVHfqIqhsX+GENqvT6xaIdSjN6D8mIyosx3Ch0
+         RMjPk6oC5FdWNtdVqx2yxdzlqRVSBPDyPF69BAru7jLTZNqkhkVISPO8yKOIK3/dQQur
+         eDw/dfYCnaardbks4FDrbrRhALgXg0DtrsXzyB3QWt/e49QpT4cifqM/xEU9YuWKAecC
+         E8CA==
+X-Gm-Message-State: ACgBeo0uXVQ2dshvxUj8v3mrEkqigbVbscvzAuq1xNXbQcTEN4NxpJpc
+        m/c2eIU7jSo4efBWhkSk5DlP0A==
+X-Google-Smtp-Source: AA6agR6d5FacAMHe4GmbVd8uFGIcTWuWpvV14leXcjzWEufYUIWFu+RUixDMXPJq3HROWsi5uM+tqg==
+X-Received: by 2002:a05:6512:39c2:b0:492:d15f:d246 with SMTP id k2-20020a05651239c200b00492d15fd246mr1022150lfu.517.1661421428010;
+        Thu, 25 Aug 2022 02:57:08 -0700 (PDT)
+Received: from jade ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id w25-20020ac254b9000000b0048b06f34566sm414602lfk.76.2022.08.25.02.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 02:57:07 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 11:57:05 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] Fix TEE system compiler warning fo4r v6.0
+Message-ID: <YwdHcdEUib7obbbW@jade>
 MIME-Version: 1.0
-References: <20220824140347.1842-1-henning.schild@siemens.com>
- <20220824140347.1842-2-henning.schild@siemens.com> <CAHp75Vf6agD-G1Ey1UgUvWnub4Q8-ysx3OMV14dR3ed5FRX=Vw@mail.gmail.com>
- <20220825113203.4e14f4d5@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220825113203.4e14f4d5@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 25 Aug 2022 12:56:48 +0300
-Message-ID: <CAHp75Vd3VOx=+hzCgo6Wpz8Uwu9trxRiF_N=QYDBfidFvECyAw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:32 PM Henning Schild
-<henning.schild@siemens.com> wrote:
-> Am Wed, 24 Aug 2022 18:59:17 +0300
-> schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
-> > On Wed, Aug 24, 2022 at 5:04 PM Henning Schild
-> > <henning.schild@siemens.com> wrote:
+Hello arm-soc maintainers,
 
-...
+Please pull this small patch which fixes a recently introduced compiler
+warning the TEE subsystem.
 
-> > > +#define gpio_dir_invert(type)  ((type) == nct6116d)
-> > > +#define gpio_data_single(type) ((type) == nct6116d)
-> >
-> > What you are trying to do here is to put GPIO maintainers / heavy
-> > contributors on a minefield (basically moving your job to their
-> > shoulders). Please, provide a proper namespace and not gpio_ one. I'm
-> > talking in my "GPIO heavy contributor" hat on.
->
-> No i was trying to avoid having to touch those other 4 existing macros,
-> touching lines that checkpatch.pl and you will pick on again. Adding
-> the prefixes just to those new ones would be inconsistent and also not
-> nice.
+Thanks,
+Jens
 
-Do you have other prefixes in those files starting with gpio_?!
-Now I see it. I'm not sure why this pops up only now.
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
 
-> > With that fixed I can survive w/o pr_fmt() being in this patch. If you
-> > are going to address this, you may add my tag in a new version.
->
-> It is a bit unfortunate that you seem to be surprised where i said i
-> was going to not address this.
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
 
-Yes, because you are not a newbie and you know that the community
-doesn't work on a "take it or leave" basis.
+are available in the Git repository at:
 
->  And once the new series comes insist on
-> another round ... which involves testing and what not.
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-fix-for-v6.0
 
-Which is your job as a developer.
+for you to fetch changes up to eccd7439709810127563e7e3e49b8b44c7b2791d:
 
-> But hey, i will send a v6 with style refactoring patches and test it
-> all over again.
+  tee: fix compiler warning in tee_shm_register() (2022-08-25 11:40:06 +0200)
 
-Thanks!
+----------------------------------------------------------------
+Add a missing include in the TEE subsystem
 
-> Thanks everyone for the review, i hope that next version will be
-> acceptable and not open new discussion with the new patches coming.
+----------------------------------------------------------------
+Jens Wiklander (1):
+      tee: fix compiler warning in tee_shm_register()
 
--- 
-With Best Regards,
-Andy Shevchenko
+ drivers/tee/tee_shm.c | 1 +
+ 1 file changed, 1 insertion(+)

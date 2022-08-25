@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322B95A0C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA325A0C75
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239039AbiHYJTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S239484AbiHYJWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237862AbiHYJT3 (ORCPT
+        with ESMTP id S239029AbiHYJWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:19:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F9AA8306;
-        Thu, 25 Aug 2022 02:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661419168; x=1692955168;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wKEARAay3oXZ7c7KadwA88gOhMIFG8jHd1g7GlPDyR8=;
-  b=ecVOLPv5TbJ6N0rZXeJ1vFDDJRoFdP81KF+JK7dpBb33XjvKNwbZBSw6
-   a87H84Lz6aYAU2XjQ8FX6UUjekaGj8/56zgUs4r51CILt+m90/h0v++xt
-   5GKoBY9h4mazf0Xw6WYRwB581awoeArPOt8y4l+tiujDRCAEiFijxQjzK
-   6GIhhPZVXoz+3TjKcnJ0PORxefRC033dr9jcuDnxFrvN8B+FmKmtqFBzF
-   26IMhL+s72KzeCEeaWW1d8Zmn6c+qnMlAPrUfVYhTYuID4siW7Var7qkJ
-   9EaMJZ22Gn0TpHR19roVlBNkFCTvq2JuOgzCQAnSmgo31cB2EDo9vbDbU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291762027"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="291762027"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 02:19:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="670902171"
-Received: from mblazque-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.101])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 02:19:26 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/1] serial: dz: Replace DZ_XMIT_SIZE with UART_XMIT_SIZE
-Date:   Thu, 25 Aug 2022 12:19:18 +0300
-Message-Id: <20220825091918.8398-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 25 Aug 2022 05:22:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC01140CB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:22:19 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MCy991tT3znTVX;
+        Thu, 25 Aug 2022 17:19:57 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 17:22:17 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <sudeep.holla@arm.com>, <vincent.guittot@linaro.org>,
+        <ionela.voinescu@arm.com>, <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <21cnbao@gmail.com>, <jonathan.cameron@huawei.com>,
+        <linuxarm@huawei.com>, <prime.zeng@huawei.com>,
+        <yangyicong@hisilicon.com>
+Subject: [PATCH v2] arch_topology: Make cluster topology span at least SMT CPUs
+Date:   Thu, 25 Aug 2022 17:20:07 +0800
+Message-ID: <20220825092007.8129-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,49 +49,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the normal UART_XMIT_SIZE directly.
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Currently cpu_clustergroup_mask() will return CPU mask if cluster span more
+or the same CPUs as cpu_coregroup_mask(). This will result topology borken
+on non-Cluster SMT machines when building with CONFIG_SCHED_CLUSTER=y.
+
+Test with:
+qemu-system-aarch64 -enable-kvm -machine virt \
+ -net none \
+ -cpu host \
+ -bios ./QEMU_EFI.fd \
+ -m 2G \
+ -smp 48,sockets=2,cores=12,threads=2 \
+ -kernel $Image \
+ -initrd $Rootfs \
+ -nographic \
+ -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+
+We'll get below error:
+[    3.084568] BUG: arch topology borken
+[    3.084570]      the SMT domain not a subset of the CLS domain
+
+Since cluster is a level higher than SMT, fix this by making cluster
+spans at least SMT CPUs.
+
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
 ---
- drivers/tty/serial/dz.c | 2 +-
- drivers/tty/serial/dz.h | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Change since v1:
+- mention the kernel config CONFIG_SCHED_CLUSTER=y, per Ionela
+Link:https://lore.kernel.org/lkml/20220823073044.58697-1-yangyicong@huawei.com/
 
-diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index 2e21acf39720..5d2588f3e6a9 100644
---- a/drivers/tty/serial/dz.c
-+++ b/drivers/tty/serial/dz.c
-@@ -279,7 +279,7 @@ static inline void dz_transmit_chars(struct dz_mux *mux)
- 	 * so we go one char at a time) :-<
+ drivers/base/arch_topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 0424b59b695e..0056a1273275 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
  	 */
- 	tmp = xmit->buf[xmit->tail];
--	xmit->tail = (xmit->tail + 1) & (DZ_XMIT_SIZE - 1);
-+	xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
- 	dz_out(dport, DZ_TDR, tmp);
- 	dport->port.icount.tx++;
+ 	if (cpumask_subset(cpu_coregroup_mask(cpu),
+ 			   &cpu_topology[cpu].cluster_sibling))
+-		return get_cpu_mask(cpu);
++		return cpu_smt_mask(cpu);
  
-diff --git a/drivers/tty/serial/dz.h b/drivers/tty/serial/dz.h
-index 3b3e31954f24..59120ad2bda0 100644
---- a/drivers/tty/serial/dz.h
-+++ b/drivers/tty/serial/dz.h
-@@ -12,6 +12,8 @@
- #ifndef DZ_SERIAL_H
- #define DZ_SERIAL_H
- 
-+#include <linux/serial_core.h>
-+
- /*
-  * Definitions for the Control and Status Register.
-  */
-@@ -124,7 +126,6 @@
- 
- #define DZ_NB_PORT 4
- 
--#define DZ_XMIT_SIZE   4096                 /* buffer size */
--#define DZ_WAKEUP_CHARS   DZ_XMIT_SIZE/4
-+#define DZ_WAKEUP_CHARS   (UART_XMIT_SIZE / 4)
- 
- #endif /* DZ_SERIAL_H */
+ 	return &cpu_topology[cpu].cluster_sibling;
+ }
 -- 
-2.30.2
+2.24.0
 

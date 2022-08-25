@@ -2,203 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CAC5A0527
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF0B5A052E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiHYAZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S230439AbiHYAaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiHYAZC (ORCPT
+        with ESMTP id S229437AbiHYA35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:25:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E764457F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661387100; x=1692923100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lTR8Aua53Hrg1CIsD9Rc3773VnkmtC85xsQjT06tgf4=;
-  b=A6MDgeqeXdqqI1p8ZAeMrsWicnpHkaao2njlpOLUar5vdgUoP/QqvAF9
-   BB3bDXSZT7hECUuEPjQpy/P6LmilXP3CcIJCMzMrIKlwX8x0farp9d7s4
-   Jus/HAiL8LcyXitzVR7Va4ZQxLnMKugSg90BLbONXt39kMPAkhH72RTd5
-   rkJc/MOQ5xHM5MMHwje+s3KsBJrWrB15G7TBm4SDvmvZVyvqSsGw9s0iK
-   PPD8UzZAMgBZf6unO9LfWzeZiI24Q56yeysDS74SmjGBIMQ8NqaHWxm5t
-   OlCTR/TPDwnbyMgn8EX/8DaiBh9BA2WbuG3G0PdlWhRyIpCpFTdlQ806V
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291675854"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="291675854"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 17:24:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="586643669"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 24 Aug 2022 17:24:56 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oR0g3-0001RD-37;
-        Thu, 25 Aug 2022 00:24:55 +0000
-Date:   Thu, 25 Aug 2022 08:24:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: sound/soc/codecs/tlv320adc3xxx.c:1209:50: error: use of undeclared
- identifier 'GPIOD_OUT_LOW'
-Message-ID: <202208250802.7310sfQR-lkp@intel.com>
+        Wed, 24 Aug 2022 20:29:57 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5881EAF8;
+        Wed, 24 Aug 2022 17:29:55 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id sd33so15212323ejc.8;
+        Wed, 24 Aug 2022 17:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ciex1M3iqp5s8wXR0fILlM12xeyVcSZQd9Ahu6CFpUY=;
+        b=PnF1b98qcTe7Aisdifeox05zIT2HLoeeBXiQ/PdvRwtGGKzs7ZPZi5t9iltgkrF9lz
+         1MBwCYR6xE3rzUIpCJVD8G0KKuiKvrmj/Hkx110eKCrnVFX9+nqJdWmEHn9epXVW9//o
+         xsLf9VHdrJRxc3KxLLGOKpHYM7vRP2XP7c5kHOahCxdFb1H5fYSxRV7YPkqXWBvu97JC
+         SfRGam+WaqVeGblpnXwbcD6+WZi3legeOsw8Qo3lUsh3XAsh62sLarHqMKR8m7EAaDcE
+         CLI0XxIFxd24NjnH7yFnIYDgN70lK0XiFw19oN84Ng7wwaVJLhfrgDT/weuW8ctzDJpP
+         6Hmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ciex1M3iqp5s8wXR0fILlM12xeyVcSZQd9Ahu6CFpUY=;
+        b=I5CrJs42leoNhgTthkdJcFKPm8F+c32oQweJBKeRwkwedwNZF5IoC3GwyBjqHBgub5
+         OuGMaRSC8knNNzRfAZjXtuNT72JXhIBHXJJRisJmfpd/Gc2e9NKNySW2dSSwEGmOsA5R
+         UsKcjcE7KKp6qNiPH45ddvgEItMNCZCU2y5q1QCnlmPk8vk5USxZ3+COsz0FhnAXshZw
+         03aGZUG6uTT2OSDideEsXVZqzydp04UfAwsnvB3dZ8yNmUHd/kDQ2Epm9iLoIljN9Lty
+         IHoJ/G0eTG5lnkiSYJMSK0bJbFbYmnNEMXRmLIP66uI4QzZtpG4mOVSJuM6Ldwxtzj0y
+         doBQ==
+X-Gm-Message-State: ACgBeo2xIHBvzOs8jTyKc2rbuj38IHl44xpDN9zeVmAI0UjhqZ4Xv/IK
+        CbIlI5YvRn75sFfX1INZs+zHs6VQfwNkJwNqywM=
+X-Google-Smtp-Source: AA6agR71AsmC5lWezecsMgCiyWe1qe55+o7z/o1o6+A+VfdBz69tWZY5RRGqoDQ3qvNsDZq6jQoUu2UYxBfbXphCcgQ=
+X-Received: by 2002:a17:907:7b94:b0:731:1b11:c241 with SMTP id
+ ne20-20020a1709077b9400b007311b11c241mr868514ejc.676.1661387394268; Wed, 24
+ Aug 2022 17:29:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220824233117.1312810-1-haoluo@google.com>
+In-Reply-To: <20220824233117.1312810-1-haoluo@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 24 Aug 2022 17:29:43 -0700
+Message-ID: <CAADnVQLT3JE8LtOYrs30mL88PNs+NaSeXgQqAPEAup5LUC+BPQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH bpf-next v9 0/5] bpf: rstat: cgroup hierarchical
+To:     Hao Luo <haoluo@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Wed, Aug 24, 2022 at 4:31 PM Hao Luo <haoluo@google.com> wrote:
+>
+> This patch series allows for using bpf to collect hierarchical cgroup
+> stats efficiently by integrating with the rstat framework. The rstat
+> framework provides an efficient way to collect cgroup stats percpu and
+> propagate them through the cgroup hierarchy.
+>
+> The stats are exposed to userspace in textual form by reading files in
+> bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+> cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> - walking a cgroup's descendants in pre-order.
+> - walking a cgroup's descendants in post-order.
+> - walking a cgroup's ancestors.
+> - process only a single object.
+>
+> When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+> created from attaching. This cgroup can be passed either as a file
+> descriptor or a cgroup id. That cgroup serves as the starting point of
+> the walk.
+>
+> One can also terminate the walk early by returning 1 from the iter
+> program.
+>
+> Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> program is called with cgroup_mutex held.
+>
+> ** Background on rstat for stats collection **
+> (I am using a subscriber analogy that is not commonly used)
+>
+> The rstat framework maintains a tree of cgroups that have updates and
+> which cpus have updates. A subscriber to the rstat framework maintains
+> their own stats. The framework is used to tell the subscriber when
+> and what to flush, for the most efficient stats propagation. The
+> workflow is as follows:
+>
+> - When a subscriber updates a cgroup on a cpu, it informs the rstat
+>   framework by calling cgroup_rstat_updated(cgrp, cpu).
+>
+> - When a subscriber wants to read some stats for a cgroup, it asks
+>   the rstat framework to initiate a stats flush (propagation) by calling
+>   cgroup_rstat_flush(cgrp).
+>
+> - When the rstat framework initiates a flush, it makes callbacks to
+>   subscribers to aggregate stats on cpus that have updates, and
+>   propagate updates to their parent.
+>
+> Currently, the main subscribers to the rstat framework are cgroup
+> subsystems (e.g. memory, block). This patch series allow bpf programs to
+> become subscribers as well.
+>
+> Patches in this series are organized as follows:
+> * Patches 1-2 introduce cgroup_iter prog, and a selftest.
+> * Patches 3-5 allow bpf programs to integrate with rstat by adding the
+>   necessary hook points and kfunc. A comprehensive selftest that
+>   demonstrates the entire workflow for using bpf and rstat to
+>   efficiently collect and output cgroup stats is added.
+>
+> ---
+> Changelog:
+> v8 -> v9:
+> - Make UNSPEC (an invalid option) as the default order for cgroup_iter.
+> - Use enum for specifying cgroup_iter order, instead of u32.
+> - Add BPF_ITER_RESHCED to cgroup_iter.
+> - Add cgroup_hierarchical_stats to s390x denylist.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+What 'RESEND' is for?
+It seems to confuse patchwork and BPF CI.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c40e8341e3b3bb27e3a65b06b5b454626234c4f0
-commit: 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f ASoC: simple-amplifier: Remove spurious gpiolib select
-date:   7 months ago
-config: hexagon-randconfig-r045-20220825 (https://download.01.org/0day-ci/archive/20220825/202208250802.7310sfQR-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+The v9 series made it to patchwork...
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   sound/soc/codecs/tlv320adc3xxx.c:1209:21: error: implicit declaration of function 'devm_gpiod_get' [-Werror,-Wimplicit-function-declaration]
-           adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-                              ^
-   sound/soc/codecs/tlv320adc3xxx.c:1209:21: note: did you mean 'devm_gpio_free'?
-   include/linux/gpio.h:243:20: note: 'devm_gpio_free' declared here
-   static inline void devm_gpio_free(struct device *dev, unsigned int gpio)
-                      ^
->> sound/soc/codecs/tlv320adc3xxx.c:1209:50: error: use of undeclared identifier 'GPIOD_OUT_LOW'
-           adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-                                                           ^
-   sound/soc/codecs/tlv320adc3xxx.c:1257:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
-           gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
-           ^
-   sound/soc/codecs/tlv320adc3xxx.c:1257:2: note: did you mean 'gpio_set_value_cansleep'?
-   include/linux/gpio.h:188:20: note: 'gpio_set_value_cansleep' declared here
-   static inline void gpio_set_value_cansleep(unsigned gpio, int value)
-                      ^
-   3 errors generated.
-
-
-vim +/GPIOD_OUT_LOW +1209 sound/soc/codecs/tlv320adc3xxx.c
-
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1196  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1197  static int adc3xxx_i2c_probe(struct i2c_client *i2c,
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1198  			     const struct i2c_device_id *id)
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1199  {
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1200  	struct device *dev = &i2c->dev;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1201  	struct adc3xxx *adc3xxx = NULL;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1202  	int ret;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1203  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1204  	adc3xxx = devm_kzalloc(dev, sizeof(struct adc3xxx), GFP_KERNEL);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1205  	if (!adc3xxx)
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1206  		return -ENOMEM;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1207  	adc3xxx->dev = dev;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1208  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15 @1209  	adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1210  	if (IS_ERR(adc3xxx->rst_pin)) {
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1211  		return dev_err_probe(dev, PTR_ERR(adc3xxx->rst_pin),
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1212  				     "Failed to request rst_pin\n");
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1213  	}
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1214  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1215  	adc3xxx->mclk = devm_clk_get(dev, NULL);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1216  	if (IS_ERR(adc3xxx->mclk)) {
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1217  		/*
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1218  		 * The chip itself supports running off the BCLK either
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1219  		 * directly or via the PLL, but the driver does not (yet), so
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1220  		 * having a specified mclk is required. Otherwise, we could
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1221  		 * use the lack of a clocks property to indicate when BCLK is
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1222  		 * intended as the clock source.
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1223  		 */
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1224  		return dev_err_probe(dev, PTR_ERR(adc3xxx->mclk),
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1225  				     "Failed to acquire MCLK\n");
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1226  	} else if (adc3xxx->mclk) {
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1227  		ret = clk_prepare_enable(adc3xxx->mclk);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1228  		if (ret < 0)
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1229  			return ret;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1230  		dev_dbg(dev, "Enabled MCLK, freq %lu Hz\n", clk_get_rate(adc3xxx->mclk));
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1231  	}
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1232  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1233  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmdin-gpio1", &adc3xxx->gpio_cfg[0]);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1234  	if (ret < 0)
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1235  		goto err_unprepare_mclk;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1236  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmclk-gpio2", &adc3xxx->gpio_cfg[1]);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1237  	if (ret < 0)
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1238  		goto err_unprepare_mclk;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1239  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias1-vg", &adc3xxx->micbias_vg[0]);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1240  	if (ret < 0)
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1241  		goto err_unprepare_mclk;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1242  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias2-vg", &adc3xxx->micbias_vg[1]);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1243  	if (ret < 0)
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1244  		goto err_unprepare_mclk;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1245  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1246  	adc3xxx->regmap = devm_regmap_init_i2c(i2c, &adc3xxx_regmap);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1247  	if (IS_ERR(adc3xxx->regmap)) {
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1248  		ret = PTR_ERR(adc3xxx->regmap);
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1249  		goto err_unprepare_mclk;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1250  	}
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1251  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1252  	i2c_set_clientdata(i2c, adc3xxx);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1253  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1254  	adc3xxx->type = id->driver_data;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1255  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1256  	/* Reset codec chip */
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1257  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1258  	usleep_range(2000, 100000); /* Requirement: > 10 ns (datasheet p13) */
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1259  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 0);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1260  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1261  	/* Potentially set up pins used as GPIOs */
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1262  	adc3xxx_init_gpio(adc3xxx);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1263  
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1264  	ret = snd_soc_register_component(dev,
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1265  			&soc_component_dev_adc3xxx, &adc3xxx_dai, 1);
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1266  	if (ret < 0) {
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1267  		dev_err(dev, "Failed to register codec: %d\n", ret);
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1268  		goto err_unprepare_mclk;
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1269  	}
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1270  
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1271  	return 0;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1272  
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1273  err_unprepare_mclk:
-8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1274  	clk_disable_unprepare(adc3xxx->mclk);
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1275  	return ret;
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1276  }
-e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1277  
-
-:::::: The code at line 1209 was first introduced by commit
-:::::: e9a3b57efd28fe889a98171bdc1e9e0dd7eb9a50 ASoC: codec: tlv320adc3xxx: New codec driver
-
-:::::: TO: Ricard Wanderlof <ricardw@axis.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Please just bump the version to v10 next time.
+Don't add things to subject, since automation cannot recognize
+that yet.

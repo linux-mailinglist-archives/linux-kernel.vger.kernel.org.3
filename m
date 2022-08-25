@@ -2,214 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C39D5A0A64
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F5E5A0A6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238179AbiHYHhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S238247AbiHYHjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbiHYHhX (ORCPT
+        with ESMTP id S230151AbiHYHi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:37:23 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E269C223
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661413042; x=1692949042;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=t/rbNCnmLJMpaKwBLSJzt4+Hn6aArCb+aEEP0znZZAk=;
-  b=ckLx1g4J6DQMN2HV2KCZUcG80WQPqfqlxX9ZpnIC8BA7AXaiP0V5S+qD
-   OzEHzPQnLFvPEA5SZey565pjRzODbwfQ0zrmJdVyF4ly2oJAaih31/kca
-   wMIFiqY7GxiabuTUouFQ0+gfMY1LQ+AgTCIVpfnZokxDDzLBcfq1mnBmR
-   us0vpkQkVfJ82/ia78WZKchD5oz38FyW47uc4Zqql6x5r8sAqDETc6k0j
-   Ak9mcOyuoGQVQf973DaQpKQVP93TYj61+lJojBVbrhuDIM5jsOlrLRase
-   4XAJUI52zJoqOjk9US+ZdJNxro4FthYmMZ76Exafl7kFOv9N1wFVaMdOI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355896764"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="355896764"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:37:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="639478341"
-Received: from pranavir-mobl.gar.corp.intel.com (HELO localhost) ([10.252.50.196])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:37:17 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>, keescook@chromium.org
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
-        llvm@lists.linux.dev,
-        "Sripada, Radhakrishna" <radhakrishna.sripada@intel.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
-In-Reply-To: <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
- <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
- <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
-Date:   Thu, 25 Aug 2022 10:37:14 +0300
-Message-ID: <875yigixjp.fsf@intel.com>
+        Thu, 25 Aug 2022 03:38:59 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2067.outbound.protection.outlook.com [40.107.105.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51C39C527;
+        Thu, 25 Aug 2022 00:38:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a/AKPh8Hk1ifObUG3hELu5YepjSW4zGG3CTra13N1BWu2hRl+rKaLtMLx1w9Y7r5GDYVggMN8msCrN5xcljzbzTSyvqeQOX+j46JwdNMBa2ofemWkW6CGbcEOPCQuIhejVGqLOJfyF3HJyrdBXC4S1K0AldGUb5pZTYmfzdk/QgQ7G+7Mw7lWpH9N3mfiHD3hviQl3IvOVC99ZFZn8cPIRDPKXqek8rT6k36oNi/uOuPs4JMVOxNGMmSekSGLVwQrBw+4drAsgHH6vWz95F8JW3XYem5GSKTvK5IUg5JuMTIX4odhqhW84QUDmUYNkIPyinjZKGA2Os6PtHYntW5Qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3O6AAcG197ZLgdwKvrbRJiihxehoeIAjIb3c4a1ELTU=;
+ b=RkQ5PqP+bz2F2eCJAr3MYdHe96zh+TCCW0mvZux58xK1o4B2dfqAt9At9VPT/BomORaD7YPRDMk+U319LU7dF3cM3wc2rn6lKd30UZok4imWvHagU7oJCxkEn37jUepmwFh4fFyeER2kjQFABZQa9ZNEljj1A4kWNIgjfwtYMtbM7NbBVDZQ5NB/fYv2QE/2pUu4mbcLJjwMqBpHpYu7VqPEM7RIOmR5r63MPOnHRqCK2oJbo9pap+nrQ5hc+9L69ylZl8dWzn+Oad1PMmu60tDfBf4CUtvD7Z6tGlCrt3L8ta21mANUGyPH0jIcXl+RSHSJte9y4LvuZbmnMw+PqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3O6AAcG197ZLgdwKvrbRJiihxehoeIAjIb3c4a1ELTU=;
+ b=vf9NS6Ga7v1c7jK3yPAtelBAj2Lb28p6KJzN/zqhy7otPu8IAGRSQJHqBsZ3rtNcyOHCTK8NI5XR5+3EeRS1MYOrN0YFn+x77/62iWiQ9NwGEF9FpRAbCYUEqDLAezqHxqij6o07dTsJSPTwJLkziZ6B8gTqt9CfzvH9TBw9ShnRPrMI/93BCV4mXHqZRXBXEufJh+VWOS+fb1fbHXjTlI3DWxOlEM7OTBOy9Biknx4jMsjlDxPOg8Chv8lUWDcnuoKnB8AOI2/m6XqAEAcEXBuYmb/sqkS+aKWfYqNhHqj/6/g0EdtoNhALQjX8rZlbUa+6Kp0vPZZaRB2hNIrjHQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by AM9PR04MB8570.eurprd04.prod.outlook.com (2603:10a6:20b:435::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
+ 2022 07:38:54 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::2d5d:bae0:430f:70ad]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::2d5d:bae0:430f:70ad%4]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
+ 07:38:54 +0000
+Message-ID: <396156e8-304e-ed68-8596-ee544dce0373@suse.com>
+Date:   Thu, 25 Aug 2022 09:38:52 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+References: <20220824142634.20966-1-jgross@suse.com>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <20220824142634.20966-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0108.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a3::11) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7bad9774-940f-40f5-b5ec-08da866cdcf0
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8570:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FTx4ZfBQUcMkev47/i3T1EZHb7kyLto6H/hkaQTmn/fhyaIq4uxsQEnWcW9TUfQrrSe09GKb+4KjkJbvFITgliu2eVQAz5IyNyKj1NUBc/aWJuOWyoQgjbcQqOD5mQ4TXn+aQHlt9LJ8Fd4gqC5CeGoNsJsk3QvJVWZ7NLaLBIcqzOVJ1/BXcOE3uP0fznF5WRsbbRmLONAmRM+a7X3CGYHtH/H8ZO6hU3GUv7HzdPJhQ94KOtGZwA30neIMqFqBq6M+YTzbzz0QJ3CfZGk6Gd+ZqTXgIdvIzbnzky1J9qu4kgk2DGXLmS8EprXnwEBKWbaLcU/GC7t1wLBWoYXoSlRpE/3SkWjWwBm2gFIdFiff/O1SDPnnGuOtx/JNUJW/Eg20N/ubjMUjSt7DuQ/X1JZod7xKa5JjXwLpOlkq5M5CN9Zt34YErcyEExU22hF4BDy5KUCxyBc9rgOGAtIOIdlVhaL24H8wudiLlYI3oxPjSl9zt9dH+c+3UZ1XSdGFsZYoEIq4xgGz8U8SRzMjDiBFEXv3hsF3A/OUiyADFDpvfhz1lBqUtm2WPjYYTG+tTY6eI7sfuMBKLk35YdA3milaox2n9mEdG8JHc8c+8lZVv/BHVH6wlxlgr0lBJYqWv8O+oM8A+bPahbw5YA0U4MLFX4HwNTNIXioKvEZUu0IdljVDwZrI1V0gNc0XpXc+Lp610sVLLHslb1u1HO7zjKWchg7FT3kqPbNk5HScRNgBXUPUznQK8/4jl61iSu+ec7cRPo1vtLiSpO8TmDIs/n9wIEf0t/mpr92JBYDG14E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(376002)(346002)(396003)(366004)(54906003)(6506007)(38100700002)(86362001)(31696002)(53546011)(66556008)(66946007)(66476007)(8676002)(36756003)(4326008)(41300700001)(37006003)(316002)(6512007)(26005)(6636002)(5660300002)(8936002)(6862004)(83380400001)(6486002)(186003)(2906002)(31686004)(478600001)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S0tVVXBqRllHRzdKRGs5UXpyS3JSN2pZcldESk1Db3ZSSER5NEt0L1R3emtI?=
+ =?utf-8?B?SmlMeEJ0YXBMTUt6QTRpM1FHOXFnNGtabEZVVTJ3cWdqdTJHaFRrQk9kU2xt?=
+ =?utf-8?B?cmZRQmRhc2luVHdDalFpRmpBTnE4clROK3VabDMyQ2MwUExRNjZVczJnak1L?=
+ =?utf-8?B?TlltVGpoNGpla1RjQkNVcG5JSGlHeExNSWpRT3l6OVdqOVlQekVLMDc3NDN0?=
+ =?utf-8?B?WHJMcCtYVmFxWm41L2lMaE1HcVF3OUJRR0RwTlEzaEhuakxBSEg4UnA4a0JG?=
+ =?utf-8?B?bDBrRWNWcmJhaWwvZjk3bzNWZmptektpMWN6a1VqR3NJK21qaUgyU21rbzFl?=
+ =?utf-8?B?bW5OdmVyMUI4UXJ3VTJhMHFkMk1UcFVOV0hzVDBJdVBpMTZDR29ON3AySVFS?=
+ =?utf-8?B?cnVjU0F6T2VjUFhwd0plT1crVmVCVXEwZ1Y0UWNTeXdneFljVVhpM2xhUStP?=
+ =?utf-8?B?bUhXVkdSSTVUdnJKeDNnZG0rbHZDdzJtMXZOREFNSkdhY2JZZEp0VDZjU0RR?=
+ =?utf-8?B?MzU3d0dXcU9IUTMvUWt3akI3a0c1cUN0aC9iaHVCK0xpQ0lnbHJ2azNEakxh?=
+ =?utf-8?B?R1lNT2xCMGdiRjNvWkgweE9GdzN1ckx5VWRiY2Z5ZmJZRnBoTnB3TkV2NUdk?=
+ =?utf-8?B?SW9GYjlBTlZ3WEhwMDVKVE1ONVREbXJUMjhuekRJNmk1NDVQYk9reEYzdG9J?=
+ =?utf-8?B?S2tqalRLL1BjY3plZkJRVHNtQXB1RjE2NDRMeUVEeEkvUVNIZGpXbldRYkxq?=
+ =?utf-8?B?MHhzSlAwVE55OXhyMlhjaW02bFc4NXM2eVFwVW15Q1hQYWRDdllQYmRVNytS?=
+ =?utf-8?B?eDRQVFIwTWRuZUFKTVpPeDlJc3JGL0lFRWRDN3RIYWpqdDRQNDk1UFBQMnBs?=
+ =?utf-8?B?SXJKTEMrVHdjMnpsZGJkaTlRazAzQXVzdmx1STRVOEF5endZVjREMTJhdytH?=
+ =?utf-8?B?RlhXSWFYS3IwTWdsQk1CY29QcGlFd2ZYdzdqTXVFOVo2RlNxL1hORmdENVRz?=
+ =?utf-8?B?dEY2RkQ1TGJQM2NWL0VWN3YweW83ZjFhcEtvMytsbFFZdVIyR3RPTzQxbDJl?=
+ =?utf-8?B?ZkRsRmVmUlBJbnRsMkhCWGl1MEdKSDl2VTJIaGFzZGNoNkhZOUNCOWEwdS9j?=
+ =?utf-8?B?bkZzM0pQMGd3K0ZneW84Y2Y1RHFKL1NHOFY0NUtEN2hvNTZUcnFYc2JpcXMz?=
+ =?utf-8?B?Zmp5SFlSOGFiazdkMnB0MnJsZzJ0ZUZ6MWY0eXBkL2NRYm9jWkdOZ3E5SHBz?=
+ =?utf-8?B?Sk5PelluUG9VL0lUUEM2RWxhWGRuT0JXanZUZy93aHZJU2xzSmhZNlJ3Z2x5?=
+ =?utf-8?B?Q1kvOWtkQ0cxcEJzdTZNRHg4YU54cFNuRHRRaWhBWWpSREVFMXUxYmFjdDJu?=
+ =?utf-8?B?dWNwN2NyQ0FpUldaUFVkbjRSZmczVG9jVTlRU0k3dE9pMmJlWUFNSTY5Yk9I?=
+ =?utf-8?B?UmhRR3N4VllQV3dDRGwzbmN1TFBneUxMV0owNlYxWFk0U0tmQ044b1ZjUHFa?=
+ =?utf-8?B?S0dnRUJGK0V2MzRBczVMWHdCbXdlREhBOTM0RVJEYkJVZlBsSWIzWXA2bEZY?=
+ =?utf-8?B?K0wzT2NmYm53MXFEL213SXBWc3ZGMW8zWmxBcko2ZTVCV1dERnNqN1U2TmtV?=
+ =?utf-8?B?K2NHbzJBeDRGcWRqRVpkN25ZYnRHRjJhaFBIVE0yV3JZNnlhSGdSTjBkN3I0?=
+ =?utf-8?B?OEppN3M0WVFEZ1BDa0xnK3pKTW0wclRHZUJuT044cHBrd0UvYmptakdlTVlL?=
+ =?utf-8?B?Z0JFRTZzWDhLL25TYkNTUDN2WnBOcmh1L1RiWlR3WmVtdXFwUmNBMTMvY0F6?=
+ =?utf-8?B?OXBsbTZiMnJwRWlpSnpsdEZMUmVRV3VlanJTd2JmZnNDTUtRTDFjRUE0K0lI?=
+ =?utf-8?B?dFJ1am95OHd0N1B5TzhVWUQwcUJEbU82MVBnNDkzYlRlQVFHRHRmM3J6a25a?=
+ =?utf-8?B?TGM0K1JBbmthK2tzbmRtS0ZzTEVFV1JQUDdjYTNzb1R3LzZtWDYwYXhNQ1gy?=
+ =?utf-8?B?UXpCVXRkMmwyNTZrZnYvNzlrTjROSzRpMXd6TGZ1TGVYcVFYR3FsWmtPM3Q3?=
+ =?utf-8?B?d2xPKzY2WnlpSFVVai9BZHBkdklYSEpXMUNvN1BmSGdOVG1TTVQ1VVlVdEtG?=
+ =?utf-8?Q?gTaT8fju26GCldIoDXNZLJQ58?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bad9774-940f-40f5-b5ec-08da866cdcf0
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 07:38:54.8949
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mhgaF4GDiDz+ocX2zMfE5eAmVYzm84xYRF2G2GXErcTwkPRzLveCgzinKAC9k8y0INx+jZiV3SstSxXfRHtp2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8570
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022, =C5=81ukasz Bartosik <lb@semihalf.com> wrote:
->>
->> Hi all,
->>
->> Apologies in advance if you see this twice. I did not see the original
->> make it to either lore.kernel.org or the freedesktop.org archives so I
->> figured it might have been sent into the void.
->>
->> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
->> > From: =C5=81ukasz Bartosik <lb@semihalf.com>
->> >
->> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
->> > The root cause is null pointer defeference of bi_next
->> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
->> >
->> > BUG: kernel NULL pointer dereference, address: 000000000000002e
->> > PGD 0 P4D 0
->> > Oops: 0002 [#1] PREEMPT SMP NOPTI
->> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
->> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05=
-/14/2021
->> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
->> > ...
->> > [    2.554467] Call Trace:
->> > [    2.554467]  <TASK>
->> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
->> > [    2.554467]  ? _printk+0x59/0x73
->> > [    2.554467]  ? _dev_err+0x77/0x91
->> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
->> > [    2.554467]  i915_driver_probe+0x4c8/0x638
->> > [    2.554467]  i915_pci_probe+0xf8/0x14e
->> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
->> > [    2.554467]  pci_device_probe+0xaa/0x142
->> > [    2.554467]  really_probe+0x13f/0x2f4
->> > [    2.554467]  __driver_probe_device+0x9e/0xd3
->> > [    2.554467]  driver_probe_device+0x24/0x7c
->> > [    2.554467]  __driver_attach+0xba/0xcf
->> > [    2.554467]  ? driver_attach+0x1f/0x1f
->> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
->> > [    2.554467]  bus_add_driver+0x11b/0x1f7
->> > [    2.554467]  driver_register+0x60/0xea
->> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
->> > [    2.554467]  i915_init+0x2c/0xb9
->> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
->> > [    2.554467]  do_one_initcall+0x12e/0x2b3
->> > [    2.554467]  do_initcall_level+0xd6/0xf3
->> > [    2.554467]  do_initcalls+0x4e/0x79
->> > [    2.554467]  kernel_init_freeable+0xed/0x14d
->> > [    2.554467]  ? rest_init+0xc1/0xc1
->> > [    2.554467]  kernel_init+0x1a/0x120
->> > [    2.554467]  ret_from_fork+0x1f/0x30
->> > [    2.554467]  </TASK>
->> > ...
->> > Kernel panic - not syncing: Fatal exception
->> >
->> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
->> > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
->> > ---
->> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
->> >  1 file changed, 9 insertions(+), 7 deletions(-)
->> >
->> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm=
-/i915/display/intel_bw.c
->> > index 2da4aacc956b..bd0ed68b7faa 100644
->> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
->> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
->> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_priva=
-te *dev_priv, const struct intel
->> >               int clpchgroup;
->> >               int j;
->> >
->> > -             if (i < num_groups - 1)
->> > -                     bi_next =3D &dev_priv->max_bw[i + 1];
->> > -
->> >               clpchgroup =3D (sa->deburst * qi.deinterleave / num_chan=
-nels) << i;
->> >
->> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
->> > -                     bi_next->num_planes =3D (ipqdepth - clpchgroup) =
-/ clpchgroup + 1;
->> > -             else
->> > -                     bi_next->num_planes =3D 0;
->> > +             if (i < num_groups - 1) {
->> > +                     bi_next =3D &dev_priv->max_bw[i + 1];
->> > +
->> > +                     if (clpchgroup < clperchgroup)
->> > +                             bi_next->num_planes =3D (ipqdepth - clpc=
-hgroup) /
->> > +                                                    clpchgroup + 1;
->> > +                     else
->> > +                             bi_next->num_planes =3D 0;
->> > +             }
->> >
->> >               bi->num_qgv_points =3D qi.num_points;
->> >               bi->num_psf_gv_points =3D qi.num_psf_points;
->> > --
->> > 2.35.0.rc2.247.g8bbb082509-goog
->> >
->> >
->>
->> Was this patch ever applied or was the issue fixed in a different way?
->> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
->> compiler supports it), bi_next will be deterministically initialized to
->> NULL, which means 'bi_next->num_planes =3D 0' will crash when the first =
-if
->> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
->> us at [1] so it impacts real users (and I have been applying this change
->> locally for six months). I see some discussion in this thread, was it
->> ever resolved?
->>
->> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
->>
->> Cheers,
->> Nathan
->
-> The patch was not accepted by upstream. I gave up after sending two remin=
-ders
-> that the issue is still present which resulted in no upstream reaction.
-> I have been also applying that patch locally for a few months.
-> Thanks for bringing it up to upstream attention again.
+On 24.08.2022 16:26, Juergen Gross wrote:
+> The error exit of privcmd_ioctl_dm_op() is calling unlock_pages()
+> potentially with pages being NULL, leading to a NULL dereference.
+> 
+> Fix that by calling unlock_pages only if lock_pages() was at least
+> partially successful.
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: ab520be8cd5d ("xen/privcmd: Add IOCTL_PRIVCMD_DM_OP")
+> Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
-Apologies for us dropping the ball here. There were objections to the
-code from Ville [1] but nobody stepped up to clean it up. I think this
-was really more about the commit being fixed c64a9a7c05be ("drm/i915:
-Update memory bandwidth formulae") than about the patch at hand.
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+albeit I wonder whether you did consider the variant actually
+reducing code size (and avoiding the need for yet another label),
+...
 
-In any case, I've gone ahead and pushed this patch to drm-intel-next
-now. With the Fixes tag it should eventually find its way to stable
-v5.17+. Thank you for the patch, review - and nagging. ;)
+> --- a/drivers/xen/privcmd.c
+> +++ b/drivers/xen/privcmd.c
+> @@ -679,7 +679,7 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
+>  	rc = lock_pages(kbufs, kdata.num, pages, nr_pages, &pinned);
+>  	if (rc < 0) {
+>  		nr_pages = pinned;
 
-What still remains is cleaning up the code. But that should never have
-stalled the fix for months. Sorry again.
+... dropping this line and ...
 
+> -		goto out;
+> +		goto unlock;
+>  	}
+>  
+>  	for (i = 0; i < kdata.num; i++) {
+> @@ -691,8 +691,9 @@ static long privcmd_ioctl_dm_op(struct file *file, void __user *udata)
+>  	rc = HYPERVISOR_dm_op(kdata.dom, kdata.num, xbufs);
+>  	xen_preemptible_hcall_end();
+>  
+> -out:
+> + unlock:
+>  	unlock_pages(pages, nr_pages);
 
-BR,
-Jani.
+... passing "pinned" here.
 
+Jan
 
-[1] https://lore.kernel.org/r/YgOYBfQJF7hIzEPE@intel.com
+> + out:
+>  	kfree(xbufs);
+>  	kfree(pages);
+>  	kfree(kbufs);
 
---=20
-Jani Nikula, Intel Open Source Graphics Center

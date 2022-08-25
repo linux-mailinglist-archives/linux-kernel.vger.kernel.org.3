@@ -2,133 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE515A1C18
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2515A1BF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242949AbiHYWS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S243578AbiHYWLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiHYWSy (ORCPT
+        with ESMTP id S243442AbiHYWLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:18:54 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADE3956A6;
-        Thu, 25 Aug 2022 15:18:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xc/PwzyMDFgp8+o0VbTSdQOhTbG6l9wxevnX+sDWN9GMngnV/pl1OZNtr0PnMVAzRM2Sog/XagZyI2CNtzHye4bj40xQF0ec6X+Wsb4j4inlY5eM2maLf7KxNqq7KeheoLir7eC2BrB/+uE3fwn1AIh2O3+eJvcxfGNbALo3sE49eZxYwKDqC4prgf6boTOKfl58kk2IYs2Uu5yl9Jt9r4tHp95e0uquwdfLGonegwo9HpYqzIjS9Cxawk3oYvOpXUdvUpsc34zQE6u0qGhVqYwN6nFl1SC0MufnKtZwXcN6t+N+sU0lR0j8VA0nOjTJCWaQW2j5ID+tx4dXq5UV2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XTLjAYJ2VHe85atSfY1n09uCICnlvOz5N5spgDcZHCE=;
- b=P1Ma8A6ECTn1SrltX26BT1gkQGmgroAqq8VoIUgc4xZKq/i+vKWxFQJYNaIrGe2IRfhEN5ukyuLeyzhfI7ITkpx239X6vIaQz08IDt6nXaEJu1OHzGg4tUQqKUhhWdlg8dQKSPnQ3WWBFgjaM5HdbOo/7mRbQcmriH4ABusTEnD9n2LJn0kXwGx4+Ph4C7Ve3/BFgYbNsUuIqAhjJFPLmkda0XVMx+u+aNGpH9f585azhrURTLbErRS4+0BbZWrpveUvNv36lR+Esnqp+sc0RpQbjWqrtdBvpVJc+HlH9T3cQP3nauUOdgkVK/d5FEfvZ4b5z3P9BL4dC5+Ckl5IqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XTLjAYJ2VHe85atSfY1n09uCICnlvOz5N5spgDcZHCE=;
- b=GoKVwjgRLJ6qGnOownEXrvJ5csSflVdY1g/Lo4lP+/8CTxH4byEbClbM76I8SbTU05Le4qfnrL7N6qV7EwBjCARXv/0cQS8G2FzX2nbq5MF68dzvAKnW0osVL7Aze9raJNd70Qxuv90PhvN3Xi/9XDi6uSGRyNnzpoWa3g6fzFpq3MtMWMXV++tri98P961f4jfd6/w3fwXcjBy+Gr4fqCSAm4gMFS1KLqlvw5DHm8A7K11mfGGVRtYBRHMvEQB8ZbuoixdBMdejfKS7BoswSEHkZT/fpjKNvw0UlwCQzYGjaaDWBga9kHp66Wu4t/HUTJxRz0l0lCWHMLPS2kXLKA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by BL3PR12MB6547.namprd12.prod.outlook.com (2603:10b6:208:38e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
- 2022 22:18:50 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::7432:2749:aa27:722c]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::7432:2749:aa27:722c%7]) with mapi id 15.20.5546.022; Thu, 25 Aug 2022
- 22:18:49 +0000
-References: <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
- <Yv1BJKb5he3dOHdC@xz-m1.local>
- <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yv5QXkS4Bm9pTBeG@xz-m1.local>
- <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87czcqiecd.fsf@nvdebian.thelocal> <YwaJSBnp2eyMlkjw@xz-m1.local>
- <YwaOpj54/qUb5fXa@xz-m1.local> <87o7w9f7dp.fsf@nvdebian.thelocal>
- <87k06xf70l.fsf@nvdebian.thelocal> <YwePm5lMSU2tsW6f@xz-m1.local>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Date:   Fri, 26 Aug 2022 08:09:28 +1000
-In-reply-to: <YwePm5lMSU2tsW6f@xz-m1.local>
-Message-ID: <877d2wezll.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0064.namprd17.prod.outlook.com
- (2603:10b6:a03:167::41) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Thu, 25 Aug 2022 18:11:08 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377175A168
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:11:04 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id j5so24985931oih.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=aL/AGV/8w/lD0tdUyUfzE8bvL9UFhy5bQRgnqnJx79U=;
+        b=A2e2m7ezoKBimHZ8/7VLP9dvWoH+EEf72LSF6b2eTN1goiRhAcaNEsH4aMIAdBMdDV
+         Sw/W7FpIPVqOMojVjC6ABvS48bY7IGsqTB01A6M4cCeZegPyYFUg8EvR7s2s2aFc3LfC
+         z98HdbmOEF6zR2mb4maMNOTJIQx37xA1hXWqy0Flnmpa2q0qc0mZ4IjJcJjpsZqyBmBD
+         rjFiFyzF51Ai9kLcPbBi7LM4LWruE51HRS6Gbc7TLQMhiWeLDnQON4DYd5MxrMEUZmvg
+         /tbF2C/V+pKnI850Af/7RerFaYyycqS4Iek09hpd2OxY6oJVEZTGKeKOi62YstibIH/C
+         kMRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aL/AGV/8w/lD0tdUyUfzE8bvL9UFhy5bQRgnqnJx79U=;
+        b=U811UkeGKBSBQCPp6Y7SzrEjUnelqG4daKtmFSIW+WviclAazixMb6fyAefyqZ+NSe
+         iLEfzA+0RnwwvTcYPvzuSs93tT4+cqfZZFd1qZzQRE/x9utp93+daj1LiwXff3jlBlzx
+         m7XoQe70rEa2gPEchMmZs0S8OZJQJz6JCo3OCqRM3fPwOm0fFuf+SJIPsUX2aeWn6Ztq
+         IhI758Dbgp5nlrs6t6CRciHip3Qa+TyEdB5AAp/xOEV/Rm/TXIwU+t3EqJao3FKCMOP5
+         o423UmtKnbZWGjXmM14UDEUU1KcfeN5UV5HVm/uEZci02AnODFcliv2i+9jgBd1jl4R8
+         /+PA==
+X-Gm-Message-State: ACgBeo1h57yk5tI+kguUo+zAYDQvZgsCgiPHvgQSePAVwmKqIugEBC5+
+        4pf3rrGXByKS5dCX3A1HSGemC+5m/7uWX+6QpcCc
+X-Google-Smtp-Source: AA6agR7SFEI7mDvYGEHKi8Bu9KDrgCXC7VjP4nzg+lnkg6FGxIcsxnYfGpmklXE7YULxMoUHaKN27KPpfrqqlTcOa3s=
+X-Received: by 2002:aca:b7d5:0:b0:343:c478:91c6 with SMTP id
+ h204-20020acab7d5000000b00343c47891c6mr444622oif.136.1661465463480; Thu, 25
+ Aug 2022 15:11:03 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6e68454b-54fb-461a-886a-08da86e7c8e4
-X-MS-TrafficTypeDiagnostic: BL3PR12MB6547:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OPijzWMSrwdL0h3IhIsMOkn0rFeG8AyBJI22/eOg29snSS3urYPMdXI72sBC1/IqQarRkxpnkGHpzQ/SCh+YqWc8sceyJXBwaTpljyMNRpcIsYKZpfg66QLNPg7cLko7TqLEWjeu0Nm9Se+v2BkhZK+tkAowat7LJmLQ+gVd0o5x9+2WA0a13e7A33226/obPcsSBP6XwddzOv3rpsbj2f6XKKKQfEPfyHe46mm0R5FC2m6WQiKNLMFmFVJCs5NzbLH/PYHcMWFrUuOoKXjqGcNBkL16cnLPPn0taYaMAsBh8GK6ZYEuswgUveF3tU3Ah/8Pxgrli0/gwFpsM2mVZBOtCxwVYD1U/2yMwvnPGg7F931PblOQlmwiI42yjKL5NBbNjf9yo8MCRo02I7FNi1g9iKBDrJXbMlxKKwbeWKapRHncTGAdZYE84X/M3kgwSkUxhNKc5Ac0A48J2uEc/MfARNbIWDxawgow9AVLImGURnb0Wbrc84TJCndvChb9Qo8zK/sNs+KPRm148W75SFeRJhLFTIZ2mrqiNhyEFz1jjyaKGDLu5w4OfwMrizcTelBwuOA1E//RmcwFo00mv1eiO3JsFhe+fPreQJEreusmyiUWUrkW+XBEXkGn/BJikiiEjl9RQ7Y8dIILIK7uAntPbwTujqHNf77fim/UwLG+Vgh07WAEU+9ke3jAPuFk4wc66Q17keIG/w6OuJdf9KuymgjGNZQBThAlttxtU5VP2ggKlzB4jMsoppmxNYgZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(2906002)(7416002)(5660300002)(8936002)(316002)(9686003)(6486002)(6916009)(6666004)(478600001)(6506007)(54906003)(41300700001)(6512007)(26005)(186003)(86362001)(8676002)(83380400001)(66476007)(66556008)(38100700002)(66946007)(4326008)(14143004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2Oo7K8cttmrBFloqTD5+BbX1LHRnvHPbhRQVNm9JSsVBHK/ZqJd9DVWxeu4C?=
- =?us-ascii?Q?g3KcXEnwH/NvHhMCOmlxLbn7Z+m9J1vLK9BXX76+Da4pcQLTVsRvjPJ4Yce9?=
- =?us-ascii?Q?C29iV2kEqVPRHqgwOqM4KwukUuDxOLx0xFIuHOo7qAFFQNERQH4+s61DCNL6?=
- =?us-ascii?Q?rPXe6Q1gxw11W1i9MDof51TmN7zFWlnbNRvC9/+vlTmTrdQbcG66k65/6Z0Y?=
- =?us-ascii?Q?h3/Rex2w7mk+AnjO3HmOlQ9in+cziBolHFemctP8e2ghP/ugFx3I8dljCQG7?=
- =?us-ascii?Q?X5UqMscJjZ4+IBriKqMVVevIkph+XslsxaAjQtawtk7UZwwjfZ/IcbOWkaBL?=
- =?us-ascii?Q?W09qMAptJPNuMNqxALpbR05xmpkCoIg269e2z0AlraDNau+h7uoRDEhHf/P8?=
- =?us-ascii?Q?ietB+nKED3zn9UOjbP9CDksjq9LfC4QxHZXUv6rtpFsHIT0nWr9w3HcB9r2s?=
- =?us-ascii?Q?3x0BSWbLN+VqQSS23pTtnTKuHyxEFozBepesXZ6l69FIfqpnTU0uQb3qEAkH?=
- =?us-ascii?Q?+4NcTp8AZY53o1crT6stzSlpOzqCzbrzB74KicIDcW8MAZDjZPyQmqGBkaUQ?=
- =?us-ascii?Q?Sq+XF/bgFYhihLF3PkC2V4hpc1Jm38XbsV49sA5gLz0nmC27SKCzgOnetAd7?=
- =?us-ascii?Q?sgOGGjZ5BlbTfI6vWIHY+V29zeJbQx2seW/fJPW2zm1jBpW7wU95BHHw7AGG?=
- =?us-ascii?Q?MgtoFN3HHll+03PA2KtDXyPJfmiEx3xlW9PVHbT17ETv/m6316FGzNVvgaDt?=
- =?us-ascii?Q?l+Q5/bCFY6dFlXmv6EAcbW+w/6bgMXCm6oS3GWBcN10FwYQUryvIC0vVdjT4?=
- =?us-ascii?Q?iST5shS5nIS7dH4rBXaL7EdM8a4SXaDb5g7jJV50ZbaEKyJbm6AeoxUJFZQ6?=
- =?us-ascii?Q?DimMl23lUvOXohmTv+ZJVgJ2A0nSKTbG9igGuc246Uo/EPY/F4ubpiQHsHvq?=
- =?us-ascii?Q?Bzrbnkx1c+Sv6XtWbq1iA9GdwyYlCCTAkyUMpqqpNi0E45Vf7GgzpTHaLLjd?=
- =?us-ascii?Q?qTnxEagJnJnGjJQIrcx0RLgtHneYUUQoi2Qp+3YlyxzddiZzS/XO3qGgBETr?=
- =?us-ascii?Q?0uPht4SFxfLQl5+h05Kd5fykI4VGQSo7W9oRix7Cnoz9jdS86LW8Ygsk78iC?=
- =?us-ascii?Q?s8TAJt7huIhGkZnnK/3WcONq381nkQ+l/knL3/jtAEo2BVuwyY5jMRyU3dxR?=
- =?us-ascii?Q?XPM49GYIt9O1R656EUkza9LbNJFmALtz71SypJu4CjwExBhJiBNKUkSS9GSK?=
- =?us-ascii?Q?vmMgf6iJDAuuAAxpWu5NAtJTa86SyF7UPa+4ak85k3H2E7eQLlGDc5pR+yi7?=
- =?us-ascii?Q?jR8+UDFG6rj+v1Q6uoRcAj6GBd5+sT+kAT3oSUZzQCzh76SXphJ6v/fJ8Kgw?=
- =?us-ascii?Q?Z4LFxFpTCVmHxyci6wGiC9NU7n/RWbrXCkMjUZDrmKUxecBx5xtHlvI77mvU?=
- =?us-ascii?Q?x7tpb1Rk8vMFA9XMkQbdVC11aeRXplwkjRzgJAOY9RAZymoFE3JtZB+uD/GQ?=
- =?us-ascii?Q?46zhU7HUm3NEBpo0KigzYseJhTUcxKUc6ZAahPqfQH4aED+gHMyDx5gdv4Oz?=
- =?us-ascii?Q?JLipZgyEKCXiNhHB6SWepgXKVw6CATxtxNSEnz0v?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e68454b-54fb-461a-886a-08da86e7c8e4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 22:18:49.6240
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cGSs6fZeTPCP1f8sIVq9O1px3mtZUafSei4fd0MObMmSv57NLGZGsAfplnsk3jUbMxxmg3IDJy0k0VNNOKA3pA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6547
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org> <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+ <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
+In-Reply-To: <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 25 Aug 2022 18:10:52 -0400
+Message-ID: <CAHC9VhS4ROEY6uBwJPaTKX_bLiDRCyFJ9_+_08gFP0VWF_s-bQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     Song Liu <songliubraving@fb.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "eparis@parisplace.org" <eparis@parisplace.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
+        "cgzones@googlemail.com" <cgzones@googlemail.com>,
+        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
+        "tixxdz@gmail.com" <tixxdz@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,66 +101,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Peter Xu <peterx@redhat.com> writes:
-
-> On Thu, Aug 25, 2022 at 11:24:03AM +1000, Alistair Popple wrote:
->> By the way it's still an optimisation because in most cases we can avoid
->> calling try_to_migrate() and walking the rmap altogether if we install
->> the migration entries here. But I agree the comment is misleading.
+On Thu, Aug 25, 2022 at 5:58 PM Song Liu <songliubraving@fb.com> wrote:
+> > On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> Paul Moore <paul@paul-moore.com> writes:
+> >>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> >>>> I am hoping we can come up with
+> >>>> "something better" to address people's needs, make everyone happy, and
+> >>>> bring forth world peace.  Which would stack just fine with what's here
+> >>>> for defense in depth.
+> >>>>
+> >>>> You may well not be interested in further work, and that's fine.  I need
+> >>>> to set aside a few days to think on this.
+> >>>
+> >>> I'm happy to continue the discussion as long as it's constructive; I
+> >>> think we all are.  My gut feeling is that Frederick's approach falls
+> >>> closest to the sweet spot of "workable without being overly offensive"
+> >>> (*cough*), but if you've got an additional approach in mind, or an
+> >>> alternative approach that solves the same use case problems, I think
+> >>> we'd all love to hear about it.
+> >>
+> >> I would love to actually hear the problems people are trying to solve so
+> >> that we can have a sensible conversation about the trade offs.
+> >
+> > Here are several taken from the previous threads, it's surely not a
+> > complete list, but it should give you a good idea:
+> >
+> > https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+> >
+> >> As best I can tell without more information people want to use
+> >> the creation of a user namespace as a signal that the code is
+> >> attempting an exploit.
+> >
+> > Some use cases are like that, there are several other use cases that
+> > go beyond this; see all of our previous discussions on this
+> > topic/patchset.  As has been mentioned before, there are use cases
+> > that require improved observability, access control, or both.
+> >
+> >> As such let me propose instead of returning an error code which will let
+> >> the exploit continue, have the security hook return a bool.  With true
+> >> meaning the code can continue and on false it will trigger using SIGSYS
+> >> to terminate the program like seccomp does.
+> >
+> > Having the kernel forcibly exit the process isn't something that most
+> > LSMs would likely want.  I suppose we could modify the hook/caller so
+> > that *if* an LSM wanted to return SIGSYS the system would kill the
+> > process, but I would want that to be something in addition to
+> > returning an error code like LSMs normally do (e.g. EACCES).
 >
-> There's one follow up question I forgot to ask on the trylock thing.  I
-> figured maybe I should ask out loud since we're at it.
+> I am new to user_namespace and security work, so please pardon me if
+> anything below is very wrong.
 >
-> Since migrate_vma_setup() always only use trylock (even if before dropping
-> the prepare() code), does it mean that it can randomly fail?
-
-Yes, migration is always best effort and can randomly fail. For example
-it can also fail because there are unexpected page references or pins.
-
-> I looked at some of the callers, it seems not all of them are ready to
-> handle that (__kvmppc_svm_page_out() or svm_migrate_vma_to_vram()).  Is it
-> safe?  Do the callers need to always properly handle that (unless the
-> migration is only a best-effort, but it seems not always the case).
-
-Migration is always best effort. Callers need to be prepared to handle
-failure of a particular page to migrate, but I could believe not all of
-them are.
-
-> Besides, since I read the old code of prepare(), I saw this comment:
+> IIUC, user_namespace is a tool that enables trusted userspace code to
+> control the behavior of untrusted (or less trusted) userspace code.
+> Failing create_user_ns() doesn't make the system more reliable.
+> Specifically, we call create_user_ns() via two paths: fork/clone and
+> unshare. For both paths, we need the userspace to use user_namespace,
+> and to honor failed create_user_ns().
 >
-> -		if (!(migrate->src[i] & MIGRATE_PFN_LOCKED)) {
-> -			/*
-> -			 * Because we are migrating several pages there can be
-> -			 * a deadlock between 2 concurrent migration where each
-> -			 * are waiting on each other page lock.
-> -			 *
-> -			 * Make migrate_vma() a best effort thing and backoff
-> -			 * for any page we can not lock right away.
-> -			 */
-> -			if (!trylock_page(page)) {
-> -				migrate->src[i] = 0;
-> -				migrate->cpages--;
-> -				put_page(page);
-> -				continue;
-> -			}
-> -			remap = false;
-> -			migrate->src[i] |= MIGRATE_PFN_LOCKED;
-> -		}
+> On the other hand, I would echo that killing the process is not
+> practical in some use cases. Specifically, allowing the application to
+> run in a less secure environment for a short period of time might be
+> much better than killing it and taking down the whole service. Of
+> course, there are other cases that security is more important, and
+> taking down the whole service is the better choice.
 >
-> I'm a bit curious whether that deadlock mentioned in the comment is
-> observed in reality?
->
-> If the page was scanned in the same address space, logically the lock order
-> should be guaranteed (if both page A&B, both threads should lock in order).
-> I think the order can be changed if explicitly did so (e.g. fork() plus
-> mremap() for anonymous here) but I just want to make sure I get the whole
-> point of it.
+> I guess the ultimate solution is a way to enforce using user_namespace
+> in the kernel (if it ever makes sense...).
 
-You seem to have the point of it. The trylock_page() is to avoid
-deadlock, and failure is always an option for migration. Drivers can
-always retry if they really need the page to migrate, although success
-is never guaranteed. For example the page might be pinned (or have
-swap-cache allocated to it, but I'm hoping to at least get that fixed).
+The LSM framework, and the BPF and SELinux LSM implementations in this
+patchset, provide a mechanism to do just that: kernel enforced access
+controls using flexible security policies which can be tailored by the
+distro, solution provider, or end user to meet the specific needs of
+their use case.
 
-> Thanks,
+-- 
+paul-moore.com

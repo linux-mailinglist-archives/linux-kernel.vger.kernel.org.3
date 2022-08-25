@@ -2,185 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA4A5A1381
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693DC5A13CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241930AbiHYOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S242316AbiHYOhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241656AbiHYOXd (ORCPT
+        with ESMTP id S242230AbiHYOhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:23:33 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4347DB6028
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:23:28 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220825142325euoutp026a9946bb02cc605ca10dc4ca3acc1c4c~OnIRomN2g1717017170euoutp02x
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:23:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220825142325euoutp026a9946bb02cc605ca10dc4ca3acc1c4c~OnIRomN2g1717017170euoutp02x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1661437405;
-        bh=Huwdp/Iixibsm1+U+Ec1zSSlNuiVTB4RieBDCeUbh60=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=aCTPEhxjI4Kn3h+UMdnKxEwTwvAGUhaGwLVFcSc+7NDlSS6++JN3cJTtwlcjf5b4D
-         CYDAwydULWyIA4Sfb8sTwbE7ioVtlS+y5ZDiK936luIjffWj1jRz2X88I0P9LyFjrG
-         hrlQeu2lqKCC2mwvdrzsK5DfZNJN3TvroolSRbuc=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220825142324eucas1p28b9945a763d61eefa0a1926d478203ec~OnIRVXztV1050010500eucas1p2e;
-        Thu, 25 Aug 2022 14:23:24 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 89.32.29727.CD587036; Thu, 25
-        Aug 2022 15:23:24 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220825142324eucas1p1cd5c4bbba236542b758269a11a2fb9ab~OnIQz1uqE1219512195eucas1p13;
-        Thu, 25 Aug 2022 14:23:24 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220825142324eusmtrp14df396a5be6d1910922e318235988b4d~OnIQy45Ad1357613576eusmtrp1N;
-        Thu, 25 Aug 2022 14:23:24 +0000 (GMT)
-X-AuditID: cbfec7f2-205ff7000001741f-83-630785dc1bdc
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 9F.EB.07473.CD587036; Thu, 25
-        Aug 2022 15:23:24 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220825142323eusmtip2b3f4a238ad06be12ed4d0ea06e8bfa49~OnIQMl41E3051730517eusmtip2b;
-        Thu, 25 Aug 2022 14:23:23 +0000 (GMT)
-Message-ID: <a78822d5-f0a1-6c42-8269-e8168ea5cd5b@samsung.com>
-Date:   Thu, 25 Aug 2022 16:23:23 +0200
+        Thu, 25 Aug 2022 10:37:12 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C04B6D46
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661438215; x=1692974215;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zznJNH66kRKwzyH876Dafr0smyRfF2XcR8259YbV6MU=;
+  b=Ea8bpcF74Iy6QgSj4E9woWQD4TvUtOLv7ApayrIxOoPO9VjzlzKtjlw0
+   vvjSZrs+AVjlw5Vh3bhq7vGtSYF/RTTPbEg2Jcwf8cKsQKhKG/PQxbzEE
+   Vss+U9pVth3XPaUUD3n4GhiO9whMUcN2PPRwdpv41m/YkWouFsN8ZH9OT
+   4cXym2qSeg89U/iQ53TdDM8trCOPrLaUzMm78b50B+u+AUb7MNUaNqAw+
+   ncoLcLMq5Hs6d4sQD6+Xedm0Am1yArO0KawRaMQIfBjGlaEoaSE5AR5pF
+   YhOm+JS86dQMJKewJcOCad9S3EIi7eAdkj2HMAv7G5LkWMWQaKpIb33j1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="292995231"
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="292995231"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 07:36:53 -0700
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="938346409"
+Received: from alanjaco-mobl3.gar.corp.intel.com (HELO [10.252.44.53]) ([10.252.44.53])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 07:36:51 -0700
+Message-ID: <adfdf06a-e1a3-e47c-a71f-5e5dccef6fd0@linux.intel.com>
+Date:   Thu, 25 Aug 2022 16:24:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH v4] regulator: core: Resolve supply name earlier to
- prevent double-init
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] soundwire: bus: Fix lost UNATTACH when re-enumerating
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Christian_Kohlschu=cc=88tter?= 
-        <christian@kohlschutter.com>, heiko@sntech.de, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        m.reichl@fivetechno.de, robin.murphy@arm.com,
-        vincent.legoll@gmail.com, wens@kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <YwdpOX0xCzYwhjmx@sirena.org.uk>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPKsWRmVeSWpSXmKPExsWy7djP87p3WtmTDf7sU7OY+vAJm8X2Q8/Z
-        LP4/es1q8e1KB5PFpsfXWC0u75rDZnHkfz+jxacH/5ktXh75wWhx8MMTVovja5+xWcyae53N
-        gcdjzbw1jB637tR77Jx1l91j06pONo9Jk3cxeWxeUu+x/do8Zo/Pm+QCOKK4bFJSczLLUov0
-        7RK4MprepBZsFa5o2NfG0sB4nb+LkYNDQsBE4t/S2i5GLg4hgRWMEkcedDNCOF8YJWa9bmDp
-        YuQEcj4zSsyfGQdigzR0XOtggyhazigx79IaJgjnI6NE16EuZpAqXgE7ib0HZ4LZLAKqEqdP
-        9zJBxAUlTs58AjZVVCBZ4tn/xewgtrBArETX9O1gcWYBcYlbT+aD1YsIKEtc/b6XBWQBs8Bl
-        JolXi54xgiTYBAwlut52sYHYnAK6Ev8fLGOGaJaXaN46mxmkQUKgn1PiwM5+Roi7XSSeHT3C
-        AmELS7w6voUdwpaROD25hwUSGPkSf2cYQ4QrJK69XsMMYVtL3Dn3iw2khFlAU2L9Ln2IakeJ
-        nl2sECafxI23ghAH8ElM2jadGSLMK9HRJgQxQ01i1vF1cCsPXrjEPIFRaRZSmMxC8vssJK/M
-        Qli7gJFlFaN4amlxbnpqsWFearlecWJucWleul5yfu4mRmAaO/3v+KcdjHNffdQ7xMjEwXiI
-        UYKDWUmE1+oYS7IQb0piZVVqUX58UWlOavEhRmkOFiVx3uTMDYlCAumJJanZqakFqUUwWSYO
-        TqkGphYNtvhbV/7czFkWmsx5wYBp/ralRwQm2vb9OnT35o/K+EV7spZZfJ9/+7X4rwUH1aUW
-        GHqvcanYU3/p0JKnzgbaKpxik05vOp6VJM0fpfPHt8jjHYeEu+6eq3Pjw/rslq8vFJsrzMnz
-        +WPxWsUTzD6biz5ZdAZkrdxxybu9gu/xlocKz39V+ndV7DL/N1di7v3Lak/t3VWz/33v3sib
-        9CZh+z3pSZteHg8LPCKV8Gue78wyUV+lCcnfufQdvmm6hb8wyfw355w2o2XPjNOqs+bF+Au3
-        TRD7cluvch7X0qlrfd+/8FSPnZzO9yR7XcCKWOHHE/yO7G5dUcr9sME0yF+PUZMx7OTtUPs9
-        J5RqXymxFGckGmoxFxUnAgAFREnM0gMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGIsWRmVeSWpSXmKPExsVy+t/xe7p3WtmTDXpPs1hMffiEzWL7oeds
-        Fv8fvWa1+Halg8li0+NrrBaXd81hszjyv5/R4tOD/8wWL4/8YLQ4+OEJq8Xxtc/YLGbNvc7m
-        wOOxZt4aRo9bd+o9ds66y+6xaVUnm8ekybuYPDYvqffYfm0es8fnTXIBHFF6NkX5pSWpChn5
-        xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GU1vUgu2Clc07GtjaWC8
-        zt/FyMkhIWAi0XGtg62LkYtDSGApo8SpVd/ZIRIyEienNbBC2MISf651QRW9Z5TovQPicHLw
-        CthJ7D04kxnEZhFQlTh9upcJIi4ocXLmExYQW1QgWWLBoaVgtrBArETX9O1gNrOAuMStJ/PB
-        6kUElCWuft8LFb/MJHHxigrEsl4miaYVj8CWsQkYSnS9hVjMKaAr8f/BMmaIBjOJrq1djBC2
-        vETz1tnMExiFZiG5YxaSfbOQtMxC0rKAkWUVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYARv
-        O/Zz8w7Gea8+6h1iZOJgPMQowcGsJMJrdYwlWYg3JbGyKrUoP76oNCe1+BCjKTAwJjJLiSbn
-        A1NIXkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQQHpiSWp2ampBahFMHxMHp1QDk0Pjyx5Oh922
-        rjueWPNdqqm2+2jgF3dd13TP19gvnmVhEsWBnmuN/1RuilOdqpnpMvXlvxUNgs2RB9+4nYh7
-        sqt0bWLNnQieg73zg6Ycs8261f3u/vxvE6aeeSJbVfbb9KrKjN+X187+L9DztznImZ3Z6Y3X
-        5rsvtBsFduiWaP8QODNrydoXGxeU1x/KOGmwd0/+3VST+dEc0nP2PD3rPdtcfMbmUiH2PZEb
-        NkQaWHu7zZj02OtrRpRHpNcvZSmOF2fP3z7c6R9+YjV39MM4902Kt+4GSnSnRriEZi28KsK4
-        Vr9SZIbksXX8mxZbT3v9tyBtrcTFk1+60vceKuN+vObkLed1jGf4b+8QvLZ2R4gSS3FGoqEW
-        c1FxIgDAntcbaQMAAA==
-X-CMS-MailID: 20220825142324eucas1p1cd5c4bbba236542b758269a11a2fb9ab
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220825113251eucas1p247c3d57de823da148ca4790975a4aba8
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220825113251eucas1p247c3d57de823da148ca4790975a4aba8
-References: <YvorNPDQQr2SH/NF@sirena.org.uk>
-        <20220818124646.6005-1-christian@kohlschutter.com>
-        <CGME20220825113251eucas1p247c3d57de823da148ca4790975a4aba8@eucas1p2.samsung.com>
-        <58b92e75-f373-dae7-7031-8abd465bb874@samsung.com>
-        <YwdpOX0xCzYwhjmx@sirena.org.uk>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220825122241.273090-1-rf@opensource.cirrus.com>
+ <20220825122241.273090-4-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220825122241.273090-4-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+Humm, I am struggling a bit more on this patch.
 
-On 25.08.2022 14:21, Mark Brown wrote:
-> On Thu, Aug 25, 2022 at 01:32:50PM +0200, Marek Szyprowski wrote:
->
->> This patch landed recently in linux next as commit 8a866d527ac0
->> ("regulator: core: Resolve supply name earlier to prevent double-init").
->> Unfortunately it breaks booting of Samsung Exynos 5800 based Peach-Pi
->> (arch/arm/boot/dts/exynos5800-peach-pi.dts) and Peach-Pit
->> (arch/arm/boot/dts/exynos5420-peach-pit.dts) Chromebooks. The last
->> message in the kernel log is a message about disabling 'vdd_1v2'
->> regulator. This regulator is not used directly, however it is a supply
->> for other critical regulators.
-> This suggests that supplies are ending up not getting bound.  Could you
-> perhaps add logging to check that we're attempting to resolve the supply
-> (in the
->
->
-> +       if ((rdev->supply_name && !rdev->supply) &&
-> +                       (rdev->constraints->always_on ||
-> +                        rdev->constraints->boot_on)) {
->
-> block)?
+On 8/25/22 14:22, Richard Fitzgerald wrote:
+> Rearrange sdw_handle_slave_status() so that any peripherals
+> on device #0 that are given a device ID are reported as
+> unattached. The ensures that UNATTACH status is not lost.
+> 
+> Handle unenumerated devices first and update the
+> sdw_slave_status array to indicate IDs that must have become
+> UNATTACHED.
+> 
+> Look for UNATTACHED devices after this so we can pick up
+> peripherals that were UNATTACHED in the original PING status
+> and those that were still ATTACHED at the time of the PING but
+> then reverted to unenumerated and were found by
+> sdw_program_device_num().
 
+Are those two cases really lost completely? It's a bit surprising, I do
+recall that we added a recheck on the status, see the 'update_status'
+label in cdns_update_slave_status_work
 
-I've spent a little time debugging this issue and here are my findings. 
-The problem is during the 'vdd_mif' regulator registration. It has one 
-supply called 'inb1' and provided by 'vdd_1v2' regulator. Both 'vdd_mif' 
-and 'vdd_1v2' regulators are provided by the same PMIC.
+> As sdw_update_slave_status() is always processing a snapshot of
+> a PING from some time in the past, it is possible that the status
+> is changing while sdw_update_slave_status() is running.
+> 
+> A peripheral could report attached in the PING, but detach and
+> revert to device #0 and then be found in the loop in
+> sdw_program_device_num(). Previously the code would not have
+> updated slave->status to UNATTACHED because there was never a
+> PING with that status. If the slave->status is not updated to
+> UNATTACHED the next PING will report it as ATTACHED, but its
+> slave->status is already ATTACHED so the re-attach will not be
+> properly handled.
+The idea of detecting first devices that become unattached - and later
+deal with device0 when they re-attach - was based on the fact that
+synchronization takes time. The absolute minimum is 16 frames per the
+SoundWire spec.
 
-The problem is that 'inb1' supply is being routed to dummy regulator 
-after this change. The regulator_resolve_supply(), which is just after 
-the above mentioned check, returns 0 and bounds 'vdd_mif' supply to 
-dummy-regulator. This happens because regulator_dev_lookup() called in 
-regulator_resolve_supply() returns -19, what in turn lets the code to 
-use dummy-regulator. I didn't check why it doesn't return -EPROBE_DEFER 
-in that case yet.
-
-> I'd also note that it's useful to paste the actual error
-> messages you're seeing rather than just a description of them.
-
-There is really nothing more that I can paste here:
-
-[   32.306264] systemd-logind[1375]: New seat seat0.
-[   32.331790] systemd-logind[1375]: Watching system buttons on 
-/dev/input/event1 (gpio-keys)
-[   32.550686] systemd-logind[1375]: Watching system buttons on 
-/dev/input/event0 (cros_ec)
-[   32.570493] systemd-logind[1375]: Failed to start user service, 
-ignoring: Unknown unit: user@0.service
-[   32.750913] systemd-logind[1375]: New session c1 of user root.
-[   35.070357] vdd_1v2:
-
---- EOF ---
+I don't see how testing for the status[0] first in
+sdw_handle_slave_status() helps, the value is taken at the same time as
+status[1..11]. If you really want to take the last information, we
+should re-read the status from a new PING frame.
 
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+> This situations happens fairly frequently with multiple
+> peripherals on a bus that are intentionally reset (for example
+> after downloading firmware).
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> ---
+>  drivers/soundwire/bus.c | 39 ++++++++++++++++++++++++++-------------
+>  1 file changed, 26 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> index bb8ce26c68b3..1212148ac251 100644
+> --- a/drivers/soundwire/bus.c
+> +++ b/drivers/soundwire/bus.c
+> @@ -718,7 +718,8 @@ void sdw_extract_slave_id(struct sdw_bus *bus,
+>  }
+>  EXPORT_SYMBOL(sdw_extract_slave_id);
+>  
+> -static int sdw_program_device_num(struct sdw_bus *bus)
+> +static int sdw_program_device_num(struct sdw_bus *bus,
+> +				  enum sdw_slave_status status[])
+>  {
+>  	u8 buf[SDW_NUM_DEV_ID_REGISTERS] = {0};
+>  	struct sdw_slave *slave, *_s;
+> @@ -776,6 +777,12 @@ static int sdw_program_device_num(struct sdw_bus *bus)
+>  					return ret;
+>  				}
+>  
+> +				/*
+> +				 * It could have dropped off the bus since the
+> +				 * PING response so update the status array.
+> +				 */
+> +				status[slave->dev_num] = SDW_SLAVE_UNATTACHED;
+> +
+>  				break;
+>  			}
+>  		}
+> @@ -1735,10 +1742,21 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
+>  {
+>  	enum sdw_slave_status prev_status;
+>  	struct sdw_slave *slave;
+> +	bool programmed_dev_num = false;
+>  	bool attached_initializing;
+>  	int i, ret = 0;
+>  
+> -	/* first check if any Slaves fell off the bus */
+> +	/* Handle any unenumerated peripherals */
+> +	if (status[0] == SDW_SLAVE_ATTACHED) {
+> +		dev_dbg(bus->dev, "Slave attached, programming device number\n");
+> +		ret = sdw_program_device_num(bus, status);
+> +		if (ret < 0)
+> +			dev_warn(bus->dev, "Slave attach failed: %d\n", ret);
+> +
+> +		programmed_dev_num = true;
+> +	}
+> +
+> +	/* Check if any fell off the bus */
+>  	for (i = 1; i <= SDW_MAX_DEVICES; i++) {
+>  		mutex_lock(&bus->bus_lock);
+>  		if (test_bit(i, bus->assigned) == false) {
+> @@ -1764,17 +1782,12 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
+>  		}
+>  	}
+>  
+> -	if (status[0] == SDW_SLAVE_ATTACHED) {
+> -		dev_dbg(bus->dev, "Slave attached, programming device number\n");
+> -		ret = sdw_program_device_num(bus);
+> -		if (ret < 0)
+> -			dev_err(bus->dev, "Slave attach failed: %d\n", ret);
+> -		/*
+> -		 * programming a device number will have side effects,
+> -		 * so we deal with other devices at a later time
+> -		 */
+> -		return ret;
+> -	}
+> +	/*
+> +	 * programming a device number will have side effects,
+> +	 * so we deal with other devices at a later time
+> +	 */
+> +	if (programmed_dev_num)
+> +		return 0;
+>  
+>  	/* Continue to check other slave statuses */
+>  	for (i = 1; i <= SDW_MAX_DEVICES; i++) {

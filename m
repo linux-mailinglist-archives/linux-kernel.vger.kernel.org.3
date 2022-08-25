@@ -2,125 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F865A18D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C45A5A18D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242278AbiHYSgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S242973AbiHYShG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbiHYSgk (ORCPT
+        with ESMTP id S243071AbiHYSg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:36:40 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1668D3D7;
-        Thu, 25 Aug 2022 11:36:40 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3378303138bso524005777b3.9;
-        Thu, 25 Aug 2022 11:36:40 -0700 (PDT)
+        Thu, 25 Aug 2022 14:36:59 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A4C901BC
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:36:54 -0700 (PDT)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A3CA83F03E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 18:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1661452612;
+        bh=dpAjbusN9yBD9N/QzCXa1x041iuJNs+syZnqbC+IIao=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=EYEce1S2Xh3NG/f2iXGbPdH8B4uD7mjMdTGZUsDiDutNBXrgG8IjFhNyIhcmBfqKH
+         yzb7BSacwLRwP8MYq80ru5deh3tmWvzc7OhJma2+c8L0YPeCkKf2147DdL8/VkergO
+         8hHff57XoRIrGUuDCKP0xeQQ5xDmMilQekI4ICJrz8ex88CkO9NxT+DRinQZBO1OPz
+         azOl+7LEXDbo2RZPip9O77ofUSgPa//ldR0BS7G2PV0TwATtDzZ8ZTwNzitrdCvOpV
+         2CMdc9Z8oBFy39xXV1tlBZepMBdQ3kcY2oll2CBiXAekwEoL5MWT6Wm0VBnmbBUrM7
+         LQdLtat3GvoXg==
+Received: by mail-wm1-f71.google.com with SMTP id f7-20020a1c6a07000000b003a60ede816cso1030063wmc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:36:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FCakrSp9UGKvybYoXqF895/oq5ySorkOlezhX9EwPEg=;
-        b=rzoikXIHKbLuFtnzwVb1eoKB8qaO45XYq3DOzSJCmEtsk/yU410bicBchD0vkA44Tj
-         LTveHuWhipsNtzKcGSIEZFE0Ge+Ehgcmaf5t5SgU6FduM9oomR7ntKLowaS2xJmF9LFm
-         ekr7CFQ+kH3JSfKNhQ988kaxW3wARB9bPQH9LkU7OOvHLWz7cg72ExSlJ0NUaoRyfdlY
-         wRKdLQ2uzWn3W7pC/7IEdfhyi84W1FUPeGSr250SUnF3uEV+i8YEVoPa2bL3ob15XASe
-         om/3oZTk3xcFelBAYeCpsm1+0thy/AFBGzF8EcU5ZCj8QSX4Nleux31LDmjdPbrok/FC
-         NbdQ==
-X-Gm-Message-State: ACgBeo3KYgBHQ9dZtBBGrOryyxvB1wDfzL7uvic+G82ZYrlLEoq0hXfG
-        saLgRg9Uc7sdc4wfLt0iOfgnUW43k01VIOVptsGJGiWNtYY=
-X-Google-Smtp-Source: AA6agR7qrjzZCfEQJFCIMTW3ZXCgJ3VMJsEZa4Oh+bMf1Pj5eSvg4ptSzw9hdH66yc2rat7GUhFsSpCCFg5g96uPoNw=
-X-Received: by 2002:a25:8d84:0:b0:695:836a:fcaf with SMTP id
- o4-20020a258d84000000b00695836afcafmr4391624ybl.633.1661452599139; Thu, 25
- Aug 2022 11:36:39 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=dpAjbusN9yBD9N/QzCXa1x041iuJNs+syZnqbC+IIao=;
+        b=p7Ee/LCx5L232kEPogMIhjik1X/w6CNmy14cqii0Q3N7ikr+H45lNWKbL0gheSRXe/
+         lNlMouok5O9WAX4SxKCGqYCVyPDgAV4e57v6yL8kKx3dCcWlLmHUIbyuwF0iuuLNsePb
+         tsOpdLRKXxcASvDQ++Ot821ir0pjAU4U9PO175E3tbzxNEFnVh2dYNFP63ypPksLf6z/
+         o+ig7XEneAnouE9dJq7t2lXQpiy+0wVD+fJ3M2/Ufcxh8jOqxhSgLHf/UEXKRFggHLA1
+         r0/56OZE5oU8XbfPqUN1AuQ6BAF5qChbD5do0GXX5qygf6j8tJThWzqJnqcXvrw3Mx7A
+         blfQ==
+X-Gm-Message-State: ACgBeo3vJ/5hvEijE/GDz+FVKFfMaRA6cBO81J43guuAYJpByx6AZ4q0
+        sqcwjomKmXGK3N4xOuEeZ0pwcp84R+oRRIvUUsJNPQn57PF69qxdLOOjWYi8EF+pZawxqc2j/2t
+        WGGDYJyug6emdQo/ZxGeA+BJiatX3ewM+UKTIqtTsgA==
+X-Received: by 2002:a05:600c:3d0f:b0:3a5:eece:c061 with SMTP id bh15-20020a05600c3d0f00b003a5eecec061mr3126681wmb.74.1661452612260;
+        Thu, 25 Aug 2022 11:36:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4LuVbPZRwE3Kvu/sLxz4WiXDcnE8lKeB5AJKOBKdr9/2gXIomWNDt5/HMCk1Ye4DwHolXA3w==
+X-Received: by 2002:a05:600c:3d0f:b0:3a5:eece:c061 with SMTP id bh15-20020a05600c3d0f00b003a5eecec061mr3126655wmb.74.1661452611922;
+        Thu, 25 Aug 2022 11:36:51 -0700 (PDT)
+Received: from [192.168.123.94] (ip-084-118-157-002.um23.pools.vodafone-ip.de. [84.118.157.2])
+        by smtp.gmail.com with ESMTPSA id k5-20020a05600c1c8500b003a5f3de6fddsm6392341wms.25.2022.08.25.11.36.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 11:36:51 -0700 (PDT)
+Message-ID: <5f00ab85-d5ac-728d-2157-e70f2a46cc90@canonical.com>
+Date:   Thu, 25 Aug 2022 20:36:49 +0200
 MIME-Version: 1.0
-References: <5607133.DvuYhMxLoT@kreacher> <ecb5a2dd-47b2-e5e1-5254-42bd5d018578@amd.com>
- <CAJZ5v0in-me017RoR8yRMMXmbBofr6u9o2_WMGh38cpiy3cG3w@mail.gmail.com> <54e439c8-7390-be01-66b2-5692af571d1b@amd.com>
-In-Reply-To: <54e439c8-7390-be01-66b2-5692af571d1b@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 25 Aug 2022 20:36:28 +0200
-Message-ID: <CAJZ5v0g0ZmkbKCxTg3DZZ-BJTuazH3zrfUsJmCun6GAhJywqrw@mail.gmail.com>
-Subject: Re: [PATCH v2] ata: ahci: Do not check ACPI_FADT_LOW_POWER_S0
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/2] dt-bindings: riscv: sifive-l2: add a PolarFire SoC
+ compatible
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Sagar Kadam <sagar.kadam@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <mail@conchuod.ie>
+References: <20220825180417.1259360-1-mail@conchuod.ie>
+ <20220825180417.1259360-2-mail@conchuod.ie>
+Content-Language: en-US
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <20220825180417.1259360-2-mail@conchuod.ie>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 8:29 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
-> On 8/25/2022 13:26, Rafael J. Wysocki wrote:
-> > On Thu, Aug 25, 2022 at 8:17 PM Limonciello, Mario
-> > <mario.limonciello@amd.com> wrote:
-> >>
-> >> On 8/25/2022 13:01, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> The ACPI_FADT_LOW_POWER_S0 flag merely means that it is better to
-> >>> use low-power S0 idle on the given platform than S3 (provided that
-> >>> the latter is supported) and it doesn't preclude using either of
-> >>> them (which of them will be used depends on the choices made by user
-> >>> space).
-> >>>
-> >>> For this reason, there is no benefit from checking that flag in
-> >>> ahci_update_initial_lpm_policy().
-> >>>
-> >>> First off, it cannot be a bug to do S3 with policy set to either
-> >>> ATA_LPM_MIN_POWER_WITH_PARTIAL or ATA_LPM_MIN_POWER, because S3 can be
-> >>> used on systems with ACPI_FADT_LOW_POWER_S0 set and it must work if
-> >>> really supported, so the ACPI_FADT_LOW_POWER_S0 check is not needed to
-> >>> protect the S3-capable systems from failing.
-> >>>
-> >>> Second, suspend-to-idle can be carried out on a system with
-> >>> ACPI_FADT_LOW_POWER_S0 unset and it is expected to work, so if setting
-> >>> policy to either ATA_LPM_MIN_POWER_WITH_PARTIAL or ATA_LPM_MIN_POWER is
-> >>> needed to handle that case correctly, it should be done regardless of
-> >>> the ACPI_FADT_LOW_POWER_S0 value.
-> >>>
-> >>> Accordingly, drop the ACPI_FADT_LOW_POWER_S0 check from
-> >>> ahci_update_initial_lpm_policy() along with the CONFIG_ACPI #ifdef
-> >>> around it that is not necessary any more.
-> >>
-> >> Looking at the source commit for this behavior:
-> >>
-> >> b1a9585cc396 ("ata: ahci: Enable DEVSLP by default on x86 with SLP_S0")
-> >>
-> >> It was trying to set a policy tied to when the system is defaulting to
-> >> suspend to idle.
-> >>
-> >> To try to match the spirit of the original request but not tying it to
-> >> the FADT, how about using pm_suspend_default_s2idle()?
-> >
-> > The user can switch to "default S3" later anyway, so this wouldn't
-> > help more than the check being dropped.
->
-> Right, they could also change LPM policy to different policy later too
-> if they want.
+On 8/25/22 20:04, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The l2 cache on PolarFire SoC is cross between that of the fu540 and
+> the fu740. It has the extra interrupt from the fu740 but the lower
+> number of cache-sets. Add a specific compatible to avoid the likes
+> of:
+> 
+> mpfs-polarberry.dtb: cache-controller@2010000: interrupts: [[1], [3], [4], [2]] is too long
 
-Exactly.
+Where is such a message written? I couldn't find the string in 
+next-20220825 (git grep -n 'is too long"').
 
-> This is just for setting up default policy.  I think if you matched to
-> only when pm_suspend_default_s2idle() it would be the least likelihood
-> to change this default policy on unsuspecting people upgrading.
+Why should a different number of cache sets require an extra compatible 
+string. cache-size is simply a parameter going with the existing 
+compatible strings.
 
-The only case where it matters is systems doing S3 by default that
-would end up enabling DEVSLP.  Would that confuse the BIOSes on them?
-Maybe, but I think that S3 with DEVSLP enabled is generally expected
-to work.
+I would assume that you only need an extra compatible string if there is 
+a functional difference that can not be expressed with the existing 
+parameters.
 
-Anyway, I'm not religious about this, so I'll send a v3.
+> 
+> Fixes: 34fc9cc3aebe ("riscv: dts: microchip: correct L2 cache interrupts")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>   .../bindings/riscv/sifive-l2-cache.yaml       | 79 ++++++++++++-------
+>   1 file changed, 49 insertions(+), 30 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> index 69cdab18d629..ca3b9be58058 100644
+> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> @@ -17,9 +17,6 @@ description:
+>     acts as directory-based coherency manager.
+>     All the properties in ePAPR/DeviceTree specification applies for this platform.
+>   
+> -allOf:
+> -  - $ref: /schemas/cache-controller.yaml#
+> -
+>   select:
+>     properties:
+>       compatible:
+> @@ -33,11 +30,16 @@ select:
+>   
+>   properties:
+>     compatible:
+> -    items:
+> -      - enum:
+> -          - sifive,fu540-c000-ccache
+> -          - sifive,fu740-c000-ccache
+
+Why can't you simply add microchip,mpfs-ccache here?
+
+> -      - const: cache
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - sifive,fu540-c000-ccache
+> +              - sifive,fu740-c000-ccache
+> +          - const: cache
+> +      - items:
+> +          - const: microchip,mpfs-ccache
+> +          - const: sifive,fu540-c000-ccache
+
+Why do we need 'sifive,fu540-c000-ccache' twice?
+
+Best regards
+
+Heinrich
+
+> +          - const: cache
+>   
+>     cache-block-size:
+>       const: 64
+> @@ -72,29 +74,46 @@ properties:
+>         The reference to the reserved-memory for the L2 Loosely Integrated Memory region.
+>         The reserved memory node should be defined as per the bindings in reserved-memory.txt.
+>   
+> -if:
+> -  properties:
+> -    compatible:
+> -      contains:
+> -        const: sifive,fu540-c000-ccache
+> +allOf:
+> +  - $ref: /schemas/cache-controller.yaml#
+>   
+> -then:
+> -  properties:
+> -    interrupts:
+> -      description: |
+> -        Must contain entries for DirError, DataError and DataFail signals.
+> -      maxItems: 3
+> -    cache-sets:
+> -      const: 1024
+> -
+> -else:
+> -  properties:
+> -    interrupts:
+> -      description: |
+> -        Must contain entries for DirError, DataError, DataFail, DirFail signals.
+> -      minItems: 4
+> -    cache-sets:
+> -      const: 2048
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - sifive,fu740-c000-ccache
+> +              - microchip,mpfs-ccache
+> +
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          description: |
+> +            Must contain entries for DirError, DataError, DataFail, DirFail signals.
+> +          minItems: 4
+> +
+> +    else:
+> +      properties:
+> +        interrupts:
+> +          description: |
+> +            Must contain entries for DirError, DataError and DataFail signals.
+> +          maxItems: 3
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: sifive,fu740-c000-ccache
+> +
+> +    then:
+> +      properties:
+> +        cache-sets:
+> +          const: 2048
+> +
+> +    else:
+> +      properties:
+> +        cache-sets:
+> +          const: 1024
+>   
+>   additionalProperties: false
+>   

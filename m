@@ -2,127 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D935A0ACC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0795A0ACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbiHYHx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S237444AbiHYHzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiHYHxo (ORCPT
+        with ESMTP id S229592AbiHYHzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:53:44 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36DE9E8B6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:53:43 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z8so4396436edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Lc3v8hBHsCf49bYVex16KFSKbVG0hlFgO3dkVBUtLng=;
-        b=e6L6q0BJUH+0W1pJctd5mNfbN9fET2DENNXVuhELy/kF0phr1KgPmbFrEL6S4XysGM
-         ENOkFXDnlTf0HOOXyds250s4+e1nZ2S5t+l5rV5GknHKbwpwF6O1m1hlgSlTqwKshIfX
-         qN5WrWKcNdQUeCq47fNrJljeHZ8YDMoqz900JcLJAUW0RDTMCs7DXcu6ob3YpWHQN5pj
-         MxgcRgZFdqYKrj/le87dmCMrQZsXfgZvKns67C1hqEKSmcZ6LvTmBnZvphVn7aebsrBe
-         XwkKOEgJUO8H/YDCOF7FaMrBMN/aSMBZ/ZivCIvOjBrywuiGm3PrCtSNjj6DwGlKw0cU
-         MW7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Lc3v8hBHsCf49bYVex16KFSKbVG0hlFgO3dkVBUtLng=;
-        b=56r/gccZ1nHTYGnYh907vqGEGBeo32v8GVFPEtFcZditMXMQJovWO/0k0zUa4CgIIS
-         b1cEp/KzXT8f1Yfk9yqD1hVr5usw49YjTH41+L0kzQKBxz8m4SczWh+/UaZhaluN0n+T
-         /0S4eW5GCv0hlHb9QF0/TOBzUE2+LmZxcFOcOH9NZuZMKv6l4iP5NN2aS1W/8oY6RgoH
-         U09wE5uaS84hAFn2KqQ1B0z2cZPDetpeF8iEenUaj+Wj1av1XbWhrgfrCQAM7s6LY9f1
-         gFIHjrXt0wAkrSVHYZ+euuIuQI/kSx+AsNwKtXInWhMpJ+pFgZoVvsVsimmBEQWCS1R2
-         zYsg==
-X-Gm-Message-State: ACgBeo3KNZFpoZbxLK3d3pwwY1A74lkZ4qoLVT4uilXpJpWNPq9lreaB
-        tVifW9vRD8sLHPig2b9Ql7a44g==
-X-Google-Smtp-Source: AA6agR6Wb3bI3r2PWMumq/hRNZ1lgycNJckeEnHdbCXKdsWIg069biDuqP8AkDqmL9yidwsSFdF9nQ==
-X-Received: by 2002:aa7:cc97:0:b0:445:afab:2634 with SMTP id p23-20020aa7cc97000000b00445afab2634mr2190277edt.54.1661414022265;
-        Thu, 25 Aug 2022 00:53:42 -0700 (PDT)
-Received: from lb02065.fritz.box ([2001:9e8:142d:a900:eab:b5b1:a064:1d0d])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170906b09600b0073dbfd33a8dsm1491736ejy.21.2022.08.25.00.53.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 00:53:41 -0700 (PDT)
-From:   Jack Wang <jinpu.wang@ionos.com>
-To:     miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mtd: rawnand: marvell: Fix error handle regarding dma_map_sg
-Date:   Thu, 25 Aug 2022 09:53:38 +0200
-Message-Id: <20220825075338.35338-3-jinpu.wang@ionos.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220825075338.35338-1-jinpu.wang@ionos.com>
-References: <20220825075338.35338-1-jinpu.wang@ionos.com>
+        Thu, 25 Aug 2022 03:55:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D495FCB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:54:53 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B91A71EC05DE;
+        Thu, 25 Aug 2022 09:54:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661414091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=UGRq4akNUG59xkhRh7o3k1+G/F+GgEUlb+NCJhtY/0U=;
+        b=qPZKoaJpGAb3SYeJlG33++UcEWLxXSSE2I21kPG8ShV3V7lT2yPEIowEA5iYXwSNmMFMFX
+        OaEQsDpI+u6g6LzSTbPIyO/Q0A3s3TxqmjsaPXfRPYnpYUiza1ZmjCtsI2oTWKvipFJv74
+        UaJwq+2ZZvLzrUSYG/DBkdSeA3IFON8=
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/microcode: Remove ->request_microcode_user()
+Date:   Thu, 25 Aug 2022 09:54:45 +0200
+Message-Id: <20220825075445.28171-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_map_sg return 0 on error, in case of error return -ENXIO,
-also add the dma_unmap_sg as rollback on the following error.
+From: Borislav Petkov <bp@suse.de>
 
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Christophe Kerello <christophe.kerello@foss.st.com>
-Cc: Cai Huoqing <cai.huoqing@linux.dev>
-Cc: linux-mtd@lists.infradead.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Fixes: 02f26ecf8c77 ("mtd: nand: add reworked Marvell NAND controller driver")
-Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+  181b6f40e9ea ("x86/microcode: Rip out the OLD_INTERFACE")
+
+removed the old microcode loading interface but forgot to remove the
+related ->request_microcode_user() functionality which it uses.
+
+Rip it out now too.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- drivers/mtd/nand/raw/marvell_nand.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/microcode.h      |  3 ---
+ arch/x86/kernel/cpu/microcode/amd.c   |  7 -------
+ arch/x86/kernel/cpu/microcode/intel.c | 17 -----------------
+ 3 files changed, 27 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw/marvell_nand.c
-index 2455a581fd70..d9f2f1d0b5ef 100644
---- a/drivers/mtd/nand/raw/marvell_nand.c
-+++ b/drivers/mtd/nand/raw/marvell_nand.c
-@@ -865,13 +865,19 @@ static int marvell_nfc_xfer_data_dma(struct marvell_nfc *nfc,
- 	marvell_nfc_enable_dma(nfc);
- 	/* Prepare the DMA transfer */
- 	sg_init_one(&sg, nfc->dma_buf, dma_len);
--	dma_map_sg(nfc->dma_chan->device->dev, &sg, 1, direction);
-+	ret = dma_map_sg(nfc->dma_chan->device->dev, &sg, 1, direction);
-+	if (!ret) {
-+		dev_err(nfc->dev, "Could not map DMA S/G list\n");
-+		return -ENXIO;
-+	}
-+
- 	tx = dmaengine_prep_slave_sg(nfc->dma_chan, &sg, 1,
- 				     direction == DMA_FROM_DEVICE ?
- 				     DMA_DEV_TO_MEM : DMA_MEM_TO_DEV,
- 				     DMA_PREP_INTERRUPT);
- 	if (!tx) {
- 		dev_err(nfc->dev, "Could not prepare DMA S/G list\n");
-+		dma_unmap_sg(nfc->dma_chan->device->dev, &sg, 1, direction);
- 		return -ENXIO;
- 	}
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index 0c3d3440fe27..7f7800e15ed0 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -32,9 +32,6 @@ enum ucode_state {
+ };
  
+ struct microcode_ops {
+-	enum ucode_state (*request_microcode_user) (int cpu,
+-				const void __user *buf, size_t size);
+-
+ 	enum ucode_state (*request_microcode_fw) (int cpu, struct device *,
+ 						  bool refresh_fw);
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 8b2fcdfa6d31..5f38dd75cbc5 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -924,12 +924,6 @@ static enum ucode_state request_microcode_amd(int cpu, struct device *device,
+ 	return ret;
+ }
+ 
+-static enum ucode_state
+-request_microcode_user(int cpu, const void __user *buf, size_t size)
+-{
+-	return UCODE_ERROR;
+-}
+-
+ static void microcode_fini_cpu_amd(int cpu)
+ {
+ 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+@@ -938,7 +932,6 @@ static void microcode_fini_cpu_amd(int cpu)
+ }
+ 
+ static struct microcode_ops microcode_amd_ops = {
+-	.request_microcode_user           = request_microcode_user,
+ 	.request_microcode_fw             = request_microcode_amd,
+ 	.collect_cpu_info                 = collect_cpu_info_amd,
+ 	.apply_microcode                  = apply_microcode_amd,
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index 025c8f0cd948..1fcbd671f1df 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -916,24 +916,7 @@ static enum ucode_state request_microcode_fw(int cpu, struct device *device,
+ 	return ret;
+ }
+ 
+-static enum ucode_state
+-request_microcode_user(int cpu, const void __user *buf, size_t size)
+-{
+-	struct iov_iter iter;
+-	struct iovec iov;
+-
+-	if (is_blacklisted(cpu))
+-		return UCODE_NFOUND;
+-
+-	iov.iov_base = (void __user *)buf;
+-	iov.iov_len = size;
+-	iov_iter_init(&iter, WRITE, &iov, 1, size);
+-
+-	return generic_load_microcode(cpu, &iter);
+-}
+-
+ static struct microcode_ops microcode_intel_ops = {
+-	.request_microcode_user		  = request_microcode_user,
+ 	.request_microcode_fw             = request_microcode_fw,
+ 	.collect_cpu_info                 = collect_cpu_info,
+ 	.apply_microcode                  = apply_microcode_intel,
 -- 
-2.34.1
+2.35.1
 

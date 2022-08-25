@@ -2,128 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71C45A127B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D9B5A127E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240431AbiHYNj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S241172AbiHYNjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbiHYNjZ (ORCPT
+        with ESMTP id S240817AbiHYNjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:39:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C625B56FD
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:39:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E53232073D;
-        Thu, 25 Aug 2022 13:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661434760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2azcP9tPZvQFnWr+B5701VWdlvj+WXIa4/SiL59J3Gc=;
-        b=JVhxdBDZ8ECfBxGpsf1qS6JkalqzAoKaChz7p8wmqF60cq6cDhxExtUodo7EAN5uD7nWux
-        hHez746eEQmgs6aQFkb3+M8Kl2KzB2NW5U3AcvkJE/f8QZC30NtnBcZukrheGc0ExNuAiN
-        JaAt1ksz+1DJ5kNMHt+csMJaJcuG/3Y=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 24E082C141;
-        Thu, 25 Aug 2022 13:39:20 +0000 (UTC)
-Date:   Thu, 25 Aug 2022 15:39:19 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ying.huang@intel.com, dave.hansen@intel.com,
-        Jonathan.Cameron@huawei.com, adobriyan@gmail.com,
-        akpm@linux-foundation.org, rf@opensource.cirrus.com,
-        will@kernel.org
-Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
- kstrtobool()
-Message-ID: <Ywd7h68eYwGDYBtJ@alley>
-References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
- <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com>
- <Yt605xj898VSAsA3@casper.infradead.org>
- <YuPwLq+D8k53GZa3@smile.fi.intel.com>
- <YuPwgmHbcQYsA4Kp@smile.fi.intel.com>
+        Thu, 25 Aug 2022 09:39:51 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CC2124
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:39:45 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id F18DC5802D2;
+        Thu, 25 Aug 2022 09:39:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 25 Aug 2022 09:39:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661434781; x=1661441981; bh=xufXNQfWsW
+        5YMPwr77PxDXziEf7hBPLQzvXQIo3+2+Y=; b=KRY3ZJmLUrz8S7afTCwjV+6oVP
+        hTtlebvUk7hjY/8s8PwqdJ3R9Z0EwogT5IbBAVEgOBSZdEtrSbrxTFN7gEX61ztq
+        cidK+o2bTLG8i+LOdAXUqS1tE4UryHbuz7CY1fbrzvsuPUUomb5r1A6txmAcTMpW
+        dWs/kEzOME+WWG3iOdu/czo1E7VQBI0qFo5hTRu9UBxucz43OTruG8RdlfPshahK
+        fsPYnLq/KywCkzc9uQgpaQxoFy5bDDDUOeTEipfnBiFLR4EXkGr2YTU4v/7UBKXG
+        U6S9ryjKeoVFgO2SKJbMuuVo7c3bXNgvxwVvGAw5Ly9kTCz1DWnyeEycm7ag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661434781; x=1661441981; bh=xufXNQfWsW5YMPwr77PxDXziEf7h
+        BPLQzvXQIo3+2+Y=; b=RZH4Z4XZhMW0HQ0yV+K9lv2Xk6n+odMvjRg4xiem1unP
+        y44V2lmeJSbc3J3Yf/Z58mYGcwKGkz/x4S0mRomdYq+JMe0Klp6+OpSo0D5oWp2g
+        yQBPMbNY+RMZRW1tyrMPJp4zn+JFk4xCfVCdZVQMLnj0zMjU881wkyt0XZbxtxoM
+        Sord2tDZWNYw4fXxTms0I7824hrZwosPGAWDWMDy+CU6/PRuutKgEcAMD5yU+pwR
+        gq41cv3QRCbf+fp64eaTAAk32G7yPKeAyTtApBqz5HJWboB/D/pnpALfx4V6lIz2
+        zItw1gBXht3MnRipo0H1OztZu77gosZPc9GL6fkmIA==
+X-ME-Sender: <xms:nHsHY5s2vftPC2fJhSn4gpJtwz4fOESWnfOfu07gKIx-GB--5tQHqA>
+    <xme:nHsHYyeeeTdDs9LacFBL_0S0SJboXaCpM-VBAeeXrSBiih5JMqSA-JsmCM3J1mag1
+    6rd_v4k66_nMEfdVoA>
+X-ME-Received: <xmr:nHsHY8y4M3jNYujUgbrqOFMIk7kslWNaitxFL2XvYpnemhsJeoz8sG8zazo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:nHsHYwNjAC9XUpKy3wxGujpnkTEOCb1wnSjXt5yLrjifYdyxOwQ0ew>
+    <xmx:nHsHY5-eJnmHvThPIanhcforvzimJwOeDcU_e3GqzdNq3AhAHYe5pQ>
+    <xmx:nHsHYwUAb-WC1XeDLe00NVdGozPbgF-GEgHoL__q6yTSs6zm03lKGg>
+    <xmx:nXsHY1u6EAo8Vb9fzDWEOXCOGN4Su2VXt3qFk_It84MuFO_R8OQELw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 25 Aug 2022 09:39:39 -0400 (EDT)
+Date:   Thu, 25 Aug 2022 15:39:36 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+Message-ID: <20220825133936.gnpgdtx4jedei5a6@houat>
+References: <20220817074710.w4c4xwj7edly2b5p@houat>
+ <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
+ <20220817111454.pn2iltvyo2drebq7@houat>
+ <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
+ <20220817131854.jwmhqvhfhp77bbr3@houat>
+ <CAMuHMdXrfH9MArXesfNCvqayiq17u7XaqtSvXTNt4V10=obSHQ@mail.gmail.com>
+ <20220818145436.vqojnhmvhjxdzooe@houat>
+ <CAMuHMdW5kTUeg59fym7QxfN5oisTZHWbiAPeSYKJVShZWduJcA@mail.gmail.com>
+ <20220818153442.u4knumkfbe7j6zj3@houat>
+ <CAMuHMdUNYErf4PJLbSFFdB1EhvzbscqxHE74FnsjYQXLy8DLZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="abetw7tfzbu2b4iz"
 Content-Disposition: inline
-In-Reply-To: <YuPwgmHbcQYsA4Kp@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMuHMdUNYErf4PJLbSFFdB1EhvzbscqxHE74FnsjYQXLy8DLZA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-07-29 17:36:50, Andy Shevchenko wrote:
-> On Fri, Jul 29, 2022 at 05:35:26PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 25, 2022 at 04:21:11PM +0100, Matthew Wilcox wrote:
-> > > On Mon, Jul 25, 2022 at 03:55:27PM +0100, Mark Rutland wrote:
-> > > > On Tue, Apr 26, 2022 at 11:32:02PM +0530, Jagdish Gediya wrote:
-> > > > > At many places in kernel, It is necessary to convert sysfs input
-> > > > > to corrosponding bool value e.g. "false" or "0" need to be converted
-> > > > > to bool false, "true" or "1" need to be converted to bool true,
-> > > > > places where such conversion is needed currently check the input
-> > > > > string manually, kstrtobool() can be utilized at such places but
-> > > > > currently it doesn't have support to accept "false"/"true".
-> > > > > 
-> > > > > Add support to accept "false"/"true" as valid string in kstrtobool().
-> > > > > 
-> > > > > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> > > > > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > > 
-> > > > I've just spotted that this broke arm64's "rodata=full" command line option,
 
-The problem still seems to be in mainline.
+--abetw7tfzbu2b4iz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
 
-> > > That isn't a documented option.
-> > > 
-> > >         rodata=         [KNL]
-> > >                 on      Mark read-only kernel memory as read-only (default).
-> > >                 off     Leave read-only kernel memory writable for debugging.
-> > > 
-> > > Hopefully this is an object lesson in why you need to update the
-> > > documentation when you extend a feature.
-> > > 
-> > > > since "full" gets parsed as 'f' = FALSE, when previously that would have been
-> > > > rejected. So anyone passing "rodata=full" on the command line will have rodata
-> > > > disabled, which is not what they wanted.
-> > > > 
-> > > > The current state of things is a bit messy (we prase the option twice because
-> > > > arch code needs it early), and we can probably fix that with some refactoring,
-> > > > but I do wonder if we actually want to open up the sysfs parsing to accept
-> > > > anything *beginning* with [tTfF] rather than the full "true" and "false"
-> > > > strings as previously, or whether it's worth reverting this for now in case
-> > > > anything else is affected.
-> > > 
-> > > Well, that's going to break people who've started using the new option.
-> > > As a quick fix, how about only allowing either "f\0" or "fa"?
-> > 
-> > I think we need to be more strict in kstrtobool(), i.e. 'f\0' ('t\0') and 'fal'
-> > ('tru') perhaps?
-> 
-> Actually kstrtobool() has been designed as a generic parser that should have
-> lowest priority. It means that the code that uses it should take care of any
-> other custom cases _before_ calling for kstrtobool().
+On Fri, Aug 19, 2022 at 11:35:42AM +0200, Geert Uytterhoeven wrote:
+> On Thu, Aug 18, 2022 at 5:34 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Thu, Aug 18, 2022 at 05:20:42PM +0200, Geert Uytterhoeven wrote:
+> > > On Thu, Aug 18, 2022 at 4:54 PM Maxime Ripard <maxime@cerno.tech> wro=
+te:
+> > > > On Wed, Aug 17, 2022 at 04:04:24PM +0200, Geert Uytterhoeven wrote:
+> > > > > On Wed, Aug 17, 2022 at 3:19 PM Maxime Ripard <maxime@cerno.tech>=
+ wrote:
+> > > > > > On Wed, Aug 17, 2022 at 03:05:52PM +0200, Geert Uytterhoeven wr=
+ote:
+> > > > > > > On Wed, Aug 17, 2022 at 1:15 PM Maxime Ripard <maxime@cerno.t=
+ech> wrote:
+> > > > > > > > On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeve=
+n wrote:
+> > > > > > > > > On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cer=
+no.tech> wrote:
+> > > > > > > > > > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterh=
+oeven wrote:
+> > > > > > > > > > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime=
+@cerno.tech> wrote:
+> > > > > > > > > > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uyt=
+terhoeven wrote:
+> > > > > > > > > > > > > > > > > Either you have to add them here (e.g. "h=
+d720p50" and "hd720p60"), or
+> > > > > > > > > > > > > > > > > handle them through "@<refresh>".  The la=
+tter would impact "[PATCH v1
+> > > > > > > > > > > > > > > > > 09/35] drm/modes: Move named modes parsin=
+g to a separate function", as
+> > > > > > > > > > > > > > > > > currently a named mode and a refresh rate=
+ can't be specified both.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > I think the former would make more sense. I=
+t simplifies a bit the
+> > > > > > > > > > > > > > > > parser, and we're going to use a named mode=
+ anyway.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce=
+ the tv_mode property as a
+> > > > > > > > > > > > > > > > > command-line option" uses a separate "tv_=
+mode" option, and not the main
+> > > > > > > > > > > > > > > > > mode name, I think you want to add them h=
+ere.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > It's a separate story I think, we could hav=
+e a named mode hd720p50,
+> > > > > > > > > > > > > > > > which would be equivalent to 1280x720,tv_mo=
+de=3Dhd720p
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > So where's the field rate in "1280x720,tv_mod=
+e=3Dhd720p"?
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Above you said "I think the former would make mor=
+e sense", so that
+> > > > > > > > > > > > > should be "1280x720,tv_mode=3Dhd720p50"?
+> > > > > > > > > > > >
+> > > > > > > > > > > > No, 720p at 50Hz would be either hd720p50 or 1280x7=
+20@50,tv_mode=3Dhd720p
+> > > > > > > > > > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=
+=3Dhd720p
+> > > > > > > > > > >
+> > > > > > > > > > > I disagree: hd720p50 and hd720p60 are different TV mo=
+des.
+> > > > > > > > > >
+> > > > > > > > > > I agree, and I don't see how that command-line doesn't =
+express that?
+> > > > > > > > >
+> > > > > > > > > Oh, I see what you mean: yes, it expresses that.
+> > > > > > > > > But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576=
+}[ip] modes,
+> > > > > > > > > where the TV mode specifies both number of lines and fram=
+e rate.
+> > > > > > > >
+> > > > > > > > Only if we're using a named mode, and naming is hard :)
+> > > > > > >
+> > > > > > > That's not true: "640x480,tv_mode=3DPAL-N" would give me a mo=
+de with
+> > > > > > > 625 lines and 25 frames/s, "640x480,tv_mode=3DPAL-M" would gi=
+ve me a
+> > > > > > > mode with 525 lines and 30 frames/s.
+> > > > > >
+> > > > > > In that series, "640x480,tv_mode=3DPAL-N" would be rejected as =
+invalid:
+> > > > > >
+> > > > > > https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-proper=
+ties-v1-14-3d53ae722097@cerno.tech/
+> > > > >
+> > > > > It would become supported once the ideas from thread "[PATCH v1 0=
+4/35]
+> > > > > drm/modes: Introduce 480i and 576i modes" are implemented...
+> > > >
+> > > > Indeed, but I'm still not sure what your concern is here.
+> > > > "640x480,tv_mode=3DPAL-N" and "640x480,tv_mode=3DPAL-M" are both fa=
+irly
+> > > > obvious.
+> > > >
+> > > > You were initially saying that you had concern over the inconsisten=
+cy of
+> > > > NTSC/PAL/SECAM where the TV mode would specify a number of lines and
+> > > > frame rate, but hd720p50 also specifies a number of line and frame =
+rate?
+> > >
+> > > My concern is that you want to call the TV mode "hd720p", which
+> > > does not dictate the frame rate.
+> > > I would like to have both "720p50" and "720p60", as they do dictate
+> > > the frame rate, like all the non-hd modes.
+> >
+> > But they don't?
+> >
+> > The refresh rate is part of the drm_display_mode, whereas that property
+> > is metadata and entirely separate from the display mode.
+> >
+> > You can even change it without changing the mode at all
+>=20
+> Yes, the refresh rate is part of drm_display_mode.  Vdisplay also
+> is, but that doesn't mean you can set it to e.g. 700 when using
+> "tv_mode=3DPAL-B". Some (combination of) parameters in drm_display_mode
+> are dictated by the tv_mode.
 
-Makes sense.
+But the opposite is also true: PAL-B and SECAM-B would be two different
+TV mode, but (could) have the same display mode.
 
-Jagdish, could you please send a patch fixing the "rodata" early_param
-in arch/arm64/mm/mmu.c?
+There's no equivalence or implication in that relationship, except for a
+smaller set of those parameters. But it's the entire display mode that
+we should compare.
 
-Please, also add:
+> Perhaps the meaning of "tv_mode" should be clarified? What does it
+> really mean, and what parameters does it (not) constrain?
 
-Cc: stable@vger.kernel.org # v5.19+
+As far as I'm concerned, it's only about the encoding. We can check
+after the fact that, say, you don't try to use a mode line with than 525
+lines and some NTSC variant, but the mode has precedence over the
+property.
 
-Best Regards,
-Petr
+> For e.g. "PAL-B", I know it's a mode with 625 lines and 30 frames/s
+> (60 fields/s).
+> For "hd720p" I know it is an analog mode with 750 lines, but it's still
+> ambiguous, as I don't know if it is the variant with 60 or 50 frames/s.
+
+As far as the TV mode property is concerned, it doesn't encode neither
+whether it has 750 lines, nor the refresh rate.
+
+If you're talking about a named mode, then yeah, it's basically an alias
+for a mode + a property, so it does, but we can choose names that aren't
+ambiguous.
+
+Maxime
+
+--abetw7tfzbu2b4iz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwd7mAAKCRDj7w1vZxhR
+xZkBAQDrEXnDTiQIDw7WVDdGrymHTzA68O6aoUE0nXlp+5E0EAEAzwBa5cUcNh9j
+iMwk3ETvnvqMbV5kyg5f+gPHMuMLswM=
+=NZmB
+-----END PGP SIGNATURE-----
+
+--abetw7tfzbu2b4iz--

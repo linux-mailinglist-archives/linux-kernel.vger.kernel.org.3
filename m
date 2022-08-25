@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27715A15D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1216A5A15D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241571AbiHYPbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S242740AbiHYPcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242796AbiHYP3x (ORCPT
+        with ESMTP id S242851AbiHYPbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:29:53 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025ECB95A1;
-        Thu, 25 Aug 2022 08:29:36 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id io24so5540862plb.1;
-        Thu, 25 Aug 2022 08:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=ewFbyp/lEsLvlG4TjMvq7Ikhvy1ZiAGlWqCLdwgjxKs=;
-        b=g84h4UQX+xvvGdoUL8ImfNq0/pE3tXzBR9dVZcyAZjKfVblPrkWIDpmVIQtKfrugfa
-         gpnInJhJJQuGvxmhizjI89lFgRIezB0X/ubNaVh6+A7Qv1/y4pIkj3jjXxIoj2RrIupF
-         dOEpxcxh8idHqX8Jf389xt2xIwuWSUTXM/dEixgh0Im3CSq2bMY8Ytj/sLAh9kjdosUH
-         hLl7WYlTLCYigVqVWSYMrDSVTtAfVOlGQY3qxmHUcHJHgjF+tPFI1pNn7LPI+QMxrVH/
-         LJFQ4CgUx/8mA1yebmgW4bSNxPV7v2XhCb/xzcnkm4NLjUlrPz2v6fxpX8E736aSI5Ac
-         +r6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=ewFbyp/lEsLvlG4TjMvq7Ikhvy1ZiAGlWqCLdwgjxKs=;
-        b=TCQm53tBxhuhYWqd6jYT+zmmVomJdGCIcCm8inNimZ0XBE5iCCf5JDoWL+H3y8PjK7
-         j0oQKdLXjNZxwvq5++qmVfbDDkV1jU5UjwYovDF5sjmETthYduTT2xPPDf+2Uk+x+eV/
-         1Ky64YMrrUZK+8RhUjV6XbFc845aFSlz5IPCZ1TXhrfcT730tBC/Yq+3pVzo+Vl6Oayb
-         7+n0o5dwDCBHzXCmRlRSt1n6eYjR7or6dU5kCMzJyVIh5MAXe4V72gIIYvIW9oCXjHNb
-         BcXyBOxcRA9COVIdb+G4ykuJ4oZJ3mIaO+Jrj5wbvqEnh1pXsbN154FKHn3QxX1MpLjn
-         wY2w==
-X-Gm-Message-State: ACgBeo0rGy9Lp3Lnv0jX+wxE6u7NT+ASN4KnK6Ri+/toQpuJMSNEVMKa
-        wf2U4yUttJQwVoD0abgLEqk=
-X-Google-Smtp-Source: AA6agR6WgxCS52ceVEttDm2ihvYC5kWHgJO2Uted6ZyV0VQPo6LIY0FJES41I/5wFZ7dFxgYg14J5Q==
-X-Received: by 2002:a17:90b:1bc6:b0:1f5:313a:de4b with SMTP id oa6-20020a17090b1bc600b001f5313ade4bmr14548108pjb.4.1661441376500;
-        Thu, 25 Aug 2022 08:29:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m38-20020a634c66000000b0042b4d55a6e9sm1516171pgl.37.2022.08.25.08.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 08:29:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 25 Aug 2022 08:29:34 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] Documentation: devicetree: update bindings for
- tps23861
-Message-ID: <20220825152934.GA1439919@roeck-us.net>
-References: <20220825143737.77732-1-dev@aboehler.at>
- <20220825150236.GB240395@roeck-us.net>
- <CA+HBbNEEvyn7a-CXzbFHywvHBky-Kwu8O3POrqo=huOJf-n2pQ@mail.gmail.com>
+        Thu, 25 Aug 2022 11:31:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2408A74353;
+        Thu, 25 Aug 2022 08:31:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F135E61AB3;
+        Thu, 25 Aug 2022 15:31:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1DAC433C1;
+        Thu, 25 Aug 2022 15:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661441503;
+        bh=T11/F7BgE239LRXHDyNOIUVXHmxFBP7bP1coH5+n/sE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Pjhzv2oa3PwImoti6yU7jeDOfwVqlBMIFN4PYUzMz9WRHhJ98kn6+wlfMfgC2Tk3F
+         O8nwqpVNJtZtF4EBE1OudRwjzAA28z+Jmfvzt8+3bQorejZcd16iGpQRapgHfxm6hF
+         WXOYB2olpWvcJuR1uMm6PATb47ACaX8+e621jnzkRmshyp3BPpp2EoTOvj3Q7Rr9tf
+         Hj3uxTJg5mEXUqAKi4v/CoH+AR8ya/XJn16+HYuoS1IofkJUM0TWhgaw5au62FypxY
+         mBz5EzU1M68Q0SOqTei9X2De0GbfxELvQeRx9owQh80mD+g/VUuN0QFSJFcdzPM+nJ
+         xxcBt0i8wAFdQ==
+Message-ID: <97dc2f1d-081e-a182-cc4d-57e3df4742a0@kernel.org>
+Date:   Thu, 25 Aug 2022 08:31:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+HBbNEEvyn7a-CXzbFHywvHBky-Kwu8O3POrqo=huOJf-n2pQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH 08/31] net/tcp: Introduce TCP_AO setsockopt()s
+Content-Language: en-US
+To:     Dmitry Safonov <dima@arista.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+References: <20220818170005.747015-1-dima@arista.com>
+ <20220818170005.747015-9-dima@arista.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220818170005.747015-9-dima@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 05:07:45PM +0200, Robert Marko wrote:
-> On Thu, Aug 25, 2022 at 5:02 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Thu, Aug 25, 2022 at 04:37:36PM +0200, Andreas Böhler wrote:
-> > > The tps23861 driver does not initialize the chip and relies on it being
-> > > in auto-mode by default. On some devices, these controllers default to
-> > > OFF-Mode and hence cannot be used at all.
-> > >
-> > > This brings minimal support for initializing the controller in a user-
-> > > defined mode.
-> > >
-> > > Signed-off-by: Andreas Böhler <dev@aboehler.at>
-> >
-> > nack for the series, sorry. The suggested properties are not hardware
-> > monitoring but phy properties. There should be a separate phy driver
-> > to manage those.
-> >
-> > Also, as mentioned, the hwmon 'enable' attribute is abused to control
-> > port functionality and should be removed.
-> 
-> Hi Guenter,
-> Are you referring to an ethernet PHY driver or the generic PHY framework?
-> 
+On 8/18/22 9:59 AM, Dmitry Safonov wrote:
+> diff --git a/include/uapi/linux/tcp.h b/include/uapi/linux/tcp.h
+> index 849bbf2d3c38..5369458ae89f 100644
+> --- a/include/uapi/linux/tcp.h
+> +++ b/include/uapi/linux/tcp.h
+> @@ -129,6 +129,9 @@ enum {
+>  
+>  #define TCP_TX_DELAY		37	/* delay outgoing packets by XX usec */
+>  
+> +#define TCP_AO			38	/* (Add/Set MKT) */
+> +#define TCP_AO_DEL		39	/* (Delete MKT) */
+> +#define TCP_AO_MOD		40	/* (Modify MKT) */
+>  
+>  #define TCP_REPAIR_ON		1
+>  #define TCP_REPAIR_OFF		0
+> @@ -344,6 +347,38 @@ struct tcp_diag_md5sig {
+>  
+>  #define TCP_AO_MAXKEYLEN	80
+>  
+> +#define TCP_AO_CMDF_CURR	(1 << 0)	/* Only checks field sndid */
+> +#define TCP_AO_CMDF_NEXT	(1 << 1)	/* Only checks field rcvid */
+> +
+> +struct tcp_ao { /* setsockopt(TCP_AO) */
+> +	struct __kernel_sockaddr_storage tcpa_addr;
+> +	char	tcpa_alg_name[64];
+> +	__u16	tcpa_flags;
+> +	__u8	tcpa_prefix;
+> +	__u8	tcpa_sndid;
+> +	__u8	tcpa_rcvid;
+> +	__u8	tcpa_maclen;
+> +	__u8	tcpa_keyflags;
+> +	__u8	tcpa_keylen;
+> +	__u8	tcpa_key[TCP_AO_MAXKEYLEN];
+> +} __attribute__((aligned(8)));
+> +
+> +struct tcp_ao_del { /* setsockopt(TCP_AO_DEL) */
+> +	struct __kernel_sockaddr_storage tcpa_addr;
+> +	__u16	tcpa_flags;
+> +	__u8	tcpa_prefix;
+> +	__u8	tcpa_sndid;
+> +	__u8	tcpa_rcvid;
+> +	__u8	tcpa_current;
+> +	__u8	tcpa_rnext;
+> +} __attribute__((aligned(8)));
+> +
+> +struct tcp_ao_mod { /* setsockopt(TCP_AO_MOD) */
+> +	__u16	tcpa_flags;
+> +	__u8	tcpa_current;
+> +	__u8	tcpa_rnext;
+> +} __attribute__((aligned(8)));
+> +
+>  /* setsockopt(fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE, ...) */
+>  
+>  #define TCP_RECEIVE_ZEROCOPY_FLAG_TLB_CLEAN_HINT 0x1
 
-Could be both, though ethernet phy sounds about right for me.
-I don't know where/how similar chips are handled. hwmon is most definitey
-the wrong place.
 
-Guenter
+I do not see anything in the uapi that would specify the VRF for the
+address.
+

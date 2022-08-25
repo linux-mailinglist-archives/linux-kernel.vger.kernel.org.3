@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8135A0C4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EBF5A0C52
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239018AbiHYJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S238894AbiHYJRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238894AbiHYJQP (ORCPT
+        with ESMTP id S230481AbiHYJRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:16:15 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766AF4CA21
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:16:13 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id w129so9892249vkg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=01gL4+t3up0n3YaVmNIclgohHRPaUWvI7fAUf1IOa5c=;
-        b=ScETR1HKVq+IR22ISzHczfRvniVIIt1/PBM91HCUo9iL4OQlZrwuu+X5ZJS+Px8eeM
-         vWK1f7WO4XlAo/hJoXFY4Pl4CRLz9ao0H4pKHcld2zNjIVSBRnufM1UHuCkjZ+7+GVDk
-         JVYv77e8xwK94KolmP/pQu3jhMxILc/4ykuTOTFmjoNsI5OG0WvAO7yqLl8ueGBbjRIo
-         3izrrauHJvTkzV9qLswci2jx8jr1S6eVKEFMPH8Y5aVl/KUbQ0801uNR6fnExJc/6UTy
-         7z819eMslCxv/zMvIMpr/JSBtSOYdR5ExFo7fRzdWisaZNlwYAnKpKjXnHuBcWFKv5/8
-         cNkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=01gL4+t3up0n3YaVmNIclgohHRPaUWvI7fAUf1IOa5c=;
-        b=7uwvZRiXThAX4Z2G24LiTKaXuOTJraWaYQQ/o2HCVhlV+3JHqaFUW0dJrAZg7ihiuy
-         Q9N1MO+J82J4PoWnsio6gmQ6fWGapRT4qxQTplYqS0wQrRy5AoE11BFLF1Owby/8CUk5
-         ZlJ+h1nIgzZfEkDdlneMNOCE/K8c5ATx/9DCAbos9G4iCSgZ545aPrbtXaR28cxoYGuw
-         uQlHI9lJyawa9+4a48mqvJ50hiSRDZBo7ybVfgzykMQaBWV01rDFMNaqyYIN6qp1hcOu
-         WeylVNZvWiyfKn10RzEkl0N3L/Da2mbs4O/lQ19zxi5nlqyXzDZn9w+K0ZgsvXYigHfI
-         7fEg==
-X-Gm-Message-State: ACgBeo0r4+nH5MRSSfJUHjYzgWUZEARPQn/ptHEXwp+VBtVoARZdJIT2
-        jDBVnhVWVPEEbjJNqHpXn5/OjVJ2Xq8X1f0X5Bw=
-X-Google-Smtp-Source: AA6agR6L5ielWa+Z+7mGVATkxA0iFHFCnHaDt4NADZcCtYLwefu1tTsfFw6gIa7D1xQPrQLVfRkiZQXhh78KL+QYt2E=
-X-Received: by 2002:a1f:30cb:0:b0:376:486a:7cb6 with SMTP id
- w194-20020a1f30cb000000b00376486a7cb6mr997526vkw.29.1661418972357; Thu, 25
- Aug 2022 02:16:12 -0700 (PDT)
+        Thu, 25 Aug 2022 05:17:18 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B0E9F8C5;
+        Thu, 25 Aug 2022 02:17:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661419037; x=1692955037;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4exIY7gU9hzEUKw5Nvq0efoD/gksy5jNEO5nY/heknk=;
+  b=BLiscJOo3Uxd9qW+TYDRJJ1d7faPUfkrxySfp4MlN7ROEF1r+swbHau9
+   OY9osE0Q6A27mPYkEsJwSuro42rt/mAXYxyqjMmXRFrjDE6QjogP9GXFD
+   0WTKy6mUA+RomC9d+QttqbolWeHWNlmumSTa5aTqqIg6isQI0rEzP6j8u
+   2S5v2J1/SR14YQbVKSd+b/f1pVgu0NUH3Y6LJwzw7vexyYKPTXZIfriTB
+   aVJW7fEq60s7PfPj6qhCbhTIQ4mlgBNivZAwnr5WjM2HrIlClHcKtR3KR
+   3N2uG7OxW/O+DTMSB0cSpxxQxJoFdcl5li3AA36RiQXBYQbe+zP64eqBN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355917152"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="355917152"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 02:17:17 -0700
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="938254118"
+Received: from mblazque-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.101])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 02:17:15 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/3] serial: Add uart_xmit_advance() + fixes part (of a larger patch series)
+Date:   Thu, 25 Aug 2022 12:17:04 +0300
+Message-Id: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Sender: gaddafiayesha532@gmail.com
-Received: by 2002:a59:d9d7:0:b0:2eb:a171:5220 with HTTP; Thu, 25 Aug 2022
- 02:16:11 -0700 (PDT)
-From:   Doris David <mrs.doris.david02@gmail.com>
-Date:   Thu, 25 Aug 2022 02:16:11 -0700
-X-Google-Sender-Auth: ffL2YbmJ6KmqBXUK4SDlqEvzNVU
-Message-ID: <CALeZTrfy7R0+4xETpmY5PQ1E-29dZ+giswqP5o_GY46HRQzgeA@mail.gmail.com>
-Subject: Re: Greetings My Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8588]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a2d listed in]
-        [list.dnswl.org]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrs.doris.david02[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [gaddafiayesha532[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+Add uart_xmit_advance() helper to handle circular xmit buffer
+advancement + accounting of Tx'ed bytes. Use it to fix a few drivers
+that previously lacked to accounting for DMA Tx.
 
-I sent this mail praying it will find you in a good condition, since I
-myself am in a very critical health condition in which I sleep every
-night  without knowing if I may be alive to see the next day. I am
-Mrs.doris david, a widow suffering from a long time illness. I have
-some funds I  inherited from my late husband, the sum of ($11 000 000
-00) my Doctor told me recently that I have serious sickness which is a
-cancer problem. What disturbs me most is my stroke sickness. Having
-known my condition, I decided to donate this fund to a good person
-that will utilize it the way I am going to instruct herein. I need a
-very Honest God.
+Greg,
+I've a another series on top this which is tty-next material making the
+rest of the drivers to use uart_xmit_advance(). That series obviously
+depends on the patch 1/3 of this series so if you end up putting these
+3 patches into tty-linus, I'll need it to be merged into tty-next at
+some point (I'm not in a big hurry with this so if you choose to delay
+the merge, it's not a big deal).
 
-fearing a person who can claim this money and use it for charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained. I do not want a situation where this money will be used in
-an ungodly manner. That's why I' making this decision. I'm not afraid
-of death so I know where I'm going. I accept this decision because I
-do not have any child who will inherit this money after I die. Please
-I want your sincere and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how
-thunder will be transferred to your bank account. I am waiting for
-your reply.
+Ilpo Järvinen (3):
+  serial: Create uart_xmit_advance()
+  serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+  serial: tegra-tcu: Use uart_xmit_advance(), fixes icount.tx accounting
 
-May God Bless you,
-Mrs.doris david,
+ drivers/tty/serial/serial-tegra.c |  5 ++---
+ drivers/tty/serial/tegra-tcu.c    |  2 +-
+ include/linux/serial_core.h       | 17 +++++++++++++++++
+ 3 files changed, 20 insertions(+), 4 deletions(-)
+
+-- 
+2.30.2
+

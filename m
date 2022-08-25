@@ -2,95 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C2F5A1817
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AD05A1819
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239846AbiHYRne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S240832AbiHYRoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiHYRnc (ORCPT
+        with ESMTP id S229804AbiHYRoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 13:43:32 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2A2B6D2A;
-        Thu, 25 Aug 2022 10:43:30 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id m2so19155700pls.4;
-        Thu, 25 Aug 2022 10:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc;
-        bh=2Q9sxu1HRBMxvkcK86QE22Ms07BjEIEOP4ZDQ3uVSzc=;
-        b=FCXHKofw5D2STaFKgE47setXTxKBRs80FRNxxPkumH4L1qjSM5ciq8KO4NAysGvJuD
-         wr80KVTFsGVBIOgkAQqhEf8h4/r2Scasna7nu5ebGaoteIadBcXH9IJaAK0/262G0/LD
-         dFd0+Rtvb+tXtPz9XcAmqH/2Xr6NacQC9VJJuJ5Y0scTs5HbQ5EMrwTZIZgbyK508Jpy
-         2BIdgqsFs5pFwkCgbpFWmXsmo+RQ6CZR5yTLqRiAzcdsq65OfeFKrf4xjDyrAjPzTtFK
-         s7+0vfpVVdMUMc0aCVA10L/ZtXWrC6HSvXJE9eKqNgqvnpn0Rmu+lZ2Qp6S5yLnbroYg
-         NGBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc;
-        bh=2Q9sxu1HRBMxvkcK86QE22Ms07BjEIEOP4ZDQ3uVSzc=;
-        b=m2Ct9a+BqMKi+428omUrC+carQzGPyP8fmcPlnIPm6c+yEYuNrjKO/iirCV4r23XSw
-         dNOnzirtgR3PENUaoM0jkxwZ1/qTYk+TwwOBNd3z3D15Vp470i7mFn6oybV1B9O+II7l
-         OymcOQEIqSZtjHSFdTkz9Ej1Y026GJ1r4CqpcN/oSAbl7QcupZO1j2i4d0tsNCoAyjL1
-         ZvL+6y/hHxkXRg9+umnPXqB1lJMeVO0AGklW8U8C52tdt6Y+p3UI/PT1t7yXJb0qnea6
-         h1uFrEZl1Q5UD6C6jaEFIEZvzpnTiMXMjLW3lnou0Hcbs+1jVIFllpNKh0rRX0X0/lML
-         KCnw==
-X-Gm-Message-State: ACgBeo2LWSBoZPjGH0JQ383xe7ZeR4ld8RAdCly4P+piVXCttYEEBTHm
-        iL5otGXpwTm2qMimwcxHEj8=
-X-Google-Smtp-Source: AA6agR5TyjlWqCz/7+W7Bd1f+2e+LclerB3KYBGfN9ot+qYG8JspDm7ZIXSscqU99KN19Qh1kx/8Jg==
-X-Received: by 2002:a17:90b:17ce:b0:1fb:3b43:f6f8 with SMTP id me14-20020a17090b17ce00b001fb3b43f6f8mr269193pjb.76.1661449410138;
-        Thu, 25 Aug 2022 10:43:30 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b0016f975be2e7sm15054336plr.139.2022.08.25.10.43.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 10:43:29 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 25 Aug 2022 07:43:27 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Subject: [GIT PULL] cgroup fixes #2 for v6.0-rc2
-Message-ID: <Ywe0v0YWJSVAs5FT@slm.duckdns.org>
+        Thu, 25 Aug 2022 13:44:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35C8B6D2A;
+        Thu, 25 Aug 2022 10:44:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85609B82A39;
+        Thu, 25 Aug 2022 17:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC43C433C1;
+        Thu, 25 Aug 2022 17:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661449444;
+        bh=3xJLBFKHRtXT311VApMRPg+Hs2bjaZNUbyoQV13y1Zk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I30JF3p5fLskWzNn7g5ZlKjaoEbzQbHAuYJimIYaa61x28FQ7sybydrR5h1r+vgeJ
+         9Qo6v/GgQQV38E/SSylo78EqM+gsZNhX73tKNzSeF66IwU1P3CqmBTMq60ltUZeVV/
+         +SPrgC00rsJixACKSGMJgfWM9QseEAbayTvoXvk5Y3kjpx31Z7vpoGEwGWCaWP/vn1
+         vE2ql+VhlFUf5rM5PJSAmJOH9Tdap5Ln5cec7EkoJzKBHl4uY2iZpzwPlNQb9zEaPf
+         jxwbgahcD/lIsMuMfqYdQQsNIelPAFPytC5oYcY4DTDR6P96JayGEcghYy6Pin+XJ5
+         BLS87Gk3svDug==
+Date:   Thu, 25 Aug 2022 10:44:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     siva.kallam@broadcom.com, prashant@broadcom.com,
+        mchan@broadcom.com, Josef Bacik <josef@toxicpanda.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tg3: Disable tg3 device on system reboot to avoid
+ triggering AER
+Message-ID: <20220825104403.740cac15@kernel.org>
+In-Reply-To: <20220825063852.1120632-1-kai.heng.feng@canonical.com>
+References: <20220825063852.1120632-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 763f4fb76e24959c370cdaa889b2492ba6175580:
+On Thu, 25 Aug 2022 14:38:52 +0800 Kai-Heng Feng wrote:
+>  	rtnl_lock();
+> +
+> +	tg3_reset_task_cancel(tp);
 
-  cgroup: Fix race condition at rebind_subsystems() (2022-08-23 08:11:06 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc2-fixes-2
-
-for you to fetch changes up to 43626dade36fa74d3329046f4ae2d7fdefe401c6:
-
-  cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all() (2022-08-25 07:36:30 -1000)
-
-----------------------------------------------------------------
-4f7e7236435ca0ab ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock()
-deadlock") in the previous fix pull required cgroup core to grab
-cpus_read_lock() before invoking ->attach(). Unfortunately, it missed adding
-cpus_read_lock() in cgroup_attach_task_all(). Fix it.
-
-----------------------------------------------------------------
-Tetsuo Handa (1):
-      cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-
- kernel/cgroup/cgroup-v1.c | 2 ++
- 1 file changed, 2 insertions(+)
+Doesn't this "task" take rtnl_lock()? Looks deadlocky.

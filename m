@@ -2,157 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8848F5A0F9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E745A0FA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240280AbiHYLwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        id S240550AbiHYLya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiHYLv6 (ORCPT
+        with ESMTP id S232349AbiHYLy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:51:58 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DBA25294
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:51:57 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MD1XY1k81z9sJY;
-        Thu, 25 Aug 2022 11:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1661428317; bh=Sr5pjSHJhISC7JcB1fG9su2V6Kc+hDrY0/E0OvJrHng=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=j8BSmqDzuzbJgEq6xsZfEfwsFvbwcRTTT+oImBVLn22K6jIu5QqZt5bebBq+IR6j7
-         vgRULV5AU304B+X8m21h35XrZh90+qSLC0g4PrHDXf+AHSlO2mJH3GfMMLVv7SwMch
-         n48a4Kdm+JzU8fJf854BItRIRqQyt8+/h23WwW+0=
-X-Riseup-User-ID: 8E48026DEC53D712AFD99E675A4697ED9AA7C588198C27D80EEA1E99DC66198C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4MD1XW4B9Jz1yTJ;
-        Thu, 25 Aug 2022 11:51:55 +0000 (UTC)
-Message-ID: <ffd9508c-ba24-e9ea-ced4-4ce189ef60c5@riseup.net>
-Date:   Thu, 25 Aug 2022 08:51:52 -0300
+        Thu, 25 Aug 2022 07:54:27 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B2CA4B1A;
+        Thu, 25 Aug 2022 04:54:26 -0700 (PDT)
+Received: from rd02-sz.amlogic.software (10.28.8.43) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.6; Thu, 25 Aug 2022
+ 19:54:22 +0800
+From:   Huqiang Qin <huqiang.qin@amlogic.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <narmstrong@baylibre.com>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Huqiang Qin <huqiang.qin@amlogic.com>
+Subject: [PATCH] arm64: dts: meson-s4: include meson-s4-gpio.h
+Date:   Thu, 25 Aug 2022 19:51:54 +0800
+Message-ID: <20220825115154.2150323-1-huqiang.qin@amlogic.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm: Remove the unused param "struct drm_buddy *mm"
-Content-Language: en-US
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220627085405.221435-1-cai.huoqing@linux.dev>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220627085405.221435-1-cai.huoqing@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.43]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cai,
+Add the included meson-s4-gpio.h in the meson-s4.dtsi
 
-On 6/27/22 05:54, Cai Huoqing wrote:
-> Remove the param "struct drm_buddy *mm" which is unused in
-> the function drm_block_alloc()/drm_block_free().
-> 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
+---
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+index ad50cba42d19..44cce8b0fcef 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+@@ -6,6 +6,7 @@
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/gpio/meson-s4-gpio.h>
+ 
+ / {
+ 	cpus {
+-- 
+2.37.1
 
-Best Regards,
-- Maíra Canal
-
-> ---
->  drivers/gpu/drm/drm_buddy.c | 25 +++++++++++--------------
->  1 file changed, 11 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-> index 11bb59399471..192c8b99fb43 100644
-> --- a/drivers/gpu/drm/drm_buddy.c
-> +++ b/drivers/gpu/drm/drm_buddy.c
-> @@ -11,10 +11,8 @@
->  
->  static struct kmem_cache *slab_blocks;
->  
-> -static struct drm_buddy_block *drm_block_alloc(struct drm_buddy *mm,
-> -					       struct drm_buddy_block *parent,
-> -					       unsigned int order,
-> -					       u64 offset)
-> +static struct drm_buddy_block *
-> +drm_block_alloc(struct drm_buddy_block *parent, unsigned int order, u64 offset)
->  {
->  	struct drm_buddy_block *block;
->  
-> @@ -32,8 +30,7 @@ static struct drm_buddy_block *drm_block_alloc(struct drm_buddy *mm,
->  	return block;
->  }
->  
-> -static void drm_block_free(struct drm_buddy *mm,
-> -			   struct drm_buddy_block *block)
-> +static void drm_block_free(struct drm_buddy_block *block)
->  {
->  	kmem_cache_free(slab_blocks, block);
->  }
-> @@ -131,7 +128,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
->  		root_size = rounddown_pow_of_two(size);
->  		order = ilog2(root_size) - ilog2(chunk_size);
->  
-> -		root = drm_block_alloc(mm, NULL, order, offset);
-> +		root = drm_block_alloc(NULL, order, offset);
->  		if (!root)
->  			goto out_free_roots;
->  
-> @@ -151,7 +148,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
->  
->  out_free_roots:
->  	while (i--)
-> -		drm_block_free(mm, mm->roots[i]);
-> +		drm_block_free(mm->roots[i]);
->  	kfree(mm->roots);
->  out_free_list:
->  	kfree(mm->free_list);
-> @@ -172,7 +169,7 @@ void drm_buddy_fini(struct drm_buddy *mm)
->  
->  	for (i = 0; i < mm->n_roots; ++i) {
->  		WARN_ON(!drm_buddy_block_is_free(mm->roots[i]));
-> -		drm_block_free(mm, mm->roots[i]);
-> +		drm_block_free(mm->roots[i]);
->  	}
->  
->  	WARN_ON(mm->avail != mm->size);
-> @@ -191,14 +188,14 @@ static int split_block(struct drm_buddy *mm,
->  	BUG_ON(!drm_buddy_block_is_free(block));
->  	BUG_ON(!drm_buddy_block_order(block));
->  
-> -	block->left = drm_block_alloc(mm, block, block_order, offset);
-> +	block->left = drm_block_alloc(block, block_order, offset);
->  	if (!block->left)
->  		return -ENOMEM;
->  
-> -	block->right = drm_block_alloc(mm, block, block_order,
-> +	block->right = drm_block_alloc(block, block_order,
->  				       offset + (mm->chunk_size << block_order));
->  	if (!block->right) {
-> -		drm_block_free(mm, block->left);
-> +		drm_block_free(block->left);
->  		return -ENOMEM;
->  	}
->  
-> @@ -257,8 +254,8 @@ static void __drm_buddy_free(struct drm_buddy *mm,
->  
->  		list_del(&buddy->link);
->  
-> -		drm_block_free(mm, block);
-> -		drm_block_free(mm, buddy);
-> +		drm_block_free(block);
-> +		drm_block_free(buddy);
->  
->  		block = parent;
->  	}

@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C255A1D2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FFB5A1D23
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244575AbiHYXZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 19:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S244591AbiHYX0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 19:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244112AbiHYXZc (ORCPT
+        with ESMTP id S244336AbiHYXZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 19:25:32 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010A457552
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:25:31 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id bd20-20020a056a00279400b0053609a39408so8340219pfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:25:31 -0700 (PDT)
+        Thu, 25 Aug 2022 19:25:35 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02BD57552
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:25:33 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id e9-20020aa78249000000b00537a62a6175so1052991pfn.20
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc;
-        bh=a5nruIl0wNeupXvrAMbGBAS1GScaEkKaYOUNnuHLnXk=;
-        b=MUrthn9a6RY6CpiffJkHt9EOPrKtSEGmXhqqxQ3D2qRZw+a7bNGa46Lw6wQ3BknnIy
-         Nccq5f/lszbKbQJgrG/Y3TeW7LcYWHSCnV1949i35B4xTqNhw6TutpLsyYtPkh4tpQun
-         8YqYEvHVdG6s/enTMEeqcr2tgcITSa5HsHiuHtd8k1okdf8J78W/3/sDX30h3JhVfrmf
-         sDq9IBDxUOd9h4P2X17g89DICK0NQZ8O2oP1O3SUmdgBnpZE5Bd1EVN61k53zguEnNjY
-         zxzQgf5iHjst9fKoqExYlsFYRa7aqRLWkLtfs18aJWmLVPp8Pj+CMrtVB/3l2rPzHLPo
-         UUPA==
+        bh=gMN8DAWXzBJk9iSBUfW/QyFFZWZuY8KBpYav4gTwpSU=;
+        b=k/VnPS3Avcyf8y12Dai2ATcxUmpDEFAlHtqHWSKGhxjT4Vhlo5GsmzjzRovXIQoToK
+         /cVnaYr1ykESlLVNNK+t2ufwentaza0JW4BtboHI9Qw5XauRoBxkJ/LyoQWOKOFiEGSS
+         n2G3NVh/e1Mqwx+mvIROA5QEpmujoLPwX5icVZ2O/E1FhBbbE5MyCHYy3lBaAPoGMPyB
+         Fbql0NmIiOpXf61dCJzjhY8uPTCZSQNe9T+DA4FM9plfxEWLbxHR+3oVvrcvveq/goce
+         vvXk5VPAuVoOQ8+nMdblfbru4J2Ipl2Jcjxwm/E9+nZvI14q8jW5EE1Fu7yGL6JMksCY
+         94aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=a5nruIl0wNeupXvrAMbGBAS1GScaEkKaYOUNnuHLnXk=;
-        b=W9PLOCU5hAhCjap3ixl/9a6GA4uD572vIHipiUdFi2YD9xmw4CVgJiy4v+3BQlmbd3
-         +YbvQesGg6ZZ//JeRQG+FgPjtil6TR0Ns5Qg2dGA6s92pQ8JS8eiUeBqEVOeaDlf5fS8
-         n7BKd/kaAjwumMLBe180S6NEMDMd0fA4fH8CqmUEh7TqvDSLYgH9eIUXckLRaQTLqyUu
-         mWrIIrGiibPkdr7MoCUlHausRjN5KRmj8Q2RAWjheXYHbXQb6MI/18PjvL0Uq4Wl6ZQA
-         AgKXmnxwFG89zeqLRYJgcNHiYyjRBBFw0csWKdggwrT0rdsz3l4aET3DGIRIVSoQp5q2
-         WlEQ==
-X-Gm-Message-State: ACgBeo1/HNN2JuQ7TQk4nxvg8TycjFrNj34ILDY1It5Jm8yA2q237XV+
-        dLlQnRXnGMSjKc0tHNA6i1wUeuyELS8=
-X-Google-Smtp-Source: AA6agR5ycc86vDkZZxz/2DKZfcSQPVYnqerGrhMoWS/DoaCwEB56TzgSv+N+GPw1ZMSLN5eesLErkDwOY7I=
+        bh=gMN8DAWXzBJk9iSBUfW/QyFFZWZuY8KBpYav4gTwpSU=;
+        b=GjEAcTvbuO7BVqZabrnsF4Vsy8REW85Jy5ooGYVOwj3WWhk9WEXAy/x1NE9gJxblFp
+         DoilY9c/b7TXDLIkAHcaDAEKcbVmnaIzFbDFmvtIpYasjtOHCYeTYkyqdcikNpKP18rV
+         ynE8AHMrhrcrn4VHRsciSaN4OT5l6YHe48xt8smDmMRkZZNN36FJ+FDJ358sA1OTxeXI
+         rBkT9G6SlzoGhXoG8ih0zGoelMMINg/kqLIerQJW5mRY/UD4mtvG02oYXJdWDaFR3TkU
+         zM54M7y8vQd00IHwJP6Lv55/SFgf9zONUbyYKb5q4QdpVxstBltWxsSh8hf2Ofbda1Bh
+         nuEQ==
+X-Gm-Message-State: ACgBeo1HwDQ0w+ouLj/h42TJjThk+dZJ8gthjRX7xUy3Eo+Z4gkmeEYT
+        2JaxadMgsRiRLQwP7Bqjp9zPX9B9Yqw=
+X-Google-Smtp-Source: AA6agR4puys/Z5jXTPDaJYPynDwF4eqnZlaLYimDxxudykXc1F+A7TB7h00cz8hneIZ8xf4MI9E8Jl/4Eh0=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f542:b0:173:a8a:d7bf with SMTP id
- h2-20020a170902f54200b001730a8ad7bfmr1185847plf.134.1661469931377; Thu, 25
- Aug 2022 16:25:31 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:10ca:b0:536:ec31:827c with SMTP id
+ d10-20020a056a0010ca00b00536ec31827cmr1221322pfu.67.1661469933060; Thu, 25
+ Aug 2022 16:25:33 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 25 Aug 2022 23:25:19 +0000
+Date:   Thu, 25 Aug 2022 23:25:20 +0000
 In-Reply-To: <20220825232522.3997340-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220825232522.3997340-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220825232522.3997340-5-seanjc@google.com>
-Subject: [PATCH v5 4/7] tools: Add atomic_test_and_set_bit()
+Message-ID: <20220825232522.3997340-6-seanjc@google.com>
+Subject: [PATCH v5 5/7] KVM: selftests: Make arm64's MMIO ucall multi-VM friendly
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Anup Patel <anup@brainfault.org>,
@@ -83,81 +83,119 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+Fix a mostly-theoretical bug where ARM's ucall MMIO setup could result in
+different VMs stomping on each other by cloberring the global pointer.
 
-Add x86 and generic implementations of atomic_test_and_set_bit() to allow
-KVM selftests to atomically manage bitmaps.
+Fix the most obvious issue by saving the MMIO gpa into the VM.
 
-Note, the generic version is taken from arch_test_and_set_bit() as of
-commit 415d83249709 ("locking/atomic: Make test_and_*_bit() ordered on
-failure").
+A more subtle bug is that creating VMs in parallel (on multiple tasks)
+could result in a VM using the wrong address.  Synchronizing a global to
+a guest effectively snapshots the value on a per-VM basis, i.e. the
+"global" is already prepped to work with multiple VMs, but setting the
+global in the host is not thread-safe.  To fix that bug, add
+write_guest_global() to allow stuffing a VM's copy of a "global" without
+modifying the host value.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/arch/x86/include/asm/atomic.h    |  7 +++++++
- tools/include/asm-generic/atomic-gcc.h | 12 ++++++++++++
- 2 files changed, 19 insertions(+)
+ .../selftests/kvm/include/kvm_util_base.h     | 15 +++++++++++++++
+ .../testing/selftests/kvm/lib/aarch64/ucall.c | 19 ++++++++++++++-----
+ 2 files changed, 29 insertions(+), 5 deletions(-)
 
-diff --git a/tools/arch/x86/include/asm/atomic.h b/tools/arch/x86/include/asm/atomic.h
-index 1f5e26aae9fc..01cc27ec4520 100644
---- a/tools/arch/x86/include/asm/atomic.h
-+++ b/tools/arch/x86/include/asm/atomic.h
-@@ -8,6 +8,7 @@
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 24fde97f6121..59d52b58a1a6 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -16,6 +16,7 @@
+ #include <linux/kvm.h>
+ #include "linux/rbtree.h"
  
- #define LOCK_PREFIX "\n\tlock; "
++#include <asm/atomic.h>
  
-+#include <asm/asm.h>
- #include <asm/cmpxchg.h>
+ #include <sys/ioctl.h>
  
- /*
-@@ -70,4 +71,10 @@ static __always_inline int atomic_cmpxchg(atomic_t *v, int old, int new)
- 	return cmpxchg(&v->counter, old, new);
- }
+@@ -81,6 +82,7 @@ struct kvm_vm {
+ 	struct sparsebit *vpages_mapped;
+ 	bool has_irqchip;
+ 	bool pgd_created;
++	vm_paddr_t ucall_mmio_addr;
+ 	vm_paddr_t pgd;
+ 	vm_vaddr_t gdt;
+ 	vm_vaddr_t tss;
+@@ -714,6 +716,19 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
+ 	memcpy(&(g), _p, sizeof(g));				\
+ })
  
-+static inline int atomic_test_and_set_bit(long nr, unsigned long *addr)
-+{
-+	GEN_BINARY_RMWcc(LOCK_PREFIX __ASM_SIZE(bts), *addr, "Ir", nr, "%0", "c");
++/*
++ * Write a global value, but only in the VM's (guest's) domain.  Primarily used
++ * for "globals" that hold per-VM values (VMs always duplicate code and global
++ * data into their own region of physical memory), but can be used anytime it's
++ * undesirable to change the host's copy of the global.
++ */
++#define write_guest_global(vm, g, val) ({			\
++	typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));	\
++	typeof(g) _val = val;					\
++								\
++	memcpy(_p, &(_val), sizeof(g));				\
++})
 +
+ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu);
+ 
+ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu,
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+index f02ae27c3e43..1c38bd260f90 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+@@ -6,20 +6,29 @@
+  */
+ #include "kvm_util.h"
+ 
++/*
++ * ucall_exit_mmio_addr holds per-VM values (global data is duplicated by each
++ * VM), it must not be accessed from host code.
++ */
+ static vm_vaddr_t *ucall_exit_mmio_addr;
+ 
++static void ucall_set_mmio_addr(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
++{
++	vm->ucall_mmio_addr = mmio_gpa;
++
++	write_guest_global(vm, ucall_exit_mmio_addr, (vm_vaddr_t *)mmio_gpa);
 +}
 +
- #endif /* _TOOLS_LINUX_ASM_X86_ATOMIC_H */
-diff --git a/tools/include/asm-generic/atomic-gcc.h b/tools/include/asm-generic/atomic-gcc.h
-index 4c1966f7c77a..6daa68bf5b9e 100644
---- a/tools/include/asm-generic/atomic-gcc.h
-+++ b/tools/include/asm-generic/atomic-gcc.h
-@@ -4,6 +4,7 @@
+ void ucall_arch_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
+ {
+ 	virt_pg_map(vm, mmio_gpa, mmio_gpa);
  
- #include <linux/compiler.h>
- #include <linux/types.h>
-+#include <linux/bitops.h>
- 
- /*
-  * Atomic operations that C can't guarantee us.  Useful for
-@@ -69,4 +70,15 @@ static inline int atomic_cmpxchg(atomic_t *v, int oldval, int newval)
- 	return cmpxchg(&(v)->counter, oldval, newval);
+-	ucall_exit_mmio_addr = (vm_vaddr_t *)mmio_gpa;
+-	sync_global_to_guest(vm, ucall_exit_mmio_addr);
++	ucall_set_mmio_addr(vm, mmio_gpa);
  }
  
-+static inline int atomic_test_and_set_bit(long nr, unsigned long *addr)
-+{
-+	unsigned long mask = BIT_MASK(nr);
-+	long old;
-+
-+	addr += BIT_WORD(nr);
-+
-+	old = __sync_fetch_and_or(addr, mask);
-+	return !!(old & mask);
-+}
-+
- #endif /* __TOOLS_ASM_GENERIC_ATOMIC_H */
+ void ucall_arch_uninit(struct kvm_vm *vm)
+ {
+-	ucall_exit_mmio_addr = 0;
+-	sync_global_to_guest(vm, ucall_exit_mmio_addr);
++	ucall_set_mmio_addr(vm, (vm_paddr_t)NULL);
+ }
+ 
+ void ucall_arch_do_ucall(vm_vaddr_t uc)
+@@ -32,7 +41,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+ 	struct kvm_run *run = vcpu->run;
+ 
+ 	if (run->exit_reason == KVM_EXIT_MMIO &&
+-	    run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
++	    run->mmio.phys_addr == vcpu->vm->ucall_mmio_addr) {
+ 		vm_vaddr_t gva;
+ 
+ 		TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
 -- 
 2.37.2.672.g94769d06f0-goog
 

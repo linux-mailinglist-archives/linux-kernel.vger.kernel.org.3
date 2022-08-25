@@ -2,173 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF7A5A1C9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE595A1C9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiHYWmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S231271AbiHYWnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiHYWmg (ORCPT
+        with ESMTP id S243936AbiHYWm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:42:36 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A438FC4825;
-        Thu, 25 Aug 2022 15:42:34 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PM4GPZ009571;
-        Thu, 25 Aug 2022 15:42:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=oqlT40XjR7dX7Ic5vyHeWbGfBti+GJw4OXYYil+wWfk=;
- b=bzc5MQHtMXfD7/wyMQI/1p/f+ugL1Ip5qC0fpsRcZKJ4pcPdpcFONOVt7WexmsQNPTH2
- eemqjuI/t8iIppsDiMES+QSYgTFKZlaJXt4dRlnJbWnhM+gi/nn4f4fP54s63kDfBrjr
- Mdqrg1a0b3OOFpCy6ihi02Y2Bi2D3IqVhVA= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j5nfckf3s-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 15:42:34 -0700
+        Thu, 25 Aug 2022 18:42:56 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2067.outbound.protection.outlook.com [40.107.223.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B77C4825;
+        Thu, 25 Aug 2022 15:42:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lAjrZr7nwOlstb45KAbP6gZlCqdJmg/gz5vequt03LiTGQpSPXNgpAf82JOwP9ojTg+2GH/oobtggsqeGlVbbzoyrW3WhLEh6DKcQpIIRzJK5arnsqg9/hy5asodwa0E3BOH5D7QwnQoLqls0SoFrvJylB6uxb/ptBF9jZO2Vs6oDW1tmzHUGsTPX4H0cZ/63yrDcYSLtqF4r85nJ7hB1GFAvOPkCcKJuAA0yeSw6IGcSTVkHWm/F7/aRtRWftzCUaOfKdy4viLQ6SyfzOwdqOUidudaNr44yKYPnv+ytnB6ruruXA0a1gphrYW3I386MddwRDb7sceRYFbZFXbMdg==
+ b=UDKE9lwb9pG0RzKtQIq4SmlHB7wWetVndNez/v6xx/zLorerJhZ/l5bspAAsyQu+IDo9q653RhCtWxNX25LKtgnfA662MyGl+HarK3iIaUQDrKlk3j9lJ95R5Q3tt8i+4ryoD5AmhcVW9fAphqGwXBqAPkhz9uF0cVxWDseJiiOL7NmjLk0N+6DCPa5jzrM7lwR7d/YXnXoyJtzJ7kExwn1VLWhKsizxBBYXW9H/5B8jhRzqXqdane3+oHOSsUpzbQxXajrtShldRuUgelitO1e+mG3+2GWCYfhoHni+48lRQimwswMkL5baPymfmQH4c9cJfAIDV+hBCLcUDfF1cg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oqlT40XjR7dX7Ic5vyHeWbGfBti+GJw4OXYYil+wWfk=;
- b=muN6rnpO+tgLLFW547nK3J3UG8aZqjeOEp/CY2KmefJtnLHS2sFCA6qsgNi2wEFt30XY8CA4QF3HXGLbEbiXAAQrEvFoilqAJou9OjHmFmMlHKyq4kmNNQBSAgmYTX1xpAaZRfM1VP3Ecv4kbg6wWjIVcjB6LD6AQWNkrWS8hnzvFxBghfhXgW2HOhhbuvGu/JFtNzVZv2tNfUlv/gGG9b8OPPHcwD7J7CyArq12psvox03PJba+HE7DJIGwzu+DmPHIOFXEedUc5QBg1YVUScy22z5Ll3cK3laeFHs4oQgFBJmUmDGE0DRyMAIZ3yjomAxGrAzCk/Q+krXqeHYa/w==
+ bh=FogXFi5LZ4ds7+D9SGNdhSaa3ct5HtARKD2x1iKd1s8=;
+ b=CfW+CtvBOwLqI2wl4Jk+VDn+DsD5U3/t0KTY/9fHlHcqGdzPhl1LiXhOqFez2OVnJP3hp1CKtIln6h0CcxDuJxhkXKckcId0WQzA5IPjCBDz+4UgqyUp64DBUJqxkT85pEocfCULvKgTtLyV2QTpXwlpASoaX17oCU+2D1yjKJY6BJdWutOCKJ0hiNu1XFweoso677f/ZYFQtshXtDoMGfj6rCiQsZvpf4HP/3BVEqxaKQTF1P3elU9Kv4yyTFvbKTXSdswBD09ISl4IfE4fOsM3tbOH5Doi2I9nIMyhvIRqQemvMIQwguT5Fb0J+7Ar2WYW8eFb6W5xP2PEYkBRKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by BN6PR15MB1139.namprd15.prod.outlook.com (2603:10b6:404:eb::15) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FogXFi5LZ4ds7+D9SGNdhSaa3ct5HtARKD2x1iKd1s8=;
+ b=udDv56mWoAgqoRrkpICNgSxiw5j8VUPWWH8ZgBN6pC7oqj2KgOi/RNja0rQt/NrAtmLbw4Ui5vIZlT6F6CDHaMQvwCh/1LxMLup+tbY9ztrf92rwI6+LIXhnA6OUno5ZXBcOW/3lKQ+7pnY0vKMiRUPlD8H1bJctJPNKrL4Fniw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by DM5PR12MB1945.namprd12.prod.outlook.com (2603:10b6:3:10f::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
- 2022 22:42:30 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::c488:891f:57b:d5da]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::c488:891f:57b:d5da%9]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
- 22:42:30 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Paul Moore <paul@paul-moore.com>
-CC:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "jackmanb@chromium.org" <jackmanb@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        "cgzones@googlemail.com" <cgzones@googlemail.com>,
-        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
-        "tixxdz@gmail.com" <tixxdz@gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-Thread-Topic: [PATCH v5 0/4] Introduce security_create_user_ns()
-Thread-Index: AQHYsML1s5QOEDIN+UabdnIDmWJJf62yExMAgAEh2FOAAA7TgIAAQiRwgAAERYCAAAwHXoAAA3iAgAAEXA2AAReTgIAAEl8AgAGLNoCAAGuIgIAJPUDAgAARoYCAACyYgIAAA2MAgAAI1YA=
-Date:   Thu, 25 Aug 2022 22:42:30 +0000
-Message-ID: <ABA58A31-E4BE-445A-B98C-F462D2ED7679@fb.com>
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
- <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
- <20220819144537.GA16552@mail.hallyn.com>
- <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
- <875yigp4tp.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
- <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
- <CAHC9VhS4ROEY6uBwJPaTKX_bLiDRCyFJ9_+_08gFP0VWF_s-bQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhS4ROEY6uBwJPaTKX_bLiDRCyFJ9_+_08gFP0VWF_s-bQ@mail.gmail.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Thu, 25 Aug
+ 2022 22:42:50 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::88f:a211:8c98:a973]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::88f:a211:8c98:a973%7]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
+ 22:42:50 +0000
+Message-ID: <1cf62647-20db-646d-ae83-c2ee61f257c7@amd.com>
+Date:   Thu, 25 Aug 2022 17:42:45 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v3 02/10] x86/cpufeatures: Add Slow Memory Bandwidth
+ Allocation feature flag
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 176b274c-e8d4-47aa-2ca0-08da86eb182f
-x-ms-traffictypediagnostic: BN6PR15MB1139:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: L4BoAUgtGE2fRfjKERItPE5pWEa6q35PP7Bg7hYUNj94XBi+/puLzb9F3ZgsA5h4vBHLxXm/WjnWYxgLn82vLvQoHNyJktyQOvzIh9uLbYRs9FyJ7usFcsasOHos8EM7bx835Si/Cy24suyHTob6wWFCNipqDkbMWymKGFklcy5KdiuRdhsBEWOvlO1YxT3t9pemKI8w46qtgNmKRavaDRLJhBYVV5A+tL0ZL+7vOuBuD6Y+l4V2pwKLIRs7v+zOSGVpCVAOWVaXwU9Z+z+V+YuiAcBpg6jwv/XM6Q4EwjjejoaYEWBOUEO97ZVQ+zNOf5Kohj1pbQOUUP7FaajTBlaBsS637gVNEcs4OR2t44G/kO1yXFTyNsjBxgHb1IcQKfX3t4/lamg7RMWvwGgrcuraIVyFbDg5eI9frVNzfDa6ryJ6L5nHkr0V/Er4jqzxjhxpwn7Z1nz3Lw4xb5PURUwrVjwU/RZcnmr/SOFQASRr74cyjA/sJKWTUOuPkxePHnwZUNTbX4qMNstVMrGd/j1jlRx8dxe8aXZq0EbSRp1iQHHWiDnBeLM9mxRkd7RxL1dy7I2sSOuP+cepTJTTmfZj9xGJr6ymq/NO3piBsoQiXpeMU1aFS6WA1LZVdt0iQ/zEbES3Rs4siKY+iP6MT0bmHbY81cPIFy7REnteXHRiGPUAacqptQX5fP//SLzI3cmKIIy4hSY7v3KcJ7/5hyjU2sKIcAFRn6YByX2RWz0jV3UtfHlC6/VG64SfEA+O/9WqGwnvyEsqzZg6M7EtjB131miuft5kaLwzoKnyc029pGgvoJnloGVHKNKswJJ6ZiFO9oNj09fcOI76Qao0hw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(136003)(366004)(376002)(186003)(86362001)(33656002)(38070700005)(2906002)(53546011)(2616005)(6512007)(122000001)(38100700002)(83380400001)(66946007)(7416002)(5660300002)(6916009)(8936002)(41300700001)(316002)(71200400001)(478600001)(36756003)(66556008)(15650500001)(54906003)(6506007)(966005)(6486002)(64756008)(66446008)(76116006)(8676002)(66476007)(4326008)(91956017)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MYG/RwG6ZOBd5FOT6MuKapxs0aI/tP8AxLtUAa8dLcnVZaAX0tgs/hcdBqDN?=
- =?us-ascii?Q?+ANjVPn6c7ssUgGhi/0LsJbLM+oPI9gmSM5jcLPlBwNYfB3PvEbNkg5HXJLp?=
- =?us-ascii?Q?icLgRVz9c/wNQbHg8k4rnjAXEQ7f+/RELRsp/l2IomloR9FC8Vo2sqDXBdWb?=
- =?us-ascii?Q?ZfiP757PSSbPjaIeQzPMZjuCTcVd7RiJUsu2rlQwbbuFxEH4auHpysGiAkaC?=
- =?us-ascii?Q?Clg4PNRwXJ4gaIzoaiOkbZHIoVF9kuo7N57wxuL+ajTbFFW+B8KKDmhOIZPQ?=
- =?us-ascii?Q?9MFJdF/mZazsWwxvHATTXk54VqlX7ort852JYW584a5IB13UbiIKztqTn+x7?=
- =?us-ascii?Q?AtFYO3KS9ybmk6iDbBbAhS4X49Oje3edbypk23ncq0C+fWFoEDrxl+8EKNPo?=
- =?us-ascii?Q?//RkrME5aMO2kq6LpQMK254rvz/3FniYZwEj8BhAi5V0tSxjwvCywj9XsTkr?=
- =?us-ascii?Q?GRTevBXpLlqpFWV1+Dr1oLW1OLd1/lQOsx7BJ7/DXNSsEafEHUpokRSl/wcP?=
- =?us-ascii?Q?PI2IZZZku7xgixOFAC0MY9qcFSq97D2Smqr8l94snNLh4Tp5Ie6jbQIU/Kxq?=
- =?us-ascii?Q?SaBuf0lRApS0hSitQkXZ9W+MCFbQU6jM3HVZqaFpGXscbyTyy8ioYU3g/QO8?=
- =?us-ascii?Q?P/WJs9rYZ5UoLC1EhfxRyecHf9XC3AcDq8hit7HyjtYx5oAMWVDC3ETcCmhN?=
- =?us-ascii?Q?tVk7wzzN5feqD5f3GtanRzkt9U/CoA4+DBtkcJGmRUPw3CK78utxo+q8tBIZ?=
- =?us-ascii?Q?YsYGZ/TPOnMbzJhhBwGFTEH8b0+6wkMq6YzxQBL0rvnpty6XZp9p0SSk6SCm?=
- =?us-ascii?Q?jKMQB3Z5jX1m0IcSggZTc+4FsiU4i1DekXxGbXiWlRDdPIO2l0Qb8jwX5ck/?=
- =?us-ascii?Q?R0t6wpP7i084CeV0/V0VHd6m9LJ82q6S/Po8YNErxePzZIJRwKfYebU3Jzmc?=
- =?us-ascii?Q?KqTdhYkQKs1isi+WqpYKHbFYI+vRFL3pKRqS/h3X2PY15/4OocaGMGEpy+Oa?=
- =?us-ascii?Q?gQie33TqkjhJXIdKZbtFAprvFlvqhqfIrW3Tk8ILc9CsqxNIUcH9lr22+Qdz?=
- =?us-ascii?Q?E78/0FCdQ7w9G3quG9QmuZCzbqMw2GM9/JNhWxerxs5PuY5vKAoJWgkUZEU8?=
- =?us-ascii?Q?3LPYdd1uxT0jKFQ9siQMdT2gEEpR44/IuG6LW/fYgd8r1fLQ04bkOv86qCNX?=
- =?us-ascii?Q?M2wsGRpINF7YE7UKf2o9eZWmpAbBjFA3Op68VBYT7AL6/MsL25b7bsWnJ8lF?=
- =?us-ascii?Q?Kx2Xw3RIQY4CILytoRE5GftuYeoUdUvLhsnnIfjhz7l2F+R2Eppe44uvxW+v?=
- =?us-ascii?Q?7PbDLgOrrpmXrd0SaNibiKQiY1HfIfGwnrY9l3rqq8lChuddMBvPbe9Khew2?=
- =?us-ascii?Q?4NSq3eDzeExM7GyWLBvoApj9HX7OiPIJSqbEoKwnxxJQiyzJ7w/mx/2ItvzX?=
- =?us-ascii?Q?gM0ZeV+uQKyHVu5lRJmjgPx+x8BHFInYur93dzhrRwsXifgYV1+CVK8DKfRT?=
- =?us-ascii?Q?fpVhk8IPe63HWc1v5n4DD5lT4ogXOxDFONA58hELPa+nau2U/7bYq+VRiEV7?=
- =?us-ascii?Q?CXKfeEr7DpOg7bvX6JXzKkCizr/YwSAmXDWF9ZF+IW/0A3+DTWaqaree9NUP?=
- =?us-ascii?Q?y56SxwK0/QgoPtxE9cPA9Yo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <119DEE46B937A441AEC8BD1948617A98@namprd15.prod.outlook.com>
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 176b274c-e8d4-47aa-2ca0-08da86eb182f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2022 22:42:30.6902
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: j6RD9dPvfkKrHmCgWT5zaEU+PlDf2a+MG1HcE6vjJ7gP5BgVpt+x57J2u2hV3rJKHb2/LlODkfwXI7KTHH4zrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1139
-X-Proofpoint-GUID: zF7MC9V6OGkkiVuAsFonah_Scsk7ww7p
-X-Proofpoint-ORIG-GUID: zF7MC9V6OGkkiVuAsFonah_Scsk7ww7p
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>, fenghua.yu@intel.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
+Cc:     eranian@google.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, bagasdotme@gmail.com
+References: <166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu>
+ <166117577662.6695.15496626554784059239.stgit@bmoger-ubuntu>
+ <2b7e3511-8e69-2e47-0f11-7f1014b38940@intel.com>
+From:   "Moger, Babu" <bmoger@amd.com>
+In-Reply-To: <2b7e3511-8e69-2e47-0f11-7f1014b38940@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR19CA0069.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::46) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_10,2022-08-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d0eecb44-1f3f-40eb-9842-08da86eb23a5
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1945:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mstSLiBJyFXAx49Ow89S30Tm9zt/anaElWB+0IC12nf2sNjfgED7LU/OsTdqE+nMCsTRrbMkEtQhlvYIhY1hyNYQf1c5pLrDsgQxxShBEcAJzG241tizTG2Kb6kuSiiBLJjfzFQ8UbiWl+KizgSe4oK3bC7mR3hT3aQBxpjPYjxMw1l9vaIXl66iLzmUlDQZS9ASgWUGz5v38X7LQ1F7VvThMAEJN98/J9lXauqdOwPJm49U1j8KszKXulGHfQAtP0khNxgca0Wi+LVemmzvaofyCqC6ldHu60lbkNROoFL2LGeCT0JQzfVVKboFulVIpXTcsiPRZMSqTB6g/t9xsvv5W5B0qkzGK8v8Uy08X2bexzIDHDBrWFG7knYtCuLQxIR2EaGg8gLDlrcPcByCRMlFuuLXxbuWx/8wGIiUw2kNguO162fMbZ8yQyPjDJzC0ACPIqmnEoJ3VmQ7wtBP72uweqrfLLQi6h8NGEeQNBa3GNLegL2hM+xRUdu/W+zh7N2BjHGhvBEUaoCgdzYQXP0AsZjvJUKxvrc+lfOlJyHMrAwIGxzlO5+rpOJJiIr94aKpzHnmdAThPdbvbcDwnkGmVQ+klrS175XfkUFg4hcJlvUGKMoZazcS+YAjAx/CBE9ZUUJc9Dge4wx7Gm8gufsGZzH9LPqbUI4PqXmu0CCBDoqgwN0iiCpz73ZMh8MMSn0GaMoImFBKyfSgpfjRS1TP8hX/KxRPen1yD12v1D84FBf5rF0O2GDbgnKdnoz37ou+PLUZN+dRepP4fPn7nnBRWsR4XaJecEviVCUnYud42xGkFSWWZ27OdhhvKMbl1UulEHBY5I9FJlx6gjvSWnowzN4nT7dWETrkI6ivIG8wlsVj1vjuX3UxrGfzkHuf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(376002)(396003)(39860400002)(26005)(53546011)(6506007)(2616005)(7416002)(186003)(5660300002)(8936002)(31686004)(36756003)(31696002)(45080400002)(6486002)(478600001)(6512007)(966005)(41300700001)(6666004)(83380400001)(66946007)(4326008)(8676002)(66476007)(110136005)(2906002)(66556008)(38100700002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aC9iaXlqaXM2c2tJMWNaYU95SExPR2ZNWDJoSmFvcVdlZ3pYRW1VdnRoY0xl?=
+ =?utf-8?B?Tm1rZnRValI5MGl6RzlGWUVVc0d0eE1ZL2lyc3drdmg3bmdGRjRlVm5hTTU1?=
+ =?utf-8?B?SURDeWNXL0lCMGtBV2VsdTRRUTN5NWVrVFFKRERKaDByTDVXTXl5b1J6NU1p?=
+ =?utf-8?B?KzJoY2FmTmN6QTU2VGZGS0VHblZ4VC9oWVNTamNnb2JjWnJzR3FsSVM1Y3Bn?=
+ =?utf-8?B?ak9mQ0psYlp2R0MxSzFSVENyd1N2RXZySDYrMTZzd2djUk5XL3g0S0grbDR0?=
+ =?utf-8?B?R2hFNitPWngrK25hZk9sK2xZVk93UFdzWWR6UkhPakJvblRQeHZNbldXWmJt?=
+ =?utf-8?B?MDI3RDlrM0tBUEFlcnlXTFJVcmE1MXJpR0dvU2xzdUVKd2JrRUc2OFllb2VI?=
+ =?utf-8?B?ZEhjZGZyQjVsU2FGTGtBdzg1Y1V4NURHNHdQdC9VSHZDSWtVNVVQMnQxQjRC?=
+ =?utf-8?B?NC9VZGVydFVLZTF1bVVqeEtrcDZJaFJDR0M3cC8zWWg4S2xNZmFaTk9CclFV?=
+ =?utf-8?B?ZGJWS3RyOXA2QXFZWGRTU2tkeEVkcG4wYTE0ck51TkNlT3UxZzBjSE40MUoy?=
+ =?utf-8?B?NFowd0ZwS0ZoMWx3aU9zaEsrM3N5ZzRlUDVFS0RsMVVadFRibWI5aEhXc25Q?=
+ =?utf-8?B?MkJsNzgrQ1RjTjczTmJ0aHYyaFczdXBGUzYvYTBhTldIc2paMS8yVzBzOWFY?=
+ =?utf-8?B?dmJJL3FaZlhWSEZ0RDh2Mko2S1BJR3kzY0lHU2dEV2JCa0R3TGZXLzhxYUZy?=
+ =?utf-8?B?TEFERm1yZzlyQ0VOSDFJbGx0TGNJc21zSFB1YjJzUDQzL0dicmoyWi80V094?=
+ =?utf-8?B?MTlkcU1sTHQ4ZSs2Zk1VckxVRG4xbEtYV1VhaXVGc2hSL1VnSmVSSzgzU1FS?=
+ =?utf-8?B?NlVMNVZweThIc3pqeDlrLzdrSzNjQmNoUmZLMzkwc2w2aG5NS2l0anB5R1Rp?=
+ =?utf-8?B?Rnd4cEV3YkplemJDWGU1dkNnSFBrNnB5MjJYZ2x3b1gvU3RmREpuMUpQSXdM?=
+ =?utf-8?B?SDBVbHU2eHdKWG1RWFJRVkJRZmJ5OFlkNmtad256NHp2d1k4K0RQV2Z5UE53?=
+ =?utf-8?B?OTRKck53R1ZKVmhTdVZwNXlWUDZxMUZaWGpUbFBaWUh1MUZlS0QwNkM2eTZo?=
+ =?utf-8?B?TG5zRC9vREREMk54VjJ4TVdNbjRWM2FneFN6ZTR5YXA0WS9rRkx4L3lNMndM?=
+ =?utf-8?B?QTZHbXpJWE53YjRnb2dEeTllQ2N2ajM2Q0szQW4vcGxhRHhSVnpTUE1rL0Mr?=
+ =?utf-8?B?M3NFM283ckl1S21yVEVoOGtqRG13K2wyajhoMnM1V25zMXN3bVMxNW53Vmho?=
+ =?utf-8?B?K1J1YzUvSldNTVJVQU9HdDhHRk1YWDROR081aEVpVzlxR2lyckd0QW4yMElP?=
+ =?utf-8?B?UjBMb3RQeDNpcWIwQ0tVaGdSTVQ2T0FhRS9FMEhzZVFvNklobDRTa0JBN0lh?=
+ =?utf-8?B?VlhJWnBTeENzMWhqUHlucEZGU2hoVzBXSlIrUjdSUHdZeUhhZWNOdUVaUTI1?=
+ =?utf-8?B?MkswSndKSDBqR0R3VnFMdEc5cUtXUFpjTEdYS0V1bEMxQ2V0TXU5Q3V3em5R?=
+ =?utf-8?B?WlRGOUhYeXkzZnovK3lTaldvRWgvU01EVjJud0d5cXYyZmQ1V0xkQ1M5Ni8r?=
+ =?utf-8?B?OFZOUHNFMmdSTDg5OEJZTDl2TzduTXI2NFNzM21nbFA4K0JhNzRwMmVid3p5?=
+ =?utf-8?B?MkZ0cFZsT0NQTW5QR2svZ3pOMGZ2YW9rdjg4L3VQaTMwcFBvN3FtZzVvZ1pj?=
+ =?utf-8?B?NlhDc2dnQXRKUG5RUnlieEMzL3pORTBnbjAwK3M3VVF5ankvVUMweTFvb09T?=
+ =?utf-8?B?TXVZK2hzeUxxd1FqT2JzbmdCOU8wTjljMEhJVE1pMDJuc1pmSkRJangzc1Ru?=
+ =?utf-8?B?VXR4eTJTZ2k4WFV4SVYwRlZMakdMNVFoc3N4NDNWQ3Fuei9WRGFPWENodDJM?=
+ =?utf-8?B?bVJ0U2xjTkV1MUdaV0xxMjBraEtXMjM2aEJWRGpaTUJmUE1PZnhIZkVmRFlX?=
+ =?utf-8?B?aEpjRkVjOUhHb1ZZZHFuZWNQRS93NVBmdGFYTm50VXRHZFRtdmFGdzVkWEJ1?=
+ =?utf-8?B?clBHUkpwSFNmVWFiT2ppL29XLzdFaWdzNEhiYVVlTVgvYkJOTGZEZkRLUlVE?=
+ =?utf-8?Q?LmRsGmk9s9J7o6yIOnxs0d98K?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0eecb44-1f3f-40eb-9842-08da86eb23a5
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 22:42:50.1869
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6RVgTJLj3n9t2DbM3WkAJAQ+TIzpEVUg4qt+Cg9Tj2hcgXWG+ypjSURPJ9IFPDc+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1945
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -176,98 +132,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 8/23/2022 5:47 PM, Reinette Chatre wrote:
+> Hi Babu,
+>
+> On 8/22/2022 6:42 AM, Babu Moger wrote:
+>> Adds the new AMD feature X86_FEATURE_SMBA. With this feature, the QOS
+>> enforcement policies can be applied to external slow memory connected
+>> to the host. QOS enforcement is accomplished by assigning a Class Of
+>> Service (COS) to a processor and specifying allocations or limits for
+>> that COS for each resource to be allocated.
+>>
+>> This feature is identified by the CPUID Function 8000_0020_EBX_x0.
+>>
+>> CPUID Fn8000_0020_EBX_x0 AMD Bandwidth Enforcement Feature Identifiers (ECX=0)
+>> Bits    Field Name      Description
+>> 2       L3SBE           L3 external slow memory bandwidth enforcement
+>>
+>> Feature description is available in the specification, "AMD64 Technology Platform Quality
+>> of Service Extensions, Revision: 1.03 Publication # 56375 Revision: 1.03 Issue Date: February 2022".
+>>
+>> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.amd.com%2Fen%2Fsupport%2Ftech-docs%2Famd64-technology-platform-quality-service-extensions&amp;data=05%7C01%7Cbabu.moger%40amd.com%7C4385e95126b24de58aec08da85597c88%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637968916632283680%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=dKSxIinxZGybtACbs3%2FVZr4zbeAvXYc%2FezVivq3xjx0%3D&amp;reserved=0
+>> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D206537&amp;data=05%7C01%7Cbabu.moger%40amd.com%7C4385e95126b24de58aec08da85597c88%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637968916632283680%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=f7MJmrwkBGxq8BuWjNY6Ze9NdzJc6NOkXxNjUZk5c4U%3D&amp;reserved=0
+>> Signed-off-by: Babu Moger <babu.moger@amd.com>
+>> Reviewed-by: Ingo Molnar <mingo@kernel.org>
+>> ---
+> resctrl currently supports "memory bandwidth allocation" and this series adds
+> "slow memory bandwidth allocation". Could you please provide more detail about
+> what the difference is between "MBA" and "SMBA"? It is clear that the implementation
+In this case the slow memory means memory attached to CXL device.
+> treats them as different resources, but both resources are associated with L3 cache
+> domains and (from what I understand) throttling always occurs at the CPU. Can both
+> types of memory resources thus be seen as downstream from L3 cache? How can
+Yes. that is correct. They are seen as downstream from L3.
+> a user know what memory is considered when configuring MBA and what memory is
+> considered when configuring SMBA? Additionally, I do find the term "slow" to be
 
-> On Aug 25, 2022, at 3:10 PM, Paul Moore <paul@paul-moore.com> wrote:
-> 
-> On Thu, Aug 25, 2022 at 5:58 PM Song Liu <songliubraving@fb.com> wrote:
->>> On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
->>> 
->>> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->>>> Paul Moore <paul@paul-moore.com> writes:
->>>>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
->>>>>> I am hoping we can come up with
->>>>>> "something better" to address people's needs, make everyone happy, and
->>>>>> bring forth world peace.  Which would stack just fine with what's here
->>>>>> for defense in depth.
->>>>>> 
->>>>>> You may well not be interested in further work, and that's fine.  I need
->>>>>> to set aside a few days to think on this.
->>>>> 
->>>>> I'm happy to continue the discussion as long as it's constructive; I
->>>>> think we all are.  My gut feeling is that Frederick's approach falls
->>>>> closest to the sweet spot of "workable without being overly offensive"
->>>>> (*cough*), but if you've got an additional approach in mind, or an
->>>>> alternative approach that solves the same use case problems, I think
->>>>> we'd all love to hear about it.
->>>> 
->>>> I would love to actually hear the problems people are trying to solve so
->>>> that we can have a sensible conversation about the trade offs.
->>> 
->>> Here are several taken from the previous threads, it's surely not a
->>> complete list, but it should give you a good idea:
->>> 
->>> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
->>> 
->>>> As best I can tell without more information people want to use
->>>> the creation of a user namespace as a signal that the code is
->>>> attempting an exploit.
->>> 
->>> Some use cases are like that, there are several other use cases that
->>> go beyond this; see all of our previous discussions on this
->>> topic/patchset.  As has been mentioned before, there are use cases
->>> that require improved observability, access control, or both.
->>> 
->>>> As such let me propose instead of returning an error code which will let
->>>> the exploit continue, have the security hook return a bool.  With true
->>>> meaning the code can continue and on false it will trigger using SIGSYS
->>>> to terminate the program like seccomp does.
->>> 
->>> Having the kernel forcibly exit the process isn't something that most
->>> LSMs would likely want.  I suppose we could modify the hook/caller so
->>> that *if* an LSM wanted to return SIGSYS the system would kill the
->>> process, but I would want that to be something in addition to
->>> returning an error code like LSMs normally do (e.g. EACCES).
->> 
->> I am new to user_namespace and security work, so please pardon me if
->> anything below is very wrong.
->> 
->> IIUC, user_namespace is a tool that enables trusted userspace code to
->> control the behavior of untrusted (or less trusted) userspace code.
->> Failing create_user_ns() doesn't make the system more reliable.
->> Specifically, we call create_user_ns() via two paths: fork/clone and
->> unshare. For both paths, we need the userspace to use user_namespace,
->> and to honor failed create_user_ns().
->> 
->> On the other hand, I would echo that killing the process is not
->> practical in some use cases. Specifically, allowing the application to
->> run in a less secure environment for a short period of time might be
->> much better than killing it and taking down the whole service. Of
->> course, there are other cases that security is more important, and
->> taking down the whole service is the better choice.
->> 
->> I guess the ultimate solution is a way to enforce using user_namespace
->> in the kernel (if it ever makes sense...).
-> 
-> The LSM framework, and the BPF and SELinux LSM implementations in this
-> patchset, provide a mechanism to do just that: kernel enforced access
-> controls using flexible security policies which can be tailored by the
-> distro, solution provider, or end user to meet the specific needs of
-> their use case.
+This memory completely transparent to OS with little bit higher latency 
+that regular main memory.
 
-In this case, I wouldn't call the kernel is enforcing access control. 
-(I might be wrong). There are 3 components here: kernel, LSM, and 
-trusted userspace (whoever calls unshare). AFAICT, kernel simply passes
-the decision made by LSM (BPF or SELinux) to the trusted userspace. It 
-is up to the trusted userspace to honor the return value of unshare(). 
-If the userspace simply ignores unshare failures, or does not call
-unshare(CLONE_NEWUSER), kernel and LSM cannot do much about it, right?
+Yes. I know slow word is bit vague. I am not an expert of CXL. But i see 
+that word slow is being used to refer the CXL memory to differentiate it 
+from regular memory.
 
-This might still be useful in some cases. (I am far from an expert on
-these). I just feel this is not the typical solution to enforce 
-something.
+> vague as a way to distinguish between different memory types. What is the
+> definition of "slow"? Would all "slow" memory on the system support SMBA?
 
-Thanks,
-Song
+Yes. All the slow memory in the system can support SMBA.
 
-PS: If I said something very stupid, I would not feel offended if someone
-pointed it out loud. :)
+Thanks
+
+Babu
+
+>
+> Reinette

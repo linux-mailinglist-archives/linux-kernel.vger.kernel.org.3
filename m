@@ -2,282 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489DB5A1C1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B25E5A1C2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243403AbiHYWTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
+        id S244355AbiHYWVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244237AbiHYWTQ (ORCPT
+        with ESMTP id S244357AbiHYWVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:19:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437C9BD0AD
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:19:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2976B82ACE
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD9ADC433D6;
-        Thu, 25 Aug 2022 22:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661465952;
-        bh=61yJdy1CU12tJc5JG4goNgQTDKMWhUH+DuAXzbk7b0s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ikaCPQwVaKhRGYMzCuonJSu2t62maZVPE5ZChqnq6+kEZmyuKGZIlgb0TOpfYaZcx
-         2J563OcEhkuuXETveYU31IOvTjxgbb6eaqi9RYKPyFfd3Y0n9mTU6uAMQiqaZbpIUe
-         4FdqcAu6YsHgXRWfpdkCCq62K6rjHfjKlRpjz3tORLYZJthAGF2keHvGo9fygAqXNl
-         7nbkNIA3+BhXxc1S1qhelG8MTt9jtNMJwR5Yg/DfPfuvqvyF4nONsRKviUYu9m5lRf
-         0dDQYFusMvtuiDS688NikaAzPhMFVZ/+jxi4/o31YQ20uSGRNwDiUuNYqWVfqh2+bB
-         csa/huvDyeBEA==
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] tracing: Add .graph suffix option to histogram value
-Date:   Thu, 25 Aug 2022 17:19:03 -0500
-Message-Id: <886fe9b6098eddb9d298e8a3f07bbea61acdac16.1661464992.git.zanussi@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1661464992.git.zanussi@kernel.org>
-References: <cover.1661464992.git.zanussi@kernel.org>
+        Thu, 25 Aug 2022 18:21:02 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701F5C578C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:21:00 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-324ec5a9e97so576565337b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=YLpy2xCVK51CZcFB6zrbiai4Ndy7eOAyjwmsLFCvyjU=;
+        b=RuNF59UtgFixO6ATvPnw/me6kowb8cK+ihIPiN9YGvyGWowPWv82QGFElwUvI5+DKh
+         4bM5mWzcBhtKOSRx+2dmqP7D/25ANqTEvkNgxLoZ03wM+hqSBilKjjVQnTGCMzQRJvrf
+         7OmD4R3ZcaS+JouPbNz1nqMeUivjrGYpAJO8ghMB+GXoorGZxcOVY6c5N0xxdBtmHwFb
+         rHW5lKM/+QFvdViqOupzGWdox6T1quWhzvQDszZN+5ppKABtqYAVc6ogO2655g3uO5Un
+         hCeyKkvFIbcG4AOPpY0aWraEDTbF1LJtJDlAcDlsGMIQ8GNjJyqD7u1NEhxtgTZWs3Mh
+         zQWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=YLpy2xCVK51CZcFB6zrbiai4Ndy7eOAyjwmsLFCvyjU=;
+        b=nTsz73hiJAdOyaf9rae2OnCujpgrIgab3p2McUzbglCMn5EgCscCCC7+97hB9mgTRH
+         VtWO2/CFYDE9d4jZao9+LpLmuOIT86ydDuPsv1cyCtR1TzQMgIyS02m/gWekW/FjZvbr
+         CG5a81qaDiPKNeRG1KGtMreBFLVgKOpCGFf1Uqmlu+OOWiLK70wVuFP4XueJ5l8443ja
+         /rMvNQlwSJckd2W2rZSKA1YxBAHtRiGDAVcXxfRfLg6YIM/ar5poBZumG8vcO9hzAm9E
+         YDeQzpRGfVVhZVflgMjDbv4D4M8rVqJxHLf7ARR9P0uojUd6MAVLAZjw1FaQBSvkoOkL
+         FDWA==
+X-Gm-Message-State: ACgBeo3AUG59DxEzR5enV2O5uRhtCZELMHSuapdX2F7xRHFkztIchDTH
+        4HaCJBpQgogAgnKSDVors0RNyU0Rm7l/GoD8wPf3Og==
+X-Google-Smtp-Source: AA6agR5WDTHEn0f5fI43Fn0xyIo60iYiherkxssOJTh4YNKt09fcyH+CjvifzWu3aG86BQ/39tXWDS0RiuFFuEIyC9g=
+X-Received: by 2002:a25:bd4d:0:b0:696:489a:3a86 with SMTP id
+ p13-20020a25bd4d000000b00696489a3a86mr3142761ybm.447.1661466059351; Thu, 25
+ Aug 2022 15:20:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220817184026.3468620-1-isaacmanjarres@google.com>
+In-Reply-To: <20220817184026.3468620-1-isaacmanjarres@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 25 Aug 2022 15:20:23 -0700
+Message-ID: <CAGETcx9U_tKjnQnymNussM+Qm8vJ_vYpPp_QHY3NDkW7BBuVag@mail.gmail.com>
+Subject: Re: [PATCH v3] driver core: Don't probe devices after
+ bus_type.match() probe deferral
+To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+On Wed, Aug 17, 2022 at 11:40 AM Isaac J. Manjarres
+<isaacmanjarres@google.com> wrote:
+>
+> Both __device_attach_driver() and __driver_attach() check the return
+> code of the bus_type.match() function to see if the device needs to be
+> added to the deferred probe list. After adding the device to the list,
+> the logic attempts to bind the device to the driver anyway, as if the
+> device had matched with the driver, which is not correct.
+>
+> If __device_attach_driver() detects that the device in question is not
+> ready to match with a driver on the bus, then it doesn't make sense for
+> the device to attempt to bind with the current driver or continue
+> attempting to match with any of the other drivers on the bus. So, update
+> the logic in __device_attach_driver() to reflect this.
+>
+> If __driver_attach() detects that a driver tried to match with a device
+> that is not ready to match yet, then the driver should not attempt to bind
+> with the device. However, the driver can still attempt to match and bind
+> with other devices on the bus, as drivers can be bound to multiple
+> devices. So, update the logic in __driver_attach() to reflect this.
+>
+> Cc: stable@vger.kernel.org
+> Cc: Saravana Kannan <saravanak@google.com>
+> Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/base/dd.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> v1 -> v2:
+> - Fixed the logic in __driver_attach() to allow a driver to continue
+>   attempting to match and bind with devices in case of any error, not
+>   just probe deferral.
+>
+> v2 -> v3:
+> - Restored the patch back to v1.
+> - Added Guenter's Tested-by tag.
+> - Added Saravana's Reviewed-by tag.
+> - Cc'd stable@vger.kernel.org
+>
+> Greg,
+>
+> This is the final version of this patch. Can you please pick this up?
+>
+> Thanks,
+> Isaac
+>
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 70f79fc71539..90b31fb141a5 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
+>                 dev_dbg(dev, "Device match requests probe deferral\n");
+>                 dev->can_match = true;
+>                 driver_deferred_probe_add(dev);
+> +               /*
+> +                * Device can't match with a driver right now, so don't attempt
+> +                * to match or bind with other drivers on the bus.
+> +                */
+> +               return ret;
+>         } else if (ret < 0) {
+>                 dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+>                 return ret;
+> @@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
+>                 dev_dbg(dev, "Device match requests probe deferral\n");
+>                 dev->can_match = true;
+>                 driver_deferred_probe_add(dev);
+> +               /*
+> +                * Driver could not match with device, but may match with
+> +                * another device on the bus.
+> +                */
+> +               return 0;
+>         } else if (ret < 0) {
+>                 dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+>                 return ret;
+> --
+> 2.37.1.595.g718a3a8f04-goog
+>
 
-Add the .graph suffix which shows the bar graph of the histogram value.
+Greg,
 
-For example, the below example shows that the bar graph
-of the histogram of the runtime for each tasks.
+Can you pull this in for 6.0-rcX please? This is fixing a long
+standing bug that was exposed by my amba code cleanup.
 
-------
-  # cd /sys/kernel/debug/tracing/
-  # echo hist:keys=pid:vals=runtime.graph:sort=pid > \
-   events/sched/sched_stat_runtime/trigger
-  # sleep 10
-  # cat events/sched/sched_stat_runtime/hist
- # event histogram
- #
- # trigger info: hist:keys=pid:vals=hitcount,runtime.graph:sort=pid:size=2048 [active]
- #
-
- { pid:         14 } hitcount:          2  runtime:
- { pid:         16 } hitcount:          8  runtime:
- { pid:         26 } hitcount:          1  runtime:
- { pid:         57 } hitcount:          3  runtime:
- { pid:         61 } hitcount:         20  runtime: ###
- { pid:         66 } hitcount:          2  runtime:
- { pid:         70 } hitcount:          3  runtime:
- { pid:         72 } hitcount:          2  runtime:
- { pid:        145 } hitcount:         14  runtime: ####################
- { pid:        152 } hitcount:          5  runtime: #######
- { pid:        153 } hitcount:          2  runtime: ####
-
- Totals:
-     Hits: 62
-     Entries: 11
-     Dropped: 0
--------
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
- Conflicts:
-	kernel/trace/trace_events_hist.c
----
- kernel/trace/trace_events_hist.c | 80 ++++++++++++++++++++++++++------
- 1 file changed, 66 insertions(+), 14 deletions(-)
-
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 8e8942e62900..f31f1adab9fa 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -507,6 +507,7 @@ enum hist_field_flags {
- 	HIST_FIELD_FL_BUCKET		= 1 << 17,
- 	HIST_FIELD_FL_CONST		= 1 << 18,
- 	HIST_FIELD_FL_PERCENT		= 1 << 19,
-+	HIST_FIELD_FL_GRAPH		= 1 << 20,
- };
- 
- struct var_defs {
-@@ -1710,6 +1711,8 @@ static const char *get_hist_field_flags(struct hist_field *hist_field)
- 		flags_str = "usecs";
- 	else if (hist_field->flags & HIST_FIELD_FL_PERCENT)
- 		flags_str = "percent";
-+	else if (hist_field->flags & HIST_FIELD_FL_GRAPH)
-+		flags_str = "graph";
- 
- 	return flags_str;
- }
-@@ -2322,6 +2325,10 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
- 			if (*flags & (HIST_FIELD_FL_VAR | HIST_FIELD_FL_KEY))
- 				goto error;
- 			*flags |= HIST_FIELD_FL_PERCENT;
-+		} else if (strncmp(modifier, "graph", 5) == 0) {
-+			if (*flags & (HIST_FIELD_FL_VAR | HIST_FIELD_FL_KEY))
-+				goto error;
-+			*flags |= HIST_FIELD_FL_GRAPH;
- 		} else {
-  error:
- 			hist_err(tr, HIST_ERR_BAD_FIELD_MODIFIER, errpos(modifier));
-@@ -4362,6 +4369,9 @@ static int create_val_fields(struct hist_trigger_data *hist_data,
- 				if (strncmp(field_str + 8, ".percent", 8) == 0)
- 					hist_data->fields[HITCOUNT_IDX]->flags |=
- 						HIST_FIELD_FL_PERCENT;
-+				if (strncmp(field_str + 8, ".graph", 8) == 0)
-+					hist_data->fields[HITCOUNT_IDX]->flags |=
-+						HIST_FIELD_FL_GRAPH;
- 			}
- 			continue;
- 		}
-@@ -5315,14 +5325,37 @@ static inline unsigned int __get_percentage(u64 val, u64 total)
- 	return (unsigned int)div64_ul(val, total);
- }
- 
-+#define BAR_CHAR '#'
-+
-+static inline const char *__fill_bar_str(char *buf, int size, u64 val, u64 max)
-+{
-+	unsigned int len = __get_percentage(val, max);
-+	int i;
-+
-+	if (len == UINT_MAX) {
-+		snprintf(buf, size, "[ERROR]");
-+		return buf;
-+	}
-+
-+	len = len * size / 10000;
-+	for (i = 0; i < len && i < size; i++)
-+		buf[i] = BAR_CHAR;
-+	while (i < size)
-+		buf[i++] = ' ';
-+	buf[size] = '\0';
-+
-+	return buf;
-+}
-+
- static void hist_trigger_entry_print(struct seq_file *m,
- 				     struct hist_trigger_data *hist_data,
--				     u64 *totals,
-+				     u64 *maxs,
- 				     void *key,
- 				     struct tracing_map_elt *elt)
- {
- 	const char *field_name;
- 	unsigned int i, pc;
-+	char bar[21];
- 	u64 val;
- 
- 	hist_trigger_print_key(m, hist_data, key, elt);
-@@ -5330,11 +5363,14 @@ static void hist_trigger_entry_print(struct seq_file *m,
- 	i = HITCOUNT_IDX;
- 	val = tracing_map_read_sum(elt, i);
- 	if (hist_data->fields[i]->flags & HIST_FIELD_FL_PERCENT) {
--		pc = __get_percentage(val, totals[i]);
-+		pc = __get_percentage(val, maxs[i]);
- 		if (pc == UINT_MAX)
- 			seq_puts(m, " hitcount:    [ERROR]");
- 		else
- 			seq_printf(m, " hitcount: %7u.%02u", pc / 100, pc % 100);
-+	} else if (hist_data->fields[i]->flags & HIST_FIELD_FL_GRAPH) {
-+		seq_printf(m, " hitcount: %20s",
-+			   __fill_bar_str(bar, 20, val, maxs[i]));
- 	} else
- 		seq_printf(m, " hitcount: %10llu", val);
- 
-@@ -5347,12 +5383,16 @@ static void hist_trigger_entry_print(struct seq_file *m,
- 
- 		if (hist_data->fields[i]->flags & HIST_FIELD_FL_PERCENT) {
- 			val = tracing_map_read_sum(elt, i);
--			pc = __get_percentage(val, totals[i]);
-+			pc = __get_percentage(val, maxs[i]);
- 			if (pc == UINT_MAX)
- 				seq_printf(m, "  %s:    [ERROR]", field_name);
- 			else
- 				seq_printf(m, "  %s: %7u.%02u", field_name,
- 				   pc / 100, pc % 100);
-+		} else if (hist_data->fields[i]->flags & HIST_FIELD_FL_GRAPH) {
-+			val = tracing_map_read_sum(elt, i);
-+			seq_printf(m, "  %s: %20s", field_name,
-+				   __fill_bar_str(bar, 20, val, maxs[i]));
- 		} else if (hist_data->fields[i]->flags & HIST_FIELD_FL_HEX) {
- 			seq_printf(m, "  %s: %10llx", field_name,
- 				   tracing_map_read_sum(elt, i));
-@@ -5373,7 +5413,8 @@ static int print_entries(struct seq_file *m,
- 	struct tracing_map_sort_entry **sort_entries = NULL;
- 	struct tracing_map *map = hist_data->map;
- 	int i, j, n_entries;
--	u64 *totals = NULL;
-+	u64 *maxs = NULL;
-+	u64 val;
- 
- 	n_entries = tracing_map_sort_entries(map, hist_data->sort_keys,
- 					     hist_data->n_sort_keys,
-@@ -5382,27 +5423,36 @@ static int print_entries(struct seq_file *m,
- 		return n_entries;
- 
- 	for (j = 0; j < hist_data->n_vals; j++) {
--		if (!(hist_data->fields[j]->flags & HIST_FIELD_FL_PERCENT))
-+		if (!(hist_data->fields[j]->flags &
-+			(HIST_FIELD_FL_PERCENT | HIST_FIELD_FL_GRAPH)))
- 			continue;
--		if (!totals) {
--			totals = kcalloc(hist_data->n_vals, sizeof(u64),
--					 GFP_KERNEL);
--			if (!totals) {
-+		if (!maxs) {
-+			maxs = kcalloc(hist_data->n_vals, sizeof(u64),
-+				       GFP_KERNEL);
-+			if (!maxs) {
- 				n_entries = -ENOMEM;
- 				goto out;
- 			}
- 		}
--		for (i = 0; i < n_entries; i++)
--			totals[j] += tracing_map_read_sum(
--					sort_entries[i]->elt, j);
-+		/*
-+		 * If the n-th field shows percentage, the maxs[n] has the
-+		 * total, or it has the maximum number.
-+		 */
-+		for (i = 0; i < n_entries; i++) {
-+			val = tracing_map_read_sum(sort_entries[i]->elt, j);
-+			if (hist_data->fields[j]->flags & HIST_FIELD_FL_PERCENT)
-+				maxs[j] += val;
-+			else if (maxs[j] < val)
-+				maxs[j] = val;
-+		}
- 	}
- 
- 	for (i = 0; i < n_entries; i++)
--		hist_trigger_entry_print(m, hist_data, totals,
-+		hist_trigger_entry_print(m, hist_data, maxs,
- 					 sort_entries[i]->key,
- 					 sort_entries[i]->elt);
- 
--	kfree(totals);
-+	kfree(maxs);
- out:
- 	tracing_map_destroy_sort_entries(sort_entries, n_entries);
- 
-@@ -5827,6 +5877,8 @@ static int event_hist_trigger_print(struct seq_file *m,
- 			seq_puts(m, "hitcount");
- 			if (field->flags & HIST_FIELD_FL_PERCENT)
- 				seq_puts(m, ".percent");
-+			if (field->flags & HIST_FIELD_FL_GRAPH)
-+				seq_puts(m, ".graph");
- 		} else {
- 			seq_puts(m, ",");
- 			hist_field_print(m, field);
--- 
-2.34.1
-
+-Saravana

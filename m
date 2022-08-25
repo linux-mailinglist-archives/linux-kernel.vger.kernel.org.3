@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E175A130D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085F95A1314
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241049AbiHYOMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S240174AbiHYOMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbiHYOMN (ORCPT
+        with ESMTP id S238220AbiHYOMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:12:13 -0400
+        Thu, 25 Aug 2022 10:12:15 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE2EC2F00B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:12:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D007A2AC2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:12:14 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 289D3ED1;
-        Thu, 25 Aug 2022 07:12:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38C62106F;
+        Thu, 25 Aug 2022 07:12:19 -0700 (PDT)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B18383F71A;
-        Thu, 25 Aug 2022 07:12:10 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C2FDF3F71A;
+        Thu, 25 Aug 2022 07:12:12 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
@@ -29,9 +29,9 @@ Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         souvik.chakravarty@arm.com, wleavitt@marvell.com,
         peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
         tarek.el-sherbiny@arm.com, cristian.marussi@arm.com
-Subject: [PATCH v2 1/9] firmware: arm_scmi: Refactor xfer in-flight registration routines
-Date:   Thu, 25 Aug 2022 15:11:44 +0100
-Message-Id: <20220825141152.2334536-2-cristian.marussi@arm.com>
+Subject: [PATCH v2 2/9] firmware: arm_scmi: Simplify chan_available transport operation
+Date:   Thu, 25 Aug 2022 15:11:45 +0100
+Message-Id: <20220825141152.2334536-3-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220825141152.2334536-1-cristian.marussi@arm.com>
 References: <20220825141152.2334536-1-cristian.marussi@arm.com>
@@ -46,180 +46,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the whole xfer in-flight registration process out of scmi_xfer_get
-and while at that, split the sequence number selection steps from the
-in-flight registration procedure itself.
+SCMI transport operation .chan_available determines in a transport-specific
+way if an SCMI channel is still available and to be configured: such
+information is derived analyzing bits of DT in a transport specific way;
+al it needs is a DT node to operate upon, not necessarily a full blown
+device.
 
-No functional change.
+Fix to receive in input a reference to adevice_node instead of a device
+carrying a pointer to such device_node.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/driver.c | 102 +++++++++++++++++++----------
- 1 file changed, 68 insertions(+), 34 deletions(-)
+ drivers/firmware/arm_scmi/common.h  | 2 +-
+ drivers/firmware/arm_scmi/driver.c  | 2 +-
+ drivers/firmware/arm_scmi/mailbox.c | 4 ++--
+ drivers/firmware/arm_scmi/optee.c   | 4 ++--
+ drivers/firmware/arm_scmi/smc.c     | 4 ++--
+ drivers/firmware/arm_scmi/virtio.c  | 2 +-
+ 6 files changed, 9 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
+index 61aba7447c32..096b66442d84 100644
+--- a/drivers/firmware/arm_scmi/common.h
++++ b/drivers/firmware/arm_scmi/common.h
+@@ -150,7 +150,7 @@ struct scmi_chan_info {
+  */
+ struct scmi_transport_ops {
+ 	int (*link_supplier)(struct device *dev);
+-	bool (*chan_available)(struct device *dev, int idx);
++	bool (*chan_available)(struct device_node *of_node, int idx);
+ 	int (*chan_setup)(struct scmi_chan_info *cinfo, struct device *dev,
+ 			  bool tx);
+ 	int (*chan_free)(int id, void *p, void *data);
 diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 609ebedee9cb..e5193da2ce09 100644
+index e5193da2ce09..62e02b6475ff 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
-@@ -311,8 +311,6 @@ static int scmi_xfer_token_set(struct scmi_xfers_info *minfo,
- 	if (xfer_id != next_token)
- 		atomic_add((int)(xfer_id - next_token), &transfer_last_id);
+@@ -2035,7 +2035,7 @@ static int scmi_chan_setup(struct scmi_info *info, struct device *dev,
+ 	if (cinfo)
+ 		return 0;
  
--	/* Set in-flight */
--	set_bit(xfer_id, minfo->xfer_alloc_table);
- 	xfer->hdr.seq = (u16)xfer_id;
- 
- 	return 0;
-@@ -330,33 +328,77 @@ static inline void scmi_xfer_token_clear(struct scmi_xfers_info *minfo,
- 	clear_bit(xfer->hdr.seq, minfo->xfer_alloc_table);
+-	if (!info->desc->ops->chan_available(dev, idx)) {
++	if (!info->desc->ops->chan_available(dev->of_node, idx)) {
+ 		cinfo = idr_find(idr, SCMI_PROTOCOL_BASE);
+ 		if (unlikely(!cinfo)) /* Possible only if platform has no Rx */
+ 			return -EINVAL;
+diff --git a/drivers/firmware/arm_scmi/mailbox.c b/drivers/firmware/arm_scmi/mailbox.c
+index 08ff4d110beb..ed7e66788134 100644
+--- a/drivers/firmware/arm_scmi/mailbox.c
++++ b/drivers/firmware/arm_scmi/mailbox.c
+@@ -46,9 +46,9 @@ static void rx_callback(struct mbox_client *cl, void *m)
+ 	scmi_rx_callback(smbox->cinfo, shmem_read_header(smbox->shmem), NULL);
  }
  
-+/**
-+ * scmi_xfer_inflight_register_unlocked  - Register the xfer as in-flight
-+ *
-+ * @xfer: The xfer to register
-+ * @minfo: Pointer to Tx/Rx Message management info based on channel type
-+ *
-+ * Note that this helper assumes that the xfer to be registered as in-flight
-+ * had been built using an xfer sequence number which still corresponds to a
-+ * free slot in the xfer_alloc_table.
-+ *
-+ * Context: Assumes to be called with @xfer_lock already acquired.
-+ */
-+static inline void
-+scmi_xfer_inflight_register_unlocked(struct scmi_xfer *xfer,
-+				     struct scmi_xfers_info *minfo)
-+{
-+	/* Set in-flight */
-+	set_bit(xfer->hdr.seq, minfo->xfer_alloc_table);
-+	hash_add(minfo->pending_xfers, &xfer->node, xfer->hdr.seq);
-+	xfer->pending = true;
-+}
-+
-+/**
-+ * scmi_xfer_pending_set  - Pick a proper sequence number and mark the xfer
-+ * as pending in-flight
-+ *
-+ * @xfer: The xfer to act upon
-+ * @minfo: Pointer to Tx/Rx Message management info based on channel type
-+ *
-+ * Return: 0 on Success or error otherwise
-+ */
-+static inline int scmi_xfer_pending_set(struct scmi_xfer *xfer,
-+					struct scmi_xfers_info *minfo)
-+{
-+	int ret;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&minfo->xfer_lock, flags);
-+	/* Set a new monotonic token as the xfer sequence number */
-+	ret = scmi_xfer_token_set(minfo, xfer);
-+	if (!ret)
-+		scmi_xfer_inflight_register_unlocked(xfer, minfo);
-+	spin_unlock_irqrestore(&minfo->xfer_lock, flags);
-+
-+	return ret;
-+}
-+
- /**
-  * scmi_xfer_get() - Allocate one message
-  *
-  * @handle: Pointer to SCMI entity handle
-  * @minfo: Pointer to Tx/Rx Message management info based on channel type
-- * @set_pending: If true a monotonic token is picked and the xfer is added to
-- *		 the pending hash table.
-  *
-  * Helper function which is used by various message functions that are
-  * exposed to clients of this driver for allocating a message traffic event.
-  *
-- * Picks an xfer from the free list @free_xfers (if any available) and, if
-- * required, sets a monotonically increasing token and stores the inflight xfer
-- * into the @pending_xfers hashtable for later retrieval.
-+ * Picks an xfer from the free list @free_xfers (if any available) and perform
-+ * a basic initialization.
-+ *
-+ * Note that, at this point, still no sequence number is assigned to the
-+ * allocated xfer, nor it is registered as a pending transaction.
-  *
-  * The successfully initialized xfer is refcounted.
-  *
-- * Context: Holds @xfer_lock while manipulating @xfer_alloc_table and
-- *	    @free_xfers.
-+ * Context: Holds @xfer_lock while manipulating @free_xfers.
-  *
-- * Return: 0 if all went fine, else corresponding error.
-+ * Return: An initialized xfer if all went fine, else pointer error.
-  */
- static struct scmi_xfer *scmi_xfer_get(const struct scmi_handle *handle,
--				       struct scmi_xfers_info *minfo,
--				       bool set_pending)
-+				       struct scmi_xfers_info *minfo)
+-static bool mailbox_chan_available(struct device *dev, int idx)
++static bool mailbox_chan_available(struct device_node *of_node, int idx)
  {
--	int ret;
- 	unsigned long flags;
- 	struct scmi_xfer *xfer;
+-	return !of_parse_phandle_with_args(dev->of_node, "mboxes",
++	return !of_parse_phandle_with_args(of_node, "mboxes",
+ 					   "#mbox-cells", idx, NULL);
+ }
  
-@@ -376,25 +418,8 @@ static struct scmi_xfer *scmi_xfer_get(const struct scmi_handle *handle,
- 	 */
- 	xfer->transfer_id = atomic_inc_return(&transfer_last_id);
+diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
+index f42dad997ac9..59e688767af2 100644
+--- a/drivers/firmware/arm_scmi/optee.c
++++ b/drivers/firmware/arm_scmi/optee.c
+@@ -328,11 +328,11 @@ static int scmi_optee_link_supplier(struct device *dev)
+ 	return 0;
+ }
  
--	if (set_pending) {
--		/* Pick and set monotonic token */
--		ret = scmi_xfer_token_set(minfo, xfer);
--		if (!ret) {
--			hash_add(minfo->pending_xfers, &xfer->node,
--				 xfer->hdr.seq);
--			xfer->pending = true;
--		} else {
--			dev_err(handle->dev,
--				"Failed to get monotonic token %d\n", ret);
--			hlist_add_head(&xfer->node, &minfo->free_xfers);
--			xfer = ERR_PTR(ret);
--		}
--	}
--
--	if (!IS_ERR(xfer)) {
--		refcount_set(&xfer->users, 1);
--		atomic_set(&xfer->busy, SCMI_XFER_FREE);
--	}
-+	refcount_set(&xfer->users, 1);
-+	atomic_set(&xfer->busy, SCMI_XFER_FREE);
- 	spin_unlock_irqrestore(&minfo->xfer_lock, flags);
+-static bool scmi_optee_chan_available(struct device *dev, int idx)
++static bool scmi_optee_chan_available(struct device_node *of_node, int idx)
+ {
+ 	u32 channel_id;
  
- 	return xfer;
-@@ -652,7 +677,7 @@ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
- 	ktime_t ts;
+-	return !of_property_read_u32_index(dev->of_node, "linaro,optee-channel-id",
++	return !of_property_read_u32_index(of_node, "linaro,optee-channel-id",
+ 					   idx, &channel_id);
+ }
  
- 	ts = ktime_get_boottime();
--	xfer = scmi_xfer_get(cinfo->handle, minfo, false);
-+	xfer = scmi_xfer_get(cinfo->handle, minfo);
- 	if (IS_ERR(xfer)) {
- 		dev_err(dev, "failed to get free message slot (%ld)\n",
- 			PTR_ERR(xfer));
-@@ -1041,13 +1066,22 @@ static int xfer_get_init(const struct scmi_protocol_handle *ph,
- 	    tx_size > info->desc->max_msg_size)
- 		return -ERANGE;
+diff --git a/drivers/firmware/arm_scmi/smc.c b/drivers/firmware/arm_scmi/smc.c
+index 745acfdd0b3d..0e21bd01348b 100644
+--- a/drivers/firmware/arm_scmi/smc.c
++++ b/drivers/firmware/arm_scmi/smc.c
+@@ -52,9 +52,9 @@ static irqreturn_t smc_msg_done_isr(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
  
--	xfer = scmi_xfer_get(pi->handle, minfo, true);
-+	xfer = scmi_xfer_get(pi->handle, minfo);
- 	if (IS_ERR(xfer)) {
- 		ret = PTR_ERR(xfer);
- 		dev_err(dev, "failed to get free message slot(%d)\n", ret);
- 		return ret;
- 	}
+-static bool smc_chan_available(struct device *dev, int idx)
++static bool smc_chan_available(struct device_node *of_node, int idx)
+ {
+-	struct device_node *np = of_parse_phandle(dev->of_node, "shmem", 0);
++	struct device_node *np = of_parse_phandle(of_node, "shmem", 0);
+ 	if (!np)
+ 		return false;
  
-+	/* Pick a sequence number and register this xfer as in-flight */
-+	ret = scmi_xfer_pending_set(xfer, minfo);
-+	if (ret) {
-+		dev_err(pi->handle->dev,
-+			"Failed to get monotonic token %d\n", ret);
-+		__scmi_xfer_put(minfo, xfer);
-+		return ret;
-+	}
-+
- 	xfer->tx.len = tx_size;
- 	xfer->rx.len = rx_size ? : info->desc->max_msg_size;
- 	xfer->hdr.type = MSG_TYPE_COMMAND;
+diff --git a/drivers/firmware/arm_scmi/virtio.c b/drivers/firmware/arm_scmi/virtio.c
+index 14709dbc96a1..e0c92037a9e6 100644
+--- a/drivers/firmware/arm_scmi/virtio.c
++++ b/drivers/firmware/arm_scmi/virtio.c
+@@ -392,7 +392,7 @@ static int virtio_link_supplier(struct device *dev)
+ 	return 0;
+ }
+ 
+-static bool virtio_chan_available(struct device *dev, int idx)
++static bool virtio_chan_available(struct device_node *of_node, int idx)
+ {
+ 	struct scmi_vio_channel *channels, *vioch = NULL;
+ 
 -- 
 2.32.0
 

@@ -2,71 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C391B5A0583
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 03:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB365A0591
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 03:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiHYBKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 21:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S231797AbiHYBTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 21:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiHYBKp (ORCPT
+        with ESMTP id S229490AbiHYBTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 21:10:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93DE6262;
-        Wed, 24 Aug 2022 18:10:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64629B826C8;
-        Thu, 25 Aug 2022 01:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730F8C433C1;
-        Thu, 25 Aug 2022 01:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661389842;
-        bh=eZ9Go/XQl2wAHzhKg+W8LOTDr4ufdLcry+Kq/lkNzUQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KfPUKgrzVARDDdQ+kYVWsucaMZd+BX0YulGPrcymaBMqNxMGRq/ikm9hNNEIs6UhE
-         vcbvQU4EiiFy0M696BEvL90BV38fu+LbjEa5Tz/B3Ly+3T8CecDwaXm15p7IqvEygW
-         H+FOCBCNtKjZSWSLhBKf/qWYmDFXo4/iaDPYgbfQfX8Gee1fvQQYc2Y1l+zi1Egjoq
-         KeX1YjhbrO6H0/C+R3iNcTagMhYIVwyUAlLRmnKaPVjpATdE9nLSH82zM4zeTAwveN
-         poZRNF/zVSHYEgrae48+Xtrev4QWy5O26liocbYUk/ky7Uj7bBlNmGNCIZ3sYnNWzc
-         L0+wGovai6YAw==
-Date:   Wed, 24 Aug 2022 18:10:40 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Menglong Dong <menglong8.dong@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        David Ahern <dsahern@kernel.org>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 2/3] net: skb: use auto-generation to
- convert skb drop reason to string
-Message-ID: <20220824181040.57ec009e@kernel.org>
-In-Reply-To: <CANn89i+bx0ybvE55iMYf5GJM48WwV1HNpdm9Q6t-HaEstqpCSA@mail.gmail.com>
-References: <20220606022436.331005-1-imagedong@tencent.com>
-        <20220606022436.331005-3-imagedong@tencent.com>
-        <CANn89i+bx0ybvE55iMYf5GJM48WwV1HNpdm9Q6t-HaEstqpCSA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 24 Aug 2022 21:19:36 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DD081A82A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 18:19:35 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id AE1231E80C99;
+        Thu, 25 Aug 2022 09:15:31 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BEp5JU4Eh47n; Thu, 25 Aug 2022 09:15:28 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 6A5001E80C8D;
+        Thu, 25 Aug 2022 09:15:28 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     will@kernel.org, mark.rutland@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH] perf/arm_pmu_platform: fix tests for platform_get_irq() failure
+Date:   Thu, 25 Aug 2022 09:18:44 +0800
+Message-Id: <20220825011844.8536-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,15 +43,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022 17:45:15 -0700 Eric Dumazet wrote:
-> After this patch, I no longer have strings added after the reason: tag
+The platform_get_irq() returns negative error codes.  It can't actually
+return zero.
 
-Hm, using a kernel address (drop_reasons) as an argument to TP_printk()
-definitely does not look right, but how to tickle whatever magic
-__print_symbolic was providing I do not know :S
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+---
+ drivers/perf/arm_pmu_platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- 	TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
- 		  __entry->skbaddr, __entry->protocol, __entry->location,
--		  __print_symbolic(__entry->reason,
--				   TRACE_SKB_DROP_REASON))
-+		  drop_reasons[__entry->reason])
+diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+index 513de1f54e2d..933b96e243b8 100644
+--- a/drivers/perf/arm_pmu_platform.c
++++ b/drivers/perf/arm_pmu_platform.c
+@@ -117,7 +117,7 @@ static int pmu_parse_irqs(struct arm_pmu *pmu)
+ 
+ 	if (num_irqs == 1) {
+ 		int irq = platform_get_irq(pdev, 0);
+-		if (irq && irq_is_percpu_devid(irq))
++		if ((irq > 0) && irq_is_percpu_devid(irq))
+ 			return pmu_parse_percpu_irq(pmu, irq);
+ 	}
+ 
+-- 
+2.11.0
+

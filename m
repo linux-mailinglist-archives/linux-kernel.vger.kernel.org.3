@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C105A0F3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD115A0F4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238031AbiHYLd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        id S241068AbiHYLeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241544AbiHYLdt (ORCPT
+        with ESMTP id S240952AbiHYLeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:33:49 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698E4AF492
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:33:44 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d8so15432692lfq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:33:43 -0700 (PDT)
+        Thu, 25 Aug 2022 07:34:09 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD50ADCFE
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:33:45 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z6so27806738lfu.9
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:33:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=vJFyZ4gv7uWiZY7gLlnEc+MME2d1g+apMDYeqdsH534=;
-        b=GmCvZ5CPgo7pW/PvY0w3ePfTcxnp1AUZHlBN7qx8csNaBhjJhTZFPpIt+K2tpHS3cb
-         lWzmI+jsy+BsmTIO7jq8BbkYMnn8VnH0T/MmjBDLZkcSdpQfAXOp3q1+S5nKPRNOa1Tr
-         V03DzrqqhMceS7MHVNL3a4SL3N4seRhJa3sq1UXzvjmU7+v0JD/qBI7t9a862HBi3Pk/
-         cvDHX8T6sNyidT7M39TZ2avUKX6RLQUk8M7pezhvGR0zLKfkphbIR/04n3Euf/vV1+VX
-         D3RubGp99jbSZXUgpwHkhVKfWpWLo6zQeuayC4F1PlNLImrKpG3hAEq19c19+VgiiQoc
-         BGMQ==
+        bh=uAj6PCuWD0Jdh8SbbVYKmqZvEbRpC9H1z0Nl20Cruac=;
+        b=fvXfXXHh5BGdtsz5EycnPawDsbQFYVSc5NIkbHOCBoaR5sbVKjYhKf0riJxZtsJPn0
+         yLkXyOcZ7O7JIzBtCuFXAdx1hymKNbd4gs+d7nj0e4VvWl4XrfrySGc/UWWzKKDZEhIK
+         PMz9IhmKovNl6wE5mKmlZCJbkOZLvYujeJ9+Z+PdLEovtKAiynUSGlYTdFQH+L9I1o33
+         aPzbFi0vyGjMUfUK4pO5yOoysBDhVf7GAzunWBiJtmNBaA9A23nonR7Uj/jAlkl5+u/w
+         Pqke31tLYylGnmywof9M0uE0+6i88SzV9fj6yOGafWmodh1kwDgsqFgTQIZDW9VnaqaW
+         R9Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=vJFyZ4gv7uWiZY7gLlnEc+MME2d1g+apMDYeqdsH534=;
-        b=b6XmD+AlSJ57FUYB+Fz57hRSzsYZzDIcI+dYtojzszCgHp3AI/8+LWqMeOrcXCYOKk
-         Zm0Lh1MpVKJHz7fYaJ9fcFGFwquqXhhIwv7xlbX4NzUreA5DyCmYS6DqHll9lYmyUSj+
-         j88xRJc3+6vqfeEkdz22tsmwkD1tS4D5C7KrJG2zocQHENpulUkt3Uvbdu+XCP8m54U7
-         g/DEhu+4yU6sbjDoZo131akefX/4+EpOkGlu2ujZXbwlDNN3bQtg51kAWdrkZXIHviMq
-         PfhwAz/5fDsq2rh9Dj7LE5KY8B0wJVBnoChiU4KbF4k/brNmjV6da9cM7CORTXYJPKNb
-         139g==
-X-Gm-Message-State: ACgBeo0PHxNdqnWS8CwYfei6LMRBps3qFIe3pmg1WjvG5B4Q+xyzU9B7
-        kBP7nYTLuyxVpdZSTNhNPeraTA==
-X-Google-Smtp-Source: AA6agR6HHKtOkxDIjlKrISLuP9gSIMQzZk2YFK0maUrFa24vBEbpyEy1Swt7twBvT/cLjTU/pj53BA==
-X-Received: by 2002:a05:6512:1093:b0:492:ca36:d693 with SMTP id j19-20020a056512109300b00492ca36d693mr1019749lfg.226.1661427222193;
-        Thu, 25 Aug 2022 04:33:42 -0700 (PDT)
+        bh=uAj6PCuWD0Jdh8SbbVYKmqZvEbRpC9H1z0Nl20Cruac=;
+        b=ejgiiLIUZTROsSSPekxWGAkBoo2sYYuwlLhuVR9azetnTgJwLTPGIBeofeVFBkKj6O
+         DfXQLXTOyooWYoQE7bBowbAbzzMRNGhgkZBAYpMYvPjuNnSfz5mxCLzjfq6D1FX+wpR+
+         ZN8VdIECKRWd/154RBZkWtOQ2POtB7rFfFk9JjPZDyiTK6XnaW3P007YoSB2ATE30q1E
+         YSqH0crw5PJEHJmWFEfDothfyHRRs9WEieyF/I452c2LV3b5uRnwJ/fVJ0qScvmv7s60
+         dUuyCsjEJihE876LRGIypwbSjogp6yAPm8drprz2xax24hHgFgCdhjUx6wE6XidQjZNz
+         wbjg==
+X-Gm-Message-State: ACgBeo3VTS0zSQwqG9XVIYO+CceaA1rcSfiFGozp0qlpOMyc07tIO5ZU
+        2lhKRSfHw8MfnBQLwZ09N1jtgg==
+X-Google-Smtp-Source: AA6agR712qcvmFpt50SIccfBNtYn9ngIdkzCeLBRl3LE4oSeWQnKcFPJ0lH5Lj37t8pI5y2uiTBTEw==
+X-Received: by 2002:a05:6512:3f06:b0:492:f6b6:ad8b with SMTP id y6-20020a0565123f0600b00492f6b6ad8bmr993416lfa.544.1661427223942;
+        Thu, 25 Aug 2022 04:33:43 -0700 (PDT)
 Received: from krzk-bin.starman.ee (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id e18-20020a195012000000b0048b0aa2f87csm446764lfb.181.2022.08.25.04.33.40
+        by smtp.gmail.com with ESMTPSA id e18-20020a195012000000b0048b0aa2f87csm446764lfb.181.2022.08.25.04.33.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 04:33:41 -0700 (PDT)
+        Thu, 25 Aug 2022 04:33:43 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -95,9 +95,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/5] dt-bindings: ata: drop minItems equal to maxItems
-Date:   Thu, 25 Aug 2022 14:33:31 +0300
-Message-Id: <20220825113334.196908-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/5] dt-bindings: clock: drop minItems equal to maxItems
+Date:   Thu, 25 Aug 2022 14:33:32 +0300
+Message-Id: <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
 References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
@@ -118,55 +118,55 @@ redundant piece to reduce size of code.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml       | 1 -
- .../devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml     | 2 --
- Documentation/devicetree/bindings/ata/sata_highbank.yaml        | 1 -
+ Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 1 -
+ .../devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml  | 2 --
+ Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml    | 1 -
  3 files changed, 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-index 235a93ac86b0..3766cc80cb17 100644
---- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-+++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-@@ -30,7 +30,6 @@ properties:
-           - const: brcm,bcm-nsp-ahci
- 
-   reg:
+diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+index 0abd6ba82dfd..82836086cac1 100644
+--- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
++++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+@@ -23,7 +23,6 @@ properties:
+   clocks:
+     description:
+       Common clock binding for CLK_IN, XTI/REF_CLK
 -    minItems: 2
      maxItems: 2
  
-   reg-names:
-diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-index 21a90975593b..529093666508 100644
---- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-+++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-@@ -22,7 +22,6 @@ properties:
+   clock-names:
+diff --git a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
+index 6eaabb4d82ec..81f09df7147e 100644
+--- a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
++++ b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
+@@ -47,7 +47,6 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    minItems: 4
+     maxItems: 4
+ 
+   clock-names:
+@@ -64,7 +63,6 @@ properties:
      maxItems: 1
  
    resets:
 -    minItems: 2
      maxItems: 2
-     description: phandles to the reset lines for both SATA bridges
  
-@@ -32,7 +31,6 @@ properties:
-       - const: sata1
+   reset-names:
+diff --git a/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml b/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+index 9248bfc16d48..d5296e6053a1 100644
+--- a/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
++++ b/Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
+@@ -34,7 +34,6 @@ properties:
+     const: 1
  
-   clocks:
--    minItems: 2
-     maxItems: 2
-     description: phandles to the compulsory peripheral clocks
+   clock-output-names:
+-    minItems: 3
+     maxItems: 3
+     description: Names for AP, CP and BT clocks.
  
-diff --git a/Documentation/devicetree/bindings/ata/sata_highbank.yaml b/Documentation/devicetree/bindings/ata/sata_highbank.yaml
-index 49679b58041c..f23f26a8f21c 100644
---- a/Documentation/devicetree/bindings/ata/sata_highbank.yaml
-+++ b/Documentation/devicetree/bindings/ata/sata_highbank.yaml
-@@ -52,7 +52,6 @@ properties:
-     minItems: 1
-     maxItems: 8
-     items:
--      minItems: 2
-       maxItems: 2
- 
-   calxeda,tx-atten:
 -- 
 2.34.1
 

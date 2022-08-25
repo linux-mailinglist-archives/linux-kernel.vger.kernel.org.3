@@ -2,163 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B25E5A1C2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EDC5A1C29
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244355AbiHYWVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S244272AbiHYWUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244357AbiHYWVC (ORCPT
+        with ESMTP id S238598AbiHYWUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:21:02 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701F5C578C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:21:00 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-324ec5a9e97so576565337b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:21:00 -0700 (PDT)
+        Thu, 25 Aug 2022 18:20:50 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B1C2751
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:20:49 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11cab7d7e0fso25576627fac.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=YLpy2xCVK51CZcFB6zrbiai4Ndy7eOAyjwmsLFCvyjU=;
-        b=RuNF59UtgFixO6ATvPnw/me6kowb8cK+ihIPiN9YGvyGWowPWv82QGFElwUvI5+DKh
-         4bM5mWzcBhtKOSRx+2dmqP7D/25ANqTEvkNgxLoZ03wM+hqSBilKjjVQnTGCMzQRJvrf
-         7OmD4R3ZcaS+JouPbNz1nqMeUivjrGYpAJO8ghMB+GXoorGZxcOVY6c5N0xxdBtmHwFb
-         rHW5lKM/+QFvdViqOupzGWdox6T1quWhzvQDszZN+5ppKABtqYAVc6ogO2655g3uO5Un
-         hCeyKkvFIbcG4AOPpY0aWraEDTbF1LJtJDlAcDlsGMIQ8GNjJyqD7u1NEhxtgTZWs3Mh
-         zQWQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=hYB1ZQNpPY6X69YeIG/KjOq929HUz/m3ktl9NHX+xgw=;
+        b=Y7owmWiWdJd8sxFvDiLnCjuWi4kAUrlOstOZGLmRPxjaIXuOLBXCQPbix2hn+PK8AQ
+         +DoLzcP8br7tbcKvl0kOtoXYQOl9/p0Xj5ZEJDhJ/H9apJW5PlQy9ihDgR2j2D3HLu+z
+         +0BLvcBwiY7Ur0kK+FaHn3ttFaK5Br5gEbitJSo4LEHoyiIg+fQf1tQpKwOizi9RRNH8
+         X1cKx05p6oabdpBCCwJw7jJApw2v6fp4002MdGS4m751OWcr+1OV80/h4sr8KKrer7LJ
+         TYYQO8IxZ5RugXVuLr1i0eWo3uEiZn0AKe/wLnPjd96T9z6kuE3NcdvKObTzX1lITbQj
+         RRpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=YLpy2xCVK51CZcFB6zrbiai4Ndy7eOAyjwmsLFCvyjU=;
-        b=nTsz73hiJAdOyaf9rae2OnCujpgrIgab3p2McUzbglCMn5EgCscCCC7+97hB9mgTRH
-         VtWO2/CFYDE9d4jZao9+LpLmuOIT86ydDuPsv1cyCtR1TzQMgIyS02m/gWekW/FjZvbr
-         CG5a81qaDiPKNeRG1KGtMreBFLVgKOpCGFf1Uqmlu+OOWiLK70wVuFP4XueJ5l8443ja
-         /rMvNQlwSJckd2W2rZSKA1YxBAHtRiGDAVcXxfRfLg6YIM/ar5poBZumG8vcO9hzAm9E
-         YDeQzpRGfVVhZVflgMjDbv4D4M8rVqJxHLf7ARR9P0uojUd6MAVLAZjw1FaQBSvkoOkL
-         FDWA==
-X-Gm-Message-State: ACgBeo3AUG59DxEzR5enV2O5uRhtCZELMHSuapdX2F7xRHFkztIchDTH
-        4HaCJBpQgogAgnKSDVors0RNyU0Rm7l/GoD8wPf3Og==
-X-Google-Smtp-Source: AA6agR5WDTHEn0f5fI43Fn0xyIo60iYiherkxssOJTh4YNKt09fcyH+CjvifzWu3aG86BQ/39tXWDS0RiuFFuEIyC9g=
-X-Received: by 2002:a25:bd4d:0:b0:696:489a:3a86 with SMTP id
- p13-20020a25bd4d000000b00696489a3a86mr3142761ybm.447.1661466059351; Thu, 25
- Aug 2022 15:20:59 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=hYB1ZQNpPY6X69YeIG/KjOq929HUz/m3ktl9NHX+xgw=;
+        b=o8W9yG1+lBEOIK22BaDK1xx4MJMRBdtZNawUhJlW0aNZvZp+3wSWmSP+8vlec29Z3B
+         sHfgH0/p41lcr0JB+mLl8As7SFROxolydqudub//pkQcIJvEyijzY6AdZk58RVPZBKPk
+         t4yvWVRbJmxti4JGMgzeSK+0Kb/czbi0vyz+vYOcP83qfHLhFEZOSsQjfMz/RPtZH3O5
+         y7gfmBFTafTeH/Lm70xoQQglnzDosIUhymoTVK/OyRRJNkW3oDSmpsW2W56hzdatuIhS
+         NLHPSLJURAESglhl67+6zUFHdrkKiFSF7HUoyWs05U/0wZhXm+cA/yeOVfIhJ4Jad/1D
+         kIOg==
+X-Gm-Message-State: ACgBeo2Zb9wZW53yN/gfu5Ovsdb6wgPLxWJ8yPtADNteLf16eEKu34Pn
+        H6mgLw/9ybOnUPVdR5AW/fI5v24dbEijz44GQrkNeA==
+X-Google-Smtp-Source: AA6agR7Q3WUHyHCZjdPdx2wnwfam+Ba3cljIdQO4m6up/yUG6pP0Tu6DtKUJNnkipd41UHSNVd091AXNNW01JUJz4Dc=
+X-Received: by 2002:a05:6870:b694:b0:11e:63e7:37f4 with SMTP id
+ cy20-20020a056870b69400b0011e63e737f4mr47956oab.217.1661466048368; Thu, 25
+ Aug 2022 15:20:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817184026.3468620-1-isaacmanjarres@google.com>
-In-Reply-To: <20220817184026.3468620-1-isaacmanjarres@google.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 25 Aug 2022 15:20:23 -0700
-Message-ID: <CAGETcx9U_tKjnQnymNussM+Qm8vJ_vYpPp_QHY3NDkW7BBuVag@mail.gmail.com>
-Subject: Re: [PATCH v3] driver core: Don't probe devices after
- bus_type.match() probe deferral
-To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
+References: <20220825104505.79718-1-etienne.carriere@linaro.org> <CAL_JsqLWQC-drkWdgiM4TnsZCa6h6vcMmCvrUC_E7z5=gYtcJw@mail.gmail.com>
+In-Reply-To: <CAL_JsqLWQC-drkWdgiM4TnsZCa6h6vcMmCvrUC_E7z5=gYtcJw@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Fri, 26 Aug 2022 00:20:37 +0200
+Message-ID: <CAN5uoS9kLTjGinBOCsTHnV=1Jg-V_GwgZ4b1d5Gj3x_Npm6wRw@mail.gmail.com>
+Subject: Re: [PATCH] dt-binding: gpio: publish binding IDs under dual license
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Stephen Warren <swarren@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:40 AM Isaac J. Manjarres
-<isaacmanjarres@google.com> wrote:
->
-> Both __device_attach_driver() and __driver_attach() check the return
-> code of the bus_type.match() function to see if the device needs to be
-> added to the deferred probe list. After adding the device to the list,
-> the logic attempts to bind the device to the driver anyway, as if the
-> device had matched with the driver, which is not correct.
->
-> If __device_attach_driver() detects that the device in question is not
-> ready to match with a driver on the bus, then it doesn't make sense for
-> the device to attempt to bind with the current driver or continue
-> attempting to match with any of the other drivers on the bus. So, update
-> the logic in __device_attach_driver() to reflect this.
->
-> If __driver_attach() detects that a driver tried to match with a device
-> that is not ready to match yet, then the driver should not attempt to bind
-> with the device. However, the driver can still attempt to match and bind
-> with other devices on the bus, as drivers can be bound to multiple
-> devices. So, update the logic in __driver_attach() to reflect this.
->
-> Cc: stable@vger.kernel.org
-> Cc: Saravana Kannan <saravanak@google.com>
-> Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/base/dd.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> v1 -> v2:
-> - Fixed the logic in __driver_attach() to allow a driver to continue
->   attempting to match and bind with devices in case of any error, not
->   just probe deferral.
->
-> v2 -> v3:
-> - Restored the patch back to v1.
-> - Added Guenter's Tested-by tag.
-> - Added Saravana's Reviewed-by tag.
-> - Cc'd stable@vger.kernel.org
->
-> Greg,
->
-> This is the final version of this patch. Can you please pick this up?
->
-> Thanks,
-> Isaac
->
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 70f79fc71539..90b31fb141a5 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
->                 dev_dbg(dev, "Device match requests probe deferral\n");
->                 dev->can_match = true;
->                 driver_deferred_probe_add(dev);
-> +               /*
-> +                * Device can't match with a driver right now, so don't attempt
-> +                * to match or bind with other drivers on the bus.
-> +                */
-> +               return ret;
->         } else if (ret < 0) {
->                 dev_dbg(dev, "Bus failed to match device: %d\n", ret);
->                 return ret;
-> @@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
->                 dev_dbg(dev, "Device match requests probe deferral\n");
->                 dev->can_match = true;
->                 driver_deferred_probe_add(dev);
-> +               /*
-> +                * Driver could not match with device, but may match with
-> +                * another device on the bus.
-> +                */
-> +               return 0;
->         } else if (ret < 0) {
->                 dev_dbg(dev, "Bus failed to match device: %d\n", ret);
->                 return ret;
-> --
-> 2.37.1.595.g718a3a8f04-goog
->
+Hello Rob,
 
-Greg,
+Many thanks for the feedback.
 
-Can you pull this in for 6.0-rcX please? This is fixing a long
-standing bug that was exposed by my amba code cleanup.
+Regards,
+Etienne
 
--Saravana
+On Thu, 25 Aug 2022 at 18:05, Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Thu, Aug 25, 2022 at 5:45 AM Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > Changes gpio.h DT binding header file to be published under GPLv2 or
+> > BSD-3-Clause license terms. This change allows these GPIO generic
+> > bindings header file to be used in software components as bootloaders
+> > and OSes that are not published under GPLv2 terms.
+> >
+> > All contributors to gpio.h file in copy.
+> >
+> > Cc: Stephen Warren <swarren@nvidia.com>
+>
+> We have NVIDIA permission for anything in bindings and NVIDIA
+> relicensed the irq headers, so I think it shouldn't be a problem.
+>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+>
+> FYI, There is blanket approval from Linaro to relicense DT files.
+>
+> > Cc: Laxman Dewangan <ldewangan@nvidia.com>
+> > Cc: Charles Keepax <ckeepax@opensource.wolfsonmicro.com>
+>
+> I don't think a. blank line is copyrightable.
+
+>
+> > Cc: Andrew Jeffery <andrew@aj.id.au>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Nuno S=C3=A1 <nuno.sa@analog.com>
+> > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > ---
+> >  include/dt-bindings/gpio/gpio.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)

@@ -2,116 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B285A1A78
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DA95A1A6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243615AbiHYUie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 16:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S243756AbiHYUg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 16:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243334AbiHYUi3 (ORCPT
+        with ESMTP id S230285AbiHYUgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 16:38:29 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5A5BB913
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 13:38:28 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 2so19558729edx.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 13:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=bE5zN8mW2wFaoag3CV1bmUwVW/DH2Tvtq/imB8LMKgk=;
-        b=i1YRORPITMQM/HrasLgyPYcWQ823dLI/Ng45Or/ZygrCULIwqrLECQWZcWFxupsxD2
-         X75GLtf0IT9Axfv/HcEcWRhO9BRu8OhmmgOe99T2VGAaf1UwetmYFKIPN0BDbb+vKuQJ
-         FVqzT9mrDPdT1fuSctzFueULvXWJOs9lXI7qbXTPDJCf/2pc2MEQhhQSYmGsNBjgqXpV
-         SsQ0CEYdXoPMuCCmqGPiK44u8ZIvEJfis8ig+Jf7A9t2zM+Grzi0keHHmTFPAmCb0XNg
-         /XL5bl7pCeO5PrR499vfKh1avb3ZCBTWbxEYFbEgZk4PpEIc+VfYFea2h+3HlN2Ab5x+
-         +7vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=bE5zN8mW2wFaoag3CV1bmUwVW/DH2Tvtq/imB8LMKgk=;
-        b=59zu7lHGu4B31oHBh7hHy/Xrr42u+gmP0jK4H7MlfAEEj0JEnLQ04J5lRUDXuDAXHN
-         GQi+2qHV7EY/ae6VgzI2TVjZtis6+LCmaKDw5BqCkOjl1u0KLKkpps23k9hw/Y+FUvaD
-         kMgDcNT1JE48qeBPKNjl3Ty7CkBp+i2SXpvuoSvx2U4XyHdsxqIbhk5tC05TCv7qVUnc
-         zY92irb/e0OBkpByuvFi0R5R9mCMSRxf3F5KTK6lB0SuHyLheA3yHlqegLneMKLryUbf
-         uhl38jL83y2dcdZ4GDxLm4+HA+Wao3Z/sgZ/OFuOeNafnSpo2QXM5zu5YOMBVfASMGGN
-         PpwA==
-X-Gm-Message-State: ACgBeo2Ua9jod8wP6+zS9eAe8PiO3GkL+sMBxFBU29U73QJxGzLKi6i5
-        jSxXtR2r8O5zkaHE9hzsV8+3Sw==
-X-Google-Smtp-Source: AA6agR46vM7ZB5GITiujfB+3Wcr0lm+Jdx1W0UL4jQUUev+eK1iWLAq9R4sWuvGXhdxS92NKg4e9ng==
-X-Received: by 2002:a05:6402:35c:b0:43c:8f51:130 with SMTP id r28-20020a056402035c00b0043c8f510130mr4457209edw.393.1661459906956;
-        Thu, 25 Aug 2022 13:38:26 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id c9-20020a17090618a900b007305d408b3dsm77319ejf.78.2022.08.25.13.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 13:38:26 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 23:38:24 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/12] clk: imx8mm: don't use multiple blank lines
-Message-ID: <YwfdwKVU0pMoxIXe@linaro.org>
-References: <20220722215445.3548530-1-marcel@ziswiler.com>
- <20220722215445.3548530-13-marcel@ziswiler.com>
+        Thu, 25 Aug 2022 16:36:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA47B72BA;
+        Thu, 25 Aug 2022 13:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661459814; x=1692995814;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ybLFVysoZYwExgdwK5f6S7RoZ7nBfaDq2wxphccHM7o=;
+  b=A7OMeERLWa1zKR6Km6uo7SIZM8MJLi77Xr297Scn+U0gJbfCu46jznAy
+   mxH8fkwfrYpuBhWyPHIaluHtr09EOOSve64WalUSSTWLZxvfzqT44quM/
+   g8JhYmSr/6jvqGZqZXjUt/9gy1NqbQ0IfkqfDaFPOTbNgh/Bs1ju95iLE
+   FXwwyG11PzUVCeusBDLcUUOm9jqZKJH6jDum5EWKTWTNiprXoTH7gZiJU
+   aB6+pvZ6PCiDIwjELpNpXgLypfvAKVCGQ7BAFnhS0E/6pwuaDcoyxMmNy
+   wCIZTedRDXrOtRJdRGJpQwLKtgllTiemqp5U//QYvmwWARyMZaWXMpFRb
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="110790084"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Aug 2022 13:36:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 25 Aug 2022 13:36:50 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 25 Aug 2022 13:36:49 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>,
+        "Horatiu Vultur" <horatiu.vultur@microchip.com>
+Subject: [PATCH v2 0/2] nvmem: lan9662-otpc: add support
+Date:   Thu, 25 Aug 2022 22:40:39 +0200
+Message-ID: <20220825204041.1485731-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722215445.3548530-13-marcel@ziswiler.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-07-22 23:54:45, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> Avoid the following checkpatch warning:
-> 
-> include/dt-bindings/clock/imx8mm-clock.h:284: check: Please don't use
->  multiple blank lines
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Add support for lan9662 OTP controller that is available on lan9662.
+The driver gives access to non-volatile memory. It allows both write
+and read access to it.
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+v1->V2:
+- remove unneed quotes for $ref: nvmem.yaml#
+- rename lan966x to lan9662 as not to have any wildcards
+- remove compatible string syscon
 
-> 
-> ---
-> 
-> (no changes since v1)
-> 
->  include/dt-bindings/clock/imx8mm-clock.h | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/include/dt-bindings/clock/imx8mm-clock.h b/include/dt-bindings/clock/imx8mm-clock.h
-> index 47c6f7f9582c..1f768b2eeb1a 100644
-> --- a/include/dt-bindings/clock/imx8mm-clock.h
-> +++ b/include/dt-bindings/clock/imx8mm-clock.h
-> @@ -281,7 +281,6 @@
->  #define IMX8MM_CLK_CLKOUT2_DIV			256
->  #define IMX8MM_CLK_CLKOUT2			257
->  
-> -
->  #define IMX8MM_CLK_END				258
->  
->  #endif
-> -- 
-> 2.35.1
-> 
+Horatiu Vultur (2):
+  dt-bindings: lan9662-otpc: document Lan9662 OTPC
+  nvmem: lan9662-otp: add support.
+
+ .../nvmem/microchip,lan9662-otpc.yaml         |  42 +++
+ drivers/nvmem/Kconfig                         |   8 +
+ drivers/nvmem/Makefile                        |   2 +
+ drivers/nvmem/lan9662-otpc.c                  | 249 ++++++++++++++++++
+ 4 files changed, 301 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/microchip,lan9662-otpc.yaml
+ create mode 100644 drivers/nvmem/lan9662-otpc.c
+
+-- 
+2.33.0
+

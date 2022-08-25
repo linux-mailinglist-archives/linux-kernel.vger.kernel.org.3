@@ -2,328 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72995A0E99
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB075A0E9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239593AbiHYK6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S241244AbiHYK7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiHYK6s (ORCPT
+        with ESMTP id S229657AbiHYK73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:58:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D9CADCFA;
-        Thu, 25 Aug 2022 03:58:46 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MD0Lm3qwsz67gNl;
-        Thu, 25 Aug 2022 18:58:24 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 25 Aug 2022 12:58:43 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 25 Aug
- 2022 11:58:43 +0100
-Date:   Thu, 25 Aug 2022 11:58:42 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC PATCH 6/9] cxl/mem: Trace Memory Module Event Record
-Message-ID: <20220825115842.000049a0@huawei.com>
-In-Reply-To: <20220813053243.757363-7-ira.weiny@intel.com>
-References: <20220813053243.757363-1-ira.weiny@intel.com>
-        <20220813053243.757363-7-ira.weiny@intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 Aug 2022 06:59:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAD4AE238
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:59:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 43F71203C3;
+        Thu, 25 Aug 2022 10:58:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661425137; h=from:from:reply-to:date:date:message-id:message-id:to:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DTFmvMyvl2axqPVRA130ZAksfN/kT649Q4+LyakY65c=;
+        b=YY+kgIjzV3BFmfmLWBEQHV4J1LNn1cRdIxj383dQNrbrQdyYglZw5JuXERVQkBjXiJGT5z
+        WhbtO9eidPzXR9hYO++QbbVwm8Ed6lvPmxMNugcIKHh6hhLvMa7aJ0XBgmCsKs2LQ2X8E1
+        N2RaSEdayhrJW+MamT9UcsfegeUKifM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661425137;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DTFmvMyvl2axqPVRA130ZAksfN/kT649Q4+LyakY65c=;
+        b=SmcUsnCs/iWxsbtc9kN3kN+BeGXgx5W+wdTTSQOm5bldOj1rsMhVRWI0zz15lZLFP667MJ
+        QDDa326+0fE8QICQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D7F013517;
+        Thu, 25 Aug 2022 10:58:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LBedAfFVB2O0bQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 25 Aug 2022 10:58:57 +0000
+Date:   Thu, 25 Aug 2022 12:58:56 +0200
+Message-ID: <874jy0mvwv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lennert Van Alboom <lennert@vanalboom.org>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: USB DAC broken since commit bf6313a0ff766925462e97b4e733d5952de02367 (5.10.0-rc5)
+In-Reply-To: <T3VPXtCc4uFws9Gfh2RjX6OdwM1RqfC6VqQr--_LMDyB2x5N3p9_q6AtPna17IXhHwBtcJVdXuS80ZZSCMjh_BafIbnzJPhbrkmhmWS6DlI=@vanalboom.org>
+References: <T3VPXtCc4uFws9Gfh2RjX6OdwM1RqfC6VqQr--_LMDyB2x5N3p9_q6AtPna17IXhHwBtcJVdXuS80ZZSCMjh_BafIbnzJPhbrkmhmWS6DlI=@vanalboom.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 22:32:40 -0700
-ira.weiny@intel.com wrote:
-
-> From: Ira Weiny <ira.weiny@intel.com>
+On Thu, 25 Aug 2022 12:45:27 +0200,
+Lennert Van Alboom wrote:
 > 
-> CXL v3.0 section 8.2.9.2.1.3 defines the Memory Module Event Record.
+> Hi,
 > 
-> Determine if the event read is memory module record and if so trace the
-> record.
 > 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Similar comments to on previous patches around using
-get_unaligned_le*()
-
-> ---
->  drivers/cxl/core/mbox.c           |  16 +++
->  drivers/cxl/cxlmem.h              |  25 +++++
->  include/trace/events/cxl-events.h | 155 ++++++++++++++++++++++++++++++
->  3 files changed, 196 insertions(+)
+> My USB DAC fails to work on recent kernels (anything past 5.10). The device is the following:
 > 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 6414588a3c7b..99b09bfeaff5 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -725,6 +725,14 @@ static const uuid_t dram_event_uuid =
->  	UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
->  		  0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24);
->  
-> +/*
-> + * Memory Module Event Record
-> + * CXL v3.0 section 8.2.9.2.1.3; Table 8-45
-> + */
-> +static const uuid_t mem_mod_event_uuid =
-> +	UUID_INIT(0xfe927475, 0xdd59, 0x4339,
-> +		  0xa5, 0x86, 0x79, 0xba, 0xb1, 0x13, 0xb7, 0x74);
-> +
->  static void cxl_trace_event_record(const char *dev_name,
->  				   enum cxl_event_log_type type,
->  				   struct cxl_get_event_payload *payload)
-> @@ -747,6 +755,14 @@ static void cxl_trace_event_record(const char *dev_name,
->  		return;
->  	}
->  
-> +	if (uuid_equal(id, &mem_mod_event_uuid)) {
-> +		struct cxl_evt_mem_mod_rec *rec =
-> +				(struct cxl_evt_mem_mod_rec *)&payload->record;
-> +
-> +		trace_cxl_mem_mod_event(dev_name, type, rec);
-> +		return;
-> +	}
-> +
->  	/* For unknown record types print just the header */
->  	trace_cxl_event(dev_name, type, &payload->record);
->  }
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 50536c0a7850..a02a41dfd988 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -445,6 +445,31 @@ struct cxl_evt_dram_rec {
->  	u8 correction_mask[CXL_EVT_DER_CORRECTION_MASK_SIZE];
->  } __packed;
->  
-> +/*
-> + * Get Health Info Record
-> + * CXL v3.0 section 8.2.9.8.3.1; Table 8-100
-> + */
-> +struct cxl_get_health_info {
-> +	u8 health_status;
-> +	u8 media_status;
-> +	u8 add_status;
-> +	u8 life_used;
-> +	u16 device_temp;
+> Bus 003 Device 005: ID 2522:0007 LH Labs Geek Out HD Audio 1V5
+> 
+> 
+> 
+> Syslog shows error messages which have changed over the different kernel versions - this is the output from debian's 5.17.0-2-amd64:
+> 
+> [66136.185642] usb 3-6: uac_clock_source_is_valid(): cannot get clock validity for id 41
+> [66136.185643] usb 3-6: clock source 41 is not valid, cannot use
+> [66136.185956] usb 3-6: 1:0: usb_set_interface failed (-71)
+> [66136.186183] usb 3-6: 1:0: usb_set_interface failed (-71)
+> 
+> 
+> >From the first point in git where it fails (5.10.0-rc5-00025-gbf6313a0ff76):
+> 
+> Aug 25 12:39:37 Nesbitt kernel: [ 5295.633079] usb 3-3: new high-speed USB device number 8 using xhci_hcd
+> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782144] usb 3-3: New USB device found, idVendor=2522, idProduct=0007, bcdDevice=15.02
+> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782148] usb 3-3: New USB device strings: Mfr=1, Product=3, SerialNumber=0
+> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782150] usb 3-3: Product: Geek Out HD Audio 1V5
+> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782151] usb 3-3: Manufacturer: LH Labs
+> Aug 25 12:39:37 Nesbitt kernel: [ 5296.162338] usb 3-3: 1:2 : unsupported format bits 0x100000000
+> Aug 25 12:39:38 Nesbitt mtp-probe: checking bus 3, device 8: "/sys/devices/pci0000:00/0000:00:14.0/usb3/3-3"
+> Aug 25 12:39:38 Nesbitt mtp-probe: bus: 3, device: 8 was not an MTP device
+> Aug 25 12:39:38 Nesbitt systemd-udevd[10311]: controlC1: Process '/usr/sbin/alsactl -E HOME=/run/alsa -E XDG_RUNTIME_DIR=/run/alsa/runtime restore 1' failed with exit code 99.
+> Aug 25 12:39:38 Nesbitt mtp-probe: checking bus 3, device 8: "/sys/devices/pci0000:00/0000:00:14.0/usb3/3-3"
+> Aug 25 12:39:38 Nesbitt mtp-probe: bus: 3, device: 8 was not an MTP device
+> Aug 25 12:39:43 Nesbitt kernel: [ 5301.921810] usb 3-3: 1:1: usb_set_interface failed (-110)
+> Aug 25 12:39:43 Nesbitt kernel: [ 5301.922047] usb 3-3: 1:0: usb_set_interface failed (-71)
+> Aug 25 12:39:43 Nesbitt kernel: [ 5301.922354] usb 3-3: 1:0: usb_set_interface failed (-71)
+> Aug 25 12:39:43 Nesbitt kernel: [ 5301.922915] usb 3-3: 1:0: usb_set_interface failed (-71)
+> 
+> 
+> I did a git bisect (from kernel source, not on debian-specific) and the offending commit has been found:
+> 
+> # git bisect bad
+> bf6313a0ff766925462e97b4e733d5952de02367 is the first bad commit
+> commit bf6313a0ff766925462e97b4e733d5952de02367
+> Author: Takashi Iwai <tiwai@suse.de>
+> Date:   Mon Nov 23 09:53:31 2020 +0100
+> 
+>     ALSA: usb-audio: Refactor endpoint management
+>     
+> 
+>     This is an intensive surgery for the endpoint and stream management
+>     for achieving more robust and clean code.
+>     
+> 
+>     The goals of this patch are:
+>     - More clear endpoint resource changes
+>     - The interface altsetting control in a single place
+>     Below are brief description of the whole changes.
+>     
+> 
+>     First off, most of the endpoint operations are moved into endpoint.c,
+>     so that the snd_usb_endpoint object is only referred in other places.
+>     The endpoint object is acquired and released via the new functions
+>     snd_usb_endpoint_open() and snd_usb_endpoint_close() that are called
+>     at PCM hw_params and hw_free callbacks, respectively.  Those are
+>     ref-counted and EPs can manage the multiple opens.
+>     
+> 
+>     The open callback receives the audioformat and hw_params arguments,
+>     and those are used for initializing the EP parameters; especially the
+>     endpoint, interface and altset numbers are read from there, as well as
+>     the PCM parameters like the format, rate and channels.  Those are
+>     stored in snd_usb_endpoint object.  If it's the secondary open, the
+>     function checks whether the given parameters are compatible with the
+>     already opened EP setup, too.
+>     
+> 
+>     The coupling with a sync EP (including an implicit feedback sync) is
+>     done by the sole snd_usb_endpoint_set_sync() call.
+>     
+> 
+>     The configuration of each endpoint is done in a single shot via
+>     snd_usb_endpoint_configure() call.  This is the place where most of
+>     PCM configurations are done.  A few flags and special handling in the
+>     snd_usb_substream are dropped along with this change.
+>     
+> 
+>     A significant difference wrt the configuration from the previous code
+>     is the order of USB host interface setups.  Now the interface is
+>     always disabled at beginning and (re-)enabled at the last step of
+>     snd_usb_endpoint_configure(), in order to be compliant with the
+>     standard UAC2/3.  For UAC1, the interface is set before the parameter
+>     setups since there seem devices that require it (e.g. Yamaha THR10),
+>     just like how it was done in the previous driver code.
+>     
+> 
+>     The start/stop are almost same as before, also single-shots.  The URB
+>     callbacks need to be set via snd_usb_endpoint_set_callback() like the
+>     previous code at the trigger phase, too.
+>     
+> 
+>     Finally, the flag for the re-setup is set at the device suspend
+>     through the full EP list, instead of PCM trigger.  This catches the
+>     overlooked cases where the PCM hasn't been running yet but the device
+>     needs the full setup after resume.
+>     
+> 
+>     Tested-by: Keith Milner <kamilner@superlative.org>
+>     Tested-by: Dylan Robinson <dylan_robinson@motu.com>
+>     Link: https://lore.kernel.org/r/20201123085347.19667-26-tiwai@suse.de
+>     Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> 
+>  sound/usb/card.c     |   8 +-
+>  sound/usb/card.h     |  11 +-
+>  sound/usb/clock.c    |  13 +-
+>  sound/usb/endpoint.c | 662 ++++++++++++++++++++++++++-------------------------
+>  sound/usb/endpoint.h |  40 ++--
+>  sound/usb/pcm.c      | 616 +++++++++++++++++++----------------------------
+>  6 files changed, 616 insertions(+), 734 deletions(-)
+> 
+> 
+> That's a lot of code though. I'd like to be able to use my DAC on kernels newer than 5.10 so any hints on how to debug and fix this would be greatly appreciated. After doing this 17-point bisect I absolutely don't mind building a few more to fix this.
+> 
+> For info, the debian bug report: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1011196 
+> 
+> For info, a related report from Arch linux for the same device vendor: https://bugs.archlinux.org/task/70636
 
-As previous - even though they aren't aligned, I'd have thought
-__le16 etc will still work.  The unaligned accessors are fine
-taking __le16 * for example.
-
-> +	u32 dirty_shutdown_cnt;
-> +	u32 cor_vol_err_cnt;
-> +	u32 cor_per_err_cnt;
-> +} __packed;
-> +
-> +/*
-> + * Memory Module Event Record
-> + * CXL v3.0 section 8.2.9.2.1.3; Table 8-45
-> + */
-> +struct cxl_evt_mem_mod_rec {
-> +	struct cxl_event_record_hdr hdr;
-> +	u8 event_type;
-> +	struct cxl_get_health_info info;
-> +} __packed;
-> +
->  struct cxl_mbox_get_partition_info {
->  	__le64 active_volatile_cap;
->  	__le64 active_persistent_cap;
-> diff --git a/include/trace/events/cxl-events.h b/include/trace/events/cxl-events.h
-> index db9b34ddd240..dbbe25fee25c 100644
-> --- a/include/trace/events/cxl-events.h
-> +++ b/include/trace/events/cxl-events.h
-> @@ -358,6 +358,161 @@ TRACE_EVENT(cxl_dram_event,
->  		)
->  );
->  
-> +/*
-> + * Memory Module Event Record - MMER
-> + *
-> + * CXL v2.0 section 8.2.9.1.1.3; Table 156, Table 181
-> + *
-> + * Device Health Information - DHI; Table 181
-> + */
-> +#define CXL_MMER_HEALTH_STATUS_CHANGE		0x00
-> +#define CXL_MMER_MEDIA_STATUS_CHANGE		0x01
-> +#define CXL_MMER_LIFE_USED_CHANGE		0x02
-> +#define CXL_MMER_TEMP_CHANGE			0x03
-> +#define CXL_MMER_DATA_PATH_ERROR		0x04
-> +#define CXL_MMER_LAS_ERROR			0x05
-> +#define show_dev_evt_type(type)	__print_symbolic(type,			   \
-> +	{ CXL_MMER_HEALTH_STATUS_CHANGE,	"Health Status Change"	}, \
-> +	{ CXL_MMER_MEDIA_STATUS_CHANGE,		"Media Status Change"	}, \
-> +	{ CXL_MMER_LIFE_USED_CHANGE,		"Life Used Change"	}, \
-> +	{ CXL_MMER_TEMP_CHANGE,			"Temperature Change"	}, \
-> +	{ CXL_MMER_DATA_PATH_ERROR,		"Data Path Error"	}, \
-> +	{ CXL_MMER_LAS_ERROR,			"LSA Error"		}  \
-> +)
-> +
-> +#define CXL_DHI_HS_MAINTENANCE_NEEDED				BIT(0)
-> +#define CXL_DHI_HS_PERFORMANCE_DEGRADED				BIT(1)
-> +#define CXL_DHI_HS_HW_REPLACEMENT_NEEDED			BIT(2)
-> +#define show_health_status_flags(flags)	__print_flags(flags, "|",	   \
-> +	{ CXL_DHI_HS_MAINTENANCE_NEEDED,	"Maintenance Needed"	}, \
-> +	{ CXL_DHI_HS_PERFORMANCE_DEGRADED,	"Performance Degraded"	}, \
-> +	{ CXL_DHI_HS_HW_REPLACEMENT_NEEDED,	"Replacement Needed"	}  \
-> +)
-> +
-> +#define CXL_DHI_MS_NORMAL							0x00
-> +#define CXL_DHI_MS_NOT_READY							0x01
-> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOST					0x02
-> +#define CXL_DHI_MS_ALL_DATA_LOST						0x03
-> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_POWER_LOSS			0x04
-> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_SHUTDOWN			0x05
-> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_IMMINENT				0x06
-> +#define CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_POWER_LOSS				0x07
-> +#define CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_SHUTDOWN				0x08
-> +#define CXL_DHI_MS_WRITE_ALL_DATA_LOSS_IMMINENT					0x09
-> +#define show_media_status(ms)	__print_symbolic(ms,			   \
-> +	{ CXL_DHI_MS_NORMAL,						   \
-> +		"Normal"						}, \
-> +	{ CXL_DHI_MS_NOT_READY,						   \
-> +		"Not Ready"						}, \
-> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOST,				   \
-> +		"Write Persistency Lost"				}, \
-> +	{ CXL_DHI_MS_ALL_DATA_LOST,					   \
-> +		"All Data Lost"						}, \
-> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_POWER_LOSS,		   \
-> +		"Write Persistency Loss in the Event of Power Loss"	}, \
-> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_SHUTDOWN,		   \
-> +		"Write Persistency Loss in Event of Shutdown"		}, \
-> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_IMMINENT,			   \
-> +		"Write Persistency Loss Imminent"			}, \
-> +	{ CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_POWER_LOSS,		   \
-> +		"All Data Loss in Event of Power Loss"			}, \
-> +	{ CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_SHUTDOWN,		   \
-> +		"All Data loss in the Event of Shutdown"		}, \
-> +	{ CXL_DHI_MS_WRITE_ALL_DATA_LOSS_IMMINENT,			   \
-> +		"All Data Loss Imminent"				}  \
-> +)
-> +
-> +#define CXL_DHI_AS_NORMAL		0x0
-> +#define CXL_DHI_AS_WARNING		0x1
-> +#define CXL_DHI_AS_CRITICAL		0x2
-> +#define show_add_status(as) __print_symbolic(as,	   \
-> +	{ CXL_DHI_AS_NORMAL,		"Normal"	}, \
-> +	{ CXL_DHI_AS_WARNING,		"Warning"	}, \
-> +	{ CXL_DHI_AS_CRITICAL,		"Critical"	}  \
-> +)
-> +
-> +#define CXL_DHI_AS_LIFE_USED(as)			(as & 0x3)
-> +#define CXL_DHI_AS_DEV_TEMP(as)				((as & 0xC) >> 2)
-> +#define CXL_DHI_AS_COR_VOL_ERR_CNT(as)			((as & 0x10) >> 4)
-> +#define CXL_DHI_AS_COR_PER_ERR_CNT(as)			((as & 0x20) >> 5)
-> +
-> +TRACE_EVENT(cxl_mem_mod_event,
-> +
-> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-> +		 struct cxl_evt_mem_mod_rec *rec),
-> +
-> +	TP_ARGS(dev_name, log, rec),
-> +
-> +	TP_STRUCT__entry(
-> +		/* Common */
-> +		__string(dev_name, dev_name)
-> +		__field(int, log)
-> +		__array(u8, id, UUID_SIZE)
-> +		__field(u32, flags)
-> +		__field(u16, handle)
-> +		__field(u16, related_handle)
-> +		__field(u64, timestamp)
-> +
-> +		/* Memory Module Event */
-> +		__field(u8, event_type)
-> +
-> +		/* Device Health Info */
-> +		__field(u8, health_status)
-> +		__field(u8, media_status)
-> +		__field(u8, life_used)
-> +		__field(u32, dirty_shutdown_cnt)
-> +		__field(u32, cor_vol_err_cnt)
-> +		__field(u32, cor_per_err_cnt)
-> +		__field(s16, device_temp)
-> +		__field(u8, add_status)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		/* Common */
-> +		__assign_str(dev_name, dev_name);
-> +		memcpy(__entry->id, &rec->hdr.id, UUID_SIZE);
-> +		__entry->log = log;
-> +		__entry->flags = le32_to_cpu(rec->hdr.flags_length) >> 8;
-> +		__entry->handle = le16_to_cpu(rec->hdr.handle);
-> +		__entry->related_handle = le16_to_cpu(rec->hdr.related_handle);
-> +		__entry->timestamp = le64_to_cpu(rec->hdr.timestamp);
-> +
-> +		/* Memory Module Event */
-> +		__entry->event_type = rec->event_type;
-> +
-> +		/* Device Health Info */
-> +		__entry->health_status = rec->info.health_status;
-> +		__entry->media_status = rec->info.media_status;
-> +		__entry->life_used = rec->info.life_used;
-> +		__entry->dirty_shutdown_cnt = le32_to_cpu(rec->info.dirty_shutdown_cnt);
-> +		__entry->cor_vol_err_cnt = le32_to_cpu(rec->info.cor_vol_err_cnt);
-
-I've lost track, but my guess is some / all of these need the unaligned_get_le32()
-etc rather than aligned form.  Maybe just be lazy and use the unaligned versions
-even when things happen to be aligned - then we don't have to think about it
-when reviewing :)
+There are lots of workarounds for the buggy USB audio firmware, and
+the latest kernel allows to enable the quirks via quirk_flags module
+option of snd-usb-audio driver.  See
+Documentation/sound/alsa-configuration.rst.
+You can try the bit 16 at first, for example.
 
 
-> +		__entry->cor_per_err_cnt = le32_to_cpu(rec->info.cor_per_err_cnt);
-> +		__entry->device_temp = le16_to_cpu(rec->info.device_temp);
-> +		__entry->add_status = rec->info.add_status;
-> +	),
-> +
-> +	TP_printk("%s: %s time=%llu id=%pUl handle=%x related_handle=%x hdr_flags='%s': " \
-> +		  "evt_type='%s' health_status='%s' media_status='%s' as_life_used=%s " \
-> +		  "as_dev_temp=%s as_cor_vol_err_cnt=%s as_cor_per_err_cnt=%s " \
-> +		  "life_used=%u dev_temp=%d dirty_shutdown_cnt=%u cor_vol_err_cnt=%u " \
-> +		  "cor_per_err_cnt=%u",
-> +		__get_str(dev_name), show_log_type(__entry->log),
-> +		__entry->timestamp, __entry->id, __entry->handle,
-> +		__entry->related_handle, show_hdr_flags(__entry->flags),
-> +
-> +		show_dev_evt_type(__entry->event_type),
-> +		show_health_status_flags(__entry->health_status),
-> +		show_media_status(__entry->media_status),
-> +		show_add_status(CXL_DHI_AS_LIFE_USED(__entry->add_status)),
-> +		show_add_status(CXL_DHI_AS_DEV_TEMP(__entry->add_status)),
-> +		show_add_status(CXL_DHI_AS_COR_VOL_ERR_CNT(__entry->add_status)),
-> +		show_add_status(CXL_DHI_AS_COR_PER_ERR_CNT(__entry->add_status)),
-> +		__entry->life_used, __entry->device_temp,
-> +		__entry->dirty_shutdown_cnt, __entry->cor_vol_err_cnt,
-> +		__entry->cor_per_err_cnt)
-> +);
-> +
-> +
->  #endif /* _CXL_TRACE_EVENTS_H */
->  
->  /* This part must be outside protection */
-
+Takashi

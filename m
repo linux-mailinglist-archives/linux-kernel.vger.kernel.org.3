@@ -2,161 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B1B5A0777
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FB05A077D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbiHYCwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 22:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S232355AbiHYCxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 22:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiHYCwC (ORCPT
+        with ESMTP id S232051AbiHYCxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 22:52:02 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3C39D105
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:52:00 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id m5so15798036lfj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:52:00 -0700 (PDT)
+        Wed, 24 Aug 2022 22:53:06 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F439CCD2;
+        Wed, 24 Aug 2022 19:53:06 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r69so16697173pgr.2;
+        Wed, 24 Aug 2022 19:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Ky9f3zT08S4ZXNjlyA5qGbsFiUvNGJziEqTyRMY4jSw=;
-        b=jo31VNDUXR8dbKvXYPyNa0M/tQAX3KyHNSSjuFpuQh9mB7Xyhvbs0IHAU7OaCjVSmy
-         paWWTAVL9yz28LlBaaiv0rcb1ANcvdrTDPc8Gdm9qCupJCdajV6g7LylrLp0zy+TRHXO
-         8RCmkbQWnxKFnqzAtL2EMCkPBOFwmxSk8z47W1tAVynQW41vlnUx8XPQuggBgXUa19kr
-         bbyNO5C3paJoU0yujCZqslCm3QZ1VHbb9cVm7UjKJn9VZ9V6GX/cnuyOP5cUHDG0Opbk
-         UY3qGBaQnJ4e8qBwBGdNaHoMYBLiDKgUA83URBqoVG2xXZQ2mBpo9Od8PptIxB3pafCD
-         Kmdg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=ZBRn3glusYyDDS6wNhVu2goiaQqoWM1kcfMmuuxqfeo=;
+        b=MPAY3R16cIl2HRQO0QjpATwvz0RbCN/3Oxj+pPn5MM8V8xA2H4ipSi8OnNAnaswXlT
+         E4rI3X57BYoJeGQ9kQ2JDf4Ci0JVCQoYjfHG/lgQjwiWv+9x8YdxzeHawlD8QxC/8qBq
+         EGPYi8hgbB3Yy+M7wvDqpiIiGnrNC4bMz6TKpIbNvAMFJNFywMw2SiSTY+Vu6sNkN8ZD
+         igO2r+RUqlQ19SlqFs4QEwN+msWM39iffaA/ttpZk0cBOqz6TcF6zaWzOl0+FFlmBty6
+         1GrNnZ2UEF6DIMiQw+lvkxuV9jPR5VS0QYNCy4GA1d4vkctOUFbv3hQfaxplYJwPJwOD
+         nsMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Ky9f3zT08S4ZXNjlyA5qGbsFiUvNGJziEqTyRMY4jSw=;
-        b=IHBLbvd/XWR/pRtbVSHbGJ3WoA/MFTWnwSaqrC2/nhRpke5ecACK8PRhI03bwTAeUX
-         Qyf+U+TJyeZkoWeO5XvWHc9jPiGSrLkhSR//2VtClj7h5nJjvzQ5XS3Rexcp2Q5wobrh
-         UZAnApyD8KESLZuot9UP77nRDwbCXej+/w71NLf23UTf5VRMlzNgmUALCCzeqCoPf8v+
-         PFosLdBkchRlAFjPVdEoloBT8O8Uf61SKtNn3A+Rcdozx9AoaGbdxwmv1pLKiQt2R9rn
-         q5RGztSKBf+pe8w5lkIGrshDMgWqgoCxeI2b0CeCIrEgG2TVO57W2DqEF5Q+tstTYS/q
-         TeRA==
-X-Gm-Message-State: ACgBeo1ooLUIht0fzJgys0gHP5D1H+z8FMkdvw4q7JMchfo9x0g2IQ/F
-        MXQ14pDp/pI4S7cv512PHqv9GgTit6yR4PcYzBWEKw==
-X-Google-Smtp-Source: AA6agR5adGSfvPjHNArIdRKeBP7Ky4mhYot3mSpYxhseCkqeFsMTRtBGNQP5s8bnvWkGLT62qwXl2P+zEWQfbLRaDug=
-X-Received: by 2002:a05:6512:3b0f:b0:492:ef21:33a0 with SMTP id
- f15-20020a0565123b0f00b00492ef2133a0mr462100lfv.419.1661395918227; Wed, 24
- Aug 2022 19:51:58 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ZBRn3glusYyDDS6wNhVu2goiaQqoWM1kcfMmuuxqfeo=;
+        b=PiG/FXj0DfEK65Jgw0PJlkQGjFcnccA9nfbBAID/DASLs66EREIKRvJXvZ1m0h13JA
+         PBN/UgGBQ4XcLs0yakpw48FzvJkBLkvYt/vmV6EjTdG5AnYmyoRgEIXdeTxTJymfNU9c
+         HDGpBRsGIJStzGj9OWSHpmzweOibNE/B3YqxgS8qTSoRKelWR61sTf/td1pMOp+wppGF
+         IZDACT3be2eDuxt3E3GLM73cTJEJKu0ayxBiLYR1YMI5pfLlltmXaFK6LW4lIjYULnlB
+         E3YIbd6xA5mN4PDcX3uWfAyR7OP6wLXNFR1FGyIGVOaa9p4gZx0ZY0mt+CNTZqwgtrc4
+         kA1w==
+X-Gm-Message-State: ACgBeo39xET9po7cldyGjZ9EwUOHdGw5Z73RFZjDOpgW+SVwXX7ylYUh
+        fTtxIa/HVv4BQlnM8YqyTSU=
+X-Google-Smtp-Source: AA6agR5Q0ST3Yu6ZCFGqnW+CQmNOuUqjcWQ4lT5jynnps9v76ptvuDUKqgDW5F7Vj338dAtgMAQa3Q==
+X-Received: by 2002:a65:6b8e:0:b0:42a:162c:e3a0 with SMTP id d14-20020a656b8e000000b0042a162ce3a0mr1539015pgw.464.1661395985677;
+        Wed, 24 Aug 2022 19:53:05 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-33.three.co.id. [116.206.28.33])
+        by smtp.gmail.com with ESMTPSA id qi3-20020a17090b274300b001f3162e4e55sm2170817pjb.35.2022.08.24.19.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 19:53:05 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8E1C9103C07; Thu, 25 Aug 2022 09:53:00 +0700 (WIB)
+Date:   Thu, 25 Aug 2022 09:52:59 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 24/24] Documentation: add HID-BPF docs
+Message-ID: <YwbkC9v83gk0Eq/d@debian.me>
+References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
+ <20220721153625.1282007-25-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-References: <20220817111348.745527-1-heiko@sntech.de> <CAOnJCUJu1fr2qxOkX4Sz-kLhB64xkcjAbBAeTkp214ZHAa0btA@mail.gmail.com>
- <CAK9=C2U3OvUZmYTJ-C0wkSp8ViPA1+Nj2L6pd4CHTCuzaVtDJg@mail.gmail.com> <13084187.uLZWGnKmhe@phil>
-In-Reply-To: <13084187.uLZWGnKmhe@phil>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 25 Aug 2022 08:21:46 +0530
-Message-ID: <CAK9=C2WhbguLxKuJ6jVZZQUvsv30iuORviDZ4sT9imvwwzNY2w@mail.gmail.com>
-Subject: Re: [PATCH] drivers/perf: riscv_pmu_sbi: add support for PMU variant
- on T-Head C9xx cores
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Atish Patra <atishp@atishpatra.org>, anup@brainfault.org,
-        will@kernel.org, mark.rutland@arm.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        philipp.tomsich@vrull.eu, cmuellner@linux.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fd9AMyEzaCZxSJic"
+Content-Disposition: inline
+In-Reply-To: <20220721153625.1282007-25-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 7:34 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Am Donnerstag, 18. August 2022, 10:24:33 CEST schrieb Anup Patel:
-> > On Thu, Aug 18, 2022 at 1:03 AM Atish Patra <atishp@atishpatra.org> wrote:
-> > >
-> > > On Wed, Aug 17, 2022 at 4:13 AM Heiko Stuebner <heiko@sntech.de> wrote:
-> > > >
-> > > > With the T-HEAD C9XX cores being designed before or during the ratification
-> > > > to the SSCOFPMF extension, they implement functionality very similar but
-> > > > not equal to it. So add some adaptions to allow the C9XX to still handle
-> > > > its PMU through the regular SBI PMU interface instead of defining new
-> > > > interfaces or drivers.
-> > > >
-> > >
-> > > IMO, vendor specific workarounds in the generic implementation is not
-> > > a good idea.
-> > > If we have to support it, I think we should just put the IRQ number in
-> > > the DT and parse from the DT.
-> > > The initial sscofpmf series was based on the DT. It was removed later
-> > > as there was no need for it at that time.
-> > > We can always revive it.
-> > >
-> > > Regarding the CSR number difference and static key enablement, can we
-> > > use code patching techniques here as well ?
-> > > At least all the T-HEAD C9XX core erratas are in one place.
-> > >
-> > > The alternate would be just to say T-HEAD C9XX support SSCOFPMF but
-> > > with erratas. I don't prefer this approach
-> > > but it keeps the vendor specific checks out of the generic code.
-> >
-> > Whether to have a DT node (or not) was already discussed and concluded
-> > in the past.
-> >
-> > We don't need a DT node just to get the IRQ number. The T-HEAD custom
-> > IRQ number can be derived based on mvendorid.
->
-> Yeah, I remember reading that discussion and thus went with the mvendorid
-> way in this patch.
->
-> > Also, all these T-HEAD specific changes in SBI PMU driver should be
-> > implemented as erratas using ALTERNATIVE() macros.
->
-> (1) "All these T-HEAD specific changes ..."
-> Actually the only T-HEAD-specific change is reading that different CSR
-> for the overflow information, the rest only makes the irq-number variable
 
-If it is just overflow CSR then it is simpler to do instruction patching
-in drivers/perf/riscv_pmu_sbi.c itself.
+--fd9AMyEzaCZxSJic
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> (2) ALTERNATIVE macros are working on assembler instructions, so are you
-> sugesting to replace the generic csr_read() for the overflow-csr with a
-> custom copy like
->
-> #define sbi_pmu_read_overflow(void)                                             \
-> ({                                                              \
->         register unsigned long __v;                             \
->         ALT_THEAD_PMU_OVERFLOW(__v); \
->         __v;                                                    \
-> })
->
-> and then in errata_list.h
->
-> #define ALT_THEAD_PMU_OVERFLOW(__ovl) \
-> __asm__ __volatile__ (alternative(
->         "csrr %0, " __ASM_STR(CSR_SSCOUNTOVF),  \
->         "csrr %0, " __ASM_STR(THEAD_C9XX_CSR_SCOUNTEROF), THEAD_VENDOR_ID, \
->                 ERRATA_THEAD_PMU, CONFIG_ERRATA_THEAD_PMU) \
->                               : "=r" (__ovl) :                  \
->                               : "memory");
->
-> I'm not yet seeing what you're gaining by going with this approach:
-> - that the overflow-csr is the same bitwise but only at a different
->   address is specific to the c9xx, other deviants might implement things
->   completely different
-> - you're not getting rid of the thead mention
-> - and we're now duplicating the generic csr-read code
->
-> Is this the preferred way or what am I overlooking?
+On Thu, Jul 21, 2022 at 05:36:25PM +0200, Benjamin Tissoires wrote:
+> +When (and why) to use HID-BPF
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> +
+> +We can enumerate several use cases for when using HID-BPF is better than
+> +using a standard kernel driver fix:
+> +
 
-Yes, better to have special sbi_pmu_read_overflow() in
-drivers/perf/riscv_pmu_sbi.c itself which is based on ALTERNATIVES.
+Better say "There are several use cases when using HID-BPF is better
+than standard kernel driver fix:"
 
-I am suggesting ALTERNATIVEs only because overflow CSR is
-accessed in the interrupt handler which is in hot-path when we run
-"perf record".
+> +When a BPF program needs to emit input events, it needs to talk HID, and=
+ rely
+> +on the HID kernel processing to translate the HID data into input events.
+> +
 
-Regards,
-Anup
+talk to HID?
+
+Otherwise the documentation LGTM (no new warnings caused by the doc).
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--fd9AMyEzaCZxSJic
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYwbkBwAKCRD2uYlJVVFO
+oz3rAQCgczCdX57yjfzPE8zpu9jiwd33nPbcTmawxaCDNeO/owEAgYmMVll2dF0j
+zQo9yKz4+kiQWQNTPR3m6sXcj3WDsQU=
+=Ww1R
+-----END PGP SIGNATURE-----
+
+--fd9AMyEzaCZxSJic--

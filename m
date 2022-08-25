@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911CE5A10F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F795A10FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242011AbiHYMql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S241988AbiHYMsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241971AbiHYMqi (ORCPT
+        with ESMTP id S240222AbiHYMsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:46:38 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4034B861CE
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:46:37 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id l23so8283374lji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=MlAO/HOwUYxrXRzuLcbJGzJd+wKSnLDy/6np4kDoRvc=;
-        b=ePUbyYECvrWpUGdCbA3selUHBljQtCu6vs0bL7IPA2FWfs0vAKbmazxKyIeku1y/Ae
-         UiHWUXcogbQO7LJkuc6GVTnGl700mU01gdpY4/nz1h1e9R7iQD2fJq0I71QT0w73VrB2
-         yKgul7OrWD2h2NWcaFemI/Qai1zF1LvQK9uyAkFIQpqKgKdb8m+UpbsiIO7DJyu37Bwa
-         h4Ob+QvzE5Lnf+B4zux0VZ2rZMQIK19Nz2sP9Zi4TeZIxsB70tjZ4QATWyc9TxLL/ZY3
-         3Pr1+pzpaXkzBpUTk+p8PMUFUOmmuuIYTGNMsDYeHRoIlxIYdiLDkErGUI16fOBHsNXp
-         7PhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=MlAO/HOwUYxrXRzuLcbJGzJd+wKSnLDy/6np4kDoRvc=;
-        b=MEcOYeDAWByDBCGn00MGBnXq8KCmYk8/J3P2gTF+Oz2vRuYISDIJkQtNY2vYhanIRF
-         trUD9ywc8JPQzVzxYDDRzK9orgF09uOaav0LnXJBE8PWLzQf5BBDBoVm67CMs/ZjPNHZ
-         PHbCj/RAN/tIFG7JMoV3D5vhwr06i3pQJD1JlacpBARGztX9likHVJsaRAS8X4uBoHuV
-         3Z7MxyG++SvhsnfdV1Yv3/orjHe0MT+KFRT1MaHizApCvMsl5WfkOPzODF2eo/dqAKgx
-         mutLTJnBatnlEjjTV5EHDRlXH8sU+VUUKQEqRbLaCg38OKSyTfzQkvdC13noO5sgiY5V
-         xpsQ==
-X-Gm-Message-State: ACgBeo29cKQB26TSk5SdulA7x4GZ4U4V23KbQgpaXdO2NBe7G56rauxo
-        +DWBM+8FiKvvzsPgxGOcUV4iKQ==
-X-Google-Smtp-Source: AA6agR6S4ckgaNIlaLxF/iotYnqi3J7kEIilm0zoEwnO6oRfujEl4XHGQoD5BFlLb3T1jtLrbKaltw==
-X-Received: by 2002:a2e:894e:0:b0:261:ea54:6c4f with SMTP id b14-20020a2e894e000000b00261ea546c4fmr576363ljk.191.1661431595673;
-        Thu, 25 Aug 2022 05:46:35 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id p15-20020a2eb98f000000b00261e58f9883sm547143ljp.56.2022.08.25.05.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 05:46:35 -0700 (PDT)
-Message-ID: <daaf6ad7-6204-2a13-442b-05068d29e734@linaro.org>
-Date:   Thu, 25 Aug 2022 15:46:34 +0300
+        Thu, 25 Aug 2022 08:48:08 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252FDAED8A
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:48:08 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P6MivD004380;
+        Thu, 25 Aug 2022 07:47:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=uKgQUlJmcmP4REZEU3yL7St1zJeaxt/MEKziZRAgg9A=;
+ b=XXecB8T8xJR8GV3rjt3ByVt0HnaBh5h9sMrMRL0+YzT2IPLmlW7zK6HHW8O2DqIfe2Pv
+ vDMfuygkv31JJpypSXkgEWIfBtyx1KXhcXZTn08y4c+Fkxdq9oAOSoL5oF4mZ/pAPrme
+ gNCxxrX44ozByhlyNwBTqEB7QIOs7TEHQdlyZ2f8WnNfXLw1XeDrnZ59KD7F0XG7K5zu
+ XrN9HU6yveks19W0DhiJnJShNhHfhPQIi5I5fA8jRvlNRNYRpl08RF6rK37acMtJFC7d
+ y+NxGJCbACpfsVBq6USnhCmCsHdVpVgJe7BmyO+qLShgnz3counLVzjdRrCNFV6rvIsi mQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3j5a3ra0ma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Aug 2022 07:47:17 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 25 Aug
+ 2022 07:47:15 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
+ Transport; Thu, 25 Aug 2022 07:47:15 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C563145D;
+        Thu, 25 Aug 2022 12:47:15 +0000 (UTC)
+Date:   Thu, 25 Aug 2022 12:47:15 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Vlad Karpovich" <Vlad.Karpovich@cirrus.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH] ASoC: wm_adsp: Silent parsing error on loading speaker
+ protection fw
+Message-ID: <20220825124715.GM92394@ediswmail.ad.cirrus.com>
+References: <20220823133347.919706-1-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND] dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630
- compatibles
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220720163802.7209-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720163802.7209-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220823133347.919706-1-cristian.ciocaltea@collabora.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: guwl9vZJAsBrCJ4edLUxyUeAgGWGsnDl
+X-Proofpoint-ORIG-GUID: guwl9vZJAsBrCJ4edLUxyUeAgGWGsnDl
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 19:38, Krzysztof Kozlowski wrote:
-> Document compatibles for QFPROM used on IPQ8064 and SDM630.  They are
-> compatible with generic QFPROM fallback.
+On Tue, Aug 23, 2022 at 04:33:47PM +0300, Cristian Ciocaltea wrote:
+> The tracing capabilities for the speaker protection fw enabled via
+> commit c55b3e46cb99 ("ASoC: wm_adsp: Add trace caps to speaker
+> protection FW") are not be available on all platforms, such as the
+> Valve's Steam Deck which is based on the Halo Core DSP.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+> As a consequence, whenever the firmware is loaded, a rather misleading
+> 'Failed to parse legacy: -19' error message is written to the kernel
+> ring buffer:
+> 
+> [  288.977412] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Firmware version: 3
+> [  288.978002] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: cs35l41-dsp1-spk-prot.wmfw: Fri 02 Apr 2021 21:03:50 W. Europe Daylight Time
+> [  289.094065] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Firmware: 400a4 vendor: 0x2 v0.33.0, 2 algorithms
+> [  289.095073] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: 0: ID cd v29.53.0 XM@94 YM@e
+> [  289.095665] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: 1: ID f20b v0.0.1 XM@170 YM@0
+> [  289.096275] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Protection: C:\Users\ocanavan\Desktop\cirrusTune_july2021.bin
+> [  291.172383] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Failed to parse legacy: -19
+> 
+> Update wm_adsp_buffer_init() to *not* report the ENODEV error when the
+> firmware type is WM_ADSP_FW_SPK_PROT.
+> 
+> Fixes: c55b3e46cb99 ("ASoC: wm_adsp: Add trace caps to speaker protection FW")
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>  sound/soc/codecs/wm_adsp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
+> index cfaa45ede916..7514fc03b468 100644
+> --- a/sound/soc/codecs/wm_adsp.c
+> +++ b/sound/soc/codecs/wm_adsp.c
+> @@ -1602,7 +1602,7 @@ static int wm_adsp_buffer_init(struct wm_adsp *dsp)
+>  	if (list_empty(&dsp->buffer_list)) {
+>  		/* Fall back to legacy support */
+>  		ret = wm_adsp_buffer_parse_legacy(dsp);
+> -		if (ret)
+> +		if (ret && (dsp->fw != WM_ADSP_FW_SPK_PROT || ret != -ENODEV))
+>  			adsp_warn(dsp, "Failed to parse legacy: %d\n", ret);
 
-This was sent ~4 months ago, then resent a month ago... and still
-nothing. Bjorn does not want to pick it up, Srini seems as well. Let me
-resend without Rob's ack, so this will go via Rob's tree.
+Fixing this for a single firmware probably doesn't really make
+the most sense, if we are treating buffers as optional these days
+I guess really the best solution would be to make this either an
+info and slightly rephrase the message or make it a dbg message.
 
-Best regards,
-Krzysztof
+Thanks,
+Charles

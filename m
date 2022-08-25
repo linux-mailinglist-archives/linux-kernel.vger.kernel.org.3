@@ -2,67 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95C85A11F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9435A11FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240998AbiHYNX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S241540AbiHYNXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240846AbiHYNX0 (ORCPT
+        with ESMTP id S242550AbiHYNXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:23:26 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D01CAA4DB
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661433806; x=1692969806;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LO3mEZSh95GcI+TJnv4VjREZQLaJ80zWeeGmVQtCKV8=;
-  b=mSfSWIwR1GY3AIu9Uyg/8alpMxPXLRcZxSzPFEWRLRTL7UR3v2wmWmrD
-   878PJEiWsvWaiY6JnRXc7eKApsznKHAR8MUpZMLCV4cWpdTIMLbXL4CmG
-   EVIUuECrUPIeE0cUiOsT/S3IKj8vTQ/jQg+sfCZS+610LkjUpsFM1sYVJ
-   n8PbwL4+sgjewDa/uOndk4j5h2TFuRn1iAK8a9w8mr3jHba4PvwGBRiz2
-   IyVYgFfpE4F6Wx1epGfl7d+ARgCqmrueo8RQdzqt312pIVFzi5qB5vBc1
-   7PNQT+0wy2GuGuj/Oz5M6bHLwAYyMtyCTaSp5ERIo2J5bcV06Q4R16Raq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="380526934"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="380526934"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:23:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="699454421"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Aug 2022 06:23:25 -0700
-Received: from [10.252.208.112] (kliang2-mobl1.ccr.corp.intel.com [10.252.208.112])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id DC738580AE3;
-        Thu, 25 Aug 2022 06:23:24 -0700 (PDT)
-Message-ID: <e5466ae3-98c9-1e9e-3ddb-bdb0245b6b5c@linux.intel.com>
-Date:   Thu, 25 Aug 2022 09:23:23 -0400
+        Thu, 25 Aug 2022 09:23:41 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA66AAA3FA;
+        Thu, 25 Aug 2022 06:23:39 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d8so15830494lfq.0;
+        Thu, 25 Aug 2022 06:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=6LhGjtWIW9co1/2gs66rsVEFtLVzBG4QOkw2+wFNu3c=;
+        b=pPPpzZ45RGXaqlXi8hum48NG1uQB4nXdUDPMYgvTTQtsRrOHiVqto00m6MXd9s4O9j
+         wPglL+1RN0amf4snG38/0fA85YH9oBBVoIq5MoCERAdMboZbVErLUerT+PsG7HecAwR9
+         bV3IkmP5bZVH3hwAe0y5ujSup4dil+Y+YzlnBJWbclaHpuD5YxrRDCHfBU1HpmxypqLU
+         Krb2A5KbjVfSAwY/oGJZuLLdzgGG/8ujaktIzgaPmwNVi8Ym+B8nNlWFkobYIVEnCBIc
+         LOkrlfIrHoCMaLxe0Dxn69ATpClotpkRmrscKObF3yQWAx0Fd+xLNFaRtW35Ad1O0t40
+         z3oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=6LhGjtWIW9co1/2gs66rsVEFtLVzBG4QOkw2+wFNu3c=;
+        b=SclGqvo70QCq+J6SC8DV8Au+6FR/BbXXdgdQbQgNHefiNs5kNYGDjHzjAJxtrnX8nq
+         tDd2tmTNbgPnTc1t3/Re8vIi0S4E5t45aot8vp+aHAgFd/xyoExk5Ex/9gyBCcmRCn0Z
+         piezN4zFbXcR/cWOMPMh0ymDK5DcHnPkCxizmzIzt0e9xw1uPxDB8hxb+MGbIKp//V5R
+         hRzGMdozTGKjUfp4soIK7kUNMtgPBFmLITaECYKuivxazpfqhyCeaoZO32cN0AndjzVJ
+         KW+SEd6SVl94XIOU7N6w4RAq9KJtSHD8tAFaL2p750JgwzuEH7DBqEQ3/sa1rUzf/Lbq
+         P2xw==
+X-Gm-Message-State: ACgBeo09L1VOpmrx5tOHAKqE/AiaJe5JzoCtTHOXJ3EKMDiQrmU+D8yd
+        lcW9JlE0YUA1qiAfBuiXqpI=
+X-Google-Smtp-Source: AA6agR49lHBZ9hF6YLntUa9KLE3iJhihwzflelrNicDUZ7cENiTbU1B0ArinDwRISS9DiDl3F+++Eg==
+X-Received: by 2002:ac2:4c4a:0:b0:492:c912:c166 with SMTP id o10-20020ac24c4a000000b00492c912c166mr1117140lfk.543.1661433818330;
+        Thu, 25 Aug 2022 06:23:38 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id p8-20020a056512312800b00492e69be4d6sm505324lfd.27.2022.08.25.06.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 06:23:37 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 16:23:35 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Message-ID: <20220825132335.f7mxjyomz6a5zybf@mobilestation>
+References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+ <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+ <20220823083243.aovlgu22j7uv73qv@mobilestation>
+ <166c0198-17c4-3b19-77fe-632d65f17cb0@linaro.org>
+ <20220823114516.4mcufkbmzy5gjdcr@mobilestation>
+ <6661dcc1-cc93-efbb-b248-0d93f681a1bf@linaro.org>
+ <20220824172724.ny2xpryn76h6ftv6@mobilestation>
+ <a04f6b56-4bca-cc86-c51f-3a7c6c7ef02a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 2/2] perf docs: Update the documentation for the save_type
- filter
-Content-Language: en-US
-To:     acme@redhat.com, linux-kernel@vger.kernel.org
-Cc:     eranian@google.com, ak@linux.intel.com, namhyung@kernel.org,
-        irogers@google.com, Peter Zijlstra <peterz@infradead.org>
-References: <20220816125612.2042397-1-kan.liang@linux.intel.com>
- <20220816125612.2042397-2-kan.liang@linux.intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220816125612.2042397-2-kan.liang@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a04f6b56-4bca-cc86-c51f-3a7c6c7ef02a@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,37 +96,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
-
-The kernel change has been merged into the tip perf/urgent branch.
-
-Do you have any comments for the patch?
-If it's OK for you, could you please pull this patch?
-
-Thanks,
-Kan
-
-On 2022-08-16 8:56 a.m., kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
+On Thu, Aug 25, 2022 at 09:06:42AM +0300, Krzysztof Kozlowski wrote:
+> On 24/08/2022 20:27, Serge Semin wrote:
 > 
-> Update the documentation to reflect the kernel changes.
+> > 
+> > Note what Rob said concerned the generic compatible "fallback" case,
+> > not the generic compatible string in general. It's ok to have a
+> > generic device name defined irrespective to the platform vendor.
+> > Moreover it's applicable in case of the DW uMCTL2 DDRC IP-core since
+> > first IP-core version is auto-detectable starting from v3.20a and
+> > second I managed to implement auto-detection solutions for almost
+> > all the DDR/ECC-specific parameters. So I am more inclined to the
+> > solution 1) suggested by me in the previous email message:
+> > - deprecate "snps,ddrc-3.80a" string.
+> > - add new generic "snps,dw-umctl2-ddrc" compatible string.
+> > - rename the DT-bindings file.
 > 
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  tools/perf/Documentation/perf-record.txt | 3 +++
->  1 file changed, 3 insertions(+)
+> Sounds ok.
+
+Agreed then.
+
 > 
-> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-> index 099817ef5150..d5c57ac1ee0a 100644
-> --- a/tools/perf/Documentation/perf-record.txt
-> +++ b/tools/perf/Documentation/perf-record.txt
-> @@ -397,6 +397,9 @@ following filters are defined:
->  	- abort_tx: only when the target is a hardware transaction abort
->  	- cond: conditional branches
->  	- save_type: save branch type during sampling in case binary is not available later
-> +		     For the platforms with Intel Arch LBR support (12th-Gen+ client or
-> +		     4th-Gen Xeon+ server), the save branch type is unconditionally enabled
-> +		     when the taken branch stack sampling is enabled.
->  
->  +
->  The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
+> > 
+> >>
+> >> Here the Linux driver also binds to generic synopsys compatible, so I
+> >> would assume it has a meaning and use case on its own.
+> > 
+> > Please see my messages above regarding the current Synopsys DW uMCTL2
+> > EDAC driver implementation.
+> > 
+> >>
+> >>>
+> >>> What do you think?
+> >>>
+> >>> * Note I've got it you'd prefer the renaming being performed in a
+> >>> separate patch.
+> >>
+> >> The rename could be in the split patch as here, but then I assume the
+> >> rename part to be detected by git and be a pure rename. However:
+> >> 1. The git did not mark it as rename (you might need to use custom
+> >> arguments to -M/-B/-C),
+> > 
+> > Of course git hasn't detected it as rename, because aside with renaming
+> > I've split the bindings up. Splitting these two updates up into two
+> > patches will give us what you said. So to speak I suggest the next
+> > updates for v2:
+> > PATCH X. Detach the Zynq A05 DDRC DT-bindings to a separate schema.
+> > PATCH X + 1. Rename the Synopsys DW uMCTL2 DDRC bindings file and add a more
+> > descriptive generic compatible string name.
+> > 
+> > What do you think?
+> 
+
+> Regardless of the split the rename can be and should be detected by Git.
+> That's why we have these options. If it is not detected, you changed too
+> much during rename, so it is not a rename anymore. Relatively small
+> amount of changes would still be detected.
+
+Right. I'll make sure the renaming is detected.
+
+-Sergey
+
+> 
+> > 
+> >> 2. There were also changes in the process (allOf:if:then).
+> > 
+> > Right. But this is in another patchset. I'll address your notes in there.
+> 
+> 
+> Best regards,
+> Krzysztof

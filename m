@@ -2,206 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB075A0E9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD475A0E9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241244AbiHYK7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S240711AbiHYLAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiHYK73 (ORCPT
+        with ESMTP id S239668AbiHYLAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:59:29 -0400
+        Thu, 25 Aug 2022 07:00:08 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAD4AE238
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:59:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB86760C4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:00:07 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 43F71203C3;
-        Thu, 25 Aug 2022 10:58:57 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD4D92044F;
+        Thu, 25 Aug 2022 11:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661425137; h=from:from:reply-to:date:date:message-id:message-id:to:to:to:cc:
+        t=1661425205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DTFmvMyvl2axqPVRA130ZAksfN/kT649Q4+LyakY65c=;
-        b=YY+kgIjzV3BFmfmLWBEQHV4J1LNn1cRdIxj383dQNrbrQdyYglZw5JuXERVQkBjXiJGT5z
-        WhbtO9eidPzXR9hYO++QbbVwm8Ed6lvPmxMNugcIKHh6hhLvMa7aJ0XBgmCsKs2LQ2X8E1
-        N2RaSEdayhrJW+MamT9UcsfegeUKifM=
+        bh=u8IJTxOt7ZUm2LRTVcVVpJxH53X0//RdMe3WV6ZJ2xE=;
+        b=dqSdKPWaUScdMMO5CbYGwe++h1lfdUWNdodK4tmxGQRuChGohNMZ86o1SmnNJ2rE6unYdr
+        vufLcu9g7JD2SnWQdGVDHafLQu4kBmc8waoSfaHhENhH+bTJ50qi9poWXDPUeFkRXYNxtQ
+        RnSAxrNt9WZ2dWnk4dQmxe91cgFf81g=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661425137;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:to:cc:
+        s=susede2_ed25519; t=1661425205;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DTFmvMyvl2axqPVRA130ZAksfN/kT649Q4+LyakY65c=;
-        b=SmcUsnCs/iWxsbtc9kN3kN+BeGXgx5W+wdTTSQOm5bldOj1rsMhVRWI0zz15lZLFP667MJ
-        QDDa326+0fE8QICQ==
+        bh=u8IJTxOt7ZUm2LRTVcVVpJxH53X0//RdMe3WV6ZJ2xE=;
+        b=8b5oUmx2qrbCG1zvtJjf6iOmC/vm6BWihy6lEPXP3uwo+6aLKpUmwUCGmrO1EtQRjX0J12
+        WO6w6+Sn340+3JDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D7F013517;
-        Thu, 25 Aug 2022 10:58:57 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90D6C13517;
+        Thu, 25 Aug 2022 11:00:05 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id LBedAfFVB2O0bQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Thu, 25 Aug 2022 10:58:57 +0000
-Date:   Thu, 25 Aug 2022 12:58:56 +0200
-Message-ID: <874jy0mvwv.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Lennert Van Alboom <lennert@vanalboom.org>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: USB DAC broken since commit bf6313a0ff766925462e97b4e733d5952de02367 (5.10.0-rc5)
-In-Reply-To: <T3VPXtCc4uFws9Gfh2RjX6OdwM1RqfC6VqQr--_LMDyB2x5N3p9_q6AtPna17IXhHwBtcJVdXuS80ZZSCMjh_BafIbnzJPhbrkmhmWS6DlI=@vanalboom.org>
-References: <T3VPXtCc4uFws9Gfh2RjX6OdwM1RqfC6VqQr--_LMDyB2x5N3p9_q6AtPna17IXhHwBtcJVdXuS80ZZSCMjh_BafIbnzJPhbrkmhmWS6DlI=@vanalboom.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        id owRNIzVWB2NDbgAAMHmgww
+        (envelope-from <bp@suse.de>); Thu, 25 Aug 2022 11:00:05 +0000
+Date:   Thu, 25 Aug 2022 12:59:59 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     "Czerwacki, Eial" <eial.czerwacki@sap.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Arsh, Leonid" <leonid.arsh@sap.com>,
+        "Twaig, Oren" <oren.twaig@sap.com>,
+        SAP vSMP Linux Maintainer <linux.vsmp@sap.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Eric Biggers <ebiggers@google.com>, Fei Li <fei1.li@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: Re: [PATCH v2] drivers/virt/vSMP: new driver
+Message-ID: <YwdWL67QkBfpp9t+@zn.tnic>
+References: <PAXPR02MB731058B69D178E026C578BB481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
+ <20220825104604.GD2030@kadam>
+ <PAXPR02MB731016E9CB8C7E04DAC4790981729@PAXPR02MB7310.eurprd02.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PAXPR02MB731016E9CB8C7E04DAC4790981729@PAXPR02MB7310.eurprd02.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 12:45:27 +0200,
-Lennert Van Alboom wrote:
-> 
-> Hi,
-> 
-> 
-> My USB DAC fails to work on recent kernels (anything past 5.10). The device is the following:
-> 
-> Bus 003 Device 005: ID 2522:0007 LH Labs Geek Out HD Audio 1V5
-> 
-> 
-> 
-> Syslog shows error messages which have changed over the different kernel versions - this is the output from debian's 5.17.0-2-amd64:
-> 
-> [66136.185642] usb 3-6: uac_clock_source_is_valid(): cannot get clock validity for id 41
-> [66136.185643] usb 3-6: clock source 41 is not valid, cannot use
-> [66136.185956] usb 3-6: 1:0: usb_set_interface failed (-71)
-> [66136.186183] usb 3-6: 1:0: usb_set_interface failed (-71)
-> 
-> 
-> >From the first point in git where it fails (5.10.0-rc5-00025-gbf6313a0ff76):
-> 
-> Aug 25 12:39:37 Nesbitt kernel: [ 5295.633079] usb 3-3: new high-speed USB device number 8 using xhci_hcd
-> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782144] usb 3-3: New USB device found, idVendor=2522, idProduct=0007, bcdDevice=15.02
-> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782148] usb 3-3: New USB device strings: Mfr=1, Product=3, SerialNumber=0
-> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782150] usb 3-3: Product: Geek Out HD Audio 1V5
-> Aug 25 12:39:37 Nesbitt kernel: [ 5295.782151] usb 3-3: Manufacturer: LH Labs
-> Aug 25 12:39:37 Nesbitt kernel: [ 5296.162338] usb 3-3: 1:2 : unsupported format bits 0x100000000
-> Aug 25 12:39:38 Nesbitt mtp-probe: checking bus 3, device 8: "/sys/devices/pci0000:00/0000:00:14.0/usb3/3-3"
-> Aug 25 12:39:38 Nesbitt mtp-probe: bus: 3, device: 8 was not an MTP device
-> Aug 25 12:39:38 Nesbitt systemd-udevd[10311]: controlC1: Process '/usr/sbin/alsactl -E HOME=/run/alsa -E XDG_RUNTIME_DIR=/run/alsa/runtime restore 1' failed with exit code 99.
-> Aug 25 12:39:38 Nesbitt mtp-probe: checking bus 3, device 8: "/sys/devices/pci0000:00/0000:00:14.0/usb3/3-3"
-> Aug 25 12:39:38 Nesbitt mtp-probe: bus: 3, device: 8 was not an MTP device
-> Aug 25 12:39:43 Nesbitt kernel: [ 5301.921810] usb 3-3: 1:1: usb_set_interface failed (-110)
-> Aug 25 12:39:43 Nesbitt kernel: [ 5301.922047] usb 3-3: 1:0: usb_set_interface failed (-71)
-> Aug 25 12:39:43 Nesbitt kernel: [ 5301.922354] usb 3-3: 1:0: usb_set_interface failed (-71)
-> Aug 25 12:39:43 Nesbitt kernel: [ 5301.922915] usb 3-3: 1:0: usb_set_interface failed (-71)
-> 
-> 
-> I did a git bisect (from kernel source, not on debian-specific) and the offending commit has been found:
-> 
-> # git bisect bad
-> bf6313a0ff766925462e97b4e733d5952de02367 is the first bad commit
-> commit bf6313a0ff766925462e97b4e733d5952de02367
-> Author: Takashi Iwai <tiwai@suse.de>
-> Date:   Mon Nov 23 09:53:31 2020 +0100
-> 
->     ALSA: usb-audio: Refactor endpoint management
->     
-> 
->     This is an intensive surgery for the endpoint and stream management
->     for achieving more robust and clean code.
->     
-> 
->     The goals of this patch are:
->     - More clear endpoint resource changes
->     - The interface altsetting control in a single place
->     Below are brief description of the whole changes.
->     
-> 
->     First off, most of the endpoint operations are moved into endpoint.c,
->     so that the snd_usb_endpoint object is only referred in other places.
->     The endpoint object is acquired and released via the new functions
->     snd_usb_endpoint_open() and snd_usb_endpoint_close() that are called
->     at PCM hw_params and hw_free callbacks, respectively.  Those are
->     ref-counted and EPs can manage the multiple opens.
->     
-> 
->     The open callback receives the audioformat and hw_params arguments,
->     and those are used for initializing the EP parameters; especially the
->     endpoint, interface and altset numbers are read from there, as well as
->     the PCM parameters like the format, rate and channels.  Those are
->     stored in snd_usb_endpoint object.  If it's the secondary open, the
->     function checks whether the given parameters are compatible with the
->     already opened EP setup, too.
->     
-> 
->     The coupling with a sync EP (including an implicit feedback sync) is
->     done by the sole snd_usb_endpoint_set_sync() call.
->     
-> 
->     The configuration of each endpoint is done in a single shot via
->     snd_usb_endpoint_configure() call.  This is the place where most of
->     PCM configurations are done.  A few flags and special handling in the
->     snd_usb_substream are dropped along with this change.
->     
-> 
->     A significant difference wrt the configuration from the previous code
->     is the order of USB host interface setups.  Now the interface is
->     always disabled at beginning and (re-)enabled at the last step of
->     snd_usb_endpoint_configure(), in order to be compliant with the
->     standard UAC2/3.  For UAC1, the interface is set before the parameter
->     setups since there seem devices that require it (e.g. Yamaha THR10),
->     just like how it was done in the previous driver code.
->     
-> 
->     The start/stop are almost same as before, also single-shots.  The URB
->     callbacks need to be set via snd_usb_endpoint_set_callback() like the
->     previous code at the trigger phase, too.
->     
-> 
->     Finally, the flag for the re-setup is set at the device suspend
->     through the full EP list, instead of PCM trigger.  This catches the
->     overlooked cases where the PCM hasn't been running yet but the device
->     needs the full setup after resume.
->     
-> 
->     Tested-by: Keith Milner <kamilner@superlative.org>
->     Tested-by: Dylan Robinson <dylan_robinson@motu.com>
->     Link: https://lore.kernel.org/r/20201123085347.19667-26-tiwai@suse.de
->     Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> 
->  sound/usb/card.c     |   8 +-
->  sound/usb/card.h     |  11 +-
->  sound/usb/clock.c    |  13 +-
->  sound/usb/endpoint.c | 662 ++++++++++++++++++++++++++-------------------------
->  sound/usb/endpoint.h |  40 ++--
->  sound/usb/pcm.c      | 616 +++++++++++++++++++----------------------------
->  6 files changed, 616 insertions(+), 734 deletions(-)
-> 
-> 
-> That's a lot of code though. I'd like to be able to use my DAC on kernels newer than 5.10 so any hints on how to debug and fix this would be greatly appreciated. After doing this 17-point bisect I absolutely don't mind building a few more to fix this.
-> 
-> For info, the debian bug report: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1011196 
-> 
-> For info, a related report from Arch linux for the same device vendor: https://bugs.archlinux.org/task/70636
+On Thu, Aug 25, 2022 at 10:48:44AM +0000, Czerwacki, Eial wrote:
+> I did not know that, sorry
 
-There are lots of workarounds for the buggy USB audio firmware, and
-the latest kernel allows to enable the quirks via quirk_flags module
-option of snd-usb-audio driver.  See
-Documentation/sound/alsa-configuration.rst.
-You can try the bit 16 at first, for example.
+This might have some valuable information while waiting:
 
+https://kernel.org/doc/html/latest/process/index.html
 
-Takashi
+HTH.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

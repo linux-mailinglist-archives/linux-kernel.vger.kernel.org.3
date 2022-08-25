@@ -2,249 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32A15A0734
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3BC5A073E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbiHYCP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 22:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S233067AbiHYC1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 22:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiHYCPz (ORCPT
+        with ESMTP id S229770AbiHYC1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 22:15:55 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6E843318
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:15:52 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33daeaa6b8eso30006977b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:from:to:cc;
-        bh=hlkbdSh3RrDmPIg3ch7MrZraM/QcXY+MEJi9qJyXRE8=;
-        b=FCCvVahDxyEe8oFcjbRaWbbqarZyrgGFoEre52IVhq5uKLHfuiHMqA33QONlyEC2Eg
-         3o27wqz72oC88bbjmE5I8H3dC7BJ+jILWkjsHkhhMzQ1IyuHSLLB2HNL1CNzJBIxl+O4
-         +ndxTbU4CFOix0jZhN0xFNliZYhih6De/JAlTGeYTnuMi02htuFlBt9wcgjtBzXx4YLU
-         QIcDF4zIZE3Tb20alkdIyJeJHR1PjMJ4D94gvKOnGh+XVBIcbmQ7D4lT9UJ2OoyFjuCc
-         gic9ZwOVU9PQt0dkSv6i7P/7tFbpltQH8zP50PoCZ+vy4w0QisX7BFnd8+ujDmSaa30Y
-         Q5Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:x-gm-message-state:from:to:cc;
-        bh=hlkbdSh3RrDmPIg3ch7MrZraM/QcXY+MEJi9qJyXRE8=;
-        b=vw8O2tFPU74bwUp+FczKCPb7ijR0etu2Oa0+bPVyt1EUb4LI36LGNS807w6lx8CBTZ
-         I1M7gD7J5oZPi3A0Bsype+x17MTXCl2FKO3AS1lG/uXyrQB63+hXo9ZS0X588nJZhOJ1
-         fijH/yItIKYoR0F20KC1KTsyOE4OkSCKZV8qwFJOFknUo3P/xsz8PQyovml9/EWSHRHy
-         Crpe9FOr8GCL48e8mkNYP+vGTVvVgMhaIkncXEqTlwOWu13dGQ63hILXE795PH2eUbks
-         AgFjnHd8BuyEHNuASF2QlBS/n0UijYd7MagICcHLS97hl2/Ww+Bxv0RAk3UYG11TIQ0g
-         5iSg==
-X-Gm-Message-State: ACgBeo184/aK9zNf2L58VvGIP1T5kwrFlqAz7Mb9smocWFNFRdzEXGOn
-        vJG7SkrOVhmBeSqaE8FqYK2rIGRHY8Ev
-X-Google-Smtp-Source: AA6agR6uZKuzUbVoRoyMSYTVwhzWKNZiSeTbS/Woz+IcgAmSSPRTj767sPQUTEPmWHRI/WonpuvfvupHu5A6
-X-Received: from eugenis.svl.corp.google.com ([2620:15c:2ce:200:ee67:952c:dac7:b56])
- (user=eugenis job=sendgmr) by 2002:a25:dd0:0:b0:695:87f3:f2e6 with SMTP id
- 199-20020a250dd0000000b0069587f3f2e6mr1593766ybn.263.1661393752119; Wed, 24
- Aug 2022 19:15:52 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 19:15:32 -0700
-Message-Id: <20220825021532.1175943-1-eugenis@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2] arm64: mte: move register initialization to C
-From:   Evgenii Stepanov <eugenis@google.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>
-Cc:     Kenny Root <kroot@google.com>, Marc Zyngier <maz@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 Aug 2022 22:27:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0266382FB5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661394431; x=1692930431;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m2NShgQpSZYJtyh/PISIzWJuAQu2oaO8T2wMyOtGoI8=;
+  b=XKfcm+lrOHHDmM58GrVFhZFBXxAbTyaw/ptGEpYqc2P63Q7SQDQ8je57
+   u8nxj8C5mUdRMFKuOxMmv7Sw/FJrkkmA1HqYrx2/JD69U4fr9oIAsPou4
+   nnNJLu8BVHFYqZevV2bsT53ET4eqGZpNyzxq3kEBo8SChfcDi55L5lXYH
+   2JXxVMlLamqlrRBBbRNKB514Fqkf/vK+WQ/0CVF7xiToM7bxYMMqKFaBk
+   9hZNEfzvbUEYWzRu4RR/So/FoIJyTyesUfPrGLWJ7Z53xDWo3mulV1I4T
+   vBe0/ZBmK+0MLEKe3b9ldN9dsv198eVt/AxAHmD7kbyJiTgWvmZtfzHkq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="320198995"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="320198995"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 19:27:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="639389118"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 24 Aug 2022 19:27:08 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oR2aJ-0001df-1d;
+        Thu, 25 Aug 2022 02:27:07 +0000
+Date:   Thu, 25 Aug 2022 10:26:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 272/276]
+ fs/hugetlbfs/inode.c:562:16: warning: variable 'm_index' is uninitialized
+ when used here
+Message-ID: <202208251012.g1mOhhxy-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
-CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
-in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
-in fact implement FEAT_MTE2, setting the system register like this may
-lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
-in the C function cpu_enable_mte which is called based on the sanitized
-version of the system register.
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   73129b786c0eca5be67491a5e893e13b75133a62
+commit: fcc0d3d00d74b012c36d52128687ab9d197d3f0d [272/276] hugetlb: handle truncate racing with page faults
+config: arm64-randconfig-r014-20220823 (https://download.01.org/0day-ci/archive/20220825/202208251012.g1mOhhxy-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/fcc0d3d00d74b012c36d52128687ab9d197d3f0d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout fcc0d3d00d74b012c36d52128687ab9d197d3f0d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/hugetlbfs/
 
-There is no need for the rest of the MTE-related system register
-initialization to happen from assembly, with the exception of TCR_EL1,
-which must be set to include at least TBI1 because the secondary CPUs
-access KASan-allocated data structures early. Therefore, make the TCR_EL1
-initialization unconditional and move the rest of the initialization to
-cpu_enable_mte so that we no longer have a dependency on the unsanitized
-ID register value.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Signed-off-by: Evgenii Stepanov <eugenis@google.com>
-Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-Link: https://lore.kernel.org/linux-arm-kernel/YwCsIm2nCXCEEgAd@arm.com/T/
-Link: https://linux-review.googlesource.com/id/I2c7df6bd4ea2dfc59376a8b9b5d=
-3562b015c7198
-X-PCC-To: Catalin Marinas <catalin.marinas@arm.com>
-X-PCC-Cc: Evgenii Stepanov <eugenis@google.com>, Marc Zyngier <maz@kernel.o=
-rg>, Will Deacon <will@kernel.org>, Vincenzo Frascino <vincenzo.frascino@ar=
-m.com>, Andrey Konovalov <andreyknvl@gmail.com>, Mark Brown <broonie@kernel=
-.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel=
-@vger.kernel.org>
----
-Changelog since v1:
-- Keep TBI1 off unless CONFIG_ARM64_MTE
-- Fixed mask application in the RGSR_EL1 computation (bug found by Kenny
-  Root).
-- Changed code formatting
+All warnings (new ones prefixed by >>):
 
- arch/arm64/kernel/cpufeature.c | 40 +++++++++++++++++++++++++++++
- arch/arm64/mm/proc.S           | 46 ++++------------------------------
- 2 files changed, 45 insertions(+), 41 deletions(-)
+>> fs/hugetlbfs/inode.c:562:16: warning: variable 'm_index' is uninitialized when used here [-Wuninitialized]
+                                                   m_start, m_index, truncate_op);
+                                                            ^~~~~~~
+   fs/hugetlbfs/inode.c:540:26: note: initialize the variable 'm_index' to silence this warning
+           pgoff_t m_start, m_index;
+                                   ^
+                                    = 0
+   1 warning generated.
 
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.=
-c
-index 907401e4fffb1..9692e75e2ee44 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -2030,8 +2030,48 @@ static void bti_enable(const struct arm64_cpu_capabi=
-lities *__unused)
- #ifdef CONFIG_ARM64_MTE
- static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
- {
-+	u64 rgsr;
-+
- 	sysreg_clear_set(sctlr_el1, 0, SCTLR_ELx_ATA | SCTLR_EL1_ATA0);
-+
-+	/*
-+	 * CnP must be enabled only after the MAIR_EL1 register has been set
-+	 * up. Inconsistent MAIR_EL1 between CPUs sharing the same TLB may
-+	 * lead to the wrong memory type being used for a brief window during
-+	 * CPU power-up.
-+	 *
-+	 * CnP is not a boot feature so MTE gets enabled before CnP, but let's
-+	 * make sure that is the case.
-+	 */
-+	BUG_ON(read_sysreg(ttbr0_el1) & TTBR_CNP_BIT);
-+	BUG_ON(read_sysreg(ttbr1_el1) & TTBR_CNP_BIT);
-+
-+	/* Normal Tagged memory type at the corresponding MAIR index */
-+	sysreg_clear_set(mair_el1,
-+			 MAIR_ATTRIDX(MAIR_ATTR_MASK, MT_NORMAL_TAGGED),
-+			 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_TAGGED,
-+				      MT_NORMAL_TAGGED));
-+
-+	write_sysreg_s(KERNEL_GCR_EL1, SYS_GCR_EL1);
-+
-+	/*
-+	 * If GCR_EL1.RRND=3D1 is implemented the same way as RRND=3D0, then
-+	 * RGSR_EL1.SEED must be non-zero for IRG to produce
-+	 * pseudorandom numbers. As RGSR_EL1 is UNKNOWN out of reset, we
-+	 * must initialize it.
-+	 */
-+	rgsr =3D (read_sysreg(CNTVCT_EL0) & SYS_RGSR_EL1_SEED_MASK) <<
-+	       SYS_RGSR_EL1_SEED_SHIFT;
-+	if (rgsr =3D=3D 0)
-+		rgsr =3D 1 << SYS_RGSR_EL1_SEED_SHIFT;
-+	write_sysreg_s(rgsr, SYS_RGSR_EL1);
-+
-+	/* clear any pending tag check faults in TFSR*_EL1 */
-+	write_sysreg_s(0, SYS_TFSR_EL1);
-+	write_sysreg_s(0, SYS_TFSRE0_EL1);
-+
- 	isb();
-+	local_flush_tlb_all();
-=20
- 	/*
- 	 * Clear the tags in the zero page. This needs to be done via the
-diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
-index 7837a69524c53..870e1b259ef7b 100644
---- a/arch/arm64/mm/proc.S
-+++ b/arch/arm64/mm/proc.S
-@@ -48,17 +48,19 @@
-=20
- #ifdef CONFIG_KASAN_HW_TAGS
- #define TCR_MTE_FLAGS TCR_TCMA1 | TCR_TBI1 | TCR_TBID1
--#else
-+#elif defined(CONFIG_ARM64_MTE)
- /*
-  * The mte_zero_clear_page_tags() implementation uses DC GZVA, which relie=
-s on
-  * TBI being enabled at EL1.
-  */
- #define TCR_MTE_FLAGS TCR_TBI1 | TCR_TBID1
-+#else
-+#define TCR_MTE_FLAGS 0
- #endif
-=20
- /*
-  * Default MAIR_EL1. MT_NORMAL_TAGGED is initially mapped as Normal memory=
- and
-- * changed during __cpu_setup to Normal Tagged if the system supports MTE.
-+ * changed during cpu_enable_mte to Normal Tagged if the system supports M=
-TE.
-  */
- #define MAIR_EL1_SET							\
- 	(MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRnE) |	\
-@@ -426,46 +428,8 @@ SYM_FUNC_START(__cpu_setup)
- 	mov_q	mair, MAIR_EL1_SET
- 	mov_q	tcr, TCR_TxSZ(VA_BITS) | TCR_CACHE_FLAGS | TCR_SMP_FLAGS | \
- 			TCR_TG_FLAGS | TCR_KASLR_FLAGS | TCR_ASID16 | \
--			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS
--
--#ifdef CONFIG_ARM64_MTE
--	/*
--	 * Update MAIR_EL1, GCR_EL1 and TFSR*_EL1 if MTE is supported
--	 * (ID_AA64PFR1_EL1[11:8] > 1).
--	 */
--	mrs	x10, ID_AA64PFR1_EL1
--	ubfx	x10, x10, #ID_AA64PFR1_MTE_SHIFT, #4
--	cmp	x10, #ID_AA64PFR1_MTE
--	b.lt	1f
--
--	/* Normal Tagged memory type at the corresponding MAIR index */
--	mov	x10, #MAIR_ATTR_NORMAL_TAGGED
--	bfi	mair, x10, #(8 *  MT_NORMAL_TAGGED), #8
-+			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS | TCR_MTE_FLAGS
-=20
--	mov	x10, #KERNEL_GCR_EL1
--	msr_s	SYS_GCR_EL1, x10
--
--	/*
--	 * If GCR_EL1.RRND=3D1 is implemented the same way as RRND=3D0, then
--	 * RGSR_EL1.SEED must be non-zero for IRG to produce
--	 * pseudorandom numbers. As RGSR_EL1 is UNKNOWN out of reset, we
--	 * must initialize it.
--	 */
--	mrs	x10, CNTVCT_EL0
--	ands	x10, x10, #SYS_RGSR_EL1_SEED_MASK
--	csinc	x10, x10, xzr, ne
--	lsl	x10, x10, #SYS_RGSR_EL1_SEED_SHIFT
--	msr_s	SYS_RGSR_EL1, x10
--
--	/* clear any pending tag check faults in TFSR*_EL1 */
--	msr_s	SYS_TFSR_EL1, xzr
--	msr_s	SYS_TFSRE0_EL1, xzr
--
--	/* set the TCR_EL1 bits */
--	mov_q	x10, TCR_MTE_FLAGS
--	orr	tcr, tcr, x10
--1:
--#endif
- 	tcr_clear_errata_bits tcr, x9, x5
-=20
- #ifdef CONFIG_ARM64_VA_BITS_52
---=20
-2.37.1.595.g718a3a8f04-goog
 
+vim +/m_index +562 fs/hugetlbfs/inode.c
+
+   502	
+   503	/*
+   504	 * remove_inode_hugepages handles two distinct cases: truncation and hole
+   505	 * punch.  There are subtle differences in operation for each case.
+   506	 *
+   507	 * truncation is indicated by end of range being LLONG_MAX
+   508	 *	In this case, we first scan the range and release found pages.
+   509	 *	After releasing pages, hugetlb_unreserve_pages cleans up region/reserve
+   510	 *	maps and global counts.  Page faults can race with truncation.
+   511	 *	During faults, hugetlb_no_page() checks i_size before page allocation,
+   512	 *	and again after	obtaining page table lock.  It will 'back out'
+   513	 *	allocations in the truncated range.
+   514	 * hole punch is indicated if end is not LLONG_MAX
+   515	 *	In the hole punch case we scan the range and release found pages.
+   516	 *	Only when releasing a page is the associated region/reserve map
+   517	 *	deleted.  The region/reserve map for ranges without associated
+   518	 *	pages are not modified.  Page faults can race with hole punch.
+   519	 *	This is indicated if we find a mapped page.
+   520	 * Note: If the passed end of range value is beyond the end of file, but
+   521	 * not LLONG_MAX this routine still performs a hole punch operation.
+   522	 *
+   523	 * Since page faults can race with this routine, care must be taken as both
+   524	 * modify huge page reservation data.  To somewhat synchronize these operations
+   525	 * the hugetlb fault mutex is taken for EVERY index in the range to be hole
+   526	 * punched or truncated.  In this way, we KNOW either:
+   527	 * - fault code has added a page beyond i_size, and we will remove here
+   528	 * - fault code will see updated i_size and not add a page beyond
+   529	 * The parameter 'lm__end' indicates the offset of the end of hole or file
+   530	 * before truncation.  For hole punch lm_end == lend.
+   531	 */
+   532	static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
+   533					   loff_t lend, loff_t lm_end)
+   534	{
+   535		struct hstate *h = hstate_inode(inode);
+   536		struct address_space *mapping = &inode->i_data;
+   537		const pgoff_t start = lstart >> huge_page_shift(h);
+   538		const pgoff_t end = lend >> huge_page_shift(h);
+   539		pgoff_t m_end = lm_end >> huge_page_shift(h);
+   540		pgoff_t m_start, m_index;
+   541		struct folio_batch fbatch;
+   542		struct folio *folio;
+   543		pgoff_t next, index;
+   544		unsigned int i;
+   545		long freed = 0;
+   546		u32 hash;
+   547		bool truncate_op = (lend == LLONG_MAX);
+   548	
+   549		folio_batch_init(&fbatch);
+   550		next = m_start = start;
+   551		while (filemap_get_folios(mapping, &next, end - 1, &fbatch)) {
+   552			for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+   553				folio = fbatch.folios[i];
+   554	
+   555				index = folio->index;
+   556				/*
+   557				 * Take fault mutex for missing folios before index,
+   558				 * while checking folios that might have been added
+   559				 * due to a race with fault code.
+   560				 */
+   561				freed += fault_lock_inode_indicies(h, inode, mapping,
+ > 562							m_start, m_index, truncate_op);
+   563	
+   564				/*
+   565				 * Remove folio that was part of folio_batch.
+   566				 */
+   567				hash = hugetlb_fault_mutex_hash(mapping, index);
+   568				mutex_lock(&hugetlb_fault_mutex_table[hash]);
+   569				if (remove_inode_single_folio(h, inode, mapping, folio,
+   570								index, truncate_op))
+   571					freed++;
+   572				mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+   573			}
+   574			folio_batch_release(&fbatch);
+   575			cond_resched();
+   576		}
+   577	
+   578		/*
+   579		 * Take fault mutex for missing folios at end of range while checking
+   580		 * for folios that might have been added due to a race with fault code.
+   581		 */
+   582		freed += fault_lock_inode_indicies(h, inode, mapping, m_start, m_end,
+   583							truncate_op);
+   584	
+   585		if (truncate_op)
+   586			(void)hugetlb_unreserve_pages(inode, start, LONG_MAX, freed);
+   587	}
+   588	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

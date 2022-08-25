@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A6E5A1A8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE73B5A1A95
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbiHYUtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 16:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S241790AbiHYUvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 16:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiHYUs7 (ORCPT
+        with ESMTP id S241549AbiHYUvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 16:48:59 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C545AAE210;
-        Thu, 25 Aug 2022 13:48:57 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id h5so25235220wru.7;
-        Thu, 25 Aug 2022 13:48:57 -0700 (PDT)
+        Thu, 25 Aug 2022 16:51:21 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7553AAE215;
+        Thu, 25 Aug 2022 13:51:20 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11d2dcc31dbso18342909fac.7;
+        Thu, 25 Aug 2022 13:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=6UzUCNgt4y0AHaBNJHl0u/FLrxd0vX2AFvB+HEQd8NM=;
-        b=E96RMdPc6kX9TtDJzrOqo1gGRHBzfP6XCPrz5N8u6kh2oo7pX+NvWTtXitAGAyhOYZ
-         dLItkLw4f906wzOWubVOl/F2SWCkaHk/7bPn+J3AUOnkJCWEAVLrTFRlPF9ems0p6hJ3
-         rqSs+G7ZXvCYbMxGQdTxdVkLQuSAS6snMZ7uZ7YmuI5cL9Qd6Kl17IYR8qF65hLEIzAz
-         D7fnTM3kkZKCh29/6g/AIk87eu0ky3FNRGVFb95NdU1qt+007aFXG+0xtNjdzOgUvERN
-         q5HP8HsJWwKJm/sRFdO/V+N0yfalBVs6XtPel5rDvkIRQifRPC/ddv7c1LEI1dUkh+5b
-         R61w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=epCHlROSXyJ4Cq6Z6MvNiSbnRgepy11g4mcIN7dnFpQ=;
+        b=UYN9K5bkL6liIaUx27zpPW8bdiRvVeal/y4WmsXLpfmsF3f6jOtLE3h32V2BrCb+Pg
+         Thd0AmKfQs87wD53p+Rtn60syjgLZb1K+dHiad3edxfHtfkALW1UlYMEetulLR3yj+WJ
+         O6pSPRi9BUkFI75OqghR8sGvIhTnBXx+iVLp2pJQlIeNZt5Ic5Zb1jwNAhKdyS4/sy3J
+         V+B6w9huzzyPwLSI0aKlWz04+4y6OO5oJHPrf1TrRc43wkQLv3X2Upw0dIEOj5dvJ3sF
+         eV+W8IihZkSZDaqEtKtYoqJ0yHYCkmDPLqw4ZJ88HpNkj0MagGH07vmnV/eINiS8Qlm2
+         FoCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=6UzUCNgt4y0AHaBNJHl0u/FLrxd0vX2AFvB+HEQd8NM=;
-        b=22wxvcNHTn6FkCxq78hcN4tEwqesS4azE79NeIxSEEUea9+adpmrQh7BvDCs5HT+sy
-         nqfYNMu1hhFdAnmo0FGk1emhsQRiobiUV5rSFubFXZqceeJJ6rINelHrfv5qwJ8Hkam6
-         kmi7mX7r++AGCiwgJumTd0PTTvSpp1VG749dRoTxs9PyiyVyWuLnk5dZYSK/2FGhQeZo
-         fcVnfNbf7wIXIF1cLCQnBM1QwZzPhuTrdSjsoMo3sGdVvt+Mu1aF09C37HmsYa+b0L+8
-         YYlU5Rq/Hj7/bObU6U4s+5CdbFpYe2JLo9ZF/nk3ZEyXEb3o39sRqJrLPktZgHNE+3Qs
-         bTFg==
-X-Gm-Message-State: ACgBeo3Ghm7/wcJ0hsWAp6tQB6mRtAQp1MgQNL+JTKCq4rLUghir4WgW
-        KXybH3kGMJlyGQAvo3DXYQep5YlyaAqjHA==
-X-Google-Smtp-Source: AA6agR5luFniLeLJR/gpv3f8y8PSO9iYmRy9xopByet6i9pxvH109nYNZOhflEi5Ej+3VAkPWavVHw==
-X-Received: by 2002:a5d:64e1:0:b0:225:5495:ff75 with SMTP id g1-20020a5d64e1000000b002255495ff75mr3216411wri.21.1661460536349;
-        Thu, 25 Aug 2022 13:48:56 -0700 (PDT)
-Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id l14-20020a5d668e000000b002253fd19a6asm266939wru.18.2022.08.25.13.48.54
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=epCHlROSXyJ4Cq6Z6MvNiSbnRgepy11g4mcIN7dnFpQ=;
+        b=R10uH802OXEFxAs3Mh9ajcLCOiO8zhVbAEt+F+49lmJYQDqlSy2YfNynY5dRkGm1PA
+         PrG9XQ5+y/l2A1/x2eZ3+0nVB3TnFUPwgxdaEGoe7tF6tmTDb+sS2Llw4vr/vyMFFu6Z
+         WLK5xEnV+apz5gr0w3a5/LVu3ZKezEna4I4smmXC/Wypz/B4u46J152I1vDx8fZBzLEM
+         rXlqWg5WDaixqjHhUXCQpK1Q2er7Yz83Dw41M1Xn21Y1NlZ9v//iFL6o7kMtagsBK3br
+         ILe/3YVztOS5CtC42l5nuopUblzY10XVKLBYrgR+dkvx0AlRILYkOpMMG4yxpLb6FEL6
+         X2oA==
+X-Gm-Message-State: ACgBeo29Ld0qlTrRecI/8ikgMRBf6Hz5Fe6U6vXLiHuLUpf18oRhIe+p
+        JreUGsNvBv1RN3cTckTvPBo=
+X-Google-Smtp-Source: AA6agR61zI8Sp8HfZRh3j14UVsml6LygU5b916fiywt/4sIQoBP4gUzqb4QH5U6z3YJWi11Zr7IkqA==
+X-Received: by 2002:a05:6870:249c:b0:10c:7f4d:71ab with SMTP id s28-20020a056870249c00b0010c7f4d71abmr383455oaq.15.1661460679591;
+        Thu, 25 Aug 2022 13:51:19 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id 66-20020a9d0bc8000000b0061c1a0b4677sm70853oth.12.2022.08.25.13.51.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 13:48:55 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        - <patches@opensource.cirrus.com>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        Chris Zhong <zyw@rock-chips.com>,
-        Zhang Qing <zhangqing@rock-chips.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: mfd: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Thu, 25 Aug 2022 22:48:54 +0200
-Message-ID: <13083804.uLZWGnKmhe@kista>
-In-Reply-To: <20220823145649.3118479-4-robh@kernel.org>
-References: <20220823145649.3118479-4-robh@kernel.org>
+        Thu, 25 Aug 2022 13:51:19 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 13:49:06 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Sander Vanheule <sander@svanheule.net>
+Subject: Re: [PATCH v3 1/9] cpumask: Make cpumask_full() check for nr_cpu_ids
+ bits
+Message-ID: <YwfgQmtbr6IrPrXb@yury-laptop>
+References: <20220825181210.284283-1-vschneid@redhat.com>
+ <20220825181210.284283-2-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825181210.284283-2-vschneid@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -95,104 +93,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 23. avgust 2022 ob 16:56:35 CEST je Rob Herring napisal(a):
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
++ Sander Vanheule
+
+On Thu, Aug 25, 2022 at 07:12:02PM +0100, Valentin Schneider wrote:
+> Consider a system with 4 CPUs and:
+>   CONFIG_NR_CPUS=64
+>   CONFIG_CPUMASK_OFFSTACK=n
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../mfd/allwinner,sun6i-a31-prcm.yaml         | 40 +++++++++++++++++++
->  .../mfd/allwinner,sun8i-a23-prcm.yaml         | 10 +++++
->  .../bindings/mfd/cirrus,lochnagar.yaml        |  5 +++
->  .../devicetree/bindings/mfd/dlg,da9063.yaml   |  7 ++--
->  .../bindings/mfd/gateworks-gsc.yaml           |  5 ++-
->  .../bindings/mfd/maxim,max14577.yaml          |  1 +
->  .../bindings/mfd/maxim,max77843.yaml          |  1 +
->  .../bindings/mfd/rockchip,rk817.yaml          |  2 +
->  .../bindings/mfd/silergy,sy7636a.yaml         |  1 +
->  .../bindings/mfd/st,stm32-lptimer.yaml        |  4 ++
->  .../bindings/mfd/st,stm32-timers.yaml         |  3 ++
->  .../devicetree/bindings/mfd/st,stmfx.yaml     |  1 +
->  .../bindings/mfd/stericsson,ab8500.yaml       | 22 ++++++++++
->  .../devicetree/bindings/mfd/ti,tps65086.yaml  |  1 +
->  .../bindings/mfd/x-powers,axp152.yaml         |  1 +
->  15 files changed, 100 insertions(+), 4 deletions(-)
+> In this situation, we have:
+>   nr_cpumask_bits == NR_CPUS == 64
+>   nr_cpu_ids = 4
 > 
-> diff --git
-> a/Documentation/devicetree/bindings/mfd/allwinner,sun6i-a31-prcm.yaml
-> b/Documentation/devicetree/bindings/mfd/allwinner,sun6i-a31-prcm.yaml index
-> d131759ccaf3..021d33cb3dd6 100644
-> --- a/Documentation/devicetree/bindings/mfd/allwinner,sun6i-a31-prcm.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/allwinner,sun6i-a31-prcm.yaml
-> @@ -22,6 +22,7 @@ properties:
->  patternProperties:
->    "^.*_(clk|rst)$":
->      type: object
-> +    unevaluatedProperties: false
+> Per smp.c::setup_nr_cpu_ids(), nr_cpu_ids <= NR_CPUS, so we want
+> cpumask_full() to check for nr_cpu_ids bits set.
 > 
->      properties:
->        compatible:
-> @@ -34,6 +35,45 @@ patternProperties:
->            - fixed-factor-clock
+> This issue is currently pointed out by the cpumask KUnit tests:
 > 
->      allOf:
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              contains:
-> +                const: fixed-factor-clock
-> +
-> +        then:
-> +          $ref: /schemas/clock/fixed-factor-clock.yaml#
-> +
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              contains:
-> +                const: allwinner,sun4i-a10-mod0-clk
-> +
-> +        then:
-> +          properties:
-> +            "#clock-cells":
-> +              const: 0
-> +
-> +            # Already checked in the main schema
-> +            compatible: true
-> +
-> +            clocks:
-> +              maxItems: 2
+>   [   14.072028]     # test_cpumask_weight: EXPECTATION FAILED at lib/test_cpumask.c:57
+>   [   14.072028]     Expected cpumask_full(((const struct cpumask *)&__cpu_possible_mask)) to be true, but is false
+>   [   14.079333]     not ok 1 - test_cpumask_weight
+> 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 
-Last time node with allwinner,sun4i-a10-mod0-clk compatible was used, it had 3 
-clocks. See:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/
-arm/boot/dts/sun4i-a10.dtsi?id=f18698e1c66338b902de386e4ad97b8b1b9d999d#n406
+It's really a puzzle, and some of my thoughts are below. So. 
 
-Once that fixed, allwinner,sun6i-a31-prcm.yaml and allwinner,sun8i-a23-
-prcm.yaml  are:
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+This is a question what for we need nr_cpumask_bits while we already
+have nr_cpu_ids. When OFFSTACK is ON, they are obviously the same.
+When it's of - the nr_cpumask_bits is an alias to NR_CPUS.
 
-Best regards,
-Jernej
+I tried to wire the nr_cpumask_bits to nr_cpu_ids unconditionally, and
+it works even when OFFSTACK is OFF, no surprises.
 
+I didn't find any discussions describing what for we need nr_cpumask_bits,
+and the code adding it dates to a very long ago.
 
-> +
-> +            clock-output-names:
-> +              maxItems: 1
-> +
-> +            phandle: true
-> +
-> +          required:
-> +            - "#clock-cells"
-> +            - compatible
-> +            - clocks
-> +            - clock-output-names
-> +
-> +          additionalProperties: false
-> +
->        - if:
->            properties:
->              compatible:
+If I alias nr_cpumask_bits to nr_cpu_ids unconditionally on my VM with
+NR_CPUs == 256 and nr_cpu_ids == 4, there's obviously a clear win in
+performance, but the Image size gets 2.5K bigger. Probably that's the
+reason for what nr_cpumask_bits was needed...
 
+There's also a very old misleading comment in cpumask.h:
 
+ *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
+ *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
+ *  ACPI reports present at boot.
 
+It lies, and I checked with x86_64 that cpu_possible_mask is populated
+during boot time with 0b1111, if I create a 4-cpu VM. Hence, the
+nr_cpu_ids is 4, while NR_CPUS == 256.
+
+Interestingly, there's no a single user of the cpumask_full(),
+obviously, because it's broken. This is really a broken dead code.
+
+Now that we have a test that checks sanity of cpumasks, this mess
+popped up.
+
+Your fix doesn't look correct, because it fixes one function, and
+doesn't touch others. For example, the cpumask subset() may fail
+if src1p will have set bits after nr_cpu_ids, while cpumask_full()
+will be returning true.
+
+In -next, there is an update from Sander for the cpumask test that
+removes this check, and probably if you rebase on top of -next, you
+can drop this and 2nd patch of your series.
+
+What about proper fix? I think that a long time ago we didn't have
+ACPI tables for possible cpus, and didn't populate cpumask_possible
+from that, so the
+
+        #define nr_cpumask_bits NR_CPUS
+
+worked well. Now that we have cpumask_possible partially filled,
+we have to always
+
+        #define nr_cpumask_bits nr_cpu_ids
+
+and pay +2.5K price in size even if OFFSTACK is OFF. At least, it wins
+at runtime...
+
+Any thoughts?
+
+---
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index 5e2b10fb4975..0f044d93ad01 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -41,13 +41,7 @@ typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } cpumask_t;
+ extern unsigned int nr_cpu_ids;
+ #endif
+ 
+-#ifdef CONFIG_CPUMASK_OFFSTACK
+-/* Assuming NR_CPUS is huge, a runtime limit is more efficient.  Also,
+- * not all bits may be allocated. */
+ #define nr_cpumask_bits	nr_cpu_ids
+-#else
+-#define nr_cpumask_bits	((unsigned int)NR_CPUS)
+-#endif
+ 
+ /*
+  * The following particular system cpumasks and operations manage
+@@ -67,10 +61,6 @@ extern unsigned int nr_cpu_ids;
+  *  cpu_online_mask is the dynamic subset of cpu_present_mask,
+  *  indicating those CPUs available for scheduling.
+  *
+- *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
+- *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
+- *  ACPI reports present at boot.
+- *
+  *  If HOTPLUG is enabled, then cpu_present_mask varies dynamically,
+  *  depending on what ACPI reports as currently plugged in, otherwise
+  *  cpu_present_mask is just a copy of cpu_possible_mask.

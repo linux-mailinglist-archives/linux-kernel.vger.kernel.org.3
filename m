@@ -2,264 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984CF5A2D0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC315A2D0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344855AbiHZRCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S1344904AbiHZRCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344896AbiHZRBm (ORCPT
+        with ESMTP id S1344884AbiHZRCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:01:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11238C0E44;
-        Fri, 26 Aug 2022 10:01:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1B90B830A9;
-        Fri, 26 Aug 2022 17:01:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8FBC433D6;
-        Fri, 26 Aug 2022 17:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661533294;
-        bh=s3Pio/x7M41P3gfexHAfE/4/8npO2rspjdMaYq53YK8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nPqNXQeAMlTTXWvY/a7sCuZgcUFynYQBjuKpcG4OxNbV4vTFxxWW93zqofSKld0Hb
-         TI3UjJff695JkHYYXxHZr3I+NEaC8+r6QLE3zeTTZYAVDWNq+//FSNVapCn2PWSk8F
-         5Kf4NFfUqIuUQ+Ovxv2NNjT097GNlOQoEpVytXZn/yXUb1jY0wVNBmn9GU+I+WOkAb
-         bX6X47wn7vNrGg/1ih4urCwkJZGR6O+z6nQ8j7x3xV1D2Wgb1eqOpTVJBa2wyylGZ6
-         MTI/e3mS8l4Q8CfZBDW59y8p/EWfRVfWPxjV4D4YFFMdl+Om3TTJI94GdTScSHySjH
-         nRCWAwE1M3LeQ==
-Date:   Fri, 26 Aug 2022 12:01:33 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com,
-        michael.a.bottini@linux.intel.com, rafael@kernel.org,
-        me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 3/3] PCI: vmd: Configure PCIe ASPM and LTR
-Message-ID: <20220826170133.GA2933821@bhelgaas>
+        Fri, 26 Aug 2022 13:02:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61E6C6CEF
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661533331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jD7hXmOLkBQH1CWMlWymLxkZmC0QqnhEG6nyPcsh0A4=;
+        b=GN6vhlrnJCF4yQiQ+szDDuz2v1lFmn41zSF3pBzrx99rKNyCHLfCz+xNHExmwUaieY6GoB
+        zaLcByoN+8KMNIuSfcgccbl6Tfv3k/ssub/+5b6A4Gv7bde26Cvq7k/lWd9GExqm9Wfx2M
+        YFiEP4xauiPwJJhI/QaFbO0bEb/yeck=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-244-NqPSFr5SMCmR4e_pAxVENg-1; Fri, 26 Aug 2022 13:02:09 -0400
+X-MC-Unique: NqPSFr5SMCmR4e_pAxVENg-1
+Received: by mail-wm1-f72.google.com with SMTP id c66-20020a1c3545000000b003a5f6dd6a25so4331934wma.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:02:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=jD7hXmOLkBQH1CWMlWymLxkZmC0QqnhEG6nyPcsh0A4=;
+        b=HaLvYemF30DcEyrP/LrgQPHUxTzIT5CpItjj37A5olRoMyqNgdilrzBKEVOCMnpiS1
+         BVNbfESkhsezXFNwFchMP1eBp2CgWcZf4FbqKJJZs2GKNr9d+2Fz6+W7Rw0j8yf1vwjA
+         uv8eXwO1Ol7ubdNvqaZLZ1j9buBqa8qFw3q0I+l9Q5/gJaCvwxnq0VP3Zq2x9QYrj7Sj
+         sWgivrYHiTDqVZNiWMIqIPNUR7pbrMGGpmjEl1tHH2+9niDVtMvTgU3ypfRQGcYXSFt9
+         KMyysnj5s6L5W4krpssOFs4OTvae6Y4UabnLjrEcbc8fzp8ZqP8+DEyNFzYMd5VI/BCf
+         NprQ==
+X-Gm-Message-State: ACgBeo0PJ4ttZgRK4Uwxa4TuMkVj/MQ4BSJnIyU0qjpOc0R69aUX4iT1
+        msnARBXHS2F+9niI65jMTqqUAFHn2YPWy4ncmPMgfV2GiLcz+hXA/J8kFvLqn14XV1zujgAUsJb
+        91i6mOSqHZa/lZdxWhH1TKhsG
+X-Received: by 2002:a05:600c:8a7:b0:3a6:85b1:2275 with SMTP id l39-20020a05600c08a700b003a685b12275mr360776wmp.30.1661533328599;
+        Fri, 26 Aug 2022 10:02:08 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4qNFSQdWdKklLyf6JGMNF43WaQ/tj38zI60Lf4fb7qD47lrMKlJqT7hUbr1HvAPU4X99wkqw==
+X-Received: by 2002:a05:600c:8a7:b0:3a6:85b1:2275 with SMTP id l39-20020a05600c08a700b003a685b12275mr360750wmp.30.1661533328294;
+        Fri, 26 Aug 2022 10:02:08 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:f600:abad:360:c840:33fa? (p200300cbc708f600abad0360c84033fa.dip0.t-ipconnect.de. [2003:cb:c708:f600:abad:360:c840:33fa])
+        by smtp.gmail.com with ESMTPSA id l3-20020a1ced03000000b003a32251c3f9sm277131wmh.5.2022.08.26.10.02.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 10:02:07 -0700 (PDT)
+Message-ID: <fe7aee66-d9f7-e472-a13f-e4c5aa176cca@redhat.com>
+Date:   Fri, 26 Aug 2022 19:02:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301041943.2935892-4-david.e.box@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Dave Young <dyoung@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        kexec@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Stephen Johnston <sjohnsto@redhat.com>,
+        Prarit Bhargava <prarit@redhat.com>
+References: <20220824163100.224449-1-david@redhat.com>
+ <20220824163100.224449-2-david@redhat.com>
+ <0db131cf-013e-6f0e-c90b-5c1e840d869c@nvidia.com>
+ <ea380cf0-acda-aaba-fb63-2834da91b66b@redhat.com>
+ <CALu+AoThhou7z+JCyv44AxGWDLDt2b7h0W6wcKRsJyLvSR1iQA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 1/2] coding-style.rst: document BUG() and WARN() rules
+ ("do not crash the kernel")
+In-Reply-To: <CALu+AoThhou7z+JCyv44AxGWDLDt2b7h0W6wcKRsJyLvSR1iQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:19:43PM -0800, David E. Box wrote:
-> PCIe ports reserved for VMD use are not visible to BIOS and therefore not
-> configured to enable PCIE ASPM.
-
-> Additionally, PCIE LTR values may be left unset since BIOS will set
-> a default maximum LTR value on endpoints to ensure that they don't
-> block SoC power management.
-
-If the ports aren't visible to BIOS, I assume BIOS doesn't configure
-*anything*, including LTR.  This sentence seems like it has a little
-too much information; if BIOS doesn't see the ports, LTR, SoC power
-management, etc., is not relevant.
-
-> Lack of this programming results in high power consumption on
-> laptops as reported in bugzilla [1].
-
-> For currently affected products, use pci_enable_default_link_state to set
-> the allowed link states for devices on the root ports.
-
-"Currently affected products" makes me wonder about the *other*
-products?  Seems like we should handle *all* VMD devices the same way.
-
-> Also set the LTR value to the maximum value needed for the SoC. Per
-> the VMD hardware team future products using VMD will enable BIOS
-> configuration of these capabilities. This solution is a workaround
-> for current products that mainly targets laptops.
-
-I guess the cover letter has a little more background on this,
-although I don't understand how talking to the Intel BIOS team can
-solve this for *all* vendors using these parts.
-
-> Support is not provided if a switch used nor for hotplug.
-
-What switch are you referring to?  What is the hotplug scenario?  Are
-VMD ports hot-pluggable?  I assumed they were built into the Root
-Complex and not hot-pluggable.
-
-s/PCIE/PCIe/ several times above so they're all consistent.
-
-s/pci_enable_default_link_state/pci_enable_default_link_state()/ so it
-looks like a function.
-
-That's a big block of text; maybe could be 2-3 paragraphs.
-
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
+On 26.08.22 03:43, Dave Young wrote:
+> Hi David,
 > 
-> Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> ---
->  V6
->   - Set ASPM first before setting LTR. This is needed because some
->     devices may only have LTR set by BIOS and not ASPM
->   - Skip setting the LTR if the current LTR in non-zero.
->  V5
->   - Provide the LTR value as driver data.
->   - Use DWORD for the config space write to avoid PCI WORD access bug.
->   - Set ASPM links firsts, enabling all link states, before setting a
->     default LTR if the capability is present
->   - Add kernel message that VMD is setting the device LTR.
->  V4
->   - Refactor vmd_enable_apsm() to exit early, making the lines shorter
->     and more readable. Suggested by Christoph.
->  V3
->   - No changes
->  V2
->   - Use return status to print pci_info message if ASPM cannot be enabled.
->   - Add missing static declaration, caught by lkp@intel.com
+> [Added more people in cc]
 > 
->  drivers/pci/controller/vmd.c | 66 +++++++++++++++++++++++++++++++++---
->  1 file changed, 62 insertions(+), 4 deletions(-)
+
+Hi Dave,
+
+thanks for your input!
+
+[...]
+
+>> Side note: especially with kdump() I feel like we might see much more
+>> widespread use of panic_on_warn to be able to actually extract debug
+>> information in a controlled manner -- for example on enterprise distros.
+>> ... which would then make these systems more likely to crash, because
+>> there is no way to distinguish a rather harmless warning from a severe
+>> warning :/ . But let's see if some kdump() folks will share their
+>> opinion as reply to the cover letter.
 > 
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index cde6e2cba210..8525bb8312f2 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -67,10 +67,19 @@ enum vmd_features {
->  	 * interrupt handling.
->  	 */
->  	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
-> +
-> +	/*
-> +	 * Enable ASPM on the PCIE root ports and set the default LTR of the
-> +	 * storage devices on platforms where these values are not configured by
-> +	 * BIOS. This is needed for laptops, which require these settings for
-> +	 * proper power management of the SoC.
-> +	 */
-> +	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
->  };
->  
->  struct vmd_device_data {
->  	enum vmd_features features;
-> +	u16 ltr;
->  };
->  
->  static DEFINE_IDA(vmd_instance_ida);
-> @@ -714,6 +723,45 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
->  	vmd_bridge->native_dpc = root_bridge->native_dpc;
->  }
->  
-> +/*
-> + * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-> + */
-> +static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
-> +{
-> +	struct vmd_device_data *info = userdata;
-> +	u32 ltr_reg;
-> +	int pos;
-> +
-> +	if (!(info->features & VMD_FEAT_BIOS_PM_QUIRK))
-> +		return 0;
-> +
-> +	pci_enable_default_link_state(pdev, PCIE_LINK_STATE_ALL);
-> +
-> +	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-> +	if (!pos)
-> +		return 0;
-> +
-> +	/*
-> +	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
-> +	 * so the LTR quirk is not needed.
-> +	 */
-> +	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
-> +	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
-> +		return 0;
-> +
-> +	/*
-> +	 * Set the default values to the maximum required by the platform to
-> +	 * allow the deepest power management savings. Write as a DWORD where
-> +	 * the lower word is the max snoop latency and the upper word is the
-> +	 * max non-snoop latency.
-> +	 */
-> +	ltr_reg = (info->ltr << 16) | info->ltr;
+> I can understand the intention of this patch, and I totally agree that
+> BUG() should be used carefully, this is a good proposal if we can
+> clearly define the standard about when to use BUG().  But I do have
 
-The fact that you have to hard-code the LTR values in the driver seems
-problematic because it requires updates for every new device.  I guess
-you have to update the driver anyway to add Device IDs.
+Essentially, the general rule from Linus is "absolutely no new BUG_ON()
+calls ever" -- but I think the consensus in that thread was that there
+are corner cases when it comes to unavoidable data corruption/security
+issues. And these are rare cases, not the usual case where we'd have
+used BUG_ON()/VM_BUG_ON().
 
-But surely there should be a firmware interface to discover this
-platform-specific information?  Does the _DSM for Latency Tolerance
-Reporting (PCI Firmware spec r3.3, sec 4.6.6) supply this? 
+> some worries,  I think this standard is different for different sub
+> components, it is not clear to me at least,  so this may introduce an
+> unstable running kernel and cause troubles (eg. data corruption) with
+> a WARN instead of a BUG. Probably it would be better to say "Do not
+> WARN lightly, and do not hesitate to use BUG if it is really needed"?
 
-We badly need generic support for that _DSM, but the documentation is
-somewhat lacking.
 
-> +	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
-> +	pci_info(pdev, "VMD: Default LTR set\n");
-> +
-> +	return 0;
-> +}
-> +
->  static int vmd_enable_domain(struct vmd_dev *vmd, struct vmd_device_data *info)
->  {
->  	struct pci_sysdata *sd = &vmd->sysdata;
-> @@ -867,6 +915,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, struct vmd_device_data *info)
->  		pci_reset_bus(child->self);
->  	pci_assign_unassigned_bus_resources(vmd->bus);
->  
-> +	pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, info);
-> +
->  	/*
->  	 * VMD root buses are virtual and don't return true on pci_is_pcie()
->  	 * and will fail pcie_bus_configure_settings() early. It can instead be
-> @@ -1016,28 +1066,36 @@ static const struct pci_device_id vmd_ids[] = {
->  		(kernel_ulong_t)&(struct vmd_device_data) {
->  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				    VMD_FEAT_BIOS_PM_QUIRK,
-> +			.ltr = 0x1003, /* 3145728 ns */
->  		},
->  	},
->  	{ PCI_VDEVICE(INTEL, 0x4c3d),
->  		(kernel_ulong_t)&(struct vmd_device_data) {
->  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				    VMD_FEAT_BIOS_PM_QUIRK,
-> +			.ltr = 0x1003, /* 3145728 ns */
->  		},
->  	},
->  	{ PCI_VDEVICE(INTEL, 0xa77f),
->  		(kernel_ulong_t)&(struct vmd_device_data) {
->  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				    VMD_FEAT_BIOS_PM_QUIRK,
-> +			.ltr = 0x1003, /* 3145728 ns */
->  		},
->  	},
->  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
->  		(kernel_ulong_t)&(struct vmd_device_data) {
->  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				    VMD_FEAT_BIOS_PM_QUIRK,
-> +			.ltr = 0x1003, /* 3145728 ns */
->  		},
->  	},
->  	{ }
-> -- 
-> 2.25.1
+Well, I don't make the rules, I document them and share them for general
+awareness/comments :) Documenting this is valuable, because there seem
+to be quite some different opinions floating around in the community --
+and I've been learning different rules from different people over the years.
+
 > 
+> About "patch_on_warn", it will depend on the admin/end user to set it,
+> it is not a good idea for distribution to set it. It seems we are
+> leaving it to end users to take the risk of a kernel panic even with
+> all kernel WARN even if it is sometimes not necessary.
+
+My question would be what we could add/improve to keep systems with
+kdump armed running as expected for end users, that is most probably:
+
+1) don't crash on harmless WARN() that can just be reported and the
+   machine will continue running mostly fine without real issues.
+2) crash on severe issues (previously BUG) such that we can properly
+   capture a system dump via kdump. The restart the machine.
+
+Of course, once one would run into 2), one could try reproducing with
+"panic_on_warn" to get a reasonable system dump. But I guess that's not
+what enterprise customers expect.
+
+
+One wild idea (in the cover letter) was to add something new that can be
+configured by user space and that expresses that something is more
+severe than just some warning that can be recovered easily. But it can
+eventually be recovered to keep the system running to some degree. But
+still, it's configurable if we want to trigger a panic or let the system
+run.
+
+John mentioned PANIC_ON().
+
+
+What would be your expectation for kdump users under which conditions we
+want to trigger kdump and when not?
+
+Regarding panic_on_warn, how often do e.g., RHEL users observe warnings
+that we're not able to catch during testing, such that "panic_on_warn"
+would be a real no-go?
+
+-- 
+Thanks,
+
+David / dhildenb
+

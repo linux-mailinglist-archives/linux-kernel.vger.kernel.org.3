@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0985A22FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC355A2304
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343615AbiHZI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S1343631AbiHZI3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343611AbiHZI2O (ORCPT
+        with ESMTP id S1343621AbiHZI31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:28:14 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3177D4F6E;
-        Fri, 26 Aug 2022 01:28:11 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id l3so989800plb.10;
-        Fri, 26 Aug 2022 01:28:11 -0700 (PDT)
+        Fri, 26 Aug 2022 04:29:27 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D559ED4F6B;
+        Fri, 26 Aug 2022 01:29:23 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c2so1013869plo.3;
+        Fri, 26 Aug 2022 01:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Je++pFVH6dftxScgLrKrV4cRe0HZ+N3IBONYauMAvUs=;
-        b=ktjrg/RO9dx6yW6/C5oYkFoptGIcUR2CniW0Do519mDjqM6uVfaw3UAe314iHZHdHs
-         o74OuXcU8KIpFTiyWfHTn3vnpn7/MWpWFuJ5N4U9AarVHPjUTUbaEd//om9w4c6fC2mF
-         oKZ2lpdP/oznREk7+TAOaDOA0DBbq0k/NUzJ3n0BmxJN8oOaOdn/thzW3GQEJMmLYSTg
-         208tHVXF3vuOQPbZSVVbxn0z7xa5IDshFPpfwR4SOlQ74ie+4ArmzFJ8fy+phJqkGzl+
-         A1NdVTR88U77mxT6ZJf/7B1TcTUd1lsw1i9Dv8xPnJw+a49o/B5MucrYpRRMMsuRT33S
-         hfyg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ZqQXUKYAXaNDETmnzeEy5G83vWE0Lw9aO8Wft3lc78A=;
+        b=lHm01CIa8Ixwmw1uJbquAM1f1zYuep3xl5yOXbVV8/h1mKz1UvIt20rKsBMiX05kez
+         jWWGO/PVdQHowBnz/kXPpWzEDX41esricYJZ9gYPVItMvjHRyO+X7UFKRnAnc/8kNU5c
+         O0sotFfxGvl7R6IVAHMY3+PuKbpe+arBx34jFUo+Q7LQH+LZ+5fsJUX21od4/hB62J2E
+         imDG60OHOvchC27FNt4EXDUbXrOQdXe9kuie+wz/VjSOX6E//av7SHIP4rmUa8UIn+u6
+         IrZNMxQTckyN3oq41/WK9Z8kL2P3EtPWdm54BrIPEocfesPlK/zTzVWVgWstNsndW8DT
+         ++gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Je++pFVH6dftxScgLrKrV4cRe0HZ+N3IBONYauMAvUs=;
-        b=trgyaQrL67Oxpt0tbYqXpXJt02eSLC2V7yOsTTYddZ6lS7lfNqBadNi0XwBZ6AhIQn
-         fI8fjHTcreAQcmq5SuWYOp25ioHu046M2JMMJjEj/gtgYuRN7X/Whue2qLeSG9akMo4h
-         W57urBOWAscC6mCIfJ94BGXY+PgGaPIKtjvcWP3BAyYv4DGvTs6eNnOHF0vxHMqpmV2P
-         cchm3+Gh46N3s6ry3oozZ1GJx9m1o7Q0SGFPlGV1Ow8AU3jWqOZFz5fe3vivm0ztG/fG
-         Af1MhZMds0TNAT/R4S2SDvarWiQQ9OkNMkveIJQ/FWXWS+dbBtrc5UBqcGOUvrkAEiZo
-         SPvA==
-X-Gm-Message-State: ACgBeo3ZCVLcHMCe6OSvFAKYmVw/OJsk4SdvZy6YMRm1GalyaZX6ZGf1
-        rniMuZBlcQgl1w6XdaCDrtY=
-X-Google-Smtp-Source: AA6agR4YNuOgJ3oOW+shMMHi+GypTijgT6PKZiCxj/6AYkxt8JzVJfblRjSVJ98g1/R3zT0npkyBiQ==
-X-Received: by 2002:a17:902:f787:b0:172:f321:2fd1 with SMTP id q7-20020a170902f78700b00172f3212fd1mr2748367pln.121.1661502491395;
-        Fri, 26 Aug 2022 01:28:11 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-73.three.co.id. [223.255.225.73])
-        by smtp.gmail.com with ESMTPSA id o5-20020a634e45000000b004161e62a3a5sm887364pgl.78.2022.08.26.01.28.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 01:28:10 -0700 (PDT)
-Message-ID: <6b6e0271-2d39-bf73-8e34-31c120d4c674@gmail.com>
-Date:   Fri, 26 Aug 2022 15:28:07 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ZqQXUKYAXaNDETmnzeEy5G83vWE0Lw9aO8Wft3lc78A=;
+        b=sE7Dm/nbNEKpVvXj0VW123iIHQ7T8FT/5U80WzLwUfy/46cwU26j1LaIDUe5k2ryMf
+         EeoXYGEMaehgO/MohLCOGIBdnLWQkXNPi2bFDcOQ6MajESCNxNdOjx3oEaEHM841MJCE
+         oxfcTIHryT+RpQQ9cbUXJHeSeE9bVM04+fuUruWyIowRsYxJ2G6rHhMwYxu0X3s5cgbR
+         VZ5BG7dAvV1tK200dLIZuQKX9iGhrpUb5nU3zz79VTJ9N9rkfHxrP/rV8ydWjuyWn6Io
+         C69aK0xszJsr+DFP93ukr7pCH4Ks5UOBqPTTALkWaS1BREC7TeOCWv+TShc7Vi0oFGVr
+         jT0Q==
+X-Gm-Message-State: ACgBeo2e5LbLo+bsLMuzmD3r8pyY7qGv5Ul5IwBfeDY6GjMdT6Mc8OdG
+        TRQPEKD82fvRrEVqGd1gTbqgPNNIsclu25ma8E0=
+X-Google-Smtp-Source: AA6agR5/8OQlotyHYlj9mA8z3fbCzfvGFlXA3R4L9leXIjUfPV5T/p5Z2C4FvaohkfRE+ehar9Wy4xF9a4a+R1k92OA=
+X-Received: by 2002:a17:902:e5cc:b0:16f:1e31:da6c with SMTP id
+ u12-20020a170902e5cc00b0016f1e31da6cmr2745061plf.66.1661502563310; Fri, 26
+ Aug 2022 01:29:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] docs: Update version number from 5.x to 6.x in README.rst
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220824080836.23087-1-lukas.bulwahn@gmail.com>
- <87a67syxa0.fsf@meer.lwn.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <87a67syxa0.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220823055739.1451419-1-floridsleeves@gmail.com> <YwRyC93rC/BAjR23@kroah.com>
+In-Reply-To: <YwRyC93rC/BAjR23@kroah.com>
+From:   Li Zhong <floridsleeves@gmail.com>
+Date:   Fri, 26 Aug 2022 01:29:12 -0700
+Message-ID: <CAMEuxRrLXov-brDL4ENyHS=1Yjd2YE0bGNHZ69p9wmuBQo9avQ@mail.gmail.com>
+Subject: Re: [PATCH v1] drivers/tty/serial: check the return value of uart_port_check()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jirislaby@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/26/22 01:48, Jonathan Corbet wrote:
->  - applying-patches.rst should just go.  I didn't prevail last time I
->    tried to make that point, but I still don't think that we help
->    anybody by dragging 1990's instructions around now.
-> 
+On Mon, Aug 22, 2022 at 11:22 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Aug 22, 2022 at 10:57:39PM -0700, lily wrote:
+> > uart_port_check() can return NULL pointer. Check its return value
+> > before dereference it.
+>
+> Also, how did you find this issue?
+>
+> >
+> > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+>
+> Also, your From: name does not match this one, so I can't take the patch
+> even if it is ok :(
+>
+> Please do initial kernel work in drivers/staging/ to get issues like
+> this fixed up before moving to other portions of the kernel so that
+> basic email problems do not bother other subsystem maintainers.
+>
+Thanks for the suggestions! I'll correct the From: in my v2 patch.
 
-Hi jon,
-
-Beside what I say earlier at [1], I also think that we need to have
-documentation on how to use git to obtain kernel tree and how to
-update the tree, with pointers to external resources for advance
-topics on git.
-
-[1]: https://lore.kernel.org/linux-doc/YwgtoiKl5Azt7Pre@debian.me/
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+> thanks,
+>
+> greg k-h
+>
+>

@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3875A2DFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245045A2E00
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344695AbiHZSIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S1344797AbiHZSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiHZSIq (ORCPT
+        with ESMTP id S232069AbiHZSJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:08:46 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C65AFAF5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:08:45 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so1520278otu.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=CppDCJwy+pfEiyfqdA6WVXDmtoQK9zZP2tsICyNNVEI=;
-        b=WcpwYf06HlBBYhu1jCwEnSlaeCtDD4JcNogXLv536HCUQ3n8SvF/CVfVSux27Zi1ye
-         OpXtUIBQ21q1V+qG8E7umV2AntflsEY9ab1lsThMByh7/f0/opzsKRl2Jf+LV75oMXGD
-         X5AZZ58yNTqRMfOzD9T6sCkrezZ2IZrPgNJWU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=CppDCJwy+pfEiyfqdA6WVXDmtoQK9zZP2tsICyNNVEI=;
-        b=29bncvKhWsuaNjMgomwmLTQqoirW4uYqIz3hZ42+TkVfqHeKmQt63UC4XwjkP82IJU
-         6icLipGrZCD319MWBxhkrLAMMhK8jTkcg466bWljqyXXxNCxDluhdFpWJsV7/apEvnSs
-         wAm5RBBYAYM6qgtbkBioTJ6Wj9IxLJ3rdt8exe0bMnrgiq5Iyuq8IZSR7mvRz2NKrf7K
-         8A4iLKg5iHHuJUbj7wEwcApH2BlYTFwVitS5aofiA4+/GnrWFxB7Qf/Lrgw4I3oRG9qE
-         Te3fBH65JKzDTWBF7LRFfUD6g7G+nPjufLLjecw9/qJdepd5tncdbs1Cm7/oZXEVxCj5
-         lIQw==
-X-Gm-Message-State: ACgBeo0zfFSq1Xj9XNI8YSfGwzEJbbPw1+pO0OmVrMQ5oJb4EOzns+ZZ
-        2SdQZX5YFz77uNIeprRwAUtmbb7dX+DI90UoBsqsRg==
-X-Google-Smtp-Source: AA6agR4OYCRv3RliIFEMCZX/FFk7+UtuEH6UFx2i07S0YUDQ71aNSZY9yYdxDpVAk/Ize79lNJgrkD6Ks9ttmzX0DWI=
-X-Received: by 2002:a9d:53cb:0:b0:637:1ddc:615c with SMTP id
- i11-20020a9d53cb000000b006371ddc615cmr1908132oth.3.1661537324727; Fri, 26 Aug
- 2022 11:08:44 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 26 Aug 2022 13:08:44 -0500
+        Fri, 26 Aug 2022 14:09:17 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96286B56E0;
+        Fri, 26 Aug 2022 11:09:16 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2692D1EC03EA;
+        Fri, 26 Aug 2022 20:09:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661537351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iCRg1BZZBWD+TbCyuzPQlX9XHqNXqh9pUPyGuQmJ7bs=;
+        b=c7+3bNPB8AcQzOC/SKx4n85TYarfRYJFQTtt3J7mFildxVA2qxwIa/+b6pSaWO7/ZJZ3ta
+        HO1onnhJ2xADFE7ouivOeIxVRLmTE5YPy+ZAHSEFvxQpBDp2bXtJfiNkX/FbUIebi/2IlV
+        NaNV9TNHJf3qgmygBzGERgmO2EQZF+A=
+Date:   Fri, 26 Aug 2022 20:09:06 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Jane Chu <jane.chu@oracle.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
+Subject: Re: [PATCH v7] x86/mce: retrieve poison range from hardware
+Message-ID: <YwkMQsUn7BLPi5mU@zn.tnic>
+References: <20220802195053.3882368-1-jane.chu@oracle.com>
+ <YwUFlo3+my6bJHWj@zn.tnic>
+ <b3880db6-6731-1d1b-144f-1080a033ad01@oracle.com>
+ <Ywf9ZL6zjzSf5pdF@zn.tnic>
+ <630908d7e6937_259e5b29445@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-In-Reply-To: <20220826065621.2255795-1-judyhsiao@chromium.org>
-References: <20220826065621.2255795-1-judyhsiao@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 26 Aug 2022 13:08:44 -0500
-Message-ID: <CAE-0n51WNeMy5gEEQ9XpR1k2g=jSiknNkwJLz-bQbMN115JSxg@mail.gmail.com>
-Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Fix Dmic no sound on villager-r1
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
-        judyhsiao@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <630908d7e6937_259e5b29445@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Judy Hsiao (2022-08-25 23:56:21)
-> Fix the DMIC no sound issue of villager-r1 by using "PP1800_L2C" as the
-> DMIC power source to match the hardware schematic.
->
-> This patch:
->    1. set vdd-micb-supply to PP1800_L2C as the MIC Bias voltage regulator.
->    2. In audio-routing, set VA DMIC01~VA DMIC03 to use the vdd-micb-supply
->       setting.
->
-> Co-developed-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+On Fri, Aug 26, 2022 at 10:54:31AM -0700, Dan Williams wrote:
+> How about:
+> 
+> ---
+> 
+> When memory poison consumption machine checks fire,
+> mce-notifier-handlers like nfit_handle_mce() record the impacted
+> physical address range.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+... which is reported by the hardware in the MCi_MISC MSR.
 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-> index c03b3ae4de50..fd202a8f6a33 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-> @@ -12,3 +12,30 @@ / {
->         model = "Google Villager (rev1+)";
->         compatible = "google,villager", "qcom,sc7280";
->  };
-> +
-> +&lpass_va_macro {
-> +       vdd-micb-supply = <&pp1800_l2c>;
-> +};
+> The error information includes data about blast
+> radius, i.e. how many cachelines did the hardware determine are
+> impacted.
 
-I wonder if we'll want to move this to some common "lpass audio" mixin
-dtsi file, but we can do that later.
+Yap, nice.
+
+> A recent change, commit 7917f9cdb503 ("acpi/nfit: rely on
+> mce->misc to determine poison granularity"), updated nfit_handle_mce()
+> to stop hard coding the blast radius value of 1 cacheline, and instead
+> rely on the blast radius reported in 'struct mce' which can be up to 4K
+> (64 cachelines).
+> 
+> It turns out that apei_mce_report_mem_error() had a similar problem in
+> that it hard coded a blast radius of 4K rather than checking the blast
+
+s/checking/reading/
+
+> radius in the error information. Fix apei_mce_report_mem_error() to
+
+s/in/from/
+
+> convey the proper poison granularity.
+> 
+> ---
+
+Yap, that's a lot better.
+
+Thanks!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

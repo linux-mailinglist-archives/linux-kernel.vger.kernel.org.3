@@ -2,178 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7CF5A2D06
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97D05A2D05
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344936AbiHZRBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        id S243928AbiHZRCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344904AbiHZRBc (ORCPT
+        with ESMTP id S1344698AbiHZRBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:01:32 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B6FC9E86;
-        Fri, 26 Aug 2022 10:01:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m0+EtaKcvVnb+cmffabNnP4Fp4CBd42zbil6oxyhTYwJxNj+fTgcbQV+0l8Q467pXDQL+Wc1+iPCJBV9sQe3Sglh/JaDHUqp8Ts418KThnE3ZDBvb5tPPqju3U6Cq7Ux9NuLKe+GjKn802uFkMBZ2+j96EdrhoQ9CiE5po2UFYlzPpg90BmtNieEgS1/HEUVY3BD2r+jN/AwLToIUPk5rZ7ueHDKmFbOk1OvSzPKU/ouneO9mbxu4gWleWjFHHy1Chaykt6ynw6H+BkMh2+4su3Wx0C1Ek4SfvwiNiQV0P11hehj+YNZVUEkymP79tmeys6pZ6ePZKt6F3s0NPZHDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DED61T5UkJy76XMNgi8aqJ78Tx1z+ZX3gqOWnGwEaTQ=;
- b=oVBStZNrg5LqcUQgXM/Uw7rm+4OhzTkmaxhkR4F7MIq2L8f9cBuiiPjJUrQ8lTuwlnWSuZwQCUQz9X23KYtej2HSRC0URvtxF43bBf4/iJbryj5SJCWH+JqctpQ855xOKFKSz9v/f0KJSJARMVOTecoBnm17cQ/tdwrEdUHGt3dV7Qk/yQyTeHk3TYbRxB5rD42Q5QVIx413TOoDJxQjBv0sVPN6Lw/l5fUXXwVbX43p8ie9fDt/hE2dB9NPW7c2SAlP4HDRPYZ1JqkXgNoQVQE2CzPHaibdeTp3gI7KuRQGoeTBkJ4h+IGKuw8ehUJhHcmMjOl8niGPC9f+sV78Zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DED61T5UkJy76XMNgi8aqJ78Tx1z+ZX3gqOWnGwEaTQ=;
- b=3B1DymodkG0P9mgowBWhjL1TP2+RIuxPC9//4Cw+VVdyBFZJ/xYiacsoGy6R6SVyl1Vt4aZOffeFIZx9Xq57kqWHPru5eNEWkwuaQ1wy//JXOBamQsbyLX/tNIVIkru4zy04+WbWQndv1M1Hkgk+EiPFUPFzgWzl3b4ElCMLpEw=
-Received: from MW4PR03CA0125.namprd03.prod.outlook.com (2603:10b6:303:8c::10)
- by DM6PR12MB3660.namprd12.prod.outlook.com (2603:10b6:5:1c3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Fri, 26 Aug
- 2022 17:01:10 +0000
-Received: from CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8c:cafe::cf) by MW4PR03CA0125.outlook.office365.com
- (2603:10b6:303:8c::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14 via Frontend
- Transport; Fri, 26 Aug 2022 17:01:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT093.mail.protection.outlook.com (10.13.175.59) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Fri, 26 Aug 2022 17:01:09 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 26 Aug
- 2022 12:01:02 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>, Hans de Goede <hdegoede@redhat.com>,
-        "Mark Gross" <markgross@kernel.org>
-CC:     <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] platform/x86: wmi: Lower verbosity of some duplicate GUID messages
-Date:   Fri, 26 Aug 2022 12:00:53 -0500
-Message-ID: <20220826170053.2124-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 26 Aug 2022 13:01:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4930C12EB;
+        Fri, 26 Aug 2022 10:01:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74CA0B83212;
+        Fri, 26 Aug 2022 17:01:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D71C433C1;
+        Fri, 26 Aug 2022 17:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661533292;
+        bh=P+Nqzk9XTOjDZaK+xvsvyoi6cnmGLm6n083Ph31mhw0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WRUDRwrNLpGUIte3tDVVrorSinqxSpBK2tXaq5gF2JJKJq5j+KErXAhFUa7htmM4t
+         Xelyma5TaqZB2uZHdrnc1IN11YeOlK4W2N3P1dbfwQBRwDysjb2vjVrH7oItsK46di
+         CN0mFQFLlHLCtaWFB17MwsGIZot35TAul+1KuU5NDrOS+Cp0Ksy49Ar4R+pRKl4Syz
+         IxglAb7bWhbrq8H+WV9D6ZBVuoCPRsGaoQgI7lVLDnx3URJFIJetgAv260PghDXqJ5
+         usL0DStnobKRp+gSJJkkuyGLTwJXdjlnOspZdFTjRjXKmnicFKJaReVPI30vnaZOwJ
+         IVEgk60KYKI4g==
+Date:   Fri, 26 Aug 2022 12:01:30 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org,
+        me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V6 1/3] PCI/ASPM: Add pci_enable_default_link_state()
+Message-ID: <20220826170130.GA2933762@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1755bffa-e6be-4524-caab-08da87849324
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3660:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IzRLHIvZLRTnkbFSKzj2nbCob7xLzRqO+smiOs8pq1TmrV0ZATHmJo1s6M4pgROleupdhqw1WMmqLz9Au/uAC1EtHX96bsGJjbuS49r16/i3kBJRJPS3QMVfg+PWXAAp1CcOiI5yhHwhX/jTp3kzWO3pNiQ/aZig+kPmora2lo5uLecT2VU2tJNx1c8nv+aOwEfy7JXbwFz2MCSnC2vA5ZgR+B7v2lrxrA4ZOPk9RcFczOL1yL1oFcv3zyzKn0gyJOK/oGK6jywd2FzlmLZbtOoHU/d2ZgwFIu2wHZ3PIgvXhdn3kI4fbN11YN4jcByS7WBt4eURpvo4Qmvp0xCkurMjOrQSxLC6iIAEWy7P1NjyPrm92mxzQ0TsEZs9kbCgTHWPJuhiBCBym443AYuCUmkif+IAikVRkE6lK79MdtKP+lBEtGl3tSpfl5w74Y6lUmlbV2g3DiDF+as+TpwspN+ymgf+Tw0Hv0sNPe53L+HTTwUCfg4eSSDQJ0kSwGTAf2hv0gbJFllcBAfMr9WskGEIdOB1zBn2kgwGXKatAmbyMFGZyjG+2M7uHGEy8wsUaelIGEIohpdOROLyjsDdArTZLOv9ZsamAzqgaWMYYVEO+NydrNxXOY09pden5cPrSL2mQ+XbLOEwcjked4OGTyRrmuOYRMJ5yozzmmPsAqU+M0qNcwcssnN3l83PtgHX/to3subbbPRN9DINdGeRyy9CiR86MP8bul85Be8GRjsp7ZJCx74oNqbiSqWBfa0N0pVmeEbhHOZpld6iiTl5HJn/2ZILw/nbLh/LHiBJ0hdYR93rdIrwaNC7kgc94Pa+VvOkwwZmDoOdMKTpneWvoA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(39860400002)(136003)(346002)(40470700004)(46966006)(36840700001)(41300700001)(5660300002)(8936002)(26005)(356005)(82740400003)(316002)(478600001)(40480700001)(40460700003)(15650500001)(966005)(44832011)(36756003)(7696005)(6666004)(86362001)(16526019)(81166007)(2906002)(1076003)(426003)(2616005)(336012)(70206006)(82310400005)(36860700001)(110136005)(54906003)(186003)(4326008)(8676002)(47076005)(70586007)(83380400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 17:01:09.8566
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1755bffa-e6be-4524-caab-08da87849324
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3660
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301041943.2935892-2-david.e.box@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The WMI subsystem in the kernel currently tracks WMI devices by
-a GUID string not by ACPI device.  The GUID used by the `wmi-bmof`
-module however is available from many devices on nearly every machine.
+On Mon, Feb 28, 2022 at 08:19:41PM -0800, David E. Box wrote:
+> From: Michael Bottini <michael.a.bottini@linux.intel.com>
+> 
+> Add pci_enable_default_link_state() to allow devices to change the default
+> BIOS configured states. Clears the BIOS default settings then sets the new
+> states and reconfigures the link under the semaphore. Also add
+> PCIE_LINK_STATE_ALL macro for convenience for callers that want to enable
+> all link states.
+> 
+> Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 
-This originally was though to be a bug, but as it happens on most
-machines it is a design mistake.  As there isn't an active need to
-get the binary from each of the `wmi-bmof` device, special case it
-and lower the message to debugging.  This will help to identify if
-there are other duplicate GUIDs in the wild.
+With minor changes below,
 
-If there are and the information contained in them is desirable it
-may be worth considering a design change to the WMI subsystem to
-access those.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Link: https://lkml.org/lkml/2017/12/8/913
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/platform/x86/wmi-bmof.c |  2 --
- drivers/platform/x86/wmi.c      | 10 ++++++++--
- include/linux/wmi.h             |  2 ++
- 3 files changed, 10 insertions(+), 4 deletions(-)
+> + * pci_enable_default_link_state - Clears and sets the default device link state
+> + * so that the link may be allowed to enter the specified states. Note that
+> + * if the BIOS didn't grant ASPM control to the OS, this does nothing because
+> + * we can't touch the LNKCTL register. Also note that this does not enable
+> + * states disabled by pci_disable_link_state(). Returns 0 or a negative errno.
 
-diff --git a/drivers/platform/x86/wmi-bmof.c b/drivers/platform/x86/wmi-bmof.c
-index 80137afb9753..af46e9e03376 100644
---- a/drivers/platform/x86/wmi-bmof.c
-+++ b/drivers/platform/x86/wmi-bmof.c
-@@ -18,8 +18,6 @@
- #include <linux/types.h>
- #include <linux/wmi.h>
- 
--#define WMI_BMOF_GUID "05901221-D566-11D1-B2F0-00A0C9062910"
--
- struct bmof_priv {
- 	union acpi_object *bmofdata;
- 	struct bin_attribute bmof_bin_attr;
-diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index aed293b5af81..d7a1f4bf443b 100644
---- a/drivers/platform/x86/wmi.c
-+++ b/drivers/platform/x86/wmi.c
-@@ -1157,6 +1157,9 @@ static void wmi_free_devices(struct acpi_device *device)
- static bool guid_already_parsed(struct acpi_device *device, const guid_t *guid)
- {
- 	struct wmi_block *wblock;
-+	guid_t guid_wmi_bmof;
-+
-+	guid_parse(WMI_BMOF_GUID, &guid_wmi_bmof);
- 
- 	list_for_each_entry(wblock, &wmi_block_list, list) {
- 		if (guid_equal(&wblock->gblock.guid, guid)) {
-@@ -1166,8 +1169,11 @@ static bool guid_already_parsed(struct acpi_device *device, const guid_t *guid)
- 			 * we need to suppress GUIDs that are unique on a
- 			 * given node but duplicated across nodes.
- 			 */
--			dev_warn(&device->dev, "duplicate WMI GUID %pUL (first instance was on %s)\n",
--				 guid, dev_name(&wblock->acpi_device->dev));
-+			if (guid_equal(guid, &guid_wmi_bmof))
-+				dev_dbg(&device->dev, "duplicate WMI-BMOF GUID found\n");
-+			else
-+				dev_warn(&device->dev, "duplicate WMI GUID %pUL (first instance was on %s)\n",
-+					 guid, dev_name(&wblock->acpi_device->dev));
- 			return true;
- 		}
- 	}
-diff --git a/include/linux/wmi.h b/include/linux/wmi.h
-index b88d7b58e61e..59acdceb4411 100644
---- a/include/linux/wmi.h
-+++ b/include/linux/wmi.h
-@@ -13,6 +13,8 @@
- #include <linux/mod_devicetable.h>
- #include <uapi/linux/wmi.h>
- 
-+#define WMI_BMOF_GUID "05901221-D566-11D1-B2F0-00A0C9062910"
-+
- struct wmi_device {
- 	struct device dev;
- 
--- 
-2.34.1
+"Clear and set" to match imperative mood of similar comments.
 
+Similarly "Return 0 or ...".
+
+> + *
+> + * @pdev: PCI device
+> + * @state: Mask of ASPM link states to enable
+> + */
+> +int pci_enable_default_link_state(struct pci_dev *pdev, int state)
+
+I think "pci_enable_link_state()" would be a better name since
+"default" isn't relevant to the caller and it would be more parallel
+with pci_disable_link_state().
+
+> +{
+> +	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
+> +
+> +	if (!link)
+> +		return -EINVAL;
+> +	/*
+> +	 * A driver requested that ASPM be enabled on this device, but
+> +	 * if we don't have permission to manage ASPM (e.g., on ACPI
+> +	 * systems we have to observe the FADT ACPI_FADT_NO_ASPM bit and
+> +	 * the _OSC method), we can't honor that request.
+> +	 */
+> +	if (aspm_disabled) {
+> +		pci_warn(pdev, "can't override BIOS ASPM; OS doesn't have ASPM control\n");
+> +		return -EPERM;
+> +	}
+> +
+> +	down_read(&pci_bus_sem);
+> +	mutex_lock(&aspm_lock);
+> +	link->aspm_default = 0;
+> +	if (state & PCIE_LINK_STATE_L0S)
+> +		link->aspm_default |= ASPM_STATE_L0S;
+> +	if (state & PCIE_LINK_STATE_L1)
+> +		/* L1 PM substates require L1 */
+> +		link->aspm_default |= ASPM_STATE_L1 | ASPM_STATE_L1SS;
+> +	if (state & PCIE_LINK_STATE_L1_1)
+> +		link->aspm_default |= ASPM_STATE_L1_1;
+> +	if (state & PCIE_LINK_STATE_L1_2)
+> +		link->aspm_default |= ASPM_STATE_L1_2;
+> +	if (state & PCIE_LINK_STATE_L1_1_PCIPM)
+> +		link->aspm_default |= ASPM_STATE_L1_1_PCIPM;
+> +	if (state & PCIE_LINK_STATE_L1_2_PCIPM)
+> +		link->aspm_default |= ASPM_STATE_L1_2_PCIPM;
+> +	pcie_config_aspm_link(link, policy_to_aspm_state(link));
+> +
+> +	link->clkpm_default = (state & PCIE_LINK_STATE_CLKPM) ? 1 : 0;
+> +	pcie_set_clkpm(link, policy_to_clkpm_state(link));
+> +	mutex_unlock(&aspm_lock);
+> +	up_read(&pci_bus_sem);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(pci_enable_default_link_state);
+> +
+>  static int pcie_aspm_set_policy(const char *val,
+>  				const struct kernel_param *kp)
+>  {
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 8253a5413d7c..fd710afe0209 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1641,10 +1641,15 @@ extern bool pcie_ports_native;
+>  #define PCIE_LINK_STATE_L1_2		BIT(4)
+>  #define PCIE_LINK_STATE_L1_1_PCIPM	BIT(5)
+>  #define PCIE_LINK_STATE_L1_2_PCIPM	BIT(6)
+> +#define PCIE_LINK_STATE_ALL		(PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1 |\
+> +					 PCIE_LINK_STATE_CLKPM | PCIE_LINK_STATE_L1_1 |\
+> +					 PCIE_LINK_STATE_L1_2 | PCIE_LINK_STATE_L1_1_PCIPM |\
+> +					 PCIE_LINK_STATE_L1_2_PCIPM)
+>  
+>  #ifdef CONFIG_PCIEASPM
+>  int pci_disable_link_state(struct pci_dev *pdev, int state);
+>  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
+> +int pci_enable_default_link_state(struct pci_dev *pdev, int state);
+>  void pcie_no_aspm(void);
+>  bool pcie_aspm_support_enabled(void);
+>  bool pcie_aspm_enabled(struct pci_dev *pdev);
+> @@ -1653,6 +1658,8 @@ static inline int pci_disable_link_state(struct pci_dev *pdev, int state)
+>  { return 0; }
+>  static inline int pci_disable_link_state_locked(struct pci_dev *pdev, int state)
+>  { return 0; }
+> +static inline int pci_enable_default_link_state(struct pci_dev *pdev, int state)
+> +{ return 0; }
+>  static inline void pcie_no_aspm(void) { }
+>  static inline bool pcie_aspm_support_enabled(void) { return false; }
+>  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return false; }
+> -- 
+> 2.25.1
+> 

@@ -2,228 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6575A2BE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136E45A2BED
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243888AbiHZQEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S245084AbiHZQFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241183AbiHZQEf (ORCPT
+        with ESMTP id S1344267AbiHZQF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:04:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF28D41A5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661529873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=obYa+npn1GLmAkgYbBxpj4Xt3ZyWQyXIOu4icthPymg=;
-        b=FPvAfMuFNWTXzK/6saYcIGKkYXTqlNgrthg95JZSi90ijgNJJxiNQqAzTxCjdQ5lGmO9Ld
-        y9owbQGAeKN0tJezcL6CQSwAxMatt1XbVjRiK8ROAaPLwWjAEr1XATpTrR2T3LVKOB2jqS
-        Op8X+Pk91NQyPPWY1+fdWU+ISEQ00wg=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-549-1hFrtA7xO2C5ICrgZqxl1g-1; Fri, 26 Aug 2022 12:04:32 -0400
-X-MC-Unique: 1hFrtA7xO2C5ICrgZqxl1g-1
-Received: by mail-qk1-f198.google.com with SMTP id de4-20020a05620a370400b006a9711bd9f8so1571403qkb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:04:31 -0700 (PDT)
+        Fri, 26 Aug 2022 12:05:28 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B5675CDA
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:05:25 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bq11so2307307wrb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Eve3FE7hOWsinCveAVX9btkiK/Cf9c1/3T/dGcwovAU=;
+        b=oIRAeTZZXtyEI1qVYgsm+cggY3Mliak5OfKLrgEvg4J3HtAne/Ixhy4qpZ133xXkTJ
+         XluRuBLn7hv8hPkqcKze/kDl/7ya7eh/LlXvhPCmLXW9kFiadRarEmHnjOoPx4KZWFsr
+         TMSZnRIR9VmuC6NnvJG67u7vGhVkmuJ6YvfwH2P8iV79r9wMpIrpnzigtzjsGmPPnFzr
+         CyLR5/v0RtXM+mOXxcMfIzBi1l37XxC6NmxbWgYowtAmd7a9uicTFeQdS9DrEK6adLTL
+         YQpr8yz/qFSad5jhr0bPxzG0o2bIYS5wa2H4zeZenCS9B8O8BRwBypYy4kGVIb6x7D07
+         D8tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=obYa+npn1GLmAkgYbBxpj4Xt3ZyWQyXIOu4icthPymg=;
-        b=Gy5gJwyn2XMdEflzTezjvgApMsb3uX8guybKanFYjhJVTM+VNeLJ0sR4J0X2WA3bAl
-         Jq1n5HrXEfuvTpIbc9NkM97UVK1uTz+o2AeYbd2R5/N+EtZCJ7tt+YIUiPDOc56/yIbH
-         u5ujIklSWZMh3g/BAJyanp5Qs4liRRIVzb4E9sFFfFmHaxaBdqGWBp5SsBSSgr4Y4oGY
-         8BOSrqH16Tk2XssbfqwXRqhxBCyhRX3XiR4TKb4MwYcALLGVmQrtMn7Kwf9Mj5nBbqwy
-         /HSFPPFPP1R93izQa8BOp7LG5RYqWglfEZ8vf0EFiNDfGtw/mJQjppJgmrjMxjZLz6gP
-         SAIw==
-X-Gm-Message-State: ACgBeo2FZh+X+MDW4Af00aqva7WehaHXotJc5HDXxVjCBjwgRchmAJ26
-        UShacJnaE/KetAeYS6M+w8Jo6Fjqe+obCikaQgAyLks3DlXCe0FBZjtxI9OXi8l41WkFcVJckMJ
-        i1I3UaqujhRD7XIfMjEFQgJUC
-X-Received: by 2002:a05:620a:31a7:b0:6bc:138:2828 with SMTP id bi39-20020a05620a31a700b006bc01382828mr257530qkb.733.1661529870392;
-        Fri, 26 Aug 2022 09:04:30 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5Rf7dOoH2Nl+vrOLRrnLwbhfetodlfuNtPx0kmDcFjxm+hII8W/X98LxoEHwELOlqKLVbq0w==
-X-Received: by 2002:a05:620a:31a7:b0:6bc:138:2828 with SMTP id bi39-20020a05620a31a700b006bc01382828mr257509qkb.733.1661529870087;
-        Fri, 26 Aug 2022 09:04:30 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bp17-20020a05620a459100b006b9a24dc9d7sm42297qkb.7.2022.08.26.09.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 09:04:29 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 12:04:27 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH] mm/mprotect: Only reference swap pfn page if type match
-Message-ID: <YwjvC1wYcODUuiSf@xz-m1.local>
-References: <20220823221138.45602-1-peterx@redhat.com>
- <411d7b8c-f914-875e-b397-856e6a894366@redhat.com>
- <YwjXxC2BbJ5+3Isx@xz-m1.local>
- <ca62c992-6242-5e82-22de-a6e8ffa824b1@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Eve3FE7hOWsinCveAVX9btkiK/Cf9c1/3T/dGcwovAU=;
+        b=l027NAczOKLlp6dDen1LPTNps3miB1kgtRzksl0vyBy3WHGjjD1skRFW1Uc/jo+Hfk
+         mXvjUpcURqWmCI6UepcRM0LytwKwb2OZ0D0C4l/KC4f8l2zHjuUgFTNxAgMyq0P75jM0
+         JoWQG+UkkGEpf6ouFdqWxwU65NkHUl5oRAyDPd2KgxdNihc1Adc96IzJGceTmSmGNC6K
+         gLa9Ze4yC/zyGBMfBH0nfXqSuhQvk59kWLxB2Uds4xYXzPQ092fe7qhjwExVDlCsJLB5
+         X2VIg8ejiw8sI3gXwBufKJgUYy+DBGJbUJBxdA6MQENTpdonZzLFf9XQ/DYB27kBr27g
+         ArdA==
+X-Gm-Message-State: ACgBeo1JcHubNeMmJUROTso8ZxxYD0681xwhiwhUeojJjM+yqNds9TIu
+        /mqXoGkv8mwJbsY9jeMvvNx7Uk/ZP6gI3uXPq7Z08Q==
+X-Google-Smtp-Source: AA6agR4WMcZViHYZpEd/SVtNnppVJwpOi1ucgCxNEiA6EzB60zAGxFEFit4aqH2BPsbjzmfKyLISll05O9Er9BqpMHY=
+X-Received: by 2002:a05:6000:1008:b0:225:58e0:223f with SMTP id
+ a8-20020a056000100800b0022558e0223fmr187277wrx.375.1661529923505; Fri, 26 Aug
+ 2022 09:05:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ca62c992-6242-5e82-22de-a6e8ffa824b1@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-12-irogers@google.com>
+ <12acbe02-bd73-07bb-d0e1-cb13dcd790c0@intel.com>
+In-Reply-To: <12acbe02-bd73-07bb-d0e1-cb13dcd790c0@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 26 Aug 2022 09:05:11 -0700
+Message-ID: <CAP-5=fWCpoqAhLzdMn1zHXfKpsYg0LQPMSz6Uy82+QL_MQpc8g@mail.gmail.com>
+Subject: Re: [PATCH v3 11/18] perf dso: Update use of pthread mutex
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 04:39:08PM +0200, David Hildenbrand wrote:
-> On 26.08.22 16:25, Peter Xu wrote:
-> > On Fri, Aug 26, 2022 at 12:49:37PM +0200, David Hildenbrand wrote:
-> >> On 24.08.22 00:11, Peter Xu wrote:
-> >>> Yu Zhao reported a bug after the commit "mm/swap: Add swp_offset_pfn() to
-> >>> fetch PFN from swap entry" added a check in swp_offset_pfn() for swap type [1]:
-> >>>
-> >>>   kernel BUG at include/linux/swapops.h:117!
-> >>>   CPU: 46 PID: 5245 Comm: EventManager_De Tainted: G S         O L 6.0.0-dbg-DEV #2
-> >>>   RIP: 0010:pfn_swap_entry_to_page+0x72/0xf0
-> >>>   Code: c6 48 8b 36 48 83 fe ff 74 53 48 01 d1 48 83 c1 08 48 8b 09 f6
-> >>>   c1 01 75 7b 66 90 48 89 c1 48 8b 09 f6 c1 01 74 74 5d c3 eb 9e <0f> 0b
-> >>>   48 ba ff ff ff ff 03 00 00 00 eb ae a9 ff 0f 00 00 75 13 48
-> >>>   RSP: 0018:ffffa59e73fabb80 EFLAGS: 00010282
-> >>>   RAX: 00000000ffffffe8 RBX: 0c00000000000000 RCX: ffffcd5440000000
-> >>>   RDX: 1ffffffffff7a80a RSI: 0000000000000000 RDI: 0c0000000000042b
-> >>>   RBP: ffffa59e73fabb80 R08: ffff9965ca6e8bb8 R09: 0000000000000000
-> >>>   R10: ffffffffa5a2f62d R11: 0000030b372e9fff R12: ffff997b79db5738
-> >>>   R13: 000000000000042b R14: 0c0000000000042b R15: 1ffffffffff7a80a
-> >>>   FS:  00007f549d1bb700(0000) GS:ffff99d3cf680000(0000) knlGS:0000000000000000
-> >>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >>>   CR2: 0000440d035b3180 CR3: 0000002243176004 CR4: 00000000003706e0
-> >>>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> >>>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >>>   Call Trace:
-> >>>    <TASK>
-> >>>    change_pte_range+0x36e/0x880
-> >>>    change_p4d_range+0x2e8/0x670
-> >>>    change_protection_range+0x14e/0x2c0
-> >>>    mprotect_fixup+0x1ee/0x330
-> >>>    do_mprotect_pkey+0x34c/0x440
-> >>>    __x64_sys_mprotect+0x1d/0x30
-> >>>
-> >>> It triggers because pfn_swap_entry_to_page() could be called upon e.g. a
-> >>> genuine swap entry.
-> >>>
-> >>> Fix it by only calling it when it's a write migration entry where the page*
-> >>> is used.
-> >>>
-> >>> [1] https://lore.kernel.org/lkml/CAOUHufaVC2Za-p8m0aiHw6YkheDcrO-C3wRGixwDS32VTS+k1w@mail.gmail.com/
-> >>>
-> >>> Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
-> >>> Cc: David Hildenbrand <david@redhat.com>
-> >>> Cc: <stable@vger.kernel.org>
-> >>> Reported-by: Yu Zhao <yuzhao@google.com>
-> >>> Signed-off-by: Peter Xu <peterx@redhat.com>
-> >>> ---
-> >>>  mm/mprotect.c | 3 ++-
-> >>>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> >>> index f2b9b1da9083..4549f5945ebe 100644
-> >>> --- a/mm/mprotect.c
-> >>> +++ b/mm/mprotect.c
-> >>> @@ -203,10 +203,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
-> >>>  			pages++;
-> >>>  		} else if (is_swap_pte(oldpte)) {
-> >>>  			swp_entry_t entry = pte_to_swp_entry(oldpte);
-> >>> -			struct page *page = pfn_swap_entry_to_page(entry);
-> >>>  			pte_t newpte;
-> >>>  
-> >>>  			if (is_writable_migration_entry(entry)) {
-> >>> +				struct page *page = pfn_swap_entry_to_page(entry);
-> >>> +
-> >>>  				/*
-> >>>  				 * A protection check is difficult so
-> >>>  				 * just be safe and disable write
-> >>
-> >>
-> >> Stumbling over the THP code, I was wondering if we also want to adjust change_huge_pmd()
-> >> and hugetlb_change_protection. There are no actual swap entries, so I assume we're fine.
-> >>
-> >>
-> >> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> >> index 482c1826e723..466364e7fc5f 100644
-> >> --- a/mm/huge_memory.c
-> >> +++ b/mm/huge_memory.c
-> >> @@ -1798,10 +1798,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
-> >>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-> >>         if (is_swap_pmd(*pmd)) {
-> >>                 swp_entry_t entry = pmd_to_swp_entry(*pmd);
-> >> -               struct page *page = pfn_swap_entry_to_page(entry);
-> >>  
-> >>                 VM_BUG_ON(!is_pmd_migration_entry(*pmd));
-> >>                 if (is_writable_migration_entry(entry)) {
-> >> +                       struct page *page = pfn_swap_entry_to_page(entry);
-> >>                         pmd_t newpmd;
-> >>                         /*
-> >>                          * A protection check is difficult so
-> >> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> >> index 2480ba627aa5..559465fae5cd 100644
-> >> --- a/mm/hugetlb.c
-> >> +++ b/mm/hugetlb.c
-> >> @@ -6370,9 +6370,9 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
-> >>                 }
-> >>                 if (unlikely(is_hugetlb_entry_migration(pte))) {
-> >>                         swp_entry_t entry = pte_to_swp_entry(pte);
-> >> -                       struct page *page = pfn_swap_entry_to_page(entry);
-> >>  
-> >>                         if (!is_readable_migration_entry(entry)) {
-> >> +                               struct page *page = pfn_swap_entry_to_page(entry);
-> >>                                 pte_t newpte;
-> >>  
-> >>                                 if (PageAnon(page))
-> >>
-> >>
-> >> @Peter, what's your thought?
-> > 
-> > IMHO they're not needed?
-> > 
-> > The rule is simple in my mind: we should only pass in a pfn-typed swap
-> > entry into pfn_swap_entry_to_page() (or the new swp_offset_pfn()), or it's
-> > a violation of the API.  In these two cases they do not violate the API and
-> > they're always safe because they're guaranteed to be pfn swap entries when
-> > calling.
-> 
-> I was wondering about extreme corner cases regarding the struct page.
-> 
-> Assume we have a hwpoison_entry that pointed at a valid struct page. We
-> can succeed in offlining+removing the section it's located on (I was
-> recently challenging if we want to keep that behavior as it's really
-> shaky already), freeing the relevant memmap entry and the memory section.
-> 
-> pfn_swap_entry_to_page() -> pfn_to_page() would be problematic if there
-> is no memmap anymore.
-> 
-> 
-> I assume it's ok to always call it for is_pfn_swap_entry(), but in the
-> PMD case we only check for is_swap_pmd()? Isn't that problematic?
+On Fri, Aug 26, 2022 at 3:37 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 24/08/22 18:38, Ian Rogers wrote:
+> > Switch to the use of mutex wrappers that provide better error checking.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/dso.c    | 12 ++++++------
+>
+> Some not done yet
+>
+> $ grep -i pthread_mut tools/perf/util/dso.c
+> static pthread_mutex_t dso__data_open_lock = PTHREAD_MUTEX_INITIALIZER;
+>         pthread_mutex_lock(&dso__data_open_lock);
+>         pthread_mutex_unlock(&dso__data_open_lock);
+>         if (pthread_mutex_lock(&dso__data_open_lock) < 0)
+>                 pthread_mutex_unlock(&dso__data_open_lock);
+>         pthread_mutex_unlock(&dso__data_open_lock);
+>         pthread_mutex_lock(&dso__data_open_lock);
+>         pthread_mutex_unlock(&dso__data_open_lock);
+>         pthread_mutex_lock(&dso__data_open_lock);
+>         pthread_mutex_unlock(&dso__data_open_lock);
 
-I don't know extensively enough on hwpoison on validity of fetching page
-from pfn inside on online/offline ops, but.. if the only concern is about
-hwpoison entry existance here I think its fine?  Because iirc we'l split
-thp when any of the subpage got poisoned, so we should never hit a hwpoison
-entry in thp path.
+Yes, these are all solely dso__data_open_lock that lacks any clear
+init/exit code to place the initialization/destruction hooks onto. I
+don't plan to alter these in this patch set.
 
-> 
-> 
-> I was confused by the hugetlb case, it's indeed fine as we check for
-> is_hugetlb_entry_migration().
+Thanks,
+Ian
 
-Right, it's more straightforward in the hugetlb case.
-
--- 
-Peter Xu
-
+>
+> >  tools/perf/util/dso.h    |  4 ++--
+> >  tools/perf/util/symbol.c |  4 ++--
+> >  3 files changed, 10 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> > index 5ac13958d1bd..a9789a955403 100644
+> > --- a/tools/perf/util/dso.c
+> > +++ b/tools/perf/util/dso.c
+> > @@ -795,7 +795,7 @@ dso_cache__free(struct dso *dso)
+> >       struct rb_root *root = &dso->data.cache;
+> >       struct rb_node *next = rb_first(root);
+> >
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >       while (next) {
+> >               struct dso_cache *cache;
+> >
+> > @@ -804,7 +804,7 @@ dso_cache__free(struct dso *dso)
+> >               rb_erase(&cache->rb_node, root);
+> >               free(cache);
+> >       }
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >  }
+> >
+> >  static struct dso_cache *__dso_cache__find(struct dso *dso, u64 offset)
+> > @@ -841,7 +841,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+> >       struct dso_cache *cache;
+> >       u64 offset = new->offset;
+> >
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >       while (*p != NULL) {
+> >               u64 end;
+> >
+> > @@ -862,7 +862,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+> >
+> >       cache = NULL;
+> >  out:
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       return cache;
+> >  }
+> >
+> > @@ -1297,7 +1297,7 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
+> >               dso->root = NULL;
+> >               INIT_LIST_HEAD(&dso->node);
+> >               INIT_LIST_HEAD(&dso->data.open_entry);
+> > -             pthread_mutex_init(&dso->lock, NULL);
+> > +             mutex_init(&dso->lock);
+> >               refcount_set(&dso->refcnt, 1);
+> >       }
+> >
+> > @@ -1336,7 +1336,7 @@ void dso__delete(struct dso *dso)
+> >       dso__free_a2l(dso);
+> >       zfree(&dso->symsrc_filename);
+> >       nsinfo__zput(dso->nsinfo);
+> > -     pthread_mutex_destroy(&dso->lock);
+> > +     mutex_destroy(&dso->lock);
+> >       free(dso);
+> >  }
+> >
+> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> > index 66981c7a9a18..58d94175e714 100644
+> > --- a/tools/perf/util/dso.h
+> > +++ b/tools/perf/util/dso.h
+> > @@ -2,7 +2,6 @@
+> >  #ifndef __PERF_DSO
+> >  #define __PERF_DSO
+> >
+> > -#include <pthread.h>
+> >  #include <linux/refcount.h>
+> >  #include <linux/types.h>
+> >  #include <linux/rbtree.h>
+> > @@ -11,6 +10,7 @@
+> >  #include <stdio.h>
+> >  #include <linux/bitops.h>
+> >  #include "build-id.h"
+> > +#include "mutex.h"
+> >
+> >  struct machine;
+> >  struct map;
+> > @@ -145,7 +145,7 @@ struct dso_cache {
+> >  struct auxtrace_cache;
+> >
+> >  struct dso {
+> > -     pthread_mutex_t  lock;
+> > +     struct mutex     lock;
+> >       struct list_head node;
+> >       struct rb_node   rb_node;       /* rbtree node sorted by long name */
+> >       struct rb_root   *root;         /* root of rbtree that rb_node is in */
+> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> > index a4b22caa7c24..656d9b4dd456 100644
+> > --- a/tools/perf/util/symbol.c
+> > +++ b/tools/perf/util/symbol.c
+> > @@ -1800,7 +1800,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >       }
+> >
+> >       nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >
+> >       /* check again under the dso->lock */
+> >       if (dso__loaded(dso)) {
+> > @@ -1964,7 +1964,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >               ret = 0;
+> >  out:
+> >       dso__set_loaded(dso);
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       nsinfo__mountns_exit(&nsc);
+> >
+> >       return ret;
+>

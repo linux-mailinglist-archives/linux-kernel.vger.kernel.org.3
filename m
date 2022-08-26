@@ -2,225 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02D45A2775
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1105A278E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245692AbiHZMM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S245714AbiHZMSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiHZMMy (ORCPT
+        with ESMTP id S1343861AbiHZMSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:12:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CADDA93;
-        Fri, 26 Aug 2022 05:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661515973; x=1693051973;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=8gzeq3HsKshBpNjIIChQDXSz7Xg1mcO3yxgdPGuVa2A=;
-  b=Gm0FsFNVYtMIw82tYTf+GLrn3cxVX3qlqqUBH0bZ7n3oEGGie4gahSGr
-   4xCGcZHP3iLZO09rcuwJnhjRKglQONhlTJtn1R3c+6h3L/6AevD6waC53
-   KDzqHioXHlmdlcMt49ADYRKl17ffF4HmO42f2yyEWdLxvvb1/maobyk4Y
-   Qa2YCw0Yv/Kd+QqAUMIfSY7XAHo+X+jk0e3PFyxlpxJTA/zYA95gPdGW9
-   Ni7TvGiYAh3L/aOwEhUmaqEHpQ63Qxu/5PHv3yo/Xgx0K3A0JKJhsomIE
-   spTW77D3YZyYt0dOnseX7Za+lu9O0uCLyu8P5NEmtv2/Z5nBE2Lt83una
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295764431"
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="295764431"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 05:12:52 -0700
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="640034953"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 05:12:40 -0700
-Message-ID: <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
-Date:   Fri, 26 Aug 2022 15:12:34 +0300
+        Fri, 26 Aug 2022 08:18:02 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBA6DDB75;
+        Fri, 26 Aug 2022 05:18:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=juUWhNHqDn2+sPKvVbeVt44WEdJrKQvaxewKza8Q5LAlMLOvLTtCrhsdK+MxAMM9fP9Y/vlNW/1s/hRmEexbbscHo1SGoIBIPdbaj7lB8g9kZMguAgIShNb8rvpFptZxDEFNvrllcClxx9riU2JE25RCBuH5p43XyD+iEWQWohSqOt7wMIXaPnJxAikn+Q1AgM6T/66vc4Dstf82w6z5RGpvgxez3GJDbd7TMYP+SI95URJeYgUCpEHAwjyrZg0klC2HWnyE9JVeMvJuoq9pvfkkT1FATppyXtOAk7i7hkPq7uwK+6EW5trR7lGsDV9KPiy7IcQXt+nIqg7j1aFF6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I6UKajqs/S/laLntuOMFWN+aKmwPPb05+IjUjthsek4=;
+ b=b6flBx4jOa5eT9byaWL/u+EYjqFauyRrclqIPrT89HZjKolgeCg8eY5gTB9gnGCWq8xTiVXRS2m+e6eTqilIlXOmtNKOkxkC9pigWrvkR0bSSnCYEq2at7uS/TPvZeqwc+WHYne+7w36UO5XG8KvSvSBTpXn94KsPfLMdIOGOdarrUNi2WldfAwWqDEL3r/DHIOunSH5Sr0BD9Xxq+6mA0Xw+/HtgjrXzIfUCPVas+gYPhff166Dec/h+bhpyxJ/0U6Ibxwxk8/f8LDW6IMK7TMaKMY/IQ5FcI2lMkZAUQDQQlTfseutsb1RSiYy1TO8yW1fuTe4967MsP2wlZCAxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I6UKajqs/S/laLntuOMFWN+aKmwPPb05+IjUjthsek4=;
+ b=qLGls8ovz/BL5phOgtjgUU06f+0ZktDoJeynUdGIICN4uHwV03ofwXEg3smkuQOnz1EcxtehGB1WAQ5ztXAxg9i3pBXCe/uwuLoWCUhVEREJP8xixDnekVyuCBsFHwv3ZyvpOWwjnlCp4hQwsx3jmi8zMqw0Btci5dQ56TfUmP2wLTV5buxp3H5VJeINg5kQf8movW2M7Xbbb365XuG450FckiaZJcAktkugP67ZPLqb3tjBimTlVtcTJb2EfnHRuGabPdKZgbb8blAhAM9aVYOCRC3673jKN7nM2TwkYIgS6e2bLi8DUg2yhIspo1ibDDBhckuH4kqaj8/PxA2ZXA==
+Received: from BN9PR03CA0622.namprd03.prod.outlook.com (2603:10b6:408:106::27)
+ by MN2PR12MB2960.namprd12.prod.outlook.com (2603:10b6:208:101::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Fri, 26 Aug
+ 2022 12:17:58 +0000
+Received: from BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:106:cafe::8b) by BN9PR03CA0622.outlook.office365.com
+ (2603:10b6:408:106::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
+ Transport; Fri, 26 Aug 2022 12:17:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ BN8NAM11FT024.mail.protection.outlook.com (10.13.177.38) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5566.15 via Frontend Transport; Fri, 26 Aug 2022 12:17:58 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.38; Fri, 26 Aug 2022 12:17:56 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 26 Aug 2022 05:17:56 -0700
+Received: from sandipan-pc.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Fri, 26 Aug 2022 05:17:53 -0700
+From:   Sandipan Patra <spatra@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <bbasu@nvidia.com>, <kyarlagadda@nvidia.com>,
+        Sandipan Patra <spatra@nvidia.com>
+Subject: [PATCH 1/2] arm64: tegra: Add PWM controllers on Tegra234
+Date:   Fri, 26 Aug 2022 17:47:45 +0530
+Message-ID: <20220826121746.32003-1-spatra@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <20220824153901.488576-17-irogers@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220824153901.488576-17-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 970ef1da-dfd3-4880-f686-08da875d033f
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2960:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B9DcQzI9vLmXrc+PbF+T71KMN+/x344EwiEysYIGPr8ied7wunVBC4nXNwI/lLdIRj/1XdDCP0MzsM1dOBstnyY8Pwq+SSxADf5yZSyRaGhPRjvWfZcamjD5RSKMtCK1kAm7WXzNrmDG7B0o69ppe6N+0T4Eq232duQpwfUyJhvvF7gYoxsS81Gt/jScVlbjpmlOeUiklEx+OAsDkMImZIl8i6todxu9z7g4X1g8DXDx7d2b6csVJJTv46lJyBXGyT+BvArciyiQDlqPdC//Lz3+yIJYnSgi7fILU7/u/2aRFKm19P6dwz4kGlygP9+MeUAeXVJzmxWle4+sXkHGl+05mZQWEfnT+efzhEnUWaSZG4GKVrmwXX2TSfymPqGLcJ1s9Ow4/Q1qFzQoOA66/x0T4YNMF7XXL2k9m6KIZVDGG+EcBp1TwLLlLTASOL7Z5OzkkuuxtXDRIdIjQlL/NBZugmr/s3gvUOHbfPZeSbq9+n7XoDkv496ccXt8IJ8S/fk+hCfOahekVgOiqXZZTv95zHzXvecKpYwYbbWehLCG/A5CBumSWYJcEbMYUakCw6tobPm358gV+CzGjtMih98Z+HTIyQN7KHMCVjGg9whOTggerlOQTDIrqyZ8qs1GRRg6INGCoh7LUQKitpUMCsUVpnY3DU3oxuMyOG6pyW8U12KTNf7oc0Ci08LdN/5h+TSIHebYbnP/9cQQGedoKwhfa0/b154NLXZRaug3sCUfrdkNzwC/FNLXauU9emH5Z0SJ7XHm8g3HW4WC4Fm33jKNdCXDDD6uwwZIkPmW/cmAnUTVjR/p6FVKjnRjQR4LiFVA13NN/WymC2ULOYq+8Q==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(39860400002)(136003)(376002)(40470700004)(36840700001)(46966006)(110136005)(316002)(54906003)(6666004)(7696005)(40480700001)(36860700001)(8676002)(4326008)(82740400003)(478600001)(5660300002)(36756003)(107886003)(41300700001)(26005)(40460700003)(47076005)(426003)(8936002)(2906002)(83380400001)(86362001)(82310400005)(356005)(70206006)(70586007)(2616005)(336012)(186003)(1076003)(81166007)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 12:17:58.0703
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 970ef1da-dfd3-4880-f686-08da875d033f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2960
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/22 18:38, Ian Rogers wrote:
-> Add annotations to describe lock behavior. Add unlocks so that mutexes
-> aren't conditionally held on exit from perf_sched__replay. Add an exit
-> variable so that thread_func can terminate, rather than leaving the
-> threads blocked on mutexes.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
->  1 file changed, 29 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> index 7e4006d6b8bc..b483ff0d432e 100644
-> --- a/tools/perf/builtin-sched.c
-> +++ b/tools/perf/builtin-sched.c
-> @@ -246,6 +246,7 @@ struct perf_sched {
->  	const char	*time_str;
->  	struct perf_time_interval ptime;
->  	struct perf_time_interval hist_time;
-> +	volatile bool   thread_funcs_exit;
->  };
->  
->  /* per thread run time data */
-> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
->  	prctl(PR_SET_NAME, comm2);
->  	if (fd < 0)
->  		return NULL;
-> -again:
-> -	ret = sem_post(&this_task->ready_for_work);
-> -	BUG_ON(ret);
-> -	mutex_lock(&sched->start_work_mutex);
-> -	mutex_unlock(&sched->start_work_mutex);
->  
-> -	cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> +	while (!sched->thread_funcs_exit) {
-> +		ret = sem_post(&this_task->ready_for_work);
-> +		BUG_ON(ret);
-> +		mutex_lock(&sched->start_work_mutex);
-> +		mutex_unlock(&sched->start_work_mutex);
->  
-> -	for (i = 0; i < this_task->nr_events; i++) {
-> -		this_task->curr_event = i;
-> -		perf_sched__process_event(sched, this_task->atoms[i]);
-> -	}
-> +		cpu_usage_0 = get_cpu_usage_nsec_self(fd);
->  
-> -	cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> -	this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> -	ret = sem_post(&this_task->work_done_sem);
-> -	BUG_ON(ret);
-> +		for (i = 0; i < this_task->nr_events; i++) {
-> +			this_task->curr_event = i;
-> +			perf_sched__process_event(sched, this_task->atoms[i]);
-> +		}
->  
-> -	mutex_lock(&sched->work_done_wait_mutex);
-> -	mutex_unlock(&sched->work_done_wait_mutex);
-> +		cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> +		this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> +		ret = sem_post(&this_task->work_done_sem);
-> +		BUG_ON(ret);
->  
-> -	goto again;
-> +		mutex_lock(&sched->work_done_wait_mutex);
-> +		mutex_unlock(&sched->work_done_wait_mutex);
-> +	}
-> +	return NULL;
->  }
->  
->  static void create_tasks(struct perf_sched *sched)
-> +	EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> +	EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
->  {
->  	struct task_desc *task;
->  	pthread_attr_t attr;
-> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
->  }
->  
->  static void wait_for_tasks(struct perf_sched *sched)
-> +	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> +	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
->  {
->  	u64 cpu_usage_0, cpu_usage_1;
->  	struct task_desc *task;
-> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
->  }
->  
->  static void run_one_test(struct perf_sched *sched)
-> +	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> +	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
->  {
->  	u64 T0, T1, delta, avg_delta, fluct;
->  
-> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
->  	print_task_traces(sched);
->  	add_cross_task_wakeups(sched);
->  
-> +	sched->thread_funcs_exit = false;
->  	create_tasks(sched);
->  	printf("------------------------------------------------------------\n");
->  	for (i = 0; i < sched->replay_repeat; i++)
->  		run_one_test(sched);
->  
-> +	sched->thread_funcs_exit = true;
-> +	mutex_unlock(&sched->start_work_mutex);
-> +	mutex_unlock(&sched->work_done_wait_mutex);
+Tegra234 has eight single-channel PWM controllers, one of them in the
+AON block.
 
-I think you still need to wait for the threads to exit before
-destroying the mutexes.
+Signed-off-by: Sandipan Patra <spatra@nvidia.com>
+---
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi | 84 ++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
->  	return 0;
->  }
->  
+diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+index 81a0f599685f..c2dc651f0842 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+@@ -840,6 +840,90 @@
+ 			#pwm-cells = <2>;
+ 		};
+ 
++		pwm2: pwm@3290000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0x3290000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM2>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM2>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
++		pwm3: pwm@32a0000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0x32a0000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM3>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM3>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
++		pwm4: pwm@c340000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0xc340000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM4>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM4>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
++		pwm5: pwm@32c0000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0x32c0000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM5>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM5>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
++		pwm6: pwm@32d0000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0x32d0000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM6>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM6>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
++		pwm7: pwm@32e0000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0x32e0000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM7>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM7>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
++		pwm8: pwm@32f0000 {
++			compatible = "nvidia,tegra194-pwm",
++				     "nvidia,tegra186-pwm";
++			reg = <0x32f0000 0x10000>;
++			clocks = <&bpmp TEGRA234_CLK_PWM8>;
++			clock-names = "pwm";
++			resets = <&bpmp TEGRA234_RESET_PWM8>;
++			reset-names = "pwm";
++			status = "disabled";
++			#pwm-cells = <2>;
++		};
++
+ 		spi@3300000 {
+ 			compatible = "nvidia,tegra234-qspi";
+ 			reg = <0x3300000 0x1000>;
+-- 
+2.17.1
 

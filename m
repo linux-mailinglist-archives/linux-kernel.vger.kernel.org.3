@@ -2,102 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F545A1F62
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969265A1F64
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiHZDRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 23:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S233309AbiHZDSb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 Aug 2022 23:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236923AbiHZDRN (ORCPT
+        with ESMTP id S230106AbiHZDS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 23:17:13 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACC3CACA0;
-        Thu, 25 Aug 2022 20:17:12 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g189so296611pgc.0;
-        Thu, 25 Aug 2022 20:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=MB6QLwte6A+FfeHZ7hhIAgqBcop3yV3R8qqmPiooMZw=;
-        b=kN4iQW7K22uT8HSAzCzZpNIGqTuTTg1AfRP4nSREd9XS7uXUVq/dVbFd/MvU4f+a3i
-         iSOIKmwEkNINjdmevNcLolUMggi9tuS6AbI9CAskuTUfzapjO9tZdbbMWFeyRBU9Ftyr
-         73akbvzVVGO1ZzhAtmDlv4RGK4oorSM97X+xKGrO2NPWU40UDk7ipTP005DdalS7QQ9Q
-         Shw90PYt66tMBnLYnjnRHI2xIqGaTVkMzlM5vN9fL+6RF8JY1lSS87GNd9SuplsLecUH
-         H1QSaIX7JbxLwxYtIEeeT8pNUEQmvpFT3jEQPUZmrngZePX2OC16YZSviQMBahljZcRR
-         9BWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=MB6QLwte6A+FfeHZ7hhIAgqBcop3yV3R8qqmPiooMZw=;
-        b=yw8Inn7MKjYr+mm3ReYM86423sphnfUol8lXViOYKskIqzaWnOzRDoKMQh29GwcZqQ
-         l9SErfd39yV+jOvSuGiKDtDynq+g3hSYCz2MpnNUd86QFv39RY4BLLsVqq6MeM3W8Kts
-         WZVwKYnhZuiXePV1RQritsI85DLg0TSfeIsIpucvglZoORm2Te4N6j/F1Tb7ngvTXAoY
-         z+58fVusPx3E2VIcVb9v5dNueB6YhlBIeS91LWvSJKAawny1BUcaaGbiBtWOBLz6s6Vb
-         RrKESv7+RTwHvuywyfvlSTMs1dpCywYdo5o7YG8pEv/tRmdrOwogq3gxOp1vc5viUUQb
-         i8Mw==
-X-Gm-Message-State: ACgBeo2WvqTcqD0zETi7flcYEzkDI1dSflib7CvBwSgyBIDtbS9Ujlr3
-        /lGY69oEEPLfERFOEgjvYOk=
-X-Google-Smtp-Source: AA6agR6smD2vHcE27Mia/GRY6ZNxBCiJ0gJvVyPZ10/qYTnr16EBtKTMJwW7445/0IulVP9EKlAkiQ==
-X-Received: by 2002:aa7:9486:0:b0:536:b212:172f with SMTP id z6-20020aa79486000000b00536b212172fmr1928223pfk.70.1661483831887;
-        Thu, 25 Aug 2022 20:17:11 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0015e8d4eb219sm316845pla.99.2022.08.25.20.17.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 20:17:11 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 25 Aug 2022 17:17:09 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Lu Jialin <lujialin4@huawei.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC 0/2] Introduce cgroup.top interface
-Message-ID: <Ywg7NcHtfjDKjwXR@slm.duckdns.org>
-References: <20220826011503.103894-1-lujialin4@huawei.com>
+        Thu, 25 Aug 2022 23:18:26 -0400
+Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711E1CACA0;
+        Thu, 25 Aug 2022 20:18:25 -0700 (PDT)
+Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
+        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 0AFF01008B38D;
+        Fri, 26 Aug 2022 11:18:22 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta90.sjtu.edu.cn (Postfix) with ESMTP id C742D37C893;
+        Fri, 26 Aug 2022 11:18:22 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta90.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Ac8wfnO9bUGB; Fri, 26 Aug 2022 11:18:22 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta90.sjtu.edu.cn (Postfix) with ESMTP id 9995E37C894;
+        Fri, 26 Aug 2022 11:18:22 +0800 (CST)
+Date:   Fri, 26 Aug 2022 11:18:21 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     jasowang <jasowang@redhat.com>
+Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Message-ID: <1625987692.9093267.1661483901701.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <ebf4b376-6a5c-3cfa-38ab-1559ace13b27@redhat.com>
+References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-7-qtxuning1999@sjtu.edu.cn> <ebf4b376-6a5c-3cfa-38ab-1559ace13b27@redhat.com>
+Subject: Re: [RFC v2 6/7] virtio: in order support for virtio_ring
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826011503.103894-1-lujialin4@huawei.com>
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.166.246.247]
+X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
+Thread-Topic: virtio: in order support for virtio_ring
+Thread-Index: 1vFj+paB+wRk8wd+9SUq6j4kd2DDhA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Fri, Aug 26, 2022 at 09:15:01AM +0800, Lu Jialin wrote:
-> Cgroup is used to organize and manage resource available processes.
-> Currently there are no handy tool for gathering reousrce usage
-> information for each and every child cgroups, makes it hard to detect
-> resource outage and debug resource issues.
+
+----- Original Message -----
+> From: "jasowang" <jasowang@redhat.com>
+> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
+> Tsirkin" <mst@redhat.com>
+> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
+> "virtualization" <virtualization@lists.linux-foundation.org>
+> Sent: Thursday, August 25, 2022 3:44:41 PM
+> Subject: Re: [RFC v2 6/7] virtio: in order support for virtio_ring
+
+> ÔÚ 2022/8/17 21:57, Guo Zhi Ð´µÀ:
+>> If in order feature negotiated, we can skip the used ring to get
+>> buffer's desc id sequentially.
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>   drivers/virtio/virtio_ring.c | 53 ++++++++++++++++++++++++++++++------
+>>   1 file changed, 45 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>> index 1c1b3fa376a2..143184ebb5a1 100644
+>> --- a/drivers/virtio/virtio_ring.c
+>> +++ b/drivers/virtio/virtio_ring.c
+>> @@ -144,6 +144,9 @@ struct vring_virtqueue {
+>>   			/* DMA address and size information */
+>>   			dma_addr_t queue_dma_addr;
+>>   			size_t queue_size_in_bytes;
+>> +
+>> +			/* In order feature batch begin here */
 > 
-> To overcome this, we present the cgroup.top interface. Just like the
-> top command, user is able to easily gather resource usage information
-> , allowing user to detect and respond to resource outage in child
-> cgroups
+> 
+> We need tweak the comment, it's not easy for me to understand the
+> meaning here.
+> 
+> 
+>> +			u16 next_desc_begin;
+>>   		} split;
+>>   
+>>   		/* Available for packed ring */
+>> @@ -702,8 +705,13 @@ static void detach_buf_split(struct vring_virtqueue *vq,
+>> unsigned int head,
+>>   	}
+>>   
+>>   	vring_unmap_one_split(vq, i);
+>> -	vq->split.desc_extra[i].next = vq->free_head;
+>> -	vq->free_head = head;
+>> +	/* In order feature use desc in order,
+>> +	 * that means, the next desc will always be free
+>> +	 */
+> 
+> 
+> Maybe we should add something like "The descriptors are prepared in order".
+> 
+> 
+>> +	if (!virtio_has_feature(vq->vq.vdev, VIRTIO_F_IN_ORDER)) {
+>> +		vq->split.desc_extra[i].next = vq->free_head;
+>> +		vq->free_head = head;
+>> +	}
+>>   
+>>   	/* Plus final descriptor */
+>>   	vq->vq.num_free++;
+>> @@ -745,7 +753,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   {
+>>   	struct vring_virtqueue *vq = to_vvq(_vq);
+>>   	void *ret;
+>> -	unsigned int i;
+>> +	unsigned int i, j;
+>>   	u16 last_used;
+>>   
+>>   	START_USE(vq);
+>> @@ -764,11 +772,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   	/* Only get used array entries after they have been exposed by host. */
+>>   	virtio_rmb(vq->weak_barriers);
+>>   
+>> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> -	i = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].id);
+>> -	*len = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].len);
+>> +	if (virtio_has_feature(_vq->vdev, VIRTIO_F_IN_ORDER)) {
+>> +		/* Skip used ring and get used desc in order*/
+>> +		i = vq->split.next_desc_begin;
+>> +		j = i;
+>> +		/* Indirect only takes one descriptor in descriptor table */
+>> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
+>> +			j = (j + 1) % vq->split.vring.num;
+> 
+> 
+> Let's move the expensive mod outside the loop. Or it's split so we can
+> use and here actually since the size is guaranteed to be power of the
+> two? Another question, is it better to store the next_desc in e.g
+> desc_extra?
+> 
+> And this seems very expensive if the device doesn't do the batching
+> (which is not mandatory).
+> 
+> 
+>> +		/* move to next */
+>> +		j = (j + 1) % vq->split.vring.num;
+>> +		/* Next buffer will use this descriptor in order */
+>> +		vq->split.next_desc_begin = j;
+>> +		if (!vq->indirect) {
+>> +			*len = vq->split.desc_extra[i].len;
+>> +		} else {
+>> +			struct vring_desc *indir_desc =
+>> +				vq->split.desc_state[i].indir_desc;
+>> +			u32 indir_num = vq->split.desc_extra[i].len, buffer_len = 0;
+>> +
+>> +			if (indir_desc) {
+>> +				for (j = 0; j < indir_num / sizeof(struct vring_desc); j++)
+>> +					buffer_len += indir_desc[j].len;
+> 
+> 
+> So I think we need to finalize this, then we can have much more stress
+> on the cache:
+> 
+> https://lkml.org/lkml/2021/10/26/1300
+> 
+> It was reverted since it's too aggressive, we should instead:
+> 
+> 1) do the validation only for morden device
+> 
+> 2) fail only when we enable the validation via (e.g a module parameter).
+> 
+> Thanks
+> 
 
-I don't think this is something we want build into the kernel. Maybe what
-you want is something similar to below?
+Sorry for this obsolete implementation, we will not get buffer'len like this(in a loop).
+Actually, for not skipped buffers, we can get length from used ring directly, for skipped buffers
+I think we don¡¯t have to get the length, because the driver is not interested in the skipped buffers(tx)¡¯ length.
 
-  https://github.com/facebookincubator/below
-
-Thanks.
-
--- 
-tejun
+> 
+>> +			}
+>> +
+>> +			*len = buffer_len;
+>> +		}
+>> +	} else {
+>> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> +		i = virtio32_to_cpu(_vq->vdev,
+>> +				    vq->split.vring.used->ring[last_used].id);
+>> +		*len = virtio32_to_cpu(_vq->vdev,
+>> +				       vq->split.vring.used->ring[last_used].len);
+>> +	}
+>>   
+>>   	if (unlikely(i >= vq->split.vring.num)) {
+>>   		BAD_RING(vq, "id %u out of range\n", i);
+>> @@ -2236,6 +2271,8 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
+>> index,
+>>   	vq->split.avail_flags_shadow = 0;
+>>   	vq->split.avail_idx_shadow = 0;
+>>   
+>> +	vq->split.next_desc_begin = 0;
+>> +
+>>   	/* No callback?  Tell other side not to bother us. */
+>>   	if (!callback) {
+>>   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;

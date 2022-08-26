@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BE15A2AA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9E55A2AA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244693AbiHZPKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S244907AbiHZPKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244755AbiHZPJW (ORCPT
+        with ESMTP id S244314AbiHZPJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:09:22 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFAEDD74E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:08:46 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dce8cae71so29641187b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:08:46 -0700 (PDT)
+        Fri, 26 Aug 2022 11:09:27 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E583FDDA87
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:08:50 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id c14-20020a05640227ce00b0043e5df12e2cso1236239ede.15
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:08:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=mLlFYFB/rgc9qqJnOoWYqSqEWYlWfzhxjk78c+cLuAA=;
-        b=XiFqi+HvFYWVKfCkxZSEvaLp4dj6PJCrtRX+y89NfMTPZ6+goUHOrJlaygaqkuIGBr
-         cdc5TBzN75bo5l86pnTnW79iKtt96Ou0SDdJM2YIL9g3uoi3Job0DZK7q/nIm6l/tWpV
-         UNDqvTKx+/6Oadm/ZjmMPEuU3raZ5GAff/rF0sMmJtdeCbxKEsKayU6Bd3s50LCPKUcZ
-         oMZ+RIGrr0zlDQke70b2ZaiBxuU5QGWCP+5v5NfPFB1kpt3JEHHNKAiGV5LkFVztHN6G
-         +Uh7pGeyKXy0VtS5AtzRj9P6HtYc37b8quRD9x2XVb1xZapp20z/LcMX0wNNYJelokgN
-         IPMA==
+        bh=PmohPhKomZXd1zOAWK/EQjp0UhZ3tSbnWnyq8ud/fAU=;
+        b=YJO4Xg0+O4fDaxcbYp1umz/9KOZq6MT64iPBuvb1Eyk0CRlXy5BoZxooWMgHq81Mww
+         aAkaFVvfJmx8okxcpaJTFDvGl68dPKJ+48I8mfAqwXsEanHocOAaCh/MGEgmAYwBPoyU
+         B98RoAIMKx99hewKWZNnFsrHAzTgDEPPakAw+ENqyBC9iSPWmrVjYUMFS5UztA5Jrts/
+         NAmFaPfKOWhmTiRrueAff3+7UOYpVyTReHij2nZk2PTf9O6wfSScGw/khRnRflK4HTor
+         aK26uUCVllQrwo/IEachNt1mk39lrVOLqFljJSHkCaPXcdzGpzQO93EM3hejm5qh5wEj
+         xnmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=mLlFYFB/rgc9qqJnOoWYqSqEWYlWfzhxjk78c+cLuAA=;
-        b=P4HAlwu1hrWv2fT5c4w54bHiYmFkvIrL+DaVyM6GXHCpZr+P5ZlShrzImesqOKHOOS
-         qP7IYhUUO+lXzQEB4tDOXbjyKnJ+cFdOrhDNQJGLYFSCaByHX/ynNnNq6ZN2RJIMBLWg
-         znFmj3Q6fyBfEJ6UB/nbFo+MrE1ygv9uqtDxHcWHitiI+YlF0cu2JuebT0VnJrkgfr1u
-         XDSqfTzW7T+BuqvANSIKvLgGh04Al7kYE7P4s4LJm9Ki7TwZUDPaKfZUkJHqWfaWs1ZI
-         FXAspLqjf3FMaJ8kctON9i5Og1N44cv5SXhldyGKRRpQXf84W+kxsBDa69A8ggMfoWws
-         wYew==
-X-Gm-Message-State: ACgBeo0wKk49YxdBAkhHgva9OVKQFdz3LbNbgTanF5O1xYi4yyVYMczY
-        AjKcW2enlTN6FoHi/su7Tb4EA1jl7cc=
-X-Google-Smtp-Source: AA6agR57RONmOxoyPLmSyjKKyC9XY3IjUGI1gX8npn/cM8EWP8iDs6QDrjkGDieykAPqCJaWURQiX5dgMQY=
+        bh=PmohPhKomZXd1zOAWK/EQjp0UhZ3tSbnWnyq8ud/fAU=;
+        b=h/7dWpsOrc3D03xnnO6/9j3ukb0IqqLgW39zt1OC6x2KBTnfIJywOkKmVCQ7p4m922
+         LUba1OYrd2mfTic34IdxJDZbRXEaMKtrbPIKpnQ9Qvp+LBgYEA8XnNTMP7J+P2bYNnAt
+         spb59BU4Ngu21QRX6YvsYFlOJ/MWFo8Y5YOzuJZnVXXzoFBFF4L5oKPSj6y17sOPE3z8
+         WKN05Itzb1mkEIdCx9evccnVE6MjmGnSKHGG7vO4e5TQlDhBa5ddmMJZZdQBTVcbsB0J
+         WJ+FmvCHdNlOzVR8e9zcqBCWmHEn4ISI6zSUNwsnDoGaR7Tq3VRDxsDBVk/7xg+6Rd/w
+         sL4A==
+X-Gm-Message-State: ACgBeo33aXteh/+UxJg7HqC8Tz+Hlg0F4YErpIfK0H9syGr2bZZSnoU6
+        9344SAhHSU0oZx5s7r0FSHrIEzcW8MM=
+X-Google-Smtp-Source: AA6agR7e2paC/ZuzvRhAHjB4767/oTAx7KXCr2XuebS6jhDF8RYl+Uz9hljfZfbpg8cNZSTTP2UQ/IVJ12o=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:5207:ac36:fdd3:502d])
- (user=glider job=sendgmr) by 2002:a0d:f144:0:b0:33d:a554:b9b6 with SMTP id
- a65-20020a0df144000000b0033da554b9b6mr135036ywf.172.1661526526267; Fri, 26
- Aug 2022 08:08:46 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 17:07:35 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:2cd0:b0:73d:d80c:b51f with SMTP id
+ hg16-20020a1709072cd000b0073dd80cb51fmr4282876ejc.619.1661526528970; Fri, 26
+ Aug 2022 08:08:48 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 17:07:36 +0200
 In-Reply-To: <20220826150807.723137-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220826150807.723137-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826150807.723137-13-glider@google.com>
-Subject: [PATCH v5 12/44] kmsan: disable instrumentation of unsupported common
- kernel code
+Message-ID: <20220826150807.723137-14-glider@google.com>
+Subject: [PATCH v5 13/44] MAINTAINERS: add entry for KMSAN
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -91,91 +90,50 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-EFI stub cannot be linked with KMSAN runtime, so we disable
-instrumentation for it.
-
-Instrumenting kcov, stackdepot or lockdep leads to infinite recursion
-caused by instrumentation hooks calling instrumented code again.
+Add entry for KMSAN maintainers/reviewers.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-Reviewed-by: Marco Elver <elver@google.com>
 ---
-v4:
- -- This patch was previously part of "kmsan: disable KMSAN
-    instrumentation for certain kernel parts", but was split away per
-    Mark Rutland's request.
 
 v5:
- -- remove unnecessary comment belonging to another patch
+ -- add arch/*/include/asm/kmsan.h
 
-Link: https://linux-review.googlesource.com/id/I41ae706bd3474f074f6a870bfc3f0f90e9c720f7
+Link: https://linux-review.googlesource.com/id/Ic5836c2bceb6b63f71a60d3327d18af3aa3dab77
 ---
- drivers/firmware/efi/libstub/Makefile | 1 +
- kernel/Makefile                       | 1 +
- kernel/locking/Makefile               | 3 ++-
- lib/Makefile                          | 3 +++
- 4 files changed, 7 insertions(+), 1 deletion(-)
+ MAINTAINERS | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index d0537573501e9..81432d0c904b1 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -46,6 +46,7 @@ GCOV_PROFILE			:= n
- # Sanitizer runtimes are unavailable and cannot be linked here.
- KASAN_SANITIZE			:= n
- KCSAN_SANITIZE			:= n
-+KMSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9d7f64dc0efe8..3bae9c4c2b73d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11369,6 +11369,19 @@ F:	kernel/kmod.c
+ F:	lib/test_kmod.c
+ F:	tools/testing/selftests/kmod/
  
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 318789c728d32..d754e0be1176d 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -38,6 +38,7 @@ KCOV_INSTRUMENT_kcov.o := n
- KASAN_SANITIZE_kcov.o := n
- KCSAN_SANITIZE_kcov.o := n
- UBSAN_SANITIZE_kcov.o := n
-+KMSAN_SANITIZE_kcov.o := n
- CFLAGS_kcov.o := $(call cc-option, -fno-conserve-stack) -fno-stack-protector
- 
- # Don't instrument error handlers
-diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
-index d51cabf28f382..ea925731fa40f 100644
---- a/kernel/locking/Makefile
-+++ b/kernel/locking/Makefile
-@@ -5,8 +5,9 @@ KCOV_INSTRUMENT		:= n
- 
- obj-y += mutex.o semaphore.o rwsem.o percpu-rwsem.o
- 
--# Avoid recursion lockdep -> KCSAN -> ... -> lockdep.
-+# Avoid recursion lockdep -> sanitizer -> ... -> lockdep.
- KCSAN_SANITIZE_lockdep.o := n
-+KMSAN_SANITIZE_lockdep.o := n
- 
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_lockdep.o = $(CC_FLAGS_FTRACE)
-diff --git a/lib/Makefile b/lib/Makefile
-index 5927d7fa08063..22c064b61b3be 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -275,6 +275,9 @@ obj-$(CONFIG_POLYNOMIAL) += polynomial.o
- CFLAGS_stackdepot.o += -fno-builtin
- obj-$(CONFIG_STACKDEPOT) += stackdepot.o
- KASAN_SANITIZE_stackdepot.o := n
-+# In particular, instrumenting stackdepot.c with KMSAN will result in infinite
-+# recursion.
-+KMSAN_SANITIZE_stackdepot.o := n
- KCOV_INSTRUMENT_stackdepot.o := n
- 
- obj-$(CONFIG_REF_TRACKER) += ref_tracker.o
++KMSAN
++M:	Alexander Potapenko <glider@google.com>
++R:	Marco Elver <elver@google.com>
++R:	Dmitry Vyukov <dvyukov@google.com>
++L:	kasan-dev@googlegroups.com
++S:	Maintained
++F:	Documentation/dev-tools/kmsan.rst
++F:	arch/*/include/asm/kmsan.h
++F:	include/linux/kmsan*.h
++F:	lib/Kconfig.kmsan
++F:	mm/kmsan/
++F:	scripts/Makefile.kmsan
++
+ KPROBES
+ M:	Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+ M:	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
 -- 
 2.37.2.672.g94769d06f0-goog
 

@@ -2,116 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B440C5A205A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B3F5A205C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243989AbiHZFg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S244709AbiHZFhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHZFg0 (ORCPT
+        with ESMTP id S229740AbiHZFhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:36:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69382CEB2A;
-        Thu, 25 Aug 2022 22:36:25 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q4ddl2015439;
-        Fri, 26 Aug 2022 05:36:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=C0lUWObrNcTw+zDPrJ0MNwDuJlgwPMa04nHCcS3OJEk=;
- b=If6pn9NDaQOzs1uYp/YrVtc0eVi6tBnRL43nFyLZBLGLK/7jTq6YdcLwPbkT5q0YNuT5
- 4Boy0qAU+Ykcx9V8cdRw5uhVO9vzhi9PcXo0O45sIpP0XRgeX//RC+de4vq1E0CgNVQj
- 4yWni0TmG7/GvybJxqGwUIuLB4tgcYOwSxmvCsd3E3jIj++fPsGeEQvIB38ZqELXlKJe
- qa+BoXX3dvWFiDtFEvaD7QD8HepgWTR7fKk3VA1oP6DyYYRrsMHtFPC5aWNnwFbzO/nI
- i6tvu+tUZSvvuqjpf1AmumVC7vAk+sSjtgJd6JUSdQx8LkWi4mtrne9ENiPY0DFM5SFE FA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j6ns50fh8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 05:36:17 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27Q5aGPN013154
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 05:36:16 GMT
-Received: from [10.216.58.196] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 25 Aug
- 2022 22:36:13 -0700
-Message-ID: <6f00975d-8900-f03a-45d9-546d222ac450@quicinc.com>
-Date:   Fri, 26 Aug 2022 11:06:08 +0530
+        Fri, 26 Aug 2022 01:37:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151AFCEB2A;
+        Thu, 25 Aug 2022 22:36:52 -0700 (PDT)
+X-UUID: 40cb4b3af52a4a089a91cbee1026d513-20220826
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=vr+SHYsQa0ePNCtafTguBsuC9if01uyMQhqyKREu3S8=;
+        b=RfUeec6gH6goFXeLfeBg1LHOrv+jbDkOZm5vi8EqcwGjwI/xhLV897O6OMOMuwuPT9xieKqnQdDyq4+kQPTvoRzH5OGH+V2z2nfGGkMW2lNbv3Z+7rcaylkMyRosdssX56wrK+37GpBBO6ys6KDwOxcegmJXHXtHjCVLGgg57qM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:b3e1148c-2d1f-4c76-8ba7-f5d0bc246fbe,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:0245a355-e800-47dc-8adf-0c936acf4f1b,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
+        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 40cb4b3af52a4a089a91cbee1026d513-20220826
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1855589256; Fri, 26 Aug 2022 13:36:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 26 Aug 2022 13:36:44 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 26 Aug 2022 13:36:44 +0800
+Message-ID: <1a16cce9fe164bafc06ae193310be71c6f645d75.camel@mediatek.com>
+Subject: Re: [PATCH 2/7] dt-bindings: phy: mediatek,tphy: add property to
+ set pre-emphasis
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
+CC:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Date:   Fri, 26 Aug 2022 13:36:43 +0800
+In-Reply-To: <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
+References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
+         <20220819091344.2274-2-chunfeng.yun@mediatek.com>
+         <438da392-f419-ad76-7e91-aa4aab36e12c@linaro.org>
+         <816ecf6287533137b750c8bde9de5830e4229c56.camel@mediatek.com>
+         <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH -next 2/3] remoteproc: qcom: wcss: Use
- devm_platform_ioremap_resource_byname()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>
-References: <20220826014511.2270433-1-yangyingliang@huawei.com>
- <20220826014511.2270433-2-yangyingliang@huawei.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220826014511.2270433-2-yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ry-gTX09yz7bzKEivea296vyKwCeCbX1
-X-Proofpoint-GUID: ry-gTX09yz7bzKEivea296vyKwCeCbX1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_02,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 phishscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208260020
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/26/2022 7:15 AM, Yang Yingliang wrote:
-> Use the devm_platform_ioremap_resource_byname() helper instead of
-> calling platform_get_resource_byname() and devm_ioremap_resource()
-> separately.
+On Tue, 2022-08-23 at 13:24 +0300, Krzysztof Kozlowski wrote:
+> On 22/08/2022 10:07, Chunfeng Yun wrote:
+> > On Fri, 2022-08-19 at 15:15 +0300, Krzysztof Kozlowski wrote:
+> > > On 19/08/2022 12:13, Chunfeng Yun wrote:
+> > > > Add a property to set usb2 phy's pre-emphasis.
+> > > > 
+> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml | 7
+> > > > +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> > > > b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> > > > index 848edfb1f677..aee2f3027371 100644
+> > > > --- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> > > > +++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> > > > @@ -219,6 +219,13 @@ patternProperties:
+> > > >          minimum: 1
+> > > >          maximum: 15
+> > > >  
+> > > > +      mediatek,pre-emphasis:
+> > > > +        description:
+> > > > +          The selection of pre-emphasis (U2 phy)
+> > > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +        minimum: 1
+> > > > +        maximum: 3
+> > > 
+> > > Instead of hard-coding register values in bindings, you should
+> > > rather
+> > > describe here feature/effect. If it is in units, use unit
+> > > suffixes.
+> > > If
+> > > it is some choice, usually string enum is appropriate.
+> > 
+> > How about changing description as bellow:
+> > 
+> > "The level of pre-emphasis, increases one level, boosts the
+> > relative
+> > amplitudes of signal's higher frequencies components about 4.16%
+> > (U2
+> > phy)"
+> > 
 > 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->   drivers/remoteproc/qcom_q6v5_wcss.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> Still the question is what is the unit. 4.16%?
+No unit, it's a level value, like an index of array.
+
 > 
-> diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-> index 017ee225dc32..209fc1bd1424 100644
-> --- a/drivers/remoteproc/qcom_q6v5_wcss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-> @@ -835,8 +835,7 @@ static int q6v5_wcss_init_mmio(struct q6v5_wcss *wcss,
->   		return -ENOMEM;
->   
->   	if (wcss->version == WCSS_IPQ8074) {
-> -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rmb");
-> -		wcss->rmb_base = devm_ioremap_resource(&pdev->dev, res);
-> +		wcss->rmb_base = devm_platform_ioremap_resource_byname(pdev, "rmb");
+> Best regards,
+> Krzysztof
 
-LGTM.
-
-Reviewed-by:Mukesh Ojha <quic_mojha@quicinc.com>
-
--Mukesh
-
-
->   		if (IS_ERR(wcss->rmb_base))
->   			return PTR_ERR(wcss->rmb_base);
->   	}

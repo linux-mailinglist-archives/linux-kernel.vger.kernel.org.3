@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431635A2FE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD3E5A2FE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiHZTX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S231626AbiHZTXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238927AbiHZTXX (ORCPT
+        with ESMTP id S241984AbiHZTXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 15:23:23 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64702BD4FF;
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F81FBD74A;
         Fri, 26 Aug 2022 12:23:21 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([104.5.61.88]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LgJSE-1pFJ152lGe-00njR1;
- Fri, 26 Aug 2022 21:22:59 +0200
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MAxNa-1obaYC2O3Q-009ylT;
+ Fri, 26 Aug 2022 21:23:00 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
         Fabio Estevam <festevam@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/5] ARM: arm64: dts/clk: imx: indentation permission whitespace cleanup 2
-Date:   Fri, 26 Aug 2022 21:22:47 +0200
-Message-Id: <20220826192252.794651-1-marcel@ziswiler.com>
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/5] ARM: dts: imx6sl: use tabs for code indent
+Date:   Fri, 26 Aug 2022 21:22:48 +0200
+Message-Id: <20220826192252.794651-2-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220826192252.794651-1-marcel@ziswiler.com>
+References: <20220826192252.794651-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:VoDgq9lYEHnNho3cG7ChG/Y/OtsKMHJBzk7vlKhhojNj1hPH87L
- lNoZqHashK5LU5KaEFT4CAa717GNqwgDBnn5pM2/22MaEa3l/xhTvjHjL/vifyDhCYUxufl
- jdIfEaOA1xuw9Dii42uug1x+p15lyX+grmR2q7X6WOLihJqbwR+BtIFOWWNkHobq1l9cvm1
- a5LpXVAKWpDa99K7CioAQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VdyUJT2x4YU=:vdggwwCV+rKRn2Ko65Piy7
- yU9zkmkslhTBG5V/zzVGD9215cOwn7D0RuL1yMJm5WfKEQVaIj1co7yuHDZ65UOVT2Jo/T5Qr
- 1VfQO8BtSypDJb0lNQmJAApQCScWvErYBBflPD755o/ktp9dM8hKamoFNW1VO6cjKCwHfpjOr
- FVjsL8JKADaQDfEio9vFvShqx+BnLMGe6jCGDV1OhxfQmpvSCGglGdOUvmDF5TbfogdDZxdf6
- hPuQ/pMsLKSNiyjdoSD/190Ht4W/YTJQUzv7cd+1/Ykj/JDfmEHe0NJRDBsFrtOxGAal+QeCH
- SMO87796ldf8GCchfbhwXfVBhvWRNy5rfWVjtSTcTWUKC+smKsJPXYLAYz+fDp1GWROYOVCZs
- qxcq+g2cQE79YxjGjy2wuBSncla/sDGkH02sHtkbBxFYrMunMIuuyyN8lFTbvglZlwEDz1Ea/
- O4JJZFmOLdIyMFZx+/8E/NyQgG8Vkfaz1x1QhSFQSaFEwzxxxp1E8YxYfMAk1njty6NPZBSs/
- qFbfd4YJEy333pqej1rVrrGO26v1+2kLIPvQNjA7GIPMbzFy7E+N0t/BFNmDxhhwWPKMyyFyZ
- nfd811B5HrV7sHntsewGO++VsXP2JFRIecWDGO4fJUGpwO3k+L2f48Sfx9nM3taSZx22+8GlV
- ShSbconPLWTIwXNpR8Cwb13oelAVrIFp2XyxM92fAsTVBz9tigavU+jGmg2UZAG51vVRKJAHL
- wPx1xHfCvJT881+YgB1K104Buvrb/f6WPNyMiA==
+X-Provags-ID: V03:K1:9lDwyVjEVDSvIfUZAiZVxnA/2RAVdX8hKdg+kkZ+gZLLhLBLiSU
+ IOXg9nzNfbx1g0QlxllestKkhgqJhCyB9Fks+It459IAPuq+uDZRbWY87J9avrrZ9xCXNAO
+ 9NrykUsjC6BEEzaXbs2WPxQM2v/8SjBSOugoYCE+gZnpc71rSK4BkFYuqsdQq0TWY+I/o6L
+ YtLbcTeDYLDy3oFe50Auw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+r7/XnQsCtE=:NZ2WhorXxIHbxpgU/Rz8Ja
+ ifczISVUvjfssEF01l+DAYKVnKaPGx6f7f7ppQY7pUgFG8mqB/4RNAI+UJDOo/Zm/MNhEdCeA
+ k445AMpWL+Efp/hIdWMLT5t+dnp8Q0eV6Uc3rtjqFWArR225JvMR7MRJp3ABsJoqgMTGCADjk
+ s50nO0crElgzvHRbQsC3VSYDRayqxow36lXvRG67IgJIiEh8Jpd87jBNeBDCcRyWQ3A+kG+BE
+ TwqOUA/91tWBEAVNKxYU3FujS5mRPm6+HhEG7S3ZRsN4lrjwrLHaSTpgt1BcNNv2uudzj3iEx
+ 2EoNjpUsBbB3M3zS08RfBm5x4qSY7qUMPlMcVAE8NKV3BTjn45NjLXkcQ3EMCEFsPg5RVyVBt
+ 8z9UgsG7wGPk7chWsambLYxPE3Taii99m4akFuXnK7wpZguEta1fu2a0A47HB+rgEGhpGrgHo
+ 4AOovqTHAy/gTBFLfUhxRovzl1NIg3MbV6VW8pptZm164k0yxF4YNHTzuadeOOOtRv8zg5CqJ
+ A8K6cWOJawQZ8dGuo+ardlDE0z8+Xyd9cqlMGEKZhFo4Vd/59JESy6miL0Lz2FtWtfpJG8vqZ
+ WEMYLwPM8vMPpywNf6y4El+mnf/bzPXXIi/RP2RQnXj+qanVx7TdLWF8ADa66JyE8NhE7d4Eo
+ 6o/DXKIHaw4eXWyBzW6l0sls0nohEl3tZuOZnJ2QUa/Id2bkygAlqNeJnr7nNJ6rq9tgi6nqW
+ e1WUCFDU+WpZ26Tu+inZ0Y4UmtDRTdZa+rYemw==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,27 +64,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
+This fixes the following error:
 
-While further synchronising them imx device trees with U-Boot I stumbled
-over more checkpatch warnings. This series addresses those trivial
-indentation, file permission and/or whitespace cleanups.
+arch/arm/boot/dts/imx6sl.dtsi:714: error: code indent should use tabs
+where possible
 
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
 
-Marcel Ziswiler (5):
-  ARM: dts: imx6sl: use tabs for code indent
-  ARM: dts: imx6sx-udoo-neo: don't use multiple blank lines
-  arm64: dts: imx8ulp: no executable source file permission
-  clk: imx6sll: add proper spdx license identifier
-  dt-bindings: imx8ulp: clock: no spaces before tabs
+ arch/arm/boot/dts/imx6sl.dtsi | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
- arch/arm/boot/dts/imx6sl.dtsi                 | 20 +++++++++----------
- arch/arm/boot/dts/imx6sx-udoo-neo.dtsi        | 14 ++++++-------
- .../boot/dts/freescale/imx8ulp-pinfunc.h      |  0
- include/dt-bindings/clock/imx6sll-clock.h     |  2 +-
- include/dt-bindings/clock/imx8ulp-clock.h     |  4 ++--
- 5 files changed, 19 insertions(+), 21 deletions(-)
- mode change 100755 => 100644 arch/arm64/boot/dts/freescale/imx8ulp-pinfunc.h
-
+diff --git a/arch/arm/boot/dts/imx6sl.dtsi b/arch/arm/boot/dts/imx6sl.dtsi
+index 06a515121dfc..271f4b971a83 100644
+--- a/arch/arm/boot/dts/imx6sl.dtsi
++++ b/arch/arm/boot/dts/imx6sl.dtsi
+@@ -61,10 +61,10 @@ cpu0: cpu@0 {
+ 				<792000  1175000>,
+ 				<396000  975000>;
+ 			fsl,soc-operating-points =
+-				/* ARM kHz      SOC-PU uV */
+-				<996000         1225000>,
+-				<792000         1175000>,
+-				<396000         1175000>;
++				/* ARM kHz	SOC-PU uV */
++				<996000		1225000>,
++				<792000		1175000>,
++				<396000		1175000>;
+ 			clock-latency = <61036>; /* two CLK32 periods */
+ 			#cooling-cells = <2>;
+ 			clocks = <&clks IMX6SL_CLK_ARM>, <&clks IMX6SL_CLK_PLL2_PFD2>,
+@@ -222,7 +222,7 @@ ecspi4: spi@2014000 {
+ 
+ 				uart5: serial@2018000 {
+ 					compatible = "fsl,imx6sl-uart",
+-						   "fsl,imx6q-uart", "fsl,imx21-uart";
++						     "fsl,imx6q-uart", "fsl,imx21-uart";
+ 					reg = <0x02018000 0x4000>;
+ 					interrupts = <0 30 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clks IMX6SL_CLK_UART>,
+@@ -235,7 +235,7 @@ uart5: serial@2018000 {
+ 
+ 				uart1: serial@2020000 {
+ 					compatible = "fsl,imx6sl-uart",
+-						   "fsl,imx6q-uart", "fsl,imx21-uart";
++						     "fsl,imx6q-uart", "fsl,imx21-uart";
+ 					reg = <0x02020000 0x4000>;
+ 					interrupts = <0 26 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clks IMX6SL_CLK_UART>,
+@@ -248,7 +248,7 @@ uart1: serial@2020000 {
+ 
+ 				uart2: serial@2024000 {
+ 					compatible = "fsl,imx6sl-uart",
+-						   "fsl,imx6q-uart", "fsl,imx21-uart";
++						     "fsl,imx6q-uart", "fsl,imx21-uart";
+ 					reg = <0x02024000 0x4000>;
+ 					interrupts = <0 27 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clks IMX6SL_CLK_UART>,
+@@ -309,7 +309,7 @@ ssi3: ssi@2030000 {
+ 
+ 				uart3: serial@2034000 {
+ 					compatible = "fsl,imx6sl-uart",
+-						   "fsl,imx6q-uart", "fsl,imx21-uart";
++						     "fsl,imx6q-uart", "fsl,imx21-uart";
+ 					reg = <0x02034000 0x4000>;
+ 					interrupts = <0 28 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clks IMX6SL_CLK_UART>,
+@@ -322,7 +322,7 @@ uart3: serial@2034000 {
+ 
+ 				uart4: serial@2038000 {
+ 					compatible = "fsl,imx6sl-uart",
+-						   "fsl,imx6q-uart", "fsl,imx21-uart";
++						     "fsl,imx6q-uart", "fsl,imx21-uart";
+ 					reg = <0x02038000 0x4000>;
+ 					interrupts = <0 29 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clks IMX6SL_CLK_UART>,
+@@ -711,7 +711,7 @@ pd_pu: power-domain@1 {
+ 						#power-domain-cells = <0>;
+ 						power-supply = <&reg_pu>;
+ 						clocks = <&clks IMX6SL_CLK_GPU2D_OVG>,
+-						         <&clks IMX6SL_CLK_GPU2D_PODF>;
++							 <&clks IMX6SL_CLK_GPU2D_PODF>;
+ 					};
+ 
+ 					pd_disp: power-domain@2 {
 -- 
 2.36.1
 

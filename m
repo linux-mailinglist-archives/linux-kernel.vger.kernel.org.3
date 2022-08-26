@@ -2,49 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57C85A207F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786205A2081
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbiHZFxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
+        id S244948AbiHZFxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiHZFxO (ORCPT
+        with ESMTP id S231315AbiHZFxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:53:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51683CCD4D
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:53:13 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oRSHD-00020d-Rx; Fri, 26 Aug 2022 07:53:07 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oRSHD-00071E-0q; Fri, 26 Aug 2022 07:53:07 +0200
-Date:   Fri, 26 Aug 2022 07:53:07 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH 1/2] gpio: Add gpio latch driver
-Message-ID: <20220826055306.tdsmdambl6fjoiop@pengutronix.de>
-References: <20220825094132.1268174-1-s.hauer@pengutronix.de>
- <20220825094132.1268174-2-s.hauer@pengutronix.de>
+        Fri, 26 Aug 2022 01:53:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE204D0762;
+        Thu, 25 Aug 2022 22:53:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2E761982;
+        Fri, 26 Aug 2022 05:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29DBC433D7;
+        Fri, 26 Aug 2022 05:53:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661493202;
+        bh=R4FIJTfK5BiXshJ8j5B3MsFnPhCrQXJMHxLvbBW+/z4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KmZvjY6ikSzn7lPBKetcxAOrQPXQyjZIx36hNrTJhovdLiwgEOUzSHkd9B9OKj+v0
+         zgjPY7sOvlCUpzgIm63O276vB5Dwsb22rXotnIUWRhVWwYisfDkT1HTFwaQ3eX70aW
+         KVXyFSypWN6riV8YSbs4X0qxdrgH0sC0SKf9UEqeWHcRTX80iJkbkxyA946Ca40WSn
+         G/BAsZpYIpP4mh3kusPDxn8zYvZM3J2peV3EVhcJDgJJmIFOguTS4Q5dDRb2Vfu5yg
+         QQtrEniSh60DkfaQJdDzvHm8tOY+G/jUYSA71bDYk+WZPWKWVLMpR9uUIOE4tsLozN
+         QAFn6r8TP2TZA==
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-33dba2693d0so10909737b3.12;
+        Thu, 25 Aug 2022 22:53:22 -0700 (PDT)
+X-Gm-Message-State: ACgBeo02mga5t78SidZI30TT3+CPnrBbyQmUGem6rryVPzhq68LJgvld
+        DPVgv1FSzbdRansU/KOIc4is0P2//vZ3mYNEyl0=
+X-Google-Smtp-Source: AA6agR7gOaZjs09UmPPNpKm1NS4oraRvce3kHiygNJeUNU9HmN2KZtckn/Yb498983PO2QNnsgsyHBbq7EsQKUYXG4s=
+X-Received: by 2002:a81:63c3:0:b0:323:ce27:4e4d with SMTP id
+ x186-20020a8163c3000000b00323ce274e4dmr7280253ywb.472.1661493201690; Thu, 25
+ Aug 2022 22:53:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825094132.1268174-2-s.hauer@pengutronix.de>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
+ <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
+ <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com> <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
+In-Reply-To: <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 25 Aug 2022 22:53:10 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
+Message-ID: <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,260 +77,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sascha,
+On Thu, Aug 25, 2022 at 10:22 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> On Thu, Aug 25, 2022 at 7:35 PM Song Liu <songliubraving@fb.com> wrote:
+> >
+> >
+> >
+> > > On Aug 25, 2022, at 4:03 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Thu, Aug 25, 2022 at 3:08 PM Song Liu <songliubraving@fb.com> wrote:
+> > >>
+> > >>
+> > >>
+> > >>> On Aug 25, 2022, at 2:33 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >>>
+> > >>> On Tue, Aug 23, 2022 at 2:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > >>>> + * long bpf_read_raw_record(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
+> > >>>> + *     Description
+> > >>>> + *             For an eBPF program attached to a perf event, retrieve the
+> > >>>> + *             raw record associated to *ctx* and store it in the buffer
+> > >>>> + *             pointed by *buf* up to size *size* bytes.
+> > >>>> + *     Return
+> > >>>> + *             On success, number of bytes written to *buf*. On error, a
+> > >>>> + *             negative value.
+> > >>>> + *
+> > >>>> + *             The *flags* can be set to **BPF_F_GET_RAW_RECORD_SIZE** to
+> > >>>> + *             instead return the number of bytes required to store the raw
+> > >>>> + *             record. If this flag is set, *buf* may be NULL.
+> > >>>
+> > >>> It looks pretty ugly from a usability standpoint to have one helper
+> > >>> doing completely different things and returning two different values
+> > >>> based on BPF_F_GET_RAW_RECORD_SIZE.
+> > >>
+> > >> Yeah, I had the same thought when I first looked at it. But that's the
+> > >> exact syntax with bpf_read_branch_records(). Well, we still have time
+> > >> to fix the new helper..
+> > >>
+> > >>>
+> > >>> I'm not sure what's best, but I have two alternative proposals:
+> > >>>
+> > >>> 1. Add two helpers: one to get perf record information (and size will
+> > >>> be one of them). Something like bpf_perf_record_query(ctx, flags)
+> > >>> where you pass perf ctx and what kind of information you want to read
+> > >>> (through flags), and u64 return result returns that (see
+> > >>> bpf_ringbuf_query() for such approach). And then have separate helper
+> > >>> to read data.
+> > >>>
+> > >>> 2. Keep one helper, but specify that it always returns record size,
+> > >>> even if user specified smaller size to read. And then allow passing
+> > >>> buf==NULL && size==0. So passing NULL, 0 -- you get record size.
+> > >>> Passing non-NULL buf -- you read data.
+> > >>
+> > >> AFAICT, this is also confusing.
+> > >>
+> > >
+> > > this is analogous to snprintf() behavior, so not that new and
+> > > surprising when you think about it. But if query + read makes more
+> > > sense, then it's fine by me
+> >
+> > Given the name discussion (the other email), I now like one API better.
+> >
+> > Actually, since we are on this, can we make it more generic, and handle
+> > all possible PERF_SAMPLE_* (in enum perf_event_sample_format)? Something
+> > like:
+> >
+> > long bpf_perf_event_read_sample(void *ctx, void *buf, u64 size, u64 flags);
+> >
+> > WDYT Namhyung?
+>
+> Do you mean reading the whole sample data at once?
+> Then it needs to parse the sample data format properly
+> which is non trivial due to a number of variable length
+> fields like callchains and branch stack, etc.
+>
+> Also I'm afraid I might need event configuration info
+> other than sample data like attr.type, attr.config,
+> attr.sample_type and so on.
+>
+> Hmm.. maybe we can add it to the ctx directly like ctx.attr_type?
 
-nice patche, please see inline.
+The user should have access to the perf_event_attr used to
+create the event. This is also available in ctx->event->attr.
 
-On 22-08-25, Sascha Hauer wrote:
-> This driver implements a GPIO multiplexer based on latches connected to
-> other GPIOs. A set of data GPIOs is connected to the data input of
-> multiple latches. The clock input of each latch is driven by another
-> set of GPIOs. With two 8-bit latches 10 GPIOs can be multiplexed into
-> 16 GPIOs. GPOs might be a better term as in fact the multiplexed pins
-> are output only.
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/gpio/Kconfig      |   6 ++
->  drivers/gpio/Makefile     |   1 +
->  drivers/gpio/gpio-latch.c | 188 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 195 insertions(+)
->  create mode 100644 drivers/gpio/gpio-latch.c
-> 
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 0642f579196f2..e4603810ec910 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1690,6 +1690,12 @@ config GPIO_AGGREGATOR
->  	      industrial control context, to be operated from userspace using
->  	      the GPIO chardev interface.
->  
-> +config GPIO_LATCH
-> +	tristate "GPIO latch driver"
-> +	help
-> +	  Say yes here to enable a driver for GPIO multiplexers based on latches
-> +	  connected to other GPIOs.
-> +
->  config GPIO_MOCKUP
->  	tristate "GPIO Testing Driver"
->  	select IRQ_SIM
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index a0985d30f51bb..310fa08decc69 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -75,6 +75,7 @@ obj-$(CONFIG_GPIO_IT87)			+= gpio-it87.o
->  obj-$(CONFIG_GPIO_IXP4XX)		+= gpio-ixp4xx.o
->  obj-$(CONFIG_GPIO_JANZ_TTL)		+= gpio-janz-ttl.o
->  obj-$(CONFIG_GPIO_KEMPLD)		+= gpio-kempld.o
-> +obj-$(CONFIG_GPIO_LATCH)		+= gpio-latch.o
->  obj-$(CONFIG_GPIO_LOGICVC)		+= gpio-logicvc.o
->  obj-$(CONFIG_GPIO_LOONGSON1)		+= gpio-loongson1.o
->  obj-$(CONFIG_GPIO_LOONGSON)		+= gpio-loongson.o
-> diff --git a/drivers/gpio/gpio-latch.c b/drivers/gpio/gpio-latch.c
-> new file mode 100644
-> index 0000000000000..117fcadf76a51
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-latch.c
-> @@ -0,0 +1,188 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * GPIO latch driver
-> + *
-> + *  Copyright (C) 2022 Sascha Hauer <s.hauer@pengutronix.de>
-> + *
-> + * This driver implements a GPIO (or better GPO as there is no input)
-> + * multiplexer based on latches like this:
-> + *
-> + * CLK0 ----------------------.        ,--------.
-> + * CLK1 -------------------.  `--------|>    #0 |
-> + *                         |           |        |
-> + * OUT0 ----------------+--|-----------|D0    Q0|-----|<
-> + * OUT1 --------------+-|--|-----------|D1    Q1|-----|<
-> + * OUT2 ------------+-|-|--|-----------|D2    Q2|-----|<
-> + * OUT3 ----------+-|-|-|--|-----------|D3    Q3|-----|<
-> + * OUT4 --------+-|-|-|-|--|-----------|D4    Q4|-----|<
-> + * OUT5 ------+-|-|-|-|-|--|-----------|D5    Q5|-----|<
-> + * OUT6 ----+-|-|-|-|-|-|--|-----------|D6    Q6|-----|<
-> + * OUT7 --+-|-|-|-|-|-|-|--|-----------|D7    Q7|-----|<
-> + *        | | | | | | | |  |           `--------'
-> + *        | | | | | | | |  |
-> + *        | | | | | | | |  |           ,--------.
-> + *        | | | | | | | |  `-----------|>    #1 |
-> + *        | | | | | | | |              |        |
-> + *        | | | | | | | `--------------|D0    Q0|-----|<
-> + *        | | | | | | `----------------|D1    Q1|-----|<
-> + *        | | | | | `------------------|D2    Q2|-----|<
-> + *        | | | | `--------------------|D3    Q3|-----|<
-> + *        | | | `----------------------|D4    Q4|-----|<
-> + *        | | `------------------------|D5    Q5|-----|<
-> + *        | `--------------------------|D6    Q6|-----|<
-> + *        `----------------------------|D7    Q7|-----|<
-> + *                                     `--------'
-> + *
-> + * The above is just an example. The actual number of number of latches and
-> + * the number of inputs per latch is derived from the number of GPIOs given
-> + * in the corresponding device tree properties.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/gpio/consumer.h>
-> +
-> +#include "gpiolib.h"
-> +
-> +struct gpio_latch_priv {
-> +	struct gpio_chip gc;
-> +	struct gpio_descs *clk_gpios;
-> +	struct gpio_descs *data_gpios;
-> +	spinlock_t lock;
-> +	int n_ports;
-> +	int n_pins;
-> +	unsigned int *shadow;
-> +	struct mutex mutex;
-> +	spinlock_t spinlock;
-> +};
-> +
-> +static const struct of_device_id gpio_latch_ids[] = {
-> +	{
-> +		.compatible	= "gpio-latch",
-> +	}, {
-> +		/* sentinel */
-> +	}
-> +};
-> +MODULE_DEVICE_TABLE(of, gpio_latch_ids);
+Would this work?
 
-Nit normally this is at the end of the file.
+Thanks,
+Song
 
-> +static int gpio_latch_get_direction(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	return GPIO_LINE_DIRECTION_OUT;
-> +}
-> +
-> +static void __gpio_latch_set(struct gpio_latch_priv *priv, unsigned int offset, int val)
-> +{
-> +	int latch = offset / priv->n_pins;
-> +	int i;
-> +
-> +	if (val)
-> +		priv->shadow[latch] |= BIT(offset % priv->n_pins);
-> +	else
-> +		priv->shadow[latch] &= ~BIT(offset % priv->n_pins);
-> +
-> +	for (i = 0; i < priv->n_pins; i++)
-> +		gpiod_set_value(priv->data_gpios->desc[i], priv->shadow[latch] & BIT(i));
-> +
-> +	gpiod_set_value(priv->clk_gpios->desc[latch], 1);
-> +	gpiod_set_value(priv->clk_gpios->desc[latch], 0);
-
-Your have two access function for _can_sleep and "can not sleep" but
-here you don't resepect it.
-
-Regards,
-  Marco
-
-> +}
-> +
-> +static void gpio_latch_set(struct gpio_chip *gc, unsigned int offset, int val)
-> +{
-> +	struct gpio_latch_priv *priv = gpiochip_get_data(gc);
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&priv->spinlock, flags);
-> +
-> +	__gpio_latch_set(priv, offset, val);
-> +
-> +	spin_unlock_irqrestore(&priv->spinlock, flags);
-> +}
-> +
-> +static void gpio_latch_set_can_sleep(struct gpio_chip *gc, unsigned int offset, int val)
-> +{
-> +	struct gpio_latch_priv *priv = gpiochip_get_data(gc);
-> +
-> +	mutex_lock(&priv->mutex);
-> +
-> +	__gpio_latch_set(priv, offset, val);
-> +
-> +	mutex_unlock(&priv->mutex);
-> +}
-> +
-> +static bool gpio_latch_can_sleep(struct gpio_latch_priv *priv)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < priv->n_ports; i++)
-> +		if (gpiod_cansleep(priv->clk_gpios->desc[i]))
-> +			return true;
-> +
-> +	for (i = 0; i < priv->n_pins; i++)
-> +		if (gpiod_cansleep(priv->data_gpios->desc[i]))
-> +			return true;
-> +	
-> +	return false;
-> +}
-> +
-> +static int gpio_latch_probe(struct platform_device *pdev)
-> +{
-> +	struct gpio_latch_priv *priv;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->clk_gpios = devm_gpiod_get_array(&pdev->dev, "clk", GPIOD_OUT_LOW);
-> +	if (IS_ERR(priv->clk_gpios))
-> +		return PTR_ERR(priv->clk_gpios);
-> +
-> +	priv->data_gpios = devm_gpiod_get_array(&pdev->dev, "data", GPIOD_OUT_LOW);
-> +	if (IS_ERR(priv->data_gpios))
-> +		return PTR_ERR(priv->data_gpios);
-> +
-> +	priv->n_ports = priv->clk_gpios->ndescs;
-> +	priv->n_pins = priv->data_gpios->ndescs;
-> +
-> +	priv->shadow = devm_kcalloc(&pdev->dev, priv->n_ports, sizeof(*priv->shadow),
-> +				    GFP_KERNEL);
-> +	if (!priv->shadow)
-> +		return -ENOMEM;
-> +
-> +	if (gpio_latch_can_sleep(priv)) {
-> +		priv->gc.can_sleep = true;
-> +		priv->gc.set = gpio_latch_set_can_sleep;
-> +		mutex_init(&priv->mutex);
-> +	} else {
-> +		priv->gc.can_sleep = false;
-> +		priv->gc.set = gpio_latch_set;
-> +		spin_lock_init(&priv->spinlock);
-> +	}
-> +	
-> +	priv->gc.get_direction = gpio_latch_get_direction;
-> +	priv->gc.ngpio = priv->n_ports * priv->n_pins;
-> +	priv->gc.owner = THIS_MODULE;
-> +	priv->gc.base = -1;
-> +	priv->gc.parent = &pdev->dev;
-> +	priv->gc.of_node = pdev->dev.of_node;
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
-> +}
-> +
-> +static struct platform_driver gpio_latch_driver = {
-> +	.driver	= {
-> +		.name		= "gpio-latch",
-> +		.of_match_table	= gpio_latch_ids,
-> +	},
-> +	.probe	= gpio_latch_probe,
-> +};
-> +module_platform_driver(gpio_latch_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Sascha Hauer <s.hauer@pengutronix.de>");
-> +MODULE_DESCRIPTION("GPIO latch driver");
-> -- 
-> 2.30.2
-> 
-> 
-> 
+>
+> >
+> > Another idea is to add another parameter, so that we can pick which
+> > PERF_SAMPLE_* to output via bpf_perf_event_read_sample().
+> >
+> > I think this will cover all cases with sample perf_event. Thoughts?
+>
+> Yeah, I like this more and it looks easier to use.

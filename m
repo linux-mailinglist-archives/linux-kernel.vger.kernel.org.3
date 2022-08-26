@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250405A1FB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F285A1FB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244609AbiHZESO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 00:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S244595AbiHZEXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 00:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243720AbiHZESM (ORCPT
+        with ESMTP id S231315AbiHZEXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:18:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F2EBFC61;
-        Thu, 25 Aug 2022 21:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661487491; x=1693023491;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YsDHteRcq1xMbpE+Et5nCrI0+XEVYx8Ur9biKx/cQPU=;
-  b=eGCetfeBSSnCGgngDaksi+RjHlSDpCrcbb/juav78rlQFRp04wDXvV0M
-   bE7tKpTsUW7oF3RK3//O+HXqPCywRCmTRQkKMOuu6iNtNbI7pkF4k7+cW
-   dqsL87wWXCPvnUUwP6fsSwzLd1Agahxx3bXAVDaoDFsTggT315aXfHiPn
-   wRngBporDWxhLWEeOYxNJt1FK+/fcHCTrRXHUL01WH4bHt9LWpWFhTgmg
-   L76BOZK3bCEZ17Q5oAD4FxbYl193nqBzsAuY3vF6CplMZHZWp2+g4jBBD
-   ZFVR+rGZf7Dm4RNVIfRQushyMRvodqBG99dFThRMNaOgsRDfJRFm8MLUL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="274171622"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="274171622"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 21:17:15 -0700
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="587156893"
-Received: from xjing1-mobl1.ccr.corp.intel.com (HELO [10.254.211.48]) ([10.254.211.48])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 21:17:08 -0700
-Message-ID: <c160bb06-5739-d1bb-f9a9-722a24e567c7@linux.intel.com>
-Date:   Fri, 26 Aug 2022 12:17:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 00/13] iommu: SVA and IOPF refactoring
-Content-Language: en-US
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 26 Aug 2022 00:23:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643F4C6FD6;
+        Thu, 25 Aug 2022 21:23:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F021A60C8A;
+        Fri, 26 Aug 2022 04:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3326C433D6;
+        Fri, 26 Aug 2022 04:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1661487819;
+        bh=jcg147D1yDM5q55rbfjcwOEpR6Qg0owFbIE79hxnzdA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=swRBl+cyscwpbrkmIlJVa2MyakZTR2Xj5+P98F6XCQZ8AmmqwbgR2wcJlW2edLZ5U
+         yQN1WMR68osbCltgUgpxR1+M1PhAAM2NHtlTWrgSnAoxeWGTCkxrIwExVBq31sUkzP
+         WrTk9NO76jkek3Rw2BV+oSvjEDCer18TgD8Hkkho=
+Date:   Thu, 25 Aug 2022 21:23:38 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     lizhe.67@bytedance.com
+Cc:     mhocko@suse.com, vbabka@suse.cz, mhiramat@kernel.org,
+        keescook@chromium.org, Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
+        rostedt@goodmis.org, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lizefan.x@bytedance.com
+Subject: Re: [PATCH v4] page_ext: introduce boot parameter 'early_page_ext'
+Message-Id: <20220825212338.e541d29ca3c4d602221f4925@linux-foundation.org>
+In-Reply-To: <20220825102714.669-1-lizhe.67@bytedance.com>
+References: <20220825102714.669-1-lizhe.67@bytedance.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,36 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/17 9:20, Lu Baolu wrote:
-> Hi folks,
-> 
-> The former part of this series introduces the IOMMU interfaces to attach
-> or detach an iommu domain to/from a pasid of a device, and refactors the
-> exsiting IOMMU SVA implementation by assigning an SVA type of iommu
-> domain to a shared virtual address and replacing sva_bind/unbind iommu
-> ops with a set_dev_pasid domain ops.
-> 
-> The latter part changes the existing I/O page fault handling framework
-> from only serving SVA to a generic one. Any driver or component could
-> handle the I/O page faults for its domain in its own way by installing
-> an I/O page fault handler.
-> 
-> This series has been functionally tested on an x86 machine and compile
-> tested for all architectures.
-> 
-> This series is also available on github:
-> [2]https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v11
-> 
-> Please review and suggest.
+On Thu, 25 Aug 2022 18:27:14 +0800 lizhe.67@bytedance.com wrote:
 
-Thank you all for review and test. I have updated this series and
-uploaded a new version at
+> From: Li Zhe <lizhe.67@bytedance.com>
+> 
+> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
+> we call page_ext_init() after page_alloc_init_late() to avoid some panic
+> problem. It seems that we cannot track early page allocations in current
+> kernel even if page structure has been initialized early.
+> 
+> This patch introduce a new boot parameter 'early_page_ext' to resolve this
+> problem. If we pass it to kernel, function page_ext_init() will be moved
+> up and feature 'deferred initialization of struct pages' will be disabled
+> to initialize the page allocator early and prevent from the panic problem
+> above. It can help us to catch early page allocations. This is useful
+> especially when we find that the free memory value is not the same right
+> after different kernel booting.
+> 
 
-https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v12
+WARNING: modpost: vmlinux.o: section mismatch in reference: early_page_ext_enabled (section: .text.unlikely) -> early_page_ext (section: .meminit.data)
+WARNING: modpost: vmlinux.o: section mismatch in reference: early_page_ext_enabled (section: .text.unlikely) -> early_page_ext (section: .meminit.data)
 
-Zhangfei and Tony have tested it on real Intel and arm64 hardware.
+I did this, but it was lazy - perhaps there's a better-optimized
+combination of section tags.  Please check?
 
-I will soon post it for further review.
+--- a/mm/page_ext.c~page_ext-introduce-boot-parameter-early_page_ext-fix
++++ a/mm/page_ext.c
+@@ -91,7 +91,7 @@ unsigned long page_ext_size = sizeof(str
+ static unsigned long total_usage;
+ static struct page_ext *lookup_page_ext(const struct page *page);
+ 
+-bool early_page_ext __meminitdata;
++bool early_page_ext;
+ static int __init setup_early_page_ext(char *str)
+ {
+ 	early_page_ext = true;
+_
 
-Best regards,
-baolu

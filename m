@@ -2,742 +2,424 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B127E5A22C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83995A22D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245108AbiHZIR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S245131AbiHZIT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiHZIRw (ORCPT
+        with ESMTP id S230109AbiHZITy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:17:52 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6824CC7FB5;
-        Fri, 26 Aug 2022 01:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=e1xGm1gMBRS/O28n//0/lhM6vje7Y1bOA9Kh8k9MZig=;
-        b=jfggaSCN7wGCJQjPkEevMO9uk+einECvg3k2FIr4LQzkV+UjWB2RGzQxJQ5CXqpjg3jU4oWZ55SRI
-         96/0tfQbURE1eHEVvdPQ3FeUOO6ZCrAyOm7jHI9u3bXkHfNVPG1m2pOUYKNpiL4kvoHjoA5cLO0umP
-         1Wdl4HYKr0oIaWhmNM29MhLBX2mmFicQcp1l6u1pC/v5ax89/ws+2obSax4XuRvE7AVG8fCxqUevnC
-         u3CACz1gouRd9BYyti1nBnB+n/6LPa3hDgHx82TEpj3cyNIJ3RaWyluTa1m3slKszv1pI1IFvXUTvy
-         iJtDaRxqqxCxE4xnGNMHAHXtbvrduDQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000013,0.058452)], BW: [Enabled, t: (0.000014,0.000001)], RTDA: [Enabled, t: (0.086279), Hit: No, Details: v2.41.0; Id: 15.52k8rr.1gbcjkua0.1uh; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Fri, 26 Aug 2022 11:17:41 +0300
-Date:   Fri, 26 Aug 2022 11:16:43 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru,
-        j.zink@pengutronix.de
-Subject: Re: [PATCH v8 1/2] fpga: lattice-sysconfig-spi: add Lattice
- sysCONFIG FPGA manager
-Message-ID: <20220826081643.4o3m4wwuygoer7pt@h-e2.ddg>
-References: <20220825112433.14583-1-i.bornyakov@metrotek.ru>
- <20220825112433.14583-2-i.bornyakov@metrotek.ru>
+        Fri, 26 Aug 2022 04:19:54 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800C3B98
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:19:52 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id bn9so878940ljb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=NwyaCFfEMgdgvoY41Arzh1xx+CoAI+pbpsz9rR9RZv0=;
+        b=TmzUhFNgBDMPKhvHU8R2w4J91J4zP7ynPvouc6XI4eH8gywVjkg51E4cEFM1TgDXgK
+         6++5o9rDdD0ZM0GANQ/GhvYbqFMXElfJOLoRsFvyGVnZgquXBcjeOmM5CtUxMyspUYqY
+         G+2VViBc3Q67+lHYT//yYuZL7y1cDDngIJS/NitYCEDribRHwd8fUgS/xOoKnDifFwdn
+         Vno6osTu85V7/JAFofswxhCMEL3EnebKtkvfWFBjyuS4ET2TkuNL09BhyuIdpaNfyT5o
+         9q5/LW2P270XGTVrzhEP87NVMhaT7FSbkc7QIyCi8N854B1Uqcft5Ssd36tAhNoHBH1q
+         qBVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=NwyaCFfEMgdgvoY41Arzh1xx+CoAI+pbpsz9rR9RZv0=;
+        b=CNbGN2xmpcm395aD4tjpn8EOzuO+QVbiarUVYGH3lumD5jECpWhoyHnXWaE0oxkjjr
+         clRCyD+y45zIpSZo/k181+4Erj1LwV6cigUAzrZWccbfkmXg4A9HJFxleE3+2qwCS1h9
+         XJ8aDcqaGaxQK6pLDoWqOluK+2y2ytcbeH408ogcY+qT508wVDFN022D0kBoutON03/J
+         iakVXVjtO4IKxqhzpM44LQGCoolYNMqfHhlYzendI7K8gDI1YHpuG0e3Z1PkoCNaoMbw
+         kGk3HnO0j43UhfSd0pC1wWQO4JKq2ha76v0Bi5AG0w9kduh0L9iTSn3N2SaNFYZcytez
+         ZAtg==
+X-Gm-Message-State: ACgBeo3CLfaPDHfSAjakksXAQ3CCWqBzQT1jn3kJ4xfGYxdqZb3AzRDU
+        v2fcCU5xD9sJNve5/dlVwxJowkEY8h2X7g==
+X-Google-Smtp-Source: AA6agR4hxgUo/5FnuISCYiG3akvQOsssa+7V2fP6LZNhWM4AK8KM+CWOwUszj+WPIItIQNk/XwqSdg==
+X-Received: by 2002:a05:651c:238b:b0:261:ca71:5945 with SMTP id bk11-20020a05651c238b00b00261ca715945mr2017204ljb.253.1661501990732;
+        Fri, 26 Aug 2022 01:19:50 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a13-20020a19ca0d000000b0048b045a5c3asm293092lfg.201.2022.08.26.01.19.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 01:19:50 -0700 (PDT)
+Message-ID: <1f31afce-6807-5d33-15e2-78bc42894764@linaro.org>
+Date:   Fri, 26 Aug 2022 11:19:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825112433.14583-2-i.bornyakov@metrotek.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] drm/msm/dp: add atomic_check to bridge ops
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_sbillaka@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        quic_aravindh@quicinc.com, freedreno@lists.freedesktop.org
+References: <1660759314-28088-1-git-send-email-quic_khsieh@quicinc.com>
+ <f211520a-cb9c-1202-0752-7bb200726ae8@linaro.org>
+ <d4b3c303-fc20-537d-0e69-6e19826b6e59@quicinc.com>
+ <266c0531-344e-5589-2143-02ab1fe9b276@linaro.org>
+ <724d695d-0293-db81-7014-57cb96bd6d4b@quicinc.com>
+ <bb153360-6567-c4d5-dc23-8586549df8c8@linaro.org>
+ <13509c06-cf2b-e37b-d8ec-b5cc5370f566@quicinc.com>
+ <CAA8EJprzE_U0crAQxu5xvQxadu8jUovEXOWzV2cTc_BQeHjyow@mail.gmail.com>
+ <16f2c33f-c91e-8b4a-f67a-81f13adb2eac@quicinc.com>
+ <CAA8EJprhwnMDLnWyfy3+TXG4cfeCCGGaaLqBTPn+UFgm7en8Fg@mail.gmail.com>
+ <35384419-0801-dabf-3481-1b5717bc11e9@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <35384419-0801-dabf-3481-1b5717bc11e9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 02:24:32PM +0300, Ivan Bornyakov wrote:
-> Add support to the FPGA manager for programming Lattice ECP5 and MachXO2
-> FPGAs over slave SPI sysCONFIG interface.
+On 24/08/2022 22:16, Abhinav Kumar wrote:
 > 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  drivers/fpga/Kconfig                 |   7 +
->  drivers/fpga/Makefile                |   1 +
->  drivers/fpga/lattice-sysconfig-spi.c | 630 +++++++++++++++++++++++++++
->  3 files changed, 638 insertions(+)
->  create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
 > 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 6c416955da53..991d9d976dca 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -263,4 +263,11 @@ config FPGA_MGR_MICROCHIP_SPI
->  	  programming over slave SPI interface with .dat formatted
->  	  bitstream image.
->  
-> +config FPGA_MGR_LATTICE_SPI
-> +	tristate "Lattice sysCONFIG SPI FPGA manager"
-> +	depends on SPI
-> +	help
-> +	  FPGA manager driver support for Lattice FPGAs programming over slave
-> +	  SPI sysCONFIG interface.
-> +
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 42ae8b58abce..115dba916024 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -20,6 +20,7 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
->  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
->  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
-> +obj-$(CONFIG_FPGA_MGR_LATTICE_SPI)	+= lattice-sysconfig-spi.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
->  
-> diff --git a/drivers/fpga/lattice-sysconfig-spi.c b/drivers/fpga/lattice-sysconfig-spi.c
-> new file mode 100644
-> index 000000000000..145b5b27b88d
-> --- /dev/null
-> +++ b/drivers/fpga/lattice-sysconfig-spi.c
-> @@ -0,0 +1,630 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Lattice FPGA programming over slave SPI sysCONFIG interface.
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/of_device.h>
-> +#include <linux/spi/spi.h>
-> +
-> +#define	SYSCONFIG_ISC_ENABLE		{0xC6, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_ISC_DISABLE		{0x26, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_ISC_ERASE		{0x0E, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_ISC_PROGRAM_DONE	{0x5E, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_LSC_READ_STATUS	{0x3C, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_LSC_CHECK_BUSY	{0xF0, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_LSC_REFRESH		{0x79, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_LSC_INIT_ADDR		{0x46, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_LSC_BITSTREAM_BURST	{0x7a, 0x00, 0x00, 0x00}
-> +#define	SYSCONFIG_LSC_PROG_INCR_NV	{0x70, 0x00, 0x00, 0x01}
-> +
-> +#define	SYSCONFIG_STATUS_DONE		BIT(8)
-> +#define	SYSCONFIG_STATUS_BUSY		BIT(12)
-> +#define	SYSCONFIG_STATUS_FAIL		BIT(13)
-> +#define	SYSCONFIG_STATUS_ERR		(BIT(23) | BIT(24) | BIT(25))
-> +
-> +#define	SYSCONFIG_POLL_RETRIES		100000
-> +
-> +#define	ECP5_SPI_MAX_SPEED_HZ		60000000
-> +#define	ECP5_ISC_ERASE_OPERAND		0x01
-> +
-> +#define	MACHXO2_SPI_MAX_SPEED_HZ	66000000
-> +#define	MACHXO2_PAGE_SIZE		16
-> +#define	MACHXO2_ISC_ENABLE_OPERAND	0x08
-> +#define	MACHXO2_ISC_ERASE_OPERAND	0x04
-> +
-> +struct sysconfig_priv {
-> +	struct gpio_desc *program;
-> +	struct gpio_desc *init;
-> +	struct gpio_desc *done;
-> +	struct spi_device *spi;
-> +	u8 isc_enable_operand;
-> +	u8 isc_erase_operand;
-> +};
-> +
-> +static int sysconfig_poll_busy(struct sysconfig_priv *data)
-> +{
-> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
-> +	int ret, retries = SYSCONFIG_POLL_RETRIES;
-> +	u8 busy;
-> +
-> +	while (retries--) {
-> +		ret = spi_write_then_read(data->spi,
-> +					  lsc_check_busy, sizeof(lsc_check_busy),
-> +					  &busy, sizeof(busy));
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (!busy)
-> +			return 0;
-> +
-> +		usleep_range(50, 100);
-> +	}
-> +
-> +	return -EBUSY;
-> +}
-> +
-> +static int sysconfig_read_status(struct sysconfig_priv *data, u32 *status)
-> +{
-> +	const u8 lsc_read_status[] = SYSCONFIG_LSC_READ_STATUS;
-> +	__be32 device_status;
-> +	int ret;
-> +
-> +	ret = spi_write_then_read(data->spi,
-> +				  lsc_read_status, sizeof(lsc_read_status),
-> +				  &device_status, sizeof(device_status));
-> +	if (ret)
-> +		return ret;
-> +
-> +	*status = be32_to_cpu(device_status);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sysconfig_poll_status(struct sysconfig_priv *data, u32 *status)
-> +{
-> +	int ret;
-> +
-> +	ret = sysconfig_poll_busy(data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysconfig_read_status(data, status);
-> +}
-> +
-> +static int sysconfig_poll_gpio(struct gpio_desc *gpio, bool is_active)
-> +{
-> +	int value, retries = SYSCONFIG_POLL_RETRIES;
-> +
-> +	while (retries--) {
-> +		value = gpiod_get_value(gpio);
-> +		if (value < 0)
-> +			return value;
-> +
-> +		if ((!is_active && !value) || (is_active && value))
-> +			return 0;
-> +
-> +		ndelay(10);
-> +	}
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static int sysconfig_refresh(struct sysconfig_priv *data)
-> +{
-> +	static const u8 lsc_refresh[] = SYSCONFIG_LSC_REFRESH;
-> +	int ret;
-> +
-> +	ret = spi_write(data->spi, lsc_refresh, sizeof(lsc_refresh));
-> +	if (ret)
-> +		return ret;
-> +
-> +	usleep_range(4000, 8000);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sysconfig_isc_enable(struct sysconfig_priv *data)
-> +{
-> +	u8 isc_enable[] = SYSCONFIG_ISC_ENABLE;
-> +	u32 status;
-> +	int ret;
-> +
-> +	isc_enable[1] = data->isc_enable_operand;
-> +
-> +	ret = spi_write(data->spi, isc_enable, sizeof(isc_enable));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sysconfig_poll_status(data, &status);
-> +	if (ret || (status & SYSCONFIG_STATUS_FAIL))
-> +		return ret ? : -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int sysconfig_isc_erase(struct sysconfig_priv *data)
-> +{
-> +	u8 isc_erase[] = SYSCONFIG_ISC_ERASE;
-> +	u32 status;
-> +	int ret;
-> +
-> +	isc_erase[1] = data->isc_erase_operand;
-> +
-> +	ret = spi_write(data->spi, isc_erase, sizeof(isc_erase));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sysconfig_poll_status(data, &status);
-> +	if (ret || (status & SYSCONFIG_STATUS_FAIL))
-> +		return ret ? : -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int sysconfig_isc_init(struct sysconfig_priv *data)
-> +{
-> +	int ret;
-> +
-> +	ret = sysconfig_isc_enable(data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysconfig_isc_erase(data);
-> +}
-> +
-> +static int sysconfig_lsc_init_addr(struct sysconfig_priv *data)
-> +{
-> +	const u8 lsc_init_addr[] = SYSCONFIG_LSC_INIT_ADDR;
-> +
-> +	return spi_write(data->spi, lsc_init_addr, sizeof(lsc_init_addr));
-> +}
-> +
-> +static int sysconfig_lsc_bitstream_burst(struct sysconfig_priv *data)
-> +{
-> +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
-> +	struct spi_transfer xfer = {
-> +		.tx_buf = lsc_bitstream_burst,
-> +		.len = sizeof(lsc_bitstream_burst),
-> +		.cs_change = 1,
-> +	};
-> +	struct spi_message msg;
-> +
-> +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> +
-> +	return spi_sync_locked(data->spi, &msg);
-> +}
-> +
-> +static int sysconfig_isc_prog_done(struct sysconfig_priv *data)
-> +{
-> +	const u8 isc_prog_done[] = SYSCONFIG_ISC_PROGRAM_DONE;
-> +	u32 status;
-> +	int ret;
-> +
-> +	ret = spi_write(data->spi, isc_prog_done, sizeof(isc_prog_done));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sysconfig_poll_status(data, &status);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (status & SYSCONFIG_STATUS_DONE)
-> +		return 0;
-> +
-> +	return -EFAULT;
-> +}
-> +
-> +static int sysconfig_isc_disable(struct sysconfig_priv *data)
-> +{
-> +	const u8 isc_disable[] = SYSCONFIG_ISC_DISABLE;
-> +
-> +	return spi_write(data->spi, isc_disable, sizeof(isc_disable));
-> +}
-> +
-> +static enum fpga_mgr_states ecp5_ops_state(struct fpga_manager *mgr)
-> +{
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +
-> +	return (gpiod_get_value(priv->done) > 0) ? FPGA_MGR_STATE_OPERATING :
-> +						   FPGA_MGR_STATE_UNKNOWN;
-> +}
-> +
-> +static int ecp5_ops_write_init(struct fpga_manager *mgr,
-> +			       struct fpga_image_info *info,
-> +			       const char *buf, size_t count)
-> +{
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &mgr->dev;
-> +	struct gpio_desc *program;
-> +	struct gpio_desc *init;
-> +	struct gpio_desc *done;
-> +	int ret;
-> +
-> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-> +		dev_err(dev, "Partial reconfiguration is not supported\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	program = priv->program;
-> +	init = priv->init;
-> +	done = priv->done;
-> +
-> +	/* Enter init mode */
-> +	gpiod_set_value(program, 1);
-> +
-> +	ret = sysconfig_poll_gpio(init, true);
-> +	if (!ret)
-> +		ret = sysconfig_poll_gpio(done, false);
-> +
-> +	if (ret) {
-> +		dev_err(dev, "Failed to go to init mode\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Enter program mode */
-> +	gpiod_set_value(program, 0);
-> +
-> +	ret = sysconfig_poll_gpio(init, false);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to go to program mode\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Enter ISC mode */
-> +	ret = sysconfig_isc_init(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to go to ISC mode\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Initialize the Address Shift Register */
-> +	ret = sysconfig_lsc_init_addr(priv);
-> +	if (ret) {
-> +		dev_err(dev,
-> +			"Failed to initialize the Address Shift Register\n");
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
-> +	 * SPI bus will be released in ecp5_ops_write_complete() or on error.
-> +	 */
-> +	spi_bus_lock(spi->controller);
-> +
-> +	/* Prepare for bitstream burst write */
-> +	ret = sysconfig_lsc_bitstream_burst(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to prepare for bitstream burst write\n");
-> +		spi_bus_unlock(spi->controller);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int ecp5_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
-> +{
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	struct spi_transfer xfer = {
-> +		.tx_buf = buf,
-> +		.len = count,
-> +		.cs_change = 1,
-> +	};
-> +	struct spi_message msg;
-> +	int ret;
-> +
-> +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> +	ret = spi_sync_locked(spi, &msg);
-> +	if (ret)
-> +		spi_bus_unlock(spi->controller);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ecp5_ops_write_complete(struct fpga_manager *mgr,
-> +				   struct fpga_image_info *info)
-> +{
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &mgr->dev;
-> +	int ret;
-> +
-> +	/* Bitstream burst write is done, release SPI bus */
-> +	spi_bus_unlock(spi->controller);
-> +
-> +	/* Toggle CS and wait for bitstream write to finish */
-> +	ret = spi_write(spi, NULL, 0);
-> +	if (!ret)
-> +		ret = sysconfig_poll_busy(priv);
-> +
-> +	if (ret) {
-> +		dev_err(dev, "Error while waiting bitstream write to finish\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Exit ISC mode */
-> +	ret = sysconfig_isc_disable(priv);
-> +	if (!ret)
-> +		ret = sysconfig_poll_gpio(priv->done, true);
-> +
-> +	if (ret)
-> +		dev_err(dev, "Failed to finish ISC\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct fpga_manager_ops ecp5_fpga_ops = {
-> +	.state = ecp5_ops_state,
-> +	.write_init = ecp5_ops_write_init,
-> +	.write = ecp5_ops_write,
-> +	.write_complete = ecp5_ops_write_complete,
-> +};
-> +
-> +static int ecp5_probe(struct sysconfig_priv *priv)
-> +{
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &spi->dev;
-> +	struct fpga_manager *mgr;
-> +	int ret;
-> +
-> +	if (spi->max_speed_hz > ECP5_SPI_MAX_SPEED_HZ) {
-> +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
-> +			spi->max_speed_hz, ECP5_SPI_MAX_SPEED_HZ);
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv->isc_erase_operand = ECP5_ISC_ERASE_OPERAND;
-> +
-> +	priv->done = devm_gpiod_get(dev, "done", GPIOD_IN);
-> +	if (IS_ERR(priv->done)) {
-> +		ret = PTR_ERR(priv->done);
-> +		dev_err(dev, "Failed to get DONE GPIO: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	priv->init = devm_gpiod_get(dev, "init", GPIOD_IN);
-> +	if (IS_ERR(priv->init)) {
-> +		ret = PTR_ERR(priv->init);
-> +		dev_err(dev, "Failed to get INIT GPIO: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	priv->program = devm_gpiod_get(dev, "program", GPIOD_OUT_LOW);
-> +	if (IS_ERR(priv->program)) {
-> +		ret = PTR_ERR(priv->program);
-> +		dev_err(dev, "Failed to get PROGRAM GPIO: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	mgr = devm_fpga_mgr_register(dev, "Lattice ECP5 SPI FPGA Manager",
-> +				     &ecp5_fpga_ops, priv);
-> +
-> +	return PTR_ERR_OR_ZERO(mgr);
-> +}
-> +
-> +static enum fpga_mgr_states machxo2_ops_state(struct fpga_manager *mgr)
-> +{
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	u32 status;
-> +	int ret;
-> +
-> +	ret = sysconfig_read_status(priv, &status);
-> +	if (ret || !(status & SYSCONFIG_STATUS_DONE))
-> +		return FPGA_MGR_STATE_UNKNOWN;
-> +
-> +	return FPGA_MGR_STATE_OPERATING;
-> +}
-> +
-> +static int machxo2_ops_write_init(struct fpga_manager *mgr,
-> +				  struct fpga_image_info *info,
-> +				  const char *buf, size_t count)
-> +{
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	struct device *dev = &mgr->dev;
-> +	int ret;
-> +
-> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-> +		dev_err(dev, "Partial reconfiguration is not supported\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	/* Enter ISC mode */
-> +	ret = sysconfig_isc_init(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to go to ISC mode\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Initialize the Address Shift Register */
-> +	ret = sysconfig_lsc_init_addr(priv);
-> +	if (ret)
-> +		dev_err(dev,
-> +			"Failed to initialize the Address Shift Register\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static int machxo2_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
-> +{
-> +	const u8 lsc_progincr[] = SYSCONFIG_LSC_PROG_INCR_NV;
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	struct device *dev = &mgr->dev;
-> +	struct spi_transfer xfers[2] = {
-> +		{
-> +			.tx_buf = lsc_progincr,
-> +			.len = sizeof(lsc_progincr),
-> +		}, {
-> +			.len = MACHXO2_PAGE_SIZE,
-> +		},
-> +	};
-> +	size_t i;
-> +	int ret;
-> +
-> +	if (count % MACHXO2_PAGE_SIZE) {
-> +		dev_err(dev, "Malformed payload.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (i = 0; i < count; i += MACHXO2_PAGE_SIZE) {
-> +		xfers[1].tx_buf = buf + i;
-> +
-> +		ret = spi_sync_transfer(priv->spi, xfers, 2);
-> +		if (!ret)
-> +			ret = sysconfig_poll_busy(priv);
-> +
-> +		if (ret) {
-> +			dev_err(dev, "Failed to write frame %zu of %zu\n",
-> +				i / MACHXO2_PAGE_SIZE, count / MACHXO2_PAGE_SIZE);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void machxo2_cleanup(struct sysconfig_priv *data)
-> +{
-> +	sysconfig_isc_erase(data);
-> +	sysconfig_refresh(data);
-> +}
-> +
-> +static int machxo2_ops_write_complete(struct fpga_manager *mgr,
-> +				      struct fpga_image_info *info)
-> +{
-> +	int ret, retries = SYSCONFIG_POLL_RETRIES;
-> +	struct sysconfig_priv *priv = mgr->priv;
-> +	struct device *dev = &mgr->dev;
-> +	u32 status;
-> +
-> +	ret = sysconfig_isc_prog_done(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to enable Self-Download Mode\n");
-> +		goto fail;
-> +	}
-> +
-> +	ret = sysconfig_isc_disable(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to disable Configuration Interface\n");
-> +		goto fail;
-> +	}
-> +
-> +	while (retries--) {
-> +		ret = sysconfig_refresh(priv);
-> +		if (!ret)
-> +			ret = sysconfig_read_status(priv, &status);
-> +
-> +		if (ret) {
-> +			dev_err(dev, "Failed to refresh\n");
-> +			break;
-> +		}
-> +
-> +		if (status & SYSCONFIG_STATUS_DONE &&
-> +		    !(status & SYSCONFIG_STATUS_BUSY) &&
-> +		    !(status & SYSCONFIG_STATUS_ERR))
-> +			return 0;
-> +	}
-> +
-> +fail:
-> +	machxo2_cleanup(priv);
-> +
-> +	return -EFAULT;
-> +}
-> +
-> +static const struct fpga_manager_ops machxo2_fpga_ops = {
-> +	.state = machxo2_ops_state,
-> +	.write_init = machxo2_ops_write_init,
-> +	.write = machxo2_ops_write,
-> +	.write_complete = machxo2_ops_write_complete,
-> +};
-> +
-> +static int machxo2_probe(struct sysconfig_priv *priv)
-> +{
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &spi->dev;
-> +	struct fpga_manager *mgr;
-> +
-> +	if (spi->max_speed_hz > MACHXO2_SPI_MAX_SPEED_HZ) {
-> +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
-> +			spi->max_speed_hz, MACHXO2_SPI_MAX_SPEED_HZ);
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv->isc_enable_operand = MACHXO2_ISC_ENABLE_OPERAND;
-> +	priv->isc_erase_operand = MACHXO2_ISC_ERASE_OPERAND;
-> +
-> +	mgr = devm_fpga_mgr_register(dev, "Lattice MachXO2 SPI FPGA Manager",
-> +				     &machxo2_fpga_ops, priv);
-> +
-> +	return PTR_ERR_OR_ZERO(mgr);
-> +}
-> +
-> +typedef int (*lattice_fpga_probe_func)(struct sysconfig_priv *);
-> +
-> +static int sysconfig_probe(struct spi_device *spi)
-> +{
-> +	const struct spi_device_id *dev_id;
-> +	lattice_fpga_probe_func probe_func;
-> +	struct device *dev = &spi->dev;
-> +	struct sysconfig_priv *priv;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->spi = spi;
-> +
-> +	probe_func = of_device_get_match_data(&spi->dev);
-> +	if (!probe_func) {
-> +		dev_id = spi_get_device_id(spi);
-> +		if (!dev_id)
-> +			return -ENODEV;
-> +
-> +		probe_func = (lattice_fpga_probe_func)dev_id->driver_data;
-> +	}
-> +
-> +	if (!probe_func)
-> +		return -EINVAL;
-> +
-> +	return probe_func(priv);
-> +}
-> +
-> +static const struct spi_device_id sysconfig_spi_ids[] = {
-> +	{
-> +		.name = "ecp5-fpga-mgr",
-> +		.driver_data = (kernel_ulong_t)ecp5_probe,
-> +	}, {
-> +		.name = "machxo2-fpga-mgr",
-> +		.driver_data = (kernel_ulong_t)machxo2_probe,
-> +	}, {},
-> +};
-> +MODULE_DEVICE_TABLE(spi, sysconfig_spi_ids);
-> +
-> +#if IS_ENABLED(CONFIG_OF)
-> +static const struct of_device_id sysconfig_of_ids[] = {
-> +	{
-> +		.compatible = "lattice,ecp5-fpga-mgr",
-> +		.data = ecp5_probe,
-> +	}, {
-> +		.compatible = "lattice,machxo2-fpga-mgr",
-> +		.data = machxo2_probe
-> +	}, {},
-> +};
-> +MODULE_DEVICE_TABLE(of, sysconfig_of_ids);
-> +#endif /* IS_ENABLED(CONFIG_OF) */
-> +
-> +static struct spi_driver lattice_sysconfig_driver = {
-> +	.probe = sysconfig_probe,
-> +	.id_table = sysconfig_spi_ids,
-> +	.driver = {
-> +		.name = "lattice_sysconfig_spi_fpga_mgr",
-> +		.of_match_table = of_match_ptr(sysconfig_of_ids),
-> +	},
-> +};
-> +
-> +module_spi_driver(lattice_sysconfig_driver);
-> +
-> +MODULE_DESCRIPTION("Lattice sysCONFIG Slave SPI FPGA Manager");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.37.2
+> On 8/24/2022 1:25 AM, Dmitry Baryshkov wrote:
+>> On Wed, 24 Aug 2022 at 01:59, Abhinav Kumar 
+>> <quic_abhinavk@quicinc.com> wrote:
+>>>
+>>>
+>>>
+>>> On 8/23/2022 3:41 PM, Dmitry Baryshkov wrote:
+>>>> On Wed, 24 Aug 2022 at 01:07, Abhinav Kumar 
+>>>> <quic_abhinavk@quicinc.com> wrote:
+>>>>> On 8/22/2022 11:33 AM, Dmitry Baryshkov wrote:
+>>>>>> On 22/08/2022 20:32, Abhinav Kumar wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 8/22/2022 9:49 AM, Dmitry Baryshkov wrote:
+>>>>>>>> On 22/08/2022 19:38, Abhinav Kumar wrote:
+>>>>>>>>> Hi Dmitry
+>>>>>>>>>
+>>>>>>>>> On 8/22/2022 9:18 AM, Dmitry Baryshkov wrote:
+>>>>>>>>>> On 17/08/2022 21:01, Kuogee Hsieh wrote:
+>>>>>>>>>>> DRM commit_tails() will disable downstream 
+>>>>>>>>>>> crtc/encoder/bridge if
+>>>>>>>>>>> both disable crtc is required and crtc->active is set before 
+>>>>>>>>>>> pushing
+>>>>>>>>>>> a new frame downstream.
+>>>>>>>>>>>
+>>>>>>>>>>> There is a rare case that user space display manager issue an 
+>>>>>>>>>>> extra
+>>>>>>>>>>> screen update immediately followed by close DRM device while 
+>>>>>>>>>>> down
+>>>>>>>>>>> stream display interface is disabled. This extra screen 
+>>>>>>>>>>> update will
+>>>>>>>>>>> timeout due to the downstream interface is disabled but will 
+>>>>>>>>>>> cause
+>>>>>>>>>>> crtc->active be set. Hence the followed commit_tails() called by
+>>>>>>>>>>> drm_release() will pass the disable downstream 
+>>>>>>>>>>> crtc/encoder/bridge
+>>>>>>>>>>> conditions checking even downstream interface is disabled.
+>>>>>>>>>>> This cause the crash to happen at dp_bridge_disable() due to it
+>>>>>>>>>>> trying
+>>>>>>>>>>> to access the main link register to push the idle pattern out
+>>>>>>>>>>> while main
+>>>>>>>>>>> link clocks is disabled.
+>>>>>>>>>>>
+>>>>>>>>>>> This patch adds atomic_check to prevent the extra frame will not
+>>>>>>>>>>> be pushed down if display interface is down so that crtc->active
+>>>>>>>>>>> will not be set neither. This will fail the conditions checking
+>>>>>>>>>>> of disabling down stream crtc/encoder/bridge which prevent
+>>>>>>>>>>> drm_release() from calling dp_bridge_disable() so that crash
+>>>>>>>>>>> at dp_bridge_disable() prevented.
+>>>>>>>>>>
+>>>>>>>>>> I must admit I had troubles parsing this description. However 
+>>>>>>>>>> if I
+>>>>>>>>>> got you right, I think the check that the main link clock is
+>>>>>>>>>> running in the dp_bridge_disable() or dp_ctrl_push_idle() 
+>>>>>>>>>> would be
+>>>>>>>>>> a better fix.
+>>>>>>>>>
+>>>>>>>>> Originally, thats what was posted
+>>>>>>>>> https://patchwork.freedesktop.org/patch/496984/.
+>>>>>>>>
+>>>>>>>> This patch is also not so correct from my POV. It checks for the 
+>>>>>>>> hpd
+>>>>>>>> status, while in reality it should check for main link clocks being
+>>>>>>>> enabled.
+>>>>>>>>
+>>>>>>>
+>>>>>>> We can push another fix to check for the clk state instead of the 
+>>>>>>> hpd
+>>>>>>> status. But I must say we are again just masking something which the
+>>>>>>> fwk should have avoided isnt it?
+>>>>>>>
+>>>>>>> As per the doc in the include/drm/drm_bridge.h it says,
+>>>>>>>
+>>>>>>> "*
+>>>>>>>     * The bridge can assume that the display pipe (i.e. clocks 
+>>>>>>> and timing
+>>>>>>>     * signals) feeding it is still running when this callback is 
+>>>>>>> called.
+>>>>>>>     *"
+>>>>>>
+>>>>>> Yes, that's what I meant about this chunk begging to go to the 
+>>>>>> core. In
+>>>>>> my opinion, if we are talking about the disconnected sinks, it is the
+>>>>>> framework who should disallow submitting the frames to the 
+>>>>>> disconnected
+>>>>>> sinks.
+>>>>>>
+>>>>>>>
+>>>>>>> By adding an extra layers of protection in the driver, we are just
+>>>>>>> avoiding another issue but the commit should not have been issued in
+>>>>>>> the first place.
+>>>>>>>
+>>>>>>> So shouldnt we do both then? That is add protection to check if 
+>>>>>>> clock
+>>>>>>> is ON and also, reject commits when display is disconnected.
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Then it seemed like we were just protecting against an issue in 
+>>>>>>>>> the
+>>>>>>>>> framework which was allowing the frames to be pushed even after 
+>>>>>>>>> the
+>>>>>>>>> display was disconnected. The DP driver did send out the 
+>>>>>>>>> disconnect
+>>>>>>>>> event correctly and as per the logs, this frame came down after 
+>>>>>>>>> that
+>>>>>>>>> and the DRM fwk did allow it.
+>>>>>>>>>
+>>>>>>>>> So after discussing on IRC with Rob, we came up with this 
+>>>>>>>>> approach that
+>>>>>>>>> if the display is not connected, then atomic_check should fail. 
+>>>>>>>>> That
+>>>>>>>>> way the commit will not happen.
+>>>>>>>>>
+>>>>>>>>> Just seemed a bit cleaner instead of adding all our protections.
+>>>>>>>>
+>>>>>>>> The check to fail atomic_check if display is not connected seems 
+>>>>>>>> out
+>>>>>>>> of place. In its current way it begs go to the upper layer,
+>>>>>>>> forbidding using disconnected sinks for all the drivers. There is
+>>>>>>>> nothing special in the MSM DP driver with respect to the HPD events
+>>>>>>>> processing and failing atomic_check() based on that.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Why all the drivers? This is only for MSM DP bridge.
+>>>>>>
+>>>>>> Yes, we change the MSM DRM driver. But the check is generic 
+>>>>>> enough. I'm
+>>>>>> not actually insisting on pushing the check to the core, just 
+>>>>>> trying to
+>>>>>> understand the real cause here.
+>>>>>>
+>>>>>>>
+>>>>>
+>>>>> I actually wanted to push this to the core and thats what I had
+>>>>> originally asked on IRC because it does seem to be generic enough that
+>>>>> it should belong to the core but after discussion with Rob on 
+>>>>> freedreno,
+>>>>> he felt this was a better approach because for some of the legacy
+>>>>> connectors like VGA, this need not belong to the DRM core, hence we 
+>>>>> went
+>>>>> with this approach.
+>>>>
+>>>> It might be better to whitelist such connectors (S-VIDEO/composite
+>>>> comes to my mind rather than VGA).
+>>>
+>>> I am fine with that approach, if Rob is onboard with that.
+>>>
+>>>>
+>>>>>>>>>>> SError Interrupt on CPU7, code 0x00000000be000411 -- SError
+>>>>>>>>>>> CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
+>>>>>>>>>>> Hardware name: Google Lazor (rev3 - 8) (DT)
+>>>>>>>>>>> pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>>>>>>>>> pc : __cmpxchg_case_acq_32+0x14/0x2c
+>>>>>>>>>>> lr : do_raw_spin_lock+0xa4/0xdc
+>>>>>>>>>>> sp : ffffffc01092b6a0
+>>>>>>>>>>> x29: ffffffc01092b6a0 x28: 0000000000000028 x27: 
+>>>>>>>>>>> 0000000000000038
+>>>>>>>>>>> x26: 0000000000000004 x25: ffffffd2973dce48 x24: 
+>>>>>>>>>>> 0000000000000000
+>>>>>>>>>>> x23: 00000000ffffffff x22: 00000000ffffffff x21: 
+>>>>>>>>>>> ffffffd2978d0008
+>>>>>>>>>>> x20: ffffffd2978d0008 x19: ffffff80ff759fc0 x18: 
+>>>>>>>>>>> 0000000000000000
+>>>>>>>>>>> x17: 004800a501260460 x16: 0441043b04600438 x15: 
+>>>>>>>>>>> 04380000089807d0
+>>>>>>>>>>> x14: 07b0089807800780 x13: 0000000000000000 x12: 
+>>>>>>>>>>> 0000000000000000
+>>>>>>>>>>> x11: 0000000000000438 x10: 00000000000007d0 x9 : 
+>>>>>>>>>>> ffffffd2973e09e4
+>>>>>>>>>>> x8 : ffffff8092d53300 x7 : ffffff808902e8b8 x6 : 
+>>>>>>>>>>> 0000000000000001
+>>>>>>>>>>> x5 : ffffff808902e880 x4 : 0000000000000000 x3 : 
+>>>>>>>>>>> ffffff80ff759fc0
+>>>>>>>>>>> x2 : 0000000000000001 x1 : 0000000000000000 x0 : 
+>>>>>>>>>>> ffffff80ff759fc0
+>>>>>>>>>>> Kernel panic - not syncing: Asynchronous SError Interrupt
+>>>>>>>>>>> CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
+>>>>>>>>>>> Hardware name: Google Lazor (rev3 - 8) (DT)
+>>>>>>>>>>> Call trace:
+>>>>>>>>>>>     dump_backtrace.part.0+0xbc/0xe4
+>>>>>>>>>>>     show_stack+0x24/0x70
+>>>>>>>>>>>     dump_stack_lvl+0x68/0x84
+>>>>>>>>>>>     dump_stack+0x18/0x34
+>>>>>>>>>>>     panic+0x14c/0x32c
+>>>>>>>>>>>     nmi_panic+0x58/0x7c
+>>>>>>>>>>>     arm64_serror_panic+0x78/0x84
+>>>>>>>>>>>     do_serror+0x40/0x64
+>>>>>>>>>>>     el1h_64_error_handler+0x30/0x48
+>>>>>>>>>>>     el1h_64_error+0x68/0x6c
+>>>>>>>>>>>     __cmpxchg_case_acq_32+0x14/0x2c
+>>>>>>>>>>>     _raw_spin_lock_irqsave+0x38/0x4c
+>>>>>>
+>>>>>> You know, after re-reading the trace, I could not help but notice 
+>>>>>> that
+>>>>>> the issue seems to be related to completion/timer/spinlock memory
+>>>>>> becoming unavailable rather than disabling the main link clock.
+>>>>>> See, the SError comes in the spin_lock path, not during register 
+>>>>>> read.
+>>>>>>
+>>>>>> Thus I think the commit message is a bit misleading.
+>>>>>>
+>>>>>
+>>>>> No, this issue is due to unclocked access. Please check this part 
+>>>>> of the
+>>>>> stack:
+>>>>
+>>>> Well, if it were for the unlocked access, we would see SError on the
+>>>> register access, wouldn't we? However in this case the SError comes
+>>>> from the raw spinlock code.
+>>>
+>>> This is not uncommon. With unclocked access, we have seen in the past
+>>> that sometimes the stack is off by one line. The fact that this issue
+>>> got resolved even with the older version of the patch
+>>> https://patchwork.freedesktop.org/patch/496984/ is pointing towards an
+>>> unclocked access and not the dp/dp->ctrl memory pointers.
+>>
+>> As far as I understood, the bug is reproducible. Just to make me feel
+>> safe, can we please:
+>> -  either have a trace which shows when the clocks are disabled (or 
+>> not enabled)
+>> - or make sure that keeping the mainlink clock on would also mitigate 
+>> the issue?
 > 
+> Yes, this trace is already available with all the drm_dbg_dp messages 
+> enabled. Please refer to the attachment named 
+> 2022-08-15-dmesg-drm-4K-crash.txt in the bug 
+> https://gitlab.freedesktop.org/drm/msm/-/issues/17.
+> 
+> You can jump to this section of the log.
+> 
+> [   99.191216] msm_dpu ae01000.mdp: [drm:dp_display_host_phy_exit] 
+> type=10 core_init=1 phy_init=1
+> [   99.192354] [drm:dp_ctrl_phy_exit] phy=00000000b9b91350 init=0 
+> power_on=0
+> [   99.192369] msm_dpu ae01000.mdp: 
+> [drm:dp_display_disable.constprop.0.isra.0] sink count: 1
+> 
+> Here is the dp_display_disable() you were looking for.
+> 
+> [   99.192378] msm_dpu ae01000.mdp: [drm:dp_bridge_post_disable] type=10 
+> Done
+> [   99.192389] msm_dpu ae01000.mdp: 
+> [drm:drm_atomic_helper_commit_modeset_disables] disabling [CRTC:60:crtc-1]
+> [   99.192561] [drm:dpu_crtc_disable] no frames pending
+> [   99.192571] [drm:dpu_core_perf_crtc_update] crtc:60 stop_req:1 
+> core_clk:200000000
+> [   99.192581] [drm:dpu_core_perf_crtc_update] crtc=60 disable
+> [   99.192588] [drm:_dpu_core_perf_crtc_update_bus] crtc=59 bw=0 paths:1
+> [   99.192595] [drm:_dpu_core_perf_crtc_update_bus] crtc=60 bw=0 paths:1
+> [   99.192700] [drm:dpu_core_perf_crtc_update] clk:200000000
+> [   99.192714] [drm:dpu_core_perf_crtc_update] update clk rate = 
+> 200000000 HZ
+> [   99.192729] msm_dpu ae01000.mdp: 
+> [drm:drm_atomic_helper_commit_modeset_disables] modeset on 
+> [ENCODER:33:TMDS-33]
+> [   99.192738] [drm:dpu_encoder_virt_atomic_mode_set] enc33
+> [   99.192749] [drm:dpu_crtc_atomic_begin] crtc59
+>>
+>>>
+>>>>
+>>>>>    >>>>>>   wait_for_completion_timeout+0x2c/0x54
+>>>>>    >>>>>>   dp_ctrl_push_idle+0x40/0x88
+>>>>>    >>>>>>   dp_bridge_disable+0x24/0x30
+>>>>>    >>>>>>   drm_atomic_bridge_chain_disable+0x90/0xbc
+>>>>>    >>>>>>   drm_atomic_helper_commit_modeset_disables+0x198/0x444
+>>>>>    >>>>>>   msm_atomic_commit_tail+0x1d0/0x374
+>>>>>    >>>>>>   commit_tail+0x80/0x108
+>>>>>    >>>>>>   drm_atomic_helper_commit+0x118/0x11c
+>>>>>    >>>>>>   drm_atomic_commit+0xb4/0xe0
+>>>>>    >>>>>>   drm_client_modeset_commit_atomic+0x184/0x224
+>>>>>    >>>>>>   drm_client_modeset_commit_locked+0x58/0x160
+>>>>>    >>>>>>   drm_client_modeset_commit+0x3c/0x64
+>>>>>
+>>>>>> Can we please get a trace checking which calls were actually made for
+>>>>>> the dp bridge and if the dp/dp->ctrl memory pointers are correct?
+>>>>>>
+>>>>>> I do not see the dp_display_disable() being called. Maybe I just 
+>>>>>> missed
+>>>>>> the call.
+>>>>>>
+>>>>>
+>>>>> Yes it is called, please refer to the above part of the stack that I
+>>>>> have pasted.
+>>>>
+>>>> The stacktrace mentions dp_bridge_disable(), not dp_display_disable()
+>>>> (which I asked for).
+>>>>
+>>>
+>>> So whats happening here is the crash is happening in 
+>>> dp_bridge_disable().
+>>>
+>>> dp_display_disable() is called from post_disable() thats why it doesnt
+>>> show up in the stack.
+>>>
+>>
+>> Yes. But the mainlink clocks are disabled in dp_display_disable()
+>> that's why I'm asking if the function was called at all.
+> 
+> Now, I see why you were asking about dp_display_disable(). So basically 
+> your question is that when did dp_display_disable() happen that disabled 
+> the clocks causing this issue.
+> 
+> dp_display_disable() happened when the cable was disconnected as shown 
+> in the above section of the logs.
+> 
+> We also sent the disconnected uevent to the usermode. But this commit is 
+> happening from the drm_lastclose() context which doesnt check the 
+> connection status.
+> 
+> This leads to a commit after the cable has been disconnected causing the 
+> unclocked access.
+> 
+> You can refer this log and comment if something is still not clear to you.
 
-Cc: Johannes Zink <j.zink@pengutronix.de>
+I have spent some time comparing the log and the programming logic.
+
+I found what I was looking for: a safeguard for not doing the disable 
+twice. The disable_outputs() function, the one which calls 
+drm_atomic_bridge_chain_disable() has a logical check which should have 
+acted as a safety net here: it checks whether crtc_needs_disable().
+
+Can you please doublecheck why doesn't it reflect the fact that CRTC 
+doesn't need disabling as it has been already disabled. If I understand 
+correctly this boils down to CRTC's old_state->active being set, while 
+the CRTC has been effectively disabled.
+
+-- 
+With best wishes
+Dmitry
 

@@ -2,175 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38485A2EA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABBD5A2EB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344718AbiHZSi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S1344892AbiHZSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345169AbiHZSiA (ORCPT
+        with ESMTP id S1345194AbiHZSiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:38:00 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D7D6113C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:35:04 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id s6so3042394lfo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=4aLkJX7cunHtM95EA9sb2bQZzhjKdoxn0b8NHuPsFR0=;
-        b=L0/i8Wip3YLAM3uYJCwNd1DWXNAdOUnJwUT2dG612DDLpJ+3YZhuHltz7xznpTH9U2
-         GWC8IwUPt+IApjCrjxi2jZNwH98Lvma8HMhMNrc4H+dCpbsZpvutNVa79X9n2Gjx0LT0
-         b9WD+ih6oaaJiQnXQs2aB0H0fqGnIxPuvpdhlqQR3pevS9RC0wnHyoo85R5qWNg2v7NY
-         zC88PKdPO+k2QY668NzdEmAt3F+bnrn+UXJQpL/GYHjMFMxw/uiy0TXVflSclJagtiq8
-         ir16es+xHOWCet/uE2FskJ34y0RKe+jT78jbM8rU0o4AZCc7AdmblmHv196v25iKCG2K
-         /Btg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=4aLkJX7cunHtM95EA9sb2bQZzhjKdoxn0b8NHuPsFR0=;
-        b=5ZgIkKyjb+afYpJUdBIjkyWznuU1+IoyKSoYmt4t/Xql1ICEb78zySreD3jImuJaKn
-         r3Pv8tRmmAB80d4/6MGoVrb2N9hXFbvy9ZPCSKw2yuQq7P36scXZw2H5Ex4eWvKn3Pvw
-         QrIoXFz29S3I+uFN47xQ0s1/2qdIF2E1xZqpwJNEJ7upsIg0uMyQKOQ0Y7W9lJkRIQNq
-         Q2RjQBYl5UZriHG42AbinSTfEIPvosYFDuomxtnzO/Zat3pWdsj3jsBzWbmckYcscrHb
-         IIWSSJ5GxxtZrE5AsYRenbQtPQ8a1wfvmnlYtnHY6ja+rRS/bqeLGfpE9SYjKQj03+5X
-         gzoQ==
-X-Gm-Message-State: ACgBeo1EBIh5853O/p54vPtav4H3LJnfxNTBDRmMdO0THdBo085UNOtW
-        etDboCB3IADdoyhlnpLPWcFYF1A3vsPyn48+hmUdRw==
-X-Google-Smtp-Source: AA6agR6GjUnk9Fc+Xi2855vHSGp0Lm/1DilayQZsJQlEygL9lQ7uIA7Heq8q4/hGmgyGNbztLUDhV1Oeyd2FboyaH+w=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr3230009lfr.647.1661538901687; Fri, 26
- Aug 2022 11:35:01 -0700 (PDT)
+        Fri, 26 Aug 2022 14:38:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951B1BCCFE
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:35:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 319F961DCB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C483FC433C1;
+        Fri, 26 Aug 2022 18:35:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661538912;
+        bh=4HUfpEyIMPwZm9Or4pnF3GVjJGYp1+pAFmXsSIh30bg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rz/BkQsdEAmhdTTQza5Ci8Es3mjzFfX887yxuqUhW52uNbRLBj+/v2yv3MTwOMbHp
+         75lF3i7rTvblIAzVVe9C15I8Z5jYCUWvmQeiBFaRB2/o8nN2yXoo4qlQhbno+dciXY
+         57CrqHke+Iz4k9bF5RwQ7blldARpTNhTUJk6N0p9L369vHEmyqbTTSodVZjNG1b3tv
+         y0Uc4HcBmCtLoBX1Hym9BsjeFV7E2Hy3vnj5OqXLHc9Y41tZfm9/+FdUvoL77LZs6h
+         m1vGjZEDowAtgPvWae6X86jGkwbNKDIjWHrqyqYS++xLeTwFmPF8wtFmsl4qFle59+
+         cTF5uA/PDGUIg==
+Date:   Fri, 26 Aug 2022 12:35:09 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        James Smart <james.smart@broadcom.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Subject: Re: [PATCH v3 1/1] nvmet-tcp: Don't kmap() pages which can't come
+ from HIGHMEM
+Message-ID: <YwkSXZtO+i+36pXI@kbusch-mbp.dhcp.thefacebook.com>
+References: <20220822142438.5954-1-fmdefrancesco@gmail.com>
+ <20220822142438.5954-2-fmdefrancesco@gmail.com>
+ <YwVjpTW6vWvdVQTK@ZenIV>
+ <2887364.VdNmn5OnKV@opensuse>
 MIME-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com>
- <20220826181035.859042-2-ndesaulniers@google.com> <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
-In-Reply-To: <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 26 Aug 2022 11:34:50 -0700
-Message-ID: <CAKwvOdmR8D_GTM=ZhnhLzR3d9Ra46WpcO1W_CujGjMb+QR-_3w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/ for as-option
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2887364.VdNmn5OnKV@opensuse>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Nick,
->
-> I think the title would be a little more readable if it was:
->
-> Makefile.compiler: Use KBUILD_AFLAGS for as-option
+On Fri, Aug 26, 2022 at 08:16:59PM +0200, Fabio M. De Francesco wrote:
+> On mercoledì 24 agosto 2022 01:32:53 CEST Al Viro wrote:
+> > On Mon, Aug 22, 2022 at 04:24:38PM +0200, Fabio M. De Francesco wrote:
+> > > Therefore, replace the kmap() of sg_page(sg) with a page_address() and
+> > > delete the "nr_mapped" field from "nvmet_tcp_cmd" and instead pass a
+> > > local variable to iov_iter_kvec() from the call site in
+> > > nvmet_tcp_map_pdu_iovec().
+> > 
+> > I'd suggest looking into switching to ITER_BVEC...
+> 
+> Hello Al,
+> 
+> It's interesting that, for the second time in a few days, I've been suggested 
+> to switch to the use of BVEC. Christoph asked for first[1]
+> 
+> I responded to Christoph and, in the same email, I also asked Sagi
+> (the author of nvmet_tcp_map_pdu_iovec()) if he wanted to add something to 
+> that discussion.
+> 
+> As you may have already read, I'm so new to kernel development that I still
+> know very little about many subsystems and drivers. I am not currently
+> able to tell the difference between BVEC and KVEC. I could probably try to 
+> switch from one to the other (after learning from other code), however I won't 
+> be able to explain in the commit message why users should better use BVEC in 
+> this case.
+> 
+> My task is to remove as many kmap() call sites I can from the entire kernel, 
+> and this is all I did in nvmet-tcp. After doing many tens of call sites 
+> removals or conversions to kmap_local_page(), I learned to not go deep into 
+> those details which aren't needed to accomplish the task I've been given.
+> 
+> However, since you and Christoph suggested doing more (I suppose in a separate
+> patch), I did some research which seems to confirm that iov_iter_kvec() may be 
+> good for what it is supposed to do.
+> 
+> Since you are talking again about BVEC, soon after Christoph did the same, I'd
+> like to understand better which improvements do we expect from BVEC and why
+> and when should developers prefer this or KVEC.
+> 
+> Can you please provide further information or links to documentation?
 
-Thanks, yeah that looks better; I expect a v2 of this series will be necessary.
-
->
-> On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
-> > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
-> > cause as-option to fail unexpectedly because clang will emit
-> > -Werror,-Wunused-command-line-argument for various -m and -f flags for
-> > assembler sources.
-> >
-> > Callers of as-option (and as-instr) likely want to be adding flags to
-> > KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> >  arch/x86/boot/compressed/Makefile | 5 +++--
-> >  scripts/Makefile.compiler         | 6 +++---
-> >  2 files changed, 6 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> > index 35ce1a64068b..fb3db714a028 100644
-> > --- a/arch/x86/boot/compressed/Makefile
-> > +++ b/arch/x86/boot/compressed/Makefile
-> > @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
-> >  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
-> >  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
-> >  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
-> > -# Disable relocation relaxation in case the link is not PIE.
-> > -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> >  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> >
-> >  # sev.c indirectly inludes inat-table.h which is generated during
-> > @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> >  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
-> >
-> >  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> > +# Disable relocation relaxation in case the link is not PIE.
-> > +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> > +
->
-> Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
-> relaxation") added this to address
-> https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
-> move it to only being used for the .S files in arch/x86/boot/compressed?
-
-+ Arvind
-
-Hmm...that makes me think we might need two different as-option flags;
-one that does use KBUILD_CFLAGS, and whose result is meant to be added
-to cflags-y, then another that uses KBUILD_AFLAGS and is added to
-aflagsy-y.
-
-(My patch 2/3 in the series would use the latter)
-
-Let's see what thoughts Masahiro has.
-
->
-> >  GCOV_PROFILE := n
-> >  UBSAN_SANITIZE :=n
-> >
-> > diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> > index 94d0d40cddb3..d1739f0d3ce3 100644
-> > --- a/scripts/Makefile.compiler
-> > +++ b/scripts/Makefile.compiler
-> > @@ -29,13 +29,13 @@ try-run = $(shell set -e;         \
-> >       fi)
-> >
-> >  # as-option
-> > -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-> > +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-> >
-> >  as-option = $(call try-run,\
-> > -     $(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-> > +     $(CC) $(KBUILD_AFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-> >
-> >  # as-instr
-> > -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
-> > +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
-> >
-> >  as-instr = $(call try-run,\
-> >       printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
-> > --
-> > 2.37.2.672.g94769d06f0-goog
-> >
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+This kvec/bvec talk is a digression from your original goal: reduce unnecessary
+kmap() usage. If anyone wants to take on the bvec optimization in this code
+path, then by all means lets do it in a separate patch.

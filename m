@@ -2,150 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6BB5A20E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48BD5A20E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245005AbiHZGcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S245016AbiHZGc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiHZGcR (ORCPT
+        with ESMTP id S236285AbiHZGc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:32:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C89CEB26;
-        Thu, 25 Aug 2022 23:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661495537; x=1693031537;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ITboVH73O8yQJPDsSk/g1d+cvwKUeF9FmO7f/tWeck8=;
-  b=lCnBVO9qrQRnwN1+8jBiD5Vtn+7YfKLyUnFy620f3ONoKHe/QajbhbAX
-   2XDspsVntvDNQD5ktN/ibfFCVpbY/zS558tBF4l6LEg4Ow5oZ8rNHdAdN
-   78P2ZFGqJjvTYp7I1qEoL9D1GhK+x3PFmNYrxB7GNd/RjM23HbaQjPw3T
-   hzksyaLkdjXe5SCqXKuHEckyDPiXayOH/fapi7ienwmMbFqbrRyaZcR6n
-   5MP2aCwS347ZCH+Bc+yl28XOkOSt2vp0hpN3USS4+azB6elX0aflVWTKn
-   pfsIn3uaPYqs7E48yyc078vV/sBGe0Rwj+qZC75t7kwhuQ9bEI1AesYNp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="292017237"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="292017237"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 23:32:16 -0700
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="671339011"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.29.246]) ([10.255.29.246])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 23:32:13 -0700
-Message-ID: <4e383b85-6777-4452-a073-4d2f439e28b1@intel.com>
-Date:   Fri, 26 Aug 2022 14:32:10 +0800
+        Fri, 26 Aug 2022 02:32:57 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4FBD11CF
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:32:53 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d8so816786lfq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+qU9ctcrY7mtJ7WOAIohkf0A848XGp2YRevCX8i4gts=;
+        b=C7HaYeqFpX0lS9ll1R6ZCwBkm8QpDYZfuNWeuq8t0XEvQUmiGWlAwZ92EXwJeoD4J+
+         HhrTOmbUp2lx/PBx34u5s9RtG5xGwYCqitwzWsE9tNWsKG4h4D9o4WCojuyM8IRP0AvA
+         2Q3oTSAcRaBDuC05Vpm59LuL+Js5fRXqt+8lY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+qU9ctcrY7mtJ7WOAIohkf0A848XGp2YRevCX8i4gts=;
+        b=EI6POvrmL7hwJ1Zr5pXJDQuCP6H4r3Pi1PP1VXD3AAT/1mr/QeWtvp7jg7Glu7miqy
+         1oJDYktgzPaT1tJFymZcw2XXI1ocFDALazoL8+fwmFV0zL+8DB0GTKgwikNmbJr5dq2u
+         43Bxery2GUggahPem7tCH9ZFeqfOewCVzZJVdbvUcea5r/sR/IC+lc9OJTtAFdjMvZGe
+         lyNvz0H/0b+iN14TDzVBm+xWO8lA5DrtOU39AcPs0k9T0vPuUaruy0DwB/leJYxYL+Fr
+         KoecJGEOqvYOQLcvgEnxIy8OwXdiF+8ysmF+rffUo2FaZt466c6Nf+FG8oKrdNuwd0Jy
+         mjtA==
+X-Gm-Message-State: ACgBeo0p05QvQkQakDucCGiDg/moNnGPZYF1wl+pJ0mL87+L/pw6nwQF
+        ia86Z8CiH/V4mGErJTSEIK+Jf9zjfi3jB4fFgraHoA==
+X-Google-Smtp-Source: AA6agR6XzaZ+tjS2B38+xX/5fv3zVFoMbmEjVYn3rbhESLg5eHnuuhXweWowUZRe3isFIyyq67NglnbcGPdP3p8ht3c=
+X-Received: by 2002:a05:6512:1694:b0:48a:9d45:763f with SMTP id
+ bu20-20020a056512169400b0048a9d45763fmr1987125lfb.662.1661495571621; Thu, 25
+ Aug 2022 23:32:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 2/2] KVM: VMX: Stop/resume host PT before/after VM
- entry when PT_MODE_HOST_GUEST
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220825085625.867763-1-xiaoyao.li@intel.com>
- <20220825085625.867763-3-xiaoyao.li@intel.com> <YweWmF3wMPRnthIh@google.com>
- <6bcab33b-3fde-d470-88b9-7667c7dc4b2d@intel.com>
- <YwecducnM/U6tqJT@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <YwecducnM/U6tqJT@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
+ <20220820082936.686924-4-dario.binacchi@amarulasolutions.com> <c74b4464-ec28-eff6-86e2-2b0e5e9e992b@linaro.org>
+In-Reply-To: <c74b4464-ec28-eff6-86e2-2b0e5e9e992b@linaro.org>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Fri, 26 Aug 2022 08:32:40 +0200
+Message-ID: <CABGWkvryfr84eZyQzB4Cf17kBBNBRGRi3TxK24tesq=k56_uQw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/4] ARM: dts: stm32: add pin map for CAN
+ controller on stm32f4
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/25/2022 11:59 PM, Sean Christopherson wrote:
-> On Thu, Aug 25, 2022, Xiaoyao Li wrote:
->> On 8/25/2022 11:34 PM, Sean Christopherson wrote:
->>> On Thu, Aug 25, 2022, Xiaoyao Li wrote:
->>>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->>>> index d7f8331d6f7e..3e9ce8f600d2 100644
->>>> --- a/arch/x86/kvm/vmx/vmx.c
->>>> +++ b/arch/x86/kvm/vmx/vmx.c
->>>> @@ -38,6 +38,7 @@
->>>>    #include <asm/fpu/api.h>
->>>>    #include <asm/fpu/xstate.h>
->>>>    #include <asm/idtentry.h>
->>>> +#include <asm/intel_pt.h>
->>>>    #include <asm/io.h>
->>>>    #include <asm/irq_remapping.h>
->>>>    #include <asm/kexec.h>
->>>> @@ -1128,13 +1129,19 @@ static void pt_guest_enter(struct vcpu_vmx *vmx)
->>>>    	if (vmx_pt_mode_is_system())
->>>>    		return;
->>>> +	/*
->>>> +	 * Stop Intel PT on host to avoid vm-entry failure since
->>>> +	 * VM_ENTRY_LOAD_IA32_RTIT_CTL is set
->>>> +	 */
->>>> +	intel_pt_stop();
->>>> +
->>>>    	/*
->>>>    	 * GUEST_IA32_RTIT_CTL is already set in the VMCS.
->>>>    	 * Save host state before VM entry.
->>>>    	 */
->>>>    	rdmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
->>>
->>> KVM's manual save/restore of MSR_IA32_RTIT_CTL should be dropped.
->>
->> No. It cannot. Please see below.
->>
->>> If PT/RTIT can
->>> trace post-VMXON, then intel_pt_stop() will disable tracing and intel_pt_resume()
->>> will restore the host's desired value.
->>
->> intel_pt_stop() and intel_pt_resume() touches host's RTIT_CTL only when host
->> enables/uses Intel PT. Otherwise, they're just noop. In this case, we cannot
->> assume host's RTIT_CTL is zero (only the RTIT_CTL.TraceEn is 0). After
->> VM-exit, RTIT_CTL is cleared, we need to restore it.
-> 
-> But ensuring the RTIT_CTL.TraceEn=0 is all that's needed to make VM-Entry happy,
-> and if the host isn't using Intel PT, what do we care if other bits that, for all
-> intents and purposes are ignored, are lost across VM-Entry/VM-Exit?  I gotta
-> imaging the perf will fully initialize RTIT_CTL if it starts using PT.
+Hi Krzysztof,
 
-Personally, I agree with it.
+On Tue, Aug 23, 2022 at 3:43 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/08/2022 11:29, Dario Binacchi wrote:
+> > Add pin configurations for using CAN controller on stm32f469-disco
+> > board. They are located on the Arduino compatible connector CN5 (CAN1)
+> > and on the extension connector CN12 (CAN2).
+> >
+> > Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>
+> Do not ignore review. This is not correct. You are mixing copyright with
+> SoC...
 
-But I'm not sure if there is a criteria that host context needs to be 
-unchanged after being virtualized.
+OK. I got it. I will drop one SOB in version 3.
 
-> Actually, if the host isn't actively using Intel PT, can KVM avoid saving the
-> other RTIT MSRs?
+>
+> >
+>
+>
+> > +                     can2_pins_b: can2-1 {
+> > +                             pins1 {
+> > +                                     pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
+> > +                             };
+> > +                             pins2 {
+> > +                                     pinmux = <STM32_PINMUX('B', 12, AF9)>; /* CAN2_RX */
+> > +                                     bias-pull-up;
+> > +                             };
+> > +                     };
+> > +
+>
+> Don't ignore review.
 
-I don't think it's a good idea that it requires PT driver never and 
-won't rely on the previous value of PT MSRs. But it's OK if handing it 
-over to perf as the idea you gave below.
+Sorry, I didn't want to ignore your review, I thought the blank line
+to be removed was another.
+Actually I had to remove two blank lines and I left out the one you suggested.
 
-> Even better, can we hand that off to perf?  I really dislike KVM making assumptions
-> about perf's internal behavior.  E.g. can this be made to look like
+Thanks and regards,
+Dario
 
-you mean let perf subsystem to do the context save/restore staff of host 
-and KVM focuses on save/restore of guest context, right?
+>
+> That's second one, so that's a no.. :(
 
-I would like to see comment from perf folks on this and maybe need their 
-help on how to implement.
 
-> 	intel_pt_guest_enter(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN);
-> 
-> and
-> 
-> 	intel_pt_guest_exit(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN);
-> 
+>
+> Best regards,
+> Krzysztof
+
+
+
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

@@ -2,120 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492315A23D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324D35A23E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343490AbiHZJML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S244992AbiHZJN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245551AbiHZJL6 (ORCPT
+        with ESMTP id S233000AbiHZJNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:11:58 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC85D6BA7;
-        Fri, 26 Aug 2022 02:11:56 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27Q9Bil5015593;
-        Fri, 26 Aug 2022 04:11:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661505104;
-        bh=+46x+HLUlBkt4yUclJTZivGkoE1QCQMQ73VLUsdQx2A=;
-        h=From:To:CC:Subject:Date;
-        b=ZgWXmP4RyxPlK6xTtNVVOv+11sNpwNoPv84sQ4+qvDVvkA0NETeLKnpGW4JpUzxR4
-         zq64RoFD0mczNjSTqpArSeJTLLJv1+qXngiIwOiSQdTV8e09voXfAPZHGD+RcT7M4C
-         7k/3gHit2DwtCOmRT8DISPCgeeGGue/HNWflPDVk=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27Q9BiEI045059
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 26 Aug 2022 04:11:44 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 26
- Aug 2022 04:11:43 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 26 Aug 2022 04:11:43 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27Q9BhwG130182;
-        Fri, 26 Aug 2022 04:11:43 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <j-keerthy@ti.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH] dt-bindings: crypto: ti,sa2ul: drop dma-coherent property
-Date:   Fri, 26 Aug 2022 14:41:42 +0530
-Message-ID: <20220826091142.262325-1-j-choudhary@ti.com>
+        Fri, 26 Aug 2022 05:13:25 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A285DCD78F;
+        Fri, 26 Aug 2022 02:13:23 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDYrv5GwNz9v7Gy;
+        Fri, 26 Aug 2022 17:07:59 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCnXxeKjghjdBVRAA--.23684S2;
+        Fri, 26 Aug 2022 10:12:54 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v14 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h and add flags check function
+Date:   Fri, 26 Aug 2022 11:12:28 +0200
+Message-Id: <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
+References: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwCnXxeKjghjdBVRAA--.23684S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW3JFWUGryftw1rWr4fuFg_yoW8uF1kpF
+        yUCa4rKry8GFy2g3s3GFsIya1ag3yfGr17AFZIgwn0vF9ag3y8Jrn7GF43GF15urWruFy2
+        qr42ga15uw1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4JQwgAFsx
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-crypto driver itself is not dma-coherent. It is the dmaengine
-that moves data and the buffers are to be mapped to the
-dmaengine provider. So this property should be dropped.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Fixes: 2ce9a7299bf6 ('dt-bindings: crypto: Add TI SA2UL crypto accelerator documentation')
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+validate the kfunc parameters.
+
+Also, introduce key_lookup_flags_valid() to check if the caller set in the
+argument only defined flags. Introduce it directly in include/linux/key.h,
+to reduce the risk that the check is not in sync with currently defined
+flags.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: KP Singh <kpsingh@kernel.org>
 ---
+ include/linux/key.h      | 16 ++++++++++++++++
+ security/keys/internal.h |  2 --
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-Resending the patch as it got ACK-ed but did not get MERGED.
-(https://lore.kernel.org/all/2935fd8e-ceda-fec9-db47-65d3ec142e32@linaro.org/)
-We get some warnings which are expected. I will post the dt-node
-fixes once this patch gets merged.
-
- .../devicetree/bindings/crypto/ti,sa2ul.yaml        | 13 -------------
- 1 file changed, 13 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml b/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
-index 02f47c2e7998..0c15fefb6671 100644
---- a/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
-+++ b/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
-@@ -35,8 +35,6 @@ properties:
-       - const: rx1
-       - const: rx2
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 7febc4881363..e679dbf0c940 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -88,6 +88,22 @@ enum key_need_perm {
+ 	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+ };
  
--  dma-coherent: true
--
-   "#address-cells":
-     const: 2
++#define KEY_LOOKUP_CREATE	0x01
++#define KEY_LOOKUP_PARTIAL	0x02
++
++/**
++ * key_lookup_flags_valid - detect if provided key lookup flags are valid
++ * @flags: key lookup flags.
++ *
++ * Verify whether or not the caller set in the argument only defined flags.
++ *
++ * Return: true if flags are valid, false if not.
++ */
++static inline bool key_lookup_flags_valid(u64 flags)
++{
++	return !(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL));
++}
++
+ struct seq_file;
+ struct user_struct;
+ struct signal_struct;
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 9b9cf3b6fcbb..3c1e7122076b 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
  
-@@ -72,16 +70,6 @@ required:
-   - dmas
-   - dma-names
+ extern bool lookup_user_key_possessed(const struct key *key,
+ 				      const struct key_match_data *match_data);
+-#define KEY_LOOKUP_CREATE	0x01
+-#define KEY_LOOKUP_PARTIAL	0x02
  
--if:
--  properties:
--    compatible:
--      enum:
--        - ti,j721e-sa2ul
--        - ti,am654-sa2ul
--then:
--  required:
--    - dma-coherent
--
- additionalProperties: false
- 
- examples:
-@@ -95,5 +83,4 @@ examples:
-         dmas = <&main_udmap 0xc000>, <&main_udmap 0x4000>,
-                <&main_udmap 0x4001>;
-         dma-names = "tx", "rx1", "rx2";
--        dma-coherent;
-     };
+ extern long join_session_keyring(const char *name);
+ extern void key_change_session_keyring(struct callback_head *twork);
 -- 
 2.25.1
 

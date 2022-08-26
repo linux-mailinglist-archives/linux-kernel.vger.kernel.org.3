@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4715A2FBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0465A2FC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241202AbiHZTNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
+        id S238612AbiHZTUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiHZTNl (ORCPT
+        with ESMTP id S231267AbiHZTUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:13:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B2B98CB4;
-        Fri, 26 Aug 2022 12:13:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8726DB83117;
-        Fri, 26 Aug 2022 19:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3BB3C433D6;
-        Fri, 26 Aug 2022 19:13:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661541218;
-        bh=JE597L0A8gq9ni57nPTbmMIrbFvwDzfCUptaHqm/PD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=llIVgHlns//rbdeTSXSMeKly1n1//+21QUco6oCapWf30ICEfWmSE0BwDs9Gppwby
-         Q74BxtWgot+r8SAsvro02yInv4G7BD1J7DfBgWrzuuxnJf85wtrzEQTc9CrfjQk0nH
-         ZUksYFBilRTg59WqWKZ7zC+abisJaposQOz8wqKAfpAtFoHcmC5n4TGDhm80QYQ4oI
-         16OsjtzdR6aaaxZLsBoeQRWYilvc8My2Mce4OZI4KL1PNn/T1lkiD/JOFKdoocJXRx
-         u5EMdf1RsMU/4kBFqeiOvqT8Tq4ewyvXyAzeewn0qmVbxXgirW8loLME+y3UBKaHxE
-         SE9puroD7iMcg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 36438404A1; Fri, 26 Aug 2022 16:13:35 -0300 (-03)
-Date:   Fri, 26 Aug 2022 16:13:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Fri, 26 Aug 2022 15:20:47 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756346CD32;
+        Fri, 26 Aug 2022 12:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661541646; x=1693077646;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+Ad09Os/PUvK/J76FchENgrJ52K2/K/VEG9kiQ+ar/Q=;
+  b=n9is3YBMJkvP0neh/9fwPpzcliUTZb1yENjweqwxbDJNA672BiOklqhC
+   SFbeelea1gRq9pMFixEZU8bXlq+g8TsWlQEyypN7LL8WRwhazzgGjdFd1
+   jxEu2XPGknTI0/3nFRgzRFejLNauhoyENVZd5/Hmn9Un9wn6E9EQheAle
+   c64UHOLJa5XLFhjwiMj0SgdTi3/5y4GqzixCaC8yCP5hcdOReTPRHc2NB
+   JqJedaaCCVpCADcoPq/jseJEosAipNV1fyvWA6IK3PRTNIZQupKYoYLIB
+   0ZdtetuN3HbR6lZAM078WnvkQ9bI4+05H3JnXtVkQsGsgHVbFzwqXMEkv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="293320759"
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="293320759"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:20:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="671588431"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:20:34 -0700
+Message-ID: <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
+Date:   Fri, 26 Aug 2022 22:20:28 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Darren Hart <dvhart@infradead.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
@@ -67,8 +76,7 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Quentin Monnet <quentin@isovalent.com>,
         William Cohen <wcohen@redhat.com>,
         Andres Freund <andres@anarazel.de>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
         Colin Ian King <colin.king@intel.com>,
         James Clark <james.clark@arm.com>,
         Fangrui Song <maskray@google.com>,
@@ -82,78 +90,82 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Jason Wang <wangborong@cdjrlc.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 15/18] perf mutex: Add thread safety annotations
-Message-ID: <YwkbXwLGXitFuEfV@kernel.org>
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
 References: <20220824153901.488576-1-irogers@google.com>
- <20220824153901.488576-16-irogers@google.com>
- <Ywj4vnYp6KGrrwl+@kernel.org>
- <CAP-5=fU0Kc+ZhVBXWz1zup1wFGUf8EOyaRREmfXDfD+hGGoL6w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fU0Kc+ZhVBXWz1zup1wFGUf8EOyaRREmfXDfD+hGGoL6w@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
+ <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+ <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com>
+ <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+ <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
+ <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Aug 26, 2022 at 10:00:43AM -0700, Ian Rogers escreveu:
-> On Fri, Aug 26, 2022 at 9:45 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Wed, Aug 24, 2022 at 08:38:58AM -0700, Ian Rogers escreveu:
-> > > Add thread safety annotations to struct mutex so that when compiled with
-> > > clang's -Wthread-safety warnings are generated for erroneous lock
-> > > patterns. NO_THREAD_SAFETY_ANALYSIS is needed for
-> > > mutex_lock/mutex_unlock as the analysis doesn't under pthread calls.
-> >
-> > So even having the guards checking if the attribute is available it
-> > seems at least clang 11.0 is needed, as the "lockable" arg was
-> > introduced there:
-> >
-> >   37    42.61 fedora:32                     : FAIL clang version 10.0.1 (Fedora 10.0.1-3.fc32)
-> >     In file included from /git/perf-6.0.0-rc2/tools/perf/util/../ui/ui.h:5:
-> >     /git/perf-6.0.0-rc2/tools/perf/util/../ui/../util/mutex.h:74:8: error: invalid capability name 'lockable'; capability name must be 'mutex' or 'role' [-Werror,-Wthread-safety-attributes]
-> >     struct LOCKABLE mutex {
-> >            ^
-> >     /git/perf-6.0.0-rc2/tools/perf/util/../ui/../util/mutex.h:35:44: note: expanded from macro 'LOCKABLE'
-> >     #define LOCKABLE __attribute__((capability("lockable")))
+On 26/08/22 22:00, Namhyung Kim wrote:
+> On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>> Below seems adequate for now, at least logically, but maybe it
+>> would confuse clang thread-safety analysis?
+> 
+> I think it's not just about locks, the exit_browser should bail out early
+> if the setup code was not called.
+
+In those cases, use_browser is 0 or -1 unless someone has inserted
+an invalid perf config like "tui.script=on" or "gtk.script=on".
+So currently, in cases where exit_browser() is called without
+setup_browser(), it does nothing.  Which means it is only the
+unconditional mutex_destroy() that needs to be conditional.
+
+> 
+> Thanks,
+> Namhyung
 > 
 > 
-> capability("lockable") can just be lockable, the capability
-> generalization came in a later clang release.
-> 
-> That is change:
-> #define LOCKABLE __attribute__((capability("lockable")))
-> to:
-> #define LOCKABLE __attribute__((lockable))
-> 
-> and later clangs take the earlier name. Do you want a v5 for this 1 liner?
+>>
+>> diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+>> index 25ded88801a3..6d81be6a349e 100644
+>> --- a/tools/perf/ui/setup.c
+>> +++ b/tools/perf/ui/setup.c
+>> @@ -73,9 +73,17 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+>>         return 0;
+>>  }
+>>
+>> +/*
+>> + * exit_browser() can get called without setup_browser() having been called
+>> + * first, so it is necessary to keep track of whether ui__lock has been
+>> + * initialized.
+>> + */
+>> +static bool ui__lock_initialized;
+>> +
+>>  void setup_browser(bool fallback_to_pager)
+>>  {
+>>         mutex_init(&ui__lock);
+>> +       ui__lock_initialized = true;
+>>         if (use_browser < 2 && (!isatty(1) || dump_trace))
+>>                 use_browser = 0;
+>>
+>> @@ -118,5 +126,6 @@ void exit_browser(bool wait_for_ok)
+>>         default:
+>>                 break;
+>>         }
+>> -       mutex_destroy(&ui__lock);
+>> +       if (ui__lock_initialized)
+>> +               mutex_destroy(&ui__lock);
+>>  }
+>>
 
-I did it and I'm now testing, thanks.
-
-- Arnaldo
-
-diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
-index 48a2d87598f0d725..29b5494b213a3fc9 100644
---- a/tools/perf/util/mutex.h
-+++ b/tools/perf/util/mutex.h
-@@ -32,7 +32,7 @@
- #define PT_GUARDED_BY(x) __attribute__((pt_guarded_by(x)))
- 
- /* Documents if a type is a lockable type. */
--#define LOCKABLE __attribute__((capability("lockable")))
-+#define LOCKABLE __attribute__((lockable))
- 
- /* Documents functions that acquire a lock in the body of a function, and do not release it. */
- #define EXCLUSIVE_LOCK_FUNCTION(...)  __attribute__((exclusive_lock_function(__VA_ARGS__)))
-
-- Arnaldo

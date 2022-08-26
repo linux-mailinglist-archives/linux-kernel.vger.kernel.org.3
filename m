@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48C55A2740
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD595A274D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343599AbiHZL4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        id S230307AbiHZMAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240024AbiHZL4U (ORCPT
+        with ESMTP id S245496AbiHZMA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:56:20 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C376D6F258;
-        Fri, 26 Aug 2022 04:56:15 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 703F483E3;
-        Fri, 26 Aug 2022 13:56:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1661514973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gWGyQWM8OXSvJySwbiAhGUCbHok4M4ZkpORs44F2o94=;
-        b=R9GgofqNh8ffJi2Q++3eaQW8kyZebCFvo6relTQwzWR6tRt6nSXNv9+Mi/sZXXnAnL5uuG
-        z/f7eXXsENymMEMqVdbUbhG5SQv1aWcLasxq5e61Go2eb2+b8/ok2kxY78u2vgpYGjAZRX
-        RCMCAMCDKX78znzg5aBZTusX0IlpFRsk03tktYLkDYjlGoqiDtHB4OM5jiRaEywVWYF8IJ
-        mn0FotCsN81g84tzOvaP21hskr0UyARWF0mbIT7ExqdFxAux5pdDifN0kqJ2F2OBj9FGph
-        aFWhQgH8VeeulDulnSo5zTvcFwMd+3hdxhN0nzHRPpyiVcRw+7ZX2n0WvRg1hQ==
-From:   Michael Walle <michael@walle.cc>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH 3/3] net: lan966x: make reset optional
-Date:   Fri, 26 Aug 2022 13:56:07 +0200
-Message-Id: <20220826115607.1148489-4-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220826115607.1148489-1-michael@walle.cc>
-References: <20220826115607.1148489-1-michael@walle.cc>
+        Fri, 26 Aug 2022 08:00:26 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB723BFE
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:00:25 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id cu2so2797815ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=MxGGd+3msz7Zn8awEDtaAUBprmyOYrYaH1QuR+N4/7o=;
+        b=Gpo7N7AFg7ypzz4ziWV5/xqGFn6VPSfepZxdPxvYxjBT44+e2TYfUynhvuN4bgXRS/
+         Y1lMBDwSuSvsL4hGB4NVY0v3EWF3sT7n/bwVeuIOO0ODHJdT0/abtE6mRH2DymksTXXO
+         r1ObcZJ+e7Ndu8lJcEp/bXAX2zEQ1GVh4vtmyJ2otqk5MeOeGigP0uXSnvUviUdyKMUb
+         9msUNjrYLw+GCjpRbA06oyQANC2DsCXnYbXtaRvOYkeCMk/UHYKt4JhjPsqcwksrWypU
+         p8o94YuVPtobGYa1F4jwdkuKvP6bhOSsOcBBEtFTo7INwdfxMTydzpLeyUkWamzDAgnB
+         0w8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=MxGGd+3msz7Zn8awEDtaAUBprmyOYrYaH1QuR+N4/7o=;
+        b=AuNabCvj97WT2kjGHECGKBRV5DZix7aAac2zJVyGR1AGB4uKIdJScjeyy2R75/JZ6d
+         YI+a6G6IDNnyKqvjT78j4HhuDMT0prJ4Jj8wAq+GYoQiiKauUrwKmw/B9iS+9ipRW/am
+         bpL9GTCI/+idDbunPIys6eF5intco6x+S01/JJsp4rjsWh/SCefvLxwtvJwa24AsOF4y
+         jytEncr5VBfXG3QwG+KLDCegaJoZ8aRutXOZzGyQKp45/oPv+Tc4AEbg9HRTEG+e1iDy
+         TO40hhxEJ5UY0KtBfBIB8VVeWgAdJZnsjn/GAo/XTPLcBgFbYe8jfX5f66/5XtnSZUXv
+         NgBg==
+X-Gm-Message-State: ACgBeo1xcSFLtl5x7hJvoQxXssdpSsyUJMSkYbN4Bua0m0VQDCUMRGcD
+        46Oqcb9T+efk0WFHSA2iViLf9Q4XPG7Etg==
+X-Google-Smtp-Source: AA6agR6pWzpqNgeu5nYDI5mFIoqg2F0SdV1dhlacTRMXfwMX4RTLBi/UMn/Zte3pGXH6yssBl9NJZA==
+X-Received: by 2002:a17:907:6d2a:b0:73d:9ba5:633a with SMTP id sa42-20020a1709076d2a00b0073d9ba5633amr5386524ejc.201.1661515223724;
+        Fri, 26 Aug 2022 05:00:23 -0700 (PDT)
+Received: from mutt (c-e429e555.07-21-73746f28.bbcust.telenor.se. [85.229.41.228])
+        by smtp.gmail.com with ESMTPSA id w20-20020a05640234d400b00447c2c1b9a0sm1164957edc.91.2022.08.26.05.00.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 05:00:22 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 14:00:20 +0200
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        kvmarm@lists.cs.columbia.edu, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alex.bennee@linaro.org, arnd@arndb.de
+Subject: Re: [PATCH V2] arm64/mm: Fix __enable_mmu() for new TGRAN range
+ values
+Message-ID: <20220826120020.GB520@mutt>
+References: <1615355590-21102-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1615355590-21102-1-git-send-email-anshuman.khandual@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no dedicated reset for just the switch core. The reset which
-is used up until now, is more of a global reset, resetting almost the
-whole SoC and cause spurious errors by doing so. Make it possible to
-handle the reset elsewhere and mark the reset as optional.
+On 2021-03-10 11:23, Anshuman Khandual wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> As per ARM ARM DDI 0487G.a, when FEAT_LPA2 is implemented, ID_AA64MMFR0_EL1
+> might contain a range of values to describe supported translation granules
+> (4K and 16K pages sizes in particular) instead of just enabled or disabled
+> values. This changes __enable_mmu() function to handle complete acceptable
+> range of values (depending on whether the field is signed or unsigned) now
+> represented with ID_AA64MMFR0_TGRAN_SUPPORTED_[MIN..MAX] pair. While here,
+> also fix similar situations in EFI stub and KVM as well.
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: kvmarm@lists.cs.columbia.edu
+> Cc: linux-efi@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Acked-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 2ad078608c45..e2c77f954a3d 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -971,7 +971,8 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
- 	int val = 0;
- 	int ret;
- 
--	switch_reset = devm_reset_control_get_shared(lan966x->dev, "switch");
-+	switch_reset = devm_reset_control_get_optional_shared(lan966x->dev,
-+							      "switch");
- 	if (IS_ERR(switch_reset))
- 		return dev_err_probe(lan966x->dev, PTR_ERR(switch_reset),
- 				     "Could not obtain switch reset");
--- 
-2.30.2
+When building an arm64 defconfig kernel from stable/linux-5.10.y and
+booting that in QEMU (version: 1:7.0+dfsg-2~bpo11+2) with '-cpu max' the
+kernel doesn't boot. I don't get any output.  The kernel boots fine if I
+change to '-cpu cortex-a72'.
 
+If I cherry-pick this patch to stable/linux-5.10.y I'm able too boot the
+kernel with '-cpu max'.
+
+However, I'm not comfortable to backport this patch to older kernels
+since there are a lot of conflicts.
+Can someone help out to do the packport?
+
+Cheers,
+Anders

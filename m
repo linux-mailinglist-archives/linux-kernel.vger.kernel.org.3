@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD2D5A1F53
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361165A1EE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244551AbiHZDLn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 Aug 2022 23:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S244713AbiHZCgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 22:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiHZDLG (ORCPT
+        with ESMTP id S231532AbiHZCgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 23:11:06 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4445642CC;
-        Thu, 25 Aug 2022 20:11:04 -0700 (PDT)
-Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id D57AF1008B388;
-        Fri, 26 Aug 2022 11:11:02 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id C7C2C37C894;
-        Fri, 26 Aug 2022 11:11:02 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from mta90.sjtu.edu.cn ([127.0.0.1])
-        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id fYuVOdzGwl62; Fri, 26 Aug 2022 11:11:02 +0800 (CST)
-Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id 9E48B37C893;
-        Fri, 26 Aug 2022 11:11:02 +0800 (CST)
-Date:   Fri, 26 Aug 2022 11:11:02 +0800 (CST)
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-To:     jasowang <jasowang@redhat.com>
-Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Message-ID: <1901174467.9092625.1661483462548.JavaMail.zimbra@sjtu.edu.cn>
-In-Reply-To: <13f97c76-bc8b-1509-d854-89d0d62138fa@redhat.com>
-References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-4-qtxuning1999@sjtu.edu.cn> <13f97c76-bc8b-1509-d854-89d0d62138fa@redhat.com>
-Subject: Re: [RFC v2 3/7] vsock: batch buffers in tx
+        Thu, 25 Aug 2022 22:36:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D09921E35
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 19:36:41 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDP4N1zc6zYcpM;
+        Fri, 26 Aug 2022 10:32:20 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 10:36:39 +0800
+Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
+ (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
+ 2022 10:36:38 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH -next] sched/deadline: Add compare_task_rq helper
+Date:   Fri, 26 Aug 2022 11:11:43 +0800
+Message-ID: <20220826031143.9501-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=GB2312
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.166.246.247]
-X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
-Thread-Topic: vsock: batch buffers in tx
-Thread-Index: 8SBCN+82rZHA3Ql/zv7BqGe0x2TrwA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Wrap repeated code in helper function compare_task_rq, which return true
+if there is no deadline task on the rq at all, or task's deadline
+earlier than the rq.
 
+Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+---
+ kernel/sched/deadline.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
------ Original Message -----
-> From: "jasowang" <jasowang@redhat.com>
-> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
-> Tsirkin" <mst@redhat.com>
-> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
-> "virtualization" <virtualization@lists.linux-foundation.org>
-> Sent: Thursday, August 25, 2022 3:08:58 PM
-> Subject: Re: [RFC v2 3/7] vsock: batch buffers in tx
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index d116d2b9d2f9..4a40a462717c 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1810,6 +1810,13 @@ static void yield_task_dl(struct rq *rq)
+ 
+ #ifdef CONFIG_SMP
+ 
++static inline bool compare_task_rq(struct task_struct *p, struct rq *rq)
++{
++	return (!rq->dl.dl_nr_running ||
++		dl_time_before(p->dl.deadline,
++			       rq->dl.earliest_dl.curr));
++}
++
+ static int find_later_rq(struct task_struct *task);
+ 
+ static int
+@@ -1852,9 +1859,7 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
+ 		int target = find_later_rq(p);
+ 
+ 		if (target != -1 &&
+-				(dl_time_before(p->dl.deadline,
+-					cpu_rq(target)->dl.earliest_dl.curr) ||
+-				(cpu_rq(target)->dl.dl_nr_running == 0)))
++		    compare_task_rq(p, cpu_rq(target)))
+ 			cpu = target;
+ 	}
+ 	rcu_read_unlock();
+@@ -2221,9 +2226,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
+ 
+ 		later_rq = cpu_rq(cpu);
+ 
+-		if (later_rq->dl.dl_nr_running &&
+-		    !dl_time_before(task->dl.deadline,
+-					later_rq->dl.earliest_dl.curr)) {
++		if (!compare_task_rq(task, later_rq)) {
+ 			/*
+ 			 * Target rq has tasks of equal or earlier deadline,
+ 			 * retrying does not release any lock and is unlikely
+@@ -2251,9 +2254,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
+ 		 * its earliest one has a later deadline than our
+ 		 * task, the rq is a good one.
+ 		 */
+-		if (!later_rq->dl.dl_nr_running ||
+-		    dl_time_before(task->dl.deadline,
+-				   later_rq->dl.earliest_dl.curr))
++		if (compare_task_rq(task, later_rq))
+ 			break;
+ 
+ 		/* Otherwise we try again. */
+@@ -2424,9 +2425,7 @@ static void pull_dl_task(struct rq *this_rq)
+ 		 *  - it will preempt the last one we pulled (if any).
+ 		 */
+ 		if (p && dl_time_before(p->dl.deadline, dmin) &&
+-		    (!this_rq->dl.dl_nr_running ||
+-		     dl_time_before(p->dl.deadline,
+-				    this_rq->dl.earliest_dl.curr))) {
++		    compare_task_rq(p, this_rq)) {
+ 			WARN_ON(p == src_rq->curr);
+ 			WARN_ON(!task_on_rq_queued(p));
+ 
+-- 
+2.17.1
 
-> ÔÚ 2022/8/17 21:57, Guo Zhi Ð´µÀ:
->> Vsock uses buffers in order, and for tx driver doesn't have to
->> know the length of the buffer. So we can do a batch for vsock if
->> in order negotiated, only write one used ring for a batch of buffers
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>   drivers/vhost/vsock.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->> index 368330417bde..b0108009c39a 100644
->> --- a/drivers/vhost/vsock.c
->> +++ b/drivers/vhost/vsock.c
->> @@ -500,6 +500,7 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work
->> *work)
->>   	int head, pkts = 0, total_len = 0;
->>   	unsigned int out, in;
->>   	bool added = false;
->> +	int last_head = -1;
->>   
->>   	mutex_lock(&vq->mutex);
->>   
->> @@ -551,10 +552,16 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work
->> *work)
->>   		else
->>   			virtio_transport_free_pkt(pkt);
->>   
->> -		vhost_add_used(vq, head, 0);
->> +		if (!vhost_has_feature(vq, VIRTIO_F_IN_ORDER))
->> +			vhost_add_used(vq, head, 0);
->> +		else
->> +			last_head = head;
->>   		added = true;
->>   	} while(likely(!vhost_exceeds_weight(vq, ++pkts, total_len)));
->>   
->> +	/* If in order feature negotiaged, we can do a batch to increase performance
->> */
->> +	if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER) && last_head != -1)
->> +		vhost_add_used(vq, last_head, 0);
-> 
-> 
-> I may miss something but spec said "The device then skips forward in the
-> ring according to the size of the batch. ".
-> 
-> I don't see how it is done here.
-> 
-> Thanks
-> 
-
-It can skip them in __vhost_add_used_n if _F_IN_ORDER is negotiated.
-last_used_idx will be added by size of the batch.
-
-> 
->>   no_more_replies:
->>   	if (added)
->>   		vhost_signal(&vsock->dev, vq);

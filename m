@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554E85A255B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7A55A254D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344140AbiHZKCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        id S1344145AbiHZKCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343551AbiHZKBU (ORCPT
+        with ESMTP id S1343599AbiHZKBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 06:01:20 -0400
-Received: from smtpout30.security-mail.net (smtpout30.security-mail.net [85.31.212.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89296D87E9
+Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD61A6C10
         for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:16 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx304.security-mail.net (Postfix) with ESMTP id C6676627E2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:14 +0200 (CEST)
+        by fx601.security-mail.net (Postfix) with ESMTP id 3A5143ACE9E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508074;
-        bh=zPiuLmkBvrE9gNyds2FdhvvxO2NhLocol7hPD7SCqjc=;
+        s=sec-sig-email; t=1661508075;
+        bh=AHZn9X4lEZeD4sEl/aav+f8s4shU6qaXDqSZTpV22Hk=;
         h=From:To:Cc:Subject:Date;
-        b=3KySO66EBKos31lRAzoehuM9rIqve8i9fwttNUXPpw5Pd07QMnJyZDvRrMkPRxiNH
-         QWisWub2/oo5O9Q2wiwxUzd3Sf+r2OuH870cboDCC53nVgDmq21f+YQZwURfVX7Nuf
-         pyTjVRyfQGwDFizrLoeqhUpd0F8L/84kQ/S8G2oE=
-Received: from fx304 (localhost [127.0.0.1])
-        by fx304.security-mail.net (Postfix) with ESMTP id 710A36273B;
+        b=eO7Z/2/u4g73UlUBWWy9ly/XOcQZhBuBN6LNYjgFXL8hwcgkMH/SxfFSdEJWZAjXu
+         m7q17n3PTVaIRxSLae2kzYSEOxwyC8N9ngCKOStBvGLzQkVX+6hcCYEvAyD6msL27z
+         lRMalv+CTQ0HCJLCOX2RV3snRznhORzHCg0NXjDo=
+Received: from fx601 (localhost [127.0.0.1])
+        by fx601.security-mail.net (Postfix) with ESMTP id CC8943ACC57;
         Fri, 26 Aug 2022 12:01:14 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <b01e.630899e9.ed9f2.0>
+Secumail-id: <61e0.630899e9.d31de.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx304.security-mail.net (Postfix) with ESMTPS id EE115627BC;
+        by fx601.security-mail.net (Postfix) with ESMTPS id D73913ACE19;
         Fri, 26 Aug 2022 12:01:13 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id D2BAF27E0396;
-        Fri, 26 Aug 2022 12:01:12 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id B544427E02FA;
+        Fri, 26 Aug 2022 12:01:13 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id BCB9E27E0392;
-        Fri, 26 Aug 2022 12:01:12 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu BCB9E27E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 9DB4927E0392;
+        Fri, 26 Aug 2022 12:01:13 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 9DB4927E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508072;
-        bh=IkfsX32OzPGlUwQqHuM2c7LduVbNSM/5tgddX+vf+c4=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508073;
+        bh=YXD6MxjcXIsKPE6/xq6L97v82v78azRYLfFeM8nubaQ=;
         h=From:To:Date:Message-Id;
-        b=H/hNnkGw129zkHzW5411T9xglnGpap8ThLMJlavC3rhVSP3CqQioZeJHxsvA+EQHV
-         2BACI+v7uS/EMTVpGgrHuVgexu0XfalYF0IhDQTct0wMRio5JkqrlPKLomnVz+eAQd
-         1I7YOHmc3auIgCna9XinAPC8WBjbQPqyDK7a1E9E=
+        b=QGGol3GvpjpinSaxyUcEiPmia+1kfMXyxIfns3BXB3k/cIPdP3iV5NmxNrg6Qb2l2
+         niN4o7CbweXnbRB3u6gVuoJ5AANr1IcW0Czsq9pk3HjoWwWEFtlNOEcsjJpe3kRaJF
+         /vDgg7q4ggCbxGHKtCGzbAnFqK5X4Zh4S6WdwOCM=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gy2FuiwpetCd; Fri, 26 Aug 2022 12:01:12 +0200 (CEST)
+        with ESMTP id q7nyrsxYmrQJ; Fri, 26 Aug 2022 12:01:13 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id A265927E02FA;
-        Fri, 26 Aug 2022 12:01:12 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 8CF7527E02FA;
+        Fri, 26 Aug 2022 12:01:13 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] ARM: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:39 +0200
-Message-Id: <20220826100052.22945-11-jmaselbas@kalray.eu>
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>, linux-s390@vger.kernel.org
+Subject: [PATCH] s390: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:40 +0200
+Message-Id: <20220826100052.22945-12-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,62 +73,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Remove redundant word `the`.
 
-CC: linux-arm-kernel@lists.infradead.org
+CC: linux-s390@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- arch/arm/Kconfig                  | 4 ++--
- arch/arm/include/asm/unwind.h     | 2 +-
- arch/arm/mach-pxa/hx4700-pcmcia.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ arch/s390/kernel/perf_cpum_sf.c | 2 +-
+ arch/s390/kernel/sthyi.c        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 87badeae3181..9f0e37bd36e0 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1654,7 +1654,7 @@ config ARM_ATAG_DTB_COMPAT_CMDLINE_EXTEND
- 	bool "Extend with bootloader kernel arguments"
- 	help
- 	  The command-line arguments provided by the boot loader will be
--	  appended to the the device tree bootargs property.
-+	  appended to the device tree bootargs property.
+diff --git a/arch/s390/kernel/perf_cpum_sf.c b/arch/s390/kernel/perf_cpum_sf.c
+index 332a49965130..0fda19b1e21d 100644
+--- a/arch/s390/kernel/perf_cpum_sf.c
++++ b/arch/s390/kernel/perf_cpum_sf.c
+@@ -1160,7 +1160,7 @@ static void perf_event_count_update(struct perf_event *event, u64 count)
+  * combined-sampling data entry consists of a basic- and a diagnostic-sampling
+  * data entry.	The sampling function is determined by the flags in the perf
+  * event hardware structure.  The function always works with a combined-sampling
+- * data entry but ignores the the diagnostic portion if it is not available.
++ * data entry but ignores the diagnostic portion if it is not available.
+  *
+  * Note that the implementation focuses on basic-sampling data entries and, if
+  * such an entry is not valid, the entire combined-sampling data entry is
+diff --git a/arch/s390/kernel/sthyi.c b/arch/s390/kernel/sthyi.c
+index 4d141e2c132e..dfc350fab384 100644
+--- a/arch/s390/kernel/sthyi.c
++++ b/arch/s390/kernel/sthyi.c
+@@ -250,7 +250,7 @@ static void fill_diag_mac(struct sthyi_sctns *sctns,
+ 	sctns->mac.infmval1 |= MAC_CNT_VLD;
+ }
  
- endchoice
- 
-@@ -1812,7 +1812,7 @@ config DMI
- 	  continue to boot on existing non-UEFI platforms.
- 
- 	  NOTE: This does *NOT* enable or encourage the use of DMI quirks,
--	  i.e., the the practice of identifying the platform via DMI to
-+	  i.e., the practice of identifying the platform via DMI to
- 	  decide whether certain workarounds for buggy hardware and/or
- 	  firmware need to be enabled. This would require the DMI subsystem
- 	  to be enabled much earlier than we do on ARM, which is non-trivial.
-diff --git a/arch/arm/include/asm/unwind.h b/arch/arm/include/asm/unwind.h
-index b51f85417f58..5fc323586c7a 100644
---- a/arch/arm/include/asm/unwind.h
-+++ b/arch/arm/include/asm/unwind.h
-@@ -10,7 +10,7 @@
- 
- #ifndef __ASSEMBLY__
- 
--/* Unwind reason code according the the ARM EABI documents */
-+/* Unwind reason code according the ARM EABI documents */
- enum unwind_reason_code {
- 	URC_OK = 0,			/* operation completed successfully */
- 	URC_CONTINUE_UNWIND = 8,
-diff --git a/arch/arm/mach-pxa/hx4700-pcmcia.c b/arch/arm/mach-pxa/hx4700-pcmcia.c
-index e2331dfe427d..860b78aed18c 100644
---- a/arch/arm/mach-pxa/hx4700-pcmcia.c
-+++ b/arch/arm/mach-pxa/hx4700-pcmcia.c
-@@ -30,7 +30,7 @@ static int hx4700_pcmcia_hw_init(struct soc_pcmcia_socket *skt)
- 	/*
- 	 * IRQ type must be set before soc_pcmcia_hw_init() calls request_irq().
- 	 * The asic3 default IRQ type is level trigger low level detect, exactly
--	 * the the signal present on GPIOD4_CF_nCD when a CF card is inserted.
-+	 * the signal present on GPIOD4_CF_nCD when a CF card is inserted.
- 	 * If the IRQ type is not changed, the asic3 interrupt handler will loop
- 	 * repeatedly because it is unable to clear the level trigger interrupt.
- 	 */
+-/* Returns a pointer to the the next partition block. */
++/* Returns a pointer to the next partition block. */
+ static struct diag204_x_part_block *lpar_cpu_inf(struct lpar_cpu_inf *part_inf,
+ 						 bool this_lpar,
+ 						 void *diag224_buf,
 -- 
 2.17.1
 

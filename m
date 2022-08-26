@@ -2,107 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3566B5A26A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7B15A26AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344162AbiHZLNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S230227AbiHZLOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244972AbiHZLNC (ORCPT
+        with ESMTP id S229575AbiHZLOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:13:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01E1D31F7;
-        Fri, 26 Aug 2022 04:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661512381; x=1693048381;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=3r4b9fNqoE5fw/Wja2N6QhB8LgGuDbCrGO8y5pnVRGo=;
-  b=XQNB3MGVNIsumnH+1KSMdSzCsOjAGPSAKFJlW2hEa7NzqY9Ht9fa2rl2
-   w+hmIugXPgZsgP6PKSMkZnn4ft27cZHNs69PP/lpbPAR+oZENBDfxRPWi
-   snqhnQZv3P3vY5yylmFTbri/Y0ulfVGz6GC1xL7BmMVRWYhQi5AmrQz8t
-   BDhMYcF2gKfi/D1LOolVqsOSsJt7U3v+Ahr3kk7hTgQj9gvmkBXYUYr1d
-   90z/+chKdiLTQJItMS9cUZk280oe7HpjVDOmY8Ao9zo4l2q8vDyT5RMUm
-   IImAq3pZf/hezFMkDELan1GCsxraIS0KVXHkfSOLIGQexMZ9m5yphYKcI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295756583"
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="295756583"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 04:12:59 -0700
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="606734124"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 04:12:47 -0700
-Message-ID: <b87631c8-aa36-b72d-64d7-9343ddeebdc3@intel.com>
-Date:   Fri, 26 Aug 2022 14:12:42 +0300
+        Fri, 26 Aug 2022 07:14:37 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97BDD59A8;
+        Fri, 26 Aug 2022 04:14:35 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDcYx6hJmzYcrc;
+        Fri, 26 Aug 2022 19:10:13 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 19:14:33 +0800
+Subject: Re: [PATCH -next 2/5] landlock: add chmod and chown support
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+CC:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <shuah@kernel.org>, <corbet@lwn.net>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <20220822114701.26975-3-xiujianfeng@huawei.com> <YwPKG3G9PlStYPkz@nuc>
+ <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
+ <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
+ <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
+ <c447b4d3-8bc7-5277-5d49-7f4ffd0b5a5b@huawei.com>
+ <8b4aa750-91f3-ca95-bb50-b2023676bc4e@digikod.net>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <f5f968d5-3e48-7e1a-d942-59136e0da4a5@huawei.com>
+Date:   Fri, 26 Aug 2022 19:14:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 15/18] perf mutex: Add thread safety annotations
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <20220824153901.488576-16-irogers@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220824153901.488576-16-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <8b4aa750-91f3-ca95-bb50-b2023676bc4e@digikod.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,141 +59,303 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/22 18:38, Ian Rogers wrote:
-> Add thread safety annotations to struct mutex so that when compiled with
-> clang's -Wthread-safety warnings are generated for erroneous lock
-> patterns. NO_THREAD_SAFETY_ANALYSIS is needed for
-> mutex_lock/mutex_unlock as the analysis doesn't under pthread calls.
+Hi,
+
+在 2022/8/26 17:36, Mickaël Salaün 写道:
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/mutex.c |  2 ++
->  tools/perf/util/mutex.h | 72 ++++++++++++++++++++++++++++++++++++++---
->  2 files changed, 69 insertions(+), 5 deletions(-)
+> On 26/08/2022 10:36, xiujianfeng wrote:
+>> Hi,
+>>
+>> 在 2022/8/24 19:44, Mickaël Salaün 写道:
+>>>
+>>> On 23/08/2022 14:50, xiujianfeng wrote:
+>>>>
+>>>>
+>>>> 在 2022/8/23 5:07, Mickaël Salaün 写道:
+>>>>>
+>>>>> On 22/08/2022 20:25, Günther Noack wrote:
+>>>>>> Hi!
+>>>>>>
+>>>>>> Thanks for sending this patch set! :)
+>>>>>>
+>>>>>> On Mon, Aug 22, 2022 at 07:46:58PM +0800, Xiu Jianfeng wrote:
+>>>>>>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and 
+>>>>>>> LANDLOCK_ACCESS_FS_CHOWN to
+>>>>>>> support restriction to chmod(2) and chown(2) with landlock.
+>>>>>>>
+>>>>>>> Also change the landlock ABI version from 3 to 4.
+>>>>>>>
+>>>>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>>>>>> ---
+>>>>>>>     include/uapi/linux/landlock.h                |  8 ++++++--
+>>>>>>>     security/landlock/fs.c                       | 16 
+>>>>>>> +++++++++++++++-
+>>>>>>>     security/landlock/limits.h                   |  2 +-
+>>>>>>>     security/landlock/syscalls.c                 |  2 +-
+>>>>>>>     tools/testing/selftests/landlock/base_test.c |  2 +-
+>>>>>>>     tools/testing/selftests/landlock/fs_test.c   |  6 ++++--
+>>>>>>>     6 files changed, 28 insertions(+), 8 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/include/uapi/linux/landlock.h
+>>>>>>> b/include/uapi/linux/landlock.h
+>>>>>>> index 735b1fe8326e..5ce633c92722 100644
+>>>>>>> --- a/include/uapi/linux/landlock.h
+>>>>>>> +++ b/include/uapi/linux/landlock.h
+>>>>>>> @@ -141,13 +141,15 @@ struct landlock_path_beneath_attr {
+>>>>>>>      *   directory) parent.  Otherwise, such actions are denied with
+>>>>>>> errno set to
+>>>>>>>      *   EACCES.  The EACCES errno prevails over EXDEV to let user
+>>>>>>> space
+>>>>>>>      *   efficiently deal with an unrecoverable error.
+>>>>>>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a 
+>>>>>>> file.
+>>>>>>> + * - %LANDLOCK_ACCESS_FS_CHOWN: Change the owner and/or group of a
+>>>>>>> file.
+>>>>>
+>>>>> This section talk about "access rights that only apply to the 
+>>>>> content of
+>>>>> a directory, not the directory itself", which is not correct (see
+>>>>> LANDLOCK_ACCESS_FS_READ_DIR). I'd like these access rights to remain
+>>>>> here but this kernel patch and the related tests need some changes.
+>>>>>
+>>>>> What about a LANDLOCK_ACCESS_FS_CHGRP? I'm not sure if we need to
+>>>>> differentiate these actions or not, but we need arguments to choose.
+>>>>>
+>>>>>
+>>>>>>>      *
+>>>>>>>      * .. warning::
+>>>>>>>      *
+>>>>>>>      *   It is currently not possible to restrict some file-related
+>>>>>>> actions
+>>>>>>>      *   accessible through these syscall families:
+>>>>>>> :manpage:`chdir(2)`,
+>>>>>>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+>>>>>>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`,
+>>>>>>> :manpage:`utime(2)`,
+>>>>>>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`,
+>>>>>>> + *   :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>>>>>
+>>>>>> *formatting nit*
+>>>>>> We could fill up the full line width here
+>>>>>>
+>>>>>>>      *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`,
+>>>>>>> :manpage:`access(2)`.
+>>>>>>>      *   Future Landlock evolutions will enable to restrict them.
+>>>>>>>      */
+>>>>>>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>>>>>>>     #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
+>>>>>>>     #define LANDLOCK_ACCESS_FS_REFER            (1ULL << 13)
+>>>>>>>     #define LANDLOCK_ACCESS_FS_TRUNCATE            (1ULL << 14)
+>>>>>>> +#define LANDLOCK_ACCESS_FS_CHMOD            (1ULL << 15)
+>>>>>>> +#define LANDLOCK_ACCESS_FS_CHOWN            (1ULL << 16)
+>>>>>>>     /* clang-format on */
+>>>>>>>
+>>>>>>>     #endif /* _UAPI_LINUX_LANDLOCK_H */
+>>>>>>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+>>>>>>> index c57f581a9cd5..c25d5f89c8be 100644
+>>>>>>> --- a/security/landlock/fs.c
+>>>>>>> +++ b/security/landlock/fs.c
+>>>>>>> @@ -147,7 +147,9 @@ static struct landlock_object
+>>>>>>> *get_inode_object(struct inode *const inode)
+>>>>>>>         LANDLOCK_ACCESS_FS_EXECUTE | \
+>>>>>>>         LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>>>>>>         LANDLOCK_ACCESS_FS_READ_FILE | \
+>>>>>>> -    LANDLOCK_ACCESS_FS_TRUNCATE)
+>>>>>>> +    LANDLOCK_ACCESS_FS_TRUNCATE | \
+>>>>>>> +    LANDLOCK_ACCESS_FS_CHMOD | \
+>>>>>>> +    LANDLOCK_ACCESS_FS_CHOWN)
+>>>>>>>     /* clang-format on */
+>>>>>>>
+>>>>>>>     /*
+>>>>>>> @@ -1146,6 +1148,16 @@ static int hook_path_truncate(const struct
+>>>>>>> path *const path)
+>>>>>>>         return current_check_access_path(path,
+>>>>>>> LANDLOCK_ACCESS_FS_TRUNCATE);
+>>>>>>>     }
+>>>>>>>
+>>>>>>> +static int hook_path_chmod(const struct path *const dir, umode_t
+>>>>>>> mode)
+>>>>>
+>>>>> This is not a "dir" but a "path".
+>>>>>
+>>>>>
+>>>>>>> +{
+>>>>>>> +    return current_check_access_path(dir, 
+>>>>>>> LANDLOCK_ACCESS_FS_CHMOD);
+>>>>>>> +}
+>>>>>>> +
+>>>>>>> +static int hook_path_chown(const struct path *const dir, kuid_t 
+>>>>>>> uid,
+>>>>>>> kgid_t gid)
+>>>>>
+>>>>> Same here.
+>>>>>
+>>>>>
+>>>>>>> +{
+>>>>>>> +    return current_check_access_path(dir, 
+>>>>>>> LANDLOCK_ACCESS_FS_CHOWN);
+>>>>>>> +}
+>>>>>>
+>>>>>> One implication of this approach is that the chown+chmod right on a
+>>>>>> directory's contents are always going together with the same 
+>>>>>> rights on
+>>>>>> the directory itself.
+>>>>>>
+>>>>>> For example, if you grant chmod+chown access rights for "datadir/",
+>>>>>> the command "chmod 0600 datadir/file1" will work, but so will the
+>>>>>> command "chmod 0600 datadir". But the approach of checking just the
+>>>>>> parent directory's rights is also inflexible if you think through the
+>>>>>> kinds of rights you can grant with it. (It would also not be possible
+>>>>>> to grant chmod+chown on individual files.)
+>>>>>
+>>>>> Good point. For an initial chmod/chown/chgrp access right, I'd 
+>>>>> prefer to
+>>>>> be able to set these access rights on a directory but only for its
+>>>>> content, not the directory itself. I think it is much safer and should
+>>>>> be enough for the majority of use cases, but let me know if I'm 
+>>>>> missing
+>>>>> something. I'm not sure being able to change the root directory access
+>>>>> rights may be a good idea anyway (even for containers). ;)
+>>>>>
+>>>>> A path_beneath rule enables to identify a file hierarchy (i.e. the
+>>>>> content of a directory), not to make modifications visible outside of
+>>>>> the directory identifying the hierarchy (hence the "parent_fd" field),
+>>>>> which would be the case with the current chmod/chown access rights.
+>>>>>
+>>>>>
+>>>>>>
+>>>>>> Do you have any thoughts on how to resolve this if this flexibility
+>>>>>> might be needed?
+>>>>>>
+>>>>>> I wonder whether the right way to resolve this would be to give users
+>>>>>> a way to make that distinction at the level of landlock_add_rule(),
+>>>>>> with an API like this (note the additional flag):
+>>>>>>
+>>>>>>      err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+>>>>>>                              &path_beneath, 
+>>>>>> LANDLOCK_STRICTLY_BENEATH);
+>>>>>>                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>
+>>>>>> Multiple calls of landlock_add_rule() on the same file are already
+>>>>>> today joining the requested access rights, so it would be possible to
+>>>>>> mix-and-match "strict beneath" with "beneath" rights on the same
+>>>>>> directory, and it would work in the same way for other access rights
+>>>>>> as well.
+>>>>>
+>>>>> This kind of option is interesting. For now, some access rights are 
+>>>>> kind
+>>>>> of "doubled" to enable to differentiate between a file and a directory
+>>>>> (i.e. READ_DIR/READ_FILE, REMOVE_DIR/REMOVE_FILE, WRITE_FILE/MAKE_*)
+>>>>> when it may be useful, but this is different.
+>>>>>
+>>>>> I think this "strictly beneath" behavior should be the default, 
+>>>>> which is
+>>>>> currently the case.
+>>>>>
+>>>>>
+>>>>>>
+>>>>>> To be clear: I'm proposing this approach not because I think it 
+>>>>>> should
+>>>>>> be part of this patch set, but because it would be good to have a way
+>>>>>> forward if that kind of flexibility is needed in the future.
+>>>>>>
+>>>>>> Does that seem reasonable?
+>>>>>
+>>>>> This is the kind of questions that made such access rights not
+>>>>> appropriate for the initial version of Landlock. But we should talk
+>>>>> about that now.
+>>>>
+>>>> Hi Günther and Mickaël,
+>>>>
+>>>> Thanks for your comments, so I think the conclusion here is that we 
+>>>> have
+>>>> to make sure that in this patchset chown/chmod access rights can be set
+>>>> on a directory only for its content, not the directory itself, right?
+>>>> any good idea about how to implement this? :)
+>>>
+>>> In such hook code, you need to get the parent directory of the path
+>>> argument. This require to use and refactor the
+>>> check_access_path_dual/jump_up part in a dedicated helper (and take care
+>>> of all the corner cases).
+>>> .
+>>
+>> Sorry, I don't quite understand what you mean, but I have another idea,
+>> how about this?
+>>
+>> static int hook_path_chown(const struct path *const path, kuid_t uid,
+>> kgid_t gid)
+>> {
+>>           int ret;
+>>           struct dentry *parent_dentry;
+>>           struct path eff_path;
+>>
+>>           eff_path = *path;
+>>           path_get(&eff_path);
+>>           if (d_is_dir(eff_path.dentry)) {
+>>                   parent_dentry = dget_parent(eff_path.dentry);
+>>                   dput(eff_path.dentry);
+>>                   eff_path.dentry = parent_dentry;
+>>           }
+>>           ret = current_check_access_path(&eff_path,
+>> LANDLOCK_ACCESS_FS_CHGRP);
+>>           path_put(&eff_path);
+>>
+>>           return ret;
+>> }
 > 
-> diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
-> index 892294ac1769..ec813093276d 100644
-> --- a/tools/perf/util/mutex.c
-> +++ b/tools/perf/util/mutex.c
-> @@ -50,11 +50,13 @@ void mutex_destroy(struct mutex *mtx)
->  }
->  
->  void mutex_lock(struct mutex *mtx)
-> +	NO_THREAD_SAFETY_ANALYSIS
->  {
->  	CHECK_ERR(pthread_mutex_lock(&mtx->lock));
->  }
->  
->  void mutex_unlock(struct mutex *mtx)
-> +	NO_THREAD_SAFETY_ANALYSIS
->  {
->  	CHECK_ERR(pthread_mutex_unlock(&mtx->lock));
->  }
-> diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
-> index c9e110a2b55e..48a2d87598f0 100644
-> --- a/tools/perf/util/mutex.h
-> +++ b/tools/perf/util/mutex.h
-> @@ -5,11 +5,73 @@
->  #include <pthread.h>
->  #include <stdbool.h>
->  
-> +/*
-> + * A function-like feature checking macro that is a wrapper around
-> + * `__has_attribute`, which is defined by GCC 5+ and Clang and evaluates to a
-> + * nonzero constant integer if the attribute is supported or 0 if not.
-> + */
-> +#ifdef __has_attribute
-> +#define HAVE_ATTRIBUTE(x) __has_attribute(x)
-> +#else
-> +#define HAVE_ATTRIBUTE(x) 0
-> +#endif
-> +
-> +
+> This is close but it ignores mount points (e.g. path being used multiple 
+> time as a mount point). This is why we need to use follow_up(), hence my 
+> previous comment. This is the kind of corner case that require tests.
+> 
+> This helper could look like this:
+> enum walk_result walk_to_visible_parent(struct path *path)
+> It could then return either WALK_CONTINUE, WALK_DENIED, or WALK_ALLOWED.
+> .
 
-Multiple blank lines
+Thanks, It's more clear now, except the return type, I think void type 
+like follows maybe ok:
 
-> +#if HAVE_ATTRIBUTE(guarded_by) && HAVE_ATTRIBUTE(pt_guarded_by) && \
-> +	HAVE_ATTRIBUTE(lockable) && HAVE_ATTRIBUTE(exclusive_lock_function) && \
-> +	HAVE_ATTRIBUTE(exclusive_trylock_function) && HAVE_ATTRIBUTE(exclusive_locks_required) && \
-> +	HAVE_ATTRIBUTE(no_thread_safety_analysis)
-> +
-> +/* Documents if a shared field or global variable needs to be protected by a mutex. */
-> +#define GUARDED_BY(x) __attribute__((guarded_by(x)))
-> +
-> +/*
-> + * Documents if the memory location pointed to by a pointer should be guarded by
-> + * a mutex when dereferencing the pointer.
-> + */
-> +#define PT_GUARDED_BY(x) __attribute__((pt_guarded_by(x)))
-> +
-> +/* Documents if a type is a lockable type. */
-> +#define LOCKABLE __attribute__((capability("lockable")))
-> +
-> +/* Documents functions that acquire a lock in the body of a function, and do not release it. */
-> +#define EXCLUSIVE_LOCK_FUNCTION(...)  __attribute__((exclusive_lock_function(__VA_ARGS__)))
-> +
-> +/*
-> + * Documents functions that expect a lock to be held on entry to the function,
-> + * and release it in the body of the function.
-> + */
-> +#define UNLOCK_FUNCTION(...) __attribute__((unlock_function(__VA_ARGS__)))
-> +
-> +/* Documents functions that try to acquire a lock, and return success or failure. */
-> +#define EXCLUSIVE_TRYLOCK_FUNCTION(...) \
-> +	__attribute__((exclusive_trylock_function(__VA_ARGS__)))
-> +
-> +
+static void walk_to_visible_parent(struct path *path)
+{
+         struct dentry *parent_dentry;
 
-Multiple blank lines
+         path_get(path);
+         /* don't need to follow_up if not dir */
+         if (!d_is_dir(path->dentry))
+                 return;
 
-> +/* Documents a function that expects a mutex to be held prior to entry. */
-> +#define EXCLUSIVE_LOCKS_REQUIRED(...) __attribute__((exclusive_locks_required(__VA_ARGS__)))
-> +
-> +/* Turns off thread safety checking within the body of a particular function. */
-> +#define NO_THREAD_SAFETY_ANALYSIS __attribute__((no_thread_safety_analysis))
-> +
-> +#else
-> +
-> +#define GUARDED_BY(x)
-> +#define PT_GUARDED_BY(x)
-> +#define LOCKABLE
-> +#define EXCLUSIVE_LOCK_FUNCTION(...)
-> +#define UNLOCK_FUNCTION(...)
-> +#define EXCLUSIVE_TRYLOCK_FUNCTION(...)
-> +#define EXCLUSIVE_LOCKS_REQUIRED(...)
-> +#define NO_THREAD_SAFETY_ANALYSIS
-> +
-> +#endif
-> +
->  /*
->   * A wrapper around the mutex implementation that allows perf to error check
->   * usage, etc.
->   */
-> -struct mutex {
-> +struct LOCKABLE mutex {
->  	pthread_mutex_t lock;
->  };
->  
-> @@ -27,9 +89,9 @@ void mutex_init(struct mutex *mtx);
->  void mutex_init_pshared(struct mutex *mtx);
->  void mutex_destroy(struct mutex *mtx);
->  
-> -void mutex_lock(struct mutex *mtx);
-> -void mutex_unlock(struct mutex *mtx);
-> -bool mutex_trylock(struct mutex *mtx);
-> +void mutex_lock(struct mutex *mtx) EXCLUSIVE_LOCK_FUNCTION(*mtx);
-> +void mutex_unlock(struct mutex *mtx) UNLOCK_FUNCTION(*mtx);
-> +bool mutex_trylock(struct mutex *mtx) EXCLUSIVE_TRYLOCK_FUNCTION(true, *mtx);
->  
->  /* Default initialize the cond struct. */
->  void cond_init(struct cond *cnd);
-> @@ -40,7 +102,7 @@ void cond_init(struct cond *cnd);
->  void cond_init_pshared(struct cond *cnd);
->  void cond_destroy(struct cond *cnd);
->  
-> -void cond_wait(struct cond *cnd, struct mutex *mtx);
-> +void cond_wait(struct cond *cnd, struct mutex *mtx) EXCLUSIVE_LOCKS_REQUIRED(mtx);
->  void cond_signal(struct cond *cnd);
->  void cond_broadcast(struct cond *cnd);
->  
+jump_up:
+         if (path->dentry == path->mnt->mnt_root) {
+                 if (follow_up(path)) {
+                         /* Ignores hidden mount points. */
+                         goto jump_up;
+                 } else {
+                         /*Stops at the real root. */
+                         return;
+                 }
+         }
+         parent_dentry = dget_parent(path->dentry);
+         dput(path->dentry);
+         path->dentry = parent_dentry;
+}
+
+static void walk_to_visible_parent_end(struct path *path)
+{
+         path_put(path);
+}
+
+static int hook_path_chown(const struct path *const path, kuid_t uid, 
+kgid_t gid)
+{
+         int ret;
+         struct path eff_path;
+
+         eff_path = *path;
+         walk_to_visible_parent(&eff_path);
+         ret = current_check_access_path(&eff_path, 
+LANDLOCK_ACCESS_FS_CHGRP);
+         walk_to_visible_parent_end(&eff_path);
+
+         return ret;
+}
 

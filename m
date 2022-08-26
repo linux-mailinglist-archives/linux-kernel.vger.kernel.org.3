@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC215A29D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8094B5A29DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344416AbiHZOoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S1344477AbiHZOpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243916AbiHZOn5 (ORCPT
+        with ESMTP id S236250AbiHZOpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:43:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B421DD399F;
-        Fri, 26 Aug 2022 07:43:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7111AB83128;
-        Fri, 26 Aug 2022 14:43:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8578C433D6;
-        Fri, 26 Aug 2022 14:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661525034;
-        bh=JPZJww0LdQuFZEeGZp8ZP+3D6d0plXd37LSA7I8HWfA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m9yTFBdzL1nv1ZlimA3HujtdlB051fDo7InetsnuqnrliWH6mwg4dS47izNjwTw7N
-         egKRpflIzkOkwJyh6Qn9blT+Wd6Dc47JWmKjnljpy+/Abr3LU9bTEehzI5IJ3F65cF
-         kZ5xLMXxrTFebR3sGJJCKpptQdhNB3ro5tnQQ1yqEWviCQYSgneCc6qnp9zAt+2Qy7
-         wHaXG5w7uz/q3/2XNR6F5MPjk0rjmJ7lRS10GhsHqzjirU0tN8xSAR0noFsOgcaH0J
-         uCUklpshhvkSnKWvALTuvSoFbuSE6kgt3BmuNZIduiOW/bGrznKCX1YOnECB/YPaUM
-         aHcW3qo6FShgA==
-Date:   Fri, 26 Aug 2022 17:43:46 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     roberto.sassu@huaweicloud.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: Re: [PATCH v12 02/10] btf: Handle dynamic pointer parameter in kfuncs
-Message-ID: <YwjcItv0q8GdzPbb@kernel.org>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
- <20220818152929.402605-3-roberto.sassu@huaweicloud.com>
- <YwhSCE0H+JfUe4Ew@kernel.org>
- <CAADnVQJbTzfe28ife1+vg+ByLfyLBTCoEZW_eg8TEw838JGaog@mail.gmail.com>
- <YwheJqUDLOxL3iTi@kernel.org>
+        Fri, 26 Aug 2022 10:45:20 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D23CE4DB4F
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:45:17 -0700 (PDT)
+Received: (qmail 39829 invoked by uid 1000); 26 Aug 2022 10:45:16 -0400
+Date:   Fri, 26 Aug 2022 10:45:16 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ath9k-devel@qca.qualcomm.com, ldv-project@linuxtesting.org,
+        eli.billauer@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        andreyknvl@google.com, gustavoars@kernel.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        oneukum@suse.com, tiwai@suse.de, syzkaller-bugs@googlegroups.com
+Subject: Re: WARNING in hif_usb_alloc_rx_urbs/usb_submit_urb
+Message-ID: <YwjcfDOLNTYiRQij@rowland.harvard.edu>
+References: <09fbc5ed-d67e-8308-1e49-2de6f2cea7dd@ispras.ru>
+ <Yv/ahFW577q5woup@rowland.harvard.edu>
+ <9ebc80d0-1b16-642c-e66b-2de52c673334@ispras.ru>
+ <5dce2e1c-fa65-2fb3-08ad-65122f7e495d@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwheJqUDLOxL3iTi@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5dce2e1c-fa65-2fb3-08ad-65122f7e495d@ispras.ru>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 08:46:14AM +0300, Jarkko Sakkinen wrote:
-> On Thu, Aug 25, 2022 at 10:16:14PM -0700, Alexei Starovoitov wrote:
-> > On Thu, Aug 25, 2022 at 9:54 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > >
-> > > > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-> > > > -                                  enum bpf_arg_type arg_type)
-> > > > +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-> > > > +                           enum bpf_arg_type arg_type)
-> > > >  {
-> > > >       struct bpf_func_state *state = func(env, reg);
-> > > >       int spi = get_spi(reg->off);
-> > > > --
-> > > > 2.25.1
-> > > >
-> > >
-> > > Might be niticking but generally I'd consider splitting
-> > > exports as commits of their own.
-> > 
-> > -static bool
-> > +bool
-> > 
-> > into a separate commit?
-> > 
-> > I guess it makes sense for people whose salary depends on
-> > number of commits.
-> > We don't play these games.
+On Fri, Aug 26, 2022 at 04:14:48PM +0300, Fedor Pchelkin wrote:
+> Sat, 10 Oct 2020 at 04:08:19 UTC+3, Alan Stern wrote:
+> > Index: usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
+> > ===================================================================
+> > --- usb-devel.orig/drivers/net/wireless/ath/ath9k/hif_usb.c
+> > +++ usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
+> > @@ -1307,6 +1307,20 @@ static int ath9k_hif_usb_probe(struct us
+> > struct usb_device *udev = interface_to_usbdev(interface);
+> > struct hif_device_usb *hif_dev;
+> > int ret = 0;
+> > + struct usb_host_interface *alt;
+> > + struct usb_endpoint_descriptor *epd;
+> > +
+> > + /* Verify the expected endpoints are present */
+> > + alt = interface->cur_altsetting;
+> > + if (!usb_find_int_in_endpoint(alt, &epd) ||
+> > + usb_endpoint_num(epd) != USB_REG_IN_PIPE ||
+> > + !usb_find_int_out_endpoint(alt, &epd) ||
+> > + usb_endpoint_num(epd) != USB_REG_OUT_PIPE ||
+> > + !usb_find_bulk_in_endpoint(alt, &epd) ||
+> > + usb_endpoint_num(epd) != USB_WLAN_RX_PIPE ||
+> > + !usb_find_bulk_out_endpoint(alt, &epd) ||
+> > + usb_endpoint_num(epd) != USB_WLAN_TX_PIPE)
+> > + return -ENODEV;
+> >
+> > if (id->driver_info == STORAGE_DEVICE)
+> > return send_eject_command(interface);
 > 
-> What kind of argument is that anyway.
+> We've tested the suggested patch and found a null-ptr-deref. The thing
+> is that usb_find_{...}_endpoint() returns zero in normal case, and
+> non-zero value (-ENXIO) when failed (in current patch version it is
+> supposed to be just opposite and sometimes a NULL epd is dereferenced).
 
-"Separate each *logical change* into a separate patch." [*]
+Whoops, you're right.  Silly mistake.
 
-To add, generally any user space visible space should be an
-isolated patch.
+> To fix it the negation signs before usb_find_{...}_endpoint() should be
+> removed.
 
-Please, stop posting nonsense.
+Actually, I would change it to "< 0", which will emphasize to readers 
+that it's testing for an error return value.
 
-[*] https://www.kernel.org/doc/html/v5.19/process/submitting-patches.html#separate-your-changes
+> And we also think usb_find_common_endpoints(...) should be used directly
+> as all the scanned usb_endpoint_descriptors will be passed to it and
+> returned in just one call.
 
-BR, Jarkko
+Good idea.
+
+> If you wish, I may prepare the patch myself.
+
+Please do; I have more than enough other things going on and little time 
+to work on them.
+
+Alan Stern

@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3110D5A27EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E445A27F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237428AbiHZMqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S1343719AbiHZMql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240616AbiHZMqU (ORCPT
+        with ESMTP id S245475AbiHZMqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:46:20 -0400
-Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C000C0B6A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:46:17 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by fx408.security-mail.net (Postfix) with ESMTP id 64B9A1B7B355
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:46:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661517976;
-        bh=PCNCr4gLjAzuooND/bjvQI4nTIspFNLeY0C0jqAHZCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Byq7lhYNewtqG2I/Otk8UwNflh0QG0RPCSBNLX4N7Cht8DVLyBXqLaEM1ZAhw6Wjl
-         xoGdx+yqJpb2tmtR4utwof9sn9uzUwv/ImgcAW0jkpXS+2cJbAiy6FScXrHI4mLjYq
-         7cr2+dXL3y9EZWOqDQ9UcdRMvWqcMIFKbBgFl0uM=
-Received: from fx408 (localhost [127.0.0.1]) by fx408.security-mail.net
- (Postfix) with ESMTP id 09D451B7B343; Fri, 26 Aug 2022 14:46:16 +0200 (CEST)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx408.security-mail.net (Postfix) with ESMTPS id 5C59B1B7B33F; Fri, 26 Aug
- 2022 14:46:14 +0200 (CEST)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 3FDAC27E02FA; Fri, 26 Aug 2022
- 14:46:14 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 2888427E0392; Fri, 26 Aug 2022 14:46:14 +0200 (CEST)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- IugXXSCcSbbN; Fri, 26 Aug 2022 14:46:14 +0200 (CEST)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 1782627E02FA; Fri, 26 Aug 2022
- 14:46:14 +0200 (CEST)
-X-Virus-Scanned: E-securemail, by Secumail
-Secumail-id: <124ec.6308c096.5b61f.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 2888427E0392
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661517974;
- bh=UYA33OxQNeupL628vgL2cqS03Bi2JR/rksKhM9GIj+4=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=GL309KhJBsMGe5q62qOR9wXax82QRj2ep2rBAHM9rmFRXO2xvBc2fMIpfxWyR6hpV
- cK4vRmwahv+hH6HFftmfCuXXVaY24zJE7w9LLJCbwh5w90HtOeOUvOiiA3Q9zgRYeT
- iH2w/e4mvzPTNvc+PPWe0bWpnEBhCgaqLcbT2zYU=
-Date:   Fri, 26 Aug 2022 14:46:13 +0200
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: Fix repeated word in comments
-Message-ID: <20220826124612.GC10294@tellis.lin.mbt.kalray.eu>
-References: <20220826100052.22945-22-jmaselbas@kalray.eu>
- <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
+        Fri, 26 Aug 2022 08:46:36 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78EBC0E7C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:46:33 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso784399wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=K5ruSlY1jCvxqbhtszXYEzO5axSbMBdWGm1jX5xAIDI=;
+        b=YDhK5SvJSWefqjsU2WPYj++ObRCDvVYTmwFRnA9yR2lyyCR/tnH5aDqVujU6uS9zMX
+         m1qcVILMZ8TblSKP0hyA1JtbrsrYTDSiBDgAB+03OxNYGbKOB6vknSaDxKmoJYo+y2Hk
+         kpoqO3qwq4EgS09hnQpN38xfu3gFTSWN36g0IIjZ+xTwjw/OufrYn+NWqzg0GXErZpNd
+         jpi0BqbNCvTEvyMD0zA0+kc3Dp0wKrkpqOPEO53z6tdwdb9Ye15gXk/MMB8rPnIb8FHY
+         ioOE6r+ywIRMauqPNdeG7rokoPe8SdXkGsFYRZ/QBF2powrJpXM5o+51PGzFQ4+MhrGN
+         jyFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=K5ruSlY1jCvxqbhtszXYEzO5axSbMBdWGm1jX5xAIDI=;
+        b=2TcvI9TZpLICCY9MbOnlcsYU4F8G/BZeipPbYaiDzUV0ZFpPZtpsuzxJLxu6oU+oGp
+         eCwpzOlocctNNYBLrkMc0qMJYX/rSoFfEe3K80nb4V2EBebpwboTsUDAjNuIFvvD58Ku
+         rxmsiJJWh03w/yKY2mcmJd0950LgFV6UfjecWr82MBw1lXcYNIQlLAqFHDHtS3QPN+04
+         jeOmdMfsUOOid/w/ijVt5j8cfxmCvc7P5NDalOcRxaqEOEQ/a+rgWgdTXF1j/B+yZ9zg
+         xlfgyMwEoYCgfbZvYuwV+JkyLuK2cyKL9xqSO+AWjQKeiujyLEmhBlC9DVMAaxsnCW+l
+         eiWg==
+X-Gm-Message-State: ACgBeo0SmhepWeSC7Ik3xUmBKEa1WiwH5/t2WpsP8QqDY5piP02Ao+c9
+        XUfrsdKi2MLRAtQo0vcfqj/r/w==
+X-Google-Smtp-Source: AA6agR47p7+yUpwUH50t0SfB9kxiuFa+blrP6f9OaGblbuFJRK+GbTrAG/eZi4Vsn8YmOBmdlLEnKA==
+X-Received: by 2002:a05:600c:22c8:b0:3a5:c134:1f50 with SMTP id 8-20020a05600c22c800b003a5c1341f50mr11466896wmg.55.1661517992442;
+        Fri, 26 Aug 2022 05:46:32 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id b3-20020a5d4d83000000b0020fff0ea0a3sm1768406wru.116.2022.08.26.05.46.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 05:46:31 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 14:46:30 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Jack Wang <jinpu.wang@ionos.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH v1 10/19] crypto: amlogic: Fix dma_map_sg error check
+Message-ID: <YwjApjRZis69PI0S@Red>
+References: <20220819060801.10443-1-jinpu.wang@ionos.com>
+ <20220819060801.10443-11-jinpu.wang@ionos.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220819060801.10443-11-jinpu.wang@ionos.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,57 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
-
-On Fri, Aug 26, 2022 at 12:24:47PM +0200, Jacopo Mondi wrote:
-> Hi Jules
+Le Fri, Aug 19, 2022 at 08:07:52AM +0200, Jack Wang a écrit :
+> dma_map_sg return 0 on error.
 > 
->   thanks, but as reported in patchwork and lore
-> https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=mt9v111&archive=both&delegate=
-> https://lore.kernel.org/all/20220824135433.h2udwtnub7mlmtam@uno.localdomain/
+> Cc: Corentin Labbe <clabbe@baylibre.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-amlogic@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
 > 
-> This is the 4th patch to fix the same repeated word in a comment.
- 
-> As I asked to Jilin, are you submitting this as part of a new
-> contributor program ?
-No, I've search for more repeated word after I've found one (in dma-buf heaps).
-I then saw that there were already some fixed by Jilin Yuan (and
-probably others).
-
-I was expecting that some patches were sent for this, sorry for the noise. 
-
-Cheers
- 
-> Thanks
->    j
+> Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+> ---
+>  drivers/crypto/amlogic/amlogic-gxl-cipher.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> On Fri, Aug 26, 2022 at 12:00:50PM +0200, Jules Maselbas wrote:
-> > Remove redundant word `the`.
-> >
-> > CC: Jacopo Mondi <jacopo@jmondi.org>
-> > CC: linux-media@vger.kernel.org
-> > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-> > ---
-> >  drivers/media/i2c/mt9v111.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
-> > index 2dc4a0f24ce8..7beca0b70b72 100644
-> > --- a/drivers/media/i2c/mt9v111.c
-> > +++ b/drivers/media/i2c/mt9v111.c
-> > @@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
-> >
-> >  	/*
-> >  	 * Set pixel integration time to the whole frame time.
-> > -	 * This value controls the the shutter delay when running with AE
-> > +	 * This value controls the shutter delay when running with AE
-> >  	 * disabled. If longer than frame time, it affects the output
-> >  	 * frame rate.
-> >  	 */
-> > --
-> > 2.17.1
-> >
 
 
+Hello
 
+Tested-by: Corentin Labbe <clabbe@baylibre.com>
+Acked-by: Corentin Labbe <clabbe@baylibre.com>
 
+Thanks
+Regards

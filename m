@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB255A2079
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4945A207A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244899AbiHZFuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S242726AbiHZFv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244922AbiHZFur (ORCPT
+        with ESMTP id S231315AbiHZFvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:50:47 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E608ADCDD;
-        Thu, 25 Aug 2022 22:50:45 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11c59785966so843780fac.11;
-        Thu, 25 Aug 2022 22:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=7Isa32vjxy67XTD9NcDv4PtKbRD7YWANWp5LplWp5g0=;
-        b=VCz76a4BwVXS1QPdFhtwb0IDkZdia53KpfMTJnGNFikINOrIth/KrxtGCAWC+D0LXC
-         6VisE6Ea18HpgaPmr/qeAPb1Aeqy+jWJZyHALf8jbOL5mHcMjei0iRIDIm9x7ZIlWoF8
-         oQmURCAtj76kyr393HOg0COITMVmy7NNh/HwP8io3mp+KrhGc20LegcPdb5Ntn9EVnP5
-         SRlsainoFY7TAzcw/bfiomWPD7CkMlxeW5vTPHC26+w5GsUGTDXPY9tRiY9mUKA5XOuA
-         kv2ziFr3wZxhYNU2vLLlBxXTKcpw48fo1YWqHigGrgaQkd/6y4oV4YIpEvYAqeorapKq
-         gyxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=7Isa32vjxy67XTD9NcDv4PtKbRD7YWANWp5LplWp5g0=;
-        b=4f2VvI1Y3TkjhuDr2vbdthlfxxgBKbMQxN+gbubLXGXJaD06B5P30lEMVQHpDc6VHA
-         +hi7wwAOWV2ur2+tL2PD2aPNhyaBCCmsoHUDtLdjYMP9n70uNCqPP+3EQ4pv39t3DnS8
-         +J20NpHQHE0/Ox+T4xZkqnq7aS3h8g453Eoi2a5hdny10t23uvILiY/G9V8Ljxk65BJV
-         XXxUnR9mxFmPlXE/BYITW8hH6OMLCOmE/DiXLWPsfKpogK3QarGScRnM4XeWLcoAFSZt
-         kb2Go2KSFun0+sEx9aQb/rfxnO3eeqwGuKq/k5zj6z53HuTlXRVDqhzVASIOuzMJCG0j
-         5GoQ==
-X-Gm-Message-State: ACgBeo3IFPHsky5vfH5RWPTcSBFftDYbGsRy534fmzUKst1x0zgd32Nf
-        7P/cCPWbdFCdv1q/Tv07lMYHSn6mOgjQJg==
-X-Google-Smtp-Source: AA6agR72CATl4WtPtwoUbhrD6jJBGYE2f62n+APBrUkg+W5te4elbSOgFe9TQnZjoYPjuGidVGjFEQ==
-X-Received: by 2002:a05:6870:41d5:b0:11c:cbbf:50c7 with SMTP id z21-20020a05687041d500b0011ccbbf50c7mr1188376oac.77.1661493044138;
-        Thu, 25 Aug 2022 22:50:44 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id bk9-20020a056830368900b006370b948974sm554544otb.32.2022.08.25.22.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 22:50:43 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
-Date:   Thu, 25 Aug 2022 23:50:24 -0600
-Message-Id: <20220826055025.1018491-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 26 Aug 2022 01:51:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A45C04DA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661493113; x=1693029113;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5rJxMTQV0P3rcT5R2f0m7QLY0y5vYKqa1BnBPwfkBew=;
+  b=HtZgbiilNP7PuIzVq26yhV2aG0dGD1ndW+1CO9XJMSbx656pH68yMFpt
+   nDlWCTOpac67PWqrCmCEEbCLO+AB0bFKpRlIIns6JsET4kM9RvngIOLVN
+   JlT1KNNFB5TioHcuPNA38zEf3CwRQm4I2rwFQEFBc+YxQ8AgucOwi6W2D
+   pNZSQkusUOHrH0zWQPrd+dJr3wqjycIlh4MOqNmYUd5aj5ODG0PFog+gC
+   d3qCafr4PiAhmxCBPekZGg6qCy+T3KaigU/dOV9UVITczVrlfwrkJHX7o
+   wXziY1lNXPAqGDSTGkmqbFXgsUHnMqNFmZCsvQp9osOs37OIkpc6ndnr4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="281402024"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="281402024"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 22:51:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="938632228"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Aug 2022 22:51:52 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRSFz-0003Ua-1R;
+        Fri, 26 Aug 2022 05:51:51 +0000
+Date:   Fri, 26 Aug 2022 13:51:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-6.0.y-rt-rebase 23/59] kernel/softirq.c:641:1:
+ sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not
+ declared. Should it be static?
+Message-ID: <202208261333.gsZk17N6-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,105 +63,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a potential for us to hit a type conflict when including
-netinet/tcp.h and sys/socket.h, we can replace both of these includes
-with linux/tcp.h to avoid this conflict.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.0.y-rt-rebase
+head:   1d8c2694d3f649c97636d991dca099bd86f63f97
+commit: 6b4c722d9a8c4017626b41c4321539a74c62b6ad [23/59] tick: Fix timer storm since introduction of timersd
+config: alpha-randconfig-s051-20220824 (https://download.01.org/0day-ci/archive/20220826/202208261333.gsZk17N6-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=6b4c722d9a8c4017626b41c4321539a74c62b6ad
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-6.0.y-rt-rebase
+        git checkout 6b4c722d9a8c4017626b41c4321539a74c62b6ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash
 
-We also need to replace SOL_TCP with equivalent IPPROTO_TCP.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes the following error:
-In file included from /usr/include/netinet/tcp.h:91,
-                 from progs/connect4_prog.c:11:
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-   34 | typedef __INT8_TYPE__ int8_t;
-      |                       ^~~~~~
-In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-                 from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-                 from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-                 from progs/connect4_prog.c:10:
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-   24 | typedef __int8_t int8_t;
-      |                  ^~~~~~
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
-   43 | typedef __INT64_TYPE__ int64_t;
-      |                        ^~~~~~~
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
-   27 | typedef __int64_t int64_t;
-      |                   ^~~~~~~
+sparse warnings: (new ones prefixed by >>)
+   kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
+>> kernel/softirq.c:641:1: sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not declared. Should it be static?
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- .../selftests/bpf/progs/connect4_prog.c       | 21 +++++++++----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+vim +/__pcpu_scope_pending_timer_softirq +641 kernel/softirq.c
 
-diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
-index b241932911db..0f68b8d756b3 100644
---- a/tools/testing/selftests/bpf/progs/connect4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
-@@ -7,8 +7,7 @@
- #include <linux/bpf.h>
- #include <linux/in.h>
- #include <linux/in6.h>
--#include <sys/socket.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
- #include <linux/if.h>
- #include <errno.h>
- 
-@@ -52,7 +51,7 @@ static __inline int verify_cc(struct bpf_sock_addr *ctx,
- 	char buf[TCP_CA_NAME_MAX];
- 	int i;
- 
--	if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
-+	if (bpf_getsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
- 		return 1;
- 
- 	for (i = 0; i < TCP_CA_NAME_MAX; i++) {
-@@ -70,12 +69,12 @@ static __inline int set_cc(struct bpf_sock_addr *ctx)
- 	char reno[TCP_CA_NAME_MAX] = "reno";
- 	char cubic[TCP_CA_NAME_MAX] = "cubic";
- 
--	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
-+	if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
- 		return 1;
- 	if (verify_cc(ctx, reno))
- 		return 1;
- 
--	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
-+	if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
- 		return 1;
- 	if (verify_cc(ctx, cubic))
- 		return 1;
-@@ -113,15 +112,15 @@ static __inline int set_keepalive(struct bpf_sock_addr *ctx)
- 	if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof(one)))
- 		return 1;
- 	if (ctx->type == SOCK_STREAM) {
--		if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
-+		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
- 			return 1;
--		if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
-+		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
- 			return 1;
--		if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPCNT, &one, sizeof(one)))
-+		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPCNT, &one, sizeof(one)))
- 			return 1;
--		if (bpf_setsockopt(ctx, SOL_TCP, TCP_SYNCNT, &one, sizeof(one)))
-+		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_SYNCNT, &one, sizeof(one)))
- 			return 1;
--		if (bpf_setsockopt(ctx, SOL_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
-+		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
- 			return 1;
- 	}
- 	if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &zero, sizeof(zero)))
-@@ -135,7 +134,7 @@ static __inline int set_notsent_lowat(struct bpf_sock_addr *ctx)
- 	int lowat = 65535;
- 
- 	if (ctx->type == SOCK_STREAM) {
--		if (bpf_setsockopt(ctx, SOL_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
-+		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
- 			return 1;
- 	}
- 
+   639	
+   640	DEFINE_PER_CPU(struct task_struct *, timersd);
+ > 641	DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
+   642	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,329 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6803A5A2B4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497CE5A2B56
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343572AbiHZPbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S231422AbiHZPey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237200AbiHZPbi (ORCPT
+        with ESMTP id S230322AbiHZPev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:31:38 -0400
-Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FCF399DC;
-        Fri, 26 Aug 2022 08:31:34 -0700 (PDT)
-Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail.stoffel.org (Postfix) with ESMTPSA id 03776283F6;
-        Fri, 26 Aug 2022 11:31:34 -0400 (EDT)
-Received: by quad.stoffel.org (Postfix, from userid 1000)
-        id 9A976A7E17; Fri, 26 Aug 2022 11:31:33 -0400 (EDT)
-MIME-Version: 1.0
+        Fri, 26 Aug 2022 11:34:51 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070.outbound.protection.outlook.com [40.107.237.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BC325F6
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:34:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QbvvUPkOmTWych1Zxd5uLAaGJPQtuaKOHHz7LEiwDdp0AW1vGyaJoReNbWYs46LhYTfoBkbWvI1rj44oJl7CYhQUeG/+TLEkX5czeTR96qzBpMGergD3AobOROSiNib67cGmhblvl2Bmw33WCVSTCUe6WF6hbRmacNFji8UF3ALoYKxz6vPKd5Llr+wHiMcEoUdktTkvoOZeoW7VM0iQqC5gsdmd8vnQRJidWVfBBqKoZ0zMel3kZAv/vnRizoBKv6aSyYq2WwOsY654NfSEySrQU7xRRGsDryuI7t5pwW/t1nQdkPus4NHvx/IgS/yq+LkCVCHrQL55XBil7B0t0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wjOjCL3nviISgJhBJLShAB3YFQHCP8jvmiSlfAW3mBQ=;
+ b=l14EVfZ7yghDtIg6y2BJkbXsWQEK1DpPSqh4HG8u1Gy+UbJ4xYwqSFySkBFByaAyK/KsWGZkvvt7GMNpWPUuvEs6E9GtqWtPUsykmREaQnlvg4tjl3LG0+fcwQnL0lR4y8ihXWo16mqNVwzR1AlE3HfSVp5xmP6IdJaVb4RAMkOPd1bl5cYrRhdGJs27Jcf7TEv2VcjcI7mqpbr3VtTjpaTtRLi8VJEwphWj2Q/+fBQOlnAyyEHa0wb8PkJN+vy4O/kDZGAc7YOHGoesFqd13Eq6iNIe8h6m2bFhgp4pUgUfxCdLcvI+LjUdJjUhWWL22Pchp98IH0kmhbUP4W0Y1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wjOjCL3nviISgJhBJLShAB3YFQHCP8jvmiSlfAW3mBQ=;
+ b=p6ivtNl67YvYoJHTIuy0dw6zriWIyoHg7DjconZLRpHiKdbFnEWePHTusEVY7QALwrF1BwUNipX78oSvMCdueR6ao958Mi5O1cwJxgOu0VtmE0cz8JQWvS4jeU3w0O6pbnBXuepfvbNJIF1wPSwXsCEgC7diGSyIXGU2H8ATop/NkSnhSgRaZgSb/Hd5W0UwoulquT2k3mvbgyFU1csUJbhHGDEsI93M5i/vsc6C191aDTbr145gd1b3q7SCNAUjBwbYvo09NaRMLLQJlPketTcGBpS70efXGg8WbxdWVENeQOA/m/sKKoAZjG4jWf2ygqLdg9ScJ9zCHudP9aE90A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM5PR12MB1419.namprd12.prod.outlook.com (2603:10b6:3:77::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Fri, 26 Aug
+ 2022 15:34:46 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
+ 15:34:46 +0000
+Date:   Fri, 26 Aug 2022 12:34:45 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] iommu: Replace detach_dev with real blocking
+ domains
+Message-ID: <YwjoFXLFIGo8s2YH@nvidia.com>
+References: <20220826123014.52709-1-baolu.lu@linux.intel.com>
+ <20220826123014.52709-2-baolu.lu@linux.intel.com>
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <25352.59221.528023.534884@quad.stoffel.home>
-Date:   Fri, 26 Aug 2022 11:31:33 -0400
-From:   "John Stoffel" <john@stoffel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Daire Byrne <daire@dneg.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/10] NFS: support parallel updates in the one directory.
-In-Reply-To: <166147984378.25420.4023980607067991846.stgit@noble.brown>
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown>
-        <166147984378.25420.4023980607067991846.stgit@noble.brown>
-X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220826123014.52709-2-baolu.lu@linux.intel.com>
+X-ClientProxiedBy: BLAPR03CA0044.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::19) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 639a4842-6a12-4d22-338c-08da87788139
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1419:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lJkiYbUnZMxiidSbRecOij9UBB4THLZKLnUJaTQjtacjoIEUaSI+J8sOjzdN2hZ5mzZ2DYwIIlqagkDNEtlkdr26Lvm4HZ9o47aaGKtzWvGBgvJHok/9ApSdInhxzjal8g4Lm1hEmvKK3i8WTKw8i6LYTcjZ2e82IrjVnAxqOoTMcXc0R6POz2Uwq31o4oleWFzOgL/urqeIKf9okkg/K4qpsxGbbHeijfbWncByJCNZTGAO1NDr/GBoTjQRr0STECnobN+j7NqzvkxCd4BfFVx5h2gb8p10u3Ko+jBiMLvXg61RYOcdrT4TzIZNGthMon65UDlnXem6J7aGdWIII0ep8fIIXF5ceQHC7Esq2Uh79zY9rFPki8IV3Jzf4P4HJ9UNBFGrqrYvBeGrM/gOnjkv/H+qY3YUu9YQItPX4LkPeNaciwx9e29qsnDaj+D81q3vVGcHlmBJjjV7rT8+ypSjZWNZN1Pr2L9ykEecgOfYT8XkuLeMX3YnMyUy0Evc+AKu+0V67+aAbH/q8KllvuVsrtWoNgamEm/fk7YDPE194w+HRz4AQ2DhY75UJ5GXqsD4qum41HyObtg9TjoO5yYcF4jEpmbQDAcp6kV5R7zNYksKfO2MAS04yY8hJhEEiHQKmnX8kSk1xW9vp/CqhB6Z0aXQbzECMo9zGf2RmCPTyQWi3NaFlP7cpW8KoDsPc3MKfgJ7PaatrtuakmBxbA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(39860400002)(366004)(376002)(396003)(2906002)(7416002)(8936002)(2616005)(83380400001)(6486002)(478600001)(5660300002)(36756003)(8676002)(38100700002)(186003)(66476007)(66556008)(6916009)(54906003)(4326008)(6512007)(26005)(86362001)(41300700001)(316002)(66946007)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GOra3UM5Bn68h5defRMtGGYTj1UUJz92OrLX/e3ozvUbMbxgI3v2cR/KGiIr?=
+ =?us-ascii?Q?BJlg84ThjkteDRtNm4Lv41Q6GQ/h4BUKu2AvB9vM+keyQxjCInTdvy6JTPc+?=
+ =?us-ascii?Q?tzIyQdiBSyd/MuqjcN2q/pGKy0rykv5KZBS4dSw6H5AR0MIC9mE7/8pfYBDk?=
+ =?us-ascii?Q?s3CIqYbC0l/2xraKH/EKu6txx8gx5WhqAU0IIr26wUvjJ5aVdp/P6or3t0em?=
+ =?us-ascii?Q?eI9BAIZdDKpIt2b5CbX5pmRMZtKtNYjMRmNPJS+H0juI2v9A+bE1KOQgkk3u?=
+ =?us-ascii?Q?wEGwr6dKG9GCAb274wzeacEzq/i8wugL2YBQrgTZgi11AzD7r8iJmBEsVLX6?=
+ =?us-ascii?Q?rbS5Rj8GKJU6d+L5LnFmd+eej15qmFsDF32OXJfQlOheWUp0kUlVfjYemB8y?=
+ =?us-ascii?Q?qTUJg0luTXp1K1lUbpPkLJLlIs04f4dKEiO5orDB+DSVjqsop2D8xIZ4ViE/?=
+ =?us-ascii?Q?e7UuuJvmXWJWCUyILCLUAhuM1pYCLbjmFGuppOWnMifjOgniKjqAJgelyeeH?=
+ =?us-ascii?Q?Pfh9CQUK/aPxF3mgUPN7dGaxhoeuM/sksO4hM1yk0aZsEaZrdA3hcl55sda3?=
+ =?us-ascii?Q?dptTvfXslivrdhr9zRBNvDtN/384qoBTzUfFwFsJrfL570G2zBdqEaG5g0KS?=
+ =?us-ascii?Q?Gx9VLb7iuUDsscMMlRk+1h54I8kJu5YEmFIN9363pd3jawt1iCk8N08fMn24?=
+ =?us-ascii?Q?dApWhfVRrMQ36rTKS2SPAulXCySY75zUuQGEq75wZBXi73xUK4GQnHGIsTC6?=
+ =?us-ascii?Q?f665wqauAgsLc755i6CMHLu/VhGYop7jJqRgGD+gcOCcfv4NpkEc3+aCw71j?=
+ =?us-ascii?Q?UPuV+LUNjR9m1OyR7Ae2dXEqmBZhfKV6/1VQOQ8qelvwLj+VjLaPXKYWVrnM?=
+ =?us-ascii?Q?XIzT1fRL++RhkDXh8bVWKmZPuhzIHZ+edLM4iNDjXC0VYUC4V33G8cwXvys5?=
+ =?us-ascii?Q?vzaOEziGZy4E4A/xSNXeqkueqPwvBI05fhLMiDraR8o8Dp/w+UIiBwFS6X9w?=
+ =?us-ascii?Q?3ozWz3ZElEe4TjU36TQHsQHI6ilepEealn3Z2gnDmXCsS0FGjVt9kiwKGhbk?=
+ =?us-ascii?Q?97zYNUTjaI/mGkiu/kZ3AojMCFTDi3SHPfQzbQk8rLPorCA0wVFtNJ31Uwok?=
+ =?us-ascii?Q?cKxsMdZcyqgMscJGL4uU2VyhqBEgPvIu1+xpklCGX9L54wdVwdfw3IJO+vAY?=
+ =?us-ascii?Q?CFTMWMLTl6ia8Aw2gyH/V2cXKwlcnGVdC5MtZKF6bRf7v77faaPq7oWiRcZ9?=
+ =?us-ascii?Q?pIW+vsW052/uB596zkYtaIQ+yq35t/igr/huSL0VzUOVhuPF3FpxEpe6EjUL?=
+ =?us-ascii?Q?ZdM0JcQbb99fE9i6lnOZqY6nrgEPzD/X931jJRmo321/noRiS7BIfGQMzGvc?=
+ =?us-ascii?Q?OPp1IMjqFxg7iBOhjzTvlgK2j14i33BGlaV9eckRO9HGDs1rfnP9zn/XNrUs?=
+ =?us-ascii?Q?eJesEBYb2zptxBDKNL9z9vEGIech7hi7ULa1FUPFt+kyp737jxxxmiD2S52N?=
+ =?us-ascii?Q?IJvxCGOtJysHr9Hw92iPsV1tTYwNqjyp85+d29SxXUaB8Ck/k4fuXLVzhWQi?=
+ =?us-ascii?Q?qq4swrsachTmg9rcWDt1WsKIjre5X53ZmemZW+62?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 639a4842-6a12-4d22-338c-08da87788139
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 15:34:46.2530
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: quLBBu9QLT/g6gIjXIu0rBpfDL7vx0Pg21bIS2sRGryDeanR5lIQwef99mpldU3f
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1419
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "NeilBrown" == NeilBrown  <neilb@suse.de> writes:
+On Fri, Aug 26, 2022 at 08:30:12PM +0800, Lu Baolu wrote:
+> From iommu core's point of view, detaching a domain from a device is
+> equal to attaching the group's blocking domain to the device. This
+> repalces all detach_dev callbacks in the IOMMU drivers with a real
+> blocking domain and handles detaching domain through it.
 
-NeilBrown> NFS can easily support parallel updates as the locking is done on the
-NeilBrown> server, so this patch enables parallel updates for NFS.
+There is a subtly here, where detach_dev() is not *always* going to a
+blocking domain. Recall we made this mistaken when building the owner
+series and it is why the blocking domain was introduced.
 
-Just curious, how is this handled if I have a server with an EXT#
-filesystem which is exported via NFS to multiple clients.  If those
-NFS clients are doing lots of changes in a single directory, I can see
-how the NFS server handles that, but what about if at the same time
-someone does multiple changes on the server in that EXT# behind the
-NFSd's back, how are the conflicts handled?
+The challenge with this work is to be sure that the code you assigned
+to the blocking domain doesn't actually set an identity domain or
+set things to use the platform DMA ops.
 
-It would seem that this all really needs to purely happen at the VFS
-layer, but I'm probably missing something.
+> +static int blocking_domain_attach_dev(struct iommu_domain *_domain,
+> +				      struct device *dev)
+> +{
+> +	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+> +
+> +	s390_iommu_detach_device(domain, dev);
+> +
+> +	return 0;
+> +}
 
-I ask this because my home server exports /home to a couple of other
-systems via NFS, but I still work in /home on the server.  
+For instance, I know that this is returning the group back to the
+platform DMA ops.
 
+To really make progress on this I would suggest
 
-NeilBrown> Handling of silly-rename - both for unlink and for the rename target -
-NeilBrown> requires some care as we need to get an exclusive lock on the chosen
-NeilBrown> silly name and for rename we need to keep the original target name
-NeilBrown> locked after it has been renamed to the silly name.
+1) Remove detach_dev from drivers that don't use it. This is any
+   driver that provides a default domain, if a default domain is set
+   then we always use attach_dev(default_domain) and never detach_dev
 
-NeilBrown> So nfs_sillyrename() now uses d_exchange() to swap the target and the
-NeilBrown> silly name after the silly-rename has happened on the server, and the
-NeilBrown> silly dentry - which now has the name of the target - is returned.
+2) Of those drivers in #1 audit and try to determine if their
+   detach_dev is doing blocking domain behavior and if yes give them a
+   real blocking domain. Otherwise just delete the code.
 
-NeilBrown> For unlink(), this is immediately unlocked and discarded with a call to
-NeilBrown> nfs_sillyrename_finish().  For rename it is kept locked until the
-NeilBrown> originally requested rename completes.
+3) The remaining drivers are not using default_domain. Rename
+   'detach_dev' to iommu_ops->set_platform_dma(dev) to make it clear
+   that what it is doing is returning control back to the platform DMA
+   ops.
 
-NeilBrown> Signed-off-by: NeilBrown <neilb@suse.de>
-NeilBrown> ---
-NeilBrown>  fs/dcache.c         |    5 ++++-
-NeilBrown>  fs/nfs/dir.c        |   28 ++++++++++++++++------------
-NeilBrown>  fs/nfs/fs_context.c |    6 ++++--
-NeilBrown>  fs/nfs/internal.h   |    3 ++-
-NeilBrown>  fs/nfs/unlink.c     |   51 ++++++++++++++++++++++++++++++++++++++-------------
-NeilBrown>  5 files changed, 64 insertions(+), 29 deletions(-)
+I would do one patch per driver on the blocking domain conversions and
+get acks from the driver owners. Do as many as can be acked, delete
+the rest.
 
-NeilBrown> diff --git a/fs/dcache.c b/fs/dcache.c
-NeilBrown> index 9bf346a9de52..a5eaab16d39f 100644
-NeilBrown> --- a/fs/dcache.c
-NeilBrown> +++ b/fs/dcache.c
-NeilBrown> @@ -3056,7 +3056,9 @@ void d_exchange(struct dentry *dentry1, struct dentry *dentry2)
-NeilBrown>  	write_seqlock(&rename_lock);
- 
-NeilBrown>  	WARN_ON(!dentry1->d_inode);
-NeilBrown> -	WARN_ON(!dentry2->d_inode);
-NeilBrown> +	/* Allow dentry2 to be negative, so we can do a rename
-NeilBrown> +	 * but keep both names locked (DCACHE_PAR_UPDATE)
-NeilBrown> +	 */
-NeilBrown>  	WARN_ON(IS_ROOT(dentry1));
-NeilBrown>  	WARN_ON(IS_ROOT(dentry2));
- 
-NeilBrown> @@ -3064,6 +3066,7 @@ void d_exchange(struct dentry *dentry1, struct dentry *dentry2)
- 
-NeilBrown>  	write_sequnlock(&rename_lock);
-NeilBrown>  }
-NeilBrown> +EXPORT_SYMBOL(d_exchange);
- 
-NeilBrown>  /**
-NeilBrown>   * d_ancestor - search for an ancestor
-NeilBrown> diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-NeilBrown> index 5d6c2ddc7ea6..fbb608fbe6bf 100644
-NeilBrown> --- a/fs/nfs/dir.c
-NeilBrown> +++ b/fs/nfs/dir.c
-NeilBrown> @@ -1935,8 +1935,12 @@ struct dentry *nfs_lookup(struct inode *dir, struct dentry * dentry, unsigned in
-NeilBrown>  	/*
-NeilBrown>  	 * If we're doing an exclusive create, optimize away the lookup
-NeilBrown>  	 * but don't hash the dentry.
-NeilBrown> +	 * A silly_rename is marked exclusive, but we need to do an
-NeilBrown> +	 * explicit lookup.
-NeilBrown>  	 */
-NeilBrown> -	if (nfs_is_exclusive_create(dir, flags) || flags & LOOKUP_RENAME_TARGET)
-NeilBrown> +	if ((nfs_is_exclusive_create(dir, flags) ||
-NeilBrown> +	     flags & LOOKUP_RENAME_TARGET) &&
-NeilBrown> +	    !(flags & LOOKUP_SILLY_RENAME))
-NeilBrown>  		return NULL;
- 
-NeilBrown>  	res = ERR_PTR(-ENOMEM);
-NeilBrown> @@ -2472,10 +2476,14 @@ int nfs_unlink(struct inode *dir, struct dentry *dentry)
-NeilBrown>  	spin_lock(&dentry->d_lock);
-NeilBrown>  	if (d_count(dentry) > 1 && !test_bit(NFS_INO_PRESERVE_UNLINKED,
-NeilBrown>  					     &NFS_I(d_inode(dentry))->flags)) {
-NeilBrown> +		struct dentry *silly;
-NeilBrown> +
-NeilBrown>  		spin_unlock(&dentry->d_lock);
-NeilBrown>  		/* Start asynchronous writeout of the inode */
-NeilBrown>  		write_inode_now(d_inode(dentry), 0);
-NeilBrown> -		error = nfs_sillyrename(dir, dentry);
-NeilBrown> +		silly = nfs_sillyrename(dir, dentry);
-NeilBrown> +		error = PTR_ERR_OR_ZERO(silly);
-NeilBrown> +		nfs_sillyrename_finish(dir, silly);
-NeilBrown>  		goto out;
-NeilBrown>  	}
-NeilBrown>  	/* We must prevent any concurrent open until the unlink
-NeilBrown> @@ -2685,16 +2693,12 @@ int nfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 
-NeilBrown>  			spin_unlock(&new_dentry->d_lock);
- 
-NeilBrown> -			/* copy the target dentry's name */
-NeilBrown> -			dentry = d_alloc(new_dentry->d_parent,
-NeilBrown> -					 &new_dentry->d_name);
-NeilBrown> -			if (!dentry)
-NeilBrown> -				goto out;
-NeilBrown> -
-NeilBrown>  			/* silly-rename the existing target ... */
-NeilBrown> -			err = nfs_sillyrename(new_dir, new_dentry);
-NeilBrown> -			if (err)
-NeilBrown> +			dentry = nfs_sillyrename(new_dir, new_dentry);
-NeilBrown> +			if (IS_ERR(dentry)) {
-NeilBrown> +				err = PTR_ERR(dentry);
-NeilBrown>  				goto out;
-NeilBrown> +			}
- 
-NeilBrown>  			new_dentry = dentry;
-NeilBrown>  			new_inode = NULL;
-NeilBrown> @@ -2750,9 +2754,9 @@ int nfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
-NeilBrown>  	} else if (error == -ENOENT)
-NeilBrown>  		nfs_dentry_handle_enoent(old_dentry);
- 
-NeilBrown> -	/* new dentry created? */
-NeilBrown>  	if (dentry)
-NeilBrown> -		dput(dentry);
-NeilBrown> +		nfs_sillyrename_finish(new_dir, dentry);
-NeilBrown> +
-NeilBrown>  	return error;
-NeilBrown>  }
-NeilBrown>  EXPORT_SYMBOL_GPL(nfs_rename);
-NeilBrown> diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
-NeilBrown> index 4da701fd1424..7133ca9433d2 100644
-NeilBrown> --- a/fs/nfs/fs_context.c
-NeilBrown> +++ b/fs/nfs/fs_context.c
-NeilBrown> @@ -1577,7 +1577,8 @@ struct file_system_type nfs_fs_type = {
-NeilBrown>  	.init_fs_context	= nfs_init_fs_context,
-NeilBrown>  	.parameters		= nfs_fs_parameters,
-NeilBrown>  	.kill_sb		= nfs_kill_super,
-NeilBrown> -	.fs_flags		= FS_RENAME_DOES_D_MOVE|FS_BINARY_MOUNTDATA,
-NeilBrown> +	.fs_flags		= FS_RENAME_DOES_D_MOVE|FS_BINARY_MOUNTDATA|
-NeilBrown> +				  FS_PAR_DIR_UPDATE,
-NeilBrown>  };
-NeilBrown>  MODULE_ALIAS_FS("nfs");
-NeilBrown>  EXPORT_SYMBOL_GPL(nfs_fs_type);
-NeilBrown> @@ -1589,7 +1590,8 @@ struct file_system_type nfs4_fs_type = {
-NeilBrown>  	.init_fs_context	= nfs_init_fs_context,
-NeilBrown>  	.parameters		= nfs_fs_parameters,
-NeilBrown>  	.kill_sb		= nfs_kill_super,
-NeilBrown> -	.fs_flags		= FS_RENAME_DOES_D_MOVE|FS_BINARY_MOUNTDATA,
-NeilBrown> +	.fs_flags		= FS_RENAME_DOES_D_MOVE|FS_BINARY_MOUNTDATA|
-NeilBrown> +				  FS_PAR_DIR_UPDATE,
-NeilBrown>  };
-NeilBrown>  MODULE_ALIAS_FS("nfs4");
-NeilBrown>  MODULE_ALIAS("nfs4");
-NeilBrown> diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
-NeilBrown> index 27c720d71b4e..3a7fd30a8e29 100644
-NeilBrown> --- a/fs/nfs/internal.h
-NeilBrown> +++ b/fs/nfs/internal.h
-NeilBrown> @@ -611,7 +611,8 @@ extern struct rpc_task *
-NeilBrown>  nfs_async_rename(struct inode *old_dir, struct inode *new_dir,
-NeilBrown>  		 struct dentry *old_dentry, struct dentry *new_dentry,
-NeilBrown>  		 void (*complete)(struct rpc_task *, struct nfs_renamedata *));
-NeilBrown> -extern int nfs_sillyrename(struct inode *dir, struct dentry *dentry);
-NeilBrown> +extern struct dentry *nfs_sillyrename(struct inode *dir, struct dentry *dentry);
-NeilBrown> +extern void nfs_sillyrename_finish(struct inode *dir, struct dentry *dentry);
- 
-NeilBrown>  /* direct.c */
-NeilBrown>  void nfs_init_cinfo_from_dreq(struct nfs_commit_info *cinfo,
-NeilBrown> diff --git a/fs/nfs/unlink.c b/fs/nfs/unlink.c
-NeilBrown> index 9697cd5d2561..c8a718f09fe6 100644
-NeilBrown> --- a/fs/nfs/unlink.c
-NeilBrown> +++ b/fs/nfs/unlink.c
-NeilBrown> @@ -428,6 +428,10 @@ nfs_complete_sillyrename(struct rpc_task *task, struct nfs_renamedata *data)
-NeilBrown>   *
-NeilBrown>   * The final cleanup is done during dentry_iput.
-NeilBrown>   *
-NeilBrown> + * We exchange the original with the new (silly) dentries, and return
-NeilBrown> + * the new dentry which will have the original name.  This ensures that
-NeilBrown> + * the target name remains locked until the rename completes.
-NeilBrown> + *
-NeilBrown>   * (Note: NFSv4 is stateful, and has opens, so in theory an NFSv4 server
-NeilBrown>   * could take responsibility for keeping open files referenced.  The server
-NeilBrown>   * would also need to ensure that opened-but-deleted files were kept over
-NeilBrown> @@ -436,7 +440,7 @@ nfs_complete_sillyrename(struct rpc_task *task, struct nfs_renamedata *data)
-NeilBrown>   * use to advertise that it does this; some day we may take advantage of
-NeilBrown>   * it.))
-NeilBrown>   */
-NeilBrown> -int
-NeilBrown> +struct dentry *
-NeilBrown>  nfs_sillyrename(struct inode *dir, struct dentry *dentry)
-NeilBrown>  {
-NeilBrown>  	static unsigned int sillycounter;
-NeilBrown> @@ -445,6 +449,8 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
-NeilBrown>  	struct dentry *sdentry;
-NeilBrown>  	struct inode *inode = d_inode(dentry);
-NeilBrown>  	struct rpc_task *task;
-NeilBrown> +	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(wq);
-NeilBrown> +	struct path path = {};
-NeilBrown>  	int            error = -EBUSY;
- 
-NeilBrown>  	dfprintk(VFS, "NFS: silly-rename(%pd2, ct=%d)\n",
-NeilBrown> @@ -459,10 +465,11 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
- 
-NeilBrown>  	fileid = NFS_FILEID(d_inode(dentry));
- 
-NeilBrown> +	path.dentry = d_find_alias(dir);
-NeilBrown>  	sdentry = NULL;
-NeilBrown>  	do {
-NeilBrown>  		int slen;
-NeilBrown> -		dput(sdentry);
-NeilBrown> +
-NeilBrown>  		sillycounter++;
-NeilBrown>  		slen = scnprintf(silly, sizeof(silly),
-NeilBrown>  				SILLYNAME_PREFIX "%0*llx%0*x",
-NeilBrown> @@ -472,14 +479,19 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
-NeilBrown>  		dfprintk(VFS, "NFS: trying to rename %pd to %s\n",
-NeilBrown>  				dentry, silly);
- 
-NeilBrown> -		sdentry = lookup_one_len(silly, dentry->d_parent, slen);
-NeilBrown> -		/*
-NeilBrown> -		 * N.B. Better to return EBUSY here ... it could be
-NeilBrown> -		 * dangerous to delete the file while it's in use.
-NeilBrown> -		 */
-NeilBrown> -		if (IS_ERR(sdentry))
-NeilBrown> -			goto out;
-NeilBrown> -	} while (d_inode(sdentry) != NULL); /* need negative lookup */
-NeilBrown> +		sdentry = filename_create_one_len(silly, slen,
-NeilBrown> +						  &path,
-NeilBrown> +						  LOOKUP_CREATE | LOOKUP_EXCL |
-NeilBrown> +						  LOOKUP_SILLY_RENAME,
-NeilBrown> +						  &wq);
-NeilBrown> +	} while (PTR_ERR_OR_ZERO(sdentry) == -EEXIST);
-NeilBrown> +	dput(path.dentry);
-NeilBrown> +	/*
-NeilBrown> +	 * N.B. Better to return EBUSY here ... it could be
-NeilBrown> +	 * dangerous to delete the file while it's in use.
-NeilBrown> +	 */
-NeilBrown> +	if (IS_ERR(sdentry))
-NeilBrown> +		goto out;
- 
-NeilBrown>  	ihold(inode);
- 
-NeilBrown> @@ -513,7 +525,7 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
-NeilBrown>  						     NFS_INO_INVALID_CTIME |
-NeilBrown>  						     NFS_INO_REVAL_FORCED);
-NeilBrown>  		spin_unlock(&inode->i_lock);
-NeilBrown> -		d_move(dentry, sdentry);
-NeilBrown> +		d_exchange(dentry, sdentry);
-NeilBrown>  		break;
-NeilBrown>  	case -ERESTARTSYS:
-NeilBrown>  		/* The result of the rename is unknown. Play it safe by
-NeilBrown> @@ -524,7 +536,20 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
-NeilBrown>  	rpc_put_task(task);
-NeilBrown>  out_dput:
-NeilBrown>  	iput(inode);
-NeilBrown> -	dput(sdentry);
-NeilBrown> +	if (!error)
-NeilBrown> +		return sdentry;
-NeilBrown> +
-NeilBrown> +	d_lookup_done(sdentry);
-NeilBrown> +	__done_path_update(&path, sdentry, true, LOOKUP_SILLY_RENAME);
-NeilBrown>  out:
-NeilBrown> -	return error;
-NeilBrown> +	return ERR_PTR(error);
-NeilBrown> +}
-NeilBrown> +
-NeilBrown> +void nfs_sillyrename_finish(struct inode *dir, struct dentry *dentry)
-NeilBrown> +{
-NeilBrown> +	struct path path = { .dentry = d_find_alias(dir) };
-NeilBrown> +
-NeilBrown> +	if (!IS_ERR(dentry))
-NeilBrown> +		__done_path_update(&path, dentry, true, LOOKUP_SILLY_RENAME);
-NeilBrown> +	dput(path.dentry);
-NeilBrown>  }
+Make it clear to driver owners checking that blocking domain must halt
+all DMA, and it must not be a passthrough or identity behavior.
 
+When last I looked several of the drivers looked like they were
+setting an identity domain on the detach_dev - eg back to a boot time
+behavior where the iommu is bypassed. It is really important these not
+be converted to blocking :) Arguably if they can be found they should
+be converted to identity domains instead.
 
+Jason

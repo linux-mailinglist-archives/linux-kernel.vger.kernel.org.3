@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161165A269A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D269E5A2696
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343681AbiHZLIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S1344144AbiHZLIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343636AbiHZLI0 (ORCPT
+        with ESMTP id S1343637AbiHZLIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:08:26 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB2EDF14;
-        Fri, 26 Aug 2022 04:08:25 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oRXCE-00FQDn-Ni; Fri, 26 Aug 2022 21:08:19 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 26 Aug 2022 19:08:18 +0800
-Date:   Fri, 26 Aug 2022 19:08:18 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     davem@davemloft.net, ebiggers@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/17] crypto: Kconfig - simplify menus and help text
-Message-ID: <Ywipov6gviNszSBp@gondor.apana.org.au>
-References: <20220817232057.73643-1-elliott@hpe.com>
- <20220820184151.1149247-1-elliott@hpe.com>
+        Fri, 26 Aug 2022 07:08:31 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9069D11C32
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:08:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VNJ0j-x_1661512103;
+Received: from 30.227.80.235(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VNJ0j-x_1661512103)
+          by smtp.aliyun-inc.com;
+          Fri, 26 Aug 2022 19:08:24 +0800
+Message-ID: <837426e9-0f24-2ce2-e631-b91276035397@linux.alibaba.com>
+Date:   Fri, 26 Aug 2022 19:08:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820184151.1149247-1-elliott@hpe.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH] arm64: spectre: increase parameters that can be used to
+ turn off bhb mitigation individually
+To:     Will Deacon <will@kernel.org>
+Cc:     catalin.marinas@arm.com, james.morse@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1659691274-48554-1-git-send-email-liusong@linux.alibaba.com>
+ <20220826103958.GB19505@willie-the-truck>
+From:   Liu Song <liusong@linux.alibaba.com>
+In-Reply-To: <20220826103958.GB19505@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 01:41:34PM -0500, Robert Elliott wrote:
-> Improve the "make menuconfig" experience under the
-> Cryptographic API page.
-> 
-> Tested by running commands like these for arm, arm64, mips, powerpc,
-> sparc, s390, and x86:
->     make ARCH=arm O=build-arm allmodconfig  # also defconfig
->     make ARCH=arm O=build-arm menuconfig
-> 
-> Patch series history:
-> v2: divide into arch-specific Kconfig files, stop series
->     after the submenu patch
-> v3: added back the entry name/help text changes after the
->     submenu patch; submenus suggested by Eric; rebased onto v6.0-rc1
-> 
-> Robert Elliott (17):
->   crypto: Kconfig - move mips entries to a submenu
->   crypto: Kconfig - move powerpc entries to a submenu
->   crypto: Kconfig - move s390 entries to a submenu
->   crypto: Kconfig - move sparc entries to a submenu
->   crypto: Kconfig - move x86 entries to a submenu
->   crypto: Kconfig - remove AES_ARM64 ref by SA2UL
->   crypto: Kconfig - submenus for arm and arm64
->   crypto: Kconfig - sort the arm64 entries
->   crypto: Kconfig - sort the arm entries
->   crypto: Kconfig - add submenus
->   crypto: Kconfig - simplify public-key entries
->   crypto: Kconfig - simplify CRC entries
->   crypto: Kconfig - simplify aead entries
->   crypto: Kconfig - simplify hash entries
->   crypto: Kconfig - simplify userspace entries
->   crypto: Kconfig - simplify cipher entries
->   crypto: Kconfig - simplify compression/RNG entries
-> 
->  arch/arm/Kconfig                         |    4 -
->  arch/arm/configs/exynos_defconfig        |    1 -
->  arch/arm/configs/milbeaut_m10v_defconfig |    1 -
->  arch/arm/configs/multi_v7_defconfig      |    1 -
->  arch/arm/configs/omap2plus_defconfig     |    1 -
->  arch/arm/configs/pxa_defconfig           |    1 -
->  arch/arm/crypto/Kconfig                  |  238 ++-
->  arch/arm64/Kconfig                       |    3 -
->  arch/arm64/configs/defconfig             |    1 -
->  arch/arm64/crypto/Kconfig                |  281 ++-
->  arch/mips/crypto/Kconfig                 |   74 +
->  arch/powerpc/crypto/Kconfig              |   97 +
->  arch/s390/crypto/Kconfig                 |  135 ++
->  arch/sparc/crypto/Kconfig                |   90 +
->  arch/x86/crypto/Kconfig                  |  466 +++++
->  crypto/Kconfig                           | 2242 ++++++++--------------
->  drivers/crypto/Kconfig                   |    2 -
->  drivers/net/Kconfig                      |    2 -
->  18 files changed, 2001 insertions(+), 1639 deletions(-)
->  create mode 100644 arch/mips/crypto/Kconfig
->  create mode 100644 arch/powerpc/crypto/Kconfig
->  create mode 100644 arch/s390/crypto/Kconfig
->  create mode 100644 arch/sparc/crypto/Kconfig
->  create mode 100644 arch/x86/crypto/Kconfig
-> 
-> 
-> base-commit: 0eaf37ee04dabc136acc68567c39d6dc35def06c
-> prerequisite-patch-id: 45479e93dd6a6ed73701a2155cd151d2c296bc50
-> prerequisite-patch-id: cd82799c9463ceb05a6528e9eac583020618754e
-> -- 
-> 2.37.1
+> On Fri, Aug 05, 2022 at 05:21:14PM +0800, Liu Song wrote:
+>> From: Liu Song <liusong@linux.alibaba.com>
+>>
+>> In our environment, it was found that the mitigation BHB has a great
+>> impact on the benchmark performance. For example, in the lmbench test,
+>> the "process fork && exit" test performance drops by 20%.
+>> So it is necessary to have the ability to turn off the mitigation
+>> individually through cmdline, thus avoiding having to compile the
+>> kernel by adjusting the config.
+>>
+>> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+>> ---
+>>   arch/arm64/kernel/proton-pack.c | 10 +++++++++-
+>>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
+>> index 40be3a7..bd16903 100644
+>> --- a/arch/arm64/kernel/proton-pack.c
+>> +++ b/arch/arm64/kernel/proton-pack.c
+>> @@ -988,6 +988,14 @@ static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
+>>   	isb();
+>>   }
+>>   
+>> +static bool __read_mostly __nospectre_bhb;
+>> +static int __init parse_spectre_bhb_param(char *str)
+>> +{
+>> +	__nospectre_bhb = true;
+>> +	return 0;
+>> +}
+>> +early_param("nospectre_bhb", parse_spectre_bhb_param);
+>> +
+>>   void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
+>>   {
+>>   	bp_hardening_cb_t cpu_cb;
+>> @@ -1001,7 +1009,7 @@ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
+>>   		/* No point mitigating Spectre-BHB alone. */
+>>   	} else if (!IS_ENABLED(CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY)) {
+>>   		pr_info_once("spectre-bhb mitigation disabled by compile time option\n");
+>> -	} else if (cpu_mitigations_off()) {
+>> +	} else if (cpu_mitigations_off() || __nospectre_bhb) {
+>>   		pr_info_once("spectre-bhb mitigation disabled by command line option\n");
+>>   	} else if (supports_ecbhb(SCOPE_LOCAL_CPU)) {
+>>   		state = SPECTRE_MITIGATED;
+> It would be good to have an Ack (or a shrug) from somebody @arm.com on this
+> one.
+>
+> Other than that, the documentation needs updating for the new option.
 
-All applied.  Thanks. 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Thanks for the reminder, I will post another V2 version.
+
+
+Thanks
+
+
+>
+> Will

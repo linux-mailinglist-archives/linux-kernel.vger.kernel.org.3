@@ -2,125 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0545A291A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AECE5A2922
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344391AbiHZOJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S244975AbiHZOMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344425AbiHZOJK (ORCPT
+        with ESMTP id S230408AbiHZOM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:09:10 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56660C7434
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:09:06 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id d8so2194529lfq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:09:05 -0700 (PDT)
+        Fri, 26 Aug 2022 10:12:27 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8613780EBB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:12:24 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id ay12so963745wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=/jvB3Zk9Ur35ndfTH3ClegVJp3L5YsswZJHu0HBwLYs=;
-        b=jQx3CjsoG4/KqyBTEu7I7zus+LfGm5o2i5DJwYB8PEnBnlqdKMQzoZvzit0d6HbeH0
-         792OCLK+089fkSLzsDQuf2cforIA6vpukpmf76nehp/qDWBuiYMLjsmWpN7WNH5AxDdU
-         qpnOWvv9wKrOoyONFNZu8kA2YQFNeacvY52jZO1JOzAfRuPnJ64iqc/6Bj7UjCoJT6WC
-         zyeDGn0/ILk/Tj/GtHLoIKMB53JY16zqhRiRyTuqu7Y39WVoUVn4D7QLzoexl5+rPLhO
-         uOcCOqIghY4npZvkgBcYBxMGS4rUzVeEnIKhbPm0++/HPXlt1SnjdlVgM4xqrUkhK7kO
-         o9iQ==
+        bh=ltPOdgdKPOgNk+QCQTfLV/0eQufbKuZ/Z6D7J07Ijbg=;
+        b=Ylk+YjK5vRWW62xLjvKqKh8WyUVgEu8zd2EjP28CyAJOu/KJU9qsWtcOJVtC6jcSf5
+         rcKNA58kz8tnPhndOOBnCfqBCGoWH/9L2ZsvhRLaeHRdNZePyxydJGxhkkzG/i2bkvl1
+         ETfcyPlTWtwVpRaeprOr5SKdPr83WHsjvUCGh6CKNLd3BPGjtUoHY/dEj1Y9YczMAohG
+         IuMfT3QM44GlzDXfJIQwBH35tpM42KBS+nMbIBakgJmCwyEh97nBzFxGThUS+7l27A2f
+         sZ0BUx/uWc7MaowR7Md5ewjiR9JfZZCYzqsPlYQzI/2Zd1HtGLX4lOA80STnQMVNH2Yb
+         4cvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=/jvB3Zk9Ur35ndfTH3ClegVJp3L5YsswZJHu0HBwLYs=;
-        b=hdbojvtX3RA1sKLMnDnEuDH62a6d9AScNd26c9kF/+nkyz8YkblljSb1gI3TzZkNgF
-         ahaLqnrbh36/uYDs+o+nRjV0GFhhRXWYJC1xz4bQ0xuVLj6H0mwbGiA5FuoAbw9n+3KX
-         CQOmg+YLmT80F1tuhw8D6LgOSh4gyS3RJivn1YZNvvQ6LN30HWRjWjqR4No8RGq8pFJX
-         BVM1GSGuNQLqQ14ifuP4ObofkYfzY4UhWvs8X/0yF0/jZmU5ppMIYfDbIndYbXJQIOsZ
-         EQ/8WWmGXr5qVDiI50x6gd6g3bBqLS68xFjZOsndCuN/Aj1U+KpFQMqKu4IIMDG3yTaV
-         wTdQ==
-X-Gm-Message-State: ACgBeo0ceSYexAKOV4YWTQ1wVSa4n7vdYayGCI++jxDj8LslNRBZBy+7
-        lTjoDXKh+gMxGxbaONwAPBl7mQ==
-X-Google-Smtp-Source: AA6agR7HiAAjmQ+OSdNfaAHoyknzoyrjx3MUmL1Ng+Vf6qRLQP4g75Bp3THQvj6bRqHPWOxdn6lnQw==
-X-Received: by 2002:a05:6512:68d:b0:492:ec42:1dd2 with SMTP id t13-20020a056512068d00b00492ec421dd2mr2597519lfe.55.1661522944058;
-        Fri, 26 Aug 2022 07:09:04 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s10-20020a19ad4a000000b00492c017de43sm390763lfd.127.2022.08.26.07.09.03
+        bh=ltPOdgdKPOgNk+QCQTfLV/0eQufbKuZ/Z6D7J07Ijbg=;
+        b=aWT2jgLtW11AOTYoni215DIGPQQRJ9SZKwI+e+BMbD+cp8wFRZOj/1kvX4eeacoyn1
+         UJuNQI4dBMDtgLuW42OV7wyMLHIj7wrUsKVdGAZIFDUw3aM6R97XDl3ieIJioZkhVqxL
+         iS0pkdFhgXf6ow/E/GoIBmY1nCI5UsDlty/CoXuN0eAn7xLv7VAgOUAdiTmNrjwN0neo
+         V4WavQ8/VwUBO/qpdVJEo+57L5KqBM6Zd+s8XGkrdzyZrSPPsyhjISq/44RUGb8AuuQ6
+         wB2wr9wenrmnr30EgLzRZzYQOfqx4k3TG96+4UPTLsI2SXkFk/gb504Up4oRKYfDV17g
+         ntbw==
+X-Gm-Message-State: ACgBeo026KuKAo87VkTB8qpvq1EmKbiSKat0NoBA/gIAH3SyoowkIQ8I
+        GfjqGPVlosubO5/spZzLmFaBzQ==
+X-Google-Smtp-Source: AA6agR74rTXidXuRME3oXuHCtp1ZXLI+aD5krgZxj/g3TEb7Whgmu8sX27kK2BrgnqVjoIn9wfwYdQ==
+X-Received: by 2002:a1c:a145:0:b0:3a5:b84b:f746 with SMTP id k66-20020a1ca145000000b003a5b84bf746mr5429572wme.127.1661523142981;
+        Fri, 26 Aug 2022 07:12:22 -0700 (PDT)
+Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.gmail.com with ESMTPSA id r6-20020a5d4986000000b0021e4829d359sm1918437wrq.39.2022.08.26.07.12.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 07:09:03 -0700 (PDT)
-Message-ID: <37834264-f6a0-fe71-e4c6-2edca9475d5a@linaro.org>
-Date:   Fri, 26 Aug 2022 17:09:02 +0300
+        Fri, 26 Aug 2022 07:12:22 -0700 (PDT)
+Message-ID: <cb355b34-f3d2-af63-ad5a-92ea19bf7fcb@baylibre.com>
+Date:   Fri, 26 Aug 2022 16:12:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [v1 2/2] drm/msm/disp/dpu1: enable crtc color management based on
- encoder topology
-Content-Language: en-GB
-To:     Kalyan Thota <kalyant@qti.qualcomm.com>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "robdclark@gmail.com" <robdclark@gmail.com>
-Cc:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
-References: <1655802387-15275-1-git-send-email-quic_kalyant@quicinc.com>
- <1655802387-15275-2-git-send-email-quic_kalyant@quicinc.com>
- <CAA8EJponMDAXDAZ9zpkYEZvONDAztuXhjwZ6y7rgo1HtQOMtfQ@mail.gmail.com>
- <BN0PR02MB81426CB90870085223C308A496B99@BN0PR02MB8142.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <BN0PR02MB81426CB90870085223C308A496B99@BN0PR02MB8142.namprd02.prod.outlook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, fparent@baylibre.com,
+        hsinyi@chromium.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, michael.kao@mediatek.com,
+        rafael@kernel.org, robh+dt@kernel.org, rui.zhang@intel.com
+References: <20220720181854.547881-1-aouledameur@baylibre.com>
+ <20220720181854.547881-5-aouledameur@baylibre.com>
+ <92540bf4-f2de-0aae-d764-ce6edfda1ab1@wanadoo.fr>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <92540bf4-f2de-0aae-d764-ce6edfda1ab1@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 14:56, Kalyan Thota wrote:
-> Thanks for the comments, Dmitry. I haven't noticed mode->hdisplay being used. My idea was to run thru the topology and tie up the encoders with dspp to the CRTCs.
-> Since mode is available only in the commit, we cannot use the dpu_encoder_get_topology during initialization sequence.
-> 
-> The requirement here is that when we initialize the crtc, we need to enable drm_crtc_enable_color_mgmt only for the crtcs that support it. As I understand from Rob, chrome framework will check for the enablement in order to exercise the feature.
-> 
-> Do you have any ideas on how to handle this requirement ? Since we will reserve the dspp's only when a commit is issued, I guess it will be too late to enable color management by then.
+Hi Christophe,
 
-I have been thinking about this for quite a while.
+On 7/20/22 20:54, Christophe JAILLET wrote:
+> Le 20/07/2022 à 20:18, Amjad Ouled-Ameur a écrit :
+>> Provide thermal zone to read thermal sensor in the SoC. We can read 
+>> all the
+>> thermal sensors value in the SoC by the node /sys/class/thermal/
+>>
+>> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+>> on the first read of sensor that often are bogus values.
+>> This can avoid following warning on boot:
+>>
+>>    thermal thermal_zone6: failed to read out thermal zone (-13)
+>>
+>> Signed-off-by: default avatarMichael Kao 
+>> <michael.kao-NuS5LvNUpcJWk0Htik3J/w@public.gmane.org>
+>> Signed-off-by: default avatarHsin-Yi Wang 
+>> <hsinyi-F7+t8E8rja9g9hUCZPvPmw@public.gmane.org>
+>> Signed-off-by: Amjad Ouled-Ameur 
+>> <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+>> Tested-by: Amjad Ouled-Ameur 
+>> <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+>> ---
+>>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
+>>   1 file changed, 76 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/thermal/mtk_thermal.c 
+>> b/drivers/thermal/mtk_thermal.c
+>> index 1dc276f8c4f1..79b14ce1a08d 100644
+>> --- a/drivers/thermal/mtk_thermal.c
+>> +++ b/drivers/thermal/mtk_thermal.c
+>> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>>     struct mtk_thermal;
+>>   +struct mtk_thermal_zone {
+>> +    struct mtk_thermal *mt;
+>> +    int id;
+>> +};
+>> +
+>>   struct thermal_bank_cfg {
+>>       unsigned int num_sensors;
+>>       const int *sensors;
+>> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct 
+>> mtk_thermal_bank *bank)
+>>           mutex_unlock(&mt->lock);
+>>   }
+>>   +static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
+>> +{
+>> +    u32 raw;
+>> +    int temp;
+>> +
+>> +    const struct mtk_thermal_data *conf = mt->conf;
+>> +
+>> +    raw = readl(mt->thermal_base + conf->msr[id]);
+>> +
+>> +    if (mt->conf->version == MTK_THERMAL_V1)
+>> +        temp = raw_to_mcelsius_v1(mt, id, raw);
+>> +    else
+>> +        temp = raw_to_mcelsius_v2(mt, id, raw);
+>> +
+>> +    /*
+>> +     * The first read of a sensor often contains very high bogus
+>> +     * temperature value. Filter these out so that the system does
+>> +     * not immediately shut down.
+>> +     */
+>> +
+>> +    if (temp > 200000)
+>> +        return  -EAGAIN;
+>
+> This function returns a u32. Is it ok to return -EAGAIN?
+>
+_get_sensor_temp() should normally return int instead u32, will fix it 
+in V3.
+> There is also 2 spaces here...
+>
+>> +    else
+>> +        return    temp;
+>
+> ... and a tab here.
+>
+will fix them in V3.
+>> +}
+>> +
+>>   /**
+>>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>>    * @bank:    The bank
+>> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct 
+>> mtk_thermal_bank *bank)
+>>       struct mtk_thermal *mt = bank->mt;
+>>       const struct mtk_thermal_data *conf = mt->conf;
+>>       int i, temp = INT_MIN, max = INT_MIN;
+>> -    u32 raw;
+>>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+>> -        raw = readl(mt->thermal_base + conf->msr[i]);
+>> -
+>> -        if (mt->conf->version == MTK_THERMAL_V1) {
+>> -            temp = raw_to_mcelsius_v1(
+>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
+>> -        } else {
+>> -            temp = raw_to_mcelsius_v2(
+>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
+>> -        }
+>> -
+>> -        /*
+>> -         * The first read of a sensor often contains very high bogus
+>> -         * temperature value. Filter these out so that the system does
+>> -         * not immediately shut down.
+>> -         */
+>> -        if (temp > 200000)
+>> -            temp = 0;
+>> +        temp = _get_sensor_temp(mt, i);
+>
+> Is it ok if _get_sensor_temp() returns -EAGAIN?
+>
+drivers/thermal/thermal_core.c:update_temperature() checks for -EAGAIN 
+after
 
-Basically I fear you have two options:
-- Register the color management for all CRTCs. In dpu_rm_reserve() check 
-for the ctm, allocate LMs taking the available DSPPs into account. Fail 
-the atomic_check() if there are no available LMs with required 
-capabilities. Additional bonus point for moving LM/DSPP resource 
-allocation from dpu_encoder into dpu_crtc.
+thermal_zone_get_temp() is called, thus, I think it's good to return 
+-EAGAIN in
 
-- Register CRTCs and it's colormanagement properties according to exact 
-available hardware. Let the userspace composer select the CRTC for the 
-connector basing on the availability of the CTM support.
+case of failure.
 
-I'd vote strongly against any attempt to put the policy ('e.g. enable 
-CTM only for the eDP and first DSI display') into the kernel, because we 
-can not predict the actual usecases the user needs. It well might be 
-that the user of the laptop will work with DP displays only and thus 
-require color management for DP.
+>>             if (temp > max)
+>>               max = temp;
+>> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct 
+>> mtk_thermal_bank *bank)
+>>     static int mtk_read_temp(void *data, int *temperature)
+>>   {
+>> -    struct mtk_thermal *mt = data;
+>> +    struct mtk_thermal_zone *tz = data;
+>> +    struct mtk_thermal *mt = tz->mt;
+>>       int i;
+>>       int tempmax = INT_MIN;
+>>   @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int 
+>> *temperature)
+>>       return 0;
+>>   }
+>>   +static int mtk_read_sensor_temp(void *data, int *temperature)
+>> +{
+>> +    struct mtk_thermal_zone *tz = data;
+>> +    struct mtk_thermal *mt = tz->mt;
+>> +    int id = tz->id - 1;
+>> +
+>> +    if (id < 0)
+>> +        return  -EACCES;
+>
+> 2 spaces.
+>
 
-> 
-> @robdclark@gmail.com
-> Is it okay, if we disable color management for all the crtcs during initialization and enable it when we have dspps available during modeset. Can we framework code query for the property before issuing a commit for the frame after modeset ?
-> 
+will fix it in V3.
+>> +
+>> +    *temperature = _get_sensor_temp(mt, id);
+>
+> If _get_sensor_temp() returns -EAGAIN, should this be propagated to 
+> the caller?
+>
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>>       .get_temp = mtk_read_temp,
+>>   };
+>>   +static const struct thermal_zone_of_device_ops 
+>> mtk_thermal_sensor_ops = {
+>> +    .get_temp = mtk_read_sensor_temp,
+>> +};
+>> +
+>>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>>                     u32 apmixed_phys_base, u32 auxadc_phys_base,
+>>                     int ctrl_id)
+>> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct 
+>> platform_device *pdev)
+>>       u64 auxadc_phys_base, apmixed_phys_base;
+>>       struct thermal_zone_device *tzdev;
+>>       void __iomem *apmixed_base, *auxadc_base;
+>> +    struct mtk_thermal_zone *tz;
+>>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>>       if (!mt)
+>> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct 
+>> platform_device *pdev)
+>>         platform_set_drvdata(pdev, mt);
+>>   -    tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+>> -                             &mtk_thermal_ops);
+>> -    if (IS_ERR(tzdev)) {
+>> -        ret = PTR_ERR(tzdev);
+>> -        goto err_disable_clk_peri_therm;
+>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+>> +        tz = kmalloc(sizeof(*tz), GFP_KERNEL);
+>
+> Should this memory allocation be a devm_kmalloc(), or is this memory 
+> freed at some point by the framework?
+>
+> (I don't know the thermal_zone API and the patch has no kfree())
+AFAIK, thermal API does not free private data, therefore devm_kmalloc() 
+should be used.
+>
+> CJ
+>
+>> +        if (!tz)
+>> +            return -ENOMEM;
+>> +
+>> +        tz->mt = mt;
+>> +        tz->id = i;
+>> +
+>> +        tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, 
+>> tz, (i == 0) ?
+>> +                                 &mtk_thermal_ops :
+>> +                                 &mtk_thermal_sensor_ops);
+>> +
+>> +        if (IS_ERR(tzdev)) {
+>> +            if (PTR_ERR(tzdev) == -ENODEV) {
+>> +                dev_warn(&pdev->dev,
+>> +                     "sensor %d not registered in thermal zone in 
+>> dt\n", i);
+>> +                continue;
+>> +            }
+>> +            if (PTR_ERR(tzdev) == -EACCES) {
+>> +                ret = PTR_ERR(tzdev);
+>> +                goto err_disable_clk_peri_therm;
+>> +            }
+>> +        }
+>>       }
+>>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
+>
+Thank you Christophe for the review.
 
--- 
-With best wishes
-Dmitry
+Regards,
+
+Amjad
 

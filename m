@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6797D5A303C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0819B5A3040
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243490AbiHZT4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S241293AbiHZT7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiHZTz5 (ORCPT
+        with ESMTP id S231216AbiHZT7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:55:57 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E99DF0BA
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:55:56 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id p185so2477565pfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:55:56 -0700 (PDT)
+        Fri, 26 Aug 2022 15:59:49 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB98765B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:59:47 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3378303138bso62001807b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=gnz1q4pz/xVc6tlRyQeVFOV7IZAqBjfIyZ5BI3hft0U=;
-        b=RrQhxaFx2nxyuhtWZesmSEiSBTXd5+FlSRNNc9KxxyKhJ0Bl69zgANMO0CqfLLj8Wp
-         iXKbEy5JuscdAXPSe3gGBQ63tvwMHyDm2gbVkrPza31gsAZYPBPZg9W3zxSSrVKd9Yk/
-         J+/Be93CyeaZPN1+vLYQK9NeE/6QAt0OcrlZs7WSL77ro535BbBF+8p7tRe3Z48slTfH
-         iIe5XE/mQbWLDiWLPvaKtgmQE5QuLz8YkrScaxgHb8tKeFkCD20srFuQ2qBpk5W36v9K
-         kRNALHXmbTvIxGBvpYWid7mpuiPBOXq/uf/Bi6sQ0xgEahLieNidSK48p393xVejDd95
-         6kNA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9BayX2iMxBiVznh3pmeqxcevUBf/Jj6vLcyG9kQaCps=;
+        b=cV5ssXt0UElh5/1P6RF9tahnjlxXLp2tbEDga11kMa5HGC5KBLt3rnMwjMmeiMun9H
+         T45QWVYWiuR6Vu5CsZaHT3JOIge2pywuReHzWGW/Nbt4rUwHdO5IMWMf5qtJ+Zqhdz/5
+         gJ8DwkmdKPz9TVwgppm9pTg4XCUstc5/3yJTDgKjSTqneE1y97MLZYIuz2BVXAQH/Fcx
+         9V5l6UV8IBPeqicTerooyiCQUISn9hhVHU9RMdntLKw6UybH/mUfDTgWyvhAtbZ/H1SO
+         EtX1/tOzc7CBFzXpZNdYkUFnkxA3kOeSsllIwjcQk1mtBgp3sRAS5sbUULf7T2HdhF2X
+         QU0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gnz1q4pz/xVc6tlRyQeVFOV7IZAqBjfIyZ5BI3hft0U=;
-        b=Q3WciREaf+If8DB8bQVdw9r/7FxAgP46SASlkMNbMCClAilu17MH+wFp7EIXWwDaOn
-         gnrTPdQnHnk3Kw0jHhymIwDszieb+FsPFv1eNjloyXjgwQfeihk7/1w3FnAbi+ZRwrLV
-         CUt7xjpWAXfOoOAKLnD4cuvrzGHwmRP2gedVvVrDNO6Lx82XttKtMQgERb69e50aX3hb
-         zJXZQYx5B/1MJaeVlSUmoLkFppPnhMqfjnVFSygiAoyID6OCJeO09UP+INIPAj8repyK
-         Op2ntRgFSkHldj9NYkdiB27rNHjuj/bgQgIVqFPdM9r+oFWoa4VOxusdWsKuFO8X2L1j
-         KxnA==
-X-Gm-Message-State: ACgBeo0mm06+OxmTjvZ1Sw3HcK0Tf5WFuf9fDC05fgVetcLbsGuUyP9o
-        lPQojaQzfjZLKmle3ghX4cGATg==
-X-Google-Smtp-Source: AA6agR7267EZysjs+BLPWLMdfKPDxv10ovdb1SjTwiW0Aq1A7/N3A/OV6mJ8qbkfeKKwzUr1R4DBNQ==
-X-Received: by 2002:a05:6a00:1588:b0:52f:a5bb:b992 with SMTP id u8-20020a056a00158800b0052fa5bbb992mr5337159pfk.38.1661543755955;
-        Fri, 26 Aug 2022 12:55:55 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id t6-20020aa79466000000b0053692028ec1sm2148303pfq.34.2022.08.26.12.55.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 12:55:54 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 13:55:52 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        linux-kernel@vger.kernel.org, german.gomez@arm.com,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] coresight: etm4x: Expose default timestamp source
- in sysfs
-Message-ID: <20220826195552.GA1991601@p14s>
-References: <20220823160650.455823-1-james.clark@arm.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9BayX2iMxBiVznh3pmeqxcevUBf/Jj6vLcyG9kQaCps=;
+        b=ankZll7WEfKsGlXlygwm97niBDb0VOMUxzBnxcDgz2wJC1d0YhlYosAW7ODiuziM8f
+         fiiQPWW49MI4zTwV1dHZuH8R/OjOeDDhLoyMTKecQ/bwLLxLCYU8gcfAJfbviQDYEo8d
+         rfFwcPKvcO/AmaEtUiuByj/qQU//zM9k9Jr7cX4W7LLlCLJSLmLZrhnEipgZ+XHJIFAE
+         WfVl9Ss9kuxlBnYYmijcaaSHYzH8tbqLuw/kKeSj5OYsL9uGJv+wX+n+BfXwyubrewyS
+         pAGcLnaqJ9xxs4rak4fNjDBAMTlHWk1PceUjuDPrjkdK4UOCh6lsNob8XTDTsRuBA6yJ
+         3eKQ==
+X-Gm-Message-State: ACgBeo27I1JNlz87PIHq18wlz9ArqBoQRo0Hk43ttD2h2NnLSQc6CycW
+        n+hfEIRw8zNns17TmKYYMyxAYfAijJyM1F2Q4LaUdHaI6n/LaA==
+X-Google-Smtp-Source: AA6agR6QjZNQelPJHf+PFxzLaUy40toWppbFWoUx2wzgkG5djmH3uMyeOC1COzMdJInnfrPOMYxZ/YBk8NYTsK3V+wk=
+X-Received: by 2002:a25:db4e:0:b0:696:4b8a:71d9 with SMTP id
+ g75-20020a25db4e000000b006964b8a71d9mr1268717ybf.220.1661543986348; Fri, 26
+ Aug 2022 12:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823160650.455823-1-james.clark@arm.com>
+References: <202208221506.0Lo051G4-lkp@intel.com> <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
+ <CAD=FV=Vxdoo21OQJ-Ad57-gFVcJ7biQipoJqDE2bSpLC2NxrhQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=Vxdoo21OQJ-Ad57-gFVcJ7biQipoJqDE2bSpLC2NxrhQ@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 21:59:34 +0200
+Message-ID: <CACRpkdaK+8bropqoRCaEw6KH7ZKRHUwNBPtc-cOojJZt+3S+yw@mail.gmail.com>
+Subject: Re: ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,42 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 05:06:48PM +0100, James Clark wrote:
-> I've taken over this one from German because he's moved to a different
-> team. I gave it a quick check and bumped the version number in the docs
-> for the next release, but the month is an estimate.
-> 
-> Thanks
-> 
-> Changes since v2:
-> 
->   * Rebased onto coresight/next (b99ee26a1a)
->   * Bumped release version to 6.1
+On Fri, Aug 26, 2022 at 5:48 PM Doug Anderson <dianders@chromium.org> wrote:
 
-I have applied this set.  Usually I'd let Suzuki handle it since he is already
-familiar with the work but 1) he is currently away and 2) the patchset is fairly
-simple.
+> Unfortunately, fixing the error isn't the most trivial thing in the
+> world. If you just do this:
+>
+>  config DRM_MIPI_DBI
+>         tristate
+> +       select DRM_KMS_HELPER
+>         depends on DRM
+>
+> ...then you get a circular dependency:
+>
+> drivers/gpu/drm/Kconfig:76:error: recursive dependency detected!
+> drivers/gpu/drm/Kconfig:76:     symbol DRM_KMS_HELPER is selected by
+> DRM_MIPI_DBI
+> drivers/gpu/drm/Kconfig:31:     symbol DRM_MIPI_DBI is selected by
+> DRM_PANEL_ILITEK_ILI9341
+> drivers/gpu/drm/panel/Kconfig:165:      symbol
+> DRM_PANEL_ILITEK_ILI9341 depends on DRM_KMS_HELPER
+> For a resolution refer to Documentation/kbuild/kconfig-language.rst
+> subsection "Kconfig recursive dependency limitations"
 
-Thanks,
-Mathieu
+It turns out Randy Dunlap had made the right fixes, and I merged them
+before you got the chance to reply!
 
-> 
-> Changes since v1:
-> 
->   * Inline etmv4_to_ts_source() function.
->   * Collect review tag from Leo.
-> 
-> German Gomez (2):
->   coresight: etm4x: Expose default timestamp source in sysfs
->   coresight: etm4x: docs: Add documentation for 'ts_source' sysfs
->     interface
-> 
->  .../testing/sysfs-bus-coresight-devices-etm4x |  8 +++++
->  .../coresight/coresight-etm4x-reference.rst   | 14 +++++++++
->  arch/arm64/include/asm/sysreg.h               |  1 +
->  .../coresight/coresight-etm4x-sysfs.c         | 29 +++++++++++++++++++
->  4 files changed, 52 insertions(+)
-> 
-> -- 
-> 2.28.0
-> 
+https://cgit.freedesktop.org/drm/drm-misc/commit/?id=84dfc46594b0167e5d3736273b0e0e05365da641
+https://cgit.freedesktop.org/drm/drm-misc/commit/?id=eb7de496451bd969e203f02f66585131228ba4ae
+
+But thanks!
+
+Yours,
+Linus Walleij

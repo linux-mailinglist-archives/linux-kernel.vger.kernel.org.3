@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897F05A2ABD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F3A5A2AC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343628AbiHZPNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S1344075AbiHZPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243549AbiHZPMD (ORCPT
+        with ESMTP id S245742AbiHZPMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:12:03 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211A4DEB6E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:20 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id hb37-20020a170907162500b0073d7f7fbbbfso725041ejc.17
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:20 -0700 (PDT)
+        Fri, 26 Aug 2022 11:12:00 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7AFDEB60
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:17 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33dbe61eed8so29866577b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=76jHGgwozZvM48bVgyafH0ePqqgPygQeeBv9QE8zFSs=;
-        b=Ez/lNwvAaDDeJuJMLhCTbPEpOPlHhfNIq7VyjE0qAVyZCRontZv0oB0LtGJ+nv4bwC
-         gZw/mTwPTBWyA0dCxVGdhKH7XEOHdENq7Cv0XhQdf86eksUUxOa2+VWsVcz6rEA4dWpu
-         Zvs62QVT+xB2cN1avkjLXHEoEa+e1ekxcYkU9ofidPy0VrkaWYbMd4GmDWtb/KlvsLO2
-         yXZ6UmXxmwAic31Rzt9UwrAuioHtXeVlWsWj3qGlJA79GCkFWZNr2tEMTQpyVXsI1d7b
-         0KcOCYL7oQy7CjEb6pflswFigH5TXa8Rfml+4QXtapWs+MN75E6ySnIaQBQTkmU2kvfY
-         TSxg==
+        bh=XOIO6yMrJJaBLCVdiKJxecGrRstBRdkXKAU8JD1YObM=;
+        b=RBRSbeDrL8qGQexUijKhcV3H7NuqN9uz8ZM5rQWAltRN3zhZJP9TKmmIf+p+yKdl6T
+         3Am09npoAEtHEWxF/Bl4GBV+lvaWA+zyaViXoAoS6FK+zkjAU0V2E1ILS8x3lB5fXtKj
+         9IHWzkzR0lKD9H/hxXtLbHPszHgU+gNR/ouI3pNZH7yhF0/W+C1cpcyiViY1J1iEBFY8
+         /rQ0ukMFzwE2rHptS3PuB+v+/gBN3s2bGa1zvZC9PEceq+oso9Jptib23PUbkHkaJtUF
+         ybmLJcK3rBbne7ulW3JpsBkspXiEuaq15wUwrHaqYN3CJnLRo71eoIyBsvku5gZs6p/s
+         mp3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=76jHGgwozZvM48bVgyafH0ePqqgPygQeeBv9QE8zFSs=;
-        b=Fw3SwRcBD8OwAJnR35YbFD3KNdrs3dL1f2Ukm//tOzPBVyAIGjHhXVjKmn1Q1VKdRX
-         i557yblngNXOX1Hu+lprW+GfcXEbM8RaXjLaxHwOHcOT1unV6XDjh6wXbkq3LzFOaYfp
-         SWq1fI84amhYRGhjykGx4LlDyetotHrDn5sk8Y3eh7JNJFoaJzNwmUl0V2/HgmS0Lneu
-         oy3M62kae4MBKuApC9EpAUJb0VFUVI3wSj9lOw+ByQsPnRhXrriojnGUwEkcQoZvh86t
-         1R4lXXf+5B5fo/FErQ1b153IR1kF1V0RMgg+LgUwBqUP7FiUhN/tqqKHPVeYmzKuswnp
-         iwEw==
-X-Gm-Message-State: ACgBeo3zQBh7BIyJ+M4oH8UaxMDHNUQt3/fQvFMK99wYEWbkE55WlUp2
-        T0zs/uYugKeZoEBEmZRL0M33qoT4cgU=
-X-Google-Smtp-Source: AA6agR6bf5SCba3ePQHoJhycDuv14GdKQb0ZRH0Sro37EO5apbOGfCrAwn2LLTqoAO1tZW/O5CJdylcsL78=
+        bh=XOIO6yMrJJaBLCVdiKJxecGrRstBRdkXKAU8JD1YObM=;
+        b=aiRscnRT/ZpEWJD2Y/5DsOImPdDH9iMWW2945UxmhWo5DzTMwaQ+2OWN4NjcLk4aba
+         HtyX7/7dCj4xyjRMvlDSIWM414HkJIevprZ2t7RrFC/wreLYba+xn0VE9hSWJSQqNCFL
+         VpByZZNTXzMabO2e1/ovR+pob6AvE2W3ArLhgoxtXeDiByqvSgvPtWcnddbyZHfCe527
+         1mtY9tFGZpYqskSz/20EiniRuppWgF1j0tPU2JLNHLgzdy8AqtOyXRI+n5FKWxWD01ku
+         dIs3wo6QsaVOWAxpc5gH0ur1ePzOlWNAbMsXqHRLaIl+/d1N13g+cDo/TaKC16nAHi4U
+         j8+g==
+X-Gm-Message-State: ACgBeo2WC97jRx69cBq2YSj646Bs668cU2c3gMgkF7NEKB+6vaMFep54
+        S0vSHCX02D65YlJ+/bFAmYVqDs3lC6s=
+X-Google-Smtp-Source: AA6agR70pOgUYoVn/e77Ld0R/nqA9LDlWtFjFwsnYYnj15N1nfRnKaSK4PvjO0uXZsTDiRTt9eMo2zal+mA=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:5207:ac36:fdd3:502d])
- (user=glider job=sendgmr) by 2002:a17:906:8458:b0:73d:d0e9:4b27 with SMTP id
- e24-20020a170906845800b0073dd0e94b27mr5257444ejy.766.1661526554281; Fri, 26
- Aug 2022 08:09:14 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 17:07:45 +0200
+ (user=glider job=sendgmr) by 2002:a0d:e6cc:0:b0:338:c82b:9520 with SMTP id
+ p195-20020a0de6cc000000b00338c82b9520mr151356ywe.66.1661526556996; Fri, 26
+ Aug 2022 08:09:16 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 17:07:46 +0200
 In-Reply-To: <20220826150807.723137-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220826150807.723137-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826150807.723137-23-glider@google.com>
-Subject: [PATCH v5 22/44] dma: kmsan: unpoison DMA mappings
+Message-ID: <20220826150807.723137-24-glider@google.com>
+Subject: [PATCH v5 23/44] virtio: kmsan: check/unpoison scatterlist in vring_map_one_sg()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -97,210 +97,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN doesn't know about DMA memory writes performed by devices.
-We unpoison such memory when it's mapped to avoid false positive
-reports.
+If vring doesn't use the DMA API, KMSAN is unable to tell whether the
+memory is initialized by hardware. Explicitly call kmsan_handle_dma()
+from vring_map_one_sg() in this case to prevent false positives.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
----
-v2:
- -- move implementation of kmsan_handle_dma() and kmsan_handle_dma_sg() here
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
+---
 v4:
- -- swap dma: and kmsan: int the subject
+ -- swap virtio: and kmsan: in the subject
 
-v5:
- -- do not export KMSAN hooks that are not called from modules
-
-Link: https://linux-review.googlesource.com/id/Ia162dc4c5a92e74d4686c1be32a4dfeffc5c32cd
+Link: https://linux-review.googlesource.com/id/I211533ecb86a66624e151551f83ddd749536b3af
 ---
- include/linux/kmsan.h | 41 ++++++++++++++++++++++++++++++
- kernel/dma/mapping.c  |  9 ++++---
- mm/kmsan/hooks.c      | 59 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 106 insertions(+), 3 deletions(-)
+ drivers/virtio/virtio_ring.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-index f056ba8a7a551..c6ae00e327e5e 100644
---- a/include/linux/kmsan.h
-+++ b/include/linux/kmsan.h
-@@ -9,6 +9,7 @@
- #ifndef _LINUX_KMSAN_H
- #define _LINUX_KMSAN_H
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 4620e9d79dde8..a9f06ec5b3c27 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/hrtimer.h>
+ #include <linux/dma-mapping.h>
++#include <linux/kmsan-checks.h>
+ #include <linux/spinlock.h>
+ #include <xen/xen.h>
  
-+#include <linux/dma-direction.h>
- #include <linux/gfp.h>
- #include <linux/kmsan-checks.h>
- #include <linux/stackdepot.h>
-@@ -17,6 +18,7 @@
- struct page;
- struct kmem_cache;
- struct task_struct;
-+struct scatterlist;
- 
- #ifdef CONFIG_KMSAN
- 
-@@ -196,6 +198,35 @@ void kmsan_ioremap_page_range(unsigned long addr, unsigned long end,
-  */
- void kmsan_iounmap_page_range(unsigned long start, unsigned long end);
- 
-+/**
-+ * kmsan_handle_dma() - Handle a DMA data transfer.
-+ * @page:   first page of the buffer.
-+ * @offset: offset of the buffer within the first page.
-+ * @size:   buffer size.
-+ * @dir:    one of possible dma_data_direction values.
-+ *
-+ * Depending on @direction, KMSAN:
-+ * * checks the buffer, if it is copied to device;
-+ * * initializes the buffer, if it is copied from device;
-+ * * does both, if this is a DMA_BIDIRECTIONAL transfer.
-+ */
-+void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
-+		      enum dma_data_direction dir);
-+
-+/**
-+ * kmsan_handle_dma_sg() - Handle a DMA transfer using scatterlist.
-+ * @sg:    scatterlist holding DMA buffers.
-+ * @nents: number of scatterlist entries.
-+ * @dir:   one of possible dma_data_direction values.
-+ *
-+ * Depending on @direction, KMSAN:
-+ * * checks the buffers in the scatterlist, if they are copied to device;
-+ * * initializes the buffers, if they are copied from device;
-+ * * does both, if this is a DMA_BIDIRECTIONAL transfer.
-+ */
-+void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
-+			 enum dma_data_direction dir);
-+
- #else
- 
- static inline void kmsan_init_shadow(void)
-@@ -278,6 +309,16 @@ static inline void kmsan_iounmap_page_range(unsigned long start,
+@@ -352,8 +353,15 @@ static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
+ 				   struct scatterlist *sg,
+ 				   enum dma_data_direction direction)
  {
- }
- 
-+static inline void kmsan_handle_dma(struct page *page, size_t offset,
-+				    size_t size, enum dma_data_direction dir)
-+{
-+}
-+
-+static inline void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
-+				       enum dma_data_direction dir)
-+{
-+}
-+
- #endif
- 
- #endif /* _LINUX_KMSAN_H */
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 49cbf3e33de71..48dfd11807be2 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -156,6 +156,7 @@ dma_addr_t dma_map_page_attrs(struct device *dev, struct page *page,
- 		addr = dma_direct_map_page(dev, page, offset, size, dir, attrs);
- 	else
- 		addr = ops->map_page(dev, page, offset, size, dir, attrs);
-+	kmsan_handle_dma(page, offset, size, dir);
- 	debug_dma_map_page(dev, page, offset, size, dir, addr, attrs);
- 
- 	return addr;
-@@ -194,11 +195,13 @@ static int __dma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
- 	else
- 		ents = ops->map_sg(dev, sg, nents, dir, attrs);
- 
--	if (ents > 0)
-+	if (ents > 0) {
-+		kmsan_handle_dma_sg(sg, nents, dir);
- 		debug_dma_map_sg(dev, sg, nents, ents, dir, attrs);
--	else if (WARN_ON_ONCE(ents != -EINVAL && ents != -ENOMEM &&
--			      ents != -EIO && ents != -EREMOTEIO))
-+	} else if (WARN_ON_ONCE(ents != -EINVAL && ents != -ENOMEM &&
-+				ents != -EIO && ents != -EREMOTEIO)) {
- 		return -EIO;
+-	if (!vq->use_dma_api)
++	if (!vq->use_dma_api) {
++		/*
++		 * If DMA is not used, KMSAN doesn't know that the scatterlist
++		 * is initialized by the hardware. Explicitly check/unpoison it
++		 * depending on the direction.
++		 */
++		kmsan_handle_dma(sg_page(sg), sg->offset, sg->length, direction);
+ 		return (dma_addr_t)sg_phys(sg);
 +	}
  
- 	return ents;
- }
-diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index a8a03f079a8a5..41b6b41e6183a 100644
---- a/mm/kmsan/hooks.c
-+++ b/mm/kmsan/hooks.c
-@@ -10,9 +10,11 @@
-  */
- 
- #include <linux/cacheflush.h>
-+#include <linux/dma-direction.h>
- #include <linux/gfp.h>
- #include <linux/mm.h>
- #include <linux/mm_types.h>
-+#include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- 
-@@ -242,6 +244,63 @@ void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
- }
- EXPORT_SYMBOL(kmsan_copy_to_user);
- 
-+static void kmsan_handle_dma_page(const void *addr, size_t size,
-+				  enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_BIDIRECTIONAL:
-+		kmsan_internal_check_memory((void *)addr, size, /*user_addr*/ 0,
-+					    REASON_ANY);
-+		kmsan_internal_unpoison_memory((void *)addr, size,
-+					       /*checked*/ false);
-+		break;
-+	case DMA_TO_DEVICE:
-+		kmsan_internal_check_memory((void *)addr, size, /*user_addr*/ 0,
-+					    REASON_ANY);
-+		break;
-+	case DMA_FROM_DEVICE:
-+		kmsan_internal_unpoison_memory((void *)addr, size,
-+					       /*checked*/ false);
-+		break;
-+	case DMA_NONE:
-+		break;
-+	}
-+}
-+
-+/* Helper function to handle DMA data transfers. */
-+void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
-+		      enum dma_data_direction dir)
-+{
-+	u64 page_offset, to_go, addr;
-+
-+	if (PageHighMem(page))
-+		return;
-+	addr = (u64)page_address(page) + offset;
-+	/*
-+	 * The kernel may occasionally give us adjacent DMA pages not belonging
-+	 * to the same allocation. Process them separately to avoid triggering
-+	 * internal KMSAN checks.
-+	 */
-+	while (size > 0) {
-+		page_offset = addr % PAGE_SIZE;
-+		to_go = min(PAGE_SIZE - page_offset, (u64)size);
-+		kmsan_handle_dma_page((void *)addr, to_go, dir);
-+		addr += to_go;
-+		size -= to_go;
-+	}
-+}
-+
-+void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
-+			 enum dma_data_direction dir)
-+{
-+	struct scatterlist *item;
-+	int i;
-+
-+	for_each_sg(sg, item, nents, i)
-+		kmsan_handle_dma(sg_page(item), item->offset, item->length,
-+				 dir);
-+}
-+
- /* Functions from kmsan-checks.h follow. */
- void kmsan_poison_memory(const void *address, size_t size, gfp_t flags)
- {
+ 	/*
+ 	 * We can't use dma_map_sg, because we don't use scatterlists in
 -- 
 2.37.2.672.g94769d06f0-goog
 

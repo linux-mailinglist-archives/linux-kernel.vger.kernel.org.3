@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356C65A1FAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250405A1FB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244498AbiHZEQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 00:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S244609AbiHZESO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 00:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244491AbiHZEQa (ORCPT
+        with ESMTP id S243720AbiHZESM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:16:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BA0BB01B;
-        Thu, 25 Aug 2022 21:16:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FC77B82F5C;
-        Fri, 26 Aug 2022 04:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92375C433C1;
-        Fri, 26 Aug 2022 04:16:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661487386;
-        bh=dWUP5SzBKFkPPFrG5kSA+6oPlRpqgdw42NE7/hoQ1Qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MiTEg+idY8oPIckibp+T6MYEKDON0WivdR/932DAeaZTSHjcPqZZ6m8grGU6QywGI
-         IaX+jY3R4IUpB7/4unSU8I/6n/nx88snyehJEKZcB5xsSt1m8MhYr2lU4ewqdYLMXv
-         A7GuWyh2bpOeWyAA+TIsFiKl5FG2i+sS2wEkgpAFPZ0BYkXWUkXjnNp7wV32pvEpAT
-         6adymDIBYkqb4ycxpjaJXy42FBqdTeZTUTep08rEQoWQBfqZOYAaz2uIHvAUgIgLrX
-         OR92z3HcoYRgavC0A6gjfQULOQ3ZgLOfstWQpG5+y64WVuj7cr/uiuSqqe0GC3nLtz
-         bglc4YvtgzDjg==
-Date:   Fri, 26 Aug 2022 07:16:12 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
-        akpm@linux-foundation.org, yejiajian2018@email.szu.edu.cn,
-        skhan@linuxfoundation.org, akiyks@gmail.com,
-        zhangyinan2019@email.szu.edu.cn, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/mm/page_owner.rst: update experimental data
-Message-ID: <YwhJDJQkymdN0E2N@kernel.org>
-References: <20220825172934.4344-1-caoyixuan2019@email.szu.edu.cn>
- <87ilmgyz34.fsf@meer.lwn.net>
- <YwgwVsKYLUq0kbMo@debian.me>
+        Fri, 26 Aug 2022 00:18:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F2EBFC61;
+        Thu, 25 Aug 2022 21:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661487491; x=1693023491;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YsDHteRcq1xMbpE+Et5nCrI0+XEVYx8Ur9biKx/cQPU=;
+  b=eGCetfeBSSnCGgngDaksi+RjHlSDpCrcbb/juav78rlQFRp04wDXvV0M
+   bE7tKpTsUW7oF3RK3//O+HXqPCywRCmTRQkKMOuu6iNtNbI7pkF4k7+cW
+   dqsL87wWXCPvnUUwP6fsSwzLd1Agahxx3bXAVDaoDFsTggT315aXfHiPn
+   wRngBporDWxhLWEeOYxNJt1FK+/fcHCTrRXHUL01WH4bHt9LWpWFhTgmg
+   L76BOZK3bCEZ17Q5oAD4FxbYl193nqBzsAuY3vF6CplMZHZWp2+g4jBBD
+   ZFVR+rGZf7Dm4RNVIfRQushyMRvodqBG99dFThRMNaOgsRDfJRFm8MLUL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="274171622"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="274171622"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 21:17:15 -0700
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="587156893"
+Received: from xjing1-mobl1.ccr.corp.intel.com (HELO [10.254.211.48]) ([10.254.211.48])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 21:17:08 -0700
+Message-ID: <c160bb06-5739-d1bb-f9a9-722a24e567c7@linux.intel.com>
+Date:   Fri, 26 Aug 2022 12:17:06 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwgwVsKYLUq0kbMo@debian.me>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 00/13] iommu: SVA and IOPF refactoring
+Content-Language: en-US
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,59 +74,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 09:30:46AM +0700, Bagas Sanjaya wrote:
-> On Thu, Aug 25, 2022 at 12:09:35PM -0600, Jonathan Corbet wrote:
-> > >  - Without page owner::
-> > >  
-> > >     text    data     bss     dec     hex filename
-> > > -   48392   2333     644   51369    c8a9 mm/page_alloc.o
-> > > +   58581   3166     652   62399    f3bf mm/page_alloc.o
-> > >  
-> > >  - With page owner::
-> > >  
-> > >     text    data     bss     dec     hex filename
-> > > -   48800   2445     644   51889    cab1 mm/page_alloc.o
-> > > -   6662     108      29    6799    1a8f mm/page_owner.o
-> > > -   1025       8       8    1041     411 mm/page_ext.o
-> > > +   59085   3294     652   63031    f637 mm/page_alloc.o
-> > > +   7464     125      28    7617    1dc1 mm/page_owner.o
-> > > +   1396      32       8    1436     59c mm/page_ext.o
-> > >  
-> > > -Although, roughly, 8 KB code is added in total, page_alloc.o increase by
-> > > -520 bytes and less than half of it is in hotpath. Building the kernel with
-> > > +Although, roughly, 9 KB code is added in total, page_alloc.o increase by
-> > > +632 bytes and less than half of it is in hotpath. Building the kernel with
-> > >  page owner and turning it on if needed would be great option to debug
-> > >  kernel memory problem.
-> > 
-> > This seems like a fine patch...but I do have to wonder if it really
-> > makes sense to maintain this information, which will surely be subject
-> > to frequent change.  Perhaps the whole thing is better replaced with a
-> > line saying that enabling page owner adds ~9KB?
-> > 
+On 2022/8/17 9:20, Lu Baolu wrote:
+> Hi folks,
 > 
-> The size figure above is from size(1) from binutils, for which the
-> command is run (maybe) against vmlinux.
+> The former part of this series introduces the IOMMU interfaces to attach
+> or detach an iommu domain to/from a pasid of a device, and refactors the
+> exsiting IOMMU SVA implementation by assigning an SVA type of iommu
+> domain to a shared virtual address and replacing sva_bind/unbind iommu
+> ops with a set_dev_pasid domain ops.
 > 
-> So I would like to say "Enabling page owner increases vmlinux size by
-> several kilobytes."
-
-Looks like original text tried to emphasize that there is no significant
-change to page allocator code, and I think it's worth keeping it. E.g.
-leaving something like
-
-"Although, enabling page owner increases kernel size by several kilobytes,
-most of this code is outside page allocator and its hot path."
- 
-instead of size(1) output and the sentences before and after it.
-
-> Thanks.
+> The latter part changes the existing I/O page fault handling framework
+> from only serving SVA to a generic one. Any driver or component could
+> handle the I/O page faults for its domain in its own way by installing
+> an I/O page fault handler.
 > 
-> -- 
-> An old man doll... just what I always wanted! - Clara
+> This series has been functionally tested on an x86 machine and compile
+> tested for all architectures.
+> 
+> This series is also available on github:
+> [2]https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v11
+> 
+> Please review and suggest.
 
+Thank you all for review and test. I have updated this series and
+uploaded a new version at
 
+https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v12
 
--- 
-Sincerely yours,
-Mike.
+Zhangfei and Tony have tested it on real Intel and arm64 hardware.
+
+I will soon post it for further review.
+
+Best regards,
+baolu

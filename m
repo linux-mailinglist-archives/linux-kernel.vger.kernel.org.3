@@ -2,89 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345075A29CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164D25A29D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344534AbiHZOmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S1344538AbiHZOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiHZOmT (ORCPT
+        with ESMTP id S243916AbiHZOnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:42:19 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F27D3996
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:42:18 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so4179389wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:42:18 -0700 (PDT)
+        Fri, 26 Aug 2022 10:43:03 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A59D632F
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:43:01 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h22so1390863qtu.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=lZLJoIWsXsqa+EaO47AoJNbezNHg+wFL+Ah5uTdYlwk=;
-        b=KLyLNrCoJwl+5GwKMfIX792NGKHxwN6CwoN19TkfC9cJysJIjrduUKHxb0+yWzgPD0
-         E1cvx9do1g7IrPPt+Pb7osZ9oZI02WQCKE4T8tBaK0SmdrzMqVx85I4eRc+XvcrVNTXG
-         veK3oQmN5PqjIuWiG7Wfc8/opAook1+EgHPj1wr8CMYu1OZbJijFDAvEUlu26MiT5tNi
-         fgKnVtCy9t4zDW5s8MkjjwWmalXolPLhHi2fJpdJ8l/lxTAq9aJ76hpYnOLly7cPNUcq
-         +MKkcsxtNyAhqRvSkYFMBAsZJcbLwhOPPZypSTBaBzzbN31iaZvSrhAarROudcEp38Nk
-         HQWQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=kTnWqPCQ7JZ842fbaIQWezAeKboDsupaMXi3CH+q7qQ=;
+        b=Gz5GUtM6XKnbcbJYe9m2fo372C5WN/HGoP1+ZL9t7Vc3t5IdeBim9cpEDk0u0fbdD2
+         Ib+8bHn7pdveBms3deDfXuelAv8+bGmaSfP1g/kBjGkt+0HcxpGBkp9aKtQm0Bm4PBCG
+         MBh/0f69BjrKsQ/AjDZ+LZIc4er6vFD6Up+Zb+KljhC4r2otLZCMvyTtoI3SApYK6Dks
+         o73wxSNQOdv2WxURPSPSj/04ZyX/WrNyrwEIb+s9g0lpzzlbcTd2hAUo/r0TtbIWbYXH
+         5IWVdio90ZV0Gy93e0NDrDAtPB/Sckuz2AaJYT2lpjEnLADHIc3RB0k1wsoGfLy3Iato
+         FGUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=lZLJoIWsXsqa+EaO47AoJNbezNHg+wFL+Ah5uTdYlwk=;
-        b=1R3+WVcsCMDz80bmHGHJdXwtnZz2QXhGBSR89DEy/AONfQzBEXIN3dcNojRwcLJXkp
-         rR4XGs/2vNqLU1t1f+LAzFutwuFvOoN13f1FfZezeHqcxBmODYtjrY1bxLf0GJg7hKpN
-         cVCvEYFBT1kZMHlM5R5vyYwHoimS3FeUHgIGgAcgSnHfcYOpeJdVrPYKr2APsfTc2MQG
-         9Nr+boZ9hIgCuHZ1OouMGNaCJ0nAFprJrFhoHaFF0VKOEhMFxpPpKigR8JIv83y7ndtJ
-         xnggo3/k0WDCRQ+x54YcNZPAuM2mJDjieqyGMhMHZIyLAhbl+5CIV9zgTMDMd9wyd8zT
-         eQQQ==
-X-Gm-Message-State: ACgBeo1iOdExOFSrV5Ja+woibJ/g5AKLi5OsQuiptLNmLcez/JMdz1C8
-        FOdYw22/XAH3gnmn6PyK8ZvKBS0wBLZ98ELv
-X-Google-Smtp-Source: AA6agR6DMgDGXJ3XhgJFIVcmP9tyyxiw62Mu4CdcheESQmuIWil8nfX+s4MTdQxlI0jsktqF1CsfAQ==
-X-Received: by 2002:a1c:3b04:0:b0:3a5:487c:6240 with SMTP id i4-20020a1c3b04000000b003a5487c6240mr11564634wma.152.1661524936715;
-        Fri, 26 Aug 2022 07:42:16 -0700 (PDT)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id t18-20020a5d49d2000000b00224f5bfa890sm2052764wrs.97.2022.08.26.07.42.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 07:42:16 -0700 (PDT)
-Message-ID: <843fda3c-f1bd-61e0-e94d-38026ad98e5f@arista.com>
-Date:   Fri, 26 Aug 2022 15:42:09 +0100
+        bh=kTnWqPCQ7JZ842fbaIQWezAeKboDsupaMXi3CH+q7qQ=;
+        b=qNYrvM2cUEhtLhP72olCij1ZGYZbmyQRKLgqmUUPuNGu2tDRVGWYpnUgmLxOqeP9pV
+         o9v6MmeLPr0Cp8G6olMXoO1ezkVPWs02DLoKG9OXGcJeg6f1S1ZVb7FNslaUnZqg0C0e
+         in5+cYJKQjpEfrudRX9SwH8HpeHLr242vrA36dqHyWmGI+S7sKQyYMTcwNLlSOGjE9Na
+         ApxWWbOB88t4plT9kjNYFN8YMdjKucrjjqJtprOw8l4vukuBt9CQ5r0R9Gz3bEjLg7ME
+         rQPKHl1mFpLaO1ejkloUDUFDXFWZ7OyF0GngXkjaFZXPvVn2y7kNN6re8Of9nsC8tvnu
+         Mz1A==
+X-Gm-Message-State: ACgBeo1fqU63/oOv7BceRSlFRSM/m6CZ1GjaakyCkRMFYiXtxQcYow5V
+        IiujWI836rzbeRSc6Nj71rOIfZAcdBe68Okkw50=
+X-Google-Smtp-Source: AA6agR7lOKxjh+ThZe08tEaUJTHLb0NYs9MVH5uJI/AydwR5HeVRwBtkzmXQGJ7fFMDCCyjhfaRJ3+5zagk/9bC4jyI=
+X-Received: by 2002:ac8:5f4f:0:b0:344:b3a1:4bb4 with SMTP id
+ y15-20020ac85f4f000000b00344b3a14bb4mr7929996qta.139.1661524980659; Fri, 26
+ Aug 2022 07:43:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 02/31] crypto_pool: Add crypto_pool_reserve_scratch()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-crypto@vger.kernel.org
-References: <202208221817.t5uzfegL-lkp@intel.com>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <202208221817.t5uzfegL-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Sender: cr.adco.adco@gmail.com
+Received: by 2002:a05:6214:7ec:0:0:0:0 with HTTP; Fri, 26 Aug 2022 07:43:00
+ -0700 (PDT)
+From:   Al muharraq group <al.muharraqgrp@gmail.com>
+Date:   Fri, 26 Aug 2022 15:43:00 +0100
+X-Google-Sender-Auth: rkS8_AskRhEiKWH5thQITcp41Qk
+Message-ID: <CAJyQtkMCbmws8Xde=6YzqjmyL7a=7+=m0CMZ-D1NJeEkgVu7TQ@mail.gmail.com>
+Subject: Re: Al-Muharraq Project funding
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,18 +65,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+-- 
+Greetings from Al-Muharraq Group Ltd.
 
-On 8/22/22 11:45, Dan Carpenter wrote:
-> Hi Dmitry,
-[..]
-> "err" not set.  It was supposed to be set to zero at the start.  But
-> better to say "ret = i;" here maybe?
-> 
-> Why is i unsigned?  It leads to unsightly casts.  Presumably some static
-> checker insists on this... :/
+I have contacted you to consult you for a funding resolution for your business.
 
-Thanks! Will be addressed/reworked in v2.
+My Name is Saif Yusuf. Do you have projects that require funding? We
+facilitate the funding needs of private project owners around the
+world covering infrastructure, housing, real estate development, IT
+parks, industrial parks, film studios, food parks, agricultural
+projects, health & wellness, hospitality, education, electronics &
+telecommunication, power & electricity and oil and gas sectors.
 
-Thank you,
-          Dmitry
+If you have any queries regarding funding please revert back to me and
+find the solution to your financial needs.
+
+
+Sincerely,
+
+
+Saif Yusuf
+Business Consultant
+
+Al-MUHARRAQ Group.
+#sblcproviders #bankguarantee #mortgageloans #unsecuredloan
+#projectfinance #startuploan #tradefund

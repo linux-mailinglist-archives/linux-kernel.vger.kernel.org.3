@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9732E5A219F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE615A21A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245081AbiHZHTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S245169AbiHZHUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245065AbiHZHTb (ORCPT
+        with ESMTP id S245143AbiHZHUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:19:31 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED8D2E95
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:19:29 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so620247ilt.4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:19:29 -0700 (PDT)
+        Fri, 26 Aug 2022 03:20:00 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83B5BC19;
+        Fri, 26 Aug 2022 00:19:58 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f4so640531pgc.12;
+        Fri, 26 Aug 2022 00:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=j/9iHgs4l5y+aD60Vfb2kB4eAbqEKVoCHwikUayMWBA=;
+        b=OuCffG4xvAn209qGHVhLOsExjE4YLkvNQv25x/AYayLrOs/isW6BWvAeUr5OC2LzwN
+         XXERUYvlqZUXvZVfhRi0wCk/lrYgU0QGKmvF/JuHttNvsDQq2dsT7ZxPCJp7MkQo/IYN
+         Svvyo3mLzqcNabYCIKy25ypW4UH7UkMzxb2SuFjQfV20JrnGtmeXhnHlt9CKeA0q2HKS
+         BhlE/cO6uHyEROzp6sQSoLHj/HBTbOkX6+Y3LPa15ERsF2oWJy1G3796pa5FAmhzf78I
+         j9qqhKhIwmRXIp5+p/9ZB7w5DDbKr7FWMah2R76fSEh5jxulcwmaqZBUfgNByPaHCEPm
+         wvGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=Dp+sBe2vn0voi8yZGI9whtCAbzY0GJcU7myLxf1qQs4=;
-        b=1I0cxDBH14lDa+M+nZ6uaPUtw2dXZ6wDX2y4zPlIIlusY2hzmrNFVTBV5Rn9lOtoGn
-         Fk5WfP5+Ge9jASzNRIYz1a4eWWUUhuSWu4OZ7doFcb3L8x1fayd5u/tcFMr1RTZ+olpK
-         +9c9r/MekUkMVTKomNpLPowq/K2w4EKXug/a2wG5nxkkYGK8IocG4cEwE450s1iBOnik
-         /jnfmmFrOmIFDoBtGa0GPwy/zUf78/EOhfbjU5RYkfaBflF3fYqou6kdR84nQhKMQUoy
-         jtRutaqXivqhwwDrUVwRp7WSPNHtwxjWZyM0gXlv8YCG2fB5H4xmtl7vIx3fwfG+SkV+
-         OVow==
-X-Gm-Message-State: ACgBeo2QL5uCs0Qua/n8nuTXQ9VXk61/KkU+yu7EZWWT9wZN92dCjnt7
-        5UmlJsownI4Np+MwsUa+Euy4hYngNUCRra3VlQJSue2keE5d
-X-Google-Smtp-Source: AA6agR7GcfkbFgGxd7vIHA6ERJ+7q3KMF/mAS/xNaa283uNCJaZMjM6XY1HIp9oSvZhqsdjxPLiuKcr+14PtyfaqULrfHShoSBaS
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=j/9iHgs4l5y+aD60Vfb2kB4eAbqEKVoCHwikUayMWBA=;
+        b=QrwnmZ7Mou5jG1Kg3q/hYLrNFSnt/+ofmbNSQOEiJ1rzd+EsxSOUelRfQbbTlX+GKD
+         1b+ShC/Gfh7iC8qCPNKzL7x7sEJz/7w7hJrNobKdYSfp/XR/c1vO2PQrStDUS+i6otkq
+         VcMX508nM1q+Oq1wwrWBrZk85Jd+xYlMRno9oBBG6kc0ygtJhd3+jl46IZhd9EFIPHVW
+         LMTitFPfH134mNNqI4+hz5pN4w/Zj2+QZCTDR98YoJpRatXyz/KDWXkKXIuFisEhGwYH
+         i8aTopx17QBZbMfqpbCeEQMt+ijFECXwDdcClCH47ApMK71O/ZfbfiQXZbEHn1y/Fa4B
+         GdNA==
+X-Gm-Message-State: ACgBeo2zU20RMcPeOWbVMGK+EG8i5sGEfziLjI9Z2QvOrGYlkWU5Q5Qu
+        GNvnQfr+Wan/jvyoVpbWBvcZVQVoURk=
+X-Google-Smtp-Source: AA6agR5bVoNlxs4bGqigbs7h8yaT1ksO0Ug3m4azHCl7Z6fMiPK4W9H7BLRBvynC4bBfLFb/7atjHQ==
+X-Received: by 2002:a05:6a00:1687:b0:518:6c6b:6a9a with SMTP id k7-20020a056a00168700b005186c6b6a9amr2626634pfc.81.1661498397946;
+        Fri, 26 Aug 2022 00:19:57 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902d50a00b001730cf6f839sm823490plg.70.2022.08.26.00.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 00:19:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     bjorn.andersson@linaro.org
+Cc:     mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] rpmsg: char: Remove the unneeded result variable
+Date:   Fri, 26 Aug 2022 07:19:54 +0000
+Message-Id: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:371f:b0:349:cfb0:89a9 with SMTP id
- k31-20020a056638371f00b00349cfb089a9mr3494594jav.151.1661498368647; Fri, 26
- Aug 2022 00:19:28 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 00:19:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000ee81005e71fbcd8@google.com>
-Subject: [syzbot] linux-next test error: BUG: program execution failed:
- executor NUM: exit status NUM (3)
-From:   syzbot <syzbot+eb8c1c76ad86ed1cd820@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-syzbot found the following issue on:
+Return the value rpmsg_chrdev_eptdev_add() directly instead of storing it
+in another redundant variable.
 
-HEAD commit:    cc2986f4dc67 Add linux-next specific files for 20220822
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11573e2d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2aea846fde08e662
-dashboard link: https://syzkaller.appspot.com/bug?extid=eb8c1c76ad86ed1cd820
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+eb8c1c76ad86ed1cd820@syzkaller.appspotmail.com
-
-2022/08/22 07:08:16 checking machine...
-2022/08/22 07:08:16 checking revisions...
-2022/08/22 07:08:17 testing simple program...
-executing program
-2022/08/22 07:08:20 SYZFATAL: BUG: program execution failed: executor 0: exit status 67
-SYZFAIL: wrong response packet
- (errno 16: Device or resource busy)
-loop exited with status 67
-
-SYZFAIL: wrong response packet
- (errno 16: Device or resource busy)
-loop exited with status 67
-
-
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/rpmsg/rpmsg_char.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+index 4f2189111494..0850ae34fb88 100644
+--- a/drivers/rpmsg/rpmsg_char.c
++++ b/drivers/rpmsg/rpmsg_char.c
+@@ -424,15 +424,12 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
+ 			       struct rpmsg_channel_info chinfo)
+ {
+ 	struct rpmsg_eptdev *eptdev;
+-	int ret;
+ 
+ 	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, parent);
+ 	if (IS_ERR(eptdev))
+ 		return PTR_ERR(eptdev);
+ 
+-	ret = rpmsg_chrdev_eptdev_add(eptdev, chinfo);
+-
+-	return ret;
++	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
+ }
+ EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
+ 
+-- 
+2.25.1

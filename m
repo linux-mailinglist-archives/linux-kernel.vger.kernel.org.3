@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F9E5A2873
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1EE5A2877
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343848AbiHZNYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S1344295AbiHZNYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiHZNYC (ORCPT
+        with ESMTP id S234147AbiHZNYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:24:02 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB66D91C5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:24:01 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3376851fe13so35593537b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:24:01 -0700 (PDT)
+        Fri, 26 Aug 2022 09:24:41 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7839D91E4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:24:39 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t5so1669265pjs.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:24:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=PIiR/n+QCdxkf97dDWAHzLDooe+ZeLrKTx7VubO2kJc=;
-        b=Vfl506+eEV29j3SFSG2c2FJrlXpA71hhQeWU6XPZ07WA/C7x9Gpef8u7QgZUgqxphb
-         5A4IZYKU2YXkTmb84zrEVFK9HNcw1IrqvhY0a291OQr5HtrVD6nB3TXLVaqEzA1Q2tc4
-         f3pX0OVE231I3FCp1NPzfBnURjmc+lhY5Iw6kVkMCxwVZxTEwh4eQv/NEvVcdw+Utwta
-         g/8nSsbIiUWmmy2a4cFuOonbjeW7ONu4iISRXvh6+X8aVQ1uymTaKeP0/hgbOrLNOm0E
-         hOUBuMgeU7UpuQX550zkBWChF9uKWWljEws3290n3Sc7aufSyzja4obExOmR1XaDsdHV
-         3UBw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=8uro9lCtd8NysvGK5k23aKGMiWT4gKBsxfPGfZl+NlA=;
+        b=kjxwALsGfWTCbe2l1vkHQBL3j35YlKcw35ucXtgz0QMLFOjuSypqGHqNLINeThA57o
+         qO7TP9d6neZQ3cqm9niRZ5bt7VzumI/G/PfFat4wEkdPfLGaSpMioVPpqQuYOCZdA5fH
+         ZtCApZqPVjN7gaVRKA/vy0Yez0Psh0S1b0MvQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=PIiR/n+QCdxkf97dDWAHzLDooe+ZeLrKTx7VubO2kJc=;
-        b=xaxbcuK81YZv0MZs7GNNvrVVYTNmBvpX2p9+Z30/IxLnTU9YnHPdlt27QCqNkKsX7/
-         JqmNo2uptmrrCBsiEfxq7tcYAjitN7f9HCjCrHA+7f+aO/iPafCk/32levuVaVeQIwiz
-         oEUsLdoKbrC7wECmg7ILf7MW580oh6dzsNVtnxlZRVWFZR5n8czoBefSU8jFq+hpcEU3
-         QgTue4dRQfW3NkA12GQl/rmJOOg9FbUQHFtoAAtPy2t7I5N/x0BJ2Inw8+s9iPSgevZ/
-         lcDBTcnJ5BLsBZrtboW/26Nqm06Jd7fYPY2GCku4NuDxmi+DZga6piX7fAVXSGIjX/8e
-         kibg==
-X-Gm-Message-State: ACgBeo3qTc7D3BpGhZLdROg3uDtvbWL58JTaQNEWQVTrqamKfhnEHVS2
-        CVQr4bTQHKiCaq55hHfhc+V9+CmpXx6YxpclS5g4Fw==
-X-Google-Smtp-Source: AA6agR60F7qofL+lQIprq0JSMlXSjr77GXI9fuLCUlQazq2xZ0LgTfP9Uw5qghqaJr4OYz6jjBnuq2E8e7ph3ThQ0d4=
-X-Received: by 2002:a25:378a:0:b0:696:3e8b:fe5f with SMTP id
- e132-20020a25378a000000b006963e8bfe5fmr6874805yba.66.1661520241045; Fri, 26
- Aug 2022 06:24:01 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=8uro9lCtd8NysvGK5k23aKGMiWT4gKBsxfPGfZl+NlA=;
+        b=y1SImdijTWpyk6xfW3KCiI1CqhB9pK97z0p614ln4c10IJRREMfTa4L+SQdrJ8H4J4
+         XRoicAaXRZrV2D9/sJDzzInV5Zlgy0fO8mO+RByXUIyZD2k9kDJZ9Hir7VHQJPLPbAj/
+         oNfvubA3WmvdLrPaHCMKL6kamJv0t3X0vS9d7ri5qw9+XWClq+3jxWdDEfpOXOjmme6K
+         culuFObqxf6/RsWo20h3Gfi0sqyaFHyxmq92NBgGKUX0S7WV9RJ4kQwdbyEMxWs6fVro
+         G3Ku8ec4aw8tey0b7fyA4ZeXj8DKcH2geaXPiYUVDDggIFKK+RwIBmsmjwyseor9KUJw
+         AFTQ==
+X-Gm-Message-State: ACgBeo0RnbVMA/DezwrsZQC9cC+szuEJvEbrqinADLOEWnT8bQi2zo/u
+        2MeOxOK6XFzHjv1I2HK/WnShzw==
+X-Google-Smtp-Source: AA6agR4sB1kkKQdyVoGlQybrFcgwDdq7voFZ0KhqW4H2B3UTW/x4fLxfd2zY6RFsZ4KdFacdB8Zwtg==
+X-Received: by 2002:a17:903:230d:b0:174:45bb:f576 with SMTP id d13-20020a170903230d00b0017445bbf576mr1205200plh.86.1661520279211;
+        Fri, 26 Aug 2022 06:24:39 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:2a3c:773f:ac25:a127])
+        by smtp.gmail.com with UTF8SMTPSA id p22-20020a170902a41600b00172c8b5df10sm1534927plq.208.2022.08.26.06.24.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 06:24:38 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 06:24:37 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 2/2] clk: qcom: gcc-sc7280: Keep USB GDSC power domains
+ on when USB wakeup is enabled
+Message-ID: <YwjJlRE1qRskZi/y@google.com>
+References: <20220822115246.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
+ <20220822115246.2.If09027f73daa6e1ed95f5eab02326b543c67132e@changeid>
+ <YwS3FCOqIeajMEgz@hovoldconsulting.com>
+ <YwUDjaG6n95Ddij2@google.com>
+ <YwXlsK3pjK/q1xwO@hovoldconsulting.com>
+ <Ywf02oIXEL8G/Heo@google.com>
+ <YwjFD9uHnSxoZHvT@google.com>
+ <YwjGpSXOscDwbvQH@hovoldconsulting.com>
+ <YwjIadKu0Wv2+VDk@google.com>
 MIME-Version: 1.0
-References: <20220823230753.14799-1-mario.limonciello@amd.com>
-In-Reply-To: <20220823230753.14799-1-mario.limonciello@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 15:23:48 +0200
-Message-ID: <CACRpkdaXaDH25Fxx=paA8D9tPEx23-c-9NNdgtpX5fDDvTX6BA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: amd: Pick some different unicode symbols
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YwjIadKu0Wv2+VDk@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +84,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 1:07 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Fri, Aug 26, 2022 at 06:19:37AM -0700, Matthias Kaehlcke wrote:
+> On Fri, Aug 26, 2022 at 03:12:05PM +0200, Johan Hovold wrote:
+> > On Fri, Aug 26, 2022 at 06:05:19AM -0700, Matthias Kaehlcke wrote:
+> > > On Thu, Aug 25, 2022 at 03:16:58PM -0700, Matthias Kaehlcke wrote:
+> > > > On Wed, Aug 24, 2022 at 10:47:44AM +0200, Johan Hovold wrote:
+> > 
+> > > > > The wakeup setting doesn't seem to have anything to do with the genpd
+> > > > > issues on sc8280xp and the controller doesn't resume properly regardless
+> > > > > of whether the PHYs have been disabled or not during suspend unless the
+> > > > > PD is left on.
+> > > > 
+> > > > I'm essentially seeing the same. USB is hosed after resume unless the PD
+> > > > is left on.
+> > > > 
+> > > > On Chrome OS we currently work around that with a version of commit
+> > > > d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller
+> > > > status") which was reverted upstream. I'm not sure whether USB worked after
+> > > > resume before we enabled wakeup support. I would have sworn it did, but we
+> > > > landed an old version of the wakeup patches a long time ago, so my
+> > > > memory might be failing me.
+> > > 
+> > > I need to remind myself that keeping the GDSC on is only needed when the PHYs
+> > > are kept on. The PHYs were always off before wakeup support was added, which
+> > > is why USB wasn't broken after suspend in the pre-wakeup days.
+> > 
+> > Ok, so to be clear: if you disable wakeup with my patches applied so
+> > that the PD is actually turned off, USB still resumes with only
+> > GENPD_FLAG_ACTIVE_WAKEUP set?
 
-> Feedback from Kent had showed some better selections for symbols to
-> use for pinctrl-amd debugfs output.  Adopt some of those instead.
->
-> Fixes: e8129a076a50 ("pinctrl: amd: Use unicode for debugfs output")
-> Suggested-by: Kent Gibson <warthog618@gmail.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Actually without GENPD_FLAG_ACTIVE_WAKEUP
 
-Patch applied.
-
-Yours,
-Linus Walleij
+> > That is, you don't need to set ALWAYS_ON as I do with sc8280xp?
+> 
+> Correct
+> 
+> The USB controller isn't entirely happy:
+> 
+> [   23.062936] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x411, Reinit
+> 
+> but USB still works.

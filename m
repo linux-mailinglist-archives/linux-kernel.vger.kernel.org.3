@@ -2,100 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A728C5A31FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222435A3203
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345242AbiHZWWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 18:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
+        id S242893AbiHZWXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 18:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344962AbiHZWV4 (ORCPT
+        with ESMTP id S231623AbiHZWWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 18:21:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184631022
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 15:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661552394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q82AOj5mgWsqghXykEygItIBdPuSqpKfW9fkWnf7Xws=;
-        b=UKv4nGylS0BVRe9BVetVNaGb5OusJT8n5XwcZoDmWU234V8Pg9P+wFCfBwtBRl04qaoJaQ
-        skhEQ884Kgxcglik0yAgnPgJMzbKl/OZ+xTgszAu0csCHAXoSFj2G2+t5DcrNsRxcFmPXx
-        h9XZ413e5O4rN5jR9NBi9624dnuSeUk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-214-sl-C1hJzP-CDnnQOstCpig-1; Fri, 26 Aug 2022 18:19:53 -0400
-X-MC-Unique: sl-C1hJzP-CDnnQOstCpig-1
-Received: by mail-wm1-f69.google.com with SMTP id 203-20020a1c02d4000000b003a5f5bce876so4650603wmc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 15:19:52 -0700 (PDT)
+        Fri, 26 Aug 2022 18:22:44 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9D317;
+        Fri, 26 Aug 2022 15:22:43 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id d8so3746443lfq.0;
+        Fri, 26 Aug 2022 15:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=jQpMnlq+ODH/Ac0/7WUzphnJZbozYed6CyScoeVbdz4=;
+        b=ce5SkjfpNQOpTiuaMMlH+tSSjeyZzphKYKmUGev4jX7Waz0RgviseNrLYzbYYoxiWz
+         nZ2GaMclfCfsb19RZr/m4sReDazhcT+CsJPxuBNmU/lpYYUsdGTKGMTufU1WuRHkZjaJ
+         7CXG6xDhN+gMsBGXJN7SOthVitjF9KOPL7RhjiXUnr1YKGGXYdglzW0XQ3i8JWAJebpR
+         dIdoFfnyXBDg7saC5Mg0SoIgNoVoM2WlrCiDt/TYdYfZw4Ib78iPUgK73c5eyU+xrt2R
+         fsQjxRUoWLaoChEkIAPAHnnMmRXan2HVaeTRGRJvaEM5Jg7hdUiFgJThL+3eNidGqpgN
+         ox/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=Q82AOj5mgWsqghXykEygItIBdPuSqpKfW9fkWnf7Xws=;
-        b=EWtPol+a/GmdG79duZ2SN7WJijeIyZqpFBKseFGYscmhK9o+a/alBE43xdfFzsCTrt
-         THOuOIw7gH3WVq7UyZAN65Z5PkQH/zW+M7G3I1myW+7XV4jZ+P8/1iqBmtkcJ6xXjh6M
-         FvtxfbNiaPgu9zFMXtB4pGZFKLk5P4NOnKeHhEsbA4G507GafQAScc7GTObwnwQ4f8qr
-         IlsfNgt8uDhxpTG3Mu8F+rTu5Kjs1+ke8jrwv6rGL2r4FFAQJ3Zx7Bl4q9lF8uZyPzqB
-         f6S8cupPorwhFOcIyfVO08zpjV6IHhZg7N3CB69adXowhRWuBXumbTd2MFt1SE6QuBoZ
-         HHTw==
-X-Gm-Message-State: ACgBeo2d/1AjHl0Kjl867OY/fZqkDgJvtx6iPtAJfXXCaTRARtJftX5U
-        d4cgzXCq/OevTL+0PRpLUgG5gBtDQJc+yh7xmdTaVjd94Jmm8uArdLE2DLRREgXUcnoNXiu2xP3
-        BZS6IAUrZ8f8XqvyNfFfXytOR
-X-Received: by 2002:a5d:698e:0:b0:225:72d1:94c with SMTP id g14-20020a5d698e000000b0022572d1094cmr794605wru.381.1661552392048;
-        Fri, 26 Aug 2022 15:19:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7uezQ+j0oPcMek2XYoB9iVNLxa90U2dcSyOQ9ZNnqcMKuPPCHXv0+i1qNpul+pt30Kva2P9A==
-X-Received: by 2002:a5d:698e:0:b0:225:72d1:94c with SMTP id g14-20020a5d698e000000b0022572d1094cmr794585wru.381.1661552391790;
-        Fri, 26 Aug 2022 15:19:51 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70c:d200:fbf4:8c3c:56fa:173d? (p200300cbc70cd200fbf48c3c56fa173d.dip0.t-ipconnect.de. [2003:cb:c70c:d200:fbf4:8c3c:56fa:173d])
-        by smtp.gmail.com with ESMTPSA id j2-20020a056000124200b0022537d826f3sm824156wrx.23.2022.08.26.15.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 15:19:51 -0700 (PDT)
-Message-ID: <a64b2131-5a78-c89d-9e88-b78aee0074b9@redhat.com>
-Date:   Sat, 27 Aug 2022 00:19:49 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=jQpMnlq+ODH/Ac0/7WUzphnJZbozYed6CyScoeVbdz4=;
+        b=XmWyEYhkEKCzHeZg28ztCzRdR6A0BDKyDndE0N85ZVaBvUEd9zs6k+bE/Ip6donlq0
+         IXl046d2OxV2JN9R0rXodCzuf1E+rB63FYGR7SjrKPJuXndqgWHmhOihq7N58DKI+aQK
+         HdGHUFj42uxezBH9zpwgqCAhYBOz61k54lA1E5gJYQ2u2cCmF7S755GbNkD7DJrYqsKG
+         GLstieuG2wRi3cnQ4seIxnlBNCrObaVcEvgacCxZUXpPFoMrbn+VgNTXFp4xO3ScViMs
+         pCsAR5jLJt+eHxvI1xAJ5vxfp8847GKxgm7rJp2d84K+5XvNbd8nQfK8XWNraW5SVUvE
+         l3og==
+X-Gm-Message-State: ACgBeo2ztfQefzw8h7lbbCDbaPkJdjA75yuU6TAPDwgPvji5qRlTjcY3
+        9lfI3rs/jdNM5I+fY9hciLGKAW8kHaIScg==
+X-Google-Smtp-Source: AA6agR5oCEajOf3PTPX/ljFuF1s4b7jHGQm9T5EiqNdlql48fr560T+T3z5DRY52O2hdC4W4s/uH1A==
+X-Received: by 2002:a05:6512:694:b0:492:c764:9510 with SMTP id t20-20020a056512069400b00492c7649510mr3389615lfe.591.1661552562128;
+        Fri, 26 Aug 2022 15:22:42 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id y9-20020a196409000000b0048af749c060sm486934lfb.157.2022.08.26.15.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 15:22:41 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 01:22:39 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeegar.lakhani@sifive.com
+Subject: Re: [PATCH 03/11] spi: dw: define spi_frf for dual/quad/octal modes
+Message-ID: <20220826222239.vaovd7n5tqaw2ucv@mobilestation>
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+ <20220802175755.6530-4-sudip.mukherjee@sifive.com>
+ <20220826220319.5flk4zkz4gzzj7vh@mobilestation>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>
-References: <3b01af093515ce2960ac39bb16ff77473150d179.1661309831.git-series.apopple@nvidia.com>
- <ffbc824af5daa2c44b91c66834a341894fba4ce6.1661309831.git-series.apopple@nvidia.com>
- <YwZGHyYJiJ+CGLn2@xz-m1.local> <8735dkeyyg.fsf@nvdebian.thelocal>
- <YwgFRLn43+U/hxwt@xz-m1.local> <8735dj7qwb.fsf@nvdebian.thelocal>
- <YwjZamk4n/dz+Y/M@xz-m1.local>
- <72146725-3d70-0427-50d4-165283a5a85d@redhat.com>
- <Ywjs/i4kIVlxZwpb@xz-m1.local>
- <140e7688-b66d-2f6d-fed8-e39da5045420@redhat.com>
- <Ywk9CKIJMX3z6WIq@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 2/3] mm/migrate_device.c: Copy pte dirty bit to page
-In-Reply-To: <Ywk9CKIJMX3z6WIq@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826220319.5flk4zkz4gzzj7vh@mobilestation>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,103 +79,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.08.22 23:37, Peter Xu wrote:
-> On Fri, Aug 26, 2022 at 06:46:02PM +0200, David Hildenbrand wrote:
->> On 26.08.22 17:55, Peter Xu wrote:
->>> On Fri, Aug 26, 2022 at 04:47:22PM +0200, David Hildenbrand wrote:
->>>>> To me anon exclusive only shows this mm exclusively owns this page. I
->>>>> didn't quickly figure out why that requires different handling on tlb
->>>>> flushs.  Did I perhaps miss something?
->>>>
->>>> GUP-fast is the magic bit, we have to make sure that we won't see new
->>>> GUP pins, thus the TLB flush.
->>>>
->>>> include/linux/mm.h:gup_must_unshare() contains documentation.
->>>
->>> Hmm.. Shouldn't ptep_get_and_clear() (e.g., xchg() on x86_64) already
->>> guarantees that no other process/thread will see this pte anymore
->>> afterwards?
->>
->> You could have a GUP-fast thread that just looked up the PTE and is
->> going to pin the page afterwards, after the ptep_get_and_clear()
->> returned. You'll have to wait until that thread finished.
+On Sat, Aug 27, 2022 at 01:03:22AM +0300, Serge Semin wrote:
+> On Tue, Aug 02, 2022 at 06:57:47PM +0100, Sudip Mukherjee wrote:
+> > The SPI mode needs to be mentioned in CTRLR0[23:22] register. Define a
+> > configuration variable to keep the mode based on the buswidth, which will
+> > then be used to update CR0. If the transfer is using dual/quad/octal
+> > mode then mark enhanced_spi as true.
+> > 
+> > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> > ---
+> >  drivers/spi/spi-dw-core.c | 29 +++++++++++++++++++++++++++++
+> >  drivers/spi/spi-dw.h      |  7 +++++++
+> >  2 files changed, 36 insertions(+)
+> > 
+> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> > index 77529e359b6d..8c84a2e991b5 100644
+> > --- a/drivers/spi/spi-dw-core.c
+> > +++ b/drivers/spi/spi-dw-core.c
+> > @@ -333,6 +333,14 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+> >  		/* CTRLR0[11:10] Transfer Mode */
+> >  		cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_TMOD_MASK, cfg->tmode);
+> >  
 > 
-
-Good that we're talking about it, very helpful! If that's actually not
-required -- good.
-
-
-What I learned how GUP-fast and TLB flushes interact is the following:
-
-GUP-fast disables local interrupts. A TLB flush will send an IPI and
-wait until it has been processed. This implies, that once the TLB flush
-succeeded, that the interrupt was handled and GUP-fast cannot be running
-anymore.
-
-BUT, there is the new RCU variant nowadays, and the TLB flush itself
-should not actually perform such a sync. They merely protect the page
-tables from getting freed and the THP from getting split IIUC. And
-you're correct that that wouldn't help.
-
-
-> IIUC the early tlb flush won't protect concurrent fast-gup from happening,
-> but I think it's safe because fast-gup will check pte after pinning, so
-> either:
+> > +	if (dws->caps & DW_SPI_CAP_EXT_SPI) {
 > 
->   (1) fast-gup runs before ptep_get_and_clear(), then
->       page_try_share_anon_rmap() will fail properly, or,
+> Drop this conditional statement. Just always set the spi_frf field.
 > 
->   (2) fast-gup runs during or after ptep_get_and_clear(), then fast-gup
->       will see that either the pte is none or changed, then it'll fail the
->       fast-gup itself.
+> 
+> > +		if (cfg->spi_frf)
+> 
+> Drop this conditional statement. Just always set the spi_frf. It shall
+> be zero if the Enhanced SPI modes are unsupported.
+> 
+> > +			cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_SPI_FRF_MASK,
+> 
+> Since the SPI_FRF field has different offset in the DW APB and DW AHB
+> SSI controllers, you'll need to initialize the mode based on the
+> IP-core ID using the dw_spi_ip_is() macro (see the as it's done for
+> tmode).
+> 
+> > +				cfg->spi_frf);
+> > +		else
+> 
+> > +			cr0 &= ~DW_HSSI_CTRLR0_SPI_FRF_MASK;
+> 
+> This is redundant. The initial value never has the SPI_FRF field set
+> (see the dw_spi_setup() and dw_spi_prepare_cr0() methods for details).
+> 
+> > +	}
+> > +
+> >  	dw_writel(dws, DW_SPI_CTRLR0, cr0);
+> >  
+> >  	if (cfg->tmode == DW_SPI_CTRLR0_TMOD_EPROMREAD ||
+> > @@ -679,10 +687,31 @@ static void dw_spi_stop_mem_op(struct dw_spi *dws, struct spi_device *spi)
+> >  static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> >  {
+> >  	struct dw_spi *dws = spi_controller_get_devdata(mem->spi->controller);
+> > +	bool enhanced_spi = false;
+> >  	struct dw_spi_cfg cfg;
+> >  	unsigned long flags;
+> >  	int ret;
+> >  
+> 
+> > +	if (dws->caps & DW_SPI_CAP_EXT_SPI) {
+> > +		switch (op->data.buswidth) {
+> > +		case 2:
+> > +			cfg.spi_frf = DW_SSI_CTRLR0_SPI_FRF_DUAL_SPI;
+> > +			enhanced_spi = true;
+> > +			break;
+> > +		case 4:
+> > +			cfg.spi_frf = DW_SSI_CTRLR0_SPI_FRF_QUAD_SPI;
+> > +			enhanced_spi = true;
+> > +			break;
+> > +		case 8:
+> > +			cfg.spi_frf = DW_SSI_CTRLR0_SPI_FRF_OCT_SPI;
+> > +			enhanced_spi = true;
+> > +			break;
+> > +		default:
+> > +			cfg.spi_frf = 0;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> 
+> Please create a separate dw_spi_exec_enh_mem_op() method for the
+> Enhanced SPI communications and parse the data.buswidth field there.
+> Also it would be better to define a new macro
+> DW_SSI_CTRLR0_SPI_FRF_STD_SPI and use it instead of the explicit zero
+> SPI_FRF value.
+> 
+> >  	/*
+> >  	 * Collect the outbound data into a single buffer to speed the
+> >  	 * transmission up at least on the initial stage.
+> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> > index 71d18e9291a3..b8cc20e0deaa 100644
+> > --- a/drivers/spi/spi-dw.h
+> > +++ b/drivers/spi/spi-dw.h
+> > @@ -96,6 +96,12 @@
+> >  #define DW_HSSI_CTRLR0_SRL			BIT(13)
+> >  #define DW_HSSI_CTRLR0_MST			BIT(31)
+> >  
+> 
+> > +/* Bit fields in CTRLR0 for enhanced SPI */
+> 
+> No need in the comment. The macros name is descriptive enough.
+> 
+> > +#define DW_HSSI_CTRLR0_SPI_FRF_MASK		GENMASK(23, 22)
+> 
+> Please also add the next new macros
+> #define DW_PSSI_CTRLR0_SPI_FRF_MASK		GENMASK(22, 21)
 
-I think you're right and I might have managed to confuse myself with the
-write_protect_page() comment. I placed the gup_must_unshare() check
-explicitly after the "pte changed" check for this reason. So once the
-PTE was cleared, GUP-fast would undo any pin performed on a now-stale PTE.
+> #define DW_SSI_CTRLR0_SPI_FRF_STD_SPI		0x0
+> 
+> and group them together with the rest of the APB SSI CTRL0 macros.
+> 
+> > +#define DW_SSI_CTRLR0_SPI_FRF_DUAL_SPI		0x1
+> > +#define DW_SSI_CTRLR0_SPI_FRF_QUAD_SPI		0x2
+> > +#define DW_SSI_CTRLR0_SPI_FRF_OCT_SPI		0x3
+
+One more thing s/DW_SSI/DW_SPI . All the common macros are defined
+with the DW_SPI prefix.
+
+-Sergey
 
 > 
->>
->> Another user that relies on this interaction between GUP-fast and TLB
->> flushing is for example mm/ksm.c:write_protect_page()
->>
->> There is a comment in there explaining the interaction a bit more detailed.
->>
->> Maybe we'll be able to handle this differently in the future (maybe once
->> this turns out to be an actual performance problem). Unfortunately,
->> mm->write_protect_seq isn't easily usable because we'd need have to make
->> sure we're the exclusive writer.
->>
->>
->> For now, it's not too complicated. For PTEs:
->> * try_to_migrate_one() already uses ptep_clear_flush().
->> * try_to_unmap_one() already conditionally used ptep_clear_flush().
->> * migrate_vma_collect_pmd() was the one case that didn't use it already
->>  (and I wonder why it's different than try_to_migrate_one()).
+> Please move these to be defined together with the APB SSI
+> CTRL0.SPI_FRF-related macros.
 > 
-> I'm not sure whether I fully get the point, but here one major difference
-> is all the rest handles one page, so a tlb flush alongside with the pte
-> clear sounds reasonable.  Even if so try_to_unmap_one() was modified to use
-> tlb batching, but then I see that anon exclusive made that batching
-> conditional.  I also have question there on whether we can keep using the
-> tlb batching even with anon exclusive pages there.
+> -Sergey
 > 
-> In general, I still don't see how stall tlb could affect anon exclusive
-> pages on racing with fast-gup, because the only side effect of a stall tlb
-> is unwanted page update iiuc, the problem is fast-gup doesn't even use tlb,
-> afaict..
-
-I have the gut feeling that the comment in write_protect_page() is
-indeed stale, and that clearing PageAnonExclusive doesn't strictly need
-the TLB flush.
-
-I'll try to refresh my memory if there was any other case that I had to
-handle over the weekend.
-
-Thanks!
-
--- 
-Thanks,
-
-David / dhildenb
-
+> > +
+> >  /* Bit fields in CTRLR1 */
+> >  #define DW_SPI_NDF_MASK				GENMASK(15, 0)
+> >  
+> > @@ -136,6 +142,7 @@ struct dw_spi_cfg {
+> >  	u8 dfs;
+> >  	u32 ndf;
+> >  	u32 freq;
+> > +	u8 spi_frf;
+> >  };
+> >  
+> >  struct dw_spi;
+> > -- 
+> > 2.30.2
+> > 

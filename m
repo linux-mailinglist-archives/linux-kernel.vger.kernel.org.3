@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD945A2752
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC645A2705
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241159AbiHZMCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S245445AbiHZLqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHZMCh (ORCPT
+        with ESMTP id S229618AbiHZLqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:02:37 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD35CD7418;
-        Fri, 26 Aug 2022 05:02:33 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 83A1F1888676;
-        Fri, 26 Aug 2022 12:02:30 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 7AA6425032BD;
-        Fri, 26 Aug 2022 12:02:30 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 21D369EC0004; Fri, 26 Aug 2022 11:46:14 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from wse-c0127.beijerelectronics.com (unknown [208.127.141.28])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id DB2899EC0009;
-        Fri, 26 Aug 2022 11:46:11 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 net-next 6/6] selftests: forwarding: add test of MAC-Auth Bypass to locked port tests
-Date:   Fri, 26 Aug 2022 13:45:38 +0200
-Message-Id: <20220826114538.705433-7-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220826114538.705433-1-netdev@kapio-technology.com>
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
+        Fri, 26 Aug 2022 07:46:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15F6B275F
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661514378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mHGinpi7lqtAkMwygFoIPaEx54TEBffoywenxaeAscc=;
+        b=Rit1P5cnaIZNxSAM15tx41oPwrQkoX5usOlJI/IV+fuFJ/eDC2rizuxVvTurCkMUi+F9e4
+        vO5etDexIgXpyLoHlSZfbxAbODQCzi/fncwYr7Dje0LwLYded+XplUJpD+Wvnlm/JPWHZf
+        kJxNgN2ay6QcXSI13Nzducn10PWg0Gk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-68-twmuZMTTO26HbL7tcjyqYA-1; Fri, 26 Aug 2022 07:46:15 -0400
+X-MC-Unique: twmuZMTTO26HbL7tcjyqYA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5BC6804191;
+        Fri, 26 Aug 2022 11:46:14 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9AB6040B40C8;
+        Fri, 26 Aug 2022 11:46:14 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27QBkE6h018375;
+        Fri, 26 Aug 2022 07:46:14 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27QBkDlA018371;
+        Fri, 26 Aug 2022 07:46:13 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Fri, 26 Aug 2022 07:46:13 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Will Deacon <will@kernel.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+In-Reply-To: <20220826112327.GA19774@willie-the-truck>
+Message-ID: <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <20220826112327.GA19774@willie-the-truck>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,182 +81,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-locked flag set, denying access until the FDB entry is replaced with a
-FDB entry without the locked flag set.
 
-Also add a test that verifies that sticky FDB entries cannot roam.
 
-Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
----
- .../net/forwarding/bridge_locked_port.sh      | 107 +++++++++++++++++-
- .../net/forwarding/bridge_sticky_fdb.sh       |  21 +++-
- 2 files changed, 126 insertions(+), 2 deletions(-)
+On Fri, 26 Aug 2022, Will Deacon wrote:
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index 5b02b6b60ce7..b763b3b9fdf0 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -1,7 +1,15 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-+ALL_TESTS="
-+	locked_port_ipv4
-+	locked_port_ipv6
-+	locked_port_vlan
-+	locked_port_mab
-+	locked_port_station_move
-+	locked_port_mab_station_move
-+"
-+
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-@@ -166,6 +174,103 @@ locked_port_ipv6()
- 	log_test "Locked port ipv6"
- }
- 
-+locked_port_mab()
-+{
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work before locking port"
-+
-+	bridge link set dev $swp1 locked on
-+	bridge link set dev $swp1 learning on
-+	if ! bridge link set dev $swp1 mab on 2>/dev/null; then
-+		echo "SKIP: iproute2 too old; MacAuth feature not supported."
-+		return $ksft_skip
-+	fi
-+
-+	ping_do $h1 192.0.2.2
-+	check_fail $? "MAB: Ping worked on locked port without FDB entry"
-+
-+	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
-+	check_err $? "MAB: No locked fdb entry after ping on locked port"
-+
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
-+
-+	bridge fdb del `mac_get $h1` dev $swp1 master
-+	bridge link set dev $swp1 learning off
-+	bridge link set dev $swp1 locked off
-+
-+	log_test "Locked port MAB"
-+}
-+
-+# No roaming allowed to a simple locked port
-+locked_port_station_move()
-+{
-+	local mac=a0:b0:c0:c0:b0:a0
-+
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	bridge link set dev $swp1 locked on
-+	bridge link set dev $swp1 learning on
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0"
-+	check_fail $? "Locked port station move: FDB entry on first injection"
-+
-+	$MZ $h2 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp2 | grep -q "$mac vlan 1 master br0"
-+	check_err $? "Locked port station move: Entry not found on unlocked port"
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0"
-+	check_fail $? "Locked port station move: entry roamed to locked port"
-+
-+	log_test "Locked port station move"
-+}
-+
-+# Roaming to and from a MAB enabled port should work if sticky flag is not set
-+locked_port_mab_station_move()
-+{
-+	local mac=10:20:30:30:20:10
-+
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	bridge link set dev $swp1 locked on
-+	bridge link set dev $swp1 learning on
-+	if ! bridge link set dev $swp1 mab on 2>/dev/null; then
-+		echo "SKIP: iproute2 too old; MacAuth feature not supported."
-+		return $ksft_skip
-+	fi
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	if bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0" | grep -q sticky; then
-+		echo "SKIP: Roaming not possible with sticky flag, run sticky flag roaming test"
-+		return $ksft_skip
-+	fi
-+
-+	bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 locked"
-+	check_err $? "MAB station move: no locked entry on first injection"
-+
-+	$MZ $h2 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 locked"
-+	check_fail $? "MAB station move: locked entry did not move"
-+
-+	bridge fdb show dev $swp2 | grep -q "$mac vlan 1 master br0"
-+	check_err $? "MAB station move: roamed entry not found"
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 locked"
-+	check_err $? "MAB station move: entry did not roam back to locked port"
-+
-+	log_test "Locked port MAB station move"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh b/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-index 1f8ef0eff862..bca77bc3fe09 100755
---- a/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--ALL_TESTS="sticky"
-+ALL_TESTS="sticky sticky_no_roaming"
- NUM_NETIFS=4
- TEST_MAC=de:ad:be:ef:13:37
- source lib.sh
-@@ -59,6 +59,25 @@ sticky()
- 	log_test "Sticky fdb entry"
- }
- 
-+# No roaming allowed with the sticky flag set
-+sticky_no_roaming()
-+{
-+	local mac=a8:b4:c2:c2:b4:a8
-+
-+	RET=0
-+
-+	bridge link set dev $swp2 learning on
-+	bridge fdb add $mac dev $swp1 master static sticky
-+	bridge fdb show dev $swp1 | grep "$mac master br0" | grep -q sticky
-+	check_err $? "Sticky no roaming: No sticky FDB entry found after adding"
-+
-+	$MZ $h2 -q -t udp -c 10 -d 100msec -a $mac -b rand
-+	bridge fdb show dev $swp2 | grep "$mac master br0" | grep -q sticky
-+	check_fail $? "Sticky no roaming: Sticky entry roamed"
-+
-+	log_test "Sticky no roaming"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
--- 
-2.30.2
+> On Thu, Aug 25, 2022 at 05:03:40PM -0400, Mikulas Patocka wrote:
+> > Here I reworked your patch, so that test_bit_acquire is defined just like 
+> > test_bit. There's some code duplication (in 
+> > include/asm-generic/bitops/generic-non-atomic.h and in 
+> > arch/x86/include/asm/bitops.h), but that duplication exists in the 
+> > test_bit function too.
+> > 
+> > I tested it on x86-64 and arm64. On x86-64 it generates the "bt" 
+> > instruction for variable-bit test and "shr; and $1" for constant bit test. 
+> > On arm64 it generates the "ldar" instruction for both constant and 
+> > variable bit test.
+> > 
+> > For me, the kernel 6.0-rc2 doesn't boot in an arm64 virtual machine at all 
+> > (with or without this patch), so I only compile-tested it on arm64. I have 
+> > to bisect it.
+> 
+> It's working fine for me and I haven't had any other reports that it's not
+> booting. Please could you share some more details about your setup so we
+> can try to reproduce the problem?
+
+I'm bisecting it now. I'll post the offending commit when I'm done.
+
+It gets stuck without printing anything at this point:
+Loading Linux 6.0.0-rc2 ...
+Loading initial ramdisk ...
+EFI stub: Booting Linux Kernel...
+EFI stub: Using DTB from configuration table
+EFI stub: Exiting boot services...
+
+I uploaded my .config here: 
+https://people.redhat.com/~mpatocka/testcases/arm64-config/config-6.0.0-rc2 
+so you can try it on your own.
+
+The host system is MacchiatoBIN board with Debian 10.12.
+
+> This looks good to me, thanks for doing it! Just one thing that jumped out
+> at me:
+> 
+> > Index: linux-2.6/include/linux/buffer_head.h
+> > ===================================================================
+> > --- linux-2.6.orig/include/linux/buffer_head.h
+> > +++ linux-2.6/include/linux/buffer_head.h
+> > @@ -156,7 +156,7 @@ static __always_inline int buffer_uptoda
+> >  	 * make it consistent with folio_test_uptodate
+> >  	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
+> >  	 */
+> > -	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
+> > +	return test_bit_acquire(BH_Uptodate, &bh->b_state);
+> 
+> Do you think it would be worth adding set_bit_release() and then relaxing
+> set_buffer_uptodate() to use that rather than the smp_mb__before_atomic()?
+> 
+> Will
+
+Yes, we could add this (but it would be better to add it in a separate 
+patch, so that backporting of the origianal patch to -stable is easier).
+
+Mikulas
 

@@ -2,92 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413E35A284F
+	by mail.lfdr.de (Postfix) with ESMTP id C07F45A2850
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbiHZNPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S1344072AbiHZNPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbiHZNO7 (ORCPT
+        with ESMTP id S242915AbiHZNPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:14:59 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1579110DA;
-        Fri, 26 Aug 2022 06:14:55 -0700 (PDT)
-Received: from [10.10.132.123] (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 51A5540D403D;
-        Fri, 26 Aug 2022 13:14:48 +0000 (UTC)
-Message-ID: <5dce2e1c-fa65-2fb3-08ad-65122f7e495d@ispras.ru>
-Date:   Fri, 26 Aug 2022 16:14:48 +0300
+        Fri, 26 Aug 2022 09:15:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F120A477;
+        Fri, 26 Aug 2022 06:15:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 11C5322CBE;
+        Fri, 26 Aug 2022 13:14:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661519699; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fNi9yBBIOMI4mmRT67z9hj/vhptWb9ZSQi1NXFzbvNU=;
+        b=GflvrT/pcAWSVNueW8L6MJD+bpKNB5UHSrDEstqr0oEdxUgi3bZENi18eB4P/DG41mKUWf
+        Z6jDV5YdZyy/JnjiDhFEP2V0N5x8UgoxfN+VFj/6RYXIc6v+bbMkZ2Y/ynJAt1nPj+Gt2Q
+        2fyf5zNBiqgNen0hFww6fXOnYgdRkHE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661519699;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fNi9yBBIOMI4mmRT67z9hj/vhptWb9ZSQi1NXFzbvNU=;
+        b=DaaqdhHEkWpjyyUim7j/jtgd9QYq1SsZBTauy6oogwRZdnK9B4x6kdaTq8MaIdF+Hk28pt
+        SUUlo99nLdOfrfDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC1C013A7E;
+        Fri, 26 Aug 2022 13:14:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2fkoMFLHCGMPJwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 26 Aug 2022 13:14:58 +0000
+Date:   Fri, 26 Aug 2022 15:14:57 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-acpi@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH] ACPI: docs: enumeration: Fix a few typos and wording
+ mistakes
+Message-ID: <20220826151457.7c13a407@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: WARNING in hif_usb_alloc_rx_urbs/usb_submit_urb
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ath9k-devel@qca.qualcomm.com, ldv-project@linuxtesting.org,
-        eli.billauer@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        andreyknvl@google.com, gustavoars@kernel.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        oneukum@suse.com, tiwai@suse.de, syzkaller-bugs@googlegroups.com
-References: <09fbc5ed-d67e-8308-1e49-2de6f2cea7dd@ispras.ru>
- <Yv/ahFW577q5woup@rowland.harvard.edu>
- <9ebc80d0-1b16-642c-e66b-2de52c673334@ispras.ru>
-Content-Language: en-US
-In-Reply-To: <9ebc80d0-1b16-642c-e66b-2de52c673334@ispras.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sat, 10 Oct 2020 at 04:08:19 UTC+3, Alan Stern wrote:
- > Index: usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
- > ===================================================================
- > --- usb-devel.orig/drivers/net/wireless/ath/ath9k/hif_usb.c
- > +++ usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
- > @@ -1307,6 +1307,20 @@ static int ath9k_hif_usb_probe(struct us
- > struct usb_device *udev = interface_to_usbdev(interface);
- > struct hif_device_usb *hif_dev;
- > int ret = 0;
- > + struct usb_host_interface *alt;
- > + struct usb_endpoint_descriptor *epd;
- > +
- > + /* Verify the expected endpoints are present */
- > + alt = interface->cur_altsetting;
- > + if (!usb_find_int_in_endpoint(alt, &epd) ||
- > + usb_endpoint_num(epd) != USB_REG_IN_PIPE ||
- > + !usb_find_int_out_endpoint(alt, &epd) ||
- > + usb_endpoint_num(epd) != USB_REG_OUT_PIPE ||
- > + !usb_find_bulk_in_endpoint(alt, &epd) ||
- > + usb_endpoint_num(epd) != USB_WLAN_RX_PIPE ||
- > + !usb_find_bulk_out_endpoint(alt, &epd) ||
- > + usb_endpoint_num(epd) != USB_WLAN_TX_PIPE)
- > + return -ENODEV;
- >
- > if (id->driver_info == STORAGE_DEVICE)
- > return send_eject_command(interface);
+"sturct" -> "struct"
+"similar than with" -> "similar to"
+Missing comma, "it" and "to"
 
-We've tested the suggested patch and found a null-ptr-deref. The thing
-is that usb_find_{...}_endpoint() returns zero in normal case, and
-non-zero value (-ENXIO) when failed (in current patch version it is
-supposed to be just opposite and sometimes a NULL epd is dereferenced).
-To fix it the negation signs before usb_find_{...}_endpoint() should be
-removed.
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+---
+ Documentation/firmware-guide/acpi/enumeration.rst |   16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-And we also think usb_find_common_endpoints(...) should be used directly
-as all the scanned usb_endpoint_descriptors will be passed to it and
-returned in just one call.
+--- linux-5.19.orig/Documentation/firmware-guide/acpi/enumeration.rst	2022-08-26 12:46:35.307949217 +0200
++++ linux-5.19/Documentation/firmware-guide/acpi/enumeration.rst	2022-08-26 15:02:50.245981296 +0200
+@@ -21,7 +21,7 @@ In order to support this and re-use the
+   - Devices behind real busses where there is a connector resource
+     are represented as struct spi_device or struct i2c_device. Note
+     that standard UARTs are not busses so there is no struct uart_device,
+-    although some of them may be represented by sturct serdev_device.
++    although some of them may be represented by struct serdev_device.
+ 
+ As both ACPI and Device Tree represent a tree of devices (and their
+ resources) this implementation follows the Device Tree way as much as
+@@ -205,7 +205,7 @@ enumerated once spi_register_master() is
+ 		}
+ 		...
+ 
+-The SPI device drivers only need to add ACPI IDs in a similar way than with
++The SPI device drivers only need to add ACPI IDs in a similar way to
+ the platform device drivers. Below is an example where we add ACPI support
+ to at25 SPI eeprom driver (this is meant for the above ACPI snippet)::
+ 
+@@ -362,7 +362,7 @@ These GPIO numbers are controller relati
+ specifies the path to the controller. In order to use these GPIOs in Linux
+ we need to translate them to the corresponding Linux GPIO descriptors.
+ 
+-There is a standard GPIO API for that and is documented in
++There is a standard GPIO API for that and it is documented in
+ Documentation/admin-guide/gpio/.
+ 
+ In the above example we can get the corresponding two GPIO descriptors with
+@@ -538,8 +538,8 @@ information.
+ PCI hierarchy representation
+ ============================
+ 
+-Sometimes could be useful to enumerate a PCI device, knowing its position on the
+-PCI bus.
++Sometimes it could be useful to enumerate a PCI device, knowing its position on
++the PCI bus.
+ 
+ For example, some systems use PCI devices soldered directly on the mother board,
+ in a fixed position (ethernet, Wi-Fi, serial ports, etc.). In this conditions it
+@@ -550,7 +550,7 @@ To identify a PCI device, a complete hie
+ the chipset root port to the final device, through all the intermediate
+ bridges/switches of the board.
+ 
+-For example, let us assume to have a system with a PCIe serial port, an
++For example, let's assume we have a system with a PCIe serial port, an
+ Exar XR17V3521, soldered on the main board. This UART chip also includes
+ 16 GPIOs and we want to add the property ``gpio-line-names`` [1] to these pins.
+ In this case, the ``lspci`` output for this component is::
+@@ -593,8 +593,8 @@ To describe this Exar device on the PCI
+ 
+ 	Bus: 0 - Device: 14 - Function: 1
+ 
+-To find this information is necessary disassemble the BIOS ACPI tables, in
+-particular the DSDT (see also [2])::
++To find this information, it is necessary to disassemble the BIOS ACPI tables,
++in particular the DSDT (see also [2])::
+ 
+ 	mkdir ~/tables/
+ 	cd ~/tables/
 
-If you wish, I may prepare the patch myself.
 
-Fedor
+-- 
+Jean Delvare
+SUSE L3 Support

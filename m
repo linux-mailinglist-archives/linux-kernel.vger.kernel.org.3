@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5945A306B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219165A306E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344911AbiHZUXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S245286AbiHZUXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 16:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiHZUXM (ORCPT
+        with ESMTP id S231643AbiHZUXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:23:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AEEC88A1;
-        Fri, 26 Aug 2022 13:23:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97635B83114;
-        Fri, 26 Aug 2022 20:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74FDC433D6;
-        Fri, 26 Aug 2022 20:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661545388;
-        bh=7cCDjYToph++Z/ONuGisoLePKjQz5vPpNaRrGjuFxao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EmkGQofJICdXtAwYKaBLKXrvOrsaFzzle1UCo1WanL/8NWbeQlEur23/S9KadZC3c
-         oeXJn3xoNIvUur9FFx5vPZgKMNUM+IVC3tYxG86ejlTNhQkpMIDHiq6qjrmFNSsWhT
-         HBRczUOefGKJxiY45U/tnYmZm116gjfeQ5cLiWvsucdA0Ya0PGCdSo/5szlcRDAXtY
-         ZVbP9xr/DM2i/Dlcn/oi6K20htE2igPDRDfasgUZ5cqXejPBJiEu9vVyYy3HkEeadJ
-         nMCjpoWdXQ5W68V/sKZm0MXOJjJSKF/sOkI2yJ/k7/UPL5p1NYfmE7F0thfZx7p7zt
-         4wVgd5bNjdWkQ==
-Date:   Fri, 26 Aug 2022 23:23:00 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Lee, Chun-Yi" <joeyli.kernel@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ben Boeckel <me@benboeckel.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Malte Gell <malte.gell@gmx.de>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Subject: Re: [PATCH v9,1/4] X.509: Add CodeSigning extended key usage parsing
-Message-ID: <YwkrpLPyU0huPduE@kernel.org>
-References: <20220825142314.8406-1-jlee@suse.com>
- <20220825142314.8406-2-jlee@suse.com>
+        Fri, 26 Aug 2022 16:23:03 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FB8AF4BA
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:23:02 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w197so3312469oie.5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:from:to:cc;
+        bh=kS5gLref/yeXZPJM95FO6NB/TUzDNorimdYNoC2IhY0=;
+        b=IfVDWnPh2pmitTa0mBVU5yMTg+GsLz0HAEtrsCYHNyYSyNi0PcHNVvrYQ5qRfDp2E/
+         /fgifVueS3Cc6X8ANEDD8CYYVML5YLtbft40vaA3eDiT/xTAeYiZPjP/ieTmv9KqoJzg
+         FwiQLsNubVZrD7CJdYxgclePk2dDaptC0GFsE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
+         :cc;
+        bh=kS5gLref/yeXZPJM95FO6NB/TUzDNorimdYNoC2IhY0=;
+        b=U8NHxfNEY7QTGmSu7QfxziSKWIAqTTG1TExhch5np0/9F9rn+NE8pzvoV7gzzzUTtD
+         zYDphgWhXRLEawC9Nx9WTL/kwXqAbga4gZY+tyovynjzzBtlrsvPhf7Svsc7SjJohfl8
+         VWGP3jC/fxSzmFShi3WadIZjG36KfqKvvnpd2M3BAWxekLEFLXeEM4DXaTMMYpMz7LJT
+         EDikluz9mihpXirhJH8fQ2FzXfgl9dJ4Yp/qHuAxjnWckwNbMmTwtCpRx8jo5+UZo81T
+         dCIVxFw5vzsNpBi67QHzTz2ZZrjoj7byFEq6/Wmwxela61/EgwBnrkp5hwPL+U2NQX4q
+         Vx8w==
+X-Gm-Message-State: ACgBeo0j8YlCZi3tACOb5cqqAHFIlmybIlwDmsmeL2rZggRnHNNAexpV
+        jkP2Az0v75xbg/uM5KONYzOQlxAR3OLDPpC606UT5g==
+X-Google-Smtp-Source: AA6agR7yBBd6qqy3Gg/HIxNowO98A36LwiC1i0R4WBg6931/LkLIDTNxeKijqVcsS3bUCwt5oh5WK0bf4vUSE18eWcY=
+X-Received: by 2002:a05:6808:bca:b0:344:ef42:930f with SMTP id
+ o10-20020a0568080bca00b00344ef42930fmr2306646oik.0.1661545381545; Fri, 26 Aug
+ 2022 13:23:01 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 26 Aug 2022 15:23:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825142314.8406-2-jlee@suse.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <81dcbf72-92bb-093a-da48-89a73ead820e@quicinc.com>
+References: <1659526134-22978-1-git-send-email-quic_krichai@quicinc.com>
+ <1659526134-22978-3-git-send-email-quic_krichai@quicinc.com>
+ <CAE-0n500y-n+ZjasYQRAa3JgamQG1c+Aqn0YiX-i0L-w6C4dbQ@mail.gmail.com>
+ <3d052733-3600-b6eb-baf3-d8806a150af3@quicinc.com> <CAE-0n53oMnnn7rOPEiibc=XM52z9THDc9jYhe3x3C_AsLtmARQ@mail.gmail.com>
+ <81dcbf72-92bb-093a-da48-89a73ead820e@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 26 Aug 2022 15:23:00 -0500
+Message-ID: <CAE-0n50NRiBNDjK2UrA_wOoRz3+3cKb4uiUiCw4t1F19Kw9EhA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] PCI: qcom: Restrict pci transactions after pci suspend
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
+        helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        dmitry.baryshkov@linaro.org, Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,114 +87,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:23:11PM +0800, Lee, Chun-Yi wrote:
-> This patch adds the logic for parsing the CodeSign extended key usage
+Quoting Krishna Chaitanya Chundru (2022-08-25 06:52:43)
+>
+> On 8/24/2022 10:50 PM, Stephen Boyd wrote:
+> > Quoting Krishna Chaitanya Chundru (2022-08-23 20:37:59)
+> >> On 8/9/2022 12:42 AM, Stephen Boyd wrote:
+> >>> Quoting Krishna chaitanya chundru (2022-08-03 04:28:53)
+> >>>> If the endpoint device state is D0 and irq's are not freed, then
+> >>>> kernel try to mask interrupts in system suspend path by writing
+> >>>> in to the vector table (for MSIX interrupts) and config space (for M=
+SI's).
+> >>>>
+> >>>> These transactions are initiated in the pm suspend after pcie clocks=
+ got
+> >>>> disabled as part of platform driver pm  suspend call. Due to it, the=
+se
+> >>>> transactions are resulting in un-clocked access and eventually to cr=
+ashes.
+> >>> Why are the platform driver pm suspend calls disabling clks that earl=
+y?
+> >>> Can they disable clks in noirq phase, or even later, so that we don't
+> >>> have to check if the device is clocking in the irq poking functions?
+> >>> It's best to keep irq operations fast, so that irq control is fast gi=
+ven
+> >>> that these functions are called from irq flow handlers.
+> >> We are registering the pcie pm suspend ops as noirq ops only. And this
+> >> msix and config
+> >>
+> >> access is coming at the later point of time that is reason we added th=
+at
+> >> check.
+> >>
+> > What is accessing msix and config? Can you dump_stack() after noirq ops
+> > are called and figure out what is trying to access the bus when it is
+> > powered down?
+>
+> The msix and config space is being accessed to mask interrupts. The
+> access is coming at the end of the suspend
+>
+> and near CPU disable. We tried to dump the stack there but the call
+> stack is not coming as it is near cpu disable.
 
-It's *not* a patch once it is applied.
+That is odd that you can't get a stacktrace.
 
-And isn't the identifier actually "codeSign", not "CodeSign"? Please,
-format identifier correctly in order not to cause confusion.
+>
+> But we got dump at resume please have look at it
+>
+> [=C2=A0=C2=A0 54.946268] Enabling non-boot CPUs ...
+> [=C2=A0=C2=A0 54.951182] CPU: 1 PID: 21 Comm: cpuhp/1 Not tainted 5.15.41=
+ #105
+> 43491e4414b1db8a6f59d56b617b520d92a9498e
+> [=C2=A0=C2=A0 54.961122] Hardware name: Qualcomm Technologies, Inc. sc728=
+0 IDP
+> SKU2 platform (DT)
+> [=C2=A0=C2=A0 54.969088] Call trace:
+> [=C2=A0=C2=A0 54.971612]=C2=A0 dump_backtrace+0x0/0x200
+> [=C2=A0=C2=A0 54.975399]=C2=A0 show_stack+0x20/0x2c
+> [=C2=A0=C2=A0 54.978826]=C2=A0 dump_stack_lvl+0x6c/0x90
+> [=C2=A0=C2=A0 54.982614]=C2=A0 dump_stack+0x18/0x38
+> [=C2=A0=C2=A0 54.986043]=C2=A0 dw_msi_unmask_irq+0x2c/0x58
+> [=C2=A0=C2=A0 54.990096]=C2=A0 irq_enable+0x58/0x90
+> [=C2=A0=C2=A0 54.993522]=C2=A0 __irq_startup+0x68/0x94
+> [=C2=A0=C2=A0 54.997216]=C2=A0 irq_startup+0xf4/0x140
+> [=C2=A0=C2=A0 55.000820]=C2=A0 irq_affinity_online_cpu+0xc8/0x154
+> [=C2=A0=C2=A0 55.005491]=C2=A0 cpuhp_invoke_callback+0x19c/0x6e4
+> [=C2=A0=C2=A0 55.010077]=C2=A0 cpuhp_thread_fun+0x11c/0x188
+> [=C2=A0=C2=A0 55.014216]=C2=A0 smpboot_thread_fn+0x1ac/0x30c
+> [=C2=A0=C2=A0 55.018445]=C2=A0 kthread+0x140/0x30c
+> [=C2=A0=C2=A0 55.021788]=C2=A0 ret_from_fork+0x10/0x20
+> [=C2=A0=C2=A0 55.028243] CPU1 is up
+>
+> So the same stack should be called at the suspend path while disabling CP=
+U.
 
-So, how I would rewrite the first sentence, would be:
+Sounds like you're getting hit by affinity changes while offlining CPUs
+during suspend (see irq_migrate_all_off_this_cpu()). That will happen
+after devices are suspended (all phases of suspend ops).
 
-  Add the logic for parsing codeSign extended key usage field, as
-  described in RFC2459, section "4.2.1.13  Extended key usage
-  field.
+>
+> If there is any other way to remove these calls can you please help us
+> point that way.
 
-E.g. it took me 15 minutes to review the commit message alone
-because I could not remember the RFC number off top of my head.
+I'm not sure. I believe genirq assumes the irqchips are always
+accessible. There is some support to suspend irqchips. See how the
+struct irq_chip::irq_suspend() function is called by syscore ops in the
+generic irqchip 'irq_gc_syscore_ops' hooks. Maybe you could add a
+syscore suspend/resume hook to disable/enable the clks and power to the
+PCI controller. syscore ops run after secondary CPUs are hotplugged out
+during suspend.
 
-> extension in X.509. The parsing result will be set to the
-> ext_key_usage
-> flag which is carried by public key. It can be used in the PKCS#7
-> verification.
-> 
-> Signed-off-by: "Lee, Chun-Yi" <jlee@suse.com>
-> ---
->  crypto/asymmetric_keys/x509_cert_parser.c | 25 +++++++++++++++++++++++
->  include/crypto/public_key.h               |  1 +
->  include/linux/oid_registry.h              |  5 +++++
->  3 files changed, 31 insertions(+)
-> 
-> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index 2899ed80bb18..1f67e0adef65 100644
-> --- a/crypto/asymmetric_keys/x509_cert_parser.c
-> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -554,6 +554,8 @@ int x509_process_extension(void *context, size_t hdrlen,
->  	struct x509_parse_context *ctx = context;
->  	struct asymmetric_key_id *kid;
->  	const unsigned char *v = value;
-> +	int i = 0;
-> +	enum OID oid;
+Or maybe setting the IRQCHIP_MASK_ON_SUSPEND flag can be used so that on
+irq migration nothing writes the irq hardware because it is already
+masked in the hardware earlier. I think the problem is that on resume
+we'll restart the irq from the first CPU online event, when you don't
+want to do that because it is too early.
 
-I'd reorder the declarations (suggestion).
-
->  
->  	pr_debug("Extension: %u\n", ctx->last_oid);
->  
-> @@ -583,6 +585,29 @@ int x509_process_extension(void *context, size_t hdrlen,
->  		return 0;
->  	}
->  
-> +	if (ctx->last_oid == OID_extKeyUsage) {
-> +		if (vlen < 2 ||
-> +		    v[0] != ((ASN1_UNIV << 6) | ASN1_CONS_BIT | ASN1_SEQ) ||
-> +		    v[1] != vlen - 2)
-> +			return -EBADMSG;
-> +		i += 2;
-> +
-> +		while (i < vlen) {
-> +			/* A 10 bytes EKU OID Octet blob =
-> +			 * ASN1_OID + size byte + 8 bytes OID */
-> +			if ((i + 10) > vlen || v[i] != ASN1_OID || v[i + 1] != 8)
-> +				return -EBADMSG;
-> +
-> +			oid = look_up_OID(v + i + 2, v[i + 1]);
-> +			if (oid == OID_codeSigning) {
-> +				ctx->cert->pub->ext_key_usage |= EKU_codeSigning;
-> +			}
-> +			i += 10;
-> +		}
-> +		pr_debug("extKeyUsage: %d\n", ctx->cert->pub->ext_key_usage);
-> +		return 0;
-> +	}
-> +
->  	return 0;
->  }
->  
-> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
-> index 68f7aa2a7e55..72c0fcc39d0f 100644
-> --- a/include/crypto/public_key.h
-> +++ b/include/crypto/public_key.h
-> @@ -28,6 +28,7 @@ struct public_key {
->  	bool key_is_private;
->  	const char *id_type;
->  	const char *pkey_algo;
-> +	unsigned int ext_key_usage : 9;      /* Extended Key Usage (9-bit) */
->  };
->  
->  extern void public_key_free(struct public_key *key);
-> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-> index 0f4a8903922a..460135c2d918 100644
-> --- a/include/linux/oid_registry.h
-> +++ b/include/linux/oid_registry.h
-> @@ -140,9 +140,14 @@ enum OID {
->  	OID_TPMImportableKey,		/* 2.23.133.10.1.4 */
->  	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
->  
-> +	/* Extended key purpose OIDs [RFC 5280] */
-> +	OID_codeSigning,		/* 1.3.6.1.5.5.7.3.3 */
-> +
->  	OID__NR
->  };
->  
-> +#define EKU_codeSigning	(1 << 2)
-> +
->  extern enum OID look_up_OID(const void *data, size_t datasize);
->  extern int parse_OID(const void *data, size_t datasize, enum OID *oid);
->  extern int sprint_oid(const void *, size_t, char *, size_t);
-> -- 
-> 2.26.2
-> 
-
-BR, Jarkko
+I have another question though, which is do MSIs support wakeup? I don't
+see how it works if the whole bus is effectively off during suspend. If
+wakeup needs to be supported then I suspect the bus can't be powered
+down during suspend.

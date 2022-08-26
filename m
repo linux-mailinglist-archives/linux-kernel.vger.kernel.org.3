@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783425A240E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE225A2427
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245688AbiHZJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S1343533AbiHZJTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240799AbiHZJTW (ORCPT
+        with ESMTP id S1343525AbiHZJT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:19:22 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC5D741B;
-        Fri, 26 Aug 2022 02:19:21 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q8XnIa002217;
-        Fri, 26 Aug 2022 11:19:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=9gvdPpfWhML/QsrMl+pD+HweNQ2GBnbJdkoZ5Iv84OE=;
- b=IlHC48Br61AxoVupam3KG+mMws0m+4cuyJJuqO6jZaumyW1J63/3QX/ztiGEinlX3D5x
- eqzvb0PwBgphdSI/lmaQYfzOKFzd04VDFCKqf5Tv4pXwCj/UtpH+2GUA7ay9THduvBJ/
- uZlOWjd4Esx1e35VPX+35kk91pBFSJ2OPxopUQsnIzkQb6lf/ZCsWpIFFxbTqaz/HUuA
- Ez7VeImJ8GRGI84bmjnq/kf3sxAgLfHQfnFfZAtIfhLs/07It/WmOXm5MpTl0gzfOjES
- uLCrk09mcekEk2IwvEeHFe+P3cLt7WBbcWeQQFO7OCjboWGPY9mVNWCtfDj9jli5L5uR pw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j5h4wn6g9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 11:19:04 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 172CE10002A;
-        Fri, 26 Aug 2022 11:19:03 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 90099217B72;
-        Fri, 26 Aug 2022 11:19:03 +0200 (CEST)
-Received: from localhost (10.75.127.119) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 26 Aug
- 2022 11:19:03 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
-Date:   Fri, 26 Aug 2022 11:18:51 +0200
-Message-ID: <20220826091851.1393266-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 26 Aug 2022 05:19:29 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F9FD7438
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:19:28 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id q10-20020a0566022f0a00b00688d703717bso612287iow.9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:19:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=7awWSOHLPnAjg3OIqppgmOG9YBZWnjkmLUSpTqU3g/U=;
+        b=vOUKTV+J59VhVKqhPSryHwrw3IzVm73RurUBdso2MOTc7tlwc17dI4k3tooWoPHyaT
+         W95yYHRcwP/wdwYyEqcWsCwYta7acI5O1tEO/TUenyu0yhb2kynjhGa9capeGwtVPsxe
+         CcMgxHTRQZW3tk64cQZN8JrZRt55cCm2Yrdr66rz0f79S+J6+E5HRJDqo68AOdBXoWGK
+         thmmyuFzuTZA/hyc60J5G1K0X9gNg4uzB6o65SOahB06v/nhnc6ujnn5pM5bq8hwm6No
+         hZU7KHufwlDa2AJPVKBB+JUbaqFHsDFHtHOGuJutDzew6hNd5EmZN88DY2Xo7CLTEuZo
+         H0Gg==
+X-Gm-Message-State: ACgBeo2/qBtyiGkRsTWNGilF+tQUSTcT20jrBn2d6izKaR3bpwIctLUx
+        qCO24JX1djAAr8DNxmDH5hdy2omrVbddiKqxr8zw1zEW2FNI
+X-Google-Smtp-Source: AA6agR7pWosGxbwJcVkZzs0IfYElXo5vIiEU4cXBP2pG9isPQ6jF+KiGcl/yCCX6hd6UyGuGdM6EwGdqUar6HS0gYGviz1tfg664
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.119]
-X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_04,2022-08-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:510d:0:b0:689:5a18:1150 with SMTP id
+ f13-20020a6b510d000000b006895a181150mr3075634iob.73.1661505568010; Fri, 26
+ Aug 2022 02:19:28 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 02:19:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c7abf05e721698d@google.com>
+Subject: [syzbot] KMSAN: uninit-value in psi_poll_worker
+From:   syzbot <syzbot+dd8e45eb61404849cde9@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, brauner@kernel.org, cgroups@vger.kernel.org,
+        glider@google.com, hannes@cmpxchg.org,
+        linux-kernel@vger.kernel.org, lizefan.x@bytedance.com,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+Hello,
 
-The patch a557fca630cc: "spi: stm32_qspi: Add transfer_one_message()
-spi callback" from Aug 23, 2022, leads to the following Smatch static
-checker warning:
+syzbot found the following issue on:
 
-drivers/spi/spi-stm32-qspi.c:627 stm32_qspi_transfer_one_message()
-error: uninitialized symbol 'ret'.Fix the following Smatch static checker warning:
+HEAD commit:    3a2b6b904ea7 x86: kmsan: enable KMSAN builds for x86
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f51a33080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8e64bc5364a1307e
+dashboard link: https://syzkaller.appspot.com/bug?extid=dd8e45eb61404849cde9
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
 
-Fixes: a557fca630cc ("spi: stm32_qspi: Add transfer_one_message() spi callback")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dd8e45eb61404849cde9@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in update_triggers kernel/sched/psi.c:525 [inline]
+BUG: KMSAN: uninit-value in psi_poll_work kernel/sched/psi.c:626 [inline]
+BUG: KMSAN: uninit-value in psi_poll_worker+0x972/0x16a0 kernel/sched/psi.c:648
+ update_triggers kernel/sched/psi.c:525 [inline]
+ psi_poll_work kernel/sched/psi.c:626 [inline]
+ psi_poll_worker+0x972/0x16a0 kernel/sched/psi.c:648
+ kthread+0x31b/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ collect_percpu_times+0x193d/0x19a0 kernel/sched/psi.c:355
+ psi_poll_work kernel/sched/psi.c:604 [inline]
+ psi_poll_worker+0x587/0x16a0 kernel/sched/psi.c:648
+ kthread+0x31b/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ collect_percpu_times+0x193d/0x19a0 kernel/sched/psi.c:355
+ psi_poll_work kernel/sched/psi.c:604 [inline]
+ psi_poll_worker+0x587/0x16a0 kernel/sched/psi.c:648
+ kthread+0x31b/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:732 [inline]
+ slab_alloc_node mm/slub.c:3258 [inline]
+ slab_alloc mm/slub.c:3266 [inline]
+ kmem_cache_alloc_trace+0x696/0xdf0 mm/slub.c:3297
+ kmalloc include/linux/slab.h:600 [inline]
+ psi_cgroup_alloc+0x83/0x250 kernel/sched/psi.c:960
+ cgroup_create kernel/cgroup/cgroup.c:5430 [inline]
+ cgroup_mkdir+0x10a3/0x3080 kernel/cgroup/cgroup.c:5550
+ kernfs_iop_mkdir+0x2ba/0x520 fs/kernfs/dir.c:1185
+ vfs_mkdir+0x62a/0x870 fs/namei.c:4013
+ do_mkdirat+0x466/0x7b0 fs/namei.c:4038
+ __do_sys_mkdirat fs/namei.c:4053 [inline]
+ __se_sys_mkdirat fs/namei.c:4051 [inline]
+ __x64_sys_mkdirat+0xc4/0x120 fs/namei.c:4051
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+CPU: 0 PID: 19765 Comm: psimon Not tainted 6.0.0-rc2-syzkaller-47460-g3a2b6b904ea7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+=====================================================
+
+
 ---
- drivers/spi/spi-stm32-qspi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 92459daca95f..679fd1c34f7e 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -562,7 +562,7 @@ static int stm32_qspi_transfer_one_message(struct spi_controller *ctrl,
- 	struct spi_transfer *transfer;
- 	struct spi_device *spi = msg->spi;
- 	struct spi_mem_op op;
--	int ret;
-+	int ret = 0;
- 
- 	if (!spi->cs_gpiod)
- 		return -EOPNOTSUPP;
-@@ -592,8 +592,10 @@ static int stm32_qspi_transfer_one_message(struct spi_controller *ctrl,
- 			dummy_bytes = transfer->len;
- 
- 			/* if happens, means that message is not correctly built */
--			if (list_is_last(&transfer->transfer_list, &msg->transfers))
-+			if (list_is_last(&transfer->transfer_list, &msg->transfers)) {
-+				ret = -EINVAL;
- 				goto end_of_transfer;
-+			}
- 
- 			transfer = list_next_entry(transfer, transfer_list);
- 		}
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

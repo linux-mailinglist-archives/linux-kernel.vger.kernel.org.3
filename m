@@ -2,72 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4106A5A26EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA505A26EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbiHZLcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S243426AbiHZLfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245527AbiHZLcm (ORCPT
+        with ESMTP id S240077AbiHZLfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:32:42 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CC1DB7F2;
-        Fri, 26 Aug 2022 04:32:39 -0700 (PDT)
-Received: from [10.28.39.83] (10.28.39.83) by mail-sz.amlogic.com (10.28.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Fri, 26 Aug
- 2022 19:32:37 +0800
-From:   Huqiang Qin <huqiang.qin@amlogic.com>
-Subject: Re: [PATCH] arm64: dts: meson-s4: include meson-s4-gpio.h
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <narmstrong@baylibre.com>, <khilman@baylibre.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Message-ID: <e32a8c39-1e47-cad1-e093-2cabb2dd37a4@amlogic.com>
-Date:   Fri, 26 Aug 2022 19:32:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 26 Aug 2022 07:35:50 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FF1BCCF3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:35:48 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A51E61EC0426;
+        Fri, 26 Aug 2022 13:35:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661513742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rygCihiq5JABhm5at71zDCNmLU3ZdhKw80RK9HD855k=;
+        b=Zj3SSlNqyYZiBF2SSrKoWJ2bBFB6m0e2WhXbvQJblc6F4/cBoCK3Bc0hcMFnfXl6NgyaNl
+        vIAOzZM1G1gYb+cJ73HLkvf9SllznyuTgEaFC5jTp/5V7+aADR6IWYEtK55O4xugOf3IZR
+        jqqARj2/rAK/V8j+ZHzshMLrWIKv1Gw=
+Date:   Fri, 26 Aug 2022 13:35:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] x86: Add resolve_cmdline() helper
+Message-ID: <YwiwCgIoIPnsyanu@zn.tnic>
+References: <cover.1653471377.git.baskov@ispras.ru>
+ <7eb917aeb1fa9f044f90ec33c8bf33bb6aee62a5.1653471377.git.baskov@ispras.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.28.39.83]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7eb917aeb1fa9f044f90ec33c8bf33bb6aee62a5.1653471377.git.baskov@ispras.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, May 25, 2022 at 01:10:10PM +0300, Evgeniy Baskov wrote:
+> Command line needs to be combined in both compressed and uncompressed
+> kernel from built-in and boot command line strings, which requires
+> non-trivial logic depending on CONFIG_CMDLINE_BOOL and
+> CONFIG_CMDLINE_OVERRIDE.
+> 
+> Add a helper function to avoid code duplication.
+> 
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> 
 
-On 2022/8/25 20:02, Krzysztof Kozlowski wrote:
-> Why? We can see what you did here, but commit msg should explain why you
-> do it...
+You have some weird configuration to your git send-email which doesn't
+add the "---" to split the patch commit message from the diffstat.
 
-Sorry, I didn't describe this commit message clearly.
+>  create mode 100644 arch/x86/include/asm/shared/setup-cmdline.h
+> 
+> diff --git a/arch/x86/include/asm/shared/setup-cmdline.h b/arch/x86/include/asm/shared/setup-cmdline.h
 
-In the future, meson-s4.dtsi will have some nodes that need
-to use the meson-s4-gpio.h file.
+Just cmdline.h I'd say.
 
-e.g.
-	(1) Bluetooth enable pin:
-		bt_en-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-	(2) Audio mute pin:
-		spk_mute-gpios = <&gpio GPIOH_8 GPIO_ACTIVE_LOW>;
-	(3) ...
+> new file mode 100644
+> index 000000000000..9822e5af4925
+> --- /dev/null
+> +++ b/arch/x86/include/asm/shared/setup-cmdline.h
+> @@ -0,0 +1,38 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _ASM_X86_SETUP_CMDLINE_H
+> +#define _ASM_X86_SETUP_CMDLINE_H
+> +
+> +#define _SETUP
+> +#include <asm/setup.h> /* For COMMAND_LINE_SIZE */
+> +#undef _SETUP
+> +
+> +#include <linux/string.h>
+> +
+> +#ifdef CONFIG_CMDLINE_BOOL
+> +#define COMMAND_LINE_INIT CONFIG_CMDLINE
+> +#else
+> +#define COMMAND_LINE_INIT ""
+> +#endif
+> +
+> +/*
+> + * command_line and boot_command_line are expected to be at most
+> + * COMMAND_LINE_SIZE length. command_line needs to be initialized
+> + * with COMMAND_LINE_INIT.
+> + */
+> +
 
-So, this patch was born.
 
-Best regards,
-Huqiang
+^ Superfluous newline.
 
+> +static inline void resolve_cmdline(char *command_line,
+> +				   const char *boot_command_line)
+
+cmdline_prepare() I'd say.
+
+> +{
+> +#ifdef CONFIG_CMDLINE_BOOL
+> +	if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
+> +		/* Append boot loader cmdline to builtin */
+> +		strlcat(command_line, " ", COMMAND_LINE_SIZE);
+> +		strlcat(command_line, boot_command_line, COMMAND_LINE_SIZE);
+> +	}
+> +#else
+> +	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+
+So that has been switched to strscpy() in the meantime:
+
+8a33d96bd178 ("x86/setup: Use strscpy() to replace deprecated strlcpy()")
+
+Please redo your set ontop of latest tip/master.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

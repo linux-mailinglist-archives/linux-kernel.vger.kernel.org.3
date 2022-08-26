@@ -2,196 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33B55A2856
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064145A285B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344172AbiHZNQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        id S1343993AbiHZNRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344185AbiHZNPu (ORCPT
+        with ESMTP id S232858AbiHZNRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:15:50 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7863F371B9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:15:49 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id q67so1620007vsa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=59n2uy6bMEwTPlHrLsIoQ5BkYFCiua3TbUF1n0ZR9DU=;
-        b=sfPFXHYL7jV0UIzY3/KsSjEWT9yyeK3p5Rpqe8jJVcARI5WGAIzGTt/2yxKZSLVjVX
-         Q+0RzoD9n4L0jjfOqIWpjm2GdKdjbNzVPmOhPFIpAQKJoyV+PH7L1vJaa/cno3peCdss
-         wh4/vFmRhgVHhl2ce0Tbx3UXmq2kyFrAigUwQd877n/uKQffc9vuGWQ72augd3lfoBda
-         CDDOnn7MXSmIgj/qYt/+SYfR2miAlH1xZLfhClF4ZTOo7QQvaYRqTPNteyvkn2JGHw61
-         awzIBLy1IfrVQKlDikieqjlgLUXeYEJrEBopXpdAfs1cAit9LvT2zomNrJ+6GiWx4Lvy
-         ZFTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=59n2uy6bMEwTPlHrLsIoQ5BkYFCiua3TbUF1n0ZR9DU=;
-        b=U3x9iUHx75BLtM0GGVKAKCJipa2XOYWfRukPYPgsqZVpUSHqBzcaSmW6n8RTj8I+fX
-         PMRuRoXIDAC93DSIhbG83H1rPxe7LGFvD88h+yGjr3fu32yWt9/NGLRhRfT9pa8vHyGv
-         z+aEiW7XzY7t4NbjIeF5+4C7mVxV0rrN6EdjwIRWPygXQ8VUlUoYSTkeQqpZp//dnjzU
-         NYF3XWaGnFtm94sSHirrxRU21gsYAVeaEKY60BVv8Ljci67f7HS0J4esBjfJKGJ3PrZH
-         tdfROi32jnL8Jgjfub3jImriqKpgA1ZCq+y/XkehkBFCLrXq4Tu8A9HAYeYIi9Dutper
-         1qRw==
-X-Gm-Message-State: ACgBeo0QTPC7GmAUA5zBh5kBUKgE/8l38caTf3jydbpKlKtgdI3bdTqW
-        abPH/jwoYfcG9AIqDP8a34sFewcmxiLZA70qxQpbdQ==
-X-Google-Smtp-Source: AA6agR6PlDujz+oXUVecvczTK/svEkHdtMJ4EBTSmLSES/3EDjMO7G84YLviv2jT2w9h1v5ElNQH1l3nlLy4nr3zxVo=
-X-Received: by 2002:a05:6102:5348:b0:390:8a9c:5376 with SMTP id
- bq8-20020a056102534800b003908a9c5376mr3074445vsb.53.1661519748475; Fri, 26
- Aug 2022 06:15:48 -0700 (PDT)
+        Fri, 26 Aug 2022 09:17:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9050FBD096
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661519833;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OVQSEywYfbFhro2HJSwS/ZHWAfsWN1QK4brX598U6YQ=;
+        b=HOPiJ+fOGFTXJFC3LRw2aQNuv7uabvK3A9zT6NIMqTRnKAJj/twXBQX1epxNqUj5PQW2Wz
+        qwgCGnavcS7Rczkregw3JqrMrh7uq0C8L3xxBLBuxziDZeN2NMrTPr6NyPTblg6vIbt0Py
+        VM62JSem23QwnGseY0vvXwIHW9T3HUY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-301-TLwwHE7CMiG_ouAnSBpWdQ-1; Fri, 26 Aug 2022 09:17:09 -0400
+X-MC-Unique: TLwwHE7CMiG_ouAnSBpWdQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C70F385A589;
+        Fri, 26 Aug 2022 13:17:08 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A0B394C816;
+        Fri, 26 Aug 2022 13:17:08 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27QDH8Sb025173;
+        Fri, 26 Aug 2022 09:17:08 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27QDH8ZI025169;
+        Fri, 26 Aug 2022 09:17:08 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Fri, 26 Aug 2022 09:17:08 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH v3] wait_on_bit: add an acquire memory barrier
+In-Reply-To: <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+Message-ID: <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-References: <0000000000004c3b1405e6b7de26@google.com> <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
-In-Reply-To: <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Fri, 26 Aug 2022 15:15:37 +0200
-Message-ID: <CANp29Y7bgwDzd47E6h8gseYuu5YXF-ABRrhVXFXS-HF7PhF-Dw@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in blk_mq_map_swqueue
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        "'Aleksandr Nogikh' via syzkaller-bugs" 
-        <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 7:48 PM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 8/20/22 20:24, syzbot wrote:
-> > Hello,
+
+
+On Thu, 25 Aug 2022, Linus Torvalds wrote:
+
+> On Thu, Aug 25, 2022 at 2:03 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
 > >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13cf3c7b080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=ea55456e1ff28ef7f9ff
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com
-> >
-> > scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-> > BUG: unable to handle page fault for address: ffffdc0000000000
-> > #PF: supervisor read access in kernel mode
-> > #PF: error_code(0x0000) - not-present page
-> > PGD 12026067
-> > P4D 12026067 PUD 0
-> > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > Workqueue: events_unbound async_run_entry_fn
-> > RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-> > Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-> > RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-> > RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> > RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-> > R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-> > R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-> > FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >   <TASK>
-> >   blk_mq_init_allocated_queue+0x1a31/0x1c20 block/blk-mq.c:4119
-> >   blk_mq_init_queue_data block/blk-mq.c:3908 [inline]
-> >   blk_mq_init_queue+0x9f/0x120 block/blk-mq.c:3918
-> >   scsi_alloc_sdev+0x697/0x9d0 drivers/scsi/scsi_scan.c:335
-> >   scsi_probe_and_add_lun+0x1d1/0x4ab0 drivers/scsi/scsi_scan.c:1191
-> >   __scsi_scan_target+0x1fb/0x10e0 drivers/scsi/scsi_scan.c:1673
-> >   scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
-> >   scsi_scan_host_selected+0x394/0x6c0 drivers/scsi/scsi_scan.c:1790
-> >   do_scsi_scan_host drivers/scsi/scsi_scan.c:1929 [inline]
-> >   do_scan_async+0x12e/0x7b0 drivers/scsi/scsi_scan.c:1939
-> >   async_run_entry_fn+0xa6/0x400 kernel/async.c:127
-> >   process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
-> >   worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
-> >   kthread+0x266/0x300 kernel/kthread.c:376
-> >   ret_from_fork+0x1f/0x30
-> >   </TASK>
-> > Modules linked in:
-> > CR2: ffffdc0000000000
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-> > Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-> > RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-> > RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> > RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-> > R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-> > R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-> > FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > ----------------
-> > Code disassembly (best guess), 5 bytes skipped:
-> >     0:        43 0f b6 04 37          movzbl (%r15,%r14,1),%eax
-> >     5:        84 c0                   test   %al,%al
-> >     7:        0f 85 49 02 00 00       jne    0x256
-> >     d:        41 0f b7 45 00          movzwl 0x0(%r13),%eax
-> >    12:        8d 48 01                lea    0x1(%rax),%ecx
-> >    15:        66 41 89 4d 00          mov    %cx,0x0(%r13)
-> >    1a:        48 8d 1c c3             lea    (%rbx,%rax,8),%rbx
-> >    1e:        48 89 d8                mov    %rbx,%rax
-> >    21:        48 c1 e8 03             shr    $0x3,%rax
-> > * 25: 42 80 3c 30 00          cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-> >    2a:        4c 8b 7c 24 68          mov    0x68(%rsp),%r15
-> >    2f:        74 08                   je     0x39
-> >    31:        48 89 df                mov    %rbx,%rdi
-> >    34:        e8 36 7b c1 fd          callq  0xfdc17b6f
-> >    39:        48                      rex.W
-> >    3a:        8b                      .byte 0x8b
->
-> Hi Dmitry,
->
-> This issue and also another report that has been shared recently on the
-> linux-scsi mailing list look like USB issues to me. Who is the right person
-> to make sure that the USB mailing list is included for USB related issues?
->
-> Thanks,
->
-> Bart.
+> > Here I reworked your patch, so that test_bit_acquire is defined just like
+> > test_bit. There's some code duplication (in
+> > include/asm-generic/bitops/generic-non-atomic.h and in
+> > arch/x86/include/asm/bitops.h), but that duplication exists in the
+> > test_bit function too.
+> 
+> This looks fine to me, and I like how you fixed up buffer_uptodate()
+> while at it.
+> 
+> > I tested it on x86-64 and arm64. On x86-64 it generates the "bt"
+> > instruction for variable-bit test and "shr; and $1" for constant bit test.
+> 
+> That shr/and is almost certainly pessimal for small constant values at
+> least, and it's better done as "movq %rax" followed by "test %rax".
+> But I guess it depends on the bit value (and thus the constant size).
+> 
+> Doing a "testb $imm8" would likely be optimal, but you'll never get
+> that with smp_load_acquire() on x86 unless you use inline asm, because
+> of how we're doing it with a volatile pointer.
+> 
+> Anyway, you could try something like this:
+> 
+>   static __always_inline bool constant_test_bit(long nr, const
+> volatile unsigned long *addr)
+>   {
+>         bool oldbit;
+> 
+>         asm volatile("testb %2,%1"
+>                      CC_SET(nz)
+>                      : CC_OUT(nz) (oldbit)
+>                      : "m" (((unsigned char *)addr)[nr >> 3]),
+>                        "Ir" (1 << (nr & 7))
+>                       :"memory");
+>         return oldbit;
+>   }
+> 
+> for both the regular test_bit() and for the acquire (since all loads
+> are acquires on x86, and using an asm basically forces a memory load
+> so it just does that "volatile" part.
 
-Hi Bart,
+I wouldn't do this for regular test_bit because if you read memory with 
+different size/alignment from what you wrote, various CPUs suffer from 
+store->load forwarding penalties.
 
-Syzbot would have included the USB mailing list and the USB
-maintainers if it saw that the bug might be related to this subsystem.
-The bot's guess was that it was the BLOCK LAYER subsystem, so it Cc'd
-only the general lists and linux-block@vger.kernel.org
+But for test_bit_acqure this optimization is likely harmless because the 
+bit will not be tested a few instructions after writing it.
 
-Is there anything in this bug report that can reliably indicate that
-the bug has to do with USB? If there is, we can definitely adjust our
-guilty subsystem recognition logic.
+> But that's a separate optimization and independent of the acquire thing.
+> 
+> > For me, the kernel 6.0-rc2 doesn't boot in an arm64 virtual machine at all
+> > (with or without this patch), so I only compile-tested it on arm64. I have
+> > to bisect it.
+> 
+> Hmm. I'm running it on real arm64 hardware (rc2+ - not your patch), so
+> I wonder what's up..
+> 
+>                Linus
+> 
 
---
-Best Regards
-Aleksandr
+This is version 3 of the patch. Changes:
+* use assembler "testb" in constant_test_bit_acquire
+* fix some comments as suggeste by Alan Stern
+* fix Documentation/atomic_bitops.txt (note that since the commit 
+  415d832497098030241605c52ea83d4e2cfa7879, test_and_set/clear_bit is 
+  always ordered, so fix this claim as well)
 
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/f70b1cf7-0291-6ebc-68f8-db9c68963255%40acm.org.
+Mikulas
+
+
+
+
+From: Mikulas Patocka <mpatocka@redhat.com>
+
+There are several places in the kernel where wait_on_bit is not followed
+by a memory barrier (for example, in drivers/md/dm-bufio.c:new_read). On
+architectures with weak memory ordering, it may happen that memory
+accesses that follow wait_on_bit are reordered before wait_on_bit and they
+may return invalid data.
+
+Fix this class of bugs by introducing a new function "test_bit_acquire"
+that works like test_bit, but has acquire memory ordering semantics.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Cc: stable@vger.kernel.org
+
+ Documentation/atomic_bitops.txt                          |   10 ++-----
+ arch/x86/include/asm/bitops.h                            |   21 +++++++++++++++
+ include/asm-generic/bitops/generic-non-atomic.h          |   14 ++++++++++
+ include/asm-generic/bitops/instrumented-non-atomic.h     |   12 ++++++++
+ include/asm-generic/bitops/non-atomic.h                  |    1 
+ include/asm-generic/bitops/non-instrumented-non-atomic.h |    1 
+ include/linux/bitops.h                                   |    1 
+ include/linux/buffer_head.h                              |    2 -
+ include/linux/wait_bit.h                                 |    8 ++---
+ kernel/sched/wait_bit.c                                  |    2 -
+ 10 files changed, 60 insertions(+), 12 deletions(-)
+
+Index: linux-2.6/include/asm-generic/bitops/generic-non-atomic.h
+===================================================================
+--- linux-2.6.orig/include/asm-generic/bitops/generic-non-atomic.h
++++ linux-2.6/include/asm-generic/bitops/generic-non-atomic.h
+@@ -4,6 +4,7 @@
+ #define __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H
+ 
+ #include <linux/bits.h>
++#include <asm/barrier.h>
+ 
+ #ifndef _LINUX_BITOPS_H
+ #error only <linux/bitops.h> can be included directly
+@@ -127,6 +128,18 @@ generic_test_bit(unsigned long nr, const
+ 	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+ }
+ 
++/**
++ * generic_test_bit_acquire - Determine, with acquire semantics, whether a bit is set
++ * @nr: bit number to test
++ * @addr: Address to start counting from
++ */
++static __always_inline bool
++generic_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
++{
++	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
++	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
++}
++
+ /*
+  * const_*() definitions provide good compile-time optimizations when
+  * the passed arguments can be resolved at compile time.
+@@ -137,6 +150,7 @@ generic_test_bit(unsigned long nr, const
+ #define const___test_and_set_bit	generic___test_and_set_bit
+ #define const___test_and_clear_bit	generic___test_and_clear_bit
+ #define const___test_and_change_bit	generic___test_and_change_bit
++#define const_test_bit_acquire		generic_test_bit_acquire
+ 
+ /**
+  * const_test_bit - Determine whether a bit is set
+Index: linux-2.6/include/asm-generic/bitops/non-atomic.h
+===================================================================
+--- linux-2.6.orig/include/asm-generic/bitops/non-atomic.h
++++ linux-2.6/include/asm-generic/bitops/non-atomic.h
+@@ -13,6 +13,7 @@
+ #define arch___test_and_change_bit generic___test_and_change_bit
+ 
+ #define arch_test_bit generic_test_bit
++#define arch_test_bit_acquire generic_test_bit_acquire
+ 
+ #include <asm-generic/bitops/non-instrumented-non-atomic.h>
+ 
+Index: linux-2.6/include/linux/bitops.h
+===================================================================
+--- linux-2.6.orig/include/linux/bitops.h
++++ linux-2.6/include/linux/bitops.h
+@@ -59,6 +59,7 @@ extern unsigned long __sw_hweight64(__u6
+ #define __test_and_clear_bit(nr, addr)	bitop(___test_and_clear_bit, nr, addr)
+ #define __test_and_change_bit(nr, addr)	bitop(___test_and_change_bit, nr, addr)
+ #define test_bit(nr, addr)		bitop(_test_bit, nr, addr)
++#define test_bit_acquire(nr, addr)	bitop(_test_bit_acquire, nr, addr)
+ 
+ /*
+  * Include this here because some architectures need generic_ffs/fls in
+Index: linux-2.6/include/linux/wait_bit.h
+===================================================================
+--- linux-2.6.orig/include/linux/wait_bit.h
++++ linux-2.6/include/linux/wait_bit.h
+@@ -71,7 +71,7 @@ static inline int
+ wait_on_bit(unsigned long *word, int bit, unsigned mode)
+ {
+ 	might_sleep();
+-	if (!test_bit(bit, word))
++	if (!test_bit_acquire(bit, word))
+ 		return 0;
+ 	return out_of_line_wait_on_bit(word, bit,
+ 				       bit_wait,
+@@ -96,7 +96,7 @@ static inline int
+ wait_on_bit_io(unsigned long *word, int bit, unsigned mode)
+ {
+ 	might_sleep();
+-	if (!test_bit(bit, word))
++	if (!test_bit_acquire(bit, word))
+ 		return 0;
+ 	return out_of_line_wait_on_bit(word, bit,
+ 				       bit_wait_io,
+@@ -123,7 +123,7 @@ wait_on_bit_timeout(unsigned long *word,
+ 		    unsigned long timeout)
+ {
+ 	might_sleep();
+-	if (!test_bit(bit, word))
++	if (!test_bit_acquire(bit, word))
+ 		return 0;
+ 	return out_of_line_wait_on_bit_timeout(word, bit,
+ 					       bit_wait_timeout,
+@@ -151,7 +151,7 @@ wait_on_bit_action(unsigned long *word,
+ 		   unsigned mode)
+ {
+ 	might_sleep();
+-	if (!test_bit(bit, word))
++	if (!test_bit_acquire(bit, word))
+ 		return 0;
+ 	return out_of_line_wait_on_bit(word, bit, action, mode);
+ }
+Index: linux-2.6/kernel/sched/wait_bit.c
+===================================================================
+--- linux-2.6.orig/kernel/sched/wait_bit.c
++++ linux-2.6/kernel/sched/wait_bit.c
+@@ -47,7 +47,7 @@ __wait_on_bit(struct wait_queue_head *wq
+ 		prepare_to_wait(wq_head, &wbq_entry->wq_entry, mode);
+ 		if (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags))
+ 			ret = (*action)(&wbq_entry->key, mode);
+-	} while (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
++	} while (test_bit_acquire(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
+ 
+ 	finish_wait(wq_head, &wbq_entry->wq_entry);
+ 
+Index: linux-2.6/include/asm-generic/bitops/non-instrumented-non-atomic.h
+===================================================================
+--- linux-2.6.orig/include/asm-generic/bitops/non-instrumented-non-atomic.h
++++ linux-2.6/include/asm-generic/bitops/non-instrumented-non-atomic.h
+@@ -12,5 +12,6 @@
+ #define ___test_and_change_bit	arch___test_and_change_bit
+ 
+ #define _test_bit		arch_test_bit
++#define _test_bit_acquire	arch_test_bit_acquire
+ 
+ #endif /* __ASM_GENERIC_BITOPS_NON_INSTRUMENTED_NON_ATOMIC_H */
+Index: linux-2.6/arch/x86/include/asm/bitops.h
+===================================================================
+--- linux-2.6.orig/arch/x86/include/asm/bitops.h
++++ linux-2.6/arch/x86/include/asm/bitops.h
+@@ -207,6 +207,20 @@ static __always_inline bool constant_tes
+ 		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+ }
+ 
++static __always_inline bool constant_test_bit_acquire(long nr, const volatile unsigned long *addr)
++{
++	bool oldbit;
++
++	asm volatile("testb %2,%1"
++		     CC_SET(nz)
++		     : CC_OUT(nz) (oldbit)
++		     : "m" (((unsigned char *)addr)[nr >> 3]),
++		       "i" (1 << (nr & 7))
++		     :"memory");
++
++	return oldbit;
++}
++
+ static __always_inline bool variable_test_bit(long nr, volatile const unsigned long *addr)
+ {
+ 	bool oldbit;
+@@ -226,6 +240,13 @@ arch_test_bit(unsigned long nr, const vo
+ 					  variable_test_bit(nr, addr);
+ }
+ 
++static __always_inline bool
++arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
++{
++	return __builtin_constant_p(nr) ? constant_test_bit_acquire(nr, addr) :
++					  variable_test_bit(nr, addr);
++}
++
+ /**
+  * __ffs - find first set bit in word
+  * @word: The word to search
+Index: linux-2.6/include/asm-generic/bitops/instrumented-non-atomic.h
+===================================================================
+--- linux-2.6.orig/include/asm-generic/bitops/instrumented-non-atomic.h
++++ linux-2.6/include/asm-generic/bitops/instrumented-non-atomic.h
+@@ -142,4 +142,16 @@ _test_bit(unsigned long nr, const volati
+ 	return arch_test_bit(nr, addr);
+ }
+ 
++/**
++ * _test_bit_acquire - Determine, with acquire semantics, whether a bit is set
++ * @nr: bit number to test
++ * @addr: Address to start counting from
++ */
++static __always_inline bool
++_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
++{
++	instrument_atomic_read(addr + BIT_WORD(nr), sizeof(long));
++	return arch_test_bit_acquire(nr, addr);
++}
++
+ #endif /* _ASM_GENERIC_BITOPS_INSTRUMENTED_NON_ATOMIC_H */
+Index: linux-2.6/include/linux/buffer_head.h
+===================================================================
+--- linux-2.6.orig/include/linux/buffer_head.h
++++ linux-2.6/include/linux/buffer_head.h
+@@ -156,7 +156,7 @@ static __always_inline int buffer_uptoda
+ 	 * make it consistent with folio_test_uptodate
+ 	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
+ 	 */
+-	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
++	return test_bit_acquire(BH_Uptodate, &bh->b_state);
+ }
+ 
+ #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
+Index: linux-2.6/Documentation/atomic_bitops.txt
+===================================================================
+--- linux-2.6.orig/Documentation/atomic_bitops.txt
++++ linux-2.6/Documentation/atomic_bitops.txt
+@@ -58,13 +58,11 @@ Like with atomic_t, the rule of thumb is
+ 
+  - RMW operations that have a return value are fully ordered.
+ 
+- - RMW operations that are conditional are unordered on FAILURE,
+-   otherwise the above rules apply. In the case of test_and_set_bit_lock(),
+-   if the bit in memory is unchanged by the operation then it is deemed to have
+-   failed.
++ - RMW operations that are conditional are fully ordered.
+ 
+-Except for a successful test_and_set_bit_lock() which has ACQUIRE semantics and
+-clear_bit_unlock() which has RELEASE semantics.
++Except for a successful test_and_set_bit_lock() which has ACQUIRE semantics,
++clear_bit_unlock() which has RELEASE semantics and test_bit_acquire which has
++ACQUIRE semantics.
+ 
+ Since a platform only has a single means of achieving atomic operations
+ the same barriers as for atomic_t are used, see atomic_t.txt.
+

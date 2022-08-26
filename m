@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13805A2C28
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6345A2C20
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344501AbiHZQS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S1344384AbiHZQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245720AbiHZQSz (ORCPT
+        with ESMTP id S1343642AbiHZQQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:18:55 -0400
-Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11871D91C5;
-        Fri, 26 Aug 2022 09:18:48 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; bh=rngoAUfTvl93BSKur1UsnUCm+wAmd5fS1fyUrfe3Tjk=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220801; t=1661530580; v=1; x=1661962580;
- b=l+iFCCbnYuqIIc0pzyehnyH4fQBERr+/rAXMhG1iop5tqOPsVsGvIMpTegIekbm8TXssaOti
- jI3R54FA9hiSAc7J3+LxKY9GJ6hqo/82DNv/y+vOag+8l32rl62HhHyE0oyiFro7yyqUDy57SWd
- W/Nzpf62Ic7w9A89l/eAF3Lcit/b7MwJQqbVCxts+NoSFhh18fz8JgB4atmqfz3jq5Psexteu1e
- vY7qlZTfdgpaTPkBTOemcI3LjHHeN1bL7z7F5qSijL7iVGyXCzhc/mN0NBXfCajdSZZn5aEdG1+
- vmrcCgzAqZXFqHyLMkBFrworatzVG8zCNK40SkkKsySVB6NZeOw4JIHg/JZVuunWO7gEtu+k7yx
- wR+oUlD8BWIKjOY2RP4zIfzfeB+NW/7Lw3olP8mwHA6iNGk/CA3xXOmdnfv05H2a2C6qU+a1VCf
- Gj2EYSLW2MOIsFQ6/WW9nzR++S/rNWBSabI5OyQ2lPWB5yQALBA09qND3bH1/lUNdpOI+OxRSlG
- d0ojZoa/u+Rxm47DRLrG2IOjVd2k9yi83Onbeml9zr0MPlFZvfm+ltTPYeaMsWC4NJCaVoqKaUa
- uWhT9tvD3NnSSBJAtZieKSlQB1hEKC1AYU9YKU/d5MoCUuguqIE2BKR/SYj48LfNfssPIIk1CwM
- 7WwM+aNxfQI=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 66436cf2; Fri, 26 Aug
- 2022 12:16:20 -0400
+        Fri, 26 Aug 2022 12:16:43 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A04D8B25
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:16:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sd33so4057784ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KGLrHWIlQkkcGAYUa/2yGh2hQoX6jmYun770U+54jAw=;
+        b=cxz0/t2rB1fyMtx/h4P5N1RTo7JQXkfoidhaIHDxpHnV6nbuvzSUAMKDk9qjHlr6vP
+         sq5QfqwyT3JKzLcYr8qoJNE3PqSsGL1vXZvfqPEFoe0vLZ8Q6nMr3lNADWmO0oVLr8gi
+         INR7ioc1nZg98YbN0WNHwsg7R13yRBf4FcA0k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KGLrHWIlQkkcGAYUa/2yGh2hQoX6jmYun770U+54jAw=;
+        b=orsbL1YcqX3GE0TV8IwzwAluOAdiW2znHcd1Mkrr9d4O2xFMdjW3abBdSasbm+A0AN
+         jBHja8Hg8QvlG69u7uw9Fn10GDpql2Yws8xQSFZa+jT2YbPAOGwhB8sXxG4bxLLeSTcy
+         0CTWjFJ73VyVmx8sJviq5kOYQ21McP2tN4SHb5qDqEKsVzaOVScCOVJ+sMKhrmBtW6Q1
+         41jMc+5Uas9RcEu8MIdOLgDuCNtrZhk9NPtlB/xZvqVfhzrpGvgVyUa8tfHn817UzBGv
+         enN888oMd2zz6KWPiY/sMPKzPwJgQ//Y0XpSOGYN6I1FJj4ebnwCpmCcEr7pE+qFYaVL
+         O9mw==
+X-Gm-Message-State: ACgBeo3xduvjSNaVGxeUfeuMRHlwMBjcqJQ4b1R7m6XyrcoXMxuF6NkU
+        I3+K/IWXID3sLMa6Mh/2GLb0H/Pwlqmmy3go
+X-Google-Smtp-Source: AA6agR4MBF4u4pgz9wFbtCADYRDkS/BOqsh+e2JsfzFq+CJWlZUjuDx53axEeOab0KFau+N5lIjI+Q==
+X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id fj2-20020a1709069c8200b006dfbaa29f75mr6129619ejc.762.1661530600467;
+        Fri, 26 Aug 2022 09:16:40 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id p6-20020a17090653c600b0073d638a7a89sm1052137ejo.99.2022.08.26.09.16.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 09:16:39 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id e13so1456275wrm.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:16:39 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr207547wrr.583.1661530599315; Fri, 26
+ Aug 2022 09:16:39 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Fri, 26 Aug 2022 12:16:19 -0400
-From:   matoro <matoro_mailinglist_kernel@matoro.tk>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Jan Kara <jack@suse.cz>, Meelis Roos <mroos@linux.ee>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>, linux-alpha@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, vbabka@suse.com
-Subject: Re: ext4 corruption on alpha with 4.20.0-09062-gd8372ba8ce28
-In-Reply-To: <bf093f5c-bd0b-e843-d9e5-a4edf0f70cae@suse.cz>
-References: <e175b885-082a-97c1-a0be-999040a06443@linux.ee>
- <20190218120209.GC20919@quack2.suse.cz>
- <4e015688-8633-d1a0-308b-ba2a78600544@linux.ee>
- <20190219132026.GA28293@quack2.suse.cz>
- <20190219144454.GB12668@bombadil.infradead.org>
- <d444f653-9b99-5e9b-3b47-97f824c29b0e@linux.ee>
- <20190220094813.GA27474@quack2.suse.cz>
- <2381c264-92f5-db43-b6a5-8e00bd881fef@linux.ee>
- <20190221132916.GA22886@quack2.suse.cz>
- <97dbffaefa65a83b36e1ec134fd53a66@matoro.tk>
- <20220826105513.eo5otoujtz75u7dg@quack3>
- <bf093f5c-bd0b-e843-d9e5-a4edf0f70cae@suse.cz>
-Message-ID: <1ef4d01e1fb81656544c296fe11f41b4@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220826084813.1.I8c9a771fcf4d1cfb6e8e0ef17a153143af9a644d@changeid>
+In-Reply-To: <20220826084813.1.I8c9a771fcf4d1cfb6e8e0ef17a153143af9a644d@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 26 Aug 2022 09:16:27 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X0FVeEKS9OLXrsK+S==BvxrnG8wZ-fjasJ-=kOPr=-=Q@mail.gmail.com>
+Message-ID: <CAD=FV=X0FVeEKS9OLXrsK+S==BvxrnG8wZ-fjasJ-=kOPr=-=Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280-herobrine: Don't enable the USB
+ 2.0 port
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At least according to the docs I see, fakenuma is x86-specific.  There 
-are multi-socket machines, but the one I have is single-socket 
-single-core.
+ Hi,
 
-I can provide access to this machine to play around with it though!  
-Either simple shell access or serial access if some kernel poking is 
-needed.
+On Fri, Aug 26, 2022 at 8:48 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> The USB 2.0 port of sc7280 is currently not used by any herobrine
+> board. Delete the device tree entries that enable it.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> I was also told that the 2.0 port is for the Embedded USB Debugger
+> (EUD) only, but I'm not sure if that's true. From the Linux side
+> it looks like a regular dwc3 controller.
+>
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 12 ------------
+>  1 file changed, 12 deletions(-)
 
-Would that be helpful or is a NUMA system going to be required for 
-debugging?
+I can confirm it's not hooked up anywhere on herobrine-class boards.
+Disabling looks good to me. If we later have a herobrine variant where
+this is enabled we can enable it just for that variant.
 
--------- Original Message --------
-Subject: Re: ext4 corruption on alpha with 4.20.0-09062-gd8372ba8ce28
-Date: 2022-08-26 07:04
- From: Vlastimil Babka <vbabka@suse.cz>
-To: Jan Kara <jack@suse.cz>, matoro 
-<matoro_mailinglist_kernel@matoro.tk>
-
-On 8/26/22 12:55, Jan Kara wrote:
-> On Thu 25-08-22 11:05:48, matoro wrote:
->> Hello all, I know this is quite an old thread.  I recently acquired 
->> some
->> alpha hardware and have run into this exact same problem on the latest
->> stable kernel (5.18 and 5.19).  CONFIG_COMPACTION seems to be totally 
->> broken
->> and causes userspace to be extremely unstable - random segfaults, 
->> corruption
->> of glibc data structures, gcc ICEs etc etc - seems most noticable 
->> during
->> tasks with heavy I/O load.
->> 
->> My hardware is a DS15 (Titan), so only slightly newer than the 
->> Tsunamis
->> mentioned earlier.  The problem is greatly exacerbated when using a
->> machine-optimized kernel (CONFIG_ALPHA_TITAN) over one with
->> CONFIG_ALPHA_GENERIC.  But it still doesn't go away on a generic 
->> kernel,
->> just pops up less often, usually very I/O heavy tasks like checking 
->> out a
->> tag in the kernel repo.
->> 
->> However all of this seems to be dependent on CONFIG_COMPACTION.  With 
->> this
->> toggled off all problems disappear, regardless of other options.  I 
->> tried
->> reverting the commit 88dbcbb3a4847f5e6dfeae952d3105497700c128 
->> mentioned
->> earlier in the thread (the structure has moved to a different file but 
->> was
->> otherwise the same), but it unfortunately did not make a difference.
->> 
->> Since this doesn't seem to have a known cause or an easy fix, would it 
->> be
->> reasonable to just add a Kconfig dep to disable it automatically on 
->> alpha?
-> 
-> Thanks for report. I guess this just confirms that migration of 
-> pagecache
-> pages is somehow broken on Alpha. Maybe we are missing to flush some 
-> cache
-> specific for Alpha? Or maybe the page migration code is not safe wrt 
-> the
-> peculiar memory ordering Alpha has... I think this will need someone 
-> with
-> Alpha HW and willingness to dive into MM internals to debug this. Added
-> Vlasta to CC mostly for awareness and in case it rings some bells :).
-
-Hi, doesn't ring any bells unfortunately. Does corruption also happen 
-when
-mmapping a file and applying mbind() with MPOL_MF_MOVE or 
-migrate_pages()?
-That should allow more controlled migration experimens than through
-compaction. But that would also need a NUMA machine or a fakenuma 
-support,
-dunno if alpha has that?
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

@@ -2,231 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88C85A27A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02D45A2775
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344240AbiHZMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S245692AbiHZMM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344226AbiHZMTE (ORCPT
+        with ESMTP id S229917AbiHZMMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:19:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F4DEA7A;
-        Fri, 26 Aug 2022 05:18:42 -0700 (PDT)
+        Fri, 26 Aug 2022 08:12:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CADDA93;
+        Fri, 26 Aug 2022 05:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661516322; x=1693052322;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cod6y9BV4MmE8AUriWIbGWZoeNxV9YeHCqFPn2OmOAQ=;
-  b=Vx/4ESCQP6NKbPSA0zXfLsaU3CAzqdBngr1KNE8xLUDYhG1GNLxbcHeF
-   pWnO+xX3SS0RjfnBzwv1hcFOwKHko0S2wx3v6BcPt2VFYgcLKsoMKnAGL
-   95+ivv+vIzMCALf7qS+qPsYmfFRsyCLoDNnloZTUAkRpW2jOl3jpRhmV0
-   PRxZh60yyq3VuO3lyVshR+ZPPuU6Hn+F4uJ4flAuTbMItemDsmgc24pP5
-   YMoQdJyTKdQq0/cYjEfu2xgHeheme7wbF7CjJcX1YxqeGQ9w6fRglK118
-   sPmeajZ15Sv33YCaeiJvMcrZ40oU1xDNpJbn/7kC4Q+9iPiiRtq4lyDoG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="320587443"
+  t=1661515973; x=1693051973;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=8gzeq3HsKshBpNjIIChQDXSz7Xg1mcO3yxgdPGuVa2A=;
+  b=Gm0FsFNVYtMIw82tYTf+GLrn3cxVX3qlqqUBH0bZ7n3oEGGie4gahSGr
+   4xCGcZHP3iLZO09rcuwJnhjRKglQONhlTJtn1R3c+6h3L/6AevD6waC53
+   KDzqHioXHlmdlcMt49ADYRKl17ffF4HmO42f2yyEWdLxvvb1/maobyk4Y
+   Qa2YCw0Yv/Kd+QqAUMIfSY7XAHo+X+jk0e3PFyxlpxJTA/zYA95gPdGW9
+   Ni7TvGiYAh3L/aOwEhUmaqEHpQ63Qxu/5PHv3yo/Xgx0K3A0JKJhsomIE
+   spTW77D3YZyYt0dOnseX7Za+lu9O0uCLyu8P5NEmtv2/Z5nBE2Lt83una
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295764431"
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="320587443"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 05:18:42 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="295764431"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 05:12:52 -0700
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="606747880"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 26 Aug 2022 05:18:37 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH v12 17/17] iommu: Rename iommu-sva-lib.{c,h}
-Date:   Fri, 26 Aug 2022 20:11:41 +0800
-Message-Id: <20220826121141.50743-18-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220826121141.50743-1-baolu.lu@linux.intel.com>
-References: <20220826121141.50743-1-baolu.lu@linux.intel.com>
+   d="scan'208";a="640034953"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 05:12:40 -0700
+Message-ID: <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
+Date:   Fri, 26 Aug 2022 15:12:34 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-17-irogers@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220824153901.488576-17-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename iommu-sva-lib.c[h] to iommu-sva.c[h] as it contains all code
-for SVA implementation in iommu core.
+On 24/08/22 18:38, Ian Rogers wrote:
+> Add annotations to describe lock behavior. Add unlocks so that mutexes
+> aren't conditionally held on exit from perf_sched__replay. Add an exit
+> variable so that thread_func can terminate, rather than leaving the
+> threads blocked on mutexes.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
+>  1 file changed, 29 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> index 7e4006d6b8bc..b483ff0d432e 100644
+> --- a/tools/perf/builtin-sched.c
+> +++ b/tools/perf/builtin-sched.c
+> @@ -246,6 +246,7 @@ struct perf_sched {
+>  	const char	*time_str;
+>  	struct perf_time_interval ptime;
+>  	struct perf_time_interval hist_time;
+> +	volatile bool   thread_funcs_exit;
+>  };
+>  
+>  /* per thread run time data */
+> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
+>  	prctl(PR_SET_NAME, comm2);
+>  	if (fd < 0)
+>  		return NULL;
+> -again:
+> -	ret = sem_post(&this_task->ready_for_work);
+> -	BUG_ON(ret);
+> -	mutex_lock(&sched->start_work_mutex);
+> -	mutex_unlock(&sched->start_work_mutex);
+>  
+> -	cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+> +	while (!sched->thread_funcs_exit) {
+> +		ret = sem_post(&this_task->ready_for_work);
+> +		BUG_ON(ret);
+> +		mutex_lock(&sched->start_work_mutex);
+> +		mutex_unlock(&sched->start_work_mutex);
+>  
+> -	for (i = 0; i < this_task->nr_events; i++) {
+> -		this_task->curr_event = i;
+> -		perf_sched__process_event(sched, this_task->atoms[i]);
+> -	}
+> +		cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+>  
+> -	cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+> -	this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+> -	ret = sem_post(&this_task->work_done_sem);
+> -	BUG_ON(ret);
+> +		for (i = 0; i < this_task->nr_events; i++) {
+> +			this_task->curr_event = i;
+> +			perf_sched__process_event(sched, this_task->atoms[i]);
+> +		}
+>  
+> -	mutex_lock(&sched->work_done_wait_mutex);
+> -	mutex_unlock(&sched->work_done_wait_mutex);
+> +		cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+> +		this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+> +		ret = sem_post(&this_task->work_done_sem);
+> +		BUG_ON(ret);
+>  
+> -	goto again;
+> +		mutex_lock(&sched->work_done_wait_mutex);
+> +		mutex_unlock(&sched->work_done_wait_mutex);
+> +	}
+> +	return NULL;
+>  }
+>  
+>  static void create_tasks(struct perf_sched *sched)
+> +	EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+> +	EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+>  {
+>  	struct task_desc *task;
+>  	pthread_attr_t attr;
+> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
+>  }
+>  
+>  static void wait_for_tasks(struct perf_sched *sched)
+> +	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> +	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>  {
+>  	u64 cpu_usage_0, cpu_usage_1;
+>  	struct task_desc *task;
+> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+>  }
+>  
+>  static void run_one_test(struct perf_sched *sched)
+> +	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> +	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>  {
+>  	u64 T0, T1, delta, avg_delta, fluct;
+>  
+> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
+>  	print_task_traces(sched);
+>  	add_cross_task_wakeups(sched);
+>  
+> +	sched->thread_funcs_exit = false;
+>  	create_tasks(sched);
+>  	printf("------------------------------------------------------------\n");
+>  	for (i = 0; i < sched->replay_repeat; i++)
+>  		run_one_test(sched);
+>  
+> +	sched->thread_funcs_exit = true;
+> +	mutex_unlock(&sched->start_work_mutex);
+> +	mutex_unlock(&sched->work_done_wait_mutex);
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-Tested-by: Tony Zhu <tony.zhu@intel.com>
----
- drivers/iommu/{iommu-sva-lib.h => iommu-sva.h}  | 6 +++---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c     | 2 +-
- drivers/iommu/intel/iommu.c                     | 2 +-
- drivers/iommu/intel/svm.c                       | 2 +-
- drivers/iommu/io-pgfault.c                      | 2 +-
- drivers/iommu/{iommu-sva-lib.c => iommu-sva.c}  | 2 +-
- drivers/iommu/iommu.c                           | 2 +-
- drivers/iommu/Makefile                          | 2 +-
- 9 files changed, 11 insertions(+), 11 deletions(-)
- rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (95%)
- rename drivers/iommu/{iommu-sva-lib.c => iommu-sva.c} (99%)
+I think you still need to wait for the threads to exit before
+destroying the mutexes.
 
-diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva.h
-similarity index 95%
-rename from drivers/iommu/iommu-sva-lib.h
-rename to drivers/iommu/iommu-sva.h
-index 1b3ace4b5863..7215a761b962 100644
---- a/drivers/iommu/iommu-sva-lib.h
-+++ b/drivers/iommu/iommu-sva.h
-@@ -2,8 +2,8 @@
- /*
-  * SVA library for IOMMU drivers
-  */
--#ifndef _IOMMU_SVA_LIB_H
--#define _IOMMU_SVA_LIB_H
-+#ifndef _IOMMU_SVA_H
-+#define _IOMMU_SVA_H
- 
- #include <linux/ioasid.h>
- #include <linux/mm_types.h>
-@@ -72,4 +72,4 @@ iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
- 	return IOMMU_PAGE_RESP_INVALID;
- }
- #endif /* CONFIG_IOMMU_SVA */
--#endif /* _IOMMU_SVA_LIB_H */
-+#endif /* _IOMMU_SVA_H */
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index e7473e879b3c..c5471fa0299c 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -10,7 +10,7 @@
- #include <linux/slab.h>
- 
- #include "arm-smmu-v3.h"
--#include "../../iommu-sva-lib.h"
-+#include "../../iommu-sva.h"
- #include "../../io-pgtable-arm.h"
- 
- struct arm_smmu_mmu_notifier {
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index f6e145973bc9..a3c5b1a1203b 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -31,7 +31,7 @@
- #include <linux/amba/bus.h>
- 
- #include "arm-smmu-v3.h"
--#include "../../iommu-sva-lib.h"
-+#include "../../iommu-sva.h"
- 
- static bool disable_bypass = true;
- module_param(disable_bypass, bool, 0444);
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index b8c0afc7f0ac..f5ae4f7f916d 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -27,7 +27,7 @@
- 
- #include "iommu.h"
- #include "../irq_remapping.h"
--#include "../iommu-sva-lib.h"
-+#include "../iommu-sva.h"
- #include "pasid.h"
- #include "cap_audit.h"
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 3be41b0291e5..028ad54732c5 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -24,7 +24,7 @@
- #include "iommu.h"
- #include "pasid.h"
- #include "perf.h"
--#include "../iommu-sva-lib.h"
-+#include "../iommu-sva.h"
- #include "trace.h"
- 
- static irqreturn_t prq_event_thread(int irq, void *d);
-diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-index d046d89cec55..e5b8b9110c13 100644
---- a/drivers/iommu/io-pgfault.c
-+++ b/drivers/iommu/io-pgfault.c
-@@ -11,7 +11,7 @@
- #include <linux/slab.h>
- #include <linux/workqueue.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- /**
-  * struct iopf_queue - IO Page Fault queue
-diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva.c
-similarity index 99%
-rename from drivers/iommu/iommu-sva-lib.c
-rename to drivers/iommu/iommu-sva.c
-index 520ec0b4ed85..54b4a66583d4 100644
---- a/drivers/iommu/iommu-sva-lib.c
-+++ b/drivers/iommu/iommu-sva.c
-@@ -6,7 +6,7 @@
- #include <linux/sched/mm.h>
- #include <linux/iommu.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- static DEFINE_MUTEX(iommu_sva_lock);
- static DECLARE_IOASID_SET(iommu_sva_pasid);
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 4dbf9d5436de..9e84f58440dd 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -29,7 +29,7 @@
- #include <trace/events/iommu.h>
- #include <linux/sched/mm.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- static struct kset *iommu_group_kset;
- static DEFINE_IDA(iommu_group_ida);
-diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-index 44475a9b3eea..c1763476162b 100644
---- a/drivers/iommu/Makefile
-+++ b/drivers/iommu/Makefile
-@@ -27,6 +27,6 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
- obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
- obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
- obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
--obj-$(CONFIG_IOMMU_SVA) += iommu-sva-lib.o io-pgfault.o
-+obj-$(CONFIG_IOMMU_SVA) += iommu-sva.o io-pgfault.o
- obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
- obj-$(CONFIG_APPLE_DART) += apple-dart.o
--- 
-2.25.1
+>  	return 0;
+>  }
+>  
 

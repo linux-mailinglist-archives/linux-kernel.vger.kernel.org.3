@@ -2,99 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1F15A30B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFAB5A30C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243911AbiHZU72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S1345048AbiHZVAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiHZU7Z (ORCPT
+        with ESMTP id S234581AbiHZVAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:59:25 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA408E1148;
-        Fri, 26 Aug 2022 13:59:23 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d12so2581771plr.6;
-        Fri, 26 Aug 2022 13:59:23 -0700 (PDT)
+        Fri, 26 Aug 2022 17:00:44 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F5E193A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:00:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=67ANL95e8WHpoIL2CvpIV5IPIXCkv/6nKh73FiYEZTk=;
-        b=biO0zryQaQSqyi8bDdtPfmAl9o+3iq97xCkOIKhxiVmKlGvcUduD2kqjuo/XihSovR
-         jCmir/sMxqgFpUwGE0+obcQBUwULaZx+7azsdItRHZpaTPWwHoqQW5eMacjDaFjAfulm
-         ZilurnwkbOupUHfy00vdLMFTXNYhvJbvdOcgwppj45evuV8NXTzcbaWHaFuIpvwS/xqh
-         v84gT+m6Ht6e1jIEl6ojwrMfk39vFIakBip0EtwK4Hje+CuVM777pW79+8i1tteTosDP
-         7k9qC/irsNCjfNM0i1se8cQZGpK+FwngOPznzHe73Te3w8eIJXnLeV6D/TFWuHnNkLfw
-         J7Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=67ANL95e8WHpoIL2CvpIV5IPIXCkv/6nKh73FiYEZTk=;
-        b=ybP0ifdsCfKJCsxIBYwb5lPv5YaglOj6iVsHdszpbuT2rIJHxZ9hsKiSsHO89gJ0V3
-         ISyyFYI0Ml3noA2vnuK6IT4sDRsDb4O2N1MVwpj6OTRB2ituV1lECvdfCvWW8QDNItyL
-         G2GCthQ2J1QH/DJ9McgTbHB7HD6mxgz/uMyE7xZuukUSSLSYVzFjs5KYuNAzvGP0z9xV
-         90ngPRMnC2GRfItex/67rvsvxmxF2AOygAQfEirI3TdYy6VyPGb4oBVsc/qJdDeir06z
-         +FBQsbX9CRIyg4sjP2yK+z3dP3aOs5EUsayYoF8PUmG5eU3/va+yBVFI8RzDl4U6ISzA
-         5Jvg==
-X-Gm-Message-State: ACgBeo0U3r22a9j1cK9/+aipPKIN0e+0O3z02WfGBeUddw83K/Vb9ZU0
-        aKZqViknhs2TduBFLndB5/A=
-X-Google-Smtp-Source: AA6agR55DguAWBXsemZkDggBZ/fx1IG7675VyXBOjG+uW3E7KIJl6oRC/GTFcRTOz0hqDODPflJBFQ==
-X-Received: by 2002:a17:90b:33d2:b0:1fb:971b:c5e9 with SMTP id lk18-20020a17090b33d200b001fb971bc5e9mr6111510pjb.90.1661547563042;
-        Fri, 26 Aug 2022 13:59:23 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa79a4e000000b00537cfbb2810sm1695129pfj.65.2022.08.26.13.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 13:59:22 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 26 Aug 2022 10:59:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        bpf@vger.kernel.org, Aditya Kali <adityakali@google.com>,
-        Serge Hallyn <serge.hallyn@canonical.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        Muneendra Kumar <muneendra.kumar@broadcom.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH 0/4] Honor cgroup namespace when resolving cgroup id
-Message-ID: <Ywk0KCmak/PsGfzL@slm.duckdns.org>
-References: <20220826165238.30915-1-mkoutny@suse.com>
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
+         message-id:subject:cc:to:from:date:from;
+        bh=myF4XsVKC9nbxvlkJR9K0wlD583A6JFQxHsVq1970Xk=;
+        b=TqfYYyvR9dXFmEBf8PbuiJpavrxrig0INxGFgTp+vZbOVyFAtKrATGV+En1p24XkjpOWooS9dt+OE
+         jFkvOyEotn1p6QeSVfn13EDzkWeF4YNrcg6VQfhR6fbt5Y7aDD5hHPp7OqkuW5Y2u7teqNO0jQh9V6
+         EUqd/qnxsqS2hJYsZ9LUHqCqiSnSRErSFPj+8LQcs9Z7bc5JBkoiuiLrdg/woYW6qZ2Kz9Safk3JrL
+         ppKzpavLQ2RzVVwxwS0vUbgYPsIAA93G+2c5lZLrItLOiCXZHVsLgmLQXL/JB7YRFnLTIzy3y+T9RC
+         7DNUpSG4XipHD6tGZ9iuYGTLfgo+e4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
+         message-id:subject:cc:to:from:date:from;
+        bh=myF4XsVKC9nbxvlkJR9K0wlD583A6JFQxHsVq1970Xk=;
+        b=3W9l3EbuTKr49ESV+jKgqXjRAOG0JFQkW7ZcDW7d9D4mev1qLo+Jwpku0XELpCML+9Q01VGRtAPmD
+         jj0wW+BDQ==
+X-HalOne-Cookie: d1f4ea6dcbb9f14bad97218b6c931d32a5291b7c
+X-HalOne-ID: 2150669c-2582-11ed-8249-d0431ea8bb10
+Received: from mailproxy2.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 2150669c-2582-11ed-8249-d0431ea8bb10;
+        Fri, 26 Aug 2022 21:00:35 +0000 (UTC)
+Date:   Fri, 26 Aug 2022 23:00:34 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Yangxi Xiang <xyangxi5@gmail.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
+        nick black <dankamongmen@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] tty/vt: Remove printable variable
+Message-ID: <Ywk0cq2k7Nhyygyy@ravnborg.org>
+References: <20220826202419.198535-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220826165238.30915-1-mkoutny@suse.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220826202419.198535-1-daniel.vetter@ffwll.ch>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 06:52:34PM +0200, Michal Koutný wrote:
-> Cgroup id is becoming a new way for userspace how to refer to cgroups it
-> wants to act upon. As opposed to cgroupfs (paths, opened FDs), the
-> current approach does not reflect limited view by (non-init) cgroup
-> namespaces.
+Hi Daniel,
+
+On Fri, Aug 26, 2022 at 10:24:19PM +0200, Daniel Vetter wrote:
+> Every since the 0.99.7A release when console_register() was introduced
+> it's become impossible to call vt_console_print (called
+> console_print() back then still) directly. Which means the
+> initialization issue this variable protected against is no more.
 > 
-> This patches don't aim to limit what a user can do (consider an uid=0 in
-> mere cgroup namespace) but to provide consistent view within a
-> namespace.
+> Give it a send off with style and let it rest in peace.
+> 
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
+> Cc: nick black <dankamongmen@gmail.com>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Cc: Yangxi Xiang <xyangxi5@gmail.com>
+> Cc: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+> ---
+>  drivers/tty/vt/vt.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index ae9c926acd6f..4d29e4a17db7 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -157,7 +157,6 @@ static void set_palette(struct vc_data *vc);
+>  
+>  #define vt_get_kmsg_redirect() vt_kmsg_redirect(-1)
+>  
+> -static int printable;		/* Is console ready for printing? */
+>  int default_utf8 = true;
+>  module_param(default_utf8, int, S_IRUGO | S_IWUSR);
+>  int global_cursor_default = -1;
+> @@ -3085,8 +3084,6 @@ static void vt_console_print(struct console *co, const char *b, unsigned count)
+>  	int kmsg_console;
+>  
+>  	/* console busy or not yet initialized */
+> -	if (!printable)
+> -		return;
+>  	if (!spin_trylock(&printing_lock))
+>  		return;
 
-Applied 1-3 to cgroup/for-6.1. The branch will be stable, so please feel
-free to pull from bpf/for-next.
+Speaking on locks - it the printing_lock necessary. Or will the caller
+serialize the calls to write()?
 
-Thanks.
+	Sam
 
--- 
-tejun
+>  
+> @@ -3537,7 +3534,6 @@ static int __init con_init(void)
+>  	pr_info("Console: %s %s %dx%d\n",
+>  		vc->vc_can_do_color ? "colour" : "mono",
+>  		display_desc, vc->vc_cols, vc->vc_rows);
+> -	printable = 1;
+>  
+>  	console_unlock();
+>  
+> -- 
+> 2.37.2

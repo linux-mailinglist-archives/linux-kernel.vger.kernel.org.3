@@ -2,117 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B165A20DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAA05A20DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244985AbiHZGYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S244996AbiHZG0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiHZGY3 (ORCPT
+        with ESMTP id S230005AbiHZG0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:24:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB623A3467;
-        Thu, 25 Aug 2022 23:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661495068; x=1693031068;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dIU8pZHYiZ6O4dmorHDdZWn/aLhwXgrJJMoBlipzCRA=;
-  b=FTO2r+Q9yLp4ncHeptMJdglilmmhNvwXvtPP2NiJmcVItrXnxkFpWTdJ
-   Ft9+GbK+aN5nNySbhhS1Zw15coh9/F+4QMYd1qLH/Hr5CB09+D8NEYllM
-   oeca5trEqhHdsbAr9v8maBn56RgfZAmXplZjxx2+CE0hVncUk6pDPaPHZ
-   Tt6MRlVSdCXD+/+Y1Ziu0BTd6axKhdJaVP/BbUHUkbV73/mII6k7ztipI
-   9xXCeE3rkqqJ3vpLi+wHH98X3+3UrbUztzHgIIk3lErzdZ8UIXGjxa82V
-   yyZeaMDf9vXCbgKvdEcP/uYQPSxIBGAlRr8wJC7Nn5+xv1ROwh+/IKLiR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295709701"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="295709701"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 23:24:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="678755446"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.30.28]) ([10.255.30.28])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 23:24:26 -0700
-Message-ID: <705268cd-6280-21dd-e825-62d416d64f42@linux.intel.com>
-Date:   Fri, 26 Aug 2022 14:24:24 +0800
+        Fri, 26 Aug 2022 02:26:11 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4665B05D;
+        Thu, 25 Aug 2022 23:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1661495169; x=1693031169;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ru/eWDImchhw6Kz9v2fJ5UGl0jpVy/CFCbFYw8iOmFs=;
+  b=g2wVjwKDywR5wUjU+WpROA4mswRyDGjrdlnyUWAB4WtNohrPLIxM1rfm
+   i8hHrlHOn8ru3vTH1xkTwa/yOCErRUQNdk0nxoDnulCe5l1TV9tZS7jke
+   fHPbrG+hc3t4eO21/9Ndhd2glWyhyar8+/9CSOTHajRR/zA1YedX6yCQj
+   uhctC/i6qj5xvtNwGGW7Vfd5xHdvsiZ84tw3rRTY8yIwA0CZTx3GSLPtp
+   xzorXS1qhltGQXD/qCHKCoXmQPLNcm7OYK8noM3HVbq5cfkBZHM9iNuDF
+   RMuWCv0l8Fen9aQP5xWdyL0hqQUyTg45kzYvpVn73ejKeqDAqtvqtBWdM
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,264,1654552800"; 
+   d="scan'208";a="25817877"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 26 Aug 2022 08:26:08 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 26 Aug 2022 08:26:08 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 26 Aug 2022 08:26:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1661495168; x=1693031168;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=Ru/eWDImchhw6Kz9v2fJ5UGl0jpVy/CFCbFYw8iOmFs=;
+  b=GZlq0KSirEFrHnj29JRewBtdV51m86yAQ2aYucZ1AyNT5t+C/WnS0w0l
+   2KjJwivgu3XTmqwC6UdW4OGXj2gyb+R+GCCm4H1yGqXWuyg9hDY40VAkv
+   3BCMWM3gJQ3ASR7r89Em8RWLBrx3YxrAdbcCilr4DcqKWKUhw3XwxZXKX
+   VgopHAhotboPVEi01OdZ1/GtodJp9uLvhJBYsx/F2r+jjbE8dwU1NpBX/
+   5eIV4t+eSQCqLpj+mZ7a6JpDG5cPF/f4mfLfQh5vt6dQCuMDp5RKnKgI9
+   N/mmD1BD4fT6Ehqnz/ZLFTgKHJBHEMQPmnhfkcQCPBHfp1birUz7aXObO
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,264,1654552800"; 
+   d="scan'208";a="25817876"
+Subject: Re: [PATCH v1 0/2] Fix the wrong order of phy callbacks
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 26 Aug 2022 08:26:07 +0200
+Received: from steina-w.localnet (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9E1C8280056;
+        Fri, 26 Aug 2022 08:26:07 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, vkoul@kernel.org,
+        marcel.ziswiler@toradex.com, kishon@ti.com,
+        linux-arm-kernel@lists.infradead.org, hongxing.zhu@nxp.com,
+        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Date:   Fri, 26 Aug 2022 08:26:05 +0200
+Message-ID: <4054884.5fSG56mABF@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v8 018/103] KVM: TDX: Stub in tdx.h with structs,
- accessors, and VMCS helpers
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sagi Shahar <sagis@google.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <d88e0cee35b70d86493d5a71becffa4ab5c5d97c.1659854790.git.isaku.yamahata@intel.com>
- <651c33a5-4b9b-927f-cb04-ec20b8c3d730@linux.intel.com>
- <YwT0+DO4AuO1xL82@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <YwT0+DO4AuO1xL82@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Richard,
 
-On 2022/8/23 23:40, Sean Christopherson wrote:
-> On Tue, Aug 23, 2022, Binbin Wu wrote:
->> On 2022/8/8 6:01, isaku.yamahata@intel.com wrote:
->>> +static __always_inline void tdvps_vmcs_check(u32 field, u8 bits)
->>> +{
->>> +	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && (field) & 0x1,
->>> +			 "Read/Write to TD VMCS *_HIGH fields not supported");
->>> +
->>> +	BUILD_BUG_ON(bits != 16 && bits != 32 && bits != 64);
->>> +
->>> +	BUILD_BUG_ON_MSG(bits != 64 && __builtin_constant_p(field) &&
->>> +			 (((field) & 0x6000) == 0x2000 ||
->>> +			  ((field) & 0x6000) == 0x6000),
->>> +			 "Invalid TD VMCS access for 64-bit field");
->> if bits is 64 here, "bits != 64" is false, how could this check for "Invalid
->> TD VMCS access for 64-bit field"?
-> Bits 14:13 of the encoding, which is extracted by "(field) & 0x6000", encodes the
-> width of the VMCS field.  Bit 0 of the encoding, "(field) & 0x1" above, is a modifier
-> that is only relevant when operating in 32-bit mode, and is disallowed because TDX is
-> 64-bit only.
->
-> This yields four possibilities for TDX:
->
->    (field) & 0x6000) == 0x0000 : 16-bit field
->    (field) & 0x6000) == 0x2000 : 64-bit field
->    (field) & 0x6000) == 0x4000 : 32-bit field
->    (field) & 0x6000) == 0x6000 : 64-bit field (technically "natural width", but
->                                                effectively 64-bit because TDX is
-> 					      64-bit only)
->
-> The assertion is that if the encoding indicates a 64-bit field (0x2000 or 0x6000),
-> then the number of bits KVM is accessing must be '64'.  The below assertions do
-> the same thing for 32-bit and 16-bit fields.
+Am Montag, 22. August 2022, 15:10:54 CEST schrieb Richard Zhu:
+> Refer [1], phy_init() must be called before phy_power_on().
+> This series used to fix the wrong order of the phy_init() and
+> phy_power_on(), introduced by commit 1aa97b002258 ("phy: freescale: pcie:
+> Initialize the imx8 pcie standalone phy driver") Tested on i.MX8MM EVK
+> board when one NVME device is used.
+> 
+> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d
+> rivers/phy/phy-core.c?id=v5.19-rc1#n233
+> 
+> [PATCH v1 1/2] PCI: imx6: Fix the wrong order of phy_init() and
+> [PATCH v1 2/2] phy: freescale: imx8m-pcie: Fix the wrong order of
 
-Thanks for explanation, it is crystal clear to me now.  :)
+Together with your imx8mp patch series on TQMa8MPxl + MBa8MPxL:
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+Thanks again!
+Alexander
 
 
->   
->>> +	BUILD_BUG_ON_MSG(bits != 32 && __builtin_constant_p(field) &&
->>> +			 ((field) & 0x6000) == 0x4000,
->>> +			 "Invalid TD VMCS access for 32-bit field");
->> ditto
->>
->>
->>> +	BUILD_BUG_ON_MSG(bits != 16 && __builtin_constant_p(field) &&
->>> +			 ((field) & 0x6000) == 0x0000,
->>> +			 "Invalid TD VMCS access for 16-bit field");
->> ditto
+

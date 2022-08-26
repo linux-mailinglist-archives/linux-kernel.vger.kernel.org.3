@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E535A21B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7271D5A21B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245231AbiHZHWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S245241AbiHZHXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiHZHWk (ORCPT
+        with ESMTP id S245234AbiHZHXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:22:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B5F4DB43;
-        Fri, 26 Aug 2022 00:22:40 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 09:22:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661498558;
+        Fri, 26 Aug 2022 03:23:02 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E09D25FD;
+        Fri, 26 Aug 2022 00:23:00 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 45B7E24000B;
+        Fri, 26 Aug 2022 07:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661498578;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GQJwizWUZDP3BI9K5yZYcBnhISmXQJvntuw2CVta3II=;
-        b=KZZpkSO4qaRwW67bSXJjY/YP/HPGu14NbRtLiv2aK+v+sYqEIcgMQkEgDnwBMtm6W5HDNB
-        JTzGM5Ne9McUF7ORLicrPYO9ssNEQEoUIlCeb4K9INMi6laExJpeaL5M85XW+lXKw+Pz3Z
-        zGKKKlEaCS6WcNKXmf5RWaBsZRUuzIfkSWbUtQQn0CEoCN4TA8WVrvGS2AOqsOsexL2v28
-        jpl0p96//YJcKBGbQ/O+1I2GtE/sKnrQIrj7rMkzTgUHRQ2LBhXuHO+qull3FwpUXaGHbq
-        4L0baQvDHtybe59BnZXT4LZodIQUJVUnq9R5fHdHlM6/D4CdiQRKiMfFZYxB1w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661498558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GQJwizWUZDP3BI9K5yZYcBnhISmXQJvntuw2CVta3II=;
-        b=u79Zlqto8+LIFUoD2rNHsPmmDaQEm+HcsZsxCrxqtp96SzJ3nfiQj4OiAxDLb6hTW7Qcgt
-        7Hv4QPzsuOhCLfAw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH v2 16/25] usb: gadget: f_tcm: Update state on data write
-Message-ID: <Ywh0vQkRLTrSeExk@linutronix.de>
-References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
- <dd9069e0527f2da04b6567fd17b19545646f4348.1658192351.git.Thinh.Nguyen@synopsys.com>
+        bh=JK9COduMorPgKCAsggz5pvTrJ2MnP3XJ9ZS9Yi4YLmo=;
+        b=k2jQNZTSqbhsDjWsVNPZdeykaB3Jq0J7Z1Bcvt1Vtghj2eeiqZPpEXhoIs4iCFNOST5jQ4
+        tuLiCOCyRU5aD6v3FqfjRu0OztAyIy64lqBQn/GXBu7XUB3+cn7BpxkGs/csa6ngYjvw4F
+        q6QPYxWz8hkcD0inkcTDLHq+jLYeEyA2/zYqITcRDDWGiyFWRGyNjziOQ2Ay1uAjUwJJKP
+        +NCKhoEeOh53Mi0y+JCD6/bP+1a9mL7j2ms0yxd8YrQHZVQW/lm5OdOPzTpReqNWtL9KP+
+        3N9vGd5PbATIxEjEv74YUZvNdFwqZK3pAoq/pAHOPnmzD+5ZfYnwoh7PlZ3x/w==
+Date:   Fri, 26 Aug 2022 09:22:57 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Zhang Jianhua <chris.zjh@huawei.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: fsl-ftm-alarm: Use module_init and add module_exit
+Message-ID: <Ywh00crgSilSfZnC@mail.local>
+References: <20220826070017.2340617-1-chris.zjh@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dd9069e0527f2da04b6567fd17b19545646f4348.1658192351.git.Thinh.Nguyen@synopsys.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220826070017.2340617-1-chris.zjh@huawei.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,46 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-18 18:27:45 [-0700], Thinh Nguyen wrote:
-> When preparing request for data write state, the next state is
-> UASP_SEND_STATUS. When data write completes, the next state is
-> UASP_QUEUE_COMMAND. Without this change, the command will transition to
-> the wrong state.
+On 26/08/2022 15:00:17+0800, Zhang Jianhua wrote:
+> - Use module_init instead of device_initcall.
+> - Add a function for module_exit to unregister driver.
+> 
 
-Why is this needed now, what is the outcome of not having it?
-My point is, was this always broken, worked by chance and broke over
-time while code was changed?
+I can see what you are doing but this doesn't explain why. Also, was
+this tested on any actual hardware?
 
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
 > ---
->  Changes in v2:
->  - Move a related change from TASK MANAGEMENT updating cmd state to
->    UASP_QUEUE_COMMAND to here.
+>  drivers/rtc/rtc-fsl-ftm-alarm.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
->  drivers/usb/gadget/function/f_tcm.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-> index 1e7d29f8aecb..d7318c84af98 100644
-> --- a/drivers/usb/gadget/function/f_tcm.c
-> +++ b/drivers/usb/gadget/function/f_tcm.c
-> @@ -934,6 +934,8 @@ static void usbg_data_write_cmpl(struct usb_ep *ep, struct usb_request *req)
->  	struct usbg_cmd *cmd = req->context;
->  	struct se_cmd *se_cmd = &cmd->se_cmd;
->  
-> +	cmd->state = UASP_QUEUE_COMMAND;
-> +
->  	if (req->status < 0) {
->  		pr_err("%s() state %d transfer failed\n", __func__, cmd->state);
->  		goto cleanup;
-> @@ -976,6 +978,8 @@ static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
->  	req->complete = usbg_data_write_cmpl;
->  	req->length = se_cmd->data_length;
->  	req->context = cmd;
-> +
-> +	cmd->state = UASP_SEND_STATUS;
->  	return 0;
+> diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
+> index c0df49fb978c..28bdc6c97b64 100644
+> --- a/drivers/rtc/rtc-fsl-ftm-alarm.c
+> +++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
+> @@ -332,7 +332,13 @@ static int __init ftm_alarm_init(void)
+>  	return platform_driver_register(&ftm_rtc_driver);
 >  }
 >  
+> -device_initcall(ftm_alarm_init);
+> +static void __exit ftm_alarm_exit(void)
+> +{
+> +	platform_driver_unregister(&ftm_rtc_driver);
+> +}
+> +
+> +module_init(ftm_alarm_init)
+> +module_exit(ftm_alarm_exit)
+>  
+>  MODULE_DESCRIPTION("NXP/Freescale FlexTimer alarm driver");
+>  MODULE_AUTHOR("Biwen Li <biwen.li@nxp.com>");
+> -- 
+> 2.31.0
+> 
 
-Sebastian
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

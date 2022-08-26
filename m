@@ -2,163 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925A95A3101
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B90F5A3102
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242597AbiHZV3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S231247AbiHZVcX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 Aug 2022 17:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiHZV3T (ORCPT
+        with ESMTP id S241925AbiHZVcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:29:19 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2077.outbound.protection.outlook.com [40.107.243.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB3A7226
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:29:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KRe6K+X427otyIvhPTrhnhFSa9W86RKou2KLHrJzfu6CHgne5Xr7sxXVkiWcOnVBaUNAn483Oqk+2o61+hYTQMVQQ3imWykSVUufCNe3hip3+SYLOvRh/xi2kaDNgzu7RwB+l/CvQRXkzuCkjFCDM5NkjCbJi01C9sFE8THSJzZ7V8tDa8XHBFRIOR0AMDTnb1k3heI2LokqbgzwDfHSY/ixkI4hhzdr3uvyB4GG/KG4og6WFzYQH0mLZFbTOoNWNAyLh8SpROY9Vmw3mfYR38F8Yf4/gdCqzSY/2CRWNXcpwgZyza9dmeAt7H7Fire1Cgxv3eGP81AidrnV7iDLRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6waJVi4vDNOeV1nN3PT61iMn2lWbupo19V4i1niclw4=;
- b=EjQnpClzHAgvuB1xU2m6sACEc0IMcjN6G40T9Zg5vKaNS8bC1zW6flECfm6IPCSUPMJtWUikSSFwmX2oXV9t9p3pQ0isAAqnB3nXS1g+EY6+0a/+fGpmchDV+OXGDlk4EcAUWqkEl+O2KfTycC8wNauiCFw8JOiSNNlKt8N7KHPa56pLipjPV8XbdTDX16jY54EgOENfQZbawnfuDFlZRiHWmFyMN5vok1pSK6N8XvPe+riDLqqopQArzPkfiTnjRo1oHSvtk0hMJNPfDNJWvRh0QbAAgERgCfO4zm8xeJvnbpO85ED3D+3mzTI/VP+SiwLYdQlWrAA0425EnZHa1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6waJVi4vDNOeV1nN3PT61iMn2lWbupo19V4i1niclw4=;
- b=s6YMRMfr+XqUHe6BXk/CJtmYppEvXF8OWC4HZeawoPZrGGbqwMOCzxXGaZVkbOSXkaC1OctrxtRaPen059GKSi/J6jcUPkxeXdpAgcDISEJkn6OeL4oKEc7ze73PSMINvrTffx+1ZgEwFoZGaMRcoHnXL/H8ajTXV8TZmFtjps4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DM5PR12MB2392.namprd12.prod.outlook.com (2603:10b6:4:b1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Fri, 26 Aug
- 2022 21:29:15 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::c175:4c:c0d:1396]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::c175:4c:c0d:1396%4]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
- 21:29:14 +0000
-Message-ID: <58903fe7-c4d9-def6-71f4-6173b47fe462@amd.com>
-Date:   Fri, 26 Aug 2022 16:29:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 4/4] x86/sev: Add SNP-specific unaccepted memory
- support
-Content-Language: en-US
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <cover.1661437397.git.thomas.lendacky@amd.com>
- <fe519747d14dd16a64e0e92e4c0354cb2ec55f59.1661437397.git.thomas.lendacky@amd.com>
- <CAAH4kHYVes8wezA+R9uAiNxpYCyDnwewn86tUKmeA=bjmAWGgg@mail.gmail.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <CAAH4kHYVes8wezA+R9uAiNxpYCyDnwewn86tUKmeA=bjmAWGgg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN6PR01CA0020.prod.exchangelabs.com (2603:10b6:805:b6::33)
- To DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+        Fri, 26 Aug 2022 17:32:19 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F389BB5D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:32:17 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-334dc616f86so67154237b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:32:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=i0/vsp+gUvOYuI/yixtkpRQ65mmMRu/3we2IfkmdpkY=;
+        b=qujqa7Fo+CZIzAMqmRWJTjdzxS7/BhQO+/oDbVFgvDC7xR0ti1BffV+5eJ7IkV9pFf
+         /Q+UYgG4Lc5Fly2kJv9/6jYGtbqaSi5YSs5PfmadlizztpC0jpLm71kUJYdot30TCiSC
+         a9vUg74bWrFV5yrO2rsw8DADtLtbW5Ysd9QxHD+6mm0+Aduq+Sk5vGg6hW8EtdRRGtSW
+         exZ8d329gFirRQjy6PSNopg+41l7bKufSjUkcyZp0tQvnMR+udY3SBlbPssrLGE7visn
+         ZVUxRzO8j6oJYlB4FTY0RodNxft+BgN5WEAcmKqnMfUQ3ULe+25ZZG0ApEpdgM4no9hN
+         n7vA==
+X-Gm-Message-State: ACgBeo0nuytvZ4yXteuTFUkxCA5z6mw0QgqA0SmsJvD2Z1y9XpwR+OiP
+        vFkW46by6YUXkjOpk/kvqjDPMAtd+RFk7899h4Q=
+X-Google-Smtp-Source: AA6agR7z2ZI0yKXDqlXkzQUMM3F1fkkF+7niigHfsen99l3nmmzXb9zSmu1ko+Iq+1f7BGMHCGhE2RqaigRfBhn3R/k=
+X-Received: by 2002:a25:becd:0:b0:690:a05c:8103 with SMTP id
+ k13-20020a25becd000000b00690a05c8103mr1471661ybm.381.1661549536354; Fri, 26
+ Aug 2022 14:32:16 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ab69a9af-8f05-4809-973c-08da87aa065f
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2392:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ksHyQJvyvYnwPTZUG8kCz3MsTC19iQnN07ygNct0BQdGciJxXlJd4sObrLA1CV+Pz52vkZ7cGc3j/Ig7WjVpeleHfDY9JaPCaIxFbuVCE9iD72YT4Lmmh9Y1Yj+hcWg+dOazkRN1JmugB1w9grPJNjDaZ5YT0+LJbid0APedyNXUdFZw8SwV3Ii6UT3uvA57DRCs9RXqWwX6NN7QpP0u3c0QuMqL82OKwx+Ojc8T31TMZRpINLbhfNelDu+YuS/xPYkBz9oASHX4Rgd04698GQqaNqiormPeYJABAOPEX/NMnHqsaOYipsiiT2Wmb7MsjZZyLXLsBj3APoodkTpCYbtUAWPiBSWBRHDjTYFL5znaso4O6ZvHxwAe98GFmIKHvTO6LoFvOgVtLSEmVwqSEJwFc2mmqwalmAg3r0JcmJl+nzJFrtsYIWzZWTWFXZCcQEYrD4Lf3AhBT4843gC5+Yhino6yNhDAzK1zTensRztE9TCxvRhCxYA8uteYYq3V1/NNq60kwb3yvqGxNMgvyUMOixNcJUWARU1xZOhPTtavTYYeagrO/BybhLOphBDcRtZskPlJIiz4OjB4qvatqqtqnylTZ+0bB0fLO0FiP8u6DLkh82ZcW1DvWMtzgHUmMe+9mObXk4PFhidVgQXud1TjEss81zK1oeSihcbZuy4EAU+jFqRO9D5EBaGths6UFaQyKP1OghSZObSRlG5g31N7u1CyBq4noxI0L4hdftGgPinmusBApsJuUC99jgzuTawuJ63wCOGvUu4l5UqctuGJsxJELpJQBmcwq15hGLg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(41300700001)(36756003)(8676002)(83380400001)(54906003)(6486002)(6506007)(31686004)(186003)(2616005)(26005)(53546011)(6916009)(316002)(38100700002)(66946007)(6512007)(66476007)(66556008)(478600001)(7416002)(86362001)(5660300002)(31696002)(8936002)(4326008)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVZ6cmNpd2ErSVJ4d1J0NHJ1bGQvdW9GaCtXOVkwQkRvMWpTTnhqYjRwd1E4?=
- =?utf-8?B?QWtwRi9oOXR0M1JyR1RrUkkyck5nNE94dWo5UEpPNkZGNHFKQWp2U1JjNVoy?=
- =?utf-8?B?a05iMkQxVkF5anVWZXlYODlZN3djVEVOaFlUeFIxTDVPd0JTbC85cUVwejcy?=
- =?utf-8?B?c3o5UVphQzMxK2JLZkh6R2lPZTZ4N3RNRVhOSHZHUGVZU0QzOGZxM1h2SGZN?=
- =?utf-8?B?UG8rZlY2eDRPNHd5Q2tNVThUdWt0U3lIckJZZ1NWcEN5aEoyY3U3RXJMYUsr?=
- =?utf-8?B?eksvTnNJd2Z6S1JtekN1M2ZGUTVRWGJtQ1hLUjE0S0k3dmJqMCs4NENFUGNE?=
- =?utf-8?B?L0ZnUGpFWHRZUjFrdng0OE9kQ2N6ME9ISnRJSjc4S3VEZmVUc0tWeXhQZ3pW?=
- =?utf-8?B?ZFRNU0o3aVlrRE13VUhzQ0N4ekZweVpXY3AwSStuRWxOUmNFeFRwaWIya1Bk?=
- =?utf-8?B?Nis3dmxqOEhpemJoa3AvakNVSFg5VWsrbnY2QnBFMC9GRmh5V1dIUU5rcW9x?=
- =?utf-8?B?YXlwVzFCczB5dEtJZzNYdnhmeVBPMGhiNEw3c3FpWG5wYmkzSzdoUm1abXBL?=
- =?utf-8?B?ZW9zdENjckdRVjJEK0VJTjc1eXFkV0Y5cTZvR05XTVVaSG9oYkNkcXg2L2Mz?=
- =?utf-8?B?Q1UrT09Bek02aHdNd1AydjFRenNCS0dnTEFsekZQTEhMZGR3bys0citXb0ZH?=
- =?utf-8?B?UytnUE1OanF2cWtpQ04yMHMzOUs3Mm9HL1Q4dUJCemgyK2R2SkhEcVoyVkNG?=
- =?utf-8?B?TlpWQ3hRTVRWdzdEbi90MFdoRGZYaGlNVFU1UVJoSXRHUDdUWkhNNE9FM015?=
- =?utf-8?B?dFo5TDVMOFJ3NTk5NWNoWHluMEtMQlJkNHhtV3lyTnZqTjlBTnhyNHdGcjN3?=
- =?utf-8?B?VlR3enVtUzAzcU5rYjArRFBDWHFoVkdGbWRia25ERmtITGtzRG10bkorZmta?=
- =?utf-8?B?Y3RDbm1HY0ZCbWNieC9tcVNBQmJ3TVU0TkR4ckFYODRzQ2oxd1IzaTYvY2Z1?=
- =?utf-8?B?U3VuSWxldklEWGozY052OG8wbm1FSTdtbXljUU1rZXBOblM2YWpWb0JZbENK?=
- =?utf-8?B?MG9GbTI4OThSU0pRZHVNdk8rd2ExeEZ6WXFWalhvUldOR2dIamQ4bHNJdTc1?=
- =?utf-8?B?d0ZudWQ3d1doL1NXUUxjN2EzVEZ3bkJMNDZPbkdkUFJEYzNNYlgya0NrMk5E?=
- =?utf-8?B?RWo1K1BFa1ZRQzNVYkViaG8xcFlTWFhTQ3p2UEcxVzAxaDR5V1RwNm9PU3Bu?=
- =?utf-8?B?NW5JOE9MZVNxcjM2TnFqNTFkaUlUZ2hpRkZQL0FTYlBxQmYzS3lJVEUvR0hS?=
- =?utf-8?B?OHA3RjNnSEplTkhmQ0l5REVrMzFGc3k0N0ZQMU5aaFl6RndPNndraGxQbTdo?=
- =?utf-8?B?Zm1BTnVGVTh0RmdsQnN6VEtXTWlKSkJqeEtLVmpJcmxLRTZOVUl1Sko1NGNa?=
- =?utf-8?B?aklFdkhWRDkyaURVdmpaN01PbitZcTBkUGNOQ2piZFhaaWM3WG1YNHYvejNQ?=
- =?utf-8?B?TnA2Z1JIMkdxY2dOR09PZW4vR3ROQkkxQlRVcXJ3c2Y3eGNWZ2dUK2huWkNE?=
- =?utf-8?B?aVpmVFZ2Zm9wUHhhcWRRUlVtUG4zMlFFMWhHRzZMbk15R1F6S2l3Ym9KVWFr?=
- =?utf-8?B?R2kzY3J0dU1ybFpoTFJrZkpwbStPTmxBQnkzdi9veFVLQlF4V1pYRUdZS0I4?=
- =?utf-8?B?Y0paZ09nY2tzRHZvR1hvTU1ac3IwNE9zZTZHWmhhMnNtcU1xL2pIMFlxMGQw?=
- =?utf-8?B?RXB4TTdvNWJtNWVzcnY0K0FxaFh0SzZLSjFTYU5LMXFvaHVMeElJU0pLZjBr?=
- =?utf-8?B?RlBXaWdpZjc5blBTWklFM0Evcm4zQ3QvQjdtU2FtWmtSbk5UQnBVVnVLNTM4?=
- =?utf-8?B?dTZnNUR4Y1c1cnRxem5LZFBKTUJMd0t1N0NzbWJTTUtrMXdzQVprM1YwQW1Z?=
- =?utf-8?B?bmtWcTk2MHFWWWNnYW9ILzBiT3ZqN3lVaWRvUHIreGlVREEyUlNESXhNcGFW?=
- =?utf-8?B?ZC9DOWZkdGU5WUQ4QW9VeEVUR1pjbzZYUGo1R1R2eW8yM0xsYXgxY0RiVGlG?=
- =?utf-8?B?Um9xWXZscU9JNG1iZ0xPQUlQS2c1UUlraUoyaDRUSWZuU3dBdzRZaS96UFFy?=
- =?utf-8?Q?5xxeoe9Kj8umihLbe51TGXoVQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab69a9af-8f05-4809-973c-08da87aa065f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 21:29:14.8558
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YFXSFlf4gglJ4nt9WhcG5uFP6qfezQlT9/y7FfNLyLZBJYRLUsfiGaeekjeyn49d9zwkhp190ECISo1g+eLu2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2392
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-1-mailhol.vincent@wanadoo.fr> <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
+ <YwT+5GGCOKoTjfQZ@zn.tnic> <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
+ <YwUR35I7+5JbLvMM@zn.tnic> <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
+ <YwXkuW3rSYY7ZJT+@zn.tnic> <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
+ <YwYmpK40ju5WUlVZ@zn.tnic>
+In-Reply-To: <YwYmpK40ju5WUlVZ@zn.tnic>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 27 Aug 2022 06:32:05 +0900
+Message-ID: <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/25/22 17:10, Dionna Amalie Glaze wrote:
->>
->> Add SNP-specific hooks to the unaccepted memory support in the boot
->> path (__accept_memory()) and the core kernel (accept_memory()) in order
->> to support booting SNP guests when unaccepted memory is present. Without
->> this support, SNP guests will fail to boot and/or panic() when unaccepted
->> memory is present in the EFI memory map.
->>
->> The process of accepting memory under SNP involves invoking the hypervisor
->> to perform a page state change for the page to private memory and then
->> issuing a PVALIDATE instruction to accept the page.
-> 
-> Thanks for this update! Tests show the boot performance shaves off a
-> good few seconds over eager acceptance, and it'll get better when we
-> have on-demand pinning.
-> 
-> The uncaught #VC exception is still there for 256GB machines and larger though.
+On Wed. 24 Aug. 2022 at 22:24, Borislav Petkov <bp@alien8.de> wrote:
+> On Wed, Aug 24, 2022 at 09:10:59PM +0900, Vincent MAILHOL wrote:
+> > Not exactly, this is TZCNT for x86_64 but for x86, it will be BSF…
+>
+> Not x86 - some old models which do not understand TZCNT, I'm being told.
 
-Any chance of getting a stack trace when this occurs, e.g. adding a 
-WARN_ON() in vc_handle_exitcode() (assuming it happens when logging is 
-enabled)?
+ACK.
 
-Thanks,
-Tom
+> And I'm being also told, "Intel and AMD disagree on what BSF does when
+> passed 0". So this is more mess.
 
-> 
+ACK.
+
+> > It means that __ffs() is not a x86_64 specific function. Each
+>
+> No, not that. The comment "Undefined if no bit exists".
+>
+> On my machine, __ffs(0) - the way it is implemented:
+>
+>         rep; bsf %1,%0
+>
+> is well-defined:
+>
+> "If the input operand is zero, CF is set to 1 and the size (in bits) of
+> the input operand is written to the destination register. Otherwise, CF
+> is cleared."
+
+It is well defined on *your* machine.
+
+On some other machines, it might be undefined:
+"If the content of the source operand is 0, the content of the
+destination operand is undefined."
+https://www.felixcloutier.com/x86/bsf
+
+> Leading to
+>
+> __ffs(0): 0x40
+>
+> i.e., input operand of 64 bits.
+>
+> So on this particular x86 implementation, TZCNT(0) is well defined.
+
+It is here where I do not follow you. OK that on most of the recent
+machines, the compiler will emit a TZCNT and that this instruction is
+well defined for zero. But on some older machines, it will emit BSF,
+and on a subset of those machines, BSF(0) might be undefined.
+
+> So I'd like for that "undefined" thing to be expanded upon and
+> explained. Something along the lines of "the libc/compiler primitives'
+> *ffs(0) is undefined. Our inline asm helpers adhere to that behavior
+> even if the result they return for input operand of 0 is very well
+> defined."
+>
+> Now, if there are some machines which do not adhere to the current hw
+> behavior, then they should be ALTERNATIVEd.
+>
+> Better?
+>
+> > > Back to your patch: I think the text should be fixed to say that both
+> > > ffs() and __ffs()'s kernel implementation doesn't have undefined results
+> >
+> > NACK. __ffs(0) is an undefined behaviour (c.f. TZCNT instruction for
+>
+> NACK, SCHMACK. Read my mail again: "I think the text should be fixed".
+> The *text* - not __ffs(0) itself. The *text* should be fixed to explain
+> what undefined means. See above too.
+>
+> IOW, to start explaining this humongous mess I've scratched the surface
+> of.
+
+Agree that this is only the surface. But, my patch series is about
+constant folding, not about the text of *ffs(). Here, I just *move*
+the existing text, I did not modify anything.
+Can we agree that this is a separate topic? I do not think I am the
+good person to fix that mess (and in all honesty, I am not a domain
+expert in this domain and I am afraid I would just make you lose your
+time if I had to work on this).
+
+
+Yours sincerely,
+Vincent Mailhol

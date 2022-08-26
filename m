@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F20F5A23AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565CC5A23B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245575AbiHZJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S242002AbiHZJEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiHZJDp (ORCPT
+        with ESMTP id S229605AbiHZJER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:03:45 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195CD39B9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:03:43 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id q7so1180796lfu.5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:03:43 -0700 (PDT)
+        Fri, 26 Aug 2022 05:04:17 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3893D39B9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:04:16 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id n15so1190723lfe.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=6wjKp5duJTgVfzr1UXrwjF1SALPZrTw3gPVi12ZjH/g=;
-        b=qzAMa2OWyy36WWaZwRfSzNNZqXwBIqn7RW1geIbwXoLZbxJ20jcuOQ43Pd0nkn9fOb
-         RCX57WrBDnQ1/MtpmUvixjAeiITsndFGd8381UD2uc3E6UxNP3vSDTBAYHb9EL9STfjL
-         bQM576O9O5ND/BnhZhbDaGupllZa2HTbhftLmuVrfydgxE2jGwtgn8usWEKJ0lYMa62L
-         p7/uf3nFQIr5eKPGwd7y30DFVGzuy+sscnKJj+SIw9j8vfs5ozq/P+aGco/UTxF+cZFr
-         mIw65hXoJ151Vp4g47rISWYFjKN3M0eJZgDW8k1Prs2N903GaB8QMDwiDlsZGR+XB4x8
-         32wQ==
+        bh=AjQiG4EgjmYRn7Cg4E7RAYUNnb1Av4V8ZZtkQ1I3e+4=;
+        b=hHIeZDnJuAFCgFgfQpFKWOqQxdQGMecO6XOIfthmP2g9jbqB1VY8dkv94z/m3BeXm4
+         Tf1N4D+Jbpakj+f5VOnzfWR2VNBljEBk98ZwgYJV8lWVsZB2Y/ycZmqsruALQMjV4u22
+         DM8OF4PaoP3NGoKl97AZ5Mkm2Q6ZoP1Klf1BCZw9WbEmyVIEQPMZhKa8k6QEp1HP6BhG
+         6juyhvxxLMe3PkzLHn7X8GoOgX2OlA+UzGFznNEpiE5AvaodjNKejZj1sZ11XJFLKiav
+         uOUsYcOtzgVxSlKA7Dh3rSXWkfeKmVHDVLyQI2ymJM73+wT9NCyM23ibDBCE50yAZowe
+         ctjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=6wjKp5duJTgVfzr1UXrwjF1SALPZrTw3gPVi12ZjH/g=;
-        b=jEnfTiFb9SZLyldDSAzpgJ0jfW/g9FAD7lExtUoelQHwbRi/GBKqaI3tQgQ7bWU4Ae
-         3e+/8a4qMDWvcr7jW4UryeI4VA5aWFXkufgXW8ao5ZNR0/pNK0yfwKWYOlsPRQYfaegk
-         xc1IvSV+Ev/nylaYKzRfxv6FHR9rHRReWWJuE8CGLo1bRs1OPN5ZsFbHVWAGFRIqhFhL
-         qD6c9KECsYP2tFTCXvB+QSyGpFdNsLTo+nfCtBt/wBudo7QkOkduAtRjd2QmI42lQLLa
-         TRql66xTpRtC+3bdJTwGJDx5ldFDdv4JOw6w+tOYY73aHTUJ9QGQrndodexq0NXHXIsW
-         SjNw==
-X-Gm-Message-State: ACgBeo3uWTOkQDPq+2IvmgWJOE5dxe/Qeqt6VLpkVMRCvcfVR95OY22j
-        FGKPhF2MeFGqO+ZtZeUrNZshWQ==
-X-Google-Smtp-Source: AA6agR4CyEq8JY4VnBVKnVhOwimuVLC9QM98RVtC/yFTvCc2rvMTc7BcK1xzXFH+y17DGL5I65x8Kw==
-X-Received: by 2002:a05:6512:1087:b0:492:e36c:d6c6 with SMTP id j7-20020a056512108700b00492e36cd6c6mr2094268lfg.502.1661504622340;
-        Fri, 26 Aug 2022 02:03:42 -0700 (PDT)
+        bh=AjQiG4EgjmYRn7Cg4E7RAYUNnb1Av4V8ZZtkQ1I3e+4=;
+        b=UrVmqp3NDWUBV5ev5sTcG3c8s29KI5toRoK22ZKn6dfaQsoBpLcz/rm0F6iNw7oKJP
+         v6LbKfvC+K2ipq8nveAyIpcFf1fgbibtlDPQpMFTzxvqkMA+xJdH3Uco8eoPOHpzi3+6
+         nkKh20XkHZwJXz/MFuwJY/w2U4yig0VS3D2fDq6JxkY69ndbafTDrd3MlE9MeWi9O5Dz
+         sl3m8etDntUizGk2fTQZVZLnvcgrJR0s43HFAREMfEPAZwt+j3mQrN97ChmHePfgbvFM
+         kvYGTLSJwRK3GaeH+XMw+1k8ZxiLs84idP0YXgJDplJM0Gw4Avlkf8IfPLWTu3nH+cby
+         Iy3Q==
+X-Gm-Message-State: ACgBeo0y1Gq/5Q2TBPA3snwY4l6Udv85xga0lPApM/YYndv+HXWrO4/A
+        N78HF0LMRG/QX5ZXVtP+cV0oKg==
+X-Google-Smtp-Source: AA6agR7dh79FCl2FsfmNeeOKbVCCJZcOlRaDjGQ/56qG/mm45vx3UOGF5F3lMLWqud1gracnsstj/g==
+X-Received: by 2002:a05:6512:b1c:b0:492:8835:1e4c with SMTP id w28-20020a0565120b1c00b0049288351e4cmr2095766lfu.442.1661504655030;
+        Fri, 26 Aug 2022 02:04:15 -0700 (PDT)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac24e84000000b00492de54940asm318699lfr.82.2022.08.26.02.03.39
+        by smtp.gmail.com with ESMTPSA id d11-20020a056512368b00b00492e10b1723sm310683lfs.139.2022.08.26.02.04.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 02:03:41 -0700 (PDT)
-Message-ID: <c49749ed-5fce-6d91-b114-e4e0daf64042@linaro.org>
-Date:   Fri, 26 Aug 2022 12:03:34 +0300
+        Fri, 26 Aug 2022 02:04:14 -0700 (PDT)
+Message-ID: <bd791d9b-3b64-22ab-723c-86003c25554f@linaro.org>
+Date:   Fri, 26 Aug 2022 12:04:13 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH v2 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
+Subject: Re: [PATCH v2 3/3] drm/msm/dp: Get rid of
+ dp_ctrl_on_stream_phy_test_report()
 Content-Language: en-GB
 To:     Stephen Boyd <swboyd@chromium.org>,
         Rob Clark <robdclark@gmail.com>,
@@ -65,9 +66,9 @@ Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         freedreno@lists.freedesktop.org,
         Kuogee Hsieh <quic_khsieh@quicinc.com>
 References: <20220623002540.871994-1-swboyd@chromium.org>
- <20220623002540.871994-3-swboyd@chromium.org>
+ <20220623002540.871994-4-swboyd@chromium.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220623002540.871994-3-swboyd@chromium.org>
+In-Reply-To: <20220623002540.871994-4-swboyd@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,27 +82,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 23/06/2022 03:25, Stephen Boyd wrote:
-> This struct member is stored to in the function that calls the function
-> which uses it. That's possible with a function argument instead of
-> storing to a struct member. Pass the pixel_rate as an argument instead
-> to simplify the code. Note that dp_ctrl_link_maintenance() was storing
-> the pixel_rate but never using it so we just remove the assignment from
-> there.
+> This API isn't really more than a couple lines now that we don't store
+> the pixel_rate to the struct member. Inline it into the caller.
 > 
 > Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
 > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-
 > ---
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c | 44 ++++++++++++--------------------
+>   1 file changed, 17 insertions(+), 27 deletions(-)
 > 
-> dp_ctrl_on_link() almost doesn't even use the pixel_clk either. It just
-> prints the value. I kept it around because maybe it is useful? But if
-> not, then we can remove even more code.
-
-Feel free to submit a patch and check if anybody (Kuogee? Abhinav?) 
-complains.
 
 -- 
 With best wishes

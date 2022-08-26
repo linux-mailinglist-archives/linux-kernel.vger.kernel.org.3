@@ -2,71 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545165A3137
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764445A313A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345010AbiHZVmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S244905AbiHZVpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238115AbiHZVmo (ORCPT
+        with ESMTP id S231629AbiHZVo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:42:44 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4B2B5A44
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:42:42 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-33dc345ad78so67956257b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=stVd1kvtLgfEmwVkeFj+I3sq6eTvN2FbTADCLAaKivY=;
-        b=cpORBdKyDf9E+dMF/M1oISvK5qEa/G3NcnVQrFQbWWjMPCPEJBCAUOq6kNgiNOCTLd
-         1X40iUjQ1XZA8MuboIiSjjtJ7r0Pcd2l4s2Ti8Y61EqTHP0UQm9w+egw8igqv/EezsXb
-         Ia3GrgGZN9B7BQLEdSeHRWs9aY5C00jVW9xuD+jb0Jay6fZngjiYlOK4MphbusgD1Aro
-         Fps9c2cm18M7TBXnqPY8SNC7LpLUZMzm3ZgUIaqdmXxtdO3HM/8LVJ2nGutNpze43pzt
-         dl0cK9uU6uUfc0prCPyIQhDt0jTyvIhoGYcG3lNWc4lFT/osLNNWPvyfXjrd1EEVUChR
-         RUTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=stVd1kvtLgfEmwVkeFj+I3sq6eTvN2FbTADCLAaKivY=;
-        b=kiUn524cQ0Sq6/rkxomg7gHRHmC6t2iFIDK8Bj2/nAdAvrbBt+4dNjmspeQUiBxQuW
-         8yGA+XhGrW0S7Cc8rk92h00EepGD3ECK6eP/MzRQFy0TG9Wq8Gg9hIqxjW0ahKIeu9uW
-         uX/Y8kJ9buKQVB+gnn9cjfuOKZv/u+0E343N0gDJwDe/Vb6IBiFyKgbf7FCwlCvphCdG
-         wQAfkRmQoOvLf8tTTZ57yhoZBga/VDL3RY0561KUVRACzjYl6eIFajiEDUd0i7tQR8HJ
-         fb0YejPvL2zGK78cmtYqaQwytt46vNMdBGPbHxrNCYqfX8hw18zfEiY0YTWXYiGFslWv
-         G7Cg==
-X-Gm-Message-State: ACgBeo0TTohAkfx8Z1pAqi7L87Chw2299PiYJfpkaW+xxDKJDqTKr2MI
-        tmDXpIDPRMg1UaS9F5CVFQPXrECqSFnZ0UhW2QKo1Q==
-X-Google-Smtp-Source: AA6agR7MUxUWlWIUrcYRP1p+BJKCa/BwK4c0Lfj4vCbAboDXjIK3nknSMyrkg2wxgWFegS5KCUPLDRxJTC7ctbNQrx0=
-X-Received: by 2002:a05:6902:3c6:b0:694:1088:5448 with SMTP id
- g6-20020a05690203c600b0069410885448mr1577517ybs.410.1661550162253; Fri, 26
- Aug 2022 14:42:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220825104422.14156-1-henning.schild@siemens.com> <20220825104422.14156-2-henning.schild@siemens.com>
-In-Reply-To: <20220825104422.14156-2-henning.schild@siemens.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 23:42:30 +0200
-Message-ID: <CACRpkdZgcLsP+q_jRkKX6gXfXErnnF6DPUzLMzVEtZui24chyQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/7] gpio-f7188x: switch over to using pr_fmt
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 26 Aug 2022 17:44:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5064C193E6;
+        Fri, 26 Aug 2022 14:44:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBC8361211;
+        Fri, 26 Aug 2022 21:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3760CC433C1;
+        Fri, 26 Aug 2022 21:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661550295;
+        bh=QbcjoAXjiFWU9vxCFk6C5gnBz0Q3lczFup9Tn77hNSQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n5hExFACqMdBH7Mswx/Mth6yD0o7SJLutKkZHYQ6mNaw4mDHeuSd2nH5Iv1arO5P5
+         zl/MA8SAuA5KUqWAPUhCRMbMHhgBJrlab2dLOSUdHj6GgU22fG6ig7lK7kUjAaHclF
+         YHCENsm1n24TZXAs+s7vkpR/YoBzcROCR/RQ4W4nVFCs+EzCLO8SbzBJQ3LvlK9JhT
+         JXZrsVqsBhj5lp68sbl5jq9RM1Yk/2esehnpFmmQx8q94OHRb/R2GJDaMDCa7F+c6F
+         k+AxRaDOIJTyNrGBu76ru3WXOeGy6PpVbw0cbbDb7aPFfArreG6GkL7A4/rGE3kLPz
+         GMsyCza7l0pXw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oRh8G-0063gX-TC;
+        Fri, 26 Aug 2022 22:44:53 +0100
+Date:   Fri, 26 Aug 2022 22:44:52 +0100
+Message-ID: <87zgfqvfvv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
+        "lznuaa@gmail.com" <lznuaa@gmail.com>
+Subject: Re: [EXT] Re: [PATCH v7 3/4] dt-bindings: irqchip: imx mu work as msi controller
+In-Reply-To: <PAXPR04MB918607281F6389092924EE6488759@PAXPR04MB9186.eurprd04.prod.outlook.com>
+References: <20220822155130.2491006-1-Frank.Li@nxp.com>
+        <20220822155130.2491006-4-Frank.Li@nxp.com>
+        <20220825212130.GA1705214-robh@kernel.org>
+        <PAXPR04MB9186201A03037BA7DC74D52B88729@PAXPR04MB9186.eurprd04.prod.outlook.com>
+        <871qt2x38f.wl-maz@kernel.org>
+        <PAXPR04MB918607281F6389092924EE6488759@PAXPR04MB9186.eurprd04.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: frank.li@nxp.com, robh@kernel.org, tglx@linutronix.de, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev, lznuaa@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,15 +92,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:44 PM Henning Schild
-<henning.schild@siemens.com> wrote:
+On Fri, 26 Aug 2022 19:59:44 +0100,
+Frank Li <frank.li@nxp.com> wrote:
+> 
+> > And I stand by my initial request. "a" doesn't convey any sort of
+> > useful information. Why not "I" and "II", while we're at it? Or
+> > something even funkier?
+> 
+> MU spec use term "a" and "b",  user have to map "I" an "II" to 
+> "a" and "b" when read MU spec and code. it is not straightforward.
+> 
+> I quote a part of spec. 
+> " The MU is connected as a peripheral under the Peripheral bus on both sides-on
+> the Processor A-side, the Processor A Peripheral Bus, and on the Processor B side,
+> the Processor B Peripheral Bus."
+> 
+> Rob Herring and Marc Zynginer:
+> I can change to any name, which you agree both. 
+> 
+> Some options:
+> 1. "a", "b"
+> 2. "a-side", "b-side"
+> 3. "a-facing", "b-facing"
+> 4. "I", "II"
 
-> Subsequent patches will touch that file, apply some nice to have style
-> changes before actually adding functional changes.
->
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+Use the wording indicated in the spec: "processor-a-side", and
+"processor-b-side". This is what I asked the first place.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+	M.
 
-Yours,
-Linus Walleij
+-- 
+Without deviation from the norm, progress is not possible.

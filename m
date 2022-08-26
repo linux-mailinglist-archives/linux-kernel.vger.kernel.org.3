@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4A65A28AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE855A28AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344368AbiHZNeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S1343761AbiHZNeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344346AbiHZNeF (ORCPT
+        with ESMTP id S1344346AbiHZNeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:34:05 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F36DC5F2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:34:03 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3378303138bso36074877b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:34:03 -0700 (PDT)
+        Fri, 26 Aug 2022 09:34:00 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282B6DC5DE
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:33:59 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id w2so1638166pld.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:33:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=qiR3kqY1FtS7aluiuV2htyDwOrHtB3ABTNirVnY7LY0=;
-        b=Badek9Z3Zw7k7MP3T3YzVdM7CAxTgNBC24Y9sxs8xUcI7ApWgF7W8s+Gcvz5ZVhKP1
-         Gv/BM4JpKuQ0UsB3GLYAcuMHJrwhuMYNb4FXaxY6qW5KzLK0QVcBuDwguYH4jNNxTedj
-         lCUZuv+5g6OWaGpzsg7CujNCCX8jo0zwxY/d62havl0hP9HtOY07Lla1ygso+jhceuRo
-         c6zerpixbQK+eKtQ2/j8/OVTJ7t+7dCHSEbF6H4JAlv0ncMGq4l8alqAwd7ZBJWq49W7
-         dduQbKTdmgNjW5trp2/imaB1kqDb2eJN79QRGfSzutp/zKzz9em/stAFPeeyWGJku245
-         agtQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=rWHO5zmUF7bZRGY8k3CrPBg15/SbyMngXXzYsL3BysI=;
+        b=BVtuM9mKurY9NgLyr5DBTUimx39q+/B6q8hWHrCMcR7ZPHUmKpdIxVzhYTB0Izkrmb
+         Yo+ht1MDnEe3k4E3rztZ/bdCo5yve76+yjrZZi9XR3KXDi6cio1xflou0lnxCtP1jzKP
+         AxB1M6MFuUQqOZ7I8KAFFpBwvfZ+5bPVGofPw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=qiR3kqY1FtS7aluiuV2htyDwOrHtB3ABTNirVnY7LY0=;
-        b=MW+gqLlLrduHL6dl6JDSj2Y04wHpHCGOQlr8VxgHzb+dCwraxIsu9jtcPEwhhSUdFi
-         gdJ4/sa0QVzQPAemVgw9k02XsBLeqw2/Pm6YnTZHBB0t1TkJKtV7pYgx9TUFmP+CZQcJ
-         53e1PjslUcHnDjI606D0i9vmgd9O2RJfK1mQRQRynoH07jkFx/F2k7COUsKnCiMRFICM
-         b31biwXMwD/lUCB+UMUxp+oyAs9VWzEkM/V63QvdbKLpuObp6Lj0F3y2memmAdZtikph
-         GBGGOPh8h69iaqqzkSgiutx7TmHhTJeO+lXm/xtaiKPtlRdEKNn1ev/ESEWt3bQr/9iz
-         Nouw==
-X-Gm-Message-State: ACgBeo1RtYsNESHLoenJkgI2yrVeXEuYJls1DyVy4oQmlpeEyRVIJLaC
-        W3YGSNPyoXqOjSry0JCcGuvtmuf06cr5+CicD1w5Pg==
-X-Google-Smtp-Source: AA6agR4cSYDUjHjKqgs9zKaZ58NNESabUJfIrLT+OTCGH4HwSfACpDx/ctbx5ozgIrEgXjQk7zDpKuMhmKfrTiLRGm0=
-X-Received: by 2002:a05:6902:124e:b0:668:222c:e8da with SMTP id
- t14-20020a056902124e00b00668222ce8damr7302689ybu.383.1661520843052; Fri, 26
- Aug 2022 06:34:03 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rWHO5zmUF7bZRGY8k3CrPBg15/SbyMngXXzYsL3BysI=;
+        b=JKhHjNNojUWNlYAcODXYRyP7G9kgM1JTv7g2tShf4sVcXvmfpcnV2nNrvtSVP5da3P
+         qbDhqj4G5JFDWyw2G+/oGq+tF3uU6snZdESsJCfm4xKiZrXCVmuznS+KAifqPB/khc0v
+         whyRqnWyRUNrI/oRHdsSUB697sRPnQzGgHhfOMQ+Cr5G/PW1O8yaXLu5N9pOYmxvdsif
+         2HTZRw0G0dNw46gW1H8Ab129Bb81fShdZ+8oxypDB5v3N/VbwtRWCeiAesQAoHJu//CT
+         /PCaaRdmlVpxNQTqucSvYZpVIm9ulZAMVFCZjs7jqtx0TtNIuShobBaLhydy35yrIhwU
+         SuSg==
+X-Gm-Message-State: ACgBeo3PZHYlaPPPL7um2R0k/u13+pHEDvtLIl73YhmTrAV+wdE+NlPN
+        Yy9i94u3ALgMq0Gba72zKwSptA==
+X-Google-Smtp-Source: AA6agR5Qd66kzZf/KIFbuWJgshdCyJXTni5AcvbARZ8KIRGS5zRC1A4KOawa1wvaCECwIXC0ycsH1g==
+X-Received: by 2002:a17:902:f54e:b0:173:3c4d:2be4 with SMTP id h14-20020a170902f54e00b001733c4d2be4mr3793540plf.71.1661520838697;
+        Fri, 26 Aug 2022 06:33:58 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:2a3c:773f:ac25:a127])
+        by smtp.gmail.com with UTF8SMTPSA id x196-20020a6286cd000000b00536816c0d4asm1757215pfd.147.2022.08.26.06.33.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 06:33:58 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 06:33:56 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 2/2] clk: qcom: gcc-sc7280: Keep USB GDSC power domains
+ on when USB wakeup is enabled
+Message-ID: <YwjLxODQhuftOY2W@google.com>
+References: <20220822115246.2.If09027f73daa6e1ed95f5eab02326b543c67132e@changeid>
+ <YwS3FCOqIeajMEgz@hovoldconsulting.com>
+ <YwUDjaG6n95Ddij2@google.com>
+ <YwXlsK3pjK/q1xwO@hovoldconsulting.com>
+ <Ywf02oIXEL8G/Heo@google.com>
+ <YwjFD9uHnSxoZHvT@google.com>
+ <YwjGpSXOscDwbvQH@hovoldconsulting.com>
+ <YwjIadKu0Wv2+VDk@google.com>
+ <YwjJlRE1qRskZi/y@google.com>
+ <YwjKG83tmRT0Y6sj@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20220823145649.3118479-6-robh@kernel.org>
-In-Reply-To: <20220823145649.3118479-6-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 15:33:51 +0200
-Message-ID: <CACRpkdZ3syQzLaZJ1aksB6o7Q_xOMGSC1RfT_9iVYgpXHi_mfw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: Add missing (unevaluated|additional)Properties
- on child nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YwjKG83tmRT0Y6sj@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,15 +85,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 4:57 PM Rob Herring <robh@kernel.org> wrote:
+On Fri, Aug 26, 2022 at 03:26:51PM +0200, Johan Hovold wrote:
+> On Fri, Aug 26, 2022 at 06:24:37AM -0700, Matthias Kaehlcke wrote:
+> > On Fri, Aug 26, 2022 at 06:19:37AM -0700, Matthias Kaehlcke wrote:
+> > > On Fri, Aug 26, 2022 at 03:12:05PM +0200, Johan Hovold wrote:
+> > > > On Fri, Aug 26, 2022 at 06:05:19AM -0700, Matthias Kaehlcke wrote:
+> > > > > On Thu, Aug 25, 2022 at 03:16:58PM -0700, Matthias Kaehlcke wrote:
+> > > > > > On Wed, Aug 24, 2022 at 10:47:44AM +0200, Johan Hovold wrote:
+> > > > 
+> > > > > > > The wakeup setting doesn't seem to have anything to do with the genpd
+> > > > > > > issues on sc8280xp and the controller doesn't resume properly regardless
+> > > > > > > of whether the PHYs have been disabled or not during suspend unless the
+> > > > > > > PD is left on.
+> > > > > > 
+> > > > > > I'm essentially seeing the same. USB is hosed after resume unless the PD
+> > > > > > is left on.
+> > > > > > 
+> > > > > > On Chrome OS we currently work around that with a version of commit
+> > > > > > d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller
+> > > > > > status") which was reverted upstream. I'm not sure whether USB worked after
+> > > > > > resume before we enabled wakeup support. I would have sworn it did, but we
+> > > > > > landed an old version of the wakeup patches a long time ago, so my
+> > > > > > memory might be failing me.
+> > > > > 
+> > > > > I need to remind myself that keeping the GDSC on is only needed when the PHYs
+> > > > > are kept on. The PHYs were always off before wakeup support was added, which
+> > > > > is why USB wasn't broken after suspend in the pre-wakeup days.
+> > > > 
+> > > > Ok, so to be clear: if you disable wakeup with my patches applied so
+> > > > that the PD is actually turned off, USB still resumes with only
+> > > > GENPD_FLAG_ACTIVE_WAKEUP set?
+> > 
+> > Actually without GENPD_FLAG_ACTIVE_WAKEUP
+> 
+> Sure, that only comes into play with wakeup enabled. I assume you still
+> need it for USB wakeup to work?
 
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Patch applied to the pinctrl tree for v6.1
-
-Yours,
-Linus Walleij
+Yes, for USB wakeup to work either setting the above genpd flag or (better)
+the ALWAYS_ON flag of the GDSC is needed.

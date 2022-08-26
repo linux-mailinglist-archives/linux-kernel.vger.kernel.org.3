@@ -2,108 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982DC5A307F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409185A3087
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbiHZUfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S1344981AbiHZUhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 16:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiHZUfj (ORCPT
+        with ESMTP id S245076AbiHZUhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:35:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B28719BF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=l9yBgjnvQ2jatRhDizS6B7/K2erN9huFYSQTHU6C+Uc=; b=lDjVlgHKPg9hO6n4vE+KZXaeEu
-        +qGyACcFM1egWnI1toV6oxCKICJi3Ig4NSSOpYorqfaNmdhWDyax6fLtQXdlmWF/GFQ3EN/lLPEPy
-        Tn/127uyV4jwZrZ/5mCAMV1rQ/CUqUkPMV64Q2Lb87o9ggrQtjezISFllQD2qQhLdIv2HL78wg3T9
-        +oOIvOG/Zf8f/ya6ZLesqjcOR16XGyxkQc0y5EokFLgLbmGEhD2U7Sof1jnrP6/7AH1G+qgFJHRD4
-        NstBgffdMBdIHqo0pxL7TkzlkMlFKN4PbMTGiBi8Ounkka1N4bUN0z1RKtIEAnHtmFbw16zcel7ae
-        c53SdsOA==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oRg2u-00Btv6-9M; Fri, 26 Aug 2022 20:35:16 +0000
-Message-ID: <39e063ad-208d-f5f0-9807-eedcf0db1692@infradead.org>
-Date:   Fri, 26 Aug 2022 13:35:13 -0700
+        Fri, 26 Aug 2022 16:37:24 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF17AC88BF;
+        Fri, 26 Aug 2022 13:37:22 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id l16so1197630ilj.2;
+        Fri, 26 Aug 2022 13:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WEfgf2R2DJCDs4AKod2m6jqCNNrqV7+4FPWOEmxw+3A=;
+        b=g8/kHbdWdljV6lk39scxyK+hjzhO3FYwd+XGwNJZSS856AA3+YYk0umH9HZ2LQ6uB1
+         WgVaK5PwdsQ4LiW812qON8c6Lx5eUGHVubtjTD5u0hDQtXh16kAo3KEv1zlgaCOhhzBZ
+         aw+xNrIqGMF7r6CEzA/j3mIJI+hnI/gvDWIiajFuVI5BoTQmSIXCljz9nWGiyN6lZRCx
+         PIWXK/Bv8B/IzdU7tOFT+Sa/UEuD/mkg/t5lEi7aD5ZXABQsnwjdWJiRy6BhYpIDgfZN
+         4TtcQHkXszBxP8tDrpf76uB+CXJzfS+TItNBtHR77cghkhpqhqwF+Hm8dER/JoTWsIYS
+         IpuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WEfgf2R2DJCDs4AKod2m6jqCNNrqV7+4FPWOEmxw+3A=;
+        b=A40NbiAGR/Uo1y4UkgWTgeONHF4uPBZPyv5QDDiaiP/CRD/vrwVLtQyxF6h8S37EbP
+         3NIbaCqNaqBQxVG5OtGUggzqQAmIP2YV7Cw1zRWlLB+7rtIOvFDRZmlhxzd/2GJ+0RQh
+         hlDNHXMJIzDiqGPRL1cU3zBhyEe24WsDLmWxEZ5sAfaZL05mXtI8iIOzoO6bBLlaguBx
+         f16gBU8igqrGeZX2DVIS6fPMAAsviTKiVvoUxrwVbd8TU4ee9VCmBQXROuTKqB0ssX4e
+         PW0r2m+rUV5Vx6/WD9/hvJnCR0cR5yGb3lh/i2FW1pu28Ty6SKFyLOUz4nyGhOxM0pXG
+         DQHg==
+X-Gm-Message-State: ACgBeo0Q3n7uSbbnHuTKlV5dpiCqh9VzwcYPMpCMKWTZUnfu6s2qPnRr
+        Bwfk6ZAgn/cUYHA7M3ivlm4N4ivU34NHPOq64EY=
+X-Google-Smtp-Source: AA6agR4OuuzyTi2F9/KR+kfMeIwGonZgjsgtKhvQSq79lYto57sei+AOJAhU1Hd0a9qqnDRUs5bZS+vBJFX5D/QZkG4=
+X-Received: by 2002:a92:ca4e:0:b0:2ea:3f77:a85 with SMTP id
+ q14-20020a92ca4e000000b002ea3f770a85mr4787935ilo.219.1661546241807; Fri, 26
+ Aug 2022 13:37:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] arch: um: Mark the stack non-executable to fix a binutils
- warning
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, x86@kernel.org
-References: <20220823010830.2675419-1-davidgow@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220823010830.2675419-1-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com> <20220823150035.711534-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220823150035.711534-3-roberto.sassu@huaweicloud.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Fri, 26 Aug 2022 22:36:46 +0200
+Message-ID: <CAP01T75rQZvnk8y+AJr9KDjra1JO8=Q_kuD5TnxJ+4dp455Gyg@mail.gmail.com>
+Subject: Re: [PATCH v13 02/10] btf: Handle dynamic pointer parameter in kfuncs
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/22/22 18:08, David Gow wrote:
-> Since binutils 2.39, ld will print a warning if any stack section is
-> executable, which is the default for stack sections on files without a
-> .note.GNU-stack section.
-> 
-> This was fixed for x86 in commit ffcf9c5700e4 ("x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments"),
-> but remained broken for UML, resulting in several warnings:
-> 
-> /usr/bin/ld: warning: arch/x86/um/vdso/vdso.o: missing .note.GNU-stack section implies executable stack
-> /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1.o: missing .note.GNU-stack section implies executable stack
-> /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms2.o: missing .note.GNU-stack section implies executable stack
-> /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> /usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
-> 
-> Link both the VDSO and vmlinux with -z noexecstack, fixing the warnings
-> about .note.GNU-stack sections. In addition, pass --no-warn-rwx-segments
-> to dodge the remaining warnings about LOAD segments with RWX permissions
-> in the kallsyms objects. (Note that this flag is apparently not
-> available on lld, so hide it behind a test for BFD, which is what the
-> x86 patch does.)
-> 
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcf9c5700e49c0aee42dcba9a12ba21338e8136
-> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> Signed-off-by: David Gow <davidgow@google.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
+On Tue, 23 Aug 2022 at 19:27, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Allow the bpf_dynptr_kern parameter to be specified in kfuncs. Also, ensure
+> that the dynamic pointer is valid and initialized.
+>
+> To properly detect whether a parameter is of the desired type, introduce
+> the stringify_struct() macro to compare the returned structure name with
+> the desired name. In addition, protect against structure renames, by
+> halting the build with BUILD_BUG_ON(), so that developers have to revisit
+> the code.
+>
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  arch/um/Makefile          | 9 ++++++++-
->  arch/x86/um/vdso/Makefile | 2 +-
->  2 files changed, 9 insertions(+), 2 deletions(-)
+>  include/linux/bpf_verifier.h |  3 +++
+>  include/linux/btf.h          |  9 +++++++++
+>  kernel/bpf/btf.c             | 18 ++++++++++++++++++
+>  kernel/bpf/verifier.c        |  4 ++--
+>  4 files changed, 32 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 2e3bad8640dc..55876fbdbae2 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -560,6 +560,9 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+>                              u32 regno);
+>  int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+>                    u32 regno, u32 mem_size);
+> +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> +                             struct bpf_reg_state *reg,
+> +                             enum bpf_arg_type arg_type);
+>
+>  /* this lives here instead of in bpf.h because it needs to dereference tgt_prog */
+>  static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index ad93c2d9cc1c..f546d368ac5d 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -52,6 +52,15 @@
+>  #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
+>  #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
+>
+> +/*
+> + * Return the name of the passed struct, if exists, or halt the build if for
+> + * example the structure gets renamed. In this way, developers have to revisit
+> + * the code using that structure name, and update it accordingly.
+> + */
+> +#define stringify_struct(x)                    \
+> +       ({ BUILD_BUG_ON(sizeof(struct x) < 0);  \
+> +          __stringify(x); })
+> +
+>  struct btf;
+>  struct btf_member;
+>  struct btf_type;
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index e49b3b6d48ad..26cb548420af 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6362,15 +6362,20 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+>
+>                         if (is_kfunc) {
+>                                 bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
+> +                               bool arg_dynptr = btf_type_is_struct(ref_t) &&
+> +                                                 !strcmp(ref_tname,
+> +                                                         stringify_struct(bpf_dynptr_kern));
+>
+>                                 /* Permit pointer to mem, but only when argument
+>                                  * type is pointer to scalar, or struct composed
+>                                  * (recursively) of scalars.
+>                                  * When arg_mem_size is true, the pointer can be
+>                                  * void *.
+> +                                * Also permit initialized dynamic pointers.
+>                                  */
+>                                 if (!btf_type_is_scalar(ref_t) &&
+>                                     !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
+> +                                   !arg_dynptr &&
+>                                     (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+>                                         bpf_log(log,
+>                                                 "arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
+> @@ -6378,6 +6383,19 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+>                                         return -EINVAL;
+>                                 }
+>
+> +                               if (arg_dynptr) {
+> +                                       if (!is_dynptr_reg_valid_init(env, reg,
+> +                                                       ARG_PTR_TO_DYNPTR)) {
+
+Do you intend to really accept all kinds of dynptr here? In the future
+we will get more, and by default ARG_PTR_TO_DYNPTR accepts all, so it
+seems better to start with a small strict subset.
+
+Secondly, you need to also check whether reg is a PTR_TO_STACK inside
+this arg_dynptr branch. It is incorrect to call
+is_dynptr_reg_valid_init for any other type of register. It would also
+be nice to include some tests for that.
 
 
--- 
-~Randy
+
+> +                                               bpf_log(log,
+> +                                                       "arg#%d pointer type %s %s must be initialized\n",
+> +                                                       i, btf_type_str(ref_t),
+> +                                                       ref_tname);
+> +                                               return -EINVAL;
+> +                                       }
+> +
+> +                                       continue;
+> +                               }
+> +
+>                                 /* Check for mem, len pair */
+>                                 if (arg_mem_size) {
+>                                         if (check_kfunc_mem_size_reg(env, &regs[regno + 1], regno + 1)) {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2c1f8069f7b7..aa834e7bb296 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
+>         return true;
+>  }
+>
+> -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> -                                    enum bpf_arg_type arg_type)
+> +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> +                             enum bpf_arg_type arg_type)
+>  {
+>         struct bpf_func_state *state = func(env, reg);
+>         int spi = get_spi(reg->off);
+> --
+> 2.25.1
+>

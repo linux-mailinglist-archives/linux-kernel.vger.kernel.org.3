@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C5F5A2246
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6003F5A224D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245625AbiHZHuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S245645AbiHZHwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245626AbiHZHuO (ORCPT
+        with ESMTP id S245610AbiHZHwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:50:14 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFDB6D54A;
-        Fri, 26 Aug 2022 00:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661500209; x=1693036209;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=lz2nlc39lwdcTUXOc/Lv9g64tJOeRWMEspIuHmIzNNU=;
-  b=JkioT9tq1xRSTmdzLrjInDcipWd0S2LFk0p9kWwHl7Re4ov87KUAZzhq
-   Y4lXp1691yZCaKqWbNgRzR8RDrdURmwOrmA1Mt/+hYjSIqRGncIOd7Yp8
-   8L50AreM5YnQCQKUBZZQxfbUXLYN4Caxd393VxLKHJ84wz1ySFmiCXfjs
-   uFDiJiJamMkrfEsFuJ1zYw2DOFn/4RxqTUAyC+PdO0Od2weUUWsINLF7Z
-   gAn5kjBd761p1Z1cqgaRjhRpgXlWN18TnnjsBhs9agHnfRtyQuw0ZgI5S
-   xnQZJHBME5XBOpYb/2tWxN7gxizZtRlA9+SVQ6lsmgFBI2ZsqHoZjZMSE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295230204"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="295230204"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 00:50:08 -0700
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="639965788"
-Received: from plomuzio-mobl.ger.corp.intel.com (HELO localhost) ([10.252.40.203])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 00:50:05 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-intel tree
-In-Reply-To: <20220826123636.72fbea19@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220826123636.72fbea19@canb.auug.org.au>
-Date:   Fri, 26 Aug 2022 10:50:00 +0300
-Message-ID: <87k06vh2af.fsf@intel.com>
+        Fri, 26 Aug 2022 03:52:01 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7BBD347E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:52:00 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oRU8E-0001SH-B3; Fri, 26 Aug 2022 09:51:58 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oRU8E-0004tJ-0G; Fri, 26 Aug 2022 09:51:58 +0200
+Date:   Fri, 26 Aug 2022 09:51:57 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        Jakub Kicinski <kuba@kernel.org>, UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v3 15/17] net: dsa: microchip: ksz9477: remove
+ unused "on" variable
+Message-ID: <20220826075157.GD2116@pengutronix.de>
+References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+ <20220823080231.2466017-16-o.rempel@pengutronix.de>
+ <20220825205407.jayiksjrnccpknoj@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220825205407.jayiksjrnccpknoj@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> After merging the drm-intel tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/gpu/drm/i915/gt/uc/intel_guc.c: In function 'intel_guc_dump_time_info':
-> drivers/gpu/drm/i915/gt/uc/intel_guc.c:399:9: error: implicit declaration of function 'intel_device_info_print_runtime'; did you mean 'intel_device_info_print'? [-Werror=implicit-function-declaration]
->   399 |         intel_device_info_print_runtime(RUNTIME_INFO(gt->i915), p);
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |         intel_device_info_print
->
-> Caused by commit
->
->   c7d3c8447b26 ("drm/i915: combine device info printing into one")
->
-> interacting with commit
->
->   368d179adbac ("drm/i915/guc: Add GuC <-> kernel time stamp translation information")
->
-> from the drm tree.
+On Thu, Aug 25, 2022 at 11:54:07PM +0300, Vladimir Oltean wrote:
+> On Tue, Aug 23, 2022 at 10:02:29AM +0200, Oleksij Rempel wrote:
+> > This variable is not used on ksz9477 side. Remove it.
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/net/dsa/microchip/ksz9477.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+> > index bfefb60ec91bf..609bd63f4cdb1 100644
+> > --- a/drivers/net/dsa/microchip/ksz9477.c
+> > +++ b/drivers/net/dsa/microchip/ksz9477.c
+> > @@ -1070,7 +1070,6 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
+> >  
+> >  			/* enable cpu port */
+> >  			ksz9477_port_setup(dev, i, true);
+> > -			p->on = 1;
+> >  		}
+> >  	}
+> >  
+> > @@ -1080,7 +1079,6 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
+> >  		p = &dev->ports[i];
+> >  
+> >  		ksz_port_stp_state_set(ds, i, BR_STATE_DISABLED);
+> > -		p->on = 1;
+> >  		if (dev->chip_id == 0x00947700 && i == 6) {
+> >  			p->sgmii = 1;
+> >  		}
+> > -- 
+> > 2.30.2
+> > 
+> 
+> And it seems like it's not used on ksz8 either. The reason I'm saying
+> that is that ksz8_flush_dyn_mac_table() is the only apparent user of
+> p->on, and that only for the case where flushing the FDB of all ports is
+> requested (port > dev->info->port_cnt). But ksz8_flush_dyn_mac_table()
+> (through dev->dev_ops->flush_dyn_mac_table) is only called from DSA's
+> ds->ops->port_fast_age() method, and that will never be requested
+> "for all ports" (and to my knowledge never was in the past, either).
+> Badly ported SDK code would be my guess. So there are more
+> simplifications which could be done.
 
-There's commit f0c70d41e4e8 ("drm/i915/guc: remove runtime info printing
-from time stamp logging") in drm-intel-gt-next removing that line
-altogether.
-
-BR,
-Jani.
-
->
-> I have applied the following merge fix patch for today:
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 26 Aug 2022 12:30:19 +1000
-> Subject: [PATCH] fix up for "drm/i915/guc: Add GuC <-> kernel time stamp translation information"
->
-> interacting with "drm/i915: combine device info printing into one".
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/i915/gt/uc/intel_guc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.c b/drivers/gpu/drm/i915/gt/uc/intel_guc.c
-> index ab4aacc516aa..977278d71182 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc.c
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.c
-> @@ -396,7 +396,7 @@ void intel_guc_dump_time_info(struct intel_guc *guc, struct drm_printer *p)
->  	u32 stamp = 0;
->  	u64 ktime;
->  
-> -	intel_device_info_print_runtime(RUNTIME_INFO(gt->i915), p);
-> +	intel_device_info_print(INTEL_INFO(gt->i915), RUNTIME_INFO(gt->i915), p);
->  
->  	with_intel_runtime_pm(&gt->i915->runtime_pm, wakeref)
->  		stamp = intel_uncore_read(gt->uncore, GUCPMTIMESTAMP);
-> -- 
-> 2.35.1
+Ok, i'll take a look on it as soon as i get one of ksz8 board in my
+fingers.
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

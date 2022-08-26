@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A6B5A23C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBEC5A23C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245189AbiHZJKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S245172AbiHZJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiHZJKE (ORCPT
+        with ESMTP id S237428AbiHZJKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 05:10:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907D42D1FF
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016032F03A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:10:02 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id w22so978569ljg.7
         for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:10:01 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MDYrV4hWYzmVdX;
-        Fri, 26 Aug 2022 17:07:38 +0800 (CST)
-Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 17:09:59 +0800
-Received: from [10.174.176.230] (10.174.176.230) by
- kwepemm600008.china.huawei.com (7.193.23.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 17:09:58 +0800
-Message-ID: <f9a637ac-2146-d430-cffc-f8ec956abfff@huawei.com>
-Date:   Fri, 26 Aug 2022 17:09:57 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=j2KtObeVweB4PtewYavPBdUZLz9VJwwib5xRQ67zdyc=;
+        b=oKatiD/7aR17ObA6DF3MveHscjyhwPg0qhz3TCUeRFLBGKOJXf6NDR9oYbEVbRXUzO
+         B6O5F/uHMUPxl3Q9UWZSLS8+IPMUzbCOXFZV4BEQtycIHZb16hTRjNwCh6Rj4Xr4YjRH
+         kTu3QlmCEFqpygZnHvdXFzHYEWkjLhtCKDMbsrzu8WAgw9O+T92h9c/Y7+FTBttw2UPf
+         4cL3kChUNV/QKrKXSnhFEH1g25t38XfapJw2PcPGg9H79moryop6ylmJAhRKULvZ3UrY
+         wONZnzpvcfWzCIr+HKn2WleikcsQUJQnCkgPHBAuPRzoiJHlwgrvG4G1KYEODqYk2P4u
+         eM+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=j2KtObeVweB4PtewYavPBdUZLz9VJwwib5xRQ67zdyc=;
+        b=tCt1tItjq2Xza426JWOyIflgfZqksaNJ9ZZdVa3tzlNvgKkLOw4iD5iWsuGrbvtZfV
+         VzzRvMgCZxD/+8+UTA7a3MJdU5ypgaYMCX6f86Yzfdx7ebzTNcS0Q7vKkRK3gwWFz8Md
+         KGu+vqmvkpFHyVLPENpJZS1YFGfYQohKeDuq2EOHt7a3Qm4Jo0IKVkYf4g/Idq8KH6hW
+         msjWT8dbhJqP/mGYtr2dQUCTBmBVVH7Mk4J+tW2lNcSQphHPw5/bTDzyouqbqpH8UeFO
+         Kl0tPQb7mzv2je49IkDZKvLRTPERwaGQNomo0a+jMfWcv7JNiNbbOwctWCD1bq3hlKVJ
+         bRCA==
+X-Gm-Message-State: ACgBeo0S8ncDOQFe5BFeDAzjLRXcThYzz2m7pjBOvHW7GJ4b9bqFopEp
+        orklt/2aw04nBh/okMSRf4w9hA==
+X-Google-Smtp-Source: AA6agR48eHVuu7caQCj51Y7Sljt2mlqruCtMZ32WU62CLQcXPd24ORg6/ufVrMRPia1ZCj244CTMFg==
+X-Received: by 2002:a2e:9d5a:0:b0:25e:2c67:edaf with SMTP id y26-20020a2e9d5a000000b0025e2c67edafmr2097255ljj.437.1661505000270;
+        Fri, 26 Aug 2022 02:10:00 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id s3-20020a05651c048300b0025e42174f0csm387180ljc.70.2022.08.26.02.09.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 02:09:59 -0700 (PDT)
+Message-ID: <713dbfbc-0111-f100-bc59-f664a25bdc3d@linaro.org>
+Date:   Fri, 26 Aug 2022 12:09:59 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH -next] sched/deadline: Add start_new_instance helper
-To:     Daniel Bristot de Oliveira <bristot@redhat.com>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <vschneid@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220826031521.13391-1-shangxiaojing@huawei.com>
- <651dbb96-8d6e-53e9-a99f-0bb12f5b2723@redhat.com>
- <893836a5-0aaa-e5e6-81ba-cc9570b9a026@huawei.com>
- <7927ac6e-7738-822a-59ce-09992947f3b4@redhat.com>
-From:   shangxiaojing <shangxiaojing@huawei.com>
-In-Reply-To: <7927ac6e-7738-822a-59ce-09992947f3b4@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.230]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600008.china.huawei.com (7.193.23.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH RESEND] drm/msm/dsi: fix the inconsistent indenting
+Content-Language: en-GB
+To:     sunliming <sunliming@kylinos.cn>, christian.koenig@amd.com,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com
+Cc:     freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        inux-arm-msm@vger.kernel.org, kelulanainsley@gmail.com,
+        kernel test robot <lkp@intel.com>
+References: <20220826084917.95409-1-sunliming@kylinos.cn>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220826084917.95409-1-sunliming@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/08/2022 11:49, sunliming wrote:
+> Fix the inconsistent indenting in function msm_dsi_dphy_timing_calc_v3().
+> 
+> Fix the following smatch warnings:
+> 
+> drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
+> 
+> Fixes: f1fa7ff44056 ("drm/msm/dsi: implement auto PHY timing calculator for 10nm PHY")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-On 2022/8/26 16:57, Daniel Bristot de Oliveira wrote:
-> On 8/26/22 09:40, shangxiaojing wrote:
->>> again, this is not a good function name. Maybe, dl_replenish_new_period() ?
->> right, i have thought like replenish_new_instance, but when i'm making
->> patch,  i was worried that "replenish" is only for ENQUEUE_REPLENISH.
-> I see, but that is a flag, not the action.
->
->> what about dl_start_new_period? which means a new deadline will be set, rather than
-> The thing it is doing is replenishing...
->
->>      dl_se->deadline += pi_of(dl_se)->dl_period;
->>
->> in replenish_dl_entity.
-> that is why I added "new_period"....  so replenish_dl_new_period() to keep the consistency.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-ok, i'll use replenish_dl_new_period in v2.
+> ---
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
->>>> +static inline void start_new_instance(struct sched_dl_entity *dl_se, struct rq *rq)
->>>>
->>>> +{
->>>> +    /* for non-boosted task, pi_of(dl_se) == dl_se */
->>>> +    dl_se->deadline = rq_clock(rq) + pi_of(dl_se)->dl_deadline;
->>>> +    dl_se->runtime = pi_of(dl_se)->dl_runtime;
->>>> +}
->>>> +
->>> -- Daniel
-> -- Daniel
-
-Thanks,
-
-Shang XiaoJing
+-- 
+With best wishes
+Dmitry
 

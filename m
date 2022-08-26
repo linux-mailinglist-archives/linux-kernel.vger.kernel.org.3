@@ -2,174 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB61A5A2002
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697FD5A1FFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244327AbiHZErW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 00:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S244762AbiHZEsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 00:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiHZErT (ORCPT
+        with ESMTP id S244648AbiHZEsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:47:19 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0FACE31B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:47:19 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so473205pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:47:19 -0700 (PDT)
+        Fri, 26 Aug 2022 00:48:02 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BC5CE446
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:48:01 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-33dbbf69b3dso9279217b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:48:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=kylehuey.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=rR0iigeJsPMEDluYstWDFc3cN935FUMoEwAJsGT7cjM=;
-        b=XZBlcnDfJ8AvdIyOUIrFtaQt93ozzW139bgeTsaWUwJywzTFv9qxwL61a8AxVP5YrH
-         jfw1npcuExfWaqEWVSy47GSq/5rwJu5iitEZLBBSRX9wQC8plHCLRtAs0txc4eCaZLVL
-         BODYGiQJo5n9tlx26pw5a93UkTFSg91AyB1FidN3ZQB3cWCwHqkbrNT2ksIwN0M/RyqM
-         utcOeGmC21ozlXelIPtq45YtGGYuwHsci2res+xyLvX2DWvfHt3MP21KMCXr3w3IQOkv
-         YikzjdmNg8Nd8/RXg6TPc5u9LJ/Msf/seW/NKsGxh9rIs1R6l5mrfAdt8T0KGQwlOSvZ
-         xWAQ==
+        bh=baSv0Pn8NKV4CT1RoqMfXK68o2fQcY24x27HhvXMUKI=;
+        b=b8WDemlJLBj3xJVS55uRQRlMy8umsRJbhI12sqSfOUsT5xTdCa1HUm4mqB0iqbIr0E
+         zv/DDPBDFLkikkKkFsmxRWayUv0WIvQLVCd/yFWkHr01Sg9cnnspTdtZFbGN5fl4QAw3
+         wqOtb+LMi6DoOCmdVAB0ZQv4QMZMuimTMJDgdRi8r4d56suCWXh/Pc0c3d3Jnyg5fqGF
+         3XBfP608utZYOXm5DYkTwVqfL30d0HxuPjvxynt/WqjWbLXImnAIDS8klUgQGRAXe5Ci
+         /kyFUvjCA03Snep08L14NN4YkqpeoVCxlqyGm226cbAb8vn6LifW5PdEXlTjlMIuiQ5j
+         7H3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=rR0iigeJsPMEDluYstWDFc3cN935FUMoEwAJsGT7cjM=;
-        b=ln97YRBnkxoHz6JG8jK67MLjBsTYq+h8rSbRgIzgRnUIF86c+iePARZCS6JR50CsHc
-         G8p902NKxWYht/bZmq7ITqD2sJU7jaq4eFv5jPkMhlFw3yjUye3OL520MPe0nlzIxK24
-         6ETekpZThlP/pldNxBUlE2MS1v68uYtDwNjGTeldZnizDVSQQiKBr13iDinvamNR3lZ4
-         TOcWnIiWZGmXS2+sV9NleAshWK7Y86zzeoBsGnt65l/V+zcr8X26hy0tttJ8PjLZyDGD
-         oM9PD32QPGK78oWSkHgBb8WzKCKqATMjGZ4p4bFEebdxnI+r77TyL5o+OBVSnISVD3Yr
-         PY2g==
-X-Gm-Message-State: ACgBeo1drxlQw4Yr5McOZSWBFMwb2aRvSmz++TVAyFuArFEe2djvCG5p
-        6B7rge/5/yTw8NYAMW4v/2slbSIaPmutfBfSuXA=
-X-Google-Smtp-Source: AA6agR6xhNBK+bE28RqK9MkyCIAA8jMxtHtdpYb7aIg+m2HMt5unSQcuZrzqc4Q7cllHqRco4RJvOYd1mwS+cygJ5zM=
-X-Received: by 2002:a17:90b:35c1:b0:1fd:6992:f82a with SMTP id
- nb1-20020a17090b35c100b001fd6992f82amr342989pjb.188.1661489238797; Thu, 25
- Aug 2022 21:47:18 -0700 (PDT)
+        bh=baSv0Pn8NKV4CT1RoqMfXK68o2fQcY24x27HhvXMUKI=;
+        b=bF7oE/wJQMlfqe/AGNf/kjv0FFC8T1+kDaJ+81mgyDGUY8URE/p6c+YjHcUv47qnJd
+         xQNzIfM6pXwPDucSUDQJN5oDuq+yh3+wb3DOu2TE01DeX7FG5xiOXwbVF4grVcdCzJ3j
+         Ff3+ePvjolD9K6NuyvitcNW6bU7vB0AyHSfMuy7WtDrihR9cnToPF8N3t3gXVo0Y05Zq
+         9a0v5ZkZcP//Q1ywHzELMvVmLmkvPHnxYjF1AKnRzMKxbagxpouJTWQrAdl40yHprljA
+         MA1OPtFTFsb8iJ3ylYA94WogiKNsNTNBrBaA8T1E0OYlbqoNNwXqTn9J2FyjpV9upQRh
+         wYQQ==
+X-Gm-Message-State: ACgBeo1kW+gyATpQXVJruatVaPqKors/3AdWjUfHc0eQIDJZefBVFmXl
+        xQPbnO7PDPnfQ+E3oSMRkvI7PWMI+RgZH5H6X5V8FQ==
+X-Google-Smtp-Source: AA6agR4McKR6po1Apga0nlBk1nr9dK1oPOWcrPMDqNvo03xzIJbG6rtBn+uTwlQxr2Ttr8yi9z0nmrOHrVlnhcLXWZc=
+X-Received: by 2002:a0d:d0c1:0:b0:33d:77db:eadf with SMTP id
+ s184-20020a0dd0c1000000b0033d77dbeadfmr6920136ywd.26.1661489280272; Thu, 25
+ Aug 2022 21:48:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825053738.476903-1-imagedong@tencent.com> <CANn89iJTW6DDrzfzya8-B14SkhCURopnHqQV9JqvOqSCXnQy2g@mail.gmail.com>
-In-Reply-To: <CANn89iJTW6DDrzfzya8-B14SkhCURopnHqQV9JqvOqSCXnQy2g@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 26 Aug 2022 12:47:07 +0800
-Message-ID: <CADxym3bw8H7E6i1CuV=AU6X+AnzWgx0YOwzcJVBjbTALpt2iFA@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: skb: fix kfree_skb event output error in perf
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Menglong Dong <imagedong@tencent.com>,
-        David Ahern <dsahern@kernel.org>,
-        Hao Peng <flyingpeng@tencent.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220808141538.102394-1-khuey@kylehuey.com> <87ilmpzunz.ffs@tglx>
+ <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com> <Yv6szXuKGv75wWmm@google.com>
+In-Reply-To: <Yv6szXuKGv75wWmm@google.com>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Thu, 25 Aug 2022 21:47:49 -0700
+Message-ID: <CAP045Aqspm6rRnM9ks_w6SS5CZ6R5TPqLras8aNjfG_2TUmWgg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:32 PM Eric Dumazet <edumazet@google.com> wrote:
+On Thu, Aug 18, 2022 at 2:19 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> On Wed, Aug 24, 2022 at 10:37 PM <menglong8.dong@gmail.com> wrote:
+> On Thu, Aug 18, 2022, Kyle Huey wrote:
+> > On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
+> > > > When management of the PKRU register was moved away from XSTATE, emulation
+> > > > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> > > > for APIs that write XSTATE. This can be seen by running gdb and executing
+> > > > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> > > > write to the PKRU register (which gdb performs through ptrace) is ignored.
+> > > >
+> > > > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+> > > > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+> > > > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+> > > > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+> > > > and sigreturn pass in pointers to the appropriate PKRU value.
+> > > >
+> > > > This also adds code to initialize the PKRU value to the hardware init value
+> > > > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+> > > > This is a change to the current KVM_SET_XSAVE behavior.
+> > >
+> > > You are stating a fact here, but provide 0 justification why this is
+> > > correct.
 > >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > As Eric reported, the 'reason' field is not presented when trace the
-> > kfree_skb event by perf:
-> >
-> > $ perf record -e skb:kfree_skb -a sleep 10
-> > $ perf script
-> >   ip_defrag 14605 [021]   221.614303:   skb:kfree_skb:
-> >   skbaddr=0xffff9d2851242700 protocol=34525 location=0xffffffffa39346b1
-> >   reason:
-> >
-> > The cause seems to be passing kernel address directly to TP_printk(),
-> > which is not right.
+> > Well, the justification is that this *is* the behavior we want for
+> > ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
+> > behavior in this edge case is an oversight rather than intentional,
+> > and in the absence of confirmation that KVM wants the existing
+> > behavior (the KVM mailing list and maintainer are CCd) one correct
+> > code path is better than one correct code path and one buggy code
+> > path.
 >
-> Why ?
+> Sorry, I missed the KVM-relevant flags.
 >
+> Hrm, the current behavior has been KVM ABI for a very long time.
+>
+> It's definitely odd because all other components will be initialized due to their
+> bits being cleared in the header during kvm_load_guest_fpu(), and it probably
+> wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
+> But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
+> the kernel not overwriting guest PKRU when its bit is cleared in the header.
 
-I think it is because of how perf passes data to the user space. From
-what 'perf_output_sample()' do, we can know that perf passes the data
-of entry (with other data) to the user, and the user generates the output
-string from the format string (which can be obtained from
-/sys/kernel/debug/tracing/event/skb/kfree_skb/format) and the entry data.
+This seems extremely conservative, but ok. As you note, PKRU is the
+only XSTATE component you could theoretically do this subset
+save/restore with in the KVM ABI since all the others really do have
+their hardware behavior.
 
-Therefore, perf can't get the string of drop reasons from the entry, only
-the enum.
+> All that said, I don't see any reason to force KVM to change at this time, it's
+> trivial enough to handle KVM's oddities while providing sane behavior for others.
+> Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
+> play nice with a NULL pointer, e.g.
+>
+>         /*
+>          * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+>          * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+>          * case (all other components are eventually re-initialized).
+>          */
+>         if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+>                 vpkru = NULL;
 
-> It seems this adds an expensive copy of a string that should reside in
-> rodata section of vmlinux, thus can not disappear...
-> (Also the ring buffer entry will have a dynamic size ?)
->
+You meant ustate->... here (since this is before the copy now), but
+yes, ok, I will do that.
 
-It indeed will add additional cost, but it seems unavoidable. In the old
-version, __print_symbolic() is used, which will loop all the drop reason
-from a array and find corresponding string:
+>         return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
 
-    TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
-          __entry->skbaddr, __entry->protocol, __entry->location,
-          __print_symbolic(__entry->reason,
-                   TRACE_SKB_DROP_REASON))
-
-And I think the cost of coping strings may be less than this loop? as the
-drop reasons are getting more and more.
-
-> trace_safe_str() is using is_kernel_rodata() which should return true
-> for drop_reasons[X] ?
->
-> $ grep drop_reasons net/core/dropreason_str.c
-> const char * const drop_reasons[] = {
-> ...
->
->
->
-> >
-> > Therefore, fix this by adding a '__string' field to the TP_STRUCT of
-> > kfree_skb, which is 'reason_str', and passing it to TP_printk().
-> >
-> > (Not sure if we should still keep the 'reason' field in
-> > TP_STRUCT__entry)
->
-> Maybe for event/trace filtering purposes ?
->
-> >
-> > Reported-by: Eric Dumazet <edumazet@google.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  include/trace/events/skb.h | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-> > index 45264e4bb254..7235554141c3 100644
-> > --- a/include/trace/events/skb.h
-> > +++ b/include/trace/events/skb.h
-> > @@ -24,6 +24,7 @@ TRACE_EVENT(kfree_skb,
-> >                 __field(void *,         location)
-> >                 __field(unsigned short, protocol)
-> >                 __field(enum skb_drop_reason,   reason)
-> > +               __string(reason_str, drop_reasons[reason])
-> >         ),
-> >
-> >         TP_fast_assign(
-> > @@ -31,11 +32,12 @@ TRACE_EVENT(kfree_skb,
-> >                 __entry->location = location;
-> >                 __entry->protocol = ntohs(skb->protocol);
-> >                 __entry->reason = reason;
-> > +               __assign_str(reason_str, drop_reasons[reason]);
-> >         ),
-> >
-> >         TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
-> >                   __entry->skbaddr, __entry->protocol, __entry->location,
-> > -                 drop_reasons[__entry->reason])
-> > +                 __get_str(reason_str))
-> >  );
-> >
-> >  TRACE_EVENT(consume_skb,
-> > --
-> > 2.37.2
-> >
+- Kyle

@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC995A2D88
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772FC5A2D8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344484AbiHZRcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S1344521AbiHZRct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344442AbiHZRcO (ORCPT
+        with ESMTP id S232757AbiHZRcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:32:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B26CDB076;
-        Fri, 26 Aug 2022 10:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661535133; x=1693071133;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TmFRXEOP3iU5sday/xLTvELB3voTZqr4jmnhnq3J/Aw=;
-  b=XclIE7fhwZa2oc4DePXzYjODbZyMZVmnI9Rf3waWKY4RMswPOxp8HoW2
-   /q9npcakQbiyeERSXRstl0m6X46qDL+zlZOlJ23juv4wWfKkaU/4uqJp9
-   ZvzcjKg53id555py0IPhQp02i7R5RjYy28mn1Vbj/JRjqLoRg3q9l4LAh
-   +xnf+eGJYbfmVA2Y7L/TCD0AJrzdfH2qpSv7VPQYdv+hfhvhUg4RWzsLi
-   Qza1J0w6jUNMeziNjjTx4kuUXyAUstxSjBinOc4cIKnmhRm6+B/zuBhad
-   o6y/2sk4LPWbvhUzm6GAbK3V9gpjYt9oKUj6lQMMiOMtOnoEzJJMvKC6A
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="380861414"
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="380861414"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:31:41 -0700
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="643740701"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:31:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oRdB9-003zbz-2p;
-        Fri, 26 Aug 2022 20:31:35 +0300
-Date:   Fri, 26 Aug 2022 20:31:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] gpiolib: acpi: Add support to ignore programming
- an interrupt
-Message-ID: <YwkDd+mAhyoSwVeq@smile.fi.intel.com>
-References: <20220803042501.515-1-mario.limonciello@amd.com>
- <efb83a0c-7617-894e-a34d-37280238d5aa@redhat.com>
+        Fri, 26 Aug 2022 13:32:46 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B827DB06E;
+        Fri, 26 Aug 2022 10:32:45 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QFRlGU003072;
+        Fri, 26 Aug 2022 17:32:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ecRmlNQsuaYmhxcydyYYt1QTJ13LiRhIIAvbEV3Gjis=;
+ b=YHK3vvq6Lh+xuq6OAG6Lfth7Y7QXGrtYi3wQxKJ+cR4xuLznqq0a6Z9OQshnEKHghyVR
+ 9AQpBwqjOBsAtDRD9WP3JfdgiQcZrh4se4gjeQS9FcWjVHe6qtZH9MjjS2uO48LgKPCX
+ I8/wEj+uCVK3koGZVUKTg7AHyJv2Pm2cCnYRw/ejxiuAmKZNclq0k1lVrB0APFXqH7Y/
+ zdUj8vsX9qXtEHm8QIosundBYJtuqZVHcpsf6y4rKccvyhghtPiRQ3d8rKwk7696DXVt
+ 1ubFbawk8TnNvLVNylYUXqS4c/zgC7CtJsTB9NnKVVcVpihmQnNT0b+bZPqQfffi0+CN FQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j6j4mk1bf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 17:32:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27QHWX2c009617
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 17:32:33 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 26 Aug 2022 10:32:30 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Maxim Devaev <mdevaev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_jackp@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH] usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
+Date:   Fri, 26 Aug 2022 23:02:22 +0530
+Message-ID: <1661535142-5204-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efb83a0c-7617-894e-a34d-37280238d5aa@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 06b6ufFt0kq0JvjKySi3Kg_FNqHHzp0L
+X-Proofpoint-ORIG-GUID: 06b6ufFt0kq0JvjKySi3Kg_FNqHHzp0L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-26_10,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 spamscore=0 malwarescore=0 clxscore=1015 suspectscore=0
+ phishscore=0 impostorscore=0 adultscore=0 mlxlogscore=258
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208260070
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,26 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 05:07:15PM +0200, Hans de Goede wrote:
-> On 8/3/22 06:24, Mario Limonciello wrote:
-> > gpiolib-acpi already had support for ignoring a pin for wakeup, but
-> > if an OEM configures a floating pin as an interrupt source then
-> > stopping it from being a wakeup won't do much good to stop the
-> > interrupt storm.
-> > 
-> > Add support for a module parameter and quirk infrastructure to
-> > ignore interrupts as well.
-> > 
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> Thanks, patch looks good to me:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+During cdrom emulation, the response to read_toc command must contain
+the cdrom address as the number of sectors (2048 byte sized blocks)
+represented either as an absolute value (when MSF bit is '0') or in
+terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
+cdrom, the fsg_lun_open call sets the number of sectors to 2048 byte
+sized blocks.
 
-Pushed to my review and testing queue, thanks!
+When MAC OS sends a read_toc request with MSF set to '1', the
+store_cdrom_address assumes that the address being provided is the
+LUN size represented in 512 byte sized blocks instead of 2048. It
+tries to modify the address further to convert it to 2048 byte sized
+blocks and store it in MSF format. This results in data transfer
+failures as the cdrom address being provided in the read_toc response
+is incorrect.
 
+Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+ drivers/usb/gadget/function/storage_common.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+index 03035db..db40392 100644
+--- a/drivers/usb/gadget/function/storage_common.c
++++ b/drivers/usb/gadget/function/storage_common.c
+@@ -295,7 +295,6 @@ void store_cdrom_address(u8 *dest, int msf, u32 addr)
+ {
+ 	if (msf) {
+ 		/* Convert to Minutes-Seconds-Frames */
+-		addr >>= 2;		/* Convert to 2048-byte frames */
+ 		addr += 2*75;		/* Lead-in occupies 2 seconds */
+ 		dest[3] = addr % 75;	/* Frames */
+ 		addr /= 75;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 

@@ -2,255 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26675A2FA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBF35A2FAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344764AbiHZTIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S1344930AbiHZTI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiHZTIN (ORCPT
+        with ESMTP id S1344709AbiHZTIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:08:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC823DC5D3;
-        Fri, 26 Aug 2022 12:08:12 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16817547;
-        Fri, 26 Aug 2022 21:08:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661540891;
-        bh=3x5c84ET66BZj+Rj//NkR71TpQss27e3h7UwwnNl6YA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GkRyHFtwQwQHvovGaGdQVI2oadFmuvach8EPNPJ20on2n6dEdOZNzZja/xZoOibm4
-         C6uC6mAOX/hxsOp8njVgUgO9Yq0L+5oSAYAVBFTz35thZRW9bfoVTZBF3gAv7IYxc7
-         IMpr7/u/ar6ar3IcH6YEgxP9ZUQ833aS3rCG2jd4=
-Date:   Fri, 26 Aug 2022 22:08:04 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?utf-8?B?S8OpdmluIEwnaMO0cGl0YWw=?= <kevin.lhopital@bootlin.com>
-Subject: Re: [PATCH NOT FOR MERGE v5 6/6] ARM: dts: sun8i: a83t: bananapi-m3:
- Enable MIPI CSI-2 with OV8865
-Message-ID: <YwkaFC2tm96X5qon@pendragon.ideasonboard.com>
-References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
- <20220826182803.604563-7-paul.kocialkowski@bootlin.com>
+        Fri, 26 Aug 2022 15:08:19 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A45DD751;
+        Fri, 26 Aug 2022 12:08:18 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-11c5505dba2so3181307fac.13;
+        Fri, 26 Aug 2022 12:08:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=squGQK7T4fhu/A2+puelG7xJpkvvOARv9nk4HKG56Rg=;
+        b=dJobb9wROUZ9uskiNEjW5mzFEtlykWzAEsVwHKieW0skqQrlGR1KAubSUZEgNTZR1j
+         WdbYd4sO4ABiJ9S25zfzFTFf782jyDj3RC0vhP9mG25fUcit20nDXZSplNuOkV5L84qx
+         cKaC2YGK4cpMIY2gutTYlHEudeghczS1kszftejewGWs5vkZpS8i5UWU69WqRsjGVDLA
+         18hxP75zJ9rzTX/LTbSiNUBScnH5Jqrq+43F3Ann3dvnSwdw/OWtHHpWNV4Z/NRHoPjM
+         NQRpk0okCOA47lJNdaCbKdjEWjMKLZJ5sYlrAk9mljVle4+V0JGc7ioNPRw+OypKS44J
+         a+RQ==
+X-Gm-Message-State: ACgBeo09yf9xZooahvUgeFz3V9n0/bIQBxrd5WpaEQIgptjNuNFC/QbJ
+        vDoN/fQmyBId6STtEDrH8mZ2tXNs6ZRY+Yg97Lk=
+X-Google-Smtp-Source: AA6agR58gxvkRi0KncHAt6chs7qM7Vpd1++erLoRCXwUTB64LZQ+R+YGyhU1eRiWnbszMjVWh1LNiVpB+ROvHpVBb9E=
+X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
+ a4-20020a056870a18400b00116bd397f94mr2582144oaf.5.1661540897768; Fri, 26 Aug
+ 2022 12:08:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220826182803.604563-7-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220826164242.43412-1-irogers@google.com>
+In-Reply-To: <20220826164242.43412-1-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 26 Aug 2022 12:08:06 -0700
+Message-ID: <CAM9d7cgQZsbwWSdRNQqUE+GsSgPVqFmKs9LJ5b6ta2-dax5T2Q@mail.gmail.com>
+Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul and Kévin,
+On Fri, Aug 26, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
+>
+> When fixing a locking race and memory leak in:
+> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+>
+> It was requested that debug mutex code be separated out into its own
+> files. This was, in part, done by Pavithra Gurushankar in:
+> https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
+>
+> These patches fix issues with the previous patches, add in the
+> original dso->nsinfo fix and then build on our mutex wrapper with
+> clang's -Wthread-safety analysis. The analysis found missing unlocks
+> in builtin-sched.c which are fixed and -Wthread-safety is enabled by
+> default when building with clang.
+>
+> v4. Adds a comment for the trylock result, fixes the new line (missed
+>     in v3) and removes two blank lines as suggested by Adrian Hunter.
+> v3. Adds a missing new line to the error messages and removes the
+>     pshared argument to mutex_init by having two functions, mutex_init
+>     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
+> v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
+>     annotations as requested by Arnaldo and Namhyung. A boolean is
+>     added to builtin-sched.c to terminate thread funcs rather than
+>     leaving them blocked on delted mutexes.
+>
+> Ian Rogers (17):
+>   perf bench: Update use of pthread mutex/cond
+>   perf tests: Avoid pthread.h inclusion
+>   perf hist: Update use of pthread mutex
+>   perf bpf: Remove unused pthread.h include
+>   perf lock: Remove unused pthread.h include
+>   perf record: Update use of pthread mutex
+>   perf sched: Update use of pthread mutex
+>   perf ui: Update use of pthread mutex
+>   perf mmap: Remove unnecessary pthread.h include
+>   perf dso: Update use of pthread mutex
+>   perf annotate: Update use of pthread mutex
+>   perf top: Update use of pthread mutex
+>   perf dso: Hold lock when accessing nsinfo
+>   perf mutex: Add thread safety annotations
+>   perf sched: Fixes for thread safety analysis
+>   perf top: Fixes for thread safety analysis
+>   perf build: Enable -Wthread-safety with clang
+>
+> Pavithra Gurushankar (1):
+>   perf mutex: Wrapped usage of mutex and cond
 
-Thank you for the patch.
+For the patches 1-7 and 10-13
 
-On Fri, Aug 26, 2022 at 08:28:03PM +0200, Paul Kocialkowski wrote:
-> From: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-> 
-> The Bananapi M3 supports a camera module which includes an OV8865 sensor
-> connected via the parallel CSI interface and an OV8865 sensor connected
-> via MIPI CSI-2.
-> 
-> The I2C2 bus is shared by the two sensors as well as the (active-low)
-> reset signal, but each sensor has it own shutdown line.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-I see a single sensor in this file, am I missing something ?
+Thanks,
+Namhyung
 
-Sounds like a perfect candidate for an overlay, it could then be merged
-upstream.
 
-> Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts | 102 +++++++++++++++++++
->  1 file changed, 102 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> index 5a7e1bd5f825..80fd99cf24b2 100644
-> --- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> +++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> @@ -85,6 +85,30 @@ led-1 {
->  		};
->  	};
->  
-> +	reg_ov8865_avdd: ov8865-avdd {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "ov8865-avdd";
-> +		regulator-min-microvolt = <2800000>;
-> +		regulator-max-microvolt = <2800000>;
-> +		vin-supply = <&reg_dldo4>;
-> +	};
-> +
-> +	reg_ov8865_dovdd: ov8865-dovdd {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "ov8865-dovdd";
-> +		regulator-min-microvolt = <2800000>;
-> +		regulator-max-microvolt = <2800000>;
-> +		vin-supply = <&reg_dldo4>;
-> +	};
-> +
-> +	reg_ov8865_dvdd: ov8865-dvdd {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "ov8865-dvdd";
-> +		regulator-min-microvolt = <1200000>;
-> +		regulator-max-microvolt = <1200000>;
-> +		vin-supply = <&reg_eldo1>;
-> +	};
-
-Are those three regulators on the Banana Pi, or on the camera module ?
-
-> +
->  	reg_usb1_vbus: reg-usb1-vbus {
->  		compatible = "regulator-fixed";
->  		regulator-name = "usb1-vbus";
-> @@ -115,6 +139,23 @@ &cpu100 {
->  	cpu-supply = <&reg_dcdc3>;
->  };
->  
-> +&csi {
-> +	status = "okay";
-> +
-> +	ports {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@1 {
-> +			reg = <1>;
-
-All of this (except the status = "okay") should go to sun8i-a83t.dtsi.
-
-> +
-> +			csi_in_mipi_csi2: endpoint {
-> +				remote-endpoint = <&mipi_csi2_out_csi>;
-> +			};
-
-This too actually, once the issue mentioned in patch 5/6 gets fixed.
-
-> +		};
-> +	};
-> +};
-> +
->  &de {
->  	status = "okay";
->  };
-> @@ -147,6 +188,36 @@ hdmi_out_con: endpoint {
->  	};
->  };
->  
-> +&i2c2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c2_pe_pins>;
-
-This looks like a candidate for upstreaming in
-sun8i-a83t-bananapi-m3.dts, it shouldn't be in the overlay.
-
-> +	status = "okay";
-> +
-> +	ov8865: camera@36 {
-> +		compatible = "ovti,ov8865";
-> +		reg = <0x36>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&csi_mclk_pin>;
-> +		clocks = <&ccu CLK_CSI_MCLK>;
-> +		assigned-clocks = <&ccu CLK_CSI_MCLK>;
-> +		assigned-clock-rates = <24000000>;
-> +		avdd-supply = <&reg_ov8865_avdd>;
-> +		dovdd-supply = <&reg_ov8865_dovdd>;
-> +		dvdd-supply = <&reg_ov8865_dvdd>;
-> +		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-> +		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-> +
-> +		port {
-> +			ov8865_out_mipi_csi2: endpoint {
-> +				data-lanes = <1 2 3 4>;
-> +				link-frequencies = /bits/ 64 <360000000>;
-> +
-> +				remote-endpoint = <&mipi_csi2_in_ov8865>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
->  &mdio {
->  	rgmii_phy: ethernet-phy@1 {
->  		compatible = "ethernet-phy-ieee802.3-c22";
-> @@ -154,6 +225,24 @@ rgmii_phy: ethernet-phy@1 {
->  	};
->  };
->  
-> +&mipi_csi2 {
-> +	status = "okay";
-> +};
-> +
-> +&mipi_csi2_in {
-> +	mipi_csi2_in_ov8865: endpoint {
-> +		data-lanes = <1 2 3 4>;
-> +
-> +		remote-endpoint = <&ov8865_out_mipi_csi2>;
-> +	};
-> +};
-> +
-> +&mipi_csi2_out {
-> +	mipi_csi2_out_csi: endpoint {
-> +		remote-endpoint = <&csi_in_mipi_csi2>;
-> +	};
-> +};
-> +
->  &mmc0 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&mmc0_pins>;
-> @@ -327,11 +416,24 @@ &reg_dldo3 {
->  	regulator-name = "vcc-pd";
->  };
->  
-> +&reg_dldo4 {
-> +	regulator-always-on;
-
-Does it have to be always on ?
-
-> +	regulator-min-microvolt = <2800000>;
-> +	regulator-max-microvolt = <2800000>;
-> +	regulator-name = "avdd-csi";
-
-Doesn't this belong to the base board .dts ? Same below.
-
-> +};
-> +
->  &reg_drivevbus {
->  	regulator-name = "usb0-vbus";
->  	status = "okay";
->  };
->  
-> +&reg_eldo1 {
-> +	regulator-min-microvolt = <1200000>;
-> +	regulator-max-microvolt = <1200000>;
-> +	regulator-name = "dvdd-csi-r";
-> +};
-> +
->  &reg_fldo1 {
->  	regulator-min-microvolt = <1080000>;
->  	regulator-max-microvolt = <1320000>;
-
--- 
-Regards,
-
-Laurent Pinchart
+>
+>  tools/perf/Makefile.config                 |   5 +
+>  tools/perf/bench/epoll-ctl.c               |  33 +++---
+>  tools/perf/bench/epoll-wait.c              |  33 +++---
+>  tools/perf/bench/futex-hash.c              |  33 +++---
+>  tools/perf/bench/futex-lock-pi.c           |  33 +++---
+>  tools/perf/bench/futex-requeue.c           |  33 +++---
+>  tools/perf/bench/futex-wake-parallel.c     |  33 +++---
+>  tools/perf/bench/futex-wake.c              |  33 +++---
+>  tools/perf/bench/numa.c                    |  93 ++++++----------
+>  tools/perf/builtin-inject.c                |   4 +
+>  tools/perf/builtin-lock.c                  |   1 -
+>  tools/perf/builtin-record.c                |  13 ++-
+>  tools/perf/builtin-sched.c                 | 105 +++++++++---------
+>  tools/perf/builtin-top.c                   |  45 ++++----
+>  tools/perf/tests/mmap-basic.c              |   2 -
+>  tools/perf/tests/openat-syscall-all-cpus.c |   2 +-
+>  tools/perf/tests/perf-record.c             |   2 -
+>  tools/perf/ui/browser.c                    |  20 ++--
+>  tools/perf/ui/browsers/annotate.c          |  12 +--
+>  tools/perf/ui/setup.c                      |   5 +-
+>  tools/perf/ui/tui/helpline.c               |   5 +-
+>  tools/perf/ui/tui/progress.c               |   8 +-
+>  tools/perf/ui/tui/setup.c                  |   8 +-
+>  tools/perf/ui/tui/util.c                   |  18 ++--
+>  tools/perf/ui/ui.h                         |   4 +-
+>  tools/perf/util/Build                      |   1 +
+>  tools/perf/util/annotate.c                 |  15 +--
+>  tools/perf/util/annotate.h                 |   4 +-
+>  tools/perf/util/bpf-event.h                |   1 -
+>  tools/perf/util/build-id.c                 |  12 ++-
+>  tools/perf/util/dso.c                      |  19 ++--
+>  tools/perf/util/dso.h                      |   4 +-
+>  tools/perf/util/hist.c                     |   6 +-
+>  tools/perf/util/hist.h                     |   4 +-
+>  tools/perf/util/map.c                      |   3 +
+>  tools/perf/util/mmap.h                     |   1 -
+>  tools/perf/util/mutex.c                    | 119 +++++++++++++++++++++
+>  tools/perf/util/mutex.h                    | 108 +++++++++++++++++++
+>  tools/perf/util/probe-event.c              |   3 +
+>  tools/perf/util/symbol.c                   |   4 +-
+>  tools/perf/util/top.h                      |   5 +-
+>  41 files changed, 569 insertions(+), 323 deletions(-)
+>  create mode 100644 tools/perf/util/mutex.c
+>  create mode 100644 tools/perf/util/mutex.h
+>
+> --
+> 2.37.2.672.g94769d06f0-goog
+>

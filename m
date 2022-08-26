@@ -2,254 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDE55A1FED
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277DC5A1FF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244666AbiHZEfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 00:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
+        id S244737AbiHZEht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 00:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiHZEfd (ORCPT
+        with ESMTP id S236285AbiHZEhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:35:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8CBBFE91
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661488529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E9JK9kQIbyb3rduBmI+mCucUnsl1FVro3S5i3XE8VBU=;
-        b=D4PN9+2hb91hBf2XAWjAGAMRdg15Bl5zD6cKJt4P26ztTpWqixcZ5I1f+oIOWqJZqijHvD
-        Jn2l9B1fwDDsbs2mVqGGtDtHe+WMEP2mfLZ5PpQVK6gPGXGXln8ZsriTYv11cJ1xNQY8BM
-        k6hShrE8L10lQmf4ZWozB8kqamithlY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-921cXJffMYabm40UmuGCGQ-1; Fri, 26 Aug 2022 00:35:24 -0400
-X-MC-Unique: 921cXJffMYabm40UmuGCGQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F1BD98032F6;
-        Fri, 26 Aug 2022 04:35:23 +0000 (UTC)
-Received: from localhost (ovpn-13-127.pek2.redhat.com [10.72.13.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B62E6945DD;
-        Fri, 26 Aug 2022 04:35:22 +0000 (UTC)
-Date:   Fri, 26 Aug 2022 12:35:18 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v10 8/8] x86/crash: Add x86 crash hotplug support
-Message-ID: <YwhNhrlmFH6ps3BN@MiWiFi-R3L-srv>
-References: <20220721181747.1640-1-eric.devolder@oracle.com>
- <20220721181747.1640-9-eric.devolder@oracle.com>
- <Yvbxgvk+5HqEl7J2@MiWiFi-R3L-srv>
- <0395a745-edbb-275a-f37f-c6e799388da1@oracle.com>
-MIME-Version: 1.0
+        Fri, 26 Aug 2022 00:37:45 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7C9CD7B3;
+        Thu, 25 Aug 2022 21:37:45 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q4671e025354;
+        Fri, 26 Aug 2022 04:37:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=C/nDiUz9OP5PbqKV0oOUgtO7xIQGX8DWEEEDpBV/It4=;
+ b=uKbRpm2BKpVYqt00No+y/p4A+tGooyMg8L5qOgOhefiG+97sJR1xQzxH1BgrUHjO/Ngg
+ M4+W4Ih19wCkjtFKzkrJm026m1KJYfSQwd8Wn7cxDRUpr+M/lWpKaFSxsj/H+a1O5lOa
+ e5tpL6zs9avNoQBwv/v1e1zhyhSw/z7PkBMh1LL6lzhtRqfxnOjt4fb56zVFEvu42Lzt
+ mRQFq/Vt6UFxzXogH83dAFlhVWd8kQmNxrIySaIPY0ZF0fggErJ4kE6Qo+bagaoUP8EV
+ vv+DBlNe42yyfVX6kxRNodZV43i7DsRMdkF/5nK4iynsY0Hemt8QIDmuU6LDK04GKn/v 7Q== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4w240jbk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 Aug 2022 04:37:31 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q2ltxn009542;
+        Fri, 26 Aug 2022 04:37:29 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n6ntt7a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 Aug 2022 04:37:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g/+Xnrmn67pUV4QvpoowLuJhYoBS+hjLMYypl49Nv2b5nrBqZB+vQMSL9dDDERcmY+LZ4VQEI9/zxixl5DgQq966qup9j7sjm1ahr17vwj3W9YOpFX+ez7PisfSL8QfgOZBIZJmqCUTdGhP6dT3YXCf5y/p/sBi9PEE+q4XsGItlZXProYMHw15WhfonekrIIoxhFgIB3QYxMbjDTRU3uFXoWi/rI6RXKPq4CEyDnLPFxITOrajPB7uC7olLTNcfup5Rk4rbRpkN/rkME5gn4nfeg4GmeKZ6tJmFtIJalsJ2BhFeeM7rFxbUbQmBQ9VZR7QWu4Fml7kBgLsuw5hV2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C/nDiUz9OP5PbqKV0oOUgtO7xIQGX8DWEEEDpBV/It4=;
+ b=BD1rZwZbp0p0OfLSpgvXsDMDUpsMxq5hrjxR2UOaDmeaDSP1BmyRDxYDn98inqCRxVyrnNBCUkL4FK3fxSRzvouga+qWTVdezzpGiZb6pzbkEG8k+FCeJ6lW+u1pdDJtSz8Cg7LzahpXxpmK8/8SUVCLGjguY9fn3o3AXMgZ83dEZAoc1JKtAF2rUoCQ2lugsbXyUNDRDDfE9C3C39SD5pPz8QjEAMko1MQJ+IIRUVBu4OhTnIXaslL9XspV4m3pQ94r2e9GAPHM/ARGg3hYWvjNao5GwJF6M7U9xgVwh58mic/H/cOuoVbKK0jWXxcd6WOelXo0KQqBGG/MSkO/Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C/nDiUz9OP5PbqKV0oOUgtO7xIQGX8DWEEEDpBV/It4=;
+ b=zSiS4jhPMwyBAQPnpi7JkK0KPYyTdvclD5cSBOv4cAepJAYTu2H1KKVMcm59Dl0XBzte7ZWuZpTh15FTE8VvmiTx28uBF+7/YJbHxWSwq5NO+q2JA+VR2rXYkT4rI6thPmQuPcLnN06qFoNzbXjPQu54EC9nDRAmDjuqfMsyvxc=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR1001MB2152.namprd10.prod.outlook.com
+ (2603:10b6:910:4a::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Fri, 26 Aug
+ 2022 04:37:18 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5546.025; Fri, 26 Aug 2022
+ 04:37:18 +0000
+Date:   Fri, 26 Aug 2022 07:37:06 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Sun Ke <sunke32@huawei.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, jefflexu@linux.alibaba.com,
+        hsiangkao@linux.alibaba.com
+Subject: Re: [PATCH v4] cachefiles: fix error return code in
+ cachefiles_ondemand_copen()
+Message-ID: <20220826043706.GC2071@kadam>
+References: <20220826023515.3437469-1-sunke32@huawei.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0395a745-edbb-275a-f37f-c6e799388da1@oracle.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220826023515.3437469-1-sunke32@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MRXP264CA0038.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:14::26) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3e208203-7c90-4f08-4e48-08da871ca8a7
+X-MS-TrafficTypeDiagnostic: CY4PR1001MB2152:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: g2Gxz1Edep06EFKAp7hoergTii62rZ0zn5MWQhJQID3bUBppc59q+GHB87LFlKuANrLPkYnHgbqOvgy0vCv6EoEnruINuyNWR6SdOnVku4nXmJD3FZsbnbNjbkpLD/SQaU7iTpZUOfFEvAQxHUmRnC7b5Nof6HUZa7PdVbhu1rBB+Ndwy3hbLSgB2X8K9qaz3UmqSDuPLectKhxr/o63p76eMsq8biaiXLuyIAHFJKGmCsx60vlHa+XJmr1m1jbhtgm8Kid0UkyS8RYJSJ8wI1nb8XClh4/+guHRPW9FSpPobdIkrSmHzcsPzrckZpArYbdN/sibmPXe+PD7ob1/w22urwurOSKDJVoFZAJXF6bzb3wuSBIFxWwmtyKsSKdMgt2k/Bqbtsm7UyozHRM/azQVmj+//C5FImvPllAXkOLCflXSOFEBxovxMBf7MqfdjOtxwkCVj7Ls8xLey0HughCoDmNPuAa/43322LrPiynCKLPVDk8fU+HdMH5mkUN5Az/FSlQeMW/8XEQno3GJalEZHzpwIo7SR+Gk+Xtg1ornBgDndKEa5YpX9NpF/1Dk6R7UX6mIf3i29SWrHWnGejuhTxVy8AH1+7kMPUUimUGBLzI6+dJ5KctFyErQLCZlhDDe6vOqhXZ2Hhqs9aNSWacEhTRGl8tD66tDEe0+clgaOyoDdULsCGwuFHFbAx60y2wGLR/4l34glyack0sIMUBS8bvU1bYJgdWdZ8eMSXPozmPXYBYcgcy6CBbIMPCbWI9Y2/6d0KEchSksi4rVig==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(346002)(366004)(376002)(39860400002)(136003)(83380400001)(33716001)(38100700002)(66556008)(38350700002)(66476007)(66946007)(8676002)(4326008)(5660300002)(9686003)(4744005)(44832011)(26005)(8936002)(6486002)(33656002)(316002)(6666004)(478600001)(6916009)(41300700001)(6512007)(186003)(6506007)(1076003)(86362001)(2906002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PMdJJOFV79TCNgqP3TOgYODfv9pgvnx2soFuGQ8bsPV6w2TeL1QVkmtmtN2I?=
+ =?us-ascii?Q?eih8AM/gcUt+bsbi3WiTM1SGS+zM5bhudLSW/zFP2e7/YDzFGv0Nz2xhBXM2?=
+ =?us-ascii?Q?LFI6R3lvWUN30rivVe159C553OlnyuHrbqUuSHNEHQxdKMN9w/jfmwVAiUXt?=
+ =?us-ascii?Q?rs7owahbLICrvsx2sM6HeVPyuZg/Zo8sFHpxR5KjGj01PL5GftgL43nwBCe9?=
+ =?us-ascii?Q?ufmJjPrEh4AmkUhm4GvIWVEE/GY14yKfHIEZkxhfu3142Y7HKxKjghBfDhgW?=
+ =?us-ascii?Q?BmTFYagwgWJjHqIVVSVXC3awswBMjVcnk2PH9+hOoWzCFYlwFLk984J9Jk6O?=
+ =?us-ascii?Q?LM9oG44aL85CV9SbgJIoP5KKnUOKJyi23KBLvs7wF2h6JrvPi4N9TICAMSeI?=
+ =?us-ascii?Q?sOn1zOx048H4FuEOER9XBx0w39/xNmMiayQPBD1hqvcxxPWCOkExlQOUrg/b?=
+ =?us-ascii?Q?WLjcsf8ajrm3zpiuEt4IJ48Su7nozKAsql3PZW8gp+sNBBlzuZx1MD779Lwf?=
+ =?us-ascii?Q?bgxSsLMWUjhX3JqXFdBobJYjCildPhKPDJvCJ877giR9pLOcJ+kJHAXBRBjb?=
+ =?us-ascii?Q?zPunEQL11L/i5yJnl0n3A1ewCViBeNfTbC20NKifMJkZhduKnSSdIuG3W97p?=
+ =?us-ascii?Q?HBsBfES9BeUZucFUpNYEWCycMhQBhoVfOdDYw1h3EosdLOtaKkZWvpzmq1Vu?=
+ =?us-ascii?Q?0CqLo3POTbwXCvxE71XrXHCkOHJSPS6OnTxXGHYwC1ZitzX9lQ578LcdJ7J5?=
+ =?us-ascii?Q?BlTF+NMMjwp9XPeGfhfqgKUWWnG0yiLPhZOLe+K2SLlpZQu/h9oDVdel70aw?=
+ =?us-ascii?Q?kTrSnZtDwSmYpbPy1RzQfBLsK0b26KkyBmTGvbyT7tO19XcDpFuUqk9PoHwU?=
+ =?us-ascii?Q?6+IHZsJGZ72rMEEcOyg+/EMVdpcMUzPkPSwrIc8IvPEaYbubiRwOxfQgeAkD?=
+ =?us-ascii?Q?dVmS2hgI3PwF7TqSoxQLelF7N6VV55W3M2b2Fg1mxldwzFaIFQHcSgEBgkOB?=
+ =?us-ascii?Q?c2fxXc8uVSxnYKm93tSTvStozpRCN+hKaZo5GkBeOvH8fsAu/hDUddR6Uf6p?=
+ =?us-ascii?Q?I81qvYL2YMyuA788uJKpf8zLNou4GZHxOo6CTXbfW8OdpaBwbkJXGbsiWXOd?=
+ =?us-ascii?Q?8jzx4F3cVP/OoNNSeuufs+kzPcLeUwWy4f5gYV79zpqELbOg1U5NFhD45KX/?=
+ =?us-ascii?Q?5mk147QpHrgz2yO4MpefZGv+bEkhlFjXIGuJwE/3SarMCDpVLO1fczQNKYMV?=
+ =?us-ascii?Q?cbcFSt/84N7zTOz8OuwvS0+Yqroud2/QP7up5lDCeIe8R5w5Mb1AouGQgd9b?=
+ =?us-ascii?Q?mfFRqMcjdCwUK4ee4uTdvs+dQDysVGrPgsIaXhV5o+R/kCLGjbIXEQPv8jDx?=
+ =?us-ascii?Q?WJNNwBzEOaguNL4MbdtSvd6nVE3Arm1WX843Qua4pA7U1ddCofQdiqV0jJf1?=
+ =?us-ascii?Q?63NSEwpFNKHUVMRAXWdILjlE2QNI9iE1BI/8cnMi7DGZja882b5DO+knZYgQ?=
+ =?us-ascii?Q?ZZkZHAWgbjGb82ap3gdgmqnhYWyFKCfzZmhFgi+SxYhgjzXgEGU3evWsCLb+?=
+ =?us-ascii?Q?oeOikKGaEWMPtmXfZutSp+FFVx9WCdMCxqKhQdqdZTG7k4f8hmfmefNzedX7?=
+ =?us-ascii?Q?rQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e208203-7c90-4f08-4e48-08da871ca8a7
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 04:37:18.6592
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ITkTYXR7K+7JumsdOL8ilC6WFX17eeSC/PrMKGsTlAYDp7Pj8fAtQc9TdrtnMvEDgWt6Q7EljMVKOkn57IrB5roLURPhWfRbe5lYpWAgP6o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2152
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-26_02,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208260016
+X-Proofpoint-ORIG-GUID: oVsFl1BzbbFnzQ4VOottSCBbyrtiP6Lv
+X-Proofpoint-GUID: oVsFl1BzbbFnzQ4VOottSCBbyrtiP6Lv
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/16/22 at 10:23am, Eric DeVolder wrote:
+On Fri, Aug 26, 2022 at 10:35:15AM +0800, Sun Ke wrote:
+> The cache_size field of copen is specified by the user daemon.
+> If cache_size < 0, then the OPEN request is expected to fail,
+> while copen itself shall succeed. However, returning 0 is indeed
+> unexpected when cache_size is an invalid error code.
 > 
+> Fix this by returning error when cache_size is an invalid error code.
 > 
-> On 8/12/22 19:34, Baoquan He wrote:
-> > On 07/21/22 at 02:17pm, Eric DeVolder wrote:
-> > ...snip....
-> > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > > index e58798f636d4..bb59596c8bea 100644
-> > > --- a/arch/x86/Kconfig
-> > > +++ b/arch/x86/Kconfig
-> > > @@ -2065,6 +2065,17 @@ config CRASH_DUMP
-> > >   	  (CONFIG_RELOCATABLE=y).
-> > >   	  For more details see Documentation/admin-guide/kdump/kdump.rst
-> > > +config CRASH_MAX_MEMORY_RANGES
-> > > +	depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> > > +	int
-> > > +	default 32768
-> > 
-> > Do we need to enforce the value with page align and minimal size? I
-> 
-> Are you asking about the value CRASH_MAX_MEMORY_RANGES? This value represents
-> the maximum number of memory ranges, and there Elf64_Phdrs, that we need to
-> allow for elfcorehdr memory. So I'm not sure what the concern for alignment
-> is. I suppose we could also institute a minimum size for this value, say 1024.
-> 
-> > checked crash_load_segments() in arch/x86/kernel/crash.c, it does the
-> > page size aligning in kexec_add_buffer(). And in
-> > load_crashdump_segments() of
-> > kexec-tools/kexec/arch/i386/crashdump-x86.c, it creates elfcorehdr at
-> > below code, the align is 1024, and in generic add_buffer()
-> > implementation, it enforces the memsz page aligned, and changes the
-> > passed align as page alignment.
-> > 
-> > 
-> > 	elfcorehdr = add_buffer(info, tmp, bufsz, memsz, align, min_base,
-> >                                                          max_addr, -1);
-> > 
-> > Maybe we should at least mention this in the help text to notice people.
-> 
-> Unfortunately I do not yet understand the concern being raised.
+> Fixes: c8383054506c ("cachefiles: notify the user daemon when looking up cookie")
+> Signed-off-by: Sun Ke <sunke32@huawei.com>
+> Suggested-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> v4: update the code suggested by Dan
+> v3: update the commit log suggested by Jingbo.
 
-Oops, never mind, I misunderstood CRASH_MAX_MEMORY_RANGES. Thought it's
-the range vlaue of buffer containing elfcorehdr, I must be dizzy when
-reading this part.
+Thanks!
 
-> 
-> > 
-...snip...
-> > > diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> > > index 9ceb93c176a6..55dda4fcde6e 100644
-> > > --- a/arch/x86/kernel/crash.c
-> > > +++ b/arch/x86/kernel/crash.c
-> > > @@ -25,6 +25,7 @@
-> > >   #include <linux/slab.h>
-> > >   #include <linux/vmalloc.h>
-> > >   #include <linux/memblock.h>
-> > > +#include <linux/highmem.h>
-> > >   #include <asm/processor.h>
-> > >   #include <asm/hardirq.h>
-> > > @@ -397,7 +398,17 @@ int crash_load_segments(struct kimage *image)
-> > >   	image->elf_headers = kbuf.buffer;
-> > >   	image->elf_headers_sz = kbuf.bufsz;
-> > > +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> > > +	/* Ensure elfcorehdr segment large enough for hotplug changes */
-> > > +	kbuf.memsz = (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) * sizeof(Elf64_Phdr);
-> > 
-> > Do we need to break the line to 80 chars?
-> 
-> Sure, I will do so.
-> 
-> > 
-> > > +	/* For marking as usable to crash kernel */
-> > > +	image->elf_headers_sz = kbuf.memsz;
-> > 
-> > Do we need this code comment?
-> 
-> Well, it did take me a while to figure this particular item out in order for all
-> this code to work right (else the crash kernel would fail at boot time). So I
-> think it best to keep this comment.
-> 
-> > 
-> > > +	/* Record the index of the elfcorehdr segment */
-> > > +	image->elfcorehdr_index = image->nr_segments;
-> > 
-> > And this place?
-> 
-> Not necessarily needed, but I've found it useful.
-> 
-> > 
-> > > +	image->elfcorehdr_index_valid = true;
-> > > +#else
-> > >   	kbuf.memsz = kbuf.bufsz;
-> > > +#endif
-> > >   	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
-> > >   	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-> > >   	ret = kexec_add_buffer(&kbuf);
-> > > @@ -412,3 +423,107 @@ int crash_load_segments(struct kimage *image)
-> > >   	return ret;
-> > >   }
-> > >   #endif /* CONFIG_KEXEC_FILE */
-> > > +
-> > > +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> > > +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
-> > > +{
-> > > +	/*
-> > > +	 * NOTE: The addresses and sizes passed to this routine have
-> > > +	 * already been fully aligned on page boundaries. There is no
-> > > +	 * need for massaging the address or size.
-> > > +	 */
-> > 
-> > Can we move the code comment above function interface?
-> 
-> Yes
-> 
-> > 
-> > > +	void *ptr = NULL;
-> > > +
-> > > +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
-> > 
-> > Do we need this code comment? On ARCH where proctionion is made, we
-> > surely need to the protect/unprotect.
-> 
-> I will remove this; I've mentioned this in handle_hotplug_event() where these
-> protect/unprotect functions are called.
-> 
-> > 
-> > > +	if (size > 0) {
-> > > +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> > > +
-> > > +		ptr = kmap_local_page(page);
-> > > +	}
-> > > +
-> > > +	return ptr;
-> > > +}
-> > > +
-> > > +void arch_unmap_crash_pages(void **ptr)
-> > > +{
-> > > +	if (ptr) {
-> > > +		if (*ptr)
-> > > +			kunmap_local(*ptr);
-> > > +		*ptr = NULL;
-> > > +	}
-> > > +}
-> > > +
-> > > +/**
-> > > + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr changes
-> > > + * @image: the active struct kimage
-> > > + * @hp_action: the hot un/plug action being handled
-> > > + * @cpu: when KEXEC_CRASH_HP_ADD/REMOVE_CPU, the cpu affected
-> > > + *
-> > > + * To accurately reflect hot un/plug changes, the elfcorehdr (which
-> > > + * is passed to the crash kernel via the elfcorehdr= parameter)
-> > > + * must be updated with the new list of CPUs and memories. The new
-> > > + * elfcorehdr is prepared in a kernel buffer, and then it is
-> > > + * written on top of the existing/old elfcorehdr.
-> > > + *
-> > > + * For hotplug changes to elfcorehdr to work, two conditions are
-> > > + * needed:
-> > > + * First, the segment containing the elfcorehdr must be large enough
-> > > + * to permit a growing number of resources. See the
-> > > + * CONFIG_CRASH_MAX_MEMORY_RANGES description.
-> > > + * Second, purgatory must explicitly exclude the elfcorehdr from the
-> > > + * list of segments it checks (since the elfcorehdr changes and thus
-> > > + * would require an update to purgatory itself to update the digest).
-> > 
-> > Isn't this generic concept to crash hotplug? Should we move it out to
-> > some generic place?
-> 
-> Yes, so I will relocate this.
-> 
-> > 
-> > > + *
-> > > + */
-> > > +void arch_crash_handle_hotplug_event(struct kimage *image,
-> > > +	unsigned int hp_action, unsigned int cpu)
-> > 
-> > The passed in 'cpu' is not used at all, what is it added for? I didn't
-> > see explanation about it.
-> 
-> Well its not used for x86, but as I recall, Sourabh Jain needed it for the PowerPC handler.
-
-Then better mention this in log or add code comment, otherwise confusion
-could be caused.
+regards,
+dan carpenter
 

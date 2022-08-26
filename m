@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8C15A22B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD4E5A22B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343573AbiHZINe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S1343570AbiHZIOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244686AbiHZIN0 (ORCPT
+        with ESMTP id S1343586AbiHZINy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:13:26 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E5DD4BCF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:13:24 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id d21so1746428eje.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NXwitHio/7JwDumLFpAgiMLj63RaVL17ajcp21R6k2Q=;
-        b=mgcopMPyOg5dStcVRGKVJ7sc/uHv47EJrRaQhXAtmc0rfwJ18NGlqkmPZ8PrUvg48P
-         MNQfyaWkkDjjt3yjs92nvYyJGerfcBOfhUyLvQoBMX31pB9JqMdkkpotlr9g4XPjdPJf
-         MZMS0Rznheo89L7t+kM3kIsVQNEXc//u6oB6+zyMCRGTviL4ZMHMvvkBy2vgLzRGWD3o
-         cdcZVSLzUpeykDumVucvbYJY94WGedvDSrBwPTWd0m2HwNYpANQjZrHcOMgWhpfNUzac
-         +9gdxj0hyP6wZp5X/p4T5eO5LwExgPWK90CTCVrSYFn7qm6foPijy6PwFFyMLMDt8XZ5
-         lNoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NXwitHio/7JwDumLFpAgiMLj63RaVL17ajcp21R6k2Q=;
-        b=iAF04oxgpJGSr4yuIlSsol8qaLT9C26y0VgCJ1OcUOBo9AvytghiN46nXpWeCt2tU0
-         74Vxt+0tiGaQv0KdgKGwTP4K7GNw8xVMK3MBQPNAvoFO3/Bh5jGQWueDXa1RGLEzX9lw
-         UHky/eoGtfboTBL/6QvNBjww4w/EKfP1e2SRyOXhTYwCRvL2JF319iTBdCuHI4ZDXmVg
-         Ia6fhjM4m8j3MKRtr8bQkb6DFmbLl7lKDwn6bkxmGGarUWmgM8SEabUTsxN7ZsmFATk3
-         YeaMXywVa+W61vCtEqfGbjLTdtn4chJ/5xLMev8e/Mfn1pFR1Yhs/dM6CIFuC2I0YZJ0
-         iVMw==
-X-Gm-Message-State: ACgBeo0NBjECfbaT3NdvO2pnYZShwpb74vJ0LwkNP4E1Jd67dc9b05dX
-        MRDLTw0JYUM4itVq1hs9GvX1wHdmjfFZcN7hOGnF1Q==
-X-Google-Smtp-Source: AA6agR5NtfoC3IPV3u7qtblqvhnD9K3/BH7jOrVDVsoqgbkt9CEFcmJ42imT8TJOmGTee/F+/HtAZgpZSoLJolrOq84=
-X-Received: by 2002:a17:907:6293:b0:73d:b27b:e594 with SMTP id
- nd19-20020a170907629300b0073db27be594mr4892481ejc.526.1661501602905; Fri, 26
- Aug 2022 01:13:22 -0700 (PDT)
+        Fri, 26 Aug 2022 04:13:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D25D4BDC;
+        Fri, 26 Aug 2022 01:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661501633; x=1693037633;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ln5K9Rli2euZm+3MbXDIrttR84dXLgSX98y9Y3WQF94=;
+  b=VSIFK+ezPjnfSWgoQGiPyBzYvP4MYQjy6v69uGmu5RenfWIf3x1yLSu8
+   8TcEHOa+nQ90yNASM2m8RR+GoRxqL7C+1r+FOIjUMwYBnevJeFsEPiL5m
+   +38HFSUzXx+YBZp4DotBYKxbN0xl8hKdEky/VafpguWeMmMcCv2zBV3wL
+   JE0Z34AXw3Myv1wm5YJFN9O6rEjE8EANT9Ec++emXd/zIJRAg8RVfwfAK
+   7GiX8+zHaIwdt/wxPyWAkYaolwiqY8O4HXwIUkv8K2l5eRmkxuBGOQsvK
+   v4jCqRlWOf+k54rxG7HrOZ7hgdWnHhK68zepu7an3m9rhUC8sidIR81pj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="356170950"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="356170950"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 01:13:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="752799840"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Aug 2022 01:13:49 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 26 Aug 2022 11:13:48 +0300
+Date:   Fri, 26 Aug 2022 11:13:48 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     cgel.zte@gmail.com
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xupanda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] usb: typec: tcpm: tcpci: Remove the unneeded
+ result variable
+Message-ID: <YwiAvHSNr34nyx/b@kuha.fi.intel.com>
+References: <20220826074856.253810-1-xu.panda@zte.com.cn>
 MIME-Version: 1.0
-References: <20220819060801.10443-1-jinpu.wang@ionos.com> <20220819060801.10443-8-jinpu.wang@ionos.com>
-In-Reply-To: <20220819060801.10443-8-jinpu.wang@ionos.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 10:13:12 +0200
-Message-ID: <CACRpkdYYPGtaVbEwu=EP31cEx6Tc1JjrQsd7MaJ_7LjFTpnQFQ@mail.gmail.com>
-Subject: Re: [PATCH v1 07/19] crypto: gemin: Fix error check for dma_map_sg
-To:     Jack Wang <jinpu.wang@ionos.com>
-Cc:     linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826074856.253810-1-xu.panda@zte.com.cn>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 8:08 AM Jack Wang <jinpu.wang@ionos.com> wrote:
+On Fri, Aug 26, 2022 at 07:48:57AM +0000, cgel.zte@gmail.com wrote:
+> From: xupanda <xu.panda@zte.com.cn>
+> 
+> Return the value regmap_update_bits() directly instead of
+> storing it in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: xupanda <xu.panda@zte.com.cn>
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index b2bfcebe218f..4436e9e5e2f7 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -328,11 +328,9 @@ static int tcpci_set_vconn(struct tcpc_dev *tcpc, bool enable)
+>  static int tcpci_enable_auto_vbus_discharge(struct tcpc_dev *dev, bool enable)
+>  {
+>  	struct tcpci *tcpci = tcpc_to_tcpci(dev);
+> -	int ret;
+>  
+> -	ret = regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_AUTO_DISCHARGE,
+> +	return regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_AUTO_DISCHARGE,
+>  				 enable ? TCPC_POWER_CTRL_AUTO_DISCHARGE : 0);
+> -	return ret;
+>  }
+>  
+>  static int tcpci_set_auto_vbus_discharge_threshold(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
+> @@ -884,5 +882,3 @@ static struct i2c_driver tcpci_i2c_driver = {
+>  };
+>  module_i2c_driver(tcpci_i2c_driver);
+>  
+> -MODULE_DESCRIPTION("USB Type-C Port Controller Interface driver");
+> -MODULE_LICENSE("GPL");
 
-> dma_map_sg return 0 on error.
->
-> Cc: Corentin Labbe <clabbe@baylibre.com>
-> Cc: Hans Ulli Kroll <ulli.kroll@googlemail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+Why are you removing those lines, and how is that related to the above
+change?
 
-Good catch!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+thanks,
 
-Yours,
-Linus Walleij
+-- 
+heikki

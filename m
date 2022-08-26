@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D4B5A2D19
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFAE5A2D17
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344649AbiHZRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S245203AbiHZRHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243995AbiHZRHN (ORCPT
+        with ESMTP id S234371AbiHZRHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:07:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60E6CCD73;
-        Fri, 26 Aug 2022 10:07:12 -0700 (PDT)
+        Fri, 26 Aug 2022 13:07:10 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA32CCE12;
+        Fri, 26 Aug 2022 10:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661533632; x=1693069632;
+  t=1661533629; x=1693069629;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wHbno+9bH5FlaHl2aCUA9a9noFNnMz8wJkNpCpcnCGc=;
-  b=acxhi9j/FcgeWG+zUF+dUQtki3isCOWyEyQNIFRRwWPrt7a7ijDamkSt
-   Bo0rMhJKha1F2yguYrU48yu6RgUptsZ49+727OlmtjmhJgtlnW0b0bfMF
-   07Nrw0qi0CsNiNM1OUHndZlrA7jFHYMxs56fqKILMGUTWAnmSvTYlRzlQ
-   I4CJbMGoY9ytgwm/9YkbwPeebGZpNRJ2+SdxmHDQRhH2h+FnbWgRQLC+A
-   0pD8Ek+7Z6rdZujizi2MWKaokZuqRWDxB/rnRipyr8BrtPS5Jc2+MgycX
-   NJ8dUtDpGalnovMvtPmwM1OixtWiiWiBCm/Rwvnugz96WPadckjRzwbdg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295825585"
+  bh=FlBUFOqO3yeVg/iVFi+5/Sl0JuIYKzTkoENlpUb/36E=;
+  b=IC1CN3egg1l+q9m3/6lvrikoWwvsQlrJIwi1Sn9qLXrUUqQ/hTEcRutS
+   KGmcrZLl91GY17GPdJ4NK/J0LUuPPwry+WL3PHK5KwY5uxauufNsaKIpJ
+   m3GgF4RXp5jprZFcZgZXrvOWB68pp3vlr1YVzsO9bA9gwvaoVTCf+F9fp
+   Y9R+Bjo8e7JvHr1EGogJUC5Le7TAfeBS28DeM85QoTicxmfGHCp/Stwnp
+   F8VBMJFnyJQ6gPS26NdDNGOVSzCU7kuj1zlhL7ggNhi7tjlsQphgB5hTm
+   Efkkc+z7c0alDwtQIJRx858w0XZiFtnt0ITwJm+IgZg+BuB1N1lCdqT+9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="274953714"
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="295825585"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:07:08 -0700
+   d="scan'208";a="274953714"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:07:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="640131972"
+   d="scan'208";a="606822061"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 26 Aug 2022 10:07:07 -0700
+  by orsmga007.jf.intel.com with ESMTP; 26 Aug 2022 10:07:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5D85E1C3; Fri, 26 Aug 2022 20:07:21 +0300 (EEST)
+        id 04AF3238; Fri, 26 Aug 2022 20:07:21 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH v2 2/4] pwm: sysfs: Return directly from the for-loop in PM callbacks
-Date:   Fri, 26 Aug 2022 20:07:14 +0300
-Message-Id: <20220826170716.6886-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 3/4] pwm: sysfs: Replace sprintf() with sysfs_emit()
+Date:   Fri, 26 Aug 2022 20:07:15 +0300
+Message-Id: <20220826170716.6886-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
 References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
@@ -65,65 +65,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to assign ret to 0 and then break the loop just
-for returning the error to the caller. Instead, return directly
-from the for-loop, and 0 otherwise.
+For sysfs outputs, it's safer to use a new helper, sysfs_emit(),
+instead of the raw sprintf() & co. This patch replaces such a
+sprintf() call straightforwardly with the new helper.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
 v2: added tag (Uwe)
  drivers/pwm/sysfs.c | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/pwm/sysfs.c b/drivers/pwm/sysfs.c
-index c21b6046067b..1543fe07765b 100644
+index 1543fe07765b..767c4b19afb1 100644
 --- a/drivers/pwm/sysfs.c
 +++ b/drivers/pwm/sysfs.c
-@@ -413,7 +413,7 @@ static int pwm_class_resume_npwm(struct device *parent, unsigned int npwm)
- {
- 	struct pwm_chip *chip = dev_get_drvdata(parent);
- 	unsigned int i;
--	int ret = 0;
-+	int ret;
+@@ -42,7 +42,7 @@ static ssize_t period_show(struct device *child,
  
- 	for (i = 0; i < npwm; i++) {
- 		struct pwm_device *pwm = &chip->pwms[i];
-@@ -427,17 +427,17 @@ static int pwm_class_resume_npwm(struct device *parent, unsigned int npwm)
- 		state.enabled = export->suspend.enabled;
- 		ret = pwm_class_apply_state(export, pwm, &state);
- 		if (ret < 0)
--			break;
-+			return ret;
- 	}
+ 	pwm_get_state(pwm, &state);
  
--	return ret;
-+	return 0;
+-	return sprintf(buf, "%llu\n", state.period);
++	return sysfs_emit(buf, "%llu\n", state.period);
  }
  
- static int pwm_class_suspend(struct device *parent)
- {
- 	struct pwm_chip *chip = dev_get_drvdata(parent);
- 	unsigned int i;
--	int ret = 0;
-+	int ret;
+ static ssize_t period_store(struct device *child,
+@@ -77,7 +77,7 @@ static ssize_t duty_cycle_show(struct device *child,
  
- 	for (i = 0; i < chip->npwm; i++) {
- 		struct pwm_device *pwm = &chip->pwms[i];
-@@ -457,11 +457,11 @@ static int pwm_class_suspend(struct device *parent)
- 			 * this suspend function.
- 			 */
- 			pwm_class_resume_npwm(parent, i);
--			break;
-+			return ret;
- 		}
- 	}
+ 	pwm_get_state(pwm, &state);
  
--	return ret;
-+	return 0;
+-	return sprintf(buf, "%llu\n", state.duty_cycle);
++	return sysfs_emit(buf, "%llu\n", state.duty_cycle);
  }
  
- static int pwm_class_resume(struct device *parent)
+ static ssize_t duty_cycle_store(struct device *child,
+@@ -112,7 +112,7 @@ static ssize_t enable_show(struct device *child,
+ 
+ 	pwm_get_state(pwm, &state);
+ 
+-	return sprintf(buf, "%d\n", state.enabled);
++	return sysfs_emit(buf, "%d\n", state.enabled);
+ }
+ 
+ static ssize_t enable_store(struct device *child,
+@@ -171,7 +171,7 @@ static ssize_t polarity_show(struct device *child,
+ 		break;
+ 	}
+ 
+-	return sprintf(buf, "%s\n", polarity);
++	return sysfs_emit(buf, "%s\n", polarity);
+ }
+ 
+ static ssize_t polarity_store(struct device *child,
+@@ -212,7 +212,7 @@ static ssize_t capture_show(struct device *child,
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%u %u\n", result.period, result.duty_cycle);
++	return sysfs_emit(buf, "%u %u\n", result.period, result.duty_cycle);
+ }
+ 
+ static DEVICE_ATTR_RW(period);
+@@ -361,7 +361,7 @@ static ssize_t npwm_show(struct device *parent, struct device_attribute *attr,
+ {
+ 	const struct pwm_chip *chip = dev_get_drvdata(parent);
+ 
+-	return sprintf(buf, "%u\n", chip->npwm);
++	return sysfs_emit(buf, "%u\n", chip->npwm);
+ }
+ static DEVICE_ATTR_RO(npwm);
+ 
 -- 
 2.35.1
 

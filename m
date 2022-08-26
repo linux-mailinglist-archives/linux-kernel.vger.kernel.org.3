@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE065A2880
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7735A2887
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344266AbiHZN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
+        id S1344332AbiHZN2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiHZN0p (ORCPT
+        with ESMTP id S229970AbiHZN2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:26:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940F3ABD68;
-        Fri, 26 Aug 2022 06:26:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0758561CED;
-        Fri, 26 Aug 2022 13:26:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607DCC433D6;
-        Fri, 26 Aug 2022 13:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661520403;
-        bh=RJu7liuWmzOWolUeo5PczxL4RZPU8wvRhMZ/JuQm9CI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G+O7UTevcpWB6Kd+btNL9zeLqivgsnayMYgE1brsz2WFZhfN7ukeHzONeFSxhV9wo
-         LpB0IhSBGf7UTUvvGGMEPpEXDZ0pcXOnJdhaH1xLdgGz7m/0VvyqV1OcbWjvXyhZlC
-         4cMN1eP2Y61Wj85P5xp3vgR2vrZjbIQFXn6ihq4Hctg2oixhpn90iWulT9OUSizBYn
-         cHz9q5OiGCIC4I1BB9vY+s0ZotxQ0O7bAClUArDaWrezFnSIBG55mnQD10JeQ00mYK
-         ouV2aF/QV8Cgjjv8ZmJuZZJNsiefCSL8TPXpaCndwJBYC5tKimQayl9ooDXVpUFETH
-         YqnuZkp9BEvQA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oRZMJ-0002GC-GT; Fri, 26 Aug 2022 15:26:52 +0200
-Date:   Fri, 26 Aug 2022 15:26:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 2/2] clk: qcom: gcc-sc7280: Keep USB GDSC power domains
- on when USB wakeup is enabled
-Message-ID: <YwjKG83tmRT0Y6sj@hovoldconsulting.com>
-References: <20220822115246.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
- <20220822115246.2.If09027f73daa6e1ed95f5eab02326b543c67132e@changeid>
- <YwS3FCOqIeajMEgz@hovoldconsulting.com>
- <YwUDjaG6n95Ddij2@google.com>
- <YwXlsK3pjK/q1xwO@hovoldconsulting.com>
- <Ywf02oIXEL8G/Heo@google.com>
- <YwjFD9uHnSxoZHvT@google.com>
- <YwjGpSXOscDwbvQH@hovoldconsulting.com>
- <YwjIadKu0Wv2+VDk@google.com>
- <YwjJlRE1qRskZi/y@google.com>
+        Fri, 26 Aug 2022 09:28:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76157D91CC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661520524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sgxwSFOIh54EtZVmIF6eRuoxcZoMjiIGAdMZ3OxKrqI=;
+        b=MmHQSTfVb/FaXY2MxwPVEx+znb0iCl2Jz+P1DQ4tLJqHFQ+U5M4WegmMAMYG/nyGFP9MC5
+        VYH1LZ9ohOdgja8tOA9yS3KE29CR+UbBiTuxJPY3zsOgk7OqGGRi/tpuYn/o4aAe5ckgui
+        uswrZr7PIqxqSSIrB7rwRL9T5Ok37xY=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-426-2qGmffvwMMe1KiByd1PuxQ-1; Fri, 26 Aug 2022 09:28:41 -0400
+X-MC-Unique: 2qGmffvwMMe1KiByd1PuxQ-1
+Received: by mail-pg1-f199.google.com with SMTP id a12-20020a65604c000000b0042a8c1cc701so857762pgp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:28:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=sgxwSFOIh54EtZVmIF6eRuoxcZoMjiIGAdMZ3OxKrqI=;
+        b=LhXfIaCkia+NRTSOobPLrLjRmN1iPSq6cb+UBM5NwLQQ5zHEJZba3XOoYLLnpEblvh
+         vxNbTwmyBuvdzlFltqloo/mA6Hl8h9suNNIQ0hIXE0RyXXiq+TYb3Hq5MQ0IK143yC4V
+         3gsOs4ua1Iuqhd/0fByvpegX8ZaOu2r44bHNJbgrVIEdpsCSDm2ntLIk3VW2JeWSns2p
+         SAfY4nOHlMVnWtgyNcq0p7SVfqalU6laeaCEm/A4O6aHNHRdd11XKX9bAjztkYX5TIRj
+         LaQI0ES5+xegW1w+az6E8Bn9KeuYT/uIeaUj4ylf3TWWOBm+0CLYUvSr/hK0lJp2HCFd
+         Y+XQ==
+X-Gm-Message-State: ACgBeo3Lbf++GmGSYwEswlzVPQP4eCh1zHatd+D0PudcQJRg7agngx9e
+        WtgpJ3Aiu1uUbhrsSvTAtzglnMahSoh+ItmRLg2qpwUyd/qTxcCz5nd/I2Ngm0mAjiGZxklB907
+        +IXW7BRMTEO5H+VFrPSs29BjmIllhe2j+EJKp/Mko
+X-Received: by 2002:a05:6a00:15ce:b0:537:24ee:cbcf with SMTP id o14-20020a056a0015ce00b0053724eecbcfmr3794896pfu.30.1661520520372;
+        Fri, 26 Aug 2022 06:28:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5GXmUOOA8TaJrQGAd0RVSO5V8ppVyacwCExmmyD+lUPx9uKDeCnQ22UA3d09DQa33dIJwDyQ32kbXmPafZg+Y=
+X-Received: by 2002:a05:6a00:15ce:b0:537:24ee:cbcf with SMTP id
+ o14-20020a056a0015ce00b0053724eecbcfmr3794882pfu.30.1661520520137; Fri, 26
+ Aug 2022 06:28:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwjJlRE1qRskZi/y@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220818210144.7915-1-wsa+renesas@sang-engineering.com>
+ <bd7275c6-4ebe-de99-75c2-400cfa2e5026@redhat.com> <YwaFRvWw5hi/uWYs@shikoro> <d53a4672-d068-c394-6ab1-058b2d72701f@redhat.com>
+In-Reply-To: <d53a4672-d068-c394-6ab1-058b2d72701f@redhat.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Fri, 26 Aug 2022 15:28:28 +0200
+Message-ID: <CAHc6FU4g_6qYsUoFOnfcX5e2=XiZCu76EUy8kFP1AHDW0f6zyQ@mail.gmail.com>
+Subject: Re: [Cluster-devel] [PATCH] gfs2: move from strlcpy with unused
+ retval to strscpy
+To:     Andrew Price <anprice@redhat.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Bob Peterson <rpeterso@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 06:24:37AM -0700, Matthias Kaehlcke wrote:
-> On Fri, Aug 26, 2022 at 06:19:37AM -0700, Matthias Kaehlcke wrote:
-> > On Fri, Aug 26, 2022 at 03:12:05PM +0200, Johan Hovold wrote:
-> > > On Fri, Aug 26, 2022 at 06:05:19AM -0700, Matthias Kaehlcke wrote:
-> > > > On Thu, Aug 25, 2022 at 03:16:58PM -0700, Matthias Kaehlcke wrote:
-> > > > > On Wed, Aug 24, 2022 at 10:47:44AM +0200, Johan Hovold wrote:
-> > > 
-> > > > > > The wakeup setting doesn't seem to have anything to do with the genpd
-> > > > > > issues on sc8280xp and the controller doesn't resume properly regardless
-> > > > > > of whether the PHYs have been disabled or not during suspend unless the
-> > > > > > PD is left on.
-> > > > > 
-> > > > > I'm essentially seeing the same. USB is hosed after resume unless the PD
-> > > > > is left on.
-> > > > > 
-> > > > > On Chrome OS we currently work around that with a version of commit
-> > > > > d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller
-> > > > > status") which was reverted upstream. I'm not sure whether USB worked after
-> > > > > resume before we enabled wakeup support. I would have sworn it did, but we
-> > > > > landed an old version of the wakeup patches a long time ago, so my
-> > > > > memory might be failing me.
-> > > > 
-> > > > I need to remind myself that keeping the GDSC on is only needed when the PHYs
-> > > > are kept on. The PHYs were always off before wakeup support was added, which
-> > > > is why USB wasn't broken after suspend in the pre-wakeup days.
-> > > 
-> > > Ok, so to be clear: if you disable wakeup with my patches applied so
-> > > that the PD is actually turned off, USB still resumes with only
-> > > GENPD_FLAG_ACTIVE_WAKEUP set?
-> 
-> Actually without GENPD_FLAG_ACTIVE_WAKEUP
+Wolfram and Andy,
 
-Sure, that only comes into play with wakeup enabled. I assume you still
-need it for USB wakeup to work?
+On Thu, Aug 25, 2022 at 11:33 AM Andrew Price <anprice@redhat.com> wrote:
+> On 24/08/2022 21:08, Wolfram Sang wrote:
+> > Hi Andy.
+> >
+> >>> -   strlcpy(sdp->sd_proto_name, proto, GFS2_FSNAME_LEN);
+> >>> -   strlcpy(sdp->sd_table_name, table, GFS2_FSNAME_LEN);
+> >>> +   strscpy(sdp->sd_proto_name, proto, GFS2_FSNAME_LEN);
+> >>> +   strscpy(sdp->sd_table_name, table, GFS2_FSNAME_LEN);
+> >>
+> >> Perhaps the size should be changed to GFS2_LOCKNAME_LEN to match the size of
+> >> the destination, too.
+> >>
+> >> With that addition, this patch fixes this syzkaller report:
+> >>
+> >> https://listman.redhat.com/archives/cluster-devel/2022-August/022755.html
+> >
+> > Linus wrote another summary about strlcpy vs. strscpy use[1]. So, the
+> > size argument should be the size of the smaller buffer if the buffers
+> > are of different size. GFS2_LOCKNAME_LEN is smaller, so that looks
+> > suitable. Shall I resend the patch with the suggested change?
+>
+> Yes, please. I can't speak for the gfs2 maintainers but I think it would
+> be a good plan, as the combination of strscpy and the size change fixes
+> a bug.
 
-Johan
+thanks, I've fixed this in for-next now:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?h=for-next&id=204c0300c4e99707e9fb6e57840aa1127060e63f
+
+Andreas
+

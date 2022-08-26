@@ -2,99 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F535A2277
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A9F5A2279
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245752AbiHZH6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S1343494AbiHZH6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245695AbiHZH6W (ORCPT
+        with ESMTP id S1343493AbiHZH6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:58:22 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2BFD41A4;
-        Fri, 26 Aug 2022 00:58:21 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q3teud026046;
-        Fri, 26 Aug 2022 09:58:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=KltPJl7Ifr5rnBSzdvpzScGg0CgWIPQrs+pS1su925I=;
- b=MvF+yqqFBjCMcsH12r7zmHsyJZnjzWaEp1mlgaQIXaE1cPGvAKKqu0V7Wc+RIEDw7LWe
- rjaIvm2qgC3vdXXpbwuAjJLSId5QXg7ZKHGoyaQ8FecRRFKth7IqzofSCYzYwlyvgbKA
- 1Y9U1e2xROrzUlMMnVN5o0EqnIBXG63L1Obfa2e9Z3q8/3VKwoi6CFfsKd/7xjStqJLK
- C/eSeR2mvFIxYdBYzD3v2T4KxqO/KFy8rkcanvwLUpP9UlwtXSCv7uMsgjH0n2sL1yd8
- b2oGQTpwMDxH5+UB7wm5cU9Jn13Cu1+3niOGKf+UROU/wVyJAiZO7ApFvZk2c7IejE0V ug== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j52b11328-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 09:58:10 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BDF23100038;
-        Fri, 26 Aug 2022 09:58:09 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B9503215130;
-        Fri, 26 Aug 2022 09:58:09 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.45) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 26 Aug
- 2022 09:58:08 +0200
-Message-ID: <03b3c313-92b1-3955-4a16-f34b9901171b@foss.st.com>
-Date:   Fri, 26 Aug 2022 09:58:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 0/2] ARM: dts: stm32: add SPI on STM32MP13 platform
-Content-Language: en-US
-To:     Alain Volmat <alain.volmat@foss.st.com>
-CC:     <robh+dt@kernel.org>, <mcoquelin.stm32@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>
-References: <20220725075255.429869-1-alain.volmat@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220725075255.429869-1-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_03,2022-08-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 26 Aug 2022 03:58:48 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D754DD474A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:58:44 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id e11-20020a17090a630b00b001f8b2deb88dso4446771pjj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=a6nmZzERx5jmaa+H9eWn+VAql7U9519YoIZhrItY5vc=;
+        b=qKnQTpW6EfBm2KqU+KthgTUBLjGgE+LzDkwCVdsC6ZRuRl0KKlRuxye/RulVZAfKIO
+         RpVMutX1FHKAO3UO8iTUi2cyx1TE+pOPsqxn8htKUopYETNZy80CxTKTl+1NGGrqRJfn
+         U1R4tkR7Cn1b6N3P/alCxMSMqmpsPh0hjfbEIsdKWRyWtdxLm+vfDNjmdDxx51QD1AiN
+         IsrMB4QodF6kUaExRQMo9K9yKlGMuRV6zcqZLxcCiuTTw+qZXTL0EVPnrr9MGljV1p/F
+         jYpqJrIfGrany/KPFm7moXprdCPi6DuCbEZsJo5ue1RlNwzxjEZfZAcB44XVtHro7THi
+         ibGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=a6nmZzERx5jmaa+H9eWn+VAql7U9519YoIZhrItY5vc=;
+        b=uee5uUCVivcGs2/UQtUbRTzcjGsdgqvsA1mqbKAEJ0mEvOQTKQMyHpov5jNm+k0Kig
+         pnfzFY3KI5btQrTiTa+IbpN+r1bIGxpYR+Ki3623+QqkYJ6TlXBb3wafaEayuDWCgqeN
+         SdJQZZhhCLIi9l6XYnANfzZfvdrbV5fwSCJo3EnpIvrllw50j7EinKhP93YHMZ9ElKgl
+         88RdZYKiecH/fLwQhn48H0i/sQG0Z5MrnM0REJLPGu+aLicFoOw6tuXCw8I9BmMBKIBa
+         bYHkH7ZMywgcqJ0Q0f33Z1MCkdu76LYS8h4x3m9U5CCMqMHbUV8mUkohDC4jYhgTdamT
+         Sc2w==
+X-Gm-Message-State: ACgBeo0+XkBO8RAA9+IB/n5IOCZuVX2pZz3Vw2Cr71YJNURuvwwfbMx9
+        PqF8H5X5vYfEgCr7N1wlKYuFVSHEYu4=
+X-Google-Smtp-Source: AA6agR5WkTeV6YDAkISWDVu/oQCYIjdhnEyvHFCjBqbhVzVSUPixE08WUwx7ARpH3GN1fBBttpOWyRyQbQs=
+X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:7c89:f723:158f:fc])
+ (user=raychi job=sendgmr) by 2002:aa7:8c4a:0:b0:537:aae3:783e with SMTP id
+ e10-20020aa78c4a000000b00537aae3783emr2802435pfd.64.1661500724402; Fri, 26
+ Aug 2022 00:58:44 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 15:58:39 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220826075839.292615-1-raychi@google.com>
+Subject: [PATCH] usb: core: stop USB enumeration if too many retries
+From:   Ray Chi <raychi@google.com>
+To:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        albertccwang@google.com, badhri@google.com, pumahsu@google.com,
+        Ray Chi <raychi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alain
+If a broken accessory connected to a USB host, usbcore might
+keep doing enumeration retries and it will take a long time to
+cause system unstable.
 
-On 7/25/22 09:52, Alain Volmat wrote:
-> This series adds DT entries related to all spi nodes for the
-> STM32MP13 platform.
-> 
-> v2: reorder all node properties, starting with compatible and reg
-> 
-> Alain Volmat (2):
->    ARM: dts: stm32: add spi nodes into stm32mp131.dtsi
->    ARM: dts: stm32: add pinctrl and disabled spi5 node in stm32mp135f-dk
-> 
->   arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 23 ++++++++
->   arch/arm/boot/dts/stm32mp131.dtsi        | 70 ++++++++++++++++++++++++
->   arch/arm/boot/dts/stm32mp135f-dk.dts     |  7 +++
->   3 files changed, 100 insertions(+)
-> 
+This patch provides a quirk to specific USB ports of the hub to
+stop USB enumeration if needed.
 
-Series applied on stm32-next.
+Signed-off-by: Ray Chi <raychi@google.com>
+---
+ drivers/usb/core/hub.c | 33 +++++++++++++++++++++++++++++++++
+ include/linux/usb.h    |  3 +++
+ 2 files changed, 36 insertions(+)
 
-Regards
-Alex
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 2633acde7ac1..0f4097440ffb 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3081,6 +3081,28 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+ 	return status;
+ }
+ 
++/* Stop enumerate if the port met errors and quirk is set */
++static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
++{
++	struct usb_port *port_dev = hub->ports[port1 - 1];
++	struct usb_device *hdev = hub->hdev;
++
++	if (retries < (PORT_INIT_TRIES - 1) / 2)
++		return false;
++
++	/*
++	 * Some USB hosts can't take a long time to keep doing enumeration
++	 * retry. After doing half of the retries, we would turn off the port
++	 * power to stop enumeration if the quirk is set.
++	 */
++	if (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM) {
++		usb_hub_set_port_power(hdev, hub, port1, false);
++		return true;
++	}
++
++	return false;
++}
++
+ /* Check if a port is power on */
+ int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
+ {
+@@ -4855,6 +4877,9 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 					buf->bMaxPacketSize0;
+ 			kfree(buf);
+ 
++			if (r < 0 && (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM))
++				goto fail;
++
+ 			retval = hub_port_reset(hub, port1, udev, delay, false);
+ 			if (retval < 0)		/* error or disconnect */
+ 				goto fail;
+@@ -5387,6 +5412,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+ 			break;
+ 
++		if (hub_port_stop_enumerate(hub, port1, i))
++			break;
++
+ 		/* When halfway through our retry count, power-cycle the port */
+ 		if (i == (PORT_INIT_TRIES - 1) / 2) {
+ 			dev_info(&port_dev->dev, "attempt power cycle\n");
+@@ -5934,6 +5962,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 		ret = hub_port_init(parent_hub, udev, port1, i);
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+ 			break;
++
++		if (hub_port_stop_enumerate(parent_hub, port1, i))
++			goto stop_enumerate;
+ 	}
+ 	mutex_unlock(hcd->address0_mutex);
+ 
+@@ -6022,6 +6053,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 	udev->bos = bos;
+ 	return 0;
+ 
++stop_enumerate:
++	mutex_unlock(hcd->address0_mutex);
+ re_enumerate:
+ 	usb_release_bos_descriptor(udev);
+ 	udev->bos = bos;
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index f7a9914fc97f..fc0fef58c706 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -490,6 +490,9 @@ enum usb_port_connect_type {
+ /* Decrease TRSTRCY to 10ms during device enumeration. */
+ #define USB_PORT_QUIRK_FAST_ENUM	BIT(1)
+ 
++/* Stop the enumeration for the given port if there are too many failures*/
++#define USB_PORT_QUIRK_STOP_ENUM	BIT(2)
++
+ /*
+  * USB 2.0 Link Power Management (LPM) parameters.
+  */
+-- 
+2.37.2.672.g94769d06f0-goog
+

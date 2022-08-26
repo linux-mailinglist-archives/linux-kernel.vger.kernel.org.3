@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F40B5A2891
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245C05A2894
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242333AbiHZN34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        id S229715AbiHZNa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344191AbiHZN3w (ORCPT
+        with ESMTP id S231664AbiHZNay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:29:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A47183A5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:29:49 -0700 (PDT)
-Received: from notapiano (unknown [70.107.189.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 224F16601B24;
-        Fri, 26 Aug 2022 14:29:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661520587;
-        bh=+m7sis5b7W8J1KdNle4N0fSBG5qi9iWA0tl/U2ExgXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kbcQ27OiXN4L4WS3AG+PvOv7ae/3Eg8kbk7YBuBUC451fN1xBzRc0WTGIhVkh8HRA
-         TjnnsPne5t5aFubjmIdbgMCnPSfBYMq8B8N/2i44+DEE6HFX0XI3/J/PLASYLlqRan
-         ib9M6x+PUgv0jJrNhDpSem+wsnOeqLeBE2sJ9VpHNavFzGqM2JPtCYIkVj1pcaeDu4
-         0Hac8gIJTwbgOy1YeeL0/8fYXgSET8355QagOgJ5ViauNhJ7lMU0DgJeGQ5OiH/g5n
-         YPZpygzbV8XhLtZmaV05NRDhq41G9pTlFIIBEeRjmHgfcmjQP2jhjQ4yw/g0B9WM7z
-         mt2K9gggrZFrA==
-Date:   Fri, 26 Aug 2022 09:29:42 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "xinlei.lee" <xinlei.lee@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        rex-bc.chen@mediatek.com, angelogioacchino.delregno@collabora.com,
-        jason-jh.lin@mediatek.com, yongqiang.niu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Jitao Shi <jitao.shi@mediatek.com>
-Subject: Re: [PATCH v3,1/2] soc: mediatek: Add mmsys func to adapt to dpi
- output for MT8186
-Message-ID: <20220826132942.k2rnlz5wwi62tity@notapiano>
-References: <1661236702-30682-1-git-send-email-xinlei.lee@mediatek.com>
- <20220823201758.ffbgb5t5odoicgir@notapiano>
- <b0f6a3c6-8fef-8983-fb69-6157a9859afd@gmail.com>
- <30f536c754829011e78239a9a400945faa4580e4.camel@mediatek.com>
+        Fri, 26 Aug 2022 09:30:54 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AD4DC086
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:30:52 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-33dc31f25f9so35743457b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0ooGIQ5Kg7jlU4lI2Cbblsvn4XORFVsSck/7vKrYV5k=;
+        b=RthvJZDD6WkH/T8xq6gxuM0kxfn7dYAeAVlAoyWlAGa6oC5TBs3ldeTFWpU5c2ojYk
+         6C8+ArPTWOen8U0ibf8dSx+uOdtUUhhuiEeVvE5EHccd+rLY5LQCY7kioajwXmfDlU7D
+         jvP9UeVcAIVfqtPPvTIiyBekGgNpgL0dZTrABnoHSISTEiX8svH0SChx20NSoDQS3nT/
+         lhGy68aW6si8WsUJAMdM34A8/CtXlDWDSRwyy9Twsy/STg5EBfH06dDm+b6vY0Kt3hjw
+         kBpSy17EFr7e2h76G1xdsb+qg7Nn5MgIsnGv7xDl1BLksZ4cnIik9I2LbHS4n118sSr4
+         EHHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0ooGIQ5Kg7jlU4lI2Cbblsvn4XORFVsSck/7vKrYV5k=;
+        b=iGeQqUu2fDP4gC4AilJNHXEhy9r9nEjvCZSLKOeLA9KUxngnDINjWpnvS+Uwi9jNB6
+         Q20oNMM2ZuD6XYYK62z7V2d08ovYg8CBg/MtLR5SNh9o4HI4SEbM1Z91ubDWAml+RAl7
+         I8uTHxDb30xZrSHAzu566ClVgJq8VhJ7VZr9dbcH4XoNkxrKi58wiTW+mKJiIANC4iYi
+         Rx4eRjf8VxKd+6xVPJVK8EJoJxVoc0z5fJouxzr+WonDZ7FXqquzVeF0DhgIMFFXPR5Y
+         wuHvNnCxjscpRxGZTSOlFLc0rJn/bEjUAmCyDcVIW1urZRuOboutuMkiODXa9reA7CQt
+         Nceg==
+X-Gm-Message-State: ACgBeo0FIDJcPYGl4myFvt/V86z0jyZJZLKTfI3aUu7VvhmWqUPTyYyW
+        cdFiTBH2U7ZEz2/eP+dztz2Fi3U8kLdq7L/tE0v8BQ==
+X-Google-Smtp-Source: AA6agR5YXZgq6kN4fV1MxKqyc0vTIjMz0GJ4TdquA00/dxmzeThXpKF5sia/6ppI0ut+CScaGfjZ9OH1Rt8W2wuX5a4=
+X-Received: by 2002:a81:594:0:b0:33d:a498:167c with SMTP id
+ 142-20020a810594000000b0033da498167cmr8974402ywf.59.1661520651973; Fri, 26
+ Aug 2022 06:30:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <30f536c754829011e78239a9a400945faa4580e4.camel@mediatek.com>
+References: <20220823102344.17624-1-henning.schild@siemens.com>
+ <20220823102344.17624-2-henning.schild@siemens.com> <YwToilxquEZGqzQD@smile.fi.intel.com>
+ <20220823165459.143e1c30@md1za8fc.ad001.siemens.net> <YwYjXzsSHNe+J3aO@76cbfcf04d45>
+ <20220824155038.5aa19495@md1za8fc.ad001.siemens.net> <a001efb5-95a3-d89d-32bd-557b6f11bb80@redhat.com>
+ <20220824161757.4ca3bb97@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220824161757.4ca3bb97@md1za8fc.ad001.siemens.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 15:30:39 +0200
+Message-ID: <CACRpkdbKzoVoch+hRJtp=vaCQvKSt+=HMJYZ4WxWjFr+-tZ4KQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, simon.guinot@sequanux.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 02:12:00PM +0800, xinlei.lee wrote:
-> On Thu, 2022-08-25 at 17:04 +0200, Matthias Brugger wrote:
-> > 
-> > On 23/08/2022 22:17, Nícolas F. R. A. Prado wrote:
-> > > On Tue, Aug 23, 2022 at 02:38:22PM +0800, xinlei.lee@mediatek.com
-> > > wrote:
-> > > > From: Xinlei Lee <xinlei.lee@mediatek.com>
-> > > > 
-> > > > Add mmsys function to manipulate dpi output format configuration
-> > > > for MT8186.
-> > > > 
-> > > > Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
-> > > > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> > > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> > > 
-> > > Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > > 
-> > 
-> > Patch looks fine, I'll wait for v4 as there is still some discussion
-> > on the DRM 
-> > part. Please try to fix the threading problem you had in sending this
-> > series.
-> > 
-> > Thanks,
-> > Matthias
-> 
-> Hi Matthias:
-> 
-> Thanks for your review.
-> 
-> Before I send the next version, do you mean the treading problem you
-> are talking about is the problem I'm discussing in another patch in
-> this series, or something else?
+On Wed, Aug 24, 2022 at 4:18 PM Henning Schild
+<henning.schild@siemens.com> wrote:
 
-Hi Xinlei,
+> > You did not write it, but you are using it to do hw-enablement for
+> > your company's products. So being asked to also some touch-ups
+> > left and right while you are at it really is not unexpected IMHO.
+>
+> Sure thing. Dropping a few characters from a line i touch anyhow is
+> easy enough. But i.e a refactoring to pr_fmt would feel like asking too
+> much in my book. That feels like work of the author or maintainer.
+>
+> In fact i am just doing the homework of what i think should have long
+> been done by Nuvoton.
 
-no, the threading problem Matthias is referring to is the fact that this version
-of your series had two cover letters (patch 0) and a patch 2 [1], while patch 1
-was sent in a different email thread [2]. The whole series (cover letter,
-patches 1 and 2), should have been in the same email thread. Also, I noticed
-that your cover letter lists the patches with incorrect prefixes "FROMLIST".
+A lot of vendors don't have much active upstream participation, they
+outsource that work to people like yourself by just ignoring it.
 
-So something weird happened when you sent this version of the series. It was ok
-in the previous version. So just make sure this is fixed when you send the next
-version of the series (after we finish the discussion on patch 2).
+> I hope that v5 will be acceptable.
 
-[1] https://lore.kernel.org/linux-mediatek/1661235517-23699-1-git-send-email-xinlei.lee@mediatek.com/
-[2] https://lore.kernel.org/linux-mediatek/1661236702-30682-1-git-send-email-xinlei.lee@mediatek.com/
+Bartosz is applying GPIO patches now, but my principle was that
+when I feel a patch makes the kernel look better after than before the
+patch and no new version is coming, I just apply the patch.
+This is how we deal with "perfect is the enemy of good" in practice.
+That said, we are all grateful for any improvements you manage to
+sneak in!
 
-Thanks,
-Nícolas
+Yours,
+Linus Walleij

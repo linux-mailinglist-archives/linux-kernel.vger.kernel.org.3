@@ -2,61 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6003F5A224D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B895A2252
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245645AbiHZHwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S245691AbiHZHxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245610AbiHZHwB (ORCPT
+        with ESMTP id S242447AbiHZHwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:52:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7BBD347E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:52:00 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRU8E-0001SH-B3; Fri, 26 Aug 2022 09:51:58 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRU8E-0004tJ-0G; Fri, 26 Aug 2022 09:51:58 +0200
-Date:   Fri, 26 Aug 2022 09:51:57 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        Jakub Kicinski <kuba@kernel.org>, UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v3 15/17] net: dsa: microchip: ksz9477: remove
- unused "on" variable
-Message-ID: <20220826075157.GD2116@pengutronix.de>
-References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
- <20220823080231.2466017-16-o.rempel@pengutronix.de>
- <20220825205407.jayiksjrnccpknoj@skbuf>
+        Fri, 26 Aug 2022 03:52:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C90ED3E7B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:52:53 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q4fDYu010624;
+        Fri, 26 Aug 2022 07:52:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2r67fnxG1d/G01C83dTecSDL8ltCIpH6BkdTqoYwbJs=;
+ b=cQvtsIA4Z+pR1JhNaIVjqMZ9CvYi6PI/RqHBHUNOWnVF0lIgIi3xVI8osFW2RTWf6IuK
+ mO+ixTtS8adeoYT1zKe+TkFKODEruDvPXVGo6pp5KqveDsMdfWwM/J/+X5V6SnWup9IW
+ WALlDaUhz6AX4unpjLZasIFuT8io0nDVuUNs/WGA4ia4Iw8gm8E+76wJYGuf2sUmR6sp
+ tlMbN/U77VBWApA17ixwHAKVv9GTTWhqOiyu94OtU3vZBbt2kjAFn/jS6JBu/wQCu7Rp
+ Ateoo+UcEA+wMNiDuOai5pZ/z84HOscgzyjPu3P2nzqkVsYUlbHeZ/JpflIlvpoeHj4i OA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j64h7mk50-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 07:52:38 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q7qbv2024922;
+        Fri, 26 Aug 2022 07:52:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3j6g9j1x72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 07:52:37 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27Q7qbJL024917;
+        Fri, 26 Aug 2022 07:52:37 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 27Q7qawV024915
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 07:52:37 +0000
+Received: from [10.216.48.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 26 Aug
+ 2022 00:52:32 -0700
+Message-ID: <fc952f08-f987-9e06-b52d-4a23d66f9d5d@quicinc.com>
+Date:   Fri, 26 Aug 2022 13:22:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220825205407.jayiksjrnccpknoj@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V4] mm: fix use-after free of page_ext after race with
+ memory-offline
+Content-Language: en-US
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>,
+        <mhocko@suse.com>, <vbabka@suse.cz>, <pasha.tatashin@soleen.com>,
+        <shakeelb@google.com>, <sieberf@amazon.com>, <sjpark@amazon.de>,
+        <william.kucharski@oracle.com>, <willy@infradead.org>,
+        <quic_pkondeti@quicinc.com>, <minchan@google.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+References: <1660830600-9068-1-git-send-email-quic_charante@quicinc.com>
+ <01fd2b11-513d-eb91-5ce6-fcaa198f8d28@redhat.com>
+ <113fd59f-e4c0-4ee1-4196-6c926677947c@quicinc.com>
+In-Reply-To: <113fd59f-e4c0-4ee1-4196-6c926677947c@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oyOIePZPgahvipBwNzl_jEUG7-iQUkKV
+X-Proofpoint-GUID: oyOIePZPgahvipBwNzl_jEUG7-iQUkKV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-26_02,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ phishscore=0 mlxscore=0 bulkscore=0 adultscore=0 mlxlogscore=561
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208260028
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,54 +97,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:54:07PM +0300, Vladimir Oltean wrote:
-> On Tue, Aug 23, 2022 at 10:02:29AM +0200, Oleksij Rempel wrote:
-> > This variable is not used on ksz9477 side. Remove it.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/microchip/ksz9477.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> > index bfefb60ec91bf..609bd63f4cdb1 100644
-> > --- a/drivers/net/dsa/microchip/ksz9477.c
-> > +++ b/drivers/net/dsa/microchip/ksz9477.c
-> > @@ -1070,7 +1070,6 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
-> >  
-> >  			/* enable cpu port */
-> >  			ksz9477_port_setup(dev, i, true);
-> > -			p->on = 1;
-> >  		}
-> >  	}
-> >  
-> > @@ -1080,7 +1079,6 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
-> >  		p = &dev->ports[i];
-> >  
-> >  		ksz_port_stp_state_set(ds, i, BR_STATE_DISABLED);
-> > -		p->on = 1;
-> >  		if (dev->chip_id == 0x00947700 && i == 6) {
-> >  			p->sgmii = 1;
-> >  		}
-> > -- 
-> > 2.30.2
-> > 
+Hi David,
+
+On 8/23/2022 10:35 PM, Charan Teja Kalla wrote:
+>> I kind-of dislike the "loop" labels. Can we come up with a more
+>> expressive name?
+>>
+>> "put_continue"
+>>
+>> or something?
+>>
+>>
+>> One alternative would be to add to the beginning of the loop, and after
+>> the loop sth like
+>>
+>> if (page_ext) {
+>> 	page_ext_put(page_ext);
+>> 	page_ext = NULL;
+>> }
+> I think, moving this to beginning of the loop looks cleaner than the
+> goto statement.  Will spin V5.
 > 
-> And it seems like it's not used on ksz8 either. The reason I'm saying
-> that is that ksz8_flush_dyn_mac_table() is the only apparent user of
-> p->on, and that only for the case where flushing the FDB of all ports is
-> requested (port > dev->info->port_cnt). But ksz8_flush_dyn_mac_table()
-> (through dev->dev_ops->flush_dyn_mac_table) is only called from DSA's
-> ds->ops->port_fast_age() method, and that will never be requested
-> "for all ports" (and to my knowledge never was in the past, either).
-> Badly ported SDK code would be my guess. So there are more
-> simplifications which could be done.
-
-Ok, i'll take a look on it as soon as i get one of ksz8 board in my
-fingers.
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I have realized that goto looks simpler and cleaner... Raised V5 @
+https://lore.kernel.org/all/1661496993-11473-1-git-send-email-quic_charante@quicinc.com/
+> 

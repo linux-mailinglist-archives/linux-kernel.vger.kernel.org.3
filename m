@@ -2,247 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9495A25F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B505C5A25F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343801AbiHZKhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S1343492AbiHZKjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242864AbiHZKhk (ORCPT
+        with ESMTP id S235903AbiHZKjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:37:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23DED570D;
-        Fri, 26 Aug 2022 03:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661510259; x=1693046259;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=9hnCuIQP0Do9Va8hiUiS3qPMSpvIWNQCjLORaXq96rM=;
-  b=SkN7+8A8mFTAywJwapYZC4VN9VBqMP4vOj9mMlam4gdn8rex+34AVvYA
-   jkCrdxf0cXhuzs0exIQ9fsVGQYS1CfbEh27VgMcmeSL3C2Rf2Meubusmq
-   1oer5ZqlWeavcdZyEyOZltAWsoyw5t+eJGDIayszalqzYlqL4edfK6AVr
-   fhHY+h50PEMqZBcvaAHI7qZcaVyHkL1RpmBez/0Rl0cMu49HTAMK+Don0
-   /FEMlYNvh6xs8Ll/r9hACXjuHis34AXg6mV8u0MpCdROhHiOrR1kYnkFI
-   xp9eVdmiJTv7SkHsXVlo8rbu6Iyir0OQtp/x2XfRw+ecUE6gMfsGONl16
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="293220362"
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="293220362"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 03:37:39 -0700
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="606726872"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 03:37:26 -0700
-Message-ID: <12acbe02-bd73-07bb-d0e1-cb13dcd790c0@intel.com>
-Date:   Fri, 26 Aug 2022 13:37:21 +0300
+        Fri, 26 Aug 2022 06:39:20 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE579D5E9B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:39:19 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q5lZX1011210;
+        Fri, 26 Aug 2022 05:38:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=9zVZF1thWOSD6FisJX63cECInLPkR0u5id9iG+QzKBw=;
+ b=UezQeAzYx3dfN6ytwKTf2yt7CpZRNq0fDj8Puc0NaEIQVK39ZrHr+YHKcx4nFk93UoKh
+ luzSzV12gN6erXJSeM06zoSFCGTHyBCdUVCimfdhp0s0xbcqsVXmLPNQdleNJsIcQS2D
+ m2lEfzaIyV/P6dKi9G6uKbWIYLp7i4vB0l7G3abDYjPv0rLWi72A7wSY80eJdXvcEn6Y
+ LF2qJ5BiZdE4nczIqquORXm8MHz/p98MPE9sgaqcH5R41hWZNjj5W6B3kV3Z4NjQjtDG
+ hmwczpVldX+f7vSUgvnlAWSrKlacxbK+0wgk/eRvRBdYuIP9bkZO1Fo+KZSc1mvnQ0Yt Ig== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3j4dgmd66s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 05:38:43 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 26 Aug
+ 2022 05:38:41 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
+ Transport; Fri, 26 Aug 2022 05:38:41 -0500
+Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 499EB45D;
+        Fri, 26 Aug 2022 10:38:41 +0000 (UTC)
+Message-ID: <99c0a747-aa76-95ff-ad03-723ff092b85e@opensource.cirrus.com>
+Date:   Fri, 26 Aug 2022 11:38:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 11/18] perf dso: Update use of pthread mutex
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 3/3] soundwire: bus: Fix lost UNATTACH when re-enumerating
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <20220824153901.488576-12-irogers@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220824153901.488576-12-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>
+CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220825122241.273090-1-rf@opensource.cirrus.com>
+ <20220825122241.273090-4-rf@opensource.cirrus.com>
+ <adfdf06a-e1a3-e47c-a71f-5e5dccef6fd0@linux.intel.com>
+ <e9deb2fb-458a-8136-5ba7-a9e2b0f2d174@opensource.cirrus.com>
+In-Reply-To: <e9deb2fb-458a-8136-5ba7-a9e2b0f2d174@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: LfwZWuC5RlUl-lfBqz4VAxK5Plm6tf_N
+X-Proofpoint-GUID: LfwZWuC5RlUl-lfBqz4VAxK5Plm6tf_N
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/22 18:38, Ian Rogers wrote:
-> Switch to the use of mutex wrappers that provide better error checking.
+On 25/08/2022 16:25, Richard Fitzgerald wrote:
+> On 25/08/2022 15:24, Pierre-Louis Bossart wrote:
+>> Humm, I am struggling a bit more on this patch.
+>>
+>> On 8/25/22 14:22, Richard Fitzgerald wrote:
+>>> Rearrange sdw_handle_slave_status() so that any peripherals
+>>> on device #0 that are given a device ID are reported as
+>>> unattached. The ensures that UNATTACH status is not lost.
+>>>
+>>> Handle unenumerated devices first and update the
+>>> sdw_slave_status array to indicate IDs that must have become
+>>> UNATTACHED.
+>>>
+>>> Look for UNATTACHED devices after this so we can pick up
+>>> peripherals that were UNATTACHED in the original PING status
+>>> and those that were still ATTACHED at the time of the PING but
+>>> then reverted to unenumerated and were found by
+>>> sdw_program_device_num().
+>>
+>> Are those two cases really lost completely? It's a bit surprising, I do
+>> recall that we added a recheck on the status, see the 'update_status'
+>> label in cdns_update_slave_status_work
+>>
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/dso.c    | 12 ++++++------
-
-Some not done yet
-
-$ grep -i pthread_mut tools/perf/util/dso.c
-static pthread_mutex_t dso__data_open_lock = PTHREAD_MUTEX_INITIALIZER;
-        pthread_mutex_lock(&dso__data_open_lock);
-        pthread_mutex_unlock(&dso__data_open_lock);
-        if (pthread_mutex_lock(&dso__data_open_lock) < 0)
-                pthread_mutex_unlock(&dso__data_open_lock);
-        pthread_mutex_unlock(&dso__data_open_lock);
-        pthread_mutex_lock(&dso__data_open_lock);
-        pthread_mutex_unlock(&dso__data_open_lock);
-        pthread_mutex_lock(&dso__data_open_lock);
-        pthread_mutex_unlock(&dso__data_open_lock);
-
-
->  tools/perf/util/dso.h    |  4 ++--
->  tools/perf/util/symbol.c |  4 ++--
->  3 files changed, 10 insertions(+), 10 deletions(-)
+> Yes they are. We see this happen extremely frequently (like, almost
+> every time) when we reset out peripherals after a firmware change.
 > 
-> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> index 5ac13958d1bd..a9789a955403 100644
-> --- a/tools/perf/util/dso.c
-> +++ b/tools/perf/util/dso.c
-> @@ -795,7 +795,7 @@ dso_cache__free(struct dso *dso)
->  	struct rb_root *root = &dso->data.cache;
->  	struct rb_node *next = rb_first(root);
->  
-> -	pthread_mutex_lock(&dso->lock);
-> +	mutex_lock(&dso->lock);
->  	while (next) {
->  		struct dso_cache *cache;
->  
-> @@ -804,7 +804,7 @@ dso_cache__free(struct dso *dso)
->  		rb_erase(&cache->rb_node, root);
->  		free(cache);
->  	}
-> -	pthread_mutex_unlock(&dso->lock);
-> +	mutex_unlock(&dso->lock);
->  }
->  
->  static struct dso_cache *__dso_cache__find(struct dso *dso, u64 offset)
-> @@ -841,7 +841,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
->  	struct dso_cache *cache;
->  	u64 offset = new->offset;
->  
-> -	pthread_mutex_lock(&dso->lock);
-> +	mutex_lock(&dso->lock);
->  	while (*p != NULL) {
->  		u64 end;
->  
-> @@ -862,7 +862,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
->  
->  	cache = NULL;
->  out:
-> -	pthread_mutex_unlock(&dso->lock);
-> +	mutex_unlock(&dso->lock);
->  	return cache;
->  }
->  
-> @@ -1297,7 +1297,7 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
->  		dso->root = NULL;
->  		INIT_LIST_HEAD(&dso->node);
->  		INIT_LIST_HEAD(&dso->data.open_entry);
-> -		pthread_mutex_init(&dso->lock, NULL);
-> +		mutex_init(&dso->lock);
->  		refcount_set(&dso->refcnt, 1);
->  	}
->  
-> @@ -1336,7 +1336,7 @@ void dso__delete(struct dso *dso)
->  	dso__free_a2l(dso);
->  	zfree(&dso->symsrc_filename);
->  	nsinfo__zput(dso->nsinfo);
-> -	pthread_mutex_destroy(&dso->lock);
-> +	mutex_destroy(&dso->lock);
->  	free(dso);
->  }
->  
-> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> index 66981c7a9a18..58d94175e714 100644
-> --- a/tools/perf/util/dso.h
-> +++ b/tools/perf/util/dso.h
-> @@ -2,7 +2,6 @@
->  #ifndef __PERF_DSO
->  #define __PERF_DSO
->  
-> -#include <pthread.h>
->  #include <linux/refcount.h>
->  #include <linux/types.h>
->  #include <linux/rbtree.h>
-> @@ -11,6 +10,7 @@
->  #include <stdio.h>
->  #include <linux/bitops.h>
->  #include "build-id.h"
-> +#include "mutex.h"
->  
->  struct machine;
->  struct map;
-> @@ -145,7 +145,7 @@ struct dso_cache {
->  struct auxtrace_cache;
->  
->  struct dso {
-> -	pthread_mutex_t	 lock;
-> +	struct mutex	 lock;
->  	struct list_head node;
->  	struct rb_node	 rb_node;	/* rbtree node sorted by long name */
->  	struct rb_root	 *root;		/* root of rbtree that rb_node is in */
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index a4b22caa7c24..656d9b4dd456 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -1800,7 +1800,7 @@ int dso__load(struct dso *dso, struct map *map)
->  	}
->  
->  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> -	pthread_mutex_lock(&dso->lock);
-> +	mutex_lock(&dso->lock);
->  
->  	/* check again under the dso->lock */
->  	if (dso__loaded(dso)) {
-> @@ -1964,7 +1964,7 @@ int dso__load(struct dso *dso, struct map *map)
->  		ret = 0;
->  out:
->  	dso__set_loaded(dso);
-> -	pthread_mutex_unlock(&dso->lock);
-> +	mutex_unlock(&dso->lock);
->  	nsinfo__mountns_exit(&nsc);
->  
->  	return ret;
+> I saw that "try again" stuff in cdns_update_slave_status_work() but
+> it's not fixing the problem. Maybe because it's looking for devices
+> still on #0 but that isn't the problem.
+> 
+> The cdns_update_slave_status_work() is running in one workqueue thread,
+> child drivers in other threads. So for example:
+> 
+> 1. Child driver #1 resets #1
+> 2. PING: #1 has reverted to #0, #2 still ATTACHED
+> 3. cdns_update_slave_status() snapshots the status. #2 is ATTACHED
+> 4. #1 has gone so mark it UNATTACHED
+> 5. Child driver #2 gets some CPU time and reset #2
+> 5. PING: #2 has reset, both now on #0 but we are handling the previous
+> PING
+> 6. sdw_handle_slave_status() - snapshot PING (from step 3) says #2 is
+> attached
+> 7. Device on #0 so call sdw_program_device_num()
+> 8. sdw_program_device_num() loops until no devices on #0, #1 and #2
+> are both reprogrammed, return from sdw_handle_slave_status()
+> 10. PING: #1 and #2 both attached
+> 11. cdns_update_slave_status() -> sdw_handle_slave_status()
+> 12. #1 has changed UNATTACHED->ATTACHED, but we never got a PING with
+>      #2 unattached so its slave->status==ATTACHED, "it hasn't changed"
+>      (wrong!)
+> 
+> Now, at step 10 the Cadence IP may have accumlated both UNATTACH and
+> ATTACH flags, and perhaps it should be smarter about deciding what
+> to report if there are multiple states. HOWEVER.... that's the behaviour
+> of Cadence IP, other IP may be different so it's probably unwise to
+> assume that the IP has "remembered" the UNATTACH state before it was 
+> reprogrammed.
+> 
 
+After I wrote that I remembered why I rejected that solution. We don't
+know what order multiple events happened, so it's not valid to report
+a backlogged UNATTACH just becuse it's more "important". It's not
+necessarily accurate.
+
+I would worry about this:
+
+Real-world order:
+
+PING: UNATTACH
+See device on #0 and program new device ID
+PING: ATTACHED
+
+But because of the delay in handling PINGs the software sees:
+
+See device on #0 and program new device ID
+PING: UNATTACH
+PING: ATTACHED
+
+Giving a false UANATTACH. We know it's unattached if we found it on #0
+so setting its state to UNATTACHED ensures our state is accurate.
+
+>> The idea of detecting first devices that become unattached - and later
+>> deal with device0 when they re-attach - was based on the fact that
+>> synchronization takes time. The absolute minimum is 16 frames per the
+>> SoundWire spec.
+>>
+
+My expectation was it was to ensure that the slave->dev was marked
+UNATTACHED before trying to re-enumerate it. Either way I think it's not
+taking into account that we don't know when the workqueue function will
+run or how long it will take. There's two chained workqueue functions to
+get to the point of handling a PING. So we can't be sure we'll handle a
+PING with the device unattaching before we see it on #0.
+
+>> I don't see how testing for the status[0] first in
+>> sdw_handle_slave_status() helps, the value is taken at the same time as
+>> status[1..11]. If you really want to take the last information, we
+>> should re-read the status from a new PING frame.
+>>
+>>
+> 
+> The point is to deal with unattached devices second, not first.
+> If we do it first we might find some more that are unattached since
+> the ping. Moving the unattach check second means we don't have to
+> do it twice.
+> 
+
+To clarify: the point was that if we check for unattaches first, when
+sdw_program_device_num() updates other slaves to UNATTACHED, we would
+then have to run the UNATTACHED loop again to deal with those. If we
+check for UNATTACHED second, it can pick up all new UNATTACHED in the
+one loop. There's no point checking for UNATTACH first since we can't
+rely on the old PING showing the unattach before we see that device on
+#0.
+
+There is another possible implementation that we only reprogram a device
+on #0 if the slave->state == UNATTACHED. I didn't really like that
+partly because we're leaving devices on #0 instead of enumerating them,
+but also because I worried that it might carry a risk of race
+conditions. But if you prefer that option I can try it.

@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57185A2121
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3DD5A212B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245091AbiHZGqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
+        id S245219AbiHZGrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245092AbiHZGqA (ORCPT
+        with ESMTP id S245145AbiHZGq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:46:00 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065B0B6D2F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:45:59 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id n24so672108ljc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:45:58 -0700 (PDT)
+        Fri, 26 Aug 2022 02:46:56 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1C1D25C4;
+        Thu, 25 Aug 2022 23:46:31 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo7190056pjd.3;
+        Thu, 25 Aug 2022 23:46:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=kS++P7f/sxm+5fpcUlBki4yBaSJvYpRpgROhsMETBW8=;
-        b=g2PebV7DA2dG91zJ+3A5Ck9fY4G2rWpOELAfA2Ey7hk2LYZzSBnkKYTY7Zr6rAbdFd
-         q46AAJBJE7yTCTd+hQDxa0jNPkVOv6mbAFOM4C+ydfPvRyUAa72QWu+0x1jf6bRp+k79
-         lnGUQedJWnwGTSwtefSnqfcdXKg/IVEad78NLN2cumTD4n0okhNXYRHGQtKwsTfJ5sJn
-         Wqz+JOCykDAXL+y297nti4d0npk/wvA06rQKSCKAFQeCih8lregz+K+CbeJZe8GzmywA
-         PdzsHZaJNXcDaszh3RQOSIntAryy2ULRKf0t72Ibxvpf1CrUBguJYGKnt6cX4aKaaVBP
-         DhGg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=WmnvVRurxH2Zy86fWf6pyYN4Ha80RUgYK6P1tlQP2/g=;
+        b=Nwefa+9WuBFgFgAQdGg0tE6ijaCa2/hmsYfjKjBxOTHUcMWLYHNP8LQn7KrpCCeM1x
+         EmFBiYrvovfVSzwpldwWAmZnnJm+mrnRYW/bZvDyZ9Ny7OR6XnB6nLK+bhBHIhhumF44
+         ZHHJDnYJbJpa8wY212ebXF1UcO4zaXlEu2mB4pHWdXfqKNtbotLVY+SvMVdLmIkYv+Rx
+         WvDPTjGTVc1Cu6w6+ntMdNdxjcaWvCsfUgVMdHuOJaydE3xKUr0e3blaFXKccAvBx8wD
+         /9O3eka5Qa+adDogE2BDKFD8epXT2mDExe9d2GecR264lBRne+ZMZuvRNfCNv25jFNCZ
+         qNSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=kS++P7f/sxm+5fpcUlBki4yBaSJvYpRpgROhsMETBW8=;
-        b=kXzL3owrrLKOKcYjMwvpw9I8Zwa+qk9ci5rfeEglW3CIiMR8rzMEteMMq+2sK2uIaW
-         Owbr9lzLT8XzmXPZLR1kW69A5NH7owCqFmLY9I7N6HSPOxS2j7+T2kybGHUiG6yRBNth
-         r3Fk73OM5ABSs/YISjevkVgLB6BFRQtlgfW/e33Km3eLYYP1DDVkz+iWm6VgoCppUrvE
-         LPBhQeErxmwVYCjDsJ+OWVogh0UoaHm/oZB9pBtvMJ1GvhdY6pRtX+CmRzEkwjK4cl69
-         8UNiqUHUtcrEvpDxCBhv4H+5VIy3Ff6bh9iyOq4dRfQzz72WImMadGTM644XWKow+i8i
-         fAdQ==
-X-Gm-Message-State: ACgBeo1za7ayGGKwjSkmfcwTucO/LYOt/BnlAfPwbbeb4eE6NcmxCDQ6
-        y6G47THJDKolecbJimCT4auMqA==
-X-Google-Smtp-Source: AA6agR4P1Lppd9IyB4a2iit7fR1482AuCseveFfT3iZ+aY3X33NJaw9K20gOE/6FuNs2mXlh6X8R1A==
-X-Received: by 2002:a05:651c:90a:b0:25d:57c9:30c4 with SMTP id e10-20020a05651c090a00b0025d57c930c4mr1790962ljq.386.1661496357412;
-        Thu, 25 Aug 2022 23:45:57 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id f18-20020a056512229200b0048a73d83b7csm262960lfu.133.2022.08.25.23.45.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 23:45:56 -0700 (PDT)
-Message-ID: <c5e22875-745d-7334-84bf-d854b2011af3@linaro.org>
-Date:   Fri, 26 Aug 2022 09:45:55 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=WmnvVRurxH2Zy86fWf6pyYN4Ha80RUgYK6P1tlQP2/g=;
+        b=e6/io5xSagmZze+cXn2tml5ylvhqtqPq59RQamCdhmkllIBVjWiPOi93qAPBwPCZpz
+         8nxv+nHo0iCaxu59oC2a4IAlDxVk+B924FUy1sBGfgWFLqYLNoxzbsjIouZBrysoi4wE
+         pFdmApQyHNfs1zzcyoSOP2dOj2NZItFfGMnkBU9VQU0puTc7ck0HdkjU1ArNPoFxvZ1N
+         sNO+dSSR1a0PpEJmAj7MyS+X4ACWosd89BeMNwQW+8eDxCuapgynr/4eym0br9tmQwLH
+         Y1M8qerTItDaJ92QCQC+Q+NQRGBpnd22jfAmjc1rQZlXSJ3QhntUhkGafiNrOaPF8AEH
+         yzSw==
+X-Gm-Message-State: ACgBeo3wK/MmlZ5/jkqixPKYmCUZfpf8pcGiysg4NNkP7rmSN+21VZqL
+        sZuzP1qynR8qpWCQpVhkFuY=
+X-Google-Smtp-Source: AA6agR61OhIkcofx2MFfuNJ7+sdXf0VwtDAAD/RfJrASsh7FidaByoWOrUOri//GsJNftXUSsNpYYg==
+X-Received: by 2002:a17:902:7845:b0:16e:d647:a66c with SMTP id e5-20020a170902784500b0016ed647a66cmr2364885pln.64.1661496391012;
+        Thu, 25 Aug 2022 23:46:31 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b0016ec8286733sm706933pla.243.2022.08.25.23.46.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 23:46:30 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 23:46:29 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v8 095/103] KVM: TDX: Handle TDX PV rdmsr/wrmsr hypercall
+Message-ID: <20220826064629.GG2538772@ls.amr.corp.intel.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <ce183d47a93012c46472b32077e80dc8b56c88ed.1659854791.git.isaku.yamahata@intel.com>
+ <CAAhR5DH2y=MXMSiM0YDn0qj3s3D3SBg6L3_uBP+a8KeC2u2jyQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v6 0/6] completely rework mediatek,mt7530 binding
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220825082301.409450-1-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220825082301.409450-1-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAAhR5DH2y=MXMSiM0YDn0qj3s3D3SBg6L3_uBP+a8KeC2u2jyQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/2022 11:22, Arınç ÜNAL wrote:
-> Hello.
-> 
-> This patch series brings complete rework of the mediatek,mt7530 binding.
-> 
-> The binding is checked with "make dt_binding_check
-> DT_SCHEMA_FILES=mediatek,mt7530.yaml".
-> 
-> If anyone knows the GIC bit for interrupt for multi-chip module MT7530 in
-> MT7623AI SoC, let me know. I'll add it to the examples.
-> 
-> If anyone got a Unielec U7623 or another MT7623AI board, please reach out.
-> 
-> v6:
-> - Do not remove binding for DSA ports from top level.
-> - On the first patch, remove requiring reg as it's already required by
-> dsa-port.yaml and define acceptable reg values for the CPU ports.
-> - Add Krzysztof's Reviewed-by: and Acked-by: to where they're given except
-> the first patch because of the changes above.
+On Wed, Aug 17, 2022 at 03:40:24PM -0700,
+Sagi Shahar <sagis@google.com> wrote:
 
-Review should have stayed. It's a close to trivial change.
+> On Sun, Aug 7, 2022 at 3:03 PM <isaku.yamahata@intel.com> wrote:
+> > +static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
+> > +{
+> > +       u32 index = tdvmcall_a0_read(vcpu);
+> > +       u64 data = tdvmcall_a1_read(vcpu);
+> > +
+> > +       if (!kvm_msr_allowed(vcpu, index, KVM_MSR_FILTER_READ) ||
+>                                                                    ^
+> This should be KVM_MSR_FILTER_WRITE
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-Best regards,
-Krzysztof
+Oops. Thanks. I'll fix it.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D015A2218
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1035A2222
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245406AbiHZHko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S245450AbiHZHoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245391AbiHZHk0 (ORCPT
+        with ESMTP id S245435AbiHZHoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:40:26 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF6D6E2C1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:40:24 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id l1so936387lfk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=SWG+AYYaD3CGqVmhJUkc0npDBvTLvT/qXBQNeQdRPPI=;
-        b=VavM614ow0Wq5WTGNBaTek9R2gSqCSK2LowLKioZCjH9fi0rLESL9gU51h6u1ICdVM
-         O54wO0xGy8NLlu+JxKeFrsTK5D6TMHGLwWPXbcToifiej4CvHspsXtqeC5ShKEruaDem
-         2VWI9zZ+ad+AeT/jOq3cAhJOGxL7TuGKXf1GA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=SWG+AYYaD3CGqVmhJUkc0npDBvTLvT/qXBQNeQdRPPI=;
-        b=GUeeorSulJImJiE3t3m1x/YddzNlOuX1Lshzuugcwylwbf4M+pzRD4610mmqkJjAow
-         M/zlFioXcBEHj1rs5LgAi96R9x39v35jkrioc7nVrYCbAEISwxW7SrVGgzHx8m2xs2KI
-         cY4RXL4y5RdBcNJ+r+1P3sIab86qXe/lVjI9BkYLJJ/X/yJBtrZzzot+2rxChQPw1/9h
-         kOwYLr5O1BNj6SCa79wLTvCU2Zejf9ns5UG9aiuVnX1jAEH6eTgpYqzle30x6cbG1ON6
-         bsB+YI1O2jLRMpmtQrwYE+PqTInl+PIh7APSdQl2Cuv0bqr9RJ268yWNQjeeqTelaQEX
-         ii0g==
-X-Gm-Message-State: ACgBeo1Nx7in7Dt/7RRaJfbB9xtKdiRUYDwf1Vkufow+IG/39lo5X8+p
-        /+9/UciWkbxBzBMh62U1Fw8lmJrCO/mvB2NB
-X-Google-Smtp-Source: AA6agR5Wm1zWSG4SC+mpBPzTyeIPT/0fZuyJYI07D9p9QGCLhhs/GEofhI1B8Us/Ffey/8A1d/hh1Q==
-X-Received: by 2002:a19:645c:0:b0:492:cf78:62de with SMTP id b28-20020a19645c000000b00492cf7862demr1925671lfj.263.1661499622588;
-        Fri, 26 Aug 2022 00:40:22 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id q15-20020ac24a6f000000b0048b3926351bsm293857lfp.56.2022.08.26.00.40.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 00:40:21 -0700 (PDT)
-Message-ID: <527eee19-532f-b2e7-a42f-a1e199094fbe@rasmusvillemoes.dk>
-Date:   Fri, 26 Aug 2022 09:40:20 +0200
+        Fri, 26 Aug 2022 03:44:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520B2C3F5E;
+        Fri, 26 Aug 2022 00:44:02 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MDWxH1ZNhzmVLR;
+        Fri, 26 Aug 2022 15:41:39 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 15:44:00 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 15:43:59 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <linux@armlinux.org.uk>, <rmk+kernel@armlinux.org.uk>,
+        <ardb@kernel.org>, <will@kernel.org>, <broonie@kernel.org>,
+        <linus.walleij@linaro.org>
+CC:     <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <arnd@arndb.de>,
+        <rostedt@goodmis.org>, <nick.hawkins@hpe.com>, <john@phrozen.org>,
+        <mhiramat@kernel.org>, <ast@kernel.org>, <linyujun809@huawei.com>,
+        <ndesaulniers@google.com>, <lihuafei1@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+Subject: [PATCH RESEND v3 0/4] ARM: Convert to ARCH_STACKWALK
+Date:   Fri, 26 Aug 2022 15:40:43 +0800
+Message-ID: <20220826074047.107357-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: strlcpy() notes (was Re: [GIT PULL] smb3 client fixes)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-References: <CAH2r5mtDFpaAWeGCtrfm_WPM6j-Gkt_O80=nKfp6y39aXaBr6w@mail.gmail.com>
- <CAHk-=wi+xbVq++uqW9YgWpHjyBHNB8a-xad+Xp23-B+eodLCEA@mail.gmail.com>
- <YwSWLH4Wp6yDMeKf@arm.com>
- <CAHk-=whU7QiwWeO81Rf+KGh0rGS9CEfKUXc5eik+Z0GaVJgu4A@mail.gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <CAHk-=whU7QiwWeO81Rf+KGh0rGS9CEfKUXc5eik+Z0GaVJgu4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,57 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 19.37, Linus Torvalds wrote:
-> On Tue, Aug 23, 2022 at 1:56 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->>
->> With load_unaligned_zeropad(), the arm64 implementation disables tag
->> checking temporarily. We could do the same with read_word_at_a_time()
->> (there is a kasan_check_read() in this function but it wrongly uses a
->> size of 1).
-> 
-> The "size of 1" is not wrong, it's intentional, exactly because people
-> do things like
-> 
->     strscpy(dst, "string", sizeof(dst));
-> 
-> which is a bit unfortunate, but very understandable and intended to
-> work. So that thing may over-read the string by up to a word. And
-> KASAN ends up being unhappy.
+This series mainly updates the ARM stack trace code to use the newer and
+simpler arch_stack_walk() interface (see patches 3 and 4). Two issues
+were fixed before that (see patches 1 and 2).
 
-So, while we're doing all the churn of replacing strlcpy anyway, may I
-once again suggest we add (name can be bikeshedded) literal_strcpy():
+v3 RESEND notes:
 
-#define literal_strcpy(d, s) ({ \
-  static_assert(__same_type(d, char[]), "destination must be char array"); \
-  static_assert(__same_type(s, const char[]), "source must be a string
-literal"); \
-  static_assert(sizeof(d) >= sizeof("" s ""), "source does not fit in
-destination"); \
-  strcpy(d, s); \
-})
+Rebase to v6.0-rc1.
 
-That interface _cannot_ be misused, because all the checking happens at
-build time, including enforcement that the source really is a string
-literal (the "" s "" trick - but for nicer error message the
-static_assert on the previous line is there as well). So unlike all the
-uses of str[ls]cpy which don't check the return value, we cannot
-silently do a truncated copy. Also, if somebody down the line changes
-the size of the destination or the literal string, again it will be
-caught at build time.
+It's been a month since I sent the v3. Linus told me I needed to add the
+patch to Russell's patch tracker myself, rebase to v6.0-rc1 before that.
+Thanks Linus for the tip!
 
-And since gcc knows the semantics of strcpy(), it will also generate
-better code, because it will usually not emit a call at all (or even put
-the string in .rodata); it will simply emit a series of "mov immediate"
-instructions.
+Since commit af6f23b88e95 ("ARM/dma-mapping: use the generic versions of
+dma_to_phys/phys_to_dma by default") and commit ae626eb97376
+("ARM/dma-mapping: use dma-direct unconditionally") modified
+arch/arm/Kconfig, there is a minor conflict with patch 4 when rebase.
 
-Sloppy grepping for places where that could be used shows around ~800
-places.
+v3: https://lore.kernel.org/lkml/20220727040022.139387-1-lihuafei1@huawei.com/
+ - According to the discussion with Linus and Russell in v1:
+   - Add a comment about "regs[1]" in patch 2, and remove the
+     unnecessary ternary operator in the initialization of
+     "frame->ex_frame".
+   - Remove the patch "ARM: stacktrace: Allow stack trace saving for
+     non-current tasks", and keep the check for not being able to
+     unwind non-current tasks (including tasks running on other CPUs)
+     when CONFIG_SMP=y in patch 4.
+ - Rebase to linux-5.19-rc8.
 
-Btw, Steve, since you're incidentally on cc here anyway, perhaps you
-want to take a look at
+v2: https://lore.kernel.org/lkml/20220713110020.85511-1-lihuafei1@huawei.com/
+ - As suggested by Mark, the commit logs for patch 4 and 5 were
+   refined for easy review.
 
-  strscpy(extension, "___", strlen("___"));
+v1: https://lore.kernel.org/lkml/20220712021527.109921-1-lihuafei1@huawei.com/
 
-and see if this really just wants two underscores copied to extension.
+Li Huafei (4):
+  ARM: stacktrace: Skip frame pointer boundary check for
+    call_with_stack()
+  ARM: stacktrace: Avoid duplicate saving of exception PC value
+  ARM: stacktrace: Make stack walk callback consistent with generic code
+  ARM: stacktrace: Convert stacktrace to generic ARCH_STACKWALK
 
-Rasmus
+ arch/arm/Kconfig                  |   1 +
+ arch/arm/include/asm/stacktrace.h |   8 +-
+ arch/arm/kernel/perf_callchain.c  |   9 +-
+ arch/arm/kernel/return_address.c  |   9 +-
+ arch/arm/kernel/stacktrace.c      | 191 ++++++++++++++----------------
+ arch/arm/lib/call_with_stack.S    |   2 +
+ 6 files changed, 110 insertions(+), 110 deletions(-)
+
+-- 
+2.17.1
+

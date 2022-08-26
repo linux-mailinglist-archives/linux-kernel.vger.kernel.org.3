@@ -2,227 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D827F5A30A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEBE5A30A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244499AbiHZUwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        id S1344539AbiHZUy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 16:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiHZUwR (ORCPT
+        with ESMTP id S231639AbiHZUyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:52:17 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B380BD3E78;
-        Fri, 26 Aug 2022 13:52:16 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QKYkUP029649;
-        Fri, 26 Aug 2022 13:52:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=JVyS4OpXBScoasKYtyjduaVQ7xk7I3JSh8zO1MIKxtk=;
- b=AGb8aJd5DoV/UtnC7w6VBgQN4zbr68dKBFajeHN+wknSeJ+0HcsQgUncsib0/k3rSVN3
- 45YAR+TbnhZYWq2sQOG/feo56G1+Wq80yCfwPHw2vqAzzOvt1ajx9E8/arMlVPCG6LEh
- jd6Hi2OAPoOyGl9ITccSQBfk6683WLZLEu0= 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2043.outbound.protection.outlook.com [104.47.74.43])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j75b5r3dg-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 13:52:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PaYHTxS4VMFG5qaF9kVDIkH84FrSpp3rZHH8TaAkU1j91Nz3uB3kXs1ptf3t8WBGFpyixKHUVeT0Mx998Bi2QYyBVxxUqhyHsJNcrQIXZ6kjpUytG23rsOF8aIPnPpfwcA6DQgU6OQvJm/ON83TyVKvZYz53pgRXzj3M6z3gMR39Kydk1eS41zsAh15NqnUbcxjsuPjqwSyMSROmDXg4Afhh2cV3poBZuj5OrmO+cwfLtD4B7q9ahwbFtYDV1sYZNDwGzvSxWr7Q/1fcUeLF4qVCibsOmJEde3mq5ufye4JgXYkeZKgFo0b0i94gyXGnIb0AP07BKvBagJnXJoMHGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JVyS4OpXBScoasKYtyjduaVQ7xk7I3JSh8zO1MIKxtk=;
- b=c3Du13y6xhMXjlhjtEjr8GgE+UrSxQAJYmvo+GPcDXrSkGfEOdar0BK/vkn8UW1Ax1oFPM6ftq1XX/7genCwG4glXOU9adF5Ye/WNv2JLsHByoWxgEOM9HiUiJYeb6El2N1BuJwxAwzhcnWsW4cONb+6mcdlO+Sr90a+XIEm4vCYGINogBbUGN9TaNLzDou+SvksliWV9B3lYfB1gqJOEmTDfHwcVpDd0j+dKWhZIG7Gug/XPj8w3+Tb3gs354iC66lguRADVw1Fsg3L47pJlcbrJze+PAXmgWa4RqDU2nTdXHGX+liH1mvL8/btr7m91dAdFMfwuJV18qr8umXwkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by BN6PR15MB1201.namprd15.prod.outlook.com (2603:10b6:404:ef::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Fri, 26 Aug
- 2022 20:52:13 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::c488:891f:57b:d5da]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::c488:891f:57b:d5da%9]) with mapi id 15.20.5566.015; Fri, 26 Aug 2022
- 20:52:13 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-Thread-Topic: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-Thread-Index: AQHYtzPeWFYcAGzsN0Wstq4jJDfNwK3AJloAgAAJpYCAAA9aAIAAO0MAgAAulQCAAAilAIAAsuMAgAAazgCAABQ9AIAAGUIA
-Date:   Fri, 26 Aug 2022 20:52:13 +0000
-Message-ID: <BCF27304-3F49-4B8B-B1FE-D785370BB9A5@fb.com>
-References: <20220823210354.1407473-1-namhyung@kernel.org>
- <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
- <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com>
- <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
- <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com>
- <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
- <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
- <CAM9d7cjTtOkRHLOosxHN8PcbVbhTK=uLDGjw8N5=1QiTHcd6rQ@mail.gmail.com>
- <C7F3F33B-4A8E-428C-9FED-FB635955C2B1@fb.com>
- <CAM9d7cgUVg1Cv+0fs=Mc7OBTOHNJkMqWnm0SZ5R7xfm5peBNDQ@mail.gmail.com>
-In-Reply-To: <CAM9d7cgUVg1Cv+0fs=Mc7OBTOHNJkMqWnm0SZ5R7xfm5peBNDQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c91b6d14-acf9-49fc-863c-08da87a4da5a
-x-ms-traffictypediagnostic: BN6PR15MB1201:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /vxuFk2gyoa5PKg/5RIYwMPHN9/f0c0aiyNBbJh0DztKJv0vPrlOsRWMpigoH9q1rF7YiQJQVs+gR5YgVRSeu9Qlk6HqYVci5ts7LsAc8X385WlssBl5w2Xg0T6XQtDXEsb11CwWeC0eYls9bLHMTibUMwMD4JSUpzvaY/CQJ6xGLFFubkmhCwSl/ePBGYVfNA9zU5SSy6XvIALfp+OrtjIYLKwHwQEq+JfZeTEMFgoBbPRZAs6VVvGC+eE/6Anm1U7lETUMQGwBqHgZrQvuMUYjieQPwcdYlVqLMl89xnRK98JLpvYwfmmiPq+FbukVIzgStUMD8hb63YolnNXj42Q1bNstSJBlsEfNKlmrdXde1sh0SrBfGT8JKLx2H7IPS0tro8pYYJCNl5DVSvVLCJcawiRnmQstLFhaLQKWPzzFkE4hukwNBBmLxiKnOrl9njJp+eeK1SfxEFlBNvM21o87LDMXbd64yaOzyDPl/42rxgJaqjVSNBwGVJG+uvzI8vGFwUKOY9RaAt4MXNaXlp96Vyi56HwNAhJKU6gNAa0v1UVhfUEroN39jjRk6PEYgc1b2q2Mq9sAOKDHX/J81s2Bzlcrkb/EWY7s0w0vN5u3avaJ1a4TKhNae5c9Eu4kKb7ltybfDzQVm57RHhQ7hhZqGKSsvN3IxP2IIUK1IiYYKM/nEEV6dYfMBQ3Qdntq89PNe91mrWQzHl4oxiltjDX/MOY1+O7xm6zl05dpAxIrIuBeaU7yNNYb9SU/GgYJU/mJ3tXw5ZvOzfx+8Zz9w53IjkFCUHEoJkhqpHx4voY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(136003)(366004)(39860400002)(478600001)(66556008)(66946007)(76116006)(91956017)(66446008)(6916009)(64756008)(66476007)(8676002)(316002)(4326008)(54906003)(5660300002)(2906002)(7416002)(8936002)(38070700005)(38100700002)(36756003)(86362001)(33656002)(186003)(53546011)(6506007)(6512007)(6486002)(2616005)(41300700001)(71200400001)(122000001)(83380400001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GDs0sdM7Ck+WLV4Z4x+zKRyrsqLQ2tHBYIm8fgB0IqsCCmA/bA6fKV92ibwS?=
- =?us-ascii?Q?xiurVNQZSrHyTOtow4XWHlNA5GPogwdMEJF0dT4ExzSOLn/KSo4YFJbpuJaU?=
- =?us-ascii?Q?tkBdSICzJ1Gf5YFr40Rfu7AwzSWS92yyQ7HrBG8X2aknw1weapes6MUuJrWS?=
- =?us-ascii?Q?tygfODWB5MxVKEP456qmV55CBOjOenNstOA77DFMVkn9ZbbWkXLlB0fho3yz?=
- =?us-ascii?Q?U3HEZeWuR+VGnl6n1IC9v8tHt2lzkQwb7PlsYhU9kt+q8qqcSKAIbFA4alDq?=
- =?us-ascii?Q?QfWvAhVMkp0mXxgAYoC9EWr6XCFncndVPze+FSQ3BLSCDQiB+8r+4UhFuR/X?=
- =?us-ascii?Q?EKMInkI7Rzagt+B95cgH3VeUUX7H/Of4Z7B75WDflCEXzBrntqFxX3h/a9tI?=
- =?us-ascii?Q?AOM+1mlxDz1SQ5PXt6YjJNdGmfRzjXkV6OR3PH8Jwy+Wce677OQJUF9K1pYY?=
- =?us-ascii?Q?lSNmn+B7rP5dDDQqTR5buJkykhkBHoGf+cz3LANuxDxi+war67thm6EojBnG?=
- =?us-ascii?Q?G314ehy46FkB7Okso5PuktpF3zVZSbAZarLTwDMVptR5rCs0FyNZaqxNGTTg?=
- =?us-ascii?Q?M8A0QeJ0yMh1TDn365OddBBNgcncA71GT2pbITKICRbgDzB6q7ShJpXgGuoL?=
- =?us-ascii?Q?vnH7Lk5+K0BmZhWOjqPBk4X06HW/xguyhmHqweP03P51QA+Yv5A8QYQ0BuuC?=
- =?us-ascii?Q?Q/5yT5mVG9Uqw7QBAyY3UGn40s3JQm1vv31/cAWRpWluLiNs4fHyckfl0Kwn?=
- =?us-ascii?Q?YAZsLEsMKJ1yZ+TGQkooNGc0wfpyJLZq4C2wjgyLJsRY+WdXUPMCdYrsnPGP?=
- =?us-ascii?Q?AMt2pVfm6b4ya4NIXye19XGvhOi6zcfMBEEPLfRxnRPW05OVy7kPFLLMnTHZ?=
- =?us-ascii?Q?/T9iM38Fr2FcIz5K7JVrrPo3m/u2Q3AWeUq0vBZwlx0tcfAtwrGKOOFOta1W?=
- =?us-ascii?Q?SG0TZIj3iL8nKTL1/XnMVaSxubmvtkhmfuyXQ0Ol0m8fmj60hIyMx64TGtmZ?=
- =?us-ascii?Q?/XtlevGajULhTuRJ2JvdzlYosqX0ikRfTmIXHTpgO2eXYjDtnk6/CTDo+SLW?=
- =?us-ascii?Q?I/87yJzkQzsiPkaQxrGHonCPT/am0gvhopp0Nfp71bRP3LSydsYzGz5B1WYh?=
- =?us-ascii?Q?qoOtu8/aGIVWmJ9M8H0sK/Nj7xoi6UqDX3w5L7cW8okbGhWCrWM0gwKGvwk2?=
- =?us-ascii?Q?kHcoHc1SidvLgpBuG0jsG7orsvzPZtzfpk1D0QEKxu+ThR1OaS5dnswg97BB?=
- =?us-ascii?Q?WWsL1ZmNmsgebq18OZy2faXYfNVhlNkCZjtUcNBgvb71gsT7ZZ1SoInb24aq?=
- =?us-ascii?Q?gI5fSbQe5Sz82ImcVrdXWjUAR7+9hoIXWDLm1fYNqY6WwouVKejaJKJM3xx8?=
- =?us-ascii?Q?9SItqB9J01JjfTfHsQNlPWHmXqLwb1PXZqJUX+aiI2+zMnoBXhtb5yW61g6Q?=
- =?us-ascii?Q?F4FWr2VpJZaSbaIFSLpguFAA3J4wSD+D2aPkctVAAAxzEi9wegmL8XvcU9eB?=
- =?us-ascii?Q?Xlad4hI6hkt4t0qn0pk0830tOYcN3C45dk9X6X96MtlQoXuvVEC3vOoyxSYo?=
- =?us-ascii?Q?DgQUrclu3IK+8UIrIX95gGkVrTdJFv2Xyn7I7anu80NYS71CxcBLzBNsaWZy?=
- =?us-ascii?Q?Z6J7H2xE2pE23ulBJarocvg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <30EF321B431B444E974DF7B8A9D3B2D4@namprd15.prod.outlook.com>
+        Fri, 26 Aug 2022 16:54:24 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4CFD419C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:54:22 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n17so3121607wrm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=dvxno4X8i6Habr4MW9y4dL3pbii1oz+8XCqowt3Ghik=;
+        b=lIkVRggySk4QpXUZQ/Sw1+9Fw2/Kd+29Yy/kgdXnM6oEAYgW9O5w3XYYnQ0C817H4z
+         bZS5LJEdFF9LFJPUCArbmo2Y8phPoC0TSzOIY/viAzXhjx5HVwRUTD34zmUOTzBRHHuK
+         hP+iHWmy7Bo1vU1o2YxFB4QfenZnpGq10qXZu14llyg4g/PynWta8chdviJAoJewC5Fm
+         X3pagtWM9fHD+Fk8ALzzFa0uA0xM2a+nZnvRVSNVRupFC3WfyYytQKOs0ZSG8lpoXsAS
+         5jLMTHUxYPlb17ljnrxtOKKTPS/hz8FyAjqtMRvOftu3Q942nG8xCQEYzO4KTQv1v1bN
+         lGGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=dvxno4X8i6Habr4MW9y4dL3pbii1oz+8XCqowt3Ghik=;
+        b=l/PGhTP1kpoP468mgaEGQ9JxM6dvfqRXYXd5HCzUCcZPoYpsb9EUPe6mGG5oW4Yba3
+         z4hRRo7T+bX+vQmbeFXmRM1QJ6l0suf0lBSpRwmpYy/+OmI82uzKW0byQ8PSAK3ZsM/P
+         2SvDUm1JahOMzTsAW3QppQTZ1agVE+d0j3ErqxyBypsjMgAahCt3xcLi/gFoMJ4ZX5GD
+         hyXzdtwR1X21hYqYtu1w0HzKza89kkLXGJxGwAmmQw1YkSP+arSg0GCB4iBnxnKe852d
+         me0roWrViWGsgSjoAdriG12VU3VfJKlGEI60YQRfrx6MIcTcyBOZylUfZnuJAjvo7jQv
+         Jo4w==
+X-Gm-Message-State: ACgBeo2aEphxN/n/NqkOxnN4x1hoIXZP3TO67HFLhjtV+/PldqNuYBUg
+        PRRS8XmDc0RngEm1LYrkbkPLQoEdB2Z+oQ3yZ7OWLA==
+X-Google-Smtp-Source: AA6agR4Qip1upUGXtZ5/LeJql1hF7uMbTBRROkqVpnszU22FEydmAskC/xOgyfaqn6fxZQqceLH+O08+KDduFdRe1uU=
+X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id
+ f7-20020a0560001a8700b002222c852f5bmr742347wry.654.1661547261033; Fri, 26 Aug
+ 2022 13:54:21 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c91b6d14-acf9-49fc-863c-08da87a4da5a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2022 20:52:13.3786
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JlLTybxcOjUuNcEuKsvPJzlWad1+3egPxVgf6YipQRP0f1ixDrqgurh5FAEbLrA5D+GO1dqJGRyES2A6H18v1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1201
-X-Proofpoint-GUID: oMCD0Ofw8ZbTLvKqKLWQ_pMKiKae2i-Q
-X-Proofpoint-ORIG-GUID: oMCD0Ofw8ZbTLvKqKLWQ_pMKiKae2i-Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_12,2022-08-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220825015458.3252239-1-zhengjun.xing@linux.intel.com>
+In-Reply-To: <20220825015458.3252239-1-zhengjun.xing@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 26 Aug 2022 13:54:09 -0700
+Message-ID: <CAP-5=fXzeqd3kS15_+9fEFERJtxkJLvP5sEj597D-BMmAwSheA@mail.gmail.com>
+Subject: Re: [PATCH] perf stat: Capitalize topdown metrics' names
+To:     zhengjun.xing@linux.intel.com
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 6:53 PM <zhengjun.xing@linux.intel.com> wrote:
+>
+> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>
+> Capitalize topdown metrics' names to follow the intel SDM.
+>
+> Before:
+>
+>  # ./perf stat -a  sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>         228,094.05 msec cpu-clock                        #  225.026 CPUs utilized
+>                842      context-switches                 #    3.691 /sec
+>                224      cpu-migrations                   #    0.982 /sec
+>                 70      page-faults                      #    0.307 /sec
+>         23,164,105      cycles                           #    0.000 GHz
+>         29,403,446      instructions                     #    1.27  insn per cycle
+>          5,268,185      branches                         #   23.097 K/sec
+>             33,239      branch-misses                    #    0.63% of all branches
+>        136,248,990      slots                            #  597.337 K/sec
+>         32,976,450      topdown-retiring                 #     24.2% retiring
+>          4,651,918      topdown-bad-spec                 #      3.4% bad speculation
+>         26,148,695      topdown-fe-bound                 #     19.2% frontend bound
+>         72,515,776      topdown-be-bound                 #     53.2% backend bound
+>          6,008,540      topdown-heavy-ops                #      4.4% heavy operations       #     19.8% light operations
+>          3,934,049      topdown-br-mispredict            #      2.9% branch mispredict      #      0.5% machine clears
+>         16,655,439      topdown-fetch-lat                #     12.2% fetch latency          #      7.0% fetch bandwidth
+>         41,635,972      topdown-mem-bound                #     30.5% memory bound           #     22.7% Core bound
+>
+>        1.013634593 seconds time elapsed
+>
+> After:
+>
+>  # ./perf stat -a  sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>         228,081.94 msec cpu-clock                        #  225.003 CPUs utilized
+>                824      context-switches                 #    3.613 /sec
+>                224      cpu-migrations                   #    0.982 /sec
+>                 67      page-faults                      #    0.294 /sec
+>         22,647,423      cycles                           #    0.000 GHz
+>         28,870,551      instructions                     #    1.27  insn per cycle
+>          5,167,099      branches                         #   22.655 K/sec
+>             32,383      branch-misses                    #    0.63% of all branches
+>        133,411,074      slots                            #  584.926 K/sec
+>         32,352,607      topdown-retiring                 #     24.3% Retiring
+>          4,456,977      topdown-bad-spec                 #      3.3% Bad Speculation
+>         25,626,487      topdown-fe-bound                 #     19.2% Frontend Bound
+>         70,955,316      topdown-be-bound                 #     53.2% Backend Bound
+>          5,834,844      topdown-heavy-ops                #      4.4% Heavy Operations       #     19.9% Light Operations
+>          3,738,781      topdown-br-mispredict            #      2.8% Branch Mispredict      #      0.5% Machine Clears
+>         16,286,803      topdown-fetch-lat                #     12.2% Fetch Latency          #      7.0% Fetch Bandwidth
+>         40,802,069      topdown-mem-bound                #     30.6% Memory Bound           #     22.6% Core Bound
+>
+>        1.013683125 seconds time elapsed
+>
+> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-
-> On Aug 26, 2022, at 12:21 PM, Namhyung Kim <namhyung@kernel.org> wrote:
-> 
-> On Fri, Aug 26, 2022 at 11:09 AM Song Liu <songliubraving@fb.com> wrote:
->> 
->> 
->> 
->>> On Aug 26, 2022, at 9:33 AM, Namhyung Kim <namhyung@kernel.org> wrote:
->>> 
->>> On Thu, Aug 25, 2022 at 10:53 PM Song Liu <song@kernel.org> wrote:
->>>> 
->>>> On Thu, Aug 25, 2022 at 10:22 PM Namhyung Kim <namhyung@kernel.org> wrote:
->>>>> 
->>>>> On Thu, Aug 25, 2022 at 7:35 PM Song Liu <songliubraving@fb.com> wrote:
->>>>>> Actually, since we are on this, can we make it more generic, and handle
->>>>>> all possible PERF_SAMPLE_* (in enum perf_event_sample_format)? Something
->>>>>> like:
->>>>>> 
->>>>>> long bpf_perf_event_read_sample(void *ctx, void *buf, u64 size, u64 flags);
->>>>>> 
->>>>>> WDYT Namhyung?
->>>>> 
->>>>> Do you mean reading the whole sample data at once?
->>>>> Then it needs to parse the sample data format properly
->>>>> which is non trivial due to a number of variable length
->>>>> fields like callchains and branch stack, etc.
->>>>> 
->>>>> Also I'm afraid I might need event configuration info
->>>>> other than sample data like attr.type, attr.config,
->>>>> attr.sample_type and so on.
->>>>> 
->>>>> Hmm.. maybe we can add it to the ctx directly like ctx.attr_type?
->>>> 
->>>> The user should have access to the perf_event_attr used to
->>>> create the event. This is also available in ctx->event->attr.
->>> 
->>> Do you mean from BPF?  I'd like to have a generic BPF program
->>> that can handle various filtering according to the command line
->>> arguments.  I'm not sure but it might do something differently
->>> for each event based on the attr settings.
->> 
->> Yeah, we can access perf_event_attr from BPF program. Note that
->> the ctx for perf_event bpf program is struct bpf_perf_event_data_kern:
->> 
->> SEC("perf_event")
->> int perf_e(struct bpf_perf_event_data_kern *ctx)
->> {
->>        ...
->> }
->> 
->> struct bpf_perf_event_data_kern {
->>        bpf_user_pt_regs_t *regs;
->>        struct perf_sample_data *data;
->>        struct perf_event *event;
->> };
-> 
-> I didn't know that it's allowed to access the kernel data directly.
-> For some reason, I thought it should use fields in bpf_event_event_data
-> only, like sample_period and addr.  And the verifier will convert the
-> access to them according to pe_prog_convert_ctx_access().
-
-We can bypass pe_prog_convert_ctx_access() with something like:
-
-	struct perf_event *event;
-	u64 config;
-
-        bpf_probe_read_kernel(&event, sizeof(void *), &ctx->event);
-        bpf_probe_read_kernel(&config, sizeof(u64), &event->attr.config);
+Acked-by: Ian Rogers <irogers@google.com>
 
 Thanks,
-Song
+Ian
 
+> ---
+>  tools/perf/util/stat-shadow.c | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+>
+> diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
+> index 979c8cb918f7..788ce5e46470 100644
+> --- a/tools/perf/util/stat-shadow.c
+> +++ b/tools/perf/util/stat-shadow.c
+> @@ -1193,7 +1193,7 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>                                                   &rsd);
+>                 if (retiring > 0.7)
+>                         color = PERF_COLOR_GREEN;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "retiring",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Retiring",
+>                                 retiring * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_FE_BOUND) &&
+>                    full_td(cpu_map_idx, st, &rsd)) {
+> @@ -1202,7 +1202,7 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>                                                   &rsd);
+>                 if (fe_bound > 0.2)
+>                         color = PERF_COLOR_RED;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "frontend bound",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Frontend Bound",
+>                                 fe_bound * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_BE_BOUND) &&
+>                    full_td(cpu_map_idx, st, &rsd)) {
+> @@ -1211,7 +1211,7 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>                                                   &rsd);
+>                 if (be_bound > 0.2)
+>                         color = PERF_COLOR_RED;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "backend bound",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Backend Bound",
+>                                 be_bound * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_BAD_SPEC) &&
+>                    full_td(cpu_map_idx, st, &rsd)) {
+> @@ -1220,7 +1220,7 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>                                                   &rsd);
+>                 if (bad_spec > 0.1)
+>                         color = PERF_COLOR_RED;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "bad speculation",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Bad Speculation",
+>                                 bad_spec * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_HEAVY_OPS) &&
+>                         full_td(cpu_map_idx, st, &rsd) && (config->topdown_level > 1)) {
+> @@ -1234,13 +1234,13 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>
+>                 if (retiring > 0.7 && heavy_ops > 0.1)
+>                         color = PERF_COLOR_GREEN;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "heavy operations",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Heavy Operations",
+>                                 heavy_ops * 100.);
+>                 if (retiring > 0.7 && light_ops > 0.6)
+>                         color = PERF_COLOR_GREEN;
+>                 else
+>                         color = NULL;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "light operations",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Light Operations",
+>                                 light_ops * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_BR_MISPREDICT) &&
+>                         full_td(cpu_map_idx, st, &rsd) && (config->topdown_level > 1)) {
+> @@ -1254,13 +1254,13 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>
+>                 if (bad_spec > 0.1 && br_mis > 0.05)
+>                         color = PERF_COLOR_RED;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "branch mispredict",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Branch Mispredict",
+>                                 br_mis * 100.);
+>                 if (bad_spec > 0.1 && m_clears > 0.05)
+>                         color = PERF_COLOR_RED;
+>                 else
+>                         color = NULL;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "machine clears",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Machine Clears",
+>                                 m_clears * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_FETCH_LAT) &&
+>                         full_td(cpu_map_idx, st, &rsd) && (config->topdown_level > 1)) {
+> @@ -1274,13 +1274,13 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>
+>                 if (fe_bound > 0.2 && fetch_lat > 0.15)
+>                         color = PERF_COLOR_RED;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "fetch latency",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Fetch Latency",
+>                                 fetch_lat * 100.);
+>                 if (fe_bound > 0.2 && fetch_bw > 0.1)
+>                         color = PERF_COLOR_RED;
+>                 else
+>                         color = NULL;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "fetch bandwidth",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Fetch Bandwidth",
+>                                 fetch_bw * 100.);
+>         } else if (perf_stat_evsel__is(evsel, TOPDOWN_MEM_BOUND) &&
+>                         full_td(cpu_map_idx, st, &rsd) && (config->topdown_level > 1)) {
+> @@ -1294,13 +1294,13 @@ void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+>
+>                 if (be_bound > 0.2 && mem_bound > 0.2)
+>                         color = PERF_COLOR_RED;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "memory bound",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Memory Bound",
+>                                 mem_bound * 100.);
+>                 if (be_bound > 0.2 && core_bound > 0.1)
+>                         color = PERF_COLOR_RED;
+>                 else
+>                         color = NULL;
+> -               print_metric(config, ctxp, color, "%8.1f%%", "Core bound",
+> +               print_metric(config, ctxp, color, "%8.1f%%", "Core Bound",
+>                                 core_bound * 100.);
+>         } else if (evsel->metric_expr) {
+>                 generic_metric(config, evsel->metric_expr, evsel->metric_events, NULL,
+> --
+> 2.25.1
+>

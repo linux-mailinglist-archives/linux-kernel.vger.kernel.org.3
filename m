@@ -2,83 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06985A1EC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EC35A1EC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbiHZCZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 22:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S244848AbiHZCZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 22:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244154AbiHZCZC (ORCPT
+        with ESMTP id S244154AbiHZCZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 22:25:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CBC71BEC;
-        Thu, 25 Aug 2022 19:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=20px62CgKdyZ2pwfDZVxI7cSmjDuUU373ANc6eVkIj4=; b=yxgPl1jZvpyjIwubW1Rm05LnHa
-        lJDVcwL0p4dPy0yHblGQmZ7aZv/8J22Lpbzr5ZIBCBbsXT+pn/O+CqenKuuhZsO+/vrbZw/SkShrx
-        7m03p1qKYrMMaeugTxjH5X+eEJiS47WZtMAluQUs0lX/ba9ef0HxXQaH7sZO+UeLj3BtSNuzyH03/
-        yC0uxE0VvUMAmn5dDFSzeS143bmBbKxSsIwd7uh6968C7m3uLRqfzL7J+tS1ss425hAisaMBvjnUH
-        IGfTwRmL65p+dvvxbeZzlJVKU9gzivlgNCMYrRVVF7g10CBYXR2UGby3EYcqYE/htZRJbNOtzIbHP
-        xOoNwDeg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oRP1m-005Eci-7b; Fri, 26 Aug 2022 02:24:58 +0000
-Message-ID: <090894ea-3539-fdca-b470-49d72cb3228e@infradead.org>
-Date:   Thu, 25 Aug 2022 19:24:55 -0700
+        Thu, 25 Aug 2022 22:25:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D34C59E0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 19:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661480747; x=1693016747;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DAdEbK/q7nGjXDdZ7NpHAffn5Cx2ccndJW77ay7UV9s=;
+  b=nvRIU93p6u7pQOmLb0aqUGexu4tD8qFpnnds3SayRbvJSiULh3L1wS/8
+   t+106J7aTKBfNtwlUVrTiX6b1+0ZZ4uFSBiwxHsTkF0vxzAq36lTG5W+G
+   A4RbCwvRI5hxWQqLXRaB6IdyLg5EhgC6M0PdXItXiYiRGK4r9/QsE2If9
+   N6x9gG+IFPVHrjmMp+CPt/xp12/7qgG6TbUYVNd2o97PD0lLCQ+6lECYh
+   lfQBsuJ6lsA3Q0iPtbCGn0gzsKU8T1ndV6tqxU9Wkos6VSiH48aO0qONR
+   67qqs6i94x2phHkqIQi4MzN9C32zetIbBHDT6pHsgfko4otzu2eDFZOE6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="320496541"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="320496541"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 19:25:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="587132577"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 25 Aug 2022 19:25:45 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRP2W-0003G0-1a;
+        Fri, 26 Aug 2022 02:25:44 +0000
+Date:   Fri, 26 Aug 2022 10:25:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-imx/cpu-imx25.c:40:5: warning: no previous prototype
+ for 'mx25_revision'
+Message-ID: <202208261020.uj1YdaoI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] docs: Update version number from 5.x to 6.x in README.rst
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824080836.23087-1-lukas.bulwahn@gmail.com>
- <87a67syxa0.fsf@meer.lwn.net> <YwgtoiKl5Azt7Pre@debian.me>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YwgtoiKl5Azt7Pre@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4c612826bec1441214816827979b62f84a097e91
+commit: a3102fafdce6f150e5a46e1725bb1732f8953a01 ARM: iop32x: enable multiplatform support
+date:   5 months ago
+config: arm-randconfig-r032-20220826 (https://download.01.org/0day-ci/archive/20220826/202208261020.uj1YdaoI-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a3102fafdce6f150e5a46e1725bb1732f8953a01
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a3102fafdce6f150e5a46e1725bb1732f8953a01
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-imx/ arch/arm/mach-versatile/ drivers/clk/spear/
 
-On 8/25/22 19:19, Bagas Sanjaya wrote:
-> On Thu, Aug 25, 2022 at 12:48:39PM -0600, Jonathan Corbet wrote:
->>  - applying-patches.rst should just go.  I didn't prevail last time I
->>    tried to make that point, but I still don't think that we help
->>    anybody by dragging 1990's instructions around now.
->>
-> 
-> Hi jon,
-> 
-> If we're about to rm applying-patches.rst, at least we also need to add
-> a warning to the doc, saying "This documentation is obsolete and will be
-> removed in the future.", while adding the same deprecation message on
-> scripts/patch-kernel. The script can still be usable and kept around for
-> a cycle. If no users complain, we will go ahead rm-ing.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-It already says:
+All warnings (new ones prefixed by >>):
 
-   This document is obsolete.  In most cases, rather than using ``patch``
-   manually, you'll almost certainly want to look at using Git instead.
+   In file included from include/linux/gfp.h:6,
+                    from include/linux/umh.h:4,
+                    from include/linux/kmod.h:9,
+                    from include/linux/module.h:17,
+                    from arch/arm/mach-imx/cpu-imx25.c:8:
+   include/linux/mmzone.h: In function '__nr_to_section':
+   include/linux/mmzone.h:1404:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
+    1404 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+         |             ^
+   include/linux/mmzone.h:1390:27: note: 'mem_section' declared here
+    1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+         |                           ^~~~~~~~~~~
+   arch/arm/mach-imx/cpu-imx25.c: At top level:
+>> arch/arm/mach-imx/cpu-imx25.c:40:5: warning: no previous prototype for 'mx25_revision' [-Wmissing-prototypes]
+      40 | int mx25_revision(void)
+         |     ^~~~~~~~~~~~~
+--
+   In file included from include/linux/swap.h:7,
+                    from include/linux/suspend.h:5,
+                    from arch/arm/mach-imx/pm-imx25.c:7:
+   include/linux/mmzone.h: In function '__nr_to_section':
+   include/linux/mmzone.h:1404:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
+    1404 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+         |             ^
+   include/linux/mmzone.h:1390:27: note: 'mem_section' declared here
+    1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+         |                           ^~~~~~~~~~~
+   arch/arm/mach-imx/pm-imx25.c: At top level:
+>> arch/arm/mach-imx/pm-imx25.c:31:13: warning: no previous prototype for 'imx25_pm_init' [-Wmissing-prototypes]
+      31 | void __init imx25_pm_init(void)
+         |             ^~~~~~~~~~~~~
+--
+   In file included from include/linux/gfp.h:6,
+                    from include/linux/radix-tree.h:12,
+                    from include/linux/idr.h:15,
+                    from include/linux/kernfs.h:12,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from arch/arm/mach-versatile/versatile.c:13:
+   include/linux/mmzone.h: In function '__nr_to_section':
+   include/linux/mmzone.h:1404:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
+    1404 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+         |             ^
+   include/linux/mmzone.h:1390:27: note: 'mem_section' declared here
+    1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+         |                           ^~~~~~~~~~~
+   arch/arm/mach-versatile/versatile.c: At top level:
+>> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for 'mmc_status' [-Wmissing-prototypes]
+      56 | unsigned int mmc_status(struct device *dev)
+         |              ^~~~~~~~~~
+--
+   In file included from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from include/linux/clkdev.h:12,
+                    from drivers/clk/spear/spear3xx_clock.c:13:
+   include/linux/mmzone.h: In function '__nr_to_section':
+   include/linux/mmzone.h:1404:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
+    1404 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+         |             ^
+   include/linux/mmzone.h:1390:27: note: 'mem_section' declared here
+    1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+         |                           ^~~~~~~~~~~
+   drivers/clk/spear/spear3xx_clock.c: At top level:
+>> drivers/clk/spear/spear3xx_clock.c:390:13: warning: no previous prototype for 'spear3xx_clk_init' [-Wmissing-prototypes]
+     390 | void __init spear3xx_clk_init(void __iomem *misc_base, void __iomem *soc_config_base)
+         |             ^~~~~~~~~~~~~~~~~
 
-although the bit about "will be removed in the [near] future"
-would be a good addition.
+
+vim +/mx25_revision +40 arch/arm/mach-imx/cpu-imx25.c
+
+d27536c6619221 Jason Liu 2011-08-26  39  
+d27536c6619221 Jason Liu 2011-08-26 @40  int mx25_revision(void)
+
+:::::: The code at line 40 was first introduced by commit
+:::::: d27536c6619221528114746317def345467a3e80 ARM: mx25: Print silicon revision on boot
+
+:::::: TO: Jason Liu <jason.hui@linaro.org>
+:::::: CC: Sascha Hauer <s.hauer@pengutronix.de>
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://01.org/lkp

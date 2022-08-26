@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7271D5A21B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2E95A21B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245241AbiHZHXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S245234AbiHZHXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245234AbiHZHXC (ORCPT
+        with ESMTP id S244814AbiHZHXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:23:02 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E09D25FD;
-        Fri, 26 Aug 2022 00:23:00 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 45B7E24000B;
-        Fri, 26 Aug 2022 07:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661498578;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JK9COduMorPgKCAsggz5pvTrJ2MnP3XJ9ZS9Yi4YLmo=;
-        b=k2jQNZTSqbhsDjWsVNPZdeykaB3Jq0J7Z1Bcvt1Vtghj2eeiqZPpEXhoIs4iCFNOST5jQ4
-        tuLiCOCyRU5aD6v3FqfjRu0OztAyIy64lqBQn/GXBu7XUB3+cn7BpxkGs/csa6ngYjvw4F
-        q6QPYxWz8hkcD0inkcTDLHq+jLYeEyA2/zYqITcRDDWGiyFWRGyNjziOQ2Ay1uAjUwJJKP
-        +NCKhoEeOh53Mi0y+JCD6/bP+1a9mL7j2ms0yxd8YrQHZVQW/lm5OdOPzTpReqNWtL9KP+
-        3N9vGd5PbATIxEjEv74YUZvNdFwqZK3pAoq/pAHOPnmzD+5ZfYnwoh7PlZ3x/w==
-Date:   Fri, 26 Aug 2022 09:22:57 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Zhang Jianhua <chris.zjh@huawei.com>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: fsl-ftm-alarm: Use module_init and add module_exit
-Message-ID: <Ywh00crgSilSfZnC@mail.local>
-References: <20220826070017.2340617-1-chris.zjh@huawei.com>
+        Fri, 26 Aug 2022 03:23:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22E1D2EB8;
+        Fri, 26 Aug 2022 00:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AEKb3DwntGJTTjvDTJ6NmSnPWGwTdjV+VoVwaBrNJnk=; b=OkA+Cx6EfR/tlzYGyBhl8+vsbz
+        3Za4a2S7rWXT+HhqKqJf5T1BQjDBg0G3qCmFvzOIovSWOu8gzNUGDBDFdvC9A7GjkfCPQoguol4wb
+        i2FYfBbYPfPEJYIYgqTrsq73NtGhpvCFzME763sBZckOABZSOk1o8FpsX+2gRox1hKEIPonKZ62mA
+        q3QF0yn04z6diKaFQs+4rc8x6Q07IDs0V3o4yIIxk76ddrcyHQ1soQ+/ZvHu5zb2j5Zb4CAHARU7y
+        AyDgtU6LR8GLZDzV4Qn9MK8ODVMqXPWT4IFWRtLUdOwcWbM7GzHeMBwNrDyjMrrtda/fUtX//2pPM
+        5MPsMXcw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oRTgk-006HEO-Ko; Fri, 26 Aug 2022 07:23:34 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4AB7B98028D; Fri, 26 Aug 2022 09:23:33 +0200 (CEST)
+Date:   Fri, 26 Aug 2022 09:23:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Adam Langley <agl@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: Should Linux set the new constant-time mode CPU flags?
+Message-ID: <Ywh09ZXBZFA3R0W6@worktop.programming.kicks-ass.net>
+References: <YwgCrqutxmX0W72r@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220826070017.2340617-1-chris.zjh@huawei.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <YwgCrqutxmX0W72r@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,43 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/08/2022 15:00:17+0800, Zhang Jianhua wrote:
-> - Use module_init instead of device_initcall.
-> - Add a function for module_exit to unregister driver.
+On Thu, Aug 25, 2022 at 11:15:58PM +0000, Eric Biggers wrote:
+> Hi,
 > 
-
-I can see what you are doing but this doesn't explain why. Also, was
-this tested on any actual hardware?
-
-> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
-> ---
->  drivers/rtc/rtc-fsl-ftm-alarm.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> Intel and ARM recently published documentation that says that no instructions
+> are guaranteed to be constant-time with respect to their data operands, unless a
+> "data independent timing" flag in the IA32_UARCH_MISC_CTL register (Intel) or
+> DIT register (arm64) is set:
 > 
-> diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
-> index c0df49fb978c..28bdc6c97b64 100644
-> --- a/drivers/rtc/rtc-fsl-ftm-alarm.c
-> +++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-> @@ -332,7 +332,13 @@ static int __init ftm_alarm_init(void)
->  	return platform_driver_register(&ftm_rtc_driver);
->  }
->  
-> -device_initcall(ftm_alarm_init);
-> +static void __exit ftm_alarm_exit(void)
-> +{
-> +	platform_driver_unregister(&ftm_rtc_driver);
-> +}
-> +
-> +module_init(ftm_alarm_init)
-> +module_exit(ftm_alarm_exit)
->  
->  MODULE_DESCRIPTION("NXP/Freescale FlexTimer alarm driver");
->  MODULE_AUTHOR("Biwen Li <biwen.li@nxp.com>");
-> -- 
-> 2.31.0
+> * https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/best-practices/data-operand-independent-timing-isa-guidance.html
+> * https://developer.arm.com/documentation/ddi0595/2021-06/AArch64-Registers/DIT--Data-Independent-Timing
 > 
+> This is a major problem for crypto code, which needs to be constant-time,
+> especially with respect to keys.  And since this is a CPU issue, it affects all
+> code running on the CPU.  While neither company is treating this as a security
+> disclosure, to me this looks exactly like a CPU vulnerability.
+> 
+> For Intel, given that the mitigation is to set an MSR flag, it seems that the
+> kernel will need to do that -- similar to the MSR flags that enable mitigations
+> for speculative execution vulnerabilities.
+> 
+> For arm64, it's not clear to me whether the DIT flag is privileged or not.  If
+> privileged, I expect it would need to be set by the kernel just like the Intel
+> flag.  If unprivileged, I expect there will still be work to do in the kernel,
+> as the flag will need to be set when running any crypto code in the kernel.
+> 
+> I'm wondering if people are aware of this issue, and whether anyone has any
+> thoughts on whether/where the kernel should be setting these new CPU flags.
+> There don't appear to have been any prior discussions about this.  (Thanks to
+> Adam Langley, who maintains BoringSSL, for bringing this to my attention.)
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Whichever way around I think you want OS support to make it a per-task
+property instead of a per CPU one.
+
+Also, *sigh* yet another MSR to touch :/

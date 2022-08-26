@@ -2,145 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8355A2524
+	by mail.lfdr.de (Postfix) with ESMTP id 319FA5A2523
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239829AbiHZJyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S245079AbiHZJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiHZJx6 (ORCPT
+        with ESMTP id S229593AbiHZJyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:53:58 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F6BD86D1;
-        Fri, 26 Aug 2022 02:53:50 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q7XkE1028560;
-        Fri, 26 Aug 2022 09:53:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=svVB0a80C6lkuuTQ847OAGgjnEL+IfSrd4seiyytp9w=;
- b=La6qlaVsHuudd+Ij7JQrx6oqmLO1J+M5xIIXvDA7D7Fz+KD8oUGEQP+wBGW85kycqSak
- 8JtLNFxqsqsIqogxLEvO7Wm0dPkdp1bMOFm7spKbzUX1hFV0DofNyelaFk84OQizMjS9
- vF6u4VgEZwPpebpaYDA0U3uSgyzVZ6RWRMHsrgPfVVAicSQ+eH9gdqT0ZfuL61KJPJjo
- ZRd0gsIwVIL87fI2L7A4ez+sYyL47MlyOcqIq7ZNCghsVzWORSqkXoztpEgtDqbC5nV5
- PDb3GLfsr2tNYMvzwQxj1ETg7hA+7tpmCXwLFXy15FTueGGqpcn/HTZgiGcQu4EMf1nL zA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4w2417f4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Aug 2022 09:53:41 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q8Pp5j007224;
-        Fri, 26 Aug 2022 09:53:41 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n58sjqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Aug 2022 09:53:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J3zdk8RhqV6F5dI1wkb74EbHuu3Jlxm7zZaBtuLgcM0nFJS4O9L8q4cNg0x5zuZfiA5vtlvC8puFVh5kgc1BKYf9GolXgOVP6UqqQAsnVzmIYl61o6Pt4SBMA0y+xM2ARSZ9Xp92S+7593mgsHSjOsWHKa5GIaQvFZtimNhnChMAba9RzDIcvYMjJonm5Vu7pBoX9+Tu2ovERcFW01xA+fdRIKUNQfd5nS3jpwQ/EHn6jvytNkS6Gi7uoXiVsxdicZMJihZfB3dpsskTi1f+R6GifbFwNYwpMCtzvnCKlVfuOJQN4wmWWjGAUo8GBQVVLnkHpXgl7nAUSy6mI43n2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=svVB0a80C6lkuuTQ847OAGgjnEL+IfSrd4seiyytp9w=;
- b=oZxxsPi+Q6rDP/YzT8F2SlefMaPUuS2FYU4eFosAZPpRXG55XCdXzmQKn8XnLAfV6/Fc51yBCBVaD71/SjzPBBrjS2RpdCm091JEfU6/mqyqonm/NlYY0VypFHZOYTIPclqDD7r0/BQNmwkbXT7EDuk5lkSHChd0xkannz2Ftybjf3K4vOkfNbVlwys+2rSsQ8WjwJkqbvflyljVO4oRCzixZrUdSMr3ggBySUgnH8ItLazEKVDnAbc6E9EJ1GnqotretJ71puQRUIfiti7TXVQHaajreR3PsifongY1SzQN950p5EAkCH/Q0gIlGhG2MGYvhydon9QIfXj2eXjNEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=svVB0a80C6lkuuTQ847OAGgjnEL+IfSrd4seiyytp9w=;
- b=QFyQKrJpvMVlAYHWeQnZ/utRn/zVLec5zTpNM7ij4WwJAq99JDeX+XoJpYwp9nVnRLFCNVjC1+80lhBCEaDhP4zUkPE2HzmaQn9I1+LK4BZ2SU/zCs7izdP8rgel+slwCmyPtnM4a8YPaO9fLtSgY4in/vD8b7/uGgwxYzXVf1k=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by DM6PR10MB2729.namprd10.prod.outlook.com
- (2603:10b6:5:b1::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Fri, 26 Aug
- 2022 09:53:39 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
- 09:53:38 +0000
-Date:   Fri, 26 Aug 2022 12:53:11 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     wangjianli <wangjianli@cdjrlc.com>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, wangqing@vivo.com, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] msm/adreno: fix repeated words in comments
-Message-ID: <20220826095311.GG2030@kadam>
-References: <20220724073650.16460-1-wangjianli@cdjrlc.com>
- <0e16e719-4eb2-bfb3-6b77-88d5314757a1@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e16e719-4eb2-bfb3-6b77-88d5314757a1@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0018.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::23)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Fri, 26 Aug 2022 05:54:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FC8D87DA
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661507649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gxGpACUZugSb6gistk/DMyJom0Pp6sbkUgL6hlrJ7UI=;
+        b=Gf/D9cbDwoz+xPgnQ5i9wasJgDc+ItG7LUMoTX4natNPYcNOY5Ho8Oj+tAHF268FoGHeqL
+        aVcdtxoNmymu1nsx9dnlz88+G7+kxelNEfd5PvKQyrLymQ1HVjRDrQB0l6/e25WcJHU8J6
+        HebMCSmDkDbUAf6mMBOUVME/dBFaC8o=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-298--QLonjsJN8aRhx2FSZsyBg-1; Fri, 26 Aug 2022 05:54:00 -0400
+X-MC-Unique: -QLonjsJN8aRhx2FSZsyBg-1
+Received: by mail-wm1-f72.google.com with SMTP id f7-20020a1c6a07000000b003a60ede816cso289531wmc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:54:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=gxGpACUZugSb6gistk/DMyJom0Pp6sbkUgL6hlrJ7UI=;
+        b=wNtoUMf4uaVOusfdmCeSKu3nzIbuuN24G6YYBGwHG8aehCm664ZQE9s4X05CMoicMf
+         iGdYajKb7o3mIT+vEkMEFqFgrm19MAQ075kBu7b4UFvcs0lzUGCxAGq+sFT2m3NoTP+S
+         /b+F7TBfMgD+hW0WbBhXvZJNqJ4CSTzjP5gQVuBne33XpGpL7/COrBIc54HiLx6ldH88
+         e/WaxNoRraSSGuM6tvp18siaS3B/DJ6xOAqSA9HBuzmrvc2RdLQPzYF5Yn+QxoORh095
+         SJEoOi4TCLFi/KHVj52dqBzXI2Qioak5cq38zDJogGOtj/rPYmu01zE5wXYPpVvTXKtb
+         o2yg==
+X-Gm-Message-State: ACgBeo3V0WRwZPdFBPvGgAZv7JrtEJkvrarkqZt15fAktidFs4+Wf9Sr
+        9tWyBZS6z9GK0DU2VdAKCcwi9gFlN5OECwy1nFisxp1pQtIrAj7FeGvieHGghOqRzOaqWGpBMvO
+        IYoVMBp6U7d20eOs6g3xU6lcz
+X-Received: by 2002:a05:6000:1a42:b0:225:8b5e:e0f8 with SMTP id t2-20020a0560001a4200b002258b5ee0f8mr1160327wry.710.1661507639316;
+        Fri, 26 Aug 2022 02:53:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7OtQPy8Lm0bdpcz01XQN4p2UT47Y+kVemr6tDelSv1bI7UiNdLH1R+YF0s1vXJMQxqxwNRCg==
+X-Received: by 2002:a05:6000:1a42:b0:225:8b5e:e0f8 with SMTP id t2-20020a0560001a4200b002258b5ee0f8mr1160302wry.710.1661507639072;
+        Fri, 26 Aug 2022 02:53:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:f600:abad:360:c840:33fa? (p200300cbc708f600abad0360c84033fa.dip0.t-ipconnect.de. [2003:cb:c708:f600:abad:360:c840:33fa])
+        by smtp.gmail.com with ESMTPSA id h21-20020a05600c351500b003a60ff7c082sm8338300wmq.15.2022.08.26.02.53.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 02:53:58 -0700 (PDT)
+Message-ID: <204b7465-0d30-d305-64fb-60fe46ca1dba@redhat.com>
+Date:   Fri, 26 Aug 2022 11:53:57 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0a82f4c7-b1ef-442f-d318-08da8748d9bb
-X-MS-TrafficTypeDiagnostic: DM6PR10MB2729:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: F/HTiuTuXLd5QYA5Ly94OjYU7VglY+wsjPCg1IZG++g4GXX7MxMIS1g4UZyQZllBDxBMTlPYgQWoDoOz4U9VzY9RJdpPcmxNqO4SWGjiqRtx+EaXVSic3iAXLpgS67tD+EKxfbXbwNGKDo4eR9Jq+VjtvZUqt3WTG8ncmYXDgjPgbN3nc0TM+4/6nfvzWVq/rbeSaNifxqPcGUEfbdvPKhTilo15rpWWyxPN4prD5yU3FljCSMIYTT53vrp/Je0PhPfnKrVM/ZDTNqJTS4QKBMDDS1hJo0fYwUlnDOXkrt2wqxbpVddgFVcUvZoS+HNpZzGHXUFkrxnqtwYTO1AlUnA2od+1U17eAyceCYWwm1nMNOWUTKMt33DIvVVPYj0eE1wCqbDGbrphYgfZG6kKjfUcOifHzTPNzDtnqcq6cRPml+VTPHouPlBKUmUo7kQENzLjOeEp+BbbH7BgfCNU//Cy0/6m5MTNdoJLTiodL6iKE6eRGTsq9OLH8B/YVhJ3mn1fnnOkHQF0nctuIDz4dUQBGgXnv4w2/qAE1vQGuHQL1D1Bd/S/VEY06yE/e+h1Jrw+30tW8BMMatErjLnYjqC3KunAnNn1V9gSblN58mW+IrtMfD8R/SD4XuXbuxufDP/YSWAfWBdgloR/t1IdrbINQIc7PayCkYIXAmltKmaAcqbmkpXUpK/5DNVt9P3JgcQio917l72pm8UnmhLwLbapFd4B2kuiYGXdIp0YlJekY46FTPzEsFRW2S1CpaTZHmHTUWOBI8kCP8m8nuMw3Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(376002)(136003)(396003)(346002)(39860400002)(33656002)(38350700002)(86362001)(38100700002)(83380400001)(1076003)(186003)(9686003)(6512007)(53546011)(52116002)(6506007)(26005)(478600001)(6486002)(6916009)(316002)(6666004)(41300700001)(8936002)(7416002)(44832011)(4744005)(5660300002)(33716001)(2906002)(66946007)(8676002)(66556008)(4326008)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Sf7/kOvBa4RCaTrb6rU7s0PVPObOZpC3knnpj4NGT6KfzMexXRzo6vL8B71K?=
- =?us-ascii?Q?MiPhGZk0HfNV8tFR2H7Z8bLcdqqxMRQ4IKcF1CqU8LePis890ISbNmzchBlX?=
- =?us-ascii?Q?R7X9ML6AlKakbsJzLOghBK7Xk/YHkTmxNUuzgroRdDDVottfRXivpyod/pCn?=
- =?us-ascii?Q?x4SJZIpSi2iSmZyowgRAeQoOIs6LllFXRZ6JjCL9Ls8Oc+MP25xevUENy25D?=
- =?us-ascii?Q?+WpA/6EXZlk1ZqJ+48dKs9yDyq+M8vanWKlA2uvL6L2E9GceHtXhSjPiyZFf?=
- =?us-ascii?Q?pqCVYelWZQb79lfvNhn4UQ7WalkOn8NvjYMVsNIX5WLeOteQuLCrxo79DIHY?=
- =?us-ascii?Q?ZWGEoDbGmtWne0y5/77JgqtK6FgiVyaYtGkJtXjxkANWkyZ8wdYlomyZNSgt?=
- =?us-ascii?Q?t+lzZX+Twa9kU7FreFtyzOsWHw3ERRnkJMannVwJ/uzIGJq/CT/HjULoIq8i?=
- =?us-ascii?Q?OK0ZiAPFvyt5gbCLK+oP8iP7nm6O+w8Ql1UQLVULxMTXn5HpuaaskesqM/65?=
- =?us-ascii?Q?EFblCKSfcJH41XUMdIs2DP9HzJVEndGjBaoiNsQu1iiGX/MtRQNAEYIRVQI9?=
- =?us-ascii?Q?HOQ+qmMEgVPXMK82t73Ld0Fc4dDDKEGWC/AxIYSWQ1BTQl1VXhLPj3A1IZGU?=
- =?us-ascii?Q?vqEZxb/XBNuPlPdd481PnBye3MVdLo9QadL96CyqWGDEjBivqBHGNh9fLtvG?=
- =?us-ascii?Q?rtnmHvzeHFXq09H6XxAXEd8OJXqePRXHXwQKl8ylhMq8WAlgD4IV9whvAY3l?=
- =?us-ascii?Q?SfPX2GhMcI4vgVU96IBW86q25xeKHlAie+ngyGz9+Fcb38iHgbd/A0k5WgGO?=
- =?us-ascii?Q?dc6kSzbf4U+s6V15o0HGF8vD6d7hz83wpiftDFmzUUG5CvS87UD9BK1LDoZc?=
- =?us-ascii?Q?zIi+0QuZQ3Q2WtfsubFAF5rF57DYj2abJONmrYr75s9E4wqfIJ9BdqbKnkJx?=
- =?us-ascii?Q?Rcq7aelWwO6bppPmfDGoYxs1/XWQ0PfhYptz6NuJC7MeP41bvctPoNAxT7/v?=
- =?us-ascii?Q?su52fD2Kzr/+AXezM5k7UibZJ1lpNHal9wL/WQMMGpBjSW9KWJ/GFT3CRc4P?=
- =?us-ascii?Q?sCgilzoxYbhXUVVoxdqC8DSW5ZtItvndNIlIBNSnAOjKcjSLQHkqarO7S4e1?=
- =?us-ascii?Q?v0xo2YU++hLX/hyCXegs47zjIMJXpNPDP23ve8aX8UIxsI7JpLPI60Dl66xV?=
- =?us-ascii?Q?tvHBPjw6QQBOoAmoKmF2zvZqhvkWs4ZU6I8oWMWVhYqxhKKPI9kEmwRZauWC?=
- =?us-ascii?Q?/uDS5L8D8E6N6DP+nbnSj/lK/4AKVw2Z5LSDPG3tv+P93BJLYTz18XuKQhXp?=
- =?us-ascii?Q?mf8CD3yKu4Y4NIdps1W/ugBAjHMzUVATdsLlaEsAZy1Ut2VbiPj/rctekTtV?=
- =?us-ascii?Q?XuuVebvzs7aKzDY77v3wUmWMqWfEz5yNjxB0z/8bAQ/r9r8GtYFWJr9yC4+1?=
- =?us-ascii?Q?BoUAOIL0HYcIb85yyWfXClIwK8mYXakeB+drheYtiFy2PzpxSAK3VEBE5dq/?=
- =?us-ascii?Q?y+i6RWIRWOmGGtb0wSD6P1tKUL/7tdt5+9jyMqmfhfsUwOY52yvqFt5ebrby?=
- =?us-ascii?Q?KHZbgZIFwssctQRNOfRdhP+Zbj5x2xBiH1BM1n17m9vBTnAF3XsM+onG2Riu?=
- =?us-ascii?Q?jA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a82f4c7-b1ef-442f-d318-08da8748d9bb
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 09:53:38.8112
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PPvCsai5qlObeQbQ/MeKVAC/kAh7vbtlPBIxvhHktMozGWrU7HXp1DDBL2xIdnmJYXz3sNYtje/MVojQjy2jIw5S/KmXTYv9ujJpC+ruLGY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2729
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_04,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
- adultscore=0 phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208260040
-X-Proofpoint-ORIG-GUID: 34qPmEsLfIao7yieWNQM9MQqaq5Q46g2
-X-Proofpoint-GUID: 34qPmEsLfIao7yieWNQM9MQqaq5Q46g2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] mm/demotion: Fix kernel error with memory hotplug
+Content-Language: en-US
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+References: <20220825092019.379069-1-aneesh.kumar@linux.ibm.com>
+ <0602b3b4-214f-94b1-61fe-2b2528ff529b@redhat.com>
+ <5b0d911b-4cc2-f1ae-b33b-79aca6e3124c@linux.ibm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <5b0d911b-4cc2-f1ae-b33b-79aca6e3124c@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,17 +96,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 12:45:09PM +0300, Dmitry Baryshkov wrote:
-> On 24/07/2022 10:36, wangjianli wrote:
-> >   Delete the redundant word 'in'.
+On 25.08.22 14:53, Aneesh Kumar K V wrote:
+> On 8/25/22 5:46 PM, David Hildenbrand wrote:
+>> On 25.08.22 11:20, Aneesh Kumar K.V wrote:
+>>> On memory hot unplug, the kernel removes the node memory type
+>>> from the associated memory tier. Use list_del_init instead of
+>>> list del such that the same memory type can be added back
+>>> to a memory tier on hotplug.
+>>>
+>>> Without this, we get the below warning and return error on
+>>> adding memory type to a new memory tier.
+>>>
+>>> [   33.596095] ------------[ cut here ]------------
+>>> [   33.596099] WARNING: CPU: 3 PID: 667 at mm/memory-tiers.c:115 set_node_memory_tier+0xd6/0x2e0
+>>> [   33.596109] Modules linked in: kmem
+>>>
+>>> ...
+>>>
+>>> [   33.596126] RIP: 0010:set_node_memory_tier+0xd6/0x2e0
+>>>
+>>> ....
+>>> [   33.596196]  memtier_hotplug_callback+0x48/0x68
+>>> [   33.596204]  blocking_notifier_call_chain+0x80/0xc0
+>>> [   33.596211]  online_pages+0x25e/0x280
+>>> [   33.596218]  memory_block_change_state+0x176/0x1f0
+>>> [   33.596225]  memory_subsys_online+0x37/0x40
+>>> [   33.596230]  online_store+0x9b/0x130
+>>> [   33.596236]  kernfs_fop_write_iter+0x128/0x1b0
+>>> [   33.596242]  vfs_write+0x24b/0x2c0
+>>> [   33.596249]  ksys_write+0x74/0xe0
+>>> [   33.596254]  do_syscall_64+0x43/0x90
+>>> [   33.596259]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>
+>>> Fixes: mm/demotion: Add hotplug callbacks to handle new numa node onlined
+>>
+>> Do we have a proper 12-digit commit id as well?
+>>
+>> Do we have to cc stable?
+>>
 > 
-> Could you please:
-> - adjust the commit subject to follow the rest of commit messages,
-> - drop the extra whitespace at the beginning of the commit message,
-> - add a correct Fixes tag.
+> That patch is not yet merged upstream. It is in mm-unstable. I guess Andrew can fold the change
+> into the original patch?
+> 
 
-This doesn't fix a bug so the fixes tag is inappropriate.
+Please make that clearer next time somehow -- either via "[PATCH
+mm-unstable]" or just by stating "Andrew, please squash this into XYZ".
 
-regards,
-dan carpenter
+I know, akpm headquarter tracks all pending patches, but for other
+reviewers this really helps to figure out how urgent this is and where
+this applies to (+ saves time).
+
+
+-- 
+Thanks,
+
+David / dhildenb
 

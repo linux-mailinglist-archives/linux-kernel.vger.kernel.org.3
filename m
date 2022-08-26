@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B48F5A2BE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEF45A2BE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244074AbiHZQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S241961AbiHZQEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiHZQDP (ORCPT
+        with ESMTP id S233247AbiHZQE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:03:15 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7A5D34CC;
-        Fri, 26 Aug 2022 09:03:13 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bn9so2012531ljb.6;
-        Fri, 26 Aug 2022 09:03:13 -0700 (PDT)
+        Fri, 26 Aug 2022 12:04:27 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C74D4779;
+        Fri, 26 Aug 2022 09:04:27 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id j1so1384742qvv.8;
+        Fri, 26 Aug 2022 09:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc;
-        bh=CJYOqLIO01MXVIHzVSpSMA9KtKvNIpQx9lFJup0kd+A=;
-        b=nZKNJYYb7BsiUFO0xhhabyJFpwpI9wbBPKhrWhpub9OkdeTNhFbhWKITn+cBfbTXCo
-         yEAXKUjBUape0cJ4SA056RPcmIsAIZpf99RCejQG8z1XHVBovkOy7XQXKLNj8kaHiLoq
-         xtQXGz7pZRz458/dVk1w7/mgkIHsAcQnMD04HNV7uio4qPWSoLjRuqmg+xIPEIjBVAAw
-         9MYJd95Z9KDZKK+/NcMYq4yLC0Ckli+meMCuK1bLwPhq1DyiAaFZVD5HEnqeToF1vlLG
-         b4fEkn+Zx+MxDpLvh1ZF+GhCpDDQjQ46CpWGGyWJ1xrh+QV+7VyIIZD7bWAsF5fRXQ6u
-         RsZA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=FeNwIbGSnin/6lpCxdAU71xVZ3XiHSxLN5ZJ0/sc5G0=;
+        b=buuUZ0d/2nkVQRZuHDDqYtaT7TzNu324SLpv4R10HSLnwhDQ96WJVTnKtR7zum0t1r
+         hqj2e0FMaD6GbufjOJ4k9zx3ZUqUNUUZyPkO0lahpnsaJBBptUclrfCtMuU9efsK6FXO
+         2UEynvZ5f62lHMWe/gcTdeOgbu5jBoMFgqkhiTV6KhEUNElx0rs4cVYkE86I1Q4HFjSY
+         2R9r/IJTqVgCguPDvErK+IEOMNmyzUp9lN4EC/OHyRu0rlB4wUvg4WTyTGdIRpTn1DGV
+         59ibKqH5KGO5FyeGk1djPNZVC5NZe+orkbYsqEKimpJUj6+jVJwK5STuzPRpCpqylF5/
+         oWZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=CJYOqLIO01MXVIHzVSpSMA9KtKvNIpQx9lFJup0kd+A=;
-        b=rsn2AybMiVAsbfPZ0U/mFso24P8CVcBL+kSrUctTLCHL3zXastqmMg/jQaKGc9pAXy
-         MUTXlgit+7PuH6QX0FpERpR9I7lwgKulNs+4vhqtA7VFoh3l3enIo94eazc/tq2URuA8
-         se5j3/+S5YLC9H8K4Zo3RmSyLqO5BJW1yoZkB/gOdAEcUtiAxatJX4NV/zbuEWdzJ2+C
-         58sbS8AhLYv4u74d2ZMCIsrSPu9Ta4DlCjAIPf4YBrb6SJrr70t/uTXoYm82IEitK8aA
-         iZeB+hJ72+sNgEuaBM4xdR0lvMi1oYvDscrDhZ41iOzdXIPAmE5fSyMk96k5Kerrf2TY
-         vc6g==
-X-Gm-Message-State: ACgBeo0/RX/TsuAPAW6XjdiqbG4NnpZ9GuPE4R0Y6k7L8eI26JfEZ9xF
-        OEkhKSMYgSlpMFn4R6uToQ4=
-X-Google-Smtp-Source: AA6agR7icvaWbLM6+nRHP0f0x/I0DIAY+vWIHyEWhhwNgtCtOCHUZfXBrRqo6KAeJlB9s7Y/tznmCA==
-X-Received: by 2002:a05:651c:1025:b0:261:cc9c:3db with SMTP id w5-20020a05651c102500b00261cc9c03dbmr2605963ljm.80.1661529791526;
-        Fri, 26 Aug 2022 09:03:11 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id m21-20020a195215000000b0048ad4c718f3sm422620lfb.30.2022.08.26.09.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 09:03:10 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 18:03:07 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Petlozu Pravareshwar <petlozup@nvidia.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "Kartik ." <kkartik@nvidia.com>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        Sandipan Patra <spatra@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] soc/tegra: pmc: Print reset info during probe
-Message-ID: <Ywjuuw/rSRUSORFF@orome>
-References: <20220817184456.1184459-1-petlozup@nvidia.com>
- <Yv5XarzacTOkTL1k@orome>
- <DM6PR12MB316434A9BA61A01251E3BA3CB5739@DM6PR12MB3164.namprd12.prod.outlook.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=FeNwIbGSnin/6lpCxdAU71xVZ3XiHSxLN5ZJ0/sc5G0=;
+        b=y1n6GlnSlLPsYFN2gvFfYfNkD27jqsU8Pb0/u8qdzrksvoGDy3YJDetatJynGl/ZXn
+         xLcbmAYvhQhskA/06+33W26/s3n6Zoubkg31U78Gv4sKBxUUQ6Tvo2qlGZK+jvzfRCsv
+         CyQfmPuoyFUdN80G5mVD7W+k+AMXbdYtkr5pJ+CK81a7fzXbyKMmEyi655Ygv/vSQ1Wm
+         YSTfPQQGhPUF6bFMLxWqEkfQnF8YK0iyYPZniVxGZb+quh+qPy23u9xj/ubjVzgI2H/I
+         LbHm30kiNwhH27YI61K9LbKUvOJHERpfZmNH1oHFA3uaH9/uioCq5E0bZEDKFPDsiBDI
+         BIyA==
+X-Gm-Message-State: ACgBeo0Abu4CPeTfHevSWCJk+Sa4Z4zf7pbnhAviCbcHQ1loYdJkKJ8X
+        YzhAByu52P8YIIa/5aBwUogRTeaD0uYdYfjvKjw=
+X-Google-Smtp-Source: AA6agR7GxQegK7svGSDjOShs7ExKxeZkw77WPZE227Ogs36elAiNCLBVrcaeegmHRf0Y5x7Clj39vvbXehqfnaKq9E0=
+X-Received: by 2002:ad4:5baf:0:b0:476:6a9e:b5e1 with SMTP id
+ 15-20020ad45baf000000b004766a9eb5e1mr300030qvq.64.1661529866149; Fri, 26 Aug
+ 2022 09:04:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IwTi6ziXccuE4c+s"
-Content-Disposition: inline
-In-Reply-To: <DM6PR12MB316434A9BA61A01251E3BA3CB5739@DM6PR12MB3164.namprd12.prod.outlook.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+References: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 Aug 2022 19:03:50 +0300
+Message-ID: <CAHp75VeJ2KR_-JUfW_3LEgB1ezQQzJ_2jLbH8vcWOtTSDAhKdQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] serial: Add uart_xmit_advance() + fixes part (of a
+ larger patch series)
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,58 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 25, 2022 at 12:19 PM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> Add uart_xmit_advance() helper to handle circular xmit buffer
+> advancement + accounting of Tx'ed bytes. Use it to fix a few drivers
+> that previously lacked to accounting for DMA Tx.
 
---IwTi6ziXccuE4c+s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For the whole series
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Thanks for fixing this issue.
 
-On Wed, Aug 24, 2022 at 07:39:46PM +0000, Petlozu Pravareshwar wrote:
-> >=20
-> > On Wed, Aug 17, 2022 at 06:44:56PM +0000, Petlozu Pravareshwar wrote:
-> > > During PMC probe, print previous reset related info such as reset
-> > > reason and reset level.
-> > >
-> > > Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
-> > > ---
-> > >  drivers/soc/tegra/pmc.c | 27 +++++++++++++++++++++++++++
-> > >  1 file changed, 27 insertions(+)
-> >=20
-> > We already expose this information in sysfs, why do we need to print it
-> > during boot?
-> >=20
-> > Thierry
-> There are some tests which would parse the boot log for this information.
-> But I agree, since we are already providing this information through sysf=
-s,
-> there is no need to print it during boot.
+> Greg,
+> I've a another series on top this which is tty-next material making the
+> rest of the drivers to use uart_xmit_advance(). That series obviously
+> depends on the patch 1/3 of this series so if you end up putting these
+> 3 patches into tty-linus, I'll need it to be merged into tty-next at
+> some point (I'm not in a big hurry with this so if you choose to delay
+> the merge, it's not a big deal).
+>
+> Ilpo J=C3=A4rvinen (3):
+>   serial: Create uart_xmit_advance()
+>   serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+>   serial: tegra-tcu: Use uart_xmit_advance(), fixes icount.tx accounting
+>
+>  drivers/tty/serial/serial-tegra.c |  5 ++---
+>  drivers/tty/serial/tegra-tcu.c    |  2 +-
+>  include/linux/serial_core.h       | 17 +++++++++++++++++
+>  3 files changed, 20 insertions(+), 4 deletions(-)
+>
+> --
+> 2.30.2
+>
 
-It'd be a good idea to transition the tests to try and obtain this
-information through sysfs first and if that fails they could fall back
-to using the boot log. Although to be honest, I think we've supported
-this sysfs interface for long enough that we probably don't have to
-worry about a fallback.
 
-Thierry
-
---IwTi6ziXccuE4c+s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMI7rsACgkQ3SOs138+
-s6Fuuw//fpdWuuuYJumXJttWNjjZcCt38TggWatdqAJIJQ3UIyy6K/+jga2fV0SZ
-SMbsuNdMyWBgq7pVNVNrAqZptg+3bnrInbJzU3BIT+UCQuXnL95I1MuvaB2zWTQv
-ZFLRZwd6X4txY70t7iFwstgjkNhKkSupGE6hDHwMh3h0ptGYby3sDtbYlXBBxnRk
-4MLW68/LIuJe36kRJI8Z7LLjzZYOo+Y1Z8Dk59d1pJxQukaH6gy5zxyuxoFd/XAt
-THB6PHQid796Ej8w7W3U9oCyvgzqYPClIA1sxaNH9ZPblDpf2skQczrJAps73aK8
-UReS3Bg0uBsj7elz9OY57bsw0gqp1EqiEK9tlfx9WVF1H2eJYKF1D/2Xb2/lsv6A
-DonpVF+TKzMiYe0AL2+vSWlzK/LB7Ckh9Lyz8aijAepFiQgAjp6G8Ogbme1fsO1Z
-shM4FahaAorW+aqLFBl9VLDthcTVlgx7WTt3aovSMYFS9DBWGluC5DSW9UCtLDVn
-wgv1M9AyXt5sYv2UzDKC2w1LQPejRfNclu0w3wM2SNkkY2551244R0H/JTusvDC6
-2dYgQ/h6f6yrxPAmmIe+2/tgYOCfp5yuMq0Sv2BdQptAR1q5v+12Lebbc0g+4du3
-eotOvH6HE8RBZRubK0d8Ih9ZY9RWc6nE2ZKH+MUqgX7+v0Dgj4M=
-=iqMZ
------END PGP SIGNATURE-----
-
---IwTi6ziXccuE4c+s--
+--=20
+With Best Regards,
+Andy Shevchenko

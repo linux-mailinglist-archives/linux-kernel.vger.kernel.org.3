@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD6D5A2230
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D015A2218
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245582AbiHZHpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S245406AbiHZHko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245506AbiHZHpb (ORCPT
+        with ESMTP id S245391AbiHZHk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:45:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CA88E0D7;
-        Fri, 26 Aug 2022 00:45:30 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q7Wdra023548;
-        Fri, 26 Aug 2022 07:45:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ETkj+QXTCULceRPEha9GhQ71BYIoHHYCDlJY3zP5qIs=;
- b=MQAwx0HQ/6SekDZplIFA1FXuWJsCP14YleGxwuZRl50UADeby6bXZZw/8R2NdlQBCSLn
- eEvutKJ0esCirP+MViY7mj21QnjwBXosfc8ElX/qxg0cGWb4GzVyLgsqU5ktebXT+eSN
- SlT4LjdwABQva01jwzcSFaF+syRruwNFptr6BAoYlnj9deFan8UTRS48UhdSOnsEnCOt
- 5jgm1Z1YNT2oGQNu4RUSLNdrK9xQeHlPsjqpPx6siq2k97xzEdlDeOkdNiWKtoBOGjwj
- UqMQxPMMt8HOCOEzE/dW1KIApa06sz1F6hYaxh6j7rWy4tVillow6r7GHzBUUJlkU4b/ ww== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j6sv7829c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 07:45:28 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27Q7eRx8005942
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 07:40:27 GMT
-Received: from [10.216.58.196] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 26 Aug
- 2022 00:40:23 -0700
-Message-ID: <089f50b7-a87e-8570-d85f-be7470153493@quicinc.com>
-Date:   Fri, 26 Aug 2022 13:10:18 +0530
+        Fri, 26 Aug 2022 03:40:26 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF6D6E2C1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:40:24 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id l1so936387lfk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=SWG+AYYaD3CGqVmhJUkc0npDBvTLvT/qXBQNeQdRPPI=;
+        b=VavM614ow0Wq5WTGNBaTek9R2gSqCSK2LowLKioZCjH9fi0rLESL9gU51h6u1ICdVM
+         O54wO0xGy8NLlu+JxKeFrsTK5D6TMHGLwWPXbcToifiej4CvHspsXtqeC5ShKEruaDem
+         2VWI9zZ+ad+AeT/jOq3cAhJOGxL7TuGKXf1GA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=SWG+AYYaD3CGqVmhJUkc0npDBvTLvT/qXBQNeQdRPPI=;
+        b=GUeeorSulJImJiE3t3m1x/YddzNlOuX1Lshzuugcwylwbf4M+pzRD4610mmqkJjAow
+         M/zlFioXcBEHj1rs5LgAi96R9x39v35jkrioc7nVrYCbAEISwxW7SrVGgzHx8m2xs2KI
+         cY4RXL4y5RdBcNJ+r+1P3sIab86qXe/lVjI9BkYLJJ/X/yJBtrZzzot+2rxChQPw1/9h
+         kOwYLr5O1BNj6SCa79wLTvCU2Zejf9ns5UG9aiuVnX1jAEH6eTgpYqzle30x6cbG1ON6
+         bsB+YI1O2jLRMpmtQrwYE+PqTInl+PIh7APSdQl2Cuv0bqr9RJ268yWNQjeeqTelaQEX
+         ii0g==
+X-Gm-Message-State: ACgBeo1Nx7in7Dt/7RRaJfbB9xtKdiRUYDwf1Vkufow+IG/39lo5X8+p
+        /+9/UciWkbxBzBMh62U1Fw8lmJrCO/mvB2NB
+X-Google-Smtp-Source: AA6agR5Wm1zWSG4SC+mpBPzTyeIPT/0fZuyJYI07D9p9QGCLhhs/GEofhI1B8Us/Ffey/8A1d/hh1Q==
+X-Received: by 2002:a19:645c:0:b0:492:cf78:62de with SMTP id b28-20020a19645c000000b00492cf7862demr1925671lfj.263.1661499622588;
+        Fri, 26 Aug 2022 00:40:22 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id q15-20020ac24a6f000000b0048b3926351bsm293857lfp.56.2022.08.26.00.40.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 00:40:21 -0700 (PDT)
+Message-ID: <527eee19-532f-b2e7-a42f-a1e199094fbe@rasmusvillemoes.dk>
+Date:   Fri, 26 Aug 2022 09:40:20 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH linux-next] rpmsg: char: Remove the unneeded result
- variable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: strlcpy() notes (was Re: [GIT PULL] smb3 client fixes)
 Content-Language: en-US
-To:     <cgel.zte@gmail.com>, <bjorn.andersson@linaro.org>
-CC:     <mathieu.poirier@linaro.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <CAH2r5mtDFpaAWeGCtrfm_WPM6j-Gkt_O80=nKfp6y39aXaBr6w@mail.gmail.com>
+ <CAHk-=wi+xbVq++uqW9YgWpHjyBHNB8a-xad+Xp23-B+eodLCEA@mail.gmail.com>
+ <YwSWLH4Wp6yDMeKf@arm.com>
+ <CAHk-=whU7QiwWeO81Rf+KGh0rGS9CEfKUXc5eik+Z0GaVJgu4A@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <CAHk-=whU7QiwWeO81Rf+KGh0rGS9CEfKUXc5eik+Z0GaVJgu4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: W3Ltf_LZM7JtQnhzXs2JeSd5AdWV_8z7
-X-Proofpoint-GUID: W3Ltf_LZM7JtQnhzXs2JeSd5AdWV_8z7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_02,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 suspectscore=0 phishscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208260028
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -82,47 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/26/2022 12:49 PM, cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On 23/08/2022 19.37, Linus Torvalds wrote:
+> On Tue, Aug 23, 2022 at 1:56 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>>
+>> With load_unaligned_zeropad(), the arm64 implementation disables tag
+>> checking temporarily. We could do the same with read_word_at_a_time()
+>> (there is a kasan_check_read() in this function but it wrongly uses a
+>> size of 1).
 > 
-> Return the value rpmsg_chrdev_eptdev_add() directly instead of storing it
-> in another redundant variable.
+> The "size of 1" is not wrong, it's intentional, exactly because people
+> do things like
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->   drivers/rpmsg/rpmsg_char.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
+>     strscpy(dst, "string", sizeof(dst));
 > 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index 4f2189111494..0850ae34fb88 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -424,15 +424,12 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
->   			       struct rpmsg_channel_info chinfo)
->   {
->   	struct rpmsg_eptdev *eptdev;
-> -	int ret;
->   
->   	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, parent);
->   	if (IS_ERR(eptdev))
->   		return PTR_ERR(eptdev);
->   
-> -	ret = rpmsg_chrdev_eptdev_add(eptdev, chinfo);
-> -
-> -	return ret;
-> +	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
->   }
+> which is a bit unfortunate, but very understandable and intended to
+> work. So that thing may over-read the string by up to a word. And
+> KASAN ends up being unhappy.
 
-LGTM.
+So, while we're doing all the churn of replacing strlcpy anyway, may I
+once again suggest we add (name can be bikeshedded) literal_strcpy():
 
-Reviewed-by:Mukesh Ojha <quic_mojha@quicinc.com>
+#define literal_strcpy(d, s) ({ \
+  static_assert(__same_type(d, char[]), "destination must be char array"); \
+  static_assert(__same_type(s, const char[]), "source must be a string
+literal"); \
+  static_assert(sizeof(d) >= sizeof("" s ""), "source does not fit in
+destination"); \
+  strcpy(d, s); \
+})
 
--Mukesh
+That interface _cannot_ be misused, because all the checking happens at
+build time, including enforcement that the source really is a string
+literal (the "" s "" trick - but for nicer error message the
+static_assert on the previous line is there as well). So unlike all the
+uses of str[ls]cpy which don't check the return value, we cannot
+silently do a truncated copy. Also, if somebody down the line changes
+the size of the destination or the literal string, again it will be
+caught at build time.
 
+And since gcc knows the semantics of strcpy(), it will also generate
+better code, because it will usually not emit a call at all (or even put
+the string in .rodata); it will simply emit a series of "mov immediate"
+instructions.
 
+Sloppy grepping for places where that could be used shows around ~800
+places.
 
->   EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
->   
+Btw, Steve, since you're incidentally on cc here anyway, perhaps you
+want to take a look at
+
+  strscpy(extension, "___", strlen("___"));
+
+and see if this really just wants two underscores copied to extension.
+
+Rasmus

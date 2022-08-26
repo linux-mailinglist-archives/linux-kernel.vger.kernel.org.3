@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC355A2304
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97F75A2303
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343631AbiHZI3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        id S1343620AbiHZI3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343621AbiHZI31 (ORCPT
+        with ESMTP id S245244AbiHZI3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:29:27 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D559ED4F6B;
-        Fri, 26 Aug 2022 01:29:23 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id c2so1013869plo.3;
-        Fri, 26 Aug 2022 01:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ZqQXUKYAXaNDETmnzeEy5G83vWE0Lw9aO8Wft3lc78A=;
-        b=lHm01CIa8Ixwmw1uJbquAM1f1zYuep3xl5yOXbVV8/h1mKz1UvIt20rKsBMiX05kez
-         jWWGO/PVdQHowBnz/kXPpWzEDX41esricYJZ9gYPVItMvjHRyO+X7UFKRnAnc/8kNU5c
-         O0sotFfxGvl7R6IVAHMY3+PuKbpe+arBx34jFUo+Q7LQH+LZ+5fsJUX21od4/hB62J2E
-         imDG60OHOvchC27FNt4EXDUbXrOQdXe9kuie+wz/VjSOX6E//av7SHIP4rmUa8UIn+u6
-         IrZNMxQTckyN3oq41/WK9Z8kL2P3EtPWdm54BrIPEocfesPlK/zTzVWVgWstNsndW8DT
-         ++gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZqQXUKYAXaNDETmnzeEy5G83vWE0Lw9aO8Wft3lc78A=;
-        b=sE7Dm/nbNEKpVvXj0VW123iIHQ7T8FT/5U80WzLwUfy/46cwU26j1LaIDUe5k2ryMf
-         EeoXYGEMaehgO/MohLCOGIBdnLWQkXNPi2bFDcOQ6MajESCNxNdOjx3oEaEHM841MJCE
-         oxfcTIHryT+RpQQ9cbUXJHeSeE9bVM04+fuUruWyIowRsYxJ2G6rHhMwYxu0X3s5cgbR
-         VZ5BG7dAvV1tK200dLIZuQKX9iGhrpUb5nU3zz79VTJ9N9rkfHxrP/rV8ydWjuyWn6Io
-         C69aK0xszJsr+DFP93ukr7pCH4Ks5UOBqPTTALkWaS1BREC7TeOCWv+TShc7Vi0oFGVr
-         jT0Q==
-X-Gm-Message-State: ACgBeo2e5LbLo+bsLMuzmD3r8pyY7qGv5Ul5IwBfeDY6GjMdT6Mc8OdG
-        TRQPEKD82fvRrEVqGd1gTbqgPNNIsclu25ma8E0=
-X-Google-Smtp-Source: AA6agR5/8OQlotyHYlj9mA8z3fbCzfvGFlXA3R4L9leXIjUfPV5T/p5Z2C4FvaohkfRE+ehar9Wy4xF9a4a+R1k92OA=
-X-Received: by 2002:a17:902:e5cc:b0:16f:1e31:da6c with SMTP id
- u12-20020a170902e5cc00b0016f1e31da6cmr2745061plf.66.1661502563310; Fri, 26
- Aug 2022 01:29:23 -0700 (PDT)
+        Fri, 26 Aug 2022 04:29:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC1FD4F66;
+        Fri, 26 Aug 2022 01:29:20 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDXwS5dCwzlVjT;
+        Fri, 26 Aug 2022 16:26:00 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 16:29:17 +0800
+Received: from [10.67.110.237] (10.67.110.237) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 16:29:16 +0800
+Subject: Re: [PATCH v3 0/4] ARM: Convert to ARCH_STACKWALK
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux@armlinux.org.uk>, <mark.rutland@arm.com>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <arnd@arndb.de>, <rostedt@goodmis.org>,
+        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
+        <ast@kernel.org>, <linyujun809@huawei.com>,
+        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <rmk+kernel@armlinux.org.uk>, <ardb@kernel.org>, <will@kernel.org>,
+        <broonie@kernel.org>
+References: <20220727040022.139387-1-lihuafei1@huawei.com>
+ <13e8c9ba-c5ec-a231-5493-3255e1ef9db8@huawei.com>
+ <CACRpkda=csAw1wZj_Uwpb1B32BBHAin8=rQVXQ0c6TwnTWJSXA@mail.gmail.com>
+From:   Li Huafei <lihuafei1@huawei.com>
+Message-ID: <54f2a18a-6c1c-4492-5e35-9908b876cf61@huawei.com>
+Date:   Fri, 26 Aug 2022 16:29:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-References: <20220823055739.1451419-1-floridsleeves@gmail.com> <YwRyC93rC/BAjR23@kroah.com>
-In-Reply-To: <YwRyC93rC/BAjR23@kroah.com>
-From:   Li Zhong <floridsleeves@gmail.com>
-Date:   Fri, 26 Aug 2022 01:29:12 -0700
-Message-ID: <CAMEuxRrLXov-brDL4ENyHS=1Yjd2YE0bGNHZ69p9wmuBQo9avQ@mail.gmail.com>
-Subject: Re: [PATCH v1] drivers/tty/serial: check the return value of uart_port_check()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jirislaby@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <CACRpkda=csAw1wZj_Uwpb1B32BBHAin8=rQVXQ0c6TwnTWJSXA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.237]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,28 +64,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 11:22 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Aug 22, 2022 at 10:57:39PM -0700, lily wrote:
-> > uart_port_check() can return NULL pointer. Check its return value
-> > before dereference it.
->
-> Also, how did you find this issue?
->
-> >
-> > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
->
-> Also, your From: name does not match this one, so I can't take the patch
-> even if it is ok :(
->
-> Please do initial kernel work in drivers/staging/ to get issues like
-> this fixed up before moving to other portions of the kernel so that
-> basic email problems do not bother other subsystem maintainers.
->
-Thanks for the suggestions! I'll correct the From: in my v2 patch.
 
-> thanks,
->
-> greg k-h
->
->
+
+On 2022/8/25 21:00, Linus Walleij wrote:
+> On Thu, Aug 18, 2022 at 11:16 AM Li Huafei <lihuafei1@huawei.com> wrote:
+> 
+>> Hi Russell，
+>>
+>> Do you have any more comments on this patch set? Can you add this patch
+>> set to your patch tracker? Thanks!
+> 
+> I would rebase the patch on v6.0-rc1 and resend then you can add it
+> to Russell's patch tracker yourself, it's not very hard to use, there is
+> good documentation for how to use it:
+> https://www.arm.linux.org.uk/developer/patches/
+> 
+
+It's done. Thank you for the tip.
+
+Thanks,
+Huafei
+
+> Yours,
+> Linus Walleij
+> .
+> 

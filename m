@@ -2,80 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D7A5A2173
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01385A2175
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245111AbiHZHKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S229649AbiHZHKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiHZHKP (ORCPT
+        with ESMTP id S245203AbiHZHK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:10:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B214646F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661497813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wRfHC8y5N2h+J4cn5c41LQNHjlhGvIk+K6AECyuILZg=;
-        b=D1RAinlIHgpJGxNQuFOeq+409pP4A2hbhGrcQZL/dsusY31MlhdzQFXUbUHGGoDosa40MH
-        5hsTNUdLygLhlPSQu1sOP0eZKrLzHXoHkA6Yv4eL4AVA14c+zistxQyNx5prDnGcXimMAp
-        sFPwIIlv0KN3ZRta6+RDKwtdbq2W1V4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-90-SDdo-IGuPsiIEaaHboe1Vg-1; Fri, 26 Aug 2022 03:10:11 -0400
-X-MC-Unique: SDdo-IGuPsiIEaaHboe1Vg-1
-Received: by mail-ed1-f69.google.com with SMTP id y11-20020a056402270b00b00446a7e4f1bcso637553edd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:10:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=wRfHC8y5N2h+J4cn5c41LQNHjlhGvIk+K6AECyuILZg=;
-        b=KGBCnzbszHnz028/nsOHQffs39i/pEd8xlZ9SYkhY70smkdrj2s7Zeh8/FaQysbeTs
-         IaEqzdPBmHgl0r2Sq2kXU3dYiER0CvWaeShmp4vKnuQUQBNyK7/+ewj3ZP/SMIBh7niF
-         LxgNoKecUKq/dF0Sq5GyMbYwh22O52ZAgnoa9aIgbT211naWIeL9lrivkUL9ptDQ75rl
-         ZhcWS+QROYF2G3vU5iFg1TIJJYONWGMHr7u5v5UAvqXpZopp+tYnJmO6iX6vVwT3nnZX
-         U744q7bC2hEBPb3p88EMblt/mU034PDqXTxZieGZWmTyl+/MAvn2rc88FLFoBkk1zXu4
-         NkWA==
-X-Gm-Message-State: ACgBeo3aNt+oDdn2f52+Cx0RNIQ2r4jWFxVVm/muKmAEX1IOlzz4gUR7
-        cojyltNuQ9h7w59y1wS44jeUgLL6HuMrw1H4Mtkv3JMsGCSkx3wu5oz8Ug+U3++iXQeAkqbc3qF
-        N1l5wedEurKAy+IKkhm5PwOnQ
-X-Received: by 2002:a05:6402:42ca:b0:446:8f11:3b96 with SMTP id i10-20020a05640242ca00b004468f113b96mr5833203edc.353.1661497810484;
-        Fri, 26 Aug 2022 00:10:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4pO9oL2N59UL8jr9N9XCriMit+V7lYj1e2Qps4gO6+DSHcxbRu0RlNAXgebza2w2eywMg0rg==
-X-Received: by 2002:a05:6402:42ca:b0:446:8f11:3b96 with SMTP id i10-20020a05640242ca00b004468f113b96mr5833189edc.353.1661497810268;
-        Fri, 26 Aug 2022 00:10:10 -0700 (PDT)
-Received: from [192.168.0.198] (host-87-8-60-205.retail.telecomitalia.it. [87.8.60.205])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170906c40600b0073dd1ac2fc8sm511393ejz.195.2022.08.26.00.10.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 00:10:09 -0700 (PDT)
-Message-ID: <c5d40522-037d-e324-697b-23e5e4686d58@redhat.com>
-Date:   Fri, 26 Aug 2022 09:10:08 +0200
+        Fri, 26 Aug 2022 03:10:29 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892569FE9;
+        Fri, 26 Aug 2022 00:10:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MDWFB6HCGz4xDB;
+        Fri, 26 Aug 2022 17:10:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661497823;
+        bh=D+/iLaa6H3WpuuFlEI1h7i9kslU9mWhl3oJwRjhaFbA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Pl1wHrL1X+J/6AUUTr4RvDnqDP23RXFE08dHv0HJYVLtMM6SZvHdjMHM0vKD1VDvd
+         FaEHdM3QTxGdoP7jGcxMasziyuzDxGwd1vQUXVN8WDlTts4/bikDxdpYUR6Ovqi231
+         SvzrIpQkBDljyTpndonrYWN5lBb69OZwtDXs9JSQphKZC0yyp0qN5dCIKYPmHMg8gd
+         BTyJ45cUXjOdxCYshMczxI9DHUbsBJK9ag+srphepmpHjZTwK2oXgJn/xBm7arwj2d
+         IP00hbagfQt++2pd8MSjF7nP2A7wep6evPrxvofONws5PoNHSzXqpsJuUqRAT+1CSf
+         ndLi9n3gqRzDA==
+Date:   Fri, 26 Aug 2022 17:10:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20220826171020.5772e600@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH -next] sched/deadline: Add compare_task_rq helper
-Content-Language: en-US
-To:     Shang XiaoJing <shangxiaojing@huawei.com>
-References: <20220826031143.9501-1-shangxiaojing@huawei.com>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220826031143.9501-1-shangxiaojing@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/opxvO9zRt8XjfN2.HWoyqVY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,35 +51,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/26/22 05:11, Shang XiaoJing wrote:
-> Wrap repeated code in helper function compare_task_rq, which return true
-> if there is no deadline task on the rq at all, or task's deadline
-> earlier than the rq.
-> 
-> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
-> ---
->  kernel/sched/deadline.c | 23 +++++++++++------------
->  1 file changed, 11 insertions(+), 12 deletions(-)
-> 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index d116d2b9d2f9..4a40a462717c 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -1810,6 +1810,13 @@ static void yield_task_dl(struct rq *rq)
->  
->  #ifdef CONFIG_SMP
+--Sig_/opxvO9zRt8XjfN2.HWoyqVY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I see the value of this helper, but "compare_task_rq" is making things more confuse.
+Hi all,
 
-Choose a more descriptive name, like, dl_task_is_earliest_deadline() ?
+After merging the mm tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-> +static inline bool compare_task_rq(struct task_struct *p, struct rq *rq)
-> +{
-> +	return (!rq->dl.dl_nr_running ||
-> +		dl_time_before(p->dl.deadline,
-> +			       rq->dl.earliest_dl.curr));
-> +}
-> +
+arch/powerpc/xmon/xmon.c: In function 'cmds':
+arch/powerpc/xmon/xmon.c:1089:33: error: too few arguments to function 'sho=
+w_mem'
+ 1089 |                                 show_mem(0, NULL);
+      |                                 ^~~~~~~~
+In file included from arch/powerpc/xmon/xmon.c:14:
+include/linux/mm.h:2585:13: note: declared here
+ 2585 | extern void show_mem(unsigned int flags, nodemask_t *nodemask, gfp_=
+t gfp_mask);
+      |             ^~~~~~~~
 
--- Daniel
+Caused by commit
 
+  9ea9abc5cd7e ("mm: reduce noise in show_mem for lowmem allocations")
+
+I have reverted that commit for today (and the following fix).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/opxvO9zRt8XjfN2.HWoyqVY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMIcdwACgkQAVBC80lX
+0GzCMwf+PnWcLkXisg6lJpJbV21L74GRxm2EH9N/g9QNeNbx0fr0z3X87m7yOw5Q
+YNil6x/XGP7u/bHAM3b8UM0jep/0LZtWiTiIC2FwrGcsbZE+AtU/w0dytzYHPgvE
+BvEKZwWcjEvv2TlgxgWjmZV1RP/KyNf+h0Omm6oy1r7qyK8uRb7ovv7G4eovKIra
+9d9+3c20MH/KqU/BG4VINUdpfbnC2EDWq7hzsmc0gdNHfzbYWSIM8O3OvwvEIrH3
+E4AMmf0+QY3BwHunRsdDYUwzHCuM0IOtzDwKn0CUwVYL7+JknkrjmWHOcU2rf0AD
+JZYgYHhDQ5XTB/dBmAcGGakroDvhXA==
+=OSep
+-----END PGP SIGNATURE-----
+
+--Sig_/opxvO9zRt8XjfN2.HWoyqVY--

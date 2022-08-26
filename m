@@ -2,116 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE9B5A321E
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125A35A3223
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345305AbiHZWiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 18:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S1345322AbiHZWkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 18:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiHZWiP (ORCPT
+        with ESMTP id S231216AbiHZWj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 18:38:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A32E68D6;
-        Fri, 26 Aug 2022 15:38:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7375AB83342;
-        Fri, 26 Aug 2022 22:38:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2097C433C1;
-        Fri, 26 Aug 2022 22:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661553492;
-        bh=2x8oP1av/GgT8wp1V9gUhZRtYrQh72Wv7er/tjyinjY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ALuZPJWezJXRb3tYWtqYGTLy6XeWMSS4Vq8DUkpHSm9lZPvL6w988PTfJN779hiKH
-         okGVloewqOtEkX2cE2Osvtrpc5LAAW8KXfswXk4m4mnKQzShUzD7me7KeLLrQx3feA
-         46cnW2wwoEABzc6ThPnVEk0aPXpB3K6vBiJcx+Im3YTEWpbZpeKFafeTNKrv7eFHiD
-         24rE1LRk2UcBxAOufVNnKZOLgXg9jI+hES0H8YYj9Q5sm6/uIj6cxzQ07zNVVrpUr7
-         XQZqK38+/pdBJmhaffDINEUB/yOju2oAKDVY/3ISuApnAYaMni5s9tGWA3zyxxgxzg
-         gkdKHyBd9rdOg==
-Date:   Fri, 26 Aug 2022 17:38:10 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        bhelgaas@google.com, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH -next 2/3] PCI: fix possible memory leak in error case in
- pci_register_host_bridge()
-Message-ID: <20220826223810.GA2961041@bhelgaas>
+        Fri, 26 Aug 2022 18:39:56 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D019564C1;
+        Fri, 26 Aug 2022 15:39:53 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D925230B;
+        Sat, 27 Aug 2022 00:39:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661553592;
+        bh=R8qukP2RffLfxf6EBUyFnNoBjpObxeBRg1U0SiCvU9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eYUKTzF6QSKxmelG0IGUX5fRApy+oFTa6yaxqckT7jFur3bMN2VPKUHjCfiA1D7Dl
+         s7m6NBji3WfpvsbirYWASI+L4MTJBY7CcsEX7FwALMxXpad6hEN4t2JjLH+Zy5h+Hr
+         W1y03MKpyhsE4sK5Wn/oU4StLWJ8WPIGG+scy2vo=
+Date:   Sat, 27 Aug 2022 01:39:44 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v6 5/6] media: sun6i-csi: Detect the availability of the
+ ISP
+Message-ID: <YwlLsKaEOoXdqRK0@pendragon.ideasonboard.com>
+References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
+ <20220826184144.605605-6-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220825122753.1838930-2-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220826184144.605605-6-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Arnd, Rob]
+Hi Paul,
 
-On Thu, Aug 25, 2022 at 08:27:52PM +0800, Yang Yingliang wrote:
-> If device_register() fails in pci_register_host_bridge(), the refcount
-> of bus device is leaked, so device name that set by dev_set_name() can
-> not be freed. Fix this by calling put_device() when device_register()
-> fails, so the device name will be freed in kobject_cleanup().
->
-> Fixes: 37d6a0a6f470 ("PCI: Add pci_register_host_bridge() interface")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Thank you for the patch.
+
+On Fri, Aug 26, 2022 at 08:41:43PM +0200, Paul Kocialkowski wrote:
+> Add a helper to detect whether the ISP is available and connected
+> and store the indication in a driver-wide variable.
+
+This sounds like it would be a global variable, while it's stored in the
+driver-specific device structure.
+
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 > ---
->  drivers/pci/probe.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++++++
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+>  2 files changed, 36 insertions(+)
 > 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index e500eb9d6468..292d9da146ce 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -948,8 +948,17 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
->  	name = dev_name(&bus->dev);
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> index 00521f966cee..b16166cba2ef 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> @@ -24,6 +24,35 @@
+>  #include "sun6i_csi_capture.h"
+>  #include "sun6i_csi_reg.h"
 >  
->  	err = device_register(&bus->dev);
-> -	if (err)
-> -		goto unregister;
-> +	if (err) {
-> +		/*
-> +		 * release_pcibus_dev() will decrease the refcount of bridge
-> +		 * device and free the memory of bus.
-> +		 * The memory of bus device name will be freed when the refcount
-> +		 * get to zero.
-> +		 */
-> +		put_device(&bus->dev);
-> +		device_unregister(&bridge->dev);
-> +		return err;
-> +	}
+> +/* ISP */
+> +
+> +static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
+> +{
+> +	struct device *dev = csi_dev->dev;
+> +	struct fwnode_handle *handle = NULL;
 
-Calling put_device(X) after device_register(X) returns failure doesn't
-need explanation because that's the standard pattern.  I think that
-was just missing before.
+No need to initialize this to NULL.
 
-In this error case, we previously did called put_device() for the
-*bridge* instead of the bus.  That was likely a typo and seems like
-the important thing here.
+> +
+> +	/* ISP is not available if disabled in kernel config. */
+> +	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
+> +		return 0;
 
->  	pcibios_add_bus(bus);
+Hmmm... The ISP driver may be disabled when compiling the sun6i-csi
+driver, but later enabled and deployed. Disabling ISP support silently
+like this could be confusing. Could it be better to move this check
+after the graph check, and print a warning message in this case ?
+
+> +
+> +	/*
+> +	 * ISP is not available if not connected via fwnode graph.
+> +	 * This weill also check that the remote parent node is available.
+
+s/weill/will/
+
+	 * ISP is not available if not connected via fwnode graph. This will
+	 * also check that the remote parent node is available.
+
+> +	 */
+> +	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
+> +						 SUN6I_CSI_PORT_ISP, 0,
+> +						 FWNODE_GRAPH_ENDPOINT_NEXT);
+> +	if (!handle)
+> +		return 0;
+> +
+> +	fwnode_handle_put(handle);
+> +
+> +	dev_info(dev, "ISP link is available\n");
+
+You could make that a debug message, it's not crucial information that
+needs to be printed when the driver is loaded. If you prefer keeping an
+info message, then I'd move it to the probe function and print that the
+CSI has been probed, and indicate in that message if the ISP is
+available.
+
+> +	csi_dev->isp_available = true;
+> +
+> +	return 0;
+> +}
+> +
+>  /* Media */
 >  
-> @@ -1025,10 +1034,6 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>  static const struct media_device_ops sun6i_csi_media_ops = {
+> @@ -290,6 +319,10 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
+>  	if (ret)
+>  		return ret;
 >  
->  	return 0;
+> +	ret = sun6i_csi_isp_detect(csi_dev);
+> +	if (ret)
+> +		goto error_resources;
+> +
+>  	ret = sun6i_csi_v4l2_setup(csi_dev);
+>  	if (ret)
+>  		goto error_resources;
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> index e611bdd6e9b2..8e232cd91ebe 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> @@ -21,6 +21,7 @@
+>  enum sun6i_csi_port {
+>  	SUN6I_CSI_PORT_PARALLEL		= 0,
+>  	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
+> +	SUN6I_CSI_PORT_ISP		= 2,
+>  };
 >  
-> -unregister:
-> -	put_device(&bridge->dev);
-> -	device_unregister(&bridge->dev);
-> -
->  free:
->  	kfree(bus);
->  	return err;
-> -- 
-> 2.25.1
-> 
+>  struct sun6i_csi_buffer {
+> @@ -44,6 +45,8 @@ struct sun6i_csi_device {
+>  	struct clk			*clock_mod;
+>  	struct clk			*clock_ram;
+>  	struct reset_control		*reset;
+> +
+> +	bool				isp_available;
+>  };
+>  
+>  struct sun6i_csi_variant {
+
+-- 
+Regards,
+
+Laurent Pinchart

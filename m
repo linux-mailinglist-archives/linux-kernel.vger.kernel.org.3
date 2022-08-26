@@ -2,63 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D045A3193
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027EE5A319C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbiHZV5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
+        id S237892AbiHZV7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiHZV5H (ORCPT
+        with ESMTP id S231131AbiHZV73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:57:07 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED68CEB11
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:57:04 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x93so3501777ede.6
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7vSzq6vPLrHqcoL8kcBtL8IovIzvXBgbRpb5JcrKApM=;
-        b=moD9pQtx2O8r/SMz3TXxlBEi6KM9LgOC/ExNEn/UpOh3/xg9gjjL/q5qvVceD+Pq+F
-         PG3XnQ6yHlAjGW0PnFMz0HF1+mX47v57RzuS2BtND06yp1HfczNjdLBMQlwDzp+bRjsA
-         TASLAwZIVTf2U/2FAdX44MlbxZDJ2wDOUBJHy7DuzqDVf36PCIpQDPUf54i6ccD02WF8
-         RPwSSewXbllRYpN5H+yEiykQi5S4mSmVJBXQxxlXkWWzxkffmb8Y/PBAWQXmtS2e3prL
-         Wlu5H/+Imia8y+VMjYkvyQOBWXC5+LZLxMkyQ3NGcQrNjdTvnFXlfmQNHG4vUu1iHB6n
-         pBjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7vSzq6vPLrHqcoL8kcBtL8IovIzvXBgbRpb5JcrKApM=;
-        b=G00UZ+Jg2D+Ss30xZBu9Ynq2Pj/7Y/z1yGMPU0FpI6rgts0tvTmiwIYJ7KM+2Ozglp
-         62Wi9NGSFPsQAAcXQZ/XQynzJplJeikSimN6dgYl532K2526bA3WvzYSovnG3C6NVM+p
-         0KEBlDln2k6B85bAEh8x8c3BaujAqqM6s+70qnaly8B4Tlgkh9tsLPbNhDcd09r8Ehay
-         yLItJ8+HzUdNpOvsa10dT5MrJc9picMJh33tJKdO1hU82hfSD/JK2zI3mqAFiAD07wO0
-         sPjKbhow5JE0g8fT9ElYdla8Auo/aLTLqAR14jqExz+JDWUNQqvSO/PgOg9US5jMYfMo
-         NKAg==
-X-Gm-Message-State: ACgBeo2SrZUMwhtzNZTm1bZ8ypLo/MG3odjT3N2y70G1BBvW+IfW0av7
-        L3Uv/Wv16Z11UzGQ+DohHPyN8Y8gsocDRJEvIuW5VQ==
-X-Google-Smtp-Source: AA6agR7/sF+zC9EW31AKq/oYtanUhvn4sbw0O7Ai7ueTmh8pIaXiX3lkjMjogncYyYdmjrCur7/uosW9qLsMkiUy3A4=
-X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
- ez23-20020a056402451700b004437fe12d60mr8196109edb.133.1661551022135; Fri, 26
- Aug 2022 14:57:02 -0700 (PDT)
+        Fri, 26 Aug 2022 17:59:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B959FCCE3D;
+        Fri, 26 Aug 2022 14:59:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5607E615D2;
+        Fri, 26 Aug 2022 21:59:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B3DC433D6;
+        Fri, 26 Aug 2022 21:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661551166;
+        bh=5xR3EC5MWZoN0OXGdyuL9WrQBUm1gv5VQ3OGVer9NL8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fnKGIUyipaVboyQ8u4/rlhxDe0P+rbyGQEJuzGfBPJFpXkh6wENXpFpYyZwKDVwPk
+         NKcpT3VxV6YTynepeMmkTIdN0lshrk7tEOr2vXbD/Yg+cGwaYzQYG22xdTDPwcXzb5
+         MfKASkYhoOxm7xzZ1T4dDce00BjoIeDwo5Skh0Wdma6erSawLtpDttiTvMItG5PYhV
+         A7SqGCPkZJVC4t81aAVx1UWhL/grl8YV5fynpZ5y6t/LsFgJD/V0L4or15tcHRQpN6
+         addZA9KMTMc5ZZQjZfPA2sI9INIVJNw80lKjG6zwv4WHxD33r67mZk9trURh/tZh7b
+         kOgaYqsURBkBw==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Maximilian Heyne <mheyne@amazon.de>, jgross@suse.com,
+        roger.pau@citrix.com, marmarek@invisiblethingslab.com,
+        xen-devel@lists.xenproject.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] xen-blkfront: Advertise feature-persistent as user requested
+Date:   Fri, 26 Aug 2022 21:59:24 +0000
+Message-Id: <20220826215924.50813-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220826212039.50736-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
-In-Reply-To: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 23:56:50 +0200
-Message-ID: <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     andrew@aj.id.au, joel@jms.id.au, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,29 +58,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 12:18 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+On Fri, 26 Aug 2022 21:20:39 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-> When the driver want to disable the signal of the function, it doesn't
-> need to query the state of the mux function's signal on a pin. The
-> condition below will miss the disable of the signal:
-> Ball | Default | P0 Signal | P0 Expression               | Other
-> -----+---------+-----------+-----------------------------+----------
->  E21   GPIOG0    SD2CLK      SCU4B4[16]=1 & SCU450[1]=1    GPIOG0
-> -----+---------+-----------+-----------------------------+----------
->  B22   GPIOG1    SD2CMD      SCU4B4[17]=1 & SCU450[1]=1    GPIOG1
-> -----+---------+-----------+-----------------------------+----------
-> Assume the register status like below:
-> SCU4B4[16] == 1 & SCU4B4[17] == 1 & SCU450[1]==1
-> After the driver set the Ball E21 to the GPIOG0:
-> SCU4B4[16] == 0 & SCU4B4[17] == 1 & SCU450[1]==0
-> When the driver want to set the Ball B22 to the GPIOG1, the condition of
-> the SD2CMD will be false causing SCU4B4[17] not to be cleared.
->
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> Hi Max,
+> 
+> On Fri, 26 Aug 2022 14:26:58 +0000 Maximilian Heyne <mheyne@amazon.de> wrote:
+> 
+> > On Thu, Aug 25, 2022 at 04:15:11PM +0000, SeongJae Park wrote:
+> > > 
+> > > Commit e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter
+> > > when connect") made blkback to advertise its support of the persistent
+> > > grants feature only if the user sets the 'feature_persistent' parameter
+> > > of the driver and the frontend advertised its support of the feature.
+> > > However, following commit 402c43ea6b34 ("xen-blkfront: Apply
+> > > 'feature_persistent' parameter when connect") made the blkfront to work
+> > > in the same way.  That is, blkfront also advertises its support of the
+> > > persistent grants feature only if the user sets the 'feature_persistent'
+> > > parameter of the driver and the backend advertised its support of the
+> > > feature.
+> > > 
+> > > Hence blkback and blkfront will never advertise their support of the
+> > > feature but wait until the other advertises the support, even though
+> > > users set the 'feature_persistent' parameters of the drivers.  As a
+> > > result, the persistent grants feature is disabled always regardless of
+> > > the 'feature_persistent' values[1].
+> > > 
+> > > The problem comes from the misuse of the semantic of the advertisement
+> > > of the feature.  The advertisement of the feature should means only
+> > > availability of the feature not the decision for using the feature.
+> > > However, current behavior is working in the wrong way.
+> > > 
+> > > This commit fixes the issue by making the blkfront advertises its
+> > > support of the feature as user requested via 'feature_persistent'
+> > > parameter regardless of the otherend's support of the feature.
+> > > 
+> > > [1] https://lore.kernel.org/xen-devel/bd818aba-4857-bc07-dc8a-e9b2f8c5f7cd@suse.com/
+> > > 
+> > > Fixes: 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter when connect")
+> > > Cc: <stable@vger.kernel.org> # 5.10.x
+> > > Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> > > Suggested-by: Juergen Gross <jgross@suse.com>
+> > > Signed-off-by: SeongJae Park <sj@kernel.org>
+> > > ---
+> > >  drivers/block/xen-blkfront.c | 8 ++++++--
+> > >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+> > > index 8e56e69fb4c4..dfae08115450 100644
+> > > --- a/drivers/block/xen-blkfront.c
+> > > +++ b/drivers/block/xen-blkfront.c
+> > > @@ -213,6 +213,9 @@ struct blkfront_info
+> > >         unsigned int feature_fua:1;
+> > >         unsigned int feature_discard:1;
+> > >         unsigned int feature_secdiscard:1;
+> > > +       /* Connect-time cached feature_persistent parameter */
+> > > +       unsigned int feature_persistent_parm:1;
+> > > +       /* Persistent grants feature negotiation result */
+> > >         unsigned int feature_persistent:1;
+> > >         unsigned int bounce:1;
+> > >         unsigned int discard_granularity;
+> > > @@ -1848,7 +1851,7 @@ static int talk_to_blkback(struct xenbus_device *dev,
+> > >                 goto abort_transaction;
+> > >         }
+> > >         err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
+> > > -                       info->feature_persistent);
+> > > +                       info->feature_persistent_parm);
+> > >         if (err)
+> > >                 dev_warn(&dev->dev,
+> > >                          "writing persistent grants feature to xenbus");
+> > > @@ -2281,7 +2284,8 @@ static void blkfront_gather_backend_features(struct blkfront_info *info)
+> > >         if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard", 0))
+> > >                 blkfront_setup_discard(info);
+> > > 
+> > > -       if (feature_persistent)
+> > > +       info->feature_persistent_parm = feature_persistent;
+> > 
+> > I think setting this here is too late because "feature-persistent" was already
+> > written to xenstore via talk_to_blkback but with default 0. So during the
+> > connect blkback will not see that the guest supports the feature and falls back
+> > to no persistent grants.
+> > 
+> > Tested only this patch with some hacky dom0 kernel that doesn't have the patch
+> > from your series yet. Will do more testing next week.
+> 
+> Appreciate for your test!  And you're right, this patch is not fixing the issue
+> completely.  That is, commit 402c43ea6b34 ("xen-blkfront: Apply
+> 'feature_persistent' parameter when connect") introduced two bugs.  One is the
+> misuse of the semantic of the advertisement.  It's fixed by this patch.  The
+> second bug, which you found here, is caching the parameter in a wrong place.
 
-I can't see the verdict for this patch? Will there be a new
-version, or are we in the middle of a discussion?
-I'd really like Andrew's ACK on the result before merging.
+To be fair, I think we should say the misuse of the semantic issue came from
+the initial commit[1] that uses only one field for the two different
+information (availability of the feature and decision to use the feature), and
+the mis-placed caching has introduced by the behavior change commit[2].
 
-Yours,
-Linus Walleij
+[1] 74a852479c68 ("xen-blkfront: add a parameter for disabling of persistent grants")
+[2] 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter when connect")
+
+
+Thanks,
+SJ
+
+> 
+> In detail, blkfront does the advertisement before connect (for init and resume)
+> and then negotiation after connected.  And the blkback does the negotiation
+> first, and then the advertisement during the establishing the connection.
+> Hence, blkback should cache the parameter just before the negotiation logic
+> while blkfront should do that just before the advertisement logic.
+> 
+> The blkback behavior change commit (e94c6101e151) did the work in the right
+> place, but the blkfront behavior change commit didn't.
+> 
+> So, I guess below change would fix the issue entirely when applied together
+> with this patch.  Any opinion, please?
+> 
+> 
+> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+> index dfae08115450..7d3bde271e69 100644
+> --- a/drivers/block/xen-blkfront.c
+> +++ b/drivers/block/xen-blkfront.c
+> @@ -1850,6 +1850,7 @@ static int talk_to_blkback(struct xenbus_device *dev,
+>                 message = "writing protocol";
+>                 goto abort_transaction;
+>         }
+> +       info->feature_persistent_parm = feature_persistent;
+>         err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
+>                         info->feature_persistent_parm);
+>         if (err)
+> @@ -2284,7 +2285,6 @@ static void blkfront_gather_backend_features(struct blkfront_info *info)
+>         if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard", 0))
+>                 blkfront_setup_discard(info);
+> 
+> -       info->feature_persistent_parm = feature_persistent;
+>         if (info->feature_persistent_parm)
+>                 info->feature_persistent =
+>                         !!xenbus_read_unsigned(info->xbdev->otherend,
+> 
+> 
+> Thanks,
+> SJ
+> 
+> 
+> > 
+> > > +       if (info->feature_persistent_parm)
+> > >                 info->feature_persistent =
+> > >                         !!xenbus_read_unsigned(info->xbdev->otherend,
+> > >                                                "feature-persistent", 0);
+> > > --
+> > > 2.25.1
+> > > 
+> > 

@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58635A1DFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 03:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADDB5A1E00
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 03:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244037AbiHZBLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 21:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S244061AbiHZBLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 21:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiHZBLN (ORCPT
+        with ESMTP id S243910AbiHZBLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 21:11:13 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F674C6CEC
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 18:11:12 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id x14-20020a17090a8a8e00b001fb61a71d99so6644649pjn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 18:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=R7xpL2cmCkMD4jtRFgP1b3ShRkD2+jaz3DYrJUN7tfs=;
-        b=SqU9cO8kD/wD1O+bTGLiXC4p6XIs1R6rFC/4FHxEwYybU1h2ZBaJy3E338XFJ7t6MZ
-         2ThdV0pPgtklaaTHok5FcRz81/gKnh8b2Giu7KR0zH8Sr4StIieOscmhiLQv0KXTwnQ7
-         kB2soe7ry9pjFpy5TSe1sjoCGdGhjQVUrFaWU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=R7xpL2cmCkMD4jtRFgP1b3ShRkD2+jaz3DYrJUN7tfs=;
-        b=nLxAceyJV419W0i0aksQaZaFpozkRFwbpceXoKJ3zIegcL4QbCo1N9d4Z1tAb4x70T
-         BwBfi+nHApPvtLX+LU3RdP6sVcnXCFubfWfqiJ7FvXi7pDJRS4Nuic6shWOR+RxfpDRh
-         TZ20/jvAI0lkABVzx9gmL7/KZO64VwQfI+r3GqL35v+7kHpK6oIQ8ffQeK0lXPkiKaBy
-         qTlailvCjNuV+Xu+1VcqU/0Y4jzpSn9ixej0xa3fdPKEn9fcYyHAfqP2j0eyon4Biybh
-         DtHerJsY3/lSAnp1saPCW+yeqQdjaSWa8H9ETKsCrSB0+hLqeu1Le3tvNV+VZn8WOSE/
-         x6EA==
-X-Gm-Message-State: ACgBeo3HHRV6j/IkN4JeDAXEszgJx/6jUFGFEtLvSuaA3z2MmZQpADTq
-        DBqXQlwb0TLS67JkAvgO0g87rhaTcIi4Yg==
-X-Google-Smtp-Source: AA6agR5WQSRy3QZ3a5qpBgOwTSFImlWhuv1MyJbjJ785Jq2ALsUtA/lkhiGhSpSdprO/IOsqR7UgNA==
-X-Received: by 2002:a17:902:e552:b0:16c:571d:fc08 with SMTP id n18-20020a170902e55200b0016c571dfc08mr1577589plf.151.1661476271952;
-        Thu, 25 Aug 2022 18:11:11 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:4eb0:cafb:7713:1e6])
-        by smtp.gmail.com with ESMTPSA id y18-20020aa793d2000000b0053602e1d6fcsm273846pff.105.2022.08.25.18.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 18:11:11 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 18:11:09 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: core: Ignore -EIO for uevent
-Message-ID: <YwgdraBXTWk1DhCE@google.com>
-References: <20220824165459.1.I059ae712dd6d324897162ee9f37c22849aa22745@changeid>
- <20220825140243.tgotqpymswduzlyy@mercury.elektranox.org>
+        Thu, 25 Aug 2022 21:11:39 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB28FC6CC1;
+        Thu, 25 Aug 2022 18:11:37 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MDMFG0RkJzGprF;
+        Fri, 26 Aug 2022 09:09:54 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 09:11:35 +0800
+Received: from [10.174.178.31] (10.174.178.31) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 09:11:34 +0800
+Subject: Re: [Linux-cachefs] [PATCH v3] cachefiles: fix error return code in
+ cachefiles_ondemand_copen()
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-cachefs@redhat.com>, <linux-fsdevel@vger.kernel.org>
+References: <20220818125038.2247720-1-sunke32@huawei.com>
+ <3700079.1661336363@warthog.procyon.org.uk>
+ <c6fd70dd-2b0b-ea9f-f0f8-9d727cde2718@linux.alibaba.com>
+ <20220825133620.GB2071@kadam> <YweAGTuBw1hWm8PW@B-P7TQMD6M-0146.local>
+From:   Sun Ke <sunke32@huawei.com>
+Message-ID: <a9e7f60a-61a6-bceb-2f5a-07438f7bb8e8@huawei.com>
+Date:   Fri, 26 Aug 2022 09:11:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825140243.tgotqpymswduzlyy@mercury.elektranox.org>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YweAGTuBw1hWm8PW@B-P7TQMD6M-0146.local>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.31]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
 
-Thanks for the response.
 
-On Thu, Aug 25, 2022 at 04:02:43PM +0200, Sebastian Reichel wrote:
-> > For uevents, we enumerate all properties. Some battery implementations
-> > don't implement all standard properties, and may return -EIO for
-> > properties that aren't recognized. This means we never report uevents
-> > for such batteries.
-> > 
-> > It's better to ignore these errors and skip the property, as we do with
-> > ENODATA and ENODEV.
-> > 
-> > Example battery implementation: Acer Chromebook Tab 10 (a.k.a. Google
-> > Gru-Scarlet) has a virtual "SBS" battery implementation in its Embedded
-> > Controller on top of an otherwise non-SBS battery.
-> > 
-> > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> > ---
+在 2022/8/25 21:58, Gao Xiang 写道:
+> On Thu, Aug 25, 2022 at 04:36:20PM +0300, Dan Carpenter wrote:
+>> I spent a long time looking at this as well...  It's really inscrutable
+>> code.  It would be more readable if we just spelled things out in the
+>> most pedantic way possible:
+>>
 > 
-> -EIO means input/output error. If a driver is reporting that for an
-> unimplemented feature it's a bug that should be fixed in the driver.
-> Handling it here means userspace ABI changes for temporary issues.
+> Yeah, the following code looks much better. Ke, would you mind
+> sending a version like below instead?
 
-I suppose I can agree with your last sentence.
-
-But the first part is much easier said than done. This is sbs-battery.c,
-on top of i2c-cros-ec-tunnel.c, talking to an EC (whose firmware is
-pretty much unchangeable at this point), which implements a subset of
-commands.
-
-The intention is that i2c-cros-ec-tunnel.c will see something like a NAK
-/ "invalid argument" response, and it converts that to ENXIO.
-Unforunately, for reasons I have yet to figure out, it's very common for
-retries (|i2c_retry_count|) to eventually yield an unexpected response
-size, which i2c_smbus_xfer_emulated() treats as EIO; so this layer is
-seeing EIO.
-
-Anyway, I might be able to coax the i2c/sbs-battery driver to return
-ENXIO instead. Would you consider that to be a better case to handle
-here? "No such device or address" seems like an appropriate description
-of a permanent error, and not a temporary IO error.
-
-Brian
+OK, I will update it.
+> 
+> Thanks,
+> Gao Xiang
+> 
+>> diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+>> index 1fee702d5529..7e1586bd5cf3 100644
+>> --- a/fs/cachefiles/ondemand.c
+>> +++ b/fs/cachefiles/ondemand.c
+>> @@ -158,9 +158,13 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+>>   
+>>   	/* fail OPEN request if daemon reports an error */
+>>   	if (size < 0) {
+>> -		if (!IS_ERR_VALUE(size))
+>> -			size = -EINVAL;
+>> -		req->error = size;
+>> +		if (!IS_ERR_VALUE(size)) {
+>> +			req->error = -EINVAL;
+>> +			ret = -EINVAL;
+>> +		} else {
+>> +			req->error = size;
+>> +			ret = 0;
+>> +		}
+>>   		goto out;
+>>   	}
+>>   
+>>
+>> --
+>> Linux-cachefs mailing list
+>> Linux-cachefs@redhat.com
+>> https://listman.redhat.com/mailman/listinfo/linux-cachefs
+> .
+> 

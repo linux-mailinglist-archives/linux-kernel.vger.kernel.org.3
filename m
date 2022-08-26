@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7CD5A1E97
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27E85A1E7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244170AbiHZCNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 22:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S244655AbiHZCCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 22:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiHZCNJ (ORCPT
+        with ESMTP id S244551AbiHZCCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 22:13:09 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2595CCAC92;
-        Thu, 25 Aug 2022 19:13:04 -0700 (PDT)
-X-UUID: c402bdaddaff492a99060e2f1a7dc99d-20220826
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 103
-        audit/email.address 1
-        dict/adv 1
-        dict/contack 1
-        dict/notice 1
-        dict/operate 1
-        meta/cnt.alert 1
-X-UUID: c402bdaddaff492a99060e2f1a7dc99d-20220826
-X-User: oushixiong@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 205237631; Fri, 26 Aug 2022 09:31:22 +0800
-From:   oushixiong <oushixiong@kylinos.cn>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: [PATCH] drm/ast: add dmabuf/prime buffer sharing support
-Date:   Fri, 26 Aug 2022 09:31:03 +0800
-Message-Id: <20220826013103.1519411-1-oushixiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 Aug 2022 22:02:42 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60B9ACAC94;
+        Thu, 25 Aug 2022 19:02:41 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27Q21RKt8027399, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27Q21RKt8027399
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Fri, 26 Aug 2022 10:01:27 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 26 Aug 2022 10:01:42 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 26 Aug 2022 10:01:42 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97]) by
+ RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97%5]) with mapi id
+ 15.01.2375.007; Fri, 26 Aug 2022 10:01:42 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        Bernie Huang <phhuang@realtek.com>
+Subject: RE: [PATCH -next] wifi: rtw88: add missing destroy_workqueue() on error path in rtw_core_init()
+Thread-Topic: [PATCH -next] wifi: rtw88: add missing destroy_workqueue() on
+ error path in rtw_core_init()
+Thread-Index: AQHYuIbMIe6iUQ1BjUawKWBN0SU+yq3AWAlQ//+O9oCAAIaswA==
+Date:   Fri, 26 Aug 2022 02:01:42 +0000
+Message-ID: <11d0e70bdadf491fab1586a8b4ef199e@realtek.com>
+References: <20220825133731.1877569-1-yangyingliang@huawei.com>
+ <2f08c305927a43d78d6ab86468609288@realtek.com>
+ <39e21608-c7e2-422a-1e05-e7ebb250ecac@huawei.com>
+In-Reply-To: <39e21608-c7e2-422a-1e05-e7ebb250ecac@huawei.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzgvMjUg5LiL5Y2IIDExOjUwOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,269 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds ast specific codes for DRM prime feature, this is to
-allow for offloading of rending in one direction and outputs in other.
-
-This patch is designed to solve the problem that the AST is not displayed
-when the server plug in a discrete graphics graphics card at the same time.
-We call the dirty callback function to copy the rendering results of the
-discrete graphics card to the ast side by dma-buf.
-
-v1->v2:
-  - Fix the comment.
-v2->v3:
-  - we remove the attach function, add the drm_gem_pin() before dma_buf_vmap(),
-    and add the drm_gem_unpin() after the dma_buf_vunmap().
-
-Signed-off-by: oushixiong <oushixiong@kylinos.cn>
----
- drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
- drivers/gpu/drm/ast/ast_mode.c | 134 ++++++++++++++++++++++++++++++++-
- drivers/gpu/drm/drm_gem.c      |   2 +
- include/drm/drm_gem.h          |   3 +
- 4 files changed, 165 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index 7465c4f0156a..107383a56ca7 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -28,6 +28,7 @@
- 
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/dma-buf.h>
- 
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 0400);
- 
- DEFINE_DRM_GEM_FOPS(ast_fops);
- 
-+struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-+						struct dma_buf *dma_buf)
-+{
-+	struct drm_gem_vram_object *gbo;
-+
-+	gbo = drm_gem_vram_of_gem(dma_buf->priv);
-+	if (gbo->bo.base.dev == dev) {
-+		/*
-+		* Importing dmabuf exported from out own gem increases
-+		* refcount on gem itself instead of f_count of dmabuf.
-+		*/
-+		drm_gem_object_get(&gbo->bo.base);
-+		return &gbo->bo.base;
-+	}
-+
-+	gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
-+	if (IS_ERR(gbo))
-+		return NULL;
-+
-+	get_dma_buf(dma_buf);
-+	return &gbo->bo.base;
-+}
-+
- static const struct drm_driver ast_driver = {
- 	.driver_features = DRIVER_ATOMIC |
- 			   DRIVER_GEM |
-@@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
- 	.minor = DRIVER_MINOR,
- 	.patchlevel = DRIVER_PATCHLEVEL,
- 
-+	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import = ast_gem_prime_import,
-+
- 	DRM_GEM_VRAM_DRIVER
- };
- 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 45b56b39ad47..c81a6148b6df 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -48,6 +48,8 @@
- #include "ast_drv.h"
- #include "ast_tables.h"
- 
-+MODULE_IMPORT_NS(DMA_BUF);
-+
- static inline void ast_load_palette_index(struct ast_private *ast,
- 				     u8 index, u8 red, u8 green,
- 				     u8 blue)
-@@ -1535,8 +1537,138 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
- 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
- };
- 
-+static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-+					int width, int height)
-+{
-+	struct drm_gem_vram_object *dst_bo = NULL;
-+	void *dst = NULL;
-+	int ret = 0, i;
-+	unsigned long offset = 0;
-+	bool unmap = false;
-+	unsigned int bytesPerPixel;
-+	struct iosys_map map;
-+	struct iosys_map dmabuf_map;
-+
-+	bytesPerPixel = fb->format->cpp[0];
-+
-+	if (!fb->obj[0]->dma_buf)
-+		return -EINVAL;
-+
-+	if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
-+		ret = drm_gem_pin(fb->obj[0]->dma_buf->priv);
-+		if (ret)
-+			return ret;
-+		ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
-+		if (ret)
-+			goto err_vmap_dmabuf;
-+	} else
-+		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-+
-+	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-+
-+	ret = drm_gem_vram_pin(dst_bo, 0);
-+	if (ret) {
-+		DRM_ERROR("ast_bo_pin failed\n");
-+		goto err_ast_pin;
-+	}
-+
-+	if (!dst_bo->map.vaddr) {
-+		ret = drm_gem_vram_vmap(dst_bo, &map);
-+		if (ret) {
-+			DRM_ERROR("failed to vmap fbcon\n");
-+			goto err_vmap_ast_bo;
-+		}
-+		unmap = true;
-+	}
-+	dst = dst_bo->map.vaddr;
-+
-+	for (i = y; i < y + height; i++) {
-+		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-+		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-+			width * bytesPerPixel);
-+	}
-+
-+	if (unmap)
-+		drm_gem_vram_vunmap(dst_bo, &map);
-+
-+	drm_gem_vram_unpin(dst_bo);
-+	return 0;
-+
-+err_vmap_ast_bo:
-+	drm_gem_vram_unpin(dst_bo);
-+err_ast_pin:
-+err_vmap_dmabuf:
-+	drm_gem_unpin(fb->obj[0]->dma_buf->priv);
-+	return ret;
-+}
-+
-+
-+static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-+				struct drm_file *file,
-+				unsigned int flags,
-+				unsigned int color,
-+				struct drm_clip_rect *clips,
-+				unsigned int num_clips)
-+{
-+	int i, ret = 0;
-+
-+	drm_modeset_lock_all(fb->dev);
-+	if (fb->obj[0]->dma_buf) {
-+		ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
-+				DMA_FROM_DEVICE);
-+		if (ret)
-+			goto unlock;
-+	}
-+
-+	for (i = 0; i < num_clips; i++) {
-+		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-+				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-+		if (ret)
-+			break;
-+	}
-+
-+	if (fb->obj[0]->dma_buf) {
-+		dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
-+				DMA_FROM_DEVICE);
-+	}
-+
-+unlock:
-+	drm_modeset_unlock_all(fb->dev);
-+
-+	return ret;
-+}
-+
-+static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
-+{
-+	struct iosys_map dmabuf_map;
-+
-+	if (fb->obj[0]->dma_buf) {
-+		dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
-+		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-+		if (dmabuf_map.vaddr)
-+			dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
-+		drm_gem_unpin(fb->obj[0]->dma_buf->priv);
-+	}
-+
-+	drm_gem_fb_destroy(fb);
-+}
-+
-+static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-+	.destroy	= ast_user_framebuffer_destroy,
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.dirty		= ast_user_framebuffer_dirty,
-+};
-+
-+static struct drm_framebuffer *
-+ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-+				const struct drm_mode_fb_cmd2 *mode_cmd)
-+{
-+	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-+					&ast_gem_fb_funcs_dirtyfb);
-+}
-+
- static const struct drm_mode_config_funcs ast_mode_config_funcs = {
--	.fb_create = drm_gem_fb_create,
-+	.fb_create = ast_gem_fb_create_with_dirty,
- 	.mode_valid = drm_vram_helper_mode_valid,
- 	.atomic_check = drm_atomic_helper_check,
- 	.atomic_commit = drm_atomic_helper_commit,
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index 56fb87885146..3a4f5137abc5 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -1159,12 +1159,14 @@ int drm_gem_pin(struct drm_gem_object *obj)
- 	else
- 		return 0;
- }
-+EXPORT_SYMBOL(drm_gem_pin);
- 
- void drm_gem_unpin(struct drm_gem_object *obj)
- {
- 	if (obj->funcs->unpin)
- 		obj->funcs->unpin(obj);
- }
-+EXPORT_SYMBOL(drm_gem_unpin);
- 
- int drm_gem_vmap(struct drm_gem_object *obj, struct iosys_map *map)
- {
-diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-index e2941cee14b6..30c4366968bf 100644
---- a/include/drm/drm_gem.h
-+++ b/include/drm/drm_gem.h
-@@ -352,6 +352,9 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj, unsigned long obj_size,
- 		     struct vm_area_struct *vma);
- int drm_gem_mmap(struct file *filp, struct vm_area_struct *vma);
- 
-+int drm_gem_pin(struct drm_gem_object *obj);
-+void drm_gem_unpin(struct drm_gem_object *obj);
-+
- /**
-  * drm_gem_object_get - acquire a GEM buffer object reference
-  * @obj: GEM buffer object
--- 
-2.17.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFlhbmcgWWluZ2xpYW5nIDx5
+YW5neWluZ2xpYW5nQGh1YXdlaS5jb20+DQo+IFNlbnQ6IEZyaWRheSwgQXVndXN0IDI2LCAyMDIy
+IDk6NTcgQU0NCj4gVG86IFBpbmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPjsgbGludXgt
+a2VybmVsQHZnZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgt
+d2lyZWxlc3NAdmdlci5rZXJuZWwub3JnDQo+IENjOiB0b255MDYyMGVtbWFAZ21haWwuY29tOyBr
+dmFsb0BrZXJuZWwub3JnOyBCZXJuaWUgSHVhbmcgPHBoaHVhbmdAcmVhbHRlay5jb20+DQo+IFN1
+YmplY3Q6IFJlOiBbUEFUQ0ggLW5leHRdIHdpZmk6IHJ0dzg4OiBhZGQgbWlzc2luZyBkZXN0cm95
+X3dvcmtxdWV1ZSgpIG9uIGVycm9yIHBhdGggaW4gcnR3X2NvcmVfaW5pdCgpDQo+IA0KPiBIaSwN
+Cj4gDQo+IE9uIDIwMjIvOC8yNiA4OjQ0LCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+ID4+IC0tLS0t
+T3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IFlhbmcgWWluZ2xpYW5nIDx5YW5neWlu
+Z2xpYW5nQGh1YXdlaS5jb20+DQo+ID4+IFNlbnQ6IFRodXJzZGF5LCBBdWd1c3QgMjUsIDIwMjIg
+OTozOCBQTQ0KPiA+PiBUbzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZn
+ZXIua2VybmVsLm9yZzsgbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnDQo+ID4+IENjOiB0
+b255MDYyMGVtbWFAZ21haWwuY29tOyBrdmFsb0BrZXJuZWwub3JnOyBCZXJuaWUgSHVhbmcgPHBo
+aHVhbmdAcmVhbHRlay5jb20+DQo+ID4+IFN1YmplY3Q6IFtQQVRDSCAtbmV4dF0gd2lmaTogcnR3
+ODg6IGFkZCBtaXNzaW5nIGRlc3Ryb3lfd29ya3F1ZXVlKCkgb24gZXJyb3IgcGF0aCBpbiBydHdf
+Y29yZV9pbml0KCkNCj4gPj4NCj4gPj4gQWRkIHRoZSBtaXNzaW5nIGRlc3Ryb3lfd29ya3F1ZXVl
+KCkgYmVmb3JlIHJldHVybiBmcm9tIHJ0d19jb3JlX2luaXQoKQ0KPiA+PiBpbiBlcnJvciBwYXRo
+Lg0KPiA+Pg0KPiA+PiBGaXhlczogZmUxMDE3MTZjN2M5ICgicnR3ODg6IHJlcGxhY2UgdHggdGFz
+a2xldCB3aXRoIHdvcmsgcXVldWUiKQ0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBZYW5nIFlpbmdsaWFu
+ZyA8eWFuZ3lpbmdsaWFuZ0BodWF3ZWkuY29tPg0KPiA+PiAtLS0NCj4gPj4gICBkcml2ZXJzL25l
+dC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L21haW4uYyB8IDggKysrKysrLS0NCj4gPj4gICAxIGZp
+bGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiA+Pg0KPiA+PiBk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9tYWluLmMgYi9k
+cml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L21haW4uYw0KPiA+PiBpbmRleCA3OTBk
+Y2ZlZDExMjUuLjU1NzIxM2U1Mjc2MSAxMDA2NDQNCj4gPj4gLS0tIGEvZHJpdmVycy9uZXQvd2ly
+ZWxlc3MvcmVhbHRlay9ydHc4OC9tYWluLmMNCj4gPj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxl
+c3MvcmVhbHRlay9ydHc4OC9tYWluLmMNCj4gPj4gQEAgLTIwOTQsNyArMjA5NCw3IEBAIGludCBy
+dHdfY29yZV9pbml0KHN0cnVjdCBydHdfZGV2ICpydHdkZXYpDQo+ID4+ICAgCXJldCA9IHJ0d19s
+b2FkX2Zpcm13YXJlKHJ0d2RldiwgUlRXX05PUk1BTF9GVyk7DQo+ID4+ICAgCWlmIChyZXQpIHsN
+Cj4gPj4gICAJCXJ0d193YXJuKHJ0d2RldiwgIm5vIGZpcm13YXJlIGxvYWRlZFxuIik7DQo+ID4+
+IC0JCXJldHVybiByZXQ7DQo+ID4+ICsJCWdvdG8gZGVzdHJveV93b3JrcXVldWU7DQo+ID4+ICAg
+CX0NCj4gPj4NCj4gPj4gICAJaWYgKGNoaXAtPndvd19md19uYW1lKSB7DQo+ID4+IEBAIC0yMTA0
+LDExICsyMTA0LDE1IEBAIGludCBydHdfY29yZV9pbml0KHN0cnVjdCBydHdfZGV2ICpydHdkZXYp
+DQo+ID4+ICAgCQkJd2FpdF9mb3JfY29tcGxldGlvbigmcnR3ZGV2LT5mdy5jb21wbGV0aW9uKTsN
+Cj4gPj4gICAJCQlpZiAocnR3ZGV2LT5mdy5maXJtd2FyZSkNCj4gPj4gICAJCQkJcmVsZWFzZV9m
+aXJtd2FyZShydHdkZXYtPmZ3LmZpcm13YXJlKTsNCj4gPj4gLQkJCXJldHVybiByZXQ7DQo+ID4+
+ICsJCQlnb3RvIGRlc3Ryb3lfd29ya3F1ZXVlOw0KPiA+PiAgIAkJfQ0KPiA+PiAgIAl9DQo+ID4+
+DQo+ID4+ICAgCXJldHVybiAwOw0KPiA+PiArDQo+ID4+ICtkZXN0cm95X3dvcmtxdWV1ZToNCj4g
+PiBJdCdzIG5vdCBzbyBnb29kIHRoYXQgdGhlIGxhYmVsICdkZXN0cm95X3dvcmtxdWV1ZScgaXMg
+dGhlIHNhbWUgYXMgZnVuY3Rpb24gbmFtZS4NCj4gPiBJIHN1Z2dlc3QgdG8ganVzdCB1c2UgJ291
+dCcgaW5zdGVhZC4NCj4gSG93IGFib3V0ICdvdXRfZGVzdG9yeV93b3JrcXVldWUnID8NCj4gDQoN
+ClNpbmNlIHRoZXJlIGlzIG9ubHkgc2luZ2xlIG9uZSBlcnJvciBjYXNlIHdlIG5lZWQgdG8gaGFu
+ZGxlLCB1c2luZyAnb3V0Jw0KaXNuJ3QgYW1iaWd1b3VzLg0KDQoNCg==

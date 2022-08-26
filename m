@@ -2,75 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995855A1F5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E7E5A1F5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238517AbiHZDOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 23:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S244785AbiHZDOY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 Aug 2022 23:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244922AbiHZDOi (ORCPT
+        with ESMTP id S230259AbiHZDOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 23:14:38 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F63CE339;
-        Thu, 25 Aug 2022 20:14:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VNH5TJ6_1661483653;
-Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VNH5TJ6_1661483653)
-          by smtp.aliyun-inc.com;
-          Fri, 26 Aug 2022 11:14:32 +0800
-From:   Liu Song <liusong@linux.alibaba.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] sbitmap: remove unnecessary code in __sbitmap_queue_get_batch
-Date:   Fri, 26 Aug 2022 11:14:13 +0800
-Message-Id: <1661483653-27326-1-git-send-email-liusong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 Aug 2022 23:14:21 -0400
+Received: from smtp237.sjtu.edu.cn (smtp237.sjtu.edu.cn [202.120.2.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004E88036A;
+        Thu, 25 Aug 2022 20:14:18 -0700 (PDT)
+Received: from mta91.sjtu.edu.cn (unknown [10.118.0.91])
+        by smtp237.sjtu.edu.cn (Postfix) with ESMTPS id E88DF10087D60;
+        Fri, 26 Aug 2022 11:14:15 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id 9302937C83F;
+        Fri, 26 Aug 2022 11:14:15 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta91.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta91.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2-vxcLwyJSQ7; Fri, 26 Aug 2022 11:14:15 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id 663D237C83E;
+        Fri, 26 Aug 2022 11:14:15 +0800 (CST)
+Date:   Fri, 26 Aug 2022 11:14:15 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     jasowang <jasowang@redhat.com>
+Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Message-ID: <384558036.9092726.1661483655362.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <ebf4b376-6a5c-3cfa-38ab-1559ace13b27@redhat.com>
+References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-7-qtxuning1999@sjtu.edu.cn> <ebf4b376-6a5c-3cfa-38ab-1559ace13b27@redhat.com>
+Subject: Re: [RFC v2 6/7] virtio: in order support for virtio_ring
+MIME-Version: 1.0
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.166.246.247]
+X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
+Thread-Topic: virtio: in order support for virtio_ring
+Thread-Index: /TRVhvCRWPpoWxEdPT1pQa8SovaRAA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Song <liusong@linux.alibaba.com>
 
-If "nr + nr_tags <= map_depth", then the value of nr_tags will not be
-greater than map_depth, so no additional comparison is required.
 
-Signed-off-by: Liu Song <liusong@linux.alibaba.com>
----
- lib/sbitmap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+----- Original Message -----
+> From: "jasowang" <jasowang@redhat.com>
+> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
+> Tsirkin" <mst@redhat.com>
+> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
+> "virtualization" <virtualization@lists.linux-foundation.org>
+> Sent: Thursday, August 25, 2022 3:44:41 PM
+> Subject: Re: [RFC v2 6/7] virtio: in order support for virtio_ring
 
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 29eb048..34c904b 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -533,10 +533,9 @@ unsigned long __sbitmap_queue_get_batch(struct sbitmap_queue *sbq, int nr_tags,
- 		nr = find_first_zero_bit(&map->word, map_depth);
- 		if (nr + nr_tags <= map_depth) {
- 			atomic_long_t *ptr = (atomic_long_t *) &map->word;
--			int map_tags = min_t(int, nr_tags, map_depth);
- 			unsigned long val, ret;
- 
--			get_mask = ((1UL << map_tags) - 1) << nr;
-+			get_mask = ((1UL << nr_tags) - 1) << nr;
- 			do {
- 				val = READ_ONCE(map->word);
- 				if ((val & ~get_mask) != val)
-@@ -547,7 +546,7 @@ unsigned long __sbitmap_queue_get_batch(struct sbitmap_queue *sbq, int nr_tags,
- 			if (get_mask) {
- 				*offset = nr + (index << sb->shift);
- 				update_alloc_hint_after_get(sb, depth, hint,
--							*offset + map_tags - 1);
-+							*offset + nr_tags - 1);
- 				return get_mask;
- 			}
- 		}
--- 
-1.8.3.1
+> ÔÚ 2022/8/17 21:57, Guo Zhi Ð´µÀ:
+>> If in order feature negotiated, we can skip the used ring to get
+>> buffer's desc id sequentially.
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>   drivers/virtio/virtio_ring.c | 53 ++++++++++++++++++++++++++++++------
+>>   1 file changed, 45 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>> index 1c1b3fa376a2..143184ebb5a1 100644
+>> --- a/drivers/virtio/virtio_ring.c
+>> +++ b/drivers/virtio/virtio_ring.c
+>> @@ -144,6 +144,9 @@ struct vring_virtqueue {
+>>   			/* DMA address and size information */
+>>   			dma_addr_t queue_dma_addr;
+>>   			size_t queue_size_in_bytes;
+>> +
+>> +			/* In order feature batch begin here */
+> 
+> 
+> We need tweak the comment, it's not easy for me to understand the
+> meaning here.
+> 
+How about this: if in_order feature is negotiated, is the next head to consume.
+> 
+>> +			u16 next_desc_begin;
+>>   		} split;
+>>   
+>>   		/* Available for packed ring */
+>> @@ -702,8 +705,13 @@ static void detach_buf_split(struct vring_virtqueue *vq,
+>> unsigned int head,
+>>   	}
+>>   
+>>   	vring_unmap_one_split(vq, i);
+>> -	vq->split.desc_extra[i].next = vq->free_head;
+>> -	vq->free_head = head;
+>> +	/* In order feature use desc in order,
+>> +	 * that means, the next desc will always be free
+>> +	 */
+> 
+> 
+> Maybe we should add something like "The descriptors are prepared in order".
+> 
+I will change it to this: The descriptors are made available in order if the in order feature is used. Since the free_head is already a circular list, it must consume it sequentially.
 
+> 
+>> +	if (!virtio_has_feature(vq->vq.vdev, VIRTIO_F_IN_ORDER)) {
+>> +		vq->split.desc_extra[i].next = vq->free_head;
+>> +		vq->free_head = head;
+>> +	}
+>>   
+>>   	/* Plus final descriptor */
+>>   	vq->vq.num_free++;
+>> @@ -745,7 +753,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   {
+>>   	struct vring_virtqueue *vq = to_vvq(_vq);
+>>   	void *ret;
+>> -	unsigned int i;
+>> +	unsigned int i, j;
+>>   	u16 last_used;
+>>   
+>>   	START_USE(vq);
+>> @@ -764,11 +772,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   	/* Only get used array entries after they have been exposed by host. */
+>>   	virtio_rmb(vq->weak_barriers);
+>>   
+>> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> -	i = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].id);
+>> -	*len = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].len);
+>> +	if (virtio_has_feature(_vq->vdev, VIRTIO_F_IN_ORDER)) {
+>> +		/* Skip used ring and get used desc in order*/
+>> +		i = vq->split.next_desc_begin;
+>> +		j = i;
+>> +		/* Indirect only takes one descriptor in descriptor table */
+>> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
+>> +			j = (j + 1) % vq->split.vring.num;
+> 
+> 
+> Let's move the expensive mod outside the loop. Or it's split so we can
+> use and here actually since the size is guaranteed to be power of the
+> two? Another question, is it better to store the next_desc in e.g
+> desc_extra?
+
+Thanks, I will use bit operation instead of mod.
+
+We only use one next_desc_begin at the same time, there is no need to store it in desc_extra.
+
+> 
+> And this seems very expensive if the device doesn't do the batching
+> (which is not mandatory).
+> 
+> 
+We will judge whether the device batched the buffer or not, we will only use this way for the batched buffer.
+And Not in order is more expensive, because is following a linked list.
+
+>> +		/* move to next */
+>> +		j = (j + 1) % vq->split.vring.num;
+>> +		/* Next buffer will use this descriptor in order */
+>> +		vq->split.next_desc_begin = j;
+>> +		if (!vq->indirect) {
+>> +			*len = vq->split.desc_extra[i].len;
+>> +		} else {
+>> +			struct vring_desc *indir_desc =
+>> +				vq->split.desc_state[i].indir_desc;
+>> +			u32 indir_num = vq->split.desc_extra[i].len, buffer_len = 0;
+>> +
+>> +			if (indir_desc) {
+>> +				for (j = 0; j < indir_num / sizeof(struct vring_desc); j++)
+>> +					buffer_len += indir_desc[j].len;
+> 
+> 
+> So I think we need to finalize this, then we can have much more stress
+> on the cache:
+> 
+> https://lkml.org/lkml/2021/10/26/1300
+> 
+> It was reverted since it's too aggressive, we should instead:
+> 
+> 1) do the validation only for morden device
+> 
+> 2) fail only when we enable the validation via (e.g a module parameter).
+> 
+> Thanks
+> 
+> 
+>> +			}
+>> +
+>> +			*len = buffer_len;
+>> +		}
+>> +	} else {
+>> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> +		i = virtio32_to_cpu(_vq->vdev,
+>> +				    vq->split.vring.used->ring[last_used].id);
+>> +		*len = virtio32_to_cpu(_vq->vdev,
+>> +				       vq->split.vring.used->ring[last_used].len);
+>> +	}
+>>   
+>>   	if (unlikely(i >= vq->split.vring.num)) {
+>>   		BAD_RING(vq, "id %u out of range\n", i);
+>> @@ -2236,6 +2271,8 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
+>> index,
+>>   	vq->split.avail_flags_shadow = 0;
+>>   	vq->split.avail_idx_shadow = 0;
+>>   
+>> +	vq->split.next_desc_begin = 0;
+>> +
+>>   	/* No callback?  Tell other side not to bother us. */
+>>   	if (!callback) {
+>>   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;

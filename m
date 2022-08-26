@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABBF5A31EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2165A31F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345414AbiHZWSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 18:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S1345341AbiHZWSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 18:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345307AbiHZWR0 (ORCPT
+        with ESMTP id S1345117AbiHZWR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 18:17:26 -0400
+        Fri, 26 Aug 2022 18:17:27 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B29DD74A;
-        Fri, 26 Aug 2022 15:16:15 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 22:16:11 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF35DE86AE;
+        Fri, 26 Aug 2022 15:16:17 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 22:16:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661552173;
+        s=2020; t=1661552175;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p/onY6OjdcfAY5UJJfzhSdFk5JT9cDLoqHG324W1o3U=;
-        b=xdT7ei+Rtihwi78VjHSbtkryA3G0Np3HT8XbT913U+Qnytes65Q3xcdku2mefO+QrcXvDu
-        0t0SCooFlqvdgNC0wcgp7m47PH0Na+mxaJhJ0DopnF8ljmp4bropr7jtZlDg/kKvYxoOJh
-        UEba5B23DavIsoQnjyTjjkrpELei+W6SWEaVB0lXaZ0xYv9smK5oFBAzwZK8Sjjh8r/HU8
-        bMe8VxjPLVZiL8mCCHhC3QxbZ0r1TYdfDksugMgBpfpVrdsld9judJ42f66LouICEvHDCR
-        Hb5dZeKyzxv3HJIgkzfxS2Ijcazz6E+480XvwLrYbjoN8rx7ds0foady/Fxatw==
+        bh=091286oT7yO5rbA4NBQR+RxD2XWprHIJeu9TMM/3rW4=;
+        b=jBwIp7cR1UchZ6L9lZP6KcxZbPdoxdtIj+t2QkFPk5tx7wO7TTVUcQfvO3t8XaLr2LqJzM
+        b16dCQwfgsUQNV0dJExTFCbQvYpEdyx9OhcbRRG0PLQupsRDqbuw4lPnIMDjOKhnILrVLy
+        MxWY9AZWobrrpjM8A5kYCHrSnWWVw1jRog4+zvX4HyMsYxkx2QWn22Q+XYbeHJxDHoz9ST
+        MdSgSRHdATxdkl17iG1rI1D8bgx7+2kzH8ewZ+s07M5vAYdTuOBBkmYi1WlU7iClwNauqU
+        4UuafdCSuYtxiPJzfrzElqPrWqM99RF0mtAHXDvM/eFB51SH9dyeeqtng4o5Vw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661552173;
+        s=2020e; t=1661552175;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p/onY6OjdcfAY5UJJfzhSdFk5JT9cDLoqHG324W1o3U=;
-        b=l8G5EnzH7ZJb9OjxIonDgfX+MS1HSs6NXFhfeVVUzj+aywhMr/o8WXKjbXO6ccdcI6+vKR
-        Mi3jqhplNQ3TfGAw==
-From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
+        bh=091286oT7yO5rbA4NBQR+RxD2XWprHIJeu9TMM/3rW4=;
+        b=kDMsQ2eV5XQ+5txgFcyglBIAhuKB4oh6Zz1LmzLIoKZgnOdtK0YEx3YupnnI+Wf+ydKwgf
+        +O70MZqxGshWGQDA==
+From:   "tip-bot2 for Stephane Eranian" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd/brs: Move feature-specific functions
-Cc:     Sandipan Das <sandipan.das@amd.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: perf/urgent] perf/x86/intel/uncore: Fix broken read_counter()
+ for SNB IMC PMU
+Cc:     Stephane Eranian <eranian@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cb60283b57179475d18ee242d117c335c16733693=2E16602?=
- =?utf-8?q?11399=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3Cb60283b57179475d18ee242d117c335c16733693=2E166021?=
- =?utf-8?q?1399=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
+In-Reply-To: <20220803160031.1379788-1-eranian@google.com>
+References: <20220803160031.1379788-1-eranian@google.com>
 MIME-Version: 1.0
-Message-ID: <166155217143.401.9259454199824421303.tip-bot2@tip-bot2>
+Message-ID: <166155217284.401.6614839609013942092.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,237 +67,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     b40d0156f560932d14e3957579b6508f8d065260
-Gitweb:        https://git.kernel.org/tip/b40d0156f560932d14e3957579b6508f8d065260
-Author:        Sandipan Das <sandipan.das@amd.com>
-AuthorDate:    Thu, 11 Aug 2022 17:59:49 +05:30
+Commit-ID:     11745ecfe8fea4b4a4c322967a7605d2ecbd5080
+Gitweb:        https://git.kernel.org/tip/11745ecfe8fea4b4a4c322967a7605d2ecbd5080
+Author:        Stephane Eranian <eranian@google.com>
+AuthorDate:    Wed, 03 Aug 2022 09:00:31 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 27 Aug 2022 00:05:41 +02:00
+CommitterDate: Sat, 27 Aug 2022 00:05:38 +02:00
 
-perf/x86/amd/brs: Move feature-specific functions
+perf/x86/intel/uncore: Fix broken read_counter() for SNB IMC PMU
 
-Move some of the Branch Sampling (BRS) specific functions out of the Core
-events sources and into the BRS sources in preparation for adding other
-mechanisms to record branches.
+Existing code was generating bogus counts for the SNB IMC bandwidth counters:
 
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+$ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
+     1.000327813           1,024.03 MiB  uncore_imc/data_reads/
+     1.000327813              20.73 MiB  uncore_imc/data_writes/
+     2.000580153         261,120.00 MiB  uncore_imc/data_reads/
+     2.000580153              23.28 MiB  uncore_imc/data_writes/
+
+The problem was introduced by commit:
+  07ce734dd8ad ("perf/x86/intel/uncore: Clean up client IMC")
+
+Where the read_counter callback was replace to point to the generic
+uncore_mmio_read_counter() function.
+
+The SNB IMC counters are freerunnig 32-bit counters laid out contiguously in
+MMIO. But uncore_mmio_read_counter() is using a readq() call to read from
+MMIO therefore reading 64-bit from MMIO. Although this is okay for the
+uncore_perf_event_update() function because it is shifting the value based
+on the actual counter width to compute a delta, it is not okay for the
+uncore_pmu_event_start() which is simply reading the counter  and therefore
+priming the event->prev_count with a bogus value which is responsible for
+causing bogus deltas in the perf stat command above.
+
+The fix is to reintroduce the custom callback for read_counter for the SNB
+IMC PMU and use readl() instead of readq(). With the change the output of
+perf stat is back to normal:
+$ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
+     1.000120987             296.94 MiB  uncore_imc/data_reads/
+     1.000120987             138.42 MiB  uncore_imc/data_writes/
+     2.000403144             175.91 MiB  uncore_imc/data_reads/
+     2.000403144              68.50 MiB  uncore_imc/data_writes/
+
+Fixes: 07ce734dd8ad ("perf/x86/intel/uncore: Clean up client IMC")
+Signed-off-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/b60283b57179475d18ee242d117c335c16733693.1660211399.git.sandipan.das@amd.com
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Link: https://lore.kernel.org/r/20220803160031.1379788-1-eranian@google.com
 ---
- arch/x86/events/amd/brs.c    | 69 ++++++++++++++++++++++++++++++++++-
- arch/x86/events/amd/core.c   | 70 +----------------------------------
- arch/x86/events/perf_event.h |  7 ++--
- 3 files changed, 76 insertions(+), 70 deletions(-)
+ arch/x86/events/intel/uncore_snb.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-index bee8765..f1bff15 100644
---- a/arch/x86/events/amd/brs.c
-+++ b/arch/x86/events/amd/brs.c
-@@ -81,7 +81,7 @@ static bool __init amd_brs_detect(void)
-  * a br_sel_map. Software filtering is not supported because it would not correlate well
-  * with a sampling period.
-  */
--int amd_brs_setup_filter(struct perf_event *event)
-+static int amd_brs_setup_filter(struct perf_event *event)
- {
- 	u64 type = event->attr.branch_sample_type;
- 
-@@ -96,6 +96,73 @@ int amd_brs_setup_filter(struct perf_event *event)
+diff --git a/arch/x86/events/intel/uncore_snb.c b/arch/x86/events/intel/uncore_snb.c
+index ce44001..1ef4f78 100644
+--- a/arch/x86/events/intel/uncore_snb.c
++++ b/arch/x86/events/intel/uncore_snb.c
+@@ -841,6 +841,22 @@ int snb_pci2phy_map_init(int devid)
  	return 0;
  }
  
-+static inline int amd_is_brs_event(struct perf_event *e)
++static u64 snb_uncore_imc_read_counter(struct intel_uncore_box *box, struct perf_event *event)
 +{
-+	return (e->hw.config & AMD64_RAW_EVENT_MASK) == AMD_FAM19H_BRS_EVENT;
++	struct hw_perf_event *hwc = &event->hw;
++
++	/*
++	 * SNB IMC counters are 32-bit and are laid out back to back
++	 * in MMIO space. Therefore we must use a 32-bit accessor function
++	 * using readq() from uncore_mmio_read_counter() causes problems
++	 * because it is reading 64-bit at a time. This is okay for the
++	 * uncore_perf_event_update() function because it drops the upper
++	 * 32-bits but not okay for plain uncore_read_counter() as invoked
++	 * in uncore_pmu_event_start().
++	 */
++	return (u64)readl(box->io_addr + hwc->event_base);
 +}
 +
-+int amd_brs_hw_config(struct perf_event *event)
-+{
-+	int ret = 0;
-+
-+	/*
-+	 * Due to interrupt holding, BRS is not recommended in
-+	 * counting mode.
-+	 */
-+	if (!is_sampling_event(event))
-+		return -EINVAL;
-+
-+	/*
-+	 * Due to the way BRS operates by holding the interrupt until
-+	 * lbr_nr entries have been captured, it does not make sense
-+	 * to allow sampling on BRS with an event that does not match
-+	 * what BRS is capturing, i.e., retired taken branches.
-+	 * Otherwise the correlation with the event's period is even
-+	 * more loose:
-+	 *
-+	 * With retired taken branch:
-+	 *   Effective P = P + 16 + X
-+	 * With any other event:
-+	 *   Effective P = P + Y + X
-+	 *
-+	 * Where X is the number of taken branches due to interrupt
-+	 * skid. Skid is large.
-+	 *
-+	 * Where Y is the occurences of the event while BRS is
-+	 * capturing the lbr_nr entries.
-+	 *
-+	 * By using retired taken branches, we limit the impact on the
-+	 * Y variable. We know it cannot be more than the depth of
-+	 * BRS.
-+	 */
-+	if (!amd_is_brs_event(event))
-+		return -EINVAL;
-+
-+	/*
-+	 * BRS implementation does not work with frequency mode
-+	 * reprogramming of the period.
-+	 */
-+	if (event->attr.freq)
-+		return -EINVAL;
-+	/*
-+	 * The kernel subtracts BRS depth from period, so it must
-+	 * be big enough.
-+	 */
-+	if (event->attr.sample_period <= x86_pmu.lbr_nr)
-+		return -EINVAL;
-+
-+	/*
-+	 * Check if we can allow PERF_SAMPLE_BRANCH_STACK
-+	 */
-+	ret = amd_brs_setup_filter(event);
-+
-+	/* only set in case of success */
-+	if (!ret)
-+		event->hw.flags |= PERF_X86_EVENT_AMD_BRS;
-+
-+	return ret;
-+}
-+
- /* tos = top of stack, i.e., last valid entry written */
- static inline int amd_brs_get_tos(union amd_debug_extn_cfg *cfg)
- {
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 9ac3718..e32a278 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -330,16 +330,8 @@ static inline bool amd_is_pair_event_code(struct hw_perf_event *hwc)
- 	}
- }
+ static struct pmu snb_uncore_imc_pmu = {
+ 	.task_ctx_nr	= perf_invalid_context,
+ 	.event_init	= snb_uncore_imc_event_init,
+@@ -860,7 +876,7 @@ static struct intel_uncore_ops snb_uncore_imc_ops = {
+ 	.disable_event	= snb_uncore_imc_disable_event,
+ 	.enable_event	= snb_uncore_imc_enable_event,
+ 	.hw_config	= snb_uncore_imc_hw_config,
+-	.read_counter	= uncore_mmio_read_counter,
++	.read_counter	= snb_uncore_imc_read_counter,
+ };
  
--#define AMD_FAM19H_BRS_EVENT 0xc4 /* RETIRED_TAKEN_BRANCH_INSTRUCTIONS */
--static inline int amd_is_brs_event(struct perf_event *e)
--{
--	return (e->hw.config & AMD64_RAW_EVENT_MASK) == AMD_FAM19H_BRS_EVENT;
--}
--
- static int amd_core_hw_config(struct perf_event *event)
- {
--	int ret = 0;
--
- 	if (event->attr.exclude_host && event->attr.exclude_guest)
- 		/*
- 		 * When HO == GO == 1 the hardware treats that as GO == HO == 0
-@@ -356,66 +348,10 @@ static int amd_core_hw_config(struct perf_event *event)
- 	if ((x86_pmu.flags & PMU_FL_PAIR) && amd_is_pair_event_code(&event->hw))
- 		event->hw.flags |= PERF_X86_EVENT_PAIR;
- 
--	/*
--	 * if branch stack is requested
--	 */
--	if (has_branch_stack(event)) {
--		/*
--		 * Due to interrupt holding, BRS is not recommended in
--		 * counting mode.
--		 */
--		if (!is_sampling_event(event))
--			return -EINVAL;
--
--		/*
--		 * Due to the way BRS operates by holding the interrupt until
--		 * lbr_nr entries have been captured, it does not make sense
--		 * to allow sampling on BRS with an event that does not match
--		 * what BRS is capturing, i.e., retired taken branches.
--		 * Otherwise the correlation with the event's period is even
--		 * more loose:
--		 *
--		 * With retired taken branch:
--		 *   Effective P = P + 16 + X
--		 * With any other event:
--		 *   Effective P = P + Y + X
--		 *
--		 * Where X is the number of taken branches due to interrupt
--		 * skid. Skid is large.
--		 *
--		 * Where Y is the occurences of the event while BRS is
--		 * capturing the lbr_nr entries.
--		 *
--		 * By using retired taken branches, we limit the impact on the
--		 * Y variable. We know it cannot be more than the depth of
--		 * BRS.
--		 */
--		if (!amd_is_brs_event(event))
--			return -EINVAL;
-+	if (has_branch_stack(event))
-+		return amd_brs_hw_config(event);
- 
--		/*
--		 * BRS implementation does not work with frequency mode
--		 * reprogramming of the period.
--		 */
--		if (event->attr.freq)
--			return -EINVAL;
--		/*
--		 * The kernel subtracts BRS depth from period, so it must
--		 * be big enough.
--		 */
--		if (event->attr.sample_period <= x86_pmu.lbr_nr)
--			return -EINVAL;
--
--		/*
--		 * Check if we can allow PERF_SAMPLE_BRANCH_STACK
--		 */
--		ret = amd_brs_setup_filter(event);
--
--		/* only set in case of success */
--		if (!ret)
--			event->hw.flags |= PERF_X86_EVENT_AMD_BRS;
--	}
--	return ret;
-+	return 0;
- }
- 
- static inline int amd_is_nb_event(struct hw_perf_event *hwc)
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index ba3d24a..5deb34e 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1233,6 +1233,9 @@ static inline bool fixed_counter_disabled(int i, struct pmu *pmu)
- int amd_pmu_init(void);
- 
- #ifdef CONFIG_PERF_EVENTS_AMD_BRS
-+
-+#define AMD_FAM19H_BRS_EVENT 0xc4 /* RETIRED_TAKEN_BRANCH_INSTRUCTIONS */
-+
- int amd_brs_init(void);
- void amd_brs_disable(void);
- void amd_brs_enable(void);
-@@ -1241,7 +1244,7 @@ void amd_brs_disable_all(void);
- void amd_brs_drain(void);
- void amd_brs_lopwr_init(void);
- void amd_brs_disable_all(void);
--int amd_brs_setup_filter(struct perf_event *event);
-+int amd_brs_hw_config(struct perf_event *event);
- void amd_brs_reset(void);
- 
- static inline void amd_pmu_brs_add(struct perf_event *event)
-@@ -1277,7 +1280,7 @@ static inline void amd_brs_enable(void) {}
- static inline void amd_brs_drain(void) {}
- static inline void amd_brs_lopwr_init(void) {}
- static inline void amd_brs_disable_all(void) {}
--static inline int amd_brs_setup_filter(struct perf_event *event)
-+static inline int amd_brs_hw_config(struct perf_event *event)
- {
- 	return 0;
- }
+ static struct intel_uncore_type snb_uncore_imc = {

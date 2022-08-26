@@ -2,147 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9CA5A2FA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26675A2FA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344928AbiHZTHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S1344764AbiHZTIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiHZTHT (ORCPT
+        with ESMTP id S231585AbiHZTIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:07:19 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4236D74CDF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:07:15 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id h22so4860127ejk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=aJkU6Tw7lia/3fgViQwrDtqNox+Rn1U1Hy6LHUh3+HM=;
-        b=fSOJmaEFNqjnYOBtaHBouRojuL3zc6UQFhGTIYAAh4BBEymNlxvhiYwPhuICwcq3Ni
-         6BrZiyCtbCl8U1vndqostbcNYqBeQKUa2AEVVNl97vfuZ2kw8umuaoV3G49D7I4AjCL9
-         3BsIZ8lQhnXW6XsS8BFedJtEq0JOe7R2FFde4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=aJkU6Tw7lia/3fgViQwrDtqNox+Rn1U1Hy6LHUh3+HM=;
-        b=vLh3OgoYWVru9+bKGbHJCZg1ltKxSF/QaqZ1tnC5fLmZ9FjHE+Lzj9xzYBEuUoVHFO
-         TI3CFFK0XlntEHsFwLfOAQVx+Z9m7gS0uEuQYeOjNJTOMJLfma6KVThP+5tVV/37KooX
-         KyqsCTpTCJ8pQF3sHKIp0joA0rRe7XamhePs8va9y5WmTKLIvw1JNDlNhnJk2pXfbJz+
-         Aj5oXuEJVhGa8kx+TyovxLcMy5QFi3auzTKpCRQ7I3ZyoIRFN3Mb3E1jbYVityi1P+Rp
-         /x67KGLSqczCOVOO9gWGuDzdib/F5wNyAxs0PC5rMEutViSAgt1cNJXIYUF/xTATow2Y
-         iwNw==
-X-Gm-Message-State: ACgBeo0cHx3//lUDFFkn5Z3Yl97IuTL7xHxSS6oF2az/kLjOx/cq+m5U
-        QCXeX8ZK4tDNMvFKjl5oqMVIW/2inelQPx4ldO0=
-X-Google-Smtp-Source: AA6agR4ZbSiYnJzF4IblEHWUlbYfQNUwlR1R40XC62bT8fogTcztiQlZEnKAnTALimNE7Zl/9VveEA==
-X-Received: by 2002:a17:907:2722:b0:731:201a:df9c with SMTP id d2-20020a170907272200b00731201adf9cmr6421892ejl.149.1661540833555;
-        Fri, 26 Aug 2022 12:07:13 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170906170f00b00722e603c39asm1219327eje.31.2022.08.26.12.07.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 12:07:12 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id m16so2828765wru.9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:07:11 -0700 (PDT)
-X-Received: by 2002:a5d:4052:0:b0:225:8b55:67fd with SMTP id
- w18-20020a5d4052000000b002258b5567fdmr549561wrp.281.1661540831542; Fri, 26
- Aug 2022 12:07:11 -0700 (PDT)
+        Fri, 26 Aug 2022 15:08:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC823DC5D3;
+        Fri, 26 Aug 2022 12:08:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16817547;
+        Fri, 26 Aug 2022 21:08:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661540891;
+        bh=3x5c84ET66BZj+Rj//NkR71TpQss27e3h7UwwnNl6YA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GkRyHFtwQwQHvovGaGdQVI2oadFmuvach8EPNPJ20on2n6dEdOZNzZja/xZoOibm4
+         C6uC6mAOX/hxsOp8njVgUgO9Yq0L+5oSAYAVBFTz35thZRW9bfoVTZBF3gAv7IYxc7
+         IMpr7/u/ar6ar3IcH6YEgxP9ZUQ833aS3rCG2jd4=
+Date:   Fri, 26 Aug 2022 22:08:04 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?utf-8?B?S8OpdmluIEwnaMO0cGl0YWw=?= <kevin.lhopital@bootlin.com>
+Subject: Re: [PATCH NOT FOR MERGE v5 6/6] ARM: dts: sun8i: a83t: bananapi-m3:
+ Enable MIPI CSI-2 with OV8865
+Message-ID: <YwkaFC2tm96X5qon@pendragon.ideasonboard.com>
+References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
+ <20220826182803.604563-7-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown> <166147984370.25420.13019217727422217511.stgit@noble.brown>
-In-Reply-To: <166147984370.25420.13019217727422217511.stgit@noble.brown>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 26 Aug 2022 12:06:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_wwTxPTnFXsG8zdaem5YDnSd4OsCeP78yJgueQCb-1g@mail.gmail.com>
-Message-ID: <CAHk-=wi_wwTxPTnFXsG8zdaem5YDnSd4OsCeP78yJgueQCb-1g@mail.gmail.com>
-Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
-To:     NeilBrown <neilb@suse.de>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Daire Byrne <daire@dneg.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220826182803.604563-7-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 7:16 PM NeilBrown <neilb@suse.de> wrote:
->
-> If a filesystem supports parallel modification in directories, it sets
-> FS_PAR_DIR_UPDATE on the file_system_type.  lookup_open() and the new
-> lookup_hash_update() notice the flag and take a shared lock on the
-> directory, and rely on a lock-bit in d_flags, much like parallel lookup
-> relies on DCACHE_PAR_LOOKUP.
+Hi Paul and Kévin,
 
-Ugh.
+Thank you for the patch.
 
-I absolutely believe in the DCACHE_PAR_LOOKUP model, and in "parallel
-updates" being important, but I *despise* locking code like this
+On Fri, Aug 26, 2022 at 08:28:03PM +0200, Paul Kocialkowski wrote:
+> From: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+> 
+> The Bananapi M3 supports a camera module which includes an OV8865 sensor
+> connected via the parallel CSI interface and an OV8865 sensor connected
+> via MIPI CSI-2.
+> 
+> The I2C2 bus is shared by the two sensors as well as the (active-low)
+> reset signal, but each sensor has it own shutdown line.
 
-+       if (wq && IS_PAR_UPDATE(dir))
-+               inode_lock_shared_nested(dir, I_MUTEX_PARENT);
-+       else
-+               inode_lock_nested(dir, I_MUTEX_PARENT);
+I see a single sensor in this file, am I missing something ?
 
-and I really really hope there's some better model for this.
+Sounds like a perfect candidate for an overlay, it could then be merged
+upstream.
 
-That "wq" test in particular is just absolutely disgusting. So now it
-doesn't just depend on whether the directory supports parallel
-updates, now the caller can choose whether to do the parallel thing or
-not, and that's how "create" is different from "rename".
+> Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts | 102 +++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+> index 5a7e1bd5f825..80fd99cf24b2 100644
+> --- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+> +++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+> @@ -85,6 +85,30 @@ led-1 {
+>  		};
+>  	};
+>  
+> +	reg_ov8865_avdd: ov8865-avdd {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "ov8865-avdd";
+> +		regulator-min-microvolt = <2800000>;
+> +		regulator-max-microvolt = <2800000>;
+> +		vin-supply = <&reg_dldo4>;
+> +	};
+> +
+> +	reg_ov8865_dovdd: ov8865-dovdd {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "ov8865-dovdd";
+> +		regulator-min-microvolt = <2800000>;
+> +		regulator-max-microvolt = <2800000>;
+> +		vin-supply = <&reg_dldo4>;
+> +	};
+> +
+> +	reg_ov8865_dvdd: ov8865-dvdd {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "ov8865-dvdd";
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1200000>;
+> +		vin-supply = <&reg_eldo1>;
+> +	};
 
-And that last difference is, I think, the one that makes me go "No. HELL NO".
+Are those three regulators on the Banana Pi, or on the camera module ?
 
-Instead of it being up to the filesystem to say "I can do parallel
-creates, but I need to serialize renames", this whole thing has been
-set up to be about the caller making that decision.
+> +
+>  	reg_usb1_vbus: reg-usb1-vbus {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "usb1-vbus";
+> @@ -115,6 +139,23 @@ &cpu100 {
+>  	cpu-supply = <&reg_dcdc3>;
+>  };
+>  
+> +&csi {
+> +	status = "okay";
+> +
+> +	ports {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		port@1 {
+> +			reg = <1>;
 
-That's just feels horribly horribly wrong.
+All of this (except the status = "okay") should go to sun8i-a83t.dtsi.
 
-Yes, I realize that to you that's just a "later patches will do
-renames", but what if it really is a filesystem issue where the
-filesystem can easily handle new names, but needs something else for
-renames because it has various cross-directory issues, perhaps?
+> +
+> +			csi_in_mipi_csi2: endpoint {
+> +				remote-endpoint = <&mipi_csi2_out_csi>;
+> +			};
 
-So I feel this is fundamentally wrong, and this ugliness is a small
-effect of that wrongness.
+This too actually, once the issue mentioned in patch 5/6 gets fixed.
 
-I think we should strive for
+> +		};
+> +	};
+> +};
+> +
+>  &de {
+>  	status = "okay";
+>  };
+> @@ -147,6 +188,36 @@ hdmi_out_con: endpoint {
+>  	};
+>  };
+>  
+> +&i2c2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c2_pe_pins>;
 
- (a) make that 'wq' and DCACHE_PAR_LOOKUP bit be unconditional
+This looks like a candidate for upstreaming in
+sun8i-a83t-bananapi-m3.dts, it shouldn't be in the overlay.
 
- (b) aim for the inode lock being taken *after* the _lookup_hash(),
-since the VFS layer side has to be able to handle the concurrency on
-the dcache side anyway
+> +	status = "okay";
+> +
+> +	ov8865: camera@36 {
+> +		compatible = "ovti,ov8865";
+> +		reg = <0x36>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&csi_mclk_pin>;
+> +		clocks = <&ccu CLK_CSI_MCLK>;
+> +		assigned-clocks = <&ccu CLK_CSI_MCLK>;
+> +		assigned-clock-rates = <24000000>;
+> +		avdd-supply = <&reg_ov8865_avdd>;
+> +		dovdd-supply = <&reg_ov8865_dovdd>;
+> +		dvdd-supply = <&reg_ov8865_dvdd>;
+> +		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
+> +		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
+> +
+> +		port {
+> +			ov8865_out_mipi_csi2: endpoint {
+> +				data-lanes = <1 2 3 4>;
+> +				link-frequencies = /bits/ 64 <360000000>;
+> +
+> +				remote-endpoint = <&mipi_csi2_in_ov8865>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+>  &mdio {
+>  	rgmii_phy: ethernet-phy@1 {
+>  		compatible = "ethernet-phy-ieee802.3-c22";
+> @@ -154,6 +225,24 @@ rgmii_phy: ethernet-phy@1 {
+>  	};
+>  };
+>  
+> +&mipi_csi2 {
+> +	status = "okay";
+> +};
+> +
+> +&mipi_csi2_in {
+> +	mipi_csi2_in_ov8865: endpoint {
+> +		data-lanes = <1 2 3 4>;
+> +
+> +		remote-endpoint = <&ov8865_out_mipi_csi2>;
+> +	};
+> +};
+> +
+> +&mipi_csi2_out {
+> +	mipi_csi2_out_csi: endpoint {
+> +		remote-endpoint = <&csi_in_mipi_csi2>;
+> +	};
+> +};
+> +
+>  &mmc0 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&mmc0_pins>;
+> @@ -327,11 +416,24 @@ &reg_dldo3 {
+>  	regulator-name = "vcc-pd";
+>  };
+>  
+> +&reg_dldo4 {
+> +	regulator-always-on;
 
- (c) at that point, the serialization really ends up being about the
-call into the filesystem, and aim to simply move the
-inode_lock{_shared]_nested() into the filesystem so that there's no
-need for a flag and related conditional locking at all.
+Does it have to be always on ?
 
-Because right now I think the main reason we cannot move the lock into
-the filesystem is literally that we've made the lock cover not just
-the filesystem part, but the "lookup and create dentry" part too.
+> +	regulator-min-microvolt = <2800000>;
+> +	regulator-max-microvolt = <2800000>;
+> +	regulator-name = "avdd-csi";
 
-But once you have that "DCACHE_PAR_LOOKUP" bit and the
-d_alloc_parallel() logic to serialize a _particular_ dentry being
-created (as opposed to serializing all the sleeping ops to that
-directly), I really think we should strive to move the locking - that
-no longer helps the VFS dcache layer - closer to the filesystem call
-and eventually into it.
+Doesn't this belong to the base board .dts ? Same below.
 
-Please? I think these patches are "mostly going in the right
-direction", but at the same time I feel like there's some serious
-mis-design going on.
+> +};
+> +
+>  &reg_drivevbus {
+>  	regulator-name = "usb0-vbus";
+>  	status = "okay";
+>  };
+>  
+> +&reg_eldo1 {
+> +	regulator-min-microvolt = <1200000>;
+> +	regulator-max-microvolt = <1200000>;
+> +	regulator-name = "dvdd-csi-r";
+> +};
+> +
+>  &reg_fldo1 {
+>  	regulator-min-microvolt = <1080000>;
+>  	regulator-max-microvolt = <1320000>;
 
-                Linus
+-- 
+Regards,
+
+Laurent Pinchart

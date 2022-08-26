@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FAD5A1E7F
+	by mail.lfdr.de (Postfix) with ESMTP id C9F3F5A1E80
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244701AbiHZCD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 22:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S244680AbiHZCDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 22:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244653AbiHZCDS (ORCPT
+        with ESMTP id S244651AbiHZCDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 Aug 2022 22:03:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2A0CAC94;
-        Thu, 25 Aug 2022 19:03:11 -0700 (PDT)
-X-UUID: 1ad1f94a29e94d22b3d0e6513719be8e-20220826
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:CC:To:From:Subject; bh=JpBdRJBBzq6P5ZQ16LVd+gkiupvyrupsuxc/Ajvy418=;
-        b=dYDXwVryVt8OYWNxZLZaSpBJXljNIknHCXSijhyQOlu47FWcIw8f3v6PvDqEI6Ff1gxnMbeDCjXJxDzudpLulStggX01vuQcemVndXJNPi4pPRNXgL63YYi/mEydkXwaahXTvvmYNX/LFU3t4TiehnXfZQSsH8hQjn2cqIYTDzo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:a6376ff1-ad6b-4256-a24e-6da899ec20a0,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:51
-X-CID-INFO: VERSION:1.1.10,REQID:a6376ff1-ad6b-4256-a24e-6da899ec20a0,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:51
-X-CID-META: VersionHash:84eae18,CLOUDID:bcaaa6cf-20bd-4e5e-ace8-00692b7ab380,C
-        OID:e6b61ddbd8c8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 1ad1f94a29e94d22b3d0e6513719be8e-20220826
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 835807649; Fri, 26 Aug 2022 10:03:02 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 26 Aug 2022 10:03:01 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 26 Aug 2022 10:03:01 +0800
-Subject: Re: [PATCH] dt-bindings: mfd: mediatek: Add scpsys compatible for
- mt8186
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>
-References: <20220819124736.21768-1-allen-kh.cheng@mediatek.com>
- <e5572e77-4ba5-d8f3-4e9e-04ac5dc416fe@linaro.org>
- <365eb0ad-8423-b8e3-298f-b356a2250dd0@mediatek.com>
-Message-ID: <b5696b65-e150-244f-05ea-ce9312970d3d@mediatek.com>
-Date:   Fri, 26 Aug 2022 10:03:01 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2983CAC83;
+        Thu, 25 Aug 2022 19:03:16 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id m1so457346edb.7;
+        Thu, 25 Aug 2022 19:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9EgT7+sSPiTYWPr9b+oWvfezXK6YiJhJIgl4/Hn+Ap4=;
+        b=RrW3j1im3HWeri6Mix5m5sujVq1KbzucVZSMIDVaZ2jLd29swg40n944O42CYvcV4W
+         lf25TUd/2XbOXaPoRH1HKwmdq0I/SPVsed7dpauPnYwTX8xHigXNogkPk1jCj04WCp8m
+         Msd6zQUekVgHR8MdQzqotsEq03k8mqke09VW+0SuIUYftuvGGOZ/zgdsPJ8+UCAU5s0H
+         Y/OfsTkbLVVn4Ck0F9+dyURwu+zYQwuu/NjmVy+mN0gd9nu2QUvK9eTphHU+QYR77Qoc
+         h0c3YCkg8+oMpefiqr7zUg8VqYo3Bot4h/0gEHuhSHB9NdboeVfYVp6lAtAF3L4j8Rwj
+         8FrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9EgT7+sSPiTYWPr9b+oWvfezXK6YiJhJIgl4/Hn+Ap4=;
+        b=IXRR+DJaTyQvFNScEdZHUTB1HRdlzd8BQfF9Oo2coqM/569BSXapeIK8DE3oTpFFNd
+         km8/f4rletoZNiEdHK1fCAbP1NRIBPtWBz+Egn+ezDQjLID0OJ6Z7LWWT+3Oyv0+pYgd
+         lWTVZuSKKk8+M34lXOi4U57lRV3mFDavfjlK/7pL7bn2gFTvE06CHl8CJ1GEs+1sJqIP
+         OQjik+QmileAVgN4kYvg6KCWO/3RlBI1ys2R8Iorf0LsZ6/c7tupfc/d2j1z329wiSdV
+         /rakgPV+X3PRJPVOO/oi/1664gSMDlFeLZjzihPFWdfvRBnR20y9IPs8M6XM7WlKNwGv
+         3XQQ==
+X-Gm-Message-State: ACgBeo1BOIv+mrAC8VMTw/I4f1LRmejPIyzJqRirO2s3b2GORJXwHV8n
+        IBs4tJl7fz2Fkx/NSktIDBDuVCpEsGo5kXhUBII=
+X-Google-Smtp-Source: AA6agR5XguDIy9h+0nX1vI83YX7Vk1ZKTHuVBeVEsTLmmLXy/Zx4Q/WlaZogfq3iro5Mx+6Atm+nzhDptIs36y5ve2Q=
+X-Received: by 2002:aa7:df01:0:b0:445:f7b3:cd4 with SMTP id
+ c1-20020aa7df01000000b00445f7b30cd4mr5119924edy.232.1661479395460; Thu, 25
+ Aug 2022 19:03:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <365eb0ad-8423-b8e3-298f-b356a2250dd0@mediatek.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220825213905.1817722-1-haoluo@google.com> <CAEf4BzaQOj3QqEbKKXhgUmWMF3gef-8+a-dYoe_t4=g+cM2KaQ@mail.gmail.com>
+ <CAJD7tkZAE_Kx9z2cXnrheFfEtSZJn4VFczhkVEb3VdcP2o_H+g@mail.gmail.com>
+In-Reply-To: <CAJD7tkZAE_Kx9z2cXnrheFfEtSZJn4VFczhkVEb3VdcP2o_H+g@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 25 Aug 2022 19:03:04 -0700
+Message-ID: <CAEf4BzbMUNo6gj+DJcnvixiMoVr-LX9JZuJbe0Txp71sZJ_F=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] Add CGROUP prefix to cgroup_iter_order
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Hao Luo <haoluo@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi maintainers,
+On Thu, Aug 25, 2022 at 4:20 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Thu, Aug 25, 2022 at 2:56 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Aug 25, 2022 at 2:39 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > As suggested by Andrii, add 'CGROUP' to cgroup_iter_order. This fix is
+> > > divided into two patches. Patch 1/2 fixes the commit that introduced
+> > > cgroup_iter. Patch 2/2 fixes the selftest that uses the
+> > > cgroup_iter_order. This is because the selftest was introduced in a
+> >
+> > but if you split rename into two patches, you break selftests build
+> > and thus potentially bisectability of selftests regressions. So I
+> > think you have to keep both in the same patch.
+>
+> I thought fixes to commits still in bpf-next would get squashed. Would
+> you mind elaborating why we don't do this?
+>
 
-On 8/22/22 3:56 PM, Allen-KH Cheng wrote:
-> Hi Krzysztof,
-> 
-> On 8/19/22 8:53 PM, Krzysztof Kozlowski wrote:
->> On 19/08/2022 15:47, Allen-KH Cheng wrote:
->>> Add a new scpsys compatible for mt8186 SoC.
->>>
->>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>> ---
->>
->> No DTS using it?
->>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> I had it all arranged to send anther DTS using patch after
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=666901
-> is applied.
-> 
-> 
-> But I see your comments in
-> https://lore.kernel.org/all/a810ec42-825c-1a85-568f-b70f04b58280@linaro.org/,
-> I think it's better that adding another DTS using patch for scpsys nodes
-> into a series (include this patch).
-> 
-> Thanks,
-> Allen
-> 
+We don't amend follow up fixes into original commits and preserve history.
 
-I found Matthias send a patch for renaming mediatek,mt8195-scpsys.yaml. [1]
-
-I will update this patch after [1] is applied.
-
-[1]
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220825141656.15747-1-matthias.bgg@kernel.org/
-
-Thanks,
-Allen
+> >
+> > With that:
+> >
+> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> >
+> > > different commit. I tested this patchset via the following command:
+> > >
+> > >   test_progs -t cgroup,iter,btf_dump
+> > >
+> > > Hao Luo (2):
+> > >   bpf: Add CGROUP to cgroup_iter order
+> > >   selftests/bpf: Fix test that uses cgroup_iter order
+> > >
+> > >  include/uapi/linux/bpf.h                      | 10 +++---
+> > >  kernel/bpf/cgroup_iter.c                      | 32 +++++++++----------
+> > >  tools/include/uapi/linux/bpf.h                | 10 +++---
+> > >  .../selftests/bpf/prog_tests/btf_dump.c       |  2 +-
+> > >  .../prog_tests/cgroup_hierarchical_stats.c    |  2 +-
+> > >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 10 +++---
+> > >  6 files changed, 33 insertions(+), 33 deletions(-)
+> > >
+> > > --
+> > > 2.37.2.672.g94769d06f0-goog
+> > >

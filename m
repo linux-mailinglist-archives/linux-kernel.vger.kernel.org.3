@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7194F5A1F22
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85F25A1F2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244906AbiHZCxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 22:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S244691AbiHZDAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 23:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238683AbiHZCxP (ORCPT
+        with ESMTP id S235147AbiHZC77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 22:53:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D03CD507
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 19:53:15 -0700 (PDT)
+        Thu, 25 Aug 2022 22:59:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377E333376;
+        Thu, 25 Aug 2022 19:59:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4F0B61E0F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D998C433C1;
-        Fri, 26 Aug 2022 02:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661482394;
-        bh=5hL+Qohca2z4LHdl33S7reOO2QkPfuDoatK2OM7n0As=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d50KXlpEz6oFuZgcXJQCIN9nTaOW3jW5BZL/mPuVC8asneQndzzdBiBd9DGOupESS
-         yLZdBpQiLn7nddRZ9MyPfNsUt/mMMZ6YO8V5mcU3ETE14MorNMCIP2sRhfEEkHesTc
-         7gyRp/hg3vBWJjmJRRzLTZGC9WbuAAGPDHGegx3I=
-Date:   Thu, 25 Aug 2022 19:53:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Haiyue Wang <haiyue.wang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, david@redhat.com, apopple@nvidia.com,
-        linmiaohe@huawei.com, ying.huang@intel.com,
-        songmuchun@bytedance.com, naoya.horiguchi@linux.dev,
-        alex.sierra@amd.com, mike.kravetz@oracle.com,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: Re: [PATCH v7 1/2] mm: migration: fix the FOLL_GET failure on
- following huge page
-Message-Id: <20220825195312.8490c2c9c0a1c54f43851cfc@linux-foundation.org>
-In-Reply-To: <20220825143917.32175f7d@thinkpad>
-References: <20220823135841.934465-1-haiyue.wang@intel.com>
-        <20220823135841.934465-2-haiyue.wang@intel.com>
-        <20220824113858.9f0a2200c4d4875a5f4da31c@linux-foundation.org>
-        <20220825143917.32175f7d@thinkpad>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D372861E64;
+        Fri, 26 Aug 2022 02:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B32A1C433D6;
+        Fri, 26 Aug 2022 02:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661482797;
+        bh=G0cteGp0bxyPbU08mT1HNn/O4ILEZ4wJ+AAKm8re164=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jGvASoibfAEATRm93/PIi92grxXeMlPkH2flVQwrjkxH9ONEiVmyQF2Pea/OEqtnX
+         JMKLCmUCH9VqjOQOVbN5qtJhCQp6TDhe4izVHSRPDexYc0ZKn2XiwxZDPoUPyYPANn
+         a/RqQLbUbKtW4A0CyA4NImnutxTLgKQeAqmTk4jjUAgIODmrxZ8YXwJPTS+FpquU39
+         bbeZ6dIR6XYZph3m/ENNL6DIMz4LIlEn8jm4Vdmmre6L2jp2hWBU+ti6oLcUJVjoV+
+         DmYCiJjDbtDWiJsEF/fIdV4hu/kQ61aXWeFSm33+yg1nNRJggM5o5MKpEm23i2Y0Kj
+         j2lqXBai4h/xA==
+Date:   Fri, 26 Aug 2022 05:59:49 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, dlunev@google.com, rjw@rjwysocki.net,
+        linux-pm@vger.kernel.org, corbet@lwn.net, jejb@linux.ibm.com,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>, Hao Wu <hao.wu@rubrik.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, axelj <axelj@axis.com>
+Subject: Re: [PATCH v2 01/10] tpm: Add support for in-kernel resetting of PCRs
+Message-ID: <Ywg3JZrWmRjvr/7f@kernel.org>
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823152108.v2.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,36 +63,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 14:39:17 +0200 Gerald Schaefer <gerald.schaefer@linux.ibm.com> wrote:
+On Tue, Aug 23, 2022 at 03:25:17PM -0700, Evan Green wrote:
+> From: Matthew Garrett <matthewgarrett@google.com>
+> 
+> Add an internal command for resetting a PCR. This will be used by the
+> encrypted hibernation code to set PCR23 to a known value. The
+> hibernation code will seal the hibernation key with a policy specifying
+> PCR23 be set to this known value as a mechanism to ensure that the
+> hibernation key is genuine. But to do this repeatedly, resetting the PCR
+> is necessary as well.
+> 
+> From: Matthew Garrett <mjg59@google.com>
 
-> On Wed, 24 Aug 2022 11:38:58 -0700
-> Andrew Morton <akpm@linux-foundation.org> wrote:
-> 
-> > On Tue, 23 Aug 2022 21:58:40 +0800 Haiyue Wang <haiyue.wang@intel.com> wrote:
-> > 
-> > > Not all huge page APIs support FOLL_GET option, so move_pages() syscall
-> > > will fail to get the page node information for some huge pages.
-> > > 
-> > > Like x86 on linux 5.19 with 1GB huge page API follow_huge_pud(), it will
-> > > return NULL page for FOLL_GET when calling move_pages() syscall with the
-> > > NULL 'nodes' parameter, the 'status' parameter has '-2' error in array.
-> > > 
-> > > Note: follow_huge_pud() now supports FOLL_GET in linux 6.0.
-> > >       Link: https://lore.kernel.org/all/20220714042420.1847125-3-naoya.horiguchi@linux.dev
-> > > 
-> > > But these huge page APIs don't support FOLL_GET:
-> > >   1. follow_huge_pud() in arch/s390/mm/hugetlbpage.c
-> > >   2. follow_huge_addr() in arch/ia64/mm/hugetlbpage.c
-> > >      It will cause WARN_ON_ONCE for FOLL_GET.
-> > >   3. follow_huge_pgd() in mm/hugetlb.c
-> > 
-> > What happened to the proposal to fix these three sites so this patch is
-> > not needed?
-> 
-> For s390, you can add my patch from
-> https://lore.kernel.org/linux-mm/20220818135717.609eef8a@thinkpad/
-> to this series.
+This is probably here by mistake.
+
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
 > 
 
-Thanks, I added that.
+No empty line here.
 
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
+> Matthew's original version of this patch was at:
+> https://patchwork.kernel.org/patch/12096487/
+> 
+> (no changes since v1)
+> 
+>  drivers/char/tpm/tpm-interface.c | 28 +++++++++++++++++++++++++
+>  drivers/char/tpm/tpm.h           |  2 ++
+>  drivers/char/tpm/tpm1-cmd.c      | 34 ++++++++++++++++++++++++++++++
+>  drivers/char/tpm/tpm2-cmd.c      | 36 ++++++++++++++++++++++++++++++++
+>  include/linux/tpm.h              |  7 +++++++
+>  5 files changed, 107 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce8187052c..17b8643ee109c2 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -342,6 +342,34 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+>  
+> +/**
+> + * tpm_pcr_reset - reset the specified PCR
+> + * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+> + * @pcr_idx:	the PCR to be reset
+> + *
+> + * Return: same as with tpm_transmit_cmd()
+> + */
+> +int tpm_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
+> +{
+> +	int rc;
+> +
+> +	chip = tpm_find_get_ops(chip);
+> +	if (!chip)
+> +		return -ENODEV;
+> +
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +		rc = tpm2_pcr_reset(chip, pcr_idx);
+> +		goto out;
+> +	}
+> +
+> +	rc = tpm1_pcr_reset(chip, pcr_idx, "attempting to reset a PCR");
+> +
+> +out:
+> +	tpm_put_ops(chip);
+
+        if (chip->flags & TPM_CHIP_FLAG_TPM2)
+                rc = tpm2_pcr_reset(chip, pcr_idx);
+        else
+                rc = tpm1_pcr_reset(chip, pcr_idx, "attempting to reset a PCR");
+
+Where does this asymmetry come with the parameters?
+
+BR, Jarkko

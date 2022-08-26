@@ -2,72 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BD55A269E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EE25A26A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344197AbiHZLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S1343763AbiHZLKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343637AbiHZLJm (ORCPT
+        with ESMTP id S1344268AbiHZLKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:09:42 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F81E4B48F;
-        Fri, 26 Aug 2022 04:09:41 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oRXDP-00FQH2-6w; Fri, 26 Aug 2022 21:09:32 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 26 Aug 2022 19:09:31 +0800
-Date:   Fri, 26 Aug 2022 19:09:31 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org,
-        "Jason A . Donenfeld " <Jason@zx2c4.com>,
-        "Justin M . Forbes" <jforbes@fedoraproject.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] crypto: lib - remove unneeded selection of XOR_BLOCKS
-Message-ID: <Ywip6/79IEQFXt3g@gondor.apana.org.au>
-References: <20220826050456.101321-1-ebiggers@kernel.org>
+        Fri, 26 Aug 2022 07:10:31 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A04D6E2CA
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:10:30 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id w11-20020a056e021c8b00b002ea48389206so926231ill.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:10:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=ykKB6JtFGZwxwwDMGZo2OlEfzOvWnacKSlhlwZsEhWI=;
+        b=gS8oCjPK8mQgVN1EU/u+B1eheuyuSvSSM2Jcl4MYOCfxYNWMasqP5o4xfHZ/W5XnUL
+         CoFx1oP9aAur7RlfJf6H9RedljnOEzCuzuWkCvXJjaytPuCY+1Jawrhu89Y6Yib+rhah
+         GlW/SfXv6mSZBnMFhpmuwQKeYI/lu1KYugHtqYHP4rTuymqWmPyfiKKrmSxbeRIoxoP7
+         aKDjHWfydsCVeja1g+0736n/ejsqU3LRV8amNNRN4NHf6xyUCvuqTwA1DJye+dSVmlNc
+         xFizFywLmZvS5aZZ8TmmEu0HsyucA6NuBiIfpi9psTRqdlEHoJgIbU6mBGUTJWk2iN52
+         5SMw==
+X-Gm-Message-State: ACgBeo2KD8RDwsQjZE0hpCZsboFkCOJL8RaRElxo1C2Eb0nyjRNMy8Ml
+        bkAL9s+xUclB0kpy9ZxYytUZn8VuCWD3rh/cwLRCaywUHKdY
+X-Google-Smtp-Source: AA6agR7RWmam6Y6fNRRsH/Zisn7THQXfY3C9pomIW+kormK2wpFFUV/pv1idIbJ20RVF12wJKUsHt3obfzuMPy5VSv7Kt3U4BYAg
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826050456.101321-1-ebiggers@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:194d:b0:2ea:373a:cbe4 with SMTP id
+ x13-20020a056e02194d00b002ea373acbe4mr3766138ilu.127.1661512229703; Fri, 26
+ Aug 2022 04:10:29 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 04:10:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003dd70305e722f605@google.com>
+Subject: [syzbot] BUG: corrupted list in efivar_entry_remove
+From:   syzbot <syzbot+1902c359bfcaf39c46f2@syzkaller.appspotmail.com>
+To:     ardb@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:04:56PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> CRYPTO_LIB_CHACHA_GENERIC doesn't need to select XOR_BLOCKS.  It perhaps
-> was thought that it's needed for __crypto_xor, but that's not the case.
-> 
-> Enabling XOR_BLOCKS is problematic because the XOR_BLOCKS code runs a
-> benchmark when it is initialized.  That causes a boot time regression on
-> systems that didn't have it enabled before.
-> 
-> Therefore, remove this unnecessary and problematic selection.
-> 
-> Fixes: e56e18985596 ("lib/crypto: add prompts back to crypto libraries")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
-> 
-> I've separated this fix out from the larger patch
-> https://lore.kernel.org/r/20220725183636.97326-3-ebiggers@kernel.org
-> that is currently queued in cryptodev.
-> 
->  lib/crypto/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+Hello,
 
-Patch applied.  Thanks. 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+syzbot found the following issue on:
+
+HEAD commit:    680fb5b009e8 Merge tag 'arm64-upstream' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=126f0865080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4557ad2600fc45f4
+dashboard link: https://syzkaller.appspot.com/bug?extid=1902c359bfcaf39c46f2
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10039fc3080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f4ebc3080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1902c359bfcaf39c46f2@syzkaller.appspotmail.com
+
+list_del corruption. prev->next should be ffff0000c74fd828, but was ffff80000d5c37a0. (prev=ffff80000d5c37a0)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:53!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3019 Comm: syz-executor150 Not tainted 5.19.0-rc8-syzkaller-01618-g680fb5b009e8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __list_del_entry_valid+0x94/0xa8 lib/list_debug.c:51
+lr : __list_del_entry_valid+0x94/0xa8 lib/list_debug.c:51
+sp : ffff80001317bc40
+x29: ffff80001317bc40 x28: ffff0000c65f0000 x27: 0000000000000000
+x26: 00000000000000c0 x25: ffff0000cae01828 x24: ffff0000c74fd000
+x23: ffff80000d309368 x22: ffff8000093f7a24 x21: ffff80000d5c37a0
+x20: 0000000000000000 x19: ffff0000c74fd000 x18: 0000000000000265
+x17: ffff80000bfed6bc x16: ffff80000db3b658 x15: ffff0000c65f0000
+x14: 0000000000000021 x13: 00000000ffffffff x12: ffff0000c65f0000
+x11: ff808000081bf324 x10: 0000000000000000 x9 : bdc8aea51905dc00
+x8 : bdc8aea51905dc00 x7 : ffff800008160c98 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefbecd0 x1 : 0000000100000000 x0 : 000000000000006d
+Call trace:
+ __list_del_entry_valid+0x94/0xa8 lib/list_debug.c:51
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ efivar_entry_remove+0x4c/0xa4 drivers/firmware/efi/vars.c:539
+ efivarfs_destroy+0x20/0x5c fs/efivarfs/super.c:185
+ __efivar_entry_iter+0x94/0x100 drivers/firmware/efi/vars.c:1089
+ efivarfs_kill_sb+0x3c/0x4c fs/efivarfs/super.c:249
+ deactivate_locked_super+0x70/0xd4 fs/super.c:332
+ deactivate_super+0xb8/0xbc fs/super.c:363
+ cleanup_mnt+0x1a4/0x1e0 fs/namespace.c:1186
+ __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+ task_work_run+0xc4/0x208 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1d0 arch/arm64/kernel/signal.c:1117
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x14c arch/arm64/kernel/entry-common.c:625
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: 9001b300 912e7000 aa0803e3 94a6ef81 (d4210000) 
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70EB5A20BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1C75A20BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244758AbiHZGQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S243140AbiHZGRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiHZGQ0 (ORCPT
+        with ESMTP id S230517AbiHZGRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:16:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015985A831;
-        Thu, 25 Aug 2022 23:16:25 -0700 (PDT)
+        Fri, 26 Aug 2022 02:17:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B120FA3D13;
+        Thu, 25 Aug 2022 23:17:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0748561B1D;
-        Fri, 26 Aug 2022 06:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DADC433C1;
-        Fri, 26 Aug 2022 06:16:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 568AD61B1D;
+        Fri, 26 Aug 2022 06:17:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E6CC433D6;
+        Fri, 26 Aug 2022 06:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661494583;
-        bh=12HUni1vNh+fFGIt+vHYF+GjFpAxFGKd2sLTQRVhsoI=;
+        s=k20201202; t=1661494668;
+        bh=mwT1dGC6kgb6AMZv9hcU8/lgllHF8A8Rmy50wbfJ4hA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hR9oroQ9BbyEEMYAHm7W/hXPZNAz/6VL0hrkDZmXJ4PYQNGPzNLiCdwVoBHYnEtz0
-         gPBDrXtoj+brM4l4i7hNhhsyMIYEs/c5nksEwelUk3V0aN4FdC9Nq1Nx7hWzFv4S1I
-         Exbr3Y+ljCvM0/5Ri/4lT/W/U5IIt4BOnz/rgxQoOw4VAVI4Rd/q6M7r5jBQQr5m4o
-         jCedCbW8tQeCprgoJ853+fmdAs71OOAdZsSs9g0z4tjOfJL13iIlUj/8FF18FKQfTk
-         9UBwp7RvZ4yAMm0cnVZdqpCuIQpgSW1BuGZhPoA6Aly0XWibc+oM7Owuzjv3iner0q
-         YcUtmWiqEmBOw==
-Date:   Fri, 26 Aug 2022 09:16:16 +0300
+        b=rFTshzAcm4WiW7FyYI+N3OS962g5eYDtI+wh3aasb+sv2dcnJ7y5LufQJNXuNP/3r
+         mUlGQ35SXTU/mNazDpo+8eBn7aKw0YinYX1VVbRihk4bZbO77DFe289A4jN/2peHKh
+         XF/lHQr46fZT2aRNsKw4heuVI+JhaL2kV6fdbTxVw7yi+iRO0nwzzhPlIdFukbR2+V
+         r8TRYTj3wt64S26a9bs9Zudflf6WeTY1XRrrbmB0fWYuHfCrPY7/gT6mvisBRZkOAu
+         WTRqMIJTObtSVg8YM6lGsTH82Ox+y6teK0AkpHkY7HapXpHMJSURROei6bE817FhFG
+         CZgMwSF6OTzOQ==
+Date:   Fri, 26 Aug 2022 09:17:41 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] security: move from strlcpy with unused retval to strscpy
-Message-ID: <YwhlMEYlNdevCPQU@kernel.org>
-References: <20220818210232.8707-1-wsa+renesas@sang-engineering.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 5.10 514/545] tpm: eventlog: Fix section mismatch for
+ DEBUG_SECTION_MISMATCH
+Message-ID: <YwhlhQYdgZdn63ii@kernel.org>
+References: <20220819153829.135562864@linuxfoundation.org>
+ <20220819153852.507832822@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818210232.8707-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220819153852.507832822@linuxfoundation.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,35 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:02:31PM +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Fri, Aug 19, 2022 at 05:44:44PM +0200, Greg Kroah-Hartman wrote:
+> From: Huacai Chen <chenhuacai@loongson.cn>
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> commit bed4593645366ad7362a3aa7bc0d100d8d8236a8 upstream.
+> 
+> If DEBUG_SECTION_MISMATCH enabled, __calc_tpm2_event_size() will not be
+> inlined, this cause section mismatch like this:
+> 
+> WARNING: modpost: vmlinux.o(.text.unlikely+0xe30c): Section mismatch in reference from the variable L0 to the function .init.text:early_ioremap()
+> The function L0() references
+> the function __init early_memremap().
+> This is often because L0 lacks a __init
+> annotation or the annotation of early_ioremap is wrong.
+> 
+> Fix it by using __always_inline instead of inline for the called-once
+> function __calc_tpm2_event_size().
+> 
+> Fixes: 44038bc514a2 ("tpm: Abstract crypto agile event size calculations")
+> Cc: stable@vger.kernel.org # v5.3
+> Reported-by: WANG Xuerui <git@xen0n.name>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
->  security/keys/request_key_auth.c | 2 +-
+>  include/linux/tpm_eventlog.h |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/security/keys/request_key_auth.c b/security/keys/request_key_auth.c
-> index 41e9735006d0..8f33cd170e42 100644
-> --- a/security/keys/request_key_auth.c
-> +++ b/security/keys/request_key_auth.c
-> @@ -178,7 +178,7 @@ struct key *request_key_auth_new(struct key *target, const char *op,
->  	if (!rka->callout_info)
->  		goto error_free_rka;
->  	rka->callout_len = callout_len;
-> -	strlcpy(rka->op, op, sizeof(rka->op));
-> +	strscpy(rka->op, op, sizeof(rka->op));
+> --- a/include/linux/tpm_eventlog.h
+> +++ b/include/linux/tpm_eventlog.h
+> @@ -157,7 +157,7 @@ struct tcg_algorithm_info {
+>   * Return: size of the event on success, 0 on failure
+>   */
 >  
->  	/* see if the calling process is already servicing the key request of
->  	 * another process */
-> -- 
-> 2.35.1
+> -static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+> +static __always_inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+>  					 struct tcg_pcr_event *event_header,
+>  					 bool do_mapping)
+>  {
 > 
+>
 
+Thank you. I'll pick this.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko

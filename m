@@ -2,153 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5705A2DBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCCF5A2DC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344937AbiHZRmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S244795AbiHZRnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344924AbiHZRmZ (ORCPT
+        with ESMTP id S237625AbiHZRnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:42:25 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB9FE2C64;
-        Fri, 26 Aug 2022 10:42:23 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo8730809pjd.3;
-        Fri, 26 Aug 2022 10:42:23 -0700 (PDT)
+        Fri, 26 Aug 2022 13:43:20 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D6CC3F42;
+        Fri, 26 Aug 2022 10:43:19 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id cu2so4545650ejb.0;
+        Fri, 26 Aug 2022 10:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=SVEAc9oaWwhvsLjCRpgqc3gUfUn0N+3jiLz9lf/QEE0=;
-        b=jrbTNnCOFn/3IiMbZtS5oHbXx/Z/L+v8WALSOxCOUFCaVYnGdV9w8k1AI0vjJxSdFj
-         m68cRNUVk7cXGOoGaIP5uKsvRlx/V+oTn4LYwkbbC2Vsam1+/SsFT2ctnqHANIgH4xBe
-         ixnCvpdXJBCfGSB6ZDZxPRe7d2Jm3RPuuxHJxO6VG8nkOLZJAnx/maXDun1H0eqaMxsp
-         ZmGCB6eFljZBXIJKnnHyZzPNycSW58BlELK4CyymZULNmfLr9F7zBO4Vejf32Hhl4huN
-         y61UnFf3o3uNOSXrrbMJqKHxLPzFFn6b308Q92LnMKRrInwqk3EytJ09j2ETLL2/DjcQ
-         D9Og==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=NCMaVbRVmfzCQC//soO0cPljODJ/kKcr4ft4UHsvOWE=;
+        b=D+cVRFCihGfyTm7tL9oaZiCCLpiQIndFkS1M1FgD8jGc4ETdJT4uBi13nLsMg+0mtf
+         t7VQWPmHl0lg28LNdO/hp9hpfAEZr811oIiGkGtZ2FDGwn9gHoS0XbmIYQD4uCrLjplC
+         2S04x1OTUcASEd6rOC6E99bfMvZ17psP8tM6OUEJCD80PJRNc/pXHHDWSu87nnS/5YuP
+         70S0j8Qg4NQeeCoAdF1h/PaB3MgKjrygTthllbUqxekQCVtpWH+mUjxFEqTkdT6WvuKE
+         EiK/ATHFS55nfSSBqlThOurRGU+3A4XlL4tzOXohJSrHYAMwV6Nm02MiciwiZt6EdYqp
+         FwdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=SVEAc9oaWwhvsLjCRpgqc3gUfUn0N+3jiLz9lf/QEE0=;
-        b=tI8rHVHu9Y0CK/04frz3LzWyn7/JGSExrpUzH+pBJA1bbeCBb3/mjZXo1xM6+m7v2g
-         EZEgP9lCxWu8yJFKRQffXOdBLsMe7aSHIEH9OH0V8xm2TDHtAj3AHJd28kEtkiMbB4ZZ
-         PURn7L26F6yRFnmdthmFRKY6UraNQoC238jFsTLmPrtNrgDJ0W32O7PCcN2nE2i0BB5M
-         KBHuxhnZ1JEU8Zsy7aekCuOoqvh9omIM5PgUnvsdLw9TAntJAcfVI5e6cWqScdvkN7go
-         9la15YyFgGTJ7LbCi9sJNeFomJSyeve4Z+J0QXZvhcO0NwnzTC8v5HfPsw1tYeGOwdTq
-         7v0Q==
-X-Gm-Message-State: ACgBeo2w+4pvown2/OId2EDDcLRHEGowDa4y1/60pgdmLxYFS1U+9GMA
-        83XMaNcacyYACSrt4Mo1UOrq50KvruixuNSkd/A=
-X-Google-Smtp-Source: AA6agR73VkI5nQg0Uq15XnxNDnwRXSDwjN4iilceZ2rCXSyc+ELTXRAfOfJ4O12Z1tONjm9l2NqVwPWAN5MiGrI9Ulc=
-X-Received: by 2002:a17:902:6b82:b0:16d:d268:3842 with SMTP id
- p2-20020a1709026b8200b0016dd2683842mr4673930plk.16.1661535742946; Fri, 26 Aug
- 2022 10:42:22 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=NCMaVbRVmfzCQC//soO0cPljODJ/kKcr4ft4UHsvOWE=;
+        b=eJZGuCfC55rsz0nPS3FPt1Un5uZpv1KZPMPUi252nm88K/xY41l7T9qp5ORBHgMvZm
+         7sIy2KVWj4PPm244OXSJlnV01oYofT7DmuEzrECP0DDb5Tx/am1crpm7otyUv2miZE5l
+         1bym2yt9geaXj69hzA+h0SJHqZq5vFIViGf482g9iOu2OMtEe64rgUxLQEtaByPXKt9M
+         Xt+NcZIhZeqgoBlzFKlHrtLZD9GMgrC0/ppYmtPwxRunOn3dotueFhOZngeyzCT2psSM
+         o6bA42o4HwBPYxVpnRx/YmTiA66OXqzDwF++rlcv5FlTytJPS+zTyXiJgTRtzUuQxE35
+         u6Aw==
+X-Gm-Message-State: ACgBeo0FLkA2/scSs0GGQMN7LeQzFHlB9QtEPn50QZ+Fq8qXJ8fTjNsq
+        h1UAXdZUnKm3LyW78807XcngQMeof5zFIL04NXU=
+X-Google-Smtp-Source: AA6agR7YT/Vzflbb/eQcVXHa6RXZd/+OntqiK6j/PVKq/tv/mkZb37gh+WaL4S3Dv28l0BcbSH4nIf4eX7sYx1y9WZQ=
+X-Received: by 2002:a17:907:970e:b0:731:4fb4:5f7b with SMTP id
+ jg14-20020a170907970e00b007314fb45f7bmr6045348ejc.556.1661535798494; Fri, 26
+ Aug 2022 10:43:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825221751.258958-1-james.hilliard1@gmail.com>
- <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com>
- <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com> <20220826171741.pdiqa4n4mls56bw3@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220826171741.pdiqa4n4mls56bw3@kafai-mbp.dhcp.thefacebook.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Fri, 26 Aug 2022 11:42:10 -0600
-Message-ID: <CADvTj4qg6R9udazmGFoFhn9pXN6HOqLGEsQOhCAELi1LxzoTmw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de> <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
+In-Reply-To: <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Fri, 26 Aug 2022 13:43:07 -0400
+Message-ID: <CAKf6xpsc9KRUKo5Z-kPqDcSCdpf9-tjf+ZdREnEiJUdHwyDQcA@mail.gmail.com>
+Subject: Re: [PATCH v7 05/10] tpm, tpm_tis: Only handle supported interrupts
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:17 AM Martin KaFai Lau <kafai@fb.com> wrote:
+On Wed, Jun 29, 2022 at 7:28 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wro=
+te:
+
+> @@ -1007,8 +1029,39 @@ int tpm_tis_core_init(struct device *dev, struct t=
+pm_tis_data *priv, int irq,
+>         if (rc < 0)
+>                 goto out_err;
 >
-> On Fri, Aug 26, 2022 at 12:13:54AM -0600, James Hilliard wrote:
-> > On Thu, Aug 25, 2022 at 11:49 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > >
-> > > On Thu, Aug 25, 2022 at 11:31:15PM -0600, James Hilliard wrote:
-> > > > On Thu, Aug 25, 2022 at 11:16 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > > >
-> > > > > On Thu, Aug 25, 2022 at 04:17:49PM -0600, James Hilliard wrote:
-> > > > > > There is a potential for us to hit a type conflict when including
-> > > > > > netinet/tcp.h with sys/socket.h, we can replace both of these includes
-> > > > > > with linux/tcp.h to avoid this conflict.
-> > > > > >
-> > > > > > Fixes errors like:
-> > > > > > In file included from /usr/include/netinet/tcp.h:91,
-> > > > > >                  from progs/bind4_prog.c:10:
-> > > > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-> > > > > >    34 | typedef __INT8_TYPE__ int8_t;
-> > > > > >       |                       ^~~~~~
-> > > > > > In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-> > > > > >                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-> > > > > >                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-> > > > > >                  from progs/bind4_prog.c:9:
-> > > > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-> > > > > >    24 | typedef __int8_t int8_t;
-> > > > > >       |                  ^~~~~~
-> > > > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
-> > > > > >    43 | typedef __INT64_TYPE__ int64_t;
-> > > > > >       |                        ^~~~~~~
-> > > > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
-> > > > > >    27 | typedef __int64_t int64_t;
-> > > > > >       |                   ^~~~~~~
-> > > > > > make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
-> > > > > >
-> > > > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > > > ---
-> > > > > >  tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
-> > > > > >  tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
-> > > > > >  2 files changed, 2 insertions(+), 4 deletions(-)
-> > > > > >
-> > > > > > diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > > > index 474c6a62078a..6bd20042fd53 100644
-> > > > > > --- a/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > > > +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > > > @@ -6,8 +6,7 @@
-> > > > > >  #include <linux/bpf.h>
-> > > > > >  #include <linux/in.h>
-> > > > > >  #include <linux/in6.h>
-> > > > > > -#include <sys/socket.h>
-> > > > > > -#include <netinet/tcp.h>
-> > > > > These includes look normal to me.  What environment is hitting this.
-> > > >
-> > > > I was hitting this error with GCC 13(GCC master branch).
-> > > These two includes (<sys/socket.h> and <netinet/tcp.h>) are normal,
-> > > so does it mean all existing programs need to change to use gcc 13 ?
-> >
-> > Well I think it's mostly just an issue getting hit with GCC-BPF as it
-> > looks to me like a cross compilation host/target header conflict.
-> The users have been using these headers in the bpf progs.
+> -       intmask |=3D TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_IN=
+T |
+> -                  TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+> +       /* Figure out the capabilities */
+> +       rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfc=
+aps);
+> +       if (rc < 0)
+> +               goto out_err;
+> +
+> +       dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+> +               intfcaps);
+> +       if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+> +               dev_dbg(dev, "\tBurst Count Static\n");
+> +       if (intfcaps & TPM_INTF_CMD_READY_INT) {
+> +               intmask |=3D TPM_INTF_CMD_READY_INT;
+> +               dev_dbg(dev, "\tCommand Ready Int Support\n");
+> +       }
+> +       if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+> +               dev_dbg(dev, "\tInterrupt Edge Falling\n");
+> +       if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+> +               dev_dbg(dev, "\tInterrupt Edge Rising\n");
+> +       if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+> +               dev_dbg(dev, "\tInterrupt Level Low\n");
+> +       if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+> +               dev_dbg(dev, "\tInterrupt Level High\n");
+> +       if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
 
-Users can migrate away from libc headers over time, migrating away
-shouldn't cause regressions and should improve reliability.
+Hi, you may already have fixed this, but I just saw:
 
-> The solution should be on the GCC-BPF side instead of changing
-> all bpf progs.
+error: this =E2=80=98if=E2=80=99 clause does not guard... [-Werror=3Dmislea=
+ding-indentation]
+ 1144 |         if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+      |         ^~
 
-I mean, GCC doesn't really control which libc is available, it seems to
-be a bad idea to use libc headers in general as they are developed
-separately from GCC and the kernel/libbpf.
+> +               intmask |=3D TPM_INTF_LOCALITY_CHANGE_INT;
+> +               dev_dbg(dev, "\tLocality Change Int Support\n");
 
-I'm not really sure how one would fix this on the GCC-BPF side without
-introducing more potential header conflicts.
+You need { } for the block.
+
+Regards,
+Jason

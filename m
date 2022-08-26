@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD595A274D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C4D5A27C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiHZMAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S1344048AbiHZMZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245496AbiHZMA0 (ORCPT
+        with ESMTP id S245432AbiHZMZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:00:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB723BFE
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:00:25 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id cu2so2797815ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc;
-        bh=MxGGd+3msz7Zn8awEDtaAUBprmyOYrYaH1QuR+N4/7o=;
-        b=Gpo7N7AFg7ypzz4ziWV5/xqGFn6VPSfepZxdPxvYxjBT44+e2TYfUynhvuN4bgXRS/
-         Y1lMBDwSuSvsL4hGB4NVY0v3EWF3sT7n/bwVeuIOO0ODHJdT0/abtE6mRH2DymksTXXO
-         r1ObcZJ+e7Ndu8lJcEp/bXAX2zEQ1GVh4vtmyJ2otqk5MeOeGigP0uXSnvUviUdyKMUb
-         9msUNjrYLw+GCjpRbA06oyQANC2DsCXnYbXtaRvOYkeCMk/UHYKt4JhjPsqcwksrWypU
-         p8o94YuVPtobGYa1F4jwdkuKvP6bhOSsOcBBEtFTo7INwdfxMTydzpLeyUkWamzDAgnB
-         0w8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=MxGGd+3msz7Zn8awEDtaAUBprmyOYrYaH1QuR+N4/7o=;
-        b=AuNabCvj97WT2kjGHECGKBRV5DZix7aAac2zJVyGR1AGB4uKIdJScjeyy2R75/JZ6d
-         YI+a6G6IDNnyKqvjT78j4HhuDMT0prJ4Jj8wAq+GYoQiiKauUrwKmw/B9iS+9ipRW/am
-         bpL9GTCI/+idDbunPIys6eF5intco6x+S01/JJsp4rjsWh/SCefvLxwtvJwa24AsOF4y
-         jytEncr5VBfXG3QwG+KLDCegaJoZ8aRutXOZzGyQKp45/oPv+Tc4AEbg9HRTEG+e1iDy
-         TO40hhxEJ5UY0KtBfBIB8VVeWgAdJZnsjn/GAo/XTPLcBgFbYe8jfX5f66/5XtnSZUXv
-         NgBg==
-X-Gm-Message-State: ACgBeo1xcSFLtl5x7hJvoQxXssdpSsyUJMSkYbN4Bua0m0VQDCUMRGcD
-        46Oqcb9T+efk0WFHSA2iViLf9Q4XPG7Etg==
-X-Google-Smtp-Source: AA6agR6pWzpqNgeu5nYDI5mFIoqg2F0SdV1dhlacTRMXfwMX4RTLBi/UMn/Zte3pGXH6yssBl9NJZA==
-X-Received: by 2002:a17:907:6d2a:b0:73d:9ba5:633a with SMTP id sa42-20020a1709076d2a00b0073d9ba5633amr5386524ejc.201.1661515223724;
-        Fri, 26 Aug 2022 05:00:23 -0700 (PDT)
-Received: from mutt (c-e429e555.07-21-73746f28.bbcust.telenor.se. [85.229.41.228])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05640234d400b00447c2c1b9a0sm1164957edc.91.2022.08.26.05.00.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 05:00:22 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 14:00:20 +0200
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        kvmarm@lists.cs.columbia.edu, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alex.bennee@linaro.org, arnd@arndb.de
-Subject: Re: [PATCH V2] arm64/mm: Fix __enable_mmu() for new TGRAN range
- values
-Message-ID: <20220826120020.GB520@mutt>
-References: <1615355590-21102-1-git-send-email-anshuman.khandual@arm.com>
+        Fri, 26 Aug 2022 08:25:28 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A3E2655B;
+        Fri, 26 Aug 2022 05:25:23 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 9CEDD188A411;
+        Fri, 26 Aug 2022 12:25:21 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 7296725032BA;
+        Fri, 26 Aug 2022 12:25:21 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 50A509EC00AD; Fri, 26 Aug 2022 11:45:51 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from wse-c0127.beijerelectronics.com (unknown [208.127.141.28])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 3836A9EC0008;
+        Fri, 26 Aug 2022 11:45:49 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v5 net-next 0/6] Extend locked port feature with FDB locked flag (MAC-Auth/MAB)
+Date:   Fri, 26 Aug 2022 13:45:32 +0200
+Message-Id: <20220826114538.705433-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1615355590-21102-1-git-send-email-anshuman.khandual@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,45 +73,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-03-10 11:23, Anshuman Khandual wrote:
-> From: James Morse <james.morse@arm.com>
-> 
-> As per ARM ARM DDI 0487G.a, when FEAT_LPA2 is implemented, ID_AA64MMFR0_EL1
-> might contain a range of values to describe supported translation granules
-> (4K and 16K pages sizes in particular) instead of just enabled or disabled
-> values. This changes __enable_mmu() function to handle complete acceptable
-> range of values (depending on whether the field is signed or unsigned) now
-> represented with ID_AA64MMFR0_TGRAN_SUPPORTED_[MIN..MAX] pair. While here,
-> also fix similar situations in EFI stub and KVM as well.
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: kvmarm@lists.cs.columbia.edu
-> Cc: linux-efi@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Acked-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+This patch set extends the locked port feature for devices
+that are behind a locked port, but do not have the ability to
+authorize themselves as a supplicant using IEEE 802.1X.
+Such devices can be printers, meters or anything related to
+fixed installations. Instead of 802.1X authorization, devices
+can get access based on their MAC addresses being whitelisted.
 
-Hi,
+For an authorization daemon to detect that a device is trying
+to get access through a locked port, the bridge will add the
+MAC address of the device to the FDB with a locked flag to it.
+Thus the authorization daemon can catch the FDB add event and
+check if the MAC address is in the whitelist and if so replace
+the FDB entry without the locked flag enabled, and thus open
+the port for the device.
 
-When building an arm64 defconfig kernel from stable/linux-5.10.y and
-booting that in QEMU (version: 1:7.0+dfsg-2~bpo11+2) with '-cpu max' the
-kernel doesn't boot. I don't get any output.  The kernel boots fine if I
-change to '-cpu cortex-a72'.
+This feature is known as MAC-Auth or MAC Authentication Bypass
+(MAB) in Cisco terminology, where the full MAB concept involves
+additional Cisco infrastructure for authorization. There is no
+real authentication process, as the MAC address of the device
+is the only input the authorization daemon, in the general
+case, has to base the decision if to unlock the port or not.
 
-If I cherry-pick this patch to stable/linux-5.10.y I'm able too boot the
-kernel with '-cpu max'.
+With this patch set, an implementation of the offloaded case is
+supplied for the mv88e6xxx driver. When a packet ingresses on
+a locked port, an ATU miss violation event will occur. When
+handling such ATU miss violation interrupts, the MAC address of
+the device is added to the FDB with a zero destination port
+vector (DPV) and the MAC address is communicated through the
+switchdev layer to the bridge, so that a FDB entry with the
+locked flag enabled can be added.
 
-However, I'm not comfortable to backport this patch to older kernels
-since there are a lot of conflicts.
-Can someone help out to do the packport?
+Log:
+        v3:     Added timers and lists in the driver (mv88e6xxx)
+                to keep track of and remove locked entries.
 
-Cheers,
-Anders
+        v4:     Leave out enforcing a limit to the number of
+                locked entries in the bridge.
+                Removed the timers in the driver and use the
+                worker only. Add locked FDB flag to all drivers
+                using port_fdb_add() from the dsa api and let
+                all drivers ignore entries with this flag set.
+                Change how to get the ageing timeout of locked
+                entries. See global1_atu.c and switchdev.c.
+                Use struct mv88e6xxx_port for locked entries
+                variables instead of struct dsa_port.
+
+	v5:	Added 'mab' flag to enable MAB/MacAuth feature,
+		in a similar way to the locked feature flag.
+
+		In these implementations for the mv88e6xxx, the
+		switchport must be configured with learning on.
+
+		To tell userspace about the behavior of the
+		locked entries in the driver, a 'blackhole'
+		FDB flag has been added, which locked FDB
+		entries coming from the driver gets. Also the
+		'sticky' flag comes with those locked entries,
+		as the drivers locked entries cannot roam.
+
+		Fixed issues with taking mutex locks, and added
+		a function to read the fid, that supports all
+		versions of the chipset family.
+		
+
+Hans Schultz (6):
+  net: bridge: add locked entry fdb flag to extend locked port feature
+  net: switchdev: add support for offloading of fdb locked flag
+  drivers: net: dsa: add locked fdb entry flag to drivers
+  net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+  net: dsa: mv88e6xxx: MacAuth/MAB implementation
+  selftests: forwarding: add test of MAC-Auth Bypass to locked port
+    tests
+
+ drivers/net/dsa/b53/b53_common.c              |   5 +
+ drivers/net/dsa/b53/b53_priv.h                |   1 +
+ drivers/net/dsa/hirschmann/hellcreek.c        |   5 +
+ drivers/net/dsa/lan9303-core.c                |   5 +
+ drivers/net/dsa/lantiq_gswip.c                |   5 +
+ drivers/net/dsa/microchip/ksz_common.c        |   5 +
+ drivers/net/dsa/mt7530.c                      |   5 +
+ drivers/net/dsa/mv88e6xxx/Makefile            |   1 +
+ drivers/net/dsa/mv88e6xxx/chip.c              |  81 ++++-
+ drivers/net/dsa/mv88e6xxx/chip.h              |  19 ++
+ drivers/net/dsa/mv88e6xxx/global1.h           |   1 +
+ drivers/net/dsa/mv88e6xxx/global1_atu.c       |  76 ++++-
+ drivers/net/dsa/mv88e6xxx/port.c              |  15 +-
+ drivers/net/dsa/mv88e6xxx/port.h              |   6 +
+ drivers/net/dsa/mv88e6xxx/switchdev.c         | 285 ++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h         |  37 +++
+ drivers/net/dsa/ocelot/felix.c                |   5 +
+ drivers/net/dsa/qca/qca8k-common.c            |   5 +
+ drivers/net/dsa/qca/qca8k.h                   |   1 +
+ drivers/net/dsa/sja1105/sja1105_main.c        |   7 +-
+ include/linux/if_bridge.h                     |   1 +
+ include/net/dsa.h                             |   1 +
+ include/net/switchdev.h                       |   3 +
+ include/uapi/linux/if_link.h                  |   1 +
+ include/uapi/linux/neighbour.h                |   4 +-
+ net/bridge/br.c                               |   5 +-
+ net/bridge/br_fdb.c                           |  43 ++-
+ net/bridge/br_input.c                         |  16 +-
+ net/bridge/br_netlink.c                       |   9 +-
+ net/bridge/br_private.h                       |   7 +-
+ net/bridge/br_switchdev.c                     |   5 +-
+ net/dsa/dsa_priv.h                            |   4 +-
+ net/dsa/port.c                                |   7 +-
+ net/dsa/slave.c                               |   4 +-
+ net/dsa/switch.c                              |  10 +-
+ .../net/forwarding/bridge_locked_port.sh      | 107 ++++++-
+ .../net/forwarding/bridge_sticky_fdb.sh       |  21 +-
+ 37 files changed, 768 insertions(+), 50 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
+
+-- 
+2.30.2
+

@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6A45A220B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3035D5A2209
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiHZHgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S242277AbiHZHgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiHZHgf (ORCPT
+        with ESMTP id S234424AbiHZHgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 03:36:35 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E502572B72
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:36:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E6C472ED9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:36:33 -0700 (PDT)
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxX+D6dwhjNj0KAA--.45610S3;
-        Fri, 26 Aug 2022 15:36:27 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxX+D6dwhjNj0KAA--.45610S4;
+        Fri, 26 Aug 2022 15:36:28 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
@@ -25,166 +25,69 @@ To:     Huacai Chen <chenhuacai@kernel.org>,
 Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn
-Subject: [PATCH v2 8/9] LoongArch/ftrace: Add HAVE_FUNCTION_GRAPH_RET_ADDR_PTR support
-Date:   Fri, 26 Aug 2022 15:36:25 +0800
-Message-Id: <20220826073626.1716-2-zhangqing@loongson.cn>
+Subject: [PATCH v2 9/9] LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
+Date:   Fri, 26 Aug 2022 15:36:26 +0800
+Message-Id: <20220826073626.1716-3-zhangqing@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220826073626.1716-1-zhangqing@loongson.cn>
 References: <20220826073626.1716-1-zhangqing@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxX+D6dwhjNj0KAA--.45610S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr43CF45Zr4xCr1fZr4ktFb_yoWrtF1xpF
-        9xAas5GrWxWF9agrnFqr1Uur4kGrnF9w1agFWDtryFkFsFqF17WrnFvryDXFWkt3ykWrWI
-        qas5GrZ0kF4UX3JanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBm14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4xMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUnCzuDUUUU
+X-CM-TRANSID: AQAAf8DxX+D6dwhjNj0KAA--.45610S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7JryrGFW5Gw1kGF15WF1Dtrb_yoWDGrb_Ja
+        13Ww1Uur48A397uF1xXw48W3yDA3WDZF1FyFnrJryxXa17Kr13GrWDJw1UC3WY9ayUWrW5
+        ZaykAasxCr18tjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbhkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
+        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUoRRiUUUUU=
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ftrace_graph_ret_addr can be called by stack unwinding code to convert
-a found stack return address ('ret') to its original value, in case the
-function graph tracer has modified it to be 'return_to_handler',If the
-hasn't been modified, the unchanged value of 'ret' is returned.
+Defaults enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS to convenient
+ftrace tests.
 
 Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 ---
- arch/loongarch/include/asm/ftrace.h     |  3 +++
- arch/loongarch/include/asm/unwind.h     |  1 +
- arch/loongarch/kernel/ftrace_dyn.c      |  2 +-
- arch/loongarch/kernel/unwind_guess.c    |  4 +++-
- arch/loongarch/kernel/unwind_prologue.c | 10 +++++++++-
- 5 files changed, 17 insertions(+), 3 deletions(-)
+ arch/loongarch/configs/loongson3_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
-index ce119496c6d0..0c306f42a512 100644
---- a/arch/loongarch/include/asm/ftrace.h
-+++ b/arch/loongarch/include/asm/ftrace.h
-@@ -10,6 +10,8 @@
- #define FTRACE_REGS_PLT_IDX	1
- #define NR_FTRACE_PLTS		2
- 
-+#define GRAPH_FAKE_OFFSET (sizeof(struct pt_regs) - offsetof(struct pt_regs, regs[1]))
-+
- #ifdef CONFIG_FUNCTION_TRACER
- #define MCOUNT_INSN_SIZE 4		/* sizeof mcount call */
- 
-@@ -20,6 +22,7 @@ extern void _mcount(void);
- #endif
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
-+#define HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
- static inline unsigned long ftrace_call_adjust(unsigned long addr)
- {
- 	return addr;
-diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-index 6af4718bdf01..f66b07c3e6a1 100644
---- a/arch/loongarch/include/asm/unwind.h
-+++ b/arch/loongarch/include/asm/unwind.h
-@@ -21,6 +21,7 @@ struct unwind_state {
- 	struct stack_info stack_info;
- 	struct task_struct *task;
- 	bool first, error;
-+	int graph_idx;
- 	unsigned long sp, pc, ra;
- };
- 
-diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-index dd37185d446e..b070ce225989 100644
---- a/arch/loongarch/kernel/ftrace_dyn.c
-+++ b/arch/loongarch/kernel/ftrace_dyn.c
-@@ -219,7 +219,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent)
- 
- 	old = *parent;
- 
--	if (!function_graph_enter(old, self_addr, 0, NULL))
-+	if (!function_graph_enter(old, self_addr, 0, parent))
- 		*parent = return_hooker;
- }
- 
-diff --git a/arch/loongarch/kernel/unwind_guess.c b/arch/loongarch/kernel/unwind_guess.c
-index 5afa6064d73e..229ba014cea0 100644
---- a/arch/loongarch/kernel/unwind_guess.c
-+++ b/arch/loongarch/kernel/unwind_guess.c
-@@ -2,6 +2,7 @@
- /*
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
-+#include <linux/ftrace.h>
- #include <linux/kernel.h>
- 
- #include <asm/unwind.h>
-@@ -53,7 +54,8 @@ bool unwind_next_frame(struct unwind_state *state)
- 		     state->sp < info->end;
- 		     state->sp += sizeof(unsigned long)) {
- 			addr = *(unsigned long *)(state->sp);
--
-+			state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+				addr, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 			if (__kernel_text_address(addr))
- 				return true;
- 		}
-diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-index b206d9159205..03f8b31a90cc 100644
---- a/arch/loongarch/kernel/unwind_prologue.c
-+++ b/arch/loongarch/kernel/unwind_prologue.c
-@@ -2,6 +2,7 @@
- /*
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
-+#include <linux/ftrace.h>
- #include <linux/kallsyms.h>
- 
- #include <asm/inst.h>
-@@ -32,6 +33,8 @@ static bool unwind_by_guess(struct unwind_state *state)
- 	     state->sp < info->end;
- 	     state->sp += sizeof(unsigned long)) {
- 		addr = *(unsigned long *)(state->sp);
-+		state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+			addr, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 		if (__kernel_text_address(addr))
- 			return true;
- 	}
-@@ -146,8 +149,11 @@ bool unwind_next_frame(struct unwind_state *state)
- 			break;
- 
- 		case UNWINDER_PROLOGUE:
--			if (unwind_by_prologue(state))
-+			if (unwind_by_prologue(state)) {
-+				state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+					state->pc, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 				return true;
-+			}
- 
- 			if (info->type == STACK_TYPE_IRQ &&
- 				info->end == state->sp) {
-@@ -159,6 +165,8 @@ bool unwind_next_frame(struct unwind_state *state)
- 
- 				state->pc = pc;
- 				state->sp = regs->regs[3];
-+				state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+					pc, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 				state->ra = regs->regs[1];
- 				state->first = true;
- 				get_stack_info(state->sp, state->task, info);
+diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
+index 3712552e18d3..cbc1ad4c704b 100644
+--- a/arch/loongarch/configs/loongson3_defconfig
++++ b/arch/loongarch/configs/loongson3_defconfig
+@@ -33,6 +33,7 @@ CONFIG_SYSFS_DEPRECATED=y
+ CONFIG_RELAY=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_EXPERT=y
++CONFIG_KALLSYMS_ALL=y
+ CONFIG_USERFAULTFD=y
+ CONFIG_PERF_EVENTS=y
+ # CONFIG_COMPAT_BRK is not set
+@@ -797,6 +798,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=m
+ CONFIG_PRINTK_TIME=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_SCHEDSTATS=y
+ # CONFIG_DEBUG_PREEMPT is not set
 -- 
 2.20.1
 

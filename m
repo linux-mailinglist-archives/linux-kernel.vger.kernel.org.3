@@ -2,118 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19505A2107
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E617B5A2109
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245068AbiHZGoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S244952AbiHZGol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238943AbiHZGoW (ORCPT
+        with ESMTP id S245071AbiHZGoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:44:22 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDF4D1260;
-        Thu, 25 Aug 2022 23:44:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id ds12-20020a17090b08cc00b001fae6343d9fso7213257pjb.0;
-        Thu, 25 Aug 2022 23:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uj3gozxe1gCyb2bIziJCE5C5mp6iXyEUe836YmXwevE=;
-        b=Q4tkonXYl+lbcTKYBVtnzj/5vghRdqtwkQnFr85jVRoA67R4lZi3AcMGvEKsYPK4zn
-         WAa7udtoVIK2N+mpSdHkwuPlzI7vy7319QYczCAbcP8T/fL90gsxatMNFNJBTQiH/luq
-         5fGRzPm9i6037skm8XlKRbOqhvs0V+F9O8LBl1focyUJjBUGo/aw3b7zqh4uIciIkr9P
-         fzHJ3+JR5juPHo2Og1TJlIxQX8qQGJjMjYx3twsmotPnJHIjsiqYLhFZVEc34LwEEEmJ
-         MibYrAC2MNveE2NxUYCR8aOpc/JurU1NQ8p6Oq/93qZdWYjkySW68Kwiy8KXRSoLwEbw
-         v5gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uj3gozxe1gCyb2bIziJCE5C5mp6iXyEUe836YmXwevE=;
-        b=vf78Ko4kCJ+Yib2KsFuuSANhe/QXZkaH43teNTfvOSZYzN4BSmMc9NFyKSHUEpndgp
-         XyP34CSxP+VDXdniHLVTRskFf2dWs4aRdLxMQsRJB78XjcbNmu6AsEZ/9QL8xWDtKjTS
-         yJs5EMgOUU5Dvcgl21MVpek4jhv1HUc4PjyD2N6nXL0DKU9g5tLzZh2nbqJeqEV7ygw9
-         pCLl8ZIIZIgmVJ/kwFyZWhroNbOHHgE63QAmWWZO+T4FS8nofE3RUxnWk7f5KUaC51nA
-         hZGVfGT5fRG3cNmsS+NjWTLqbUIorMAXfEfpRUvub6aB+06pxLQW46rnUGHo5eY59Wej
-         n+SQ==
-X-Gm-Message-State: ACgBeo1UflTyz25CpYfrVf6sazvUFYBMTG48J1hfFlmoDXBJ37+/zmCE
-        PJS45GOBdbRqX7lXUU6PGi0=
-X-Google-Smtp-Source: AA6agR55luo1gonaYM998/0zeKpNAOHtO1nUdPA4yxxPpmSW8t677Omq57Ht4ilqKXiORaycxxO1MQ==
-X-Received: by 2002:a17:902:f542:b0:173:4136:83cb with SMTP id h2-20020a170902f54200b00173413683cbmr2414665plf.4.1661496260795;
-        Thu, 25 Aug 2022 23:44:20 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id j17-20020a170903029100b00172ba718ed4sm717586plr.138.2022.08.25.23.44.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 23:44:18 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 23:44:18 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Erdem Aktas <erdemaktas@google.com>
-Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v8 020/103] KVM: TDX: create/destroy VM structure
-Message-ID: <20220826064418.GF2538772@ls.amr.corp.intel.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <810ce6dbd0330f06a80e05afa0a068b5f5b332f3.1659854790.git.isaku.yamahata@intel.com>
- <CAAYXXYzxDEG20jbasFB5yi1RmKCn+OOChfFiGjdfQGjzPze5Ug@mail.gmail.com>
+        Fri, 26 Aug 2022 02:44:38 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D347D1E20
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:44:35 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id RT4xoMkam09yuRT4xonQ8Y; Fri, 26 Aug 2022 08:44:32 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 26 Aug 2022 08:44:32 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <e5ac1c95-a6b9-5cd6-3f6d-1134677f4fcb@wanadoo.fr>
+Date:   Fri, 26 Aug 2022 08:44:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAYXXYzxDEG20jbasFB5yi1RmKCn+OOChfFiGjdfQGjzPze5Ug@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] spi: amd: Configure device speed
+Content-Language: en-US
+To:     shreeya.patel@collabora.com
+Cc:     alvaro.soliverez@collabora.com, broonie@kernel.org,
+        kernel@collabora.com, krisman@collabora.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        sanju.mehta@amd.com, tanureal@opensource.cirrus.com
+References: <20220825143132.253224-1-shreeya.patel@collabora.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220825143132.253224-1-shreeya.patel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 05:53:00PM -0700,
-Erdem Aktas <erdemaktas@google.com> wrote:
-
-> On Sun, Aug 7, 2022 at 3:03 PM <isaku.yamahata@intel.com> wrote:
-
-> > +static void tdx_clear_page(unsigned long page)
-> > +{
-> > +       const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> > +       unsigned long i;
-> > +
-> > +       /*
-> > +        * Zeroing the page is only necessary for systems with MKTME-i:
-> > +        * when re-assign one page from old keyid to a new keyid, MOVDIR64B is
-> > +        * required to clear/write the page with new keyid to prevent integrity
-> > +        * error when read on the page with new keyid.
-> > +        */
+Le 25/08/2022 à 16:31, Shreeya Patel a écrit :
+> From: Lucas Tanure <tanureal-yzvPICuk2AA4QjBA90+/kJqQE7yCjDx5@public.gmane.org>
 > 
-> Are we saying that we do not need to use MOVDIR64B to clear pages with Li?
-
-Yes. TDX module spec, Table 15.3: Checks on Memory Reads in Li mode says that
-read with shared HKID doesn't result in #MC.  Read of poisoned cache line is
-another story, though.
-
-
-> > +       if (!static_cpu_has(X86_FEATURE_MOVDIR64B))
-> > +               return;
-> > +
-> > +       for (i = 0; i < 4096; i += 64)
-> > +               /* MOVDIR64B [rdx], es:rdi */
-> > +               asm (".byte 0x66, 0x0f, 0x38, 0xf8, 0x3a"
-> > +                    : : "d" (zero_page), "D" (page + i) : "memory");
-> > +}
+> Number of clock frequencies are supported by AMD controller
+> which are mentioned in the amd_spi_freq structure table.
 > 
-> According to the Software Developer Manual, mfence is required for a
-> strong ordering on stores. Should we not use mfence here?
+> Create mechanism to configure device clock frequency such
+> that it is strictly less than the requested frequency.
+> 
+> Give priority to the device transfer speed and in case
+> it is not set then use the max clock speed supported
+> by the device.
+> 
+> Signed-off-by: Lucas Tanure <tanureal-yzvPICuk2AA4QjBA90+/kJqQE7yCjDx5@public.gmane.org>
+> Co-developed-by: Shreeya Patel <shreeya.patel-ZGY8ohtN/8qB+jHODAdFcQ@public.gmane.org>
+> Signed-off-by: Shreeya Patel <shreeya.patel-ZGY8ohtN/8qB+jHODAdFcQ@public.gmane.org>
+> ---
+> 
+> Changes in v3
+>    - Make changes as per the current code and resend.
+> 
+> Changes in v2
+>    - Improve the commit message.
+> 
+>   drivers/spi/spi-amd.c | 97 +++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 97 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+> index b3b3f5167c4c..264633c5ce0b 100644
+> --- a/drivers/spi/spi-amd.c
+> +++ b/drivers/spi/spi-amd.c
+> @@ -36,6 +36,18 @@
+>   #define AMD_SPI_FIFO_SIZE	70
+>   #define AMD_SPI_MEM_SIZE	200
+>   
+> +#define AMD_SPI_ENA_REG		0x20
+> +#define AMD_SPI_ALT_SPD_SHIFT	20
+> +#define AMD_SPI_ALT_SPD_MASK	GENMASK(23, AMD_SPI_ALT_SPD_SHIFT)
+> +#define AMD_SPI_SPI100_SHIFT	0
+> +#define AMD_SPI_SPI100_MASK	GENMASK(AMD_SPI_SPI100_SHIFT, AMD_SPI_SPI100_SHIFT)
+> +#define AMD_SPI_SPEED_REG	0x6C
+> +#define AMD_SPI_SPD7_SHIFT	8
+> +#define AMD_SPI_SPD7_MASK	GENMASK(13, AMD_SPI_SPD7_SHIFT)
+> +
+> +#define AMD_SPI_MAX_HZ		100000000
+> +#define AMD_SPI_MIN_HZ		800000
+> +
+>   /**
+>    * enum amd_spi_versions - SPI controller versions
+>    * @AMD_SPI_V1:		AMDI0061 hardware version
+> @@ -46,14 +58,41 @@ enum amd_spi_versions {
+>   	AMD_SPI_V2,
+>   };
+>   
+> +enum amd_spi_speed {
+> +	F_66_66MHz,
+> +	F_33_33MHz,
+> +	F_22_22MHz,
+> +	F_16_66MHz,
+> +	F_100MHz,
+> +	F_800KHz,
+> +	SPI_SPD7,
+> +	F_50MHz = 0x4,
+> +	F_4MHz = 0x32,
+> +	F_3_17MHz = 0x3F
+> +};
+> +
+> +/**
+> + * struct amd_spi_freq - Matches device speed with values to write in regs
+> + * @speed_hz: Device frequency
+> + * @enable_val: Value to be written to "enable register"
+> + * @spd7_val: Some frequencies requires to have a value written at SPISPEED register
+> + */
+> +struct amd_spi_freq {
+> +	u32 speed_hz;
+> +	u32 enable_val;
+> +	u32 spd7_val;
+> +};
+> +
+>   /**
+>    * struct amd_spi - SPI driver instance
+>    * @io_remap_addr:	Start address of the SPI controller registers
+>    * @version:		SPI controller hardware version
+> + * @speed_hz:		Device frequency
+>    */
+>   struct amd_spi {
+>   	void __iomem *io_remap_addr;
+>   	enum amd_spi_versions version;
+> +	unsigned int speed_hz;
+>   };
+>   
+>   static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
+> @@ -185,11 +224,62 @@ static int amd_spi_master_setup(struct spi_device *spi)
+>   	return 0;
+>   }
+>   
+> +static const struct amd_spi_freq amd_spi_freq[] = {
+> +	{ AMD_SPI_MAX_HZ,   F_100MHz,         0},
+> +	{       66660000, F_66_66MHz,         0},
+> +	{       50000000,   SPI_SPD7,   F_50MHz},
+> +	{       33330000, F_33_33MHz,         0},
+> +	{       22220000, F_22_22MHz,         0},
+> +	{       16660000, F_16_66MHz,         0},
+> +	{        4000000,   SPI_SPD7,    F_4MHz},
+> +	{        3170000,   SPI_SPD7, F_3_17MHz},
+> +	{ AMD_SPI_MIN_HZ,   F_800KHz,         0},
+> +};
+> +
 
-Right. I'll add __mb(). thanks for catching it.
+Hi,
+I'm not sure to understand the logic here:
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+> +static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
+> +{
+> +	unsigned int i, spd7_val, alt_spd;
+> +
+> +	if (speed_hz == amd_spi->speed_hz)
+> +		return 0;
+
+If we set a speed that is already the one in use --> return success
+
+> +
+> +	if (speed_hz < AMD_SPI_MIN_HZ)
+> +		return -EINVAL;
+
+If we request a speed below the lower possible --> return error.
+
+> +
+> +	for (i = 0; i < ARRAY_SIZE(amd_spi_freq); i++)
+> +		if (speed_hz >= amd_spi_freq[i].speed_hz)
+> +			break;
+
+Search the array for the speed that is just below or equal to the 
+requested one.
+
+> +
+> +	if (speed_hz == amd_spi_freq[i].speed_hz)
+> +		return 0;
+
+If it is an exact match --> return success
+???
+
+So, if the requested value is one of the table, nothing is done and it 
+can't be selected.
+
+Is it what is expected?
+Without looking at the rest of the code or at the driver, I don't see 
+the point of this test.
+
+
+Should this be:
+     if (amd_spi->speed_hz == amd_spi_freq[i].speed_hz)
+         ^^^^^^^^^
+?
+
+
+If so, the first 'if (speed_hz == amd_spi->speed_hz)' looks redundant. 
+(I guess it is a slow path, so should it be an optimization, it 
+should'nt really matter)
+
+CJ
+
+> +
+> +	amd_spi->speed_hz = amd_spi_freq[i].speed_hz;
+> +
+> +	alt_spd = (amd_spi_freq[i].enable_val << AMD_SPI_ALT_SPD_SHIFT)
+> +		   & AMD_SPI_ALT_SPD_MASK;
+> +	amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, alt_spd,
+> +			       AMD_SPI_ALT_SPD_MASK);
+> +
+> +	if (amd_spi->speed_hz == AMD_SPI_MAX_HZ)
+> +		amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, 1,
+> +				       AMD_SPI_SPI100_MASK);
+> +
+> +	if (amd_spi_freq[i].spd7_val) {
+> +		spd7_val = (amd_spi_freq[i].spd7_val << AMD_SPI_SPD7_SHIFT)
+> +			    & AMD_SPI_SPD7_MASK;
+> +		amd_spi_setclear_reg32(amd_spi, AMD_SPI_SPEED_REG, spd7_val,
+> +				       AMD_SPI_SPD7_MASK);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+>   				    struct spi_master *master,
+>   				    struct spi_message *message)
+>   {
+>   	struct spi_transfer *xfer = NULL;
+> +	struct spi_device *spi = message->spi;
+>   	u8 cmd_opcode = 0, fifo_pos = AMD_SPI_FIFO_BASE;
+>   	u8 *buf = NULL;
+>   	u32 i = 0;
+> @@ -197,6 +287,11 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+>   
+>   	list_for_each_entry(xfer, &message->transfers,
+>   			    transfer_list) {
+> +		if (xfer->speed_hz)
+> +			amd_set_spi_freq(amd_spi, xfer->speed_hz);
+> +		else
+> +			amd_set_spi_freq(amd_spi, spi->max_speed_hz);
+> +
+>   		if (xfer->tx_buf) {
+>   			buf = (u8 *)xfer->tx_buf;
+>   			if (!tx_len) {
+> @@ -313,6 +408,8 @@ static int amd_spi_probe(struct platform_device *pdev)
+>   	master->num_chipselect = 4;
+>   	master->mode_bits = 0;
+>   	master->flags = SPI_MASTER_HALF_DUPLEX;
+> +	master->max_speed_hz = AMD_SPI_MAX_HZ;
+> +	master->min_speed_hz = AMD_SPI_MIN_HZ;
+>   	master->setup = amd_spi_master_setup;
+>   	master->transfer_one_message = amd_spi_master_transfer;
+>   	master->max_transfer_size = amd_spi_max_transfer_size;
+

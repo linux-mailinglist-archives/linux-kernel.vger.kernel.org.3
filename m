@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7025A3021
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1EE5A3023
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344713AbiHZTmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S245684AbiHZTnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245076AbiHZTmv (ORCPT
+        with ESMTP id S234914AbiHZTn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:42:51 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B32D571A;
-        Fri, 26 Aug 2022 12:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=h0e8hrYZfBnA260sHoSevKRKR3k7440CqGW7FeAzwLU=; b=Ak+dlcgwpEInjYw9VkXGNh0etu
-        plTwstn1brCe1z2wG8gv5nNbIIZc7zXi9cS9AbsXa4y6FbcERoN0nYT+lKP4jJ+Q6kx2eVUHA1/nc
-        OYu1ZuPriJ2ozCOZnVQNhVnitCGaufhg+R7170uzOFB5WmwQ5m6GFDB2MLFg9vYsgYZ8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oRfDy-00Eibg-8n; Fri, 26 Aug 2022 21:42:38 +0200
-Date:   Fri, 26 Aug 2022 21:42:38 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Divya.Koppera@microchip.com
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next] net: phy: micrel: Adding SQI support for
- lan8814 phy
-Message-ID: <YwkiLoZkkl2cVcOT@lunn.ch>
-References: <20220825080549.9444-1-Divya.Koppera@microchip.com>
- <YwfvaSFejdtPtZgK@lunn.ch>
- <CO1PR11MB4771E1680E841F91411AE6DFE2759@CO1PR11MB4771.namprd11.prod.outlook.com>
+        Fri, 26 Aug 2022 15:43:29 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EC2D7407
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:43:28 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-f2a4c51c45so3318975fac.9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=eiyNYMtneNX7CSj+dgkUWXzOT8i/iivgh6eDQitYFyQ=;
+        b=kNWQVtnMNFKcBiOg8XFKYDmlecn6FgPvKsTG/8NhBXVPgwPIjD3+cHAL9nOrFFxuui
+         WunA93DNEoKDDRWx76/2bprt9m4LNwWe0rRLj5HQ7nyZ+M7ysud/5tpWDh1JGQ1PB8sB
+         OZSMlV+LJzJ+FNbv7mbg35xvzg3bmigZzxZyGD0crDMrUbsErvt/Rhw6gk7LRQp2+6Rc
+         EdOBZfCCaWO7awuSNgwy5pRZt0JGMNyCvc6iEDXW69qmXP3WCKIuWDdoB3yZ1zblEOLY
+         uRcxIx3dzEA+7uGOu1oqUI1CqhqCMA52aIVdA3RZ2jHBfyGvP6wjqPZStFaiaIISDxJw
+         1ELA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=eiyNYMtneNX7CSj+dgkUWXzOT8i/iivgh6eDQitYFyQ=;
+        b=tMAHsGxlUPn27tp74fDuV0/MmYEFy2eMv1P+ih6h0DC2zWEMyxxU0mZh/KPrX56cn7
+         Hq8Gx20JfjxFpct8eji/04eZkGKQe7WVWo/+wSJmlbVTwghp2MWjLh9kWQDjoSKjuDCN
+         ife7NaHsEsHdVOL1WVCd+C13qi7xWXo/1vFN2g+tAaBNBSIN6c63AXsr0MAXhkZryTu/
+         wTRGWaHcpR2xZglF0ap0JW2eW1gzp5bw6tFQtBzkl3eqdvDozienS/G2eb3WVMnDR39r
+         8boJxpdocVSE+k0CaLg58XEV2ueIBlUUyejvo+NRhoABLsiL1FqFl6hp2oOqfKn0cvmS
+         rbDw==
+X-Gm-Message-State: ACgBeo1anSV8003i+oxNZ/4xkzsMdq9lC3jRfMCl+t7EyeaFY8AP9jUq
+        4YP4oY0ZDaCQDJT95UuHTdXKvxWoV7C6zuhoEnG/lZ0HwEHE
+X-Google-Smtp-Source: AA6agR6bxYJFF6A/pP8yAsQodJdlc0C4MRgH2RcIfXjZXMBSHo5XyRUCCxxBOoyUVBzJB2L3uwLHSvjja0KSfJpqmak=
+X-Received: by 2002:a05:6870:7092:b0:11d:83fe:9193 with SMTP id
+ v18-20020a056870709200b0011d83fe9193mr2692218oae.41.1661543007805; Fri, 26
+ Aug 2022 12:43:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB4771E1680E841F91411AE6DFE2759@CO1PR11MB4771.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 26 Aug 2022 15:43:17 -0400
+Message-ID: <CAHC9VhTj1qHQ9gkrkay12AFv8rk8ttvaecP_NEBaSeN9xh2zEA@mail.gmail.com>
+Subject: [GIT PULL] Audit fixes for v6.0 (#2)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,54 +61,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > I just took a quick look at the datasheet. It says:
-> > 
-> 
-> I'm not sure the datasheet you looked into is the right one. Could you please crosscheck if its lan8814 or lan8841.
-> Lan8814 is quad port phy where register access are of extended page. Lan8841 is 1 port phy where register access are mmd access.
-> 
-> > All registers references in this section are in MMD Device Address 1
-> > 
-> > So you should be using phy_read_mmd(phydev, MDIO_MMD_PMAPMD,
-> > xxx) to read/write these registers. The datasheet i have however is missing
-> > the register map, so i've no idea if it is still 0xe6.
+Linus,
 
-https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/DS-LAN8814-00003592C.pdf
+Another small audit patch, this time to fix a bug where the return
+codes were not properly set before the audit filters were run,
+potentially resulting in missed audit records.  Please merge for v6.0.
 
-5.13.4 OPEN ALLIANCE TC1/TC12 DCQ SIGNAL QUALITY INDEX
+Thanks,
+-Paul
 
-Note: All registers references in this section are in MMD Device Address 1.
+--
+The following changes since commit ad982c3be4e60c7d39c03f782733503cbd88fd2a:
 
-This section defines the implementation of section 6.1.2 of the TC1
-and TC12 specifications. This mode builds upon the OPEN Alliance
-TC1/TC12 DCQ Mean Square Error method by mapping the MSE value onto a
-simple quality index. This mode is enabled by setting the sqi_enable
-bit, in the DCQ Configuration register.
+ audit: fix potential double free on error path from
+        fsnotify_add_inode_mark  (2022-08-22 18:50:06 -0400)
 
-The MSE value is compared to the thresholds set in the DCQ SQI Table
-Registers to provide an SQI value between 0 (worst value) and 7 (best
-value) as follows:
+are available in the Git repository at:
 
-In order to capture the SQI value, the DCQ Read Capture bit in the DCQ
-Configuration register needs to be written as a high with the desired
-cable pair specified in the DCQ Channel Number field of the same
-register. The DCQ Read Capture bit will immediately self-clear and the
-result will be available in the DCQ SQI register.  In addition to the
-current SQI, the worst case (lowest) SQI since the last read is
-available in the SQI Worst Case field.  The correlation between the
-SQI values stored in the DCQ SQI register and an according Signal to
-Noise Ratio (SNR) based on Additive White Gaussian (AWG) noise
-(bandwidth of 80 MHz @ 100 Mbps / 550 MHz @ 1000 Mbps) is shown in
-Table 5-5. The bit error rates to be expected in the case of white
-noise as interference signal is shown in the table as well for
-information purposes.
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+   tags/audit-pr-20220826
 
-I had a quick look at OPEN ALLIANCE specification. It seems to specify
-how each of these registers should look. It just failed to specify
-where in the address map they are. So if you look at drivers
-implementing SQI, you see most poke around in MDIO_MMD_VEND1.  I
-wounder if we can actually share the implementation between drivers,
-those that follow the standard, with some paramatirisation where the
-registers are.
+for you to fetch changes up to d4fefa4801a1c2f9c0c7a48fbb0fdf384e89a4ab:
 
-	  Andrew
+ audit: move audit_return_fixup before the filters
+   (2022-08-25 17:25:08 -0400)
+
+----------------------------------------------------------------
+audit/stable-6.0 PR 20220826
+
+----------------------------------------------------------------
+Richard Guy Briggs (1):
+     audit: move audit_return_fixup before the filters
+
+kernel/auditsc.c | 4 ++--
+1 file changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+paul-moore.com

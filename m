@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF665A2BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DD35A2BDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344030AbiHZQCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S243526AbiHZQCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344700AbiHZQBz (ORCPT
+        with ESMTP id S1344493AbiHZQCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:01:55 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8C7D3444;
-        Fri, 26 Aug 2022 09:01:54 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id h22so1582340qtu.2;
-        Fri, 26 Aug 2022 09:01:54 -0700 (PDT)
+        Fri, 26 Aug 2022 12:02:16 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979CDD34CC;
+        Fri, 26 Aug 2022 09:02:15 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id 199so1898419pfz.2;
+        Fri, 26 Aug 2022 09:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=n2+dMPy2K7fo8g/XVO6oLoG9YstnR6LpwprL/jGVfrg=;
-        b=Wznyr51DfwIlXTAcFFB7EU0/mOgECJ7qcyamDo8thQEMuIsm7dG4AzCfiwyf1kDSVr
-         W45soWcIZw5uvx4ruwLBX1JTyUnrjnn6Wjt5+anbIoSYBA17F/X2l1ks1Mx71eeJaxOx
-         AdvlgMeChdpiv2fp+Fwnbh1Kodl+Fct4zrabLUZ8X70bwQ5pUZ425N/0CQbu4RxArO3w
-         3sFY2xbAqDINyZ6zdQSoWSZ46EQ4/8AG19X/49veCp1V7qVYTbcC9oyX1GKWX7GMbHV8
-         Fl55JxKUAjLlU2E9ny7E0sW2lBD1N9eJuPpqmL+G3KCq0m6Dz4bYs95JvQxVHwEEqocF
-         q9CA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=4CHMpfodr+A683JL6hoWZB83QwyHqrKIPppn/xZbB0w=;
+        b=AA76Pp5S5oVg5MQorGulxTr60Q4GG6xkAInDgl2SBTq0Y3TVR4M885T9eE6iaw6K5Q
+         sSebgok4lxpfHRpH9z3X02c46fBe3C7f+iApBmD0gUcwbzIPGiWXYdpadbdLvXt7XoXy
+         R4OmhyE9NQtJjbCmG8Df1+tjZw2QC5+zZz0+tEjTzViLkjBFebrMzCs9D+vkyfvxiUyb
+         m7G1dKrPar6uHYBikKEP7kvJuoHTV8PDEW42NSFFsI6wTqF5sx0OasR+fdmn1gh9Tizq
+         jnRlpqzgmEdVrmX+LnsJsz6/9edEUjJUFDwAtCY+Uokcx6+XejOjTOIsSmaibTg79QNV
+         qmBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=n2+dMPy2K7fo8g/XVO6oLoG9YstnR6LpwprL/jGVfrg=;
-        b=ZOtdbMNOCYKMYEpmIzz3qg3c+0WcbEM1rJZueXXobteVr3LajYl/aHCNmGEbx0oGnS
-         0kMQ5YnkgUYd2nxHxZot4kHPuZ9nvaVnEwJD94KgnHAHHWxdHb6KRk0mKGx0rJL4Y8Rp
-         ojcXp+Jfm9KtewFPDKGfWSj/cuPhlK7xqyTI8KSjVTZjAgqP9oE1uyTsPsYp98vOQXtb
-         H7V5MoJPCBeXoV19hnT75BRmzakKEykVt2oMhKZbeTHQ1m5GK8ZmKmmokU+lCDiKOkDY
-         3c1Wj/PGMX7jQW6mOGa8b3IErubqLEURHSkKEuKyGBh9YE0Ld6mjUUhrdZoUYK7ITVSL
-         YnBg==
-X-Gm-Message-State: ACgBeo1y1a0/IqiTMmccUSbHdyhWJh3fD2pV3ZdPRhOPGuuWqNu+3b0V
-        yvICfDMsILIxU7YqLeoxA/fajsk0tbO03w6f7Muig68qeqM=
-X-Google-Smtp-Source: AA6agR7K74SWRACvY818br3dUrpwzySIZUk87d3KiMupGeottKKPN+aAyHONaSKkMse+j6LAhVoQ+mWf7MboAccgSMM=
-X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
- p17-20020a05622a049100b0034495bf8f05mr326066qtx.61.1661529713464; Fri, 26 Aug
- 2022 09:01:53 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=4CHMpfodr+A683JL6hoWZB83QwyHqrKIPppn/xZbB0w=;
+        b=htyeoZl2CLQh+TXNkcCWRFTNt9UdLaW6BLJ1JRHn5drfQBydqJbFGtj8XQZ0jRC8qn
+         mswQwGfXaalQCnO6TiNdUdIzaBuZtciqJtQI0KqzJePhwbA2wD59we+gWc0bpULVXzOR
+         Z9XSgNhdE3q/0sxcpPDyulWpQ+zuXpxA0b6ksLoGG1mMLo57GorK3fpaxAIVuRjZfHiz
+         gWhDlb8YOftceGOop9KzuWToZ2nJpM78/zSD/sUCf6p/i3VIkLb6kJlWMjysL1P2zeIS
+         jIUh8+aJ6lR+RAx2BOLsEvJK/Dg9BjfNY22ode41FFns6T34GaJ4N89Wh82LK5MBiTYX
+         bvWA==
+X-Gm-Message-State: ACgBeo17m5CzL3aRA6PsFDKcynWUwq/iKl1HZUk7mSu5ya7/UiVcJqlJ
+        Rr5Hze99dATTu2SnOsruHnemHu3fkhI=
+X-Google-Smtp-Source: AA6agR5LAmpNvBHmm316LUzRkH8Yd0kc5/4dY45ARuAUU5xWjkre45Gqls3bC5TfrLQ1cDP/1ZaCFA==
+X-Received: by 2002:a63:fe12:0:b0:42a:e57:7464 with SMTP id p18-20020a63fe12000000b0042a0e577464mr3772235pgh.552.1661529735028;
+        Fri, 26 Aug 2022 09:02:15 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.82])
+        by smtp.gmail.com with ESMTPSA id u1-20020a17090341c100b0016b81679c1fsm1796331ple.216.2022.08.26.09.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 09:02:14 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org, sfr@canb.auug.org.au, bagasdotme@gmail.com
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH net-next v2] docs/conf.py: add function attribute '__fix_address' to conf.py
+Date:   Sat, 27 Aug 2022 00:01:50 +0800
+Message-Id: <20220826160150.834639-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220826083612.1699194-1-floridsleeves@gmail.com>
-In-Reply-To: <20220826083612.1699194-1-floridsleeves@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 26 Aug 2022 19:01:17 +0300
-Message-ID: <CAHp75VcdqL4wYnhEi8LrxqJktA2uDzP3a6-08suJRghX=1UZsg@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers/tty/serial: check the return value of uart_port_check()
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,16 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:38 AM Li Zhong <floridsleeves@gmail.com> wrote:
->
-> uart_port_check() will return NULL pointer when state->uart_port is
-> NULL. Check the return value before dereference it to avoid
-> null-pointer-dereference error.
+From: Menglong Dong <imagedong@tencent.com>
 
-Have you taken the locking into consideration?
-If no, please do, if yes, expand your commit message to explain why
-the current locking scheme doesn't prevent an error from happening.
+Stephen Rothwell reported htmldocs warning when merging net-next:
 
+Documentation/networking/kapi:26: net/core/skbuff.c:780: WARNING: Error in declarator or parameters
+Invalid C declaration: Expecting "(" in parameters. [error at 19]
+  void __fix_address kfree_skb_reason (struct sk_buff *skb, enum skb_drop_reason reason)
+  -------------------^
+
+Add __fix_address keyword to c_id_attributes array in conf.py to fix
+the warning.
+
+Link: https://lore.kernel.org/linux-next/20220825154105.534d78ab@canb.auug.org.au/
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+v2:
+- optimize the commit log, as Bagas Sanjaya suggested.
+---
+ Documentation/conf.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 934727e23e0e..255384d094bf 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -86,6 +86,7 @@ if major >= 3:
+             "__used",
+             "__weak",
+             "noinline",
++            "__fix_address",
+ 
+             # include/linux/memblock.h:
+             "__init_memblock",
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.2
+

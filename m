@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CC15A21B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E8D5A21BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245250AbiHZHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
+        id S245263AbiHZHZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245018AbiHZHYh (ORCPT
+        with ESMTP id S245253AbiHZHZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:24:37 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0981AD2EB9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:24:37 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id u22so867701plq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:24:37 -0700 (PDT)
+        Fri, 26 Aug 2022 03:25:27 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6AB1B7A0;
+        Fri, 26 Aug 2022 00:25:25 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o4so840167pjp.4;
+        Fri, 26 Aug 2022 00:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=YlkUnf3+W4a/WjCpnPyFQgyVY7X5ih8bJPCrzi0qPuo=;
-        b=CIW0pGf/u/t99gjOXibOein6cCbSDOUW3AZ6CUaNlRXFkxOg/YJmkgdE6hqISHloQQ
-         BAfXaQ/4GGoDH5jUlfb2pB5gCRSePQBZ4jbH4v3djEPpbcgRzwtbVXrXzs6TkKuBxWzl
-         N71OqSLmZjNSjNbo+RusFj/7skLKORw8skk1kLDr850IX2oHuy3hPWmYpN5ZteSvfSFx
-         +QMgWbJMM1ZFYf8I6yvmsrAjvTqpDaIFTFfHtuXMf0S7mHiWMW9+lOwIGD4f9JRZ0RyP
-         +f9LjmSxQMmGKdAshFmwsq8ev5tZcXY36rr+b8f2rcqQ+KOyFatXJnwz5l+sUbKCuKYs
-         0KXg==
+        bh=RfyA8eZvryHNH4HN+Dlxrz30HGArxWXNdn8L24r2LTE=;
+        b=RA8iQ4VDgIFpZCF/gEPQGHfUhURzT/5vjRgMEh4MRTNfpUC69I1fJkUAlHvdyBwV+4
+         paIlRSovzAqMotSqrS3tBexmymggSbxkRo9kxA0QD8/G7jkkV/l+0/+0oVqQtozrR2vc
+         RS3jYpgfn3ZuTK0kJEjKbI3afrtJNcWsYkpRRQwgF6LjQozLcM/Dg33i2N88TXjHLqyY
+         aZRLVwxksOX0Ypxw0z2jkd+H4HeRfO1x8WUSyIMlthV1uZT7Ebm/1QlOf7iTZejJvLBT
+         XXk0kPnUGI9WdOA1+fEisQu2oi7wqQuxFstLtJg5xz8yeYZv2IbUYEmwkcsmJxS5yS1x
+         8MQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=YlkUnf3+W4a/WjCpnPyFQgyVY7X5ih8bJPCrzi0qPuo=;
-        b=HX9KqVpYVq4u4lEhzE22VGynZt5A/53WnqtjuiYzrqGsA34qNactlGurlmHRqrpMCr
-         6xtpVer6/sTVzbH+C5BlbIs71uFhUvI1gdUaZHlei3Cr61d6I5hSy4IqjDBEOJhmIVFG
-         14qDNW7A39Ey6zAKxqVpHUzQEYVx8KcjgJOmX79H/nbt5W23A/vZbV7jE9RavvggTvWv
-         kSQ2u0e7RqLohmMqSytgqPaHdLHoWyjl/fJLFBb+FqZLhzTe3/mfUUzVuABC2t8zPCqV
-         qGG0CDJbvyY7vDZNzceQHRtJMTdaALpuLgh0UbSU+mejj81JEgMFeGYhErRBJ6z5NvC7
-         LlqQ==
-X-Gm-Message-State: ACgBeo1sIw0PwhaxsOd/zFrgTvh0ZywlPKn6HAxJg3kTSJ7ATgj4GFNF
-        6W94BHkU7ZJJ+fgbVtPVQvE=
-X-Google-Smtp-Source: AA6agR5HyqBo0oZgQZZq5UC/wOzHLibv7ZVIrS6bRpCelNOCiG5Rg5WRYYINvIpRdM12ePAv0ZNXOQ==
-X-Received: by 2002:a17:90a:5988:b0:1fd:6a33:abf with SMTP id l8-20020a17090a598800b001fd6a330abfmr715935pji.69.1661498676588;
-        Fri, 26 Aug 2022 00:24:36 -0700 (PDT)
+        bh=RfyA8eZvryHNH4HN+Dlxrz30HGArxWXNdn8L24r2LTE=;
+        b=yJFTeVkhOjSIGuT4wGfDlNoSPZFkYk8CQddLIOGrh8bBnKZ6HAm/Ca4Ix22sfK4pja
+         ngdWUGa+CT37TjUMQcLFDCSACE6Ry2TreSSAYQC34Hl4Uc1km7l5bT8LWKFAeevdQD0c
+         WS6hNiwPIKUKJE6ckVP6SQ9EPt5EdimUQGQ6WHL5q8/ZHMPT3pDs3PJ6chGAsPP/QmAD
+         xHQuExu6fsWBYawhj5cUDi21o5L75uX2LUngBMDXu+yRpTIKykS4/m1KFMA3PYTUTlLd
+         TA/o2xqJlSKrz4QfiuPjp9WvlUcQBxqfacIs++FLfFZPeTUVr0weCiNHbES5ayVfWgKT
+         tgpA==
+X-Gm-Message-State: ACgBeo2wfMEhbJ6TvoXq7vdxcqCSY7pxZMzihG+Vfxs2z0E7+vrvl9LA
+        vLHInaKa/lrbJQfLcSXPofM=
+X-Google-Smtp-Source: AA6agR5+ym2go5XHX7sa8kb6KPUcxRMwrsMssaSyoU+DZowdmhq9FzDE+dSfgcvMAgZPkYf94appsg==
+X-Received: by 2002:a17:90a:d90c:b0:1fa:c99f:757d with SMTP id c12-20020a17090ad90c00b001fac99f757dmr3094773pjv.240.1661498724641;
+        Fri, 26 Aug 2022 00:25:24 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o186-20020a62cdc3000000b005289a50e4c2sm930463pfg.23.2022.08.26.00.24.33
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b00172b0272f1asm820229pls.51.2022.08.26.00.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 00:24:36 -0700 (PDT)
+        Fri, 26 Aug 2022 00:25:24 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, Hawking.Zhang@amd.com, Jack.Xiao@amd.com,
-        guchun.chen@amd.com, Prike.Liang@amd.com, ricetons@gmail.com,
-        Bokun.Zhang@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
+To:     martin.petersen@oracle.com
+Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, jejb@linux.ibm.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] drm/amdgpu: Remove the unneeded result variable
-Date:   Fri, 26 Aug 2022 07:23:57 +0000
-Message-Id: <20220826072357.252676-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] scsi: mpt3sas: Remove the unneeded result variable
+Date:   Fri, 26 Aug 2022 07:25:20 +0000
+Message-Id: <20220826072520.252845-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -76,32 +74,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Return the value sdma_v5_2_start() directly instead of storing it in
+Return the value _base_diag_reset() directly instead of storing it in
 another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c b/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c
-index 83c6ccaaa9e4..95689ef4be10 100644
---- a/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c
-+++ b/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c
-@@ -1413,12 +1413,9 @@ static int sdma_v5_2_sw_fini(void *handle)
- 
- static int sdma_v5_2_hw_init(void *handle)
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 565339a0811d..26f5897a5c7c 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -7170,7 +7170,6 @@ static int
+ _base_wait_for_iocstate(struct MPT3SAS_ADAPTER *ioc, int timeout)
  {
--	int r;
- 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
+ 	u32 ioc_state;
+-	int rc;
  
--	r = sdma_v5_2_start(adev);
--
--	return r;
-+	return sdma_v5_2_start(adev);
+ 	dinitprintk(ioc, ioc_info(ioc, "%s\n", __func__));
+ 
+@@ -7216,8 +7215,7 @@ _base_wait_for_iocstate(struct MPT3SAS_ADAPTER *ioc, int timeout)
+ 	}
+ 
+  issue_diag_reset:
+-	rc = _base_diag_reset(ioc);
+-	return rc;
++	return _base_diag_reset(ioc);
  }
  
- static int sdma_v5_2_hw_fini(void *handle)
+ /**
+@@ -7879,7 +7877,6 @@ int
+ mpt3sas_base_make_ioc_ready(struct MPT3SAS_ADAPTER *ioc, enum reset_type type)
+ {
+ 	u32 ioc_state;
+-	int rc;
+ 	int count;
+ 
+ 	dinitprintk(ioc, ioc_info(ioc, "%s\n", __func__));
+@@ -7948,8 +7945,7 @@ mpt3sas_base_make_ioc_ready(struct MPT3SAS_ADAPTER *ioc, enum reset_type type)
+ 	}
+ 
+  issue_diag_reset:
+-	rc = _base_diag_reset(ioc);
+-	return rc;
++	return _base_diag_reset(ioc);
+ }
+ 
+ /**
 -- 
 2.25.1

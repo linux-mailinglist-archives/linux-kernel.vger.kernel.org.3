@@ -2,252 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4945A3256
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1455A325E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbiHZXGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 19:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S1345486AbiHZXHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 19:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345190AbiHZXGv (ORCPT
+        with ESMTP id S1345469AbiHZXHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 19:06:51 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4039E9A82
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 16:06:49 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33d9f6f4656so47338767b3.21
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 16:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
-        bh=AErA6r+S0T2+MIHy6k4+EgHRpVoazsJhQoBwdMNs6OQ=;
-        b=rQ2yqilamgWFxD5OxWxgwRd3ZenVlKBZDKCtoZMBtHyXDycAdbTNWiEQHDPPndoANt
-         LwY9Mg1z2RiY3386JkyJR7WT7DpwsI4P+BZcka6KIByvHSOta6ou1A6gWtDUdzLPCOPF
-         SI6m5D9rOnOrAbDWL+zxlYC2x2uWNZYc8i3xwOZxKGmqUCcX6CYOwHjp2hxp3Nae2Kwu
-         GuWdgKVb0raU3DhmOwE4lzqZLulzNQU+XeaQgCIGpTQfXnNluBS5aclifoklvZHElqFX
-         vWBKb4w1xMXEYteERS9hJrB4eVnct4iR/Ggw7iQH7IxzAdMPnsLOgzxzouCOWlboIvTv
-         1o1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc;
-        bh=AErA6r+S0T2+MIHy6k4+EgHRpVoazsJhQoBwdMNs6OQ=;
-        b=KMQ+OK6mcycxqSjMrVi61RKATy8P/dURERVPhOr7CJvGMD3u7EalVZISOBlryONNcv
-         2tcBF9nRjXgJ6U0bZ5/+/xKxnOZwS5o8JlbMt6jmatjlbJCS8TIRFn2SFdCF08FieK4g
-         kIpLXVI4i9S5X/l1J5xFeW+/ICWa2rgGEWoAVzzRVSmx5CDqQaO4EbNBqDtwZ8bjgA0T
-         vcG8IcTRVrAB9vJin/C3xc1q0RKxPm78B8GcCgmqeLAw0We9e0rCHW+zWRY0S3tEN/zb
-         Orkmhu84Bld4L59832M4pdmoqYOZZAEFXA17E7d7F/h7ACd5JAmCEMJcSLUE4y7jxilI
-         ps6Q==
-X-Gm-Message-State: ACgBeo3dmZRpba4NcJ1naR8tz0WkrHsE+OReKYtAZ1DuTTlIDM5mJ2Cr
-        wd+OMBuTUlW7snnTDwLQvg1u2wTuOkAAdw==
-X-Google-Smtp-Source: AA6agR6q5EJP/GkNg/PNBka+3A3ihvPAbli2Ztt0HU+f7NUyjnHeTeAKy9bBjR/3gpFsR9Z44fIBCV6ivqlklQ==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a25:2493:0:b0:695:839:3a5a with SMTP id
- k141-20020a252493000000b0069508393a5amr1776831ybk.468.1661555208691; Fri, 26
- Aug 2022 16:06:48 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 23:06:42 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826230642.566725-1-shakeelb@google.com>
-Subject: [PATCH v2] mm: deduplicate cacheline padding code
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Michal Hocko <mhocko@kernel.org>, Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 Aug 2022 19:07:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C950EA15E;
+        Fri, 26 Aug 2022 16:06:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7704F1F9AA;
+        Fri, 26 Aug 2022 23:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661555217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z9A0c2a3LCJ9HJ4RB1nSEWfMe03bJHyDrZPgEaaTEYc=;
+        b=INqbeFj3w2PzH1oF+OZJpFIvoUFqm1RVyKKo5LXy/H0mMWfs+cr4E5Kb521FCR6ButT2HE
+        XoxSEZ3kRwmNKABcz3C/2+JUAng99Xo3RjdLJU+w6GNF1NeNcAw7GNGvW7GuON0kkIskNG
+        Y4QJTey76ikAMYV2mZo6Pd5ufPf+MV0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661555217;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z9A0c2a3LCJ9HJ4RB1nSEWfMe03bJHyDrZPgEaaTEYc=;
+        b=Ck47smO+LzO+yoZ5LmCawuaiW47mp3isxzMgPSMeB7m75ceiKfdcX0prCboyj5Vk3A6Xh+
+        iVioxUaSV5z+7kAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F05A013421;
+        Fri, 26 Aug 2022 23:06:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VZZiKg5SCWOhcAAAMHmgww
+        (envelope-from <neilb@suse.de>); Fri, 26 Aug 2022 23:06:54 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Daire Byrne" <daire@dneg.com>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>,
+        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
+In-reply-to: <CAHk-=wi_wwTxPTnFXsG8zdaem5YDnSd4OsCeP78yJgueQCb-1g@mail.gmail.com>
+References: <166147828344.25420.13834885828450967910.stgit@noble.brown>,
+ <166147984370.25420.13019217727422217511.stgit@noble.brown>,
+ <CAHk-=wi_wwTxPTnFXsG8zdaem5YDnSd4OsCeP78yJgueQCb-1g@mail.gmail.com>
+Date:   Sat, 27 Aug 2022 09:06:51 +1000
+Message-id: <166155521174.27490.456427475820966571@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are three users (mmzone.h, memcontrol.h, page_counter.h) using
-similar code for forcing cacheline padding between fields of different
-structures. Dedup that code.
+On Sat, 27 Aug 2022, Linus Torvalds wrote:
+> On Thu, Aug 25, 2022 at 7:16 PM NeilBrown <neilb@suse.de> wrote:
+> >
+> > If a filesystem supports parallel modification in directories, it sets
+> > FS_PAR_DIR_UPDATE on the file_system_type.  lookup_open() and the new
+> > lookup_hash_update() notice the flag and take a shared lock on the
+> > directory, and rely on a lock-bit in d_flags, much like parallel lookup
+> > relies on DCACHE_PAR_LOOKUP.
+>=20
+> Ugh.
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Suggested-by: Feng Tang <feng.tang@intel.com>
----
-Changes since v1:
-- add semicolons in mmzone.h
+Thanks :-) - no, really - thanks for the high-level review!
 
- include/linux/cache.h        | 13 +++++++++++++
- include/linux/memcontrol.h   | 13 ++-----------
- include/linux/mmzone.h       | 24 +++++-------------------
- include/linux/page_counter.h | 13 ++-----------
- 4 files changed, 22 insertions(+), 41 deletions(-)
+>=20
+> I absolutely believe in the DCACHE_PAR_LOOKUP model, and in "parallel
+> updates" being important, but I *despise* locking code like this
+>=20
+> +       if (wq && IS_PAR_UPDATE(dir))
+> +               inode_lock_shared_nested(dir, I_MUTEX_PARENT);
+> +       else
+> +               inode_lock_nested(dir, I_MUTEX_PARENT);
+>=20
+> and I really really hope there's some better model for this.
+>=20
+> That "wq" test in particular is just absolutely disgusting. So now it
+> doesn't just depend on whether the directory supports parallel
+> updates, now the caller can choose whether to do the parallel thing or
+> not, and that's how "create" is different from "rename".
 
-diff --git a/include/linux/cache.h b/include/linux/cache.h
-index d742c57eaee5..5da1bbd96154 100644
---- a/include/linux/cache.h
-+++ b/include/linux/cache.h
-@@ -85,4 +85,17 @@
- #define cache_line_size()	L1_CACHE_BYTES
- #endif
- 
-+/*
-+ * Helper to add padding within a struct to ensure data fall into separate
-+ * cachelines.
-+ */
-+#if defined(CONFIG_SMP)
-+struct cacheline_padding {
-+	char x[0];
-+} ____cacheline_internodealigned_in_smp;
-+#define CACHELINE_PADDING(name)		struct cacheline_padding name
-+#else
-+#define CACHELINE_PADDING(name)
-+#endif
-+
- #endif /* __LINUX_CACHE_H */
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 344022f102c2..60545e4a1c03 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -185,15 +185,6 @@ struct mem_cgroup_thresholds {
- 	struct mem_cgroup_threshold_ary *spare;
- };
- 
--#if defined(CONFIG_SMP)
--struct memcg_padding {
--	char x[0];
--} ____cacheline_internodealigned_in_smp;
--#define MEMCG_PADDING(name)      struct memcg_padding name
--#else
--#define MEMCG_PADDING(name)
--#endif
--
- /*
-  * Remember four most recent foreign writebacks with dirty pages in this
-  * cgroup.  Inode sharing is expected to be uncommon and, even if we miss
-@@ -304,7 +295,7 @@ struct mem_cgroup {
- 	spinlock_t		move_lock;
- 	unsigned long		move_lock_flags;
- 
--	MEMCG_PADDING(_pad1_);
-+	CACHELINE_PADDING(_pad1_);
- 
- 	/* memory.stat */
- 	struct memcg_vmstats	vmstats;
-@@ -326,7 +317,7 @@ struct mem_cgroup {
- 	struct list_head objcg_list;
- #endif
- 
--	MEMCG_PADDING(_pad2_);
-+	CACHELINE_PADDING(_pad2_);
- 
- 	/*
- 	 * set > 0 if pages under this cgroup are moving to other cgroup.
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 14919b2fb5f5..b30f5f0dd13f 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -121,20 +121,6 @@ static inline bool free_area_empty(struct free_area *area, int migratetype)
- 
- struct pglist_data;
- 
--/*
-- * Add a wild amount of padding here to ensure data fall into separate
-- * cachelines.  There are very few zone structures in the machine, so space
-- * consumption is not a concern here.
-- */
--#if defined(CONFIG_SMP)
--struct zone_padding {
--	char x[0];
--} ____cacheline_internodealigned_in_smp;
--#define ZONE_PADDING(name)	struct zone_padding name;
--#else
--#define ZONE_PADDING(name)
--#endif
--
- #ifdef CONFIG_NUMA
- enum numa_stat_item {
- 	NUMA_HIT,		/* allocated in intended node */
-@@ -837,7 +823,7 @@ struct zone {
- 	int initialized;
- 
- 	/* Write-intensive fields used from the page allocator */
--	ZONE_PADDING(_pad1_)
-+	CACHELINE_PADDING(_pad1_);
- 
- 	/* free areas of different sizes */
- 	struct free_area	free_area[MAX_ORDER];
-@@ -849,7 +835,7 @@ struct zone {
- 	spinlock_t		lock;
- 
- 	/* Write-intensive fields used by compaction and vmstats. */
--	ZONE_PADDING(_pad2_)
-+	CACHELINE_PADDING(_pad2_);
- 
- 	/*
- 	 * When free pages are below this point, additional steps are taken
-@@ -886,7 +872,7 @@ struct zone {
- 
- 	bool			contiguous;
- 
--	ZONE_PADDING(_pad3_)
-+	CACHELINE_PADDING(_pad3_);
- 	/* Zone statistics */
- 	atomic_long_t		vm_stat[NR_VM_ZONE_STAT_ITEMS];
- 	atomic_long_t		vm_numa_event[NR_VM_NUMA_EVENT_ITEMS];
-@@ -1194,7 +1180,7 @@ typedef struct pglist_data {
- #endif /* CONFIG_NUMA */
- 
- 	/* Write-intensive fields used by page reclaim */
--	ZONE_PADDING(_pad1_)
-+	CACHELINE_PADDING(_pad1_);
- 
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
- 	/*
-@@ -1239,7 +1225,7 @@ typedef struct pglist_data {
- 	struct lru_gen_mm_walk	mm_walk;
- #endif
- 
--	ZONE_PADDING(_pad2_)
-+	CACHELINE_PADDING(_pad2_);
- 
- 	/* Per-node vmstats */
- 	struct per_cpu_nodestat __percpu *per_cpu_nodestats;
-diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
-index 78a1c934e416..c141ea9a95ef 100644
---- a/include/linux/page_counter.h
-+++ b/include/linux/page_counter.h
-@@ -7,22 +7,13 @@
- #include <linux/kernel.h>
- #include <asm/page.h>
- 
--#if defined(CONFIG_SMP)
--struct pc_padding {
--	char x[0];
--} ____cacheline_internodealigned_in_smp;
--#define PC_PADDING(name)	struct pc_padding name
--#else
--#define PC_PADDING(name)
--#endif
--
- struct page_counter {
- 	/*
- 	 * Make sure 'usage' does not share cacheline with any other field. The
- 	 * memcg->memory.usage is a hot member of struct mem_cgroup.
- 	 */
- 	atomic_long_t usage;
--	PC_PADDING(_pad1_);
-+	CACHELINE_PADDING(_pad1_);
- 
- 	/* effective memory.min and memory.min usage tracking */
- 	unsigned long emin;
-@@ -38,7 +29,7 @@ struct page_counter {
- 	unsigned long failcnt;
- 
- 	/* Keep all the read most fields in a separete cacheline. */
--	PC_PADDING(_pad2_);
-+	CACHELINE_PADDING(_pad2_);
- 
- 	unsigned long min;
- 	unsigned long low;
--- 
-2.37.2.672.g94769d06f0-goog
+As you note, by the end of the series "create" is not more different
+from "rename" than it already is.  I only broke up the patches to make
+review more manageable.
 
+The "wq" can be removed.  There are two options.
+One is to change every kern_path_create() or user_path_create() caller
+to passed in a wq.  Then we can assume that a wq is always available.
+There are about a dozen of these calls, so not an enormous change, but
+one that I didn't want to think about just yet.  I could add a patch at
+the front of the series which did this.
+
+Alternate option is to never pass in a wq for create operation, and use
+var_waitqueue() (or something similar) to provide a global shared wait
+queue (which is essentially what I am using to wait for
+DCACHE_PAR_UPDATE to clear).
+The more I think about it, the more I think this is the best way
+forward.   Maybe we'll want to increase WAIT_TABLE_BITS ... I wonder how
+to measure how much contention there is on these shared queues.
+
+>=20
+> And that last difference is, I think, the one that makes me go "No. HELL NO=
+".
+>=20
+> Instead of it being up to the filesystem to say "I can do parallel
+> creates, but I need to serialize renames", this whole thing has been
+> set up to be about the caller making that decision.
+
+I think that is a misunderstanding.  The caller isn't making a decision
+- except the IS_PAR_UPDATE() test which is simply acting on the fs
+request.  What you are seeing is a misguided attempt to leave in place
+some existing interfaces which assumed exclusive locking and didn't
+provide wqs.
+
+>=20
+> That's just feels horribly horribly wrong.
+>=20
+> Yes, I realize that to you that's just a "later patches will do
+> renames", but what if it really is a filesystem issue where the
+> filesystem can easily handle new names, but needs something else for
+> renames because it has various cross-directory issues, perhaps?
+
+Obviously a filesystem can add its own locking - and they will have to,
+though at a finer grain that the VFS can do.
+
+
+>=20
+> So I feel this is fundamentally wrong, and this ugliness is a small
+> effect of that wrongness.
+>=20
+> I think we should strive for
+>=20
+>  (a) make that 'wq' and DCACHE_PAR_LOOKUP bit be unconditional
+
+Agreed (in an earlier version DCACHE_PAR_LOOKUP was optional, but I
+realised that you wouldn't like that :-)
+
+>=20
+>  (b) aim for the inode lock being taken *after* the _lookup_hash(),
+> since the VFS layer side has to be able to handle the concurrency on
+> the dcache side anyway
+
+I think you are suggesting that we change ->lookup call to NOT
+require i_rwsem be held.  That is not a small change.
+I agree that it makes sense in the long term.  Getting there ....  won't
+be a quick as I'd hoped.
+
+>=20
+>  (c) at that point, the serialization really ends up being about the
+> call into the filesystem, and aim to simply move the
+> inode_lock{_shared]_nested() into the filesystem so that there's no
+> need for a flag and related conditional locking at all.
+
+It might be nice to take a shared lock in VFS, and let the FS upgrade it
+to exclusive if needed, but we don't have upgrade_read() ...  maybe it
+would be deadlock-prone.
+
+>=20
+> Because right now I think the main reason we cannot move the lock into
+> the filesystem is literally that we've made the lock cover not just
+> the filesystem part, but the "lookup and create dentry" part too.
+>=20
+> But once you have that "DCACHE_PAR_LOOKUP" bit and the
+> d_alloc_parallel() logic to serialize a _particular_ dentry being
+> created (as opposed to serializing all the sleeping ops to that
+> directly), I really think we should strive to move the locking - that
+> no longer helps the VFS dcache layer - closer to the filesystem call
+> and eventually into it.
+>=20
+> Please? I think these patches are "mostly going in the right
+> direction", but at the same time I feel like there's some serious
+> mis-design going on.
+
+Hmmm....  I'll dig more deeply into ->lookup and see if I can understand
+the locking well enough to feel safe removing i_rwsem from it.
+
+Thanks,
+NeilBrown

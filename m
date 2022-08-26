@@ -2,142 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312A45A2D56
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5B5A2D50
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344443AbiHZRTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S1344654AbiHZRUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238718AbiHZRTm (ORCPT
+        with ESMTP id S244877AbiHZRUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:19:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C68D87F3;
-        Fri, 26 Aug 2022 10:19:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EF53B8320B;
-        Fri, 26 Aug 2022 17:19:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C497C433D6;
-        Fri, 26 Aug 2022 17:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661534379;
-        bh=vuEokndF506qRdyhDYmaWg4LZphgo/7UF9f2EnSu4xo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uRV4ZO47e1JugjRw4RVdrrpCHpR5bO4DvYgEkHIvcIjZ+lXuT1cBKl/AuPb6guZUs
-         QDU296S9F4xsGChwu2sswCDeANzItTmyiRPDt6L/ni7NfFynjd6RN0vlCwH3F/fc3f
-         Z7QIZ8FofXlaZRyedQNWiiJWSr7mo/69bslYAgkEK6/ZTwfbW5WEqidCS4+rh06SXl
-         uR6fLYO46w9SsnXWQkpOf/CXGbw+yUMdxsKsyu7+e2IoLr1PpifubP3Z7lS5cInr3b
-         lCgvHJstqBOvz0YgwjFkINWO/qDNOg0Bsi4POKI573SdJdMEwyHTJNhufBaI8tlffl
-         iZpkxUmjkk3jw==
-Message-ID: <3543250c8157c3e0e7e410b268121e4d7d3e9bc2.camel@kernel.org>
-Subject: Re: [PATCH v4 0/9] make statx() return DIO alignment information
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-Date:   Fri, 26 Aug 2022 13:19:37 -0400
-In-Reply-To: <20220722071228.146690-1-ebiggers@kernel.org>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Fri, 26 Aug 2022 13:20:15 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F5A564F4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:20:14 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sd33so4365500ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=It4+5CS+UNBeAwCRSjUort6xAl6L4rhn+tviYQlJwV4=;
+        b=bvVWbRsktC7uen3WmN2PR8rG2BVOvL443OYu0EBa6/QF6kvq+eoPJi12hOyXu1k5h9
+         WeXhFzxlOqfnkM1hvvIC3iy16tiosu1od8Wr8f1gSgK7zWcNTVRdhNeujpHzZWDPu+rU
+         aEJwvLB6HBpWriiIAr0rAJNsmgfaLDjBiRt94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=It4+5CS+UNBeAwCRSjUort6xAl6L4rhn+tviYQlJwV4=;
+        b=IyFgvs4njQ/NwNCgk6fshBMSlRZ1ul5fI387SZbqcP0BMDdn/X1S90XnTiIarDTmMJ
+         xnFlGB/75c+8EWNsUwIc39jHhldjhWUm24ula7fM6O+k0dvRbSYixJRm0DIU7kJWJCIW
+         r6T+ReYqYD9wHOVDN6Qej20/QJi+FUK9bdPooS05qMfaew40rhM6ZRJskQe8/Uk4mJoF
+         uLavXT24unAupfUmF5bt0Z9SUqEfnzC3PVLqPxhCWOIT2dO+MrAZ/T92COZ3WrtTxG0P
+         V5oUbZFF7bQZEmW0Eb2Mkklb4g1C+DopWSN+PA2N/hti3hrrwF+AsQB5uKnV81H7IzqV
+         VA7A==
+X-Gm-Message-State: ACgBeo1xsAmHn6g+WziNC93QjUJIYIVQIoF5GZEyflBngBW994G5XwkD
+        sXukvMeHKwYM8W3+/j+DbX2TYb+UrfgZvDbhnZw=
+X-Google-Smtp-Source: AA6agR5dGVUv4YYdmQhcTJZznRx8wltfxrtpesZ/D4ovz4TNE4N+1qrGFXogSvK0ruhBQhRBAvW7hQ==
+X-Received: by 2002:a17:907:e8b:b0:73d:9c6b:1804 with SMTP id ho11-20020a1709070e8b00b0073d9c6b1804mr6025333ejc.553.1661534412627;
+        Fri, 26 Aug 2022 10:20:12 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id kz18-20020a17090777d200b0073dbaeb50f6sm1086104ejc.169.2022.08.26.10.20.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 10:20:11 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id u5so2533025wrt.11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:20:10 -0700 (PDT)
+X-Received: by 2002:a5d:4052:0:b0:225:8b55:67fd with SMTP id
+ w18-20020a5d4052000000b002258b5567fdmr354955wrp.281.1661534410125; Fri, 26
+ Aug 2022 10:20:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+ <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjDeF2V7fiBEUUHHmUK8AZKq+b+=wwaMWbJ0WP+8GNvUw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjDeF2V7fiBEUUHHmUK8AZKq+b+=wwaMWbJ0WP+8GNvUw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 Aug 2022 10:19:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjdVsunbZNq39nv4dbcXiro3fzpt-v2TGV_nR0DUsUCLw@mail.gmail.com>
+Message-ID: <CAHk-=wjdVsunbZNq39nv4dbcXiro3fzpt-v2TGV_nR0DUsUCLw@mail.gmail.com>
+Subject: Re: [PATCH v3] wait_on_bit: add an acquire memory barrier
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-22 at 00:12 -0700, Eric Biggers wrote:
-> This patchset makes the statx() system call return direct I/O (DIO)
-> alignment information.  This allows userspace to easily determine
-> whether a file supports DIO, and if so with what alignment restrictions.
->=20
-> Patch 1 adds the basic VFS support for STATX_DIOALIGN.  Patch 2 wires it
-> up for all block device files.  The remaining patches wire it up for
-> regular files on ext4, f2fs, and xfs.  Support for regular files on
-> other filesystems can be added later.
->=20
-> I've also written a man-pages patch, which I'm sending separately.
->=20
-> Note, f2fs has one corner case where DIO reads are allowed but not DIO
-> writes.  The proposed statx fields can't represent this.  My proposal
-> (patch 6) is to just eliminate this case, as it seems much too weird.
-> But I'd appreciate any feedback on that part.
->=20
-> This patchset applies to v5.19-rc7.
->=20
-> Changed v3 =3D> v4:
->    - Added xfs support.
->=20
->    - Moved the helper function for block devices into block/bdev.c.
->   =20
->    - Adjusted the ext4 patch to not introduce a bug where misaligned DIO
->      starts being allowed on encrypted files when it gets combined with
->      the patch "iomap: add support for dma aligned direct-io" that is
->      queued in the block tree for 5.20.
->=20
->    - Made a simplification in fscrypt_dio_supported().
->=20
-> Changed v2 =3D> v3:
->    - Dropped the stx_offset_align_optimal field, since its purpose
->      wasn't clearly distinguished from the existing stx_blksize.
->=20
->    - Renamed STATX_IOALIGN to STATX_DIOALIGN, to reflect the new focus
->      on DIO only.
->=20
->    - Similarly, renamed stx_{mem,offset}_align_dio to
->      stx_dio_{mem,offset}_align, to reflect the new focus on DIO only.
->=20
->    - Wired up STATX_DIOALIGN on block device files.
->=20
-> Changed v1 =3D> v2:
->    - No changes.
->=20
-> Eric Biggers (9):
->   statx: add direct I/O alignment information
->   vfs: support STATX_DIOALIGN on block devices
->   fscrypt: change fscrypt_dio_supported() to prepare for STATX_DIOALIGN
->   ext4: support STATX_DIOALIGN
->   f2fs: move f2fs_force_buffered_io() into file.c
->   f2fs: don't allow DIO reads but not DIO writes
->   f2fs: simplify f2fs_force_buffered_io()
->   f2fs: support STATX_DIOALIGN
->   xfs: support STATX_DIOALIGN
->=20
->  block/bdev.c              | 25 ++++++++++++++++++++
->  fs/crypto/inline_crypt.c  | 49 +++++++++++++++++++--------------------
->  fs/ext4/ext4.h            |  1 +
->  fs/ext4/file.c            | 37 ++++++++++++++++++++---------
->  fs/ext4/inode.c           | 36 ++++++++++++++++++++++++++++
->  fs/f2fs/f2fs.h            | 45 -----------------------------------
->  fs/f2fs/file.c            | 45 ++++++++++++++++++++++++++++++++++-
->  fs/stat.c                 | 14 +++++++++++
->  fs/xfs/xfs_iops.c         |  9 +++++++
->  include/linux/blkdev.h    |  4 ++++
->  include/linux/fscrypt.h   |  7 ++----
->  include/linux/stat.h      |  2 ++
->  include/uapi/linux/stat.h |  4 +++-
->  13 files changed, 190 insertions(+), 88 deletions(-)
->=20
-> base-commit: ff6992735ade75aae3e35d16b17da1008d753d28
+On Fri, Aug 26, 2022 at 9:45 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So narrowing the load is fine (but you generally never want to narrow
+> a *store*, because that results in huge problems with subsequent wider
+> loads).
 
-Hi Eric,
+.. so making that statement made me go look around, and it's exactly
+what we use for clear_bit() on x86.
 
-Can I ask what your plans are with this set? I didn't see it in
-linux-next yet, so I wasn't sure when you were looking to get it merged.
-I'm working on patches to add a new statx field for the i_version
-counter as well and I want to make sure that our work doesn't collide.
+Which is actually ok too, because it's a locked operation, and at that
+point the whole "store buffer forwarding" issue pretty much goes out
+the window anyway.
 
-Thanks,
---=20
-Jeff Layton <jlayton@kernel.org>
+But because I looked at where the new test_bit_acquire() triggers and
+where there are other bitops around it, I found this beauty in
+fs/buffer.c: clean_bdev_aliases():
+
+                                if (!buffer_mapped(bh) ||
+(bh->b_blocknr < block))
+                                        goto next;
+                                if (bh->b_blocknr >= block + len)
+                                        break;
+                                clear_buffer_dirty(bh);
+                                wait_on_buffer(bh);
+                                clear_buffer_req(bh);
+
+where it basically works on four different bits (buffer_mapped, dirty,
+lock, req) right next to each other.
+
+That code sequence really doesn't matter, but it was interesting
+seeing the generated code. Not pretty, but the ugliest part was
+actually how the might_sleep() calls in those helper functions result
+in __cond_resched() when PREEMPT_VOLUNTARY is on, and how horrid that
+is for register allocation.
+
+And in bh_submit_read() we have another ugly thing:
+
+        mov    (%rdi),%rax
+        test   $0x4,%al
+        je     <bh_submit_read+0x7d>
+        push   %rbx
+        mov    %rdi,%rbx
+        testb  $0x1,(%rdi)
+
+where we have a mix of those two kinds of "test_bit()" (and test
+"testb" version most definitely looks better. But that's due to the
+source code being
+
+        BUG_ON(!buffer_locked(bh));
+        if (buffer_uptodate(bh)) {
+
+ie we have that *ancient* BUG_ON() messing things up. Oh well.
+
+None of the buffer-head code matters any more, bit it's certainly
+showing the effects of that patch of yours, and the code isn't pretty.
+
+But none of the ugliness I found was actually _due_ to your patch. It
+was all due to other things, and your patch just makes code generation
+better in the cases I looked at.
+
+             Linus

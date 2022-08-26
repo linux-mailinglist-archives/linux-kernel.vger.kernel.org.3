@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49045A31DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F1D5A31DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345273AbiHZWRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 18:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S1345215AbiHZWRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 18:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345128AbiHZWQI (ORCPT
+        with ESMTP id S1345214AbiHZWQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 18:16:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150C3DAA14;
-        Fri, 26 Aug 2022 15:16:04 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 22:16:01 -0000
+        Fri, 26 Aug 2022 18:16:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCFFDB059;
+        Fri, 26 Aug 2022 15:16:06 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 22:16:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661552162;
+        s=2020; t=1661552164;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AXoOW8v7mhouAZrJCldhsFRCTuo5CMDMndsH0A6tbvQ=;
-        b=xsk9ruLwbT4aOheSNzIhyiMTCG7Vb9uimXqTAZSBHEyLg9UMnzAgFqMh+72xnxMdPLvgio
-        ZFSZK7HMRoOrZB88IXfFN5PSvqAad+REVuKUc0dzZkpcteEY/UC6qSCzxn4IlWAb7uGlsr
-        MNhPukyRPDgmXPFQ0dqFIGbR6oB9AHYkGI2QOLFpB2XKsM9mhHQN9AY0llwiFgms9jI0UK
-        G6rHYsEGbbyuhFDZhMSCE78IJYP9UVMJQw6IkVaPPZyHSdSsjJxXNFRsoJrKwpq8PdWm3e
-        wRrBVUSd4+iTn8Qf9rr4qOp9c963o8QorhLqkY8by9WG0vKyq9g87nr1ciUOvA==
+        bh=/rRzX/sbne1RUALddC9ZAWXfpnQiCuaP0T042bQzezg=;
+        b=i/GfG0hzF5vV47IbcbbP/SDHWHOqcKbPVptqfR/d0M8jUMKT4363Uk8Ca4D9T5lF6bOZtC
+        YgB59oEpnJODd/mPZiK10L+0Cv3745jynl/UdAyRbMryMqAcO4adcKB3/1+aHTfpAAxN6Q
+        F4EtL4N1g2TDj20xo16vjurKTm6DrQ6HXDoivz4dD9T5t4E0JnnP93yhNPfkGgU2JQKsQB
+        0ABh4Dp0wJ13J8e0AXkdnUnRlcHO7kyRb6sqyT6hPMgfjAX8K3QbQLhYja9biH2PAv4NgQ
+        nPd2MrGWG6Pp1GGBSEIZiqkbQicFzxESi2VIEhVRf8YsVqBSKy0NOGG6pELZeA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661552162;
+        s=2020e; t=1661552164;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AXoOW8v7mhouAZrJCldhsFRCTuo5CMDMndsH0A6tbvQ=;
-        b=3jQxvI++dFUvFBs35XGXgzwJcrktQ6GPEXkqaOvYkfM3FMCjDZ1Bv8SlWErkg97fGlkSqz
-        C64nwsNRPVbg2KDw==
+        bh=/rRzX/sbne1RUALddC9ZAWXfpnQiCuaP0T042bQzezg=;
+        b=LFzgu1ZODLjRX9ePeXyRiRj4wLcAMSCs/UDEMAvMgXeLro4anHoGkjuj4ilh6tCgRcsXJF
+        WoFpZBkq846U3CDQ==
 From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86: Move branch classifier
+Subject: [tip: perf/core] perf/x86/amd/lbr: Add LbrExtV2 hardware branch
+ filter support
 Cc:     Sandipan Das <sandipan.das@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cbae5b95470d6bd49f40954bd379f414f5afcb965=2E16602?=
+In-Reply-To: =?utf-8?q?=3C9336af5c9785b8e14c62220fc0e6cfb10ab97de3=2E16602?=
  =?utf-8?q?11399=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3Cbae5b95470d6bd49f40954bd379f414f5afcb965=2E166021?=
+References: =?utf-8?q?=3C9336af5c9785b8e14c62220fc0e6cfb10ab97de3=2E166021?=
  =?utf-8?q?1399=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <166155216105.401.9798935988734229477.tip-bot2@tip-bot2>
+Message-ID: <166155216253.401.3296757431619664581.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,634 +70,239 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     4462fbfe6ec1bfe2196b977010f6ce7b43a32f2c
-Gitweb:        https://git.kernel.org/tip/4462fbfe6ec1bfe2196b977010f6ce7b43a32f2c
+Commit-ID:     f4f925dae7419fc7a10af539c073871927ce3a24
+Gitweb:        https://git.kernel.org/tip/f4f925dae7419fc7a10af539c073871927ce3a24
 Author:        Sandipan Das <sandipan.das@amd.com>
-AuthorDate:    Thu, 11 Aug 2022 17:59:56 +05:30
+AuthorDate:    Thu, 11 Aug 2022 17:59:55 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 27 Aug 2022 00:05:44 +02:00
+CommitterDate: Sat, 27 Aug 2022 00:05:43 +02:00
 
-perf/x86: Move branch classifier
+perf/x86/amd/lbr: Add LbrExtV2 hardware branch filter support
 
-Commit 3e702ff6d1ea ("perf/x86: Add LBR software filter support for Intel
-CPUs") introduces a software branch filter which complements the hardware
-branch filter and adds an x86 branch classifier.
+If AMD Last Branch Record Extension Version 2 (LbrExtV2) is detected,
+convert the requested branch filter (PERF_SAMPLE_BRANCH_* flags) to the
+corresponding hardware filter value and stash it in the event data when
+a branch stack is requested. The hardware filter value is also saved in
+per-CPU areas for use during event scheduling.
 
-Move the branch classifier to arch/x86/events/ so that it can be utilized
-by other vendors for branch record filtering.
+Hardware filtering is provided by the LBR Branch Select register. It has
+bits which when set, suppress recording of the following types of branches:
+
+  * CPL = 0 (Kernel only)
+  * CPL > 0 (Userspace only)
+  * Conditional Branches
+  * Near Relative Calls
+  * Near Indirect Calls
+  * Near Returns
+  * Near Indirect Jumps (excluding Near Indirect Calls and Near Returns)
+  * Near Relative Jumps (excluding Near Relative Calls)
+  * Far Branches
 
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/bae5b95470d6bd49f40954bd379f414f5afcb965.1660211399.git.sandipan.das@amd.com
+Link: https://lore.kernel.org/r/9336af5c9785b8e14c62220fc0e6cfb10ab97de3.1660211399.git.sandipan.das@amd.com
 ---
- arch/x86/events/Makefile     |   2 +-
- arch/x86/events/intel/lbr.c  | 273 +----------------------------------
- arch/x86/events/perf_event.h |  62 ++++++++-
- arch/x86/events/utils.c      | 216 +++++++++++++++++++++++++++-
- 4 files changed, 279 insertions(+), 274 deletions(-)
- create mode 100644 arch/x86/events/utils.c
+ arch/x86/events/amd/core.c | 21 +++++---
+ arch/x86/events/amd/lbr.c  | 94 ++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 108 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/events/Makefile b/arch/x86/events/Makefile
-index 9933c0e..86a76ef 100644
---- a/arch/x86/events/Makefile
-+++ b/arch/x86/events/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--obj-y					+= core.o probe.o
-+obj-y					+= core.o probe.o utils.o
- obj-$(CONFIG_PERF_EVENTS_INTEL_RAPL)	+= rapl.o
- obj-y					+= amd/
- obj-$(CONFIG_X86_LOCAL_APIC)            += msr.o
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 4f70fb6..7dffc0c 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -4,7 +4,6 @@
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index d799628..36bede1 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -542,16 +542,24 @@ static int amd_pmu_cpu_prepare(int cpu)
+ {
+ 	struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
  
- #include <asm/perf_event.h>
- #include <asm/msr.h>
--#include <asm/insn.h>
++	cpuc->lbr_sel = kzalloc_node(sizeof(struct er_account), GFP_KERNEL,
++				     cpu_to_node(cpu));
++	if (!cpuc->lbr_sel)
++		return -ENOMEM;
++
+ 	WARN_ON_ONCE(cpuc->amd_nb);
+ 
+ 	if (!x86_pmu.amd_nb_constraints)
+ 		return 0;
+ 
+ 	cpuc->amd_nb = amd_alloc_nb(cpu);
+-	if (!cpuc->amd_nb)
+-		return -ENOMEM;
++	if (cpuc->amd_nb)
++		return 0;
+ 
+-	return 0;
++	kfree(cpuc->lbr_sel);
++	cpuc->lbr_sel = NULL;
++
++	return -ENOMEM;
+ }
+ 
+ static void amd_pmu_cpu_starting(int cpu)
+@@ -589,13 +597,14 @@ static void amd_pmu_cpu_starting(int cpu)
+ 
+ static void amd_pmu_cpu_dead(int cpu)
+ {
+-	struct cpu_hw_events *cpuhw;
++	struct cpu_hw_events *cpuhw = &per_cpu(cpu_hw_events, cpu);
++
++	kfree(cpuhw->lbr_sel);
++	cpuhw->lbr_sel = NULL;
+ 
+ 	if (!x86_pmu.amd_nb_constraints)
+ 		return;
+ 
+-	cpuhw = &per_cpu(cpu_hw_events, cpu);
+-
+ 	if (cpuhw->amd_nb) {
+ 		struct amd_nb *nb = cpuhw->amd_nb;
+ 
+diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+index 1dea66f..bb79b43 100644
+--- a/arch/x86/events/amd/lbr.c
++++ b/arch/x86/events/amd/lbr.c
+@@ -4,6 +4,39 @@
  
  #include "../perf_event.h"
  
-@@ -66,65 +65,6 @@
- #define LBR_FROM_SIGNEXT_2MSB	(BIT_ULL(60) | BIT_ULL(59))
- 
- /*
-- * x86control flow change classification
-- * x86control flow changes include branches, interrupts, traps, faults
-- */
--enum {
--	X86_BR_NONE		= 0,      /* unknown */
--
--	X86_BR_USER		= 1 << 0, /* branch target is user */
--	X86_BR_KERNEL		= 1 << 1, /* branch target is kernel */
--
--	X86_BR_CALL		= 1 << 2, /* call */
--	X86_BR_RET		= 1 << 3, /* return */
--	X86_BR_SYSCALL		= 1 << 4, /* syscall */
--	X86_BR_SYSRET		= 1 << 5, /* syscall return */
--	X86_BR_INT		= 1 << 6, /* sw interrupt */
--	X86_BR_IRET		= 1 << 7, /* return from interrupt */
--	X86_BR_JCC		= 1 << 8, /* conditional */
--	X86_BR_JMP		= 1 << 9, /* jump */
--	X86_BR_IRQ		= 1 << 10,/* hw interrupt or trap or fault */
--	X86_BR_IND_CALL		= 1 << 11,/* indirect calls */
--	X86_BR_ABORT		= 1 << 12,/* transaction abort */
--	X86_BR_IN_TX		= 1 << 13,/* in transaction */
--	X86_BR_NO_TX		= 1 << 14,/* not in transaction */
--	X86_BR_ZERO_CALL	= 1 << 15,/* zero length call */
--	X86_BR_CALL_STACK	= 1 << 16,/* call stack */
--	X86_BR_IND_JMP		= 1 << 17,/* indirect jump */
--
--	X86_BR_TYPE_SAVE	= 1 << 18,/* indicate to save branch type */
--
--};
--
--#define X86_BR_PLM (X86_BR_USER | X86_BR_KERNEL)
--#define X86_BR_ANYTX (X86_BR_NO_TX | X86_BR_IN_TX)
--
--#define X86_BR_ANY       \
--	(X86_BR_CALL    |\
--	 X86_BR_RET     |\
--	 X86_BR_SYSCALL |\
--	 X86_BR_SYSRET  |\
--	 X86_BR_INT     |\
--	 X86_BR_IRET    |\
--	 X86_BR_JCC     |\
--	 X86_BR_JMP	 |\
--	 X86_BR_IRQ	 |\
--	 X86_BR_ABORT	 |\
--	 X86_BR_IND_CALL |\
--	 X86_BR_IND_JMP  |\
--	 X86_BR_ZERO_CALL)
--
--#define X86_BR_ALL (X86_BR_PLM | X86_BR_ANY)
--
--#define X86_BR_ANY_CALL		 \
--	(X86_BR_CALL		|\
--	 X86_BR_IND_CALL	|\
--	 X86_BR_ZERO_CALL	|\
--	 X86_BR_SYSCALL		|\
--	 X86_BR_IRQ		|\
--	 X86_BR_INT)
--
--/*
-  * Intel LBR_CTL bits
-  *
-  * Hardware branch filter for Arch LBR
-@@ -1143,219 +1083,6 @@ int intel_pmu_setup_lbr_filter(struct perf_event *event)
- 	return ret;
- }
- 
--/*
-- * return the type of control flow change at address "from"
-- * instruction is not necessarily a branch (in case of interrupt).
-- *
-- * The branch type returned also includes the priv level of the
-- * target of the control flow change (X86_BR_USER, X86_BR_KERNEL).
-- *
-- * If a branch type is unknown OR the instruction cannot be
-- * decoded (e.g., text page not present), then X86_BR_NONE is
-- * returned.
-- */
--static int branch_type(unsigned long from, unsigned long to, int abort)
--{
--	struct insn insn;
--	void *addr;
--	int bytes_read, bytes_left;
--	int ret = X86_BR_NONE;
--	int ext, to_plm, from_plm;
--	u8 buf[MAX_INSN_SIZE];
--	int is64 = 0;
--
--	to_plm = kernel_ip(to) ? X86_BR_KERNEL : X86_BR_USER;
--	from_plm = kernel_ip(from) ? X86_BR_KERNEL : X86_BR_USER;
--
--	/*
--	 * maybe zero if lbr did not fill up after a reset by the time
--	 * we get a PMU interrupt
--	 */
--	if (from == 0 || to == 0)
--		return X86_BR_NONE;
--
--	if (abort)
--		return X86_BR_ABORT | to_plm;
--
--	if (from_plm == X86_BR_USER) {
--		/*
--		 * can happen if measuring at the user level only
--		 * and we interrupt in a kernel thread, e.g., idle.
--		 */
--		if (!current->mm)
--			return X86_BR_NONE;
--
--		/* may fail if text not present */
--		bytes_left = copy_from_user_nmi(buf, (void __user *)from,
--						MAX_INSN_SIZE);
--		bytes_read = MAX_INSN_SIZE - bytes_left;
--		if (!bytes_read)
--			return X86_BR_NONE;
--
--		addr = buf;
--	} else {
--		/*
--		 * The LBR logs any address in the IP, even if the IP just
--		 * faulted. This means userspace can control the from address.
--		 * Ensure we don't blindly read any address by validating it is
--		 * a known text address.
--		 */
--		if (kernel_text_address(from)) {
--			addr = (void *)from;
--			/*
--			 * Assume we can get the maximum possible size
--			 * when grabbing kernel data.  This is not
--			 * _strictly_ true since we could possibly be
--			 * executing up next to a memory hole, but
--			 * it is very unlikely to be a problem.
--			 */
--			bytes_read = MAX_INSN_SIZE;
--		} else {
--			return X86_BR_NONE;
--		}
--	}
--
--	/*
--	 * decoder needs to know the ABI especially
--	 * on 64-bit systems running 32-bit apps
--	 */
--#ifdef CONFIG_X86_64
--	is64 = kernel_ip((unsigned long)addr) || any_64bit_mode(current_pt_regs());
--#endif
--	insn_init(&insn, addr, bytes_read, is64);
--	if (insn_get_opcode(&insn))
--		return X86_BR_ABORT;
--
--	switch (insn.opcode.bytes[0]) {
--	case 0xf:
--		switch (insn.opcode.bytes[1]) {
--		case 0x05: /* syscall */
--		case 0x34: /* sysenter */
--			ret = X86_BR_SYSCALL;
--			break;
--		case 0x07: /* sysret */
--		case 0x35: /* sysexit */
--			ret = X86_BR_SYSRET;
--			break;
--		case 0x80 ... 0x8f: /* conditional */
--			ret = X86_BR_JCC;
--			break;
--		default:
--			ret = X86_BR_NONE;
--		}
--		break;
--	case 0x70 ... 0x7f: /* conditional */
--		ret = X86_BR_JCC;
--		break;
--	case 0xc2: /* near ret */
--	case 0xc3: /* near ret */
--	case 0xca: /* far ret */
--	case 0xcb: /* far ret */
--		ret = X86_BR_RET;
--		break;
--	case 0xcf: /* iret */
--		ret = X86_BR_IRET;
--		break;
--	case 0xcc ... 0xce: /* int */
--		ret = X86_BR_INT;
--		break;
--	case 0xe8: /* call near rel */
--		if (insn_get_immediate(&insn) || insn.immediate1.value == 0) {
--			/* zero length call */
--			ret = X86_BR_ZERO_CALL;
--			break;
--		}
--		fallthrough;
--	case 0x9a: /* call far absolute */
--		ret = X86_BR_CALL;
--		break;
--	case 0xe0 ... 0xe3: /* loop jmp */
--		ret = X86_BR_JCC;
--		break;
--	case 0xe9 ... 0xeb: /* jmp */
--		ret = X86_BR_JMP;
--		break;
--	case 0xff: /* call near absolute, call far absolute ind */
--		if (insn_get_modrm(&insn))
--			return X86_BR_ABORT;
--
--		ext = (insn.modrm.bytes[0] >> 3) & 0x7;
--		switch (ext) {
--		case 2: /* near ind call */
--		case 3: /* far ind call */
--			ret = X86_BR_IND_CALL;
--			break;
--		case 4:
--		case 5:
--			ret = X86_BR_IND_JMP;
--			break;
--		}
--		break;
--	default:
--		ret = X86_BR_NONE;
--	}
--	/*
--	 * interrupts, traps, faults (and thus ring transition) may
--	 * occur on any instructions. Thus, to classify them correctly,
--	 * we need to first look at the from and to priv levels. If they
--	 * are different and to is in the kernel, then it indicates
--	 * a ring transition. If the from instruction is not a ring
--	 * transition instr (syscall, systenter, int), then it means
--	 * it was a irq, trap or fault.
--	 *
--	 * we have no way of detecting kernel to kernel faults.
--	 */
--	if (from_plm == X86_BR_USER && to_plm == X86_BR_KERNEL
--	    && ret != X86_BR_SYSCALL && ret != X86_BR_INT)
--		ret = X86_BR_IRQ;
--
--	/*
--	 * branch priv level determined by target as
--	 * is done by HW when LBR_SELECT is implemented
--	 */
--	if (ret != X86_BR_NONE)
--		ret |= to_plm;
--
--	return ret;
--}
--
--#define X86_BR_TYPE_MAP_MAX	16
--
--static int branch_map[X86_BR_TYPE_MAP_MAX] = {
--	PERF_BR_CALL,		/* X86_BR_CALL */
--	PERF_BR_RET,		/* X86_BR_RET */
--	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
--	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
--	PERF_BR_UNKNOWN,	/* X86_BR_INT */
--	PERF_BR_ERET,		/* X86_BR_IRET */
--	PERF_BR_COND,		/* X86_BR_JCC */
--	PERF_BR_UNCOND,		/* X86_BR_JMP */
--	PERF_BR_IRQ,		/* X86_BR_IRQ */
--	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
--	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
--	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
--	PERF_BR_UNKNOWN,	/* X86_BR_NO_TX */
--	PERF_BR_CALL,		/* X86_BR_ZERO_CALL */
--	PERF_BR_UNKNOWN,	/* X86_BR_CALL_STACK */
--	PERF_BR_IND,		/* X86_BR_IND_JMP */
--};
--
--static int
--common_branch_type(int type)
--{
--	int i;
--
--	type >>= 2; /* skip X86_BR_USER and X86_BR_KERNEL */
--
--	if (type) {
--		i = __ffs(type);
--		if (i < X86_BR_TYPE_MAP_MAX)
--			return branch_map[i];
--	}
--
--	return PERF_BR_UNKNOWN;
--}
--
- enum {
- 	ARCH_LBR_BR_TYPE_JCC			= 0,
- 	ARCH_LBR_BR_TYPE_NEAR_IND_JMP		= 1,
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index e893041..2de9cd6 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1210,6 +1210,68 @@ static inline void set_linear_ip(struct pt_regs *regs, unsigned long ip)
- 	regs->ip = ip;
- }
- 
-+/*
-+ * x86control flow change classification
-+ * x86control flow changes include branches, interrupts, traps, faults
-+ */
-+enum {
-+	X86_BR_NONE		= 0,      /* unknown */
-+
-+	X86_BR_USER		= 1 << 0, /* branch target is user */
-+	X86_BR_KERNEL		= 1 << 1, /* branch target is kernel */
-+
-+	X86_BR_CALL		= 1 << 2, /* call */
-+	X86_BR_RET		= 1 << 3, /* return */
-+	X86_BR_SYSCALL		= 1 << 4, /* syscall */
-+	X86_BR_SYSRET		= 1 << 5, /* syscall return */
-+	X86_BR_INT		= 1 << 6, /* sw interrupt */
-+	X86_BR_IRET		= 1 << 7, /* return from interrupt */
-+	X86_BR_JCC		= 1 << 8, /* conditional */
-+	X86_BR_JMP		= 1 << 9, /* jump */
-+	X86_BR_IRQ		= 1 << 10,/* hw interrupt or trap or fault */
-+	X86_BR_IND_CALL		= 1 << 11,/* indirect calls */
-+	X86_BR_ABORT		= 1 << 12,/* transaction abort */
-+	X86_BR_IN_TX		= 1 << 13,/* in transaction */
-+	X86_BR_NO_TX		= 1 << 14,/* not in transaction */
-+	X86_BR_ZERO_CALL	= 1 << 15,/* zero length call */
-+	X86_BR_CALL_STACK	= 1 << 16,/* call stack */
-+	X86_BR_IND_JMP		= 1 << 17,/* indirect jump */
-+
-+	X86_BR_TYPE_SAVE	= 1 << 18,/* indicate to save branch type */
-+
-+};
-+
-+#define X86_BR_PLM (X86_BR_USER | X86_BR_KERNEL)
-+#define X86_BR_ANYTX (X86_BR_NO_TX | X86_BR_IN_TX)
-+
-+#define X86_BR_ANY       \
-+	(X86_BR_CALL    |\
-+	 X86_BR_RET     |\
-+	 X86_BR_SYSCALL |\
-+	 X86_BR_SYSRET  |\
-+	 X86_BR_INT     |\
-+	 X86_BR_IRET    |\
-+	 X86_BR_JCC     |\
-+	 X86_BR_JMP	 |\
-+	 X86_BR_IRQ	 |\
-+	 X86_BR_ABORT	 |\
-+	 X86_BR_IND_CALL |\
-+	 X86_BR_IND_JMP  |\
-+	 X86_BR_ZERO_CALL)
-+
-+#define X86_BR_ALL (X86_BR_PLM | X86_BR_ANY)
-+
-+#define X86_BR_ANY_CALL		 \
-+	(X86_BR_CALL		|\
-+	 X86_BR_IND_CALL	|\
-+	 X86_BR_ZERO_CALL	|\
-+	 X86_BR_SYSCALL		|\
-+	 X86_BR_IRQ		|\
-+	 X86_BR_INT)
-+
-+int common_branch_type(int type);
-+int branch_type(unsigned long from, unsigned long to, int abort);
-+
- ssize_t x86_event_sysfs_show(char *page, u64 config, u64 event);
- ssize_t intel_event_sysfs_show(char *page, u64 config);
- 
-diff --git a/arch/x86/events/utils.c b/arch/x86/events/utils.c
-new file mode 100644
-index 0000000..a323689
---- /dev/null
-+++ b/arch/x86/events/utils.c
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <asm/insn.h>
-+
-+#include "perf_event.h"
++/* LBR Branch Select valid bits */
++#define LBR_SELECT_MASK		0x1ff
 +
 +/*
-+ * return the type of control flow change at address "from"
-+ * instruction is not necessarily a branch (in case of interrupt).
-+ *
-+ * The branch type returned also includes the priv level of the
-+ * target of the control flow change (X86_BR_USER, X86_BR_KERNEL).
-+ *
-+ * If a branch type is unknown OR the instruction cannot be
-+ * decoded (e.g., text page not present), then X86_BR_NONE is
-+ * returned.
++ * LBR Branch Select filter bits which when set, ensures that the
++ * corresponding type of branches are not recorded
 + */
-+int branch_type(unsigned long from, unsigned long to, int abort)
-+{
-+	struct insn insn;
-+	void *addr;
-+	int bytes_read, bytes_left;
-+	int ret = X86_BR_NONE;
-+	int ext, to_plm, from_plm;
-+	u8 buf[MAX_INSN_SIZE];
-+	int is64 = 0;
++#define LBR_SELECT_KERNEL		0	/* Branches ending in CPL = 0 */
++#define LBR_SELECT_USER			1	/* Branches ending in CPL > 0 */
++#define LBR_SELECT_JCC			2	/* Conditional branches */
++#define LBR_SELECT_CALL_NEAR_REL	3	/* Near relative calls */
++#define LBR_SELECT_CALL_NEAR_IND	4	/* Indirect relative calls */
++#define LBR_SELECT_RET_NEAR		5	/* Near returns */
++#define LBR_SELECT_JMP_NEAR_IND		6	/* Near indirect jumps (excl. calls and returns) */
++#define LBR_SELECT_JMP_NEAR_REL		7	/* Near relative jumps (excl. calls) */
++#define LBR_SELECT_FAR_BRANCH		8	/* Far branches */
 +
-+	to_plm = kernel_ip(to) ? X86_BR_KERNEL : X86_BR_USER;
-+	from_plm = kernel_ip(from) ? X86_BR_KERNEL : X86_BR_USER;
++#define LBR_KERNEL	BIT(LBR_SELECT_KERNEL)
++#define LBR_USER	BIT(LBR_SELECT_USER)
++#define LBR_JCC		BIT(LBR_SELECT_JCC)
++#define LBR_REL_CALL	BIT(LBR_SELECT_CALL_NEAR_REL)
++#define LBR_IND_CALL	BIT(LBR_SELECT_CALL_NEAR_IND)
++#define LBR_RETURN	BIT(LBR_SELECT_RET_NEAR)
++#define LBR_REL_JMP	BIT(LBR_SELECT_JMP_NEAR_REL)
++#define LBR_IND_JMP	BIT(LBR_SELECT_JMP_NEAR_IND)
++#define LBR_FAR		BIT(LBR_SELECT_FAR_BRANCH)
++#define LBR_NOT_SUPP	-1	/* unsupported filter */
++#define LBR_IGNORE	0
 +
-+	/*
-+	 * maybe zero if lbr did not fill up after a reset by the time
-+	 * we get a PMU interrupt
-+	 */
-+	if (from == 0 || to == 0)
-+		return X86_BR_NONE;
++#define LBR_ANY		\
++	(LBR_JCC | LBR_REL_CALL | LBR_IND_CALL | LBR_RETURN |	\
++	 LBR_REL_JMP | LBR_IND_JMP | LBR_FAR)
 +
-+	if (abort)
-+		return X86_BR_ABORT | to_plm;
+ struct branch_entry {
+ 	union {
+ 		struct {
+@@ -97,12 +130,56 @@ void amd_pmu_lbr_read(void)
+ 	cpuc->lbr_stack.hw_idx = 0;
+ }
+ 
++static const int lbr_select_map[PERF_SAMPLE_BRANCH_MAX_SHIFT] = {
++	[PERF_SAMPLE_BRANCH_USER_SHIFT]		= LBR_USER,
++	[PERF_SAMPLE_BRANCH_KERNEL_SHIFT]	= LBR_KERNEL,
++	[PERF_SAMPLE_BRANCH_HV_SHIFT]		= LBR_IGNORE,
 +
-+	if (from_plm == X86_BR_USER) {
-+		/*
-+		 * can happen if measuring at the user level only
-+		 * and we interrupt in a kernel thread, e.g., idle.
-+		 */
-+		if (!current->mm)
-+			return X86_BR_NONE;
++	[PERF_SAMPLE_BRANCH_ANY_SHIFT]		= LBR_ANY,
++	[PERF_SAMPLE_BRANCH_ANY_CALL_SHIFT]	= LBR_REL_CALL | LBR_IND_CALL,
++	[PERF_SAMPLE_BRANCH_ANY_RETURN_SHIFT]	= LBR_RETURN,
++	[PERF_SAMPLE_BRANCH_IND_CALL_SHIFT]	= LBR_IND_CALL,
++	[PERF_SAMPLE_BRANCH_ABORT_TX_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_IN_TX_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_NO_TX_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_COND_SHIFT]		= LBR_JCC,
 +
-+		/* may fail if text not present */
-+		bytes_left = copy_from_user_nmi(buf, (void __user *)from,
-+						MAX_INSN_SIZE);
-+		bytes_read = MAX_INSN_SIZE - bytes_left;
-+		if (!bytes_read)
-+			return X86_BR_NONE;
++	[PERF_SAMPLE_BRANCH_CALL_STACK_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_IND_JUMP_SHIFT]	= LBR_IND_JMP,
++	[PERF_SAMPLE_BRANCH_CALL_SHIFT]		= LBR_REL_CALL,
 +
-+		addr = buf;
-+	} else {
-+		/*
-+		 * The LBR logs any address in the IP, even if the IP just
-+		 * faulted. This means userspace can control the from address.
-+		 * Ensure we don't blindly read any address by validating it is
-+		 * a known text address.
-+		 */
-+		if (kernel_text_address(from)) {
-+			addr = (void *)from;
-+			/*
-+			 * Assume we can get the maximum possible size
-+			 * when grabbing kernel data.  This is not
-+			 * _strictly_ true since we could possibly be
-+			 * executing up next to a memory hole, but
-+			 * it is very unlikely to be a problem.
-+			 */
-+			bytes_read = MAX_INSN_SIZE;
-+		} else {
-+			return X86_BR_NONE;
-+		}
-+	}
++	[PERF_SAMPLE_BRANCH_NO_FLAGS_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_NO_CYCLES_SHIFT]	= LBR_NOT_SUPP,
 +
-+	/*
-+	 * decoder needs to know the ABI especially
-+	 * on 64-bit systems running 32-bit apps
-+	 */
-+#ifdef CONFIG_X86_64
-+	is64 = kernel_ip((unsigned long)addr) || any_64bit_mode(current_pt_regs());
-+#endif
-+	insn_init(&insn, addr, bytes_read, is64);
-+	if (insn_get_opcode(&insn))
-+		return X86_BR_ABORT;
-+
-+	switch (insn.opcode.bytes[0]) {
-+	case 0xf:
-+		switch (insn.opcode.bytes[1]) {
-+		case 0x05: /* syscall */
-+		case 0x34: /* sysenter */
-+			ret = X86_BR_SYSCALL;
-+			break;
-+		case 0x07: /* sysret */
-+		case 0x35: /* sysexit */
-+			ret = X86_BR_SYSRET;
-+			break;
-+		case 0x80 ... 0x8f: /* conditional */
-+			ret = X86_BR_JCC;
-+			break;
-+		default:
-+			ret = X86_BR_NONE;
-+		}
-+		break;
-+	case 0x70 ... 0x7f: /* conditional */
-+		ret = X86_BR_JCC;
-+		break;
-+	case 0xc2: /* near ret */
-+	case 0xc3: /* near ret */
-+	case 0xca: /* far ret */
-+	case 0xcb: /* far ret */
-+		ret = X86_BR_RET;
-+		break;
-+	case 0xcf: /* iret */
-+		ret = X86_BR_IRET;
-+		break;
-+	case 0xcc ... 0xce: /* int */
-+		ret = X86_BR_INT;
-+		break;
-+	case 0xe8: /* call near rel */
-+		if (insn_get_immediate(&insn) || insn.immediate1.value == 0) {
-+			/* zero length call */
-+			ret = X86_BR_ZERO_CALL;
-+			break;
-+		}
-+		fallthrough;
-+	case 0x9a: /* call far absolute */
-+		ret = X86_BR_CALL;
-+		break;
-+	case 0xe0 ... 0xe3: /* loop jmp */
-+		ret = X86_BR_JCC;
-+		break;
-+	case 0xe9 ... 0xeb: /* jmp */
-+		ret = X86_BR_JMP;
-+		break;
-+	case 0xff: /* call near absolute, call far absolute ind */
-+		if (insn_get_modrm(&insn))
-+			return X86_BR_ABORT;
-+
-+		ext = (insn.modrm.bytes[0] >> 3) & 0x7;
-+		switch (ext) {
-+		case 2: /* near ind call */
-+		case 3: /* far ind call */
-+			ret = X86_BR_IND_CALL;
-+			break;
-+		case 4:
-+		case 5:
-+			ret = X86_BR_IND_JMP;
-+			break;
-+		}
-+		break;
-+	default:
-+		ret = X86_BR_NONE;
-+	}
-+	/*
-+	 * interrupts, traps, faults (and thus ring transition) may
-+	 * occur on any instructions. Thus, to classify them correctly,
-+	 * we need to first look at the from and to priv levels. If they
-+	 * are different and to is in the kernel, then it indicates
-+	 * a ring transition. If the from instruction is not a ring
-+	 * transition instr (syscall, systenter, int), then it means
-+	 * it was a irq, trap or fault.
-+	 *
-+	 * we have no way of detecting kernel to kernel faults.
-+	 */
-+	if (from_plm == X86_BR_USER && to_plm == X86_BR_KERNEL
-+	    && ret != X86_BR_SYSCALL && ret != X86_BR_INT)
-+		ret = X86_BR_IRQ;
-+
-+	/*
-+	 * branch priv level determined by target as
-+	 * is done by HW when LBR_SELECT is implemented
-+	 */
-+	if (ret != X86_BR_NONE)
-+		ret |= to_plm;
-+
-+	return ret;
-+}
-+
-+#define X86_BR_TYPE_MAP_MAX	16
-+
-+static int branch_map[X86_BR_TYPE_MAP_MAX] = {
-+	PERF_BR_CALL,		/* X86_BR_CALL */
-+	PERF_BR_RET,		/* X86_BR_RET */
-+	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
-+	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
-+	PERF_BR_UNKNOWN,	/* X86_BR_INT */
-+	PERF_BR_ERET,		/* X86_BR_IRET */
-+	PERF_BR_COND,		/* X86_BR_JCC */
-+	PERF_BR_UNCOND,		/* X86_BR_JMP */
-+	PERF_BR_IRQ,		/* X86_BR_IRQ */
-+	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
-+	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
-+	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
-+	PERF_BR_UNKNOWN,	/* X86_BR_NO_TX */
-+	PERF_BR_CALL,		/* X86_BR_ZERO_CALL */
-+	PERF_BR_UNKNOWN,	/* X86_BR_CALL_STACK */
-+	PERF_BR_IND,		/* X86_BR_IND_JMP */
++	[PERF_SAMPLE_BRANCH_TYPE_SAVE_SHIFT]	= LBR_NOT_SUPP,
 +};
 +
-+int common_branch_type(int type)
-+{
+ static int amd_pmu_lbr_setup_filter(struct perf_event *event)
+ {
++	struct hw_perf_event_extra *reg = &event->hw.branch_reg;
++	u64 br_type = event->attr.branch_sample_type;
++	u64 mask = 0, v;
 +	int i;
 +
-+	type >>= 2; /* skip X86_BR_USER and X86_BR_KERNEL */
+ 	/* No LBR support */
+ 	if (!x86_pmu.lbr_nr)
+ 		return -EOPNOTSUPP;
+ 
++	for (i = 0; i < PERF_SAMPLE_BRANCH_MAX_SHIFT; i++) {
++		if (!(br_type & BIT_ULL(i)))
++			continue;
 +
-+	if (type) {
-+		i = __ffs(type);
-+		if (i < X86_BR_TYPE_MAP_MAX)
-+			return branch_map[i];
++		v = lbr_select_map[i];
++		if (v == LBR_NOT_SUPP)
++			return -EOPNOTSUPP;
++
++		if (v != LBR_IGNORE)
++			mask |= v;
 +	}
 +
-+	return PERF_BR_UNKNOWN;
-+}
++	/* Filter bits operate in suppress mode */
++	reg->config = mask ^ LBR_SELECT_MASK;
++
+ 	return 0;
+ }
+ 
+@@ -137,6 +214,7 @@ void amd_pmu_lbr_reset(void)
+ 
+ 	cpuc->last_task_ctx = NULL;
+ 	cpuc->last_log_id = 0;
++	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
+ }
+ 
+ void amd_pmu_lbr_add(struct perf_event *event)
+@@ -146,6 +224,11 @@ void amd_pmu_lbr_add(struct perf_event *event)
+ 	if (!x86_pmu.lbr_nr)
+ 		return;
+ 
++	if (has_branch_stack(event)) {
++		cpuc->lbr_select = 1;
++		cpuc->lbr_sel->config = event->hw.branch_reg.config;
++	}
++
+ 	perf_sched_cb_inc(event->ctx->pmu);
+ 
+ 	if (!cpuc->lbr_users++ && !event->total_time_running)
+@@ -159,6 +242,9 @@ void amd_pmu_lbr_del(struct perf_event *event)
+ 	if (!x86_pmu.lbr_nr)
+ 		return;
+ 
++	if (has_branch_stack(event))
++		cpuc->lbr_select = 0;
++
+ 	cpuc->lbr_users--;
+ 	WARN_ON_ONCE(cpuc->lbr_users < 0);
+ 	perf_sched_cb_dec(event->ctx->pmu);
+@@ -180,11 +266,17 @@ void amd_pmu_lbr_sched_task(struct perf_event_context *ctx, bool sched_in)
+ void amd_pmu_lbr_enable_all(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+-	u64 dbg_ctl, dbg_extn_cfg;
++	u64 lbr_select, dbg_ctl, dbg_extn_cfg;
+ 
+ 	if (!cpuc->lbr_users || !x86_pmu.lbr_nr)
+ 		return;
+ 
++	/* Set hardware branch filter */
++	if (cpuc->lbr_select) {
++		lbr_select = cpuc->lbr_sel->config & LBR_SELECT_MASK;
++		wrmsrl(MSR_AMD64_LBR_SELECT, lbr_select);
++	}
++
+ 	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
+ 	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
+ 

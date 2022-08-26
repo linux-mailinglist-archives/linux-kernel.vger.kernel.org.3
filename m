@@ -2,129 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061305A2B8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4A05A2B93
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344388AbiHZPrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S1344473AbiHZPrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbiHZPq6 (ORCPT
+        with ESMTP id S231540AbiHZPrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:46:58 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3308775486;
-        Fri, 26 Aug 2022 08:46:57 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 142so1895090pfu.10;
-        Fri, 26 Aug 2022 08:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=XLAF4GD1Ll6EGxLanEucHnoexGW6b0Wj5SM8EF5olb0=;
-        b=nEIC1LEVXu9HZ9Ap7ma+49wjUxKvnllTvNhxVnJ0iNzG0QjXr4i59oaxYg8LpfNaSc
-         qgvAD/y8jZVrs+A3OUSvGAtbc4ORLIbG2n1xdhvc4eW7XQecwerCfJu32Z2kCFnNFX9J
-         4Bvq5OvlD9ctCHkgbfanhNXz4Mkqty/ycHMuwLucrfpFX+bEy64EoUDqsr2a6jgIQrj0
-         n2vjPod+lqWc6VCgo9YLCsfBfWVM7AGVxKyu72fXQbsx2D89QGNe7SPaMiz4LToj64KO
-         L4DnbhBuGNu4C7KsHS1KxHXJWxLYNEq2MgupcOiexoVqxJOwWnDMdpszZO6BJvW6fibC
-         6JkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=XLAF4GD1Ll6EGxLanEucHnoexGW6b0Wj5SM8EF5olb0=;
-        b=uK0EMMu+BwjzrYpGEQbPaDd/dAzXYbrciCjUATq2vl5F05Cx/jzHYSb40DRAufu9qo
-         o0kX/Qu9m6tOB7siItxKtPjYWpo0PeOiOzTedPNVVeRWKt1W1TpC6DLZa3WJ5dlTOhx9
-         y46ENyNKM9hEqo5Ni2zESBvuUvv0nBjK66+aLw8yMmMNqUp2ZuArM8YUZTgqDgxgJASG
-         MUnhpb+/6EcOxZbq9GUO4NgQjTupMCdraU3t3KDxSseE3XHflaso8KtpHbS8jwBAKkXl
-         bRdBtyCqZp+eGxJZEgbIeIQcNbDFT3ne08bmfTsuDtT2/RauNmcCaR5xbQU7dQJbepI7
-         /dfQ==
-X-Gm-Message-State: ACgBeo2GXg89enODuwkCwDLVdsSmfZCEfzzP7g15yWC8bQ0UYxlI+f2l
-        eWK/drU7oTqivm5auH5VWlMjG1P71Y5XE6Xv2Cg=
-X-Google-Smtp-Source: AA6agR44uTEKqoaF0rchbX3O4hiBo4HvONhKxVeO9PKFeq6MXB4FbWxFpufNFUS38KC9iTDhTauKuAujkFb14pgJBr0=
-X-Received: by 2002:a63:fc13:0:b0:42b:890d:5954 with SMTP id
- j19-20020a63fc13000000b0042b890d5954mr903069pgi.200.1661528816704; Fri, 26
- Aug 2022 08:46:56 -0700 (PDT)
+        Fri, 26 Aug 2022 11:47:00 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687C172EEC;
+        Fri, 26 Aug 2022 08:46:56 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 186341BF204;
+        Fri, 26 Aug 2022 15:46:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661528815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bJS3wVqhI7PyKA6CizQMt74/WL+BYCPbB8yEif7UhJk=;
+        b=SLzdnTZe9u11oxbDRcDChoO5aLgsC36Ax0vBr4+qn1jBw7kN7hZvgct1mox3STH9T4+KAW
+        ndsvB+TKQvrgzBUzNw0uWtKCsdWJKQ4k8fz33ZWoFxNTC74zbBVyiXpX87l/IBFLZGjNxV
+        mIQCXt4eANG3PpMV2sOGUtkcg8IJ9kRSlNpbLsT07PjV1UNQvf9a5NRkh+df5rFojdrE58
+        kBGkr6IrjunpP8aq+xj4WWyl0W512M1Hb3/VIyR+kHz6n7U5TLGZetztzQtXGR7i2mSzUg
+        6w1VRB3eN4QOvckAKctW3sHAqLprrZyF77/jAtJoNd76I3uQVRsp/PWdkqwTxw==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH net-next v3 0/5] net: ipqess: introduce Qualcomm IPQESS driver
+Date:   Fri, 26 Aug 2022 17:46:45 +0200
+Message-Id: <20220826154650.615582-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220826061914.816239-1-imagedong@tencent.com>
- <YwiU4DPEPryi1cMZ@debian.me> <30415bcb-c367-9ee3-a5bb-4c97510f4749@gmail.com>
-In-Reply-To: <30415bcb-c367-9ee3-a5bb-4c97510f4749@gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 26 Aug 2022 23:46:45 +0800
-Message-ID: <CADxym3aYgsEUa-nizq7BRsJHLoHxNcJeqjpiQanaGzpxLw9uwA@mail.gmail.com>
-Subject: Re: [PATCH net-next] docs/conf.py: add function attribute
- '__fix_address' to conf.py
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     kuba@kernel.org, sfr@canb.auug.org.au, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 8:47 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On 8/26/22 16:39, Bagas Sanjaya wrote:
-> > On Fri, Aug 26, 2022 at 02:19:14PM +0800, menglong8.dong@gmail.com wrote:
-> >> From: Menglong Dong <imagedong@tencent.com>
-> >>
-> >> Stephen Rothwell report that the function attribute '__fix_address'
-> >> causes a warning when create html docs with the command:
-> >>
-> >>   make htmldocs
-> >>
-> >> Therefor, add this attribute to c_id_attributes in Documentation/conf.py
-> >> to clean this warning.
-> >>
-> >> BTW, I'm not able to reproduce this warning (both ubuntu and centos are
-> >> tested). I will appreciate it if anyone can have a test for this
-> >> commit.
-> >>
-> > Hi,
-> >
-> > The patch description can be improved, like:
-> > "Stephen Rothwell reported htmldocs warning when merging net-next:
-> >
-> > Documentation/networking/kapi:26: net/core/skbuff.c:780: WARNING: Error in declarator or parameters
-> > Invalid C declaration: Expecting "(" in parameters. [error at 19]
-> >   void __fix_address kfree_skb_reason (struct sk_buff *skb, enum skb_drop_reason reason)
-> >   -------------------^
-> >
-> > Add __fix_address keyword to c_id_attributes array in conf.py to fix the
-> > warning."
-> >
-> > So next time when you spot documentation warnings like above, specify the
-> > exact warning in the patch description. This will help reviewers what warning
-> > the patch is fixing.
-> >
-> >> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> >> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> >
-> > Also, don't forget to add Link tag, like:
-> > Link: https://lore.kernel.org/linux-next/20220825154105.534d78ab@canb.auug.org.au/
-> >
-> > Otherwise, the warning disappeared on my htmldocs build, thanks.
-> >
-> > Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> >
->
-> Oops, ignore my Reviewed-by above (not LGTM until my comments above
-> are addressed).
+Hello everyone,
 
-Thanks for your advice and the testing. I'll send a V2 with your
-comments addressed, and with your Reviewed-by and Tested-by
-tags.
+This is the 3rd iteration of a series that introduces a new driver, for
+the Qualcomm IPQESS Ethernet Controller, found on the IPQ4019.
 
-Menglong Dong
+Notables changes on V3 :
+ - Took into account Russell's review on the ioctl handler and the mac
+   capabilities that were missing
+ - Took Andrew's reviews into account by reworking the napi rx loop,
+   some stray "inline" keywords, and useless warnings
+ - Took Vlad's reviews into account by reworking a few macros
+ - Took Christophe's review into account by removing extra GFP_ZERO
+ - Took Rob's review into account by simplifying the binding
 
->
-> --
-> An old man doll... just what I always wanted! - Clara
+Note that this V3 didn't focus on the tagging protocol, as I understand
+the issue is still open. I'm willing to keep on testing some ideas, and
+continue Florian's discussion.
+
+Notables changes on V2 :
+ - Put the DSA tag in the skb itself instead of using skb->shinfo
+ - Fixed the initialisation sequence based on Andrew's comments
+ - Reworked the error paths in the init sequence
+ - Add support for the clock and reset lines on that controller
+ - Fixed and updated the binding
+
+The driver itself is pretty straightforward, but has lived out-of-tree
+for a while. I've done my best to clean-up some outdated API calls, but
+some might remain.
+
+This controller is somewhat special, since it's part of the IPQ4019 SoC
+which also includes an QCA8K switch, and uses the IPQESS controller for
+the CPU port. The switch is so tightly intergrated with the MAC that it
+is connected to the MAC using an internal link (hence the fact that we
+only support PHY_INTERFACE_MODE_INTERNAL), and this has some
+consequences on the DSA side.
+
+The tagging for the switch isn't done inband as most switch do, but
+out-of-band, the DSA tag being included in the DMA descriptor.
+
+This series includes a new out-of-band tagger that uses the skb headroom
+to convey the tag between the tagger and the MAC driver.
+
+Thanks to the Sartura folks who worked on a base version of this driver,
+and provided test hardware.
+
+Best regards,
+
+Maxime Chevallier
+
+Maxime Chevallier (5):
+  net: ipqess: introduce the Qualcomm IPQESS driver
+  net: dsa: add out-of-band tagging protocol
+  net: ipqess: Add out-of-band DSA tagging support
+  net: dt-bindings: Introduce the Qualcomm IPQESS Ethernet controller
+  ARM: dts: qcom: ipq4019: Add description for the IPQESS Ethernet
+    controller
+
+ .../devicetree/bindings/net/qcom,ipqess.yaml  |   95 ++
+ MAINTAINERS                                   |    6 +
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |   46 +
+ drivers/net/ethernet/qualcomm/Kconfig         |   12 +
+ drivers/net/ethernet/qualcomm/Makefile        |    2 +
+ drivers/net/ethernet/qualcomm/ipqess/Makefile |    8 +
+ drivers/net/ethernet/qualcomm/ipqess/ipqess.c | 1284 +++++++++++++++++
+ drivers/net/ethernet/qualcomm/ipqess/ipqess.h |  518 +++++++
+ .../ethernet/qualcomm/ipqess/ipqess_ethtool.c |  168 +++
+ include/linux/dsa/oob.h                       |   17 +
+ include/net/dsa.h                             |    2 +
+ net/dsa/Kconfig                               |    7 +
+ net/dsa/Makefile                              |    1 +
+ net/dsa/tag_oob.c                             |   84 ++
+ 14 files changed, 2250 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ipqess.yaml
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/Makefile
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.c
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.h
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c
+ create mode 100644 include/linux/dsa/oob.h
+ create mode 100644 net/dsa/tag_oob.c
+
+-- 
+2.37.2
+

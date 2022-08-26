@@ -2,91 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3335A2F6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BAA5A2F6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345109AbiHZS5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S1345393AbiHZS6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345123AbiHZS5J (ORCPT
+        with ESMTP id S238333AbiHZS6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:57:09 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9AC3DB41
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:54:35 -0700 (PDT)
-Received: (qmail 47487 invoked by uid 1000); 26 Aug 2022 14:54:34 -0400
-Date:   Fri, 26 Aug 2022 14:54:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Maxim Devaev <mdevaev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com
-Subject: Re: [PATCH] usb: gadget: mass_storage: Fix cdrom data transfers on
- MAC-OS
-Message-ID: <YwkW6pZoZcua9eoN@rowland.harvard.edu>
-References: <1661535142-5204-1-git-send-email-quic_kriskura@quicinc.com>
+        Fri, 26 Aug 2022 14:58:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58274B32
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:57:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA61CB83115
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:57:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B858C433D6;
+        Fri, 26 Aug 2022 18:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661540244;
+        bh=Et+UJP3nMFjSqnln2xBo9NvAK9eQG6VOhiPO8c+DwVA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LVtNQfn43hg0qP57cDq5ZVdSuV6F6hQMIY1+AMC/AT3Ul1lVgo3d7yFo6RNUVk2i6
+         5FSRXGpBJBqhoe+pGJ1ntBysI6RfXr0Yco3lgkrvokSb5lj4CM7c3fqnKeA1o8zNJj
+         qpDkgsGcaUaYSe1FBbU3qZ/B6euL+WJCJ/dvysJfwUePOdcCUc/YRcmHNLDSpNYtQO
+         +8zaYpy/gq7hM3eL4czpWP7kmgA1vsD7VpmWbjw3Ztf3dk9RcBgCnLQoPOXlexVvK4
+         vXYjs1nXVyORwzEph65O51zTPbwHy0vijKZm1M+rB6bLL90jOH/jnp4lnX0bpIddQP
+         b0X5KhiYBt9Rw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oReWA-0062Ce-OM;
+        Fri, 26 Aug 2022 19:57:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1661535142-5204-1-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Date:   Fri, 26 Aug 2022 19:57:22 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     apatel@ventanamicro.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        daniel.lezcano@linaro.org, atishp@atishpatra.org,
+        Alistair.Francis@wdc.com, anup@brainfault.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] RISC-V: Treat IPIs as normal Linux IRQs
+In-Reply-To: <8f4ae429-0f12-2096-c07b-fe43b3abb4fe@microchip.com>
+References: <20220820065446.389788-1-apatel@ventanamicro.com>
+ <20220820065446.389788-5-apatel@ventanamicro.com>
+ <8f4ae429-0f12-2096-c07b-fe43b3abb4fe@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <69e58f4dc2b74415a32a97998e862479@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: Conor.Dooley@microchip.com, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:02:22PM +0530, Krishna Kurapati wrote:
-> During cdrom emulation, the response to read_toc command must contain
-> the cdrom address as the number of sectors (2048 byte sized blocks)
-> represented either as an absolute value (when MSF bit is '0') or in
-> terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
-> cdrom, the fsg_lun_open call sets the number of sectors to 2048 byte
-
-Sets the sector size to 2048 bytes, not the number of sectors.
-
-> sized blocks.
+On 2022-08-26 19:48, Conor.Dooley@microchip.com wrote:
+> On 20/08/2022 07:54, Anup Patel wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>> Currently, the RISC-V kernel provides arch specific hooks (i.e.
+>> struct riscv_ipi_ops) to register IPI handling methods. The stats
+>> gathering of IPIs is also arch specific in the RISC-V kernel.
+>> 
+>> Other architectures (such as ARM, ARM64, and MIPS) have moved away
+>> from custom arch specific IPI handling methods. Currently, these
+>> architectures have Linux irqchip drivers providing a range of Linux
+>> IRQ numbers to be used as IPIs and IPI triggering is done using
+>> generic IPI APIs. This approach allows architectures to treat IPIs
+>> as normal Linux IRQs and IPI stats gathering is done by the generic
+>> Linux IRQ subsystem.
+>> 
+>> We extend the RISC-V IPI handling as-per above approach so that arch
+>> specific IPI handling methods (struct riscv_ipi_ops) can be removed
+>> and the IPI handling is done through the Linux IRQ subsystem.
+>> 
+>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > 
-> When MAC OS sends a read_toc request with MSF set to '1', the
-> store_cdrom_address assumes that the address being provided is the
-> LUN size represented in 512 byte sized blocks instead of 2048. It
-> tries to modify the address further to convert it to 2048 byte sized
-> blocks and store it in MSF format. This results in data transfer
-> failures as the cdrom address being provided in the read_toc response
-> is incorrect.
+>> +void riscv_ipi_set_virq_range(int virq, int nr)
+>> +{
+>> +       int i, err;
+>> 
+>> -               if (ops & (1 << IPI_IRQ_WORK)) {
+>> -                       stats[IPI_IRQ_WORK]++;
+>> -                       irq_work_run();
+>> -               }
+>> +       if (WARN_ON(ipi_virq_base))
+>> +               return;
+>> 
+>> -#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
+>> -               if (ops & (1 << IPI_TIMER)) {
+>> -                       stats[IPI_TIMER]++;
+>> -                       tick_receive_broadcast();
+>> -               }
+>> -#endif
+>> -               BUG_ON((ops >> IPI_MAX) != 0);
+>> +       WARN_ON(nr < IPI_MAX);
+>> +       nr_ipi = min(nr, IPI_MAX);
+>> +       ipi_virq_base = virq;
+>> +
+>> +       /* Request IPIs */
+>> +       for (i = 0; i < nr_ipi; i++) {
+>> +               err = request_percpu_irq(ipi_virq_base + i, 
+>> handle_IPI,
+>> +                                        "IPI", &ipi_virq_base);
 > 
-> Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> FWIW, ?sparse? does not like this:
+> arch/riscv/kernel/smp.c:163:50: warning: incorrect type in argument 4
+> (different address spaces)
+> arch/riscv/kernel/smp.c:163:50:    expected void [noderef] __percpu
+> *percpu_dev_id
+> arch/riscv/kernel/smp.c:163:50:    got int *
 
-Should include "Cc: stable@vger.kernel.org".
+Huh, well spotted. This will totally give the wrong sort of
+result, as this is used as a percpu variable from the irq
+core code.
 
-> ---
->  drivers/usb/gadget/function/storage_common.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
-> index 03035db..db40392 100644
-> --- a/drivers/usb/gadget/function/storage_common.c
-> +++ b/drivers/usb/gadget/function/storage_common.c
-> @@ -295,7 +295,6 @@ void store_cdrom_address(u8 *dest, int msf, u32 addr)
->  {
->  	if (msf) {
->  		/* Convert to Minutes-Seconds-Frames */
-> -		addr >>= 2;		/* Convert to 2048-byte frames */
+The arm64 code passes instead a pointer to the CPU number, which
+is not very useful, but at least not completely wrong.
 
-Please leave a comment here saying that we already know the sector size 
-is 2048 bytes.
+I'm sure the RISC-V code has some sort of semi-useful data to
+stuff in there instead of this.
 
->  		addr += 2*75;		/* Lead-in occupies 2 seconds */
->  		dest[3] = addr % 75;	/* Frames */
->  		addr /= 75;
-
-Otherwise this is okay.  In your next submission you can add:
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-Alan Stern
+         M.
+-- 
+Jazz is not dead. It just smells funny...

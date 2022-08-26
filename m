@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451135A3290
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D695A3295
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238115AbiHZXX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 19:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S245185AbiHZXZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 19:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiHZXXX (ORCPT
+        with ESMTP id S234203AbiHZXZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 19:23:23 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389AAB6012;
-        Fri, 26 Aug 2022 16:23:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id m3so3814493lfg.10;
-        Fri, 26 Aug 2022 16:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Z3ofurWE8ZXj18ZbZuUVHMAHqzrPPON1XujjS2A1mJI=;
-        b=eVt6zDYt7Q/bxAb1Y9vBCNEDDpgiDmI1Ed33Vdj8QpED8unQkG0OAq797b7Oe4pXJa
-         XqN1SJgB1oEJ7d7aiqyhiTogQuvpN4EprkaswnTldjvDs63bGvVtGk3K8GN4y3pxwiwi
-         uPPQ299I7dv8JGZ0iwHkNlFpz7oUsd/8Y+yk38cTcyeTx8n7LOHyKWtwfj2/kG8iIAKR
-         OadSk+Ft7WZ+qIA53CADNRTJXh4SVAvQQP9clLwzSLpvAn5TmWTFx+cYnqxf0g9r/W/I
-         IJ1ghMZsR/cPbpQ3wfdmevGMpEq2QSFBCWR3sxqontwZTserBfckR8h3hVXbnVrHg/BQ
-         R2hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Z3ofurWE8ZXj18ZbZuUVHMAHqzrPPON1XujjS2A1mJI=;
-        b=ENFdFEbrf8jaYQD6hRdfyDFFCsa1Ovu6bQpQyZFYYNAmsqSbsVWV3/jdFrbQVVqtRq
-         wSjDKmox2Fhn5h2g6yelv/TEtThRpxT8d+L2kNf1etIHlC7Lhf5Hs7McggIJNLfLilIF
-         MYsZ/buzOKU0hf0wB5az7CQksLYn2ZRiCzLskxRuGZfG2mCkC9jk18XmNJ/A78WDDGzn
-         D960y61lYy6zo9+M0pfdWHRnFEvpdOg6BOM85XXg92aJ54dJjR5vqEY31uGQYk9jhGx4
-         9ncdmxRJKWqRoeFYYBrTjcUoCjTSFBiInS1z9QYi+cTupvYRD5HNiJudGEdpE2wFrZD6
-         gCKw==
-X-Gm-Message-State: ACgBeo3oBkNbQR+U0wSyQkyyFOMhK1Sv6QxunjJpKll2EffoPMSamtu2
-        AyDQ9FxgFi3dcv+ZskHvMfA=
-X-Google-Smtp-Source: AA6agR6FMR+24UHpiJIJi6iCKiRAnzQjwOTvqzo9P1JxnIKRWkzTixJSeUXUbPKki7K8uhYw+t70uQ==
-X-Received: by 2002:a05:6512:318b:b0:492:c484:9d1c with SMTP id i11-20020a056512318b00b00492c4849d1cmr3430819lfe.38.1661556200627;
-        Fri, 26 Aug 2022 16:23:20 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id s20-20020a197714000000b00492e7b8e26asm495703lfc.208.2022.08.26.16.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 16:23:19 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 02:23:17 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 10/11] spi: dw-apb-ssi: add generic 1.03a version
-Message-ID: <20220826232317.h4vmijjotzu7qvpg@mobilestation>
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-11-sudip.mukherjee@sifive.com>
+        Fri, 26 Aug 2022 19:25:26 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875C75721D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 16:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661556325; x=1693092325;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NmWk5k9zzw/VjsfwQZfk4wiZ8VTW8sB239V2xjy9Ybs=;
+  b=J+ee75lmwSZaYfdutQ5DMQJXxTtXM0uh9crcPe+4KcHt4FYeNWZRwBid
+   uDA6WLHkuCx+LJ/B2VuNSq/W6uBsh6ofeLijW2OQCt877yED1Bg6IO3tT
+   VYRHOY3CcU7OfBW88JwSteSt9QeDHNihhNe/k+iywUI7Xnuoy2sMRfQTB
+   hmNyYABmk5w8CAd+aXh/ZBYtms94yiNuSUEmRtGQ4kCFQJ0KXSxIpq6dp
+   +316w12yOts3GyU50zmvri+nBknYO46mNvHQtrTK0ChFaouPRjU3cOtDI
+   5hGUUBXh/Tk0IhIURfCTKfKTa1qRc+riytxKO5kh3ft3UXGto+z58ocmR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="293355415"
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="293355415"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 16:25:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="643831383"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2022 16:25:23 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRihX-0000dv-0B;
+        Fri, 26 Aug 2022 23:25:23 +0000
+Date:   Sat, 27 Aug 2022 07:25:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>
+Subject: kismet: WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+ when selected by SEV_GUEST
+Message-ID: <202208270733.XIo5aiLH-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-11-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:57:54PM +0100, Sudip Mukherjee wrote:
-> From: Ben Dooks <ben.dooks@sifive.com>
-> 
-> Add new snps,dw-ssi-1.03a version to the bindings.
-> 
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index 37c3c272407d..35aa04a85813 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -45,6 +45,7 @@ properties:
->          enum:
->            - snps,dw-apb-ssi
->            - snps,dwc-ssi-1.01a
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e022620b5d056e822e42eb9bc0f24fcb97389d86
+commit: fce96cf0443083e37455eff8f78fd240c621dae3 virt: Add SEV-SNP guest driver
+date:   5 months ago
+config: x86_64-kismet-CONFIG_CRYPTO_AEAD2-CONFIG_SEV_GUEST-0-0 (https://download.01.org/0day-ci/archive/20220827/202208270733.XIo5aiLH-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fce96cf0443083e37455eff8f78fd240c621dae3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fce96cf0443083e37455eff8f78fd240c621dae3
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_CRYPTO_AEAD2 --selectors CONFIG_SEV_GUEST -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
 
-> +          - snps,dwc-ssi-1.03a
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-There is no point in having the IP-core versions used in the
-compatible string. The controller version is retrieved from the device
-CSR. Just add new generic compatible string "snps,dw-ahb-ssi" and use
-it to identify your device.
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for CRYPTO_AEAD2 when selected by SEV_GUEST
+   
+   WARNING: unmet direct dependencies detected for CRYPTO_GCM
+     Depends on [n]: CRYPTO [=n]
+     Selected by [y]:
+     - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
+   
+   WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+     Depends on [n]: CRYPTO [=n]
+     Selected by [y]:
+     - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 
--Sergey
-
->        - description: Microsemi Ocelot/Jaguar2 SoC SPI Controller
->          items:
->            - enum:
-> -- 
-> 2.30.2
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

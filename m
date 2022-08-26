@@ -2,241 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9636E5A1FE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90A25A1FE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 06:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244525AbiHZEae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 00:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        id S244647AbiHZEb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 00:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiHZEa2 (ORCPT
+        with ESMTP id S236285AbiHZEb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:30:28 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E9574E38
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:30:25 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id u5so378058wrt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc;
-        bh=a9scMduDb2RgBkGFRzzrneOTBxlEZxkrBW1E8AAXHRY=;
-        b=d0WQZrRHmt/GFQCy4PQvfETraZlqA9fMH5i3s5RA2yEuURgzBdC2AU5Bwp5G0sC4pU
-         MDLqDYtXBK4yk0juSABn8WRq1G4msR5F0zYtOnHr5P69GWOKj6f49CaCUOHkBdncvd1n
-         Btk8/qwKXqJhiEOuTiQhTg7BpJmG6YlzGlXo4a8Ff22gsNfs1j21f95Ub7TYYTcxpPX5
-         e6wtvOHdUBPkOfpbI8JvClWfmYubURZc5GftNTuhxqLxB7+6A27G+epd39rRgLejdglJ
-         G3Q5u6/AYgrH2C1jxANo9XWFGzG1FH3muJ6lv+nZ2N9g9Myvn3J2u24x/FiJGKb6V3mb
-         Y/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=a9scMduDb2RgBkGFRzzrneOTBxlEZxkrBW1E8AAXHRY=;
-        b=c6Olo/m2FbHUBdy0WJmV/RC0YRCnbg3M/9V+YIBpWWvMdGvvgMuPEdu++cAKrDQNkl
-         z8jyQaAXh3RlhUQlr5yLTwadSoPkgoHOxQZqszKVJJAWbnXVc6BwrjOrR9R/3ZsgZLt0
-         xvuBgjkY9eQobp5hxFvyKG02yviwtrwhToqUvMvIb5N0uX9MtnFvpNyhrzVkyTM7duK5
-         wV67AtjFTx8uJOqWcXWLFKbClQz91tfnHOvxyWdjPOETBUg2nxX685CXg2S6wJzCqYUW
-         hRtb14pFp/MVWlrmdI/yeXLfaY93kngZJYfeho431bsSHcQxiVulcER+CJdh56FwHsnB
-         H5OA==
-X-Gm-Message-State: ACgBeo1GZqPMOVSJh2ssAb92yLjvq6Gw0EXiESkC4nGaB0q4edWpa9xt
-        TTyyyKPu4BduchO2aUgbM0OrN6xeXl3YBcMwHY9QyOLw7rQ=
-X-Google-Smtp-Source: AA6agR4J9K00wybccBT+g94ENUgUbF/+FCKxm7nrEaz8COpyAzKGtL0SkzGth65sA4m0k7+C+BG/zEOucB5VccPoIJw=
-X-Received: by 2002:adf:f7ca:0:b0:225:2df0:d23 with SMTP id
- a10-20020adff7ca000000b002252df00d23mr3730219wrq.255.1661488224114; Thu, 25
- Aug 2022 21:30:24 -0700 (PDT)
+        Fri, 26 Aug 2022 00:31:26 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A17CAC97
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 21:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661488284; x=1693024284;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=xh7fXVrVZZ8TR/92mtZODU9ZNKLc8hVgtACRH5wtXEc=;
+  b=FFTzJoMOcSsB4NVBgcxZKc1+5YjFS/+DCgcdLto/QbfavtbrQC8aD8G2
+   VozpDKlFyrR0jILnjvesbHSNFUpTd1wnBV32mLtSt6AezGnpiJwOXIYsy
+   g39zt3XqNiIMqhreOuaC4q32cKhpiM4O3JTAxQDLhzdMfT0PplqyBl0/H
+   BBnSeHdTmawpIM5UaFw0AP60YbmmBx75LVqhmQ05qJvFVx5pam7P/Ugxt
+   zInslkfMzyj6AfKTtNgxrRQpYBPhLidI3Yhf+hW6im7O9tVMl8wMh9o5a
+   MHJM24Jb01d8Vn81Rz6nAjscNw+KEtnVf+FywrN0nt6l813gS3PyJU8ME
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="320513851"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="320513851"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 21:31:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="699717298"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 21:31:20 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+Subject: Re: [RFC PATCH 2/2] mm/demotion: Expose memory tier details via sysfs
+In-Reply-To: <20220825092325.381517-2-aneesh.kumar@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Thu, 25 Aug 2022 14:53:25 +0530")
+References: <20220825092325.381517-1-aneesh.kumar@linux.ibm.com>
+        <20220825092325.381517-2-aneesh.kumar@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Fri, 26 Aug 2022 12:31:10 +0800
+Message-ID: <871qt339td.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 26 Aug 2022 14:30:12 +1000
-Message-ID: <CAPM=9tzv9SAUpqMNh=4EuE3kCOYrsO9bW1vH8NiB+0rbOZv3LA@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.0-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-Weekly fixes, lots of amdgpu fixes mostly for IP blocks introduced in
-6.0-rc1, otherwise vc4, nouveau fixes. There is a backmerge in here to
-resync our misc-fixes tree with fixes after rc1, but it should be
-harmless.
+> All allocated memory tiers will be listed as
+> /sys/devices/virtual/memtier/memtierN/
+>
+> Each memtier directory contains symbolic link for the memory types
+> that are part of the memory tier. A directory hierarchy looks like
+>
+> :/sys/devices/virtual/memtier# tree memtier512/
+> memtier512/
 
-Regards,
-Dave.
+So you suggest to use abstract_distance_start as memory tier ID?  That
+will make memory tier ID stable unless we change abstract distance chunk
+size or abstract distance division points.  That is, we have at least 2
+choices here
 
-drm-fixes-2022-08-26-1:
-drm fixes for 6.0-rc3
+1. memory_tier0, memory_tier1, memory_tier2, ...
 
-gem:
-- Fixes handle release leak
+The ID will start from 0.  This is easy to understand by users.  The
+main drawback is that the memory tier ID may be changed when a NUMA node
+is onlined/offlined.  That is, the memory tier ID is relatively
+unstable.
 
-nouveau:
-- fix fencing when moving BO
+2. memory_tier<abstract_distance_start1>, memory_tier<abstract_distance_sta=
+rt2>, ...
 
-vc4:
-- HDMI fixes
+The ID will be discontinuous. So it's not as intuitive as 0,1,2,....
+The main advantage is that the memory tier ID will not change when a
+NUMA node is onlined/offlined.  The ID will be changed only when we
+change abstract distance chunk size or abstract distance division
+points.  That is considered relatively seldom.
 
-amdgpu:
-- GFX 11.0 fixes
-- PSP XGMI handling fixes
-- GFX9 fix for compute-only IPs
-- Drop duplicated function call
-- Fix warning due to missing header
-- NBIO 7.7 fixes
-- DCN 3.1.4 fixes
-- SDMA 6.0 fixes
-- SMU 13.0 fixes
-- Arcturus GPUVM page table fix
-- MMHUB 1.0 fix
+Personally, I prefer the 2nd choice too.  But I want to collect opinions
+from other people too.
 
-amdkfd:
-- GC 10.3.7 fix
+> =E2=94=9C=E2=94=80=E2=94=80 memtype1 -> ../memtype1
+> =E2=94=9C=E2=94=80=E2=94=80 memtype2 -> ../memtype2
 
-radeon:
-- Delayed work flush fix
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555=
-:
+I think abstract_distance_start and abstract_distance_end is the key
+information of a memory tier too.  So we should show them here.
 
-  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memtier
+> =E2=94=94=E2=94=80=E2=94=80 uevent
+>
+> The nodes which are part of a specific memory type can be listed via
+> /sys/devices/system/memtier/memtypeN/nodes.
+>
+> The adistance value of a specific memory type can be listed via
+> /sys/devices/system/memtier/memtypeN/adistance.
+>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 
-are available in the Git repository at:
+Best Regards,
+Huang, Ying
 
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-08-26-1
-
-for you to fetch changes up to 100d0ae82b5c240a4dc17486698e67bf116bd598:
-
-  Merge tag 'amd-drm-fixes-6.0-2022-08-25' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2022-08-26
-09:56:53 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.0-rc3
-
-gem:
-- Fixes handle release leak
-
-nouveau:
-- fix fencing when moving BO
-
-vc4:
-- HDMI fixes
-
-amdgpu:
-- GFX 11.0 fixes
-- PSP XGMI handling fixes
-- GFX9 fix for compute-only IPs
-- Drop duplicated function call
-- Fix warning due to missing header
-- NBIO 7.7 fixes
-- DCN 3.1.4 fixes
-- SDMA 6.0 fixes
-- SMU 13.0 fixes
-- Arcturus GPUVM page table fix
-- MMHUB 1.0 fix
-
-amdkfd:
-- GC 10.3.7 fix
-
-radeon:
-- Delayed work flush fix
-
-----------------------------------------------------------------
-Candice Li (1):
-      drm/amdgpu: Check num_gfx_rings for gfx v9_0 rb setup.
-
-Dave Airlie (2):
-      Merge tag 'drm-misc-fixes-2022-08-25' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'amd-drm-fixes-6.0-2022-08-25' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-
-Evan Quan (1):
-      drm/amd/pm: update SMU 13.0.0 driver_if header
-
-Jeffy Chen (1):
-      drm/gem: Fix GEM handle release errors
-
-Karol Herbst (1):
-      nouveau: explicitly wait on the fence in nouveau_bo_move_m2mf
-
-Likun Gao (1):
-      drm/amdgpu: add MGCG perfmon setting for gfx11
-
-Maxime Ripard (2):
-      drm/vc4: hdmi: Depends on CONFIG_PM
-      drm/vc4: hdmi: Rework power up
-
-Ma=C3=ADra Canal (1):
-      drm/amd/display: Include missing header
-
-Mukul Joshi (1):
-      drm/amdgpu: Fix page table setup on Arcturus
-
-Prike Liang (1):
-      drm/amdkfd: Fix isa version for the GC 10.3.7
-
-Qu Huang (1):
-      drm/amdgpu: mmVM_L2_CNTL3 register not initialized correctly
-
-Roman Li (1):
-      drm/amd/display: enable PCON support for dcn314
-
-Thomas Zimmermann (1):
-      Merge drm/drm-fixes into drm-misc-fixes
-
-Tim Huang (5):
-      drm/amdgpu: enable GFXOFF allow control for GC IP v11.0.1
-      drm/amdgpu: add TX_POWER_CTRL_1 macro definitions for NBIO IP v7.7.0
-      drm/amdgpu: add NBIO IP v7.7.0 Clock Gating support
-      drm/amdgpu: enable NBIO IP v7.7.0 Clock Gating
-      drm/amdgpu: add sdma instance check for gfx11 CGCG
-
-YiPeng Chai (2):
-      drm/amdgpu: Move psp_xgmi_terminate call from
-amdgpu_xgmi_remove_device to psp_hw_fini
-      drm/amdgpu: fix hive reference leak when adding xgmi device
-
-Zhenneng Li (1):
-      drm/radeon: add a force flush to delay work when radeon
-
-shaoyunl (1):
-      drm/amdgpu: Remove the additional kfd pre reset call for sriov
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  4 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c            |  3 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c           |  2 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             | 24 ++++---
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |  3 +-
- drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c            |  1 +
- drivers/gpu/drm/amd/amdgpu/mmhub_v9_4.c            | 12 +++-
- drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c             | 78 ++++++++++++++++++=
-++++
- drivers/gpu/drm/amd/amdgpu/soc21.c                 | 22 ++++--
- drivers/gpu/drm/amd/amdkfd/kfd_device.c            |  6 +-
- .../drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c    |  5 +-
- .../drm/amd/display/amdgpu_dm/amdgpu_dm_plane.h    |  8 ---
- .../drm/amd/display/dc/dcn314/dcn314_resource.c    |  1 +
- .../amd/include/asic_reg/nbio/nbio_7_7_0_offset.h  |  2 +
- .../amd/include/asic_reg/nbio/nbio_7_7_0_sh_mask.h | 13 ++++
- .../pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h | 31 +++++----
- drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h       |  2 +-
- drivers/gpu/drm/drm_gem.c                          | 17 +----
- drivers/gpu/drm/drm_internal.h                     |  4 +-
- drivers/gpu/drm/drm_prime.c                        | 20 +++---
- drivers/gpu/drm/nouveau/nouveau_bo.c               |  9 +++
- drivers/gpu/drm/radeon/radeon_device.c             |  3 +
- drivers/gpu/drm/vc4/Kconfig                        |  1 +
- drivers/gpu/drm/vc4/vc4_hdmi.c                     | 17 +++--
- 24 files changed, 206 insertions(+), 82 deletions(-)
+[snip]

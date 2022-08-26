@@ -2,68 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147BC5A2846
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413E35A284F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343706AbiHZNMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S235235AbiHZNPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiHZNL7 (ORCPT
+        with ESMTP id S232629AbiHZNO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:11:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE343A2DAC;
-        Fri, 26 Aug 2022 06:11:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67BF561D49;
-        Fri, 26 Aug 2022 13:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAD7C433C1;
-        Fri, 26 Aug 2022 13:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661519517;
-        bh=QQoUPSHqx5rAL5i+Fp7jqIcmWyRc9Uc4L6KZPpl4oys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pekQ1JJbaiyxjSHHbpz3EHPezpq7Wj00xt2jIS20NToeASW56PR1ztNrDktEk6kTy
-         93BiAQpcQztfV7IbJU8ceeRmwD02HWy675BAYXbv2SpVB8NToKDGRpZjFlrgEYjzpy
-         UsxsCNhQRx/NYbkHrSspjCeeTwqC2biw+USvHmf7w6y7zHYn10Xy955iK9iceuqiAO
-         7uPDbMbGDJyLedQ0Jfle8/7/yHUmFnzINELc/vFGXLE5s3paqbx8txUCFIHbLH78UZ
-         iZQE5hopUDJ2jA5c+zMn+onwTdRXMXIWnO5tovF+Ubv4totQN+L6hrBE7+4CkPZe4Q
-         hjjVehQelYekw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oRZ81-0005zC-La; Fri, 26 Aug 2022 15:12:06 +0200
-Date:   Fri, 26 Aug 2022 15:12:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 2/2] clk: qcom: gcc-sc7280: Keep USB GDSC power domains
- on when USB wakeup is enabled
-Message-ID: <YwjGpSXOscDwbvQH@hovoldconsulting.com>
-References: <20220822115246.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
- <20220822115246.2.If09027f73daa6e1ed95f5eab02326b543c67132e@changeid>
- <YwS3FCOqIeajMEgz@hovoldconsulting.com>
- <YwUDjaG6n95Ddij2@google.com>
- <YwXlsK3pjK/q1xwO@hovoldconsulting.com>
- <Ywf02oIXEL8G/Heo@google.com>
- <YwjFD9uHnSxoZHvT@google.com>
+        Fri, 26 Aug 2022 09:14:59 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1579110DA;
+        Fri, 26 Aug 2022 06:14:55 -0700 (PDT)
+Received: from [10.10.132.123] (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 51A5540D403D;
+        Fri, 26 Aug 2022 13:14:48 +0000 (UTC)
+Message-ID: <5dce2e1c-fa65-2fb3-08ad-65122f7e495d@ispras.ru>
+Date:   Fri, 26 Aug 2022 16:14:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwjFD9uHnSxoZHvT@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: WARNING in hif_usb_alloc_rx_urbs/usb_submit_urb
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ath9k-devel@qca.qualcomm.com, ldv-project@linuxtesting.org,
+        eli.billauer@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        andreyknvl@google.com, gustavoars@kernel.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        oneukum@suse.com, tiwai@suse.de, syzkaller-bugs@googlegroups.com
+References: <09fbc5ed-d67e-8308-1e49-2de6f2cea7dd@ispras.ru>
+ <Yv/ahFW577q5woup@rowland.harvard.edu>
+ <9ebc80d0-1b16-642c-e66b-2de52c673334@ispras.ru>
+Content-Language: en-US
+In-Reply-To: <9ebc80d0-1b16-642c-e66b-2de52c673334@ispras.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,33 +50,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 06:05:19AM -0700, Matthias Kaehlcke wrote:
-> On Thu, Aug 25, 2022 at 03:16:58PM -0700, Matthias Kaehlcke wrote:
-> > On Wed, Aug 24, 2022 at 10:47:44AM +0200, Johan Hovold wrote:
+Sat, 10 Oct 2020 at 04:08:19 UTC+3, Alan Stern wrote:
+ > Index: usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
+ > ===================================================================
+ > --- usb-devel.orig/drivers/net/wireless/ath/ath9k/hif_usb.c
+ > +++ usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
+ > @@ -1307,6 +1307,20 @@ static int ath9k_hif_usb_probe(struct us
+ > struct usb_device *udev = interface_to_usbdev(interface);
+ > struct hif_device_usb *hif_dev;
+ > int ret = 0;
+ > + struct usb_host_interface *alt;
+ > + struct usb_endpoint_descriptor *epd;
+ > +
+ > + /* Verify the expected endpoints are present */
+ > + alt = interface->cur_altsetting;
+ > + if (!usb_find_int_in_endpoint(alt, &epd) ||
+ > + usb_endpoint_num(epd) != USB_REG_IN_PIPE ||
+ > + !usb_find_int_out_endpoint(alt, &epd) ||
+ > + usb_endpoint_num(epd) != USB_REG_OUT_PIPE ||
+ > + !usb_find_bulk_in_endpoint(alt, &epd) ||
+ > + usb_endpoint_num(epd) != USB_WLAN_RX_PIPE ||
+ > + !usb_find_bulk_out_endpoint(alt, &epd) ||
+ > + usb_endpoint_num(epd) != USB_WLAN_TX_PIPE)
+ > + return -ENODEV;
+ >
+ > if (id->driver_info == STORAGE_DEVICE)
+ > return send_eject_command(interface);
 
-> > > The wakeup setting doesn't seem to have anything to do with the genpd
-> > > issues on sc8280xp and the controller doesn't resume properly regardless
-> > > of whether the PHYs have been disabled or not during suspend unless the
-> > > PD is left on.
-> > 
-> > I'm essentially seeing the same. USB is hosed after resume unless the PD
-> > is left on.
-> > 
-> > On Chrome OS we currently work around that with a version of commit
-> > d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller
-> > status") which was reverted upstream. I'm not sure whether USB worked after
-> > resume before we enabled wakeup support. I would have sworn it did, but we
-> > landed an old version of the wakeup patches a long time ago, so my
-> > memory might be failing me.
-> 
-> I need to remind myself that keeping the GDSC on is only needed when the PHYs
-> are kept on. The PHYs were always off before wakeup support was added, which
-> is why USB wasn't broken after suspend in the pre-wakeup days.
+We've tested the suggested patch and found a null-ptr-deref. The thing
+is that usb_find_{...}_endpoint() returns zero in normal case, and
+non-zero value (-ENXIO) when failed (in current patch version it is
+supposed to be just opposite and sometimes a NULL epd is dereferenced).
+To fix it the negation signs before usb_find_{...}_endpoint() should be
+removed.
 
-Ok, so to be clear: if you disable wakeup with my patches applied so
-that the PD is actually turned off, USB still resumes with only
-GENPD_FLAG_ACTIVE_WAKEUP set?
+And we also think usb_find_common_endpoints(...) should be used directly
+as all the scanned usb_endpoint_descriptors will be passed to it and
+returned in just one call.
 
-That is, you don't need to set ALWAYS_ON as I do with sc8280xp?
+If you wish, I may prepare the patch myself.
 
-Johan
+Fedor

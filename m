@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B314B5A259E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E885A25A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245448AbiHZKOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S234424AbiHZKOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242826AbiHZKOf (ORCPT
+        with ESMTP id S236831AbiHZKOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:14:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42686AFAC1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661508873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kLsMpZl6pKYr7WS0pD17GyZwc7LDBjeF1ao0OHp8dGw=;
-        b=G07r7/YHW3nBIG60Qkk/Cht9OvqIIOu8yYodiEOBN1eH+ipr8w15bqqu0cWgxm9Twl8c8E
-        KI1KUBm9lqZskzlYjdlv12gs8129OJRyutElffPMGfsFkTFJ/ZUOasLHoZah7ihKvKLhLR
-        pgIbGSIPxwHPsA3mKIB0t1ElRLuPB58=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-654-1ufTwsxLMTSQiFb28-_sig-1; Fri, 26 Aug 2022 06:14:32 -0400
-X-MC-Unique: 1ufTwsxLMTSQiFb28-_sig-1
-Received: by mail-ed1-f69.google.com with SMTP id b13-20020a056402350d00b0043dfc84c533so856925edd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:32 -0700 (PDT)
+        Fri, 26 Aug 2022 06:14:41 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB23C2FBC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:38 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e20so1212136wri.13
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=YRpdcaJ4r7VRT3/3i///gd/6IhC/k0ujvr195lrn9Lk=;
+        b=VSUkeWQzqxVlhVFu4DC9tyaajVlj//djUl8X7BaKZwQua+k3/xBJFtIuDLjNJjQWLL
+         GUaedmIJPtnNIiSBpY5M30o+30Jmmq1+sM9Rcp9s3vlmgwWWjzOLVA9s2rUJiYwfzqSI
+         ruXSplnM+iFUnlzG+3jlq28Y6R/yJQmNN42YpzLUNlvU/DMtnH8RREhwp6CNmsiD6cAn
+         P+odQZOAnBZyjm6qfeiccNeyztJh7Y0leBhqXWaNypkUwVE/lTfDMjJZ14dvEqlveVCO
+         JbSmJo0t4quHGh+3J0eEE02Ec8Xn1LwKIkbOSGlqxJVVetWJH28se8Gz+WiQRhVspY0M
+         RAiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=kLsMpZl6pKYr7WS0pD17GyZwc7LDBjeF1ao0OHp8dGw=;
-        b=KsgOZRopBuhDDMOeQzbQ5AkBM8uGUrwQOul9pEO3UHDBPe1RxyjQdweXiW5Cb+QKfv
-         +JbsVGf9cknBjOBdS1uyVb3tJdIKzUtjWWUT4CCK3bItCCIQ1V4smKK/nLPVMAyQRku1
-         1Vao44W5Z4zQZ4Icl5YC+ZvSmzFzee8kAIcNW1DMgAXg4kmQgl+135MFKIWUjdLVmXn5
-         Zh9X5GaZq43YYLuwBs1gyj5ItHs30rzGEHoll65UU7OkwLh66asgnTHlaAUdLhHkoT3C
-         5F46bpQaBLNdaTxkW+rKvTKY5WEKBqRpl08+3RChIShPqBpkj9Sl9wyxqLNnoiKcsSYT
-         ztcQ==
-X-Gm-Message-State: ACgBeo2MDZ+MUqT9d+ZsGf/6wVOi4okbDgAmpLRLqUsroakuxRIe92fK
-        qHq/kLiuqOuq8QWEsVUyma/WajJ/7JI7bXt28NTzugtsJVqZ7BBmU5xvx75Dn1MWuv1gB4EpUol
-        BNj6HAAFfgzu+9IdXtxBR0eqF
-X-Received: by 2002:a05:6402:3596:b0:447:11ea:362d with SMTP id y22-20020a056402359600b0044711ea362dmr6348252edc.117.1661508871303;
-        Fri, 26 Aug 2022 03:14:31 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR61958O0SP3ojKwfYX23ngd+Dh+aUFS3g76QnzgJsqidkUdenB0JJsJ4POiZUw39HMhYnJNIw==
-X-Received: by 2002:a05:6402:3596:b0:447:11ea:362d with SMTP id y22-20020a056402359600b0044711ea362dmr6348242edc.117.1661508871105;
-        Fri, 26 Aug 2022 03:14:31 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id kw2-20020a170907770200b0073872f367cesm716150ejc.112.2022.08.26.03.14.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 03:14:30 -0700 (PDT)
-Message-ID: <7558c548-7866-9176-34a2-056f4a72a483@redhat.com>
-Date:   Fri, 26 Aug 2022 12:14:29 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=YRpdcaJ4r7VRT3/3i///gd/6IhC/k0ujvr195lrn9Lk=;
+        b=A9HoUC2TGG9C5iQgn89BwowORj+i0lRPv0zXFA7TIuRAxvgsey+OJ4T8XFs8bHPpLf
+         6k3XpB6pS8/AujSPGaR+nOFuuaup7BFU01p526MQQe+zKoB9/iyCOdE4QKLiCfSN0S81
+         4PlDY/y+dCnYvO9lj1BJN83dPnViFGEzSJMgSGCMV52VSQet12CoPNY7Pzdmp+llf7i8
+         qOwEMq/yuJjmQ8Wy5U1o8aJ8EXVnQzzqN2BO8ssyPb/xAhDnFCXCz87Nhf9ae65RQ4Sx
+         jKjVnksloJ+98KWSZHTWjgEWQiW5n2ZYmPFb9B0ozpgxpiMBntj2JcuUZ72EsF3YdwZV
+         oOrQ==
+X-Gm-Message-State: ACgBeo1hT69q5V45MtaI09BXruA9msxEeOL5gY+AsR3uv8ynZXfoJ6+z
+        leinJuBmvqViWT8QZ/3l7Yh97aRpVJXV/w==
+X-Google-Smtp-Source: AA6agR6XuzcSJ7avTDDbXtkKVvQcQEVjKXh2P9x7wWoHp7sT5sEudBIMCpUai6U2OGmhHrEje1PKMg==
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr4466170wrr.583.1661508877365;
+        Fri, 26 Aug 2022 03:14:37 -0700 (PDT)
+Received: from lb02065.fritz.box ([2001:9e8:140d:2300:3a17:fa67:2b0b:b905])
+        by smtp.gmail.com with ESMTPSA id r8-20020a05600c284800b003a3561d4f3fsm1920423wmb.43.2022.08.26.03.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 03:14:36 -0700 (PDT)
+From:   Jack Wang <jinpu.wang@ionos.com>
+To:     jejb@linux.ibm.com
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi/qlogicpti: Fix dma_map_sg check
+Date:   Fri, 26 Aug 2022 12:14:35 +0200
+Message-Id: <20220826101435.79170-1-jinpu.wang@ionos.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] KVM: x86: use TPAUSE to replace PAUSE in halt polling
-Content-Language: en-US
-To:     "Mi, Dapeng1" <dapeng1.mi@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>
-References: <20220824091117.767363-1-dapeng1.mi@intel.com>
- <YwZDL4yv7F2Y4JBP@google.com>
- <PH0PR11MB4824201DABEFF588B4E0FE34CD729@PH0PR11MB4824.namprd11.prod.outlook.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <PH0PR11MB4824201DABEFF588B4E0FE34CD729@PH0PR11MB4824.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/25/22 13:31, Mi, Dapeng1 wrote:
->> I say "if", because I think this needs to come with performance numbers to show
->> the impact on guest latency so that KVM and its users can make an informed
->> decision.
->> And if it's unlikely that anyone will ever want to enable TPAUSE for halt polling,
->> then it's not worth the extra complexity in KVM.
-> I ever run two scheduling related benchmarks, hackbench and schbench, I didn't see  there are obvious performance impact.
-> 
-> Here are the hackbench and schbench data on Intel ADL platform.
+Add the missing error check for dma_map_sg.
 
-Can you confirm (using debugfs for example) that halt polling is used 
-while hackbench is running, and not used while it is not running?
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-In particular, I think you need to run the server and client on 
-different VMs, for example using netperf's UDP_RR test.  With hackbench 
-the ping-pong is simply between two tasks on the same CPU, and the 
-hypervisor is not exercised at all.
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+---
+ drivers/scsi/qlogicpti.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Paolo
+diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
+index 57f2f4135a06..8c961ff03fcd 100644
+--- a/drivers/scsi/qlogicpti.c
++++ b/drivers/scsi/qlogicpti.c
+@@ -909,7 +909,8 @@ static inline int load_cmd(struct scsi_cmnd *Cmnd, struct Command_Entry *cmd,
+ 		sg_count = dma_map_sg(&qpti->op->dev, sg,
+ 				      scsi_sg_count(Cmnd),
+ 				      Cmnd->sc_data_direction);
+-
++		if (!sg_count)
++			return -1;
+ 		ds = cmd->dataseg;
+ 		cmd->segment_cnt = sg_count;
+ 
+-- 
+2.34.1
 

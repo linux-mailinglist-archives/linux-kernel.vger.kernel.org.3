@@ -2,162 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C0E5A2B08
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5695A2B14
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343724AbiHZPWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S244045AbiHZPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344194AbiHZPWY (ORCPT
+        with ESMTP id S240660AbiHZPYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:22:24 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80C7E8310;
-        Fri, 26 Aug 2022 08:16:16 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oRb44-0000j9-GB; Fri, 26 Aug 2022 17:16:08 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
-        mark.rutland@arm.com
-Cc:     palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        paul.walmsley@sifive.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        cmuellner@linux.com, philipp.tomsich@vrull.eu,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH] drivers/perf: riscv_pmu_sbi: add perf_user_access sysctl
-Date:   Fri, 26 Aug 2022 17:15:56 +0200
-Message-Id: <20220826151556.1708879-1-heiko@sntech.de>
-X-Mailer: git-send-email 2.35.1
+        Fri, 26 Aug 2022 11:24:08 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D857DCFF8;
+        Fri, 26 Aug 2022 08:18:57 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id x5so1455653qtv.9;
+        Fri, 26 Aug 2022 08:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ir9pClhHiSh9+thFreEL1bpBTTHeDK2kTUYhvRZSn1I=;
+        b=YIvMvlkoqy6Ddjk4k+h0nO4nYRRCIovSaDWQ2Go+InBBpKqzYWhelaRUMWf11OXU+3
+         dBrCHpKSYeBMVA1eSkuNOqD460NLrqYexVXA30kGDVWYMB+Mhw+K6NaXacfyaKbP+ode
+         eVYs+YUfuS3sFPczAVaGJi/L3PixT7SE7n10apMiTQe3qzxfa6J+gINjmxqHu4A/6rxx
+         umrLaDPoe0nDBmLCSHpjp1A3nrrJwtsYmqk7WVio6HUFMnAmDyVXGGz/yRGO6Vg9oAQX
+         N9+fnWaz5YXUmy8UGxkg/Yltw4RYlz2qfypQbqZlck2+3lKg4UWA5BOAV+lr35AOZix4
+         MsmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ir9pClhHiSh9+thFreEL1bpBTTHeDK2kTUYhvRZSn1I=;
+        b=Vjo3RY7fv4jS6uE6qW1Zqr4jZAVEoauj1Pr6mpaOYXPld6GvTklK70idiILaV28VOf
+         KNofYLRVvMYWxhy03DOxBaEHtmlgJuzs2NPaA3UE+A9/qGeGh5blY44CIpaYzcK44j6h
+         jemzQ9DlgrwQMn0V4rdLyR18YIQDw8AWfyK/jpVM8VuAUVDBtpG1yK6HWasZTzkOaU00
+         9UI9R8C6EY2asi3uW933meU3rulp1feXetMseEJBZmkUxJVeqENVgiato6MMKym8CnAr
+         +GIasHZ+J4Oun5yyMHvL9i2POv4YXptVxZp8K2OMEcZl9/cZ2usGZ3bUfdP8JktbDfzR
+         0Hwg==
+X-Gm-Message-State: ACgBeo1oVo84zsKu1nowF3susGL8+e7p5FmWHNXeTXbtP41i5jDy8kcs
+        H1w/jb7auIieeLYcyeoCPmnbPL4F5qcYCokV45U=
+X-Google-Smtp-Source: AA6agR4UCrZD21JUkGpHAkQLjM5NAmWv2LS38onN0nlK38RIv7t8Cv6mTPpy9oKZJWTzJt560Y6E94qEAWNXs/nSBvk=
+X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
+ p17-20020a05622a049100b0034495bf8f05mr156849qtx.61.1661527136190; Fri, 26 Aug
+ 2022 08:18:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220825144012.24a33bb0@endymion.delvare> <CAHp75VeSgmO_=mXVR4uSpbQDO8MBGZu4O2vLEqunHYuoPfJbbQ@mail.gmail.com>
+ <20220826124603.4a28a154@endymion.delvare>
+In-Reply-To: <20220826124603.4a28a154@endymion.delvare>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 Aug 2022 18:18:20 +0300
+Message-ID: <CAHp75VcGopXaksmvXP_vMM-iGK0o_g5Fw_F5zvH+PXcCUx_cDQ@mail.gmail.com>
+Subject: Re: [PATCH] iio:accel:dmard06: Optimize when CONFIG_OF isn't set
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a sysctl similar to the one on arm64 to enable/disable
-access to counter CSRs from u-mode on RISC-V.
+On Fri, Aug 26, 2022 at 1:46 PM Jean Delvare <jdelvare@suse.de> wrote:
+> On Thu, 25 Aug 2022 23:12:43 +0300, Andy Shevchenko wrote:
+> > On Thu, Aug 25, 2022 at 3:54 PM Jean Delvare <jdelvare@suse.de> wrote:
 
-The default is of course set to disabled keeping the current
-state of access - to only the TIME CSR.
+...
 
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- Documentation/admin-guide/sysctl/kernel.rst |  6 +--
- drivers/perf/riscv_pmu_sbi.c                | 43 ++++++++++++++++++++-
- 2 files changed, 44 insertions(+), 5 deletions(-)
+> Now I'm curious, is there a well-defined subset of device names that
+> can be found in an ACPI table? If not, does that mean that any driver
+> with an OF entry could match,
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index ee6572b1edad..efd4bc385e7a 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -894,15 +894,15 @@ enabled, otherwise writing to this file will return ``-EBUSY``.
- The default value is 8.
- 
- 
--perf_user_access (arm64 only)
--=================================
-+perf_user_access (arm64 and riscv only)
-+=======================================
- 
- Controls user space access for reading perf event counters. When set to 1,
- user space can read performance monitor counter registers directly.
- 
- The default value is 0 (access disabled).
- 
--See Documentation/arm64/perf.rst for more information.
-+See Documentation/arm64/perf.rst for more information on arm64
- 
- 
- pid_max
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 6f6681bbfd36..7aab8d673357 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -41,6 +41,8 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
- 	NULL,
- };
- 
-+static int sysctl_perf_user_access __read_mostly;
-+
- /*
-  * RISC-V doesn't have hetergenous harts yet. This need to be part of
-  * per_cpu in case of harts with different pmu counters
-@@ -640,13 +642,22 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
- 	return IRQ_HANDLED;
- }
- 
-+/*
-+ * Depending on the perf_user_access setting, enable the access
-+ * from usermode either for all counters or for TIME csr only.
-+ */
-+static void riscv_pmu_update_user_access(void *info)
-+{
-+	csr_write(CSR_SCOUNTEREN, sysctl_perf_user_access ? GENMASK(31, 0) :
-+							    0x2);
-+}
-+
- static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
- {
- 	struct riscv_pmu *pmu = hlist_entry_safe(node, struct riscv_pmu, node);
- 	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
- 
--	/* Enable the access for TIME csr only from the user mode now */
--	csr_write(CSR_SCOUNTEREN, 0x2);
-+	riscv_pmu_update_user_access(NULL);
- 
- 	/* Stop all the counters so that they can be enabled from perf */
- 	pmu_sbi_stop_all(pmu);
-@@ -785,6 +796,32 @@ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
- 	cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
- }
- 
-+static int riscv_pmu_proc_user_access_handler(struct ctl_table *table,
-+			int write, void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+
-+	if (ret || !write)
-+		return ret;
-+
-+	on_each_cpu(riscv_pmu_update_user_access, NULL, 1);
-+
-+	return 0;
-+}
-+
-+static struct ctl_table sbi_pmu_sysctl_table[] = {
-+	{
-+		.procname       = "perf_user_access",
-+		.data		= &sysctl_perf_user_access,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode           = 0644,
-+		.proc_handler	= riscv_pmu_proc_user_access_handler,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
-+	{ }
-+};
-+
- static int pmu_sbi_device_probe(struct platform_device *pdev)
- {
- 	struct riscv_pmu *pmu = NULL;
-@@ -834,6 +871,8 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out_unregister;
- 
-+	register_sysctl("kernel", sbi_pmu_sysctl_table);
-+
- 	return 0;
- 
- out_unregister:
+Yes, anything can be matched by ACPI with any of the compatible strings.
+
+> therefore of_match_ptr() should be
+> removed from the kernel entirely?
+
+In most cases yes, like for discrete components that can be connected
+to any SoC on ACPI/DT/whatever platform. But for some cases it still
+makes sense: platform is known to never be non-OF, component is known
+to be used only on such platforms, etc.
+
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko

@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850C45A27CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD305A27C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbiHZM0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S1343677AbiHZMYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiHZM0s (ORCPT
+        with ESMTP id S230132AbiHZMYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:26:48 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04720D8B34;
-        Fri, 26 Aug 2022 05:26:47 -0700 (PDT)
-Received: from rd02-sz.amlogic.software (10.28.8.43) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.6; Fri, 26 Aug 2022
- 20:26:44 +0800
-From:   Huqiang Qin <huqiang.qin@amlogic.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <narmstrong@baylibre.com>, <khilman@baylibre.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Huqiang Qin <huqiang.qin@amlogic.com>
-Subject: [PATCH v2] arm64: dts: meson-s4: include meson-s4-gpio.h
-Date:   Fri, 26 Aug 2022 20:23:40 +0800
-Message-ID: <20220826122338.2452433-1-huqiang.qin@amlogic.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 26 Aug 2022 08:24:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563E0E9D;
+        Fri, 26 Aug 2022 05:24:29 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2405:201:10:389d:42df:ae4c:c047:294c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 829BD6601EC8;
+        Fri, 26 Aug 2022 13:24:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661516667;
+        bh=x89a8TvfcoIEzBD2+gLPAUruz1s8rtys3PetrUIb6xc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dbdEzMnnKG3ER31kdXrzaxxao0JBbpW386BCpHg+L5YtlTFwd+bnow3gPket6+Vsb
+         B169O8KzxPR3Zv14CRcbtQb5hJGa6zqDkY5HR2B8rzSxnmqWrQOnOyS3gbHhr9SEXb
+         g9hjgeqCob+dq0t/nhrYOKtU/0MO/61ycylKOJVoMqrnumjBq+QFuO24uzsoMSTSNC
+         dDqBPpszKDUCdVIvakDRVFwOnoUSXzI9+mYSz9gF7rxV6TWNbDCdDAPvzkhaVM8lpk
+         sh+v7To32hot+P0tKDC5mhD9cNHONafNpigivEyABYUUVKn74TjbfyWe+HsYQFz3YM
+         hLUwB7RaHYGLw==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     krisman@collabora.com, dmitry.osipenko@collabora.com,
+        kernel@collabora.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] iio: light: tsl2583: Fix module unloading
+Date:   Fri, 26 Aug 2022 17:53:52 +0530
+Message-Id: <20220826122352.288438-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.43]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the future, meson-s4.dtsi will have some nodes that need
-to use the meson-s4-gpio.h file.
+tsl2583 uses devm_iio_device_register() function and
+calling iio_device_unregister() in remove breaks the
+module unloading.
+Fix this by using iio_device_register() instead of
+devm_iio_device_register() function in probe.
 
-e.g.
-  * Bluetooth enable pin:
-    bt_en-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-  * Audio mute pin:
-    spk_mute-gpios = <&gpio GPIOH_8 GPIO_ACTIVE_LOW>;
-  * ...
-
-Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
+Cc: stable@vger.kernel.org
+Fixes: 371894f5d1a0 ("iio: tsl2583: add runtime power management support")
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v2
+  - Use iio_device_register() instead of devm_iio_device_register()
+  - Add fixes and stable tags
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-index ad50cba42d19..44cce8b0fcef 100644
---- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-@@ -6,6 +6,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/gpio/meson-s4-gpio.h>
+ drivers/iio/light/tsl2583.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iio/light/tsl2583.c b/drivers/iio/light/tsl2583.c
+index 82662dab87c0..94d75ec687c3 100644
+--- a/drivers/iio/light/tsl2583.c
++++ b/drivers/iio/light/tsl2583.c
+@@ -858,7 +858,7 @@ static int tsl2583_probe(struct i2c_client *clientp,
+ 					 TSL2583_POWER_OFF_DELAY_MS);
+ 	pm_runtime_use_autosuspend(&clientp->dev);
  
- / {
- 	cpus {
+-	ret = devm_iio_device_register(indio_dev->dev.parent, indio_dev);
++	ret = iio_device_register(indio_dev);
+ 	if (ret) {
+ 		dev_err(&clientp->dev, "%s: iio registration failed\n",
+ 			__func__);
 -- 
-2.37.1
+2.30.2
 

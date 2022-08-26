@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691D65A308E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B050F5A3094
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344954AbiHZUjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S231655AbiHZUk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 16:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344914AbiHZUje (ORCPT
+        with ESMTP id S243095AbiHZUkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:39:34 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FD4CC33E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:39:33 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id r10so3388626oie.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=dddmhs6+o4Xh9+N13zA/oRm8MafN5+Bs+QATExsKyJY=;
-        b=hKBtKzMs03S28uiZi6W8K8XZgK75JXvAxKo69eY/sQekyRhp1YDNE92qlzZ1RrAq3M
-         QsDsiQB7qxj8u5WGLGJHEZN07uqx4uc0DTtu5I/rzwTBshwnXs6bsC5fraE+DzBgABfq
-         lJf137qOxIx2CcV4CeSlhGUTvJUGsGWMiR+hC4BwUa4b2NwK/oVTNO2xok8F82P7n4Ep
-         RxPpF7+nfDHOA1DhvwWcT2s2Vm11G62IR+Bl5ajoBGVZxYxGlU+DLmQ61DOgfjg35AOy
-         zGeumYcJWLrbLg4asbyORIc7ded9kdzu0zs+lFpE60Shh652rk31pj+32mP95lMFUTfH
-         idkQ==
+        Fri, 26 Aug 2022 16:40:23 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD8ED0765;
+        Fri, 26 Aug 2022 13:40:22 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f2a4c51c45so3504106fac.9;
+        Fri, 26 Aug 2022 13:40:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=dddmhs6+o4Xh9+N13zA/oRm8MafN5+Bs+QATExsKyJY=;
-        b=otal6CPKzJaZWVwBa4heCwwZUJOml1e/ySs4H4qz2pm/55AIsaowQCz8dnD4tdjJlm
-         zkL5wGsLtYZkBSmES9AHnW7ty5s6QQem6zc/zqqmw2p7UUAuLOnb5Cl5V4dMPO2oegIA
-         B165SM2idL3RcuMjSubH3DjnDDbL0C1cXX3gMPu9aw/dMzf5QDsqgyOL+W6HvJM801WE
-         GqCtJt7EaQhPh/F9W03n5ZljpoktnIIUDBdu6XE8lEtotn/5V1Yll8U0UDrhgP0QqKs7
-         P9sDoEpYQpCY53Exnpec7d1Q+SHA6SDymS7djJ4tMx5KZwvETmRI17Vova/7GY7hXNL0
-         wwKw==
-X-Gm-Message-State: ACgBeo3oZwbftI1mvTJvERbCTD2V7vNEC2uN7qzV98o0NsansYIDl/ER
-        rOJK1rFlzFgDWqaC2iT7vc2kSIihhonxBzyttsA=
-X-Google-Smtp-Source: AA6agR5YV12hxD8EP5woASxrumAqZLtWB2nIX2ZgJ6CEQXi1v32YpdrloQb1NynuwLMpljxfEtaSTgJaT+IXUD3ZTbs=
-X-Received: by 2002:a05:6808:2187:b0:344:eccd:3fc5 with SMTP id
- be7-20020a056808218700b00344eccd3fc5mr2542948oib.46.1661546372683; Fri, 26
- Aug 2022 13:39:32 -0700 (PDT)
+        bh=VC/B2aCmREbDRB0d5cj7IYjvFuzN89g85WyKxEil/CU=;
+        b=KirXgUr77bdD4gWhDmx7SpUOxQ+sRuVg1t6MA1jzD8f4nbj3F81+86jyK2ppGTiVC9
+         OU0NU+wCCXjOi1pq5bKD/1TyAjbFTBONVWrJS/Vi7WSwA1P8YE39gO0bQfnpijhXetz3
+         9dCsYbkP5ujNeGWAWS+FfHAqJwdG18RfkWIlx0UKXE7v4I9FYOzGaT7vA+1PU55YDWaY
+         2OLlKFhM4a5F4x6Qk7de6Nh0wej14vCDN9w09TMzfr1QCKTm+rDuZwaJGWpHJE/pGUEO
+         H7QHBl5stMBlEM652Q8+EXXRu5PjU4CyFGHL2nCioS6bE1NncOzDrAdXdM+zCp+5oNTt
+         wviw==
+X-Gm-Message-State: ACgBeo1roImPCfFzkRfeCxwOu2ds4a13dGcBCBMgk4/buC+NFri41bXf
+        45n3lXr6aERJidg7K+e1K9WqDoGj6JOKjDqR3KQ=
+X-Google-Smtp-Source: AA6agR4Te3dKQ6g6TKR4BckswAseo5LxEUCtZ4KSfu1JnyrPazLFBIFV26Eo/GzBpNZW/s1MlD6JFM2mGBqa6Jj4oeg=
+X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
+ em4-20020a0568705b8400b0010cd1fa2f52mr2722690oab.92.1661546421646; Fri, 26
+ Aug 2022 13:40:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220826084121.94319-1-sunliming@kylinos.cn>
-In-Reply-To: <20220826084121.94319-1-sunliming@kylinos.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 26 Aug 2022 16:39:21 -0400
-Message-ID: <CADnq5_O2WoDxCJG0rx_x1VhqVHxDT8Aa-X1h+5XwPALiO=8qOA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Fix variable dereferenced before check
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch,
-        kernel test robot <lkp@intel.com>, kelulanainsley@gmail.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com> <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+ <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com> <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+ <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com> <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
+ <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
+In-Reply-To: <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 26 Aug 2022 13:40:10 -0700
+Message-ID: <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Fri, Aug 26, 2022 at 12:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 26/08/22 22:00, Namhyung Kim wrote:
+> > On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >> Below seems adequate for now, at least logically, but maybe it
+> >> would confuse clang thread-safety analysis?
+> >
+> > I think it's not just about locks, the exit_browser should bail out early
+> > if the setup code was not called.
+>
+> In those cases, use_browser is 0 or -1 unless someone has inserted
+> an invalid perf config like "tui.script=on" or "gtk.script=on".
+> So currently, in cases where exit_browser() is called without
+> setup_browser(), it does nothing.  Which means it is only the
+> unconditional mutex_destroy() that needs to be conditional.
 
-Alex
+Yeah there's a possibility that it can be called with > 0 use_browser
+on some broken config or something.  So I think it's safer and better
+for future changes.
 
-On Fri, Aug 26, 2022 at 4:41 AM sunliming <sunliming@kylinos.cn> wrote:
->
-> Fixes the following smatch warning:
->
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:311 dc_dmub_srv_p_state_delegate()
-> warn: variable dereferenced before check 'dc' (see line 309)
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> ---
->  drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> index 09b304507bad..ebf99e8f93e0 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> @@ -323,11 +323,13 @@ bool dc_dmub_srv_p_state_delegate(struct dc *dc, bool should_manage_pstate, stru
->         struct dmub_cmd_fw_assisted_mclk_switch_config *config_data = &cmd.fw_assisted_mclk_switch.config_data;
->         int i = 0;
->         int ramp_up_num_steps = 1; // TODO: Ramp is currently disabled. Reenable it.
-> -       uint8_t visual_confirm_enabled = dc->debug.visual_confirm == VISUAL_CONFIRM_FAMS;
-> +       uint8_t visual_confirm_enabled;
->
->         if (dc == NULL)
->                 return false;
->
-> +       visual_confirm_enabled = dc->debug.visual_confirm == VISUAL_CONFIRM_FAMS;
-> +
->         // Format command.
->         cmd.fw_assisted_mclk_switch.header.type = DMUB_CMD__FW_ASSISTED_MCLK_SWITCH;
->         cmd.fw_assisted_mclk_switch.header.sub_type = DMUB_CMD__FAMS_SETUP_FW_CTRL;
-> --
-> 2.25.1
->
+Thanks,
+Namhyung

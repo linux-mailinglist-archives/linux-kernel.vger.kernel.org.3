@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D5C5A28CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96855A28C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243574AbiHZNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S1343861AbiHZNrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344378AbiHZNpZ (ORCPT
+        with ESMTP id S230256AbiHZNrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:45:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B5943E73;
-        Fri, 26 Aug 2022 06:45:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7FE6B82F84;
-        Fri, 26 Aug 2022 13:45:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8466CC433D6;
-        Fri, 26 Aug 2022 13:45:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661521520;
-        bh=/wCO+8NSsd2IYaROtKGfH5tdFKHXG6nMlG+xYwW1HJk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=oZUROb8qX+9vmEmC4yo3jFzm26WdhONdNte9Nj1h7bIjlxeM0fdO/WkSUsg2SmV5I
-         FGlDnvy9isRLKMkqtfXr6i6Oh8WMQzZSttVt2iIaHtC9/Z4jsHYGl9+O9/METg+xFH
-         PsL8XHqVghg+eFaG4Tn8YTHEdDIT7wOBHtTEou6eM8vP6aOX/TqQN9DLLkCXVRTMaY
-         7EnAsvKAyq6PqBURbknt42CUz9ZuWEQ+PlCXayS5d7UUBZa3YJSX2BlofCs+JqWPyb
-         DUsbjGkYUwFVWA9c7ql/21r+TBd8gSrjmkzo66Nnxc+guBh2RSTZbzaDyKrKu+fCdB
-         94IqVvvTF2dvw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1FF0F5C03F3; Fri, 26 Aug 2022 06:45:20 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 06:45:20 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] rcu: Simplify the code logic of rcu_init_nohz()
-Message-ID: <20220826134520.GS6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220825092311.179-1-thunder.leizhen@huawei.com>
- <20220825092311.179-2-thunder.leizhen@huawei.com>
- <20220825172654.GP6159@paulmck-ThinkPad-P17-Gen-1>
- <43370a3c-8c7a-c7c7-ac2b-bec2bf6c8728@huawei.com>
+        Fri, 26 Aug 2022 09:47:08 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F6BDC5F7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:47:04 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b16so2184205edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=tdyqm7lW/9+BRKW1noV2HeTiiovjnxyU7lQpW/yER3A=;
+        b=O9w7ecSB+WNfVwITP4QWmvW6OO25vFRs1Sdo2EdTAls2m3jrPtBALKsm1IOhTVKxoA
+         cXJlYperIsC5N8IyAuHQSQzyPFLBTktnttvC8CE2fVhx7MlWn7VkKNkRTej4H0OJw9CM
+         u5wvIKojceg8sTi6soDnTD7Mj2W11Wj5s+kObbrzqfzBYsisqYVFrii8VV7HToejDDXP
+         tnHJCciBrqk8aOhappwRGWZ/YBgSOigHd/ge969BkVJr2fo0rA6g2iDYPFI0k7V/xuZM
+         c72JEdZ3Br8wj3p6s51gEoILwgjx/ZR7EAVCS2jCr2k23c8qxKaPs068T4o8Uv0BR2tZ
+         vxeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tdyqm7lW/9+BRKW1noV2HeTiiovjnxyU7lQpW/yER3A=;
+        b=RkGnXuS7on4NvZvToYF/3wiZWhYQWlELEGKq/LjNTGNYj22NDi1i3HZClZnCGnyEfh
+         HvdgYRssPO4Ww0SX9+1okeHurYqymU1GY6rmUhM7qb2vqwEAhLpTs5fm3Ro9GbOuXjl6
+         ayiL4tre3vNFP2iHc17PUulyM8klPUHoRe8ohm9NZmFvqKnBDwvCSRUOnTgsC9x//pBw
+         bhhWQCfQnPOKJ3/t6Vn/nNK+VqkIVigGNRFVKla640ybd1c74+46p67SO25/Rd60IboW
+         we33riUUbyR/aXDa3hQW4nShyQSf9AmV9ReO0JTgYhM9A2CmPke01ho8tYRky7OKFXf8
+         yFOw==
+X-Gm-Message-State: ACgBeo1PgPMePr39B7JwyWs+9OPZv8CJOwIwmLDnd/zsx4VK0oud30qW
+        fG3ZE5iShJKwbFeV+AHF8O941DeXVVqq2Nm25yt5wQ==
+X-Google-Smtp-Source: AA6agR67VcVIwydkOJbRJ+QEjF4GAyGy9EWxWvhhZOU/F/3QiJ1q7RjJsgnEJCNT7kkdxyg3X2i9roJGA4m0wxjQ1sg=
+X-Received: by 2002:a05:6402:1f8c:b0:43e:8fab:76c with SMTP id
+ c12-20020a0564021f8c00b0043e8fab076cmr6821062edc.126.1661521622829; Fri, 26
+ Aug 2022 06:47:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43370a3c-8c7a-c7c7-ac2b-bec2bf6c8728@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220825124134.30242-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220825124134.30242-1-yuanjilin@cdjrlc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 15:46:51 +0200
+Message-ID: <CACRpkday3c1BUDgheHVovBJ=v9Z-Gbq92Ex4J3VmKDr4sYdL9w@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl/nuvoton: Use 'unsigned int' instead of just 'unsigned'.
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,120 +68,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 09:42:11AM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/8/26 1:26, Paul E. McKenney wrote:
-> > On Thu, Aug 25, 2022 at 05:23:11PM +0800, Zhen Lei wrote:
-> >> When CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or CONFIG_NO_HZ_FULL=y, additional
-> >> CPUs need to be added to 'rcu_nocb_mask'. But 'rcu_nocb_mask' may be not
-> >> available now, due to 'rcu_nocbs' is not specified. Check and initialize
-> >> 'rcu_nocb_mask' before using it. This code simplification strictly follows
-> >> this logic, compared with old implementations, unnecessary crossovers are
-> >> avoided and easy to understand.
-> >>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > 
-> > Much nicer, thank you!
-> > 
-> > As usual, I could not resist the urge to wordsmith.  Could you please
-> > check to make sure that I did not mess anything up?
-> 
-> Okay, thank you very much. The boot option name "rcu_nocb_mask=" is
-> incorrect, should be "rcu_nocbs=".
+On Thu, Aug 25, 2022 at 2:41 PM Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
 
-Good eyes, thank you!  I will fix this on the next rebase.
+> 'unsigned int' should be clearer than 'unsigned'.
+>
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 
-							Thanx, Paul
+Patch applied.
 
-> > ------------------------------------------------------------------------
-> > 
-> > commit 4ac3b3d1a19943b1522c0b1d0895aefbb80ec294
-> > Author: Zhen Lei <thunder.leizhen@huawei.com>
-> > Date:   Thu Aug 25 17:23:11 2022 +0800
-> > 
-> >     rcu: Simplify rcu_init_nohz() cpumask handling
-> >     
-> >     In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
-> >     CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
-> >     Except that kernels booted without the rcu_nocb_mask= will not have
-> 
-> rcu_nocb_mask=   ---->  rcu_nocbs=
-> 
-> >     allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
-> >     its need_rcu_nocb_mask and offload_all local variables to track the
-> >     rcu_nocb and nohz_full state.
-> >     
-> >     But there is a much simpler approach, namely creating a cpumask pointer
-> >     to track the default and then using cpumask_available() to check the
-> >     rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
-> >     and shortening the rcu_init_nohz() function.
-> >     
-> >     Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index 0a5f0ef414845..c8167be2288fa 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -1210,45 +1210,31 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
-> >  void __init rcu_init_nohz(void)
-> >  {
-> >  	int cpu;
-> > -	bool need_rcu_nocb_mask = false;
-> > -	bool offload_all = false;
-> >  	struct rcu_data *rdp;
-> > +	const struct cpumask *cpumask = NULL;
-> >  
-> >  #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> > -	if (!rcu_state.nocb_is_setup) {
-> > -		need_rcu_nocb_mask = true;
-> > -		offload_all = true;
-> > -	}
-> > -#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
-> > -
-> > -#if defined(CONFIG_NO_HZ_FULL)
-> > -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
-> > -		need_rcu_nocb_mask = true;
-> > -		offload_all = false; /* NO_HZ_FULL has its own mask. */
-> > -	}
-> > -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> > +	cpumask = cpu_possible_mask;
-> > +#elif defined(CONFIG_NO_HZ_FULL)
-> > +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-> > +		cpumask = tick_nohz_full_mask;
-> > +#endif
-> >  
-> > -	if (need_rcu_nocb_mask) {
-> > +	if (cpumask) {
-> >  		if (!cpumask_available(rcu_nocb_mask)) {
-> >  			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
-> >  				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
-> >  				return;
-> >  			}
-> >  		}
-> > +
-> > +		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
-> >  		rcu_state.nocb_is_setup = true;
-> >  	}
-> >  
-> >  	if (!rcu_state.nocb_is_setup)
-> >  		return;
-> >  
-> > -#if defined(CONFIG_NO_HZ_FULL)
-> > -	if (tick_nohz_full_running)
-> > -		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
-> > -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> > -
-> > -	if (offload_all)
-> > -		cpumask_setall(rcu_nocb_mask);
-> > -
-> >  	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
-> >  		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
-> >  		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-> > .
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
+Yours,
+Linus Walleij

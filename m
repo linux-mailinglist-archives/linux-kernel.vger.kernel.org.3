@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FA55A2213
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3675A2215
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245376AbiHZHjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
+        id S245386AbiHZHkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241505AbiHZHjU (ORCPT
+        with ESMTP id S241505AbiHZHkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:39:20 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE8E9D13D;
-        Fri, 26 Aug 2022 00:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1661499555;
-        bh=xbq4JSkJ3q4yhKrUImOqVqkALOzpDY+WNKe5bh9TfsE=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=iFYzrZ3KL4kE56bco4SbddMqnXMMhxbDGoJT2RHMo+n/SpBGk4fb5uTBVNcJvJ4Tl
-         VCDHXU4U6skLqBvB8kBQZoetqAYQ6Z4LGTTB+Gy9eQHX1Rd7qyyjnJTSAitarFbF9R
-         6VGIVjcM44xsuTbD1ExOfNODa9v+YcKLaMUdua/0=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D5B5C1280E04;
-        Fri, 26 Aug 2022 03:39:15 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pEhvqNtTl1gI; Fri, 26 Aug 2022 03:39:15 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1661499555;
-        bh=xbq4JSkJ3q4yhKrUImOqVqkALOzpDY+WNKe5bh9TfsE=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=iFYzrZ3KL4kE56bco4SbddMqnXMMhxbDGoJT2RHMo+n/SpBGk4fb5uTBVNcJvJ4Tl
-         VCDHXU4U6skLqBvB8kBQZoetqAYQ6Z4LGTTB+Gy9eQHX1Rd7qyyjnJTSAitarFbF9R
-         6VGIVjcM44xsuTbD1ExOfNODa9v+YcKLaMUdua/0=
-Received: from [IPv6:2a00:23c8:1005:a801:e95:68ca:9caa:7c8c] (unknown [IPv6:2a00:23c8:1005:a801:e95:68ca:9caa:7c8c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E54EC1280AD2;
-        Fri, 26 Aug 2022 03:39:13 -0400 (EDT)
-Message-ID: <042650172f59fca9836fe523ce14a07daccc4f2d.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 6.0-rc2
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 26 Aug 2022 08:39:10 +0100
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 26 Aug 2022 03:40:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044FF47B80
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:40:09 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MDWqQ0cWmzkWcH;
+        Fri, 26 Aug 2022 15:36:34 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 15:40:06 +0800
+Received: from [10.174.176.230] (10.174.176.230) by
+ kwepemm600008.china.huawei.com (7.193.23.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 15:40:05 +0800
+Message-ID: <893836a5-0aaa-e5e6-81ba-cc9570b9a026@huawei.com>
+Date:   Fri, 26 Aug 2022 15:40:04 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH -next] sched/deadline: Add start_new_instance helper
+To:     Daniel Bristot de Oliveira <bristot@redhat.com>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220826031521.13391-1-shangxiaojing@huawei.com>
+ <651dbb96-8d6e-53e9-a99f-0bb12f5b2723@redhat.com>
+From:   shangxiaojing <shangxiaojing@huawei.com>
+In-Reply-To: <651dbb96-8d6e-53e9-a99f-0bb12f5b2723@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.230]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-10 fixes.  Of the three core changes, the two large ones are a complete
-reversion of the async rework and an ALUA timing rework (the latter
-shouldn't affect non-ALUA paths).  The remaining patches are all small
-and all but one in drivers.
 
-The patch is available here:
+On 2022/8/26 15:15, Daniel Bristot de Oliveira wrote:
+> On 8/26/22 05:15, Shang XiaoJing wrote:
+>> Wrap repeated code in helper function start_new_instance, which set
+>> the deadline and runtiem of input dl_se based on pi_of(dl_se). Note that
+>                        ^ runtime
+oops
+>> setup_new_dl_entity originally set the deadline and runtime base on
+>> dl_se, which should equals to pi_of(dl_se) for non-boosted task.
+>>
+>> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+>> ---
+>>   kernel/sched/deadline.c | 22 ++++++++++++----------
+>>   1 file changed, 12 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+>> index 4a40a462717c..5e9c28847610 100644
+>> --- a/kernel/sched/deadline.c
+>> +++ b/kernel/sched/deadline.c
+>> @@ -770,6 +770,13 @@ static void enqueue_task_dl(struct rq *rq, struct task_struct *p, int flags);
+>>   static void __dequeue_task_dl(struct rq *rq, struct task_struct *p, int flags);
+>>   static void check_preempt_curr_dl(struct rq *rq, struct task_struct *p, int flags);
+> again, this is not a good function name. Maybe, dl_replenish_new_period() ?
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+right, i have thought like replenish_new_instance, but when i'm making 
+patch,  i was worried that "replenish" is only for ENQUEUE_REPLENISH.
 
-The short changelog is:
+what about dl_start_new_period? which means a new deadline will be set, 
+rather than
 
-Alim Akhtar (1):
-      scsi: ufs: host: ufs-exynos: Make fsd_ufs_drvs static
+     dl_se->deadline += pi_of(dl_se)->dl_period;
 
-Bart Van Assche (2):
-      scsi: sd: Revert "Rework asynchronous resume support"
-      scsi: ufs: core: Reduce the power mode change timeout
+in replenish_dl_entity.
 
-Brian Bunker (1):
-      scsi: core: Allow the ALUA transitioning state enough time
+>> +static inline void start_new_instance(struct sched_dl_entity *dl_se, struct rq *rq)
+>> +{
+>> +	/* for non-boosted task, pi_of(dl_se) == dl_se */
+>> +	dl_se->deadline = rq_clock(rq) + pi_of(dl_se)->dl_deadline;
+>> +	dl_se->runtime = pi_of(dl_se)->dl_runtime;
+>> +}
+>> +
+> -- Daniel
 
-Guixin Liu (2):
-      scsi: megaraid_sas: Remove unnecessary kfree()
-      scsi: megaraid_sas: Fix double kfree()
+Thanks,
 
-Kiwoong Kim (1):
-      scsi: ufs: core: Enable link lost interrupt
-
-Mike Christie (1):
-      scsi: core: Fix passthrough retry counter handling
-
-Saurabh Sengar (1):
-      scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
-
-Tony Battersby (1):
-      scsi: qla2xxx: Disable ATIO interrupt coalesce for quad port ISP27XX
-
-And the diffstat:
-
- drivers/scsi/megaraid/megaraid_sas_base.c   |  8 +--
- drivers/scsi/megaraid/megaraid_sas_fusion.c |  1 -
- drivers/scsi/qla2xxx/qla_target.c           | 10 +---
- drivers/scsi/scsi_lib.c                     | 47 +++++++++-------
- drivers/scsi/sd.c                           | 84 +++++++----------------------
- drivers/scsi/sd.h                           |  5 --
- drivers/scsi/storvsc_drv.c                  |  2 +-
- drivers/ufs/core/ufshcd.c                   |  9 +++-
- drivers/ufs/host/ufs-exynos.c               |  2 +-
- include/ufs/ufshci.h                        |  6 +--
- 10 files changed, 60 insertions(+), 114 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-
+Shang XiaoJing
 

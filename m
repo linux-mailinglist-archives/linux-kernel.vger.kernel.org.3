@@ -2,142 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257935A2CE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9848A5A2CEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344882AbiHZQxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S243730AbiHZQ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344123AbiHZQx1 (ORCPT
+        with ESMTP id S230486AbiHZQ4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:53:27 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BD151411
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:53:26 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id x9-20020a056602210900b006897b3869e4so1230421iox.16
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:53:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=O4xE16U1PcNmJvjpOhAN7LuGuI92F91Ca8SLJk21uSE=;
-        b=N3j0QwmBU13VDrGYJXr1slNPo31MhmpdozTh9KKmBTBdhRXF0HGyCHvonsourYYaHM
-         nxzljiGjONFkVosNgyXT6KxVrhyinnshFNaNK+8Hm2hZUx7Mu6+kkMwfF1zV9m5TR+iu
-         TVS6CI7Nll7+7mCbJsyHRe5QChjfYH8KldfZoFzwI7PTflzpEnKQju3mIzcQopJ00TXf
-         lK7DMhlgTLNomcOJWvNZWpXCefj8M0rAfDBhfXSziQvvglMrM5gO9A9ZFq8Vt4tEx2cH
-         CnwPTwpRKS2DTG+Q5weezpaBbIOEB8fOs8dZr58iwttvDSh01no1QgLvZjKU0UzaL8kp
-         qAJw==
-X-Gm-Message-State: ACgBeo0lV8+Z8aKn9D8+4NeKceCDWQulrLmQUY0qUvd5c/fC3GqieF+a
-        W4CGK5Pgz3iUT/6TLf3ocjh3fIE02F4dG6QpixFbdhhmdM+g
-X-Google-Smtp-Source: AA6agR7FLZVFUv6fjm0fltgjZs2aUZj2vnwWLzSsh6q6zjMQGFJlD1zJQcmnGG2dzIdVBHU48SGqk269+nAQkilpTFXQFflmqzYt
-MIME-Version: 1.0
-X-Received: by 2002:a92:511:0:b0:2ea:9574:c6b8 with SMTP id
- q17-20020a920511000000b002ea9574c6b8mr2299310ile.31.1661532805948; Fri, 26
- Aug 2022 09:53:25 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 09:53:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ae6d9205e727c0f5@google.com>
-Subject: [syzbot] WARNING in ext2_fill_super
-From:   syzbot <syzbot+0f2f7e65a3007d39539f@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 26 Aug 2022 12:56:47 -0400
+Received: from smtpout30.security-mail.net (smtpout30.security-mail.net [85.31.212.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96157A52E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:56:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx306.security-mail.net (Postfix) with ESMTP id 13CA53994E8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:56:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1661533000;
+        bh=RUEEvXqouYqNkm0U0P1EZVTQX1P0TCPoxuusWsEw05Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QJKnzMlB88DNE6j/w1z0lpqRZiCtiNWVv2ABBXjhCz8WDgjU2bIIVNjmuktOu0Dcc
+         esn4bAQFXCIohgU91I18Hyk9WXpelyuGeLSFrsnlFVXooVUkt+rb0nMf05g3xNiZ2T
+         Sx7Gi9yUVdU8MO5Anelew6Hv9EhKqiLlRH8Is5so=
+Received: from fx306 (localhost [127.0.0.1])
+        by fx306.security-mail.net (Postfix) with ESMTP id B2B3C3994A1;
+        Fri, 26 Aug 2022 18:56:39 +0200 (CEST)
+X-Virus-Scanned: E-securemail
+Secumail-id: <4ee8.6308fb47.17078.0>
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
+        by fx306.security-mail.net (Postfix) with ESMTPS id 17CEC3993D0;
+        Fri, 26 Aug 2022 18:56:39 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id E1DD327E0392;
+        Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id C7AEB27E0396;
+        Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu C7AEB27E0396
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661532998;
+        bh=8QCQcukmddoAigmi2bZXjK4ovAPrdFjkKWbgX4jEFsM=;
+        h=From:To:Date:Message-Id;
+        b=Ky3mkNDjGKaPdpw13LbXBd9Oska6WxZfcKcGZCuBMU848nE944hqS0MAvfJ1Lza2C
+         zNGPUi0EPvju+XA3e2dbHIezkOoG3Or5e0kftzKjAUMAWnbhAcXtunJJnFW0B1ZJLP
+         BJlKY2/jP8dtpIRuapp9eNv55H1a10d/8Ll3Y3FI=
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id e0zIwA12G-6z; Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id B09C827E0392;
+        Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>, Conor.Dooley@microchip.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Subject: [PATCH v4] Remove duplicated words across the whole documentation
+Date:   Fri, 26 Aug 2022 18:56:34 +0200
+Message-Id: <20220826165634.5617-1-jmaselbas@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220826163458.1142-1-jmaselbas@kalray.eu>
+References: <20220826163458.1142-1-jmaselbas@kalray.eu>
+X-Virus-Scanned: by Secumail
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Remove duplicated words (the, at, be ...) across the whole documentation.
+In some cases the duplicated words are replaced by something that makes
+more sense, for instance: "be be" is replaced by "can be" when possible.
 
-syzbot found the following issue on:
+There are likely more duplicated words.
 
-HEAD commit:    680fb5b009e8 Merge tag 'arm64-upstream' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13afe5e3080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4557ad2600fc45f4
-dashboard link: https://syzkaller.appspot.com/bug?extid=0f2f7e65a3007d39539f
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ea730d080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1546af0d080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0f2f7e65a3007d39539f@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 15
-Dev loop0: unable to read RDB block 15
- loop0: unable to read partition table
-loop0: partition table beyond EOD, truncated
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3025 at mm/page_alloc.c:5403 __alloc_pages+0x150/0x1fc mm/page_alloc.c:5403
-Modules linked in:
-CPU: 0 PID: 3025 Comm: syz-executor332 Not tainted 5.19.0-rc8-syzkaller-01618-g680fb5b009e8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
-pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __alloc_pages+0x150/0x1fc mm/page_alloc.c:5403
-lr : alloc_pages+0x2fc/0x404
-sp : ffff80000fee3960
-x29: ffff80000fee39a0 x28: 00000000000007c0 x27: ffff0000ca8a0800
-x26: ffff80000ef11938 x25: ffff0000c5470000 x24: ffff80000ee71730
-x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000000000
-x20: 0000000000000000 x19: 000000000000000c x18: 00000000000000c0
-x17: 0000000000000009 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000005 x12: ffff80000d468290
-x11: ff808000084ff6a0 x10: 0000000000000000 x9 : 0000000000000001
-x8 : ffff80000d8c1000 x7 : ffff80000856455c x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000002 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 000000000000000c x0 : 0000000000040dc0
-Call trace:
- __alloc_pages+0x150/0x1fc mm/page_alloc.c:5403
- alloc_pages+0x2fc/0x404
- kmalloc_order+0x34/0x104 mm/slab_common.c:945
- kmalloc_order_trace+0x2c/0x7c mm/slab_common.c:961
- kmalloc_large include/linux/slab.h:529 [inline]
- __kmalloc+0x2cc/0x374 mm/slub.c:4435
- kmalloc_array include/linux/slab.h:640 [inline]
- kcalloc include/linux/slab.h:671 [inline]
- ext2_fill_super+0xad0/0xfe0 fs/ext2/super.c:1085
- mount_bdev+0x1b8/0x210 fs/super.c:1367
- ext2_mount+0x44/0x58 fs/ext2/super.c:1465
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
- vfs_get_tree+0x40/0x140 fs/super.c:1497
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x8b0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x14c arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-irq event stamp: 12290
-hardirqs last  enabled at (12289): [<ffff800008438d28>] mod_lruvec_page_state include/linux/vmstat.h:569 [inline]
-hardirqs last  enabled at (12289): [<ffff800008438d28>] kmalloc_order+0xac/0x104 mm/slab_common.c:948
-hardirqs last disabled at (12290): [<ffff80000bfa4314>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (12146): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (12129): [<ffff800008101e20>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-softirqs last disabled at (12129): [<ffff800008101e20>] invoke_softirq+0x70/0xbc kernel/softirq.c:452
----[ end trace 0000000000000000 ]---
-EXT2-fs (loop0): error: not enough memory
-
-
+CC: Conor.Dooley@microchip.com
+CC: Randy Dunlap <rdunlap@infradead.org>
+CC: Bagas Sanjaya <bagasdotme@gmail.com>
+CC: linux-doc@vger.kernel.org
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+in v4:
+ - remove spurious changes reported by Conor Dooley
+in v3:
+ as suggested by Randy Dunlap:
+ - remove duplicated 'The the '
+ - remove duplicated 'at at ' (some are replaced by 'at a ')
+ - remove duplicated be, is, to, we, on ...
+in v2:
+ - also remove the second 'the' in one sentence as suggested by
+   Bagas Sanjaya
+---
+ Documentation/RCU/checklist.rst                               | 2 +-
+ Documentation/admin-guide/kdump/vmcoreinfo.rst                | 2 +-
+ Documentation/bpf/instruction-set.rst                         | 2 +-
+ Documentation/bpf/map_cgroup_storage.rst                      | 4 ++--
+ Documentation/core-api/cpu_hotplug.rst                        | 3 +--
+ Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml  | 4 ++--
+ .../devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt      | 2 +-
+ Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt     | 2 +-
+ Documentation/devicetree/bindings/fpga/fpga-region.txt        | 4 ++--
+ Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml      | 2 +-
+ Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml      | 2 +-
+ Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml      | 2 +-
+ .../devicetree/bindings/net/amlogic,meson-dwmac.yaml          | 2 +-
+ .../devicetree/bindings/net/can/microchip,mcp251xfd.yaml      | 2 +-
+ Documentation/driver-api/isa.rst                              | 2 +-
+ Documentation/filesystems/caching/backend-api.rst             | 2 +-
+ Documentation/filesystems/journalling.rst                     | 2 +-
+ Documentation/hwmon/f71882fg.rst                              | 2 +-
+ Documentation/locking/seqlock.rst                             | 2 +-
+ Documentation/networking/switchdev.rst                        | 2 +-
+ Documentation/sphinx/cdomain.py                               | 2 +-
+ Documentation/trace/histogram.rst                             | 2 +-
+ Documentation/userspace-api/media/dvb/dmx-reqbufs.rst         | 2 +-
+ Documentation/userspace-api/media/dvb/frontend_f_open.rst     | 2 +-
+ 24 files changed, 27 insertions(+), 28 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
+index 42cc5d891bd2..7b1c85a16dc3 100644
+--- a/Documentation/RCU/checklist.rst
++++ b/Documentation/RCU/checklist.rst
+@@ -477,6 +477,6 @@ over a rather long period of time, but improvements are always welcome!
+ 	So if you need to wait for both an RCU grace period and for
+ 	all pre-existing call_rcu() callbacks, you will need to execute
+ 	both rcu_barrier() and synchronize_rcu(), if necessary, using
+-	something like workqueues to to execute them concurrently.
++	something like workqueues to execute them concurrently.
+ 
+ 	See rcubarrier.rst for more information.
+diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+index 8419019b6a88..6726f439958c 100644
+--- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
++++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+@@ -200,7 +200,7 @@ prb
+ 
+ A pointer to the printk ringbuffer (struct printk_ringbuffer). This
+ may be pointing to the static boot ringbuffer or the dynamically
+-allocated ringbuffer, depending on when the the core dump occurred.
++allocated ringbuffer, depending on when the core dump occurred.
+ Used by user-space tools to read the active kernel log buffer.
+ 
+ printk_rb_static
+diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+index 1b0e6711dec9..0ac7ae40be37 100644
+--- a/Documentation/bpf/instruction-set.rst
++++ b/Documentation/bpf/instruction-set.rst
+@@ -133,7 +133,7 @@ code field of ``BPF_END``.
+ The byte swap instructions operate on the destination register
+ only and do not use a separate source register or immediate value.
+ 
+-The 1-bit source operand field in the opcode is used to to select what byte
++The 1-bit source operand field in the opcode is used to select what byte
+ order the operation convert from or to:
+ 
+   =========  =====  =================================================
+diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
+index cab9543017bf..8e5fe532c07e 100644
+--- a/Documentation/bpf/map_cgroup_storage.rst
++++ b/Documentation/bpf/map_cgroup_storage.rst
+@@ -31,7 +31,7 @@ The map uses key of type of either ``__u64 cgroup_inode_id`` or
+     };
+ 
+ ``cgroup_inode_id`` is the inode id of the cgroup directory.
+-``attach_type`` is the the program's attach type.
++``attach_type`` is the program's attach type.
+ 
+ Linux 5.9 added support for type ``__u64 cgroup_inode_id`` as the key type.
+ When this key type is used, then all attach types of the particular cgroup and
+@@ -155,7 +155,7 @@ However, the BPF program can still only associate with one map of each type
+ ``BPF_MAP_TYPE_CGROUP_STORAGE`` or more than one
+ ``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE``.
+ 
+-In all versions, userspace may use the the attach parameters of cgroup and
++In all versions, userspace may use the attach parameters of cgroup and
+ attach type pair in ``struct bpf_cgroup_storage_key`` as the key to the BPF map
+ APIs to read or update the storage for a given attachment. For Linux 5.9
+ attach type shared storages, only the first value in the struct, cgroup inode
+diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
+index c6f4ba2fb32d..c326f4a86d34 100644
+--- a/Documentation/core-api/cpu_hotplug.rst
++++ b/Documentation/core-api/cpu_hotplug.rst
+@@ -560,8 +560,7 @@ available:
+   * cpuhp_state_remove_instance(state, node)
+   * cpuhp_state_remove_instance_nocalls(state, node)
+ 
+-The arguments are the same as for the the cpuhp_state_add_instance*()
+-variants above.
++The arguments are the same as for cpuhp_state_add_instance*() variants above.
+ 
+ The functions differ in the way how the installed callbacks are treated:
+ 
+diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+index a4b4452afc1d..e5b56ee500bc 100644
+--- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+@@ -121,7 +121,7 @@ properties:
+ 
+   arm,vexpress,position:
+     description: When daughterboards are stacked on one site, their position
+-      in the stack be be described this attribute.
++      in the stack can be described with this attribute.
+     $ref: '/schemas/types.yaml#/definitions/uint32'
+     minimum: 0
+     maximum: 3
+@@ -139,7 +139,7 @@ patternProperties:
+       the connection between the motherboard and any tiles. Sometimes the
+       compatible is placed directly under this node, sometimes it is placed
+       in a subnode named "motherboard-bus". Sometimes the compatible includes
+-      "arm,vexpress,v2?-p1" sometimes (on software models) is is just
++      "arm,vexpress,v2?-p1" sometimes (on software models) it is just
+       "simple-bus". If the compatible is placed in the "motherboard-bus" node,
+       it is stricter and always has two compatibles.
+     type: object
+diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
+index 9a4295b54539..b300c42c52d7 100644
+--- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
++++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
+@@ -8,7 +8,7 @@ Required properties:
+ - reg : Should contain 1 register ranges(address and length).  For
+   Tegra20, Tegra30, and Tegra114 chips, the value must be <0x6000c004
+   0x10c>.  For Tegra124, Tegra132 and Tegra210 chips, the value should
+-  be be <0x6000c000 0x150>.
++  be <0x6000c000 0x150>.
+ 
+ Example (for a Tegra20 chip):
+ 	ahb: ahb@6000c004 {
+diff --git a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
+index b849a1ed389d..47e477cce6d2 100644
+--- a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
++++ b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
+@@ -4,7 +4,7 @@ Required properties:
+ - compatible:	"ti,dra7-dma-crossbar" for DRA7xx DMA crossbar
+ 		"ti,am335x-edma-crossbar" for AM335x and AM437x
+ - reg:		Memory map for accessing module
+-- #dma-cells:	Should be set to to match with the DMA controller's dma-cells
++- #dma-cells:	Should be set to match with the DMA controller's dma-cells
+ 		for ti,dra7-dma-crossbar and <3> for ti,am335x-edma-crossbar.
+ - dma-requests:	Number of DMA requests the crossbar can receive
+ - dma-masters:	phandle pointing to the DMA controller
+diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+index 6694ef29a267..095b5e728dff 100644
+--- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
++++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+@@ -50,7 +50,7 @@ Partial Reconfiguration Region (PRR)
+ Persona
+  * Also called a "partial bit stream"
+  * An FPGA image that is designed to be loaded into a PRR.  There may be
+-   any number of personas designed to fit into a PRR, but only one at at time
++   any number of personas designed to fit into a PRR, but only one at a time
+    may be loaded.
+  * A persona may create more regions.
+ 
+@@ -127,7 +127,7 @@ add the child devices:
+ 
+  * FPGA Manager
+  * FPGA Bridges
+- * image-specific information needed to to the programming.
++ * image-specific information needed to do the programming.
+  * child nodes
+ 
+ The intended use is that a Device Tree overlay (DTO) can be used to reprogram an
+diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
+index f6cac4b1079c..3549a32452ec 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
+@@ -26,7 +26,7 @@ properties:
+   '#gpio-cells':
+     description:
+       The first cell is the pin number.
+-      The second cell is is used to specify flags.
++      The second cell is used to specify flags.
+       See ../gpio/gpio.txt for more information.
+     const: 2
+ 
+diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
+index dc5a29b5ef7d..43a3f7ccaf36 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
+@@ -26,7 +26,7 @@ properties:
+   '#gpio-cells':
+     description:
+       The first cell is the pin number.
+-      The second cell is is used to specify flags.
++      The second cell is used to specify flags.
+       See ../gpio/gpio.txt for more information.
+     const: 2
+ 
+diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+index 012d25111054..373c4f89c4ea 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+@@ -28,7 +28,7 @@ properties:
+   '#gpio-cells':
+     description:
+       The first cell is the pin number.
+-      The second cell is is used to specify flags.
++      The second cell is used to specify flags.
+       See ../gpio/gpio.txt for more information.
+     const: 2
+ 
+diff --git a/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml b/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
+index 608e1d62bed5..3eb0513d824c 100644
+--- a/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
+@@ -149,7 +149,7 @@ properties:
+       - description:
+           The first register range should be the one of the DWMAC controller
+       - description:
+-          The second range is is for the Amlogic specific configuration
++          The second range is for the Amlogic specific configuration
+           (for example the PRG_ETHERNET register range on Meson8b and newer)
+ 
+ required:
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+index 7a73057707b4..0415c3a886ca 100644
+--- a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+@@ -42,7 +42,7 @@ properties:
+ 
+   microchip,rx-int-gpios:
+     description:
+-      GPIO phandle of GPIO connected to to INT1 pin of the MCP251XFD, which
++      GPIO phandle of GPIO connected to INT1 pin of the MCP251XFD, which
+       signals a pending RX interrupt.
+     maxItems: 1
+ 
+diff --git a/Documentation/driver-api/isa.rst b/Documentation/driver-api/isa.rst
+index def4a7b690b5..3df1b1696524 100644
+--- a/Documentation/driver-api/isa.rst
++++ b/Documentation/driver-api/isa.rst
+@@ -100,7 +100,7 @@ I believe platform_data is available for this, but if rather not, moving
+ the isa_driver pointer to the private struct isa_dev is ofcourse fine as
+ well.
+ 
+-Then, if the the driver did not provide a .match, it matches. If it did,
++Then, if the driver did not provide a .match, it matches. If it did,
+ the driver match() method is called to determine a match.
+ 
+ If it did **not** match, dev->platform_data is reset to indicate this to
+diff --git a/Documentation/filesystems/caching/backend-api.rst b/Documentation/filesystems/caching/backend-api.rst
+index d7507becf674..3a199fc50828 100644
+--- a/Documentation/filesystems/caching/backend-api.rst
++++ b/Documentation/filesystems/caching/backend-api.rst
+@@ -122,7 +122,7 @@ volumes, calling::
+ to tell fscache that a volume has been withdrawn.  This waits for all
+ outstanding accesses on the volume to complete before returning.
+ 
+-When the the cache is completely withdrawn, fscache should be notified by
++When the cache is completely withdrawn, fscache should be notified by
+ calling::
+ 
+ 	void fscache_relinquish_cache(struct fscache_cache *cache);
+diff --git a/Documentation/filesystems/journalling.rst b/Documentation/filesystems/journalling.rst
+index e18f90ffc6fd..2a69bd2d95ed 100644
+--- a/Documentation/filesystems/journalling.rst
++++ b/Documentation/filesystems/journalling.rst
+@@ -93,7 +93,7 @@ easily as on jbd2_journal_start().
+ 
+ Try to reserve the right number of blocks the first time. ;-). This will
+ be the maximum number of blocks you are going to touch in this
+-transaction. I advise having a look at at least ext4_jbd.h to see the
++transaction. I advise having at least a look at ext4_jbd.h to see the
+ basis on which ext4 uses to make these decisions.
+ 
+ Another wriggle to watch out for is your on-disk block allocation
+diff --git a/Documentation/hwmon/f71882fg.rst b/Documentation/hwmon/f71882fg.rst
+index 38e30fbd4806..ab83bc7bbbdf 100644
+--- a/Documentation/hwmon/f71882fg.rst
++++ b/Documentation/hwmon/f71882fg.rst
+@@ -179,7 +179,7 @@ Writing an unsupported mode will result in an invalid parameter error.
+ 
+ * 2: Normal auto mode
+   You can define a number of temperature/fan speed trip points, which % the
+-  fan should run at at this temp and which temp a fan should follow using the
++  fan should run at this temp and which temp a fan should follow using the
+   standard sysfs interface. The number and type of trip points is chip
+   depended, see which files are available in sysfs.
+   Fan/PWM channel 3 of the F8000 is always in this mode!
+diff --git a/Documentation/locking/seqlock.rst b/Documentation/locking/seqlock.rst
+index 64405e5da63e..bfda1a5fecad 100644
+--- a/Documentation/locking/seqlock.rst
++++ b/Documentation/locking/seqlock.rst
+@@ -39,7 +39,7 @@ as the writer can invalidate a pointer that the reader is following.
+ Sequence counters (``seqcount_t``)
+ ==================================
+ 
+-This is the the raw counting mechanism, which does not protect against
++This is the raw counting mechanism, which does not protect against
+ multiple writers.  Write side critical sections must thus be serialized
+ by an external lock.
+ 
+diff --git a/Documentation/networking/switchdev.rst b/Documentation/networking/switchdev.rst
+index f1f4e6a85a29..6a0c2cc722eb 100644
+--- a/Documentation/networking/switchdev.rst
++++ b/Documentation/networking/switchdev.rst
+@@ -161,7 +161,7 @@ The switchdev driver can know a particular port's position in the topology by
+ monitoring NETDEV_CHANGEUPPER notifications.  For example, a port moved into a
+ bond will see it's upper master change.  If that bond is moved into a bridge,
+ the bond's upper master will change.  And so on.  The driver will track such
+-movements to know what position a port is in in the overall topology by
++movements to know what position a port is in the overall topology by
+ registering for netdevice events and acting on NETDEV_CHANGEUPPER.
+ 
+ L2 Forwarding Offload
+diff --git a/Documentation/sphinx/cdomain.py b/Documentation/sphinx/cdomain.py
+index ca8ac9e59ded..a7d1866e72ff 100644
+--- a/Documentation/sphinx/cdomain.py
++++ b/Documentation/sphinx/cdomain.py
+@@ -151,7 +151,7 @@ class CObject(Base_CObject):
+     def handle_func_like_macro(self, sig, signode):
+         u"""Handles signatures of function-like macros.
+ 
+-        If the objtype is 'function' and the the signature ``sig`` is a
++        If the objtype is 'function' and the signature ``sig`` is a
+         function-like macro, the name of the macro is returned. Otherwise
+         ``False`` is returned.  """
+ 
+diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
+index 859fd1b76c63..c1b685a38f6b 100644
+--- a/Documentation/trace/histogram.rst
++++ b/Documentation/trace/histogram.rst
+@@ -412,7 +412,7 @@ Extended error information
+   Because the default sort key above is 'hitcount', the above shows a
+   the list of call_sites by increasing hitcount, so that at the bottom
+   we see the functions that made the most kmalloc calls during the
+-  run.  If instead we we wanted to see the top kmalloc callers in
++  run.  If instead we wanted to see the top kmalloc callers in
+   terms of the number of bytes requested rather than the number of
+   calls, and we wanted the top caller to appear at the top, we can use
+   the 'sort' parameter, along with the 'descending' modifier::
+diff --git a/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst b/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
+index d2bb1909ec98..18810f0bbca8 100644
+--- a/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
++++ b/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
+@@ -72,4 +72,4 @@ appropriately. The generic error codes are described at the
+ :ref:`Generic Error Codes <gen-errors>` chapter.
+ 
+ EOPNOTSUPP
+-    The  the requested I/O method is not supported.
++    The requested I/O method is not supported.
+diff --git a/Documentation/userspace-api/media/dvb/frontend_f_open.rst b/Documentation/userspace-api/media/dvb/frontend_f_open.rst
+index bb37eded0870..70e169b8f601 100644
+--- a/Documentation/userspace-api/media/dvb/frontend_f_open.rst
++++ b/Documentation/userspace-api/media/dvb/frontend_f_open.rst
+@@ -91,7 +91,7 @@ appropriately.
+        -  The caller has no permission to access the device.
+ 
+     -  - ``EBUSY``
+-       -  The the device driver is already in use.
++       -  The device driver is already in use.
+ 
+     -  - ``EMFILE``
+        -  The process already has the maximum number of files open.
+-- 
+2.17.1
+

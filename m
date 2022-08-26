@@ -2,46 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C365A285F
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED475A2860
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 15:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344298AbiHZNSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 09:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S1344130AbiHZNSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 09:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344313AbiHZNSI (ORCPT
+        with ESMTP id S1343699AbiHZNSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 09:18:08 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947E5D25FC;
-        Fri, 26 Aug 2022 06:18:05 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id E4FB24B0;
-        Fri, 26 Aug 2022 13:18:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E4FB24B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1661519885; bh=VtRTsWzEJlrHYKSbEjzrBwyUxA/ZI3RZLpC0o+8o2nA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TuTcNFbkXhWBkC0KbL8cto36vgRZPM2ADhRX1OQgiP281Fb6/6XVqMd1r+nBSUwDB
-         aJ95uVelQHPN/2tdJWC6dsy1yfvpPX0zqoPtyuXZWk63hzQr93arWHt+U9nDBrITKB
-         El5WiSa7EcD0mYlg6E3YVyLWKKEWsawM59w+cwYKemlbOGPBDm9M0rpHG6ZxwxekXU
-         0PmLah5xK+/4oL74iuYxGqbNH2m+y7J/oNrEUXkK8mdY0djwAFV02t3+K93QMZgIsZ
-         6LUjylpIP0Z6EuFZhZbfipJrECn6EPtMeJR6KS95UGpsVNlr+ldi7Hpo9O+id2h5SN
-         mdRqjaSTiLwjQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: Update version number from 5.x to 6.x in README.rst
-In-Reply-To: <YwgtoiKl5Azt7Pre@debian.me>
-References: <20220824080836.23087-1-lukas.bulwahn@gmail.com>
- <87a67syxa0.fsf@meer.lwn.net> <YwgtoiKl5Azt7Pre@debian.me>
-Date:   Fri, 26 Aug 2022 07:18:04 -0600
-Message-ID: <87fshjw3cj.fsf@meer.lwn.net>
+        Fri, 26 Aug 2022 09:18:39 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0000696E6
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:18:37 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-333a4a5d495so34851247b3.10
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 06:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc;
+        bh=0KLfpzsgtgrPkqk04Snjei4j0M1CGrgAL2L2IpSvI+M=;
+        b=keyXB4+4TjCA8L8vxK1P7RmWNNfs+4d88ra7GUHwGHnGxus2GbXniwiuZSrOERe+vR
+         FdsQkQjKTsiNZ7sh/iiL9XUmzN5PODD2LTqafF8EWr17GgR3XpA3a/R393X6OcWTYokT
+         efff3lazztDAcAxMUvVroqVpnvAJBZtHtQlTpaJ1Pzb09a1CXHoY4HBxAgGyLMIQjgil
+         YUBPGJn9AzSVh8SGDMrQUz3B3SrEE4/8PZw5kHyq2nl62jIrC7umPmYxmn064TkNF6QF
+         JV8g/5UHZ4FuUIf+6Cye+3U+c7fgcZnkSltvBPWunYGvmyxYc+XsDrlLSID98BOctkvD
+         rUBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=0KLfpzsgtgrPkqk04Snjei4j0M1CGrgAL2L2IpSvI+M=;
+        b=TCAL1Qwyy8xEBhP0u5ZqBpoh9I9DLrRPJ/Yem3AtkBG7y1JvFrieduZyse2a7cCMcJ
+         EvX0rHd+BL4uAt/HfYLyDi9IdL2hB2PThPPEzLjjxn3TGmSfMTKi/Mc6VPHGVCWSuxKv
+         OKLrFHQuNDJE1bmd4uqgo784a6/f5JJFnCK4U0B2tT8SQvvNFHWq0wgb2gN+kedYAT2A
+         cRDGdu1N6QisQhBhW/DYYU2KKyvSByS4U3zW0xqzVSJXbnx0v6ukFdqfikj+tnraugEf
+         eyfmB6bSGdAgp1IKCu/SeWc3nAQgufGCJAgLdsCcgoyqYjbeTgDI9nyvaJec1Km4tc/F
+         yL5Q==
+X-Gm-Message-State: ACgBeo1PLL6AEZJqafCcvsAZ8GbUf4/1QE2nrFGIZYWxXXDBBykzVwDl
+        b7kL4EBpHLsRPWRaGTg2XV8BhbiGwKBhUDwYPHBFRw==
+X-Google-Smtp-Source: AA6agR5HRYyy0TC7O+SS4Ci1Mr6a/QQYZdarbbMZMWtEIUpTkXmajxqeJ2v06gaYPbm6w8zEPOf+N3C9LIn+tRDbndE=
+X-Received: by 2002:a81:4b87:0:b0:336:9ecd:2768 with SMTP id
+ y129-20020a814b87000000b003369ecd2768mr9040239ywa.299.1661519917130; Fri, 26
+ Aug 2022 06:18:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220826152650.2c55e482@canb.auug.org.au> <CACRpkdYZOK9NhEqqU4Wkg1XHCHEQk=AR6w9730qo_tHmgGrorA@mail.gmail.com>
+ <YwiscXaIDER6SnBf@shikoro>
+In-Reply-To: <YwiscXaIDER6SnBf@shikoro>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 15:18:25 +0200
+Message-ID: <CACRpkdZZHFQLu3ZfPaSPdWBCNiR9Mmqwgz697XaMWWuAsyPW-w@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pinctrl tree
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,29 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+On Fri, Aug 26, 2022 at 1:20 PM Wolfram Sang <wsa@the-dreams.de> wrote:
 
-> On Thu, Aug 25, 2022 at 12:48:39PM -0600, Jonathan Corbet wrote:
->>  - applying-patches.rst should just go.  I didn't prevail last time I
->>    tried to make that point, but I still don't think that we help
->>    anybody by dragging 1990's instructions around now.
->> 
+> > How typical, the ideal way to resolve it is if there is an immutable
+> > branch with the > basic changes I can pull in from the i2c tree
 >
-> Hi jon,
+> It is already there:
 >
-> If we're about to rm applying-patches.rst, at least we also need to add
-> a warning to the doc, saying "This documentation is obsolete and will be
-> removed in the future.", while adding the same deprecation message on
-> scripts/patch-kernel. The script can still be usable and kept around for
-> a cycle. If no users complain, we will go ahead rm-ing.
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/make_remove_callback_void-immutable
 
-A document isn't an API, it's not like users need time to somehow
-migrate away from it.  If people will be affected by the removal of a
-document, we probably shouldn't remove it.  The situation here is that
-nobody is likely to care.  *Somebody* is probably still updating their
-kernel with patches somewhere, but they know what they are doing by now.
+Oh excellent, pulled this in and applied Stephens fixup on top.
 
-A script is different, of course; removing that might actually affect
-people.
+> Uwe (originator of the series) spread this information. Sorry that it
+> did not reach you.
 
-jon
+Don't worry about that, there is no perfect process.
+
+Yours,
+Linus Walleij

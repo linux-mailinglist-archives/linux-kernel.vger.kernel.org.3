@@ -2,54 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810E45A2E5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A735A2E61
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiHZSYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S231544AbiHZSZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiHZSYF (ORCPT
+        with ESMTP id S231216AbiHZSZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:24:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7242D4CA01
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:24:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 26 Aug 2022 14:25:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D61BB917
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661538334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=10Z0hFHy6JGlr4UjlZ3ezg9Bu/7ux+XkXNdfWhl84VU=;
+        b=CN0cTOkct4EQn/qlD/vQeRaCjPgvPPTfSH3D3OqrOK6Z6pk0wYUzCbGg5J6NhLznY7n6Sj
+        eUAyq/ZGWdN4g0qzdiuJrwDo07GvZ1rAnWCsfRaEPOXzVJ3vWfN5pODM/BdVLrv5cZ2hU4
+        FjZZt3YbVCLAgErz8yrodb0C3TPb/I0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-Wr08j1wPOpenK_gcZRjXTA-1; Fri, 26 Aug 2022 14:25:31 -0400
+X-MC-Unique: Wr08j1wPOpenK_gcZRjXTA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F32961D25
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B0CC433D6;
-        Fri, 26 Aug 2022 18:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661538241;
-        bh=fDJZJ3AeiKD9D2LjbTJDLiT5RrB5WN+nB7JpXBvjlnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sWIqnfn9d+OsCtFDKIiyGcfAeVrHpOoMVzlcqSZRBwbl2sRwBYQmSszCQwLZObuBD
-         ZyY3dj6+t4VaQA5v+cBAeTm5cmiiw0p/AZ4aTDDtYyoaWt0BZ49KZtIYYy99IX8tZA
-         GVLptnAtwx2Z0N5Cn4ulM0RuT57Sl0WxMp0+SFVH4YyEd2mTbu4siFBw0HQm5f3ZMt
-         g7+0W9YNijQ1zzuqOu9fnWjQQaNuS0ZJ1khTCIkjgkXfWj10cFm+NvfxHjs9Lt8Ekc
-         y2xEloopbPRn9U09fdCE8K/+YBa+lXS2OjPuyup1aa1m0n3rp8HR6CAJiitPHa36WF
-         omf/5GEEoD/5g==
-Date:   Fri, 26 Aug 2022 19:24:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Maurycy Z <10maurycy10@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, alsa-devel@alsa-project.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        aroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH] ASoC: Fix misspelling of 'system' as 'ststem'.
-Message-ID: <YwkPwFQapBz6gFPO@sirena.org.uk>
-References: <YwgAi68IzghNf0Dl@thinbox>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60A1A3817A77;
+        Fri, 26 Aug 2022 18:25:30 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3B300C15BBA;
+        Fri, 26 Aug 2022 18:25:30 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27QIPUSj032014;
+        Fri, 26 Aug 2022 14:25:30 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27QIPTF7032010;
+        Fri, 26 Aug 2022 14:25:29 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Fri, 26 Aug 2022 14:25:29 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Will Deacon <will@kernel.org>
+cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+In-Reply-To: <20220826174352.GA20386@willie-the-truck>
+Message-ID: <alpine.LRH.2.02.2208261424580.31963@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <20220826112327.GA19774@willie-the-truck> <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220826174352.GA20386@willie-the-truck>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2vlFT4VlBjIBHCeB"
-Content-Disposition: inline
-In-Reply-To: <YwgAi68IzghNf0Dl@thinbox>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,35 +84,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---2vlFT4VlBjIBHCeB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Thu, Aug 25, 2022 at 04:06:51PM -0700, Maurycy Z wrote:
-> Signed-off-by: Maurycy Zalewski <10maurycy10@gmail.com>
-> ---
->  sound/pci/ice1712/ice1712.c | 2 +-
->  sound/pci/ice1712/ice1724.c | 2 +-
->  sound/soc/fsl/Kconfig       | 2 +-
->  sound/soc/generic/Kconfig   | 4 ++--
+On Fri, 26 Aug 2022, Will Deacon wrote:
 
-This has an ASoC tag in the subject but also covers ALSA
+> > So, the bad commit is aacd149b62382c63911060b8f64c1e3d89bd405a ("arm64: 
+> > head: avoid relocating the kernel twice for KASLR").
+> 
+> Thanks. Any chance you could give this a go, please?
+> 
+> https://lore.kernel.org/r/20220826164800.2059148-1-ardb@kernel.org
+> 
+> Will
 
-Acked-by: Mark Brown <broonie@kernel.org>
+This doesn't help.
 
---2vlFT4VlBjIBHCeB
-Content-Type: application/pgp-signature; name="signature.asc"
+Mikulas
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMJD78ACgkQJNaLcl1U
-h9DZvgf/RMNK90WuuI02JCzni10BvcEpIfIyz2ZMSSmNwtFBHHm+WMDGJNpt0EoE
-6gfb5thSwCQ0k/AqvbtKV9k+R/zoBFqyPOecVHjf5VvET2NDTH7ifguMEI7OkuYN
-qrXCnIA8U/rF4VMHA3viyE5u9UV4ISbW9bg7Mkx9+86cuEm8tgHmYtCULMC7BzMN
-VoaS7k0wDYGD8cvh6oW+pc+0AbwuUC/zm59OoijAkcUxrD4KkRA+URLbbqeJAx5G
-1J10/3H0I4liJ5ruX28lNTw0/+oPL6FRGRa0ht2qxipVIRboOn+bR2/bIdoNGwMF
-UWxCldv5VD4ZDxXas7IAQ34b8cPrzg==
-=AIGx
------END PGP SIGNATURE-----
-
---2vlFT4VlBjIBHCeB--

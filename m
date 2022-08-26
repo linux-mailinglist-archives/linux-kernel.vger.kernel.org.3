@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9AC5A26CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F575A26E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245233AbiHZLYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
+        id S245188AbiHZLcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiHZLX7 (ORCPT
+        with ESMTP id S229538AbiHZLcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:23:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B32DAEE5;
-        Fri, 26 Aug 2022 04:23:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99EAB61ABC;
-        Fri, 26 Aug 2022 11:23:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4517CC433D6;
-        Fri, 26 Aug 2022 11:23:56 +0000 (UTC)
-Message-ID: <a4fbbf75-7fad-3124-6d42-21749b507115@xs4all.nl>
-Date:   Fri, 26 Aug 2022 13:23:54 +0200
+        Fri, 26 Aug 2022 07:32:05 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECD9C6943;
+        Fri, 26 Aug 2022 04:32:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VNIv.gp_1661513519;
+Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VNIv.gp_1661513519)
+          by smtp.aliyun-inc.com;
+          Fri, 26 Aug 2022 19:32:00 +0800
+Message-ID: <10116646-a12b-05b2-5364-17e078649fab@linux.alibaba.com>
+Date:   Fri, 26 Aug 2022 19:31:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] media: i2c: Fix repeated word in comments
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v4] cachefiles: fix error return code in
+ cachefiles_ondemand_copen()
 Content-Language: en-US
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-References: <20220826100052.22945-22-jmaselbas@kalray.eu>
- <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
+To:     Sun Ke <sunke32@huawei.com>, dhowells@redhat.com
+Cc:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dan.carpenter@oracle.com, hsiangkao@linux.alibaba.com
+References: <20220826023515.3437469-1-sunke32@huawei.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220826023515.3437469-1-sunke32@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm rejecting these patches in patchwork. All (or almost all) are duplicates.
 
-Regards,
 
-	Hans
+On 8/26/22 10:35 AM, Sun Ke wrote:
+> The cache_size field of copen is specified by the user daemon.
+> If cache_size < 0, then the OPEN request is expected to fail,
+> while copen itself shall succeed. However, returning 0 is indeed
+> unexpected when cache_size is an invalid error code.
+> 
+> Fix this by returning error when cache_size is an invalid error code.
+> 
+> Fixes: c8383054506c ("cachefiles: notify the user daemon when looking up cookie")
+> Signed-off-by: Sun Ke <sunke32@huawei.com>
+> Suggested-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-On 8/26/22 12:24, Jacopo Mondi wrote:
-> Hi Jules
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+Thanks Sun. Also thanks Dan for the suggestion.
+
+
+Jingbo Xu
+
+> ---
+> v4: update the code suggested by Dan
+> v3: update the commit log suggested by Jingbo.
+>  fs/cachefiles/ondemand.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
->   thanks, but as reported in patchwork and lore
-> https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=mt9v111&archive=both&delegate=
-> https://lore.kernel.org/all/20220824135433.h2udwtnub7mlmtam@uno.localdomain/
-> 
-> This is the 4th patch to fix the same repeated word in a comment.
-> 
-> As I asked to Jilin, are you submitting this as part of a new
-> contributor program ?
-> 
-> Thanks
->    j
-> 
-> On Fri, Aug 26, 2022 at 12:00:50PM +0200, Jules Maselbas wrote:
->> Remove redundant word `the`.
->>
->> CC: Jacopo Mondi <jacopo@jmondi.org>
->> CC: linux-media@vger.kernel.org
->> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
->> ---
->>  drivers/media/i2c/mt9v111.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
->> index 2dc4a0f24ce8..7beca0b70b72 100644
->> --- a/drivers/media/i2c/mt9v111.c
->> +++ b/drivers/media/i2c/mt9v111.c
->> @@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
->>
->>  	/*
->>  	 * Set pixel integration time to the whole frame time.
->> -	 * This value controls the the shutter delay when running with AE
->> +	 * This value controls the shutter delay when running with AE
->>  	 * disabled. If longer than frame time, it affects the output
->>  	 * frame rate.
->>  	 */
->> --
->> 2.17.1
->>
+> diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+> index 1fee702d5529..7e1586bd5cf3 100644
+> --- a/fs/cachefiles/ondemand.c
+> +++ b/fs/cachefiles/ondemand.c
+> @@ -158,9 +158,13 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+>  
+>  	/* fail OPEN request if daemon reports an error */
+>  	if (size < 0) {
+> -		if (!IS_ERR_VALUE(size))
+> -			size = -EINVAL;
+> -		req->error = size;
+> +		if (!IS_ERR_VALUE(size)) {
+> +			req->error = -EINVAL;
+> +			ret = -EINVAL;
+> +		} else {
+> +			req->error = size;
+> +			ret = 0;
+> +		}
+>  		goto out;
+>  	}
+>  
+
+-- 
+Thanks,
+Jingbo

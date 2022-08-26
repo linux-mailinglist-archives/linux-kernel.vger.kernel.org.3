@@ -2,252 +2,531 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFD85A2DD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426B15A2DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344663AbiHZRsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S230256AbiHZRw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242827AbiHZRsQ (ORCPT
+        with ESMTP id S229946AbiHZRw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:48:16 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA49DF4F8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:48:14 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id bs25so2647163wrb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:48:14 -0700 (PDT)
+        Fri, 26 Aug 2022 13:52:56 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DA0E2C54
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:52:54 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id u6so2973349eda.12
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:52:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9JHPKBEhnzj2Xmii0IJwAZm9bDxPzFxlEKG6x6ug6zk=;
-        b=YeShUHZAjaMfVm4ZJoT0KtWHtHVQF69k9j5LM9cpMqgaMBQIQk8RISAZ3c9Tqdk1K3
-         +u9YAnO+b7e0rlD9Hwu0FZ8cxVnXQkNbxbgHITNxqiu6DnykqjCEQzRAu1VWZ3pWMwXO
-         qV8dmBSMKtVzj95smb3JbC4Qxz6oW0AAHo4U4mvjUaCX+F/oNdn28VcnJqXUvoYxsHeL
-         LDVP5o6aCWrz15+TGMnlnF5B9lUezo3kaYrDNBfi+zhipDC3vY6zC/AYRaBblBKFZwCA
-         JCYLynPHBYuVw2A7/hRiyX8i8tRylbPycdSMmfMib/nALqD33gt64nTQzJDHFay+hhCo
-         fdEQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=f9jx78fTpUuHQnqQIYm2qYzvKXvRFtv++vzxBHldKYY=;
+        b=RVLxS2g1rgqW3Q80UQwmwyDyXdyo4X42WsKiTNY6dZQIq3W/M23sN6CXpQIG0QHvRR
+         uZhKLKddhC9hXVw3rOC4JDuDTlJ6ykgl+wtmeaQ8pEHMwnohYR3dhcWG9G6jWxrIMSgt
+         RUo4K3m0IwysRruyEXOqEeCyOj0WUckjoPVab2gb0zupfg7qODNMQCT+ygdtARt8eXAf
+         ZU+0f+po6B3Jy47o+i9QnnqeL4u/osicEO8DsC7rbF8oGUCdHsGEWR+1YtR+FSiRQ8yd
+         XTvIvcn1f79FCgzvKzogX4sEUK8bWor+6hfhU+GfVMVTyEkMED+KlkYE9YfowXoklPi7
+         AMnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9JHPKBEhnzj2Xmii0IJwAZm9bDxPzFxlEKG6x6ug6zk=;
-        b=svEUEZKh/0vVVD+kTN5fFU8dSCqupU9i5JS8JrpIyvFlMU4/virgFk9S+g3GH1ku3e
-         JaM44lmYisximoRNLSP9gnOEDWE28m9aRwU27EIigRFGuQcFgwhzLsDPU1byO42u539v
-         4DSfqxbQJnUmyZizHC8VeI4s/ERfswv5pmxvD8oeXFB5tUV0pqGQP12ZroJUIENMzrwf
-         FoamxbrFOSefmsSWJp9wvdlYJbsIRkJkXaK6z129SFs3Cm8O+uHUN0oL0/kQbelQSoLz
-         G9zvRGfchNnDHLfik3nOWMh76q3ZkY3cwyVSAVstNeF4plMx2vIPTWbYHu2ohr+7MiXK
-         DvmA==
-X-Gm-Message-State: ACgBeo0HppbteQu1y6GJqBoxfX2v9vHMrjYE4lXvFrH5hy13Kl2/p5fk
-        FF4oMmeCWQ3kcnf3MLIrT4FhEB8pJQrSEhbo0zeBmA==
-X-Google-Smtp-Source: AA6agR5YTArV0z60f6fmYVbsoslFeZS5EcVg43N45kefsQs86vvqkoP4opnpC/decH7TsBShY7VKfEFc8XYLy4nqC/U=
-X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
- v13-20020adfe28d000000b0021e4c3bb446mr431200wri.300.1661536092846; Fri, 26
- Aug 2022 10:48:12 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=f9jx78fTpUuHQnqQIYm2qYzvKXvRFtv++vzxBHldKYY=;
+        b=bT+HTuxTOzVcIDdq7XXGXG9oz3JyOUVyRmIvOJR4hDsuTbKZv5jCU1iEWtMjET9M3v
+         SVxjyaE4plH8ZSi2Z7qpbIyfP+naOB00CF3LXRjv/Fl6hso28AT6s1dxoH/8XKH/l0YJ
+         n0uvnZKI2RPh19cHy2slFYRgYFHIvuEB0UlI62NcH8vyBJpF06HrRcBoVqT3/syq+9fo
+         a3F3YNG8RblMhQ228whdubW3r6ZL3xsq9mCTVILORsQ3OYGTeYy+b5pw91o7AeFMywWm
+         700+euWMZXfmIoEnibT2Tpw5RyE/y3ZsbQ8SRchXVWbkJA5p+AU90NPzna3Br/532Xfx
+         +maw==
+X-Gm-Message-State: ACgBeo091oj1S3brM1uxBj0l+zWu8q1tpER9R2wLyjJX4eZRZLU+YHlA
+        6IRV3IGF+b4GxEV9VIC6vgKIwrcSnE8=
+X-Google-Smtp-Source: AA6agR4X9PPPhq/4Bu3LZheXMRUxQmozrHW94WTQvsja08jq6qvrE2EXBF0FEZfV7EsPu+xDO4yRow==
+X-Received: by 2002:a50:a6c5:0:b0:448:40b:6c51 with SMTP id f5-20020a50a6c5000000b00448040b6c51mr1715294edc.78.1661536372731;
+        Fri, 26 Aug 2022 10:52:52 -0700 (PDT)
+Received: from localhost.localdomain (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
+        by smtp.gmail.com with ESMTPSA id 27-20020a170906319b00b00740f1a58e0bsm815179ejy.30.2022.08.26.10.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 10:52:51 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs/sysv: Replace kmap() with kmap_local_page()
+Date:   Fri, 26 Aug 2022 19:50:41 +0200
+Message-Id: <20220826175041.5381-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
- <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com> <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
- <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
-In-Reply-To: <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 26 Aug 2022 10:48:00 -0700
-Message-ID: <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
-Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 26/08/22 19:06, Ian Rogers wrote:
-> > On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>
-> >> On 24/08/22 18:38, Ian Rogers wrote:
-> >>> Add annotations to describe lock behavior. Add unlocks so that mutexes
-> >>> aren't conditionally held on exit from perf_sched__replay. Add an exit
-> >>> variable so that thread_func can terminate, rather than leaving the
-> >>> threads blocked on mutexes.
-> >>>
-> >>> Signed-off-by: Ian Rogers <irogers@google.com>
-> >>> ---
-> >>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
-> >>>  1 file changed, 29 insertions(+), 17 deletions(-)
-> >>>
-> >>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> >>> index 7e4006d6b8bc..b483ff0d432e 100644
-> >>> --- a/tools/perf/builtin-sched.c
-> >>> +++ b/tools/perf/builtin-sched.c
-> >>> @@ -246,6 +246,7 @@ struct perf_sched {
-> >>>       const char      *time_str;
-> >>>       struct perf_time_interval ptime;
-> >>>       struct perf_time_interval hist_time;
-> >>> +     volatile bool   thread_funcs_exit;
-> >>>  };
-> >>>
-> >>>  /* per thread run time data */
-> >>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
-> >>>       prctl(PR_SET_NAME, comm2);
-> >>>       if (fd < 0)
-> >>>               return NULL;
-> >>> -again:
-> >>> -     ret = sem_post(&this_task->ready_for_work);
-> >>> -     BUG_ON(ret);
-> >>> -     mutex_lock(&sched->start_work_mutex);
-> >>> -     mutex_unlock(&sched->start_work_mutex);
-> >>>
-> >>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> >>> +     while (!sched->thread_funcs_exit) {
-> >>> +             ret = sem_post(&this_task->ready_for_work);
-> >>> +             BUG_ON(ret);
-> >>> +             mutex_lock(&sched->start_work_mutex);
-> >>> +             mutex_unlock(&sched->start_work_mutex);
-> >>>
-> >>> -     for (i = 0; i < this_task->nr_events; i++) {
-> >>> -             this_task->curr_event = i;
-> >>> -             perf_sched__process_event(sched, this_task->atoms[i]);
-> >>> -     }
-> >>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> >>>
-> >>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> >>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> >>> -     ret = sem_post(&this_task->work_done_sem);
-> >>> -     BUG_ON(ret);
-> >>> +             for (i = 0; i < this_task->nr_events; i++) {
-> >>> +                     this_task->curr_event = i;
-> >>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
-> >>> +             }
-> >>>
-> >>> -     mutex_lock(&sched->work_done_wait_mutex);
-> >>> -     mutex_unlock(&sched->work_done_wait_mutex);
-> >>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> >>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> >>> +             ret = sem_post(&this_task->work_done_sem);
-> >>> +             BUG_ON(ret);
-> >>>
-> >>> -     goto again;
-> >>> +             mutex_lock(&sched->work_done_wait_mutex);
-> >>> +             mutex_unlock(&sched->work_done_wait_mutex);
-> >>> +     }
-> >>> +     return NULL;
-> >>>  }
-> >>>
-> >>>  static void create_tasks(struct perf_sched *sched)
-> >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
-> >>>  {
-> >>>       struct task_desc *task;
-> >>>       pthread_attr_t attr;
-> >>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
-> >>>  }
-> >>>
-> >>>  static void wait_for_tasks(struct perf_sched *sched)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >>>  {
-> >>>       u64 cpu_usage_0, cpu_usage_1;
-> >>>       struct task_desc *task;
-> >>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
-> >>>  }
-> >>>
-> >>>  static void run_one_test(struct perf_sched *sched)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >>>  {
-> >>>       u64 T0, T1, delta, avg_delta, fluct;
-> >>>
-> >>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
-> >>>       print_task_traces(sched);
-> >>>       add_cross_task_wakeups(sched);
-> >>>
-> >>> +     sched->thread_funcs_exit = false;
-> >>>       create_tasks(sched);
-> >>>       printf("------------------------------------------------------------\n");
-> >>>       for (i = 0; i < sched->replay_repeat; i++)
-> >>>               run_one_test(sched);
-> >>>
-> >>> +     sched->thread_funcs_exit = true;
-> >>> +     mutex_unlock(&sched->start_work_mutex);
-> >>> +     mutex_unlock(&sched->work_done_wait_mutex);
-> >>
-> >> I think you still need to wait for the threads to exit before
-> >> destroying the mutexes.
-> >
-> > This is a pre-existing issue and beyond the scope of this patch set.
->
-> You added the mutex_destroy functions in patch 8, so it is still
-> fallout from that.
+kmap() is being deprecated in favor of kmap_local_page().
 
-In the previous code the threads were blocked on mutexes that were
-stack allocated and the stack memory went away. You are correct to say
-that to those locks I added an init and destroy call. The lifetime of
-the mutex was wrong previously and remains wrong in this change.
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-Thanks,
-Ian
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-> >
-> > Thanks,
-> > Ian
-> >
-> >>>       return 0;
-> >>>  }
-> >>>
-> >>
->
+Since its use in fs/sysv is safe everywhere, it should be preferred.
+
+Therefore, replace kmap() with kmap_local_page() in fs/sysv. kunmap_local()
+requires the mapping address, so return that address from dir_get_page()
+to be used in dir_put_page().
+
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+
+This code is not tested. I have no means to create an SysV filesystem.
+Despite nothing here seems to break the strict rules about the use of
+kmap_local_page(), any help with testing will be much appreciated :-)
+
+ fs/sysv/dir.c   | 83 ++++++++++++++++++++++---------------------------
+ fs/sysv/namei.c | 26 +++++++++-------
+ fs/sysv/sysv.h  | 19 ++++++++---
+ 3 files changed, 65 insertions(+), 63 deletions(-)
+
+diff --git a/fs/sysv/dir.c b/fs/sysv/dir.c
+index 88e38cd8f5c9..130350fde106 100644
+--- a/fs/sysv/dir.c
++++ b/fs/sysv/dir.c
+@@ -28,12 +28,6 @@ const struct file_operations sysv_dir_operations = {
+ 	.fsync		= generic_file_fsync,
+ };
+ 
+-static inline void dir_put_page(struct page *page)
+-{
+-	kunmap(page);
+-	put_page(page);
+-}
+-
+ static int dir_commit_chunk(struct page *page, loff_t pos, unsigned len)
+ {
+ 	struct address_space *mapping = page->mapping;
+@@ -52,12 +46,12 @@ static int dir_commit_chunk(struct page *page, loff_t pos, unsigned len)
+ 	return err;
+ }
+ 
+-static struct page * dir_get_page(struct inode *dir, unsigned long n)
++static struct page *dir_get_page(struct inode *dir, unsigned long n, void **page_addr)
+ {
+ 	struct address_space *mapping = dir->i_mapping;
+ 	struct page *page = read_mapping_page(mapping, n, NULL);
+ 	if (!IS_ERR(page))
+-		kmap(page);
++		*page_addr = kmap_local_page(page);
+ 	return page;
+ }
+ 
+@@ -80,11 +74,10 @@ static int sysv_readdir(struct file *file, struct dir_context *ctx)
+ 	for ( ; n < npages; n++, offset = 0) {
+ 		char *kaddr, *limit;
+ 		struct sysv_dir_entry *de;
+-		struct page *page = dir_get_page(inode, n);
++		struct page *page = dir_get_page(inode, n, (void **)&kaddr);
+ 
+ 		if (IS_ERR(page))
+ 			continue;
+-		kaddr = (char *)page_address(page);
+ 		de = (struct sysv_dir_entry *)(kaddr+offset);
+ 		limit = kaddr + PAGE_SIZE - SYSV_DIRSIZE;
+ 		for ( ;(char*)de <= limit; de++, ctx->pos += sizeof(*de)) {
+@@ -96,11 +89,11 @@ static int sysv_readdir(struct file *file, struct dir_context *ctx)
+ 			if (!dir_emit(ctx, name, strnlen(name,SYSV_NAMELEN),
+ 					fs16_to_cpu(SYSV_SB(sb), de->inode),
+ 					DT_UNKNOWN)) {
+-				dir_put_page(page);
++				dir_put_page(page, kaddr);
+ 				return 0;
+ 			}
+ 		}
+-		dir_put_page(page);
++		dir_put_page(page, kaddr);
+ 	}
+ 	return 0;
+ }
+@@ -124,7 +117,8 @@ static inline int namecompare(int len, int maxlen,
+  * itself (as a parameter - res_dir). It does NOT read the inode of the
+  * entry - you'll have to do that yourself if you want to.
+  */
+-struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry, struct page **res_page)
++struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry,
++				       struct page **res_page, void **res_page_addr)
+ {
+ 	const char * name = dentry->d_name.name;
+ 	int namelen = dentry->d_name.len;
+@@ -133,8 +127,10 @@ struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry, struct page **res_
+ 	unsigned long npages = dir_pages(dir);
+ 	struct page *page = NULL;
+ 	struct sysv_dir_entry *de;
++	char *kaddr;
+ 
+ 	*res_page = NULL;
++	*res_page_addr = NULL;
+ 
+ 	start = SYSV_I(dir)->i_dir_start_lookup;
+ 	if (start >= npages)
+@@ -142,10 +138,8 @@ struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry, struct page **res_
+ 	n = start;
+ 
+ 	do {
+-		char *kaddr;
+-		page = dir_get_page(dir, n);
++		page = dir_get_page(dir, n, (void **)&kaddr);
+ 		if (!IS_ERR(page)) {
+-			kaddr = (char*)page_address(page);
+ 			de = (struct sysv_dir_entry *) kaddr;
+ 			kaddr += PAGE_SIZE - SYSV_DIRSIZE;
+ 			for ( ; (char *) de <= kaddr ; de++) {
+@@ -155,7 +149,7 @@ struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry, struct page **res_
+ 							name, de->name))
+ 					goto found;
+ 			}
+-			dir_put_page(page);
++			dir_put_page(page, kaddr);
+ 		}
+ 
+ 		if (++n >= npages)
+@@ -167,6 +161,7 @@ struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry, struct page **res_
+ found:
+ 	SYSV_I(dir)->i_dir_start_lookup = n;
+ 	*res_page = page;
++	*res_page_addr = kaddr;
+ 	return de;
+ }
+ 
+@@ -176,6 +171,7 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
+ 	const char * name = dentry->d_name.name;
+ 	int namelen = dentry->d_name.len;
+ 	struct page *page = NULL;
++	void *page_addr = NULL;
+ 	struct sysv_dir_entry * de;
+ 	unsigned long npages = dir_pages(dir);
+ 	unsigned long n;
+@@ -185,11 +181,11 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
+ 
+ 	/* We take care of directory expansion in the same loop */
+ 	for (n = 0; n <= npages; n++) {
+-		page = dir_get_page(dir, n);
++		page = dir_get_page(dir, n, &page_addr);
+ 		err = PTR_ERR(page);
+ 		if (IS_ERR(page))
+ 			goto out;
+-		kaddr = (char*)page_address(page);
++		kaddr = page_addr;
+ 		de = (struct sysv_dir_entry *)kaddr;
+ 		kaddr += PAGE_SIZE - SYSV_DIRSIZE;
+ 		while ((char *)de <= kaddr) {
+@@ -200,14 +196,13 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
+ 				goto out_page;
+ 			de++;
+ 		}
+-		dir_put_page(page);
++		dir_put_page(page, page_addr);
+ 	}
+ 	BUG();
+ 	return -EINVAL;
+ 
+ got_it:
+-	pos = page_offset(page) +
+-			(char*)de - (char*)page_address(page);
++	pos = page_offset(page) + (char *)de - (char *)page_addr;
+ 	lock_page(page);
+ 	err = sysv_prepare_chunk(page, pos, SYSV_DIRSIZE);
+ 	if (err)
+@@ -219,7 +214,7 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
+ 	dir->i_mtime = dir->i_ctime = current_time(dir);
+ 	mark_inode_dirty(dir);
+ out_page:
+-	dir_put_page(page);
++	dir_put_page(page, page_addr);
+ out:
+ 	return err;
+ out_unlock:
+@@ -227,10 +222,9 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
+ 	goto out_page;
+ }
+ 
+-int sysv_delete_entry(struct sysv_dir_entry *de, struct page *page)
++int sysv_delete_entry(struct sysv_dir_entry *de, struct page *page, char *kaddr)
+ {
+ 	struct inode *inode = page->mapping->host;
+-	char *kaddr = (char*)page_address(page);
+ 	loff_t pos = page_offset(page) + (char *)de - kaddr;
+ 	int err;
+ 
+@@ -239,7 +233,7 @@ int sysv_delete_entry(struct sysv_dir_entry *de, struct page *page)
+ 	BUG_ON(err);
+ 	de->inode = 0;
+ 	err = dir_commit_chunk(page, pos, SYSV_DIRSIZE);
+-	dir_put_page(page);
++	dir_put_page(page, kaddr);
+ 	inode->i_ctime = inode->i_mtime = current_time(inode);
+ 	mark_inode_dirty(inode);
+ 	return err;
+@@ -259,19 +253,15 @@ int sysv_make_empty(struct inode *inode, struct inode *dir)
+ 		unlock_page(page);
+ 		goto fail;
+ 	}
+-	kmap(page);
+-
+-	base = (char*)page_address(page);
++	base = kmap_local_page(page);
+ 	memset(base, 0, PAGE_SIZE);
+-
+ 	de = (struct sysv_dir_entry *) base;
+ 	de->inode = cpu_to_fs16(SYSV_SB(inode->i_sb), inode->i_ino);
+ 	strcpy(de->name,".");
+ 	de++;
+ 	de->inode = cpu_to_fs16(SYSV_SB(inode->i_sb), dir->i_ino);
+ 	strcpy(de->name,"..");
+-
+-	kunmap(page);
++	kunmap_local(base);
+ 	err = dir_commit_chunk(page, 0, 2 * SYSV_DIRSIZE);
+ fail:
+ 	put_page(page);
+@@ -286,16 +276,15 @@ int sysv_empty_dir(struct inode * inode)
+ 	struct super_block *sb = inode->i_sb;
+ 	struct page *page = NULL;
+ 	unsigned long i, npages = dir_pages(inode);
++	char *kaddr;
+ 
+ 	for (i = 0; i < npages; i++) {
+-		char *kaddr;
+ 		struct sysv_dir_entry * de;
+-		page = dir_get_page(inode, i);
++		page = dir_get_page(inode, i, (void **)&kaddr);
+ 
+ 		if (IS_ERR(page))
+ 			continue;
+ 
+-		kaddr = (char *)page_address(page);
+ 		de = (struct sysv_dir_entry *)kaddr;
+ 		kaddr += PAGE_SIZE-SYSV_DIRSIZE;
+ 
+@@ -314,22 +303,21 @@ int sysv_empty_dir(struct inode * inode)
+ 			if (de->name[1] != '.' || de->name[2])
+ 				goto not_empty;
+ 		}
+-		dir_put_page(page);
++		dir_put_page(page, kaddr);
+ 	}
+ 	return 1;
+ 
+ not_empty:
+-	dir_put_page(page);
++	dir_put_page(page, kaddr);
+ 	return 0;
+ }
+ 
+ /* Releases the page */
+ void sysv_set_link(struct sysv_dir_entry *de, struct page *page,
+-	struct inode *inode)
++		   void *page_addr, struct inode *inode)
+ {
+ 	struct inode *dir = page->mapping->host;
+-	loff_t pos = page_offset(page) +
+-			(char *)de-(char*)page_address(page);
++	loff_t pos = page_offset(page) + (char *)de - (char *)page_addr;
+ 	int err;
+ 
+ 	lock_page(page);
+@@ -337,19 +325,21 @@ void sysv_set_link(struct sysv_dir_entry *de, struct page *page,
+ 	BUG_ON(err);
+ 	de->inode = cpu_to_fs16(SYSV_SB(inode->i_sb), inode->i_ino);
+ 	err = dir_commit_chunk(page, pos, SYSV_DIRSIZE);
+-	dir_put_page(page);
++	dir_put_page(page, page_addr);
+ 	dir->i_mtime = dir->i_ctime = current_time(dir);
+ 	mark_inode_dirty(dir);
+ }
+ 
+-struct sysv_dir_entry * sysv_dotdot (struct inode *dir, struct page **p)
++struct sysv_dir_entry *sysv_dotdot(struct inode *dir, struct page **p, void **pa)
+ {
+-	struct page *page = dir_get_page(dir, 0);
++	void *page_addr;
++	struct page *page = dir_get_page(dir, 0, &page_addr);
+ 	struct sysv_dir_entry *de = NULL;
+ 
+ 	if (!IS_ERR(page)) {
+-		de = (struct sysv_dir_entry*) page_address(page) + 1;
++		de = (struct sysv_dir_entry *)page_addr + 1;
+ 		*p = page;
++		*pa = page_addr;
+ 	}
+ 	return de;
+ }
+@@ -357,12 +347,13 @@ struct sysv_dir_entry * sysv_dotdot (struct inode *dir, struct page **p)
+ ino_t sysv_inode_by_name(struct dentry *dentry)
+ {
+ 	struct page *page;
+-	struct sysv_dir_entry *de = sysv_find_entry (dentry, &page);
++	void *page_addr;
++	struct sysv_dir_entry *de = sysv_find_entry(dentry, &page, &page_addr);
+ 	ino_t res = 0;
+ 	
+ 	if (de) {
+ 		res = fs16_to_cpu(SYSV_SB(dentry->d_sb), de->inode);
+-		dir_put_page(page);
++		dir_put_page(page, page_addr);
+ 	}
+ 	return res;
+ }
+diff --git a/fs/sysv/namei.c b/fs/sysv/namei.c
+index b2e6abc06a2d..1371980ec5fb 100644
+--- a/fs/sysv/namei.c
++++ b/fs/sysv/namei.c
+@@ -152,14 +152,15 @@ static int sysv_unlink(struct inode * dir, struct dentry * dentry)
+ {
+ 	struct inode * inode = d_inode(dentry);
+ 	struct page * page;
++	void *page_addr;
+ 	struct sysv_dir_entry * de;
+ 	int err = -ENOENT;
+ 
+-	de = sysv_find_entry(dentry, &page);
++	de = sysv_find_entry(dentry, &page, &page_addr);
+ 	if (!de)
+ 		goto out;
+ 
+-	err = sysv_delete_entry (de, page);
++	err = sysv_delete_entry(de, page, page_addr);
+ 	if (err)
+ 		goto out;
+ 
+@@ -196,26 +197,29 @@ static int sysv_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 	struct inode * old_inode = d_inode(old_dentry);
+ 	struct inode * new_inode = d_inode(new_dentry);
+ 	struct page * dir_page = NULL;
++	void *dir_page_addr;
+ 	struct sysv_dir_entry * dir_de = NULL;
+ 	struct page * old_page;
++	void *old_page_addr;
+ 	struct sysv_dir_entry * old_de;
+ 	int err = -ENOENT;
+ 
+ 	if (flags & ~RENAME_NOREPLACE)
+ 		return -EINVAL;
+ 
+-	old_de = sysv_find_entry(old_dentry, &old_page);
++	old_de = sysv_find_entry(old_dentry, &old_page, &old_page_addr);
+ 	if (!old_de)
+ 		goto out;
+ 
+ 	if (S_ISDIR(old_inode->i_mode)) {
+ 		err = -EIO;
+-		dir_de = sysv_dotdot(old_inode, &dir_page);
++		dir_de = sysv_dotdot(old_inode, &dir_page, &dir_page_addr);
+ 		if (!dir_de)
+ 			goto out_old;
+ 	}
+ 
+ 	if (new_inode) {
++		void *new_page_addr;
+ 		struct page * new_page;
+ 		struct sysv_dir_entry * new_de;
+ 
+@@ -224,10 +228,10 @@ static int sysv_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 			goto out_dir;
+ 
+ 		err = -ENOENT;
+-		new_de = sysv_find_entry(new_dentry, &new_page);
++		new_de = sysv_find_entry(new_dentry, &new_page, &new_page_addr);
+ 		if (!new_de)
+ 			goto out_dir;
+-		sysv_set_link(new_de, new_page, old_inode);
++		sysv_set_link(new_de, new_page, new_page_addr, old_inode);
+ 		new_inode->i_ctime = current_time(new_inode);
+ 		if (dir_de)
+ 			drop_nlink(new_inode);
+@@ -240,23 +244,21 @@ static int sysv_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 			inode_inc_link_count(new_dir);
+ 	}
+ 
+-	sysv_delete_entry(old_de, old_page);
++	sysv_delete_entry(old_de, old_page, old_page_addr);
+ 	mark_inode_dirty(old_inode);
+ 
+ 	if (dir_de) {
+-		sysv_set_link(dir_de, dir_page, new_dir);
++		sysv_set_link(dir_de, dir_page, dir_page_addr, new_dir);
+ 		inode_dec_link_count(old_dir);
+ 	}
+ 	return 0;
+ 
+ out_dir:
+ 	if (dir_de) {
+-		kunmap(dir_page);
+-		put_page(dir_page);
++		dir_put_page(dir_page, dir_page_addr);
+ 	}
+ out_old:
+-	kunmap(old_page);
+-	put_page(old_page);
++	dir_put_page(old_page, old_page_addr);
+ out:
+ 	return err;
+ }
+diff --git a/fs/sysv/sysv.h b/fs/sysv/sysv.h
+index 99ddf033da4f..b0631ea6b506 100644
+--- a/fs/sysv/sysv.h
++++ b/fs/sysv/sysv.h
+@@ -119,6 +119,11 @@ static inline void dirty_sb(struct super_block *sb)
+ 		mark_buffer_dirty(sbi->s_bh2);
+ }
+ 
++static inline void dir_put_page(struct page *page, void *page_addr)
++{
++	kunmap_local(page_addr);
++	put_page(page);
++}
+ 
+ /* ialloc.c */
+ extern struct sysv_inode *sysv_raw_inode(struct super_block *, unsigned,
+@@ -148,14 +153,18 @@ extern void sysv_destroy_icache(void);
+ 
+ 
+ /* dir.c */
+-extern struct sysv_dir_entry *sysv_find_entry(struct dentry *, struct page **);
++extern struct sysv_dir_entry *sysv_find_entry(struct dentry *dir,
++					      struct page **res_page,
++					      void **res_page_addr);
+ extern int sysv_add_link(struct dentry *, struct inode *);
+-extern int sysv_delete_entry(struct sysv_dir_entry *, struct page *);
++extern int sysv_delete_entry(struct sysv_dir_entry *dir, struct page *page,
++			     char *kaddr);
+ extern int sysv_make_empty(struct inode *, struct inode *);
+ extern int sysv_empty_dir(struct inode *);
+-extern void sysv_set_link(struct sysv_dir_entry *, struct page *,
+-			struct inode *);
+-extern struct sysv_dir_entry *sysv_dotdot(struct inode *, struct page **);
++extern void sysv_set_link(struct sysv_dir_entry *de, struct page *page,
++			  void *page_addr, struct inode *inode);
++extern struct sysv_dir_entry *sysv_dotdot(struct inode *inode,
++					  struct page **page, void **page_addr);
+ extern ino_t sysv_inode_by_name(struct dentry *);
+ 
+ 
+-- 
+2.37.2
+

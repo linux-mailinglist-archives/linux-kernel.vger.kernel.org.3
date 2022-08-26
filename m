@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296905A2540
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C9B5A2543
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245650AbiHZKAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S1343523AbiHZKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343733AbiHZKAT (ORCPT
+        with ESMTP id S1343830AbiHZKBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:00:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1837D481C3;
-        Fri, 26 Aug 2022 03:00:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3134A61E9D;
-        Fri, 26 Aug 2022 10:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CE97C4347C;
-        Fri, 26 Aug 2022 10:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661508015;
-        bh=4NbhDShSfbJVQ91PTmOJ09I/KVFHwBhoPvn6y1m70Hg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=olhdsS7EzcO/o1gl7NJ0mheY2oJFTEQq6w531ikxUDEyPH9RigHh/4vaRYJG89JBl
-         TzIL1pHMIqcJldtC0pBUs+jO46z8dCtaEr14NmjIgJCiiiDLcmsffZaexedpozE80h
-         D9FQXcL3cmYJ/T0gj+oSWV7j4n7d+yC4Lg4U3RBrBH1oh/a6g5SAf07q5gz7dwABrM
-         XAoREJrGUnvORIvk1NUqA3rfAkgllU5/7hYWJUpyK1aegH/dsWVknv7dzz1VGoMBLg
-         wFQQOwPz3bfV6dXu4ez2yKeTFsIvPPN8BQJMDBYcxniXFCoe4SwdkXsW6ozauHdyrh
-         5WRgEjYwbtguw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6B17BE2A040;
-        Fri, 26 Aug 2022 10:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net-next] net: phylink: allow RGMII/RTBI in-band status
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166150801543.12913.17008280622819013369.git-patchwork-notify@kernel.org>
-Date:   Fri, 26 Aug 2022 10:00:15 +0000
-References: <20220824061034.3922371-1-dqfext@gmail.com>
-In-Reply-To: <20220824061034.3922371-1-dqfext@gmail.com>
-To:     Qingfang DENG <dqfext@gmail.com>
-Cc:     linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 26 Aug 2022 06:01:14 -0400
+Received: from smtpout30.security-mail.net (smtpout30.security-mail.net [85.31.212.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A97D86E5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:09 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx301.security-mail.net (Postfix) with ESMTP id 6DD5324BD0DD
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1661508068;
+        bh=AuIUPtDG7EP5rSMVhlxZvrX9iTAUSf0vV72kLeZiS2I=;
+        h=From:To:Cc:Subject:Date;
+        b=lPICwcWN7YWeKZtLuGQI3pwdHwDdp8GwJKc6rqGrMUriZDVEOuInO3TmG9AAWxdAV
+         A5HzSrZOhZEhy4gmBIjBLp+lopUhnahGzumJw2Q0cQaQxprTYzhzotMzgg6uGix86B
+         nVnX8KKwJYxfsAEkFAQwVOJSSsgFfP0S6D1t/kr4=
+Received: from fx301 (localhost [127.0.0.1])
+        by fx301.security-mail.net (Postfix) with ESMTP id 181C124BD07B;
+        Fri, 26 Aug 2022 12:01:08 +0200 (CEST)
+X-Virus-Scanned: E-securemail
+Secumail-id: <17d21.630899e3.507b4.0>
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
+        by fx301.security-mail.net (Postfix) with ESMTPS id 97CE324BD125;
+        Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 3557C27E0396;
+        Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 1EB1727E0392;
+        Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 1EB1727E0392
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508067;
+        bh=Myu8SMkijdecTs03PTrW2IgGc9cWDLAdsLPOgTch5Dc=;
+        h=From:To:Date:Message-Id;
+        b=RAqOonkLYCYKGpzj+Vm7+4eDQPSOlG+ymCge7/xERFwVwKMMW++S4PQgW38+ah/Vy
+         XwxFAh+PYVfPcwcwrTQahkys48kIdDBbpTPVExUoTUWagGbZ1ahZ/8aGOXuTMB6cT6
+         x+dnY8c/QONd2NRIInBNem/7f+wuXbA0QWPTsRmc=
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vElzBLQjMoGP; Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 0441C27E02FA;
+        Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH] fs: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:35 +0200
+Message-Id: <20220826100052.22945-7-jmaselbas@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: by Secumail
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Remove redundant word `the`.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+CC: Alexander Viro <viro@zeniv.linux.org.uk>
+CC: linux-fsdevel@vger.kernel.org
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+---
+ include/linux/fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 24 Aug 2022 14:10:34 +0800 you wrote:
-> As per RGMII specification v2.0, section 3.4.1, RGMII/RTBI has an
-> optional in-band status feature where the PHY's link status, speed and
-> duplex mode can be passed to the MAC.
-> Allow RGMII/RTBI to use in-band status.
-> 
-> Signed-off-by: Qingfang DENG <dqfext@gmail.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,net-next] net: phylink: allow RGMII/RTBI in-band status
-    https://git.kernel.org/netdev/net-next/c/d73ffc08824d
-
-You are awesome, thank you!
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 9eced4cc286e..6e946ed4c133 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -3069,7 +3069,7 @@ extern void evict_inodes(struct super_block *sb);
+ void dump_mapping(const struct address_space *);
+ 
+ /*
+- * Userspace may rely on the the inode number being non-zero. For example, glibc
++ * Userspace may rely on the inode number being non-zero. For example, glibc
+  * simply ignores files with zero i_ino in unlink() and other places.
+  *
+  * As an additional complication, if userspace was compiled with
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 

@@ -2,152 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065725A28FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED47A5A2964
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241254AbiHZOBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S1343948AbiHZOZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiHZOBp (ORCPT
+        with ESMTP id S244406AbiHZOZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:01:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1832EC00D6;
-        Fri, 26 Aug 2022 07:01:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C32DB82A67;
-        Fri, 26 Aug 2022 14:01:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6EEBC433C1;
-        Fri, 26 Aug 2022 14:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661522500;
-        bh=p/JDAuAHU4Zd+HtSCGRiMszPIJbGgAjMGbUVAPyyTpg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Evz/oTNMeXYkF7kcjWRT7CXxCTmLxbN1wc/7mtIdyMnlHPXdyxiHde6qEF9Yat2d7
-         NKhouvQkBNsjNt/FtVAEC1KDwlyGwAHRnU5LhoLlqH9F8D4lhgGox9T6s0p69+6qpO
-         SawgGE0iuaCRMv51h9qqYd5wfcEcWhv9lLgEaXCyI2dlTj1DACqfYWliSVmtHv9mIj
-         1JMlFJ0xAoRVFpsTJaWEb7/8lICYusrXNRezqHBlszB++Hk2ibWXHC/fhS0GGCEae1
-         i3q8eqEOihhjoNx4hHwdxuISgudI/mW05mZAeOitz8HozWGBfNSDP7gnJAP07Rvvwp
-         R+JnkcwlWMbMA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2EE9F404A1; Fri, 26 Aug 2022 11:01:35 -0300 (-03)
-Date:   Fri, 26 Aug 2022 11:01:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2] perf sched: Fix memory leaks in __cmd_record
-Message-ID: <YwjSP83b3u2Hp5Le@kernel.org>
-References: <20220824145733.409005-1-irogers@google.com>
+        Fri, 26 Aug 2022 10:25:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4133055A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661523944; x=1693059944;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EagHLuYyy/D4ZjO0QalG/OMeTF32exa9+75PSttsxWg=;
+  b=foW7JUZelAQ0S/5IWuq8I2tO8yJ9B9Wx/WvGB007rke4AmzievbNGM76
+   eesESv8uKt/lNpTlObeUKK2137Il4kkSjq4EivfC1cUUQa0KMv9Hg5IPb
+   T9R82nV5NC7uENdH1U9ifQQkwCBNmtJJ2XK15ECJXRB0BjBWFOh95M+Xa
+   dAU610d1g0pHbXig95IerFAs5zVjuc5vrvEcXrctwjILjUlQ/SsamuWBx
+   ZfK0eqM4LnNtqK1rx9imr8/EGhmV5wrEjJOtbhANDIbfxOheZqguzudbd
+   eE4u/e/QCzUTOjSFtOlClln46yPZnA82+zfIxLtCvtyIF3TnAKYLigTkn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="358482914"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="358482914"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 07:25:42 -0700
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="610579760"
+Received: from plecluse-mobl2.ger.corp.intel.com (HELO [10.252.52.28]) ([10.252.52.28])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 07:25:40 -0700
+Message-ID: <01e03c55-1fcf-1e33-78e8-398a50b622ce@linux.intel.com>
+Date:   Fri, 26 Aug 2022 10:06:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824145733.409005-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] soundwire: bus: Fix lost UNATTACH when re-enumerating
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220825122241.273090-1-rf@opensource.cirrus.com>
+ <20220825122241.273090-4-rf@opensource.cirrus.com>
+ <adfdf06a-e1a3-e47c-a71f-5e5dccef6fd0@linux.intel.com>
+ <e9deb2fb-458a-8136-5ba7-a9e2b0f2d174@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <e9deb2fb-458a-8136-5ba7-a9e2b0f2d174@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Aug 24, 2022 at 07:57:33AM -0700, Ian Rogers escreveu:
-> An array of strings is passed to cmd_record but not freed. As
-> cmd_record modifies the array, add another array as a copy that can be
-> mutated allowing the original array contents to all be freed.
+
+
+>> On 8/25/22 14:22, Richard Fitzgerald wrote:
+>>> Rearrange sdw_handle_slave_status() so that any peripherals
+>>> on device #0 that are given a device ID are reported as
+>>> unattached. The ensures that UNATTACH status is not lost.
+>>>
+>>> Handle unenumerated devices first and update the
+>>> sdw_slave_status array to indicate IDs that must have become
+>>> UNATTACHED.
+>>>
+>>> Look for UNATTACHED devices after this so we can pick up
+>>> peripherals that were UNATTACHED in the original PING status
+>>> and those that were still ATTACHED at the time of the PING but
+>>> then reverted to unenumerated and were found by
+>>> sdw_program_device_num().
+>>
+>> Are those two cases really lost completely? It's a bit surprising, I do
+>> recall that we added a recheck on the status, see the 'update_status'
+>> label in cdns_update_slave_status_work
+>>
 > 
-> Detected with -fsanitize=address.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-sched.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
+> Yes they are. We see this happen extremely frequently (like, almost
+> every time) when we reset out peripherals after a firmware change.
 > 
-> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> index 2f6cd1b8b662..a5cf243c337f 100644
-> --- a/tools/perf/builtin-sched.c
-> +++ b/tools/perf/builtin-sched.c
-> @@ -3355,7 +3355,8 @@ static bool schedstat_events_exposed(void)
->  static int __cmd_record(int argc, const char **argv)
->  {
->  	unsigned int rec_argc, i, j;
-> -	const char **rec_argv;
-> +	char **rec_argv;
-> +	const char **rec_argv_copy;
->  	const char * const record_args[] = {
->  		"record",
->  		"-a",
-> @@ -3384,6 +3385,7 @@ static int __cmd_record(int argc, const char **argv)
->  		ARRAY_SIZE(schedstat_args) : 0;
->  
->  	struct tep_event *waking_event;
-> +	int ret;
->  
->  	/*
->  	 * +2 for either "-e", "sched:sched_wakeup" or
-> @@ -3391,14 +3393,18 @@ static int __cmd_record(int argc, const char **argv)
->  	 */
->  	rec_argc = ARRAY_SIZE(record_args) + 2 + schedstat_argc + argc - 1;
->  	rec_argv = calloc(rec_argc + 1, sizeof(char *));
-> -
->  	if (rec_argv == NULL)
->  		return -ENOMEM;
-> +	rec_argv_copy = calloc(rec_argc + 1, sizeof(char *));
-> +	if (rec_argv_copy == NULL) {
-> +		free(rec_argv);
-> +		return -ENOMEM;
-> +	}
->  
->  	for (i = 0; i < ARRAY_SIZE(record_args); i++)
->  		rec_argv[i] = strdup(record_args[i]);
->  
-> -	rec_argv[i++] = "-e";
-> +	rec_argv[i++] = strdup("-e");
->  	waking_event = trace_event__tp_format("sched", "sched_waking");
->  	if (!IS_ERR(waking_event))
->  		rec_argv[i++] = strdup("sched:sched_waking");
-> @@ -3409,11 +3415,19 @@ static int __cmd_record(int argc, const char **argv)
->  		rec_argv[i++] = strdup(schedstat_args[j]);
->  
->  	for (j = 1; j < (unsigned int)argc; j++, i++)
-> -		rec_argv[i] = argv[j];
-> +		rec_argv[i] = strdup(argv[j]);
->  
->  	BUG_ON(i != rec_argc);
->  
-> -	return cmd_record(i, rec_argv);
-> +	memcpy(rec_argv_copy, rec_argv, sizeof(char *) * rec_argc);
-> +	ret = cmd_record(rec_argc, rec_argv_copy);
-> +
-> +	for (i = 0; i < rec_argc; i++)
-> +		free(rec_argv[i]);
-> +	free(rec_argv);
-> +	free(rec_argv_copy);
-> +
-> +	return ret;
->  }
->  
->  int cmd_sched(int argc, const char **argv)
-> -- 
-> 2.37.2.609.g9ff673ca1a-goog
+> I saw that "try again" stuff in cdns_update_slave_status_work() but
+> it's not fixing the problem. Maybe because it's looking for devices
+> still on #0 but that isn't the problem.
+> 
+> The cdns_update_slave_status_work() is running in one workqueue thread,
+> child drivers in other threads. So for example:
+> 
+> 1. Child driver #1 resets #1
+> 2. PING: #1 has reverted to #0, #2 still ATTACHED
+> 3. cdns_update_slave_status() snapshots the status. #2 is ATTACHED
+> 4. #1 has gone so mark it UNATTACHED
+> 5. Child driver #2 gets some CPU time and reset #2
+> 5. PING: #2 has reset, both now on #0 but we are handling the previous
+> PING
+> 6. sdw_handle_slave_status() - snapshot PING (from step 3) says #2 is
+> attached
+> 7. Device on #0 so call sdw_program_device_num()
+> 8. sdw_program_device_num() loops until no devices on #0, #1 and #2
+> are both reprogrammed, return from sdw_handle_slave_status()
+> 10. PING: #1 and #2 both attached
+> 11. cdns_update_slave_status() -> sdw_handle_slave_status()
+> 12. #1 has changed UNATTACHED->ATTACHED, but we never got a PING with
+>     #2 unattached so its slave->status==ATTACHED, "it hasn't changed"
+>     (wrong!)
+> 
+> Now, at step 10 the Cadence IP may have accumlated both UNATTACH and
+> ATTACH flags, and perhaps it should be smarter about deciding what
+> to report if there are multiple states. HOWEVER.... that's the behaviour
+> of Cadence IP, other IP may be different so it's probably unwise to
+> assume that the IP has "remembered" the UNATTACH state before it was
+> reprogrammed.
+> 
+> If we reprogrammed it, it was definitely UNATTACHED so let's say that.
 
--- 
+Thanks for the detailed answer, this sequence of events will certainly
+defeat the Cadence IP and the way sticky bits were handled.
 
-- Arnaldo
+The UNATTACHED case was assumed to be a really rare case of losing sync,
+i.e. a SOFT_RESET in SoundWire parlance.
+
+If you explicitly do a device reset, that would be a new scenario that
+was not considered before on any of the existing SoundWire commercial
+devices. It's however something we need to support, and your work here
+is much appreciated.
+
+I still think we should re-check the actual status from a PING frame, in
+order to work with more current data than the sticky bits taken at an
+earlier time, but that would only be a minor improvement.
+
+I also have a vague feeling that additional work is needed to make sure
+the DAIs are not used before that second enumeration and all firmware
+download complete. I did a couple of tests last year where I used the
+debugfs interface to issue a device reset command while streaming audio,
+and the detach/reattach was not handled at the ASoC level.
+
+I really don't see any logical flaws in your patch as is, so
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+

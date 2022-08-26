@@ -2,156 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B626F5A2DEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F3E5A2DEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244984AbiHZR7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
+        id S243549AbiHZSBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiHZR7H (ORCPT
+        with ESMTP id S230453AbiHZSBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:59:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8D0E1ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:59:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCD2AB83210
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:59:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A8DC433D6;
-        Fri, 26 Aug 2022 17:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661536743;
-        bh=ML00VXZq74rLsWSCPX4qAUs7nJr27zkTJK9wwnNrUbE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n0YHMPnLk7UG56gX/qdLwzPEa70Y4IgWbTREGMm3zHRclNTr3of4ek0ZL0n1ICowK
-         WPjwvomEi6DTN7QDnQS6QkVfl/mdkjzcavgBaJO24j1kW8u4F7n/geHGy15PvgkcNX
-         L4w4ijS2dDOhlmSLgY50uY7cMdWrvgjWHLxXwESyTU8BCJQAOxTWZMduT31BC+GyoV
-         OFtEIGLdCe7iQSRitdJwANCwsDLKKbve/DimVPx4P0PJYnV9Mpq9OQn60Z869iDcfo
-         LsBh6UlOUPwPqP7knO7vCNkh9fnJwHqkjQ7iQvTsEdJWaauPNYhIXTAZ1at4TFdabU
-         9Sip9ejz4KodQ==
-Date:   Fri, 26 Aug 2022 18:58:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: [GIT PULL] arm64 fixes for -rc3
-Message-ID: <20220826175857.GA20431@willie-the-truck>
+        Fri, 26 Aug 2022 14:01:52 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB34F9C2C9;
+        Fri, 26 Aug 2022 11:01:49 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 83D115C005A;
+        Fri, 26 Aug 2022 14:01:47 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 26 Aug 2022 14:01:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1661536907; x=
+        1661623307; bh=4ZXRyN/6PHKsITnMYINhCH0rT/aFKu8us2ywc2yLlP8=; b=r
+        lN/Qgp4Ox4hRkAMkIleMZWd3BQFtE22obvxFQz6e5uIHUX2Qhc9onokA6JNj6i37
+        qUUWf3061ZOc6dPK6xruRt4U0tI7mis4iaEoMJgOaT9i7pl2694VUoLC6XlpAq9C
+        Fe7rBunn4SRpRMg87pcsOi/ZNUQna17Y9u/SDugETJsQFhh9S7pI3F4B+sF6crDK
+        DAuMHFS1KEg4omYJjmTMkDbklI1DbGVL3OFC7WbnMGY5+NsQwYadn08lyYQeXcKz
+        eF13MnTyW58glKdS1JR9Oo1M6kmrD8/NdEIouAWs5me6TKFty7b36H1wOczQhOo1
+        vrM6W5RrSbb0Sc5AWwjWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661536907; x=1661623307; bh=4ZXRyN/6PHKsITnMYINhCH0rT/aF
+        Ku8us2ywc2yLlP8=; b=L9FlE9ul12nEuEC58bhyKNhS70s04eTVfzKbu4p/fN4N
+        Ihz9P298WwGN/bYbzFmBnqz02kby9wy3LeupppoB5houwB8GPiLZQQX2FLyvhVFF
+        zVJPb3W5UZFnWQAmQ/cdOYDL9qhZjwmNzJzhlsVo+BS+67btWEF4DLoSeb4+E3SH
+        QZBB5mlYiF6GKgwapsFcQ/Hy9XN0bMh2Sodsx35PP6uTsDuRiw9JvmSzqg6Qi06H
+        SOa0V6BZPIA4JMgBiMJS0BTTWj6iWu1GijZEIhpeVYHRgRLJs4PvQQXi7ksw73iP
+        3RSCs1TsspiazogWnaSp+pQL1IoaUzUE655xyE1YDw==
+X-ME-Sender: <xms:iwoJY55NzO8Vt9zEuykAJRZlnv7zeV4duwcK0GW3taDfvF4vlKO_hQ>
+    <xme:iwoJY24cV4H7r1Lmx02voPSX555_C0SVuOFbP5_GxhMn2ep3SHZj0wOEn73HLqKYs
+    2E2aoV-To5156Y>
+X-ME-Received: <xmr:iwoJYwdHauY1-FaOTKVRAGqXvtDlhXpGro8ICoR6WzuK0FxJYqC-0ztxajVF>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejhedguddulecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeduieelfeeutedvleehueetffej
+    geejgeffkeelveeuleeukeejjeduffetjeekteenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
+    shhlrggsrdgtohhm
+X-ME-Proxy: <xmx:iwoJYyL0Z2gideEIq_sT4AwxbVgTaYLdWbKW0X84Gxy1o2C7AS6rBQ>
+    <xmx:iwoJY9JCNaE2sHJZgMNW8CA340lq3V7MrULGmCet7SaGn3ewacXl-A>
+    <xmx:iwoJY7y7NLQA0_lINcm6kXi-oxe1mMLLqfER1GzRakvkTmM3ZvCeQA>
+    <xmx:iwoJY7jLSEODOCfwPCe0qwbeRCAk6ucGspsO12s6KnVTiAt9yDUamQ>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 26 Aug 2022 14:01:46 -0400 (EDT)
+Date:   Fri, 26 Aug 2022 14:01:44 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Ard Biesheuvel <ardb@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH] Add support for ESRT loading under Xen
+Message-ID: <YwkKiFIKHG4IcCmH@itl-email>
+Mail-Followup-To: Jan Beulich <jbeulich@suse.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Ard Biesheuvel <ardb@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+References: <20220825215218.1606-1-demi@invisiblethingslab.com>
+ <c2a22672-b9dd-7aa4-b61e-ccb0faaa3b01@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ADaG3VrA093Bc+/S"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c2a22672-b9dd-7aa4-b61e-ccb0faaa3b01@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Please pull this bumper crop of arm64 fixes for -rc3. The usual summary
-is in the tag, but the largest change is fixing our parsing of the
-'rodata=full' command line option, which kstrtobool() started treating
-as 'rodata=false'. The fix actually makes the parsing of that option much
-less fragile and updates the documentation at the same time.
+--ADaG3VrA093Bc+/S
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 26 Aug 2022 14:01:44 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Jan Beulich <jbeulich@suse.com>
+Cc: linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org, Ard Biesheuvel <ardb@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH] Add support for ESRT loading under Xen
 
-We still have a boot issue pending when KASLR is disabled at compile time,
-but there's a fresh fix on the list which I'll send next week if it holds
-up to testing.
+On Fri, Aug 26, 2022 at 09:53:29AM +0200, Jan Beulich wrote:
+> On 25.08.2022 23:52, Demi Marie Obenour wrote:
+> > @@ -40,6 +41,38 @@
+> > =20
+> >  #define efi_data(op)	(op.u.efi_runtime_call)
+> > =20
+> > +static_assert(XEN_PAGE_SHIFT =3D=3D EFI_PAGE_SHIFT,
+> > +              "Mismatch between EFI_PAGE_SHIFT and XEN_PAGE_SHIFT");
+> > +
+> > +bool xen_efi_mem_desc_lookup(u64 phys_addr, efi_memory_desc_t *md)
+> > +{
+> > +	struct xen_platform_op op =3D {
+> > +		.cmd =3D XENPF_firmware_info,
+> > +		.u.firmware_info =3D {
+> > +			.type =3D XEN_FW_EFI_INFO,
+> > +			.index =3D XEN_FW_EFI_MEM_INFO,
+> > +			.u.efi_info.mem.addr =3D phys_addr,
+> > +			.u.efi_info.mem.size =3D ((u64)-1ULL) - phys_addr,
+> > +		}
+> > +	};
+> > +	union xenpf_efi_info *info =3D &op.u.firmware_info.u.efi_info;
+> > +	int rc;
+> > +
+> > +	memset(md, 0, sizeof(*md)); /* initialize md even on failure */
+> > +	rc =3D HYPERVISOR_platform_op(&op);
+> > +	if (rc) {
+> > +		pr_warn("Could not obtain information on address %llu from Xen: "
+> > +			"error %d\n", phys_addr, rc);
+> > +		return false;
+> > +	}
+> > +
+> > +	md->attribute =3D info->mem.attr;
+> > +	md->type =3D info->mem.type;
+> > +	md->num_pages =3D info->mem.size >> XEN_PAGE_SHIFT;
+> > +	md->phys_addr =3D info->mem.addr;
+>=20
+> As indicated in reply to your patch changing XEN_FW_EFI_MEM_INFO in
+> the hypervisor: While this may fit the ESRT purpose, the address you
+> return here is not necessarily the start of the region, and hence
+> this function is not a general Xen replacement for the non-Xen
+> function. Therefore I think it also shouldn't give the impression of
+> doing so.
 
-Cheers,
+Is this just a matter of renaming the function?  Is it possible to
+implement the original function with the current hypervisor?
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
-Will
+--ADaG3VrA093Bc+/S
+Content-Type: application/pgp-signature; name="signature.asc"
 
---->8
+-----BEGIN PGP SIGNATURE-----
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmMJCogACgkQsoi1X/+c
+IsEOXA/+KcxojsYfgCdCpNKkR9XEwx/tYKqs5TYjfEtdS8+dyEV3WCb90RA95rJf
+nPCqsC3lqKs1xKCZCVQ9Qnsk0PtD+NBfjUnPDNZxSXOanSrfHTlqCE5v73Wsx3U9
+vDOgx8fpvsR7pLQJ1nD56zKgomKkHJw1sv+Ac+y85CdZDkCB4JHPnobHx7cRsrg7
+7+ZQbU3HdHQc655XDIK6a5HisFsLDvwHHCAPFUeyq3VEfFIWTuXBnYxVRgb2VGF8
+uwfuQ13QaS8yu+yTQ444X4N/vwTj0ZGwjHdwS8UGM1skUcW4NSig5ymt4MAlIfnr
+SdHutMhenm0+JuKwg9QNTbNb2q3XRKH+9FJ1tCX3fFirqz6H07PNLVKMJKM4VHbz
+DAREFZtuFRtxxeymiSmrxJkNNByDXOwx5JdxEPZYAHhHOT13NCpv4M/I0UihEkXU
+0Z6sUYHKam/XhYUtC08K9KQWt/65f7PjouulEp60cL7U14yZKi/yHzhGugWzPUUl
+/6lXXaICO9JohvISVWlnfvYDyMrzXgo3MSGBk3ByUDzNaaby+xPyS4aTsmOHW91G
+Jr5JUFNVRR6gAJO1UX5ZzH7b64ybpCzBC/DRMtTyhZnBkuv9dG0E8G45zyw06BoZ
+ltToA0VyXeJcPm2hpB6RqtcPT+ZacoRO9vE/D4ihNruF+9cw1pg=
+=t2WL
+-----END PGP SIGNATURE-----
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
-
-for you to fetch changes up to 714f3cbd70a4db9f9b7fe5b8a032896ed33fb824:
-
-  arm64/sme: Don't flush SVE register state when handling SME traps (2022-08-23 11:29:12 +0100)
-
-----------------------------------------------------------------
-arm64 fixes for -rc3
-
-- Fix workaround for Cortex-A76 erratum #1286807
-
-- Add workaround for AMU erratum #2457168 on Cortex-A510
-
-- Drop reference to removed CONFIG_ARCH_RANDOM #define
-
-- Fix parsing of the "rodata=full" cmdline option
-
-- Fix a bunch of issues in the SME register state switching and sigframe code
-
-- Fix incorrect extraction of the CTR_EL0.CWG register field
-
-- Fix ACPI cache topology probing when the PPTT is not present
-
-- Trivial comment and whitespace fixes
-
-----------------------------------------------------------------
-Ionela Voinescu (1):
-      arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
-
-Kuan-Ying Lee (1):
-      arm64: Fix comment typo
-
-Lukas Bulwahn (1):
-      arm64: adjust KASLR relocation after ARCH_RANDOM removal
-
-Mark Brown (7):
-      arm64/sysreg: Directly include bitfield.h
-      arm64/sysreg: Guard SYS_FIELD_ macros for asm
-      arm64/cache: Fix cache_type_cwg() for register generation
-      arm64/signal: Raise limit on stack frames
-      arm64/signal: Flush FPSIMD register state when disabling streaming mode
-      arm64/sme: Don't flush SVE register state when allocating SME storage
-      arm64/sme: Don't flush SVE register state when handling SME traps
-
-Mark Rutland (1):
-      arm64: fix rodata=full
-
-Martin Liška (1):
-      docs/arm64: elf_hwcaps: unify newlines in HWCAP lists
-
-Sudeep Holla (1):
-      arm64: cacheinfo: Fix incorrect assignment of signed error value to unsigned fw_level
-
-Zenghui Yu (1):
-      arm64: Fix match_list for erratum 1286807 on Arm Cortex-A76
-
- Documentation/admin-guide/kernel-parameters.txt |  2 ++
- Documentation/arm64/elf_hwcaps.rst              | 10 --------
- Documentation/arm64/silicon-errata.rst          |  2 ++
- arch/arm64/Kconfig                              | 17 +++++++++++++
- arch/arm64/include/asm/cache.h                  |  2 +-
- arch/arm64/include/asm/fpsimd.h                 |  4 ++--
- arch/arm64/include/asm/setup.h                  | 17 +++++++++++++
- arch/arm64/include/asm/sysreg.h                 |  5 ++--
- arch/arm64/kernel/cacheinfo.c                   |  6 ++++-
- arch/arm64/kernel/cpu_errata.c                  | 12 ++++++++++
- arch/arm64/kernel/cpufeature.c                  |  5 +++-
- arch/arm64/kernel/entry.S                       |  2 +-
- arch/arm64/kernel/fpsimd.c                      | 21 +++++-----------
- arch/arm64/kernel/pi/kaslr_early.c              |  8 +++----
- arch/arm64/kernel/ptrace.c                      |  6 ++---
- arch/arm64/kernel/signal.c                      | 14 +++++++++--
- arch/arm64/kernel/topology.c                    | 32 +++++++++++++++++++++++--
- arch/arm64/mm/mmu.c                             | 18 --------------
- arch/arm64/tools/cpucaps                        |  1 +
- init/main.c                                     | 18 +++++++++++---
- 20 files changed, 136 insertions(+), 66 deletions(-)
+--ADaG3VrA093Bc+/S--

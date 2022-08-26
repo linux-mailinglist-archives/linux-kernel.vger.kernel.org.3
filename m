@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC645A2705
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704405A270F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245445AbiHZLqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S1343603AbiHZLry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiHZLqU (ORCPT
+        with ESMTP id S1343673AbiHZLrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:46:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15F6B275F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661514378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mHGinpi7lqtAkMwygFoIPaEx54TEBffoywenxaeAscc=;
-        b=Rit1P5cnaIZNxSAM15tx41oPwrQkoX5usOlJI/IV+fuFJ/eDC2rizuxVvTurCkMUi+F9e4
-        vO5etDexIgXpyLoHlSZfbxAbODQCzi/fncwYr7Dje0LwLYded+XplUJpD+Wvnlm/JPWHZf
-        kJxNgN2ay6QcXSI13Nzducn10PWg0Gk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-68-twmuZMTTO26HbL7tcjyqYA-1; Fri, 26 Aug 2022 07:46:15 -0400
-X-MC-Unique: twmuZMTTO26HbL7tcjyqYA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5BC6804191;
-        Fri, 26 Aug 2022 11:46:14 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9AB6040B40C8;
-        Fri, 26 Aug 2022 11:46:14 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27QBkE6h018375;
-        Fri, 26 Aug 2022 07:46:14 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27QBkDlA018371;
-        Fri, 26 Aug 2022 07:46:13 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Fri, 26 Aug 2022 07:46:13 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Will Deacon <will@kernel.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-In-Reply-To: <20220826112327.GA19774@willie-the-truck>
-Message-ID: <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <20220826112327.GA19774@willie-the-truck>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Fri, 26 Aug 2022 07:47:45 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62045CCE2C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:47:44 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id sd33so2662979ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=6I1saXwykcy6QayrIDGL5n32r08at8PoZmfVUTcYUCU=;
+        b=X2Fmrrv3asyl2W5nL1jiASlsERZ0mKPSNWIwo8PhVQ45WlvZUrFHDb7DPqb1185Mcs
+         0z0o4jS394BMi+2ciyqOriJzpAK9hyPDkFdSJ+F4j/rWXNPZNbH8Gf++gfvDCQVEGhdh
+         inPE8COluT9LpiHfaQRCKs3roYaZF2h5piAg5xdW7HryQ5QQnfPnT7WsG0J3uPmeCSJ0
+         51wdyeu4IXh9etE96mcyB4PYI1ykou3wh41TxquW8+FATgxjU5mCtCMio3g9oWQURMuf
+         wqnndLhihzxwQouxqndndmbqYwMTdMPqf5hGRnhuzfvPHxYCXibzrWis6BgU7xfbajvx
+         5zhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=6I1saXwykcy6QayrIDGL5n32r08at8PoZmfVUTcYUCU=;
+        b=c2sBo6Eo9C/rAjd1NEjYbLBCeZ0ebMv09UhhFfhGWzN6QyQTPZF/MZAVzJShgDdGaI
+         2XrFt8p6LDfWrIlUfM27yO0bEqIZr+/BQMG0aiCF7z6N9tjd94Hp6OK2yl115luv3xAn
+         Grgnz2lX1Hfx/V0fXkmQw2WRRNzXoPidzhP+HvVQbJPBrTapkSaFliLrJC1XUCzYObAy
+         6JjO3KOZO09g49ucsTpCs/MWqXpdGFDbPVZw6CihUJ5cy32c7r50Ycdzkm3s9dyTojUa
+         5NCYyuR8OXXSnZJHkQT4gaXyYFFiSg25kMR2GR178a9VyXLTgYhIlvewaFtg04UNtwWD
+         KUjg==
+X-Gm-Message-State: ACgBeo0xINP/96o4iGAgBgkJ0VxsNmzPAzbM682fZuJG1lMP+RjdKgTt
+        WfEuKDLBo255r/4OjPzSh2OVchr9rYJa5MB5pBEsYQ==
+X-Google-Smtp-Source: AA6agR4b4g6N1PbpW7cvmvO/x0YA2aTRLqfpsYqXh165oRYCKTU2oImycDVfMp2rZsEx3rrMZIY2UqLFUuMUPdk0jWA=
+X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
+ e8-20020a17090658c800b006fe91d518d2mr5381175ejs.190.1661514462901; Fri, 26
+ Aug 2022 04:47:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220804114105.41326-1-wangborong@cdjrlc.com>
+In-Reply-To: <20220804114105.41326-1-wangborong@cdjrlc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 13:47:31 +0200
+Message-ID: <CACRpkdbh1W4E=aq=+pApiiBWhRyASuk4iHDEmu38xssht-4h0A@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: nt35510: Fix comment typo
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,66 +67,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 4, 2022 at 1:41 PM Jason Wang <wangborong@cdjrlc.com> wrote:
 
+> The double `the' is duplicated in the comment, remove one.
+>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-On Fri, 26 Aug 2022, Will Deacon wrote:
+Patch applied to drm-misc-next
 
-> On Thu, Aug 25, 2022 at 05:03:40PM -0400, Mikulas Patocka wrote:
-> > Here I reworked your patch, so that test_bit_acquire is defined just like 
-> > test_bit. There's some code duplication (in 
-> > include/asm-generic/bitops/generic-non-atomic.h and in 
-> > arch/x86/include/asm/bitops.h), but that duplication exists in the 
-> > test_bit function too.
-> > 
-> > I tested it on x86-64 and arm64. On x86-64 it generates the "bt" 
-> > instruction for variable-bit test and "shr; and $1" for constant bit test. 
-> > On arm64 it generates the "ldar" instruction for both constant and 
-> > variable bit test.
-> > 
-> > For me, the kernel 6.0-rc2 doesn't boot in an arm64 virtual machine at all 
-> > (with or without this patch), so I only compile-tested it on arm64. I have 
-> > to bisect it.
-> 
-> It's working fine for me and I haven't had any other reports that it's not
-> booting. Please could you share some more details about your setup so we
-> can try to reproduce the problem?
-
-I'm bisecting it now. I'll post the offending commit when I'm done.
-
-It gets stuck without printing anything at this point:
-Loading Linux 6.0.0-rc2 ...
-Loading initial ramdisk ...
-EFI stub: Booting Linux Kernel...
-EFI stub: Using DTB from configuration table
-EFI stub: Exiting boot services...
-
-I uploaded my .config here: 
-https://people.redhat.com/~mpatocka/testcases/arm64-config/config-6.0.0-rc2 
-so you can try it on your own.
-
-The host system is MacchiatoBIN board with Debian 10.12.
-
-> This looks good to me, thanks for doing it! Just one thing that jumped out
-> at me:
-> 
-> > Index: linux-2.6/include/linux/buffer_head.h
-> > ===================================================================
-> > --- linux-2.6.orig/include/linux/buffer_head.h
-> > +++ linux-2.6/include/linux/buffer_head.h
-> > @@ -156,7 +156,7 @@ static __always_inline int buffer_uptoda
-> >  	 * make it consistent with folio_test_uptodate
-> >  	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
-> >  	 */
-> > -	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
-> > +	return test_bit_acquire(BH_Uptodate, &bh->b_state);
-> 
-> Do you think it would be worth adding set_bit_release() and then relaxing
-> set_buffer_uptodate() to use that rather than the smp_mb__before_atomic()?
-> 
-> Will
-
-Yes, we could add this (but it would be better to add it in a separate 
-patch, so that backporting of the origianal patch to -stable is easier).
-
-Mikulas
-
+Yours,
+Linus Walleij

@@ -2,123 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBF55A29F6
+	by mail.lfdr.de (Postfix) with ESMTP id 8676B5A29F5
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344619AbiHZOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:47:32 -0400
+        id S229843AbiHZOrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:47:43 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240616AbiHZOrQ (ORCPT
+        with ESMTP id S1344596AbiHZOr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:47:16 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031DFD8B1A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=pzSEnzVb4PRuwPohD2SDHsa5KY0tRkBlHuhkY0oHs0w=;
-        b=NCRe3O/xZCHJ8hDEpD57d6zrmZ/D/l0pxGva3S+GafoGTaEBI8V+8dRJcau2lXRHDYLk3R1tpxP1j
-         3KhToFhOZVyitlnJ0xRfBBHfLRdUC92ngLyYi8++VZngl+6FIPMMSswvmOKlwmrA48SEArDfjlrrZp
-         aLUYNtoPbfHie2QZuWN/5gmc96n89BeYnrY4HhmXJ0VYbMK/Nwimvglfg4ZslyKY8HJv9B0kGS+jUd
-         iAj6qBZTfiE8K/3fT3d5xnIszRsKWAcgiOTrubWRizGAPwPa3VkkroaVH+3Yp57Mf7SsdGZtyGg98g
-         yEaoCAI90mioch8sotzXt8Sz2DOGFiA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=pzSEnzVb4PRuwPohD2SDHsa5KY0tRkBlHuhkY0oHs0w=;
-        b=czLkABglyklPhRImctvsIg7tPPnc0HaIPVvkP1cQzOjoIxLxHBn86D/l7MTIWNazZ6K+XJ8mOPOkH
-         5qB81ZOBw==
-X-HalOne-Cookie: f226e6ab43f82fd861952f49718ba8a608aa1fbd
-X-HalOne-ID: f6029a30-254d-11ed-a920-d0431ea8a290
-Received: from mailproxy3.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id f6029a30-254d-11ed-a920-d0431ea8a290;
-        Fri, 26 Aug 2022 14:47:09 +0000 (UTC)
-Date:   Fri, 26 Aug 2022 16:47:07 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Michal Simek <monstr@monstr.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 5/6] sparc: use the asm-generic version of cpuinfo_op
-Message-ID: <Ywjc67hcBwOkMtI/@ravnborg.org>
-References: <20220821113512.2056409-1-mail@conchuod.ie>
- <20220821113512.2056409-6-mail@conchuod.ie>
+        Fri, 26 Aug 2022 10:47:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F30FD8B3B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661525247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=99JWd2r7uI+NtQEfMTMU0psWdgteknoK0WTYvTciCxY=;
+        b=YGy7Al/yIDUPXKq1aR4YxdLc0JQUPxs/ZMzouTh3+WrVC6wOOMnIzys4+tOY8m8n1EpqhW
+        2HR6EWUuwjI/IGSj2rMXlRpUO5XfZJhX1//u08q+EU8ebtZJPQ5SkqigaoBnu1RuT+GETo
+        RGzyRSxx6u4iFuRX6gDwTSjG8sV1XBs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-256-uFxQ7Tl-N7qF9PAyvzVSkw-1; Fri, 26 Aug 2022 10:47:25 -0400
+X-MC-Unique: uFxQ7Tl-N7qF9PAyvzVSkw-1
+Received: by mail-wm1-f71.google.com with SMTP id p19-20020a05600c1d9300b003a5c3141365so4158373wms.9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:47:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=99JWd2r7uI+NtQEfMTMU0psWdgteknoK0WTYvTciCxY=;
+        b=kM4Du1sOXwWct4O/UuBOJQkcnuaPBbvomZyFqutIIyRAXH/weGZwSa8AhCtMHxPkKy
+         oeEaMX8OcIeAulZkJU2cMMsk5CGP/sXEPI1EEBp6d0PE60qPmPw2HInOw8gYigJ9tUY+
+         NVEQjRANSNwNvMByzFjoeUJuMr+9ZRZeEtBimC++w+4DuHKOJdGCSkIcpzfG4KMrqBu2
+         dbiUkgcGBrrGaXM2xDIh4H0vI8jhOFmDoIenpJ3PNJ5Y1hgkaVP1z6NIw72xFrQ3iOe8
+         znjuUq9PDDT1rfsCbB8tpTjeofgQI5d7z6DOL/APQdyK833NAI88t9zkQhmhu2krLkQG
+         LiQQ==
+X-Gm-Message-State: ACgBeo2mg3NdAf/5CcrS7bgBrWRBicV9kX3bAPUZhMO2RNlAK6FncJ8w
+        j4fN80reN3SzSHpu7LCcDYrNXWPbrahd0Mt2N3tkmFYexA4jULZB6PK8+dKcwZWDcXiqgnE96Qe
+        4Ugr4Jum8CRpZ0rI1t4hXaJsp
+X-Received: by 2002:a5d:5985:0:b0:222:c827:11d5 with SMTP id n5-20020a5d5985000000b00222c82711d5mr523wri.323.1661525243921;
+        Fri, 26 Aug 2022 07:47:23 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6DwZULOBS0dk+aCd9iIC0MR/e4UA3DRO6z9TwsFVCvv46I7xo6Oq/KhO+SKX3jNfwHlL+UnQ==
+X-Received: by 2002:a5d:5985:0:b0:222:c827:11d5 with SMTP id n5-20020a5d5985000000b00222c82711d5mr499wri.323.1661525243581;
+        Fri, 26 Aug 2022 07:47:23 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:f600:abad:360:c840:33fa? (p200300cbc708f600abad0360c84033fa.dip0.t-ipconnect.de. [2003:cb:c708:f600:abad:360:c840:33fa])
+        by smtp.gmail.com with ESMTPSA id l25-20020a05600c1d1900b003a62052053csm10503423wms.18.2022.08.26.07.47.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 07:47:23 -0700 (PDT)
+Message-ID: <72146725-3d70-0427-50d4-165283a5a85d@redhat.com>
+Date:   Fri, 26 Aug 2022 16:47:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220821113512.2056409-6-mail@conchuod.ie>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/3] mm/migrate_device.c: Copy pte dirty bit to page
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>
+References: <3b01af093515ce2960ac39bb16ff77473150d179.1661309831.git-series.apopple@nvidia.com>
+ <ffbc824af5daa2c44b91c66834a341894fba4ce6.1661309831.git-series.apopple@nvidia.com>
+ <YwZGHyYJiJ+CGLn2@xz-m1.local> <8735dkeyyg.fsf@nvdebian.thelocal>
+ <YwgFRLn43+U/hxwt@xz-m1.local> <8735dj7qwb.fsf@nvdebian.thelocal>
+ <YwjZamk4n/dz+Y/M@xz-m1.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YwjZamk4n/dz+Y/M@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor.
-
-Thanks for this nice simplification, but I think you can make it even
-better.
-
-On Sun, Aug 21, 2022 at 12:35:12PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 26.08.22 16:32, Peter Xu wrote:
+> On Fri, Aug 26, 2022 at 11:02:58AM +1000, Alistair Popple wrote:
+>>
+>> Peter Xu <peterx@redhat.com> writes:
+>>
+>>> On Fri, Aug 26, 2022 at 08:21:44AM +1000, Alistair Popple wrote:
+>>>>
+>>>> Peter Xu <peterx@redhat.com> writes:
+>>>>
+>>>>> On Wed, Aug 24, 2022 at 01:03:38PM +1000, Alistair Popple wrote:
+>>>>>> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
+>>>>>> installs migration entries directly if it can lock the migrating page.
+>>>>>> When removing a dirty pte the dirty bit is supposed to be carried over
+>>>>>> to the underlying page to prevent it being lost.
+>>>>>>
+>>>>>> Currently migrate_vma_*() can only be used for private anonymous
+>>>>>> mappings. That means loss of the dirty bit usually doesn't result in
+>>>>>> data loss because these pages are typically not file-backed. However
+>>>>>> pages may be backed by swap storage which can result in data loss if an
+>>>>>> attempt is made to migrate a dirty page that doesn't yet have the
+>>>>>> PageDirty flag set.
+>>>>>>
+>>>>>> In this case migration will fail due to unexpected references but the
+>>>>>> dirty pte bit will be lost. If the page is subsequently reclaimed data
+>>>>>> won't be written back to swap storage as it is considered uptodate,
+>>>>>> resulting in data loss if the page is subsequently accessed.
+>>>>>>
+>>>>>> Prevent this by copying the dirty bit to the page when removing the pte
+>>>>>> to match what try_to_migrate_one() does.
+>>>>>>
+>>>>>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+>>>>>> Acked-by: Peter Xu <peterx@redhat.com>
+>>>>>> Reported-by: Huang Ying <ying.huang@intel.com>
+>>>>>> Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
+>>>>>> Cc: stable@vger.kernel.org
+>>>>>>
+>>>>>> ---
+>>>>>>
+>>>>>> Changes for v3:
+>>>>>>
+>>>>>>  - Defer TLB flushing
+>>>>>>  - Split a TLB flushing fix into a separate change.
+>>>>>>
+>>>>>> Changes for v2:
+>>>>>>
+>>>>>>  - Fixed up Reported-by tag.
+>>>>>>  - Added Peter's Acked-by.
+>>>>>>  - Atomically read and clear the pte to prevent the dirty bit getting
+>>>>>>    set after reading it.
+>>>>>>  - Added fixes tag
+>>>>>> ---
+>>>>>>  mm/migrate_device.c |  9 +++++++--
+>>>>>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+>>>>>> index 6a5ef9f..51d9afa 100644
+>>>>>> --- a/mm/migrate_device.c
+>>>>>> +++ b/mm/migrate_device.c
+>>>>>> @@ -7,6 +7,7 @@
+>>>>>>  #include <linux/export.h>
+>>>>>>  #include <linux/memremap.h>
+>>>>>>  #include <linux/migrate.h>
+>>>>>> +#include <linux/mm.h>
+>>>>>>  #include <linux/mm_inline.h>
+>>>>>>  #include <linux/mmu_notifier.h>
+>>>>>>  #include <linux/oom.h>
+>>>>>> @@ -196,7 +197,7 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>>>>>>  			anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+>>>>>>  			if (anon_exclusive) {
+>>>>>>  				flush_cache_page(vma, addr, pte_pfn(*ptep));
+>>>>>> -				ptep_clear_flush(vma, addr, ptep);
+>>>>>> +				pte = ptep_clear_flush(vma, addr, ptep);
+>>>>>>
+>>>>>>  				if (page_try_share_anon_rmap(page)) {
+>>>>>>  					set_pte_at(mm, addr, ptep, pte);
+>>>>>> @@ -206,11 +207,15 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>>>>>>  					goto next;
+>>>>>>  				}
+>>>>>>  			} else {
+>>>>>> -				ptep_get_and_clear(mm, addr, ptep);
+>>>>>> +				pte = ptep_get_and_clear(mm, addr, ptep);
+>>>>>>  			}
+>>>>>
+>>>>> I remember that in v2 both flush_cache_page() and ptep_get_and_clear() are
+>>>>> moved above the condition check so they're called unconditionally.  Could
+>>>>> you explain the rational on why it's changed back (since I think v2 was the
+>>>>> correct approach)?
+>>>>
+>>>> Mainly because I agree with your original comments, that it would be
+>>>> better to keep the batching of TLB flushing if possible. After the
+>>>> discussion I don't think there is any issues with HW pte dirty bits
+>>>> here. There are already other cases where HW needs to get that right
+>>>> anyway (eg. zap_pte_range).
+>>>
+>>> Yes tlb batching was kept, thanks for doing that way.  Though if only apply
+>>> patch 1 we'll have both ptep_clear_flush() and batched flush which seems to
+>>> be redundant.
+>>>
+>>>>
+>>>>> The other question is if we want to split the patch, would it be better to
+>>>>> move the tlb changes to patch 1, and leave the dirty bit fix in patch 2?
+>>>>
+>>>> Isn't that already the case? Patch 1 moves the TLB flush before the PTL
+>>>> as suggested, patch 2 atomically copies the dirty bit without changing
+>>>> any TLB flushing.
+>>>
+>>> IMHO it's cleaner to have patch 1 fix batch flush, replace
+>>> ptep_clear_flush() with ptep_get_and_clear() and update pte properly.
+>>
+>> Which ptep_clear_flush() are you referring to? This one?
+>>
+>> 			if (anon_exclusive) {
+>> 				flush_cache_page(vma, addr, pte_pfn(*ptep));
+>> 				ptep_clear_flush(vma, addr, ptep);
 > 
-> There's little point in duplicating the declaration of cpuinfo_op now
-> that there's a shared version of it, so drop it & include the generic
-> header.
+> Correct.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/sparc/include/asm/cpudata.h | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> My understanding is that we need to do a flush for anon_exclusive.
 > 
-> diff --git a/arch/sparc/include/asm/cpudata.h b/arch/sparc/include/asm/cpudata.h
-> index d213165ee713..af6ef3c028a9 100644
-> --- a/arch/sparc/include/asm/cpudata.h
-> +++ b/arch/sparc/include/asm/cpudata.h
-> @@ -6,8 +6,7 @@
->  
->  #include <linux/threads.h>
->  #include <linux/percpu.h>
-> -
-> -extern const struct seq_operations cpuinfo_op;
-> +#include <asm-generic/processor.h>
+> To me anon exclusive only shows this mm exclusively owns this page. I
+> didn't quickly figure out why that requires different handling on tlb
+> flushs.  Did I perhaps miss something?
 
-Since the header file did not need <asm-generic/processor.h> then it
-should not need it now after deleting stuff.
-The better fix is to add the missing include to arch/sparc/kernel/cpu.c,
-where we have the user of it.
+GUP-fast is the magic bit, we have to make sure that we won't see new
+GUP pins, thus the TLB flush.
 
-A header file should include what it needs, and no more.
+include/linux/mm.h:gup_must_unshare() contains documentation.
 
-I looked only at this patch, this comment may also be relevant for the
-other patches.
+Without GUP-fast, some things would be significantly easier to handle.
 
-	Sam
+
+-- 
+Thanks,
+
+David / dhildenb
+

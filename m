@@ -2,228 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBD85A30FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925A95A3101
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345007AbiHZV0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S242597AbiHZV3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237812AbiHZV0Q (ORCPT
+        with ESMTP id S230416AbiHZV3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:26:16 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7686E5925A;
-        Fri, 26 Aug 2022 14:26:15 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QIPAMH018100;
-        Fri, 26 Aug 2022 14:25:58 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=gX/YZZLVeHzYylBMfigGJByo3JbRQMnTsFz/X7Dp2NU=;
- b=JKA0r5AMzfkfSItmsmjQ5SL4rMH5zu5szh+cXrOIuKYYhZQnnKHoB+t4bwzyFoY7m+sF
- rO1Njd7BE0eK1uKrA/Qt9rlubVr3oFLTXddDhY6koZRJjW8aoA0200CTk0xvHSsN7QQs
- 3daoJ9TR/9BsAMb9HzV7Do44wjezZ8dI3IE= 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j6g8dyrvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 14:25:58 -0700
+        Fri, 26 Aug 2022 17:29:19 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2077.outbound.protection.outlook.com [40.107.243.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB3A7226
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:29:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GPz8W1WueimRgeD4OrQaKdEMJEt8HjsWFvApUUlXN2XxBskTzXns6devyLqd98raXEZtjK2eMgPwdfxBXAsavFXqlnmKa3W4ciznPYg1czcrLD8d80kz9AML2iiNi6gn7hGOGU42sG90QeGvjkFC8sHF0LYJsCYvpkCSIwEULECi/OqGbgSJbHFK/M0AH7/ik6usNNc2Zddup5tW87uXZtg0eM3p/F0Zv2v/x3yJFe4J8JaeHvwZCfCXaI22cYgKBZ3wPB7RAri3tVcLkAPt3wsnP1weVQwfFlRQIFgPVBQrRQfmFB8zWMhWobVsydgk9Q/Lpqglj0/O9eLnyzPydw==
+ b=KRe6K+X427otyIvhPTrhnhFSa9W86RKou2KLHrJzfu6CHgne5Xr7sxXVkiWcOnVBaUNAn483Oqk+2o61+hYTQMVQQ3imWykSVUufCNe3hip3+SYLOvRh/xi2kaDNgzu7RwB+l/CvQRXkzuCkjFCDM5NkjCbJi01C9sFE8THSJzZ7V8tDa8XHBFRIOR0AMDTnb1k3heI2LokqbgzwDfHSY/ixkI4hhzdr3uvyB4GG/KG4og6WFzYQH0mLZFbTOoNWNAyLh8SpROY9Vmw3mfYR38F8Yf4/gdCqzSY/2CRWNXcpwgZyza9dmeAt7H7Fire1Cgxv3eGP81AidrnV7iDLRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gX/YZZLVeHzYylBMfigGJByo3JbRQMnTsFz/X7Dp2NU=;
- b=R7prYOnVHiGk9nKElzOywMrh/7kiyz74exIWuxEsoykRf9DOn3Hwv/haDa7Wb/g0pNSViR1/VcLFXhozs3jVWoagsk++A+0E46SQSY6J8M5+ss+sXFzkdijMbm/G/2sBgkzoODEWWtZZUtAgs8tdyurapXLluWtiN+xaikERMGx1ovGq0logefuT8NKWKwWV89s6GX+8kFusyndGSQ85Mjoh6PYyh8twI9n0Jk8sxFD/jfjSywXGDHec5NBsb+McFKr6c/F5x/hjelVrEuABdRCCFBqOJiQHH/cp8oXlOmTOc3hr2dqfTmZP7tbzUov760hVe3JYqEXGH6pELMGAIQ==
+ bh=6waJVi4vDNOeV1nN3PT61iMn2lWbupo19V4i1niclw4=;
+ b=EjQnpClzHAgvuB1xU2m6sACEc0IMcjN6G40T9Zg5vKaNS8bC1zW6flECfm6IPCSUPMJtWUikSSFwmX2oXV9t9p3pQ0isAAqnB3nXS1g+EY6+0a/+fGpmchDV+OXGDlk4EcAUWqkEl+O2KfTycC8wNauiCFw8JOiSNNlKt8N7KHPa56pLipjPV8XbdTDX16jY54EgOENfQZbawnfuDFlZRiHWmFyMN5vok1pSK6N8XvPe+riDLqqopQArzPkfiTnjRo1oHSvtk0hMJNPfDNJWvRh0QbAAgERgCfO4zm8xeJvnbpO85ED3D+3mzTI/VP+SiwLYdQlWrAA0425EnZHa1A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
- by SA0PR15MB3760.namprd15.prod.outlook.com (2603:10b6:806:84::24) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6waJVi4vDNOeV1nN3PT61iMn2lWbupo19V4i1niclw4=;
+ b=s6YMRMfr+XqUHe6BXk/CJtmYppEvXF8OWC4HZeawoPZrGGbqwMOCzxXGaZVkbOSXkaC1OctrxtRaPen059GKSi/J6jcUPkxeXdpAgcDISEJkn6OeL4oKEc7ze73PSMINvrTffx+1ZgEwFoZGaMRcoHnXL/H8ajTXV8TZmFtjps4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM5PR12MB2392.namprd12.prod.outlook.com (2603:10b6:4:b1::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Fri, 26 Aug
- 2022 21:25:56 +0000
-Received: from MW4PR15MB4475.namprd15.prod.outlook.com
- ([fe80::1858:f420:93d2:4b5e]) by MW4PR15MB4475.namprd15.prod.outlook.com
- ([fe80::1858:f420:93d2:4b5e%3]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
- 21:25:53 +0000
-Date:   Fri, 26 Aug 2022 14:25:50 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type
- conflict
-Message-ID: <20220826212550.mgugz6fomoqpgdbb@kafai-mbp.dhcp.thefacebook.com>
-References: <20220825221751.258958-1-james.hilliard1@gmail.com>
- <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com>
- <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com>
- <20220826171741.pdiqa4n4mls56bw3@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4qg6R9udazmGFoFhn9pXN6HOqLGEsQOhCAELi1LxzoTmw@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADvTj4qg6R9udazmGFoFhn9pXN6HOqLGEsQOhCAELi1LxzoTmw@mail.gmail.com>
-X-ClientProxiedBy: SJ0PR05CA0076.namprd05.prod.outlook.com
- (2603:10b6:a03:332::21) To MW4PR15MB4475.namprd15.prod.outlook.com
- (2603:10b6:303:104::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Fri, 26 Aug
+ 2022 21:29:15 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::c175:4c:c0d:1396]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::c175:4c:c0d:1396%4]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
+ 21:29:14 +0000
+Message-ID: <58903fe7-c4d9-def6-71f4-6173b47fe462@amd.com>
+Date:   Fri, 26 Aug 2022 16:29:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 4/4] x86/sev: Add SNP-specific unaccepted memory
+ support
+Content-Language: en-US
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <cover.1661437397.git.thomas.lendacky@amd.com>
+ <fe519747d14dd16a64e0e92e4c0354cb2ec55f59.1661437397.git.thomas.lendacky@amd.com>
+ <CAAH4kHYVes8wezA+R9uAiNxpYCyDnwewn86tUKmeA=bjmAWGgg@mail.gmail.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <CAAH4kHYVes8wezA+R9uAiNxpYCyDnwewn86tUKmeA=bjmAWGgg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR01CA0020.prod.exchangelabs.com (2603:10b6:805:b6::33)
+ To DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2164a7b9-0a62-419a-9be8-08da87a98e2f
-X-MS-TrafficTypeDiagnostic: SA0PR15MB3760:EE_
-X-FB-Source: Internal
+X-MS-Office365-Filtering-Correlation-Id: ab69a9af-8f05-4809-973c-08da87aa065f
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2392:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +f/jXRg2phBVBGF3i0XYIp3kemCRkOM3aXxWNjjsKsMT8NpGoymepkPpn4obIK40BtU+dwilk0np/cva33XiuqYFL3u/G+ZGUgNhLq+gfepY13qHDi13uGi4mkobPRprXxyp/mO4xDxQVYA6dSOvKZG/oxz3aTh4HnsAlbg2VM8I4Rm+I8h08YRXxc3ClEEJ1uAEe4k6N0BrjWmIuwnR8CvtiSplLvW1i2wP1m2s9FJIcysZIvFK7OcKeceo1nUaaJHdAWfUWysQlK77Ky8Kxh/WBe6xwvZFwFYp+ESqOKjNMxZ3QDViOERSMmsu/wfjn8Y2N1saITlYUQB6Tiu6YVV604tgFIcZ5SByfD368WG7KnDFEXkjNnVmbRlMrfg5P1Ey4fwRDIVhBU+08Uz8ZTGSRteDGgyVyw25Jge/y5k0qjXZXPMOPe6QHm+Orl+zu+mP7MLPlvuhebCqAArK2dQOPZpjOzC2by8LoV3DlP2fTLgC6V5G77RZoQnzmPqTTL0oCzT3jB0JKMr5kHI9sTJjylDxmvXqoR5JmUl8/yD1Viijagr+Wmmt8wkx4s+jPmF29cFl/WGWq62bfDbQmT/+TPM6WYvQBtr6DwBcIffcr7rKjLbGzLLyuqvN/TXbpsOl/QythZum33hXkTezOIwekIjHwrvRrC1VOaO3A/qXMA2ciKfeujyDrCicN1BBHRm3zitBL0mg9CTC7ejWUA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(83380400001)(86362001)(38100700002)(6916009)(316002)(54906003)(2906002)(186003)(1076003)(7416002)(5660300002)(4326008)(66556008)(8676002)(66946007)(66476007)(8936002)(9686003)(478600001)(6486002)(41300700001)(53546011)(52116002)(6506007)(6512007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ksHyQJvyvYnwPTZUG8kCz3MsTC19iQnN07ygNct0BQdGciJxXlJd4sObrLA1CV+Pz52vkZ7cGc3j/Ig7WjVpeleHfDY9JaPCaIxFbuVCE9iD72YT4Lmmh9Y1Yj+hcWg+dOazkRN1JmugB1w9grPJNjDaZ5YT0+LJbid0APedyNXUdFZw8SwV3Ii6UT3uvA57DRCs9RXqWwX6NN7QpP0u3c0QuMqL82OKwx+Ojc8T31TMZRpINLbhfNelDu+YuS/xPYkBz9oASHX4Rgd04698GQqaNqiormPeYJABAOPEX/NMnHqsaOYipsiiT2Wmb7MsjZZyLXLsBj3APoodkTpCYbtUAWPiBSWBRHDjTYFL5znaso4O6ZvHxwAe98GFmIKHvTO6LoFvOgVtLSEmVwqSEJwFc2mmqwalmAg3r0JcmJl+nzJFrtsYIWzZWTWFXZCcQEYrD4Lf3AhBT4843gC5+Yhino6yNhDAzK1zTensRztE9TCxvRhCxYA8uteYYq3V1/NNq60kwb3yvqGxNMgvyUMOixNcJUWARU1xZOhPTtavTYYeagrO/BybhLOphBDcRtZskPlJIiz4OjB4qvatqqtqnylTZ+0bB0fLO0FiP8u6DLkh82ZcW1DvWMtzgHUmMe+9mObXk4PFhidVgQXud1TjEss81zK1oeSihcbZuy4EAU+jFqRO9D5EBaGths6UFaQyKP1OghSZObSRlG5g31N7u1CyBq4noxI0L4hdftGgPinmusBApsJuUC99jgzuTawuJ63wCOGvUu4l5UqctuGJsxJELpJQBmcwq15hGLg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(41300700001)(36756003)(8676002)(83380400001)(54906003)(6486002)(6506007)(31686004)(186003)(2616005)(26005)(53546011)(6916009)(316002)(38100700002)(66946007)(6512007)(66476007)(66556008)(478600001)(7416002)(86362001)(5660300002)(31696002)(8936002)(4326008)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0z7CeMlPnmcXpx3kJgDA4AeDoV0E6Fs6me8f62EfLUkGbviow5Yu96zE7W2Z?=
- =?us-ascii?Q?EgbTLI/biXOBJObJnqR8oZ30o+qKZbqzraZCABLEg5BV2Cdo2VpxXa9r88Kk?=
- =?us-ascii?Q?7UzBOvHqv3AA0jXkwqYiSRRTyJt0yIy4Qn2aS5IGh0nAJ0Ld1YFg4jp7whAH?=
- =?us-ascii?Q?3s7faTDwgUv/tUtYPT06XqXbiOk8FkAPY4nlQ4FoGeKhyy+tfvxyo2mcYhQz?=
- =?us-ascii?Q?gqoHAOQH32pDXyiKvumnIgcR0wWdhjmVrng1/a7qDa8A/YJWraVPgVkLEBIy?=
- =?us-ascii?Q?bJWVbWxpycxraZ9U2c9Aweee7ufnWZbiBLS1IQN2UwssTuk1Q1E8ygvX1zME?=
- =?us-ascii?Q?T/qiv38J27rRAQa5myTwaGiEb2pGuoUxmUcutoRB/qyQ4kxoOQXxNjqWdjql?=
- =?us-ascii?Q?mE5EU+eQ8jkt/QxBdv0Lea1r4/s5bhU6hy6roDpa4u1sfVtZLUheSrM1Roy/?=
- =?us-ascii?Q?JhDyLVYOEqEFnqZYy6v2T0YDpqMSJwspgBBJLv4pf5kyDwkC5M2M9kD14cgv?=
- =?us-ascii?Q?BsYfI/xx0AZNpPg3G+R4z/qXzz+mNPDbh2PyruMKkYIp9/pia+chZ1DLy1f1?=
- =?us-ascii?Q?uXWl/S9ITaeLpQrpf51saYEhS9DJ5ocGphXsHO+9jCE6QUSfdlOiehtE8yBw?=
- =?us-ascii?Q?MRuZzgt5IkpV0CisfRa6yC5oW1rC/DszzgOQdvfzgUdR4NQ/BA5SfX3L9Ntr?=
- =?us-ascii?Q?O1rfEKYR5/F9ZbBx+XfrZjrQV+fh2igdEsh4cFOZ3JJ5Oz72pZe1dnKIsUGy?=
- =?us-ascii?Q?USEavRjFgv2iewWXgmUXJNRd8eAUmpx1TyRZ+RaYseSU2Obr2orLi7uYL3w7?=
- =?us-ascii?Q?n0qqdThcc5lMj+gwdnhvQrXoMhbQ3AX5+YXn8hUde+60gYa8RVvYSE07/lKH?=
- =?us-ascii?Q?LvLJ6M2CWmuqlrVYrkP1NmEDgpQjipb/GuS3O9hMk/Pe5mU8epaQ6KyR+vU7?=
- =?us-ascii?Q?VzP134/+53HMxtaTfmL5FZbzMYvYQ1SIctaxWIwnh81LElcYppJkPlJOiUZ+?=
- =?us-ascii?Q?gSc9GvjAWRYWMMtl51paNPMTVPkI5ojWKlIUHuPzmZy+idv8htoDsz2gRh2Y?=
- =?us-ascii?Q?fgDdR+Pc1IBe4pWnQA0bi0EnEO8QUbH+KSI65WnO0c0BQS/tsAqKOObaQMV7?=
- =?us-ascii?Q?Ittxfd7R4hiW9fiKef6ea0KFILpDZ1B65cpUDKbJ/6YYjfc9mbbv7Q1X+Fhg?=
- =?us-ascii?Q?NJ9rDlkATqMUXs9E72j2yXLGWFmGPezKbx9vonVKFabLbxX5o7nVPJAQT6qV?=
- =?us-ascii?Q?dgb+oKddU2lMBDYnE3Xmcl6T6/YIDOabWuG/OMBWmz2MWlhARZuhxOPQFQ7G?=
- =?us-ascii?Q?HCwJD7QVLw1jxrJA+wi+1isdzLLHf6cgieHhsW7iLNy/eoKwD/LkuBs9GJmR?=
- =?us-ascii?Q?edisbe66KHzLERdEb/imvLH/XmPsUbF9knFEQK878VphdAYhejHO4X+sezRI?=
- =?us-ascii?Q?5LJcVK1ezepekLm1Je+0QuucBNMuOFOFl8PTZUOm072UDv3NoV/VaDnyQxDM?=
- =?us-ascii?Q?IM1Cn3/NIJyX5ZZ581XNYs3Smt2kWDl0Ogzz9rIQK0fEliggP3uQPACsvuu4?=
- =?us-ascii?Q?tgo9Y/BVVOSvO7q1QK3jkKte/X+wsKrLKVRIGzLvjIFohi2Iv7/sNtmLsuYR?=
- =?us-ascii?Q?0w=3D=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2164a7b9-0a62-419a-9be8-08da87a98e2f
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVZ6cmNpd2ErSVJ4d1J0NHJ1bGQvdW9GaCtXOVkwQkRvMWpTTnhqYjRwd1E4?=
+ =?utf-8?B?QWtwRi9oOXR0M1JyR1RrUkkyck5nNE94dWo5UEpPNkZGNHFKQWp2U1JjNVoy?=
+ =?utf-8?B?a05iMkQxVkF5anVWZXlYODlZN3djVEVOaFlUeFIxTDVPd0JTbC85cUVwejcy?=
+ =?utf-8?B?c3o5UVphQzMxK2JLZkh6R2lPZTZ4N3RNRVhOSHZHUGVZU0QzOGZxM1h2SGZN?=
+ =?utf-8?B?UG8rZlY2eDRPNHd5Q2tNVThUdWt0U3lIckJZZ1NWcEN5aEoyY3U3RXJMYUsr?=
+ =?utf-8?B?eksvTnNJd2Z6S1JtekN1M2ZGUTVRWGJtQ1hLUjE0S0k3dmJqMCs4NENFUGNE?=
+ =?utf-8?B?L0ZnUGpFWHRZUjFrdng0OE9kQ2N6ME9ISnRJSjc4S3VEZmVUc0tWeXhQZ3pW?=
+ =?utf-8?B?ZFRNU0o3aVlrRE13VUhzQ0N4ekZweVpXY3AwSStuRWxOUmNFeFRwaWIya1Bk?=
+ =?utf-8?B?Nis3dmxqOEhpemJoa3AvakNVSFg5VWsrbnY2QnBFMC9GRmh5V1dIUU5rcW9x?=
+ =?utf-8?B?YXlwVzFCczB5dEtJZzNYdnhmeVBPMGhiNEw3c3FpWG5wYmkzSzdoUm1abXBL?=
+ =?utf-8?B?ZW9zdENjckdRVjJEK0VJTjc1eXFkV0Y5cTZvR05XTVVaSG9oYkNkcXg2L2Mz?=
+ =?utf-8?B?Q1UrT09Bek02aHdNd1AydjFRenNCS0dnTEFsekZQTEhMZGR3bys0citXb0ZH?=
+ =?utf-8?B?UytnUE1OanF2cWtpQ04yMHMzOUs3Mm9HL1Q4dUJCemgyK2R2SkhEcVoyVkNG?=
+ =?utf-8?B?TlpWQ3hRTVRWdzdEbi90MFdoRGZYaGlNVFU1UVJoSXRHUDdUWkhNNE9FM015?=
+ =?utf-8?B?dFo5TDVMOFJ3NTk5NWNoWHluMEtMQlJkNHhtV3lyTnZqTjlBTnhyNHdGcjN3?=
+ =?utf-8?B?VlR3enVtUzAzcU5rYjArRFBDWHFoVkdGbWRia25ERmtITGtzRG10bkorZmta?=
+ =?utf-8?B?Y3RDbm1HY0ZCbWNieC9tcVNBQmJ3TVU0TkR4ckFYODRzQ2oxd1IzaTYvY2Z1?=
+ =?utf-8?B?U3VuSWxldklEWGozY052OG8wbm1FSTdtbXljUU1rZXBOblM2YWpWb0JZbENK?=
+ =?utf-8?B?MG9GbTI4OThSU0pRZHVNdk8rd2ExeEZ6WXFWalhvUldOR2dIamQ4bHNJdTc1?=
+ =?utf-8?B?d0ZudWQ3d1doL1NXUUxjN2EzVEZ3bkJMNDZPbkdkUFJEYzNNYlgya0NrMk5E?=
+ =?utf-8?B?RWo1K1BFa1ZRQzNVYkViaG8xcFlTWFhTQ3p2UEcxVzAxaDR5V1RwNm9PU3Bu?=
+ =?utf-8?B?NW5JOE9MZVNxcjM2TnFqNTFkaUlUZ2hpRkZQL0FTYlBxQmYzS3lJVEUvR0hS?=
+ =?utf-8?B?OHA3RjNnSEplTkhmQ0l5REVrMzFGc3k0N0ZQMU5aaFl6RndPNndraGxQbTdo?=
+ =?utf-8?B?Zm1BTnVGVTh0RmdsQnN6VEtXTWlKSkJqeEtLVmpJcmxLRTZOVUl1Sko1NGNa?=
+ =?utf-8?B?aklFdkhWRDkyaURVdmpaN01PbitZcTBkUGNOQ2piZFhaaWM3WG1YNHYvejNQ?=
+ =?utf-8?B?TnA2Z1JIMkdxY2dOR09PZW4vR3ROQkkxQlRVcXJ3c2Y3eGNWZ2dUK2huWkNE?=
+ =?utf-8?B?aVpmVFZ2Zm9wUHhhcWRRUlVtUG4zMlFFMWhHRzZMbk15R1F6S2l3Ym9KVWFr?=
+ =?utf-8?B?R2kzY3J0dU1ybFpoTFJrZkpwbStPTmxBQnkzdi9veFVLQlF4V1pYRUdZS0I4?=
+ =?utf-8?B?Y0paZ09nY2tzRHZvR1hvTU1ac3IwNE9zZTZHWmhhMnNtcU1xL2pIMFlxMGQw?=
+ =?utf-8?B?RXB4TTdvNWJtNWVzcnY0K0FxaFh0SzZLSjFTYU5LMXFvaHVMeElJU0pLZjBr?=
+ =?utf-8?B?RlBXaWdpZjc5blBTWklFM0Evcm4zQ3QvQjdtU2FtWmtSbk5UQnBVVnVLNTM4?=
+ =?utf-8?B?dTZnNUR4Y1c1cnRxem5LZFBKTUJMd0t1N0NzbWJTTUtrMXdzQVprM1YwQW1Z?=
+ =?utf-8?B?bmtWcTk2MHFWWWNnYW9ILzBiT3ZqN3lVaWRvUHIreGlVREEyUlNESXhNcGFW?=
+ =?utf-8?B?ZC9DOWZkdGU5WUQ4QW9VeEVUR1pjbzZYUGo1R1R2eW8yM0xsYXgxY0RiVGlG?=
+ =?utf-8?B?Um9xWXZscU9JNG1iZ0xPQUlQS2c1UUlraUoyaDRUSWZuU3dBdzRZaS96UFFy?=
+ =?utf-8?Q?5xxeoe9Kj8umihLbe51TGXoVQ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab69a9af-8f05-4809-973c-08da87aa065f
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 21:25:53.3709
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 21:29:14.8558
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gtHIBmFJ3oyJEP2CbKHbSgM55L8RNwxqBasE7uVr7IA7o16C+rb8fx/rzfa7RnZb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB3760
-X-Proofpoint-GUID: -Tp3yAfs-n_56naINW6TtJO_dcEgax1K
-X-Proofpoint-ORIG-GUID: -Tp3yAfs-n_56naINW6TtJO_dcEgax1K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_12,2022-08-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: YFXSFlf4gglJ4nt9WhcG5uFP6qfezQlT9/y7FfNLyLZBJYRLUsfiGaeekjeyn49d9zwkhp190ECISo1g+eLu2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2392
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:42:10AM -0600, James Hilliard wrote:
-> On Fri, Aug 26, 2022 at 11:17 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 12:13:54AM -0600, James Hilliard wrote:
-> > > On Thu, Aug 25, 2022 at 11:49 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > >
-> > > > On Thu, Aug 25, 2022 at 11:31:15PM -0600, James Hilliard wrote:
-> > > > > On Thu, Aug 25, 2022 at 11:16 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > > > >
-> > > > > > On Thu, Aug 25, 2022 at 04:17:49PM -0600, James Hilliard wrote:
-> > > > > > > There is a potential for us to hit a type conflict when including
-> > > > > > > netinet/tcp.h with sys/socket.h, we can replace both of these includes
-> > > > > > > with linux/tcp.h to avoid this conflict.
-> > > > > > >
-> > > > > > > Fixes errors like:
-> > > > > > > In file included from /usr/include/netinet/tcp.h:91,
-> > > > > > >                  from progs/bind4_prog.c:10:
-> > > > > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-> > > > > > >    34 | typedef __INT8_TYPE__ int8_t;
-> > > > > > >       |                       ^~~~~~
-> > > > > > > In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-> > > > > > >                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-> > > > > > >                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-> > > > > > >                  from progs/bind4_prog.c:9:
-> > > > > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-> > > > > > >    24 | typedef __int8_t int8_t;
-> > > > > > >       |                  ^~~~~~
-> > > > > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
-> > > > > > >    43 | typedef __INT64_TYPE__ int64_t;
-> > > > > > >       |                        ^~~~~~~
-> > > > > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
-> > > > > > >    27 | typedef __int64_t int64_t;
-> > > > > > >       |                   ^~~~~~~
-> > > > > > > make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
-> > > > > > >
-> > > > > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > > > > ---
-> > > > > > >  tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
-> > > > > > >  tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
-> > > > > > >  2 files changed, 2 insertions(+), 4 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > > > > index 474c6a62078a..6bd20042fd53 100644
-> > > > > > > --- a/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > > > > +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > > > > @@ -6,8 +6,7 @@
-> > > > > > >  #include <linux/bpf.h>
-> > > > > > >  #include <linux/in.h>
-> > > > > > >  #include <linux/in6.h>
-> > > > > > > -#include <sys/socket.h>
-> > > > > > > -#include <netinet/tcp.h>
-> > > > > > These includes look normal to me.  What environment is hitting this.
-> > > > >
-> > > > > I was hitting this error with GCC 13(GCC master branch).
-> > > > These two includes (<sys/socket.h> and <netinet/tcp.h>) are normal,
-> > > > so does it mean all existing programs need to change to use gcc 13 ?
-> > >
-> > > Well I think it's mostly just an issue getting hit with GCC-BPF as it
-> > > looks to me like a cross compilation host/target header conflict.
-> > The users have been using these headers in the bpf progs.
+On 8/25/22 17:10, Dionna Amalie Glaze wrote:
+>>
+>> Add SNP-specific hooks to the unaccepted memory support in the boot
+>> path (__accept_memory()) and the core kernel (accept_memory()) in order
+>> to support booting SNP guests when unaccepted memory is present. Without
+>> this support, SNP guests will fail to boot and/or panic() when unaccepted
+>> memory is present in the EFI memory map.
+>>
+>> The process of accepting memory under SNP involves invoking the hypervisor
+>> to perform a page state change for the page to private memory and then
+>> issuing a PVALIDATE instruction to accept the page.
 > 
-> Users can migrate away from libc headers over time, migrating away
-imo, not without a good reason.
+> Thanks for this update! Tests show the boot performance shaves off a
+> good few seconds over eager acceptance, and it'll get better when we
+> have on-demand pinning.
+> 
+> The uncaught #VC exception is still there for 256GB machines and larger though.
 
-> shouldn't cause regressions and should improve reliability.
-May be I am missing something.  I also don't understand the reliability
-part.
+Any chance of getting a stack trace when this occurs, e.g. adding a 
+WARN_ON() in vc_handle_exitcode() (assuming it happens when logging is 
+enabled)?
 
-In this sys/socket.h as an example, what is wrong in using
-"'int8_t' {aka 'signed char'}" from libc and the one from
-gcc "'int8_t'; have 'char'" must be used instead.
-
-Why LLVM bpf does not have issue ?
+Thanks,
+Tom
 
 > 
-> > The solution should be on the GCC-BPF side instead of changing
-> > all bpf progs.
-> 
-> I mean, GCC doesn't really control which libc is available, it seems to
-> be a bad idea to use libc headers in general as they are developed
-> separately from GCC and the kernel/libbpf.
-> 
-> I'm not really sure how one would fix this on the GCC-BPF side without
-> introducing more potential header conflicts.

@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCCF5A2DC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8215A2DC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244795AbiHZRnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S244060AbiHZRoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237625AbiHZRnU (ORCPT
+        with ESMTP id S231315AbiHZRoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:43:20 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D6CC3F42;
-        Fri, 26 Aug 2022 10:43:19 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id cu2so4545650ejb.0;
-        Fri, 26 Aug 2022 10:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=NCMaVbRVmfzCQC//soO0cPljODJ/kKcr4ft4UHsvOWE=;
-        b=D+cVRFCihGfyTm7tL9oaZiCCLpiQIndFkS1M1FgD8jGc4ETdJT4uBi13nLsMg+0mtf
-         t7VQWPmHl0lg28LNdO/hp9hpfAEZr811oIiGkGtZ2FDGwn9gHoS0XbmIYQD4uCrLjplC
-         2S04x1OTUcASEd6rOC6E99bfMvZ17psP8tM6OUEJCD80PJRNc/pXHHDWSu87nnS/5YuP
-         70S0j8Qg4NQeeCoAdF1h/PaB3MgKjrygTthllbUqxekQCVtpWH+mUjxFEqTkdT6WvuKE
-         EiK/ATHFS55nfSSBqlThOurRGU+3A4XlL4tzOXohJSrHYAMwV6Nm02MiciwiZt6EdYqp
-         FwdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=NCMaVbRVmfzCQC//soO0cPljODJ/kKcr4ft4UHsvOWE=;
-        b=eJZGuCfC55rsz0nPS3FPt1Un5uZpv1KZPMPUi252nm88K/xY41l7T9qp5ORBHgMvZm
-         7sIy2KVWj4PPm244OXSJlnV01oYofT7DmuEzrECP0DDb5Tx/am1crpm7otyUv2miZE5l
-         1bym2yt9geaXj69hzA+h0SJHqZq5vFIViGf482g9iOu2OMtEe64rgUxLQEtaByPXKt9M
-         Xt+NcZIhZeqgoBlzFKlHrtLZD9GMgrC0/ppYmtPwxRunOn3dotueFhOZngeyzCT2psSM
-         o6bA42o4HwBPYxVpnRx/YmTiA66OXqzDwF++rlcv5FlTytJPS+zTyXiJgTRtzUuQxE35
-         u6Aw==
-X-Gm-Message-State: ACgBeo0FLkA2/scSs0GGQMN7LeQzFHlB9QtEPn50QZ+Fq8qXJ8fTjNsq
-        h1UAXdZUnKm3LyW78807XcngQMeof5zFIL04NXU=
-X-Google-Smtp-Source: AA6agR7YT/Vzflbb/eQcVXHa6RXZd/+OntqiK6j/PVKq/tv/mkZb37gh+WaL4S3Dv28l0BcbSH4nIf4eX7sYx1y9WZQ=
-X-Received: by 2002:a17:907:970e:b0:731:4fb4:5f7b with SMTP id
- jg14-20020a170907970e00b007314fb45f7bmr6045348ejc.556.1661535798494; Fri, 26
- Aug 2022 10:43:18 -0700 (PDT)
+        Fri, 26 Aug 2022 13:44:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FC927B05;
+        Fri, 26 Aug 2022 10:44:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46568B8320B;
+        Fri, 26 Aug 2022 17:44:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE658C433D6;
+        Fri, 26 Aug 2022 17:43:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661535840;
+        bh=LLwqHI85y/+GxaK6vW19+U7CAFcsPtYk7pvwQU3KP2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d8ZZpJ4Gl3aT3tooSeX1grJEq1dDXnzsptm50eVO29+Y/Z2W46kzZtNeCd7QxcOiO
+         NG0jb9fWyrFZ7UZ1GGa7PVDnP1UWnMrZGVTFrvF5zYk3rHFtx0q1NrCHDqbxZTZgk2
+         YVL5tNzunifprLBH8dybidRdhSASplsyc1iIj/RpoHCLUFZZE+4phGeWwWQdHzt79c
+         262HIT4+TqUo7nMA2OjIwdRTTWCfoV76CfWcJg3OmwDLAra230/t+XICOB0fy0LM8h
+         4nlNXSp5jgLrVOLabWho00LOecHd4g3UfTPL+rzAaGqx7nNVuQo70vtKsJYteK1DB2
+         s0QAIyevYu+bg==
+Date:   Fri, 26 Aug 2022 18:43:53 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+Message-ID: <20220826174352.GA20386@willie-the-truck>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220826112327.GA19774@willie-the-truck>
+ <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de> <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
-In-Reply-To: <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
-From:   Jason Andryuk <jandryuk@gmail.com>
-Date:   Fri, 26 Aug 2022 13:43:07 -0400
-Message-ID: <CAKf6xpsc9KRUKo5Z-kPqDcSCdpf9-tjf+ZdREnEiJUdHwyDQcA@mail.gmail.com>
-Subject: Re: [PATCH v7 05/10] tpm, tpm_tis: Only handle supported interrupts
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 7:28 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wro=
-te:
+On Fri, Aug 26, 2022 at 10:08:42AM -0400, Mikulas Patocka wrote:
+> On Fri, 26 Aug 2022, Mikulas Patocka wrote:
+> > On Fri, 26 Aug 2022, Will Deacon wrote:
+> > > On Thu, Aug 25, 2022 at 05:03:40PM -0400, Mikulas Patocka wrote:
+> > > > For me, the kernel 6.0-rc2 doesn't boot in an arm64 virtual machine at all 
+> > > > (with or without this patch), so I only compile-tested it on arm64. I have 
+> > > > to bisect it.
+> > > 
+> > > It's working fine for me and I haven't had any other reports that it's not
+> > > booting. Please could you share some more details about your setup so we
+> > > can try to reproduce the problem?
+> > 
+> > I'm bisecting it now. I'll post the offending commit when I'm done.
+> 
+> So, the bad commit is aacd149b62382c63911060b8f64c1e3d89bd405a ("arm64: 
+> head: avoid relocating the kernel twice for KASLR").
 
-> @@ -1007,8 +1029,39 @@ int tpm_tis_core_init(struct device *dev, struct t=
-pm_tis_data *priv, int irq,
->         if (rc < 0)
->                 goto out_err;
->
-> -       intmask |=3D TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_IN=
-T |
-> -                  TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
-> +       /* Figure out the capabilities */
-> +       rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfc=
-aps);
-> +       if (rc < 0)
-> +               goto out_err;
-> +
-> +       dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
-> +               intfcaps);
-> +       if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
-> +               dev_dbg(dev, "\tBurst Count Static\n");
-> +       if (intfcaps & TPM_INTF_CMD_READY_INT) {
-> +               intmask |=3D TPM_INTF_CMD_READY_INT;
-> +               dev_dbg(dev, "\tCommand Ready Int Support\n");
-> +       }
-> +       if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
-> +               dev_dbg(dev, "\tInterrupt Edge Falling\n");
-> +       if (intfcaps & TPM_INTF_INT_EDGE_RISING)
-> +               dev_dbg(dev, "\tInterrupt Edge Rising\n");
-> +       if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
-> +               dev_dbg(dev, "\tInterrupt Level Low\n");
-> +       if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
-> +               dev_dbg(dev, "\tInterrupt Level High\n");
-> +       if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+Thanks. Any chance you could give this a go, please?
 
-Hi, you may already have fixed this, but I just saw:
+https://lore.kernel.org/r/20220826164800.2059148-1-ardb@kernel.org
 
-error: this =E2=80=98if=E2=80=99 clause does not guard... [-Werror=3Dmislea=
-ding-indentation]
- 1144 |         if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
-      |         ^~
-
-> +               intmask |=3D TPM_INTF_LOCALITY_CHANGE_INT;
-> +               dev_dbg(dev, "\tLocality Change Int Support\n");
-
-You need { } for the block.
-
-Regards,
-Jason
+Will

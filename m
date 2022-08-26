@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667675A2AAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1543B5A2ABA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245146AbiHZPJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S244388AbiHZPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244406AbiHZPJC (ORCPT
+        with ESMTP id S245684AbiHZPL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:09:02 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760F6DD4EA
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:08:35 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id x26so1804505pfo.8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=rDCiGRameoc44J7lHWbl0JPQBn/IEONwz9o9l1i/k5o=;
-        b=VQf8EKuL0X7CTzQMT9/lmQ+1rlvFbqSdWJ43L2omf4zYAogNVKx+E1+/4NxJWp71SJ
-         upBbQVhWVUJgfYiXHlKIPENQcY4w5U5t2RiKYJ1PfGxVKiRSReXEYab8Qccb52pLO1Gz
-         9k6Yu3mGdHw96K7FOVQvnspayt0a1/FKDnVi8LZ03IepA9Ug+67nWgCGDqoT3JkI05xu
-         nbk0SFMOuytiK/CcgApCgKitlSaJ+nc/lkDgP+Tj82x0OHPOdPl7qO+otN0tngOpDBh8
-         nQw21ypSGxxW1TEWOIRpqxxDz8wh9kWTKp1xo+SGr3tJ0u90VX3TrVPkKVczUhCGQoZz
-         /e2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=rDCiGRameoc44J7lHWbl0JPQBn/IEONwz9o9l1i/k5o=;
-        b=x2VXRBbnScIuGdX1jx4YWLBEuUFUuqPB6cCEFVUJX7RZuZoWGj5ckMs8xNePBRL8A1
-         lmpGcyqWt1D8jbl/k337veu6T6U3WrSy8nya6wtWt3jGVdKSE1bLqCxbW8LnXzgb0HrT
-         kOvTuCs4auj0PZwwkfsTy2YTjBAmKfxfqE9PthPaxJ992nLXpPmRJbu1UIxL0iS0INRR
-         J/DrpM8WfSXE8SFwQXRRvAI3qeOAHNzb+TkmNgdye+fmGYGja4sip09XAu30i1ICA+Yp
-         B/wnOCCxJv8oWvX+kZ/4VrPRw9BCjrqTRhCuY2V7XCz18VaFiPj0kEOwf17tRrg0qYPX
-         W24g==
-X-Gm-Message-State: ACgBeo1OtrfAkVfYiXO9UP1HRQ6529oKS+wkH79DGtIp0avzkxlPY/4y
-        bfedN66UovaWyCCdM8PR5ChjGQ==
-X-Google-Smtp-Source: AA6agR5uCZ7VBJfvhJmt8rw74pIfwFba099AydbeQHgPwVRGBIy1lChlBYYL7MzvcFd9dTtAf6OYiw==
-X-Received: by 2002:a63:f704:0:b0:42b:7fa6:19bd with SMTP id x4-20020a63f704000000b0042b7fa619bdmr1671900pgh.283.1661526514860;
-        Fri, 26 Aug 2022 08:08:34 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170902cccf00b0016c0eb202a5sm1693664ple.225.2022.08.26.08.08.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 08:08:34 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 15:08:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] KVM: VMX: Stop/resume host PT before/after VM
- entry when PT_MODE_HOST_GUEST
-Message-ID: <YwjhaPdvmklwXf9B@google.com>
-References: <20220825085625.867763-1-xiaoyao.li@intel.com>
- <20220825085625.867763-3-xiaoyao.li@intel.com>
- <YweWmF3wMPRnthIh@google.com>
- <6bcab33b-3fde-d470-88b9-7667c7dc4b2d@intel.com>
- <YwecducnM/U6tqJT@google.com>
- <4e383b85-6777-4452-a073-4d2f439e28b1@intel.com>
+        Fri, 26 Aug 2022 11:11:59 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8DEDEB5C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661526557; x=1693062557;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UGiZkh5Bys/4pSAQhlUkrqm+lOAA5Ftlt8P24fAHZDE=;
+  b=mWwCfT5Y+jftmd9W5hI8IpfUaWOMi9OkUMzEydtkj9wngt9YcBB7N73C
+   WRBpo9wjoQe9MkYE+h1HxHnl2q4ZZG0HjgQ6l85/Ka172+5CIjlqtXUBm
+   slNKE8/pkMtSt+5WMpAZB240MYeWte9dlcD2FxPeUH9McHAQCBXlWcRkN
+   PwSRr6k9pVLLkMgJO2J5F88TQxnNpvJbVYBXsyIeob5hQB+tl/MEz6VxH
+   1v2Bo6XeoyBvk2px0TLJnnxuDj2pYvPftPRuV8dw2CvHWOCfg7fA/Ub5r
+   zCQdJ0c8yJqrfmvcQOpUPieuwwOqUQ67yeizJ/tUHpHjUWedr2WLeaHZG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="293267458"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="293267458"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 08:08:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="678890258"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 26 Aug 2022 08:08:58 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRax7-000027-2x;
+        Fri, 26 Aug 2022 15:08:57 +0000
+Date:   Fri, 26 Aug 2022 23:08:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>
+Subject: kismet: WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+ when selected by SEV_GUEST
+Message-ID: <202208262201.KpZ9BZoq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4e383b85-6777-4452-a073-4d2f439e28b1@intel.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022, Xiaoyao Li wrote:
-> On 8/25/2022 11:59 PM, Sean Christopherson wrote:
-> > But ensuring the RTIT_CTL.TraceEn=0 is all that's needed to make VM-Entry happy,
-> > and if the host isn't using Intel PT, what do we care if other bits that, for all
-> > intents and purposes are ignored, are lost across VM-Entry/VM-Exit?  I gotta
-> > imaging the perf will fully initialize RTIT_CTL if it starts using PT.
-> 
-> Personally, I agree with it.
-> 
-> But I'm not sure if there is a criteria that host context needs to be
-> unchanged after being virtualized.
-> 
-> > Actually, if the host isn't actively using Intel PT, can KVM avoid saving the
-> > other RTIT MSRs?
-> 
-> I don't think it's a good idea that it requires PT driver never and won't
-> rely on the previous value of PT MSRs. But it's OK if handing it over to
-> perf as the idea you gave below.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4c612826bec1441214816827979b62f84a097e91
+commit: fce96cf0443083e37455eff8f78fd240c621dae3 virt: Add SEV-SNP guest driver
+date:   5 months ago
+config: x86_64-kismet-CONFIG_CRYPTO_AEAD2-CONFIG_SEV_GUEST-0-0 (https://download.01.org/0day-ci/archive/20220826/202208262201.KpZ9BZoq-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fce96cf0443083e37455eff8f78fd240c621dae3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fce96cf0443083e37455eff8f78fd240c621dae3
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_CRYPTO_AEAD2 --selectors CONFIG_SEV_GUEST -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
 
-Yep, my thought exactly.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Even better, can we hand that off to perf?  I really dislike KVM making assumptions
-> > about perf's internal behavior.  E.g. can this be made to look like
-> 
-> you mean let perf subsystem to do the context save/restore staff of host and
-> KVM focuses on save/restore of guest context, right?
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for CRYPTO_AEAD2 when selected by SEV_GUEST
+   
+   WARNING: unmet direct dependencies detected for CRYPTO_GCM
+     Depends on [n]: CRYPTO [=n]
+     Selected by [y]:
+     - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
+   
+   WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+     Depends on [n]: CRYPTO [=n]
+     Selected by [y]:
+     - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 
-Yep!  KVM already more or less does this for "regular" PMU MSRs, though in that
-case perf hands back a list of MSRs+data.  But for Intel PT I don't see any point
-in having KVM do the actual MSR accesses.  Tracing has to be turned off _before_
-VM-Enter, so using the MSR load/save lists doesn't buy us anything. 
- 
-> I would like to see comment from perf folks on this and maybe need their
-> help on how to implement.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

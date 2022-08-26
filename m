@@ -2,291 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9AA5A22DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1955A22E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245402AbiHZIWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S245121AbiHZIW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244825AbiHZIWB (ORCPT
+        with ESMTP id S1343505AbiHZIWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:22:01 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B857D4BCB
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:21:59 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DD67F580133;
-        Fri, 26 Aug 2022 04:21:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 26 Aug 2022 04:21:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661502115; x=1661509315; bh=xNms8xjTA9
-        VJiT6V9Qae1WG7aPcDm2v7iLmvsefpGGA=; b=XJFa20goJDb/o/tychB9iiMIVZ
-        SmwaxnTpMpNiJfIkgpl0/i+ZtpP4GNmyYbKGffEBVm3YcdIYsCKKgOorO/i4K9xF
-        Iw3tEvzTG41a2vk4iPc9Qg8HnT8jJM/n9hZsw9gAuP5JjIRX9E/BFnylGlrRYJIV
-        r68eP0vd2A2xzfueil1mmmYIvAOCzy4ZW+NlwoCVtj+kTBENPLwrIo0y1q1anQmR
-        JwPhiBXnotfa8I3XFO5BsZDO7+BZ5OZe2ZhYyZGhVP1xOQlQg2w7WwNeJud2PpBz
-        n7qm+Lupd8Z8p7rt9ShUbWzin1aOwnAmaekZzHi3OKYGEW9wxaKNL3A3pP4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661502115; x=1661509315; bh=xNms8xjTA9VJiT6V9Qae1WG7aPcD
-        m2v7iLmvsefpGGA=; b=EX+IRm9FYmfknj8kJzcAD19jE0xMEZd8O/pa3XLpJ2HX
-        wXZEilyoY9nsYJMQEVMMTA1+d3CBBcZyHqhbOrUZx7rtA7QppsS077406A/vfnkj
-        7RHvMJQ3/TUubWPqfJvYjl6xpgikTsEhumoLh9lcrpzL0Q4LA9lQURzcyfjjR4cF
-        PwOM1NpePP7NY4/9l+9GDxgkOHtkA1rAjLLPh6ahwWa14caHqMnXZ7wS5vNPtwja
-        TDNR9n+E2fKgny4qLbAHXO5V6iuK4QyyC4mvsqoJ+GdTNekhijpErfVb0g/OK9OO
-        u9GrOZCAY3SsElMOoqHkccnZh6pl/jhXwRD+rvgg6A==
-X-ME-Sender: <xms:ooIIY2g-x7J2x2D5kje7wICVMaumk7Uj60g-hLx7iv8Im1A6S2ojCw>
-    <xme:ooIIY3AevSAdkVgIn8dpi7L-sinReY9nYMN6tmAPiP8wcV1AlB7i_0URpEWSv3oAq
-    ipSB9_Ud7N71cbMcCk>
-X-ME-Received: <xmr:ooIIY-HtfgCqyQ8Dc904NYN63WhsYQ3lMa4HG_VP7I0-aRujDH4RhDV3mcg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejhedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevuddthffgfeeiffejgfeghfeludegkedtgefgffejtdegtddvleduvdfh
-    teehveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:ooIIY_TaEu7rXz23kpyCxbIVu5zI8kpntNg_QZwDxR5YQBrUx-w8QQ>
-    <xmx:ooIIYzw28vuTMnNNFIxpjpp6klkXuKkCGIdEpDhxhoaMgoay78GPCw>
-    <xmx:ooIIY96bEWtDtW1tcHxN0bICr8OavHzfy9dBeQUGPRRV9s2BNJUq7A>
-    <xmx:o4IIY6isgwnWO8n4v8xBxivmaZ61dMUcY0MRjsxWsjgGfNpwg8RNlw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 26 Aug 2022 04:21:54 -0400 (EDT)
-Date:   Fri, 26 Aug 2022 10:21:51 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220826082151.h2kt3wca7s3ahl6x@houat>
-References: <20220816082612.grebxql5ynnfnvfd@houat>
- <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
- <20220816094922.oqhrhefv327zo2ou@houat>
- <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
- <20220817114605.jpb3tlnoseyvf65d@houat>
- <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
- <133c2a1d-0b4c-cef9-11fe-9ce9985253d6@tronnes.org>
- <9daca9bf-838e-c3eb-51de-1cf5188a9341@tronnes.org>
- <20220818153101.c25x33vkl6qboswe@houat>
- <9e0256bd-b37a-0b94-45d5-59e06cd1547c@tronnes.org>
+        Fri, 26 Aug 2022 04:22:18 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16862D4F5C;
+        Fri, 26 Aug 2022 01:22:15 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id c16-20020a17090aa61000b001fb3286d9f7so7110651pjq.1;
+        Fri, 26 Aug 2022 01:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=fbBxa9mjs9/LeuC1VMhijkCQf3EzJL3oe0B8rWAVysQ=;
+        b=ljneAyibOjyTC05FF6LRfcf4yjqy4gzmq8rkiD/zwxZA/iHd4zBVAWAhkVRJ7V8pr+
+         f04/6gZ4lNPXteJyUUR6WV0ZSB3xd8+yvpSx1lDjW71Nn5u/2aYiCb2B9IJnev/S5AAQ
+         ynWLnSRupPEDX05rNFTnb7a/DWOeFxiYRih5x34K3fBDn2gJvb3CmTc7cBnzuKeiIl5x
+         SqdKLvHUGkogPH0/ZKnHJUPIQ7Y4GwJkZpvhXYHZxB8aGPBo6bvu3E8/jKyz/PVz78Id
+         GJ/1ngJlzLd+KotOBKUrXz+92/SC5Uf3Ix9/VMaAK9raZe8E4PIGkPPkVRAyIDCTpnfX
+         Ci2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=fbBxa9mjs9/LeuC1VMhijkCQf3EzJL3oe0B8rWAVysQ=;
+        b=TgzkcNixo37PXvy6PALP+iTL+ow6HBrrFyKXXIM9b4VrKTox9hn4A/m1Uog+EVSF0f
+         E5CrFC6Dy9gUB4kjJQAUdz/VX6vyMgQ36Y0CBlJrIJLBid3cDO2zG9e8NeWIYcvKqvDp
+         rl9Xcoe6I9tuL+OVllgGg09+eS7xHdlxvDcjehEXPnx07phnltrCBtucLw2t1UjDWL51
+         BzjxkhNNa/8rv1UYkZcfV6Te4E0JkzXIR0PUJmfDUiePojuBrPou8hMiYF45lPSulAuF
+         ko0P7HE1AdYB37qH3GWKQ+67AP/Id18ixt2n7iD78r0pR8tKLmXQtr5z1GWKhN4lqtNQ
+         N50A==
+X-Gm-Message-State: ACgBeo2mJFn2nA6clQpjcHv+nJ8to1loZB3fNYSjmm3/B9f49ZuaOdFa
+        HteMgxy3oqVwu8STF9aj9lI=
+X-Google-Smtp-Source: AA6agR6iJyn0D0eTSc4C3/t2P0r0WATvM3cuFa/W+c4RXrwLlHoQREeqpitVd1G27l3pppCEmhjjTg==
+X-Received: by 2002:a17:90a:8415:b0:1fa:ae71:560d with SMTP id j21-20020a17090a841500b001faae71560dmr3230337pjn.191.1661502134566;
+        Fri, 26 Aug 2022 01:22:14 -0700 (PDT)
+Received: from [192.168.43.80] (subs09a-223-255-225-73.three.co.id. [223.255.225.73])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170902e54600b0016dbb878f8asm949476plf.82.2022.08.26.01.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 01:22:14 -0700 (PDT)
+Message-ID: <e819de52-9b35-a698-0b45-80a9b063cf0c@gmail.com>
+Date:   Fri, 26 Aug 2022 15:22:08 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4sbs3xfkyrzbmun4"
-Content-Disposition: inline
-In-Reply-To: <9e0256bd-b37a-0b94-45d5-59e06cd1547c@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 4/4] mm: add documentation of the new ioctl on pagemap
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20220826064535.1941190-1-usama.anjum@collabora.com>
+ <20220826064535.1941190-5-usama.anjum@collabora.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220826064535.1941190-5-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/26/22 13:45, Muhammad Usama Anjum wrote:
+>  The soft-dirty is a bit on a PTE which helps to track which pages a task
+> -writes to. In order to do this tracking one should
+> +writes to.
+> +
+> +Using Proc FS
+> +-------------
+> +
+> +In order to do this tracking one should
+>  
+>    1. Clear soft-dirty bits from the task's PTEs.
+>  
+> @@ -20,6 +25,41 @@ writes to. In order to do this tracking one should
+>       64-bit qword is the soft-dirty one. If set, the respective PTE was
+>       written to since step 1.
+>  
+> +Using IOCTL
+> +-----------
+> +
+> +The IOCTL on the ``/proc/PID/pagemap`` can be can be used to find the dirty pages
+> +atomically. The following commands are supported::
+> +
+> +	MEMWATCH_SD_GET
+> +		Get the page offsets which are soft dirty.
+> +
+> +	MEMWATCH_SD_CLEAR
+> +		Clear the pages which are soft dirty.
+> +
+> +	MEMWATCH_SD_GET_AND_CLEAR
+> +		Get and clear the pages which are soft dirty.
+> +
 
---4sbs3xfkyrzbmun4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Definition lists are enough, no need to use code block.
 
-On Sun, Aug 21, 2022 at 01:43:40PM +0200, Noralf Tr=F8nnes wrote:
->=20
->=20
-> Den 18.08.2022 17.31, skrev Maxime Ripard:
-> > On Thu, Aug 18, 2022 at 05:01:38PM +0200, Noralf Tr=F8nnes wrote:
-> >>
-> >>
-> >> Den 18.08.2022 01.23, skrev Noralf Tr=F8nnes:
-> >>>
-> >>>
-> >>> Den 17.08.2022 15.11, skrev Noralf Tr=F8nnes:
-> >>>>
-> >>>>
-> >>>> Den 17.08.2022 13.46, skrev Maxime Ripard:
-> >>>>> On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf Tr=F8nnes wrote:
-> >>>>>> Den 16.08.2022 11.49, skrev Maxime Ripard:
-> >>>>>>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Tr=F8nnes wrote:
-> >>>>>>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
-> >>>>>>>>> Hi,
-> >>>>>>>>>
-> >>>>>>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Tr=F8nnes wrot=
-e:
-> >>>>>>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
-> >>>>>>>>>>> The TV mode property has been around for a while now to selec=
-t and get the
-> >>>>>>>>>>> current TV mode output on an analog TV connector.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Despite that property name being generic, its content isn't a=
-nd has been
-> >>>>>>>>>>> driver-specific which makes it hard to build any generic beha=
-viour on top
-> >>>>>>>>>>> of it, both in kernel and user-space.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Let's create a new bitmask tv norm property, that can contain=
- any of the
-> >>>>>>>>>>> analog TV standards currently supported by kernel drivers. Ea=
-ch driver can
-> >>>>>>>>>>> then pass in a bitmask of the modes it supports.
-> >>>>>>>>>>>
-> >>>>>>>>>>> We'll then be able to phase out the older tv mode property.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >>>>>>>>>>>
-> >>>
-> >>>>>> How do you test the property? I've used modetest but I can only ch=
-ange
-> >>>>>> to a tv.mode that matches the current display mode. I can't switch=
- from
-> >>>>>> ntsc to pal for instance.
-> >>>>>
-> >>>>> Yep, if you want to change from PAL to NTSC, it will require a new =
-mode.
-> >>>>>
-> >>>>
-> >>>> So userspace has to check tv.mode first and then create a display mo=
-de
-> >>>> the driver will accept if switching to a different display mode is
-> >>>> necessary? In other words, userspace can't discover from the kernel
-> >>>> which display modes a certain tv.mode/norm provides before it is
-> >>>> selected? If so, maybe libdrm should have some function(s) to deal w=
-ith
-> >>>> switching between modes that require a different display mode since
-> >>>> knowledge about which display modes a tv.mode supports is needed bef=
-ore
-> >>>> hand.
-> >>>>
-> >>>
-> >>> I haven't used vc4 on Pi4 in mainline before and have finally gotten =
-it
-> >>> to work.
-> >>>
-> >>> I see that the connector reports 2 modes that together fit all tv.nor=
-ms
-> >>> so userspace doesn't have to contruct a display mode, but it does need
-> >>> to know which display mode belongs to a certain tv.norm.
-> >>>
-> >>> When I try to use modetest I'm unable to set a mode:
-> >>>
-> >>> pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i
-> >>> setting mode 720x480i-29.97Hz on connectors 45, crtc 68
-> >>> failed to set mode: Function not implemented
-> >>>
-> >>> The errno is misleading, modetest does a drmModeDirtyFB before checki=
-ng
-> >>> the error returned by drmModeSetCrtc.
-> >>>
-> >>> Setting the property succeeds, but the modeset still fails:
-> >>>
-> >>> pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i -w 45:"tv norm":2
-> >>> setting mode 720x480i-29.97Hz on connectors 45, crtc 68
-> >>> failed to set mode: Function not implemented
-> >>>
-> >>> pi@pi4t:~ $ modetest -M vc4 -c
-> >>>         37 tv norm:
-> >>>                 flags: bitmask
-> >>>                 values: NTSC-443=3D0x1 NTSC-J=3D0x2 NTSC-M=3D0x4 PAL-=
-B=3D0x10
-> >>> PAL-M=3D0x200 PAL-N=3D0x400 SECAM-B=3D0x2000
-> >>>                 value: 2
-> >>>
-> >>> Here's the log, can you see if there's anything obvious in there:
-> >>> https://gist.github.com/notro/a079498bf6b64327105752b2bafa8858
-> >>>
-> >>
-> >> I'm one step closer as I now have fbcon working, I had forgotten to add
-> >> enable_tvout=3D1 and I had disable_fw_kms_setup=3D1 which disables the
-> >> video=3D mode on the kernel commandline.
-> >>
-> >> modetest still fails though, after alot of printk sprinkling, I've
-> >> tracked it down to the drm_mode_equal test in
-> >> drm_atomic_helper_connector_tv_check(). The aspect ratios differ:
-> >>
-> >> [   61.336295] drm_atomic_helper_connector_tv_check:
-> >> mode->picture_aspect_ratio=3D1
-> >> [   61.336301] drm_atomic_helper_connector_tv_check:
-> >> &crtc_state->mode->picture_aspect_ratio=3D0
-> >=20
-> > I haven't seen this when testing, but I'll have a look, thanks!
->=20
-> I have found the cause, the kernel strips off the aspect ratio in
-> drm_mode_getconnector() if drm_file->aspect_ratio_allowed is false. So I
-> think the drm_mode_equal() test needs to be relaxed for
-> legacy/non-atomic userspace to work.
+> +The struct :c:type:`pagemap_sd_args` is used as the argument. In this struct:
+> +
+> +  1. The range is specified through start and len. The len argument need not be
+> +     the multiple of the page size, but since the information is returned for the
+> +     whole pages, len is effectively rounded up to the next multiple of the page
+> +     size.
+> +
+> +  2. The output buffer and size is specified in vec and vec_len. The offsets of
+> +     the dirty pages from start are returned in vec. The ioctl returns when the
+> +     whole range has been searched or vec is completely filled. The whole range
+> +     isn't cleared if vec fills up completely.
+> +
+> +  3. The flags can be specified in flags field. Currently only one flag,
+> +     PAGEMAP_SD_NO_REUSED_REGIONS is supported which can be specified to ignore
+> +     the VMA dirty flags for better performance. This flag shows only those pages
+> +     dirty which have been written to by the user. All new allocations aren't returned
+> +     to be dirty.
+> +
+> +Explanation
+> +-----------
+>  
+>  Internally, to do this tracking, the writable bit is cleared from PTEs
+>  when the soft-dirty bit is cleared. So, after this, when the task tries to
 
-Geert suggested I removed it too, so this check is gone now.
+I'd like to see identifier keywords (such as filename, function and variable name)
+are consistently formatted either with inline code (``identifier``) or no
+formatting (all or nothing).
 
-> If I use modetest with atomic commit (-a) it works as is, having the
-> drm_mode_equal() test:
->=20
-> $ modetest -M vc4 -a -P 61@68:720x480 -s 45:720x480i
->=20
-> I have a problem because the board hangs, either right away or after I
-> press <enter> to quit modetest.
->=20
-> I often get this, sometimes after 10s of seconds:
->=20
-> [  136.822963] Unhandled fault: asynchronous external abort (0x1211) at
-> 0x00000000
-> ...
-> [  137.248496]  bcm2711_get_temp [bcm2711_thermal] from
-> thermal_zone_get_temp+0x54/0x74
->=20
-> Unloading bcm2711_thermal didn't help, in that case I got nothing, so
-> the problem lies elsewhere.
-> I have even tried with a fresh SD image and a fresh kernel, but it
-> didn't help.
-
-I got this too when working from current next (next-20220825) but it
-doesn't seem to happen on drm-misc-next-2022-08-20-1, so it's probably
-something unrelated?
-
-> I can switch from NTSC to PAL like this (but it still crashes):
->=20
-> $ modetest -M vc4 -a -w 45:"tv norm":16 -P 61@68:720x576 -s 45:720x576i
-
-I've tested with my current branch, and it work fine with modetest, I'll
-put my commands in my next iteration so that you can compare?
-
-Maxime
-
---4sbs3xfkyrzbmun4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwiCnwAKCRDj7w1vZxhR
-xbzKAQDqxiMk+IO8pfk9HqQ1PrVbxiK0YR5t7FKIewrW+mkuygD/f18RRG2JbWSS
-N1D43YlytKgkhdifDY8m2GQjF4f6ngA=
-=5kCn
------END PGP SIGNATURE-----
-
---4sbs3xfkyrzbmun4--
+-- 
+An old man doll... just what I always wanted! - Clara

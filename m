@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97F75A2303
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A5D5A2308
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343620AbiHZI3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S1343646AbiHZIaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245244AbiHZI3V (ORCPT
+        with ESMTP id S245755AbiHZIaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:29:21 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC1FD4F66;
-        Fri, 26 Aug 2022 01:29:20 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDXwS5dCwzlVjT;
-        Fri, 26 Aug 2022 16:26:00 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 16:29:17 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 16:29:16 +0800
-Subject: Re: [PATCH v3 0/4] ARM: Convert to ARCH_STACKWALK
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux@armlinux.org.uk>, <mark.rutland@arm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <arnd@arndb.de>, <rostedt@goodmis.org>,
-        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
-        <ast@kernel.org>, <linyujun809@huawei.com>,
-        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <rmk+kernel@armlinux.org.uk>, <ardb@kernel.org>, <will@kernel.org>,
-        <broonie@kernel.org>
-References: <20220727040022.139387-1-lihuafei1@huawei.com>
- <13e8c9ba-c5ec-a231-5493-3255e1ef9db8@huawei.com>
- <CACRpkda=csAw1wZj_Uwpb1B32BBHAin8=rQVXQ0c6TwnTWJSXA@mail.gmail.com>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <54f2a18a-6c1c-4492-5e35-9908b876cf61@huawei.com>
-Date:   Fri, 26 Aug 2022 16:29:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Fri, 26 Aug 2022 04:30:08 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530D4E0C5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:30:03 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id w19so1794727ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2w7uDDGae7lPC9PBKoaaB26gLASkKWk1Ljox9Qb8l6Q=;
+        b=WzlJoUzfNCpYcC/wKzgOZa08JruxJVjED39QeHg1/uZzWWP49D65DM1aFYc3qaKtvn
+         Q6zinWKDzFkDnxkWbGAh3BdqVKj2p2Y8GJhTsY/Pxt17M0r3EvJJymiAQrA33yDj5s17
+         X9iqJjwU09qVwnXAfOZGVQrRe+vzz3SkUiI7GmHzLQav3BjthDp7VmNiWuFuuAFntQ8c
+         meb78ZzYilLV0zjJZ/sdxprNpg3psTxruUB6RB89PizXIEEFmMorRbzKW8fkamtp+eE/
+         UP/DeTKxY08moOLhnrFO8NtHOaRtGKMwmVAnVvG2+YiB6+su8G33EAWTxccYf6n5zxDH
+         Bt8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2w7uDDGae7lPC9PBKoaaB26gLASkKWk1Ljox9Qb8l6Q=;
+        b=IrpxBTaInb5FehlIUTpTzTmkNXmaqlE7didhZhiAO7FaQ69t0BQtt/y2yoPbFTZ/7Y
+         /+rDo8BD0vQjg2rp6K0mNu/1Ot/V4BUqqdOcWrfDjIMhmQiezRJp9u/1Bw56S7JsI2N3
+         u+MNLzj9VSG3JNzNHN1hiXf5LcUjw7e7krSV2HfcLroCEvtP2JJ4JU1Jzb4Zmd4s898Q
+         iFFRmBfl2hvIM49hVctRAbfci06VuNWupcuuJyOyo/Pu5bdkBitU6Uq+0XYJ1NeMQNLJ
+         KgT3MWICRw9nCOwf/QPh4PaaWqUati6BaGFsUhVAuyxnrRC3but+RYIDvbIEih9Ya46q
+         eaew==
+X-Gm-Message-State: ACgBeo0C9CGPE+ZsYuPWO7sD08r7Bau2sRma8piJ4kZBkX1RbVGDlbHX
+        9QEE5h2SJTNJo4+J4iN0s81N15m6zMWaLhvlCFh/ZQ==
+X-Google-Smtp-Source: AA6agR5Mur9vHmJyu+/jiMMkqB3v9LgJ6NwVlpsA0j4qLjcco/mAHvxbCi0JTgMvXiCAzfETgkWpYo/C46NbmmoWnWI=
+X-Received: by 2002:a17:907:6293:b0:73d:b27b:e594 with SMTP id
+ nd19-20020a170907629300b0073db27be594mr4929048ejc.526.1661502601587; Fri, 26
+ Aug 2022 01:30:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CACRpkda=csAw1wZj_Uwpb1B32BBHAin8=rQVXQ0c6TwnTWJSXA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819190054.31348-1-a-nandan@ti.com> <20220819190054.31348-3-a-nandan@ti.com>
+In-Reply-To: <20220819190054.31348-3-a-nandan@ti.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 10:29:50 +0200
+Message-ID: <CACRpkdaktinAJveF_nH9NYYk7mAvnResRzoyuVDVWpwKKq6JOQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] dt-bindings: pinctrl: k3: Introduce pinmux
+ definitions for J784s4
+To:     Apurva Nandan <a-nandan@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hari Nagalla <hnagalla@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Aug 19, 2022 at 9:01 PM Apurva Nandan <a-nandan@ti.com> wrote:
 
+> Add pinctrl macros for J784s4 SoC. These macro definitions are
+> similar to that of J721s2, but adding new definitions to avoid
+> any naming confusions in the soc dts files.
+>
+> checkpatch insists the following error exists:
+> ERROR: Macros with complex values should be enclosed in parentheses
+>
+> However, we do not need parentheses enclosing the values for this
+> macro as we do intend it to generate two separate values as has been
+> done for other similar platforms.
+>
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 
-On 2022/8/25 21:00, Linus Walleij wrote:
-> On Thu, Aug 18, 2022 at 11:16 AM Li Huafei <lihuafei1@huawei.com> wrote:
-> 
->> Hi Russell，
->>
->> Do you have any more comments on this patch set? Can you add this patch
->> set to your patch tracker? Thanks!
-> 
-> I would rebase the patch on v6.0-rc1 and resend then you can add it
-> to Russell's patch tracker yourself, it's not very hard to use, there is
-> good documentation for how to use it:
-> https://www.arm.linux.org.uk/developer/patches/
-> 
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+I guess you will merge these patches together?
+Tell me if you rather want that I apply this one patch to the pinctrl tree.
 
-It's done. Thank you for the tip.
-
-Thanks,
-Huafei
-
-> Yours,
-> Linus Walleij
-> .
-> 
+Yours,
+Linus Walleij

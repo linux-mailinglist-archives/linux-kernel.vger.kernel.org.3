@@ -2,125 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4235A25E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D835A25E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiHZKcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        id S1343753AbiHZKco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiHZKcc (ORCPT
+        with ESMTP id S245078AbiHZKci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:32:32 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C045D2768
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:32:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id 199so1117920pfz.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:32:31 -0700 (PDT)
+        Fri, 26 Aug 2022 06:32:38 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74881D290C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:32:37 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id z187so1144968pfb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=wuqOv6Q2WHJryeaZo/bgjwLA2C78VwpKJa5KV+Zo29w=;
-        b=5G0gjatnKWvLD6IiMZqkJDH3vBec1+BPrqWG5JRapFkq2SQELWs8bdoBDr3zLQ4O2m
-         ToUORBLokZzfB5Zr2MqBrJtaQ7ywCPZJsjcdDyrgk3+DiCDTFWV9j1pSZF+fGuQmGosn
-         Z6maqpnLdrjDEdwrMlpig7s06F8Nt/+rnqlLKevC6P+CwS/HiyQoiEGud03Ykdsuy2HZ
-         MFSa8HUy6lka2IZwEot7Uv5ZjJpY+lO0M8r4nBXGU8SF2Ao2wBN/44WxOaAff5id93/p
-         /Mxi7EX9VAFh+gz4DrTTfKXoxQWCDGIYuzRUSQ0k5ajkoe3e3PYtw6MnMzTfnqOh+4yV
-         viWg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=dtu5aMtj4xUVB2P5GCPZnShf7gkZy/unClrmm0lDZ+c=;
+        b=b83I/LIUmp+5mSHBInI1Ef5MEkkssWTZ9r1cpEBUBRzA/ZJUnTHCJNuWKrDFCDHlfY
+         GqFUviJizlXZBDZye7eBnd2IYU1/7zMGh+l+j1i15tqSv/PEnrQDHOfeNAzDVa6cI4zJ
+         ASkiPi3xCAUlqtsESLiBaZ5DIwj78VM+MSY/U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=wuqOv6Q2WHJryeaZo/bgjwLA2C78VwpKJa5KV+Zo29w=;
-        b=lVihvN1LhaIxB+k61Y31HRu0kFJbNPV/9HWRmuZj8n2ixa0rEVLNyD3gy+UIrbaqX+
-         dvQ5GZbTHmz3YFMe1zkZR3i+K3XFoa3TjQRIqnUBztSQkgODIihYNvOfjvQYoFbpD/dv
-         4HojIaR3kzKZH+8gSg8LNFmXpNU5eHZW3eybCa7iwucrS1hLivYlaM6MpGkYecG0W5YI
-         EgZ3bfNbK8S+EQQaJFdu/2510pGoTde8Bi3vbz8QU59uBR0LrTCMSsY+1CIbjtJlHf7d
-         6WuGUywmRX1UzXp/JIOcg7gxK3ushL/8WXHaz+VDOkalHLJr5ine7hal5tic9pWMi9kA
-         YH9w==
-X-Gm-Message-State: ACgBeo0SvGTaV06hGNmIGeZ8UemwgW431J2FVE5xVXC9XDfn04mfcJcl
-        D6mxvH3/5wAMX48xiApc0qTLahQI6cf2VAoZ
-X-Google-Smtp-Source: AA6agR7oM+ZOvnrqUme89chVvcTd9tAj5vskzDUlg5MF6QeOoOQ+AFvBN5KReA7YQ4/gpqtmQq4VWQ==
-X-Received: by 2002:aa7:8393:0:b0:537:701d:e7f3 with SMTP id u19-20020aa78393000000b00537701de7f3mr3297443pfm.50.1661509950855;
-        Fri, 26 Aug 2022 03:32:30 -0700 (PDT)
-Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id r27-20020aa7963b000000b0052aaff953aesm1357008pfg.115.2022.08.26.03.32.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Aug 2022 03:32:30 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     akpm@linux-foundation.org
-Cc:     Jason@zx2c4.com, corbet@lwn.net, keescook@chromium.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com,
-        lizhe.67@bytedance.com, mark-pk.tsai@mediatek.com,
-        mhiramat@kernel.org, mhocko@suse.com, rostedt@goodmis.org,
-        vbabka@suse.cz
-Subject: Re: [PATCH v4] page_ext: introduce boot parameter 'early_page_ext'
-Date:   Fri, 26 Aug 2022 18:32:17 +0800
-Message-Id: <20220826103217.17393-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220825212338.e541d29ca3c4d602221f4925@linux-foundation.org>
-References: <20220825212338.e541d29ca3c4d602221f4925@linux-foundation.org>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=dtu5aMtj4xUVB2P5GCPZnShf7gkZy/unClrmm0lDZ+c=;
+        b=vzKaTpZAbk5N2EcfYCa74w3Fs7kdXt3V2wIqPbHePxMbJkeYTCpCsU+tXEf+Sr8SJ7
+         WU2gFZvcfFxnGG1DDG0ftAHorxJ9Dysg4av5S1wbKbKH77XWQgNDGWjkuO46QfTmLV3T
+         T/AWiJCQJt2G/w10M7uzVXEPXt7xbhAV4HNNMM4SavcHymF3bBXhg6irW7zDfui7F1yH
+         diw3F7wFJb4LFRlExS2q0ld+8GEEieLIBxZ5r/Xcn3RpN2cFgpqs7Is0zlKUHu86kSPd
+         mZQ1e7uA2NRKyru39oRV3bX8QH3nJq0CHKqtLzvTwrqysFWA8+I6FwUzzeUaQ4faNivx
+         svwg==
+X-Gm-Message-State: ACgBeo0O/BvR17r3pW2vTENJATgMI1NTTYeIotmHTp2Rx7mpRmtNlNHS
+        wbgs7NGaLmWq6GAnWKV2Gbfk8Q==
+X-Google-Smtp-Source: AA6agR6YwO3Xn18S+BIsUXZCFTJcr2ucNOrvG9nC8pX4z4u57OUlF7fWbmEA7/GLENjqSBtMyfM3yQ==
+X-Received: by 2002:aa7:8712:0:b0:537:db6d:af66 with SMTP id b18-20020aa78712000000b00537db6daf66mr30006pfo.55.1661509956933;
+        Fri, 26 Aug 2022 03:32:36 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:d4a7:ca1d:f607:5a3b])
+        by smtp.gmail.com with ESMTPSA id n59-20020a17090a5ac100b001f510175984sm1314610pji.41.2022.08.26.03.32.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 03:32:36 -0700 (PDT)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Cc:     Allen Chen <allen.chen@ite.com.tw>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Pin-yen Lin <treapking@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/bridge: it6505: Fix the order of DP_SET_POWER commands
+Date:   Fri, 26 Aug 2022 18:32:31 +0800
+Message-Id: <20220826103231.2504799-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 21:23:38 -0700, akpm@linux-foundation.org wrote:
->On Thu, 25 Aug 2022 18:27:14 +0800 lizhe.67@bytedance.com wrote:
->
->> From: Li Zhe <lizhe.67@bytedance.com>
->> 
->> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
->> we call page_ext_init() after page_alloc_init_late() to avoid some panic
->> problem. It seems that we cannot track early page allocations in current
->> kernel even if page structure has been initialized early.
->> 
->> This patch introduce a new boot parameter 'early_page_ext' to resolve this
->> problem. If we pass it to kernel, function page_ext_init() will be moved
->> up and feature 'deferred initialization of struct pages' will be disabled
->> to initialize the page allocator early and prevent from the panic problem
->> above. It can help us to catch early page allocations. This is useful
->> especially when we find that the free memory value is not the same right
->> after different kernel booting.
->> 
->
->WARNING: modpost: vmlinux.o: section mismatch in reference: early_page_ext_enabled (section: .text.unlikely) -> early_page_ext (section: .meminit.data)
->WARNING: modpost: vmlinux.o: section mismatch in reference: early_page_ext_enabled (section: .text.unlikely) -> early_page_ext (section: .meminit.data)
+Send DP_SET_POWER_D3 command to the downstream before stopping DP, so the
+suspend process will not be interrupted by the HPD interrupt. Also modify
+the order in .atomic_enable callback to make the callbacks symmetric.
 
-Sorry for introducing this WARNING. I did multiple checks before submitting
-the patch but unluckily I didn't trigger this WARNING. Maybe there are some
-differences of config in our compilation environment. I have tried gcc 8.3
-and gcc 11.2.1.
+Fixes: 77c18864c5fc ("drm/bridge: it6505: Send DP_SET_POWER_D3 before stopping DP")
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+---
 
->
->I did this, but it was lazy - perhaps there's a better-optimized
->combination of section tags.  Please check?
->
->--- a/mm/page_ext.c~page_ext-introduce-boot-parameter-early_page_ext-fix
->+++ a/mm/page_ext.c
->@@ -91,7 +91,7 @@ unsigned long page_ext_size = sizeof(str
-> static unsigned long total_usage;
-> static struct page_ext *lookup_page_ext(const struct page *page);
-> 
->-bool early_page_ext __meminitdata;
->+bool early_page_ext;
-> static int __init setup_early_page_ext(char *str)
-> {
-> 	early_page_ext = true;
->_
+ drivers/gpu/drm/bridge/ite-it6505.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for the fix.
-I try '__initdata', it triggers another WARNING below.
+diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+index f9251ec49bf0..2bb957cffd94 100644
+--- a/drivers/gpu/drm/bridge/ite-it6505.c
++++ b/drivers/gpu/drm/bridge/ite-it6505.c
+@@ -2951,9 +2951,6 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
+ 	if (ret)
+ 		dev_err(dev, "Failed to setup AVI infoframe: %d", ret);
+ 
+-	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
+-				     DP_SET_POWER_D0);
+-
+ 	it6505_update_video_parameter(it6505, mode);
+ 
+ 	ret = it6505_send_video_infoframe(it6505, &frame);
+@@ -2963,6 +2960,9 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
+ 
+ 	it6505_int_mask_enable(it6505);
+ 	it6505_video_reset(it6505);
++
++	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
++				     DP_SET_POWER_D0);
+ }
+ 
+ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
+@@ -2974,9 +2974,9 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
+ 	DRM_DEV_DEBUG_DRIVER(dev, "start");
+ 
+ 	if (it6505->powered) {
+-		it6505_video_disable(it6505);
+ 		it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
+ 					     DP_SET_POWER_D3);
++		it6505_video_disable(it6505);
+ 	}
+ }
+ 
+-- 
+2.37.2.672.g94769d06f0-goog
 
-WARNING: modpost: vmlinux.o: section mismatch in reference: memmap_init_range (section: .meminit.text) -> early_page_ext (section: .init.data)
-
-I check the section tags in include/linux/init.h. It seems that we don't have
-a better choise. So in my opinion, your patch is the best solution.

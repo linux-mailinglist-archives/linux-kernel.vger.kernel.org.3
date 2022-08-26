@@ -2,375 +2,563 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFC75A2C30
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6FE5A2C3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245723AbiHZQWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S231484AbiHZQWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344693AbiHZQVu (ORCPT
+        with ESMTP id S1343568AbiHZQWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:21:50 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF81DDA9A;
-        Fri, 26 Aug 2022 09:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661530905; x=1693066905;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=bpDImZzsLaOLZR+ks3uAbeh9HSL96oiQvAZ0/dSJc2k=;
-  b=ed9dd0GH6I/xy3yIEkAIQP4DEAUnVItNuaFRg1kQVM6zUbjNn3Nt9Afy
-   Kn3s5k8p5iBCrJHVLFZiLzWI+WuJGjF+cldPvI7uaaJXCLM6TIckTs6K9
-   vi2LSSFKqTX2dp1tADjXbvCON/5bgsBzE40WRSxrQnMIIfbXIcIxwt2Pv
-   TdmCns+W2j+p4T87vhoL+w4cZq9W+BrB9/667BWOrv0I6HqUaAA3ebRp9
-   jpX9+dYJB0g0n1Q3wdfdLM+Y1FK9jXPYIGBRhLCLyGTJQISOSkzFk9Cpt
-   32IdD3UCTe/cMR/y8Ptvbe0RSyTdtYIqjrZxZ50bkYVB3BOXXjKy5NqG2
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="188225300"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Aug 2022 09:21:44 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 26 Aug 2022 09:21:44 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Fri, 26 Aug 2022 09:21:44 -0700
+        Fri, 26 Aug 2022 12:22:41 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50067.outbound.protection.outlook.com [40.107.5.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E91FDEB5A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:22:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UgOsD+k0znoIZNJNrVvIbDIHmS6qBPh8pn2/AwpY2bXcFRpdmBuuFgLY27GUbqj39Kt0eHSx5YXlH8hDQSHt1w8hRtugZsLqCRK0qcC0GccmTu95B6kLsi5GUIX/oC30lzN/swOlIpMQ9zmydL3Kwgp+546j8hWip0xJDLIPArrJJf5YJzZxLHzgbSx/OXcUM7gobY6kg3Cb09YAiZGMDycIsjh7Sppx6sLjehjNHY4zLbq2FFixNExUf3wl6zMDWwsK05Gxlmuky5Lyey2qWFoaf/rpEiTcOsqNGW+AaNa8+J7I+6dG6MvPTsg7wQPRYeBZOfrt0s0QO7GIs2jhvw==
+ b=mkR92/xcSocKefKty9X/liDrShJ++cNSPPkB45MwXwsxzS0vRjvNyrvE4mAcK4KC5L/PW55fSxRgRh918g8QP+ZQnWgaV43q52x9SQiJtiW7pwedfXTPYGdJ9/SwIFnPWZsdc3AL439DHEXvjWcneBjgqbUr0k6kmyWgSNCfKjFNWBXqwWqj+vzzbb9TYtqZBctpx6g/lD3D0e1/ox+tb9gDj0Ascv9T+h3m3niBJlPyTdJi+euMjnDlVuwUOivH7+0DUQ/atfqkYPgnns/CBSl8WkF8BKJgd14HI//xh0JL0wko0u1Sv14oFKB1R/9Owg2IEmm0KupzsCiBBgBMqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bpDImZzsLaOLZR+ks3uAbeh9HSL96oiQvAZ0/dSJc2k=;
- b=XRFm99fs8E3Vgm5W6UEv2KVJv1RJ6Ea0VNd/zES/0RgQ/hSpRg1n0fPcyeW2Wo1Y7o0k8PIHaXBB7dXmHqC5VEkwqAIlgI5g/FGBTDldxvnE0Y6xICqbYc05XIcgYxRezWNS2W3gxv5cvZTnNX0ZdNxfwKsXcTnTZIpFSOxpDbxC8qg+gdAD3+77CfbmGO/dpUvfV9lo83Z36u6JVt86BacScS07aCxqSIyeX0X8c0ZzT6VR8mPqI1pP7FLgm5sUELb+KL9XtbMpZufGxNNpK9chdpzoIn9mkAQDHPDXiwJ2ECpgkub3G4GseDcM29HtNMY6+pBbVA7OwktQq+N4FQ==
+ bh=6npxgPA8VspPoslgB7/gyFCvie4rmgRGuMqHbwi+si4=;
+ b=LUg+IcY2XN26fLPL1dMDncshX5EvVFN3I/CxQ5EUPB0BB2JZCCWTQujD4fI6SmzXnKCGlrjUiBRLLbhnzG7usojnE/1KPEmMzLmcNAVeqHbaiudJEQXKCGIIKQRV6PJtj3illCKL+KSvGwjj2M6/UnBu3GgWNrXAtdQ1K9rSDEd3p67/S6l0xGMGOK8tLGkdqxE4GbL/IKjnx4sLOcY9MYwIoUi7HMNg+hrcgtZ0wo8J1x5WBs3qJgtgrcmNmcdochv/vNaDX4yB6LO4QO+rJ695AMhjTFogFMHUUc9ZuE6fdvl9tI5+j4ahWWrxdwWpxTIjGENf9Rp5aQtLfwmV0A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bpDImZzsLaOLZR+ks3uAbeh9HSL96oiQvAZ0/dSJc2k=;
- b=lH/qwJUxxSeGKpL74a+XjUsWmGTzwV/XYYO/JW0iWviQnaiaavsMoydE5mdTJXg1FfSWV6p7WgxkEZxyXP52nNQwJ5j/QPDlVYWFtP17lXkTx3MFpYp7hhFYnIbextK/86BC57THx1Db4AM9xVBSMx6gQr3FNKR6cwczli+hPgw=
-Received: from DM5PR11MB0076.namprd11.prod.outlook.com (2603:10b6:4:6b::28) by
- DM8PR11MB5623.namprd11.prod.outlook.com (2603:10b6:8:25::20) with Microsoft
+ bh=6npxgPA8VspPoslgB7/gyFCvie4rmgRGuMqHbwi+si4=;
+ b=0IZ/6A5PkJ/gIyo44i1A73djTVh4RLB5mOPqb0KWLQ1T+ZfdoOSJmA05cShfljAvYVSOqtmVMA4qR3MyGlNbDW2ICpNjCymLJZwY19/sKwOTjUNgWv6kiht4w3m5acpOtVVfILZsgCZBkl40TKUGs78nD0goAZsvx95FSU8fjZ2SnLJHkW3NU1H9QY/wOzArTBGjyl4syvAQyDthaCEp4rwXDaeUIegnGfUvBTQNkwHSKAOFGa6+uCm5IucaHo0JkQ6/RsZNv+8oH62Yin6qbVu8kw2R3dh3mdZZl8p0OsiFgvXIM9EuB6zSlzCdqz68upwF6KNIHlsHMxbJcWV2Tw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by DB7PR03MB3596.eurprd03.prod.outlook.com (2603:10a6:5:4::16) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.15; Fri, 26 Aug 2022 16:21:39 +0000
-Received: from DM5PR11MB0076.namprd11.prod.outlook.com
- ([fe80::945f:fc90:5ca3:d69a]) by DM5PR11MB0076.namprd11.prod.outlook.com
- ([fe80::945f:fc90:5ca3:d69a%6]) with mapi id 15.20.5546.021; Fri, 26 Aug 2022
- 16:21:39 +0000
-From:   <Arun.Ramadoss@microchip.com>
-To:     <andrew@lunn.ch>
-CC:     <olteanv@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <vivien.didelot@gmail.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <f.fainelli@gmail.com>, <kuba@kernel.org>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <Woojung.Huh@microchip.com>, <davem@davemloft.net>
-Subject: Re: [RFC Patch net-next v2] net: dsa: microchip: lan937x: enable
- interrupt for internal phy link detection
-Thread-Topic: [RFC Patch net-next v2] net: dsa: microchip: lan937x: enable
- interrupt for internal phy link detection
-Thread-Index: AQHYtgiNtEkHMlfxJUuZi3LTVSyR5a265aIAgAFpO4CAAD+fAIAE1UgA
-Date:   Fri, 26 Aug 2022 16:21:39 +0000
-Message-ID: <650478ca37c09c91566784db2b496838a15d567c.camel@microchip.com>
-References: <20220822092017.5671-1-arun.ramadoss@microchip.com>
-         <YwOAxh7Bc12OornD@lunn.ch>
-         <b1e66b49e8006bd7dcb3fd74d5185db807e5a9f6.camel@microchip.com>
-         <YwTlKnpgMRp2Nugm@lunn.ch>
-In-Reply-To: <YwTlKnpgMRp2Nugm@lunn.ch>
-Accept-Language: en-US
+ 15.20.5566.15; Fri, 26 Aug 2022 16:22:28 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::ecaa:a5a9:f0d5:27a2]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::ecaa:a5a9:f0d5:27a2%4]) with mapi id 15.20.5504.019; Fri, 26 Aug 2022
+ 16:22:28 +0000
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Sean Anderson <sean.anderson@seco.com>
+Subject: retire_capture_urb: Corrected urb data len
+Message-ID: <68a97d61-21bf-b45e-f6ed-c0906dd4b197@seco.com>
+Date:   Fri, 26 Aug 2022 12:22:24 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 373ff3de-4147-4dc4-85a8-08da877f0e3f
-x-ms-traffictypediagnostic: DM8PR11MB5623:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UyGqfY8QurtGfVs1A6oHppasP/QDExQFw95h+n4QSiX7oAez/AWTnWvnVnCeqFnPNJboQcgIdsZ3SywqhUH7VCDdhnPBZQi2CaAk/cfJhz7nTvqqrUhAYg4h9qxPRMp/XTm1GEchlapBufoZoEToX0WXv1FlxfKrSTBTGJTuGk2jAfcD6r+hozNMZ/45vcBDIFFJ1Up3g8t6oB6TLuT8VYFTMm2Wc7TEj1uGttCYSBJWuivFnunMLjxuD7h5kqeudybgZGF7G9VAL2v0Z+43zlnhfoqeHGSeMZt1KWTdMtuqM+Vcxf35GLtdPoCvmX8isQbmy/wwHCpmspc7BskbnZu5lnFLPLHdkmQOQ9b+zBXw9+dPGc/p7kUpFgUHLQdgBA5Gk2zWau7UJRA2i3mZwHsoZEeM37VGKcVShE4DEDkh0XpbULMKbkFjjvoIwhJiUZ/dmLhpBmQOIIn9hZGpWvw8d0Rh2GGZiBbqS4/u5WVI2hHErTfgXfXoGXCPB8lg5l+6qLXS3KCrI/XTk+LSl2xr1OkRZVN13nDdhTPazKGiVOu/aaYExAIJPhuAjCk812roiNchVfxUar7DKheRynLH2nR6/+YgBD9ik+Ses/hG/e1QXwxPR4Ediwp+drZEWPeLWylEAkmoAcJ7Tl0eAZBVypS5q/JZhF7LJUOzLxJ1j3VXoQgGK7wvLXHAzcMderv/P3y1yDMULuvUAkxJTE4y4KHIGLd75w2UfD7AXSmVbFNqt2TR9qLyFYGO8/Cp96aXq3Ok8wQ/O1xJ4zsF4RJ8G+e1F4lXH+MefuopPKD3DeGvmLPoEZpErcCn8otQ/AauYHT5VNkyyr0Hj+gAv2yZ+sO9AWGrQDGWMhKkvkA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0076.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(376002)(136003)(366004)(396003)(316002)(54906003)(30864003)(71200400001)(122000001)(66446008)(6506007)(478600001)(38100700002)(64756008)(8676002)(4326008)(7416002)(966005)(6486002)(36756003)(5660300002)(6916009)(41300700001)(6512007)(8936002)(2906002)(83380400001)(86362001)(38070700005)(76116006)(66476007)(66946007)(66556008)(91956017)(2616005)(186003)(99106002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnFxR3gvM2RjT0Y0aE1JWmpFL1hwZFdmbUY1SGsxbWowNFFDaCtvSk1SeW85?=
- =?utf-8?B?MzkrSVRaZHJZK2NGUUd2alF1QlJ5OHF2QjlsRS8vejBBNDFydWY1WU0zcUpC?=
- =?utf-8?B?b2diRWhDbjl0bUpENTdibk5GbWU0MDhMbEhKSUtraW1hWnNGaE9GUHN1Zzcy?=
- =?utf-8?B?N01yUHhnZVJOYkw4ck8rek9XZDkyOWtoRDNnTDBvVkF4L0JmV3M0cmtSRHRI?=
- =?utf-8?B?SlRqdUJwaG5JVmZJZXFpVDI2bTBZTlVEbjBBQmJaNTdBV2lORnNqUFlaUXhF?=
- =?utf-8?B?NktCeGtEUk1GWVZyZnJXU3BLWWpzbVp3SktaUTR3ODJnQVVaLzNUN05HSWZS?=
- =?utf-8?B?YXg1TEp6Vy9hN1JlUXBKc1Zyd2pEK2RhZ0hYNi9PSTFSZkpDQWlFT2h4QW5t?=
- =?utf-8?B?R3B5c1NaWVFIODFxSldweVl1YWNsSmhVcVZJQW90TXhUWnUzT3M0dThFS0Fq?=
- =?utf-8?B?Vml5NEZUZit6d005MXlHaVZHdEUrMTVEdWVKeXpqd1ZKRlN6U0VKQnFnTTl0?=
- =?utf-8?B?UjhUdEhVQkYrMEZTR3pqZVlOU1ZZWE1hTkZuTERTb2NSc2d5Zy9iSmFaMkla?=
- =?utf-8?B?OVUvOHp1bWlidlgvYUtzRzRSaGpHc2xHTzBGQjhrOXplMVk3anZ5d2QvcnV3?=
- =?utf-8?B?bnlyaldRWEh3ajRuYWNoNDBFZkFKWWo3NjNnZ3VzdksyMmRlamFpUUpiZW82?=
- =?utf-8?B?REtjWTZZY2NZUndGYjVId2JkZ2xuY0ovKytObzF3SXZyTHV5bEttT21LVEg0?=
- =?utf-8?B?NVVoYmZZZlVPbVhyYklvMHcvaDlITFY4c0tIZGxMQkNMMTdoSytIcVFycU1u?=
- =?utf-8?B?SldrZmdsRkg2RHN5dVRTcjE5RWZES1lRVVJNd0NNRFZnUGtkSEFlSDg0TmxF?=
- =?utf-8?B?V0FLVldZaW5zZS9sNEp3UER0U25iNnN3ODQ0MzJ1blQzSTMxUHpiK0kzWHpk?=
- =?utf-8?B?Y2w1dVhOOGhVRlA1SnliYUwyREtjYTl5SmovYVZJMkRHYTZSd3ZRcm5FeGZR?=
- =?utf-8?B?U1FNa0EyN1pxNXNKSEQ5MmYwaXVBUWZIOERkNzRtV3F5Nzgxc1duZ09tV0JE?=
- =?utf-8?B?bWVuTGVaY3VENXNmWlJySjhsZUEyN3MwRmtjOTBUS1JGTXdoWkg0TDJuM2xn?=
- =?utf-8?B?d1FWT1BuaUxVR0ZUUEJYcExYdWJaSjJ5WCswSWV5dEhEbzBCZDgybjFZbHNY?=
- =?utf-8?B?T1Y3M2lqMG5xd2NpcXppZ1doeDVtdTRJUTRLYmR6Zm0renB3a3JvaWNVZGdn?=
- =?utf-8?B?TEZlcmFnbUo5OUJYSU1RaFQzeTdSYW1jamFVRHNBU3k4YjREU1MwalZndi95?=
- =?utf-8?B?WG9qUTlRTTRBbEFYSDZBYUxPcEtqOGUvcXJFY2VXa1RlTjZjOG5TcElMblhP?=
- =?utf-8?B?bnBtTGVlUkNzaUdPZzhaL2J1VVFVZHU5YXpreVg5QTF3NDQ1MDdtQzdseVRz?=
- =?utf-8?B?NElUWjhYOHBzNUVuNWR6N1NlRiswOTdXK0wrMktlSUo3R1E4NXZmWU4waWNu?=
- =?utf-8?B?Rm9uUnFNb3lXV2JoNXJSNFdGVm1vTjN4d2tEdEVlU3loS3ZYL1ZKbVRlak1Q?=
- =?utf-8?B?Qm1pUGtzbHhMRyswM1E1MGp0ZTBUZVdYcCswa2dsdkVKWXpWdmpMbDg3MytL?=
- =?utf-8?B?MlhMd2Z0alJHLytaMmlJbDkySis4ZnBUb2lRcGFJK2xpalV5aUo2bnVNQUw0?=
- =?utf-8?B?MXk3bWRoajNvcmJGRUZlaGhRc1ZnWDFwcnhZVnJWU0lwRE16aW5wTThDOVYr?=
- =?utf-8?B?Kzk5U3RReHJXLzlEamQ3VGZqeEYwSm4wQ0RUQ0ZVdXh0YmxWRnc2TWVrRUdV?=
- =?utf-8?B?bWNlK005TGpLSkJGcnBlN29JU3J5UW5pZkJBVm9Ncy9mN2RoY2NUTU9ockxm?=
- =?utf-8?B?dmJkbmRwNjNPeWg5YldNaG1NMlVGcXpHblRjUThmbk9vQnNrMGN2Z1VlMG9q?=
- =?utf-8?B?SHhaZUVaT2JLeTk3Rmg0b08zbXJpaXE2a1BOTTd2eTFVM1M1dEFDaXRyL2p5?=
- =?utf-8?B?Tmd2blcwcDFTYWROL01zSmp1aDFsb0pTdWhHVmhPV2dISFdlaHhyVzNkVGlG?=
- =?utf-8?B?dWhOYVRib2k1dGlZWWZpb3hmNStza0N5K2g1dWJCN2NmZU1oS2YreXl0VFh0?=
- =?utf-8?B?YTEzWnhrVmFPVFJDT0ErcENqOWpsdytlTHRySlFwY0xrZlBNM1JnV0N1L2hY?=
- =?utf-8?B?T0JGSjlXZjBia2lBR3ZuUWEya1F4RkVsUnJ5QWxXSzYzUytDcm1Vd2ZLREJR?=
- =?utf-8?Q?NjrG7BjM+vbaMuCBffuySi1KhSDLr5hN/eZbuPuwfI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <94D0228D88A87D4884A3E35E11BAE8A6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR08CA0016.namprd08.prod.outlook.com
+ (2603:10b6:208:239::21) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 80ce556c-cbfc-40c8-1131-08da877f2af3
+X-MS-TrafficTypeDiagnostic: DB7PR03MB3596:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xGTvWw2k9FtTxdb29sgDQOsxYunx2uZ6vEHBHIHaVQ/XiTlHyEh9BGJaYDKVz0Bb05JQgCI9ziV870GxqzV0RfMZ/YCodoo2OsAqq1LLXGCQmw3tCMyG4YR0yIaUlwiw2x0fYWW5wf4H/y5gnqU+ksvRIZCh8FyPS27dn/0gx0Mde7UVPXBjdPKvhy+DCv/pyxx2ijlmJw2Rx/IsUwYMcgFqPRKCW4CNTRNUIsPTimC08r/FW1KWV79rNjebXkSxTGkaUoPgI1d+t2E2M8A8tKtc7EFtPkxNdNjgm0+3N5/Du96wctVVnGU6l/Nrdi78HzjZwBc0ktI9FpoykubwpO6ggC1PEr9NOYU+QK4F03nKpBEHrkCgazmnoDCaAbCmoBlt7q8EtZNeU+TDaCz0wVYS+Q6uksSIuevucqyJtAA49DCSCyluDGS+Id+bZ8xWMaONINkLZYv2hQ5evxW8O7/kJoOGnFp0FWO3EBeY2be0OVMvzEG7hHWVLJexzxnw2XDs+Zo4vmUQ1XbkCneTLzFiS5eOFP3ccEtLMRm0khEftA4tqWhavK43QlUlMnRhd9NwV2w/NI9ejrvwxOJrpQtEVvcChjcG0PdITuN8dV3dqMoPTH0edD8gtAJbOnitTeLSe90QNJw18GJ4amOtcJ2AX0wjDMCMRAV05djK7bAcV/E6smab9k+aOyQiICO48cXmiHMwyMohDHA12qgbQvgSKe2/kf0D5VNnkRBLmfbXjkwrWXr5gyHT1TOKbJnfL5CyQsgyRAMeDeCfp71mtBBaKrvOpLqSBbVxLtXXQwhoI4uPOlGIRUYCTwUIQy5WlLjB34X4y5tT0MNlom27KrxLwUgT4AGOom31Jrab7gM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(376002)(396003)(366004)(39840400004)(26005)(44832011)(86362001)(52116002)(6506007)(31696002)(2906002)(110136005)(316002)(36756003)(186003)(41300700001)(478600001)(83380400001)(5660300002)(31686004)(66476007)(38100700002)(2616005)(966005)(6666004)(6512007)(66946007)(8936002)(4326008)(8676002)(6486002)(66556008)(38350700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTNuWm5hYk8rVFlXdGRaTkJpdW4yT0pNRXA5ckRKeDh5b3FvR0tkL2lGNTBr?=
+ =?utf-8?B?L0VFbkNZdEtjZEJ6cHVtSTc1Zkc3b2Y3aVN4RUtmOFRJZkZKc2xhU240ZitV?=
+ =?utf-8?B?RENxTm9WZnlLbi9tbVBsODNyZVB6V05tVURpbDM0c2hSUEI3QVFKTDRmZjA1?=
+ =?utf-8?B?UUoxOThIVUI0WldGZUFZSktxdmsxTjY5UEtsdjNBN25NL3Z2QlBIVDBrT1Na?=
+ =?utf-8?B?VFFadWlnbFBOdlJJdDZTOEs1YXl6ZUd6NXJKVCs1dkQ3L010WGw4TnQwbGlv?=
+ =?utf-8?B?Y0NkL3lFV3c5dWJaUHUwZm1WTDVyRHlSa2g2V3M2VUZ3RTdpRGpMcjQvV3Ny?=
+ =?utf-8?B?UEI4TUNESmxiYVc1UG1qU1ViemZXTzhyaUw3TXkwb2w2RzlTb2J4bU5qL2s4?=
+ =?utf-8?B?aHczejNEemdiUTg0L3R4bkpoaGtXeDBIc3E1YzhkcmN2em5mM0Evczl1YkpU?=
+ =?utf-8?B?aXRGeXVoeDBOTDhsWStlYW03V3N4cEFTUHVQMlp2dStJaVFDeGZueW9YZ0Vw?=
+ =?utf-8?B?MGgvVVZhbHFjbTA3SUJGb0dGTXFocCtWMWk2cmI3OVh5NnNuT25yOFRhRVJx?=
+ =?utf-8?B?OWRweGErY1EvZXh1S3Uza0FxdVkxdWdFNmxwTFJyZFYwQlJYbEYwaWFidzVX?=
+ =?utf-8?B?YWpMa0NERFM2cWhwREdQcFJ3cFdncEI0OWFxUHMxb2pDblVOUG1LR2Mrbk9n?=
+ =?utf-8?B?QnRCaVl1RWszMFhQQVRqUEtrbzJNb3h0aEZDQitKZTRZZXliNjgvL2hrZmN2?=
+ =?utf-8?B?dS9Cc2F1Ny9xcys3Z012SFhybWZZMVppa0tNMERDQ2NiZm1BUHZKSUt6UHVz?=
+ =?utf-8?B?cDhpMnpIY0ZzNW1NNGJldEg5Q2xrVjU5MXBPSXVPZklkOWIwTG1TUmlvWXhh?=
+ =?utf-8?B?NlRCV3lJalN4OE4yUHVKamsxMVVsQVBVczV4eTR1dUpvcERXRDMvNWdic0Qv?=
+ =?utf-8?B?aDkzREZTL0c1aitHMndWdUt6bDFrOGJSemVxdzc0RTlsM0o2WGRETXpKcTVo?=
+ =?utf-8?B?d2NrTi8ya2xhdGFIYXVPa1BpOEg4UlRnS0RoeEducHdzSVV6ZUE5MjZkL3NM?=
+ =?utf-8?B?WE4zRFNFRUp3Z2FVcDM0V2dUMkJHTUYxMXorQ1psU3ZpakE2SEZXR2MrOGl4?=
+ =?utf-8?B?d244MlBwaFc5QzdQZUUrZWltQURyNjRaWjk5VG5lZEFPaUJ1VkVaTnVxV3lm?=
+ =?utf-8?B?NzJDeHNGZVliSFA1bkZiOVdSUjdlTGdzZ2ZuWHRsQVRBUEdtb0JTS0s1Vkxp?=
+ =?utf-8?B?Nk9sM2cyNXNmWHJyVjdOU3NTd1FNaVNBb1NkYkM4eXgvVVVqbGNaTXdkUWhO?=
+ =?utf-8?B?bkVHeU9SaWJmZVVJOGZFazY1MStNZFBPNlpqMmQ2c3huRzVORzNvV1dmSDV2?=
+ =?utf-8?B?SlNIVDFLSUd1L3JmdlJMTnFkOUdTb25jSzlndXo5MlZYTGRZcU8rMXdUMEMw?=
+ =?utf-8?B?R3dDMm9hdXQ0WWk3Vlo1Qi9TMVlONjNDYkEwNlNtYzJkWk5MWWlwVUo3OTJl?=
+ =?utf-8?B?d1k3YTBCemJZMW11LyszWU5zN0RzbVdHRHo1Slk4eXpyUTg4RmtrYWJKMldk?=
+ =?utf-8?B?bC8rRkh5aTBXdXFPSXJqYllFNlZySitTeHprMXByOTgxVmQ3WWR6V1Vxa2Jo?=
+ =?utf-8?B?TGl0YWJ1UXUyMUh1UVZ3ZEN5SXZQTHFlc2RZL2hPaEp6VG1maGozNzBuL3g3?=
+ =?utf-8?B?WTFoVWU0ZXl2cDJ5dFVVOG1rMFdDRjlvbkgrelpKcXo1RmxvaWt4dkpDdUFr?=
+ =?utf-8?B?RHBFeEQyVWovNVI0OXBaZXRXZWthQy9tdjZ1b2tsSm95aTJFcG1jSDRVNS9n?=
+ =?utf-8?B?QmFYWlBZSEx2d0IrNzV5a25oakVTKzVNMURNWFhLaTI3R2J1RHNoancyenRD?=
+ =?utf-8?B?ejZJcFRxVDlscHdTK2FwZW42bHA0T1pmSmh6dzFUSXh6Y2J1NFFYc2JQQUg5?=
+ =?utf-8?B?QnU0Sk5qT1lvRW1JbTNXQXNkYk5NQlpHUnJUTThlSndnQ0JhRnpoQWJzV21R?=
+ =?utf-8?B?MXZVSm8vYU0rbzJHa1A0Y2paQmFOdi9iRi9GcFJrdUdTdG8ySWRWS2xZMFVR?=
+ =?utf-8?B?elhFc0xWc0lSYUw2UFZ6SjJHUXcxQVlPdXFBOEllblN5K0IybjNuNXFFa0F3?=
+ =?utf-8?B?OVh5WVVNYTJkZEJnelllVzhYQjVmQzRBN1N6NWJmWjMweTduUDA4L3V0MjJr?=
+ =?utf-8?B?Vnc9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80ce556c-cbfc-40c8-1131-08da877f2af3
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0076.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 373ff3de-4147-4dc4-85a8-08da877f0e3f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2022 16:21:39.5361
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 16:22:27.9546
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RFjgWHmox8KytcGQIvKwF6O+BH0uMOi7gU+nOvuCCpQzwzfk0vGUxK+W9NmVfrWJe1j+usgjVhvKBhgYzNvblqiTNQo+nFu8TNBhrD9B0/c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5623
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tENj42pl/dIWt+r8WFTQ9st/qnzNkcHt6lW8O9Y5DEcrQSxo1J7eEH3DgpGjk8+9fSWwLPQzx8tKmE2gZiNfXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB3596
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQW5kcmV3LA0KVGhhbmtzIGZvciB0aGUgcmVwbHkuDQoNCk9uIFR1ZSwgMjAyMi0wOC0yMyBh
-dCAxNjozMyArMDIwMCwgQW5kcmV3IEx1bm4gd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBu
-b3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91DQo+IGtub3cgdGhl
-IGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gDQo+IA0KaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20v
-bGludXgvbGF0ZXN0L3NvdXJjZS9hcmNoL2FybS9ib290L2R0cy92ZjYxMC16aWktZGV2LXJldi1i
-LmR0cyNMOTMNCj4gDQo+IERvaW5nIGl0IHRoaXMgd2F5IGlzIGhvd2V2ZXIgdmVyeSB2ZXJib3Nl
-LiBJIGxhdGVyIGRpc2NvdmVyZWQgYSBzaG9ydA0KPiBjdXQ6DQo+IA0KPiANCmh0dHBzOi8vZWxp
-eGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvZHJpdmVycy9uZXQvZHNhL212ODhl
-Nnh4eC9nbG9iYWwyLmMjTDExNjQNCj4gDQo+IGJ5IHNldHRpbmcgbWRpb2J1cy0+aXJxW10gdG8g
-dGhlIGludGVycnVwdCBudW1iZXIsIHBoeWxpYiB3aWxsDQo+IGF1dG9tYXRpY2FsbHkgdXNlIHRo
-ZSBjb3JyZWN0IGludGVycnVwdCB3aXRob3V0IG5lZWRpbmcgYW4gRFQuDQo+IA0KPiAgICAgICAg
-IEFuZHJldw0KDQpJbiBMQU45Mzd4LCByZWdpc3RlciBSRUdfU1dfUE9SVF9JTlRfTUFTS19fNCBC
-SVQ3OjAgdXNlZCB0bw0KZW5hYmxlL2Rpc2FibGUgdGhlIGludGVycnVwdHMgZm9yIGVhY2ggcG9y
-dC4gSXQgaXMgdGhlIGdsb2JhbCBpbnRlcnJ1cHQNCmVuYWJsZSBmb3IgcG9ydHMuIEluIHR1cm4g
-ZWFjaCBwb3J0IGhhcyBSRUdfUE9SVF9JTlRfTUFTSyByZWdpc3RlciwNCndoaWNoIGVuYWJsZS9k
-aXNhYmxlIGludGVycnVwdHMgbGlrZSBQVFAsIFBIWSAoQklUIDEpLiBBbmQgaW4gdHVybiBmb3IN
-CmVhY2ggcGh5IGl0IGhhcyBkaWZmZXJlbnQgaW50ZXJydXB0cyBsaWtlIGxpbmsgdXAsIGxpbmsg
-ZG93biBldGMuDQoNCkFzIHBlciB5b3VyIHN1Z2dlc3Rpb24sIEkgZW5hYmxlZCB0aGUgZ2xvYmFs
-X2lycSBkb21haW4gZm9yIGVhY2ggcG9ydA0KYW5kIHBvcnRfaXJxIGRvbWFpbiBmb3IgcG9ydCAx
-IGFsb25lIGFuZCB0aGUgY29ycmVzcG9uZGluZyBtZGlvIGlycSBpcw0KdXBkYXRlZC4gVGhlIGR0
-cyBpcyB1cGRhdGVkIHdpdGggKm9ubHkgb25lIHVzZXIgcG9ydCouIEFuZCBpdCBpcw0Kd29ya2lu
-ZyBhcyBleHBlY3RlZC4NCg0KSG93IGNhbiBJIGV4dGVuZCB0aGUgYWJvdmUgcHJvY2VkdXJlIGZv
-ciByZW1haW5pbmcgcG9ydHMgMiAtOC4gRG8gSQ0KbmVlZCB0byBjcmVhdGUgdGhlIGFycmF5IG9m
-IHBvcnRfaXJxWzhdIGRvbWFpbi4gQnV0IHdoZW4gSSBhbmFseXplZA0KY29kZSBmbG93LCBpZiB0
-aGUgcG9ydF9pcnFfdGhyZWFkIGlzIHRyaWdnZXJlZCBpdCBoYXMgZnVuY3Rpb24NCnBhcmFtZXRl
-ciBhcyBpcnEgb25seS4gRnJvbSB0aGlzIGlycSBob3cgY2FuIHdlIGRlcml2ZSB0aGUgcGFyZW50
-IGlycQ0KaS5lIGZyb20gd2hpY2ggcG9ydCBpcyB0cmlnZ2VyZWQuIE9ubHkgaWYgSSBrbm93IHRo
-ZSBwb3J0LCB0aGVuIEkgY2FuDQpyZWFkIHRoZSBjb3JyZXNwb25kaW5nIHN0YXR1cyByZWdpc3Rl
-ciBhbmQgY2hlY2sgaWYgdGhlIGludGVycnVwdCBpcw0KZnJvbSBwaHkgb3IgcHRwIGV0Yy4NCg0K
-Q2FuIHlvdSBzdWdnZXN0IGhvdyB0byBlbmFibGUgaXJxX2RvbWFpbiBmb3IgdGhlIGVhY2ggcG9y
-dCBhbmQgZmluZCBvdXQNCnRoZSBwaHkgaW50ZXJydXB0LiBTbyB0aGF0IGl0IGNhbiBiZSBleHRl
-bmRlZCBmdXJ0aGVyIGluIG91ciBwdHANCmludGVycnVwdCBiYXNlZCBpbXBsZW1lbnRhdGlvbi4g
-DQoNCkJlbG93IGlzIHRoZSBkcmFmdCBjb2RlIG9uIGltcGxlbWVudGF0aW9uIG9mIHNpbmdsZSBw
-b3J0IGlycSBkb21haW4uDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9kc2EvbWljcm9jaGlw
-L2tzel9jb21tb24uaA0KYi9kcml2ZXJzL25ldC9kc2EvbWljcm9jaGlwL2tzel9jb21tb24uaA0K
-aW5kZXggNzY0YWRhM2EwZjQyLi4yMjVkNjViNGI0M2UgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL25l
-dC9kc2EvbWljcm9jaGlwL2tzel9jb21tb24uaA0KKysrIGIvZHJpdmVycy9uZXQvZHNhL21pY3Jv
-Y2hpcC9rc3pfY29tbW9uLmgNCkBAIC02Myw2ICs2MywxMyBAQCBzdHJ1Y3Qga3N6X2NoaXBfZGF0
-YSB7DQogCWJvb2wgaW50ZXJuYWxfcGh5W0tTWl9NQVhfTlVNX1BPUlRTXTsNCiB9Ow0KIA0KK3N0
-cnVjdCBrc3pfaXJxIHsNCisJdTE2IG1hc2tlZDsNCisJc3RydWN0IGlycV9jaGlwIGNoaXA7DQor
-CXN0cnVjdCBpcnFfZG9tYWluICpkb21haW47DQorCWludCBuaXJxczsNCit9Ow0KKw0KIHN0cnVj
-dCBrc3pfcG9ydCB7DQogCWJvb2wgcmVtb3ZlX3RhZzsJCQ0KIAlpbnQgc3RwX3N0YXRlOw0KQEAg
-LTk4LDYgKzEwNSw3IEBAIHN0cnVjdCBrc3pfZGV2aWNlIHsNCiAJc3RydWN0IHJlZ21hcCAqcmVn
-bWFwWzNdOw0KIA0KIAl2b2lkICpwcml2Ow0KKwlpbnQgaXJxOw0KIA0KIAlzdHJ1Y3QgZ3Bpb19k
-ZXNjICpyZXNldF9ncGlvOwkvKiBPcHRpb25hbCByZXNldCBHUElPICovDQogDQpAQCAtMTE5LDYg
-KzEyNyw5IEBAIHN0cnVjdCBrc3pfZGV2aWNlIHsNCiAJdTE2IG1pcnJvcl90eDsNCiAJdTMyIGZl
-YXR1cmVzOwkJCS8qIGNoaXAgc3BlY2lmaWMgZmVhdHVyZXMgKi8NCiAJdTE2IHBvcnRfbWFzazsN
-CisJc3RydWN0IG11dGV4IGxvY2tfaXJxOyANCisJc3RydWN0IGtzel9pcnEgZ2xvYmFsX2lycTsN
-CisJc3RydWN0IGtzel9pcnEgcG9ydF9pcnE7DQogfTsNCiANCiAvKiBMaXN0IG9mIHN1cHBvcnRl
-ZCBtb2RlbHMgKi8NCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9kc2EvbWljcm9jaGlwL2tzel9z
-cGkuYw0KYi9kcml2ZXJzL25ldC9kc2EvbWljcm9jaGlwL2tzel9zcGkuYw0KaW5kZXggMDViZDA4
-OTc5NWY4Li43YmE4OTdiNmY5NTAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL25ldC9kc2EvbWljcm9j
-aGlwL2tzel9zcGkuYw0KKysrIGIvZHJpdmVycy9uZXQvZHNhL21pY3JvY2hpcC9rc3pfc3BpLmMN
-CkBAIC04NSw2ICs4NSw4IEBAIHN0YXRpYyBpbnQga3N6X3NwaV9wcm9iZShzdHJ1Y3Qgc3BpX2Rl
-dmljZSAqc3BpKQ0KIAlpZiAocmV0KQ0KIAkJcmV0dXJuIHJldDsNCiANCisJZGV2LT5pcnEgPSBz
-cGktPmlycTsNCisNCiAJcmV0ID0ga3N6X3N3aXRjaF9yZWdpc3RlcihkZXYpOw0KIA0KIAkvKiBN
-YWluIERTQSBkcml2ZXIgbWF5IG5vdCBiZSBzdGFydGVkIHlldC4gKi8NCmRpZmYgLS1naXQgYS9k
-cml2ZXJzL25ldC9kc2EvbWljcm9jaGlwL2xhbjkzN3hfbWFpbi5jDQpiL2RyaXZlcnMvbmV0L2Rz
-YS9taWNyb2NoaXAvbGFuOTM3eF9tYWluLmMNCmluZGV4IGRhZWRkMmJmMjBjMS4uNjIxNmMzNGM4
-Y2JhIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9uZXQvZHNhL21pY3JvY2hpcC9sYW45Mzd4X21haW4u
-Yw0KKysrIGIvZHJpdmVycy9uZXQvZHNhL21pY3JvY2hpcC9sYW45Mzd4X21haW4uYw0KQEAgLTEw
-LDYgKzEwLDcgQEANCiAjaW5jbHVkZSA8bGludXgvb2ZfbWRpby5oPg0KICNpbmNsdWRlIDxsaW51
-eC9pZl9icmlkZ2UuaD4NCiAjaW5jbHVkZSA8bGludXgvaWZfdmxhbi5oPg0KKyNpbmNsdWRlIDxs
-aW51eC9pcnFkb21haW4uaD4NCiAjaW5jbHVkZSA8bGludXgvbWF0aC5oPg0KICNpbmNsdWRlIDxu
-ZXQvZHNhLmg+DQogI2luY2x1ZGUgPG5ldC9zd2l0Y2hkZXYuaD4NCkBAIC0xNzEsNiArMTcyLDcg
-QEAgc3RhdGljIGludCBsYW45Mzd4X21kaW9fcmVnaXN0ZXIoc3RydWN0IGtzel9kZXZpY2UNCipk
-ZXYpDQogCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbWRpb19ucDsNCiAJc3RydWN0IG1paV9idXMgKmJ1
-czsNCiAJaW50IHJldDsNCisJaW50IHA7DQogDQogCW1kaW9fbnAgPSBvZl9nZXRfY2hpbGRfYnlf
-bmFtZShkZXYtPmRldi0+b2Zfbm9kZSwgIm1kaW8iKTsNCiAJaWYgKCFtZGlvX25wKSB7DQpAQCAt
-MTk0LDYgKzE5NiwxNiBAQCBzdGF0aWMgaW50IGxhbjkzN3hfbWRpb19yZWdpc3RlcihzdHJ1Y3Qg
-a3N6X2RldmljZQ0KKmRldikNCiANCiAJZHMtPnNsYXZlX21paV9idXMgPSBidXM7DQogDQorCWZv
-ciAocCA9IDA7IHAgPCA4OyBwKyspIHsNCisJCWlmIChCSVQocCkgJiBkcy0+cGh5c19taWlfbWFz
-aykgew0KKwkJCXVuc2lnbmVkIGludCBpcnE7DQorDQorCQkJaXJxID0gaXJxX2ZpbmRfbWFwcGlu
-ZyhkZXYtPnBvcnRfaXJxLmRvbWFpbiwNCjEpOw0KKwkJCWRzLT5zbGF2ZV9taWlfYnVzLT5pcnFb
-cF0gPSBpcnE7DQorCQl9DQorCX0NCisNCisNCiAJcmV0ID0gZGV2bV9vZl9tZGlvYnVzX3JlZ2lz
-dGVyKGRzLT5kZXYsIGJ1cywgbWRpb19ucCk7DQogCWlmIChyZXQpIHsNCiAJCWRldl9lcnIoZHMt
-PmRldiwgInVuYWJsZSB0byByZWdpc3RlciBNRElPIGJ1cyAlc1xuIiwNCkBAIC0zODMsNiArMzk1
-LDI5MSBAQCB2b2lkIGxhbjkzN3hfc2V0dXBfcmdtaWlfZGVsYXkoc3RydWN0IGtzel9kZXZpY2UN
-CipkZXYsIGludCBwb3J0KQ0KIAl9DQogfQ0KIA0KK2ludCBsYW45Mzd4X3N3aXRjaF9pbml0KHN0
-cnVjdCBrc3pfZGV2aWNlICpkZXYpDQorew0KKwlkZXYtPnBvcnRfbWFzayA9ICgxIDw8IGRldi0+
-aW5mby0+cG9ydF9jbnQpIC0gMTsNCisNCisJcmV0dXJuIDA7DQorfQ0KKw0KK3ZvaWQgbGFuOTM3
-eF9zd2l0Y2hfZXhpdChzdHJ1Y3Qga3N6X2RldmljZSAqZGV2KQ0KK3sNCisJbGFuOTM3eF9yZXNl
-dF9zd2l0Y2goZGV2KTsNCit9DQorDQorc3RhdGljIHZvaWQgbGFuOTM3eF9nbG9iYWxfaXJxX21h
-c2soc3RydWN0IGlycV9kYXRhICpkKQ0KK3sNCisJc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGly
-cV9kYXRhX2dldF9pcnFfY2hpcF9kYXRhKGQpOw0KKwl1bnNpZ25lZCBpbnQgbiA9IGQtPmh3aXJx
-Ow0KKw0KKwlkZXYtPmdsb2JhbF9pcnEubWFza2VkIHw9ICgxIDw8IG4pOw0KK30NCisNCitzdGF0
-aWMgdm9pZCBsYW45Mzd4X2dsb2JhbF9pcnFfdW5tYXNrKHN0cnVjdCBpcnFfZGF0YSAqZCkNCit7
-DQorCXN0cnVjdCBrc3pfZGV2aWNlICpkZXYgPSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShk
-KTsNCisJdW5zaWduZWQgaW50IG4gPSBkLT5od2lycTsNCisNCisJZGV2LT5nbG9iYWxfaXJxLm1h
-c2tlZCAmPSB+KDEgPDwgbik7DQorfQ0KKw0KK3N0YXRpYyB2b2lkIGxhbjkzN3hfZ2xvYmFsX2ly
-cV9idXNfbG9jayhzdHJ1Y3QgaXJxX2RhdGEgKmQpDQorew0KKwlzdHJ1Y3Qga3N6X2RldmljZSAq
-ZGV2ID0gaXJxX2RhdGFfZ2V0X2lycV9jaGlwX2RhdGEoZCk7DQorDQorCW11dGV4X2xvY2soJmRl
-di0+bG9ja19pcnEpOw0KK30NCisNCitzdGF0aWMgdm9pZCBsYW45Mzd4X2dsb2JhbF9pcnFfYnVz
-X3N5bmNfdW5sb2NrKHN0cnVjdCBpcnFfZGF0YSAqZCkNCit7DQorCXN0cnVjdCBrc3pfZGV2aWNl
-ICpkZXYgPSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkKTsNCisJaW50IHJldDsNCisNCisJ
-cmV0ID0ga3N6X3dyaXRlMzIoZGV2LCBSRUdfU1dfUE9SVF9JTlRfTUFTS19fNCwgZGV2LQ0KPmds
-b2JhbF9pcnEubWFza2VkKTsgDQorCWlmIChyZXQpDQorCQlkZXZfZXJyKGRldi0+ZGV2LCAiZmFp
-bGVkIHRvIGNoYW5nZSBJUlEgbWFza1xuIik7DQorDQorCW11dGV4X3VubG9jaygmZGV2LT5sb2Nr
-X2lycSk7DQorfQ0KKw0KK3N0YXRpYyBjb25zdCBzdHJ1Y3QgaXJxX2NoaXAgbGFuOTM3eF9nbG9i
-YWxfaXJxX2NoaXAgPSB7DQorCS5uYW1lCQkJPSAibGFuOTM3eC1nbG9iYWwiLA0KKwkuaXJxX21h
-c2sJCT0gbGFuOTM3eF9nbG9iYWxfaXJxX21hc2ssDQorCS5pcnFfdW5tYXNrCQk9IGxhbjkzN3hf
-Z2xvYmFsX2lycV91bm1hc2ssDQorCS5pcnFfYnVzX2xvY2sJCT0gbGFuOTM3eF9nbG9iYWxfaXJx
-X2J1c19sb2NrLA0KKwkuaXJxX2J1c19zeW5jX3VubG9jawk9IGxhbjkzN3hfZ2xvYmFsX2lycV9i
-dXNfc3luY191bmxvY2ssDQorfTsNCisNCisNCitzdGF0aWMgaW50IGxhbjkzN3hfZ2xvYmFsX2ly
-cV9kb21haW5fbWFwKHN0cnVjdCBpcnFfZG9tYWluICpkLA0KKwkJCQkJIHVuc2lnbmVkIGludCBp
-cnEsDQorCQkJCQkgaXJxX2h3X251bWJlcl90IGh3aXJxKQ0KK3sNCisJc3RydWN0IGtzel9kZXZp
-Y2UgKmRldiA9IGQtPmhvc3RfZGF0YTsNCisNCisJaXJxX3NldF9jaGlwX2RhdGEoaXJxLCBkLT5o
-b3N0X2RhdGEpOw0KKwlpcnFfc2V0X2NoaXBfYW5kX2hhbmRsZXIoaXJxLCAmZGV2LT5nbG9iYWxf
-aXJxLmNoaXAsDQpoYW5kbGVfbGV2ZWxfaXJxKTsNCisJaXJxX3NldF9ub3Byb2JlKGlycSk7DQor
-DQorCXJldHVybiAwOw0KK30NCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IGlycV9kb21haW5fb3Bz
-IGxhbjkzN3hfZ2xvYmFsX2lycV9kb21haW5fb3BzID0gew0KKwkubWFwCT0gbGFuOTM3eF9nbG9i
-YWxfaXJxX2RvbWFpbl9tYXAsDQorCS54bGF0ZQk9IGlycV9kb21haW5feGxhdGVfdHdvY2VsbCwN
-Cit9Ow0KKw0KK3N0YXRpYyB2b2lkIGxhbjkzN3hfZ2xvYmFsX2lycV9mcmVlKHN0cnVjdCBrc3pf
-ZGV2aWNlICpkZXYpDQorew0KKwlpbnQgaXJxLCB2aXJxOw0KKw0KKwlmb3IgKGlycSA9IDA7IGly
-cSA8IDg7IGlycSsrKSB7DQorCQl2aXJxID0gaXJxX2ZpbmRfbWFwcGluZyhkZXYtPmdsb2JhbF9p
-cnEuZG9tYWluLCBpcnEpOw0KKwkJaXJxX2Rpc3Bvc2VfbWFwcGluZyh2aXJxKTsNCisJfQ0KKw0K
-KwlpcnFfZG9tYWluX3JlbW92ZShkZXYtPmdsb2JhbF9pcnEuZG9tYWluKTsNCit9DQorDQorc3Rh
-dGljIGlycXJldHVybl90IGxhbjkzN3hfZ2xvYmFsX2lycV90aHJlYWRfZm4oaW50IGlycSwgdm9p
-ZCAqZGV2X2lkKQ0KK3sNCisJc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGRldl9pZDsNCisJdW5z
-aWduZWQgaW50IG5oYW5kbGVkID0gMDsNCisJdW5zaWduZWQgaW50IHN1Yl9pcnE7DQorCXVuc2ln
-bmVkIGludCBuOw0KKwl1MzIgZGF0YTsNCisJaW50IHJldDsNCisNCisJcmV0ID0ga3N6X3JlYWQz
-MihkZXYsIFJFR19TV19JTlRfU1RBVFVTX180LCAmZGF0YSk7DQorCWlmIChyZXQpDQorCQlnb3Rv
-IG91dDsNCisNCisJaWYgKGRhdGEgJiBQT1JfUkVBRFlfSU5UKSB7DQorCQlyZXQgPSBrc3pfd3Jp
-dGUzMihkZXYsIFJFR19TV19JTlRfU1RBVFVTX180LA0KUE9SX1JFQURZX0lOVCk7DQorCQlpZiAo
-cmV0KQ0KKwkJCWdvdG8gb3V0Ow0KKwl9DQorDQorCS8qIFJlYWQgZ2xvYmFsIGludGVycnVwdCBz
-dGF0dXMgcmVnaXN0ZXIgKi8NCisJcmV0ID0ga3N6X3JlYWQzMihkZXYsIFJFR19TV19QT1JUX0lO
-VF9TVEFUVVNfXzQsICZkYXRhKTsNCisJaWYgKHJldCkNCisJCWdvdG8gb3V0Ow0KKw0KKwlmb3Ig
-KG4gPSAwOyBuIDwgZGV2LT5nbG9iYWxfaXJxLm5pcnFzOyArK24pIHsNCisJCWlmIChkYXRhICYg
-KDEgPDwgbikpIHsNCisJCQlzdWJfaXJxID0gaXJxX2ZpbmRfbWFwcGluZyhkZXYtDQo+Z2xvYmFs
-X2lycS5kb21haW4sIG4pOw0KKwkJCWhhbmRsZV9uZXN0ZWRfaXJxKHN1Yl9pcnEpOw0KKwkJCSsr
-bmhhbmRsZWQ7DQorCQl9DQorCX0NCitvdXQ6DQorCXJldHVybiAobmhhbmRsZWQgPiAwID8gSVJR
-X0hBTkRMRUQgOiBJUlFfTk9ORSk7DQorfQ0KKw0KK3N0YXRpYyBpbnQgbGFuOTM3eF9nbG9iYWxf
-aXJxX3NldHVwKHN0cnVjdCBrc3pfZGV2aWNlICpkZXYpDQorew0KKwlpbnQgcmV0LCBpcnE7DQor
-DQorCWRldi0+Z2xvYmFsX2lycS5uaXJxcyA9IDg7DQorCWRldi0+Z2xvYmFsX2lycS5kb21haW4g
-PSBpcnFfZG9tYWluX2FkZF9zaW1wbGUoDQorCQkJCU5VTEwsIGRldi0+Z2xvYmFsX2lycS5uaXJx
-cywgMCwNCisJCQkJJmxhbjkzN3hfZ2xvYmFsX2lycV9kb21haW5fb3BzLCBkZXYpOw0KKwlpZiAo
-IWRldi0+Z2xvYmFsX2lycS5kb21haW4pDQorCQlyZXR1cm4gLUVOT01FTTsNCisNCisJZm9yIChp
-cnEgPSAwOyBpcnEgPCBkZXYtPmdsb2JhbF9pcnEubmlycXM7IGlycSsrKQ0KKwkJaXJxX2NyZWF0
-ZV9tYXBwaW5nKGRldi0+Z2xvYmFsX2lycS5kb21haW4sIGlycSk7DQorDQorCWRldi0+Z2xvYmFs
-X2lycS5jaGlwID0gbGFuOTM3eF9nbG9iYWxfaXJxX2NoaXA7DQorCWRldi0+Z2xvYmFsX2lycS5t
-YXNrZWQgPSB+MDsNCisNCisJcmV0ID0gcmVxdWVzdF90aHJlYWRlZF9pcnEoZGV2LT5pcnEsIE5V
-TEwsDQorCQkJCSAgIGxhbjkzN3hfZ2xvYmFsX2lycV90aHJlYWRfZm4sDQorCQkJCSAgIElSUUZf
-T05FU0hPVCB8IElSUUZfVFJJR0dFUl9GQUxMSU5HLA0KKwkJCQkgICBkZXZfbmFtZShkZXYtPmRl
-diksIGRldik7DQorCWlmIChyZXQpDQorCQlnb3RvIG91dDsNCisNCisJcmV0dXJuIDA7DQorDQor
-b3V0Og0KKwlsYW45Mzd4X2dsb2JhbF9pcnFfZnJlZShkZXYpOw0KKw0KKwlyZXR1cm4gcmV0Ow0K
-K30NCisNCitzdGF0aWMgdm9pZCBsYW45Mzd4X3BvcnRfaXJxX21hc2soc3RydWN0IGlycV9kYXRh
-ICpkKQ0KK3sNCisJc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGlycV9kYXRhX2dldF9pcnFfY2hp
-cF9kYXRhKGQpOw0KKwl1bnNpZ25lZCBpbnQgbiA9IGQtPmh3aXJxOw0KKw0KKw0KKwlkZXYtPnBv
-cnRfaXJxLm1hc2tlZCB8PSAoMSA8PCBuKTsNCit9DQorDQorc3RhdGljIHZvaWQgbGFuOTM3eF9w
-b3J0X2lycV91bm1hc2soc3RydWN0IGlycV9kYXRhICpkKQ0KK3sNCisJc3RydWN0IGtzel9kZXZp
-Y2UgKmRldiA9IGlycV9kYXRhX2dldF9pcnFfY2hpcF9kYXRhKGQpOw0KKwl1bnNpZ25lZCBpbnQg
-biA9IGQtPmh3aXJxOw0KKw0KKwlkZXYtPnBvcnRfaXJxLm1hc2tlZCAmPSB+KDEgPDwgbik7DQor
-fQ0KKw0KK3N0YXRpYyB2b2lkIGxhbjkzN3hfcG9ydF9pcnFfYnVzX2xvY2soc3RydWN0IGlycV9k
-YXRhICpkKQ0KK3sNCisJc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGlycV9kYXRhX2dldF9pcnFf
-Y2hpcF9kYXRhKGQpOw0KKw0KKwltdXRleF9sb2NrKCZkZXYtPmxvY2tfaXJxKTsNCit9DQorDQor
-c3RhdGljIHZvaWQgbGFuOTM3eF9wb3J0X2lycV9idXNfc3luY191bmxvY2soc3RydWN0IGlycV9k
-YXRhICpkKQ0KK3sNCisJc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGlycV9kYXRhX2dldF9pcnFf
-Y2hpcF9kYXRhKGQpOw0KKwlpbnQgcmV0Ow0KKwl1OCBkYXRhOw0KKw0KKwlrc3pfcHdyaXRlOChk
-ZXYsIDAsIFJFR19QT1JUX0lOVF9NQVNLLCBkZXYtPnBvcnRfaXJxLm1hc2tlZCk7DQorCW11dGV4
-X3VubG9jaygmZGV2LT5sb2NrX2lycSk7DQorfQ0KKw0KK3N0YXRpYyBjb25zdCBzdHJ1Y3QgaXJx
-X2NoaXAgbGFuOTM3eF9wb3J0X2lycV9jaGlwID0gew0KKwkubmFtZQkJCT0gImxhbjkzN3gtcG9y
-dCIsDQorCS5pcnFfbWFzawkJPSBsYW45Mzd4X3BvcnRfaXJxX21hc2ssDQorCS5pcnFfdW5tYXNr
-CQk9IGxhbjkzN3hfcG9ydF9pcnFfdW5tYXNrLA0KKwkuaXJxX2J1c19sb2NrCQk9IGxhbjkzN3hf
-cG9ydF9pcnFfYnVzX2xvY2ssDQorCS5pcnFfYnVzX3N5bmNfdW5sb2NrCT0gbGFuOTM3eF9wb3J0
-X2lycV9idXNfc3luY191bmxvY2ssDQorfTsNCisNCitzdGF0aWMgaW50IGxhbjkzN3hfcG9ydF9p
-cnFfZG9tYWluX21hcChzdHJ1Y3QgaXJxX2RvbWFpbiAqZCwNCisJCQkJCSB1bnNpZ25lZCBpbnQg
-aXJxLA0KKwkJCQkJIGlycV9od19udW1iZXJfdCBod2lycSkNCit7DQorCXN0cnVjdCBrc3pfZGV2
-aWNlICpkZXYgPSBkLT5ob3N0X2RhdGE7DQorDQorCWlycV9zZXRfY2hpcF9kYXRhKGlycSwgZC0+
-aG9zdF9kYXRhKTsNCisJaXJxX3NldF9jaGlwX2FuZF9oYW5kbGVyKGlycSwgJmRldi0+cG9ydF9p
-cnEuY2hpcCwNCmhhbmRsZV9sZXZlbF9pcnEpOw0KKwlpcnFfc2V0X25vcHJvYmUoaXJxKTsNCisN
-CisJcmV0dXJuIDA7DQorfQ0KKw0KK3N0YXRpYyBjb25zdCBzdHJ1Y3QgaXJxX2RvbWFpbl9vcHMg
-bGFuOTM3eF9wb3J0X2lycV9kb21haW5fb3BzID0gew0KKwkubWFwCT0gbGFuOTM3eF9wb3J0X2ly
-cV9kb21haW5fbWFwLA0KKwkueGxhdGUJPSBpcnFfZG9tYWluX3hsYXRlX3R3b2NlbGwsDQorfTsN
-CisNCitzdGF0aWMgdm9pZCBsYW45Mzd4X3BvcnRfaXJxX2ZyZWUoc3RydWN0IGtzel9kZXZpY2Ug
-KmRldikNCit7DQorCWludCBpcnEsIHZpcnE7DQorDQorCWZvciAoaXJxID0gMDsgaXJxIDwgODsg
-aXJxKyspIHsNCisJCXZpcnEgPSBpcnFfZmluZF9tYXBwaW5nKGRldi0+cG9ydF9pcnEuZG9tYWlu
-LCBpcnEpOw0KKwkJaXJxX2Rpc3Bvc2VfbWFwcGluZyh2aXJxKTsNCisJfQ0KKw0KKwlpcnFfZG9t
-YWluX3JlbW92ZShkZXYtPnBvcnRfaXJxLmRvbWFpbik7DQorfQ0KKw0KKyAgDQorc3RhdGljIGly
-cXJldHVybl90IGxhbjkzN3hfcG9ydF9pcnFfdGhyZWFkX2ZuKGludCBpcnEsIHZvaWQgKmRldl9p
-ZCkNCit7DQorCXN0cnVjdCBrc3pfZGV2aWNlICpkZXYgPSBkZXZfaWQ7DQorCXVuc2lnbmVkIGlu
-dCBuaGFuZGxlZCA9IDA7DQorCXVuc2lnbmVkIGludCBzdWJfaXJxOw0KKwl1bnNpZ25lZCBpbnQg
-bjsNCisJdTggZGF0YTsNCisJaW50IHJldDsNCisNCisJLyogUmVhZCBnbG9iYWwgaW50ZXJydXB0
-IHN0YXR1cyByZWdpc3RlciAqLw0KKwlrc3pfcHJlYWQ4KGRldiwgMCwgUkVHX1BPUlRfSU5UX1NU
-QVRVUywgJmRhdGEpOw0KKw0KKwlmb3IgKG4gPSAwOyBuIDwgNjsgKytuKSB7DQorCQlpZiAoZGF0
-YSAmICgxIDw8IG4pKSB7DQorCQkJc3ViX2lycSA9IGlycV9maW5kX21hcHBpbmcoZGV2LQ0KPnBv
-cnRfaXJxLmRvbWFpbiwgbik7DQorCQkJaGFuZGxlX25lc3RlZF9pcnEoc3ViX2lycSk7DQorCQkJ
-KytuaGFuZGxlZDsNCisJCX0NCisJfQ0KK291dDoNCisJcmV0dXJuIChuaGFuZGxlZCA+IDAgPyBJ
-UlFfSEFORExFRCA6IElSUV9OT05FKTsNCit9DQorDQorc3RhdGljIGludCBsYW45Mzd4X3BvcnRf
-aXJxX3NldHVwKHN0cnVjdCBrc3pfZGV2aWNlICpkZXYpDQorew0KKwlpbnQgcG9ydF9pcnE7DQor
-CWludCByZXQsIGlycTsNCisNCisJZGV2LT5wb3J0X2lycS5uaXJxcyA9IDY7DQorCWRldi0+cG9y
-dF9pcnEuZG9tYWluID0gaXJxX2RvbWFpbl9hZGRfc2ltcGxlKA0KKwkJIGRldi0+ZGV2LT5vZl9u
-b2RlLCBkZXYtPnBvcnRfaXJxLm5pcnFzLCAwLA0KKwkJCQkgICAgJmxhbjkzN3hfcG9ydF9pcnFf
-ZG9tYWluX29wcywgZGV2KTsNCisJaWYgKCFkZXYtPnBvcnRfaXJxLmRvbWFpbikNCisJCXJldHVy
-biAtRU5PTUVNOw0KKw0KKwlmb3IgKGlycSA9IDA7IGlycSA8IGRldi0+cG9ydF9pcnEubmlycXM7
-IGlycSsrKQ0KKwkJaXJxX2NyZWF0ZV9tYXBwaW5nKGRldi0+cG9ydF9pcnEuZG9tYWluLCBpcnEp
-Ow0KKw0KKwlkZXYtPnBvcnRfaXJxLmNoaXAgPSBsYW45Mzd4X3BvcnRfaXJxX2NoaXA7DQorCWRl
-di0+cG9ydF9pcnEubWFza2VkID0gfjA7DQorCQ0KKwlwb3J0X2lycSA9IGlycV9maW5kX21hcHBp
-bmcoZGV2LT5nbG9iYWxfaXJxLmRvbWFpbiwNCisJCQkJICAgIDApOw0KKw0KKwlyZXQgPSByZXF1
-ZXN0X3RocmVhZGVkX2lycShwb3J0X2lycSwgTlVMTCwNCisJCQkJICAgbGFuOTM3eF9wb3J0X2ly
-cV90aHJlYWRfZm4sDQorCQkJCSAgIElSUUZfT05FU0hPVCB8IElSUUZfVFJJR0dFUl9GQUxMSU5H
-LA0KKwkJCQkgICAicG9ydF9pcnEiLCBkZXYpOw0KKwlpZiAocmV0KQ0KKwkJZ290byBvdXQ7DQor
-DQorCXJldHVybiAwOw0KKw0KK291dDoNCisJbGFuOTM3eF9wb3J0X2lycV9mcmVlKGRldik7DQor
-DQorCXJldHVybiByZXQ7DQorfQ0KKw0KIGludCBsYW45Mzd4X3NldHVwKHN0cnVjdCBkc2Ffc3dp
-dGNoICpkcykNCiB7DQogCXN0cnVjdCBrc3pfZGV2aWNlICpkZXYgPSBkcy0+cHJpdjsNCkBAIC0z
-OTUsNiArNjkyLDEwIEBAIGludCBsYW45Mzd4X3NldHVwKHN0cnVjdCBkc2Ffc3dpdGNoICpkcykN
-CiAJCXJldHVybiByZXQ7DQogCX0NCiANCisJbGFuOTM3eF9nbG9iYWxfaXJxX3NldHVwKGRldik7
-DQorDQorCWxhbjkzN3hfcG9ydF9pcnFfc2V0dXAoZGV2KTsNCisNCiAJcmV0ID0gbGFuOTM3eF9t
-ZGlvX3JlZ2lzdGVyKGRldik7DQogCWlmIChyZXQgPCAwKSB7DQogCQlkZXZfZXJyKGRldi0+ZGV2
-LCAiZmFpbGVkIHRvIHJlZ2lzdGVyIHRoZSBtZGlvIik7DQpAQCAtNDI2LDE3ICs3MjcsNiBAQCBp
-bnQgbGFuOTM3eF9zZXR1cChzdHJ1Y3QgZHNhX3N3aXRjaCAqZHMpDQogCXJldHVybiAwOw0KIH0N
-CiANCg0K
+Hi all,
+
+I have a "FiiO DigiHug USB Audio" sound card (1852:7022) [3]. I have had
+no problems with the audio, but I did notice a large number of message
+like 
+
+retire_capture_urb: 4992 callbacks suppressed
+
+in my dmesg [1]. This is caused by the "Corrected urb data len."
+warning. The patch adding this warning [2] makes it seem like
+this warning should be an uncommon occurance. However, based on the
+number of suppressed callbacks, this seems to be happening at a rate of
+around 500 Hz.
+
+Is this buggy hardware? Or is this a bug in the driver? Does there need
+to be a quirk? Or perhaps the warning above should be a debug instead?
+
+I'm using 5.15.0-46-generic. I know, I know; this is a vendor
+kernel. However, I went through the commits for sound/usb/pcm.c and
+didn't see any major differences. I also previously saw this issue on
+5.4, so this probably isn't a regression.
+
+--Sean
+
+[1] I would have liked to post the actual message, but I was unable to
+figure out how to disable ratelimiting. I tried setting
+/proc/sys/kernel/printk_ratelimit to 0,
+/proc/sys/kernel/printk_ratelimit_burst to 5000, and
+/proc/sys/kernel/printk to 8. However, nothing seemed to have any effect
+(except that the callbacks suppressed messages were disabled). I find
+this very strange, given that the callbacks suppressed message uses
+KERN_WARN, and so does dev_warn_ratelimited.
+[2] https://lore.kernel.org/all/4B28A659.6070303@ladisch.de/T/
+[3]
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0         8
+  idVendor           0x1852 GYROCOM C&C Co., LTD
+  idProduct          0x7022 
+  bcdDevice            0.01
+  iManufacturer           1 FiiO
+  iProduct                2 DigiHug USB Audio
+  iSerial                 0 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0182
+    bNumInterfaces          4
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      0 
+      bInterfaceProtocol      0 
+      iInterface              0 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      58
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0012  1x 18 bytes
+        bInterval              32
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      1 Control Device
+      bInterfaceProtocol      0 
+      iInterface              3 FiiO USB DAC-E10
+      AudioControl Interface Descriptor:
+        bLength                10
+        bDescriptorType        36
+        bDescriptorSubtype      1 (HEADER)
+        bcdADC               1.00
+        wTotalLength       0x003e
+        bInCollection           2
+        baInterfaceNr(0)        2
+        baInterfaceNr(1)        3
+      AudioControl Interface Descriptor:
+        bLength                12
+        bDescriptorType        36
+        bDescriptorSubtype      2 (INPUT_TERMINAL)
+        bTerminalID             5
+        wTerminalType      0x0605 SPDIF interface
+        bAssocTerminal          0
+        bNrChannels             2
+        wChannelConfig     0x0003
+          Left Front (L)
+          Right Front (R)
+        iChannelNames           0 
+        iTerminal               0 
+      AudioControl Interface Descriptor:
+        bLength                12
+        bDescriptorType        36
+        bDescriptorSubtype      2 (INPUT_TERMINAL)
+        bTerminalID             9
+        wTerminalType      0x0101 USB Streaming
+        bAssocTerminal          0
+        bNrChannels             2
+        wChannelConfig     0x0003
+          Left Front (L)
+          Right Front (R)
+        iChannelNames           0 
+        iTerminal               0 
+      AudioControl Interface Descriptor:
+        bLength                 9
+        bDescriptorType        36
+        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+        bTerminalID             3
+        wTerminalType      0x0605 SPDIF interface
+        bAssocTerminal          0
+        bSourceID              16
+        iTerminal               0 
+      AudioControl Interface Descriptor:
+        bLength                 9
+        bDescriptorType        36
+        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+        bTerminalID             7
+        wTerminalType      0x0101 USB Streaming
+        bAssocTerminal          0
+        bSourceID               5
+        iTerminal               0 
+      AudioControl Interface Descriptor:
+        bLength                10
+        bDescriptorType        36
+        bDescriptorSubtype      6 (FEATURE_UNIT)
+        bUnitID                16
+        bSourceID               9
+        bControlSize            1
+        bmaControls(0)       0x01
+          Mute Control
+        bmaControls(1)       0x02
+          Volume Control
+        bmaControls(2)       0x02
+          Volume Control
+        iFeature                0 
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       1
+      bNumEndpoints           1
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+      AudioStreaming Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      1 (AS_GENERAL)
+        bTerminalLink           7
+        bDelay                  0 frames
+        wFormatTag         0x0001 PCM
+      AudioStreaming Interface Descriptor:
+        bLength                26
+        bDescriptorType        36
+        bDescriptorSubtype      2 (FORMAT_TYPE)
+        bFormatType             1 (FORMAT_TYPE_I)
+        bNrChannels             2
+        bSubframeSize           2
+        bBitResolution         16
+        bSamFreqType            6 Discrete
+        tSamFreq[ 0]         8000
+        tSamFreq[ 1]        16000
+        tSamFreq[ 2]        32000
+        tSamFreq[ 3]        44100
+        tSamFreq[ 4]        48000
+        tSamFreq[ 5]        96000
+      Endpoint Descriptor:
+        bLength                 9
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            9
+          Transfer Type            Isochronous
+          Synch Type               Adaptive
+          Usage Type               Data
+        wMaxPacketSize     0x0184  1x 388 bytes
+        bInterval               1
+        bRefresh                0
+        bSynchAddress           0
+        AudioStreaming Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType        37
+          bDescriptorSubtype      1 (EP_GENERAL)
+          bmAttributes         0x01
+            Sampling Frequency
+          bLockDelayUnits         2 Decoded PCM samples
+          wLockDelay         0x0002
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       2
+      bNumEndpoints           1
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+      AudioStreaming Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      1 (AS_GENERAL)
+        bTerminalLink           7
+        bDelay                  0 frames
+        wFormatTag         0x0001 PCM
+      AudioStreaming Interface Descriptor:
+        bLength                26
+        bDescriptorType        36
+        bDescriptorSubtype      2 (FORMAT_TYPE)
+        bFormatType             1 (FORMAT_TYPE_I)
+        bNrChannels             2
+        bSubframeSize           3
+        bBitResolution         24
+        bSamFreqType            6 Discrete
+        tSamFreq[ 0]         8000
+        tSamFreq[ 1]        16000
+        tSamFreq[ 2]        32000
+        tSamFreq[ 3]        44100
+        tSamFreq[ 4]        48000
+        tSamFreq[ 5]        96000
+      Endpoint Descriptor:
+        bLength                 9
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            9
+          Transfer Type            Isochronous
+          Synch Type               Adaptive
+          Usage Type               Data
+        wMaxPacketSize     0x0246  1x 582 bytes
+        bInterval               1
+        bRefresh                0
+        bSynchAddress           0
+        AudioStreaming Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType        37
+          bDescriptorSubtype      1 (EP_GENERAL)
+          bmAttributes         0x01
+            Sampling Frequency
+          bLockDelayUnits         2 Decoded PCM samples
+          wLockDelay         0x0002
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       1
+      bNumEndpoints           1
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+      AudioStreaming Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      1 (AS_GENERAL)
+        bTerminalLink           9
+        bDelay                  0 frames
+        wFormatTag         0x0001 PCM
+      AudioStreaming Interface Descriptor:
+        bLength                20
+        bDescriptorType        36
+        bDescriptorSubtype      2 (FORMAT_TYPE)
+        bFormatType             1 (FORMAT_TYPE_I)
+        bNrChannels             2
+        bSubframeSize           2
+        bBitResolution         16
+        bSamFreqType            4 Discrete
+        tSamFreq[ 0]        32000
+        tSamFreq[ 1]        44100
+        tSamFreq[ 2]        48000
+        tSamFreq[ 3]        96000
+      Endpoint Descriptor:
+        bLength                 9
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            9
+          Transfer Type            Isochronous
+          Synch Type               Adaptive
+          Usage Type               Data
+        wMaxPacketSize     0x0184  1x 388 bytes
+        bInterval               1
+        bRefresh                0
+        bSynchAddress           0
+        AudioStreaming Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType        37
+          bDescriptorSubtype      1 (EP_GENERAL)
+          bmAttributes         0x01
+            Sampling Frequency
+          bLockDelayUnits         2 Decoded PCM samples
+          wLockDelay         0x0002
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       2
+      bNumEndpoints           1
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+      AudioStreaming Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      1 (AS_GENERAL)
+        bTerminalLink           9
+        bDelay                  0 frames
+        wFormatTag         0x0001 PCM
+      AudioStreaming Interface Descriptor:
+        bLength                20
+        bDescriptorType        36
+        bDescriptorSubtype      2 (FORMAT_TYPE)
+        bFormatType             1 (FORMAT_TYPE_I)
+        bNrChannels             2
+        bSubframeSize           3
+        bBitResolution         24
+        bSamFreqType            4 Discrete
+        tSamFreq[ 0]        32000
+        tSamFreq[ 1]        44100
+        tSamFreq[ 2]        48000
+        tSamFreq[ 3]        96000
+      Endpoint Descriptor:
+        bLength                 9
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            9
+          Transfer Type            Isochronous
+          Synch Type               Adaptive
+          Usage Type               Data
+        wMaxPacketSize     0x0246  1x 582 bytes
+        bInterval               1
+        bRefresh                0
+        bSynchAddress           0
+        AudioStreaming Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType        37
+          bDescriptorSubtype      1 (EP_GENERAL)
+          bmAttributes         0x01
+            Sampling Frequency
+          bLockDelayUnits         2 Decoded PCM samples
+          wLockDelay         0x0002
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       3
+      bNumEndpoints           1
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+      AudioStreaming Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      1 (AS_GENERAL)
+        bTerminalLink           9
+        bDelay                  0 frames
+        wFormatTag         0x2001 IEC1937_AC-3
+      AudioStreaming Interface Descriptor:
+        bLength                11
+        bDescriptorType        36
+        bDescriptorSubtype      2 (FORMAT_TYPE)
+        bFormatType             3 (FORMAT_TYPE_III)
+        bNrChannels             2
+        bSubframeSize           2
+        bBitResolution         16
+        bSamFreqType            1 Discrete
+        tSamFreq[ 0]        48000
+      Endpoint Descriptor:
+        bLength                 9
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            9
+          Transfer Type            Isochronous
+          Synch Type               Adaptive
+          Usage Type               Data
+        wMaxPacketSize     0x00c0  1x 192 bytes
+        bInterval               1
+        bRefresh                0
+        bSynchAddress           0
+        AudioStreaming Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType        37
+          bDescriptorSubtype      1 (EP_GENERAL)
+          bmAttributes         0x01
+            Sampling Frequency
+          bLockDelayUnits         2 Decoded PCM samples
+          wLockDelay         0x0002
+can't get debug descriptor: Resource temporarily unavailable
+Device Status:     0x0000
+  (Bus Powered)

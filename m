@@ -2,96 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8676B5A29F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADF35A2A44
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiHZOrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S243608AbiHZPC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344596AbiHZOr3 (ORCPT
+        with ESMTP id S237834AbiHZPCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:47:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F30FD8B3B
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661525247;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=99JWd2r7uI+NtQEfMTMU0psWdgteknoK0WTYvTciCxY=;
-        b=YGy7Al/yIDUPXKq1aR4YxdLc0JQUPxs/ZMzouTh3+WrVC6wOOMnIzys4+tOY8m8n1EpqhW
-        2HR6EWUuwjI/IGSj2rMXlRpUO5XfZJhX1//u08q+EU8ebtZJPQ5SkqigaoBnu1RuT+GETo
-        RGzyRSxx6u4iFuRX6gDwTSjG8sV1XBs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-256-uFxQ7Tl-N7qF9PAyvzVSkw-1; Fri, 26 Aug 2022 10:47:25 -0400
-X-MC-Unique: uFxQ7Tl-N7qF9PAyvzVSkw-1
-Received: by mail-wm1-f71.google.com with SMTP id p19-20020a05600c1d9300b003a5c3141365so4158373wms.9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:47:24 -0700 (PDT)
+        Fri, 26 Aug 2022 11:02:19 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C2CD86CB;
+        Fri, 26 Aug 2022 08:02:17 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id z22-20020a056830129600b0063711f456ceso1174518otp.7;
+        Fri, 26 Aug 2022 08:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SlWypEhuzKh6o8JnTAr50IRQsWnoVrK87srIp4fAsvQ=;
+        b=nOUu1td7NBo1uww0Jn+6NSAs/i0wIeXIOkzhAPow7DPsLGwrJVmdu9OPb3y412ujfu
+         rZVmVnzKNLyHv+75TWvkPnckxKa+UQYNnH4V3dcRiFYWmjuM9SeC03aDsIahS1epeevC
+         hurI0oTsMXe/Emi4YoPCCWMD8rCzR5za0WzEMpvCyCo8sYHYOWCdsN4kapaaZul4ElVw
+         3e+7lBGatFdWH1cWC95B8A1IoJBH8IpAuSWEDHNJebakDF0WXAbOw6amlDF+r++Go6Q7
+         +uOYHA+McaR5yg8E5pHECHgLB6QsusJrknfejd/YFL9uXibxylyA4nSk1nrAsxGp4s5Y
+         N3NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=99JWd2r7uI+NtQEfMTMU0psWdgteknoK0WTYvTciCxY=;
-        b=kM4Du1sOXwWct4O/UuBOJQkcnuaPBbvomZyFqutIIyRAXH/weGZwSa8AhCtMHxPkKy
-         oeEaMX8OcIeAulZkJU2cMMsk5CGP/sXEPI1EEBp6d0PE60qPmPw2HInOw8gYigJ9tUY+
-         NVEQjRANSNwNvMByzFjoeUJuMr+9ZRZeEtBimC++w+4DuHKOJdGCSkIcpzfG4KMrqBu2
-         dbiUkgcGBrrGaXM2xDIh4H0vI8jhOFmDoIenpJ3PNJ5Y1hgkaVP1z6NIw72xFrQ3iOe8
-         znjuUq9PDDT1rfsCbB8tpTjeofgQI5d7z6DOL/APQdyK833NAI88t9zkQhmhu2krLkQG
-         LiQQ==
-X-Gm-Message-State: ACgBeo2mg3NdAf/5CcrS7bgBrWRBicV9kX3bAPUZhMO2RNlAK6FncJ8w
-        j4fN80reN3SzSHpu7LCcDYrNXWPbrahd0Mt2N3tkmFYexA4jULZB6PK8+dKcwZWDcXiqgnE96Qe
-        4Ugr4Jum8CRpZ0rI1t4hXaJsp
-X-Received: by 2002:a5d:5985:0:b0:222:c827:11d5 with SMTP id n5-20020a5d5985000000b00222c82711d5mr523wri.323.1661525243921;
-        Fri, 26 Aug 2022 07:47:23 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6DwZULOBS0dk+aCd9iIC0MR/e4UA3DRO6z9TwsFVCvv46I7xo6Oq/KhO+SKX3jNfwHlL+UnQ==
-X-Received: by 2002:a5d:5985:0:b0:222:c827:11d5 with SMTP id n5-20020a5d5985000000b00222c82711d5mr499wri.323.1661525243581;
-        Fri, 26 Aug 2022 07:47:23 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:f600:abad:360:c840:33fa? (p200300cbc708f600abad0360c84033fa.dip0.t-ipconnect.de. [2003:cb:c708:f600:abad:360:c840:33fa])
-        by smtp.gmail.com with ESMTPSA id l25-20020a05600c1d1900b003a62052053csm10503423wms.18.2022.08.26.07.47.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 07:47:23 -0700 (PDT)
-Message-ID: <72146725-3d70-0427-50d4-165283a5a85d@redhat.com>
-Date:   Fri, 26 Aug 2022 16:47:22 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SlWypEhuzKh6o8JnTAr50IRQsWnoVrK87srIp4fAsvQ=;
+        b=0DjKUBhdm+3Twm+NYjgBhfC1c/Kd8gtTC0u4fNZYdxsIyU5WKsfaL34j/M9hLZ6Of5
+         IU2gkWvohEXM0zVq2cPTAYdimPtPiE+i/nU93PyXvAPOhwjUpuh9C4aPV/+PT44D0x32
+         09fIF2Z+YrIW6L8sTOHPr7jUJFA8qsA9Ca1v7QH5QBF9Gv+OfrvDNgsh0g2noI26Blm4
+         SymRaIXq9tJEScWzb+uZmscHoJsy6+qYN1vmtWmtlETVZQp0XDGHRWhICSg70ILNKJzU
+         QH2a5YN0zTeddbuIeF97fS7SUhg/Bz9cIbWU/OqcmlvIBn1EhUKF7XLtaTnP7ynCBIEc
+         7odQ==
+X-Gm-Message-State: ACgBeo2LxnVdgh7S9etntRmcdCCKUBLyAFHtmPVPVIZw6J9RKY48elZh
+        Y5g4pmz2yu7JtnI4pu+zjeM=
+X-Google-Smtp-Source: AA6agR7H+LosV0wJVvvgdazIKiERc6cOY1dmpJHDOv+F/DCJ2wRGO3kK06cjOsP1yQPGvkBNmVUz1Q==
+X-Received: by 2002:a05:6830:3150:b0:638:afc3:8639 with SMTP id c16-20020a056830315000b00638afc38639mr1541966ots.53.1661526136536;
+        Fri, 26 Aug 2022 08:02:16 -0700 (PDT)
+Received: from localhost.localdomain (cpe-70-114-247-242.austin.res.rr.com. [70.114.247.242])
+        by smtp.gmail.com with ESMTPSA id j26-20020a4adf5a000000b00441b98453d8sm1190015oou.8.2022.08.26.08.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 08:02:16 -0700 (PDT)
+From:   Denis Kenzior <denkenz@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Denis Kenzior <denkenz@gmail.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KEYS: asymmetric: Fix ECDSA use via keyctl uapi
+Date:   Fri, 26 Aug 2022 09:51:19 -0500
+Message-Id: <20220826145119.9375-1-denkenz@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 2/3] mm/migrate_device.c: Copy pte dirty bit to page
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>
-References: <3b01af093515ce2960ac39bb16ff77473150d179.1661309831.git-series.apopple@nvidia.com>
- <ffbc824af5daa2c44b91c66834a341894fba4ce6.1661309831.git-series.apopple@nvidia.com>
- <YwZGHyYJiJ+CGLn2@xz-m1.local> <8735dkeyyg.fsf@nvdebian.thelocal>
- <YwgFRLn43+U/hxwt@xz-m1.local> <8735dj7qwb.fsf@nvdebian.thelocal>
- <YwjZamk4n/dz+Y/M@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YwjZamk4n/dz+Y/M@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,140 +72,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.08.22 16:32, Peter Xu wrote:
-> On Fri, Aug 26, 2022 at 11:02:58AM +1000, Alistair Popple wrote:
->>
->> Peter Xu <peterx@redhat.com> writes:
->>
->>> On Fri, Aug 26, 2022 at 08:21:44AM +1000, Alistair Popple wrote:
->>>>
->>>> Peter Xu <peterx@redhat.com> writes:
->>>>
->>>>> On Wed, Aug 24, 2022 at 01:03:38PM +1000, Alistair Popple wrote:
->>>>>> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
->>>>>> installs migration entries directly if it can lock the migrating page.
->>>>>> When removing a dirty pte the dirty bit is supposed to be carried over
->>>>>> to the underlying page to prevent it being lost.
->>>>>>
->>>>>> Currently migrate_vma_*() can only be used for private anonymous
->>>>>> mappings. That means loss of the dirty bit usually doesn't result in
->>>>>> data loss because these pages are typically not file-backed. However
->>>>>> pages may be backed by swap storage which can result in data loss if an
->>>>>> attempt is made to migrate a dirty page that doesn't yet have the
->>>>>> PageDirty flag set.
->>>>>>
->>>>>> In this case migration will fail due to unexpected references but the
->>>>>> dirty pte bit will be lost. If the page is subsequently reclaimed data
->>>>>> won't be written back to swap storage as it is considered uptodate,
->>>>>> resulting in data loss if the page is subsequently accessed.
->>>>>>
->>>>>> Prevent this by copying the dirty bit to the page when removing the pte
->>>>>> to match what try_to_migrate_one() does.
->>>>>>
->>>>>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
->>>>>> Acked-by: Peter Xu <peterx@redhat.com>
->>>>>> Reported-by: Huang Ying <ying.huang@intel.com>
->>>>>> Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
->>>>>> Cc: stable@vger.kernel.org
->>>>>>
->>>>>> ---
->>>>>>
->>>>>> Changes for v3:
->>>>>>
->>>>>>  - Defer TLB flushing
->>>>>>  - Split a TLB flushing fix into a separate change.
->>>>>>
->>>>>> Changes for v2:
->>>>>>
->>>>>>  - Fixed up Reported-by tag.
->>>>>>  - Added Peter's Acked-by.
->>>>>>  - Atomically read and clear the pte to prevent the dirty bit getting
->>>>>>    set after reading it.
->>>>>>  - Added fixes tag
->>>>>> ---
->>>>>>  mm/migrate_device.c |  9 +++++++--
->>>>>>  1 file changed, 7 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->>>>>> index 6a5ef9f..51d9afa 100644
->>>>>> --- a/mm/migrate_device.c
->>>>>> +++ b/mm/migrate_device.c
->>>>>> @@ -7,6 +7,7 @@
->>>>>>  #include <linux/export.h>
->>>>>>  #include <linux/memremap.h>
->>>>>>  #include <linux/migrate.h>
->>>>>> +#include <linux/mm.h>
->>>>>>  #include <linux/mm_inline.h>
->>>>>>  #include <linux/mmu_notifier.h>
->>>>>>  #include <linux/oom.h>
->>>>>> @@ -196,7 +197,7 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->>>>>>  			anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
->>>>>>  			if (anon_exclusive) {
->>>>>>  				flush_cache_page(vma, addr, pte_pfn(*ptep));
->>>>>> -				ptep_clear_flush(vma, addr, ptep);
->>>>>> +				pte = ptep_clear_flush(vma, addr, ptep);
->>>>>>
->>>>>>  				if (page_try_share_anon_rmap(page)) {
->>>>>>  					set_pte_at(mm, addr, ptep, pte);
->>>>>> @@ -206,11 +207,15 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->>>>>>  					goto next;
->>>>>>  				}
->>>>>>  			} else {
->>>>>> -				ptep_get_and_clear(mm, addr, ptep);
->>>>>> +				pte = ptep_get_and_clear(mm, addr, ptep);
->>>>>>  			}
->>>>>
->>>>> I remember that in v2 both flush_cache_page() and ptep_get_and_clear() are
->>>>> moved above the condition check so they're called unconditionally.  Could
->>>>> you explain the rational on why it's changed back (since I think v2 was the
->>>>> correct approach)?
->>>>
->>>> Mainly because I agree with your original comments, that it would be
->>>> better to keep the batching of TLB flushing if possible. After the
->>>> discussion I don't think there is any issues with HW pte dirty bits
->>>> here. There are already other cases where HW needs to get that right
->>>> anyway (eg. zap_pte_range).
->>>
->>> Yes tlb batching was kept, thanks for doing that way.  Though if only apply
->>> patch 1 we'll have both ptep_clear_flush() and batched flush which seems to
->>> be redundant.
->>>
->>>>
->>>>> The other question is if we want to split the patch, would it be better to
->>>>> move the tlb changes to patch 1, and leave the dirty bit fix in patch 2?
->>>>
->>>> Isn't that already the case? Patch 1 moves the TLB flush before the PTL
->>>> as suggested, patch 2 atomically copies the dirty bit without changing
->>>> any TLB flushing.
->>>
->>> IMHO it's cleaner to have patch 1 fix batch flush, replace
->>> ptep_clear_flush() with ptep_get_and_clear() and update pte properly.
->>
->> Which ptep_clear_flush() are you referring to? This one?
->>
->> 			if (anon_exclusive) {
->> 				flush_cache_page(vma, addr, pte_pfn(*ptep));
->> 				ptep_clear_flush(vma, addr, ptep);
-> 
-> Correct.
-> 
->>
->> My understanding is that we need to do a flush for anon_exclusive.
-> 
-> To me anon exclusive only shows this mm exclusively owns this page. I
-> didn't quickly figure out why that requires different handling on tlb
-> flushs.  Did I perhaps miss something?
+When support for ECDSA keys was added, constraints for data & signature
+sizes were never updated.  This makes it impossible to use such keys via
+keyctl API from userspace.
 
-GUP-fast is the magic bit, we have to make sure that we won't see new
-GUP pins, thus the TLB flush.
+Update constraint on max_data_size to 64 bytes in order to support
+SHA512-based signatures. Also update the signature length constraints
+per ECDSA signature encoding described in RFC 5480.
 
-include/linux/mm.h:gup_must_unshare() contains documentation.
+Fixes: 299f561a6693 ("x509: Add support for parsing x509 certs with ECDSA keys")
+Signed-off-by: Denis Kenzior <denkenz@gmail.com>
+---
 
-Without GUP-fast, some things would be significantly easier to handle.
+Version History:
 
+  v2: Update patch description according to Jarkko's comments.  No
+  functional code changes.
 
+ crypto/asymmetric_keys/public_key.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+index 2f8352e88860..eca5671ad3f2 100644
+--- a/crypto/asymmetric_keys/public_key.c
++++ b/crypto/asymmetric_keys/public_key.c
+@@ -186,8 +186,28 @@ static int software_key_query(const struct kernel_pkey_params *params,
+ 
+ 	len = crypto_akcipher_maxsize(tfm);
+ 	info->key_size = len * 8;
+-	info->max_data_size = len;
+-	info->max_sig_size = len;
++
++	if (strncmp(pkey->pkey_algo, "ecdsa", 5) == 0) {
++		/*
++		 * ECDSA key sizes are much smaller than RSA, and thus could
++		 * operate on (hashed) inputs that are larger than key size.
++		 * For example SHA384-hashed input used with secp256r1
++		 * based keys.  Set max_data_size to be at least as large as
++		 * the largest supported hash size (SHA512)
++		 */
++		info->max_data_size = 64;
++
++		/*
++		 * Verify takes ECDSA-Sig (described in RFC 5480) as input,
++		 * which is actually 2 'key_size'-bit integers encoded in
++		 * ASN.1.  Account for the ASN.1 encoding overhead here.
++		 */
++		info->max_sig_size = 2 * (len + 3) + 2;
++	} else {
++		info->max_data_size = len;
++		info->max_sig_size = len;
++	}
++
+ 	info->max_enc_size = len;
+ 	info->max_dec_size = len;
+ 	info->supported_ops = (KEYCTL_SUPPORTS_ENCRYPT |
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 

@@ -2,255 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F6A5A2DBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662A45A2DB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiHZRm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S244746AbiHZRmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbiHZRmR (ORCPT
+        with ESMTP id S1344930AbiHZRmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:42:17 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9704E3431
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:42:14 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l33-20020a05600c1d2100b003a645240a95so1219373wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:42:14 -0700 (PDT)
+        Fri, 26 Aug 2022 13:42:04 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB26E2C64
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:42:01 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id w22so2254232ljg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:42:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=he/bfvf1mDfynCT5CMERAlIneGT6+vfp7BBeASbZgO4=;
-        b=KxEI28tPSvUdNvAkCqxed+rLWbEo5ARCEAFxCt3dpg9zrIvuE3hyl80F3lBx6u6qJ8
-         R3H2BDEl5L7K+oGIDQ+GjK3+LxQch4naSX+wXjC37jJ8uPcV/nR7R/TpQnB1BwSld3zJ
-         8A9o6uWd5OHoG6EhSrquWNsRUo+btk7LVQYEwB9wWyLHaMoMxohYIhDMTLJWnQc1wOIu
-         5oAFiC+QxDuY95fL6yWs6rGPB3zd9X2TzZJMsdYhExNwR4VFmsnTXyA0+3vf81dhV4nc
-         e6Yo3jfLObOFrEj8pqSkT2fdafWMy12nNaRl2jJm6z+Rm+/zknxKzE0IeiFATBFDDZX2
-         lMxA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=rw3ft7Xiuq6jQh7CexeaJRVGi6CosNconl2BfPOtJXg=;
+        b=s847w+OO7cYhJyVS3QmbSC+ByjtLv8K5yKznoyPw5hZeTr4Bek8MTxQEaof5/WC8Gf
+         pwxv/xSzlQA9YefMjG/9uI/pKA3KUT93EN1o+cVxKj9RaxHdjMSmcBWzrXNjfMgFUWvy
+         tMYh1xSmY8EkAu2FJET39FDgmdDpVOqajSQvmNw1wWFo1qMpzK2amdWuDd/JNbIQXSSh
+         8wjGDV+o5d9/o7zJbIV502ev5GDKfTHqmOo9abPNo1GrGju9iSLJlQqOIbx0XwapaHGX
+         umrbKtRe92nJj8Sx+mflxGhb//qti5iUngVfK3wcsIJLEf+O+M6gOMDSHuXj7Doy+6jo
+         lkRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=he/bfvf1mDfynCT5CMERAlIneGT6+vfp7BBeASbZgO4=;
-        b=1If+Hqmdn6PSq/oJp4pLI/DE6Y56PnvhAZsTGE7lnUnfXe59XjOdvh6M3XnzA6dn8C
-         3gY84FJFL2alP/0IWwrQ+uFHJsLb0BuiRW6x/+6jSsJAZIXrnAyZzn711OkTDWthaw4/
-         45UucxWw/XXy3i4sLvlG0ntApGICCvI7xZdtXamvv/AuY3vanysT1IXeirqNtjJEtfsD
-         +22bfXcU/d608CXrtcyPzN3AM5+eJ9ufNRPkdPKHQ91m0n5xbcN+eDUFell/tl4PWWTG
-         ZsAV8VHPOb7fuC3mKs2FPkcW3XkF8tc0a09YW1XRT/AxdsMRYAtb8RB7hccgKjFUtlTg
-         6SUw==
-X-Gm-Message-State: ACgBeo1A0Bm6wdCWCItEKpvVWrUyN3eo3cW6iKmSC/PiFsSBOfTED5xP
-        654FrB386qtE2vywYL37NP4EG2p/zgWdNRUUDebtqQ==
-X-Google-Smtp-Source: AA6agR7/djEpyXLmdsCZ/Kfc2/F8wSfF7w1WoiOTxpF6ZpcmN5MGMotc82Np/jxf3XCYtHfCucVkRsVFYrjqmymNdjw=
-X-Received: by 2002:a05:600c:224c:b0:3a6:7234:551 with SMTP id
- a12-20020a05600c224c00b003a672340551mr367113wmm.27.1661535733158; Fri, 26 Aug
- 2022 10:42:13 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=rw3ft7Xiuq6jQh7CexeaJRVGi6CosNconl2BfPOtJXg=;
+        b=hk20kVRpeCyVUeHJIsB516Pk7tDE/u1lGAA1CgO1YWNHzcyT2+UiOCa7PtushRXVF4
+         8s/q/oSubFWrE5JgRTYojS9d/4CM6MVtbtRjvQrF0BTbSBcFBogpEA3HFSdxOBIBdbWl
+         7KJp3deELbVcgdqiX18TSZl/F5gDZTn6LQkvTXpBaIWuBlxNoWexrTOtQw0j0OFzVwnC
+         tp5dO/HacF+g/Sy2NR+iHYBL16EHd+UtCuzYtKbCfnuwIsr/Krd3xzeJ/AMHhEJnhtcH
+         E/LJfVO3eAtPhcj6BpiRhG+0/wOKsp5jFhxgfHbo8XNsOuCyBJmEqJjBUlm5jj3Ftnep
+         WPCg==
+X-Gm-Message-State: ACgBeo1PgQU7RIXP2ZNJra8kGbzQKIILnuH+WDkpFVxda7pQegs6Zt7c
+        c5Say7Yua0OaOL72CtfY7VUmag==
+X-Google-Smtp-Source: AA6agR5O4np8N7uZzKIuzC3AmkW23UMkTi/wwqOWxiQRm5W1buJbivDheV/iRyfq+Jvv1q4deP+neg==
+X-Received: by 2002:a2e:93c8:0:b0:261:e5a7:56ed with SMTP id p8-20020a2e93c8000000b00261e5a756edmr2689909ljh.483.1661535720141;
+        Fri, 26 Aug 2022 10:42:00 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id c28-20020ac244bc000000b00492ef1ee7b0sm422450lfm.290.2022.08.26.10.41.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 10:41:59 -0700 (PDT)
+Message-ID: <58d791f3-2a45-1ddb-79ac-852656be2b50@linaro.org>
+Date:   Fri, 26 Aug 2022 20:41:58 +0300
 MIME-Version: 1.0
-References: <20220826165238.30915-1-mkoutny@suse.com> <20220826165238.30915-5-mkoutny@suse.com>
-In-Reply-To: <20220826165238.30915-5-mkoutny@suse.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 26 Aug 2022 10:41:37 -0700
-Message-ID: <CAJD7tkZZ6j6mPfwwFDy_ModYux5447HFP=oPwa6MFA_NYAZ9-g@mail.gmail.com>
-Subject: Re: [PATCH 4/4] cgroup/bpf: Honor cgroup NS in cgroup_iter for ancestors
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Aditya Kali <adityakali@google.com>,
-        Serge Hallyn <serge.hallyn@canonical.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        Muneendra Kumar <muneendra.kumar@broadcom.com>,
-        Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Document additional skus for
+ sc7180 pazquel360
+Content-Language: en-US
+To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bob Moragues <moragues@chromium.org>,
+        Henry Sun <henrysun@google.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220826102513.1.If97ef7a7d84bcc2cf20e0479b3e00c4a8fb5a2fd@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220826102513.1.If97ef7a7d84bcc2cf20e0479b3e00c4a8fb5a2fd@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi there!
-
-Thanks for following up with this series!
-
-On Fri, Aug 26, 2022 at 9:53 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
->
-> The iterator with BPF_CGROUP_ITER_ANCESTORS_UP can traverse up across a
-> cgroup namespace level, which may be surprising within a non-init cgroup
-> namespace.
->
-> Introduce and use a new cgroup_parent_ns() helper that stops according
-> to cgroup namespace boundary. With BPF_CGROUP_ITER_ANCESTORS_UP. We use
-> the cgroup namespace of the iterator caller, not that one of the creator
-> (might be different, the former is relevant).
->
-> Fixes: d4ccaf58a847 ("bpf: Introduce cgroup iter")
-> Signed-off-by: Michal Koutn=C3=BD <mkoutny@suse.com>
-> ---
->  include/linux/cgroup.h   |  3 +++
->  kernel/bpf/cgroup_iter.c |  9 ++++++---
->  kernel/cgroup/cgroup.c   | 32 +++++++++++++++++++++++---------
->  3 files changed, 32 insertions(+), 12 deletions(-)
->
-> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index b6a9528374a8..b63a80e03fae 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -858,6 +858,9 @@ struct cgroup_namespace *copy_cgroup_ns(unsigned long=
- flags,
->  int cgroup_path_ns(struct cgroup *cgrp, char *buf, size_t buflen,
->                    struct cgroup_namespace *ns);
->
-> +struct cgroup *cgroup_parent_ns(struct cgroup *cgrp,
-> +                               struct cgroup_namespace *ns);
-> +
->  #else /* !CONFIG_CGROUPS */
->
->  static inline void free_cgroup_ns(struct cgroup_namespace *ns) { }
-> diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
-> index c69bce2f4403..06ee4a0c5870 100644
-> --- a/kernel/bpf/cgroup_iter.c
-> +++ b/kernel/bpf/cgroup_iter.c
-> @@ -104,6 +104,7 @@ static void *cgroup_iter_seq_next(struct seq_file *se=
-q, void *v, loff_t *pos)
->  {
->         struct cgroup_subsys_state *curr =3D (struct cgroup_subsys_state =
-*)v;
->         struct cgroup_iter_priv *p =3D seq->private;
-> +       struct cgroup *parent;
->
->         ++*pos;
->         if (p->terminate)
-> @@ -113,9 +114,11 @@ static void *cgroup_iter_seq_next(struct seq_file *s=
-eq, void *v, loff_t *pos)
->                 return css_next_descendant_pre(curr, p->start_css);
->         else if (p->order =3D=3D BPF_CGROUP_ITER_DESCENDANTS_POST)
->                 return css_next_descendant_post(curr, p->start_css);
-> -       else if (p->order =3D=3D BPF_CGROUP_ITER_ANCESTORS_UP)
-> -               return curr->parent;
-> -       else  /* BPF_CGROUP_ITER_SELF_ONLY */
-> +       else if (p->order =3D=3D BPF_CGROUP_ITER_ANCESTORS_UP) {
-> +               parent =3D cgroup_parent_ns(curr->cgroup,
-> +                                         current->nsproxy->cgroup_ns);
-> +               return parent ? &parent->self : NULL;
-> +       } else  /* BPF_CGROUP_ITER_SELF_ONLY */
->                 return NULL;
->  }
->
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index c0377726031f..d60b5dfbbbc9 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -1417,11 +1417,11 @@ static inline struct cgroup *__cset_cgroup_from_r=
-oot(struct css_set *cset,
->  }
->
->  /*
-> - * look up cgroup associated with current task's cgroup namespace on the
-> + * look up cgroup associated with given cgroup namespace on the
->   * specified hierarchy
->   */
-> -static struct cgroup *
-> -current_cgns_cgroup_from_root(struct cgroup_root *root)
-> +static struct cgroup *cgns_cgroup_from_root(struct cgroup_root *root,
-> +                                           struct cgroup_namespace *ns)
->  {
->         struct cgroup *res =3D NULL;
->         struct css_set *cset;
-> @@ -1430,7 +1430,7 @@ current_cgns_cgroup_from_root(struct cgroup_root *r=
-oot)
->
->         rcu_read_lock();
->
-> -       cset =3D current->nsproxy->cgroup_ns->root_cset;
-> +       cset =3D ns->root_cset;
->         res =3D __cset_cgroup_from_root(cset, root);
->
->         rcu_read_unlock();
-> @@ -1852,15 +1852,15 @@ int cgroup_show_path(struct seq_file *sf, struct =
-kernfs_node *kf_node,
->         int len =3D 0;
->         char *buf =3D NULL;
->         struct cgroup_root *kf_cgroot =3D cgroup_root_from_kf(kf_root);
-> -       struct cgroup *ns_cgroup;
-> +       struct cgroup *root_cgroup;
->
->         buf =3D kmalloc(PATH_MAX, GFP_KERNEL);
->         if (!buf)
->                 return -ENOMEM;
->
->         spin_lock_irq(&css_set_lock);
-> -       ns_cgroup =3D current_cgns_cgroup_from_root(kf_cgroot);
-> -       len =3D kernfs_path_from_node(kf_node, ns_cgroup->kn, buf, PATH_M=
-AX);
-> +       root_cgroup =3D cgns_cgroup_from_root(kf_cgroot, current->nsproxy=
-->cgroup_ns);
-> +       len =3D kernfs_path_from_node(kf_node, root_cgroup->kn, buf, PATH=
-_MAX);
->         spin_unlock_irq(&css_set_lock);
->
->         if (len >=3D PATH_MAX)
-> @@ -2330,6 +2330,18 @@ int cgroup_path_ns(struct cgroup *cgrp, char *buf,=
- size_t buflen,
->  }
->  EXPORT_SYMBOL_GPL(cgroup_path_ns);
->
-> +struct cgroup *cgroup_parent_ns(struct cgroup *cgrp,
-> +                                  struct cgroup_namespace *ns)
-> +{
-> +       struct cgroup *root_cgrp;
-> +
-> +       spin_lock_irq(&css_set_lock);
-> +       root_cgrp =3D cgns_cgroup_from_root(cgrp->root, ns);
-> +       spin_unlock_irq(&css_set_lock);
-> +
-> +       return cgrp =3D=3D root_cgrp ? NULL : cgroup_parent(cgrp);
-
-I understand that currently cgroup_iter is the only user of this, but
-for future use cases, is it safe to assume that cgrp will always be
-inside ns? Would it be safer to do something like:
-
-struct cgroup *parent =3D cgroup_parent(cgrp);
-
-if (!parent)
-    return NULL;
-
-return cgroup_is_descendant(parent, root_cgrp) ? parent : NULL;
+On 26/08/2022 13:26, Yunlong Jia wrote:
+> pazquel360 is an extension project based on pazquel.
+> We create 3 sku on pazquel360:
+>    sku 20 for LTE with physical SIM _and_ eSIM and WiFi
+>    sku 21 for WiFi only
+>    sku 22 for LTE with only a physical SIM
+>  Both sku20 and sku22 are LTE SKUs.
+>  One has the eSIM stuffed and one doesn't.
+>  There is a single shared device tree for the two.
+> 
+> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
 
 
-> +}
-> +
->  /**
->   * task_cgroup_path - cgroup path of a task in the first cgroup hierarch=
-y
->   * @task: target task
-> @@ -6031,7 +6043,8 @@ struct cgroup *cgroup_get_from_id(u64 id)
->                 goto out;
->
->         spin_lock_irq(&css_set_lock);
-> -       root_cgrp =3D current_cgns_cgroup_from_root(&cgrp_dfl_root);
-> +       root_cgrp =3D cgns_cgroup_from_root(&cgrp_dfl_root,
-> +                                         current->nsproxy->cgroup_ns);
->         spin_unlock_irq(&css_set_lock);
->         if (!cgroup_is_descendant(cgrp, root_cgrp)) {
->                 cgroup_put(cgrp);
-> @@ -6612,7 +6625,8 @@ struct cgroup *cgroup_get_from_path(const char *pat=
-h)
->         struct cgroup *root_cgrp;
->
->         spin_lock_irq(&css_set_lock);
-> -       root_cgrp =3D current_cgns_cgroup_from_root(&cgrp_dfl_root);
-> +       root_cgrp =3D cgns_cgroup_from_root(&cgrp_dfl_root,
-> +                                         current->nsproxy->cgroup_ns);
->         kn =3D kernfs_walk_and_get(root_cgrp->kn, path);
->         spin_unlock_irq(&css_set_lock);
->         if (!kn)
-> --
-> 2.37.0
->
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

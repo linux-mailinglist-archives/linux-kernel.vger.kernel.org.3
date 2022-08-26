@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4275A2C51
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CBA5A2C59
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiHZQ3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S232289AbiHZQdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHZQ3k (ORCPT
+        with ESMTP id S229447AbiHZQdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:29:40 -0400
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45846DF679;
-        Fri, 26 Aug 2022 09:29:40 -0700 (PDT)
-Received: by mail-pj1-f47.google.com with SMTP id i8-20020a17090a65c800b001fd602afda2so2173732pjs.4;
-        Fri, 26 Aug 2022 09:29:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=lBvvh8CMBUZ2sjFkD26Cqoc4+9rLr06nz33vMiatlKg=;
-        b=zGlgpTZt7y4RuOIBm6obh5ay0lNUw1pt0yg1FMs/sfje7TG9bWtM6JBc93CxIhu8vT
-         GL1ueW4b+4uuHbNXthoP4cVkE6rCb/o6cbVSQjhI95GKXsiNn053k2abZPJfuGz8tsrw
-         4pyN9LlZVGxOVyrNZtbdG4fpCxuRswvGFEaCR7bk4qA9AdrAOKuxYE3L2y8ueKnztw/2
-         seoDdeOpqtaorJVv+ddcsuoM5qbr1nOklg6c4zZbuyT42n//3RSbxYvZdXULo33tqxgE
-         CxrZq9u6MbZd2NbJykSvghGNQcWwFL2VM7gMongl4iqI/ECpNrSUp7E9MR3zBDUCO/sr
-         9Wdw==
-X-Gm-Message-State: ACgBeo0NDvvK9Vz3KEQvuoevodCNXxksV9mw8vKe88bz7Gebjibc8sXU
-        Vxv14akl1B3y2naYC1DL9xCoPWOpvPnjrw==
-X-Google-Smtp-Source: AA6agR7vd7jE0Y5Ib+TqvdaFovHQP0nydl+a10cj01d60/tG2Hj7/bbclaJKgdJa5dhuJjDKvnN5RQ==
-X-Received: by 2002:a17:902:f650:b0:172:8ee1:7f40 with SMTP id m16-20020a170902f65000b001728ee17f40mr4444648plg.101.1661531379674;
-        Fri, 26 Aug 2022 09:29:39 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a12:b4b9:f1b3:ec63? ([2620:15c:211:201:a12:b4b9:f1b3:ec63])
-        by smtp.gmail.com with ESMTPSA id x36-20020a17090a6c2700b001fa867105a3sm1939818pjj.4.2022.08.26.09.29.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 09:29:38 -0700 (PDT)
-Message-ID: <5ffb520f-d86f-be3e-4239-2f31c681ede2@acm.org>
-Date:   Fri, 26 Aug 2022 09:29:36 -0700
+        Fri, 26 Aug 2022 12:33:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B84D759A;
+        Fri, 26 Aug 2022 09:33:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E236B8319C;
+        Fri, 26 Aug 2022 16:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A48C433C1;
+        Fri, 26 Aug 2022 16:32:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661531579;
+        bh=dddAmdfWjVtoO1zNo5UFNAU20s8CfLCokEstVAbikEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uc453d6xrPO4sqirlR3Ea7botJQ14akx7wxI4nPJML+FKVFzSjHGdYhlpQMvjli+k
+         mvdUbRjN/hizqNn+U0Ry37bYsjrOHblkP4YlVzZSffOt1Cw/KDqbh0Kk1yq0rgmsWm
+         X5SedSOZTeS6ZL4nQf2M9BvLjwM2Se0R2gtBy3yxcVwiGVqsjpYkWrQH1treGXtfpv
+         IgSOqICc92TmABZ0wDZnsFzBtU0Snly/E8a0nVgrdPc9Uo7UAvXcEfPqFVS3HxnNtu
+         K9KU4kff5B9qMWIfir2e1QxPNKPNiTln0xnK5ciQuVad8bJ9E3urGaYhEWMQWQ904u
+         3Janfpy2A5DvQ==
+Date:   Fri, 26 Aug 2022 19:32:51 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: Re: [PATCH v12 02/10] btf: Handle dynamic pointer parameter in kfuncs
+Message-ID: <Ywj1s6d7XowV82PZ@kernel.org>
+References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
+ <20220818152929.402605-3-roberto.sassu@huaweicloud.com>
+ <YwhSCE0H+JfUe4Ew@kernel.org>
+ <CAADnVQJbTzfe28ife1+vg+ByLfyLBTCoEZW_eg8TEw838JGaog@mail.gmail.com>
+ <YwheJqUDLOxL3iTi@kernel.org>
+ <YwjcItv0q8GdzPbb@kernel.org>
+ <bb4bdd90017d5772bdc31dfac93f2e86c6c61b82.camel@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in blk_mq_map_swqueue
-Content-Language: en-US
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        'Aleksandr Nogikh' via syzkaller-bugs 
-        <syzkaller-bugs@googlegroups.com>
-References: <0000000000004c3b1405e6b7de26@google.com>
- <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
- <CANp29Y7bgwDzd47E6h8gseYuu5YXF-ABRrhVXFXS-HF7PhF-Dw@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CANp29Y7bgwDzd47E6h8gseYuu5YXF-ABRrhVXFXS-HF7PhF-Dw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb4bdd90017d5772bdc31dfac93f2e86c6c61b82.camel@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +86,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/26/22 06:15, Aleksandr Nogikh wrote:
-> Syzbot would have included the USB mailing list and the USB
-> maintainers if it saw that the bug might be related to this subsystem.
-> The bot's guess was that it was the BLOCK LAYER subsystem, so it Cc'd
-> only the general lists and linux-block@vger.kernel.org
+On Fri, Aug 26, 2022 at 05:34:57PM +0200, Roberto Sassu wrote:
+> On Fri, 2022-08-26 at 17:43 +0300, Jarkko Sakkinen wrote:
+> > On Fri, Aug 26, 2022 at 08:46:14AM +0300, Jarkko Sakkinen wrote:
+> > > On Thu, Aug 25, 2022 at 10:16:14PM -0700, Alexei Starovoitov wrote:
+> > > > On Thu, Aug 25, 2022 at 9:54 PM Jarkko Sakkinen <
+> > > > jarkko@kernel.org> wrote:
+> > > > > > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env
+> > > > > > *env, struct bpf_reg_state *reg,
+> > > > > > -                                  enum bpf_arg_type
+> > > > > > arg_type)
+> > > > > > +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> > > > > > struct bpf_reg_state *reg,
+> > > > > > +                           enum bpf_arg_type arg_type)
+> > > > > >  {
+> > > > > >       struct bpf_func_state *state = func(env, reg);
+> > > > > >       int spi = get_spi(reg->off);
+> > > > > > --
+> > > > > > 2.25.1
+> > > > > > 
+> > > > > 
+> > > > > Might be niticking but generally I'd consider splitting
+> > > > > exports as commits of their own.
+> > > > 
+> > > > -static bool
+> > > > +bool
+> > > > 
+> > > > into a separate commit?
+> > > > 
+> > > > I guess it makes sense for people whose salary depends on
+> > > > number of commits.
+> > > > We don't play these games.
+> > > 
+> > > What kind of argument is that anyway.
+> > 
+> > "Separate each *logical change* into a separate patch." [*]
 > 
-> Is there anything in this bug report that can reliably indicate that
-> the bug has to do with USB? If there is, we can definitely adjust our
-> guilty subsystem recognition logic.
+> The logical change, as per the patch subject, is allowing the
+> possibility of including eBPF dynamic pointers in a kfunc definition.
+> It requires to call an existing function that was already defined
+> elsewhere.
+> 
+> Maybe I'm wrong, but I don't see only exporting a function definition
+> to an include file as a logical change. To me, the changes in this
+> patch are clearly connected. Or even better, they tell why the function
+> definition has been exported, that would not appear if moving the
+> function definition is a standalone patch.
+> 
+> > 
+> > To add, generally any user space visible space should be an
+> > isolated patch.
+> 
+> As far as I understood, definitions visible to user space should be in
+> include/uapi.
 
-Hi Aleksandr,
-  I may have been to fast with my conclusion that the root cause is in 
-the USB subsystem.
+It does change e.g. the output of kallsyms.
 
-Regarding your question, can syzbot inspect the console log and scan for 
-"scsi host%d: %s" strings? The text next to the colon comes from the 
-SCSI host template "name" member and hence indicates which SCSI LLD 
-driver is involved.
+It's not ABI but it's still user space visble.
 
-Thanks,
+> 
+> > 
+> > Please, stop posting nonsense.
+> 
+> If I may, saying this does not encourage people to try to submit their
+> code. I feel it is a bit strong, and I kindly ask you to express your
+> opinion in a more gentle way.
 
-Bart.
+I agree. That's why I was wondering what is this nonsense
+about salary and games.
+
+BR, Jarkko

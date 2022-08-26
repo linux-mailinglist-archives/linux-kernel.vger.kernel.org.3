@@ -2,160 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609345A3194
+	by mail.lfdr.de (Postfix) with ESMTP id 15D045A3193
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiHZV5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S231776AbiHZV5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiHZV44 (ORCPT
+        with ESMTP id S231738AbiHZV5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:56:56 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE92CACA2;
-        Fri, 26 Aug 2022 14:56:54 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-32a09b909f6so69161807b3.0;
-        Fri, 26 Aug 2022 14:56:54 -0700 (PDT)
+        Fri, 26 Aug 2022 17:57:07 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED68CEB11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:57:04 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id x93so3501777ede.6
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=YIsmXK/1IMUzBKPFPBCOzWlrG3vuxnAl26/EQEinaGU=;
-        b=Woi3HMQVUTh9wjBeAKXEpTFy4sf0GT5G162/idyorzEjanNHHAAO45K6yb3Gq251vx
-         vdGkWXeLHyJD1Eg5RShfMvgsW17hKDHZr/WeeDtgdpyt32v1ggnnjCHlRuAQ94Dpc11n
-         zS2IwMRHR9s2PGlSxiCxhhs3r1G6RPkeqBKCOCYCE4mPWzWmQqlnHguY0hSWkrhmHkVP
-         c80tnpQQ8aynngWmq9c20Rz5FIJYqJ1lG8EM+uu+/Bn+bD/1qLICngiaAtk0lCNG7gJn
-         U7gXacECwV1iR4jaz+0w7cw+lJzQltivxlZf7vX/cHXdyHNxlEyqXdk9GMeHqzK764xE
-         fj2w==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=7vSzq6vPLrHqcoL8kcBtL8IovIzvXBgbRpb5JcrKApM=;
+        b=moD9pQtx2O8r/SMz3TXxlBEi6KM9LgOC/ExNEn/UpOh3/xg9gjjL/q5qvVceD+Pq+F
+         PG3XnQ6yHlAjGW0PnFMz0HF1+mX47v57RzuS2BtND06yp1HfczNjdLBMQlwDzp+bRjsA
+         TASLAwZIVTf2U/2FAdX44MlbxZDJ2wDOUBJHy7DuzqDVf36PCIpQDPUf54i6ccD02WF8
+         RPwSSewXbllRYpN5H+yEiykQi5S4mSmVJBXQxxlXkWWzxkffmb8Y/PBAWQXmtS2e3prL
+         Wlu5H/+Imia8y+VMjYkvyQOBWXC5+LZLxMkyQ3NGcQrNjdTvnFXlfmQNHG4vUu1iHB6n
+         pBjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=YIsmXK/1IMUzBKPFPBCOzWlrG3vuxnAl26/EQEinaGU=;
-        b=xtJ3U2yLwssHKz6czZ3Qs+tai4dTBlgdlPzgdlZ5kCmBHzUs4Q4+BqpIaYTYJg4xwe
-         8+vxr/EqO+65qpYAatXv95S53IEZZsG2hUZ085JMjr6AbuvME6i/pZREpB+TwwKMdVHE
-         zhSgFb++RH4cSFbCvG7DXaKiDQArf5momXl+O7c2qNE6BUgi8pfDLfxF8QZUUziI3QYR
-         Uh+Gk8zGQwFCCaU4UI2Be3KXwtXeLFSudMPcrXeJo0P1dDs3t9n9xM8UBfk8A5mpAnhj
-         tnR1KXjFx4EWJJVq5bNdBEiyhK1gyMCMIQXSmci6mxjMhgAO0fXPdePWtphaKpNjQ+lq
-         rd9w==
-X-Gm-Message-State: ACgBeo3R57Ucj1iiEZDefLlEEItyUdZ6LUMTw7XMYwhM9jqqaOQLDS4d
-        Z99ETb3AKLCcvbQuHmrV/AEaeUx6m0PGS7sLv6Y=
-X-Google-Smtp-Source: AA6agR4UTuA3qINNphj7afBVZTaQiWFU8zQh4oSl0I8d9SplK6OhHc5jyFq4/aR+zST0rOWp264LYbZR9vv+Gc1Ll04=
-X-Received: by 2002:a5b:68e:0:b0:671:76c9:ff with SMTP id j14-20020a5b068e000000b0067176c900ffmr1606448ybq.630.1661551013566;
- Fri, 26 Aug 2022 14:56:53 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7vSzq6vPLrHqcoL8kcBtL8IovIzvXBgbRpb5JcrKApM=;
+        b=G00UZ+Jg2D+Ss30xZBu9Ynq2Pj/7Y/z1yGMPU0FpI6rgts0tvTmiwIYJ7KM+2Ozglp
+         62Wi9NGSFPsQAAcXQZ/XQynzJplJeikSimN6dgYl532K2526bA3WvzYSovnG3C6NVM+p
+         0KEBlDln2k6B85bAEh8x8c3BaujAqqM6s+70qnaly8B4Tlgkh9tsLPbNhDcd09r8Ehay
+         yLItJ8+HzUdNpOvsa10dT5MrJc9picMJh33tJKdO1hU82hfSD/JK2zI3mqAFiAD07wO0
+         sPjKbhow5JE0g8fT9ElYdla8Auo/aLTLqAR14jqExz+JDWUNQqvSO/PgOg9US5jMYfMo
+         NKAg==
+X-Gm-Message-State: ACgBeo2SrZUMwhtzNZTm1bZ8ypLo/MG3odjT3N2y70G1BBvW+IfW0av7
+        L3Uv/Wv16Z11UzGQ+DohHPyN8Y8gsocDRJEvIuW5VQ==
+X-Google-Smtp-Source: AA6agR7/sF+zC9EW31AKq/oYtanUhvn4sbw0O7Ai7ueTmh8pIaXiX3lkjMjogncYyYdmjrCur7/uosW9qLsMkiUy3A4=
+X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
+ ez23-20020a056402451700b004437fe12d60mr8196109edb.133.1661551022135; Fri, 26
+ Aug 2022 14:57:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com> <20220820082936.686924-5-dario.binacchi@amarulasolutions.com>
-In-Reply-To: <20220820082936.686924-5-dario.binacchi@amarulasolutions.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Sat, 27 Aug 2022 06:56:42 +0900
-Message-ID: <CAMZ6RqKQJZBVOSU7oA3AGSRG11vxdysAyRotHavUzsVRuM28Kw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 4/4] can: bxcan: add support for ST bxCAN controller
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+In-Reply-To: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 23:56:50 +0200
+Message-ID: <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     andrew@aj.id.au, joel@jms.id.au, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat. 20 Aug. 2022 =C3=A0 17:32, Dario Binacchi
-<dario.binacchi@amarulasolutions.com> a =C3=A9crit :
-> Add support for the basic extended CAN controller (bxCAN) found in many
-> low- to middle-end STM32 SoCs. It supports the Basic Extended CAN
-> protocol versions 2.0A and B with a maximum bit rate of 1 Mbit/s.
+On Thu, Aug 18, 2022 at 12:18 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+
+> When the driver want to disable the signal of the function, it doesn't
+> need to query the state of the mux function's signal on a pin. The
+> condition below will miss the disable of the signal:
+> Ball | Default | P0 Signal | P0 Expression               | Other
+> -----+---------+-----------+-----------------------------+----------
+>  E21   GPIOG0    SD2CLK      SCU4B4[16]=1 & SCU450[1]=1    GPIOG0
+> -----+---------+-----------+-----------------------------+----------
+>  B22   GPIOG1    SD2CMD      SCU4B4[17]=1 & SCU450[1]=1    GPIOG1
+> -----+---------+-----------+-----------------------------+----------
+> Assume the register status like below:
+> SCU4B4[16] == 1 & SCU4B4[17] == 1 & SCU450[1]==1
+> After the driver set the Ball E21 to the GPIOG0:
+> SCU4B4[16] == 0 & SCU4B4[17] == 1 & SCU450[1]==0
+> When the driver want to set the Ball B22 to the GPIOG1, the condition of
+> the SD2CMD will be false causing SCU4B4[17] not to be cleared.
 >
-> The controller supports two channels (CAN1 as master and CAN2 as slave)
-> and the driver can enable either or both of the channels. They share
-> some of the required logic (e. g. clocks and filters), and that means
-> you cannot use the slave CAN without enabling some hardware resources
-> managed by the master CAN.
->
-> Each channel has 3 transmit mailboxes, 2 receive FIFOs with 3 stages and
-> 28 scalable filter banks.
-> It also manages 4 dedicated interrupt vectors:
-> - transmit interrupt
-> - FIFO 0 receive interrupt
-> - FIFO 1 receive interrupt
-> - status change error interrupt
->
-> Driver uses all 3 available mailboxes for transmission and FIFO 0 for
-> reception. Rx filter rules are configured to the minimum. They accept
-> all messages and assign filter 0 to CAN1 and filter 14 to CAN2 in
-> identifier mask mode with 32 bits width. It enables and uses transmit,
-> receive buffers for FIFO 0 and error and status change interrupts.
->
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->
-> ---
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 
-(...)
+I can't see the verdict for this patch? Will there be a new
+version, or are we in the middle of a discussion?
+I'd really like Andrew's ACK on the result before merging.
 
-> +static void bxcan_handle_state_change(struct net_device *ndev, u32 esr)
-> +{
-> +       struct bxcan_priv *priv =3D netdev_priv(ndev);
-> +       struct net_device_stats *stats =3D &ndev->stats;
-> +       enum can_state new_state =3D priv->can.state;
-> +       struct can_berr_counter bec;
-> +       enum can_state rx_state, tx_state;
-> +       struct sk_buff *skb;
-> +       struct can_frame *cf;
-> +
-> +       /* Early exit if no error flag is set */
-> +       if (!(esr & (BXCAN_ESR_EWGF | BXCAN_ESR_EPVF | BXCAN_ESR_BOFF)))
-> +               return;
-> +
-> +       bec.txerr =3D BXCAN_TEC(esr);
-> +       bec.rxerr =3D BXCAN_REC(esr);
-> +
-> +       if (esr & BXCAN_ESR_BOFF)
-> +               new_state =3D CAN_STATE_BUS_OFF;
-> +       else if (esr & BXCAN_ESR_EPVF)
-> +               new_state =3D CAN_STATE_ERROR_PASSIVE;
-> +       else if (esr & BXCAN_ESR_EWGF)
-> +               new_state =3D CAN_STATE_ERROR_WARNING;
-> +
-> +       /* state hasn't changed */
-> +       if (unlikely(new_state =3D=3D priv->can.state))
-> +               return;
-> +
-> +       skb =3D alloc_can_err_skb(ndev, &cf);
-> +       if (unlikely(!skb))
-> +               return;
-> +
-> +       tx_state =3D bec.txerr >=3D bec.rxerr ? new_state : 0;
-> +       rx_state =3D bec.txerr <=3D bec.rxerr ? new_state : 0;
-> +       can_change_state(ndev, cf, tx_state, rx_state);
-> +
-> +       if (new_state =3D=3D CAN_STATE_BUS_OFF)
-> +               can_bus_off(ndev);
-> +
-> +       stats->rx_bytes +=3D cf->len;
-
-Please do not increment the stats if the frame is remote (c.f. CAN_RTR_FLAG=
-).
-
-> +       stats->rx_packets++;
-> +       netif_rx(skb);
-> +}
-
-
-Yours sincerely,
-Vincent Mailhol
+Yours,
+Linus Walleij

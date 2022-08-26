@@ -2,155 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB1B5A2219
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950615A2221
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245391AbiHZHk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S245429AbiHZHns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245403AbiHZHkz (ORCPT
+        with ESMTP id S234125AbiHZHnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:40:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C05D96FF3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:40:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CB73F33687;
-        Fri, 26 Aug 2022 07:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661499652; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UHDVWf627GrJFHwQC3okbVaIrG2oRgmMy8dX9XM3OOM=;
-        b=ZmHi+NO43BUhjvggOCnhKFHErKsuWYJ+x+g1jKVaY9jmCwjT82lKzzRIaBhKtqCCDoic8j
-        Pl4s3unhkexk+8F1dJY6GQWngCSyfu4/CDrl+c88r4Z8Y4BQszgJ0+A+LoOYRYkb8zfcvh
-        wvzYrmtWKwEqTlvh8O7VFJGBW6BKP8I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A8E4013A7E;
-        Fri, 26 Aug 2022 07:40:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xvjWJgR5CGO+EgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 26 Aug 2022 07:40:52 +0000
-Date:   Fri, 26 Aug 2022 09:40:52 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, vbabka@suse.cz,
-        pasha.tatashin@soleen.com, shakeelb@google.com, sieberf@amazon.com,
-        sjpark@amazon.de, william.kucharski@oracle.com,
-        willy@infradead.org, quic_pkondeti@quicinc.com, minchan@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH V5] mm: fix use-after free of page_ext after race with
- memory-offline
-Message-ID: <Ywh5BHIpMpTjy3B6@dhcp22.suse.cz>
-References: <1661496993-11473-1-git-send-email-quic_charante@quicinc.com>
+        Fri, 26 Aug 2022 03:43:46 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7B6C4809
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:43:41 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id kk26so1568144ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=F/nfhZc46qE5/TwWod1aI4DtHV3cNbQmnQVOS7KtUiw=;
+        b=oYUX+bEJ3UQh33DuSroB74rRtvLbKykp+t2RAxwDLy17IG39SixpC5Od3J6bFsciB9
+         L9M6qY6VdiGRtgQ+ffqxDTDMF7lUEKPKr7vINrwUGHEY8re/XIq+N4u42bvu25JqNmnx
+         Cmd7mKgbmf3nte+WkudFsZN6VizrJjzc9TgPE4ruvlZgzQQRkRawnESVH58U0GT4fPU0
+         tRoOQkDndMYCPPfTQN/Y+XUZbGoqjGCeNAM++5oLIM5+9rSirKi/siCRYLx0utR8a9r/
+         mg5AxwuVrD/3PVrOHuB3lC2ua2J3NC5whRotD023zrPibSXyGObsurBGEv8Fi1fiYW+p
+         DrMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=F/nfhZc46qE5/TwWod1aI4DtHV3cNbQmnQVOS7KtUiw=;
+        b=1UgNJPOxFRI3K0UqnbO8UA1KS0q58T8tRsdQtPlywxhX6HG4PTUe7V7R8lQ3XLPFqX
+         ZBTDT13U8WtnajZgs4pWLP3KhmhTCSBz/Fsio1MuKgY4ORwKTkVbQTailmVWgIMyZzBu
+         bDI5zHVleqDDBA5+aIH+t0md9IAyDpzajd2cXBBh+x3S2JGzLhMaUEVWkBtlXWOEHi4n
+         YwSvgNzZlU/niB1r0/OH1S4V9RnFzLjAAxKO1Usq31VNRzPtz4lbSMbemeYauo0/IvCv
+         yPSjYZ/wpHnFp48VvPScXHLvvbHD9r2aX5F/vj7tk2cZVu+fQfrPD5i2UZI6OoctfNwp
+         YYYg==
+X-Gm-Message-State: ACgBeo0cCUd8kn5gJJIOcnOeqNU5/EimK+geDWiJVw5axH6QR+G24gqI
+        z0QIjQNv5NKtBN/2reGjk/ZRWw==
+X-Google-Smtp-Source: AA6agR4FR1taplTOBaRAf+gwkdsaV73At3Y63T+X4h88m7x9hmzQ6iSyIBQqF/N1LTgXniDa9N5s3g==
+X-Received: by 2002:a17:906:8a5b:b0:73d:7975:567e with SMTP id gx27-20020a1709068a5b00b0073d7975567emr4601197ejc.378.1661499820198;
+        Fri, 26 Aug 2022 00:43:40 -0700 (PDT)
+Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id es5-20020a056402380500b0043bc4b28464sm852979edb.34.2022.08.26.00.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 00:43:39 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 09:43:18 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Conor.Dooley@microchip.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wangkefeng.wang@huawei.com, Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v2 1/2] riscv: uaccess: rename
+ __get/put_user_nocheck to __get/put_mem_nocheck
+Message-ID: <20220826074318.g6nwri5ziiutiio5@kamzik>
+References: <20220815032025.2685516-1-tongtiangen@huawei.com>
+ <20220815032025.2685516-2-tongtiangen@huawei.com>
+ <20220825105600.ezueddmwehob42rf@kamzik>
+ <3541c980-7fcf-7047-cec7-3c2ca6381a99@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1661496993-11473-1-git-send-email-quic_charante@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3541c980-7fcf-7047-cec7-3c2ca6381a99@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 26-08-22 12:26:33, Charan Teja Kalla wrote:
-> The below is one path where race between page_ext and  offline of the
-> respective memory blocks will cause use-after-free on the access of
-> page_ext structure.
+On Fri, Aug 26, 2022 at 02:33:47PM +0800, Tong Tiangen wrote:
 > 
-> process1		              process2
-> ---------                             ---------
-> a)doing /proc/page_owner           doing memory offline
-> 			           through offline_pages.
 > 
-> b)PageBuddy check is failed
-> thus proceed to get the
-> page_owner information
-> through page_ext access.
-> page_ext = lookup_page_ext(page);
+> 在 2022/8/25 18:56, Andrew Jones 写道:
+> > On Mon, Aug 15, 2022 at 03:20:24AM +0000, Tong Tiangen wrote:
+> > > Current, The helpers __get/put_user_nocheck() is used by get/put_user() and
+> > > __get/put_kernel_nofault(), which is not always uaccess, so the name with
+> > > *user* is not appropriate.
+> > > 
+> > > Also rename xxx_user_xxx to xxx_mem_xx  on the call path of
+> > > __get/put_user_nocheck()
+> > > 
+> > > Only refactor code without any functional changes.
+> > > 
+> > > Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> > > ---
+> > >   arch/riscv/include/asm/uaccess.h | 48 ++++++++++++++++----------------
+> > >   1 file changed, 24 insertions(+), 24 deletions(-)
+> > > 
+> > > diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+> > > index 855450bed9f5..1370da055b44 100644
+> > > --- a/arch/riscv/include/asm/uaccess.h
+> > > +++ b/arch/riscv/include/asm/uaccess.h
+> > > @@ -50,7 +50,7 @@
+> > >    * call.
+> > >    */
+> > > -#define __get_user_asm(insn, x, ptr, err)			\
+> > > +#define __get_mem_asm(insn, x, ptr, err)			\
+> > >   do {								\
+> > >   	__typeof__(x) __x;					\
+> > >   	__asm__ __volatile__ (					\
+> > > @@ -64,12 +64,12 @@ do {								\
+> > >   } while (0)
+> > >   #ifdef CONFIG_64BIT
+> > > -#define __get_user_8(x, ptr, err) \
+> > > -	__get_user_asm("ld", x, ptr, err)
+> > > +#define __get_mem_8(x, ptr, err) \
+> > > +	__get_mem_asm("ld", x, ptr, err)
+> > >   #else /* !CONFIG_64BIT */
+> > > -#define __get_user_8(x, ptr, err)				\
+> > > +#define __get_mem_8(x, ptr, err)				\
+> > >   do {								\
+> > > -	u32 __user *__ptr = (u32 __user *)(ptr);		\
+> > > +	u32 *__ptr = (u32 *)(ptr);				\
+> > 
+> > Doesn't casting away __user reduce sparse's utility?
 > 
-> 				    migrate_pages();
-> 				    .................
-> 				Since all pages are successfully
-> 				migrated as part of the offline
-> 				operation,send MEM_OFFLINE notification
-> 				where for page_ext it calls:
-> 				offline_page_ext()-->
-> 				__free_page_ext()-->
-> 				   free_page_ext()-->
-> 				     vfree(ms->page_ext)
-> 			           mem_section->page_ext = NULL
+> From the call logic[1], the address passed into this macro is not
+> necessarily __user. I understand that no problem will be introduced for
+> sparse's utility.
 > 
-> c) Check for the PAGE_EXT flags
-> in the page_ext->flags access
-> results into the use-after-free(leading
-> to the translation faults).
+> In addition, there is no need to do a pointer conversion here, will be fixed
+> next version.
 > 
-> As mentioned above, there is really no synchronization between page_ext
-> access and its freeing in the memory_offline.
-> 
-> The memory offline steps(roughly) on a memory block is as below:
-> 1) Isolate all the pages
-> 2) while(1)
->   try free the pages to buddy.(->free_list[MIGRATE_ISOLATE])
-> 3) delete the pages from this buddy list.
-> 4) Then free page_ext.(Note: The struct page is still alive as it is
-> freed only during hot remove of the memory which frees the memmap, which
-> steps the user might not perform).
-> 
-> This design leads to the state where struct page is alive but the struct
-> page_ext is freed, where the later is ideally part of the former which
-> just representing the page_flags (check [3] for why this design is
-> chosen).
-> 
-> The above mentioned race is just one example __but the problem persists
-> in the other paths too involving page_ext->flags access(eg:
-> page_is_idle())__.
-> 
-> Fix all the paths where offline races with page_ext access by
-> maintaining synchronization with rcu lock and is achieved in 3 steps:
-> 1) Invalidate all the page_ext's of the sections of a memory block by
-> storing a flag in the LSB of mem_section->page_ext.
-> 
-> 2) Wait till all the existing readers to finish working with the
-> ->page_ext's with synchronize_rcu(). Any parallel process that starts
-> after this call will not get page_ext, through lookup_page_ext(), for
-> the block parallel offline operation is being performed.
-> 
-> 3) Now safely free all sections ->page_ext's of the block on which
-> offline operation is being performed.
-> 
-> Note: If synchronize_rcu() takes time then optimizations can be done in
-> this path through call_rcu()[2].
-> 
-> Thanks to David Hildenbrand for his views/suggestions on the initial
-> discussion[1] and Pavan kondeti for various inputs on this patch.
-> 
-> [1] https://lore.kernel.org/linux-mm/59edde13-4167-8550-86f0-11fc67882107@quicinc.com/
-> [2] https://lore.kernel.org/all/a26ce299-aed1-b8ad-711e-a49e82bdd180@quicinc.com/T/#u
-> [3] https://lore.kernel.org/all/6fa6b7aa-731e-891c-3efb-a03d6a700efa@redhat.com/
-> 
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-> ---
-> Changes in V5:
->    o Used the loop variable name as ext_put_continue -- David
+> [1] __get_kernel_nofault -> __get_mem_nocheck -> __get_mem_8
 
-If this is the only change since the last version (I didn't have much
-time to read through the whole patch) then my ack still applies.
--- 
-Michal Hocko
-SUSE Labs
+Yes, I understood that. My concern was for the times that the address was
+__user as we'd no longer get that check for them.
+
+Thanks,
+drew

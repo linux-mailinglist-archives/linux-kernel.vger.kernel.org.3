@@ -2,99 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFB65A2E2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090535A2E5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239406AbiHZSVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:21:22 -0400
+        id S232338AbiHZSWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:22:55 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344952AbiHZSUd (ORCPT
+        with ESMTP id S1344659AbiHZSWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:20:33 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D8A7C315
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:20:31 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id bh13so2070678pgb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=7Z3u13rYQpnMB98SibwD18Rv6bC0Tn7F50N9xepOERw=;
-        b=kIFIo75w279aJv2ofl4iO/HUsPyAG7Rq/DvHSJwplXANqZaq8sSUsFmXBWYqBUyxmk
-         qj5YzQUw41E1un0dHclsYhP5pcjMqL0XHHbUCxtCuVqjaP8Q4Wdpn1kYU/5/0Xb3SEa4
-         Yow2X0F/8jjBaV+At6tCjlW/pIS+wh28tpzsobR+l81iHFYDHCxG2UgTleg9AgC/Qx2A
-         +37/f0KfBpcV+CmJ2H85LX9/DR62gMxsaNZ67GUfuu2cfgaA8cn6ySIHKMRw1wzGSiJ9
-         tuGhtG2VyBcuntiJkNrNm1MoLL47z9+cP1+Fkm/qUPEJmdoT7FCxPlT9toBFkThpiHdo
-         wFZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=7Z3u13rYQpnMB98SibwD18Rv6bC0Tn7F50N9xepOERw=;
-        b=t8ypF9A3t2rVmnjoz0xfVXSfNoM6YiZqKll1hNqj5aFlJI01UdAG1sbEWlggOC8HWH
-         NZkuawsDLZTJ+Xw/FVjqIGGuaJ744i5YbdpNboEg0SjkfN6IxCBPxv8zwi4f/bRSKKGs
-         dJgPsum1HI5HzQyH3F6INqEwOle9DcHaanm1NEdXBZbLbP3a2oauGlH9IHuzoeBNSg7L
-         Rjuvaq/ySU8lZ0F7oIet8+NwbpOfAx8Xxtj6QakQwS7ggFobvGGDi7U53stlMIYo09eL
-         VZ0MREMaP5QjG888QTZPMPGU0S67e2cVSVBE12WXSWp8tVYomOt2iAUL1VJ2JJZx0jrC
-         R1Og==
-X-Gm-Message-State: ACgBeo0UF8+zHKvM2Uq6AlKIrNRmBp+ueUKfAr7+TE1MJvt3SUg2XcQk
-        N97NhN9OS4cWRhRuZIxDn6kA
-X-Google-Smtp-Source: AA6agR48unRdWK6EPo21Jrmr5DkiUFVV4duWI4IrF9S/zpKSwhAgilNnw7tNsYK62QKTToiG+L5/4w==
-X-Received: by 2002:a63:90c1:0:b0:42b:77aa:55df with SMTP id a184-20020a6390c1000000b0042b77aa55dfmr3159556pge.558.1661538030654;
-        Fri, 26 Aug 2022 11:20:30 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.214.147])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170902b18500b00173368e9dedsm1881868plr.252.2022.08.26.11.20.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 11:20:30 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org
-Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        dmitry.baryshkov@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 11/11] PCI: qcom-ep: Add support for SM8450 SoC
-Date:   Fri, 26 Aug 2022 23:49:23 +0530
-Message-Id: <20220826181923.251564-12-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org>
-References: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org>
+        Fri, 26 Aug 2022 14:22:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AB6E398C;
+        Fri, 26 Aug 2022 11:21:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B0AC61D23;
+        Fri, 26 Aug 2022 18:21:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9888C433C1;
+        Fri, 26 Aug 2022 18:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661538105;
+        bh=P+hcLIrD/F79al7x8aLPgb1+lPQ8gMRGke9HgDVnG/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z3yHxCqi3J/rAwrRsJLFeT4icMMpxhb3OpvWJ9DJWaYvDvGzOL+TCnbC6/PgoVUUR
+         XNdnqO731drISisd0y80CmEDHwyJVand2PAe3oPWitY9mWShrepAIMgWIWhJXXgNbR
+         kKKlkizBFCHMEjaZGg8HuPrylFmSMtJM0ce+ORSfrUpoqjbDxevVp9TebNHvX/AKv9
+         DQcmWDKBGCK144wO/AvrTXOLl1C5+rgX6/OzH7j2Sdc8y1t5zCewgTCWvae/9imSU6
+         zov6lclxSgDpvuhAKX5LJgBCEIXC3ILbKJ7kbLCfCEjrfwFipx1L1Tcb7tyVZ7UOKx
+         FCfN7vdTOPObg==
+Date:   Fri, 26 Aug 2022 11:21:43 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/
+ for as-option
+Message-ID: <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
+References: <20220826181035.859042-1-ndesaulniers@google.com>
+ <20220826181035.859042-2-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826181035.859042-2-ndesaulniers@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for SM8450 SoC to the Qualcomm PCIe Endpoint Controller
-driver. The driver uses the same config as of the existing SDX55 chipset.
-So additional settings are not required.
+Hi Nick,
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 1 +
- 1 file changed, 1 insertion(+)
+I think the title would be a little more readable if it was:
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 4908f08bd90b..fa1819c9f667 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -775,6 +775,7 @@ static int qcom_pcie_ep_remove(struct platform_device *pdev)
- 
- static const struct of_device_id qcom_pcie_ep_match[] = {
- 	{ .compatible = "qcom,sdx55-pcie-ep", },
-+	{ .compatible = "qcom,sm8450-pcie-ep", },
- 	{ }
- };
- 
--- 
-2.25.1
+Makefile.compiler: Use KBUILD_AFLAGS for as-option
 
+On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
+> as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> cause as-option to fail unexpectedly because clang will emit
+> -Werror,-Wunused-command-line-argument for various -m and -f flags for
+> assembler sources.
+> 
+> Callers of as-option (and as-instr) likely want to be adding flags to
+> KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1699
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  arch/x86/boot/compressed/Makefile | 5 +++--
+>  scripts/Makefile.compiler         | 6 +++---
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 35ce1a64068b..fb3db714a028 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
+>  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+>  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+>  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+> -# Disable relocation relaxation in case the link is not PIE.
+> -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+>  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+>  
+>  # sev.c indirectly inludes inat-table.h which is generated during
+> @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+>  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
+>  
+>  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+> +# Disable relocation relaxation in case the link is not PIE.
+> +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+> +
+
+Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
+relaxation") added this to address
+https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
+move it to only being used for the .S files in arch/x86/boot/compressed?
+
+>  GCOV_PROFILE := n
+>  UBSAN_SANITIZE :=n
+>  
+> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> index 94d0d40cddb3..d1739f0d3ce3 100644
+> --- a/scripts/Makefile.compiler
+> +++ b/scripts/Makefile.compiler
+> @@ -29,13 +29,13 @@ try-run = $(shell set -e;		\
+>  	fi)
+>  
+>  # as-option
+> -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+> +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+>  
+>  as-option = $(call try-run,\
+> -	$(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+> +	$(CC) $(KBUILD_AFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+>  
+>  # as-instr
+> -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
+> +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
+>  
+>  as-instr = $(call try-run,\
+>  	printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 

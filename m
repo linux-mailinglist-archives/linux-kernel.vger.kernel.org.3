@@ -2,447 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFCE5A2BE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B48F5A2BE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344451AbiHZQDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S244074AbiHZQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244795AbiHZQDK (ORCPT
+        with ESMTP id S230256AbiHZQDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:03:10 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A750ED34F9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:03:07 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id u5so2300678wrt.11
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:03:07 -0700 (PDT)
+        Fri, 26 Aug 2022 12:03:15 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7A5D34CC;
+        Fri, 26 Aug 2022 09:03:13 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bn9so2012531ljb.6;
+        Fri, 26 Aug 2022 09:03:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8vAGKoF9jgn/tUNVyO8o1ITGDSm2GHRMu0jTib9BiWo=;
-        b=VQfpSKZ5DqVyujy15/8n3f/cLMyp8jjtuDNyiEAs3Ry0RotbMvHdE46jBPSAngsrhX
-         aVJTvw3JXdRJHc5HYOZvA+/heOEFvDdXy1LQItozsbcUKAPRNQn0C7l5fUxOPAf1gJ6v
-         2kun9wRTa8eVI85x9T+Um1Zr+QgFBkZuiefUZSrfH/XZI8XLGOt9G0VSM6B7sc+n/2Av
-         i9xJL6EG24UVlQc3Ii1k43nD4yzm0QcYTnwpZ8JSzENMcQf8JXKbFcRx1ijioz/HwXzt
-         tiB8dsAcGHWzjVDtHjFsJytRfd7oUw8K/YeSz65DdNNE3t4zsa9k00rqk5UZS7aH4CYI
-         sWMA==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=CJYOqLIO01MXVIHzVSpSMA9KtKvNIpQx9lFJup0kd+A=;
+        b=nZKNJYYb7BsiUFO0xhhabyJFpwpI9wbBPKhrWhpub9OkdeTNhFbhWKITn+cBfbTXCo
+         yEAXKUjBUape0cJ4SA056RPcmIsAIZpf99RCejQG8z1XHVBovkOy7XQXKLNj8kaHiLoq
+         xtQXGz7pZRz458/dVk1w7/mgkIHsAcQnMD04HNV7uio4qPWSoLjRuqmg+xIPEIjBVAAw
+         9MYJd95Z9KDZKK+/NcMYq4yLC0Ckli+meMCuK1bLwPhq1DyiAaFZVD5HEnqeToF1vlLG
+         b4fEkn+Zx+MxDpLvh1ZF+GhCpDDQjQ46CpWGGyWJ1xrh+QV+7VyIIZD7bWAsF5fRXQ6u
+         RsZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8vAGKoF9jgn/tUNVyO8o1ITGDSm2GHRMu0jTib9BiWo=;
-        b=EB5yubi0rMn9kvNsM43JJdNLveqZRF8YhHXL95HqAiC2ZVbWKHXJ3nN6UWpHGcztme
-         PN5pgvyNWL24sLlewhTeNMFMtAX1b4Schsp0yLE2mRGsfBuXl0mWZoeX+X1YOKB+243L
-         UqKgdN0rBT97iiqbbiilf1fSy6JBTDYcHKWwbkKCvgOVMhnMB7wn8wGKXY38z1SEfGXU
-         2o8GgZ1i8Nf9KY6daOjgsNa1ZN/ev/3SrHgwOmY/LxfGFY6eVDAEfDqpRAN/SW4p9V5D
-         2Rx+KVaACdKI29VrCrVl4svAHDxzVBP/rJypkWoi09lapPNm1piT4iVIXz83t4n+vGKj
-         1Q1A==
-X-Gm-Message-State: ACgBeo32xnDdjWZ2mErYdoQ0kt/M0l7RUbQMrrvstjk3/mMGKhk7jd6A
-        lUDKPNF0n4GevoMGuXBiT8OVtf5wmRzX57rNJ7AC+w==
-X-Google-Smtp-Source: AA6agR56LLPgPczHv26VdIBrzy2WI/OHspNLB8HYyLFBpDOrNasYWwIi3kVfMeLR/npl9IPAfjp6/xYQ1KxA/nnEkNI=
-X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id
- f7-20020a0560001a8700b002222c852f5bmr194383wry.654.1661529785843; Fri, 26 Aug
- 2022 09:03:05 -0700 (PDT)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=CJYOqLIO01MXVIHzVSpSMA9KtKvNIpQx9lFJup0kd+A=;
+        b=rsn2AybMiVAsbfPZ0U/mFso24P8CVcBL+kSrUctTLCHL3zXastqmMg/jQaKGc9pAXy
+         MUTXlgit+7PuH6QX0FpERpR9I7lwgKulNs+4vhqtA7VFoh3l3enIo94eazc/tq2URuA8
+         se5j3/+S5YLC9H8K4Zo3RmSyLqO5BJW1yoZkB/gOdAEcUtiAxatJX4NV/zbuEWdzJ2+C
+         58sbS8AhLYv4u74d2ZMCIsrSPu9Ta4DlCjAIPf4YBrb6SJrr70t/uTXoYm82IEitK8aA
+         iZeB+hJ72+sNgEuaBM4xdR0lvMi1oYvDscrDhZ41iOzdXIPAmE5fSyMk96k5Kerrf2TY
+         vc6g==
+X-Gm-Message-State: ACgBeo0/RX/TsuAPAW6XjdiqbG4NnpZ9GuPE4R0Y6k7L8eI26JfEZ9xF
+        OEkhKSMYgSlpMFn4R6uToQ4=
+X-Google-Smtp-Source: AA6agR7icvaWbLM6+nRHP0f0x/I0DIAY+vWIHyEWhhwNgtCtOCHUZfXBrRqo6KAeJlB9s7Y/tznmCA==
+X-Received: by 2002:a05:651c:1025:b0:261:cc9c:3db with SMTP id w5-20020a05651c102500b00261cc9c03dbmr2605963ljm.80.1661529791526;
+        Fri, 26 Aug 2022 09:03:11 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id m21-20020a195215000000b0048ad4c718f3sm422620lfb.30.2022.08.26.09.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 09:03:10 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 18:03:07 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Petlozu Pravareshwar <petlozup@nvidia.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "Kartik ." <kkartik@nvidia.com>,
+        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
+        Sandipan Patra <spatra@nvidia.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] soc/tegra: pmc: Print reset info during probe
+Message-ID: <Ywjuuw/rSRUSORFF@orome>
+References: <20220817184456.1184459-1-petlozup@nvidia.com>
+ <Yv5XarzacTOkTL1k@orome>
+ <DM6PR12MB316434A9BA61A01251E3BA3CB5739@DM6PR12MB3164.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
- <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
-In-Reply-To: <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 26 Aug 2022 09:02:53 -0700
-Message-ID: <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
-Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IwTi6ziXccuE4c+s"
+Content-Disposition: inline
+In-Reply-To: <DM6PR12MB316434A9BA61A01251E3BA3CB5739@DM6PR12MB3164.namprd12.prod.outlook.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 3:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 24/08/22 18:38, Ian Rogers wrote:
-> > Switch to the use of mutex wrappers that provide better error checking.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/ui/browser.c           | 20 ++++++++++----------
-> >  tools/perf/ui/browsers/annotate.c |  2 +-
-> >  tools/perf/ui/setup.c             |  5 +++--
-> >  tools/perf/ui/tui/helpline.c      |  5 ++---
-> >  tools/perf/ui/tui/progress.c      |  8 ++++----
-> >  tools/perf/ui/tui/setup.c         |  8 ++++----
-> >  tools/perf/ui/tui/util.c          | 18 +++++++++---------
-> >  tools/perf/ui/ui.h                |  4 ++--
-> >  8 files changed, 35 insertions(+), 35 deletions(-)
-> >
-> > diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
-> > index fa5bd5c20e96..78fb01d6ad63 100644
-> > --- a/tools/perf/ui/browser.c
-> > +++ b/tools/perf/ui/browser.c
-> > @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
-> >
-> >  void ui_browser__show_title(struct ui_browser *browser, const char *title)
-> >  {
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       __ui_browser__show_title(browser, title);
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >  }
-> >
-> >  int ui_browser__show(struct ui_browser *browser, const char *title,
-> > @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
-> >
-> >       browser->refresh_dimensions(browser);
-> >
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       __ui_browser__show_title(browser, title);
-> >
-> >       browser->title = title;
-> > @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
-> >       va_end(ap);
-> >       if (err > 0)
-> >               ui_helpline__push(browser->helpline);
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >       return err ? 0 : -1;
-> >  }
-> >
-> >  void ui_browser__hide(struct ui_browser *browser)
-> >  {
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       ui_helpline__pop();
-> >       zfree(&browser->helpline);
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >  }
-> >
-> >  static void ui_browser__scrollbar_set(struct ui_browser *browser)
-> > @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
-> >
-> >  int ui_browser__refresh(struct ui_browser *browser)
-> >  {
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       __ui_browser__refresh(browser);
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >
-> >       return 0;
-> >  }
-> > @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
-> >       while (1) {
-> >               off_t offset;
-> >
-> > -             pthread_mutex_lock(&ui__lock);
-> > +             mutex_lock(&ui__lock);
-> >               err = __ui_browser__refresh(browser);
-> >               SLsmg_refresh();
-> > -             pthread_mutex_unlock(&ui__lock);
-> > +             mutex_unlock(&ui__lock);
-> >               if (err < 0)
-> >                       break;
-> >
-> > diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
-> > index 44ba900828f6..b8747e8dd9ea 100644
-> > --- a/tools/perf/ui/browsers/annotate.c
-> > +++ b/tools/perf/ui/browsers/annotate.c
-> > @@ -8,11 +8,11 @@
-> >  #include "../../util/hist.h"
-> >  #include "../../util/sort.h"
-> >  #include "../../util/map.h"
-> > +#include "../../util/mutex.h"
-> >  #include "../../util/symbol.h"
-> >  #include "../../util/evsel.h"
-> >  #include "../../util/evlist.h"
-> >  #include <inttypes.h>
-> > -#include <pthread.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/string.h>
-> >  #include <linux/zalloc.h>
-> > diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
-> > index 700335cde618..25ded88801a3 100644
-> > --- a/tools/perf/ui/setup.c
-> > +++ b/tools/perf/ui/setup.c
-> > @@ -1,5 +1,4 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> > -#include <pthread.h>
-> >  #include <dlfcn.h>
-> >  #include <unistd.h>
-> >
-> > @@ -8,7 +7,7 @@
-> >  #include "../util/hist.h"
-> >  #include "ui.h"
-> >
-> > -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
-> > +struct mutex ui__lock;
-> >  void *perf_gtk_handle;
-> >  int use_browser = -1;
-> >
-> > @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
-> >
-> >  void setup_browser(bool fallback_to_pager)
-> >  {
-> > +     mutex_init(&ui__lock);
-> >       if (use_browser < 2 && (!isatty(1) || dump_trace))
-> >               use_browser = 0;
-> >
-> > @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
-> >       default:
-> >               break;
-> >       }
-> > +     mutex_destroy(&ui__lock);
->
-> Looks like exit_browser() can be called even when setup_browser()
-> was never called.
->
-> Note, it also looks like PTHREAD_MUTEX_INITIALIZER is all zeros so
-> pthread won't notice.
 
-Memory sanitizer will notice some cases of this and so I didn't want
-to code defensively around exit being called ahead of setup.
+--IwTi6ziXccuE4c+s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Ian
+On Wed, Aug 24, 2022 at 07:39:46PM +0000, Petlozu Pravareshwar wrote:
+> >=20
+> > On Wed, Aug 17, 2022 at 06:44:56PM +0000, Petlozu Pravareshwar wrote:
+> > > During PMC probe, print previous reset related info such as reset
+> > > reason and reset level.
+> > >
+> > > Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+> > > ---
+> > >  drivers/soc/tegra/pmc.c | 27 +++++++++++++++++++++++++++
+> > >  1 file changed, 27 insertions(+)
+> >=20
+> > We already expose this information in sysfs, why do we need to print it
+> > during boot?
+> >=20
+> > Thierry
+> There are some tests which would parse the boot log for this information.
+> But I agree, since we are already providing this information through sysf=
+s,
+> there is no need to print it during boot.
 
-> >  }
-> > diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
-> > index 298d6af82fdd..db4952f5990b 100644
-> > --- a/tools/perf/ui/tui/helpline.c
-> > +++ b/tools/perf/ui/tui/helpline.c
-> > @@ -2,7 +2,6 @@
-> >  #include <stdio.h>
-> >  #include <stdlib.h>
-> >  #include <string.h>
-> > -#include <pthread.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/string.h>
-> >
-> > @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
-> >       int ret;
-> >       static int backlog;
-> >
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       ret = vscnprintf(ui_helpline__last_msg + backlog,
-> >                       sizeof(ui_helpline__last_msg) - backlog, format, ap);
-> >       backlog += ret;
-> > @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
-> >               SLsmg_refresh();
-> >               backlog = 0;
-> >       }
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >
-> >       return ret;
-> >  }
-> > diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
-> > index 3d74af5a7ece..71b6c8d9474f 100644
-> > --- a/tools/perf/ui/tui/progress.c
-> > +++ b/tools/perf/ui/tui/progress.c
-> > @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
-> >       }
-> >
-> >       ui__refresh_dimensions(false);
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       y = SLtt_Screen_Rows / 2 - 2;
-> >       SLsmg_set_color(0);
-> >       SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
-> > @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
-> >       bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
-> >       SLsmg_fill_region(y, 1, 1, bar, ' ');
-> >       SLsmg_refresh();
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >  }
-> >
-> >  static void tui_progress__finish(void)
-> > @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
-> >               return;
-> >
-> >       ui__refresh_dimensions(false);
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       y = SLtt_Screen_Rows / 2 - 2;
-> >       SLsmg_set_color(0);
-> >       SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
-> >       SLsmg_refresh();
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >  }
-> >
-> >  static struct ui_progress_ops tui_progress__ops = {
-> > diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
-> > index b1be59b4e2a4..a3b8c397c24d 100644
-> > --- a/tools/perf/ui/tui/setup.c
-> > +++ b/tools/perf/ui/tui/setup.c
-> > @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
-> >  {
-> >       if (force || ui__need_resize) {
-> >               ui__need_resize = 0;
-> > -             pthread_mutex_lock(&ui__lock);
-> > +             mutex_lock(&ui__lock);
-> >               SLtt_get_screen_size();
-> >               SLsmg_reinit_smg();
-> > -             pthread_mutex_unlock(&ui__lock);
-> > +             mutex_unlock(&ui__lock);
-> >       }
-> >  }
-> >
-> > @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
-> >                                   "Press any key...", 0);
-> >
-> >       SLtt_set_cursor_visibility(1);
-> > -     if (!pthread_mutex_trylock(&ui__lock)) {
-> > +     if (mutex_trylock(&ui__lock)) {
-> >               SLsmg_refresh();
-> >               SLsmg_reset_smg();
-> > -             pthread_mutex_unlock(&ui__lock);
-> > +             mutex_unlock(&ui__lock);
-> >       }
-> >       SLang_reset_tty();
-> >       perf_error__unregister(&perf_tui_eops);
-> > diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
-> > index 0f562e2cb1e8..3c5174854ac8 100644
-> > --- a/tools/perf/ui/tui/util.c
-> > +++ b/tools/perf/ui/tui/util.c
-> > @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
-> >               t = sep + 1;
-> >       }
-> >
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >
-> >       max_len += 2;
-> >       nr_lines += 8;
-> > @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
-> >       SLsmg_write_nstring((char *)exit_msg, max_len);
-> >       SLsmg_refresh();
-> >
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >
-> >       x += 2;
-> >       len = 0;
-> >       key = ui__getch(delay_secs);
-> >       while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
-> > -             pthread_mutex_lock(&ui__lock);
-> > +             mutex_lock(&ui__lock);
-> >
-> >               if (key == K_BKSPC) {
-> >                       if (len == 0) {
-> > -                             pthread_mutex_unlock(&ui__lock);
-> > +                             mutex_unlock(&ui__lock);
-> >                               goto next_key;
-> >                       }
-> >                       SLsmg_gotorc(y, x + --len);
-> > @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
-> >               }
-> >               SLsmg_refresh();
-> >
-> > -             pthread_mutex_unlock(&ui__lock);
-> > +             mutex_unlock(&ui__lock);
-> >
-> >               /* XXX more graceful overflow handling needed */
-> >               if (len == sizeof(buf) - 1) {
-> > @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
-> >
-> >  void ui__info_window(const char *title, const char *text)
-> >  {
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       __ui__info_window(title, text, NULL);
-> >       SLsmg_refresh();
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >  }
-> >
-> >  int ui__question_window(const char *title, const char *text,
-> >                       const char *exit_msg, int delay_secs)
-> >  {
-> > -     pthread_mutex_lock(&ui__lock);
-> > +     mutex_lock(&ui__lock);
-> >       __ui__info_window(title, text, exit_msg);
-> >       SLsmg_refresh();
-> > -     pthread_mutex_unlock(&ui__lock);
-> > +     mutex_unlock(&ui__lock);
-> >       return ui__getch(delay_secs);
-> >  }
-> >
-> > diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
-> > index 9b6fdf06e1d2..99f8d2fe9bc5 100644
-> > --- a/tools/perf/ui/ui.h
-> > +++ b/tools/perf/ui/ui.h
-> > @@ -2,11 +2,11 @@
-> >  #ifndef _PERF_UI_H_
-> >  #define _PERF_UI_H_ 1
-> >
-> > -#include <pthread.h>
-> > +#include "../util/mutex.h"
-> >  #include <stdbool.h>
-> >  #include <linux/compiler.h>
-> >
-> > -extern pthread_mutex_t ui__lock;
-> > +extern struct mutex ui__lock;
-> >  extern void *perf_gtk_handle;
-> >
-> >  extern int use_browser;
->
+It'd be a good idea to transition the tests to try and obtain this
+information through sysfs first and if that fails they could fall back
+to using the boot log. Although to be honest, I think we've supported
+this sysfs interface for long enough that we probably don't have to
+worry about a fallback.
+
+Thierry
+
+--IwTi6ziXccuE4c+s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMI7rsACgkQ3SOs138+
+s6Fuuw//fpdWuuuYJumXJttWNjjZcCt38TggWatdqAJIJQ3UIyy6K/+jga2fV0SZ
+SMbsuNdMyWBgq7pVNVNrAqZptg+3bnrInbJzU3BIT+UCQuXnL95I1MuvaB2zWTQv
+ZFLRZwd6X4txY70t7iFwstgjkNhKkSupGE6hDHwMh3h0ptGYby3sDtbYlXBBxnRk
+4MLW68/LIuJe36kRJI8Z7LLjzZYOo+Y1Z8Dk59d1pJxQukaH6gy5zxyuxoFd/XAt
+THB6PHQid796Ej8w7W3U9oCyvgzqYPClIA1sxaNH9ZPblDpf2skQczrJAps73aK8
+UReS3Bg0uBsj7elz9OY57bsw0gqp1EqiEK9tlfx9WVF1H2eJYKF1D/2Xb2/lsv6A
+DonpVF+TKzMiYe0AL2+vSWlzK/LB7Ckh9Lyz8aijAepFiQgAjp6G8Ogbme1fsO1Z
+shM4FahaAorW+aqLFBl9VLDthcTVlgx7WTt3aovSMYFS9DBWGluC5DSW9UCtLDVn
+wgv1M9AyXt5sYv2UzDKC2w1LQPejRfNclu0w3wM2SNkkY2551244R0H/JTusvDC6
+2dYgQ/h6f6yrxPAmmIe+2/tgYOCfp5yuMq0Sv2BdQptAR1q5v+12Lebbc0g+4du3
+eotOvH6HE8RBZRubK0d8Ih9ZY9RWc6nE2ZKH+MUqgX7+v0Dgj4M=
+=iqMZ
+-----END PGP SIGNATURE-----
+
+--IwTi6ziXccuE4c+s--

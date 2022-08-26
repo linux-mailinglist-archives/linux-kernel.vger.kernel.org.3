@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBEC5A23C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677305A23CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245172AbiHZJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S245641AbiHZJLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237428AbiHZJKE (ORCPT
+        with ESMTP id S245530AbiHZJLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:10:04 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016032F03A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:10:02 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id w22so978569ljg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:10:01 -0700 (PDT)
+        Fri, 26 Aug 2022 05:11:06 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B4FCD524
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:11:04 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id p187so698754iod.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=j2KtObeVweB4PtewYavPBdUZLz9VJwwib5xRQ67zdyc=;
-        b=oKatiD/7aR17ObA6DF3MveHscjyhwPg0qhz3TCUeRFLBGKOJXf6NDR9oYbEVbRXUzO
-         B6O5F/uHMUPxl3Q9UWZSLS8+IPMUzbCOXFZV4BEQtycIHZb16hTRjNwCh6Rj4Xr4YjRH
-         kTu3QlmCEFqpygZnHvdXFzHYEWkjLhtCKDMbsrzu8WAgw9O+T92h9c/Y7+FTBttw2UPf
-         4cL3kChUNV/QKrKXSnhFEH1g25t38XfapJw2PcPGg9H79moryop6ylmJAhRKULvZ3UrY
-         wONZnzpvcfWzCIr+HKn2WleikcsQUJQnCkgPHBAuPRzoiJHlwgrvG4G1KYEODqYk2P4u
-         eM+w==
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9WfR61mwlG7xEw+rTgThfNinRNgyKs7+mef9MefL6PA=;
+        b=EhvIqLiC9BX9tHc9a+BQqpydsPIjtHyKBmBx0sofnPbgUlRgpWlCGxWIpp5JbnuFup
+         2kZoVj99EcwjkfBHBUZg2oipu8wdizJwB4NoGLsfzUAFh/Tk2zvveA8DFExtjEyQ8Dc/
+         /pVtcCgigmLtsj7Cwo14GVv+Ocdqf7No5PvDs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=j2KtObeVweB4PtewYavPBdUZLz9VJwwib5xRQ67zdyc=;
-        b=tCt1tItjq2Xza426JWOyIflgfZqksaNJ9ZZdVa3tzlNvgKkLOw4iD5iWsuGrbvtZfV
-         VzzRvMgCZxD/+8+UTA7a3MJdU5ypgaYMCX6f86Yzfdx7ebzTNcS0Q7vKkRK3gwWFz8Md
-         KGu+vqmvkpFHyVLPENpJZS1YFGfYQohKeDuq2EOHt7a3Qm4Jo0IKVkYf4g/Idq8KH6hW
-         msjWT8dbhJqP/mGYtr2dQUCTBmBVVH7Mk4J+tW2lNcSQphHPw5/bTDzyouqbqpH8UeFO
-         Kl0tPQb7mzv2je49IkDZKvLRTPERwaGQNomo0a+jMfWcv7JNiNbbOwctWCD1bq3hlKVJ
-         bRCA==
-X-Gm-Message-State: ACgBeo0S8ncDOQFe5BFeDAzjLRXcThYzz2m7pjBOvHW7GJ4b9bqFopEp
-        orklt/2aw04nBh/okMSRf4w9hA==
-X-Google-Smtp-Source: AA6agR48eHVuu7caQCj51Y7Sljt2mlqruCtMZ32WU62CLQcXPd24ORg6/ufVrMRPia1ZCj244CTMFg==
-X-Received: by 2002:a2e:9d5a:0:b0:25e:2c67:edaf with SMTP id y26-20020a2e9d5a000000b0025e2c67edafmr2097255ljj.437.1661505000270;
-        Fri, 26 Aug 2022 02:10:00 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s3-20020a05651c048300b0025e42174f0csm387180ljc.70.2022.08.26.02.09.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 02:09:59 -0700 (PDT)
-Message-ID: <713dbfbc-0111-f100-bc59-f664a25bdc3d@linaro.org>
-Date:   Fri, 26 Aug 2022 12:09:59 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9WfR61mwlG7xEw+rTgThfNinRNgyKs7+mef9MefL6PA=;
+        b=jrRJEj9CP8JfaUwItLTslnhM1elK7HU4KVWq9iM1FRz2PF2i/Eym0ql0XobLvjOzhy
+         dxfu5XLw+1seOsB3qIP1M7rnDXyroA1ZxZRVkyHSo8PR8NkeQR9LJdwitKWspqR2BO/s
+         rznenitrxVBiGV16y1lpY216/yiQ0VcObnyK27Y1GXS1MwTB5O5eC7WtnwpXeih60gvA
+         vYMIdpol5ELCkJ2If4RKPLQDjJ8WW+wuXUrCK2gi95oyjedpyAbQuy12+OQ8GWzbIIwc
+         lnApVRzeg+NHE5K2ZTnKuLpaWD9O04sbmszhY3areAQ5PTtU4CO2K0gzh0EKWV0/OSrL
+         /WMQ==
+X-Gm-Message-State: ACgBeo0Wc+8EMAjm8UqaCOR2BOPq2pIfE3seIZHFYKu4swUK2rbxF0TP
+        4jd/S8m6xm98B9ttL4L0NKLfKtnQy6MqyuKHIuRVcw==
+X-Google-Smtp-Source: AA6agR6HH6H4gQKe9WI6NZj2d6w2XPDgEj2DZxqfhfzNbm4v9sn+/Pw662xyRmYU8yITLrnZeY2UhvE0P3+pTftDpXg=
+X-Received: by 2002:a05:6638:1244:b0:34a:1104:afa with SMTP id
+ o4-20020a056638124400b0034a11040afamr3321877jas.244.1661505063405; Fri, 26
+ Aug 2022 02:11:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH RESEND] drm/msm/dsi: fix the inconsistent indenting
-Content-Language: en-GB
-To:     sunliming <sunliming@kylinos.cn>, christian.koenig@amd.com,
-        robdclark@gmail.com, quic_abhinavk@quicinc.com
-Cc:     freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        inux-arm-msm@vger.kernel.org, kelulanainsley@gmail.com,
-        kernel test robot <lkp@intel.com>
-References: <20220826084917.95409-1-sunliming@kylinos.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220826084917.95409-1-sunliming@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org> <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+In-Reply-To: <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+From:   Ignat Korchagin <ignat@cloudflare.com>
+Date:   Fri, 26 Aug 2022 10:10:51 +0100
+Message-ID: <CALrw=nHRFC-Ws2j-MJAs50oznfRC5fG3a3opmYRkxQCtK61EEg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +84,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/08/2022 11:49, sunliming wrote:
-> Fix the inconsistent indenting in function msm_dsi_dphy_timing_calc_v3().
-> 
-> Fix the following smatch warnings:
-> 
-> drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
-> 
-> Fixes: f1fa7ff44056 ("drm/msm/dsi: implement auto PHY timing calculator for 10nm PHY")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+On Thu, Aug 25, 2022 at 8:19 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > Paul Moore <paul@paul-moore.com> writes:
+> > > On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> > >>  I am hoping we can come up with
+> > >> "something better" to address people's needs, make everyone happy, and
+> > >> bring forth world peace.  Which would stack just fine with what's here
+> > >> for defense in depth.
+> > >>
+> > >> You may well not be interested in further work, and that's fine.  I need
+> > >> to set aside a few days to think on this.
+> > >
+> > > I'm happy to continue the discussion as long as it's constructive; I
+> > > think we all are.  My gut feeling is that Frederick's approach falls
+> > > closest to the sweet spot of "workable without being overly offensive"
+> > > (*cough*), but if you've got an additional approach in mind, or an
+> > > alternative approach that solves the same use case problems, I think
+> > > we'd all love to hear about it.
+> >
+> > I would love to actually hear the problems people are trying to solve so
+> > that we can have a sensible conversation about the trade offs.
+>
+> Here are several taken from the previous threads, it's surely not a
+> complete list, but it should give you a good idea:
+>
+> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+>
+> > As best I can tell without more information people want to use
+> > the creation of a user namespace as a signal that the code is
+> > attempting an exploit.
+>
+> Some use cases are like that, there are several other use cases that
+> go beyond this; see all of our previous discussions on this
+> topic/patchset.  As has been mentioned before, there are use cases
+> that require improved observability, access control, or both.
+>
+> > As such let me propose instead of returning an error code which will let
+> > the exploit continue, have the security hook return a bool.  With true
+> > meaning the code can continue and on false it will trigger using SIGSYS
+> > to terminate the program like seccomp does.
+>
+> Having the kernel forcibly exit the process isn't something that most
+> LSMs would likely want.  I suppose we could modify the hook/caller so
+> that *if* an LSM wanted to return SIGSYS the system would kill the
+> process, but I would want that to be something in addition to
+> returning an error code like LSMs normally do (e.g. EACCES).
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I would also add here that seccomp allows more flexibility than just
+delivering SIGSYS to a violating application. We can program seccomp
+bpf to:
+  * deliver a signal
+  * return a CUSTOM error code (and BTW somehow this does not trigger
+any requirements to change userapi or document in manpages: in my toy
+example in [1] I'm delivering ENETDOWN from a uname(2) system call,
+which is not documented in the man pages, but totally valid from a
+seccomp usage perspective)
+  * do-nothing, but log the action
 
-> ---
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+So I would say the seccomp reference supports the current approach
+more than the alternative approach of delivering SIGSYS as technically
+an LSM implementation of the hook (at least in-kernel one) can chose
+to deliver a signal to a task via kernel-api, but BPF-LSM (and others)
+can deliver custom error codes and log the actions as well.
 
--- 
-With best wishes
-Dmitry
+Ignat
 
+> --
+> paul-moore.com
+
+[1]: https://blog.cloudflare.com/sandboxing-in-linux-with-zero-lines-of-code/

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5AC5A25E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4242B5A25ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245350AbiHZKdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S1343742AbiHZKfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343752AbiHZKdt (ORCPT
+        with ESMTP id S231664AbiHZKfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:33:49 -0400
+        Fri, 26 Aug 2022 06:35:09 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4BD8D34CD;
-        Fri, 26 Aug 2022 03:33:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BC3E6112D;
+        Fri, 26 Aug 2022 03:35:07 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7961823A;
-        Fri, 26 Aug 2022 03:33:52 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5921F23A;
+        Fri, 26 Aug 2022 03:35:12 -0700 (PDT)
 Received: from [10.57.46.92] (unknown [10.57.46.92])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3E2FA3F93E;
-        Fri, 26 Aug 2022 03:33:46 -0700 (PDT)
-Message-ID: <0e676355-25fa-8527-a425-18c7f72c0215@arm.com>
-Date:   Fri, 26 Aug 2022 12:33:48 +0200
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EC363F93E;
+        Fri, 26 Aug 2022 03:35:05 -0700 (PDT)
+Message-ID: <42295bfc-136d-ebac-c44e-6bf46b0757f9@arm.com>
+Date:   Fri, 26 Aug 2022 12:35:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Subject: Re: [PATCH] irqchip/gic-v3-its: Remove cpumask_var_t allocation
 Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
+To:     Song Chen <chensong_2000@189.cn>, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 References: <20220825152348.1634133-1-pierre.gondois@arm.com>
- <875yigw64n.wl-maz@kernel.org>
+ <b946d81b-3777-51e1-8a01-e4ace99d829f@189.cn>
 From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <875yigw64n.wl-maz@kernel.org>
+In-Reply-To: <b946d81b-3777-51e1-8a01-e4ace99d829f@189.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -46,21 +46,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mark,
+Hello Song,
 
-On 8/25/22 20:05, Marc Zyngier wrote:
-> On Thu, 25 Aug 2022 16:23:48 +0100,
-> Pierre Gondois <pierre.gondois@arm.com> wrote:
->>
+On 8/26/22 03:17, Song Chen wrote:
+> hi,
+> 
+> 在 2022/8/25 23:23, Pierre Gondois 写道:
 >> In KvmTool, on a ThunderX2, when running a preemp_rt kernel based on
-> 
-> How is this specific to kvmtool? Or to running as a guest?
-
-This is not specific to KvmTool/running as a guest. This can be reproduced
-on an Ampere Altra for instance. KvmTool is mentioned here because this
-was used as the test environment.
-
-> 
 >> v5.19-rc3-rt4, the following happens:
 >> [    4.070739] [ BUG: Invalid wait context ]
 >> [    4.070740] 5.19.0-rc3-rt4-00001-g1a6597c0bdcf #153 Not tainted
@@ -118,12 +110,6 @@ was used as the test environment.
 >> [    4.070921] kernel_init_freeable (init/main.c:1367)
 >> [    4.070924] kernel_init (init/main.c:1503)
 >> [    4.070927] ret_from_fork (arch/arm64/kernel/entry.S:868)
-> 
-> Consider trimming the trace to the useful part.
-
-Yes sure.
-
-> 
 >>
 >> commit cba4235e6031e ("genirq: Remove mask argument from
 >> setup_affinity()")
@@ -135,190 +121,108 @@ Yes sure.
 >> disabled.
 >> its_select_cpu() can be executed with IRQs enabled or disabled. Thus
 >> disabling IRQs is necesserary to avoid deadlocking.
-> 
-> Only if this code can be preempted by an interrupt and subsequently
-> called from interrupt context. Can you describe this code path?
-
-I'm putting the debug log at the end of the mail.
-
-> 
 >>
 >> This patch:
-> 
-> Please refer to the documentation and the section about avoiding
-> things like "this patch" in a commit message.
-
-Yes sure.
-
-> 
 >> - makes tmpmask a 'static struct cpumask'. This prevents storing it on
->>    the stack and having to dynamically allocate it
+>>     the stack and having to dynamically allocate it
 >> - protects tmpmask with a raw spinlock
 >> - disables IRQs around the spinlock for the case its_select_cpu() is
->>    called with IRQs enabled
+>>     called with IRQs enabled
 >>
 >> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 >> ---
->>   drivers/irqchip/irq-gic-v3-its.c | 34 +++++++++++++++++---------------
->>   1 file changed, 18 insertions(+), 16 deletions(-)
+>>    drivers/irqchip/irq-gic-v3-its.c | 34 +++++++++++++++++---------------
+>>    1 file changed, 18 insertions(+), 16 deletions(-)
 >>
 >> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
 >> index 5ff09de6c48f..3cf89e59b036 100644
 >> --- a/drivers/irqchip/irq-gic-v3-its.c
 >> +++ b/drivers/irqchip/irq-gic-v3-its.c
 >> @@ -1574,14 +1574,15 @@ static int its_select_cpu(struct irq_data *d,
->>   			  const struct cpumask *aff_mask)
->>   {
->>   	struct its_device *its_dev = irq_data_get_irq_chip_data(d);
+>>    			  const struct cpumask *aff_mask)
+>>    {
+>>    	struct its_device *its_dev = irq_data_get_irq_chip_data(d);
 >> -	cpumask_var_t tmpmask;
 >> +	static DEFINE_RAW_SPINLOCK(tmpmask_lock);
 >> +	static struct cpumask tmpmask;
 >> +	unsigned long flags;
->>   	int cpu, node;
+>>    	int cpu, node;
 >> -
 >> -	if (!alloc_cpumask_var(&tmpmask, GFP_ATOMIC))
 >> -		return -ENOMEM;
 >> -
->>   	node = its_dev->its->numa_node;
->>   
+>>    	node = its_dev->its->numa_node;
+>>    
 >> +	local_irq_save(flags);
 >> +	raw_spin_lock(&tmpmask_lock);
-> 
-> Why is this done in two steps? What is wrong with raw_spin_lock_irqsave()?
-
-This is a mistake. raw_spin_lock_irqsave() would fit perfectly.
-
-> 
-> More importantly, a number of call paths reaching its_set_affinity()
-> already execute under a raw spinlock, with interrupts disabled. Is it
-> worth not hitting this lock at all times?
-
-I think this is necessary to avoid 'possible irq lock inversion' at the
-end of the message.
-
-> 
 >> +
->>   	if (!irqd_affinity_is_managed(d)) {
->>   		/* First try the NUMA node */
->>   		if (node != NUMA_NO_NODE) {
+> 
+> why not call raw_spin_lock_irqsave and raw_spin_unlock_irqrestore?
+
+Yes indeed, raw_spin_unlock_irqrestore() would fit perfectly,
+this is a mistake.
+
+Thanks for the review,
+Pierre
+
+> 
+> Song
+> 
+>>    	if (!irqd_affinity_is_managed(d)) {
+>>    		/* First try the NUMA node */
+>>    		if (node != NUMA_NO_NODE) {
 >> @@ -1589,8 +1590,8 @@ static int its_select_cpu(struct irq_data *d,
->>   			 * Try the intersection of the affinity mask and the
->>   			 * node mask (and the online mask, just to be safe).
->>   			 */
+>>    			 * Try the intersection of the affinity mask and the
+>>    			 * node mask (and the online mask, just to be safe).
+>>    			 */
 >> -			cpumask_and(tmpmask, cpumask_of_node(node), aff_mask);
 >> -			cpumask_and(tmpmask, tmpmask, cpu_online_mask);
 >> +			cpumask_and(&tmpmask, cpumask_of_node(node), aff_mask);
 >> +			cpumask_and(&tmpmask, &tmpmask, cpu_online_mask);
-> 
-> Consider reducing the churn by writing something like:
-> 
-> 	static struct cpumask __tmpmask;
-> 	struct cpumask *tmpmask = &__tmpmask;
-> 
-> which is strictly equivalent, and makes the patch much smaller.
-
-Yes sure.
-
-> 
-> Thanks,
-> 
-> 	M.
-> 
-
-Thanks for the fast review,
-
-Regards,
-Pierre
-
-
-The debug log:
-
-
-[    2.935093] ========================================================
-[    2.935094] WARNING: possible irq lock inversion dependency detected
-[    2.935096] 5.19.0-rc3-rt4-00062-g6c393ee20e4e #37 Not tainted
-[    2.935098] --------------------------------------------------------
-[    2.935099] swapper/0/1 just changed the state of lock:
-[    2.935101] ffff0000029534c8 (&irq_desc_lock_class){-...}-{2:2}, at: handle_fasteoi_irq (linux/kernel/irq/chip.c:693)
-[    2.935116] but this lock took another, HARDIRQ-unsafe lock in the past:
-[    2.935117]  (tmpmask_lock){+.+.}-{2:2}
-[    2.935119]
-[    2.935119]
-[    2.935119] and interrupts could create inverse lock ordering between them.
-[    2.935119]
-[    2.935120]
-[    2.935120] other info that might help us debug this:
-[    2.935121] Chain exists of:
-[    2.935121]   &irq_desc_lock_class --> tmp_mask_lock --> tmpmask_lock
-[    2.935121]
-[    2.935125]  Possible interrupt unsafe locking scenario:
-[    2.935125]
-[    2.935126]        CPU0                    CPU1
-[    2.935126]        ----                    ----
-[    2.935127]   lock(tmpmask_lock);
-[    2.935129]                                local_irq_disable();
-[    2.935129]                                lock(&irq_desc_lock_class);
-[    2.935131]                                lock(tmp_mask_lock);
-[    2.935133]   <Interrupt>
-[    2.935133]     lock(&irq_desc_lock_class);
-[    2.935135]
-[    2.935135]  *** DEADLOCK ***
-[    2.935135]
-[    2.935136] 3 locks held by swapper/0/1:
-[    2.935137] #0: ffff000000e621e0 (&dev->mutex){....}-{4:4}, at: __device_driver_lock (linux/drivers/base/dd.c:1055)
-[    2.935147] #1: ffff000002951548 (&disk->open_mutex){+.+.}-{4:4}, at: blkdev_get_by_dev (linux/./include/linux/blkdev.h:177)
-[    2.935155] #2: ffff80000b0e4778 (&folio_wait_table[i]){+.+.}-{3:3}, at: folio_wait_bit_common (linux/./arch/arm64/include/asm/jump_label.h:38)
-
-[snip]
-
-[    2.935446] ... key at: tmpmask_lock.56732+0x18/0x40
-[    2.935451]    ... acquired at:
-[    2.935452] _raw_spin_lock (linux/./include/linux/spinlock_api_smp.h:134)
-[    2.935454] its_select_cpu (linux/drivers/irqchip/irq-gic-v3-its.c:1584)
-[    2.935457] its_set_affinity (linux/drivers/irqchip/irq-gic-v3-its.c:1661)
-[    2.935460] msi_domain_set_affinity (linux/kernel/irq/msi.c:501)
-[    2.935463] irq_do_set_affinity (linux/kernel/irq/manage.c:276)
-[    2.935468] irq_setup_affinity (linux/kernel/irq/manage.c:633)
-[    2.935471] irq_startup (linux/kernel/irq/chip.c:280)
-[    2.935473] __setup_irq (linux/kernel/irq/manage.c:1777)
-[    2.935476] request_threaded_irq (linux/kernel/irq/manage.c:2206)
-[    2.935479] vp_find_vqs_msix (linux/./include/linux/interrupt.h:168)
-[    2.935481] vp_find_vqs (linux/drivers/virtio/virtio_pci_common.c:400)
-[    2.935483] vp_modern_find_vqs (linux/drivers/virtio/virtio_pci_modern.c:259)
-[    2.935485] init_vq (linux/./include/linux/virtio_config.h:213)
-[    2.935487] virtblk_probe (linux/drivers/block/virtio_blk.c:936)
-[    2.935489] virtio_dev_probe (linux/drivers/virtio/virtio.c:303)
-
-[snip]
-
-[    2.935592] ... key at: tmp_mask_lock.40873+0x18/0x40
-[    2.935598]   ... acquired at:
-[    2.935598] _raw_spin_lock (linux/./include/linux/spinlock_api_smp.h:134)
-[    2.935600] irq_do_set_affinity (linux/./include/linux/irq.h:381)
-[    2.935603] irq_startup (linux/kernel/irq/chip.c:273)
-[    2.935605] __setup_irq (linux/kernel/irq/manage.c:1777)
-[    2.935608] request_threaded_irq (linux/kernel/irq/manage.c:2206)
-[    2.935611] vp_find_vqs_msix (linux/drivers/virtio/virtio_pci_common.c:342)
-[    2.935613] vp_find_vqs (linux/drivers/virtio/virtio_pci_common.c:400)
-[    2.935615] vp_modern_find_vqs (linux/drivers/virtio/virtio_pci_modern.c:259)
-[    2.935617] init_vq (linux/./include/linux/virtio_config.h:213)
-[    2.935619] virtblk_probe (linux/drivers/block/virtio_blk.c:936)
-[    2.935622] virtio_dev_probe (linux/drivers/virtio/virtio.c:303)
-[    2.935625] really_probe (linux/drivers/base/dd.c:555)
-[    2.935627] __driver_probe_device (linux/drivers/base/dd.c:764)
-[    2.935629] driver_probe_device (linux/drivers/base/dd.c:794)
-
-[snip]
-
-[    2.935812] ... key at: irq_desc_lock_class+0x0/0x10
-[    2.935819]  ... acquired at:
-[    2.935820] __lock_acquire (linux/kernel/locking/lockdep.c:4524)
-[    2.935822] lock_acquire (linux/kernel/locking/lockdep.c:466)
-[    2.935823] _raw_spin_lock (linux/./include/linux/spinlock_api_smp.h:134)
-[    2.935825] handle_fasteoi_irq (linux/kernel/irq/chip.c:693)
-[    2.935827] generic_handle_domain_irq (linux/kernel/irq/irqdesc.c:649)
-[    2.935830] gic_handle_irq (linux/drivers/irqchip/irq-gic-v3.c:736)
-[    2.935832] call_on_irq_stack (linux/arch/arm64/kernel/entry.S:902)
-[    2.935834] do_interrupt_handler (linux/arch/arm64/kernel/entry-common.c:274)
-
-[snip]
+>>    
+>>    			/*
+>>    			 * Ideally, we would check if the mask is empty, and
+>> @@ -1604,7 +1605,7 @@ static int its_select_cpu(struct irq_data *d,
+>>    			 * Instead, just fallback on the online mask. This
+>>    			 * diverges from Thomas' suggestion above.
+>>    			 */
+>> -			cpu = cpumask_pick_least_loaded(d, tmpmask);
+>> +			cpu = cpumask_pick_least_loaded(d, &tmpmask);
+>>    			if (cpu < nr_cpu_ids)
+>>    				goto out;
+>>    
+>> @@ -1616,25 +1617,26 @@ static int its_select_cpu(struct irq_data *d,
+>>    		}
+>>    
+>>    		/* Try the intersection of the affinity and online masks */
+>> -		cpumask_and(tmpmask, aff_mask, cpu_online_mask);
+>> +		cpumask_and(&tmpmask, aff_mask, cpu_online_mask);
+>>    
+>>    		/* If that doesn't fly, the online mask is the last resort */
+>> -		if (cpumask_empty(tmpmask))
+>> -			cpumask_copy(tmpmask, cpu_online_mask);
+>> +		if (cpumask_empty(&tmpmask))
+>> +			cpumask_copy(&tmpmask, cpu_online_mask);
+>>    
+>> -		cpu = cpumask_pick_least_loaded(d, tmpmask);
+>> +		cpu = cpumask_pick_least_loaded(d, &tmpmask);
+>>    	} else {
+>> -		cpumask_copy(tmpmask, aff_mask);
+>> +		cpumask_copy(&tmpmask, aff_mask);
+>>    
+>>    		/* If we cannot cross sockets, limit the search to that node */
+>>    		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
+>>    		    node != NUMA_NO_NODE)
+>> -			cpumask_and(tmpmask, tmpmask, cpumask_of_node(node));
+>> +			cpumask_and(&tmpmask, &tmpmask, cpumask_of_node(node));
+>>    
+>> -		cpu = cpumask_pick_least_loaded(d, tmpmask);
+>> +		cpu = cpumask_pick_least_loaded(d, &tmpmask);
+>>    	}
+>>    out:
+>> -	free_cpumask_var(tmpmask);
+>> +	raw_spin_unlock(&tmpmask_lock);
+>> +	local_irq_restore(flags);
+>>    
+>>    	pr_debug("IRQ%d -> %*pbl CPU%d\n", d->irq, cpumask_pr_args(aff_mask), cpu);
+>>    	return cpu;

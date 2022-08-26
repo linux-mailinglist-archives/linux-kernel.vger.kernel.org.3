@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA69A5A260B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E305A2610
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343849AbiHZKpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S1343856AbiHZKqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235942AbiHZKpO (ORCPT
+        with ESMTP id S229991AbiHZKqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:45:14 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1824213DFA;
-        Fri, 26 Aug 2022 03:45:04 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 032F41E80D93;
-        Fri, 26 Aug 2022 18:40:48 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id R_UdhJc9Y01Z; Fri, 26 Aug 2022 18:40:45 +0800 (CST)
-Received: from localhost.localdomain (unknown [58.247.180.115])
-        (Authenticated sender: jiaming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 5A0AA1E80D54;
-        Fri, 26 Aug 2022 18:40:44 +0800 (CST)
-From:   Zhang Jiaming <jiaming@nfschina.com>
-To:     song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com, yuzhe@nfschina.com,
-        Zhang Jiaming <jiaming@nfschina.com>
-Subject: [PATCH v3] block: Fix spelling mistakes in comments
-Date:   Fri, 26 Aug 2022 18:44:32 +0800
-Message-Id: <20220826104432.4613-1-jiaming@nfschina.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220705022617.12555-1-jiaming@nfschina.com>
-References: <20220705022617.12555-1-jiaming@nfschina.com>
+        Fri, 26 Aug 2022 06:46:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF8B3FA04;
+        Fri, 26 Aug 2022 03:46:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B663E1FDA9;
+        Fri, 26 Aug 2022 10:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661510764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aa/3ypYSJSQW433oi1w/2O4+8Mbdi8Blp1YdWljoRSg=;
+        b=rEmlke3oS5xgtWurko+VQbWOg814W/WaYopKvn6LehJnfbW1bMJQb5ur1/cVEQX3+KDwnz
+        Gn1H//eh+uuco2IKLZZdgmclsuQcjxMtuXfJek/bwGn4Qo5PsGpZjkdjfPUfWc46xQAnVY
+        WmZ670H63mvj+djY3YHiXM4D6KGCCEY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661510764;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aa/3ypYSJSQW433oi1w/2O4+8Mbdi8Blp1YdWljoRSg=;
+        b=tHGd5UQXO8TmzcCocfN/smLfbn4Z7fne2gDb+sUqnSK8WJWYedige4XOnK4eNNotFVfhx/
+        kLxQe2exohFupjBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F09413A7E;
+        Fri, 26 Aug 2022 10:46:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X2U2HWykCGNhYwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 26 Aug 2022 10:46:04 +0000
+Date:   Fri, 26 Aug 2022 12:46:03 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH] iio:accel:dmard06: Optimize when CONFIG_OF isn't set
+Message-ID: <20220826124603.4a28a154@endymion.delvare>
+In-Reply-To: <CAHp75VeSgmO_=mXVR4uSpbQDO8MBGZu4O2vLEqunHYuoPfJbbQ@mail.gmail.com>
+References: <20220825144012.24a33bb0@endymion.delvare>
+        <CAHp75VeSgmO_=mXVR4uSpbQDO8MBGZu4O2vLEqunHYuoPfJbbQ@mail.gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix spelling of dones't and waitting in comments.
-Fix tense mistakes of hold and finsh in comments.
-Use underline to connecting reconfig and mutex.
+Hi Andy,
 
-Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
----
-v3: Resolve conflicts when applying patches.
----
----
- drivers/md/raid5-cache.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On Thu, 25 Aug 2022 23:12:43 +0300, Andy Shevchenko wrote:
+> On Thu, Aug 25, 2022 at 3:54 PM Jean Delvare <jdelvare@suse.de> wrote:
+> >
+> > When CONFIG_OF isn't set, we can optimize out dmard06_of_match as it
+> > will never be used.  
+> 
+> NACK. There is a magic PRP0001 for ACPI case.
 
-diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-index 058d82e..a4a84a0 100644
---- a/drivers/md/raid5-cache.c
-+++ b/drivers/md/raid5-cache.c
-@@ -125,7 +125,7 @@ struct r5l_log {
- 					 * reclaimed.  if it's 0, reclaim spaces
- 					 * used by io_units which are in
- 					 * IO_UNIT_STRIPE_END state (eg, reclaim
--					 * dones't wait for specific io_unit
-+					 * doesn't wait for specific io_unit
- 					 * switching to IO_UNIT_STRIPE_END
- 					 * state) */
- 	wait_queue_head_t iounit_wait;
-@@ -1326,12 +1326,12 @@ static void r5l_write_super_and_discard_space(struct r5l_log *log,
- 	 * Discard could zero data, so before discard we must make sure
- 	 * superblock is updated to new log tail. Updating superblock (either
- 	 * directly call md_update_sb() or depend on md thread) must hold
--	 * reconfig mutex. On the other hand, raid5_quiesce is called with
--	 * reconfig_mutex hold. The first step of raid5_quiesce() is waiting
--	 * for all IO finish, hence waiting for reclaim thread, while reclaim
--	 * thread is calling this function and waiting for reconfig mutex. So
-+	 * reconfig_mutex. On the other hand, raid5_quiesce is called with
-+	 * reconfig_mutex held. The first step of raid5_quiesce() is waiting
-+	 * for all IO to finish, hence waiting for reclaim thread, while reclaim
-+	 * thread is calling this function and waiting for reconfig_mutex. So
- 	 * there is a deadlock. We workaround this issue with a trylock.
--	 * FIXME: we could miss discard if we can't take reconfig mutex
-+	 * FIXME: we could miss discard if we can't take reconfig_mutex
- 	 */
- 	set_mask_bits(&mddev->sb_flags, 0,
- 		BIT(MD_SB_CHANGE_DEVS) | BIT(MD_SB_CHANGE_PENDING));
+OK, I wasn't aware of this. As of_match_device() is a stub when
+CONFIG_OF isn't set, I thought the table could never be used. But now I
+see that the acpi subsystem accesses the table directly, so you are
+correct, the optimization I suggested is bogus.
+
+Now I'm curious, is there a well-defined subset of device names that
+can be found in an ACPI table? If not, does that mean that any driver
+with an OF entry could match, therefore of_match_ptr() should be
+removed from the kernel entirely?
+
+Another possibility would be to stub out of_match_ptr() only if neither
+CONFIG_OF nor CONFIG_ACPI is set. But I'm not sure that would be worth,
+as I expected either to be set on almost all kernels in practice
+(except on s390x, but you wouldn't build any of these drivers there
+anyway).
+
 -- 
-2.11.0
-
+Jean Delvare
+SUSE L3 Support

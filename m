@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AF45A25AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D618A5A25B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240949AbiHZKPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S245581AbiHZKRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343588AbiHZKPA (ORCPT
+        with ESMTP id S1343749AbiHZKP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:15:00 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF531A446
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:56 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bq23so1383154lfb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:56 -0700 (PDT)
+        Fri, 26 Aug 2022 06:15:28 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8441B14D5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:15:26 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bu22so897319wrb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=nBDls8p7zWKgMsdae7qsDU8nms79A1faHjvYu7tARvE=;
-        b=piJ7BEpevaGNdTfb+iohBsjVd8y6wP7fyx2scpDUXdludX6+pLspOYMOnspr5RJUmE
-         OIh1n/nMbN506hH3wRUECtpn215qzlyev8PAdv9fkUrfkWN8RbOIkAAv7iCnj/GpRewr
-         6b8p81mVhXkt+JAB6KBcurlZ+unI6qZhm+lUuSOQ1aVLUbncBRWCYQHGm7l3rhjuEEDJ
-         RjWZPIryyeV1a9Ua7OflgMFcrcgLy0YL1gskTh695mZRAbIF7D/CS172snBeNCYvtNLW
-         KiLBOlEow99lBrYt00L0fYGxGF8kqOX5BJxf2PcQjnNJbHR8CkNz3o+2HAoT3HYzO0fA
-         RAjw==
+        d=ionos.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Rz7Ri8U5aOCKdVvdIijp7X/sK+Kj5rWcJ2yernN5/UU=;
+        b=gPM3TcVxoDHwYqK27/aPW5GKL7yoXrHcGW40ghqodySkT/N482ydnrzme+qFCnl73g
+         uM8ed9i+2UaCZbh4NTfu4SSIorIixGRhxNbUY7Yfe81VHpce18w542bEI7Kg+FcWsz+m
+         OiKdk+h7G/YjBfmgeds9f3qYjFgW1Ebjx9kL1HcDPyNrzxPfDyV+e8ixGSOaTKx9Tnt5
+         gy+i0OWEwzCYj7hXMxVqTCjiRA4ny+FS/7916/pa6C0ECzaCrpbJwWWJpt09TinZuyWY
+         FQ5ScuDMB6sMFrykEtuAna4pF1C/jTFunEszH4OLKPTcGOL5k+2XviTAMrxho7un3kDi
+         nN4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=nBDls8p7zWKgMsdae7qsDU8nms79A1faHjvYu7tARvE=;
-        b=baN8h2DSG7Kx4wvmRAtorBctH6yV6S470CJxIZuI7+apkIAfmxlu3PwCHu9h3j6qok
-         0sZ1weQ9JWuUOaPGr95ViaJqYRC2YGZtrIX2e5Nn4oD6i5sAJlvnVp5AfIUsIMlA4hsD
-         xQdU2kYPJXBEmD0SAQY4fRv5ouY8YeXcp1kcOsCyy9uBgRNeT9SCO5LZ+DA2URMTRCXn
-         mVCXEm9xx+0OFP4fOpwaBIp0DpXLrHo4CyQ8hS/fF6sMS7gJvkMe6ft7RnVghilvzkxw
-         KL+lMqY4e7Wkt/0UD85KVnidgDgInRIDVGPmp21Yl32OVWzU6UhXQRU9xqit9hct9beM
-         miEw==
-X-Gm-Message-State: ACgBeo00TOPVXN9iln5Ozu7F+1lYcdOg/m/jzVFv5wcT24i7y1FVQy0T
-        BxXBBbND2mUKzEFWTD7PYOL7Fg==
-X-Google-Smtp-Source: AA6agR7caUbLwyQSa715SFZUEGY9QFvmhTYs0wWUx3epIqtDxGXY7MC1nfcBGHa9KKFMrtkkLdDXyw==
-X-Received: by 2002:a19:915c:0:b0:492:f06d:b3b1 with SMTP id y28-20020a19915c000000b00492f06db3b1mr2554374lfj.1.1661508894364;
-        Fri, 26 Aug 2022 03:14:54 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y7-20020a05651c106700b0025e42f8e771sm414675ljm.34.2022.08.26.03.14.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 03:14:53 -0700 (PDT)
-Message-ID: <ad2db009-8660-db05-60d9-fea61a5cde26@linaro.org>
-Date:   Fri, 26 Aug 2022 13:14:53 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Rz7Ri8U5aOCKdVvdIijp7X/sK+Kj5rWcJ2yernN5/UU=;
+        b=6CJSwVWPRpIudgLYyvJcAQN/fP7Y/DzwerH3efb5va0u6BADg5aPFWz94I2KMoeP8C
+         dc7ZhLpEwGH5eDNP50/vyNM4j0HxExri9AXs459dvv08G3GaxJXLOOlgjeaNtHdIcOD+
+         z1MDKoxFX9T8qu9BMG9gIG5/88puc5Pfehkg8gd5KKlLmPfEvIkiO9Sq86koGWIVNjQz
+         4AJhiM9FWpD+VZP6PRscLAIv8tepBCNrk4Qckj1nzWSP1/b7K0+bkVred/ym3TBXiaaV
+         SZBGMjgTlnrQH2Gw10ezxE76qOeCNqJkHXrKwOs8d0384xSGrJP7mNLgydAWK26DaVyr
+         Oghg==
+X-Gm-Message-State: ACgBeo30ldCr8hFmr5IF1XVzOvRYqJeG6RLZn3tEnzqKw6l+UK7yzQvS
+        1yFcfx8poqe/06aIslSS1Mjbta9TqoZFhg==
+X-Google-Smtp-Source: AA6agR57O1cwi+qphGSKGGSIT5z0TrEh1gdt6SbE8yynmslGWt2m198gFohyG8mk5TSEwcXU7IDXow==
+X-Received: by 2002:adf:f2ca:0:b0:225:4800:d201 with SMTP id d10-20020adff2ca000000b002254800d201mr4502643wrp.187.1661508925071;
+        Fri, 26 Aug 2022 03:15:25 -0700 (PDT)
+Received: from lb02065.fritz.box ([2001:9e8:140d:2300:3a17:fa67:2b0b:b905])
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d500e000000b0021f0c0c62d1sm1505882wrt.13.2022.08.26.03.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 03:15:24 -0700 (PDT)
+From:   Jack Wang <jinpu.wang@ionos.com>
+To:     alexander.shishkin@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] intel_th: Fix dma_map_sg error check
+Date:   Fri, 26 Aug 2022 12:15:23 +0200
+Message-Id: <20220826101523.79502-1-jinpu.wang@ionos.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3] drm/msm/dp: correct 1.62G link rate at
- dp_catalog_ctrl_config_msa()
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1661372150-3764-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1661372150-3764-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,45 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 23:15, Kuogee Hsieh wrote:
-> At current implementation there is an extra 0 at 1.62G link rate which cause
-> no correct pixel_div selected for 1.62G link rate to calculate mvid and nvid.
-> This patch delete the extra 0 to have mvid and nvid be calculated correctly.
-> 
-> Changes in v2:
-> -- fix Fixes tag's text
-> 
-> Changes in v3:
-> -- fix misspelling of "Reviewed-by"
-> 
-> Fixes: 937f941ca06f  ("drm/msm/dp: Use qmp phy for DP PLL and PHY")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> 
+dma_map_sg return 0 on error.
 
-No extra empty lines between the tags please. I'll correct this manually 
-while applying.
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org
+Fixes: 4e0eaf239fb3 ("intel_th: msu: Fix single mode with IOMMU")
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+---
+ drivers/hwtracing/intel_th/msu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dp/dp_catalog.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> index 7257515..676279d 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> @@ -431,7 +431,7 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
->   
->   	if (rate == link_rate_hbr3)
->   		pixel_div = 6;
-> -	else if (rate == 1620000 || rate == 270000)
-> +	else if (rate == 162000 || rate == 270000)
->   		pixel_div = 2;
->   	else if (rate == link_rate_hbr2)
->   		pixel_div = 4;
-
+diff --git a/drivers/hwtracing/intel_th/msu.c b/drivers/hwtracing/intel_th/msu.c
+index 6c8215a47a60..b49237d56a60 100644
+--- a/drivers/hwtracing/intel_th/msu.c
++++ b/drivers/hwtracing/intel_th/msu.c
+@@ -931,7 +931,7 @@ static int msc_buffer_contig_alloc(struct msc *msc, unsigned long size)
+ 
+ 	ret = dma_map_sg(msc_dev(msc)->parent->parent, msc->single_sgt.sgl, 1,
+ 			 DMA_FROM_DEVICE);
+-	if (ret < 0)
++	if (!ret)
+ 		goto err_free_pages;
+ 
+ 	msc->nr_pages = nr_pages;
 -- 
-With best wishes
-Dmitry
+2.34.1
 

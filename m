@@ -1,240 +1,174 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B405B5A1D97
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 02:08:44 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 745815A1DA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 02:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243870AbiHZAIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 20:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S237455AbiHZAIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 20:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244288AbiHZAIT (ORCPT
+        with ESMTP id S244161AbiHZAIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 20:08:19 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2048.outbound.protection.outlook.com [40.107.21.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62899C8774;
-        Thu, 25 Aug 2022 17:08:16 -0700 (PDT)
+        Thu, 25 Aug 2022 20:08:44 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2057.outbound.protection.outlook.com [40.107.100.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22530C88BE;
+        Thu, 25 Aug 2022 17:08:29 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nBnq1hGrngsqUJdG6Zm05n1Eoxszw6rXJnIgc7m6YMODyUnKuyJKpJXpON6EIzXdbHdvkHE8bIxWXgBegw+vgkYoKoNvmU3mEOAw9o12tTJfyslOx7DJnL8aIvsjAxnlrbsH49jb3cppUSTpXox3XnOGsIjlN+jHFV6cUXvcThjxlqyK+1l4Ei2kt8R39kYtI77JWAMqFiUamniRY8Q9zv9Y70H4FgdRy+RlxhAKf34Vwpyx66Tc9mIMlWzpLblIpu5JvVcPMtXwHdIWTNfMu3H30cLQVNwlCn1AfMm/YzDeAxBGYAdkLXWA8xjSI69dNlUxTEZRbiKiKD+BbX4Tpg==
+ b=Ku0Qia1O7KMEPDnjhTV6JHO0WeYr9MDwWxceYdLqGq497jCGMgs+CzRALn+hPbMDrR9H8FazjC63Rgk+8LtWlZlGg05SaoSNUPH4R+71F9jQDq+7D0q/O3jLQ5ICEP7/YEItwmT6kyWPZAepCVnNt9G7wtI6+7GPuF3RiHwHwKvTjOmZ5oT4v7sVOv1M3mgn0VmPD25thenY9xFYG/IbkvLqRIcrdApb7/JAWhDHUSNB7mp8igZdZ4EYQRXbSwzwt5ebf1jO/aeOGDKwc1d3cHKcXjjsj89hgkFFJG4HbqJgsmflnVjIqr92vyY+y3JrSb0++wrIGLJJJSULf+hYkQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cmqfc25JmN2/5RFCB1EzOZtDmsErkU6GoI7j2itHpus=;
- b=SaBtMoiTNcaotHSrvSwgYvzpzZ576NBk3oLACe24Zt7DhhbRH1DMZGjhH9gcrJuCuPKa1Bx9NfFzm2zGLIEURtaFobW8jYn5tTyl42CQ4UdfX26pJfvh/D5HsPo6ttr43wXo1woEzBp+JI3I+nNWVZ9mb/ZLoxGDcWXfAENoh6tFrwr46bIE07cZhtDyjWaihGS9SfnTAhAEdfqWbeT1Abmk0gGDUpT1biX2K2BUKei9HWmx5A4UEtR2gEvPjsJh2GaaOhfRI9NPrlwDFePcRtBpOPh+FoTxtVBLMPP0GmIiEVlt6Jkbi+e0KK4/cOmTxcLwzrx4IISFhMa0bmc/hA==
+ bh=sQgwSDnbotnPTmknADKeY+EkkBgHv4es45bKT6i4JC0=;
+ b=IoOPOInsOqlkeQ9qomWd+mfisT/mJ99LEFcAa7uxs7vYAM9ymLxIRj+9lge4vY/a3qOnFYVUTFtOaoZgfBUsq589iN0l7HMMVpBZGRTzbXHp8+Z7Kf0cDZxvNHJ2cS7mycZNNkOZrkr7xT4VB85AkVhFHuqb872WaSFobzIklxPJsK8hR1hcAfwv6SPP7vrvhlhhVqQTpc9IXP0MiiHHLLoi1PpnQ18RU8IWnsTL+gjCVeOAzwL8r3EolOruMWVTH5NsP1m+6mLfcPBzZqsCg9pacMzGhS+HvrWPQIjHn3hFpxiFiTn0+YHpEkze1kkMHzu6VPH+BKfxmuMqRa1vag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cmqfc25JmN2/5RFCB1EzOZtDmsErkU6GoI7j2itHpus=;
- b=h9Q2YwrfD3OFoiKcmjfvRuA44ROdSnAoBe+HcfPOQXaK0lNfKQrEMLV5sfHhFCpv4c69pvMWXlVPxsMCDMjJFXj8RFCLwnbmLPVZejjjm61MbREyINPdYERzy3P6NL+aKsn8oeyqInLCbWgy7t9Q+ouve2ghXFMYJ3BjpuM6bl9r1RSBU36EqYkPX+huWgOZpJipihway3PjnPweb4TjA+BUEfezxJXR4lI/RVFeBpq8OZ5VNBoVADJQTStx3fqvnRlJQSGJ58tdt6jF0248T2by/LnvA8sJOExBpf/8a+JkgR0uTc/rqUVi+VYvGwRbTAdd8tWlKwLshpKl4491Wg==
+ bh=sQgwSDnbotnPTmknADKeY+EkkBgHv4es45bKT6i4JC0=;
+ b=GSRRZTlB5doUoWpYmO77N9ZN/ZS9BukHmLdphR4MQr/6tupXxRAG5xM4krxr7NlYq5oIRzadrxOq0UWXP97/6gkpP0wEYMLGKUl8EYuFhqCKU4j4Ko13TOHt+oPONhFrA9Ib5AC4JYDsMWxaR7TESLa+4tw+i39OPIuo5Ku8fm8QM2hwD+d723KiUiZERdkpm6LXf6zjRbz27njgXd/h4Pe3nLBKHxSq/8NiblxorXKp+REYXFh3gqe+aJDe4hOLr8aCypH2yF28rLUXZWFtk4f4aaCeG6HYOx6M91FxfWvuNzJi58kw9tJVONbCBUI7RuJvbZ1/lIe3vwyf2cEJkw==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by DBBPR03MB7146.eurprd03.prod.outlook.com (2603:10a6:10:209::22) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SJ0PR12MB5502.namprd12.prod.outlook.com (2603:10b6:a03:300::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Fri, 26 Aug
- 2022 00:08:12 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::ecaa:a5a9:f0d5:27a2]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::ecaa:a5a9:f0d5:27a2%4]) with mapi id 15.20.5504.019; Fri, 26 Aug 2022
- 00:08:12 +0000
-Subject: Re: [PATCH v3 02/11] net: phy: Add 1000BASE-KX interface mode
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220725153730.2604096-3-sean.anderson@seco.com>
- <20220818165303.zzp57kd7wfjyytza@skbuf>
- <8a7ee3c9-3bf9-cfd1-67ab-bb11c1a0c82a@seco.com>
- <35779736-8787-f4cb-4160-4ff35946666d@seco.com>
- <20220818171255.ntfdxasulitkzinx@skbuf>
- <cfe3d910-adee-a3bf-96e2-ce1c10109e58@seco.com>
- <20220818195151.3aeaib54xjdhk3ch@skbuf>
- <b858932a-3e34-7365-f64b-63decfe83b41@seco.com>
- <68b28596-cd16-2485-87df-b659060b0b0b@seco.com>
- <68b28596-cd16-2485-87df-b659060b0b0b@seco.com>
- <20220825234526.f6pjq56sab4pm6u4@skbuf>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <a2708113-6e53-3e1c-c3f6-3e9fcbe1f0fd@seco.com>
-Date:   Thu, 25 Aug 2022 20:08:08 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20220825234526.f6pjq56sab4pm6u4@skbuf>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0170.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::25) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Fri, 26 Aug
+ 2022 00:08:20 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5566.015; Fri, 26 Aug 2022
+ 00:08:20 +0000
+Date:   Thu, 25 Aug 2022 21:08:18 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
+Message-ID: <YwgO8oCNn/QFM76V@nvidia.com>
+References: <20220817150542.483291-1-nipun.gupta@amd.com>
+ <20220817150542.483291-3-nipun.gupta@amd.com>
+ <Yv0KHROjESUI59Pd@kroah.com>
+ <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <YwOEv6107RfU5p+H@kroah.com>
+ <DM6PR12MB3082B4BDD39632264E7532B8E8739@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <YwYVhJCSAuYcgj1/@kroah.com>
+ <20220824233122.GA4068@nvidia.com>
+ <CAGETcx846Pomh_DUToncbaOivHMhHrdt-MTVYqkfLUKvM8b=6w@mail.gmail.com>
+ <a6ca5a5a-8424-c953-6f76-c9212db88485@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a6ca5a5a-8424-c953-6f76-c9212db88485@arm.com>
+X-ClientProxiedBy: BL1P222CA0007.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c7::12) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4fc9790e-786b-4a49-f95c-08da86f71092
-X-MS-TrafficTypeDiagnostic: DBBPR03MB7146:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a0ac167-a2b5-4543-6aa6-08da86f7153c
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5502:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hHLMUvzHYCLav2XBz5Q5II9b5+NjODzCCYMJPOb+kDp0hBPfAKlkdzPs7AB6G5Ut/toc+Iq8nI+gRCM6KhekywQhsAelGWwL1PE56mOCnj7gzDbyClq/v0U3t5fMdLwMIwbcrN93cffzUua74Ml67OmU63HttZEHk1w9fUzoAnbrh/SOg/094zbYmYuFP0DT3nb9XDgHMoTRPRZjbYYU1FCQFOt99D1e1a6GWsm4I42aFnVDsd8/1hHMzIhZ67Y9t0Ipz581t8T/8SXFA1BRoRy8PfK1VUxuzIXglWIXFHaA9ehHwP3vgp7YKtmBy2I/zD2gKJ2DbZ2jRZvxNu/dRJBj/QU2RIxhersKxsS0Iar9Td1XevrKHFDDKRNMEsnGBIno3td0SzUeMV2qSKmEMwuoXlreYzzQmBB6XowljjB/BtS7GcrtC1BH+sD3su6xN1F7zy/g09n5L/Mo/LA1CpMpPSgRoFV1YEsTlzj/3qsY14WCnzmJUATNcDbjs8Dk5VOVa4EcWZDYcXttr6/nmu29SoE+VyvvxDwSQHjPW3RacDizI+v25B9eiKM50lkjjZ1/eHJ+PReojZyrHnxgnnA6KQzskyyk5CFOc9bND3YS+aqousxHub/oNrN0TfQzvJsCQbYo8UEKga9JwWd5+Eer6fjYCZhKY/2DxP9Vr3MHIjtjZ6BQheFsRNKCVhShvJSlqAtPokPfQX3K5v8IiS/UiNXmdoK8Nx+ycP03RgB0ytCHqLogsvSXK+WSIFcYrJUgb+jJLJ5Uz7NBh7b7L9ugxQ+PrT8L7KoAX3HRwQXGRMjzrM5z6rtC7K1uW8Jt6UGD5Rm2FcPJXk8rBDcRP7JnYrd4fn3/YtaaKDqE8Uw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39850400004)(136003)(376002)(366004)(396003)(83380400001)(186003)(2616005)(38100700002)(36756003)(38350700002)(6916009)(316002)(31696002)(86362001)(52116002)(53546011)(2906002)(6512007)(26005)(54906003)(6506007)(7416002)(6666004)(8936002)(41300700001)(31686004)(5660300002)(66476007)(66556008)(66946007)(8676002)(6486002)(966005)(4326008)(44832011)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: HTzkhWFVJH544bScjA36U/GljkChlTMSDMydsE1gGw7awYiRws3es1dul0nYN2402XLoFp4E/mQFNJjCSsbxQ9Layv3ZlEVe+Xss6D/WmRnq2V4IGIdD78mndkPayPo6Sq8Jkt6TYkV6BLEoLIGxNQZ6Uq996G9hgJ+dedQL+/VRz8klHYEJp2F9Ep8SLUsAB8wFtpfimEaYD4bBdLtZeX7LXaHmck8zH/JueqsWKA7wnsdqDxVtCMm5/wQrMVSyFFClj0LeKApj0qzVsbXcN0zmf/nGiDWxiqJJUToN+4+BvITcFLj4dXpY79TSkr9DjbP2kRBTOyw+KJzgvWCIiMyb0KDU8lRK44flI9fQMrXovGGRV4UveJphXhXbVCnRCcMg9xadNYAzQeOhQ9CUv1WEXHCU9I5/QRzZC8hy+wfVSeJE2IxYoCDWstjG2YISwTg5dnBmg6zLpdk1V21EFHOgsQbWO4eV8ekjxObCFrONBTp8UAEqnu7CZG7i8V1DU0bvA+U2fMhyZCWEHEnU7F0dO1Wq/uvMhXDKyEa4HtdIuY1GupKFk7lNyNIH9NKUsO6nCh1M3sjOvn6kYaKLg6sHSuXzo4ZebJueRp6EGbrJuFAcXVyGQoEZz7iFQCrIgFGdnv0oLmoa42XzcklhErR7/MedBt9TPgMHoRxgSvkB2lrSKUoOMvr3O8IXHmbUKCnHUMy+tLwlwdUyoJSO5w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(39860400002)(396003)(346002)(376002)(186003)(6506007)(2906002)(7416002)(8936002)(478600001)(5660300002)(2616005)(41300700001)(86362001)(66556008)(8676002)(26005)(316002)(66946007)(36756003)(6916009)(4326008)(66476007)(6512007)(54906003)(6486002)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGpQcHRiS1grakt4YkRpcG9HcS9FeHM2TEo3K20rU2x3UkZoU055eXhMODdU?=
- =?utf-8?B?alMxdi81Y0ZoeDRqdTBDQ2NURmFTVSs3emhaM09kc2gwMFBTaDdSdHBBRmRR?=
- =?utf-8?B?d0ZFQ3dLZjdPWmpnNll6NmZCeXVHcm14c2hOeTNpZ01LTXI5blcwRURnQ1F4?=
- =?utf-8?B?eWs5cEZITlVPWFc4Qk0rRVNXOFNSNnFWR0pxY24rdXhzbmNRQWpTemRhaWYx?=
- =?utf-8?B?T1hDNVN5ZzZOdVpsL1JkM21nQnpIM0FuZXFjR3FiSzVOYUw5TGt0b1Z6cy9U?=
- =?utf-8?B?Q2RYQjZqbW1iR0hTSm96eDNKT0xWRE1KU09DSmRtTEhCU3hWdWkweHg2WTVP?=
- =?utf-8?B?WEhJODF5V2xhbHNDdks0NWJCbjU4eGxFWHZMWFQxa2d2RGw1UWRUZHUzRExK?=
- =?utf-8?B?SEVueW9Da3VLb1lLK1FkNzBqZllhaHcvWGl2YjFrUXB1NHo2eDRHVmk5SVk0?=
- =?utf-8?B?SjRKdUd3bmZYb3RLUEtIb3M2RDM3ZVBabHV3OElrWkR6V2cxU29rajJxdXUz?=
- =?utf-8?B?aFUxUXIwWkNHNzdvQlptZkVvUEFaQ3FjUkRPYWJNdCtPeGUvMTJNQzVnV1Yy?=
- =?utf-8?B?eG1KYlZWSHplSkV0eEpkOU1DQWY3dDBiRDN4MXhjRER5SlVWdFRhcFExS3Zy?=
- =?utf-8?B?QjkwWWFaOVRFYkpkYVNMWnlhZE5kSGRaKytuakJ1dU10bXlJM3V3K3pYRE1Y?=
- =?utf-8?B?MW90VlYzNFJZMDZ0cndzalpKWTdPV3NyU0RLN3FkcFRDU3RPdHdKV2NFZlU2?=
- =?utf-8?B?OHV2SlJUWUVZaitjZ1prMzJNakRFNVM1d0Y3QzNWV2ExWWw2eHRFMzUwRWFM?=
- =?utf-8?B?L0VBbnYwNnh6UlZqL0VCbFFBb0Y3N2JrancwN2RiNjVxUjU1dURxbW81Tzh4?=
- =?utf-8?B?MmRoUzhmaEVjMENZNldzajNaYnI5TjdaMnRtdjZLenZ6RFViOUxaYy9BbXRk?=
- =?utf-8?B?MzZyVkswWjZPdkhSVy91aXF4RzRnM1pIM1V3bnVVeU1rRHBIWEJJc1UydW1G?=
- =?utf-8?B?ZVBwd2RVMjM4OGFMdDQ3UGxFK3E1REV2R1RBTmlzUHRnM0I4aUI2VlZEcjRD?=
- =?utf-8?B?SEhLdWZ0YkJGdE0vNXJWTWJHMDZQZTFoNzdpVS9qNWg1SXpZN0M1Q2w5WW5l?=
- =?utf-8?B?TWdmWWRPd3NNRjM1VEFoc081REg5REFRcnkyWGtjQzgrWmlzbWdBOXp3L3cy?=
- =?utf-8?B?N1p6VUNTMVhoVTRyNUtQZGZVWVVsdjRCVnJuR2VjcXROdW9nclZKZG1jRC9G?=
- =?utf-8?B?c2F3MG0xcFFYTWw2bHM4bk9JVXNrOGZUeFlxSEFXMUhzaElzL21tc0swemgz?=
- =?utf-8?B?L2VRdHFFUkJiRWxWYjRyR0JobXVlOHVnQWFFVHFpaTNNeVh5UVk1U3V2L1Yr?=
- =?utf-8?B?RVNsdW1IRysrQ1VDRDE0U3ZzZ0djdjlCNGNsRUFXbzAzYjJvbEZCSGZEMXYy?=
- =?utf-8?B?bUVHYmtzNnE4TW9qSm9CZGNNSnpmcnR3QXBlVEYwdmliUjY4enpVTEtYbnlD?=
- =?utf-8?B?VTdGdHpZZkNaY0tiQzFISm5lWFluZFFrQ3hUenVCRnZOZExBUmdhMXZuOENO?=
- =?utf-8?B?S2RuckxCL29HUGYwd2Z2UjFrVHlBMjFrUDhiSVp0d1lUL3ZLcnI4TitpK1E4?=
- =?utf-8?B?NCtmSG02L0k4aENsa0RtejJGZW1Sa1RkT3RhNUtqU0xJQlFsRjUxR24xanZx?=
- =?utf-8?B?ajJDMkxMenR2Rk5wNktkeDVBK0JDZ2VkS1B6MVpqMS9GaTNJTFNkWW0vNGU0?=
- =?utf-8?B?STlOcSswdjg0QXRyRGpabEtZckorUGpKVTk2Vm9kU3RBMm9zSEZGTHNCNFZ5?=
- =?utf-8?B?NkNPQ1RsaDhaSGt5U1MzMzIzVzN6SFZLaEFBNTZqeUs5WmpraGk0eHlJOWM1?=
- =?utf-8?B?RG5qditTVnVkeGdYKys4Yjg2VXQxcnpaUXQ2SjZqTEtiWXMzZThpVm9CbHZR?=
- =?utf-8?B?OEk0d1R1NUFUWWNrTjBNVC8wQkdDTHhWZCtTbHlFM3lUQWZvUUR1M2NXRXBz?=
- =?utf-8?B?SlBrMEtJNS94MDhPc1FjbCtOT0puZnFPMjE2aVY1ZE5Td3pPMkRNdUZwRHhJ?=
- =?utf-8?B?dmw0aHpGRjZEc3ZjdTRuTE1jSS9FSkJ3RDZHQzArT1JzTE5XMG5LT1AwVTNF?=
- =?utf-8?B?c202Q1BxaXFmWnZCY2xheXJNNkZWVW04Yzh4SGI5VTNrWFdSdzdaWjhDWHJE?=
- =?utf-8?B?SUE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fc9790e-786b-4a49-f95c-08da86f71092
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AgIYYZXYCHNfqG/vSnXbeEGF4QpGpojcdrqMXth5eBCYVLiRJ1QAASSN+o8/?=
+ =?us-ascii?Q?4TQo/5BPmxg/0m7kCV446okLuujFvVhK4GKo0jNJa/+k3jbhZFh6F49G3cEa?=
+ =?us-ascii?Q?L70zMhESyNt5nw/3mtf14ikj11XNKp9kPtXp17vls11lv6u/P8dy3F1VCaKP?=
+ =?us-ascii?Q?PKMgpZm38fhOpG8aRMpudOBOkQFGIInJc6VxHUjLGxbflljpO3GoXiBLKtqz?=
+ =?us-ascii?Q?ofGCCgXBrX8hZ7UMVWkohMSvjhEQuxMe+eLVv+aLj6J3voT/UValsyRn+ezY?=
+ =?us-ascii?Q?vpI+CKhTK8TCeAQZ49rt3LQowMahE7PtCvvreivTfNJw7iG13EWndpratTRK?=
+ =?us-ascii?Q?oO9tzlgCezaZRrzQBtKXSfYvW/hW8GJfWCdVBDlIyTpfrpnmXocA4Y7d4Aiy?=
+ =?us-ascii?Q?xBJ1cclRGNPJsJcTU88thhsLycmyzHvrEl+QDNKYefcTViuuGVS2TgrGwS4F?=
+ =?us-ascii?Q?8OmcoiXWaRvt64zfil3jXpnew57p3BLZ5U9rf35lew7nn4+/HaPKWcy5o62N?=
+ =?us-ascii?Q?Ppmx7WORgMKxeL5ybyoArOmo9d2Y5f78jJJnT00yJb6BPNSLxadIgOYUN5DN?=
+ =?us-ascii?Q?WveRQj6qo3VxORayzi26qIaPZdr6xTp5TEYhLCF/8iE9niv2oXWKfOZ79KTS?=
+ =?us-ascii?Q?y7PwTlocwepgO7LPIsm9lrFg+1IZ1HLFHykZVbtaOkoeJDE9Wz8sU6dxMHTS?=
+ =?us-ascii?Q?FRtQR1ZzEeM1Y8Azqm3nYnMw3t+Z9aA/tbcyTmE/O9AvGBzM6aWUdiKDdkJ2?=
+ =?us-ascii?Q?uE5hjsF4lm0MZFiL0VqCofnx3duLo7L3gzfQ9m9+N6Q/dRTY6wpGQPCRSAc/?=
+ =?us-ascii?Q?jZMcOXASh7cjBy2omswQ6hgli4q8nX4yFGfhQa7iFscB472+BRvIquyRzGNj?=
+ =?us-ascii?Q?UneM1awhVkGwzUZAMEC0v+HXybcJbR3CzngDsOSr3853mJSgWjOFZoPM7D/y?=
+ =?us-ascii?Q?ffqvicaX94ByKwOV3M+WYIw/ZwCtOZClYL9am8+JnTWVT/slrrdzK3Nv4CpT?=
+ =?us-ascii?Q?xCdsCbN6+k0/hT7WqmOIp09gNyfTt8xx00f1T+J7nlgbLTl7QivqxXfRo1Gu?=
+ =?us-ascii?Q?5O8A8CsjQHIBvnRvHNNmDVa5z/EwyhM02Kh5Y3NEdA5X7yBsT2vgPVrnWoEP?=
+ =?us-ascii?Q?xzatx62L9X2RIhNe6AAYNXyAuUFV34WtW0Q/nXh22FRJa4AmknOTu0vdcaKj?=
+ =?us-ascii?Q?j2w7PLnYtsurWniwwlCZWYv07IASxRhPV/RiHX4FQTmorv6i0EnhX6e33TpF?=
+ =?us-ascii?Q?IUxhC15ZrB7SSfKhtUfbtk6oM1+1asrMuvpKwf+Yt6G5I0tgGIsXu1M/rzAE?=
+ =?us-ascii?Q?lBGps2zfLMOUnykV7QhQqePYsU50BGoOI9Q4mKm1e++yYUflJ2tAbR8Et/HZ?=
+ =?us-ascii?Q?4/sl82gnaRo/8pZaIYlLgnClj1U42IJCjKGaD/6CDxiofdTIi2KzV4xghWyI?=
+ =?us-ascii?Q?R5QYZPwA/x7ngevG28djRWK8DX5EJjKUvSl1V12+ZXcpMH3IcJzMg72GW5IY?=
+ =?us-ascii?Q?zmsjq1UlGtbnYB+YBFoDqcfl7frXH6QD0PsM4m6EQatdZPy4aFD6mxaQ5I7I?=
+ =?us-ascii?Q?oGLiCtLcvzcQXWyQJi8BKfVOB6HX9oSboDEn7TDy?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a0ac167-a2b5-4543-6aa6-08da86f7153c
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 00:08:12.1489
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 00:08:20.3141
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VoBh8fpI4gApd4AnMYeCFvmisCIoDYWD5cUCvxSNkI16lyykwRYrsXcotqKjyJvkSxj1teCaGJ0vOkGsNitvUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR03MB7146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: JbwfFVF9m5oLQcesN4qSzg9l0rlOqRCedGAFnPYrOkdW7RyPVr5aD+vbi/ygBUTd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5502
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 25, 2022 at 08:57:49PM +0100, Robin Murphy wrote:
 
+> To my mind, it would definitely help to understand if this is a *real*
+> discoverable bus in hardware, i.e. does one have to configure one's device
+> with some sort of CDX wrapper at FPGA synthesis time, that then physically
+> communicates with some sort of CDX controller to identify itself once
+> loaded; or is it "discoverable" in the sense that there's some firmware on
+> an MCU controlling what gets loaded into the FPGA, and software can query
+> that and get back whatever precompiled DTB fragment came bundled with the
+> bitstream, i.e. it's really more like fpga-mgr in a fancy hat?
 
-On 8/25/22 7:45 PM, Vladimir Oltean wrote:
-> On Thu, Aug 25, 2022 at 06:50:23PM -0400, Sean Anderson wrote:
->> > The problem is that our current model looks something like
->> > 
->> > 1. MAC <--               A              --> phy (ethernet) --> B <-- far end
->> > 2. MAC <-> "PCS" <-> phy (serdes) --> C <-- phy (ethernet) --> B <-- far end
->> > 3.                                --> C <-- transciever    --> B <-- far end
->> > 4.                                -->           D                <-- far end
->> > 
->> > Where 1 is the traditional MAC+phy architecture, 2 is a MAC connected to
->> > a phy over a serial link, 3 is a MAC connected to an optical
->> > transcievber, and 4 is a backplane connection. A is the phy interface
->> > mode, and B is the ethtool link mode. C is also the "phy interface
->> > mode", except that sometimes it is highly-dependent on the link mode
->> > (e.g. 1000BASE-X) and sometimes it is not (SGMII). The problem is case
->> > 4. Here, there isn't really a phy interface mode; just a link mode.
->> >
->> > Consider the serdes driver. It has to know how to configure itself.
->> > Sometimes this will be the phy mode (cases 2 and 3), and sometimes it
->> > will be the link mode (case 4). In particular, for a link mode like
->> > 1000BASE-SX, it should be configured for 1000BASE-X. But for
->> > 1000BASE-KX, it has to be configured for 1000BASE-KX. I suppose the
->> > right thing to do here is rework the phy subsystem to use link modes and
->> > not phy modes for phy_mode_ext, since it seems like there is a
->> > 1000BASE-X link mode. But what should be passed to mac_prepare and
->> > mac_select_pcs?
->> > 
->> > As another example, consider the AQR113C. It supports the following
->> > (abbreviated) interfaces on the MAC side:
->> > 
->> > - 10GBASE-KR
->> > - 1000BASE-KX
->> > - 10GBASE-R
->> > - 1000BASE-X
->> > - USXGMII
->> > - SGMII
->> > 
->> > This example of what phy-mode = "1000base-kx" would imply. I would
->> > expect that selecting -KX over -X would change the electrical settings
->> > to comply with clause 70 (instead of the SFP spec).
->> 
->> Do you have any comments on the above?
-> 
-> What comments do you expect? My message was just don't get sidetracked
-> by trying to tackle problems you don't need to solve, thinking they're
-> just there, along the way.
-> 
-> "The problem" of wanting to describe an electrical using phy-mode was
-> discussed before, with debatable degrees of success and the following
-> synopsis:
-> 
-> | phy_interface_t describes the protocol *only*, it doesn't describe
-> | the electrical characteristics of the interface.  So, if we exclude
-> | the electrical characteristics of SFI, we're back to 10GBASE-R,
-> | 10GBASE-W, 10GFC or 10GBASE-R with FEC.  That's what phy_interface_t
-> | is, not SFI.
-> |
-> | So, I propose that we add 10GBASE-R to the list and *not* SFI.
-> 
-> https://lore.kernel.org/netdev/20191223105719.GM25745@shell.armlinux.org.uk/
-> 
-> I don't have access to 802.3 right now to double check, but I think this
-> is a similar case here - between 1000Base-SX and 1000Base-KX, only the
-> PMA/PMD is different, otherwise they are still both 1000Base-X in terms
-> of protocol/coding.
+So much of the IP that you might want to put in a FPGA needs DT, I
+don't thing a simplistic AMBA like discoverable thing would be that
+interesting.
 
-Well, the main thing is that the PCS has to know we are doing c73 AN, as
-opposed to c37. Maybe we need another MLO_AN_? Or perhaps the PCS should
-look at the advertisement in order to determine how to advertise? But
-then who determines whether we do c73? This should really come from the
-device tree, and not involve userspace manually setting up the advertisement.
+Think about things like FPGA GPIOs being configured as SPI/I2C, then
+describing the board config of SPI/I2C busses, setting up PCI bridges,
+flash storage controllers and all sorts of other typically embedded
+stuff that really relies on DT these days.
 
-And of course the serdes has to find out what the link mode is. I suppose
-we could stick this stuff in the device tree. Maybe using ethtool link modes
-for phy_set_mode_ext is better, but it's still not ideal since many link modes
-are electrically identical (we don't want to special-case full/half duplex in
-every serdes driver).
+It would be nice if Xilinx could explain more about what environment
+this is targetting. Is it Zynq-like stuff?
 
-> As for the second "example". I had opened my copy of the AQR113C manual
-> and IIRC it listed 10GBASE-KR in the system interfaces, but I don't
-> recall seeing 1000Base-KX. And even for 10GBASE-KR, there weren't a lot
-> of details, like what is configurable about it, is there C73 available etc.
-> Not extremely clear what that is about, tbh. Something that has
-> 10GBase-KR on system side and 10GBase-T on media side sounds like a
-> media converter to me. Not sure how we model those in phylib (I think
-> the answer is we don't).
-
-I'd agree with your assesment that it's a media converter and that the
-documentation isn't clear. However, it's fairly trivial to support in the
-manner I outlined. That's actually the main thing I'm getting at: the rest
-of the code is structured to treat a PHY_INTERFACE_MODE_1000BASEKX in the
-right way, even if it's not really a phy interface mode (...just like
-1000BASE-X isn't really a phy interface mode).
-
---Sean
+Jason

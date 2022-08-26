@@ -2,48 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA505A26EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2EF5A26F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243426AbiHZLfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S244994AbiHZLhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240077AbiHZLfu (ORCPT
+        with ESMTP id S229846AbiHZLhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:35:50 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FF1BCCF3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:35:48 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 26 Aug 2022 07:37:40 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CCADB7E9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:37:39 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A51E61EC0426;
-        Fri, 26 Aug 2022 13:35:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1661513742;
+        by mail.3ffe.de (Postfix) with ESMTPSA id C04588390;
+        Fri, 26 Aug 2022 13:37:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1661513857;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rygCihiq5JABhm5at71zDCNmLU3ZdhKw80RK9HD855k=;
-        b=Zj3SSlNqyYZiBF2SSrKoWJ2bBFB6m0e2WhXbvQJblc6F4/cBoCK3Bc0hcMFnfXl6NgyaNl
-        vIAOzZM1G1gYb+cJ73HLkvf9SllznyuTgEaFC5jTp/5V7+aADR6IWYEtK55O4xugOf3IZR
-        jqqARj2/rAK/V8j+ZHzshMLrWIKv1Gw=
-Date:   Fri, 26 Aug 2022 13:35:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] x86: Add resolve_cmdline() helper
-Message-ID: <YwiwCgIoIPnsyanu@zn.tnic>
-References: <cover.1653471377.git.baskov@ispras.ru>
- <7eb917aeb1fa9f044f90ec33c8bf33bb6aee62a5.1653471377.git.baskov@ispras.ru>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d97NfSPeWxwcueUWPJv125kGVseFeqIVjuK7yR6hQHU=;
+        b=z40hiH4OYEPM8sUa/FAJRCPUbP1j34N3omHj1GmEMS8IRefQSs4+573nEX4zQXpETddu6P
+        HsDw67+JNtd7IFW58fZ1GWT/mCBc84tTW3ohU6ZW09/AuUTktjG91PFRUHQCA0TEv8ldmI
+        8VuA+NNiyZ6S0QIQm3+tXvGjfrhRVXIyLcKHdytEF0cXfpqy8C0bQ5Yd7AIUefcqR5wOMI
+        MuBWqw72m6JoB+m1jY2zHhVMRry2+X72BqiJLmA4bY2AZTGwT075sW84zwWntZF5iLOHBP
+        BPHmeWwQ171+sdioJs62z/P5h9oEmiF/aKhXv+7ohzhiCo5rvSl4sS27f3Xc8A==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7eb917aeb1fa9f044f90ec33c8bf33bb6aee62a5.1653471377.git.baskov@ispras.ru>
+Date:   Fri, 26 Aug 2022 13:37:37 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Steen Hegelund <steen.hegelund@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        =?UTF-8?Q?Cl=C3=A9ment_L=C3=A9ge?= =?UTF-8?Q?r?= 
+        <clement.leger@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: [PATCH] Revert "reset: microchip-sparx5: allow building as a
+ module"
+In-Reply-To: <4a12868d0bffbaef9912fbc54e5998e0c50bccf6.camel@pengutronix.de>
+References: <20220713084010.168720-1-p.zabel@pengutronix.de>
+ <73dc6fcedebcae098751bd093fe2d028@walle.cc>
+ <ba905391f3258c2d780677e09e4f89192df7bc31.camel@microchip.com>
+ <595347d292ee31a9f0de031d6349f44e@walle.cc>
+ <4a12868d0bffbaef9912fbc54e5998e0c50bccf6.camel@pengutronix.de>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <acddd598716d2d9e9903c425a3b54257@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -53,83 +68,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:10:10PM +0300, Evgeniy Baskov wrote:
-> Command line needs to be combined in both compressed and uncompressed
-> kernel from built-in and boot command line strings, which requires
-> non-trivial logic depending on CONFIG_CMDLINE_BOOL and
-> CONFIG_CMDLINE_OVERRIDE.
+Hi,
+
+Am 2022-07-13 14:08, schrieb Philipp Zabel:
+> On Mi, 2022-07-13 at 11:52 +0200, Michael Walle wrote:
+>> [+ Horatiu, I missed you earlier, sorry]
+>> 
+>> Hi Steen,
+>> 
+>> Am 2022-07-13 11:40, schrieb Steen Hegelund:
+>> > I am afraid that the exact list of affected modules is not available,
+>> > so using the
+>> > RESET_PROT_STAT.SYS_RST_PROT_VCORE bit is the best known way of
+>> > resetting as much as possible, and
+>> > still continue execution.
+>> 
+>> Mh, you are designing that chip (at least the LAN966x) no? Shouldn't
+>> that information be available anywhere at Microchip? ;)
+>> 
+>> Anyway, it looks like almost the whole chip is reset
+>> except some minor things. So the driver has actually a
+>> wrong name. Until recently only the switch driver was the
+>> sole user of it (at least on the lan966x). So, my question
+>> remains, is this correct? I mean the switch driver says,
+>> "reset the switch core", but what actually happens is that
+>> the the entire SoC except the CPU and maybe the io mux is reset.
+>> What about the watchdog for example? Will that be reset, too?
 > 
-> Add a helper function to avoid code duplication.
+> If [1-3] are to be trusted, RESET_PROT_STAT[VCORE_RST_PROT_WDT], which
+> protects the watchdog from soft reset, is not set by default. So yes?
 > 
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
-> 
+> There are also AMBA, PCIe, PDBG protection bits against Vcore soft
+> reset in this register, depending on the platform.
 
-You have some weird configuration to your git send-email which doesn't
-add the "---" to split the patch commit message from the diffstat.
+*But* this also prevents it from reset by the watchdog. I don't know
+if we want that?!
 
->  create mode 100644 arch/x86/include/asm/shared/setup-cmdline.h
-> 
-> diff --git a/arch/x86/include/asm/shared/setup-cmdline.h b/arch/x86/include/asm/shared/setup-cmdline.h
+I.e. what happens if one sets RESET_PROT_STAT[VCORE_RST_PROT_WDT] and
+the watchdog does a reset? OTHO, I guess it is also bad to reset the
+watchdog during boot.. IMHO this reset logic doesn't look that well
+designed.
 
-Just cmdline.h I'd say.
+> [1] 
+> https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=cpu,cpu_regs,reset_prot_stat
+> [2] 
+> https://microchip-ung.github.io/lan9662_reginfo/reginfo_LAN9662.html?select=cpu,cpu_regs,reset_prot_stat
+> [3] 
+> https://microchip-ung.github.io/lan9668_reginfo/reginfo_LAN9668.html?select=cpu,cpu_regs,reset_prot_stat
 
-> new file mode 100644
-> index 000000000000..9822e5af4925
-> --- /dev/null
-> +++ b/arch/x86/include/asm/shared/setup-cmdline.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _ASM_X86_SETUP_CMDLINE_H
-> +#define _ASM_X86_SETUP_CMDLINE_H
-> +
-> +#define _SETUP
-> +#include <asm/setup.h> /* For COMMAND_LINE_SIZE */
-> +#undef _SETUP
-> +
-> +#include <linux/string.h>
-> +
-> +#ifdef CONFIG_CMDLINE_BOOL
-> +#define COMMAND_LINE_INIT CONFIG_CMDLINE
-> +#else
-> +#define COMMAND_LINE_INIT ""
-> +#endif
-> +
-> +/*
-> + * command_line and boot_command_line are expected to be at most
-> + * COMMAND_LINE_SIZE length. command_line needs to be initialized
-> + * with COMMAND_LINE_INIT.
-> + */
-> +
-
-
-^ Superfluous newline.
-
-> +static inline void resolve_cmdline(char *command_line,
-> +				   const char *boot_command_line)
-
-cmdline_prepare() I'd say.
-
-> +{
-> +#ifdef CONFIG_CMDLINE_BOOL
-> +	if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
-> +		/* Append boot loader cmdline to builtin */
-> +		strlcat(command_line, " ", COMMAND_LINE_SIZE);
-> +		strlcat(command_line, boot_command_line, COMMAND_LINE_SIZE);
-> +	}
-> +#else
-> +	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
-
-So that has been switched to strscpy() in the meantime:
-
-8a33d96bd178 ("x86/setup: Use strscpy() to replace deprecated strlcpy()")
-
-Please redo your set ontop of latest tip/master.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-michael

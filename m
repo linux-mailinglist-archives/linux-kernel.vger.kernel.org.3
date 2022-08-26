@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D8B5A3190
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEAE5A318E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344574AbiHZVy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S242352AbiHZVyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiHZVyw (ORCPT
+        with ESMTP id S231216AbiHZVyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:54:52 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8453325D9;
-        Fri, 26 Aug 2022 14:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZYOb94mj7PmrgZ8lf4hGillqW9ALQbpLDBnuQXLsL/Q=; b=de6bz6m8RXsGeButLQ0GZiYofc
-        CeHk/fHUC4HlAP5P4dFY8S9LoE538UWtSdCPwW6Hx7rfr1dpuGoaXyhPeqgo+Rgaw/4a8CAA9Z8F+
-        JUG9bkYNE+hGy97YclJtshfiP1+K4i2MX/3VTALQgUmQLNXvZuQfylY2ZFP23Qgz6l0S75Z9gdLcq
-        2uiXhvdmCx/Fr3Nwbvm3xweKduR+qPlPRkLA+d32MyL8GKYAVth5Q4B1WXk0S95K1rw8Ejbck14ea
-        +pGNlTzSzsBirRccGMr7uztSxR2igoUM/lJ+QzXX6NWCzSelgbpLtwWdul3vBkaZKzTudSdaPUTPf
-        gOGjj7Fg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oRhHT-006UVY-Cc; Fri, 26 Aug 2022 21:54:23 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ED60798018A; Fri, 26 Aug 2022 23:54:21 +0200 (CEST)
-Date:   Fri, 26 Aug 2022 23:54:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] sched/completion: Add wait_for_completion_state()
-Message-ID: <YwlBDWIah0fVYRXK@worktop.programming.kicks-ass.net>
-References: <20220822111816.760285417@infradead.org>
- <20220822114648.922711674@infradead.org>
- <CAJZ5v0i=+jXz71DBx=Hr9_6bxOx7yFF_xZJc4tXB0j4kSW0Q_g@mail.gmail.com>
+        Fri, 26 Aug 2022 17:54:36 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B9795BB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:54:34 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-33dc345ad78so68470927b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=iD+oDgmA+uqkgZAjiZVwNKXzpAuCVIysHt0xaw4YizU=;
+        b=Ca+dkdvTTZAOLDvgw3Z9TkaUnMZcEWn4NTxm5+zjenuU2n7vyLOc9KPh6+KdZ5gwBJ
+         tn/9thf3hXLJO9QmMCTrPu9UeA9bqXKkdHcD3t26KAQo8P0j/mO2Wsp3546vXy2g5DVe
+         7hsSOEj3K89mu/jqNLHDZpbjrvMfyUGLE++bdQHX7CDFGQhtlU3YxsNnf8kvVYpVHf5L
+         lxVu/SLHlqgK0HT7NNi6O08XfosRfNiRI1W7yI7n62C0LRD+iwPjN2kz2hv3wdQVmP8E
+         SrxuPd7hPHS0iDGfnSjx5LwMaLY9kxqbUtS5dWAWogDi+uOzyJWbWoS9ExFdkez6KFbW
+         ThmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=iD+oDgmA+uqkgZAjiZVwNKXzpAuCVIysHt0xaw4YizU=;
+        b=M8yX28rVFB6dP6EMmwLGcUflGBYKvP874ZOMx/IpRw/mVLq48xJjWMtyZVNvwGzxV7
+         AYAFzWdM8ZHVQAnFwFCKOAaPvaBzcNlzOIJC2C0rZg3XSaOhIZwQd9p1ONOGBl+ma97a
+         whDbDy9ts3O/YmerZSrLCHmpiOU9sjZTYNOYmbIb26XHOX/ZL8v5dE3KyDSBjZi6f5wI
+         gcX65AqeGlxofzH0mLZ7QNQ/TcQoUYXLDjMjgl6uJefHZHjFRgkdvrQMZwDUun4iJwhF
+         2Ewxth6/A6mLNBVjBAKkT7eZ9nnR1BaP9kHwJB65aenQosNhZXago0cwvYiSI1p4R7M+
+         B3vQ==
+X-Gm-Message-State: ACgBeo0a5cRqBGzMVw9i4v2M5ioj5O7GaQfuDQmJlfDs1VTPQBul/Rfs
+        8l5NWfMxYN+dZc/ekBLU5obm4PX6+63o/0y6PcrpgQ==
+X-Google-Smtp-Source: AA6agR6/Js/n7u8uAt+Vs5/9brwPzqXD8oV9j9u5xOFLL3KiwQvGzqQugDWZuWB0GKL5dR3cPMdqCyb0gjesC5DDHLQ=
+X-Received: by 2002:a25:7902:0:b0:67b:d842:1184 with SMTP id
+ u2-20020a257902000000b0067bd8421184mr1609196ybc.374.1661550874022; Fri, 26
+ Aug 2022 14:54:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i=+jXz71DBx=Hr9_6bxOx7yFF_xZJc4tXB0j4kSW0Q_g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
+ <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+ <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
+ <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
+ <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
+ <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
+ <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
+ <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu> <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
+ <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
+In-Reply-To: <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 23:54:22 +0200
+Message-ID: <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 07:32:33PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Aug 22, 2022 at 1:48 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, Aug 26, 2022 at 5:08 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+> Le 26/08/2022 =C3=A0 15:49, Linus Walleij a =C3=A9crit :
+> > On Thu, Aug 25, 2022 at 4:00 PM Christophe Leroy
+> > <christophe.leroy@csgroup.eu> wrote:
 > >
-> > Allows waiting with a custom @state.
+> >>> Christophe? Will you take a stab at it?
+> >>
+> >> Which patch should I write ?
 > >
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  include/linux/completion.h |    1 +
-> >  kernel/sched/completion.c  |    9 +++++++++
-> >  2 files changed, 10 insertions(+)
+> > One that removes CONFIG_ARCH_HAS_NR_GPIO entirely, then
+> > allocate bases for new GPIO chips from 0 and upward instead.
+> > And then see what happens.
 > >
-> > --- a/include/linux/completion.h
-> > +++ b/include/linux/completion.h
-> > @@ -103,6 +103,7 @@ extern void wait_for_completion(struct c
-> >  extern void wait_for_completion_io(struct completion *);
-> >  extern int wait_for_completion_interruptible(struct completion *x);
-> >  extern int wait_for_completion_killable(struct completion *x);
-> > +extern int wait_for_completion_state(struct completion *x, unsigned int state);
-> >  extern unsigned long wait_for_completion_timeout(struct completion *x,
-> >                                                    unsigned long timeout);
-> >  extern unsigned long wait_for_completion_io_timeout(struct completion *x,
-> > --- a/kernel/sched/completion.c
-> > +++ b/kernel/sched/completion.c
-> > @@ -247,6 +247,15 @@ int __sched wait_for_completion_killable
-> >  }
-> >  EXPORT_SYMBOL(wait_for_completion_killable);
-> >
-> > +int __sched wait_for_completion_state(struct completion *x, unsigned int state)
-> > +{
-> > +       long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, state);
-> > +       if (t == -ERESTARTSYS)
-> > +               return t;
-> > +       return 0;
-> > +}
-> > +EXPORT_SYMBOL(wait_for_completion_state);
-> 
-> Why not EXPORT_SYMBOL_GPL?  I guess to match the above?
+>
+> Ok, I can give it a try.
 
-Yeah; I'm torn between preference and consistency here :-)
+Nice!
+
+> But what do I do with:
+>
+> drivers/gpio/gpio-aggregator.c: bitmap =3D bitmap_alloc(ARCH_NR_GPIOS,
+> GFP_KERNEL);
+
+That's just used locally in that driver to loop over the arguments to the
+aggregator (from the file in sysfs). I would set some arbitrary root
+like
+#define AGGREGATOR_MAX_GPIOS 512
+and just search/replace with that.
+
+Yours,
+Linus Walleij

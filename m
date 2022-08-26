@@ -2,149 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D725F5A3065
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5945A306B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242178AbiHZUUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S1344911AbiHZUXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 16:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHZUUG (ORCPT
+        with ESMTP id S231643AbiHZUXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:20:06 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC51B32EE3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:20:04 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id p185so2533062pfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Yy3h91/LZL0yMN3Y+gPnYCc8uzqqu6+PEMw/uYOkvrQ=;
-        b=QI2iqRq9/94E6zl7r9mZw4F+7Daqhq8WErAzs7MCXRZvrz4GpEbY7Dstc+ZZ2JEyb2
-         q0xcA8xKqPk01eYmQLRlBIm9I9enL9gle1pvxTgv3hEVqdUw5C4cSi7lwuKtIjcxf5KZ
-         MNemfeMqo0zzfRvxEdPkaXJq+V0CXBJoNhrKZhmH2a/6fEvyddf2Pci6F7c3hz5Uh2KZ
-         p9XfmAZB3QDZNhI51WLuUsrX5a34H43X0h0MgNESMM7lb3mZRO5lRiW8QfXtTjK0Iio8
-         Bx/faeNKIHAHpdLZt2Qt47/Jnw19TxwGoB6eZJ5V4qbulyod0s+zhEZ6nWzqexbUBQl1
-         6MGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Yy3h91/LZL0yMN3Y+gPnYCc8uzqqu6+PEMw/uYOkvrQ=;
-        b=DTuld6IrXlX26JioGFZ7jKo2VfVBeRnOtJYOuAoL4B/y/Yl0v8twcFE6iyDdFlJ7nh
-         W4vF4FH56BRla8WM41tLfA7NQ+EyFi3Y3fIyde/d9rXz1X78V+OA3yZsdv5F8XcDvsEP
-         qsfsHMo68jy32CshryoidtKNf5ZYzHWtT+K4CokOWyndTMjn3qMGVhuvQKvISCop2ouV
-         /SyLdh3hVvyQ/gIkYA6ut4QI0erBrj3OMv/lFo+3+vt+3wks882BED2B8y4/T3tdvODV
-         TwzbhHx16xMFrQ2rg4yGWsxd55LL1hNecTbkecFx183kL8DgD3u1MCDKicZxL/ev9N9W
-         YHnQ==
-X-Gm-Message-State: ACgBeo03CTiIPpYuOEs2P6UR6cDXM89ZoGxw2sByk+FwKE4HwxnYBe/9
-        nwAn0SgvTQAmTIl0cFOvHkZ19Q==
-X-Google-Smtp-Source: AA6agR5n02jhbK1nhPu/jZhpJFX2d1euSOaYUkGIxcjNNi+QlVmGNtQ1h1+3uTxVaQGYEwd8dNh3mw==
-X-Received: by 2002:a05:6a00:4147:b0:52e:2d56:17c8 with SMTP id bv7-20020a056a00414700b0052e2d5617c8mr5478964pfb.51.1661545204289;
-        Fri, 26 Aug 2022 13:20:04 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x21-20020a63f715000000b0042b117e8bf8sm1843703pgh.23.2022.08.26.13.20.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 13:20:03 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 20:20:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>, Huang@google.com,
-        Shaoqin <shaoqin.huang@intel.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v7 3/4] KVM: x86/mmu: count KVM mmu usage in secondary
- pagetable stats.
-Message-ID: <Ywkq8HYyTI1eStSO@google.com>
-References: <20220823004639.2387269-1-yosryahmed@google.com>
- <20220823004639.2387269-4-yosryahmed@google.com>
+        Fri, 26 Aug 2022 16:23:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AEEC88A1;
+        Fri, 26 Aug 2022 13:23:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97635B83114;
+        Fri, 26 Aug 2022 20:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74FDC433D6;
+        Fri, 26 Aug 2022 20:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661545388;
+        bh=7cCDjYToph++Z/ONuGisoLePKjQz5vPpNaRrGjuFxao=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EmkGQofJICdXtAwYKaBLKXrvOrsaFzzle1UCo1WanL/8NWbeQlEur23/S9KadZC3c
+         oeXJn3xoNIvUur9FFx5vPZgKMNUM+IVC3tYxG86ejlTNhQkpMIDHiq6qjrmFNSsWhT
+         HBRczUOefGKJxiY45U/tnYmZm116gjfeQ5cLiWvsucdA0Ya0PGCdSo/5szlcRDAXtY
+         ZVbP9xr/DM2i/Dlcn/oi6K20htE2igPDRDfasgUZ5cqXejPBJiEu9vVyYy3HkEeadJ
+         nMCjpoWdXQ5W68V/sKZm0MXOJjJSKF/sOkI2yJ/k7/UPL5p1NYfmE7F0thfZx7p7zt
+         4wVgd5bNjdWkQ==
+Date:   Fri, 26 Aug 2022 23:23:00 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Lee, Chun-Yi" <joeyli.kernel@gmail.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ben Boeckel <me@benboeckel.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Malte Gell <malte.gell@gmx.de>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Lee, Chun-Yi" <jlee@suse.com>
+Subject: Re: [PATCH v9,1/4] X.509: Add CodeSigning extended key usage parsing
+Message-ID: <YwkrpLPyU0huPduE@kernel.org>
+References: <20220825142314.8406-1-jlee@suse.com>
+ <20220825142314.8406-2-jlee@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823004639.2387269-4-yosryahmed@google.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220825142314.8406-2-jlee@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022, Yosry Ahmed wrote:
-> Count the pages used by KVM mmu on x86 in memory stats under secondary
-> pagetable stats (e.g. "SecPageTables" in /proc/meminfo) to give better
-> visibility into the memory consumption of KVM mmu in a similar way to
-> how normal user page tables are accounted.
+On Thu, Aug 25, 2022 at 10:23:11PM +0800, Lee, Chun-Yi wrote:
+> This patch adds the logic for parsing the CodeSign extended key usage
+
+It's *not* a patch once it is applied.
+
+And isn't the identifier actually "codeSign", not "CodeSign"? Please,
+format identifier correctly in order not to cause confusion.
+
+So, how I would rewrite the first sentence, would be:
+
+  Add the logic for parsing codeSign extended key usage field, as
+  described in RFC2459, section "4.2.1.13  Extended key usage
+  field.
+
+E.g. it took me 15 minutes to review the commit message alone
+because I could not remember the RFC number off top of my head.
+
+> extension in X.509. The parsing result will be set to the
+> ext_key_usage
+> flag which is carried by public key. It can be used in the PKCS#7
+> verification.
 > 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: "Lee, Chun-Yi" <jlee@suse.com>
 > ---
->  arch/x86/kvm/mmu/mmu.c     | 16 ++++++++++++++--
->  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++++++
->  2 files changed, 26 insertions(+), 2 deletions(-)
+>  crypto/asymmetric_keys/x509_cert_parser.c | 25 +++++++++++++++++++++++
+>  include/crypto/public_key.h               |  1 +
+>  include/linux/oid_registry.h              |  5 +++++
+>  3 files changed, 31 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index e418ef3ecfcb..4d38e4eba772 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1665,6 +1665,18 @@ static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
->  	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
+> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
+> index 2899ed80bb18..1f67e0adef65 100644
+> --- a/crypto/asymmetric_keys/x509_cert_parser.c
+> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
+> @@ -554,6 +554,8 @@ int x509_process_extension(void *context, size_t hdrlen,
+>  	struct x509_parse_context *ctx = context;
+>  	struct asymmetric_key_id *kid;
+>  	const unsigned char *v = value;
+> +	int i = 0;
+> +	enum OID oid;
+
+I'd reorder the declarations (suggestion).
+
+>  
+>  	pr_debug("Extension: %u\n", ctx->last_oid);
+>  
+> @@ -583,6 +585,29 @@ int x509_process_extension(void *context, size_t hdrlen,
+>  		return 0;
+>  	}
+>  
+> +	if (ctx->last_oid == OID_extKeyUsage) {
+> +		if (vlen < 2 ||
+> +		    v[0] != ((ASN1_UNIV << 6) | ASN1_CONS_BIT | ASN1_SEQ) ||
+> +		    v[1] != vlen - 2)
+> +			return -EBADMSG;
+> +		i += 2;
+> +
+> +		while (i < vlen) {
+> +			/* A 10 bytes EKU OID Octet blob =
+> +			 * ASN1_OID + size byte + 8 bytes OID */
+> +			if ((i + 10) > vlen || v[i] != ASN1_OID || v[i + 1] != 8)
+> +				return -EBADMSG;
+> +
+> +			oid = look_up_OID(v + i + 2, v[i + 1]);
+> +			if (oid == OID_codeSigning) {
+> +				ctx->cert->pub->ext_key_usage |= EKU_codeSigning;
+> +			}
+> +			i += 10;
+> +		}
+> +		pr_debug("extKeyUsage: %d\n", ctx->cert->pub->ext_key_usage);
+> +		return 0;
+> +	}
+> +
+>  	return 0;
 >  }
 >  
-> +static void kvm_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-> +{
-> +	kvm_mod_used_mmu_pages(kvm, +1);
-> +	kvm_account_pgtable_pages((void *)sp->spt, +1);
-> +}
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index 68f7aa2a7e55..72c0fcc39d0f 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -28,6 +28,7 @@ struct public_key {
+>  	bool key_is_private;
+>  	const char *id_type;
+>  	const char *pkey_algo;
+> +	unsigned int ext_key_usage : 9;      /* Extended Key Usage (9-bit) */
+>  };
+>  
+>  extern void public_key_free(struct public_key *key);
+> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
+> index 0f4a8903922a..460135c2d918 100644
+> --- a/include/linux/oid_registry.h
+> +++ b/include/linux/oid_registry.h
+> @@ -140,9 +140,14 @@ enum OID {
+>  	OID_TPMImportableKey,		/* 2.23.133.10.1.4 */
+>  	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
+>  
+> +	/* Extended key purpose OIDs [RFC 5280] */
+> +	OID_codeSigning,		/* 1.3.6.1.5.5.7.3.3 */
 > +
-> +static void kvm_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-> +{
-> +	kvm_mod_used_mmu_pages(kvm, -1);
-> +	kvm_account_pgtable_pages((void *)sp->spt, -1);
-> +}
+>  	OID__NR
+>  };
+>  
+> +#define EKU_codeSigning	(1 << 2)
+> +
+>  extern enum OID look_up_OID(const void *data, size_t datasize);
+>  extern int parse_OID(const void *data, size_t datasize, enum OID *oid);
+>  extern int sprint_oid(const void *, size_t, char *, size_t);
+> -- 
+> 2.26.2
+> 
 
-Hrm, this is causing build on x86 issues for me.  AFAICT, modpost doesn't detect
-that this creates a new module dependency on __mod_lruvec_page_state() and so doesn't
-refresh vmlinux.symvers.
-
-  ERROR: modpost: "__mod_lruvec_page_state" [arch/x86/kvm/kvm.ko] undefined!
-  make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
-  make[1]: *** [Makefile:1769: modules] Error 2
-  make[1]: *** Waiting for unfinished jobs....
-  Kernel: arch/x86/boot/bzImage is ready  (#128)
-  make[1]: Leaving directory '/usr/local/google/home/seanjc/build/kernel/vm'
-  make: *** [Makefile:222: __sub-make] Error 2
-
-Both gcc and clang yield the same behavior, so I doubt it's the compiler doing
-something odd.  Cleaning the build makes the problem go away, but that's a poor
-band-aid.
-
-If I squash this with the prior patch that adds kvm_account_pgtable_pages() to
-kvm_host.h, modpost detects the need to refresh and all is well.
-
-Given that ARM doesn't support building KVM as a module, i.e. can't run afoul
-of whatever modpost weirdness I'm hitting, I'm inclined to squash this with the
-previous patch and punt on the modpost issue so that we can get this merged.
-
-Any objections?  Or thoughts on what's going wrong?
+BR, Jarkko

@@ -2,196 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C094A5A2969
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D823C5A296D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiHZO1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S234847AbiHZO2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344425AbiHZO1T (ORCPT
+        with ESMTP id S230151AbiHZO2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:27:19 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34537B7BA;
-        Fri, 26 Aug 2022 07:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1661524035; x=1693060035;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=3KHfG9pE5vUtzEuAuE175SucQTfUj+3os4tgSI5rGug=;
-  b=BRujo0VQI/jE021v/Pr+D8b+4umEbqrJymmEKBT5I+QeBZKawQPKG46g
-   fNF/Ga7YIcFCRT2sV7x4XRdSoiquhGdkSgW3i5PJBn9hMKeDkGwYpWts3
-   Iw1X8lIYOY4udkNRmzaxvyBqpc8YKwZNeGBIUHUC3mdX7sA2Y9nFjGscg
-   w=;
-X-IronPort-AV: E=Sophos;i="5.93,265,1654560000"; 
-   d="scan'208";a="237815397"
-Subject: Re: [PATCH 2/2] xen-blkfront: Advertise feature-persistent as user requested
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-b09ea7fa.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 14:27:00 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-b09ea7fa.us-west-2.amazon.com (Postfix) with ESMTPS id A73F044E7B;
-        Fri, 26 Aug 2022 14:26:59 +0000 (UTC)
-Received: from EX19D048UWA004.ant.amazon.com (10.13.139.40) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Fri, 26 Aug 2022 14:26:59 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D048UWA004.ant.amazon.com (10.13.139.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Fri, 26 Aug 2022 14:26:58 +0000
-Received: from dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com (10.15.57.183)
- by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
- 15.0.1497.38 via Frontend Transport; Fri, 26 Aug 2022 14:26:58 +0000
-Received: by dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com (Postfix, from userid 5466572)
-        id 4069E26EF; Fri, 26 Aug 2022 14:26:58 +0000 (UTC)
-Date:   Fri, 26 Aug 2022 14:26:58 +0000
-From:   Maximilian Heyne <mheyne@amazon.de>
-To:     SeongJae Park <sj@kernel.org>
-CC:     <jgross@suse.com>, <roger.pau@citrix.com>,
-        <marmarek@invisiblethingslab.com>,
-        <xen-devel@lists.xenproject.org>, <axboe@kernel.dk>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Message-ID: <20220826142658.GA77627@dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com>
-References: <20220825161511.94922-1-sj@kernel.org>
- <20220825161511.94922-3-sj@kernel.org>
+        Fri, 26 Aug 2022 10:28:44 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73AF1C10E;
+        Fri, 26 Aug 2022 07:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661524123; x=1693060123;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yyk3C0tplTqm10LTuEAScqxik33o055KXg/FXYvR5QI=;
+  b=bi+S+PjOweB/JWFAFTYW3SnXJnbYnpy2s+0Qx4Fg8+pNQ2DnP7I38JXZ
+   e0e0wQfRUSpkXXFgfeiI9uUhpsy8Hj9KWSD0LglVrCxrgS3YVmnBOZZ4d
+   NNBP6ARwc0hNShcAyM2pW/c2KkZtqLGMBF32ky1ceQ5sj2E1X5JYHb1sJ
+   3BekY8gjZ8MByFCp/xWBYUo1JFo/3IJmAdUmf/1tGVJtVnDyodkINGd7S
+   jyAGuhWG/k96BHI/70QmVL0i58I66Esr9CGH1JjTIDq2Nb5WLp0NjxxNf
+   Mif0FvvXKMHahK3Cyg8Bzc6Fug+44HPBJZe3pomLI6zJbCPxtnbK1nF5F
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="171133563"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Aug 2022 07:28:42 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 26 Aug 2022 07:28:41 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 26 Aug 2022 07:28:38 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Shravan Chippa <shravan.chippa@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cyril Jean <Cyril.Jean@microchip.com>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        Vattipalli Praveen <praveen.kumar@microchip.com>,
+        Wolfgang Grandegger <wg@aries-embedded.de>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/9] New PolarFire SoC devkit devicetrees & 22.09 reference design updates
+Date:   Fri, 26 Aug 2022 15:27:58 +0100
+Message-ID: <20220826142806.3658434-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-In-Reply-To: <20220825161511.94922-3-sj@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 04:15:11PM +0000, SeongJae Park wrote:
-> CAUTION: This email originated from outside of the organization. Do not c=
-lick links or open attachments unless you can confirm the sender and know t=
-he content is safe.
-> =
+Hey all,
 
-> =
+Some 6.1 targeted changes here.
+Firstly, two new dev kits (one first-party & one from Aries Embedded).
+They've been sitting in our vendor tree, so are being sent where they
+belong.
 
-> =
+Secondly, another release of our reference design for the Icicle kit
+is due in September. Usually these do not really change much for the
+devicetree, but this time around a pair of changes impact the memory
+map.
 
-> Commit e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter
-> when connect") made blkback to advertise its support of the persistent
-> grants feature only if the user sets the 'feature_persistent' parameter
-> of the driver and the frontend advertised its support of the feature.
-> However, following commit 402c43ea6b34 ("xen-blkfront: Apply
-> 'feature_persistent' parameter when connect") made the blkfront to work
-> in the same way.  That is, blkfront also advertises its support of the
-> persistent grants feature only if the user sets the 'feature_persistent'
-> parameter of the driver and the backend advertised its support of the
-> feature.
-> =
+The first of these is adding dma-ranges to the pcie controller. The
+controller had some issues to begin with & with the current reference
+design (v2022.05) would not work with mainline Linux nor has it since
+reference design v2021.08. A combination of the property, a change
+to the FPGA design & a small fix to the driver will get it working
+with mainline again. The other non-backwards compatible change to the
+reference design is moves of the peripherals instantiated in the
+fabric. Currently they are fairly spread out & a common complaint has
+been that this leaves little room in the fic3 section of the memory map
+for custom peripherals without removing the existing ones.
 
-> Hence blkback and blkfront will never advertise their support of the
-> feature but wait until the other advertises the support, even though
-> users set the 'feature_persistent' parameters of the drivers.  As a
-> result, the persistent grants feature is disabled always regardless of
-> the 'feature_persistent' values[1].
-> =
+This series depends on [0] so as not to add dtbs_check warnings. The
+fabric clock support is added by [1].
 
-> The problem comes from the misuse of the semantic of the advertisement
-> of the feature.  The advertisement of the feature should means only
-> availability of the feature not the decision for using the feature.
-> However, current behavior is working in the wrong way.
-> =
+Thanks,
+Conor.
 
-> This commit fixes the issue by making the blkfront advertises its
-> support of the feature as user requested via 'feature_persistent'
-> parameter regardless of the otherend's support of the feature.
-> =
+0 - https://lore.kernel.org/linux-gpio/20220825143522.3102546-1-conor.dooley@microchip.com/
+1 - https://lore.kernel.org/linux-clk/20220824093342.187844-1-conor.dooley@microchip.com/
 
-> [1] https://lore.kernel.org/xen-devel/bd818aba-4857-bc07-dc8a-e9b2f8c5f7c=
-d@suse.com/
-> =
+Conor Dooley (7):
+  dt-bindings: riscv: microchip: document icicle reference design
+  dt-bindings: riscv: microchip: document the aries m100pfsevp
+  riscv: dts: microchip: add pci dma ranges for the icicle kit
+  riscv: dts: microchip: move the mpfs' pci node to -fabric.dtsi
+  riscv: dts: microchip: icicle: update pci address properties
+  riscv: dts: microchip: icicle: re-jig fabric peripheral addresses
+  riscv: dts: microchip: add a devicetree for aries' m100pfsevp
 
-> Fixes: 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter =
-when connect")
-> Cc: <stable@vger.kernel.org> # 5.10.x
-> Reported-by: Marek Marczykowski-G=F3recki <marmarek@invisiblethingslab.co=
-m>
-> Suggested-by: Juergen Gross <jgross@suse.com>
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  drivers/block/xen-blkfront.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> =
+Shravan Chippa (1):
+  dt-bindings: riscv: microchip: document the sev kit
 
-> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-> index 8e56e69fb4c4..dfae08115450 100644
-> --- a/drivers/block/xen-blkfront.c
-> +++ b/drivers/block/xen-blkfront.c
-> @@ -213,6 +213,9 @@ struct blkfront_info
->         unsigned int feature_fua:1;
->         unsigned int feature_discard:1;
->         unsigned int feature_secdiscard:1;
-> +       /* Connect-time cached feature_persistent parameter */
-> +       unsigned int feature_persistent_parm:1;
-> +       /* Persistent grants feature negotiation result */
->         unsigned int feature_persistent:1;
->         unsigned int bounce:1;
->         unsigned int discard_granularity;
-> @@ -1848,7 +1851,7 @@ static int talk_to_blkback(struct xenbus_device *de=
-v,
->                 goto abort_transaction;
->         }
->         err =3D xenbus_printf(xbt, dev->nodename, "feature-persistent", "=
-%u",
-> -                       info->feature_persistent);
-> +                       info->feature_persistent_parm);
->         if (err)
->                 dev_warn(&dev->dev,
->                          "writing persistent grants feature to xenbus");
-> @@ -2281,7 +2284,8 @@ static void blkfront_gather_backend_features(struct=
- blkfront_info *info)
->         if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard"=
-, 0))
->                 blkfront_setup_discard(info);
-> =
+Vattipalli Praveen (1):
+  riscv: dts: microchip: add sevkit device tree
 
-> -       if (feature_persistent)
-> +       info->feature_persistent_parm =3D feature_persistent;
+ .../devicetree/bindings/riscv/microchip.yaml  |  21 ++-
+ arch/riscv/boot/dts/microchip/Makefile        |   3 +
+ .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |  42 ++++-
+ .../boot/dts/microchip/mpfs-icicle-kit.dts    |   3 +-
+ .../dts/microchip/mpfs-m100pfs-fabric.dtsi    |  45 +++++
+ .../dts/microchip/mpfs-m100pfsevp-emmc.dts    |  37 +++++
+ .../dts/microchip/mpfs-m100pfsevp-sdcard.dts  |  37 +++++
+ .../boot/dts/microchip/mpfs-m100pfsevp.dtsi   | 155 ++++++++++++++++++
+ .../dts/microchip/mpfs-polarberry-fabric.dtsi |  29 ++++
+ .../dts/microchip/mpfs-sev-kit-fabric.dtsi    |  45 +++++
+ .../riscv/boot/dts/microchip/mpfs-sev-kit.dts | 145 ++++++++++++++++
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |  29 ----
+ 12 files changed, 550 insertions(+), 41 deletions(-)
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfsevp-emmc.dts
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfsevp-sdcard.dts
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts
 
-I think setting this here is too late because "feature-persistent" was alre=
-ady
-written to xenstore via talk_to_blkback but with default 0. So during the
-connect blkback will not see that the guest supports the feature and falls =
-back
-to no persistent grants.
-
-Tested only this patch with some hacky dom0 kernel that doesn't have the pa=
-tch
-from your series yet. Will do more testing next week.
-
-> +       if (info->feature_persistent_parm)
->                 info->feature_persistent =3D
->                         !!xenbus_read_unsigned(info->xbdev->otherend,
->                                                "feature-persistent", 0);
-> --
-> 2.25.1
-> =
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+-- 
+2.36.1
 

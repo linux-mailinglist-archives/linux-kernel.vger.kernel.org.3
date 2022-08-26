@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC4E5A25A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AF45A25AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiHZKPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S240949AbiHZKPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245581AbiHZKPC (ORCPT
+        with ESMTP id S1343588AbiHZKPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:15:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1109D46DBD;
-        Fri, 26 Aug 2022 03:14:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C26061408;
-        Fri, 26 Aug 2022 10:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0438C43140;
-        Fri, 26 Aug 2022 10:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661508898;
-        bh=NK190jfdx00jTrDCv7zIYGo0wJWl8l2X9W8c9twpJWM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nIY/moorJ/m4y8AsNO48CqLsfSNmDBPVeSgxPLfk52PP7Y6aYXueV2aNABvSfDMUi
-         PDsp5ZmnBW+jFnyUjB+NFpeEaud2aDjGAhL/0GP4P7NeL/sMVy9bfp90MrRO4zY8m3
-         aab6J1R5XG4vEQ86+OsqWJAsQyDOSWHH0r7wlUYV87Z1shvS3i2IxpzQA9EK0vCAfP
-         mXRq/ZxVseBpULo8TA1iBO4iSt4FYmZg6Pt3c42fJBWPbpuChX7CTEq8XOz1wQJvH5
-         3T+i8q/2bsnuufE2Wetp7tEPW5GiTGzTQNKXS7ymuEskEsAhQC7Ky/ZfbW1GE3yc0I
-         f9SCR3FYOGWyQ==
-Received: by mail-wr1-f50.google.com with SMTP id e13so330836wrm.1;
-        Fri, 26 Aug 2022 03:14:58 -0700 (PDT)
-X-Gm-Message-State: ACgBeo33rVA+TcAduSoD2aTtHLvMe5Kzl9+XuoxaUrJPyJBM3/66UD2l
-        HqS/rUfslS9akDI1371pDPA43yP5HmBnRGAk0OY=
-X-Google-Smtp-Source: AA6agR543ZK5dQZzr1lpLH8yqs+KhBfAVVvO1WOBz7r4lxnkexozgQ2VhsVLtTvZFBFUFU85FdH18Lv17LDbYByPKjY=
-X-Received: by 2002:a05:6000:782:b0:225:3e46:3dd5 with SMTP id
- bu2-20020a056000078200b002253e463dd5mr4249270wrb.103.1661508897137; Fri, 26
- Aug 2022 03:14:57 -0700 (PDT)
+        Fri, 26 Aug 2022 06:15:00 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF531A446
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:56 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bq23so1383154lfb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=nBDls8p7zWKgMsdae7qsDU8nms79A1faHjvYu7tARvE=;
+        b=piJ7BEpevaGNdTfb+iohBsjVd8y6wP7fyx2scpDUXdludX6+pLspOYMOnspr5RJUmE
+         OIh1n/nMbN506hH3wRUECtpn215qzlyev8PAdv9fkUrfkWN8RbOIkAAv7iCnj/GpRewr
+         6b8p81mVhXkt+JAB6KBcurlZ+unI6qZhm+lUuSOQ1aVLUbncBRWCYQHGm7l3rhjuEEDJ
+         RjWZPIryyeV1a9Ua7OflgMFcrcgLy0YL1gskTh695mZRAbIF7D/CS172snBeNCYvtNLW
+         KiLBOlEow99lBrYt00L0fYGxGF8kqOX5BJxf2PcQjnNJbHR8CkNz3o+2HAoT3HYzO0fA
+         RAjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=nBDls8p7zWKgMsdae7qsDU8nms79A1faHjvYu7tARvE=;
+        b=baN8h2DSG7Kx4wvmRAtorBctH6yV6S470CJxIZuI7+apkIAfmxlu3PwCHu9h3j6qok
+         0sZ1weQ9JWuUOaPGr95ViaJqYRC2YGZtrIX2e5Nn4oD6i5sAJlvnVp5AfIUsIMlA4hsD
+         xQdU2kYPJXBEmD0SAQY4fRv5ouY8YeXcp1kcOsCyy9uBgRNeT9SCO5LZ+DA2URMTRCXn
+         mVCXEm9xx+0OFP4fOpwaBIp0DpXLrHo4CyQ8hS/fF6sMS7gJvkMe6ft7RnVghilvzkxw
+         KL+lMqY4e7Wkt/0UD85KVnidgDgInRIDVGPmp21Yl32OVWzU6UhXQRU9xqit9hct9beM
+         miEw==
+X-Gm-Message-State: ACgBeo00TOPVXN9iln5Ozu7F+1lYcdOg/m/jzVFv5wcT24i7y1FVQy0T
+        BxXBBbND2mUKzEFWTD7PYOL7Fg==
+X-Google-Smtp-Source: AA6agR7caUbLwyQSa715SFZUEGY9QFvmhTYs0wWUx3epIqtDxGXY7MC1nfcBGHa9KKFMrtkkLdDXyw==
+X-Received: by 2002:a19:915c:0:b0:492:f06d:b3b1 with SMTP id y28-20020a19915c000000b00492f06db3b1mr2554374lfj.1.1661508894364;
+        Fri, 26 Aug 2022 03:14:54 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id y7-20020a05651c106700b0025e42f8e771sm414675ljm.34.2022.08.26.03.14.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 03:14:53 -0700 (PDT)
+Message-ID: <ad2db009-8660-db05-60d9-fea61a5cde26@linaro.org>
+Date:   Fri, 26 Aug 2022 13:14:53 +0300
 MIME-Version: 1.0
-References: <20220825111715.3025694-1-sakari.ailus@linux.intel.com>
-In-Reply-To: <20220825111715.3025694-1-sakari.ailus@linux.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 26 Aug 2022 12:14:45 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFVnZzmYN46d0YB8ieri4vEPz49ufw1FvQ19GT+cQ+wLw@mail.gmail.com>
-Message-ID: <CAMj1kXFVnZzmYN46d0YB8ieri4vEPz49ufw1FvQ19GT+cQ+wLw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] acpi: Remove default association from integer maximum values
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sbinding@opensource.cirrus.com, andriy.shevchenko@intel.com,
-        patches@opensource.cirrus.com, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3] drm/msm/dp: correct 1.62G link rate at
+ dp_catalog_ctrl_config_msa()
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1661372150-3764-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1661372150-3764-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,34 +80,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 at 13:17, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
->
-> Remove the default association from integer maximum value checks. It is
-> not necessary and has caused a bug in other associations being unnoticed.
->
-> Fixes: 923044133367 ("ACPI: property: Unify integer value reading functions")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+On 24/08/2022 23:15, Kuogee Hsieh wrote:
+> At current implementation there is an extra 0 at 1.62G link rate which cause
+> no correct pixel_div selected for 1.62G link rate to calculate mvid and nvid.
+> This patch delete the extra 0 to have mvid and nvid be calculated correctly.
+> 
+> Changes in v2:
+> -- fix Fixes tag's text
+> 
+> Changes in v3:
+> -- fix misspelling of "Reviewed-by"
+> 
+> Fixes: 937f941ca06f  ("drm/msm/dp: Use qmp phy for DP PLL and PHY")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> 
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+No extra empty lines between the tags please. I'll correct this manually 
+while applying.
 
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
->  drivers/acpi/property.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> index 91d0e75859d37..d4c168ce428ca 100644
-> --- a/drivers/acpi/property.c
-> +++ b/drivers/acpi/property.c
-> @@ -1046,8 +1046,7 @@ static int acpi_data_prop_read_single(const struct acpi_device_data *data,
->                                                                 u8 *: U8_MAX, \
->                                                                 u16 *: U16_MAX, \
->                                                                 u32 *: U32_MAX, \
-> -                                                               u64 *: U64_MAX, \
-> -                                                               default: 0U)) { \
-> +                                                               u64 *: U64_MAX)) { \
->                                 ret = -EOVERFLOW;                       \
->                                 break;                                  \
->                         }                                               \
-> --
-> 2.30.2
->
+>   drivers/gpu/drm/msm/dp/dp_catalog.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> index 7257515..676279d 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> @@ -431,7 +431,7 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
+>   
+>   	if (rate == link_rate_hbr3)
+>   		pixel_div = 6;
+> -	else if (rate == 1620000 || rate == 270000)
+> +	else if (rate == 162000 || rate == 270000)
+>   		pixel_div = 2;
+>   	else if (rate == link_rate_hbr2)
+>   		pixel_div = 4;
+
+-- 
+With best wishes
+Dmitry
+

@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA175A24F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECDE5A24FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245699AbiHZJvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S1343863AbiHZJvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244972AbiHZJu6 (ORCPT
+        with ESMTP id S245408AbiHZJvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:50:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96E9D4C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661507457; x=1693043457;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FyBesxBopP4WUfvr9s3m3ayI6JGta6ovjzfVKeQey/k=;
-  b=Xw+8eFb4Mea5wTGwKUiBXjn744PlhBFiPLz7tX0DwyF3EHR4uYma7qkp
-   +iIchvp4dUOSafZ8/T2vZDphzAEE/IfVh+SRPVBWqJYReeWeslIGGSRba
-   1m51n3ze6slXiYMvdczGXoVszN8GcfUT+BcGWhtBekit2dlCFBBVYtz2V
-   qSspZHKHbfjAf1qMSMbF69rEmAWSfM218offUZYCvR2tRxNLUi4x8w26G
-   fAnFrVMcs/5IvZklNWdvB+qWaDihLmd4uG9Dm+KCiB8aFc5Mz/Uxn163N
-   rfR0dwFmFTUNhsxSXy5gqYdumig4a67lQZxMXxw/0rBttZ7OSzPh0k7ZA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="358436497"
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="358436497"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 02:50:57 -0700
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="671399096"
-Received: from spr.sh.intel.com ([10.239.53.122])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 02:50:55 -0700
-From:   Chao Gao <chao.gao@intel.com>
-To:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Cc:     hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        Chao Gao <chao.gao@intel.com>
-Subject: [PATCH] swiotlb: fix a typo
-Date:   Fri, 26 Aug 2022 17:50:46 +0800
-Message-Id: <20220826095046.880626-1-chao.gao@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 26 Aug 2022 05:51:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50117B1E5;
+        Fri, 26 Aug 2022 02:50:58 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MDZkM73dzz19VdR;
+        Fri, 26 Aug 2022 17:47:23 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 17:50:56 +0800
+Received: from [10.67.109.150] (10.67.109.150) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 17:50:55 +0800
+Subject: Re: [RFC 0/2] Introduce cgroup.top interface
+To:     Tejun Heo <tj@kernel.org>
+CC:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>
+References: <20220826011503.103894-1-lujialin4@huawei.com>
+ <Ywg7NcHtfjDKjwXR@slm.duckdns.org>
+From:   "lujialin (A)" <lujialin4@huawei.com>
+Message-ID: <e6deb22b-506d-d4f6-1a75-58dda4b58bcc@huawei.com>
+Date:   Fri, 26 Aug 2022 17:50:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
+In-Reply-To: <Ywg7NcHtfjDKjwXR@slm.duckdns.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.109.150]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"overwirte" isn't a word. It should be "overwrite".
+Ok, I got it, thanks
 
-Signed-off-by: Chao Gao <chao.gao@intel.com>
----
-BTW, I am wondering if copying the original buffer to the tlb buffer
-unconditionally will leak the original buffer to the VMM, especially
-when VMM isn't trusted e.g., by confidential VMs. Would it be better
-to zero the tlb buffer for dir == DMA_FROM_DEVICE?
-
- kernel/dma/swiotlb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index c5a9190b218f..f67e5f50ee3c 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -765,7 +765,7 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
- 	/*
- 	 * When dir == DMA_FROM_DEVICE we could omit the copy from the orig
- 	 * to the tlb buffer, if we knew for sure the device will
--	 * overwirte the entire current content. But we don't. Thus
-+	 * overwrite the entire current content. But we don't. Thus
- 	 * unconditional bounce may prevent leaking swiotlb content (i.e.
- 	 * kernel memory) to user-space.
- 	 */
--- 
-2.25.1
-
+ÔÚ 2022/8/26 11:17, Tejun Heo Ð´µÀ:
+> Hello,
+>
+> On Fri, Aug 26, 2022 at 09:15:01AM +0800, Lu Jialin wrote:
+>> Cgroup is used to organize and manage resource available processes.
+>> Currently there are no handy tool for gathering reousrce usage
+>> information for each and every child cgroups, makes it hard to detect
+>> resource outage and debug resource issues.
+>>
+>> To overcome this, we present the cgroup.top interface. Just like the
+>> top command, user is able to easily gather resource usage information
+>> , allowing user to detect and respond to resource outage in child
+>> cgroups
+> I don't think this is something we want build into the kernel. Maybe what
+> you want is something similar to below?
+>
+>    https://github.com/facebookincubator/below
+>
+> Thanks.
+>

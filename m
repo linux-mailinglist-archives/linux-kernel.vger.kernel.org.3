@@ -2,197 +2,576 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD495A21F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA635A21FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245464AbiHZHcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S245508AbiHZHc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245461AbiHZHbj (ORCPT
+        with ESMTP id S245365AbiHZHbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:31:39 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7EDD3E41
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:31:21 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id w188so859269vsb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=T0Ny5YtTYuVj4jKrxEt+iRXyKf10x01pN9fuiliVss0=;
-        b=hxlP/VmJsYtdOqrB1IFqgC4qk2XxXOtiLasli5Zk5waQe4FVBG3PEL2jy6kotmzJfi
-         MSgOkAb9VQBXJ0D4GLPfja+44ibhoqYoArivOQ84XTly9+8aOXifg72sXogrK7sJu4oF
-         s+6B2mSa7AwyGfsSssRUcAkIj+k9F+IEWcPRVuplzjgIgFeHJi5/T7gfPrHxofq5T7Vu
-         mSaDSLIq8BP68BYTfkMO2BCAKh9MeJwQaVryMoMmyLqTgDjpTCyyvMexyReXK/KVkogo
-         GnwqEPpmZCAOU8QdB43OaXd8Rasnja3LmWMAR6wtqgy09sJTGaCMUo0KYc7uLTFzSF0P
-         NSVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=T0Ny5YtTYuVj4jKrxEt+iRXyKf10x01pN9fuiliVss0=;
-        b=VGvPqWNDfHGA+2zMud/PWMA0C4CF7a9rBnu9o5wk1tI4tk6bXGWa5QhT9AIuVg/irS
-         BE0xztvBrBdyKLP5AJ9FzV49RI8mUjbpxY675y9Mt0c6yuI8jTv7jMCHf9Pl6DXTAZKk
-         kM0UAc3ZIQ9kB3eDKBBQzsMlnW1BcW4gH8kMXgWZNoRtcROS3mLzj8SKX5SStBAJlUX0
-         LGlDrSy63P44MF7SHP8qxwa2oOphxGTIRIw1ZkihzxORDmmnOBdKaAVtr0XhBLtp6D58
-         gOlz5yhP7h8MHpKqbYu6nlh/vZNawgbcsRqPxc9cogUByl9eczvUmJs5OPu7TXgXb3+h
-         Tn6A==
-X-Gm-Message-State: ACgBeo1hoUZh+1JNgoDYCtiaqGxZVKgR/ptaPotrqoa/dDVFzHjl/W2M
-        VKBmemDqY9f5X9VSRZGlhv5GJRBEQVguv3ak9iGp0Q==
-X-Google-Smtp-Source: AA6agR4uJ1qJp+m0Y3pAg/7HZQy398mCfaoig8Hsu9pzomLHgOQSksYgKfBhdcU7fuB45hhfkn0THJjV9MwH0/PwFQM=
-X-Received: by 2002:a67:d219:0:b0:390:46d5:7ab5 with SMTP id
- y25-20020a67d219000000b0039046d57ab5mr2949222vsi.35.1661499079705; Fri, 26
- Aug 2022 00:31:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220822022646.98581-1-tales.aparecida@gmail.com> <20220822022646.98581-9-tales.aparecida@gmail.com>
-In-Reply-To: <20220822022646.98581-9-tales.aparecida@gmail.com>
-From:   David Gow <davidgow@google.com>
+        Fri, 26 Aug 2022 03:31:49 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8602CE4AD
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:31:25 -0700 (PDT)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxFeLDdghjfjwKAA--.46370S5;
+        Fri, 26 Aug 2022 15:31:20 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn
+Subject: [PATCH v2 3/9] LoongArch/ftrace: Add dynamic function tracer support
 Date:   Fri, 26 Aug 2022 15:31:08 +0800
-Message-ID: <CABVgOSmH+-QQU99fCEry0egL8i1n8L_jDN52YE=atwFYTqk69w@mail.gmail.com>
-Subject: Re: [PATCH v2 8/8] lib: stackinit: update reference to kunit-tool
-To:     Tales Aparecida <tales.aparecida@gmail.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007540e805e71fe613"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20220826073114.1515-4-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220826073114.1515-1-zhangqing@loongson.cn>
+References: <20220826073114.1515-1-zhangqing@loongson.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxFeLDdghjfjwKAA--.46370S5
+X-Coremail-Antispam: 1UD129KBjvAXoW3Kr4DKr1rKryDZry3KryDZFb_yoW8Gw4rGo
+        WY93Wj9r4rGFW29w4Fk3y5WFWUXry0krZ0y34Syrs8uF40yry3Xr13Ca15Ka43Jr95Jr43
+        CF93uF48Aa47Xr97n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYu7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20EY4v20xva
+        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r1rM28IrcIa0x
+        kI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84AC
+        jcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJw
+        A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4xMxAIw2
+        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbs2-5UUUUU==
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007540e805e71fe613
-Content-Type: text/plain; charset="UTF-8"
+The compiler has inserted 2 NOPs before the regular function prologue.
+T series registers are available and safe because of LoongArch psABI.
 
-On Mon, Aug 22, 2022 at 10:30 AM Tales Aparecida
-<tales.aparecida@gmail.com> wrote:
->
-> Replace URL with an updated path to the full Documentation page
->
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> ---
+At runtime, replace nop with bl to enable ftrace call and replace bl with
+nop to disable ftrace call. The bl requires us to save the original RA value,
+so here it saves RA at t0.
+details are:
 
-Reviewed-by: David Gow <davidgow@google.com>
+| Compiled   |       Disabled         |        Enabled         |
++------------+------------------------+------------------------+
+| nop        | move     t0, ra        | move     t0, ra        |
+| nop        | nop                    | bl      ftrace_caller  |
+| func_body  | func_body              | func_body              |
 
-If there are no objections we'll take this (along with the whole
-series) via the ksefltest/kunit tree.
+The RA value will be recovered by ftrace_regs_entry, and restored into RA
+before returning to the regular function prologue. When a function is not
+being traced, the move t0, ra is not harmful.
 
-Cheers,
--- David
+1) ftrace_make_call, ftrace_make_nop (in kernel/ftrace.c)
+   The two functions turn each recorded call site of filtered functions
+   into a call to ftrace_caller or nops.
 
+2) ftracce_update_ftrace_func (in kernel/ftrace.c)
+   turns the nops at ftrace_call into a call to a generic entry for
+   function tracers.
 
->  lib/stackinit_kunit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/stackinit_kunit.c b/lib/stackinit_kunit.c
-> index 35c69aa425b2..4591d6cf5e01 100644
-> --- a/lib/stackinit_kunit.c
-> +++ b/lib/stackinit_kunit.c
-> @@ -3,7 +3,7 @@
->   * Test cases for compiler-based stack variable zeroing via
->   * -ftrivial-auto-var-init={zero,pattern} or CONFIG_GCC_PLUGIN_STRUCTLEAK*.
->   * For example, see:
-> - * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
-> + * "Running tests with kunit_tool" at Documentation/dev-tools/kunit/start.rst
->   *     ./tools/testing/kunit/kunit.py run stackinit [--raw_output] \
->   *             --make_option LLVM=1 \
->   *             --kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
-> --
-> 2.37.2
->
+3) ftrace_caller (in kernel/mcount-dyn.S)
+   The entry where each _mcount call sites calls to once they are
+   filtered to be traced.
 
---0000000000007540e805e71fe613
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Co-developed-by: Jinyang He <hejinyang@loongson.cn>
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
+ arch/loongarch/Kconfig              |   1 +
+ arch/loongarch/include/asm/ftrace.h |  16 ++++
+ arch/loongarch/include/asm/inst.h   |  33 +++++++++
+ arch/loongarch/kernel/Makefile      |   5 ++
+ arch/loongarch/kernel/entry_dyn.S   |  89 ++++++++++++++++++++++
+ arch/loongarch/kernel/ftrace_dyn.c  | 111 ++++++++++++++++++++++++++++
+ arch/loongarch/kernel/inst.c        |  92 +++++++++++++++++++++++
+ 7 files changed, 347 insertions(+)
+ create mode 100644 arch/loongarch/kernel/entry_dyn.S
+ create mode 100644 arch/loongarch/kernel/ftrace_dyn.c
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCA
-qFwcoSTdDQdNXED6e//bNQ8x8c7YZmbpVlM8Tf68hDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjYwNzMxMjBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAdnnjELo7qXDJHtveCTQt
-GGl7y4vh/uUZjUODcApA3i5IBd/aMoJ98dig3P6aFxbnCE43C9He2wed9a9S9ZrLDxC07WuPG6mP
-LpY8yV87JtnG6apOyfQAgmPwfPnLw57kciGsRAFoSKWTOO1e/4A172KnlB9A5vG/8p6GeseJDdZt
-bJvW+VRBKWBWYTfN13bK6PilHGYMe94IgTnWLES0evD2gTCHLP+ksjPTIit5K7PMgmbj/X1Wyq1A
-jB9yHgsW8xH7weHqKKEMciucQ/uf7Al8qy4Offv1tacOJZ5y6bhDFa3WUqWrlMwVXBLpqJmWH/z1
-eC+yorBetA+oZKe53Q==
---0000000000007540e805e71fe613--
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 4d13bac368ed..f2d4899b1a0e 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -83,6 +83,7 @@ config LOONGARCH
+ 	select HAVE_C_RECORDMCOUNT
+ 	select HAVE_DEBUG_STACKOVERFLOW
+ 	select HAVE_DMA_CONTIGUOUS
++        select HAVE_DYNAMIC_FTRACE
+ 	select HAVE_EXIT_THREAD
+ 	select HAVE_FAST_GUP
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
+index 6a3e76234618..76ca58767f4d 100644
+--- a/arch/loongarch/include/asm/ftrace.h
++++ b/arch/loongarch/include/asm/ftrace.h
+@@ -10,9 +10,25 @@
+ #define MCOUNT_INSN_SIZE 4		/* sizeof mcount call */
+ 
+ #ifndef __ASSEMBLY__
++#ifndef CONFIG_DYNAMIC_FTRACE
+ extern void _mcount(void);
+ #define mcount _mcount
++#endif
+ 
++#ifdef CONFIG_DYNAMIC_FTRACE
++static inline unsigned long ftrace_call_adjust(unsigned long addr)
++{
++	return addr;
++}
++
++struct dyn_arch_ftrace {
++};
++
++struct dyn_ftrace;
++int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
++#define ftrace_init_nop ftrace_init_nop
++
++#endif /* CONFIG_DYNAMIC_FTRACE */
+ #endif /* __ASSEMBLY__ */
+ #endif /* CONFIG_FUNCTION_TRACER */
+ #endif /* _ASM_LOONGARCH_FTRACE_H */
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 7b07cbb3188c..713b4996bfac 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -8,6 +8,9 @@
+ #include <linux/types.h>
+ #include <asm/asm.h>
+ 
++#define INSN_NOP 0x03400000
++#define INSN_BREAK 0x002a0000
++
+ #define ADDR_IMMMASK_LU52ID	0xFFF0000000000000
+ #define ADDR_IMMMASK_LU32ID	0x000FFFFF00000000
+ #define ADDR_IMMMASK_ADDU16ID	0x00000000FFFF0000
+@@ -18,6 +21,11 @@
+ 
+ #define ADDR_IMM(addr, INSN)	((addr & ADDR_IMMMASK_##INSN) >> ADDR_IMMSHIFT_##INSN)
+ 
++enum reg0i26_op {
++	b_op		= 0x14,
++	bl_op		= 0x15,
++};
++
+ enum reg1i20_op {
+ 	lu12iw_op	= 0x0a,
+ 	lu32id_op	= 0x0b,
+@@ -32,6 +40,7 @@ enum reg2i12_op {
+ 	addiw_op	= 0x0a,
+ 	addid_op	= 0x0b,
+ 	lu52id_op	= 0x0c,
++	ori_op          = 0x0e,
+ 	ldb_op		= 0xa0,
+ 	ldh_op		= 0xa1,
+ 	ldw_op		= 0xa2,
+@@ -52,6 +61,10 @@ enum reg2i16_op {
+ 	bgeu_op		= 0x1b,
+ };
+ 
++enum reg3_op {
++	or_op		= 0x2a,
++};
++
+ struct reg0i26_format {
+ 	unsigned int immediate_h : 10;
+ 	unsigned int immediate_l : 16;
+@@ -85,6 +98,13 @@ struct reg2i16_format {
+ 	unsigned int opcode : 6;
+ };
+ 
++struct reg3_format {
++	unsigned int rd : 5;
++	unsigned int rj : 5;
++	unsigned int rk : 5;
++	unsigned int opcode : 17;
++};
++
+ union loongarch_instruction {
+ 	unsigned int word;
+ 	struct reg0i26_format reg0i26_format;
+@@ -92,6 +112,7 @@ union loongarch_instruction {
+ 	struct reg1i21_format reg1i21_format;
+ 	struct reg2i12_format reg2i12_format;
+ 	struct reg2i16_format reg2i16_format;
++	struct reg3_format    reg3_format;
+ };
+ 
+ #define LOONGARCH_INSN_SIZE	sizeof(union loongarch_instruction)
+@@ -162,6 +183,18 @@ static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
+ 		is_imm12_negative(ip->reg2i12_format.immediate);
+ }
+ 
++int larch_insn_read(void *addr, u32 *insnp);
++int larch_insn_write(void *addr, u32 insn);
++int larch_insn_patch_text(void *addr, u32 insn);
++
++u32 larch_insn_gen_nop(void);
++u32 larch_insn_gen_b(unsigned long pc, unsigned long dest);
++u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest);
++
++u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj,
++			enum loongarch_gpr rk);
++u32 larch_insn_gen_move(enum loongarch_gpr rd, enum loongarch_gpr rj);
++
+ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+ u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 0a745d24d3e5..a73599619466 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -15,8 +15,13 @@ obj-$(CONFIG_EFI) 		+= efi.o
+ obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
+ 
+ ifdef CONFIG_FUNCTION_TRACER
++  ifndef CONFIG_DYNAMIC_FTRACE
+     obj-y += mcount.o ftrace.o
+     CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
++  else
++    obj-y += entry_dyn.o ftrace_dyn.o
++    CFLAGS_REMOVE_ftrace_dyn.o = $(CC_FLAGS_FTRACE)
++  endif
+   CFLAGS_REMOVE_inst.o = $(CC_FLAGS_FTRACE)
+   CFLAGS_REMOVE_time.o = $(CC_FLAGS_FTRACE)
+   CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
+diff --git a/arch/loongarch/kernel/entry_dyn.S b/arch/loongarch/kernel/entry_dyn.S
+new file mode 100644
+index 000000000000..205925bc3822
+--- /dev/null
++++ b/arch/loongarch/kernel/entry_dyn.S
+@@ -0,0 +1,89 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Loongson Technology Corporation Limited
++ */
++
++#include <asm/export.h>
++#include <asm/regdef.h>
++#include <asm/stackframe.h>
++#include <asm/ftrace.h>
++
++	.text
++/*
++ * Due to -fpatchable-function-entry=2: the compiler inserted 2 NOPs before the
++ * regular C function prologue. When PC arrived here, the last 2 instructions
++ * as follows,
++ * 	move		t0, ra
++ * 	bl		callsite (for modules, callsite is a tramplione)
++ *
++ * modules tramplione as follows,
++ * 	lu12i.w		t1, callsite[31:12]
++ * 	lu32i.d		t1, callsite[51:32]
++ * 	lu52i.d		t1, t1, callsite[63:52]
++ * 	jirl		zero, t1, callsite[11:0] >> 2
++ *
++ * See arch/loongarch/kernel/ftrace_dyn.c for details. Here, pay attention to
++ * that the T series regs are available and safe because each C functions
++ * follows the LoongArch psABI well.
++ */
++
++	.macro  ftrace_regs_entry
++	PTR_ADDI sp, sp, -PT_SIZE
++	/* Save trace function ra at PT_ERA */
++	PTR_S	ra, sp, PT_ERA
++	/* Save parent ra at PT_R1(RA) */
++	PTR_S	t0, sp, PT_R1
++	PTR_S	a0, sp, PT_R4
++	PTR_S	a1, sp, PT_R5
++	PTR_S	a2, sp, PT_R6
++	PTR_S	a3, sp, PT_R7
++	PTR_S	a4, sp, PT_R8
++	PTR_S	a5, sp, PT_R9
++	PTR_S	a6, sp, PT_R10
++	PTR_S	a7, sp, PT_R11
++	PTR_S	fp, sp, PT_R22
++
++	PTR_ADDI t8, sp, PT_SIZE
++	PTR_S   t8, sp, PT_R3
++
++	.endm
++
++SYM_CODE_START(ftrace_caller)
++	ftrace_regs_entry
++	b	ftrace_common
++SYM_CODE_END(ftrace_caller)
++
++SYM_CODE_START(ftrace_common)
++	PTR_ADDI	a0, ra, -8	/* arg0: ip */
++	move		a1, t0		/* arg1: parent_ip */
++	la.pcrel	t1, function_trace_op
++	PTR_L		a2, t1, 0	/* arg2: op */
++	move		a3, sp		/* arg3: regs */
++	.globl ftrace_call
++ftrace_call:
++	bl		ftrace_stub
++/*
++ * As we didn't use S series regs in this assmembly code and all calls
++ * are C function which will save S series regs by themselves, there is
++ * no need to restore S series regs. The T series is available and safe
++ * at the callsite, so there is no need to restore the T series regs.
++ */
++ftrace_common_return:
++	PTR_L	a0, sp, PT_R4
++	PTR_L	a1, sp, PT_R5
++	PTR_L	a2, sp, PT_R6
++	PTR_L	a3, sp, PT_R7
++	PTR_L	a4, sp, PT_R8
++	PTR_L	a5, sp, PT_R9
++	PTR_L	a6, sp, PT_R10
++	PTR_L	a7, sp, PT_R11
++	PTR_L	fp, sp, PT_R22
++	PTR_L	ra, sp, PT_R1
++	PTR_L	t0, sp, PT_ERA
++	PTR_ADDI sp, sp, PT_SIZE
++	jr	t0
++SYM_CODE_END(ftrace_common)
++
++SYM_FUNC_START(ftrace_stub)
++	jr	ra
++SYM_FUNC_END(ftrace_stub)
+diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
+new file mode 100644
+index 000000000000..1f8955be8b64
+--- /dev/null
++++ b/arch/loongarch/kernel/ftrace_dyn.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Based on arch/arm64/kernel/ftrace.c
++ *
++ * Copyright (C) 2022 Loongson Technology Corporation Limited
++ */
++
++#include <linux/ftrace.h>
++#include <linux/uaccess.h>
++
++#include <asm/inst.h>
++
++static int ftrace_modify_code(unsigned long pc, u32 old, u32 new,
++			      bool validate)
++{
++	u32 replaced;
++
++	if (validate) {
++		if (larch_insn_read((void *)pc, &replaced))
++			return -EFAULT;
++
++		if (replaced != old)
++			return -EINVAL;
++	}
++
++	if (larch_insn_patch_text((void *)pc, new))
++		return -EPERM;
++
++	return 0;
++}
++
++int ftrace_update_ftrace_func(ftrace_func_t func)
++{
++	unsigned long pc;
++	u32 new;
++
++	pc = (unsigned long)&ftrace_call;
++	new = larch_insn_gen_bl(pc, (unsigned long)func);
++
++	return ftrace_modify_code(pc, 0, new, false);
++}
++
++/*
++ * The compiler has inserted 2 NOPs before the regular function prologue.
++ * T series registers are available and safe because of LoongArch psABI.
++ *
++ * At runtime, replace nop with bl to enable ftrace call and replace bl with
++ * nop to disable ftrace call. The bl requires us to save the original RA value,
++ * so here it saves RA at t0.
++ * details are:
++ *
++ * | Compiled   |       Disabled         |        Enabled         |
++ * +------------+------------------------+------------------------+
++ * | nop        | move     t0, ra        | move     t0, ra        |
++ * | nop        | nop                    | bl      ftrace_caller  |
++ * | func_body  | func_body              | func_body              |
++ *
++ * The RA value will be recovered by ftrace_regs_entry, and restored into RA
++ * before returning to the regular function prologue. When a function is not
++ * being traced, the move t0, ra is not harmful.
++ */
++
++int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
++{
++	unsigned long pc;
++	u32 old, new;
++
++	pc = rec->ip;
++	old = larch_insn_gen_nop();
++	new = larch_insn_gen_move(LOONGARCH_GPR_T0, LOONGARCH_GPR_RA);
++
++	return ftrace_modify_code(pc, old, new, true);
++}
++
++int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
++{
++	unsigned long pc;
++	u32 old, new;
++
++	pc = rec->ip + LOONGARCH_INSN_SIZE;
++
++	old = larch_insn_gen_nop();
++	new = larch_insn_gen_bl(pc, addr);
++
++	return ftrace_modify_code(pc, old, new, true);
++}
++
++int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
++		    unsigned long addr)
++{
++	unsigned long pc;
++	u32 old, new;
++
++	pc = rec->ip + LOONGARCH_INSN_SIZE;
++
++	new = larch_insn_gen_nop();
++	old = larch_insn_gen_bl(pc, addr);
++
++	return ftrace_modify_code(pc, old, new, true);
++}
++
++void arch_ftrace_update_code(int command)
++{
++	command |= FTRACE_MAY_SLEEP;
++	ftrace_modify_all_code(command);
++}
++
++int __init ftrace_dyn_arch_init(void)
++{
++	return 0;
++}
+diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+index b1df0ec34bd1..d62cdf4a9ffb 100644
+--- a/arch/loongarch/kernel/inst.c
++++ b/arch/loongarch/kernel/inst.c
+@@ -2,8 +2,83 @@
+ /*
+  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+  */
++#include <linux/sizes.h>
++#include <linux/uaccess.h>
++
++#include <asm/cacheflush.h>
+ #include <asm/inst.h>
+ 
++static DEFINE_RAW_SPINLOCK(patch_lock);
++
++int larch_insn_read(void *addr, u32 *insnp)
++{
++	int ret;
++	u32 val;
++
++	ret = copy_from_kernel_nofault(&val, addr, LOONGARCH_INSN_SIZE);
++	if (!ret)
++		*insnp = val;
++
++	return ret;
++}
++
++int larch_insn_write(void *addr, u32 insn)
++{
++	int ret;
++	unsigned long flags = 0;
++
++	raw_spin_lock_irqsave(&patch_lock, flags);
++	ret = copy_to_kernel_nofault(addr, &insn, LOONGARCH_INSN_SIZE);
++	raw_spin_unlock_irqrestore(&patch_lock, flags);
++
++	return ret;
++}
++
++int larch_insn_patch_text(void *addr, u32 insn)
++{
++	int ret;
++	u32 *tp = addr;
++
++	if ((unsigned long)tp & 3)
++		return -EINVAL;
++
++	ret = larch_insn_write(tp, insn);
++	if (!ret)
++		flush_icache_range((unsigned long)tp,
++				   (unsigned long)tp + LOONGARCH_INSN_SIZE);
++
++	return ret;
++}
++
++u32 larch_insn_gen_nop(void)
++{
++	return INSN_NOP;
++}
++
++u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest)
++{
++	unsigned int immediate_l, immediate_h;
++	union loongarch_instruction insn;
++	long offset = dest - pc;
++
++	if ((offset & 3) || offset < -SZ_128M || offset >= SZ_128M) {
++		pr_warn("The generated bl instruction is out of range.\n");
++		return INSN_BREAK;
++	}
++
++	offset >>= 2;
++
++	immediate_l = offset & 0xffff;
++	offset >>= 16;
++	immediate_h = offset & 0x3ff;
++
++	insn.reg0i26_format.opcode = bl_op;
++	insn.reg0i26_format.immediate_l = immediate_l;
++	insn.reg0i26_format.immediate_h = immediate_h;
++
++	return insn.word;
++}
++
+ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm)
+ {
+ 	union loongarch_instruction insn;
+@@ -38,3 +113,20 @@ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned l
+ 
+ 	return insn.word;
+ }
++
++u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj, enum loongarch_gpr rk)
++{
++	union loongarch_instruction insn;
++
++	insn.reg3_format.opcode = or_op;
++	insn.reg3_format.rd = rd;
++	insn.reg3_format.rj = rj;
++	insn.reg3_format.rk = rk;
++
++	return insn.word;
++}
++
++u32 larch_insn_gen_move(enum loongarch_gpr rd, enum loongarch_gpr rj)
++{
++	return larch_insn_gen_or(rd, rj, 0);
++}
+-- 
+2.20.1
+

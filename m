@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F3C5A2298
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7928F5A22A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245184AbiHZIHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S245218AbiHZILG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244376AbiHZIG7 (ORCPT
+        with ESMTP id S241826AbiHZILE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:06:59 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D87BD4754
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:06:57 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id og21so1718475ejc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:06:57 -0700 (PDT)
+        Fri, 26 Aug 2022 04:11:04 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8FD2771;
+        Fri, 26 Aug 2022 01:11:01 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bq11so855866wrb.12;
+        Fri, 26 Aug 2022 01:11:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=EFxNeR78FI3l0OC7HZl6P9i468zpQHaQ3saZGSwaod0=;
-        b=uFWdeiGlLmROCVF+abK6O/n+PsbMttVes6THDJ8y2LAohfjd6WA5TiVYxHj9GMiEz/
-         /o2V0PIbRDule0ccYIFRdZqGaS9X6IIiTK5sAY+4lr1s+PApBmbeMsf7OoMrRngJUAci
-         edcD4w4NCdSLmcDx6yybnDfSf6SiGAgoLVS/GZvRyKoMrkMjOKtyciatt+Ty2YNT8HGU
-         W2ZfCiIBS5BvuTIcEt6NeCnP+KlL1qfENeyWPlxMhtoJQoctwMLSzjoreyHbpHL1pS28
-         rkXNjwvoCskyZQU3peT9/0ORJnwuJxAG5hncEAo/N+YUhHmm+S22atJYioIyqr7giWqe
-         M0Yw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=v4H+4AvGFUQ4X3fIy7w2GNzFwXOQBQhFujlzuWD9IjY=;
+        b=OuOtNoLcjmkerE26piau/BBAmyQeBWWJkFV58GBry+HSm1QOf12Wf52ETbS/4swFqt
+         RpG0fLp7sf8KvPbnEj9ZB2pTKlL3bUVHjcowxS2N1cnm4WnN+B7kDFFipvgXAOXWgZs0
+         MfLFr6BQKC4USPKszgF7/pPZcr3vHgg+xVpQJn4YMBFKmQ7+wTn8mtWeAoQal3vI3cqv
+         GPzr/Byw7ZiQXZco5ec70eUVMuohUFyEAGDp+RX3hBqzUFdjBJj9S9z4lgVtrMdpRsBi
+         OupQC1G8CwSlHs+JVynTj0+4eT2PAfs7c1p/JFs4WrNbFMdDpaDxiBLyNZQWQGNGL7O/
+         gBJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=EFxNeR78FI3l0OC7HZl6P9i468zpQHaQ3saZGSwaod0=;
-        b=Ly1niXUPDy3BfbpqmDizUNuUzxKS9fVrY9RbxYC7sLIZLZQFzMWJCQKqXGeqQx1zwo
-         KP8lZSU4I35tRc0P1ghYoJ2JczKyQ6R+BNV7c5ijTphVSXfJNpC6p9G4bd85H+cg/tSf
-         UE2UTpK52PRZ65gJfgeaqHzJ3HBsgLX5w787F24QzGj/ackEfVzsrF5ALTzSsbq7nLT3
-         yUcYHrq4vTc9TmSNvi/6S1MFykfwDXKU70oDXCOvYc+VBQaD2kYg/468bdj29lzUJXgV
-         /QzWvYcVAn2c+DpsHEN01orcPXinVjJqzPuu9DqHa2VVUDbiI5oOo8MDwD35xhjDHmgq
-         KFiw==
-X-Gm-Message-State: ACgBeo1CDjFzAZE9x8QYVhOpLZCiLkQBh9sHiRycYEdMu6ilkQ1FhdHX
-        1Z26Iey3dLaPg5aJKh54pnKQSiehA1uNkYDTUGZwIg==
-X-Google-Smtp-Source: AA6agR7jN7XyheMHhzyh7YMEy8KcA8oU9ydIho7xiM2GGzQ4ny4ssMEayxNW/Er2QZsizb6/p3b/jGMLqTYIWr3h2tY=
-X-Received: by 2002:a17:906:478f:b0:73d:7919:b23 with SMTP id
- cw15-20020a170906478f00b0073d79190b23mr4413839ejc.690.1661501216423; Fri, 26
- Aug 2022 01:06:56 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=v4H+4AvGFUQ4X3fIy7w2GNzFwXOQBQhFujlzuWD9IjY=;
+        b=GbbiYpseqH4CDESt1zzKrG2ERypZfQSjAwVd2AW4LCzUb2BMn5492KQjDco8dP95fT
+         Au4gOHxzVIki5JDqNZP90ArmDzI0EHAs8TdjeWECvQhB/bPoIW00fcvvZlzehQ1f2Tnd
+         L5Zx9BNvC34tuOLFA03FsfeNEN1BjKVcDrQd5RWkRLiJBEjp9JvD62gnlMpnkJzP6W5U
+         Wk3M+5wcsIIeoravcJx12OqA9O9de3PljFHOsw+dSh4SIpVxVCoqUtE9fUfeVOAEmftD
+         ve3aMwDiNiwgJODbkdwdVY47XfNGcLyLKwTejf4m5DNpnY1pGHlhyw5ZbYInzKNHGBLT
+         RWMA==
+X-Gm-Message-State: ACgBeo3xqust+s/KvHCPp+/Fs+HI/IP5Jsgb8AoFcAA242CevcrOTB7t
+        vPND6omhJyGBpekskha8IzI=
+X-Google-Smtp-Source: AA6agR7ysxe9JNOKfIwiIIgPuKqoR5ZYpJJUcQVOQgPdpzLzxZskEsNeXkzfxokh5KxwZ7dlKEKHTw==
+X-Received: by 2002:adf:d1c1:0:b0:220:5ec3:fb62 with SMTP id b1-20020adfd1c1000000b002205ec3fb62mr4154423wrd.69.1661501459865;
+        Fri, 26 Aug 2022 01:10:59 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u10-20020adfdd4a000000b00225232c03fdsm1500927wrm.27.2022.08.26.01.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 01:10:59 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Rahul Kumar Singh <rahul.kumar.singh@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] drm/i915/guc: Fix spelling mistake "heatbeat" -> "heartbeat"
+Date:   Fri, 26 Aug 2022 09:10:58 +0100
+Message-Id: <20220826081058.1605094-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220816133016.77553-1-krzysztof.kozlowski@linaro.org> <20220816133016.77553-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220816133016.77553-2-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 10:06:45 +0200
-Message-ID: <CACRpkdYDAY-OA=YJU4J=-16PNmYb9LdnowFoMSbhQHKqNWxmVA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: samsung: stop using bindings
- header with constants
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:30 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+There is a spelling mistake in a drm_err message. Fix it.
 
-> The bindings header with pin controller register values is being
-> deprecated and DTS already switched to a DTS-local header.
->
-> Do not reference the bindings header in schema and replace the defines
-> with raw values.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/i915/gt/uc/selftest_guc_hangcheck.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looks good to me:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/gpu/drm/i915/gt/uc/selftest_guc_hangcheck.c b/drivers/gpu/drm/i915/gt/uc/selftest_guc_hangcheck.c
+index 01f8cd3c3134..d7857cf7c08f 100644
+--- a/drivers/gpu/drm/i915/gt/uc/selftest_guc_hangcheck.c
++++ b/drivers/gpu/drm/i915/gt/uc/selftest_guc_hangcheck.c
+@@ -61,7 +61,7 @@ static int intel_hang_guc(void *arg)
+ 	old_beat = engine->props.heartbeat_interval_ms;
+ 	ret = intel_engine_set_heartbeat(engine, BEAT_INTERVAL);
+ 	if (ret) {
+-		drm_err(&gt->i915->drm, "Failed to boost heatbeat interval: %d\n", ret);
++		drm_err(&gt->i915->drm, "Failed to boost heartbeat interval: %d\n", ret);
+ 		goto err;
+ 	}
+ 
+-- 
+2.37.1
 
-I expect this to come to me with some pull request later.
-
-Yours,
-Linus Walleij

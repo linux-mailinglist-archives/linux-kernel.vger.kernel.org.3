@@ -2,81 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841B05A21AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E535A21B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245210AbiHZHWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S245231AbiHZHWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiHZHWM (ORCPT
+        with ESMTP id S229970AbiHZHWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:22:12 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37302C10A;
-        Fri, 26 Aug 2022 00:22:10 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDWNZ51Pzz9v7Gh;
-        Fri, 26 Aug 2022 15:16:46 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDnthJ4dAhj+iNOAA--.37625S2;
-        Fri, 26 Aug 2022 08:21:41 +0100 (CET)
-Message-ID: <67c4a5e7cf363a6c9b79a436690c4c3f469652de.camel@huaweicloud.com>
-Subject: Re: [PATCH v13 05/10] bpf: Add bpf_lookup_*_key() and bpf_key_put()
- kfuncs
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Song Liu <song@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, Shuah Khan <shuah@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Daniel =?ISO-8859-1?Q?M=FCller?= <deso@posteo.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 26 Aug 2022 09:21:25 +0200
-In-Reply-To: <CAPhsuW5iVRSCQsMRC7bGHw=ZHW1Y7y0SccQG-i-7=umHF2yJEQ@mail.gmail.com>
-References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
-         <20220823150035.711534-6-roberto.sassu@huaweicloud.com>
-         <CAPhsuW5iVRSCQsMRC7bGHw=ZHW1Y7y0SccQG-i-7=umHF2yJEQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 26 Aug 2022 03:22:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B5F4DB43;
+        Fri, 26 Aug 2022 00:22:40 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 09:22:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661498558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GQJwizWUZDP3BI9K5yZYcBnhISmXQJvntuw2CVta3II=;
+        b=KZZpkSO4qaRwW67bSXJjY/YP/HPGu14NbRtLiv2aK+v+sYqEIcgMQkEgDnwBMtm6W5HDNB
+        JTzGM5Ne9McUF7ORLicrPYO9ssNEQEoUIlCeb4K9INMi6laExJpeaL5M85XW+lXKw+Pz3Z
+        zGKKKlEaCS6WcNKXmf5RWaBsZRUuzIfkSWbUtQQn0CEoCN4TA8WVrvGS2AOqsOsexL2v28
+        jpl0p96//YJcKBGbQ/O+1I2GtE/sKnrQIrj7rMkzTgUHRQ2LBhXuHO+qull3FwpUXaGHbq
+        4L0baQvDHtybe59BnZXT4LZodIQUJVUnq9R5fHdHlM6/D4CdiQRKiMfFZYxB1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661498558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GQJwizWUZDP3BI9K5yZYcBnhISmXQJvntuw2CVta3II=;
+        b=u79Zlqto8+LIFUoD2rNHsPmmDaQEm+HcsZsxCrxqtp96SzJ3nfiQj4OiAxDLb6hTW7Qcgt
+        7Hv4QPzsuOhCLfAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: Re: [PATCH v2 16/25] usb: gadget: f_tcm: Update state on data write
+Message-ID: <Ywh0vQkRLTrSeExk@linutronix.de>
+References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <dd9069e0527f2da04b6567fd17b19545646f4348.1658192351.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDnthJ4dAhj+iNOAA--.37625S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uryUZry5Jw4ftr1fCF4fGrg_yoW8XF1fpF
-        W8CF4FkFs5Ka47CF9av3WavrySgw4v9r17K3srWr1Utr9Fkr1kGr4kCr4a9ry5Arn29r18
-        WryYgF43Cry5Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
-        CF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj35RKgABsj
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <dd9069e0527f2da04b6567fd17b19545646f4348.1658192351.git.Thinh.Nguyen@synopsys.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,54 +60,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-08-25 at 22:56 -0700, Song Liu wrote:
-> On Tue, Aug 23, 2022 at 8:02 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Add the bpf_lookup_user_key(), bpf_lookup_system_key() and
-> > bpf_key_put()
-> > kfuncs, to respectively search a key with a given key handle serial
-> > number
-> > and flags, obtain a key from a pre-determined ID defined in
-> > include/linux/verification.h, and cleanup.
-> > 
-> > Introduce system_keyring_id_check() to validate the keyring ID
-> > parameter of
-> > bpf_lookup_system_key().
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  include/linux/bpf.h          |   6 ++
-> >  include/linux/verification.h |   8 +++
-> >  kernel/trace/bpf_trace.c     | 135
-> > +++++++++++++++++++++++++++++++++++
-> >  3 files changed, 149 insertions(+)
-> > 
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 6041304b402e..991da09a5858 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -2586,4 +2586,10 @@ static inline void bpf_cgroup_atype_get(u32
-> > attach_btf_id, int cgroup_atype) {}
-> >  static inline void bpf_cgroup_atype_put(int cgroup_atype) {}
-> >  #endif /* CONFIG_BPF_LSM */
-> > 
-> > +#ifdef CONFIG_KEYS
+On 2022-07-18 18:27:45 [-0700], Thinh Nguyen wrote:
+> When preparing request for data write state, the next state is
+> UASP_SEND_STATUS. When data write completes, the next state is
+> UASP_QUEUE_COMMAND. Without this change, the command will transition to
+> the wrong state.
+
+Why is this needed now, what is the outcome of not having it?
+My point is, was this always broken, worked by chance and broke over
+time while code was changed?
+
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  Changes in v2:
+>  - Move a related change from TASK MANAGEMENT updating cmd state to
+>    UASP_QUEUE_COMMAND to here.
 > 
-> Do we need to declare struct key here?
+>  drivers/usb/gadget/function/f_tcm.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> > +struct bpf_key {
-> > +       struct key *key;
-> > +       bool has_ref;
-> > +};
-> > +#endif /* CONFIG_KEYS */
-> >  #endif /* _LINUX_BPF_H */
-> > 
+> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> index 1e7d29f8aecb..d7318c84af98 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -934,6 +934,8 @@ static void usbg_data_write_cmpl(struct usb_ep *ep, struct usb_request *req)
+>  	struct usbg_cmd *cmd = req->context;
+>  	struct se_cmd *se_cmd = &cmd->se_cmd;
+>  
+> +	cmd->state = UASP_QUEUE_COMMAND;
+> +
+>  	if (req->status < 0) {
+>  		pr_err("%s() state %d transfer failed\n", __func__, cmd->state);
+>  		goto cleanup;
+> @@ -976,6 +978,8 @@ static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
+>  	req->complete = usbg_data_write_cmpl;
+>  	req->length = se_cmd->data_length;
+>  	req->context = cmd;
+> +
+> +	cmd->state = UASP_SEND_STATUS;
+>  	return 0;
+>  }
+>  
 
-If there is a better place, I will move there.
-
-Thanks
-
-Roberto
-
+Sebastian

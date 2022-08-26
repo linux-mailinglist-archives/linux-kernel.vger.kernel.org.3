@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091435A23FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B620E5A23FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343500AbiHZJRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S245227AbiHZJRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245675AbiHZJRT (ORCPT
+        with ESMTP id S1343497AbiHZJRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:17:19 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644D1D598F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:17:17 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bt10so1236596lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:17:17 -0700 (PDT)
+        Fri, 26 Aug 2022 05:17:24 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A16D741B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:17:20 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q16so994692ljp.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=kWwbtT/54FyUEO6wWPpRIwL8GLUA5z0zpRQ+oeLgI4Q=;
-        b=uJjezohYlWYNbj23GA51zYTVzXsn8I7264i22VBOIJep8GJraT5Hxo5M2oUcFlo9t8
-         miozsWwpM3suEEtBt/XymJNCw64FRkiKlXgLuk+td0iSoBnLuR3IjxKDuSMEg1oOIAx2
-         YaYjoRrDhOf1VkNfbMKgnBkwWrze5ZOktyz2+9aItoZaAoCq3E50LjaR4Vd7q3llBgek
-         uymRe4/ctK+sj5GKuRojGTMF93WUrWkgQ+kaPtPbme2aSJoAJvPusqJ8rkCY3JZDJVRD
-         mD23zRydF7fb5y61iBYTCxjfz2nhqt9YuXXWADe6g2P+GZhJGHmj6S8qeAZ9UvB/QttY
-         masg==
+        bh=yxr0Qd86necJLeODbFUrhjcBFjoAd3uXBhNlcIXoPwA=;
+        b=T7Nuduru6zJHRRXE+O8aAOqpJYu7JZcaH8MVxpYFVbyhndtPkIWJ+PXUeeIWWQ+urc
+         VXnj9BHHuJGwEaDUvuKjwZEDfGlQCL2w7tPSa2NhRK9pY+AyHNtlzjkPe0D/Gwd2lSjg
+         8TS7/EjK9t3tV5j8SHh8FjT2jAoMz9eEqqcNIfNot9ScBM3WzyPBlM8L65FKCodry4qC
+         TghT2eXyYDQsjIYiAP5yg2Phv4/EPNGdGPEaxI1QWM1p5PQgECuCRvevWkGAuQM8uhWb
+         m3cJHKCgtr20++kuCJl8t5ViDAcYBEKBRNMhBCMbucwVq8YMmCclALI7BhxPbUccj/Ru
+         yiJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=kWwbtT/54FyUEO6wWPpRIwL8GLUA5z0zpRQ+oeLgI4Q=;
-        b=JpZd5jCnrfB6hra5A4AgLOH5YHU5lHh/WUcbsPkQ7jlbGZCIkSsK/da6Kf/uOz0XIy
-         OD6kKrgk1ztaTYOdhv490uytQUEcbo9SNoxcK+LX47aAexXRnZCnfZLAP7iUgDaSN734
-         7dv8smUtWQDtJZ0fcLBUC/hV/668hKZEt5gpRlJ9uRuk11mEjxwawJ6v/n8bsSS43G4b
-         dHjQQDrdiAEVcifWSWjvGukcwvUYpOTsuicgumw99bYo5BAILQ1G4Bg8z+5WMppVcLUn
-         owk+rWzv6yGTnMDefhDNOb0foLk8ftTwzp2+Qha0mSQjpQT6pEkXlHs7Hvpdlgra3QkG
-         Ndvg==
-X-Gm-Message-State: ACgBeo2Rwk+UUJyrqyLV7NscHCbn1DL9Z53IuC94RDMdsxDaUnw93y2e
-        F8t69HS024WKDmxJmSsbg2iL/VI0ZN9lhwXVpSeKaQ==
-X-Google-Smtp-Source: AA6agR6c3bAZ3/2TopOviym18sXnze1yRcZBfeJcwIh55DYHGT4eqQP86GgpcX4QIr2GKajCvRrr7MX6kWdrKaBnJ2o=
-X-Received: by 2002:a05:6512:6ca:b0:492:ef21:c085 with SMTP id
- u10-20020a05651206ca00b00492ef21c085mr2340299lff.71.1661505435752; Fri, 26
- Aug 2022 02:17:15 -0700 (PDT)
+        bh=yxr0Qd86necJLeODbFUrhjcBFjoAd3uXBhNlcIXoPwA=;
+        b=1uANILibrqGkGQy4VNFG5aOIJVnpGgvVeC40sM52inKQMKN3WhMx9IT8UJCq7E5y+O
+         IPZdmUGPESZ9M/UQR3YYkoA/ZvWrKALHes8fAYk2yoch/L00POubu8NkyS92fWrGciIG
+         UEnufwpOtdPRwxQFTciT7JBh0nOW8I7C00riG6YPuhF2b09xZcpqb9KSDqlVmRA7+k/X
+         x01WdAzo9NkDztndetxHDVZpq+aAoGgpXZdTgXBb0FRZpTuFkx+YBQPTF6uDqkuHptR2
+         tKIICEAh6saDak6Y9wz07gFaap1fWL7cHfe7j7I4c3A+PdQgho1BXyM71FTBHwuDpIol
+         Tk+w==
+X-Gm-Message-State: ACgBeo01mxroE/xXbem2wTf6PXOAke6VQdIjiX6ejfaLLdvmMxnjUu7q
+        6yJXBstdx+G3LpsUCKaypg4hkz+F/S/Fg79zrsQOLw==
+X-Google-Smtp-Source: AA6agR4FQXQ7vnpLnj3X7fRAmWQuLdRJrDKoAbK/JRm6muzl7lWnOItItBR6YENWPhKATqMHJ9UhBRsW+dG2laoBPbA=
+X-Received: by 2002:a2e:884c:0:b0:261:ca69:6023 with SMTP id
+ z12-20020a2e884c000000b00261ca696023mr1925180ljj.300.1661505439069; Fri, 26
+ Aug 2022 02:17:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220819190729.32358-1-a-nandan@ti.com> <20220819190729.32358-3-a-nandan@ti.com>
-In-Reply-To: <20220819190729.32358-3-a-nandan@ti.com>
+References: <21d99886d07fa7fcbec74992657dabad98c935c4.1661412818.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <21d99886d07fa7fcbec74992657dabad98c935c4.1661412818.git.christophe.jaillet@wanadoo.fr>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 26 Aug 2022 11:16:38 +0200
-Message-ID: <CAPDyKFpn+3MUA-Vp9cnY8a=rpg0kLQk0_c5+4=FgF0FbW7mxLg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: mmc: Fix 'dma-coherent' was unexpected
-To:     Apurva Nandan <a-nandan@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Hari Nagalla <hnagalla@ti.com>
+Date:   Fri, 26 Aug 2022 11:16:42 +0200
+Message-ID: <CAPDyKFqF+gFD8dw7swZ5pu6jf6kt7xkXHs8BHYSQ1Ue2e8eRsw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: au1xmmc: Fix an error handling path in au1xmmc_probe()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mmc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,13 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 at 21:07, Apurva Nandan <a-nandan@ti.com> wrote:
+On Thu, 25 Aug 2022 at 09:34, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 >
-> dma-coherent is mentioned in almost all TI K3 platform mmc
-> nodes. Fix warning generated due to its missing match in
-> yaml schema.
+> If clk_prepare_enable() fails, there is no point in calling
+> clk_disable_unprepare() in the error handling path.
 >
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> Move the out_clk label at the right place.
+>
+> Fixes: b6507596dfd6 ("MIPS: Alchemy: au1xmmc: use clk framework")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Applied for next, thanks!
 
@@ -88,23 +86,24 @@ Uffe
 
 
 > ---
->  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/mmc/host/au1xmmc.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
-> index 0ab07759b472..ea9121fb188d 100644
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
-> @@ -51,6 +51,9 @@ properties:
->
->    sdhci-caps-mask: true
->
-> +  dma-coherent:
-> +    type: boolean
+> diff --git a/drivers/mmc/host/au1xmmc.c b/drivers/mmc/host/au1xmmc.c
+> index a9a0837153d8..c88b039dc9fb 100644
+> --- a/drivers/mmc/host/au1xmmc.c
+> +++ b/drivers/mmc/host/au1xmmc.c
+> @@ -1097,8 +1097,9 @@ static int au1xmmc_probe(struct platform_device *pdev)
+>         if (host->platdata && host->platdata->cd_setup &&
+>             !(mmc->caps & MMC_CAP_NEEDS_POLL))
+>                 host->platdata->cd_setup(mmc, 0);
+> -out_clk:
 > +
->    # PHY output tap delays:
->    # Used to delay the data valid window and align it to the sampling clock.
->    # Binding needs to be provided for each supported speed mode otherwise the
+>         clk_disable_unprepare(host->clk);
+> +out_clk:
+>         clk_put(host->clk);
+>  out_irq:
+>         free_irq(host->irq, host);
 > --
-> 2.17.1
+> 2.34.1
 >

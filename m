@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405A15A2281
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D255A228F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343506AbiHZH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S245569AbiHZIFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343499AbiHZH7y (ORCPT
+        with ESMTP id S245009AbiHZIFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:59:54 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543D9B7E8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:59:52 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MDXJJ3g7WzGpj0;
-        Fri, 26 Aug 2022 15:58:08 +0800 (CST)
-Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 15:59:50 +0800
-Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
- (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
- 2022 15:59:49 +0800
-From:   Shang XiaoJing <shangxiaojing@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
-CC:     <shangxiaojing@huawei.com>
-Subject: [PATCH -next v2] sched/deadline: Add dl_task_is_earliest_deadline helper
-Date:   Fri, 26 Aug 2022 16:34:53 +0800
-Message-ID: <20220826083453.698-1-shangxiaojing@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 26 Aug 2022 04:05:41 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BE0C00D9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:05:39 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id cu2so1758694ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=us6a+2w38MVWRp+x+cBiJGnbvKgPbkAshBT44b7qxRo=;
+        b=SuM/dfQorTdjvY+sn9+yhhK0yYIFo96ETN6NZBz3VXQa87jm2uhSY/+QAfrn1dDMiy
+         gNMach8yNQg3PiqRLOaYWuOXpuyKOOFEXx3LaEAPfw0+A7bn6TUuCTsaqxavyxdziHPm
+         QVdsTar93YJvIHlAALTt4aWO0PV+h0F9v2vnjwVfqOFYkbl62v9wAS4kxYoQLWG86L+f
+         t0NPncepnJDq4oW5uOqLks514SifS/JS26L8vevZg6NM85WS5j1DEKNRrjCb8I3rtag+
+         8ySmlyc/FLZc12algffeOLulK/yhR+B7ciw9aqOPM8JrDmkQrOPTY+zm2HQFNubbqrkW
+         Um9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=us6a+2w38MVWRp+x+cBiJGnbvKgPbkAshBT44b7qxRo=;
+        b=aGTtpXlCCgokda4FVYLPqOKk0QxfmgFqrYU/L98ucvQwBpbnymY/cWauwbz7Ete3L2
+         E/BRgDIvrIFiSuNM3q0j8u3ZSBssgprSOIcZxR8Nx3ehPlKZ/tPVgyUq7CdfYhASKE34
+         0fo0cnm9cH8EPPteSPu1iKXWJMx5+BPFsKTK3G13PIbLQp2v/kvCfeBet6iMDPwt3vgG
+         ZiUsS2A1RNGXTZs/ifgchzXzUGynlhQO76LyksfAepk2R4F4zbgt3DQvXSBiab5V53LP
+         sqAg6m12VajULHCnObkF5AYu/l0+4EP/RNu46KC5+cEr0A0Hx+JakRqDFPVujRepZyMU
+         iaxw==
+X-Gm-Message-State: ACgBeo16PP+Ndi49UEeovZ4NLnGOeXpEaGHCwjgFYXW1G0KDoTKiHNsS
+        MqVRI6Qq0qMWWZykscM6MM3jL6HjwzIVPzb21p1kpQ==
+X-Google-Smtp-Source: AA6agR482POjrHU7UEj08J/xiUvRkTbGO3ZP9C1XXIt/DeZCorz43iLD519ONM1EksuUcQhKLggIFuOQqGAS3Zv6bLU=
+X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
+ e8-20020a17090658c800b006fe91d518d2mr4861877ejs.190.1661501137575; Fri, 26
+ Aug 2022 01:05:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600008.china.huawei.com (7.193.23.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220818172528.23062-1-pali@kernel.org> <20220818172528.23062-2-pali@kernel.org>
+In-Reply-To: <20220818172528.23062-2-pali@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 10:05:26 +0200
+Message-ID: <CACRpkdYWQVW_akJS7hvtU2=c063LCMfjN22X-neTfuTZRbt+yw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] leds: syscon: Implement support for active-low property
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,81 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrap repeated code in helper function dl_task_is_earliest_deadline, which
-return true if there is no deadline task on the rq at all, or task's
-deadline earlier than the whole rq.
+On Thu, Aug 18, 2022 at 7:25 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
----
-changes in v2:
-- pick a more descriptive function name rather than compare_task_rq.
----
- kernel/sched/deadline.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+> This new active-low property specify that LED has inverted logic
+> (0 - enable LED, 1 - disable LED).
+>
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index d116d2b9d2f9..34271aff4712 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1810,6 +1810,14 @@ static void yield_task_dl(struct rq *rq)
- 
- #ifdef CONFIG_SMP
- 
-+static inline bool dl_task_is_earliest_deadline(struct task_struct *p,
-+						 struct rq *rq)
-+{
-+	return (!rq->dl.dl_nr_running ||
-+		dl_time_before(p->dl.deadline,
-+			       rq->dl.earliest_dl.curr));
-+}
-+
- static int find_later_rq(struct task_struct *task);
- 
- static int
-@@ -1852,9 +1860,7 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
- 		int target = find_later_rq(p);
- 
- 		if (target != -1 &&
--				(dl_time_before(p->dl.deadline,
--					cpu_rq(target)->dl.earliest_dl.curr) ||
--				(cpu_rq(target)->dl.dl_nr_running == 0)))
-+		    dl_task_is_earliest_deadline(p, cpu_rq(target)))
- 			cpu = target;
- 	}
- 	rcu_read_unlock();
-@@ -2221,9 +2227,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
- 
- 		later_rq = cpu_rq(cpu);
- 
--		if (later_rq->dl.dl_nr_running &&
--		    !dl_time_before(task->dl.deadline,
--					later_rq->dl.earliest_dl.curr)) {
-+		if (!dl_task_is_earliest_deadline(task, later_rq)) {
- 			/*
- 			 * Target rq has tasks of equal or earlier deadline,
- 			 * retrying does not release any lock and is unlikely
-@@ -2251,9 +2255,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
- 		 * its earliest one has a later deadline than our
- 		 * task, the rq is a good one.
- 		 */
--		if (!later_rq->dl.dl_nr_running ||
--		    dl_time_before(task->dl.deadline,
--				   later_rq->dl.earliest_dl.curr))
-+		if (dl_task_is_earliest_deadline(task, later_rq))
- 			break;
- 
- 		/* Otherwise we try again. */
-@@ -2424,9 +2426,7 @@ static void pull_dl_task(struct rq *this_rq)
- 		 *  - it will preempt the last one we pulled (if any).
- 		 */
- 		if (p && dl_time_before(p->dl.deadline, dmin) &&
--		    (!this_rq->dl.dl_nr_running ||
--		     dl_time_before(p->dl.deadline,
--				    this_rq->dl.earliest_dl.curr))) {
-+		    dl_task_is_earliest_deadline(p, this_rq)) {
- 			WARN_ON(p == src_rq->curr);
- 			WARN_ON(!task_on_rq_queued(p));
- 
--- 
-2.17.1
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij

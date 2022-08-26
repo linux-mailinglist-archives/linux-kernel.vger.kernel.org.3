@@ -2,191 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FAE5A30DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7815A30DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344540AbiHZVNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S233026AbiHZVOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiHZVNK (ORCPT
+        with ESMTP id S231247AbiHZVOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:13:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF74E58A1;
-        Fri, 26 Aug 2022 14:13:09 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 823F12B3;
-        Fri, 26 Aug 2022 23:13:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661548386;
-        bh=5f0gP12QTNlFrSClyCypQH3rw2Mfu1Bl+NgEw0jt7uY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W5ZD/HuZPyLfhQlfYVDxqXyy1oqcuOWmG7pEWy4zYFGS7AzmsQQTSRMgLF1/WV2HU
-         Nw+wa29mQ1vpUGhmGm8gxU9sHFPhTM9LMxw12xtnF4eAXNGbQMfqr1NbtmcPYWE5bu
-         4DRN1Pyi8Un37f4VWWALCWvmY8aLBjhN/yYmKMxg=
-Date:   Sat, 27 Aug 2022 00:12:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 1/6] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <Ywk3W6pTOOlzLYVn@pendragon.ideasonboard.com>
-References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
- <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
+        Fri, 26 Aug 2022 17:14:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E562E58A9;
+        Fri, 26 Aug 2022 14:14:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 858B161F68;
+        Fri, 26 Aug 2022 21:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A498DC433C1;
+        Fri, 26 Aug 2022 21:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661548442;
+        bh=7azrnsiCu14tEupZXXCpNTjljV0a/zloctCANgEak44=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kjbW75aBgkj/vd6Em/TorngQ+aIIuyl75Eb8oCububNQSjqk5bAkw8bPWCIqMYZfs
+         09mAnflYPx+wM4D/DxksBBmfbTwIeyE4d36g3JSRF1V7qF+piTggxa2qdyhxNjejgQ
+         gByqr/PuEZUWmYej2JmeJz9UfMk0m0L02ljQZSOGOWstnPXjI1KDBnhOjQ9zPiHkXT
+         MRd4QcujuEV9qqi6F1jaSJ3cHHV69KNLkQbEVt4vnXTJPHmmsHVRQz/lT9lrSEv+vo
+         VNiz8SlsYFBgKDOCeOUfLXR5ZtpBhsTMYCpaQ1rNy1nXxLeld/UCTZLKA9NyJ6w7p9
+         JsxBDYm6A8Nmw==
+Date:   Fri, 26 Aug 2022 16:14:01 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        bhelgaas@google.com, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH -next 1/3] PCI: fix double put_device() in error case in
+ pci_create_root_bus()
+Message-ID: <20220826211401.GA2959769@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220825122753.1838930-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+[+cc Rob]
 
-Thank you for the patch.
+On Thu, Aug 25, 2022 at 08:27:51PM +0800, Yang Yingliang wrote:
+> If device_add() fails in pci_register_host_bridge(), the brigde device will
+> be put once, and it will be put again in error path of pci_create_root_bus().
+> Move the put_device() from pci_create_root_bus() to pci_register_host_bridge()
+> to fix this problem. And use device_unregister() instead of del_device() and
+> put_device().
 
-On Fri, Aug 26, 2022 at 08:41:39PM +0200, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 Image
-> Signal Processor (ISP).
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+s/brigde/bridge/
+
+> Fixes: 9885440b16b8 ("PCI: Fix pci_host_bridge struct device release/free handling")
+
+If you're fixing a commit from somebody else, please always cc: the
+author because the author can help review the change.
+
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
->  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+>  drivers/pci/probe.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> new file mode 100644
-> index 000000000000..2fda6e05e16c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
-> +
-> +maintainers:
-> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun6i-a31-isp
-> +      - allwinner,sun8i-v3s-isp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Bus Clock
-> +      - description: Module Clock
-> +      - description: DRAM Clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: mod
-> +      - const: ram
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: CSI0 input port
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: CSI1 input port
-> +
-> +    anyOf:
-> +      - required:
-> +          - port@0
-> +      - required:
-> +          - port@1
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index c5286b027f00..e500eb9d6468 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1027,7 +1027,7 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>  
+>  unregister:
+>  	put_device(&bridge->dev);
+> -	device_del(&bridge->dev);
+> +	device_unregister(&bridge->dev);
 
-I'd still like to see all ports that exist in the hardware being
-mandatory. I assume at least one of the A31 and V3s has two connected
-ports in the SoC or you wouldn't declare them both here :-)
+I don't understand this part.  device_unregister() looks like this:
 
-Apart from that, this looks good.
+  void device_unregister(struct device *dev)
+  {
+    device_del(dev);
+    put_device(dev);
+  }
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> +
-> +    isp: isp@1cb8000 {
-> +        compatible = "allwinner,sun8i-v3s-isp";
-> +        reg = <0x01cb8000 0x1000>;
-> +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&ccu CLK_BUS_CSI>,
-> +             <&ccu CLK_CSI1_SCLK>,
-> +             <&ccu CLK_DRAM_CSI>;
-> +        clock-names = "bus", "mod", "ram";
-> +        resets = <&ccu RST_BUS_CSI>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                isp_in_csi0: endpoint {
-> +                    remote-endpoint = <&csi0_out_isp>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
+So this calls put_device(&bridge->dev) twice, doesn't it?
 
--- 
-Regards,
+The "unregister" label looks poorly named.  We only get there if
+device_register() *failed*.  We shouldn't need to unregister anything
+in that case.
 
-Laurent Pinchart
+>  free:
+>  	kfree(bus);
+> @@ -3037,13 +3037,9 @@ struct pci_bus *pci_create_root_bus(struct device *parent, int bus,
+>  
+>  	error = pci_register_host_bridge(bridge);
+>  	if (error < 0)
+> -		goto err_out;
+> +		return NULL;
+>  
+>  	return bridge->bus;
+> -
+> -err_out:
+> -	put_device(&bridge->dev);
+> -	return NULL;
+
+This part looks right to me.  The get_device() is in
+pci_register_host_bridge(), and if pci_register_host_bridge() returns
+failure, I think it should first do the corresponding put_device().
+
+>  }
+>  EXPORT_SYMBOL_GPL(pci_create_root_bus);
+>  
+> -- 
+> 2.25.1
+> 

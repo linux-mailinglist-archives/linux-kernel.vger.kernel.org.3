@@ -2,46 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B515A236F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F20F5A23AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245346AbiHZIpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S245575AbiHZJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245175AbiHZIpW (ORCPT
+        with ESMTP id S229904AbiHZJDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:45:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F4D402E7;
-        Fri, 26 Aug 2022 01:45:20 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDYFl0rS9zYcnb;
-        Fri, 26 Aug 2022 16:40:59 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 16:45:18 +0800
-Received: from huawei.com (10.175.113.133) by kwepemm600001.china.huawei.com
- (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
- 2022 16:45:17 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <kuba@kernel.org>, <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>,
-        <jiri@resnulli.us>, <davem@davemloft.net>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <brouer@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v2] net/sched: fix netdevice reference leaks in attach_default_qdiscs()
-Date:   Fri, 26 Aug 2022 17:00:55 +0800
-Message-ID: <20220826090055.24424-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 26 Aug 2022 05:03:45 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195CD39B9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:03:43 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id q7so1180796lfu.5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:03:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=6wjKp5duJTgVfzr1UXrwjF1SALPZrTw3gPVi12ZjH/g=;
+        b=qzAMa2OWyy36WWaZwRfSzNNZqXwBIqn7RW1geIbwXoLZbxJ20jcuOQ43Pd0nkn9fOb
+         RCX57WrBDnQ1/MtpmUvixjAeiITsndFGd8381UD2uc3E6UxNP3vSDTBAYHb9EL9STfjL
+         bQM576O9O5ND/BnhZhbDaGupllZa2HTbhftLmuVrfydgxE2jGwtgn8usWEKJ0lYMa62L
+         p7/uf3nFQIr5eKPGwd7y30DFVGzuy+sscnKJj+SIw9j8vfs5ozq/P+aGco/UTxF+cZFr
+         mIw65hXoJ151Vp4g47rISWYFjKN3M0eJZgDW8k1Prs2N903GaB8QMDwiDlsZGR+XB4x8
+         32wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=6wjKp5duJTgVfzr1UXrwjF1SALPZrTw3gPVi12ZjH/g=;
+        b=jEnfTiFb9SZLyldDSAzpgJ0jfW/g9FAD7lExtUoelQHwbRi/GBKqaI3tQgQ7bWU4Ae
+         3e+/8a4qMDWvcr7jW4UryeI4VA5aWFXkufgXW8ao5ZNR0/pNK0yfwKWYOlsPRQYfaegk
+         xc1IvSV+Ev/nylaYKzRfxv6FHR9rHRReWWJuE8CGLo1bRs1OPN5ZsFbHVWAGFRIqhFhL
+         qD6c9KECsYP2tFTCXvB+QSyGpFdNsLTo+nfCtBt/wBudo7QkOkduAtRjd2QmI42lQLLa
+         TRql66xTpRtC+3bdJTwGJDx5ldFDdv4JOw6w+tOYY73aHTUJ9QGQrndodexq0NXHXIsW
+         SjNw==
+X-Gm-Message-State: ACgBeo3uWTOkQDPq+2IvmgWJOE5dxe/Qeqt6VLpkVMRCvcfVR95OY22j
+        FGKPhF2MeFGqO+ZtZeUrNZshWQ==
+X-Google-Smtp-Source: AA6agR4CyEq8JY4VnBVKnVhOwimuVLC9QM98RVtC/yFTvCc2rvMTc7BcK1xzXFH+y17DGL5I65x8Kw==
+X-Received: by 2002:a05:6512:1087:b0:492:e36c:d6c6 with SMTP id j7-20020a056512108700b00492e36cd6c6mr2094268lfg.502.1661504622340;
+        Fri, 26 Aug 2022 02:03:42 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id o4-20020ac24e84000000b00492de54940asm318699lfr.82.2022.08.26.02.03.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 02:03:41 -0700 (PDT)
+Message-ID: <c49749ed-5fce-6d91-b114-e4e0daf64042@linaro.org>
+Date:   Fri, 26 Aug 2022 12:03:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.113.133]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
+Content-Language: en-GB
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+References: <20220623002540.871994-1-swboyd@chromium.org>
+ <20220623002540.871994-3-swboyd@chromium.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220623002540.871994-3-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,103 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In attach_default_qdiscs(), if a dev has multiple queues and queue 0 fails
-to attach qdisc because there is no memory in attach_one_default_qdisc().
-Then dev->qdisc will be noop_qdisc by default. But the other queues may be
-able to successfully attach to default qdisc.
+On 23/06/2022 03:25, Stephen Boyd wrote:
+> This struct member is stored to in the function that calls the function
+> which uses it. That's possible with a function argument instead of
+> storing to a struct member. Pass the pixel_rate as an argument instead
+> to simplify the code. Note that dp_ctrl_link_maintenance() was storing
+> the pixel_rate but never using it so we just remove the assignment from
+> there.
+> 
+> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-In this case, the fallback to noqueue process will be triggered. If the
-original attached qdisc is not released and a new one is directly
-attached, this will cause netdevice reference leaks.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-The following is the bug log:
 
-veth0: default qdisc (fq_codel) fail, fallback to noqueue
-unregister_netdevice: waiting for veth0 to become free. Usage count = 32
-leaked reference.
- qdisc_alloc+0x12e/0x210
- qdisc_create_dflt+0x62/0x140
- attach_one_default_qdisc.constprop.41+0x44/0x70
- dev_activate+0x128/0x290
- __dev_open+0x12a/0x190
- __dev_change_flags+0x1a2/0x1f0
- dev_change_flags+0x23/0x60
- do_setlink+0x332/0x1150
- __rtnl_newlink+0x52f/0x8e0
- rtnl_newlink+0x43/0x70
- rtnetlink_rcv_msg+0x140/0x3b0
- netlink_rcv_skb+0x50/0x100
- netlink_unicast+0x1bb/0x290
- netlink_sendmsg+0x37c/0x4e0
- sock_sendmsg+0x5f/0x70
- ____sys_sendmsg+0x208/0x280
+> ---
+> 
+> dp_ctrl_on_link() almost doesn't even use the pixel_clk either. It just
+> prints the value. I kept it around because maybe it is useful? But if
+> not, then we can remove even more code.
 
-Fix this bug by clearing any non-noop qdiscs that may have been assigned
-before trying to re-attach.
+Feel free to submit a patch and check if anybody (Kuogee? Abhinav?) 
+complains.
 
-Fixes: bf6dba76d278 ("net: sched: fallback to qdisc noqueue if default qdisc setup fail")
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
----
-v1->v2: Clean up under the failed path to fix this bug.
- net/sched/sch_generic.c | 31 ++++++++++++++++---------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
-
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index d47b9689eba6..f58a22945145 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1122,6 +1122,21 @@ struct Qdisc *dev_graft_qdisc(struct netdev_queue *dev_queue,
- }
- EXPORT_SYMBOL(dev_graft_qdisc);
- 
-+static void shutdown_scheduler_queue(struct net_device *dev,
-+				     struct netdev_queue *dev_queue,
-+				     void *_qdisc_default)
-+{
-+	struct Qdisc *qdisc = dev_queue->qdisc_sleeping;
-+	struct Qdisc *qdisc_default = _qdisc_default;
-+
-+	if (qdisc) {
-+		rcu_assign_pointer(dev_queue->qdisc, qdisc_default);
-+		dev_queue->qdisc_sleeping = qdisc_default;
-+
-+		qdisc_put(qdisc);
-+	}
-+}
-+
- static void attach_one_default_qdisc(struct net_device *dev,
- 				     struct netdev_queue *dev_queue,
- 				     void *_unused)
-@@ -1169,6 +1184,7 @@ static void attach_default_qdiscs(struct net_device *dev)
- 	if (qdisc == &noop_qdisc) {
- 		netdev_warn(dev, "default qdisc (%s) fail, fallback to %s\n",
- 			    default_qdisc_ops->id, noqueue_qdisc_ops.id);
-+		netdev_for_each_tx_queue(dev, shutdown_scheduler_queue, &noop_qdisc);
- 		dev->priv_flags |= IFF_NO_QUEUE;
- 		netdev_for_each_tx_queue(dev, attach_one_default_qdisc, NULL);
- 		qdisc = txq->qdisc_sleeping;
-@@ -1447,21 +1463,6 @@ void dev_init_scheduler(struct net_device *dev)
- 	timer_setup(&dev->watchdog_timer, dev_watchdog, 0);
- }
- 
--static void shutdown_scheduler_queue(struct net_device *dev,
--				     struct netdev_queue *dev_queue,
--				     void *_qdisc_default)
--{
--	struct Qdisc *qdisc = dev_queue->qdisc_sleeping;
--	struct Qdisc *qdisc_default = _qdisc_default;
--
--	if (qdisc) {
--		rcu_assign_pointer(dev_queue->qdisc, qdisc_default);
--		dev_queue->qdisc_sleeping = qdisc_default;
--
--		qdisc_put(qdisc);
--	}
--}
--
- void dev_shutdown(struct net_device *dev)
- {
- 	netdev_for_each_tx_queue(dev, shutdown_scheduler_queue, &noop_qdisc);
 -- 
-2.17.1
+With best wishes
+Dmitry
 

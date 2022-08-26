@@ -2,95 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85425A2157
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E41D5A215C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245120AbiHZHB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S245074AbiHZHCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245121AbiHZHBC (ORCPT
+        with ESMTP id S244029AbiHZHCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:01:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A0ED274A;
-        Fri, 26 Aug 2022 00:00:47 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 09:00:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661497243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mkTtYm2q/9xtcjUEfSGlzSP0DecF5sMix+kg+ulWubI=;
-        b=LDdxH5cVjo4V3SbRmuOHNfXIEenNZLUPqsQEFPgzZtqIJIAfqqWQF7aFjKPuMh+e1iAN2u
-        wImKeRqbrZF1CUrCadKKyB5vwOeRebtGXS4RV6vTls3rHUKc8c7FLmZRvFqDY014dgU6RF
-        N8it/iZ//v6M0vNYbWsZmgFMbbsFWbJ5d1vg5u0f1TC0sTyRp42AjGzrpiqCZvO2MNDwgA
-        sUYwQZzGSpBaoP2xXjnjCCHBpbMIhoNWShgy4uqm8tKRMlo0wHOwdt29yLD+RlVTUVF/9s
-        mSWFVXEZo6lESKDSt/ceStaBE9HO5nclAUWObcoUzd6UnRzLFvNpwrlNayjKhQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661497243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mkTtYm2q/9xtcjUEfSGlzSP0DecF5sMix+kg+ulWubI=;
-        b=keO7wzubCGo7igl4B1c5pmvEm5kpAYCLkM7HbuBc9brjFSVX60XgSeCl+OLB2sHx0Wo4kp
-        Gk1J8w/S9eQJfFBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH v2 11/25] usb: gadget: f_tcm: Execute command on write
- completion
-Message-ID: <YwhvmpdbG8WXhhZ0@linutronix.de>
-References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
- <b030d10834c13aa09bbbba7b33b1957d5ba3664c.1658192351.git.Thinh.Nguyen@synopsys.com>
+        Fri, 26 Aug 2022 03:02:03 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833CFB9422
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:02:01 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id g185so263260vkb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=nb30IeBYlNCm8COYdWtT+NwLEjGs+E4jf3hbuLim9Zg=;
+        b=by8E/XRfPLlvKvkN3s95Up+mY3By3W4x8doh/J7BVnFzqHaw38MrXk7SIvsanVKg6z
+         HL3tFsbSnFokvmWEiqBAwTXe8cd6RnOFQCQ9u8Xnk9EwFyzkGPDWoQL7u3Q0wfnWLx/x
+         B4AF0IjIMg3nBYpOfv/3yinNeZLYuEwJ+vRJMPWO+ufB0Qy4Cx/Sos4re+WJYowByHBc
+         M08ylkfGMIRXA0isVrZMHezOW5V4YJ0nT6VErcaymEkfs0Mcs3KorIoWjUH6bR92jSId
+         EPC+h7uHmzVCNc1MUjyG8ojO3dqxAl2Iicb7Bd8NqgF80uZn0hSf1JUE0vhwE8Zrq2vR
+         AknA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=nb30IeBYlNCm8COYdWtT+NwLEjGs+E4jf3hbuLim9Zg=;
+        b=HWrsUFLnl3DLjde8G5dfWH994Tvx3vCZlqnuaNDRUlLG/mhMb5WZTsDh6FeIP+a8PG
+         smYc7CXpVb8RZskiCKLiK9G7CChqqKWjNb3G5HYWZcfsIe6PjEytGAQBmVsaqH2j7H6h
+         9ZJUSbgAFParG8lp0DAaJ/6BUUf/dbPvuoUti4q0q3seun4p8MoUkWAFG585OO0voxYS
+         hIfGt17t9VL1bHzJdIFPMzCr9JTyvAcDjzZNFT91outUGGfAEfCBTCQxi0vOLhevq+RF
+         MeiY1eFcz2omMGWWdlTcdiWC8AAzajpmKHnTCTYiFqgOnyR5uc8fQPzEMApPRZZY2bSo
+         xHgw==
+X-Gm-Message-State: ACgBeo0MMORHgknaW+fB/LFXTVcml/AUJqisG1cDf9e9Twcue4Hk6WPB
+        sbcjEKEGj4kheGJo6PPTfD9CcUcfBWtwrXL3NKCztg==
+X-Google-Smtp-Source: AA6agR5YIgRD7icrEPbMo91EGOok4fOYKpDJ8hyhpp8YDdFqB05P37vSLYM6jMxTZZTheFfN3bRbXt/+bNfyIynoR4k=
+X-Received: by 2002:a05:6122:178a:b0:380:c120:6760 with SMTP id
+ o10-20020a056122178a00b00380c1206760mr2698897vkf.7.1661497320522; Fri, 26 Aug
+ 2022 00:02:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <b030d10834c13aa09bbbba7b33b1957d5ba3664c.1658192351.git.Thinh.Nguyen@synopsys.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220819053234.241501-1-tales.aparecida@gmail.com>
+ <20220819053234.241501-3-tales.aparecida@gmail.com> <f0c491f2-39fd-b778-bc63-99b3338c6d8a@riseup.net>
+In-Reply-To: <f0c491f2-39fd-b778-bc63-99b3338c6d8a@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 26 Aug 2022 15:01:46 +0800
+Message-ID: <CABVgOSmbU+rrQsKYjiGcx95yJ-hyr5SS9W-oDCHRyH6Sfe_Cvg@mail.gmail.com>
+Subject: Re: [PATCH 2/8] Documentation: KUnit: avoid repeating "kunit.py run"
+ in start.rst
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Tales Aparecida <tales.aparecida@gmail.com>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
+        mwen@igalia.com, andrealmeid@riseup.net,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009ad9d505e71f7d5f"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-18 18:27:12 [-0700], Thinh Nguyen wrote:
-> index 6fea80afe2d7..ec83f2f9a858 100644
-> --- a/drivers/usb/gadget/function/f_tcm.c
-> +++ b/drivers/usb/gadget/function/f_tcm.c
-> @@ -955,7 +949,7 @@ static void usbg_data_write_cmpl(struct usb_ep *ep, s=
-truct usb_request *req)
->  				se_cmd->data_length);
->  	}
-> =20
-> -	complete(&cmd->write_complete);
-> +	target_execute_cmd(se_cmd);
+--0000000000009ad9d505e71f7d5f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-usbg_data_write_cmpl() is invoked from interrupt service routing which
-may run with disabled interrupts. From looking at target_execute_cmd():
-| void target_execute_cmd(struct se_cmd *cmd)
-| {
-=E2=80=A6
-|         spin_lock_irq(&cmd->t_state_lock);
-=E2=80=A6
-|         spin_unlock_irq(&cmd->t_state_lock);
-=E2=80=A6
-| }
+On Fri, Aug 19, 2022 at 7:04 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wr=
+ote:
+>
+> Hi Tales
+>
+> On 8/19/22 02:32, Tales Aparecida wrote:
+> > Combine two sections mentioning "kunit.py run" to streamline the
+> > getting-started guide.
+> >
+> > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+> > ---
+> >  Documentation/dev-tools/kunit/start.rst | 38 ++++++++++---------------
+> >  1 file changed, 15 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/de=
+v-tools/kunit/start.rst
+> > index e730df1f468e..165d7964aa13 100644
+> > --- a/Documentation/dev-tools/kunit/start.rst
+> > +++ b/Documentation/dev-tools/kunit/start.rst
+> > @@ -19,7 +19,21 @@ can run kunit_tool:
+> >
+> >       ./tools/testing/kunit/kunit.py run
+> >
+> > -For more information on this wrapper, see:
+> > +If everything worked correctly, you should see the following:
+> > +
+> > +.. code-block::
+> > +
+> > +     Generating .config ...
+>
+> When I run ./tools/testing/kunit/kunit.py run, I usually see
+> "Configuring KUnit Kernel ..." instead of "Generating .config ...".
+> Maybe there was a change in the code that didn't reflect on the docs.
+>
 
-which means interrupts will remain open after leaving
-target_execute_cmd(). Now, why didn't the WARN_ONCE() in
-__handle_irq_event_percpu() trigger? Am I missing something?
+FYI, The "Generating .config..." message will only appear if there's
+no .config file present in the build dir. Since this is the case the
+first time kunit_tool is used, it makes sense to mention it here in
+the "Getting Started" docs, IMHO.
 
->  	return;
+Cheers,
+-- David
 
-Sebastian
+--0000000000009ad9d505e71f7d5f
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDM
+Cizit2CYi+Po7iHI61hdM1Pz0e4JuL/NYSBisvlyqDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjYwNzAyMDBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMGvx4tgK1pbYQPA3f6dN
+/EmQiFaWBkpct8WQ7tbAYfntprvSVMYN9IVOwKxse16btWChe7ASzsXptVNdEqH9yKcB7CA96LWB
+lN6pMf6pIkCgSZ0v71YNDlNEbMTDUnyM+m9OLqdRaAHj2xQqhnXUGM0/Kgu59xHt6MIRQqWDVedx
+g+6fyoFYLqe2SIdk0F8TBwWxLvihKt/g6+pebA+KZRlZZPHWdQ4RAqEIJEDiu2e6kPZB3ITDCa12
+LmBulaE+HTIzmv5xgAKUaj8e36Gd38wqgicZbUvWoPYOxKTMDA4ghAOLUWS9RqaqHhZischB2+Tl
+V/O+hCTfM8WrKPbBHQ==
+--0000000000009ad9d505e71f7d5f--

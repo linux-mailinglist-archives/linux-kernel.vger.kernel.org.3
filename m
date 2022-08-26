@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397A65A2554
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A6D5A2549
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245604AbiHZKCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S245703AbiHZKCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245723AbiHZKB3 (ORCPT
+        with ESMTP id S245547AbiHZKBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:01:29 -0400
-Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F96F25A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:26 -0700 (PDT)
+        Fri, 26 Aug 2022 06:01:30 -0400
+Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CD19C1EB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:27 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id 4CD483236F2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
+        by fx601.security-mail.net (Postfix) with ESMTP id 1BB4C3ACEC9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508085;
-        bh=vvFfyIzVOt+FBtDJHEyLUs+N/uAy6HQNA/KHZSgA5D8=;
+        s=sec-sig-email; t=1661508086;
+        bh=FL2kL4VkOcbIIUP2+DJXexnRiRjPgLGKb2H7npN08ME=;
         h=From:To:Cc:Subject:Date;
-        b=CgwopXANpNqyg6YtzA3SripPIjrvnzTiWBwNLhmQi1z17QQipQAAN0OOnGqotm9vM
-         qZIEfaXtms72/nlexVIA1VfhqJR1TU2onBpUWChj97llbhBVP1xxl/K2sgiy1McZVT
-         vjkTtdRQftjGmZTikoDKP8QAr0j9ewyhWFjBzysQ=
-Received: from fx409 (localhost [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id B3E8032363E;
-        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
+        b=TvaOt7OA3K9FyOOposSPENC9vKGCsJDIaRzZdAvwvr1hdi0MWCDtAmgEfeHegJOzL
+         dBLagupYNN8DTCWYKAOzd1lsCdsUOk7+GO7hgxMh4yL4TX3oAJuK9Vr+T6NO/+Kuna
+         zjy3Z/2dbC0cKUDn7pNxC/+rpdNf6E7FGW3Qj1Kk=
+Received: from fx601 (localhost [127.0.0.1])
+        by fx601.security-mail.net (Postfix) with ESMTP id 751563ACEC2;
+        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <5a32.630899f3.d3b51.0>
+Secumail-id: <598d.630899f4.90da8.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx409.security-mail.net (Postfix) with ESMTPS id D5B9B3238AC;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        by fx601.security-mail.net (Postfix) with ESMTPS id 9236E3ACC21;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id B5F5827E02FA;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 730A327E0396;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 9E51827E0392;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 9E51827E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 5C3AC27E0392;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 5C3AC27E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508083;
-        bh=M/RfIAISD7kAlTMJPp9AUX7+0n4u8J4cxKaRTfK45Jk=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508084;
+        bh=ZLOui77VJF4L/AKDWT1oLYTzZXXPuvwmiFMUZzsMKvs=;
         h=From:To:Date:Message-Id;
-        b=gGI6sadZ5EwB55pMsAHuFLe/ZLEWEaWS4jmEeGy0Rmcwx+BoKeK03zXymXKatxl1k
-         fRH59Y5+Lr3wmydZI3NheomjaQMBJ6lnxwbltN2ev4tkacOWA2dbES6H3oi0aN9Aq4
-         6uv9RGDeLEML9faz7OvFYcqcrgPRhvuN+sGXtlnA=
+        b=By68bO5vWjYlzD3JnnLoRhl1dphlaJ27E4JIwa4yF9VCycgxjaekVF76xEOCdp5nu
+         Yh+u4mfI+ybN6hYEt/fxQtAdE+KxfXBBPImU8A0JsHRQFtYXyonz+OrbiYH2oSjcls
+         psxfge5b2+O+fcxTpONDKB13LBiPM6Tpw4aTvSec=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wanPIDXbM-ba; Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        with ESMTP id e5VH8Q9L9fKg; Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 8CED527E02FA;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 4CB1227E02FA;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH] media: platform: ti: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:46 +0200
-Message-Id: <20220826100052.22945-18-jmaselbas@kalray.eu>
+Subject: [PATCH] media: dvb-frontends: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:47 +0200
+Message-Id: <20220826100052.22945-19-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,42 +73,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove redundant word `the`.
+Remove redundant words `the` and `this`.
 
-CC: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>
 CC: linux-media@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- drivers/media/platform/ti/davinci/vpbe.c | 2 +-
- drivers/media/platform/ti/omap3isp/isp.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/dvb-frontends/dib8000.c  | 2 +-
+ drivers/media/dvb-frontends/tda1002x.h | 2 +-
+ drivers/media/dvb-frontends/tda10048.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
-index 5f0aeb744e81..509ecc84624e 100644
---- a/drivers/media/platform/ti/davinci/vpbe.c
-+++ b/drivers/media/platform/ti/davinci/vpbe.c
-@@ -280,7 +280,7 @@ static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
-  * vpbe_get_output - Get output
-  * @vpbe_dev: vpbe device ptr
-  *
-- * return current vpbe output to the the index
-+ * return current vpbe output to the index
-  */
- static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
- {
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index d251736eb420..a6052df9bb19 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
-  * To solve this problem power management support is split into prepare/complete
-  * and suspend/resume operations. The pipelines are stopped in prepare() and the
-  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
-- * resume(), and the the pipelines are restarted in complete().
-+ * resume(), and the pipelines are restarted in complete().
-  *
-  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
-  * yet.
+diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
+index d67f2dd997d0..25980e90d6bf 100644
+--- a/drivers/media/dvb-frontends/dib8000.c
++++ b/drivers/media/dvb-frontends/dib8000.c
+@@ -3212,7 +3212,7 @@ static int dib8000_tune(struct dvb_frontend *fe)
+ 
+ 	case CT_DEMOD_STEP_6: /* (36)  if there is an input (diversity) */
+ 		if ((state->fe[1] != NULL) && (state->output_mode != OUTMODE_DIVERSITY)) {
+-			/* if there is a diversity fe in input and this fe is has not already failed : wait here until this this fe has succedeed or failed */
++			/* if there is a diversity fe in input and this fe is has not already failed : wait here until this fe has succedeed or failed */
+ 			if (dib8000_get_status(state->fe[1]) <= FE_STATUS_STD_SUCCESS) /* Something is locked on the input fe */
+ 				*tune_state = CT_DEMOD_STEP_8; /* go for mpeg */
+ 			else if (dib8000_get_status(state->fe[1]) >= FE_STATUS_TUNE_TIME_TOO_SHORT) { /* fe in input failed also, break the current one */
+diff --git a/drivers/media/dvb-frontends/tda1002x.h b/drivers/media/dvb-frontends/tda1002x.h
+index 60a0952c1bca..00491bea9975 100644
+--- a/drivers/media/dvb-frontends/tda1002x.h
++++ b/drivers/media/dvb-frontends/tda1002x.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ /*
+     TDA10021/TDA10023  - Single Chip Cable Channel Receiver driver module
+-			 used on the the Siemens DVB-C cards
++			 used on the Siemens DVB-C cards
+ 
+     Copyright (C) 1999 Convergence Integrated Media GmbH <ralph@convergence.de>
+     Copyright (C) 2004 Markus Schulz <msc@antzsystem.de>
+diff --git a/drivers/media/dvb-frontends/tda10048.c b/drivers/media/dvb-frontends/tda10048.c
+index d1d206ebdedd..0b3f6999515e 100644
+--- a/drivers/media/dvb-frontends/tda10048.c
++++ b/drivers/media/dvb-frontends/tda10048.c
+@@ -1118,7 +1118,7 @@ struct dvb_frontend *tda10048_attach(const struct tda10048_config *config,
+ 		state->pll_pfactor = 0;
+ 	}
+ 
+-	/* Establish any defaults the the user didn't pass */
++	/* Establish any defaults the user didn't pass */
+ 	tda10048_establish_defaults(&state->frontend);
+ 
+ 	/* Set the xtal and freq defaults */
 -- 
 2.17.1
 

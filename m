@@ -2,130 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFAB5A30C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA635A30C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345048AbiHZVAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S1345090AbiHZVAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbiHZVAo (ORCPT
+        with ESMTP id S237072AbiHZVAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:00:44 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F5E193A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=myF4XsVKC9nbxvlkJR9K0wlD583A6JFQxHsVq1970Xk=;
-        b=TqfYYyvR9dXFmEBf8PbuiJpavrxrig0INxGFgTp+vZbOVyFAtKrATGV+En1p24XkjpOWooS9dt+OE
-         jFkvOyEotn1p6QeSVfn13EDzkWeF4YNrcg6VQfhR6fbt5Y7aDD5hHPp7OqkuW5Y2u7teqNO0jQh9V6
-         EUqd/qnxsqS2hJYsZ9LUHqCqiSnSRErSFPj+8LQcs9Z7bc5JBkoiuiLrdg/woYW6qZ2Kz9Safk3JrL
-         ppKzpavLQ2RzVVwxwS0vUbgYPsIAA93G+2c5lZLrItLOiCXZHVsLgmLQXL/JB7YRFnLTIzy3y+T9RC
-         7DNUpSG4XipHD6tGZ9iuYGTLfgo+e4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=myF4XsVKC9nbxvlkJR9K0wlD583A6JFQxHsVq1970Xk=;
-        b=3W9l3EbuTKr49ESV+jKgqXjRAOG0JFQkW7ZcDW7d9D4mev1qLo+Jwpku0XELpCML+9Q01VGRtAPmD
-         jj0wW+BDQ==
-X-HalOne-Cookie: d1f4ea6dcbb9f14bad97218b6c931d32a5291b7c
-X-HalOne-ID: 2150669c-2582-11ed-8249-d0431ea8bb10
-Received: from mailproxy2.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 2150669c-2582-11ed-8249-d0431ea8bb10;
-        Fri, 26 Aug 2022 21:00:35 +0000 (UTC)
-Date:   Fri, 26 Aug 2022 23:00:34 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Yangxi Xiang <xyangxi5@gmail.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        nick black <dankamongmen@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] tty/vt: Remove printable variable
-Message-ID: <Ywk0cq2k7Nhyygyy@ravnborg.org>
-References: <20220826202419.198535-1-daniel.vetter@ffwll.ch>
+        Fri, 26 Aug 2022 17:00:47 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3839E3433;
+        Fri, 26 Aug 2022 14:00:40 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 4A92F605; Fri, 26 Aug 2022 16:00:39 -0500 (CDT)
+Date:   Fri, 26 Aug 2022 16:00:39 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "eparis@parisplace.org" <eparis@parisplace.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
+        "cgzones@googlemail.com" <cgzones@googlemail.com>,
+        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
+        "tixxdz@gmail.com" <tixxdz@gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+Message-ID: <20220826210039.GA15952@mail.hallyn.com>
+References: <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
+ <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com>
+ <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+ <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
+ <20220826152445.GB12466@mail.hallyn.com>
+ <25C89E75-A900-42C7-A8E4-2800AA2E3387@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220826202419.198535-1-daniel.vetter@ffwll.ch>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <25C89E75-A900-42C7-A8E4-2800AA2E3387@fb.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-On Fri, Aug 26, 2022 at 10:24:19PM +0200, Daniel Vetter wrote:
-> Every since the 0.99.7A release when console_register() was introduced
-> it's become impossible to call vt_console_print (called
-> console_print() back then still) directly. Which means the
-> initialization issue this variable protected against is no more.
+On Fri, Aug 26, 2022 at 05:00:51PM +0000, Song Liu wrote:
 > 
-> Give it a send off with style and let it rest in peace.
 > 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jiri Slaby <jirislaby@kernel.org>
-> Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
-> Cc: nick black <dankamongmen@gmail.com>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Cc: Yangxi Xiang <xyangxi5@gmail.com>
-> Cc: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> ---
->  drivers/tty/vt/vt.c | 4 ----
->  1 file changed, 4 deletions(-)
+> > On Aug 26, 2022, at 8:24 AM, Serge E. Hallyn <serge@hallyn.com> wrote:
+> > 
+> > On Thu, Aug 25, 2022 at 09:58:46PM +0000, Song Liu wrote:
+> >> 
+> >> 
+> >>> On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
+> >>> 
+> >>> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >>>> Paul Moore <paul@paul-moore.com> writes:
+> >>>>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> >>>>>> I am hoping we can come up with
+> >>>>>> "something better" to address people's needs, make everyone happy, and
+> >>>>>> bring forth world peace.  Which would stack just fine with what's here
+> >>>>>> for defense in depth.
+> >>>>>> 
+> >>>>>> You may well not be interested in further work, and that's fine.  I need
+> >>>>>> to set aside a few days to think on this.
+> >>>>> 
+> >>>>> I'm happy to continue the discussion as long as it's constructive; I
+> >>>>> think we all are.  My gut feeling is that Frederick's approach falls
+> >>>>> closest to the sweet spot of "workable without being overly offensive"
+> >>>>> (*cough*), but if you've got an additional approach in mind, or an
+> >>>>> alternative approach that solves the same use case problems, I think
+> >>>>> we'd all love to hear about it.
+> >>>> 
+> >>>> I would love to actually hear the problems people are trying to solve so
+> >>>> that we can have a sensible conversation about the trade offs.
+> >>> 
+> >>> Here are several taken from the previous threads, it's surely not a
+> >>> complete list, but it should give you a good idea:
+> >>> 
+> >>> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+> >>> 
+> >>>> As best I can tell without more information people want to use
+> >>>> the creation of a user namespace as a signal that the code is
+> >>>> attempting an exploit.
+> >>> 
+> >>> Some use cases are like that, there are several other use cases that
+> >>> go beyond this; see all of our previous discussions on this
+> >>> topic/patchset.  As has been mentioned before, there are use cases
+> >>> that require improved observability, access control, or both.
+> >>> 
+> >>>> As such let me propose instead of returning an error code which will let
+> >>>> the exploit continue, have the security hook return a bool.  With true
+> >>>> meaning the code can continue and on false it will trigger using SIGSYS
+> >>>> to terminate the program like seccomp does.
+> >>> 
+> >>> Having the kernel forcibly exit the process isn't something that most
+> >>> LSMs would likely want.  I suppose we could modify the hook/caller so
+> >>> that *if* an LSM wanted to return SIGSYS the system would kill the
+> >>> process, but I would want that to be something in addition to
+> >>> returning an error code like LSMs normally do (e.g. EACCES).
+> >> 
+> >> I am new to user_namespace and security work, so please pardon me if
+> >> anything below is very wrong. 
+> >> 
+> >> IIUC, user_namespace is a tool that enables trusted userspace code to 
+> >> control the behavior of untrusted (or less trusted) userspace code. 
+> > 
+> > No.  user namespaces are not a way for more trusted code to control the
+> > behavior of less trusted code.
 > 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index ae9c926acd6f..4d29e4a17db7 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -157,7 +157,6 @@ static void set_palette(struct vc_data *vc);
->  
->  #define vt_get_kmsg_redirect() vt_kmsg_redirect(-1)
->  
-> -static int printable;		/* Is console ready for printing? */
->  int default_utf8 = true;
->  module_param(default_utf8, int, S_IRUGO | S_IWUSR);
->  int global_cursor_default = -1;
-> @@ -3085,8 +3084,6 @@ static void vt_console_print(struct console *co, const char *b, unsigned count)
->  	int kmsg_console;
->  
->  	/* console busy or not yet initialized */
-> -	if (!printable)
-> -		return;
->  	if (!spin_trylock(&printing_lock))
->  		return;
+> Hmm.. In this case, I think I really need to learn more. 
+> 
+> Thanks for pointing out my misunderstanding.
 
-Speaking on locks - it the printing_lock necessary. Or will the caller
-serialize the calls to write()?
+(I thought maybe Eric would chime in with a better explanation, but I'll
+fill it in for now :)
 
-	Sam
+One of the main goals of user namespaces is to allow unprivileged users
+to do things like chroot and mount, which are very useful development
+tools, without needing admin privileges.  So it's almost the opposite
+of what you said: rather than to enable trusted userspace code to control
+the behavior of less trusted code, it's to allow less privileged code to
+do things which do not affect other users, without having to assume *more*
+privilege.
 
->  
-> @@ -3537,7 +3534,6 @@ static int __init con_init(void)
->  	pr_info("Console: %s %s %dx%d\n",
->  		vc->vc_can_do_color ? "colour" : "mono",
->  		display_desc, vc->vc_cols, vc->vc_rows);
-> -	printable = 1;
->  
->  	console_unlock();
->  
-> -- 
-> 2.37.2
+To be precise, the goals were:
+
+1. uid mapping - allow two users to both "use uid 500" without conflicting
+2. provide (unprivileged) users privilege over their own resources
+3. absolutely no extra privilege over other resources
+4. be able to nest
+
+While (3) was technically achieved, the problem we have is that
+(2) provides unprivileged users the ability to exercise kernel code
+which they previously could not.
+
+-serge

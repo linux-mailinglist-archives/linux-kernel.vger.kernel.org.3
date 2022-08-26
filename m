@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E485A244B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01DC5A2440
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343814AbiHZJZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S1343862AbiHZJZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343672AbiHZJY6 (ORCPT
+        with ESMTP id S237130AbiHZJY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 05:24:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E176761
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12937960F
         for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:24:56 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MDZBS4mjmzGps0;
-        Fri, 26 Aug 2022 17:23:12 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDZ8d6qH4zlW3j;
+        Fri, 26 Aug 2022 17:21:37 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
         <songmuchun@bytedance.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 07/10] hugetlb: kill hugetlbfs_pagecache_page()
-Date:   Fri, 26 Aug 2022 17:24:19 +0800
-Message-ID: <20220826092422.39591-8-linmiaohe@huawei.com>
+Subject: [PATCH 08/10] hugetlb: remove unneeded SetHPageVmemmapOptimized()
+Date:   Fri, 26 Aug 2022 17:24:20 +0800
+Message-ID: <20220826092422.39591-9-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220826092422.39591-1-linmiaohe@huawei.com>
 References: <20220826092422.39591-1-linmiaohe@huawei.com>
@@ -49,47 +49,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fold hugetlbfs_pagecache_page() into its sole caller to remove some
-duplicated code. No functional change intended.
+If code reaches here, it's guaranteed that HPageVmemmapOptimized is set
+for the hugetlb page (or VM_BUG_ON_PAGE() will complain about it). It's
+unnecessary to set it again.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/hugetlb.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
+ mm/hugetlb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 58eeae934e09..7934188bbed0 100644
+index 7934188bbed0..b432a00061e3 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -5467,19 +5467,6 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
- 	return ret;
- }
+@@ -1520,7 +1520,6 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
  
--/* Return the pagecache page at a given address within a VMA */
--static struct page *hugetlbfs_pagecache_page(struct hstate *h,
--			struct vm_area_struct *vma, unsigned long address)
--{
--	struct address_space *mapping;
--	pgoff_t idx;
--
--	mapping = vma->vm_file->f_mapping;
--	idx = vma_hugecache_offset(h, vma, address);
--
--	return find_lock_page(mapping, idx);
--}
--
- /*
-  * Return whether there is a pagecache page to back given address within VMA.
-  * Caller follow_hugetlb_page() holds page_table_lock so we cannot lock_page.
-@@ -5885,7 +5872,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 		/* Just decrements count, does not deallocate */
- 		vma_end_reservation(h, vma, haddr);
+ 	set_compound_page_dtor(page, HUGETLB_PAGE_DTOR);
+ 	set_page_private(page, 0);
+-	SetHPageVmemmapOptimized(page);
  
--		pagecache_page = hugetlbfs_pagecache_page(h, vma, haddr);
-+		pagecache_page = find_lock_page(mapping, idx);
- 	}
- 
- 	ptl = huge_pte_lock(h, mm, ptep);
+ 	/*
+ 	 * This page is about to be managed by the hugetlb allocator and
 -- 
 2.23.0
 

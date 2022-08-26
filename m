@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E098D5A2536
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571375A252F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245370AbiHZJ4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S1343516AbiHZJ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343592AbiHZJ4V (ORCPT
+        with ESMTP id S245433AbiHZJ4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 05:56:21 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FDE6F56E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:56:19 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id t5so1441164edc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:56:19 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAF270E7A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:56:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id r4so1447328edi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ionos.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=VmzhV/ezSnvm4gL0tOSe/SBf3LXvGBx6QmleyHvvzqM=;
-        b=di/mKF4/Aqk4vP4wxwvjqBC/nfcx39SifNToqtv4Ycjf9n0P2NBXylUe/59EdggY1d
-         Hy1IwmIZteQOrwe5wo/vKlB2/CVx11SwsM9NsU5OfU4/wHiCqWSyybSZiRvMGqHo4Iu9
-         /Wxjce5jYDye3quXsQ9EcKSIGgbRaIYrNv2HMBlwDCM16bQj4yuY0yMiL+08lpvJN7WC
-         bw25wIoa+LxB5hIATJv/8aksicbWQ8Z+X0TDxn55FIckQdLyy+qd/koMg68X8uxEJMnZ
-         Jjk94Gk123JqEG5n4HQlBVWnXN8w+QyRV6zrauZamjZy9ObuskahWTnxdPQrFIF+9QTg
-         sLTQ==
+        bh=1OtudCFdOB5S7Toxd4SmAHP6iPCLN05Aag/oasSZDWA=;
+        b=efRIhw++dqp6QLx+Q2w7pAGcxcUmskniao0oki8SgvSPc86uO3IxEmNXglFS27j2hT
+         RjEQ67PugOZynFe2rpz3UzfqWJ0v2ZwHgr+0eikZqwn0GOwBYhYQCLhPEqnpk/nguZW8
+         Nkm/+lfEmSW/2+O1vFtUk+ySCwL1lYhaMmmsQhy01RZv2EHUC5ca99S/MlH+vfqvzpxG
+         GGRzGM7pL1YnQJfEXSDoua7tkRY32VMkU9HPN/kpTpkt6jgdXzmufev6Ju9bcd+I1UUF
+         9bVKtRTcZi1cFiXdAZt3gDhO0hGEUxvCSuZsrGl32rZPw5QWQCEWnKNgP8u4sd+1PgBJ
+         5l6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=VmzhV/ezSnvm4gL0tOSe/SBf3LXvGBx6QmleyHvvzqM=;
-        b=aaqYFYgP3D+Dr6dviLhGJj6KL8gWR9leVVAWSSONhPkAUEWBUYTBZwo9i78xTorAgJ
-         42oJhpZwozWsIDAUpvDjSHTH2H7RUcUTJNn1M2a0GxMCoZ8EKJzz05Ul/++0K/zIhM6Y
-         v3SFsWih5n6kpi+7Vu4HfZQ1w+YkrNcSXqlICgXqYzOaeSshS0c5S5kugDHn/bNTNlf1
-         HjYMS8LCQCdcQn8je/y7frILhelz5xhXtZgHoxw55EaRI7EhAxGtS0siPAfqkyTAezNR
-         VtA4TLFuHSu1CVNu7UMLJu5MkQ7Tz2h5jVBpBBfja2tQ+GBUMkp9fFLn1n9SjgJr9HGB
-         91xQ==
-X-Gm-Message-State: ACgBeo12nhp2D/NEkdxWMnDny8PJO8kGyeCVMBnRMkXr0ci7A6XxXdOd
-        SvQeMKqiUHN0lhHOPUPBGolwzLHSGmTYVQ==
-X-Google-Smtp-Source: AA6agR4xZ/14nOsJNAugRCdiJqIASeZoRGxteR+jzRB3ElL4JkCO4jxYsE+Lj6arkreupBYHiTrENA==
-X-Received: by 2002:a05:6402:19:b0:447:901f:6b28 with SMTP id d25-20020a056402001900b00447901f6b28mr6051188edu.392.1661507778188;
-        Fri, 26 Aug 2022 02:56:18 -0700 (PDT)
+        bh=1OtudCFdOB5S7Toxd4SmAHP6iPCLN05Aag/oasSZDWA=;
+        b=DvYjJ8QnKiuObSRV3SNSvUjDyA6zqRtXmXv1ONpxc3RyMt2zXgg1VYhsk9o90kvYwb
+         PZQOFLai2WWqqccayqBlL+WLRb2nSiSMTCa+c9X2TByIf8PzpMbf0dQFcEBNjb/UeU7B
+         t5GK8UMtHko37zJ2hKiaL9PUsWHFqAlfKzvBxV497KJ8SSLwkxSBbJt9p7ek13pTfKzM
+         V1kgmorO6RrE0keJ4cO1By9NPBueXr95Q23ZMg4rr6tsqVzaxDGdtvIE86URklIRne30
+         687EyQhOUPa/A6MRgiSlNj+TGWNXlZiJ3YMdqSSq/39tr2e9aB1goos41F3fEC550Ix4
+         zptg==
+X-Gm-Message-State: ACgBeo1BvuUT8tGySL5ZE+jgzlwZd01H3qBWQGslxYkv7GYdQqo6YBe2
+        0jn/pRgVK4fv79rT25Z+KKWLFQ==
+X-Google-Smtp-Source: AA6agR7Yqqg3A4Dbj2cSfbf06U2Z2J4BviHFEZdFKdknQy2IT0JEZsM/AVORLCAC3t51Cb+lLoMWeA==
+X-Received: by 2002:a05:6402:1943:b0:443:5ffb:b04e with SMTP id f3-20020a056402194300b004435ffbb04emr6139295edz.230.1661507779210;
+        Fri, 26 Aug 2022 02:56:19 -0700 (PDT)
 Received: from lb02065.fritz.box ([2001:9e8:140d:2300:3a17:fa67:2b0b:b905])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170906218100b007081282cbd8sm694826eju.76.2022.08.26.02.56.17
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906218100b007081282cbd8sm694826eju.76.2022.08.26.02.56.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 02:56:17 -0700 (PDT)
+        Fri, 26 Aug 2022 02:56:18 -0700 (PDT)
 From:   Jack Wang <jinpu.wang@ionos.com>
 To:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] infiniband/mthca: Fix dma_map_sg error check
-Date:   Fri, 26 Aug 2022 11:56:14 +0200
-Message-Id: <20220826095615.74328-2-jinpu.wang@ionos.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] RDMA: dma-mapping: Return an unsigned int from ib_dma_map_sg{,_attrs}
+Date:   Fri, 26 Aug 2022 11:56:15 +0200
+Message-Id: <20220826095615.74328-3-jinpu.wang@ionos.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220826095615.74328-1-jinpu.wang@ionos.com>
 References: <20220826095615.74328-1-jinpu.wang@ionos.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -73,56 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_map_sg return 0 on error, in case of error set
-EIO as return code.
+Following 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}")
+change the return value of ib_dma_map_sg{,attrs} to unsigned int.
 
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Leon Romanovsky <leon@kernel.org>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: "Håkon Bugge" <haakon.bugge@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>
 Cc: linux-rdma@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Fixes: 56483ec1b702 ("[PATCH] IB uverbs: add mthca user doorbell record support")
-Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- drivers/infiniband/hw/mthca/mthca_memfree.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/hw/mthca/mthca_memfree.c b/drivers/infiniband/hw/mthca/mthca_memfree.c
-index f2734a5c5f26..44fd5fdf64d5 100644
---- a/drivers/infiniband/hw/mthca/mthca_memfree.c
-+++ b/drivers/infiniband/hw/mthca/mthca_memfree.c
-@@ -189,7 +189,7 @@ struct mthca_icm *mthca_alloc_icm(struct mthca_dev *dev, int npages,
- 						   chunk->npages,
- 						   DMA_BIDIRECTIONAL);
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+---
+ drivers/infiniband/core/device.c | 2 +-
+ include/rdma/ib_verbs.h          | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
+index d275db195f1a..72489294391d 100644
+--- a/drivers/infiniband/core/device.c
++++ b/drivers/infiniband/core/device.c
+@@ -2721,7 +2721,7 @@ void ib_set_device_ops(struct ib_device *dev, const struct ib_device_ops *ops)
+ EXPORT_SYMBOL(ib_set_device_ops);
  
--				if (chunk->nsg <= 0)
-+				if (!chunk->nsg)
- 					goto fail;
- 			}
+ #ifdef CONFIG_INFINIBAND_VIRT_DMA
+-int ib_dma_virt_map_sg(struct ib_device *dev, struct scatterlist *sg, int nents)
++unsigned int ib_dma_virt_map_sg(struct ib_device *dev, struct scatterlist *sg, int nents)
+ {
+ 	struct scatterlist *s;
+ 	int i;
+diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+index 975d6e9efbcb..49256bf8cbf5 100644
+--- a/include/rdma/ib_verbs.h
++++ b/include/rdma/ib_verbs.h
+@@ -4101,8 +4101,8 @@ static inline void ib_dma_unmap_page(struct ib_device *dev,
+ 		dma_unmap_page(dev->dma_device, addr, size, direction);
+ }
  
-@@ -208,7 +208,7 @@ struct mthca_icm *mthca_alloc_icm(struct mthca_dev *dev, int npages,
- 		chunk->nsg = dma_map_sg(&dev->pdev->dev, chunk->mem,
- 					chunk->npages, DMA_BIDIRECTIONAL);
- 
--		if (chunk->nsg <= 0)
-+		if (!chunk->nsg)
- 			goto fail;
- 	}
- 
-@@ -482,8 +482,9 @@ int mthca_map_user_db(struct mthca_dev *dev, struct mthca_uar *uar,
- 
- 	ret = dma_map_sg(&dev->pdev->dev, &db_tab->page[i].mem, 1,
- 			 DMA_TO_DEVICE);
--	if (ret < 0) {
-+	if (!ret) {
- 		unpin_user_page(pages[0]);
-+		ret = -EIO;
- 		goto out;
- 	}
- 
+-int ib_dma_virt_map_sg(struct ib_device *dev, struct scatterlist *sg, int nents);
+-static inline int ib_dma_map_sg_attrs(struct ib_device *dev,
++unsigned int ib_dma_virt_map_sg(struct ib_device *dev, struct scatterlist *sg, int nents);
++static inline unsigned int ib_dma_map_sg_attrs(struct ib_device *dev,
+ 				      struct scatterlist *sg, int nents,
+ 				      enum dma_data_direction direction,
+ 				      unsigned long dma_attrs)
+@@ -4163,7 +4163,7 @@ static inline void ib_dma_unmap_sgtable_attrs(struct ib_device *dev,
+  * @nents: The number of scatter/gather entries
+  * @direction: The direction of the DMA
+  */
+-static inline int ib_dma_map_sg(struct ib_device *dev,
++static inline unsigned int ib_dma_map_sg(struct ib_device *dev,
+ 				struct scatterlist *sg, int nents,
+ 				enum dma_data_direction direction)
+ {
 -- 
 2.34.1
 

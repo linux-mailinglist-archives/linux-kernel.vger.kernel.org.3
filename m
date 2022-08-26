@@ -2,165 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E965A2717
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5FD5A272F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343650AbiHZLtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S1343733AbiHZLxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiHZLtv (ORCPT
+        with ESMTP id S232994AbiHZLxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:49:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB111205
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:49:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 623D7B830D1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E1DC433C1;
-        Fri, 26 Aug 2022 11:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661514584;
-        bh=x4miST/mqjIF58aX8nr+cFh+RaxzmQTYRFbA0Vg7LaI=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=tWyW047mMJ3Oxq8S532U+BJKm6qbFaCudNRKZBBs+26w+2jpde/6WULEFKVzZbTpC
-         ex74HJKlxJn5wfywY0xPKkNDUzOwaCUOqCgrlid0SvIOfrSUINIB0D1vcajct5h/mG
-         uq+EvLdmwSaUCcC9LycHNswbPSAgT//unYxeB+TNh8bbkTSDBBd5XUEIksjCyCSuPn
-         2NJfq8HBNff2ExvTFwiNia0EAgltEhcRivUBspPZbqRTgD3qWsx6We9lsJ7Uj5LNff
-         xXdJ8lZnq0FeRNMXECsXm5D5b6l2rKYitDguMOMJuraI9+zukHBHT/wdes5rFSQW19
-         f++5LS8DsFbQw==
-Message-ID: <e5856ab3-3cbc-929a-d885-ceb456b0d3b2@kernel.org>
-Date:   Fri, 26 Aug 2022 13:49:40 +0200
+        Fri, 26 Aug 2022 07:53:35 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A94D742A;
+        Fri, 26 Aug 2022 04:53:33 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QA5Wv5031074;
+        Fri, 26 Aug 2022 13:53:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=iEo1T84Vz7FQCvQtWZ4+CglEzwVQiGhNUWl6R0IhKeg=;
+ b=MKi3grh6NUAmdOl1U/z9GlQWL9ABoYOKABPbV1sW32qLOMaqM+ljiHwjx4fIQd69dqqt
+ u8GYJryaxdZ/Vhzjg5xHkYAtNsKnolLld0+4thMZbogp1GSP5bAVEUF0IeNVojTqARQk
+ fxfzfMuvYUi2Z66MgaOEuEwGkagw1NBPz10Dv2/Znzph2WMiK9A79XjiXZ5w/IOGB+wY
+ vMkebrTMsLvMtzMcCzX5KcGVjI4fgl/qf+Z3hFnlMPdx8MDW66ZsGgV5J2UdsdhT37Bp
+ A6B0lb1F8poRpJIQQiy1nD+vd1kJmIqhp47W1ub/GEIMoVv1ATnKTAs6khZjzNsIgW8+ iQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j4w3dm2yn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 13:53:24 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3074010002A;
+        Fri, 26 Aug 2022 13:53:22 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9BE08222CA8;
+        Fri, 26 Aug 2022 13:53:22 +0200 (CEST)
+Received: from localhost (10.75.127.117) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 26 Aug
+ 2022 13:53:21 +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>,
+        <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v8 0/4] remoteproc: restructure the remoteproc VirtIO device
+Date:   Fri, 26 Aug 2022 13:52:28 +0200
+Message-ID: <20220826115232.2163130-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.24.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH] mm: introduce __GFP_TRACKLEAK to track in-kernel
- allocation
-Content-Language: en-US
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
-References: <1661496048-26410-1-git-send-email-zhaoyang.huang@unisoc.com>
-From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <1661496048-26410-1-git-send-email-zhaoyang.huang@unisoc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.117]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-26_05,2022-08-25_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/26/22 08:40, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> 
-> Kthread and drivers could fetch memory via alloc_pages directly which make them
-> hard to debug when leaking. Solve this by introducing __GFP_TRACELEAK and reuse
-> kmemleak mechanism which unified most of kernel cosuming pages into kmemleak.
+1) Update from V7 [1]:
 
-Can you expand how exactly this is expected to be used? So you first have to
-suspect some concrete allocation and add __GFP_TRACKLEAK to it?
+- rebase on rproc-next branch [2], commit 729c16326b7f ("remoteproc: imx_dsp_rproc: fix argument 2 of rproc_mem_entry_init")
+  The updates take into account the integration of the
+  commit 1404acbb7f68 ("remoteproc: Fix dma_mem leak after rproc_shutdown")
+- add Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org> according to reviews on V7
 
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> ---
->  include/linux/gfp.h        | 4 +++-
->  include/linux/page-flags.h | 3 +++
->  mm/kmemleak.c              | 2 +-
->  mm/page_alloc.c            | 6 ++++++
->  4 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index 2d2ccae..081ab54 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -68,6 +68,7 @@
->  #else
->  #define ___GFP_NOLOCKDEP	0
->  #endif
-> +#define ___GFP_TRACKLEAK	0x10000000u
->  /* If the above are modified, __GFP_BITS_SHIFT may need updating */
->  
->  /*
-> @@ -259,12 +260,13 @@
->  #define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
->  #define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
->  #define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
-> +#define __GFP_TRACKLEAK   ((__force gfp_t)___GFP_TRACKLEAK)
->  
->  /* Disable lockdep for GFP context tracking */
->  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
->  
->  /* Room for N __GFP_FOO bits */
-> -#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
-> +#define __GFP_BITS_SHIFT (28 + IS_ENABLED(CONFIG_LOCKDEP))
->  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
->  
->  /**
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index e66f7aa..ef0f814 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -942,6 +942,7 @@ static inline bool is_page_hwpoison(struct page *page)
->  #define PG_offline	0x00000100
->  #define PG_table	0x00000200
->  #define PG_guard	0x00000400
-> +#define PG_trackleak	0x00000800
->  
->  #define PageType(page, flag)						\
->  	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
-> @@ -1012,6 +1013,8 @@ static inline int page_has_type(struct page *page)
->   */
->  PAGE_TYPE_OPS(Guard, guard)
->  
-> +PAGE_TYPE_OPS(Trackleak, trackleak)
-> +
->  extern bool is_free_buddy_page(struct page *page);
->  
->  PAGEFLAG(Isolated, isolated, PF_ANY);
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 422f28f..a182f5d 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -1471,7 +1471,7 @@ static void kmemleak_scan(void)
->  			if (page_zone(page) != zone)
->  				continue;
->  			/* only scan if page is in use */
-> -			if (page_count(page) == 0 || PageReserved(page))
-> +			if (page_count(page) == 0)
->  				continue;
->  			scan_block(page, page + 1, NULL);
->  			if (!(pfn & 63))
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e008a3d..d8995c6 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1361,6 +1361,8 @@ static __always_inline bool free_pages_prepare(struct page *page,
->  		page->mapping = NULL;
->  	if (memcg_kmem_enabled() && PageMemcgKmem(page))
->  		__memcg_kmem_uncharge_page(page, order);
-> +	if (PageTrackleak(page))
-> +		kmemleak_free(page);
->  	if (check_free)
->  		bad += check_free_page(page);
->  	if (bad)
-> @@ -5444,6 +5446,10 @@ struct page *__alloc_pages(gfp_t gfp, unsigned int order, int preferred_nid,
->  		__free_pages(page, order);
->  		page = NULL;
->  	}
-> +	if (gfp & __GFP_TRACKLEAK) {
-> +		kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, gfp & ~__GFP_TRACKLEAK);
-> +		__SetPageTrackleak(page);
-> +	}
->  
->  	trace_mm_page_alloc(page, order, alloc_gfp, ac.migratetype);
->  
+
+[1] https://lkml.org/lkml/2022/7/13/663
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/log/?h=for-next
+
+2) Patchset description:
+
+This series is a part of the work initiated a long time ago in 
+the series "remoteproc: Decorelate virtio from core"[3]
+
+Objective of the work:
+- Update the remoteproc VirtIO device creation (use platform device)
+- Allow to declare remoteproc VirtIO device in DT
+    - declare resources associated to a remote proc VirtIO
+    - declare a list of VirtIO supported by the platform.
+- Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
+  For instance be able to declare a I2C device in a virtio-i2C node.
+- Keep the legacy working!
+- Try to improve the picture about concerns reported by Christoph Hellwing [4][5]
+
+[3] https://lkml.org/lkml/2020/4/16/1817
+[4] https://lkml.org/lkml/2021/6/23/607
+[5] https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
+
+In term of device tree this would result in such hierarchy (stm32mp1 example with 2 virtio RPMSG):
+
+	m4_rproc: m4@10000000 {
+		compatible = "st,stm32mp1-m4";
+		reg = <0x10000000 0x40000>,
+		      <0x30000000 0x40000>,
+		      <0x38000000 0x10000>;
+        memory-region = <&retram>, <&mcuram>,<&mcuram2>;
+        mboxes = <&ipcc 2>, <&ipcc 3>;
+        mbox-names = "shutdown", "detach";
+        status = "okay";
+
+        #address-cells = <1>;
+        #size-cells = <0>;
+        
+        vdev@0 {
+		compatible = "rproc-virtio";
+		reg = <0>;
+		virtio,id = <7>;  /* RPMSG */
+		memory-region = <&vdev0vring0>, <&vdev0vring1>, <&vdev0buffer>;
+		mboxes = <&ipcc 0>, <&ipcc 1>;
+		mbox-names = "vq0", "vq1";
+		status = "okay";
+        };
+
+        vdev@1 {
+		compatible = "rproc-virtio";
+		reg = <1>;
+		virtio,id = <7>;  /*RPMSG */
+		memory-region = <&vdev1vring0>, <&vdev1vring1>, <&vdev1buffer>;
+		mboxes = <&ipcc 4>, <&ipcc 5>;
+		mbox-names = "vq0", "vq1";
+		status = "okay";
+        };
+};
+
+I have divided the work in 4 steps to simplify the review, This series implements only
+the step 1:
+step 1: Redefine the remoteproc VirtIO device as a platform device
+  - migrate rvdev management in remoteproc virtio.c,
+  - create a remotproc virtio config ( can be disabled for platform that not use VirtIO IPC.
+step 2: Add possibility to declare and probe a VirtIO sub node
+  - VirtIO bindings declaration,
+  - multi DT VirtIO devices support,
+  - introduction of a remote proc virtio bind device mechanism ,
+=> https://github.com/arnopo/linux/commits/step2-virtio-in-DT
+step 3: Add memory declaration in VirtIO subnode
+=> https://github.com/arnopo/linux/commits/step3-virtio-memories
+step 4: Add mailbox declaration in VirtIO subnode
+=> https://github.com/arnopo/linux/commits/step4-virtio-mailboxes
+
+Arnaud Pouliquen (4):
+  remoteproc: core: Introduce rproc_rvdev_add_device function
+  remoteproc: core: Introduce rproc_add_rvdev function
+  remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+  remoteproc: virtio: Create platform device for the remoteproc_virtio
+
+ drivers/remoteproc/remoteproc_core.c     | 154 +++---------------
+ drivers/remoteproc/remoteproc_internal.h |  23 ++-
+ drivers/remoteproc/remoteproc_virtio.c   | 189 ++++++++++++++++++++---
+ include/linux/remoteproc.h               |   6 +-
+ 4 files changed, 210 insertions(+), 162 deletions(-)
+
+-- 
+2.24.3
 

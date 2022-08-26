@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96A35A29F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBF55A29F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbiHZOrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S1344619AbiHZOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344591AbiHZOrD (ORCPT
+        with ESMTP id S240616AbiHZOrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:47:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049E9D8B25;
-        Fri, 26 Aug 2022 07:46:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5297A61E6F;
-        Fri, 26 Aug 2022 14:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F761C433D6;
-        Fri, 26 Aug 2022 14:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661525218;
-        bh=lSndhZ2rdlYCYSF4fsTiUalCAvFT7xxht3MoYvAbmAw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XTy9Za+0gzR2PhxXOWTrsWMpqQzJfDzqOBQRhpkdKcMhol7PjnAUVgfDXR3ZtPve7
-         vNhI9pi5HDLLwq+/NhZnNkKXyLEPqSwiYCc1Cf1WLXglToMXjzk2vHvR/bczAey18g
-         j38me5SPTTpnVH4Hw3T02ymOapK2MBOwifELna+W+EsNKazytkdQpzek3Oq4h9+NRA
-         sPeSsG3R/1cca24czOCNfOSRx6rS4tix+xbMRzfN1ps2SL/ZY18alJ60wX+YmHtKkM
-         axCSiMuzeGJmO0YAUnzKiNk1pIq6Pryd+ZAYLydds2jvnfosyGhF/6XF1TTwNmSpw+
-         aIqupDvKMSSWA==
-Date:   Fri, 26 Aug 2022 17:46:51 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     roberto.sassu@huaweicloud.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: Re: [PATCH v12 02/10] btf: Handle dynamic pointer parameter in kfuncs
-Message-ID: <Ywjc29EcrpbMObcd@kernel.org>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
- <20220818152929.402605-3-roberto.sassu@huaweicloud.com>
- <YwhSCE0H+JfUe4Ew@kernel.org>
- <CAADnVQJbTzfe28ife1+vg+ByLfyLBTCoEZW_eg8TEw838JGaog@mail.gmail.com>
- <YwheJqUDLOxL3iTi@kernel.org>
- <YwjcItv0q8GdzPbb@kernel.org>
+        Fri, 26 Aug 2022 10:47:16 -0400
+Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031DFD8B1A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=pzSEnzVb4PRuwPohD2SDHsa5KY0tRkBlHuhkY0oHs0w=;
+        b=NCRe3O/xZCHJ8hDEpD57d6zrmZ/D/l0pxGva3S+GafoGTaEBI8V+8dRJcau2lXRHDYLk3R1tpxP1j
+         3KhToFhOZVyitlnJ0xRfBBHfLRdUC92ngLyYi8++VZngl+6FIPMMSswvmOKlwmrA48SEArDfjlrrZp
+         aLUYNtoPbfHie2QZuWN/5gmc96n89BeYnrY4HhmXJ0VYbMK/Nwimvglfg4ZslyKY8HJv9B0kGS+jUd
+         iAj6qBZTfiE8K/3fT3d5xnIszRsKWAcgiOTrubWRizGAPwPa3VkkroaVH+3Yp57Mf7SsdGZtyGg98g
+         yEaoCAI90mioch8sotzXt8Sz2DOGFiA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=pzSEnzVb4PRuwPohD2SDHsa5KY0tRkBlHuhkY0oHs0w=;
+        b=czLkABglyklPhRImctvsIg7tPPnc0HaIPVvkP1cQzOjoIxLxHBn86D/l7MTIWNazZ6K+XJ8mOPOkH
+         5qB81ZOBw==
+X-HalOne-Cookie: f226e6ab43f82fd861952f49718ba8a608aa1fbd
+X-HalOne-ID: f6029a30-254d-11ed-a920-d0431ea8a290
+Received: from mailproxy3.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id f6029a30-254d-11ed-a920-d0431ea8a290;
+        Fri, 26 Aug 2022 14:47:09 +0000 (UTC)
+Date:   Fri, 26 Aug 2022 16:47:07 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Michal Simek <monstr@monstr.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 5/6] sparc: use the asm-generic version of cpuinfo_op
+Message-ID: <Ywjc67hcBwOkMtI/@ravnborg.org>
+References: <20220821113512.2056409-1-mail@conchuod.ie>
+ <20220821113512.2056409-6-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwjcItv0q8GdzPbb@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220821113512.2056409-6-mail@conchuod.ie>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,40 +82,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 05:43:50PM +0300, Jarkko Sakkinen wrote:
-> On Fri, Aug 26, 2022 at 08:46:14AM +0300, Jarkko Sakkinen wrote:
-> > On Thu, Aug 25, 2022 at 10:16:14PM -0700, Alexei Starovoitov wrote:
-> > > On Thu, Aug 25, 2022 at 9:54 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > >
-> > > > > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-> > > > > -                                  enum bpf_arg_type arg_type)
-> > > > > +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-> > > > > +                           enum bpf_arg_type arg_type)
-> > > > >  {
-> > > > >       struct bpf_func_state *state = func(env, reg);
-> > > > >       int spi = get_spi(reg->off);
-> > > > > --
-> > > > > 2.25.1
-> > > > >
-> > > >
-> > > > Might be niticking but generally I'd consider splitting
-> > > > exports as commits of their own.
-> > > 
-> > > -static bool
-> > > +bool
-> > > 
-> > > into a separate commit?
-> > > 
-> > > I guess it makes sense for people whose salary depends on
-> > > number of commits.
-> > > We don't play these games.
-> > 
-> > What kind of argument is that anyway.
-> 
-> "Separate each *logical change* into a separate patch." [*]
-> 
-> To add, generally any user space visible space should be an
-                                           ~~~~~
-                                           change
+Hi Conor.
 
-BR, Jarkko
+Thanks for this nice simplification, but I think you can make it even
+better.
+
+On Sun, Aug 21, 2022 at 12:35:12PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> There's little point in duplicating the declaration of cpuinfo_op now
+> that there's a shared version of it, so drop it & include the generic
+> header.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/sparc/include/asm/cpudata.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/sparc/include/asm/cpudata.h b/arch/sparc/include/asm/cpudata.h
+> index d213165ee713..af6ef3c028a9 100644
+> --- a/arch/sparc/include/asm/cpudata.h
+> +++ b/arch/sparc/include/asm/cpudata.h
+> @@ -6,8 +6,7 @@
+>  
+>  #include <linux/threads.h>
+>  #include <linux/percpu.h>
+> -
+> -extern const struct seq_operations cpuinfo_op;
+> +#include <asm-generic/processor.h>
+
+Since the header file did not need <asm-generic/processor.h> then it
+should not need it now after deleting stuff.
+The better fix is to add the missing include to arch/sparc/kernel/cpu.c,
+where we have the user of it.
+
+A header file should include what it needs, and no more.
+
+I looked only at this patch, this comment may also be relevant for the
+other patches.
+
+	Sam

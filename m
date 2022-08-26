@@ -2,119 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92435A30D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FAE5A30DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243153AbiHZVNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S1344540AbiHZVNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiHZVNJ (ORCPT
+        with ESMTP id S231388AbiHZVNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:13:09 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145A5E58A3;
-        Fri, 26 Aug 2022 14:13:08 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-11e9a7135easo1122458fac.6;
-        Fri, 26 Aug 2022 14:13:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=exgbzKr463Q9s30OYFv8bOmIUD5a1Cxa1f8CavAdtto=;
-        b=xBLS/5XHp0du2rpBZ4AywkGWUf3qY+9sIJxQ/8p8FfnNNqCu8aznZrB5KJxghWhL7O
-         32KUXDG4A701OoA0MTMwHzvQ1t7jvFO/hjt18qGr0kBSQlOgRsZ/aVvrm3ET7s7P7ygg
-         rsoLyeYzt9KeDJ90pS2L2MGqlvb2y/sYiYeOgdVoNrzbsb3pjP6RtajWjk/Pa+90xT10
-         byWk2tXHT7MBWYhZuvb0hfdV2disK2r0suRrWGSmu7FNey5hpboewEQQ9XcJz9HL6wj7
-         sc6OaVmqJulRxvZHSU1mG1nTmPjdz1WtOcUSenyDa+4NcqjONfp9EXyfUUm0sYuGGkn9
-         F45g==
-X-Gm-Message-State: ACgBeo1QhWkkW+YAEIiZ3KACgrKUIOfw9KVcxuKEDhaRfWEkASsdW/z5
-        xwlG0xPD62kNNTznIGkPPzFcMzcuBgfLKQ5HdYk=
-X-Google-Smtp-Source: AA6agR63woA+bAEOlrtqCm2q6aMLtZaoj7yIO7JULzx1FwdY/ColEkTwiUX8lcmxNzJI8DJ1gHiwuH1RN4qPK0qRym8=
-X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
- em4-20020a0568705b8400b0010cd1fa2f52mr2779792oab.92.1661548387360; Fri, 26
- Aug 2022 14:13:07 -0700 (PDT)
+        Fri, 26 Aug 2022 17:13:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF74E58A1;
+        Fri, 26 Aug 2022 14:13:09 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 823F12B3;
+        Fri, 26 Aug 2022 23:13:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661548386;
+        bh=5f0gP12QTNlFrSClyCypQH3rw2Mfu1Bl+NgEw0jt7uY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W5ZD/HuZPyLfhQlfYVDxqXyy1oqcuOWmG7pEWy4zYFGS7AzmsQQTSRMgLF1/WV2HU
+         Nw+wa29mQ1vpUGhmGm8gxU9sHFPhTM9LMxw12xtnF4eAXNGbQMfqr1NbtmcPYWE5bu
+         4DRN1Pyi8Un37f4VWWALCWvmY8aLBjhN/yYmKMxg=
+Date:   Sat, 27 Aug 2022 00:12:59 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 1/6] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <Ywk3W6pTOOlzLYVn@pendragon.ideasonboard.com>
+References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
+ <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
- <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
- <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com> <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
- <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
- <CAM9d7cjTtOkRHLOosxHN8PcbVbhTK=uLDGjw8N5=1QiTHcd6rQ@mail.gmail.com>
- <C7F3F33B-4A8E-428C-9FED-FB635955C2B1@fb.com> <FCC75F8E-4C2F-42A4-B582-9BE3BB87E15A@fb.com>
- <CAM9d7cj6YNTL+u38PZjhPF2Qg_BYiJ1NMmDkPDx3N3Xe+ZTbyA@mail.gmail.com> <FD49F694-10FA-4346-8303-E1E185C3E6E4@fb.com>
-In-Reply-To: <FD49F694-10FA-4346-8303-E1E185C3E6E4@fb.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 26 Aug 2022 14:12:56 -0700
-Message-ID: <CAM9d7cjj0X90=NsvdwaLMGCDVkMJBLAGF_q-+Eqj6b44OAnzoQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 1:59 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Aug 26, 2022, at 12:30 PM, Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 11:45 AM Song Liu <songliubraving@fb.com> wrote:
-> >
-> >>> And actually, we can just read ctx->data and get the raw record,
-> >>> right..?
-> >>
-> >> Played with this for a little bit. ctx->data appears to be not
-> >> reliable sometimes. I guess (not 100% sure) this is because we
-> >> call bpf program before event->orig_overflow_handler. We can
-> >> probably add a flag to specify we want to call orig_overflow_handler
-> >> first.
-> >
-> > I'm not sure.  The sample_data should be provided by the caller
-> > of perf_event_overflow.  So I guess the bpf program should see
-> > a valid ctx->data.
->
-> Let's dig into this. Maybe we need some small changes in
-> pe_prog_convert_ctx_access.
+Hi Paul,
 
-Sure, can you explain the problem in detail and share your program?
+Thank you for the patch.
 
->
-> > Also I want to control calling the orig_overflow_handler based
-> > on the return value of the BPF program.  So calling the orig
-> > handler before BPF won't work for me. :)
->
-> Interesting. Could you share more information about the use case?
+On Fri, Aug 26, 2022 at 08:41:39PM +0200, Paul Kocialkowski wrote:
+> This introduces YAML bindings documentation for the Allwinner A31 Image
+> Signal Processor (ISP).
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> new file mode 100644
+> index 000000000000..2fda6e05e16c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> +
+> +maintainers:
+> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun6i-a31-isp
+> +      - allwinner,sun8i-v3s-isp
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Bus Clock
+> +      - description: Module Clock
+> +      - description: DRAM Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +      - const: mod
+> +      - const: ram
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: CSI0 input port
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: CSI1 input port
+> +
+> +    anyOf:
+> +      - required:
+> +          - port@0
+> +      - required:
+> +          - port@1
 
-Well.. it's nothing new.  The bpf_overflow_handler calls the
-orig_overflow_handler (which writes the sample to the buffer)
-only if the BPF returns non zero.  Then I can drop unnecessary
-samples based on the sample data by returning 0.
+I'd still like to see all ports that exist in the hardware being
+mandatory. I assume at least one of the A31 and V3s has two connected
+ports in the SoC or you wouldn't declare them both here :-)
 
-The possible use cases are
-1. when you want to sample from specific code ranges only
-2. when hardware sets specific bits in raw data
+Apart from that, this looks good.
 
-Thanks,
-Namhyung
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
+> +
+> +    isp: isp@1cb8000 {
+> +        compatible = "allwinner,sun8i-v3s-isp";
+> +        reg = <0x01cb8000 0x1000>;
+> +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&ccu CLK_BUS_CSI>,
+> +             <&ccu CLK_CSI1_SCLK>,
+> +             <&ccu CLK_DRAM_CSI>;
+> +        clock-names = "bus", "mod", "ram";
+> +        resets = <&ccu RST_BUS_CSI>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +
+> +                isp_in_csi0: endpoint {
+> +                    remote-endpoint = <&csi0_out_isp>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+
+-- 
+Regards,
+
+Laurent Pinchart

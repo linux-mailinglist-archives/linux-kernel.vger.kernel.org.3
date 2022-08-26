@@ -2,115 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8D85A20A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D010C5A20A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242671AbiHZGFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S244946AbiHZGFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiHZGFJ (ORCPT
+        with ESMTP id S244814AbiHZGFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:05:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F24C13E3E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:05:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1414A1FA84;
-        Fri, 26 Aug 2022 06:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661493905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 26 Aug 2022 02:05:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F6E3ED5C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 23:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661493947;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DN02I7kEFmfTtDYmYudlOvukbJZ+sbDOXc3tG40EQgc=;
-        b=t+pDgLpjMQP5N01ZSCo3Ks9m2jFxcfJMLe3qXB2u6kZ3VAePU8cQcV9b4f/nNZZWgqh0xj
-        37XX4Ely87hPVAua8g3g5C3JAPb/kwe841HDmD1VPFhxp9qIckCX/TEXWRCw+pAO/S5pWE
-        Ch6YrO0jApvYTgleTPQJt2ytgYiPL98=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661493905;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DN02I7kEFmfTtDYmYudlOvukbJZ+sbDOXc3tG40EQgc=;
-        b=a1nwsbCoecvaYMu50APva9q7zZ6Y4XZCmO4t+TiKU7JzavWB4ZVO2l5gx8fGMP9SwbC/uE
-        eG6CoJQeWemhd+Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=Lqh2n2750WP3Dgy6fwmu8zFAJxbNa0Ek7hJYWPU2vOg=;
+        b=FyLSGyTzYxslS+j3fw/in9kvBLEBXMY39hWV4L+VRb9Ap4XuwVueuyXrWaEw/LLMD966uj
+        1tFtuhT1EAgqopc5n1m69fWYSyh3Ujo/bzlWwoik8Wwhtd6UCqu+cArzc97FOANPT8Axx9
+        9Zh6yYHk6iSbaAPgb+FWjaoIWPVh5f4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-XrZySnM_PJeUU444C_7XHw-1; Fri, 26 Aug 2022 02:05:39 -0400
+X-MC-Unique: XrZySnM_PJeUU444C_7XHw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E257113A7E;
-        Fri, 26 Aug 2022 06:05:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZdRlNpBiCGNYbQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 26 Aug 2022 06:05:04 +0000
-Date:   Fri, 26 Aug 2022 08:05:04 +0200
-Message-ID: <87bks7leun.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Lennert Van Alboom <lennert@vanalboom.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: USB DAC broken since commit bf6313a0ff766925462e97b4e733d5952de02367 (5.10.0-rc5)
-In-Reply-To: <JGbq2exwKdQ4T8GQCI5YWzGredZVbYtBOxlnBN0ROtba40PvCdEKfz2mKzClqejgZMck374nGQyEIwzjiBi6sKYYNnJgKp26n1-_j6GT3hw=@vanalboom.org>
-References: <T3VPXtCc4uFws9Gfh2RjX6OdwM1RqfC6VqQr--_LMDyB2x5N3p9_q6AtPna17IXhHwBtcJVdXuS80ZZSCMjh_BafIbnzJPhbrkmhmWS6DlI=@vanalboom.org>
-        <874jy0mvwv.wl-tiwai@suse.de>
-        <JGbq2exwKdQ4T8GQCI5YWzGredZVbYtBOxlnBN0ROtba40PvCdEKfz2mKzClqejgZMck374nGQyEIwzjiBi6sKYYNnJgKp26n1-_j6GT3hw=@vanalboom.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E497885A58A;
+        Fri, 26 Aug 2022 06:05:38 +0000 (UTC)
+Received: from [10.64.54.16] (vpn2-54-16.bne.redhat.com [10.64.54.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2893E945DD;
+        Fri, 26 Aug 2022 06:05:30 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+To:     Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com,
+        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
+        oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org,
+        shuah@kernel.org, seanjc@google.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+References: <87lerkwtm5.wl-maz@kernel.org>
+ <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+ <87fshovtu0.wl-maz@kernel.org>
+ <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+ <YwTc++Lz6lh3aR4F@xz-m1.local> <87bksawz0w.wl-maz@kernel.org>
+ <YwVEoM1pj2MPCELp@xz-m1.local> <878rnewpaw.wl-maz@kernel.org>
+ <YwVgaGp3HOGzC8k2@xz-m1.local> <87y1vdr98o.wl-maz@kernel.org>
+ <YwZQHqS5DZBloYPZ@xz-m1.local> <877d2xweae.wl-maz@kernel.org>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <78c613e8-b600-119e-0d33-b049dd7c35ce@redhat.com>
+Date:   Fri, 26 Aug 2022 16:05:28 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
+MIME-Version: 1.0
+In-Reply-To: <877d2xweae.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 22:52:02 +0200,
-Lennert Van Alboom wrote:
-> 
-> ------- Original Message -------
-> On Thursday, August 25th, 2022 at 12:58, Takashi Iwai <tiwai@suse.de> wrote:
-> > 
-> 
-> > There are lots of workarounds for the buggy USB audio firmware, and
-> > the latest kernel allows to enable the quirks via quirk_flags module
-> > option of snd-usb-audio driver. See
-> > Documentation/sound/alsa-configuration.rst.
-> > You can try the bit 16 at first, for example.
-> > 
-> 
-> > 
-> 
-> > Takashi
-> 
-> 
-> Thanks. I tried fiddling around with it for a bit but so far limited success. I wasn't sure about the arguments or counting order of quirk_flags (some tidbits show it as hex, others as an array of booleans (?)) so tried a few different things. I have no other USB audio devices so didn't see a need to specify vendor or product ID while testing. 
-> 
-> 
-> # modprobe snd_usb_audio quirk_flags=0x10000
-> # modprobe snd_usb_audio quirk_flags=0x1
-> # modprobe snd_usb_audio quirk_flags=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
-> 
-> No success with any, so far. Is there a way to make the process more verbose? I can see from the lights on the DAC that the initialisation works differently if I mess with the different quirks but that's not visible in syslog or outcome.
+Hi Marc,
 
-This option is passed per card instance, as the driver may hold
-multiple cards.  Check your /proc/asound/cards.  The first argument of
-quirk_flags is applied to the first USB-audio card, the second to the
-second USB audio device, and so on.
+On 8/25/22 6:57 AM, Marc Zyngier wrote:
+> On Wed, 24 Aug 2022 17:21:50 +0100,
+> Peter Xu <peterx@redhat.com> wrote:
+>>
+>> On Wed, Aug 24, 2022 at 03:45:11PM +0100, Marc Zyngier wrote:
+>>> On Wed, 24 Aug 2022 00:19:04 +0100,
+>>> Peter Xu <peterx@redhat.com> wrote:
+>>>>
+>>>> On Tue, Aug 23, 2022 at 11:47:03PM +0100, Marc Zyngier wrote:
+>>>>> Atomicity doesn't guarantee ordering, unfortunately.
+>>>>
+>>>> Right, sorry to be misleading.  The "atomicity" part I was trying to say
+>>>> the kernel will always see consistent update on the fields.
+>>>>
+>>>> The ordering should also be guaranteed, because things must happen with
+>>>> below sequence:
+>>>>
+>>>>    (1) kernel publish dirty GFN data (slot, offset)
+>>>>    (2) kernel publish dirty GFN flag (set to DIRTY)
+>>>>    (3) user sees DIRTY, collects (slots, offset)
+>>>>    (4) user sets it to RESET
+>>>>    (5) kernel reads RESET
+>>>
+>>> Maybe. Maybe not. The reset could well be sitting in the CPU write
+>>> buffer for as long as it wants and not be seen by the kernel if the
+>>> read occurs on another CPU. And that's the crucial bit: single-CPU is
+>>> fine, but cross CPU isn't. Unfortunately, the userspace API is per-CPU
+>>> on collection, and global on reset (this seems like a bad decision,
+>>> but it is too late to fix this).
+>>
+>> Regarding the last statement, that's something I had question too and
+>> discussed with Paolo, even though at that time it's not a outcome of
+>> discussing memory ordering issues.
+>>
+>> IIUC the initial design was trying to avoid tlb flush flood when vcpu
+>> number is large (each RESET per ring even for one page will need all vcpus
+>> to flush, so O(N^2) flushing needed). With global RESET it's O(N).  So
+>> it's kind of a trade-off, and indeed until now I'm not sure which one is
+>> better.  E.g., with per-ring reset, we can have locality too in userspace,
+>> e.g. the vcpu thread might be able to recycle without holding global locks.
+> 
+> I don't get that. On x86, each CPU must perform the TLB invalidation
+> (there is an IPI for that). So whether you do a per-CPU scan of the
+> ring or a global scan is irrelevant: each entry you find in any of the
+> rings must result in a global invalidation, since you've updated the
+> PTE to make the page RO.
+> 
+> The same is true on ARM, except that the broadcast is done in HW
+> instead of being tracked in SW.
+> 
+> Buy anyway, this is all moot. The API is what it is, and it isn't
+> going to change any time soon. All we can do is add some
+> clarifications to the API for the more relaxed architectures, and make
+> sure the kernel behaves accordingly.
+> 
+> [...]
+> 
+>>> It may be safe, but it isn't what the userspace API promises.
+>>
+>> The document says:
+>>
+>>    After processing one or more entries in the ring buffer, userspace calls
+>>    the VM ioctl KVM_RESET_DIRTY_RINGS to notify the kernel about it, so that
+>>    the kernel will reprotect those collected GFNs.  Therefore, the ioctl
+>>    must be called *before* reading the content of the dirty pages.
+>>
+>> I'd say it's not an explicit promise, but I think I agree with you that at
+>> least it's unclear on the behavior.
+> 
+> This is the least problematic part of the documentation. The bit I
+> literally choke on is this:
+> 
+> <quote>
+> It's not necessary for userspace to harvest the all dirty GFNs at once.
+> However it must collect the dirty GFNs in sequence, i.e., the userspace
+> program cannot skip one dirty GFN to collect the one next to it.
+> </quote>
+> 
+> This is the core of the issue. Without ordering rules, the consumer on
+> the other side cannot observe the updates correctly, even if userspace
+> follows the above to the letter. Of course, the kernel itself must do
+> the right thing (I guess it amounts to the kernel doing a
+> load-acquire, and userspace doing a store-release -- effectively
+> emulating x86...).
+> 
+>> Since we have a global recycle mechanism, most likely the app (e.g. current
+>> qemu impl) will use the same thread to collect/reset dirty GFNs, and
+>> trigger the RESET ioctl().  In that case it's safe, IIUC, because no
+>> cross-core ops.
+>>
+>> QEMU even guarantees this by checking it (kvm_dirty_ring_reap_locked):
+>>
+>>      if (total) {
+>>          ret = kvm_vm_ioctl(s, KVM_RESET_DIRTY_RINGS);
+>>          assert(ret == total);
+>>      }
+>>
+>> I think the assert() should never trigger as mentioned above.  But ideally
+>> maybe it should just be a loop until cleared gfns match total.
+> 
+> Right. If userspace calls the ioctl on every vcpu, then things should
+> work correctly. It is only that the overhead is higher than what it
+> should be if multiple vcpus perform a reset at the same time.
+> 
+>>
+>>> In other words, without further straightening of the API, this doesn't
+>>> work as expected on relaxed memory architectures. So before this gets
+>>> enabled on arm64, this whole ordering issue must be addressed.
+>>
+>> How about adding some more documentation for KVM_RESET_DIRTY_RINGS on the
+>> possibility of recycling partial of the pages, especially when collection
+>> and the ioctl() aren't done from the same thread?
+> 
+> I'd rather tell people about the ordering rules. That will come at
+> zero cost on x86.
+> 
+>> Any suggestions will be greatly welcomed.
+> 
+> I'll write a couple of patch when I get the time, most likely next
+> week. Gavin will hopefully be able to take them as part of his series.
+> 
 
-At best, give alsa-info.sh output before and after applying the
-quirk.  Run the script with --no-upload option and attach the
-outputs.
+Thanks, Marc. Please let me know where I can check out the patches
+when they're ready. I can include the patches into this series in
+next revision :)
 
-And, as a reference, you can see the existing quirk tables in
-sound/usb/quirks.c.
+Thanks,
+Gavin
 
 
-Takashi

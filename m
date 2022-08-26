@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72505A219A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9732E5A219F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245015AbiHZHTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S245081AbiHZHTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244483AbiHZHTL (ORCPT
+        with ESMTP id S245065AbiHZHTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:19:11 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5750D2E84
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:19:10 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id z187so761129pfb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=mujhyhflTSHBMZ6M+FlaiVGD/9sUOC8oxd5fz31ysDM=;
-        b=nXbk6Xa7ljhTr+XpcTgwjQLVifDZi0r6YmywVy2E4uN9ZB2LuLIiQL0eMft4U10UMd
-         VbVbC6HHGhcH8eCpRAnr/5ZWniwrMVVfNA3tV1c7zOZNiNuhbrGxwmU/O3Og/wiYd9kt
-         WnyWu8uPsy/3JvJ5u3H+msCNzJa7C1q4wPMVRsnCk5XjFBNkLUQ8BUo5zVZ7t+eKxGmf
-         ltWJ7iH06DYKcIp20W4nXFi4yaSKdfk7x8yUcYZdWESvwFqdqALooDpT5IXXjQTgn491
-         eORND/IHqkZ96MZ3+I+oAsSxcivltlNcgvLq1pqcDaHlxFmUgjled49zRPjR53+YIQhF
-         nyCA==
+        Fri, 26 Aug 2022 03:19:31 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED8D2E95
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:19:29 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so620247ilt.4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:19:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=mujhyhflTSHBMZ6M+FlaiVGD/9sUOC8oxd5fz31ysDM=;
-        b=kVG26dkx3VmXRQNJWVqF6CbCsp5/1F28a1DPS0hCPQ7aedNua/4QCs0UXjkn/Bine3
-         QnF+luiUkR0QaqgZLBwH+1/fO6Uz57AUqXstTGULSCiTvDoXw0psEYQkhun2v3pnhtIE
-         qzWOPG+nbUH1kye7/zfJycMVAZ9gU1Relj0M8c8mN9OSAqTTCtMzu1MlG+0UfztuqXsX
-         zkDzz+PF5x9rhv6YwP6juiCdGvmrnA9nUvRFmd3Bkqeg5gWIDmWia+mdGrXQgVBvgsUu
-         qeqCaexD06Lf1tDN4iOli2aCoNDG11F2pTzaspfxE9VFKVE/QzSllAdmg0z8uvBG3Gvb
-         oHAA==
-X-Gm-Message-State: ACgBeo3vGBILa8p0mk6282Pcf6ZPciRXbRec1R5yvRxM66RUFX3L2dyG
-        R15s+MOEpr5HNxn3r6DatDqWDYao0ac=
-X-Google-Smtp-Source: AA6agR5hspO+joqEkdhIjD3vEkFNquPzvu/3aHDWt6Zr3KBQv/hUgo8ISs+7yCwTe8npD/1YfGbf8g==
-X-Received: by 2002:a05:6a00:ad1:b0:530:2cb7:84de with SMTP id c17-20020a056a000ad100b005302cb784demr2728749pfl.3.1661498350189;
-        Fri, 26 Aug 2022 00:19:10 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z14-20020a1709027e8e00b00172f0184b54sm773002pla.156.2022.08.26.00.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 00:19:09 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] mm: backing-dev: Remove the unneeded result variable
-Date:   Fri, 26 Aug 2022 07:19:06 +0000
-Message-Id: <20220826071906.252419-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Dp+sBe2vn0voi8yZGI9whtCAbzY0GJcU7myLxf1qQs4=;
+        b=1I0cxDBH14lDa+M+nZ6uaPUtw2dXZ6wDX2y4zPlIIlusY2hzmrNFVTBV5Rn9lOtoGn
+         Fk5WfP5+Ge9jASzNRIYz1a4eWWUUhuSWu4OZ7doFcb3L8x1fayd5u/tcFMr1RTZ+olpK
+         +9c9r/MekUkMVTKomNpLPowq/K2w4EKXug/a2wG5nxkkYGK8IocG4cEwE450s1iBOnik
+         /jnfmmFrOmIFDoBtGa0GPwy/zUf78/EOhfbjU5RYkfaBflF3fYqou6kdR84nQhKMQUoy
+         jtRutaqXivqhwwDrUVwRp7WSPNHtwxjWZyM0gXlv8YCG2fB5H4xmtl7vIx3fwfG+SkV+
+         OVow==
+X-Gm-Message-State: ACgBeo2QL5uCs0Qua/n8nuTXQ9VXk61/KkU+yu7EZWWT9wZN92dCjnt7
+        5UmlJsownI4Np+MwsUa+Euy4hYngNUCRra3VlQJSue2keE5d
+X-Google-Smtp-Source: AA6agR7GcfkbFgGxd7vIHA6ERJ+7q3KMF/mAS/xNaa283uNCJaZMjM6XY1HIp9oSvZhqsdjxPLiuKcr+14PtyfaqULrfHShoSBaS
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:371f:b0:349:cfb0:89a9 with SMTP id
+ k31-20020a056638371f00b00349cfb089a9mr3494594jav.151.1661498368647; Fri, 26
+ Aug 2022 00:19:28 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 00:19:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000ee81005e71fbcd8@google.com>
+Subject: [syzbot] linux-next test error: BUG: program execution failed:
+ executor NUM: exit status NUM (3)
+From:   syzbot <syzbot+eb8c1c76ad86ed1cd820@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hello,
 
-Return the value cgwb_bdi_init() directly instead of storing it in another
- redundant variable.
+syzbot found the following issue on:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+HEAD commit:    cc2986f4dc67 Add linux-next specific files for 20220822
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11573e2d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2aea846fde08e662
+dashboard link: https://syzkaller.appspot.com/bug?extid=eb8c1c76ad86ed1cd820
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+eb8c1c76ad86ed1cd820@syzkaller.appspotmail.com
+
+2022/08/22 07:08:16 checking machine...
+2022/08/22 07:08:16 checking revisions...
+2022/08/22 07:08:17 testing simple program...
+executing program
+2022/08/22 07:08:20 SYZFATAL: BUG: program execution failed: executor 0: exit status 67
+SYZFAIL: wrong response packet
+ (errno 16: Device or resource busy)
+loop exited with status 67
+
+SYZFAIL: wrong response packet
+ (errno 16: Device or resource busy)
+loop exited with status 67
+
+
 ---
- mm/backing-dev.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-index 95550b8fa7fe..e1e6f293a0cd 100644
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -776,8 +776,6 @@ static void cgwb_remove_from_bdi_list(struct bdi_writeback *wb)
- 
- int bdi_init(struct backing_dev_info *bdi)
- {
--	int ret;
--
- 	bdi->dev = NULL;
- 
- 	kref_init(&bdi->refcnt);
-@@ -788,9 +786,7 @@ int bdi_init(struct backing_dev_info *bdi)
- 	INIT_LIST_HEAD(&bdi->wb_list);
- 	init_waitqueue_head(&bdi->wb_waitq);
- 
--	ret = cgwb_bdi_init(bdi);
--
--	return ret;
-+	return cgwb_bdi_init(bdi);
- }
- 
- struct backing_dev_info *bdi_alloc(int node_id)
--- 
-2.25.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

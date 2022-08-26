@@ -2,270 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069255A2F46
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CF95A2F44
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345382AbiHZStx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S1345001AbiHZStP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345285AbiHZStJ (ORCPT
+        with ESMTP id S1345318AbiHZSsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:49:09 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3786EEA8B7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:46:07 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id pw2-20020a17090b278200b001fbb2bdea57so1434019pjb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc;
-        bh=stpKDIZUfAsiCHACs7kxVCVZD/2HAYo+g81a4039rSM=;
-        b=JLKuVXKrzJAX9lRDhFsvN8/57xqI44Ve65I6izBKMAWQAMDfeEvNRM8DT3GncC3jwZ
-         C5mD65vLDnS6SAxPZoqbFr5f7WpXMTrxN/dyNDj4aqpZvCoZugfQPwalqA6vRAitkQQ+
-         iVq0c8TSx43/2GslVLWOp4abBXvIvl2/YnUmXq+KQOBelyY9wT8h7qhoazsR714fkWZ1
-         sd/h8qjuKJ+2YBKQQ0LS2IX6ai5LBKslrfp8j7nMI82yApy++/Q7osQdgMMx85/E/pSr
-         M2nnRFjmfvS/DvYqbuzLCnbHCCSa9wxSi81pxM1dOSbEKgcyRA3ov+eLejm79JsPxgRX
-         O5jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=stpKDIZUfAsiCHACs7kxVCVZD/2HAYo+g81a4039rSM=;
-        b=8OHUqtKYTNjam/74WvAE27lym8S6f+YyMnON8ADMRy+UEjI17kuDxvLQnp+/7BkxT2
-         Z1xztzHuzbfdBhnhrSGaDDuQ9ex3HwoiKdFcMIFyDZISgsEKmiUNTaw8+P4OZSyIwp/p
-         jq40qkaaVa2UAaHojmF5L4xszV70n7zTD6CxQAxrYKK6TcwIOhnGNPbSsMjpmVfb0AgU
-         QFjl15HHQs9y9BaeOnjLV68REIWw08v3SYNPLGQewoSUORyEoWH9kmZC8L1d/2tlM8Be
-         a8IToYtkXSI31kPA6qARDehfMjp0OpNL1VUhmYTeJjx755zWO5wn027E4QudE5mWc7ak
-         lBFA==
-X-Gm-Message-State: ACgBeo3Euvmu2MmXsUz+W0brnqD8u5da2sfaY0N20MOtmMKp22XnoOxF
-        +MhoRGjFuYe+5n90GfimIsaSnN90WvH5
-X-Google-Smtp-Source: AA6agR54JHf5XDCzHtZ9WW+dQdBMo2qJwzcI8ikqfIIMo2VhpBmsWT3mg59hNVT6q78/LP+pCPy1siiXW+CB
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6a00:ad1:b0:530:2cb7:84e2 with SMTP id
- c17-20020a056a000ad100b005302cb784e2mr5057556pfl.18.1661539566895; Fri, 26
- Aug 2022 11:46:06 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 11:45:00 -0700
-In-Reply-To: <20220826184500.1940077-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20220826184500.1940077-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826184500.1940077-5-vipinsh@google.com>
-Subject: [PATCH v3 4/4] KVM: selftests: Run dirty_log_perf_test on specific cpus
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, dmatlack@google.com, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 Aug 2022 14:48:31 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D440E9278
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:45:35 -0700 (PDT)
+Received: from [192.168.1.101] (afbd60.neoplus.adsl.tpnet.pl [95.49.29.60])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DFE813F677;
+        Fri, 26 Aug 2022 20:45:33 +0200 (CEST)
+Message-ID: <7276a824-4535-89bf-0eab-241d3f2d5527@somainline.org>
+Date:   Fri, 26 Aug 2022 20:45:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280-herobrine: Don't enable the USB
+ 2.0 port
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+References: <20220826084813.1.I8c9a771fcf4d1cfb6e8e0ef17a153143af9a644d@changeid>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220826084813.1.I8c9a771fcf4d1cfb6e8e0ef17a153143af9a644d@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add command line options, -c,  to run the vcpus and optionally the main
-process on the specific cpus on a host machine. This is useful as it
-provides a way to analyze performance based on the vcpus and dirty log
-worker locations, like on the different numa nodes or on the same numa
-nodes.
 
-Link: https://lore.kernel.org/lkml/20220801151928.270380-1-vipinsh@google.com
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Suggested-by: David Matlack <dmatlack@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
----
- .../selftests/kvm/dirty_log_perf_test.c       | 23 ++++++-
- .../selftests/kvm/include/perf_test_util.h    |  4 ++
- .../selftests/kvm/lib/perf_test_util.c        | 62 ++++++++++++++++++-
- 3 files changed, 86 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 1346f6b5a9bd..9514b5f28b67 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -353,7 +353,7 @@ static void help(char *name)
- 	puts("");
- 	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
- 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
--	       "[-x memslots]\n", name);
-+	       "[-x memslots] [-c physical cpus to run test on]\n", name);
- 	puts("");
- 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
- 	       TEST_HOST_LOOP_N);
-@@ -383,6 +383,18 @@ static void help(char *name)
- 	backing_src_help("-s");
- 	printf(" -x: Split the memory region into this number of memslots.\n"
- 	       "     (default: 1)\n");
-+	printf(" -c: Comma separated values of the physical CPUs, which will run\n"
-+	       "     the vCPUs, optionally, followed by the main application thread cpu.\n"
-+	       "     Number of values must be at least the number of vCPUs.\n"
-+	       "     The very next number is used to pin main application thread.\n\n"
-+	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24,50\n"
-+	       "     This means that the vcpu 0 will run on the physical cpu 22,\n"
-+	       "     vcpu 1 on the physical cpu 23, vcpu 2 on the physical cpu 24\n"
-+	       "     and the main thread will run on cpu 50.\n\n"
-+	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24\n"
-+	       "     Same as the previous example except now main application\n"
-+	       "     thread can run on any physical cpu\n\n"
-+	       "     (default: No cpu mapping)\n");
- 	puts("");
- 	exit(0);
- }
-@@ -398,6 +410,7 @@ int main(int argc, char *argv[])
- 		.slots = 1,
- 	};
- 	int opt;
-+	const char *pcpu_list = NULL;
- 
- 	dirty_log_manual_caps =
- 		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
-@@ -406,11 +419,14 @@ int main(int argc, char *argv[])
- 
- 	guest_modes_append_default();
- 
--	while ((opt = getopt(argc, argv, "b:ef:ghi:m:nop:s:v:x:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:c:ef:ghi:m:nop:s:v:x:")) != -1) {
- 		switch (opt) {
- 		case 'b':
- 			guest_percpu_mem_size = parse_size(optarg);
- 			break;
-+		case 'c':
-+			pcpu_list = optarg;
-+			break;
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
-@@ -459,6 +475,9 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (pcpu_list)
-+		perf_test_setup_pinning(pcpu_list, nr_vcpus);
-+
- 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
- 
- 	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-index eaa88df0555a..d02619f153a2 100644
---- a/tools/testing/selftests/kvm/include/perf_test_util.h
-+++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-@@ -27,6 +27,8 @@ struct perf_test_vcpu_args {
- 	/* Only used by the host userspace part of the vCPU thread */
- 	struct kvm_vcpu *vcpu;
- 	int vcpu_idx;
-+	bool pin_pcpu;
-+	int pcpu;
- };
- 
- struct perf_test_args {
-@@ -60,4 +62,6 @@ void perf_test_guest_code(uint32_t vcpu_id);
- uint64_t perf_test_nested_pages(int nr_vcpus);
- void perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_vcpu *vcpus[]);
- 
-+int perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus);
-+
- #endif /* SELFTEST_KVM_PERF_TEST_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-index 9618b37c66f7..7a1e8223e7c7 100644
---- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -2,7 +2,10 @@
- /*
-  * Copyright (C) 2020, Google LLC.
-  */
-+#define _GNU_SOURCE
-+
- #include <inttypes.h>
-+#include <sched.h>
- 
- #include "kvm_util.h"
- #include "perf_test_util.h"
-@@ -240,9 +243,26 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
- 	exit(KSFT_SKIP);
- }
- 
-+static void pin_me_to_pcpu(int pcpu)
-+{
-+	cpu_set_t cpuset;
-+	int err;
-+
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(pcpu, &cpuset);
-+	errno = 0;
-+	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
-+	TEST_ASSERT(err == 0, "sched_setaffinity errored out: %d\n", errno);
-+}
-+
- static void *vcpu_thread_main(void *data)
- {
- 	struct vcpu_thread *vcpu = data;
-+	int idx = vcpu->vcpu_idx;
-+	struct perf_test_vcpu_args *vcpu_args = &perf_test_args.vcpu_args[idx];
-+
-+	if (vcpu_args->pin_pcpu)
-+		pin_me_to_pcpu(vcpu_args->pcpu);
- 
- 	WRITE_ONCE(vcpu->running, true);
- 
-@@ -255,7 +275,7 @@ static void *vcpu_thread_main(void *data)
- 	while (!READ_ONCE(all_vcpu_threads_running))
- 		;
- 
--	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu->vcpu_idx]);
-+	vcpu_thread_fn(vcpu_args);
- 
- 	return NULL;
- }
-@@ -292,3 +312,43 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
- 	for (i = 0; i < nr_vcpus; i++)
- 		pthread_join(vcpu_threads[i].thread, NULL);
- }
-+
-+int perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus)
-+{
-+	char delim[2] = ",";
-+	char *cpu, *cpu_list;
-+	int i = 0, pcpu_num;
-+
-+	cpu_list = strdup(pcpus_string);
-+	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-+
-+	cpu = strtok(cpu_list, delim);
-+
-+	// 1. Get all pcpus for vcpus
-+	while (cpu && i < nr_vcpus) {
-+		pcpu_num = atoi_paranoid(cpu);
-+		TEST_ASSERT(pcpu_num >= 0, "Invalid cpu number: %d\n", pcpu_num);
-+
-+		perf_test_args.vcpu_args[i].pin_pcpu = true;
-+		perf_test_args.vcpu_args[i++].pcpu = pcpu_num;
-+
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	TEST_ASSERT(i == nr_vcpus,
-+		    "Number of pcpus (%d) not sufficient for the number of vcpus (%d).",
-+		    i, nr_vcpus);
-+
-+	// 2. Check if main worker is provided
-+	if (cpu) {
-+		pcpu_num = atoi_paranoid(cpu);
-+		TEST_ASSERT(pcpu_num >= 0, "Invalid cpu number: %d\n", pcpu_num);
-+
-+		pin_me_to_pcpu(pcpu_num);
-+
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	free(cpu_list);
-+	return i;
-+}
--- 
-2.37.2.672.g94769d06f0-goog
+On 26.08.2022 17:48, Matthias Kaehlcke wrote:
+> The USB 2.0 port of sc7280 is currently not used by any herobrine
+> board. Delete the device tree entries that enable it.
+> 
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
+Konrad
+> I was also told that the 2.0 port is for the Embedded USB Debugger
+> (EUD) only, but I'm not sure if that's true. From the Linux side
+> it looks like a regular dwc3 controller.
+> 
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 12 ------------
+>  1 file changed, 12 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> index 3f8996c00b05..b2f0404d3f71 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> @@ -606,18 +606,6 @@ &usb_1_qmpphy {
+>  	status = "okay";
+>  };
+>  
+> -&usb_2 {
+> -	status = "okay";
+> -};
+> -
+> -&usb_2_dwc3 {
+> -	dr_mode = "host";
+> -};
+> -
+> -&usb_2_hsphy {
+> -	status = "okay";
+> -};
+> -
+>  /* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
+>  
+>  &dp_hot_plug_det {

@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3035D5A2209
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693C45A220C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242277AbiHZHgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S232163AbiHZHhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbiHZHgf (ORCPT
+        with ESMTP id S244999AbiHZHh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:36:35 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E6C472ED9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:36:33 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxX+D6dwhjNj0KAA--.45610S4;
-        Fri, 26 Aug 2022 15:36:28 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn
-Subject: [PATCH v2 9/9] LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
-Date:   Fri, 26 Aug 2022 15:36:26 +0800
-Message-Id: <20220826073626.1716-3-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220826073626.1716-1-zhangqing@loongson.cn>
-References: <20220826073626.1716-1-zhangqing@loongson.cn>
+        Fri, 26 Aug 2022 03:37:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEB2A830D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:37:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 52D231F8BD;
+        Fri, 26 Aug 2022 07:37:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661499444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1p2xME7kAvCPtIhoSfeZxGkK6SEIAeyNE2bD/HJuXL4=;
+        b=SdH8625ujYPc8wCfZMEAkqUEiWc8JPXp9epO3MYjdRexAXsE7R1IBuKzrdWiDGMy8cYycp
+        r5Cbw+NfsvE1iZoqY+Dow5ZvGPVnsmnUNDlGxSnzfxjq3ZIjjewVNNai5wXsCmreP8VFhF
+        DsWOyNK291zoX6xdWjCwhU3NHTt4NKM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661499444;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1p2xME7kAvCPtIhoSfeZxGkK6SEIAeyNE2bD/HJuXL4=;
+        b=pFmvlH2H2ES6LC+8XbeyIr0RwhgctqmPUXrRjXNUzhD2yqUOyyS55hYKbwTcrM4wZMluWi
+        cvGP8XqHmzLOJlCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3489713421;
+        Fri, 26 Aug 2022 07:37:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V7s1DDR4CGNREQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 26 Aug 2022 07:37:24 +0000
+Message-ID: <c38a2012-d1c4-4860-881d-66ce0955700d@suse.cz>
+Date:   Fri, 26 Aug 2022 09:37:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxX+D6dwhjNj0KAA--.45610S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7JryrGFW5Gw1kGF15WF1Dtrb_yoWDGrb_Ja
-        13Ww1Uur48A397uF1xXw48W3yDA3WDZF1FyFnrJryxXa17Kr13GrWDJw1UC3WY9ayUWrW5
-        ZaykAasxCr18tjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUoRRiUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+ <a461479d-a5cd-dc86-013a-d8827d7d321a@suse.cz>
+ <YwdIDpqNlziTn/et@dhcp22.suse.cz>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <YwdIDpqNlziTn/et@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,34 +79,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Defaults enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS to convenient
-ftrace tests.
+On 8/25/22 11:59, Michal Hocko wrote:
+> On Thu 25-08-22 11:52:09, Vlastimil Babka wrote:
+>> On 8/23/22 11:22, Michal Hocko wrote:
+>> > All but node0 are really completely irrelevant for this allocation
+>> > because they do not have ZONE_DMA yet it swamps the log and makes it
+>> > harder to visually inspect.
+>> > 
+>> > Address this by providing gfp_maks parameter to show_mem and filter the
+>> > output to only those zones/nodes which are relevant for the allocation.
+>> > That means nodes which have at least one managed zone which is usable
+>> > for the allocation (zone_idx(zone) <= gfp_zone(gfp_mask)).
+>> > The resulting output for the same failure would become:
+>> 
+>> Looks good to me.
+>> 
+>> > [...]
+>> > [   14.017605][    T1] Mem-Info:
+>> 
+>> Maybe print the gfp_mask (or just max zone) here again, to make it more
+>> obvious in case somebody sents a report without the top header?
+> 
+> I have tried to not alter the output but rather filter it out. The gfp
+> mask is the first line of the allocation failure and from my past
+> experience it is usually included in reports.
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/configs/loongson3_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+OK
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 3712552e18d3..cbc1ad4c704b 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -33,6 +33,7 @@ CONFIG_SYSFS_DEPRECATED=y
- CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
-+CONFIG_KALLSYMS_ALL=y
- CONFIG_USERFAULTFD=y
- CONFIG_PERF_EVENTS=y
- # CONFIG_COMPAT_BRK is not set
-@@ -797,6 +798,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=m
- CONFIG_PRINTK_TIME=y
- CONFIG_STRIP_ASM_SYMS=y
- CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_SCHEDSTATS=y
- # CONFIG_DEBUG_PREEMPT is not set
--- 
-2.20.1
+>> > [   14.017956][    T1] active_anon:0 inactive_anon:0 isolated_anon:0
+>> > [   14.017956][    T1]  active_file:0 inactive_file:0 isolated_file:0
+>> > [   14.017956][    T1]  unevictable:0 dirty:0 writeback:0
+>> > [   14.017956][    T1]  slab_reclaimable:876 slab_unreclaimable:30300
+>> > [   14.017956][    T1]  mapped:0 shmem:0 pagetables:12 bounce:0
+>> > [   14.017956][    T1]  free:3170151735 free_pcp:6868 free_cma:0
+>> > [   14.017962][    T1] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:7200kB pagetables:4kB all_unreclaimable? no
+>> > [   14.018026][    T1] Node 0 DMA free:160kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+>> > [   14.018035][    T1] lowmem_reserve[]: 0 0 0 0 0
+>> > [   14.018339][    T1] Node 0 DMA: 0*4kB 0*8kB 0*16kB 1*32kB (U) 0*64kB 1*128kB (U) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 160kB
+>> > [   14.018480][    T1] 0 total pagecache pages
+>> > [   14.018483][    T1] 0 pages in swap cache
+>> > [   14.018484][    T1] Swap cache stats: add 0, delete 0, find 0/0
+>> > [   14.018486][    T1] Free swap  = 0kB
+>> > [   14.018487][    T1] Total swap = 0kB
+>> > [   14.018488][    T1] 3221164600 pages RAM
+>> > [   14.018489][    T1] 0 pages HighMem/MovableOnly
+>> > [   14.018490][    T1] 50531051 pages reserved
+>> > [   14.018491][    T1] 0 pages cma reserved
+>> > [   14.018492][    T1] 0 pages hwpoisoned
+>> > 
+>> > Signed-off-by: Michal Hocko <mhocko@suse.com>
 
+Acked-by: Vlastimil Babka <vbabka@suse.cz>

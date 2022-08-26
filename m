@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696FF5A2558
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE595A2552
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343891AbiHZKCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S1344074AbiHZKBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245755AbiHZKBU (ORCPT
+        with ESMTP id S1343876AbiHZKBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:01:20 -0400
+        Fri, 26 Aug 2022 06:01:16 -0400
 Received: from mxout.security-mail.net (mxout.security-mail.net [85.31.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EDDD5996
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F389C52B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:13 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id 6CBAF3D3B098
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:13 +0200 (CEST)
+        by fx302.security-mail.net (Postfix) with ESMTP id 63C723D3B0E7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:12 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508073;
-        bh=XOpWOzVHbQqn5UQdIbMGAIlVue4aBavc/v1XQOqP2Hw=;
+        s=sec-sig-email; t=1661508072;
+        bh=1GC7S1YI+aB5LYvu6vYYdn/mPMvHPNtxVJzgqwaAId0=;
         h=From:To:Cc:Subject:Date;
-        b=qpRHk9VZz0OXMTm16Oh6Q448koV5rejWCZlnIkx2X/89mpggqFaWQhmEBmM5+k4Om
-         Y4ZplO48T4pVr50lfxlP2hU+o505g3+nohib94/FVCruKzE9CppF0+9T8yl66kOD6l
-         +8x9OQJRV9Uh4i4SjKxqtnfZ6bzS2U7BjflhA2Zg=
+        b=aY04NnPOlV7fqAbKyLCrJjs4RswziZQ3udoZY006lMc4UGnDfmSuK6T47Bmpmp9Xu
+         q+wRbXX357WVpmL20jRlgAXb1hlJHGyO4pmFxfaTALgx1u51DR9gUNATYxHLmMo3qh
+         tESZxS5a3aektQ/2JvmEPwphRL9gytHeRXqIUlWU=
 Received: from fx302 (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id 758D23D3B085;
-        Fri, 26 Aug 2022 12:01:12 +0200 (CEST)
+        by fx302.security-mail.net (Postfix) with ESMTP id D87253D3B088;
+        Fri, 26 Aug 2022 12:01:11 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <15a98.630899e7.5f823.0>
+Secumail-id: <1510e.630899e7.57542.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx302.security-mail.net (Postfix) with ESMTPS id B5BD13D3B0F4;
+        by fx302.security-mail.net (Postfix) with ESMTPS id 57EFA3D3B0B8;
         Fri, 26 Aug 2022 12:01:11 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id 34C3027E02FA;
-        Fri, 26 Aug 2022 12:01:10 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 3C70B27E0397;
+        Fri, 26 Aug 2022 12:01:11 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 1D88B27E0392;
-        Fri, 26 Aug 2022 12:01:10 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 1D88B27E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 266A327E0396;
+        Fri, 26 Aug 2022 12:01:11 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 266A327E0396
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508070;
-        bh=/B4H62Ql/fDwYtt6B8yJ3OwEAw90E0dg2l8SOHFyVvs=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508071;
+        bh=51SLjhsn+vy0womsoGh4RwOudTiJbGNbt8966uS7txM=;
         h=From:To:Date:Message-Id;
-        b=CyNhI6+2VZ9JfcVEz45N82yM1dz/yv3QOuU58YrHGo/fOF0pveyr42o/GQS6cYgIz
-         kpjMgGf2pBiZL3yL0YDe3n5Dvo+sUh7EUMYt2dFDLQSiV1Bai49YCLRVpUkdfBLhes
-         H+liVsCkOcihIEhCIDXiKADuvTaKPujzLCA5XU5Q=
+        b=IGeaAppdp1g0yMNqxaSagJrlP/tL1gKAL7aqGdKAiRLPsXhZAQBYOCBwDn8WAeu0F
+         LGHmX1I9oo/hta6P9NwrD8bQ6IRKyLV5/6GSOuF5JQgRh+LECI1hhURCw1G13x+t3k
+         BE2tVsf3ZwcQPc0JUMo6Eg9pUHL/OUtMQLpAHcX4=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id uYRkkLsCIhy2; Fri, 26 Aug 2022 12:01:10 +0200 (CEST)
+        with ESMTP id kxyUnf5eMmRV; Fri, 26 Aug 2022 12:01:11 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 0DEA627E02FA;
-        Fri, 26 Aug 2022 12:01:10 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 141B827E0392;
+        Fri, 26 Aug 2022 12:01:11 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>, ecryptfs@vger.kernel.org
-Subject: [PATCH] fs/ecryptfs: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:37 +0200
-Message-Id: <20220826100052.22945-9-jmaselbas@kalray.eu>
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org
+Subject: [PATCH] mmc: host: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:38 +0200
+Message-Id: <20220826100052.22945-10-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,25 +74,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Remove redundant word `the`.
 
-CC: ecryptfs@vger.kernel.org
+CC: Ulf Hansson <ulf.hansson@linaro.org>
+CC: linux-mmc@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- fs/ecryptfs/keystore.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/dw_mmc.c     | 2 +-
+ drivers/mmc/host/sdhci-acpi.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ecryptfs/keystore.c b/fs/ecryptfs/keystore.c
-index 3fe41964c0d8..2452d6fd7062 100644
---- a/fs/ecryptfs/keystore.c
-+++ b/fs/ecryptfs/keystore.c
-@@ -878,7 +878,7 @@ struct ecryptfs_parse_tag_70_packet_silly_stack {
-  * @filename: This function kmalloc's the memory for the filename
-  * @filename_size: This function sets this to the amount of memory
-  *                 kmalloc'd for the filename
-- * @packet_size: This function sets this to the the number of octets
-+ * @packet_size: This function sets this to the number of octets
-  *               in the packet parsed
-  * @mount_crypt_stat: The mount-wide cryptographic context
-  * @data: The memory location containing the start of the tag 70
+diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
+index 581614196a84..7f00d7d7e35e 100644
+--- a/drivers/mmc/host/dw_mmc.c
++++ b/drivers/mmc/host/dw_mmc.c
+@@ -1363,7 +1363,7 @@ static void __dw_mci_start_request(struct dw_mci *host,
+ 		 * is just about to roll over.
+ 		 *
+ 		 * We do this whole thing under spinlock and only if the
+-		 * command hasn't already completed (indicating the the irq
++		 * command hasn't already completed (indicating the irq
+ 		 * already ran so we don't want the timeout).
+ 		 */
+ 		spin_lock_irqsave(&host->irq_lock, irqflags);
+diff --git a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
+index 4cca4c90769b..bddfaba091a9 100644
+--- a/drivers/mmc/host/sdhci-acpi.c
++++ b/drivers/mmc/host/sdhci-acpi.c
+@@ -648,7 +648,7 @@ static int sdhci_acpi_emmc_amd_probe_slot(struct platform_device *pdev,
+ 	 *       in reading a garbage value and using the wrong presets.
+ 	 *
+ 	 *       Since HS400 and HS200 presets must be identical, we could
+-	 *       instead use the the SDR104 preset register.
++	 *       instead use the SDR104 preset register.
+ 	 *
+ 	 *    If the above issues are resolved we could remove this quirk for
+ 	 *    firmware that that has valid presets (i.e., SDR12 <= 12 MHz).
 -- 
 2.17.1
 

@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACB25A254F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515B65A2551
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245293AbiHZKBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S1344133AbiHZKBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343733AbiHZKBO (ORCPT
+        with ESMTP id S245573AbiHZKBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 06:01:14 -0400
-Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680ABD7D03
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:09 -0700 (PDT)
+Received: from mxout.security-mail.net (mxout.security-mail.net [85.31.212.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F4D87D7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:12 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx405.security-mail.net (Postfix) with ESMTP id 9AB4C3237DA
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+        by fx302.security-mail.net (Postfix) with ESMTP id 6972C3D3B165
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:10 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508067;
-        bh=gUmMDNVHONWQCwwllNOwQSYYUlJqM6rPPtKjbyOJ0QQ=;
+        s=sec-sig-email; t=1661508070;
+        bh=8GaQ+BQxQwmLfFAY3UwtrZ/d9W9sEVE4MVV/IE9XSnA=;
         h=From:To:Cc:Subject:Date;
-        b=PS5Hl37gbe/zH87vrED14FiK30yTosXHTyuwPEZEbdnStXQL7xUOVP11RQpNztBtX
-         Qt2bGNq9KJawu4CpEpqKq+Gw89SgErQdg1UiJwkP4J6dNDgfbKSBXxSyzmimP7WHlx
-         JauMtXtPx/hPKY4vV/5ZScsYv52xT1sNLZm0FQHc=
-Received: from fx405 (localhost [127.0.0.1])
-        by fx405.security-mail.net (Postfix) with ESMTP id 43DEF3237CE;
-        Fri, 26 Aug 2022 12:01:07 +0200 (CEST)
+        b=LasDV7CTYN7QMKnInMJUanUZfMWgg6phgF/fhU1l8pJkNsduEvUbdDb0MMiL0POfn
+         vE6U99KOeiL/fCkG5hqR5OQ39YqAl1MSDj/GfIovxj0pdXZ0HOPrEqs+5RM7oq1qxh
+         lGrBu4NJgLPzfMgMGa7ibC3e+F9+tUaqryFtX4mI=
+Received: from fx302 (localhost [127.0.0.1])
+        by fx302.security-mail.net (Postfix) with ESMTP id F18983D3B0B8;
+        Fri, 26 Aug 2022 12:01:09 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <8c06.630899e2.680d7.0>
+Secumail-id: <1510e.630899e5.72c6a.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx405.security-mail.net (Postfix) with ESMTPS id 6AB763237BC;
-        Fri, 26 Aug 2022 12:01:06 +0200 (CEST)
+        by fx302.security-mail.net (Postfix) with ESMTPS id 7347F3D3B165;
+        Fri, 26 Aug 2022 12:01:09 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id 48A1B27E02FA;
-        Fri, 26 Aug 2022 12:01:06 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 5A1F127E02FA;
+        Fri, 26 Aug 2022 12:01:09 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 3069227E0392;
-        Fri, 26 Aug 2022 12:01:06 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 3069227E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 439C427E0392;
+        Fri, 26 Aug 2022 12:01:09 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 439C427E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508066;
-        bh=NweMvkwuUL9aWcrZ2XSp5kn992gDP/VanWRyvYnL8Vw=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508069;
+        bh=xq2h1CH6VTuibgIykByVr3mMAa1GYI+GOILmH7S2DtY=;
         h=From:To:Date:Message-Id;
-        b=pPCpJt/KFVDpG412JwQAZ+wMTHxAzNlp3NIPCI/KGn7UtAVARzvNjfm9Ha5Ikru2o
-         4UHCXqDxga2Ca+EYBFFm6Bti4F3wEnKnS/naPmspbjKKX6aUrshimNvAgh7Ey5m7Ri
-         6ctpyqA7nT0YjwGhqgOTtmDswFR6WnJQgG4lbMqA=
+        b=W60DOFbm7ZFHvA/oTIYXhaFgSAZDaB0Ffvpqc9bwqSBXUQbp0jyqQof5CB+8obqFi
+         9Id+IkysVeDY6N6oUtKGv3+FwmI1jkg+jOZVTGporocg3+XqZOFtZsDKQ4v4yml+zs
+         sOn9OHF0DwyEi9lMQBjBTBGABxZnGS+aV6U7n2lM=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qa_kXKPI9kJn; Fri, 26 Aug 2022 12:01:06 +0200 (CEST)
+        with ESMTP id Y7IGJxT_wypX; Fri, 26 Aug 2022 12:01:09 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 15C0327E02FA;
-        Fri, 26 Aug 2022 12:01:06 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 2B85A27E02FA;
+        Fri, 26 Aug 2022 12:01:09 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-Subject: [PATCH] seqlock: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:34 +0200
-Message-Id: <20220826100052.22945-6-jmaselbas@kalray.eu>
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>, linux-fsdevel@vger.kernel.org
+Subject: [PATCH] fs/afs: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:36 +0200
+Message-Id: <20220826100052.22945-8-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,27 +73,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Remove redundant word `the`.
 
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Will Deacon <will@kernel.org>
-CC: linux-kernel@vger.kernel.org
+CC: linux-fsdevel@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- include/linux/seqlock.h | 2 +-
+ fs/afs/flock.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index 3926e9027947..4e2ae90554cd 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -863,7 +863,7 @@ static inline unsigned read_seqretry(const seqlock_t *sl, unsigned start)
+diff --git a/fs/afs/flock.c b/fs/afs/flock.c
+index c4210a3964d8..801fe305878f 100644
+--- a/fs/afs/flock.c
++++ b/fs/afs/flock.c
+@@ -152,7 +152,7 @@ static void afs_next_locker(struct afs_vnode *vnode, int error)
  }
  
  /*
-- * For all seqlock_t write side functions, use the the internal
-+ * For all seqlock_t write side functions, use the internal
-  * do_write_seqcount_begin() instead of generic write_seqcount_begin().
-  * This way, no redundant lockdep_assert_held() checks are added.
+- * Kill off all waiters in the the pending lock queue due to the vnode being
++ * Kill off all waiters in the pending lock queue due to the vnode being
+  * deleted.
   */
+ static void afs_kill_lockers_enoent(struct afs_vnode *vnode)
 -- 
 2.17.1
 

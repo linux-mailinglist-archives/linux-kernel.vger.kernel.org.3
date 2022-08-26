@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE145A254A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EBA5A2559
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbiHZKCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S244690AbiHZKCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245414AbiHZKBd (ORCPT
+        with ESMTP id S1343716AbiHZKBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:01:33 -0400
-Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE096F25A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:30 -0700 (PDT)
+        Fri, 26 Aug 2022 06:01:31 -0400
+Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D781ED5996
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:01:29 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx405.security-mail.net (Postfix) with ESMTP id ADE29323842
+        by fx601.security-mail.net (Postfix) with ESMTP id 53A243ACEDD
         for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:01:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
         s=sec-sig-email; t=1661508088;
-        bh=jH9u55xoEl5fjJm0ZnYiHwhOtEMoREMp1lLHQ6qSoZQ=;
+        bh=SCDpeIxVyYrv4kQNpVeu9eSc75msKnazn+ZKlH00Qhs=;
         h=From:To:Cc:Subject:Date;
-        b=uE1kNmcxaFrGW/dcDxPM7Ui8HDZm8K0g9CRg4AzS3YXiUK1pwsi0SAQkRAs6KScaG
-         PvRCkrk7FdnSCRq3wp2YQ3gv/DzMaYPYuzOrOgxa73Pbcx8C5MMvPgssyKBchg8uFn
-         tVDkhfgLpJStkAhjuLXtSNnYk5rXkWURrEfbQqAI=
-Received: from fx405 (localhost [127.0.0.1])
-        by fx405.security-mail.net (Postfix) with ESMTP id 2BBFC32382C;
+        b=ntkYtSdvKd2e/vfTvdKnWB8GqJvlxkzB/PJvcZmEx+VzRD2TEMeMBMU76UUzCXP3n
+         VxklrdrXEz5RURA8yyZ3qPsMouMtF2BmoX9u1wxT9L8QoMDxZbYe5erQX3xtijmAPY
+         h/K7wMTSb2+53p4CT3UcGdBAjL0B/DHNCQkuOFjQ=
+Received: from fx601 (localhost [127.0.0.1])
+        by fx601.security-mail.net (Postfix) with ESMTP id 950463ACEB9;
         Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <97eb.630899f6.1d19a.0>
+Secumail-id: <5f8a.630899f6.c2f5d.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx405.security-mail.net (Postfix) with ESMTPS id 1F3B132383D;
+        by fx601.security-mail.net (Postfix) with ESMTPS id C46AF3ACEA3;
         Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id DC80727E02FA;
-        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id A718A27E02FA;
+        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id C634327E0392;
-        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu C634327E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 90AAD27E0392;
+        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 90AAD27E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508085;
-        bh=vabnn3dBTh05+XFUF+tEvTaFAN/F2mML7V7liWpEnYs=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508086;
+        bh=NaiqwpRbXRdjsNpz1W2XnsBstSv/EPGUYAQ6UVixNRI=;
         h=From:To:Date:Message-Id;
-        b=TRLlJm7ow6Auz8F47GQIy2Qm/SRiiyXJJIrfmZ8f9aRtVRZKJphQqSae6AEgaYRil
-         vwEX6y1wAUh1NVk3pWcVjdJJDa7+w4qhjU0rAiCrHiBXSVpxVIsvfzWXSE/HFfDNe+
-         68VrJVFwXECcXo7s/cIBSE7GRweX/aX8/5ZTMwj4=
+        b=CrvT1Yda4Cy03jf7mLVYm3A34sAUXbvdJdiZ6S9TKuhCxm8vouJ+kpZngmBuUkDOc
+         YhcTcfGlNvBV2p7UJnbwAG5O2JmRwJ2v5L8WUzjUNgGrq1a1Z+1ZyOk950oLICzNiw
+         kSstF6EKR8/gSIkUgMmoWXrQjdQyz1AudI15K4mc=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QDtUcm_SRFBG; Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
+        with ESMTP id 9n1S3QpK0Pxj; Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id AC21527E02FA;
-        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 7766127E02FA;
+        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH] media: usb: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:49 +0200
-Message-Id: <20220826100052.22945-21-jmaselbas@kalray.eu>
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
+Subject: [PATCH] media: i2c: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:50 +0200
+Message-Id: <20220826100052.22945-22-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,70 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove redundant words `the` and `by`.
+Remove redundant word `the`.
 
-CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC: Jacopo Mondi <jacopo@jmondi.org>
 CC: linux-media@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- drivers/media/usb/gspca/finepix.c       | 2 +-
- drivers/media/usb/gspca/ov519.c         | 2 +-
- drivers/media/usb/tm6000/tm6000-cards.c | 2 +-
- drivers/media/usb/uvc/uvc_video.c       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/i2c/mt9v111.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/gspca/finepix.c b/drivers/media/usb/gspca/finepix.c
-index 66c8e5122a0a..bc6133b525e3 100644
---- a/drivers/media/usb/gspca/finepix.c
-+++ b/drivers/media/usb/gspca/finepix.c
-@@ -129,7 +129,7 @@ static void dostream(struct work_struct *work)
- 				 * for, then it's the end of the
- 				 * frame. Sometimes the jpeg is not complete,
- 				 * but there's nothing we can do. We also end
--				 * here if the the jpeg ends right at the end
-+				 * here if the jpeg ends right at the end
- 				 * of the frame. */
- 				gspca_frame_add(gspca_dev, LAST_PACKET,
- 						data, len);
-diff --git a/drivers/media/usb/gspca/ov519.c b/drivers/media/usb/gspca/ov519.c
-index bffa94e76da5..57219a738c73 100644
---- a/drivers/media/usb/gspca/ov519.c
-+++ b/drivers/media/usb/gspca/ov519.c
-@@ -13,7 +13,7 @@
-  * Copyright (c) 1999-2006 Mark W. McClelland
-  * Support for OV519, OV8610 Copyright (c) 2003 Joerg Heckenbach
-  * Many improvements by Bret Wallach <bwallac1@san.rr.com>
-- * Color fixes by by Orion Sky Lawlor <olawlor@acm.org> (2/26/2000)
-+ * Color fixes by Orion Sky Lawlor <olawlor@acm.org> (2/26/2000)
-  * OV7620 fixes by Charl P. Botha <cpbotha@ieee.org>
-  * Changes by Claudio Matsuoka <claudio@conectiva.com>
-  *
-diff --git a/drivers/media/usb/tm6000/tm6000-cards.c b/drivers/media/usb/tm6000/tm6000-cards.c
-index 98f4a63adc2a..b7842cd6f9af 100644
---- a/drivers/media/usb/tm6000/tm6000-cards.c
-+++ b/drivers/media/usb/tm6000/tm6000-cards.c
-@@ -1297,7 +1297,7 @@ static int tm6000_usb_probe(struct usb_interface *interface,
- 		le16_to_cpu(dev->udev->descriptor.idProduct),
- 		interface->altsetting->desc.bInterfaceNumber);
- 
--/* check if the the device has the iso in endpoint at the correct place */
-+/* check if the device has the iso in endpoint at the correct place */
- 	if (!dev->isoc_in.endp) {
- 		printk(KERN_ERR "tm6000: probing error: no IN ISOC endpoint!\n");
- 		rc = -ENODEV;
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 170a008f4006..d2eb9066e4dc 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1095,7 +1095,7 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
+diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
+index 2dc4a0f24ce8..7beca0b70b72 100644
+--- a/drivers/media/i2c/mt9v111.c
++++ b/drivers/media/i2c/mt9v111.c
+@@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
  
  	/*
- 	 * Synchronize to the input stream by waiting for the FID bit to be
--	 * toggled when the the buffer state is not UVC_BUF_STATE_ACTIVE.
-+	 * toggled when the buffer state is not UVC_BUF_STATE_ACTIVE.
- 	 * stream->last_fid is initialized to -1, so the first isochronous
- 	 * frame will always be in sync.
- 	 *
+ 	 * Set pixel integration time to the whole frame time.
+-	 * This value controls the the shutter delay when running with AE
++	 * This value controls the shutter delay when running with AE
+ 	 * disabled. If longer than frame time, it affects the output
+ 	 * frame rate.
+ 	 */
 -- 
 2.17.1
 

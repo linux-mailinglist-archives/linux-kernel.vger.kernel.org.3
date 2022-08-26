@@ -2,233 +2,533 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423B05A2C66
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B744B5A2C67
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244667AbiHZQf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S231379AbiHZQgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiHZQfu (ORCPT
+        with ESMTP id S244516AbiHZQgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:35:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4C425C53
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661531741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 26 Aug 2022 12:36:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1345A8A8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:36:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E3831F903;
+        Fri, 26 Aug 2022 16:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661531765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xJrtDOE1LS6YjgDSPmg59up2c2x/o9+GnjMuyWVSMCo=;
-        b=aE5N79Hue/vqual5q4CMjSvHOdvAi6aviBnSm5N49YurfgjOg4W6XQ9oM4bnRBDJywVV/r
-        n/cwpKvlhEVIMXFibEbH8NWHZKrWy5CUNQridvDT8b/lyHwbomrDTewr5gp5XEtg/NiCW/
-        2gdDpOtxUF5zHaz+XrOAwvzNM2IrpYw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-tiZpvfBCPSaTtlLYxVcYuQ-1; Fri, 26 Aug 2022 12:35:39 -0400
-X-MC-Unique: tiZpvfBCPSaTtlLYxVcYuQ-1
-Received: by mail-wr1-f71.google.com with SMTP id j4-20020adfa544000000b002255264474bso220065wrb.17
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:35:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=xJrtDOE1LS6YjgDSPmg59up2c2x/o9+GnjMuyWVSMCo=;
-        b=e3GKcenSnqTOd3zWDFqgUOwEo57IUWk8gpNBTRLV2LCh5RxOTaZht4AJASdYOit7sx
-         5seSwzDrSKhJSMPbusuczq6IhTmYEv+I+2X6GrAYpePLPtlKXk0ga39F7/2F3qjdyczC
-         g3PRssI9lWlFlRbeyV9ElMayWaSEmVwQLLaMH4p8MCGlqpnYbr5XFQJCIT8HvLPslA8j
-         OJ1hxpUoIZofeDvG4ctteWrowUA5sCpuinI1cTw+YiL/FGu9MrY8TElhcc+CcOrEytLD
-         Z7yLz0LpA1QpWLU7UZygFpC4M/KCL4oO9HnK2ZLQtlNiG+slCm/6pbXmmkTda4iNWKxI
-         1dfg==
-X-Gm-Message-State: ACgBeo2emiteWSc8zCxNoMDv9trwZbUP5biP63iKxpS9/XZnLK5/I6y3
-        aiwKWtBXNCc/24jNsBp0xfiCTQClk2GvUPNRVjXjGlskwgrlq+G1KBAwchBXj7caWhY7Y4Ty9ww
-        fBFpTg9f0ApIkaPrwmlq6uN01
-X-Received: by 2002:a05:600c:290a:b0:3a5:515d:4f69 with SMTP id i10-20020a05600c290a00b003a5515d4f69mr244851wmd.127.1661531738256;
-        Fri, 26 Aug 2022 09:35:38 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5EIHMKQi/zXPpLKIV0JdmfWhkQBXmKVB2m1LedfaFyGwzgbKghd2AEaeUXKNQ8MGWtQi3a4A==
-X-Received: by 2002:a05:600c:290a:b0:3a5:515d:4f69 with SMTP id i10-20020a05600c290a00b003a5515d4f69mr244839wmd.127.1661531737961;
-        Fri, 26 Aug 2022 09:35:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:f600:abad:360:c840:33fa? (p200300cbc708f600abad0360c84033fa.dip0.t-ipconnect.de. [2003:cb:c708:f600:abad:360:c840:33fa])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05600c4f5500b003a327b98c0asm102915wmq.22.2022.08.26.09.35.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 09:35:37 -0700 (PDT)
-Message-ID: <f8e80df6-1c56-6a55-0926-67f5e2c3e204@redhat.com>
-Date:   Fri, 26 Aug 2022 18:35:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] mm/mprotect: Only reference swap pfn page if type match
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org,
-        Yu Zhao <yuzhao@google.com>
-References: <20220823221138.45602-1-peterx@redhat.com>
- <411d7b8c-f914-875e-b397-856e6a894366@redhat.com>
- <YwjXxC2BbJ5+3Isx@xz-m1.local>
- <ca62c992-6242-5e82-22de-a6e8ffa824b1@redhat.com>
- <YwjvC1wYcODUuiSf@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YwjvC1wYcODUuiSf@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        bh=RPDxr3Ztn4+5QsscdSkEfhq+48P+uTXlFovytZKsRYM=;
+        b=ecrqlTFOWRUBuOoMUe8YsWSYSEps3AMAT7sOl415VwcWA31UvP1xa3itBM3pwouuowMDAw
+        9ZFL7q5ISTrQ7XT4HH3GV7sg70/EoNpesSynvDWmDEf1TxsKK7Acc6RMWPfnAv0GHdqbLv
+        eiPQOiDpnIGqBV3jWvB0QRU9LVeiT+o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661531765;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RPDxr3Ztn4+5QsscdSkEfhq+48P+uTXlFovytZKsRYM=;
+        b=NvW0ZeaCQ6niEFZsluRpfPCL3U4QkWuDc8rAY0WutFiSXwSeIIci2AC/ow1zh24Py7KK49
+        mVvri9vyrn3CvLBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3488A13421;
+        Fri, 26 Aug 2022 16:36:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pWLeC3X2CGNQdgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 26 Aug 2022 16:36:05 +0000
+Date:   Fri, 26 Aug 2022 18:36:04 +0200
+Message-ID: <87ilmfj72j.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: retire_capture_urb: Corrected urb data len
+In-Reply-To: <68a97d61-21bf-b45e-f6ed-c0906dd4b197@seco.com>
+References: <68a97d61-21bf-b45e-f6ed-c0906dd4b197@seco.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.08.22 18:04, Peter Xu wrote:
-> On Fri, Aug 26, 2022 at 04:39:08PM +0200, David Hildenbrand wrote:
->> On 26.08.22 16:25, Peter Xu wrote:
->>> On Fri, Aug 26, 2022 at 12:49:37PM +0200, David Hildenbrand wrote:
->>>> On 24.08.22 00:11, Peter Xu wrote:
->>>>> Yu Zhao reported a bug after the commit "mm/swap: Add swp_offset_pfn() to
->>>>> fetch PFN from swap entry" added a check in swp_offset_pfn() for swap type [1]:
->>>>>
->>>>>   kernel BUG at include/linux/swapops.h:117!
->>>>>   CPU: 46 PID: 5245 Comm: EventManager_De Tainted: G S         O L 6.0.0-dbg-DEV #2
->>>>>   RIP: 0010:pfn_swap_entry_to_page+0x72/0xf0
->>>>>   Code: c6 48 8b 36 48 83 fe ff 74 53 48 01 d1 48 83 c1 08 48 8b 09 f6
->>>>>   c1 01 75 7b 66 90 48 89 c1 48 8b 09 f6 c1 01 74 74 5d c3 eb 9e <0f> 0b
->>>>>   48 ba ff ff ff ff 03 00 00 00 eb ae a9 ff 0f 00 00 75 13 48
->>>>>   RSP: 0018:ffffa59e73fabb80 EFLAGS: 00010282
->>>>>   RAX: 00000000ffffffe8 RBX: 0c00000000000000 RCX: ffffcd5440000000
->>>>>   RDX: 1ffffffffff7a80a RSI: 0000000000000000 RDI: 0c0000000000042b
->>>>>   RBP: ffffa59e73fabb80 R08: ffff9965ca6e8bb8 R09: 0000000000000000
->>>>>   R10: ffffffffa5a2f62d R11: 0000030b372e9fff R12: ffff997b79db5738
->>>>>   R13: 000000000000042b R14: 0c0000000000042b R15: 1ffffffffff7a80a
->>>>>   FS:  00007f549d1bb700(0000) GS:ffff99d3cf680000(0000) knlGS:0000000000000000
->>>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>   CR2: 0000440d035b3180 CR3: 0000002243176004 CR4: 00000000003706e0
->>>>>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>>>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>>>   Call Trace:
->>>>>    <TASK>
->>>>>    change_pte_range+0x36e/0x880
->>>>>    change_p4d_range+0x2e8/0x670
->>>>>    change_protection_range+0x14e/0x2c0
->>>>>    mprotect_fixup+0x1ee/0x330
->>>>>    do_mprotect_pkey+0x34c/0x440
->>>>>    __x64_sys_mprotect+0x1d/0x30
->>>>>
->>>>> It triggers because pfn_swap_entry_to_page() could be called upon e.g. a
->>>>> genuine swap entry.
->>>>>
->>>>> Fix it by only calling it when it's a write migration entry where the page*
->>>>> is used.
->>>>>
->>>>> [1] https://lore.kernel.org/lkml/CAOUHufaVC2Za-p8m0aiHw6YkheDcrO-C3wRGixwDS32VTS+k1w@mail.gmail.com/
->>>>>
->>>>> Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
->>>>> Cc: David Hildenbrand <david@redhat.com>
->>>>> Cc: <stable@vger.kernel.org>
->>>>> Reported-by: Yu Zhao <yuzhao@google.com>
->>>>> Signed-off-by: Peter Xu <peterx@redhat.com>
->>>>> ---
->>>>>  mm/mprotect.c | 3 ++-
->>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/mm/mprotect.c b/mm/mprotect.c
->>>>> index f2b9b1da9083..4549f5945ebe 100644
->>>>> --- a/mm/mprotect.c
->>>>> +++ b/mm/mprotect.c
->>>>> @@ -203,10 +203,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
->>>>>  			pages++;
->>>>>  		} else if (is_swap_pte(oldpte)) {
->>>>>  			swp_entry_t entry = pte_to_swp_entry(oldpte);
->>>>> -			struct page *page = pfn_swap_entry_to_page(entry);
->>>>>  			pte_t newpte;
->>>>>  
->>>>>  			if (is_writable_migration_entry(entry)) {
->>>>> +				struct page *page = pfn_swap_entry_to_page(entry);
->>>>> +
->>>>>  				/*
->>>>>  				 * A protection check is difficult so
->>>>>  				 * just be safe and disable write
->>>>
->>>>
->>>> Stumbling over the THP code, I was wondering if we also want to adjust change_huge_pmd()
->>>> and hugetlb_change_protection. There are no actual swap entries, so I assume we're fine.
->>>>
->>>>
->>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->>>> index 482c1826e723..466364e7fc5f 100644
->>>> --- a/mm/huge_memory.c
->>>> +++ b/mm/huge_memory.c
->>>> @@ -1798,10 +1798,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
->>>>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
->>>>         if (is_swap_pmd(*pmd)) {
->>>>                 swp_entry_t entry = pmd_to_swp_entry(*pmd);
->>>> -               struct page *page = pfn_swap_entry_to_page(entry);
->>>>  
->>>>                 VM_BUG_ON(!is_pmd_migration_entry(*pmd));
->>>>                 if (is_writable_migration_entry(entry)) {
->>>> +                       struct page *page = pfn_swap_entry_to_page(entry);
->>>>                         pmd_t newpmd;
->>>>                         /*
->>>>                          * A protection check is difficult so
->>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>>> index 2480ba627aa5..559465fae5cd 100644
->>>> --- a/mm/hugetlb.c
->>>> +++ b/mm/hugetlb.c
->>>> @@ -6370,9 +6370,9 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
->>>>                 }
->>>>                 if (unlikely(is_hugetlb_entry_migration(pte))) {
->>>>                         swp_entry_t entry = pte_to_swp_entry(pte);
->>>> -                       struct page *page = pfn_swap_entry_to_page(entry);
->>>>  
->>>>                         if (!is_readable_migration_entry(entry)) {
->>>> +                               struct page *page = pfn_swap_entry_to_page(entry);
->>>>                                 pte_t newpte;
->>>>  
->>>>                                 if (PageAnon(page))
->>>>
->>>>
->>>> @Peter, what's your thought?
->>>
->>> IMHO they're not needed?
->>>
->>> The rule is simple in my mind: we should only pass in a pfn-typed swap
->>> entry into pfn_swap_entry_to_page() (or the new swp_offset_pfn()), or it's
->>> a violation of the API.  In these two cases they do not violate the API and
->>> they're always safe because they're guaranteed to be pfn swap entries when
->>> calling.
->>
->> I was wondering about extreme corner cases regarding the struct page.
->>
->> Assume we have a hwpoison_entry that pointed at a valid struct page. We
->> can succeed in offlining+removing the section it's located on (I was
->> recently challenging if we want to keep that behavior as it's really
->> shaky already), freeing the relevant memmap entry and the memory section.
->>
->> pfn_swap_entry_to_page() -> pfn_to_page() would be problematic if there
->> is no memmap anymore.
->>
->>
->> I assume it's ok to always call it for is_pfn_swap_entry(), but in the
->> PMD case we only check for is_swap_pmd()? Isn't that problematic?
+On Fri, 26 Aug 2022 18:22:24 +0200,
+Sean Anderson wrote:
 > 
-> I don't know extensively enough on hwpoison on validity of fetching page
-> from pfn inside on online/offline ops, but.. if the only concern is about
-> hwpoison entry existance here I think its fine?  Because iirc we'l split
-> thp when any of the subpage got poisoned, so we should never hit a hwpoison
-> entry in thp path.
+> Hi all,
+> 
+> I have a "FiiO DigiHug USB Audio" sound card (1852:7022) [3]. I have had
+> no problems with the audio, but I did notice a large number of message
+> like 
+> 
+> retire_capture_urb: 4992 callbacks suppressed
+> 
+> in my dmesg [1]. This is caused by the "Corrected urb data len."
+> warning.
 
-Ah right, so we're good. Thanks!
+What exact values are shown there?  The problem is that your hardware
+(likely a buggy firmware) returns the unaligned size of bytes as the
+data.  Maybe it's worth to replace dev_warn_ratelimited() there with
+dev_warn() and take all warnings once.  Then we can see what kind of
+values are delivered from the hardware.
 
--- 
-Thanks,
+> The patch adding this warning [2] makes it seem like
+> this warning should be an uncommon occurance. However, based on the
+> number of suppressed callbacks, this seems to be happening at a rate of
+> around 500 Hz.
+> 
+> Is this buggy hardware? Or is this a bug in the driver? Does there need
+> to be a quirk? Or perhaps the warning above should be a debug instead?
 
-David / dhildenb
+There is no quirk for that.  As long as the device works with that
+workaround (except for messages), we can simply add a quirk to not
+warn but always apply the workaround silently for such devices.
 
+
+thanks,
+
+Takashi
+
+> 
+> I'm using 5.15.0-46-generic. I know, I know; this is a vendor
+> kernel. However, I went through the commits for sound/usb/pcm.c and
+> didn't see any major differences. I also previously saw this issue on
+> 5.4, so this probably isn't a regression.
+> 
+> --Sean
+> 
+> [1] I would have liked to post the actual message, but I was unable to
+> figure out how to disable ratelimiting. I tried setting
+> /proc/sys/kernel/printk_ratelimit to 0,
+> /proc/sys/kernel/printk_ratelimit_burst to 5000, and
+> /proc/sys/kernel/printk to 8. However, nothing seemed to have any effect
+> (except that the callbacks suppressed messages were disabled). I find
+> this very strange, given that the callbacks suppressed message uses
+> KERN_WARN, and so does dev_warn_ratelimited.
+> [2] https://lore.kernel.org/all/4B28A659.6070303@ladisch.de/T/
+> [3]
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               1.10
+>   bDeviceClass            0 
+>   bDeviceSubClass         0 
+>   bDeviceProtocol         0 
+>   bMaxPacketSize0         8
+>   idVendor           0x1852 GYROCOM C&C Co., LTD
+>   idProduct          0x7022 
+>   bcdDevice            0.01
+>   iManufacturer           1 FiiO
+>   iProduct                2 DigiHug USB Audio
+>   iSerial                 0 
+>   bNumConfigurations      1
+>   Configuration Descriptor:
+>     bLength                 9
+>     bDescriptorType         2
+>     wTotalLength       0x0182
+>     bNumInterfaces          4
+>     bConfigurationValue     1
+>     iConfiguration          0 
+>     bmAttributes         0x80
+>       (Bus Powered)
+>     MaxPower              500mA
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        0
+>       bAlternateSetting       0
+>       bNumEndpoints           1
+>       bInterfaceClass         3 Human Interface Device
+>       bInterfaceSubClass      0 
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>         HID Device Descriptor:
+>           bLength                 9
+>           bDescriptorType        33
+>           bcdHID               1.00
+>           bCountryCode            0 Not supported
+>           bNumDescriptors         1
+>           bDescriptorType        34 Report
+>           wDescriptorLength      58
+>          Report Descriptors: 
+>            ** UNAVAILABLE **
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x81  EP 1 IN
+>         bmAttributes            3
+>           Transfer Type            Interrupt
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0012  1x 18 bytes
+>         bInterval              32
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        1
+>       bAlternateSetting       0
+>       bNumEndpoints           0
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      1 Control Device
+>       bInterfaceProtocol      0 
+>       iInterface              3 FiiO USB DAC-E10
+>       AudioControl Interface Descriptor:
+>         bLength                10
+>         bDescriptorType        36
+>         bDescriptorSubtype      1 (HEADER)
+>         bcdADC               1.00
+>         wTotalLength       0x003e
+>         bInCollection           2
+>         baInterfaceNr(0)        2
+>         baInterfaceNr(1)        3
+>       AudioControl Interface Descriptor:
+>         bLength                12
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (INPUT_TERMINAL)
+>         bTerminalID             5
+>         wTerminalType      0x0605 SPDIF interface
+>         bAssocTerminal          0
+>         bNrChannels             2
+>         wChannelConfig     0x0003
+>           Left Front (L)
+>           Right Front (R)
+>         iChannelNames           0 
+>         iTerminal               0 
+>       AudioControl Interface Descriptor:
+>         bLength                12
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (INPUT_TERMINAL)
+>         bTerminalID             9
+>         wTerminalType      0x0101 USB Streaming
+>         bAssocTerminal          0
+>         bNrChannels             2
+>         wChannelConfig     0x0003
+>           Left Front (L)
+>           Right Front (R)
+>         iChannelNames           0 
+>         iTerminal               0 
+>       AudioControl Interface Descriptor:
+>         bLength                 9
+>         bDescriptorType        36
+>         bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+>         bTerminalID             3
+>         wTerminalType      0x0605 SPDIF interface
+>         bAssocTerminal          0
+>         bSourceID              16
+>         iTerminal               0 
+>       AudioControl Interface Descriptor:
+>         bLength                 9
+>         bDescriptorType        36
+>         bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+>         bTerminalID             7
+>         wTerminalType      0x0101 USB Streaming
+>         bAssocTerminal          0
+>         bSourceID               5
+>         iTerminal               0 
+>       AudioControl Interface Descriptor:
+>         bLength                10
+>         bDescriptorType        36
+>         bDescriptorSubtype      6 (FEATURE_UNIT)
+>         bUnitID                16
+>         bSourceID               9
+>         bControlSize            1
+>         bmaControls(0)       0x01
+>           Mute Control
+>         bmaControls(1)       0x02
+>           Volume Control
+>         bmaControls(2)       0x02
+>           Volume Control
+>         iFeature                0 
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        2
+>       bAlternateSetting       0
+>       bNumEndpoints           0
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        2
+>       bAlternateSetting       1
+>       bNumEndpoints           1
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       AudioStreaming Interface Descriptor:
+>         bLength                 7
+>         bDescriptorType        36
+>         bDescriptorSubtype      1 (AS_GENERAL)
+>         bTerminalLink           7
+>         bDelay                  0 frames
+>         wFormatTag         0x0001 PCM
+>       AudioStreaming Interface Descriptor:
+>         bLength                26
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (FORMAT_TYPE)
+>         bFormatType             1 (FORMAT_TYPE_I)
+>         bNrChannels             2
+>         bSubframeSize           2
+>         bBitResolution         16
+>         bSamFreqType            6 Discrete
+>         tSamFreq[ 0]         8000
+>         tSamFreq[ 1]        16000
+>         tSamFreq[ 2]        32000
+>         tSamFreq[ 3]        44100
+>         tSamFreq[ 4]        48000
+>         tSamFreq[ 5]        96000
+>       Endpoint Descriptor:
+>         bLength                 9
+>         bDescriptorType         5
+>         bEndpointAddress     0x82  EP 2 IN
+>         bmAttributes            9
+>           Transfer Type            Isochronous
+>           Synch Type               Adaptive
+>           Usage Type               Data
+>         wMaxPacketSize     0x0184  1x 388 bytes
+>         bInterval               1
+>         bRefresh                0
+>         bSynchAddress           0
+>         AudioStreaming Endpoint Descriptor:
+>           bLength                 7
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (EP_GENERAL)
+>           bmAttributes         0x01
+>             Sampling Frequency
+>           bLockDelayUnits         2 Decoded PCM samples
+>           wLockDelay         0x0002
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        2
+>       bAlternateSetting       2
+>       bNumEndpoints           1
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       AudioStreaming Interface Descriptor:
+>         bLength                 7
+>         bDescriptorType        36
+>         bDescriptorSubtype      1 (AS_GENERAL)
+>         bTerminalLink           7
+>         bDelay                  0 frames
+>         wFormatTag         0x0001 PCM
+>       AudioStreaming Interface Descriptor:
+>         bLength                26
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (FORMAT_TYPE)
+>         bFormatType             1 (FORMAT_TYPE_I)
+>         bNrChannels             2
+>         bSubframeSize           3
+>         bBitResolution         24
+>         bSamFreqType            6 Discrete
+>         tSamFreq[ 0]         8000
+>         tSamFreq[ 1]        16000
+>         tSamFreq[ 2]        32000
+>         tSamFreq[ 3]        44100
+>         tSamFreq[ 4]        48000
+>         tSamFreq[ 5]        96000
+>       Endpoint Descriptor:
+>         bLength                 9
+>         bDescriptorType         5
+>         bEndpointAddress     0x82  EP 2 IN
+>         bmAttributes            9
+>           Transfer Type            Isochronous
+>           Synch Type               Adaptive
+>           Usage Type               Data
+>         wMaxPacketSize     0x0246  1x 582 bytes
+>         bInterval               1
+>         bRefresh                0
+>         bSynchAddress           0
+>         AudioStreaming Endpoint Descriptor:
+>           bLength                 7
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (EP_GENERAL)
+>           bmAttributes         0x01
+>             Sampling Frequency
+>           bLockDelayUnits         2 Decoded PCM samples
+>           wLockDelay         0x0002
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        3
+>       bAlternateSetting       0
+>       bNumEndpoints           0
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        3
+>       bAlternateSetting       1
+>       bNumEndpoints           1
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       AudioStreaming Interface Descriptor:
+>         bLength                 7
+>         bDescriptorType        36
+>         bDescriptorSubtype      1 (AS_GENERAL)
+>         bTerminalLink           9
+>         bDelay                  0 frames
+>         wFormatTag         0x0001 PCM
+>       AudioStreaming Interface Descriptor:
+>         bLength                20
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (FORMAT_TYPE)
+>         bFormatType             1 (FORMAT_TYPE_I)
+>         bNrChannels             2
+>         bSubframeSize           2
+>         bBitResolution         16
+>         bSamFreqType            4 Discrete
+>         tSamFreq[ 0]        32000
+>         tSamFreq[ 1]        44100
+>         tSamFreq[ 2]        48000
+>         tSamFreq[ 3]        96000
+>       Endpoint Descriptor:
+>         bLength                 9
+>         bDescriptorType         5
+>         bEndpointAddress     0x03  EP 3 OUT
+>         bmAttributes            9
+>           Transfer Type            Isochronous
+>           Synch Type               Adaptive
+>           Usage Type               Data
+>         wMaxPacketSize     0x0184  1x 388 bytes
+>         bInterval               1
+>         bRefresh                0
+>         bSynchAddress           0
+>         AudioStreaming Endpoint Descriptor:
+>           bLength                 7
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (EP_GENERAL)
+>           bmAttributes         0x01
+>             Sampling Frequency
+>           bLockDelayUnits         2 Decoded PCM samples
+>           wLockDelay         0x0002
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        3
+>       bAlternateSetting       2
+>       bNumEndpoints           1
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       AudioStreaming Interface Descriptor:
+>         bLength                 7
+>         bDescriptorType        36
+>         bDescriptorSubtype      1 (AS_GENERAL)
+>         bTerminalLink           9
+>         bDelay                  0 frames
+>         wFormatTag         0x0001 PCM
+>       AudioStreaming Interface Descriptor:
+>         bLength                20
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (FORMAT_TYPE)
+>         bFormatType             1 (FORMAT_TYPE_I)
+>         bNrChannels             2
+>         bSubframeSize           3
+>         bBitResolution         24
+>         bSamFreqType            4 Discrete
+>         tSamFreq[ 0]        32000
+>         tSamFreq[ 1]        44100
+>         tSamFreq[ 2]        48000
+>         tSamFreq[ 3]        96000
+>       Endpoint Descriptor:
+>         bLength                 9
+>         bDescriptorType         5
+>         bEndpointAddress     0x03  EP 3 OUT
+>         bmAttributes            9
+>           Transfer Type            Isochronous
+>           Synch Type               Adaptive
+>           Usage Type               Data
+>         wMaxPacketSize     0x0246  1x 582 bytes
+>         bInterval               1
+>         bRefresh                0
+>         bSynchAddress           0
+>         AudioStreaming Endpoint Descriptor:
+>           bLength                 7
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (EP_GENERAL)
+>           bmAttributes         0x01
+>             Sampling Frequency
+>           bLockDelayUnits         2 Decoded PCM samples
+>           wLockDelay         0x0002
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        3
+>       bAlternateSetting       3
+>       bNumEndpoints           1
+>       bInterfaceClass         1 Audio
+>       bInterfaceSubClass      2 Streaming
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       AudioStreaming Interface Descriptor:
+>         bLength                 7
+>         bDescriptorType        36
+>         bDescriptorSubtype      1 (AS_GENERAL)
+>         bTerminalLink           9
+>         bDelay                  0 frames
+>         wFormatTag         0x2001 IEC1937_AC-3
+>       AudioStreaming Interface Descriptor:
+>         bLength                11
+>         bDescriptorType        36
+>         bDescriptorSubtype      2 (FORMAT_TYPE)
+>         bFormatType             3 (FORMAT_TYPE_III)
+>         bNrChannels             2
+>         bSubframeSize           2
+>         bBitResolution         16
+>         bSamFreqType            1 Discrete
+>         tSamFreq[ 0]        48000
+>       Endpoint Descriptor:
+>         bLength                 9
+>         bDescriptorType         5
+>         bEndpointAddress     0x03  EP 3 OUT
+>         bmAttributes            9
+>           Transfer Type            Isochronous
+>           Synch Type               Adaptive
+>           Usage Type               Data
+>         wMaxPacketSize     0x00c0  1x 192 bytes
+>         bInterval               1
+>         bRefresh                0
+>         bSynchAddress           0
+>         AudioStreaming Endpoint Descriptor:
+>           bLength                 7
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (EP_GENERAL)
+>           bmAttributes         0x01
+>             Sampling Frequency
+>           bLockDelayUnits         2 Decoded PCM samples
+>           wLockDelay         0x0002
+> can't get debug descriptor: Resource temporarily unavailable
+> Device Status:     0x0000
+>   (Bus Powered)
+> 

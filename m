@@ -2,185 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F685A1E40
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 03:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E655A1E55
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 03:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiHZBhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 21:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S244586AbiHZBrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 21:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244189AbiHZBhW (ORCPT
+        with ESMTP id S233064AbiHZBrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 21:37:22 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14061C2E98;
-        Thu, 25 Aug 2022 18:37:21 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MDMmq1Svjz1N7K7;
-        Fri, 26 Aug 2022 09:33:47 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 09:37:19 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
- 2022 09:37:18 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>
-Subject: [PATCH -next 3/3] remoteproc: qcom: wcss: Use dev_err_probe() helper in q6v5_wcss_init_clock()
-Date:   Fri, 26 Aug 2022 09:45:11 +0800
-Message-ID: <20220826014511.2270433-3-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220826014511.2270433-1-yangyingliang@huawei.com>
-References: <20220826014511.2270433-1-yangyingliang@huawei.com>
+        Thu, 25 Aug 2022 21:47:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8454F00;
+        Thu, 25 Aug 2022 18:47:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MDN433Jwjz4wgv;
+        Fri, 26 Aug 2022 11:46:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661478420;
+        bh=Errj4XKH89q1P52Y82X83Hu2p5IV9qbTXCibUzCgWbg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I6Y+RyWIeumtWhPItavQxWxcpFwen9E6Nf/lYkiKx3X/+zF8cYln1nCmYyE5ohjWw
+         9jYeNZduQP0Xz/6H4SzjGw9ITErqJ4NQamjIAJD47tgwhZk6j2+f9C1GrHG+EqgEnm
+         zeDCPIPgXCAGkGoEGb3EXZXL5qY7J6dhnVQLgMye4ndJRrMD4ggJ51KZaaWcYnSSaQ
+         BC7UZXY44zHydzsN1dqOO1rNHdsDG9xmCeDIae2lD3UJG6hg0UthckDMGEzYxPVpBf
+         YZdWkKkMWxeqc0933ClrodYFF0XUK/B/FLnX5K/KJnVV3A6yx/t8ap24l9Bruwq7kV
+         0llkeUjLYMEtw==
+Date:   Fri, 26 Aug 2022 11:46:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Daniel =?UTF-8?B?TcO8bGxlcg==?= <deso@posteo.net>,
+        Hao Luo <haoluo@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20220826114655.4535c1d0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/MFR7LOoNg_VNOx55Oz52vhg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dev_err() can be replace with dev_err_probe() which will check if error
-code is -EPROBE_DEFER.
+--Sig_/MFR7LOoNg_VNOx55Oz52vhg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/remoteproc/qcom_q6v5_wcss.c | 90 ++++++++++-------------------
- 1 file changed, 30 insertions(+), 60 deletions(-)
+Hi all,
 
-diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index 209fc1bd1424..ec9ad2c019aa 100644
---- a/drivers/remoteproc/qcom_q6v5_wcss.c
-+++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -902,87 +902,57 @@ static int q6v5_wcss_init_clock(struct q6v5_wcss *wcss)
- 	int ret;
- 
- 	wcss->xo = devm_clk_get(wcss->dev, "xo");
--	if (IS_ERR(wcss->xo)) {
--		ret = PTR_ERR(wcss->xo);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get xo clock");
--		return ret;
--	}
-+	if (IS_ERR(wcss->xo))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->xo),
-+				     "failed to get xo clock");
- 
- 	wcss->gcc_abhs_cbcr = devm_clk_get(wcss->dev, "gcc_abhs_cbcr");
--	if (IS_ERR(wcss->gcc_abhs_cbcr)) {
--		ret = PTR_ERR(wcss->gcc_abhs_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get gcc abhs clock");
--		return ret;
--	}
-+	if (IS_ERR(wcss->gcc_abhs_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->gcc_abhs_cbcr),
-+				     "failed to get gcc abhs clock");
- 
- 	wcss->gcc_axim_cbcr = devm_clk_get(wcss->dev, "gcc_axim_cbcr");
--	if (IS_ERR(wcss->gcc_axim_cbcr)) {
--		ret = PTR_ERR(wcss->gcc_axim_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get gcc axim clock\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->gcc_axim_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->gcc_axim_cbcr),
-+				     "failed to get gcc axim clock\n");
- 
- 	wcss->ahbfabric_cbcr_clk = devm_clk_get(wcss->dev,
- 						"lcc_ahbfabric_cbc");
--	if (IS_ERR(wcss->ahbfabric_cbcr_clk)) {
--		ret = PTR_ERR(wcss->ahbfabric_cbcr_clk);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get ahbfabric clock\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->ahbfabric_cbcr_clk))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbfabric_cbcr_clk),
-+				     "failed to get ahbfabric clock\n");
- 
- 	wcss->lcc_csr_cbcr = devm_clk_get(wcss->dev, "tcsr_lcc_cbc");
--	if (IS_ERR(wcss->lcc_csr_cbcr)) {
--		ret = PTR_ERR(wcss->lcc_csr_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get csr cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->lcc_csr_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_csr_cbcr),
-+				     "failed to get csr cbcr clk\n");
- 
- 	wcss->ahbs_cbcr = devm_clk_get(wcss->dev,
- 				       "lcc_abhs_cbc");
--	if (IS_ERR(wcss->ahbs_cbcr)) {
--		ret = PTR_ERR(wcss->ahbs_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get ahbs_cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->ahbs_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbs_cbcr),
-+				     "failed to get ahbs_cbcr clk\n");
- 
- 	wcss->tcm_slave_cbcr = devm_clk_get(wcss->dev,
- 					    "lcc_tcm_slave_cbc");
--	if (IS_ERR(wcss->tcm_slave_cbcr)) {
--		ret = PTR_ERR(wcss->tcm_slave_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get tcm cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->tcm_slave_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->tcm_slave_cbcr),
-+				     "failed to get tcm cbcr clk\n");
- 
- 	wcss->qdsp6ss_abhm_cbcr = devm_clk_get(wcss->dev, "lcc_abhm_cbc");
--	if (IS_ERR(wcss->qdsp6ss_abhm_cbcr)) {
--		ret = PTR_ERR(wcss->qdsp6ss_abhm_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get abhm cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->qdsp6ss_abhm_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_abhm_cbcr),
-+				     "failed to get abhm cbcr clk\n");
- 
- 	wcss->qdsp6ss_axim_cbcr = devm_clk_get(wcss->dev, "lcc_axim_cbc");
--	if (IS_ERR(wcss->qdsp6ss_axim_cbcr)) {
--		ret = PTR_ERR(wcss->qdsp6ss_axim_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get axim cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->qdsp6ss_axim_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_axim_cbcr),
-+				     "failed to get axim cbcr clk\n");
- 
- 	wcss->lcc_bcr_sleep = devm_clk_get(wcss->dev, "lcc_bcr_sleep");
--	if (IS_ERR(wcss->lcc_bcr_sleep)) {
--		ret = PTR_ERR(wcss->lcc_bcr_sleep);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get bcr cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->lcc_bcr_sleep))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_bcr_sleep),
-+				     "failed to get bcr cbcr clk\n");
- 
- 	return 0;
- }
--- 
-2.25.1
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
+  tools/testing/selftests/bpf/DENYLIST.s390x
+
+between commit:
+
+  27e23836ce22 ("selftests/bpf: Add lru_bug to s390x deny list")
+
+from the bpf tree and commit:
+
+  88886309d2e8 ("selftests/bpf: add a selftest for cgroup hierarchical stat=
+s collection")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/bpf/DENYLIST.s390x
+index 5cadfbdadf36,736b65f61022..000000000000
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@@ -65,4 -65,6 +65,7 @@@ send_signa
+  select_reuseport                         # intermittently fails on new s3=
+90x setup
+  xdp_synproxy                             # JIT does not support calling k=
+ernel function                                (kfunc)
+  unpriv_bpf_disabled                      # fentry
+ +lru_bug                                  # prog 'printk': failed to auto-=
+attach: -524
++ setget_sockopt                           # attach unexpected error: -524 =
+                                              (trampoline)
++ cb_refs                                  # expected error message unexpec=
+ted error: -524                               (trampoline)
++ cgroup_hierarchical_stats                # JIT does not support calling k=
+ernel function                                (kfunc)
+
+--Sig_/MFR7LOoNg_VNOx55Oz52vhg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMIJg8ACgkQAVBC80lX
+0Gw2nQf/Wek0iOFLZ7lv8cXDmZxXlT4Q1afkO81LXDo0g7/ya7FbCjyewnCcksaH
+Sgj35dwLh8HPCWQUebBi5gbjYH/OKomVBfoHWIlTs2JvgD8z7KZk16iRGUNsgZLB
+DVMWSSXxybmmJCPm7JhyOXZSSDM9cDKsj3YZvyi6j1aaCyUYskSczGnG3ZEdOFRY
+l2PVESmnLyBwhAeDdSKIb2P1jBzyITzHQi+aO5ro4AFibxWCHLResK/99ba9pGzn
+aJiYWpfQiZbBocv7fgFiqgnqWXyAjyOm8RUZSHg/kLuuivPb6IlzIVFCN4xcR/Oi
+7CZeO1GprSvdp5EOc1sXM7djsO9nng==
+=51f4
+-----END PGP SIGNATURE-----
+
+--Sig_/MFR7LOoNg_VNOx55Oz52vhg--

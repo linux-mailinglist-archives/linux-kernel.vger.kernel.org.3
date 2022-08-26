@@ -2,126 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00F75A21DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9375A21E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245322AbiHZHaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S245355AbiHZHaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245306AbiHZH36 (ORCPT
+        with ESMTP id S245324AbiHZH36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 Aug 2022 03:29:58 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0D3C5E;
-        Fri, 26 Aug 2022 00:29:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uh9IrLfXhnxiaWn/tVviS8B+o3eKB2S4F/Uf+bsbqhH0byUNLpLhCG9PBB8m9zyIfboWnFNWtJKF85H9w6/KV9iDIsWqSEm0tPn14pXD6r5fFWCZSEvEPq+NoAQlDLZ2vs2eGrDpluwwEZWBfaBr/Bdd4tP/LSTOlcM1o9MVFALQib0CIriIxnaqlFAjvEwMzy9nZ+jcDDWQZT90B0BQdUjZPj1Wsjvwf5QLg2/5w668C2CccfNnWVtvySMbcmRxuRpO6qAgzSx2SR2NbIUV9Clpz/KW9a2wwwbZBNPCfrGaqBxq2udbS7+gqlitVf013ITObafPAlpf0IkweumhRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4WJOqnblUkybLK5WXkY7NnlWum6MtR69AQ0pPycS1AE=;
- b=WlJjPsJufweWZDpRrvW0CawdyJxrjxo0b1HE+M8I9Rq/2DnVVuAS6+8L3H2xI9G6tSjVe703kQbMV84csTdgvTXCZERqAyQk/j/BJHWXVWXgSrSsmhjjaiBKEZIaJ0CNROEppHrkz8Zox0zhzC7fxtZy81vBmcqXHvZMrwijvN3AezxtdeZCB6OUCPXC765xDjlsMrF3McJt5pHstyhoHqN7DqyfO6uddmQVUVhcnt8kivDXuxeNO/1Xs7TrEr/wLZLOj75F/p9mrxPZkCn6nzhzpTlV6ZfyTk7lNiGua8Ak1pIvV37qvPyBT2AGI/VNirZqcW/MfVnnvd9q6PNnZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4WJOqnblUkybLK5WXkY7NnlWum6MtR69AQ0pPycS1AE=;
- b=h0IB7xj7At3Nlc3EvOfjMaGlBu/ATIwQUSg+OwWxce9ch9vOSkNWNDUISDRmjoVsIHkIXgd0MkpgaAxUJdAQauTaLuh+uX1zrJZvVNg9BipB8bJdvjPf7rd+/iN+W3qHRVr/slHePTEpkS2AHSOedIxOgeXB0plCAtqB6O8y9yY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DS7PR12MB6333.namprd12.prod.outlook.com (2603:10b6:8:96::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Fri, 26 Aug
- 2022 07:29:43 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5566.015; Fri, 26 Aug 2022
- 07:29:43 +0000
-Message-ID: <76882e3a-6061-e5f3-fe69-7928de91ba17@amd.com>
-Date:   Fri, 26 Aug 2022 09:29:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/ast: add dmabuf/prime buffer sharing support
-Content-Language: en-US
-To:     oushixiong <oushixiong@kylinos.cn>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20220826013103.1519411-1-oushixiong@kylinos.cn>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220826013103.1519411-1-oushixiong@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR04CA0143.eurprd04.prod.outlook.com
- (2603:10a6:20b:48a::24) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E132AEC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:29:56 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id q21so264648uam.13
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=lYXeV2KsC7CY3nSjTdXhe5Bjn6oIcfQQUrOOM1fONlk=;
+        b=rlgHX2lnnjggtpyjBpTLIcqiEiu8uYJGVX8NQoL/5QVm2wJ7r9Yv5nZ870xJoU/hLW
+         YbPdAYlT50xFkeyBj6tRBa2NJb1JfjIxe+QSjUjXhcqmCfSh7STDbrBn4gYGU6eOIbWj
+         92Zq7d29x9pe+nvFQfyyJy7R/0zR1j5qaBSMxUlUrOOhU5Iflkn2eoPJXauxmyKSvMf6
+         A5du5+EPPM8gsbeI26lqi8vVp+pokra45lW4qr65Y4OV0UZovPQ8Y/UAWSs+gq0b4jDO
+         IjNMyJd6QzpHlGEk1IYRSwk2m+Q6q4X/e5GN1st1CgjwSY73lckhYj/0TKZVmGAXr23X
+         Vk7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lYXeV2KsC7CY3nSjTdXhe5Bjn6oIcfQQUrOOM1fONlk=;
+        b=eNp/JlxX232/kxI2GSV6JGvxS1e3hEqBHPULVp4JOVWJaTFD3T+ZHdQKG94WKzNaMt
+         PrVD2n6feOguypdW/3DmI14cW1G8S0phRHUXeSSIUnIVMv0/u7QhUxzPfbX1HrM+P9eP
+         EbfKAfreYrRvlfayu2dDv+NPm7E1OujQYd4MTmLkJkU9xUMP0yp5zlIgWBY78iQtyKoV
+         4NAqF9OMH34SAE/fgVeAQgY4sksrGtXLaWKSykRXIIx1I0T3LTAJtyURPLLiiEPRgTOh
+         HRzIBQKLz/sLM8yO0CTBgMPaSfkqDBFQPOpCyMqbAlcrwTDeYXngTig//WBAV0M29ulx
+         R6pA==
+X-Gm-Message-State: ACgBeo3VPh26myQMnBSYg71cBRGlPgCeIAtfFfEkq1LHhI5idzVwc5Ek
+        CrCDKYv2nzNRQSZzN5eAF77xBfidWZ37qEXSIS9CUg==
+X-Google-Smtp-Source: AA6agR54ZG8qKVeafytfKt1PWeZASXjS48mLkoaHVp+GzzEaQXfM0iQf+IVf9YXNgQYYGxIMCRai/vdomjwPlx9/3Sc=
+X-Received: by 2002:ab0:14ad:0:b0:39f:255c:2ea9 with SMTP id
+ d42-20020ab014ad000000b0039f255c2ea9mr2804290uae.52.1661498995743; Fri, 26
+ Aug 2022 00:29:55 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 65a3a6b1-086e-4f28-0c88-08da8734bed1
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6333:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wSS22a/3dpWuDx//UDI6/Am1LWqhIkorMd+zhPArd1kDshJebwHcmraP5jcPEJIAclzFsUc9cx97aNrZWXf5omvmNtbc+b/tzItB/V9r+N6Yjip+w847A0NZRLKeev3jAvXJUS03fL710adK1q90eEZIIeOvTWKUVtwCN5F9bdChiQG3pMV8B1iW0SuDfX7FPTjvshxEgzHYcDx0Skr1yaJF1kHiAzXQ+nX829NhGDBUgs/73703bO2x3dl7Id8sVyQBSGoFZ3kZRTSkkTk1ulSAToFXpJaKW+NbcNZl+6NPhQOoz0EbOcS9AlkUVoPZjPVn/n+8AIjF44dQzoY9lYZIhM07AR0gqyeMODPfyId+cOlCY4K2WKS/iq4Xv30SGo6BV8qynbM0kb3ffZnQ3/PvWu2lFoqUdczkjHXqfBWSTjlnJ0+TZP5frz/J17ormv26JDTcAgjCt/91IT9ODI2dmYIzCAkhVYAICa4+Xu9u82swIY/kUohu5PJmEQZ0qBc+LkTxb1/7C8MDKHXJ2NrW/rFTk7vn7r+KD15LUcvVp4jhV9O5n40T0T4iIqiC5B8zFbE/iMKT79nvYApFsj3ZfKHOvonf8SSis3Q7FCmlJYbwjTn2WyLHX6Lyq7wahuPHyRZHemqNNsRYZBjeACMIFkVRxHG2UpXTIgGJsO+ysUiOV1OU8HMv+0ZPf9vbMweBHaCsG0HI1Gb8vVueSXbMgotXZwt5HTVwG1aVXNeAPSkd7ORNxalugOk7YJ30QkaAjoA+i++iZ3kJ9UvOvcHb6FzpIrYoBAIWEY+swUw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(110136005)(31686004)(36756003)(54906003)(83380400001)(7416002)(5660300002)(8936002)(4326008)(66476007)(66556008)(66946007)(2906002)(8676002)(316002)(31696002)(6666004)(41300700001)(6512007)(2616005)(186003)(6486002)(86362001)(26005)(6506007)(478600001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGthMXExUUdBbWdrcjJPVll4MGlIUDAxd2QrbHVseERzS0VKeGR3dkNoNmdP?=
- =?utf-8?B?T3BqK1kxLzNPenVXRnV6bWRmbFJpcFhXUGE0VHp3N0Z3alBEVGgwR1BDL21w?=
- =?utf-8?B?cFJJZnpMMndHWXByQ3FkQ1JXaEdRY0FwTmtBOERjenVyRTF1VlJ6ckZ4UC9h?=
- =?utf-8?B?TmJGK21FUmNrVW90bndyYU1jQ2Vtc2tyYlpObEtCSlIrWFlKVVBHaG5QS0Jv?=
- =?utf-8?B?ZHNBNmVsU1BKOWtVdStZbzZLSkhIaVJrK2JNM0t5M0RVYThlRjJkSDdjUFNx?=
- =?utf-8?B?UWFOUkdwbWNVZ2c1dTVMMTRlZVRpbEVwY2xlZVBZNVp6ZjBCL2hOUURIV0VQ?=
- =?utf-8?B?TEs3cnNIWFdaSkhGbFB4anVnME1QNVJnREZZUkZ3S1lxMFRNejNnejdZdWdD?=
- =?utf-8?B?Qm91LzV5VXZaMmtLZURqbnZtYnN2YS9kUDF0cTVwL2U3Q1VzUjRDTnh0bGdX?=
- =?utf-8?B?MFFUZk1hUmhjMS93L3RGRE5RbnNERHgxSEw1SWo3QnJxdTk4aDNuZUtQbGds?=
- =?utf-8?B?bHRxSWRoS2R4TGRHNERtZk5IblpwT2c3QlhzdGVOaUxqNG96S3dObnR0ZWF6?=
- =?utf-8?B?ekhPZjhSM3VqS29xUnpZZlpQd0dlY0YyQVU1SXovN21SZzRsSFJhalB4R2FN?=
- =?utf-8?B?UWlkZ0Q4Q0RpendFZnhCb1dRRXlaU2prWVY0MVNBeGxyeTRPNzFYa3dUQnFW?=
- =?utf-8?B?YjN1bkRGRjFwdDdZcThiaEplay9EUGRib3Mwc3ZNVTZxakxyRUZhRk8vOGJ3?=
- =?utf-8?B?ZTErb2hSRWdIQlBPcVJzd2VWdkRFM0JMNlY2YXRiSW5WWHQyZFJtV3Y2SGIx?=
- =?utf-8?B?Ny85WmtrRUFOcjFlZDl1ZTRQMVBHUHp2UVI4b0Y5UnZtQzlTR0Q5bUZFY0tS?=
- =?utf-8?B?TWNFU2NDcGwyOHVQOXMxR3NDMi9IWEcwbUpEM0hQMFFBMzFyeWVhRkYraXBC?=
- =?utf-8?B?MUFtMXdSUkl1a21ZYUlXN3Y4dTl3ZG40NWVwMklrbnBnMGsrdmYxcFRpUVFI?=
- =?utf-8?B?c3dvSVZudzlyYUF0ZHFaRzZRRWdsTFVwZ0c0aWkwS09KTkV4YWEzcHlvY3Y2?=
- =?utf-8?B?T25RdlRLWG1KQi9LdklxMDdJMXRZbmNWZEVUa1dGMkl3cjFsTFZRc2loa0hD?=
- =?utf-8?B?Z3JHcUxoWGN6cGljUlRVYzhITVpLdzd5TGNTSFhEQlRaRUxpdmxXMHBNSWtm?=
- =?utf-8?B?QS9DVnNlS2NVWFZ0NU5Cd3dMVkZuTFluRnVNM2FtSnRyMlY5Z3ZNelNjakIv?=
- =?utf-8?B?a0NPMzNudkEyOVhGS05uVytUNW1FZlhsRmhTYzdKYWZLdGZIbGVYc09CbWxi?=
- =?utf-8?B?b1pMTGgwZG81c3JGZFc1a0J5eVFFNmVTeFVzcGJrOHhxbTFvYlhVVmtmck0x?=
- =?utf-8?B?WUl1VmpqUmNBak1IZmgzYVNhRjJtR3N4NDVETUtDT2o3Vk1ZSGl6b3lSWHF2?=
- =?utf-8?B?bzBrcGtlU1pOUFkxemNTcmY2SFBiamtweENRWlY5aXBjT1dWcGQ0bEMwREt0?=
- =?utf-8?B?bUxvalFtRmVvZzU5RnhyNXllcFpKMEE5ZlJnQS8zMjR6T3daUnJzcW0yb1NH?=
- =?utf-8?B?cVFIVDB3eXEyTktFTjZjdy8vajc4NGpjOXQvM2VkaDNKZVhYZVB4S2k4Y1Va?=
- =?utf-8?B?YjBYTWtYb3RneWdGRVBiMGtETllqZ09pNjdMQWs0TkVYRnhRY0tjVXArcDl5?=
- =?utf-8?B?SlFDV05GK2RYaDJBWnNZbCttSjRHVUw3dkJlaHhWK3VrblEwOEFVUDlJazVN?=
- =?utf-8?B?YTE4NVVRYVp1dGpPY1ZwU1Mzd3JIMVBMbXA0aE5CZ1B0NjVTTWYzcVAxL3Zm?=
- =?utf-8?B?Qi9PamsxcUtlNGF1UTNPSUdHRCtOVndKQlIzK2dhcEtYZUowYkpGUG05K2w5?=
- =?utf-8?B?bHp4T0ZiQlJ5QXFxZ25ndmgxQ0RJMFEzdk11VUREQWhXQUszOURWMXNUS3Z1?=
- =?utf-8?B?U3VkV1lVRkF3RnNjSTFRS0EyY3ZoVkRhZDgxaUZZUkZmek1WaWxWdEZCb2hS?=
- =?utf-8?B?V2tMRTRoRnNRTUpuOCt4enZaM3FCZHlZRmxVd0thOTllUmFKUkdIVDFHdWVY?=
- =?utf-8?B?cHlNM2ZlVW1pTHBDa1ZCamdsU1dvN0pIcERtcXU5S0hDS0lGdUlZa1hXMzNs?=
- =?utf-8?Q?Uqh7bFLsQ4y8Q7dvg+AWsONDQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65a3a6b1-086e-4f28-0c88-08da8734bed1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 07:29:43.6860
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SkfMWjPJUcjKoRt0Xds8LMJ4jxKHjYsnz8E3puMph1M2JHSRxEcpVctqIUfgXTm3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6333
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220822022646.98581-1-tales.aparecida@gmail.com> <20220822022646.98581-3-tales.aparecida@gmail.com>
+In-Reply-To: <20220822022646.98581-3-tales.aparecida@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 26 Aug 2022 15:29:44 +0800
+Message-ID: <CABVgOSnmRaSHm5D0DvRW9T2wpaGvzMwUuxPi=tHnLrOATMfEtQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/8] Documentation: KUnit: avoid repeating "kunit.py
+ run" in start.rst
+To:     Tales Aparecida <tales.aparecida@gmail.com>
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
+        mwen@igalia.com, andrealmeid@riseup.net,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000073fd7805e71fe1e6"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,277 +79,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26.08.22 um 03:31 schrieb oushixiong:
-> This patch adds ast specific codes for DRM prime feature, this is to
-> allow for offloading of rending in one direction and outputs in other.
+--00000000000073fd7805e71fe1e6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Aug 22, 2022 at 10:30 AM Tales Aparecida
+<tales.aparecida@gmail.com> wrote:
 >
-> This patch is designed to solve the problem that the AST is not displayed
-> when the server plug in a discrete graphics graphics card at the same time.
-> We call the dirty callback function to copy the rendering results of the
-> discrete graphics card to the ast side by dma-buf.
+> Combine two sections mentioning "kunit.py run" to streamline the
+> getting-started guide. Update "kunit.py run" expected output in
+> the guide and run_wrapper.
 >
-> v1->v2:
->    - Fix the comment.
-> v2->v3:
->    - we remove the attach function, add the drm_gem_pin() before dma_buf_vmap(),
->      and add the drm_gem_unpin() after the dma_buf_vunmap().
+> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 >
-> Signed-off-by: oushixiong <oushixiong@kylinos.cn>
 > ---
->   drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
->   drivers/gpu/drm/ast/ast_mode.c | 134 ++++++++++++++++++++++++++++++++-
->   drivers/gpu/drm/drm_gem.c      |   2 +
->   include/drm/drm_gem.h          |   3 +
->   4 files changed, 165 insertions(+), 1 deletion(-)
+> Notes:
+>     Update the expected output and the note that follows it (Ma=C3=ADra C=
+anal and
+>     Sadiya Kazi). The output was updated on the commit: 45ba7a893ad8
+>     ("kunit: kunit_tool: Separate out config/build/exec/parse")
+>     Add word "step" to note and fix the case of "kernel".
+> ---
+
+Seems okay to me.
+
+FYI: The old "Generating .config" message is still technically correct
+for the first time kunit_tool is run. I don't think it matters one way
+or the other, though...
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+
+>  Documentation/dev-tools/kunit/run_wrapper.rst |  2 +-
+>  Documentation/dev-tools/kunit/start.rst       | 38 ++++++++-----------
+>  2 files changed, 16 insertions(+), 24 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-> index 7465c4f0156a..107383a56ca7 100644
-> --- a/drivers/gpu/drm/ast/ast_drv.c
-> +++ b/drivers/gpu/drm/ast/ast_drv.c
-> @@ -28,6 +28,7 @@
->   
->   #include <linux/module.h>
->   #include <linux/pci.h>
-> +#include <linux/dma-buf.h>
->   
->   #include <drm/drm_aperture.h>
->   #include <drm/drm_atomic_helper.h>
-> @@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 0400);
->   
->   DEFINE_DRM_GEM_FOPS(ast_fops);
->   
-> +struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-> +						struct dma_buf *dma_buf)
-> +{
-> +	struct drm_gem_vram_object *gbo;
+> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentatio=
+n/dev-tools/kunit/run_wrapper.rst
+> index 518cf87ea732..6b33caf6c8ab 100644
+> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+> @@ -22,7 +22,7 @@ We should see the following:
+>
+>  .. code-block::
+>
+> -       Generating .config...
+> +       Configuring KUnit Kernel ...
+>         Building KUnit kernel...
+>         Starting KUnit kernel...
+>
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-=
+tools/kunit/start.rst
+> index e730df1f468e..2e31350a85e1 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -19,7 +19,21 @@ can run kunit_tool:
+>
+>         ./tools/testing/kunit/kunit.py run
+>
+> -For more information on this wrapper, see:
+> +If everything worked correctly, you should see the following:
 > +
-> +	gbo = drm_gem_vram_of_gem(dma_buf->priv);
-> +	if (gbo->bo.base.dev == dev) {
-> +		/*
-> +		* Importing dmabuf exported from out own gem increases
-> +		* refcount on gem itself instead of f_count of dmabuf.
-> +		*/
-> +		drm_gem_object_get(&gbo->bo.base);
-> +		return &gbo->bo.base;
-> +	}
+> +.. code-block::
 > +
-> +	gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
-> +	if (IS_ERR(gbo))
-> +		return NULL;
+> +       Configuring KUnit Kernel ...
+> +       Building KUnit Kernel ...
+> +       Starting KUnit Kernel ...
 > +
-> +	get_dma_buf(dma_buf);
-> +	return &gbo->bo.base;
-> +}
+> +The tests will pass or fail.
 > +
->   static const struct drm_driver ast_driver = {
->   	.driver_features = DRIVER_ATOMIC |
->   			   DRIVER_GEM |
-> @@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
->   	.minor = DRIVER_MINOR,
->   	.patchlevel = DRIVER_PATCHLEVEL,
->   
-> +	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-> +	.gem_prime_import = ast_gem_prime_import,
+> +.. note ::
+> +   Because it is building a lot of sources for the first time,
+> +   the ``Building KUnit Kernel`` step may take a while.
 > +
->   	DRM_GEM_VRAM_DRIVER
->   };
->   
-> diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-> index 45b56b39ad47..c81a6148b6df 100644
-> --- a/drivers/gpu/drm/ast/ast_mode.c
-> +++ b/drivers/gpu/drm/ast/ast_mode.c
-> @@ -48,6 +48,8 @@
->   #include "ast_drv.h"
->   #include "ast_tables.h"
->   
-> +MODULE_IMPORT_NS(DMA_BUF);
-> +
->   static inline void ast_load_palette_index(struct ast_private *ast,
->   				     u8 index, u8 red, u8 green,
->   				     u8 blue)
-> @@ -1535,8 +1537,138 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
->   	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
->   };
->   
-> +static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-> +					int width, int height)
-> +{
-> +	struct drm_gem_vram_object *dst_bo = NULL;
-> +	void *dst = NULL;
-> +	int ret = 0, i;
-> +	unsigned long offset = 0;
-> +	bool unmap = false;
-> +	unsigned int bytesPerPixel;
-> +	struct iosys_map map;
-> +	struct iosys_map dmabuf_map;
-> +
-> +	bytesPerPixel = fb->format->cpp[0];
-> +
-> +	if (!fb->obj[0]->dma_buf)
-> +		return -EINVAL;
-> +
-> +	if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
-> +		ret = drm_gem_pin(fb->obj[0]->dma_buf->priv);
-> +		if (ret)
-> +			return ret;
+> +For detailed information on this wrapper, see:
+>  Documentation/dev-tools/kunit/run_wrapper.rst.
+>
+>  Creating a ``.kunitconfig``
+> @@ -74,28 +88,6 @@ you if you have not included dependencies for the opti=
+ons used.
+>     tools like ``make menuconfig O=3D.kunit``. As long as its a superset =
+of
+>     ``.kunitconfig``, kunit.py won't overwrite your changes.
+>
+> -Running Tests (KUnit Wrapper)
+> ------------------------------
+> -1. To make sure that everything is set up correctly, invoke the Python
+> -   wrapper from your kernel repository:
+> -
+> -.. code-block:: bash
+> -
+> -       ./tools/testing/kunit/kunit.py run
+> -
+> -If everything worked correctly, you should see the following:
+> -
+> -.. code-block::
+> -
+> -       Generating .config ...
+> -       Building KUnit Kernel ...
+> -       Starting KUnit Kernel ...
+> -
+> -The tests will pass or fail.
+> -
+> -.. note ::
+> -   Because it is building a lot of sources for the first time, the
+> -   ``Building KUnit kernel`` may take a while.
+>
+>  Running Tests without the KUnit Wrapper
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --
+> 2.37.2
+>
 
-This is an full blown NAK to this!
+--00000000000073fd7805e71fe1e6
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-By accessing dma_buf->priv you are assuming that this points to a GEM 
-buffer.
-
-Additional to that pinning the buffer shouldn't be necessary for a call 
-to dma_buf_vmap().
-
-Regards,
-Christian.
-
-> +		ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
-> +		if (ret)
-> +			goto err_vmap_dmabuf;
-> +	} else
-> +		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-> +
-> +	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-> +
-> +	ret = drm_gem_vram_pin(dst_bo, 0);
-> +	if (ret) {
-> +		DRM_ERROR("ast_bo_pin failed\n");
-> +		goto err_ast_pin;
-> +	}
-> +
-> +	if (!dst_bo->map.vaddr) {
-> +		ret = drm_gem_vram_vmap(dst_bo, &map);
-> +		if (ret) {
-> +			DRM_ERROR("failed to vmap fbcon\n");
-> +			goto err_vmap_ast_bo;
-> +		}
-> +		unmap = true;
-> +	}
-> +	dst = dst_bo->map.vaddr;
-> +
-> +	for (i = y; i < y + height; i++) {
-> +		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-> +		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-> +			width * bytesPerPixel);
-> +	}
-> +
-> +	if (unmap)
-> +		drm_gem_vram_vunmap(dst_bo, &map);
-> +
-> +	drm_gem_vram_unpin(dst_bo);
-> +	return 0;
-> +
-> +err_vmap_ast_bo:
-> +	drm_gem_vram_unpin(dst_bo);
-> +err_ast_pin:
-> +err_vmap_dmabuf:
-> +	drm_gem_unpin(fb->obj[0]->dma_buf->priv);
-> +	return ret;
-> +}
-> +
-> +
-> +static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-> +				struct drm_file *file,
-> +				unsigned int flags,
-> +				unsigned int color,
-> +				struct drm_clip_rect *clips,
-> +				unsigned int num_clips)
-> +{
-> +	int i, ret = 0;
-> +
-> +	drm_modeset_lock_all(fb->dev);
-> +	if (fb->obj[0]->dma_buf) {
-> +		ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
-> +				DMA_FROM_DEVICE);
-> +		if (ret)
-> +			goto unlock;
-> +	}
-> +
-> +	for (i = 0; i < num_clips; i++) {
-> +		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-> +				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	if (fb->obj[0]->dma_buf) {
-> +		dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
-> +				DMA_FROM_DEVICE);
-> +	}
-> +
-> +unlock:
-> +	drm_modeset_unlock_all(fb->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
-> +{
-> +	struct iosys_map dmabuf_map;
-> +
-> +	if (fb->obj[0]->dma_buf) {
-> +		dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
-> +		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-> +		if (dmabuf_map.vaddr)
-> +			dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
-> +		drm_gem_unpin(fb->obj[0]->dma_buf->priv);
-> +	}
-> +
-> +	drm_gem_fb_destroy(fb);
-> +}
-> +
-> +static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-> +	.destroy	= ast_user_framebuffer_destroy,
-> +	.create_handle	= drm_gem_fb_create_handle,
-> +	.dirty		= ast_user_framebuffer_dirty,
-> +};
-> +
-> +static struct drm_framebuffer *
-> +ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-> +				const struct drm_mode_fb_cmd2 *mode_cmd)
-> +{
-> +	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-> +					&ast_gem_fb_funcs_dirtyfb);
-> +}
-> +
->   static const struct drm_mode_config_funcs ast_mode_config_funcs = {
-> -	.fb_create = drm_gem_fb_create,
-> +	.fb_create = ast_gem_fb_create_with_dirty,
->   	.mode_valid = drm_vram_helper_mode_valid,
->   	.atomic_check = drm_atomic_helper_check,
->   	.atomic_commit = drm_atomic_helper_commit,
-> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-> index 56fb87885146..3a4f5137abc5 100644
-> --- a/drivers/gpu/drm/drm_gem.c
-> +++ b/drivers/gpu/drm/drm_gem.c
-> @@ -1159,12 +1159,14 @@ int drm_gem_pin(struct drm_gem_object *obj)
->   	else
->   		return 0;
->   }
-> +EXPORT_SYMBOL(drm_gem_pin);
->   
->   void drm_gem_unpin(struct drm_gem_object *obj)
->   {
->   	if (obj->funcs->unpin)
->   		obj->funcs->unpin(obj);
->   }
-> +EXPORT_SYMBOL(drm_gem_unpin);
->   
->   int drm_gem_vmap(struct drm_gem_object *obj, struct iosys_map *map)
->   {
-> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-> index e2941cee14b6..30c4366968bf 100644
-> --- a/include/drm/drm_gem.h
-> +++ b/include/drm/drm_gem.h
-> @@ -352,6 +352,9 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj, unsigned long obj_size,
->   		     struct vm_area_struct *vma);
->   int drm_gem_mmap(struct file *filp, struct vm_area_struct *vma);
->   
-> +int drm_gem_pin(struct drm_gem_object *obj);
-> +void drm_gem_unpin(struct drm_gem_object *obj);
-> +
->   /**
->    * drm_gem_object_get - acquire a GEM buffer object reference
->    * @obj: GEM buffer object
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
+yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
+MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
+JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
+SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
+hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
+RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
+kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBa
+9BIjPuZCvhsJi5VH2KY7R8lNBgkP0XcPPQ5LVHIiQjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjYwNzI5NTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEARQ/KD+iIKnMLRvVAQBTp
+ZeKPDBbWWHiuU2ABSxcuBVTWLmYUUagTLRJu9dqQseTNkDhbiD2BC3FCY8G6rAUrh4zPz31a0qRQ
+DBv/dZkpOUMVJVpol9QGUL17EE1V6P1F2hCuBUkIR0vV+Ux3tFbULbdTsaVZwOPstsewN2m4itK2
+yAKwPDzcKWeSVyHCcfhzNaTCkxXj3GgyS3ZkQesF99csk+L1kjk8YoJ9oSV47hXR5VdwhdvbhVsz
+yuEQKvwQxnrdYs2qD/6l01yz2ggVNILDBC/SvBDgh7RJOSEaoTW+RUJ69qdqMJgqAZ1vGGQtnK1S
+p6mIlEvqDymgQTS6dw==
+--00000000000073fd7805e71fe1e6--

@@ -2,80 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028D75A2998
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3215E5A299C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344549AbiHZOcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S1344445AbiHZOcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344524AbiHZObz (ORCPT
+        with ESMTP id S1344574AbiHZOcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:31:55 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032CACD53A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:31:52 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo8245125pjd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc;
-        bh=yFrZaBTnH0a2pdY6VSIo3LxE0IBoHhY23bZhh1lul/4=;
-        b=oNJWe7IYa5D+TjB3Pqa5Q4mPC4Idgowxyesqop9TCo/d4MquJxIUcEoSmmzWGGrMdM
-         s6LC6DDEurAQZ2eUTvV2X7+ZxiVjWLvgwB7A+CvojkhKE5aDNMv32VRaA67oiA9ojszi
-         u3XsBXpBH9d2EKJfrh9V8TIqU68mWmwpUElSz1MzRqCa8hzcrY6s4thfQqsZuVr9sLmm
-         NTheNd+krmzedE7NIzy6zisFDNtBuaRo/x425kWUAHfFa/A8gcNxOh/mq01gufHtMH/3
-         9DwKas9ZHUisLt7X0ORyy7FUroAEH28u9RcbwbTJM5i2R9MMW85Sbxr/v6hT6zRA4+il
-         zDbQ==
+        Fri, 26 Aug 2022 10:32:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E403CE44E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661524335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rx2FKGUlOIaH18EmtIfbPwlvVef3uy1QGtBjrZhEA+U=;
+        b=Jb5tigxRMniCJ6IaPa4fbhEDsDtCQGZ+2Dbv9AyIeQoq8mFyU7FqQsjDfY/OqX7xYW68p8
+        6AhXyb80Sgr3i/Uvig0T4s92Oi49OiQ0mTrktlbavBTWKcuraA2TsANbjYwWuLBB2u9OeE
+        WE7szmRJxsGRHl82QCtdSocIDTqcK2A=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-397-7S53NThmPhWOT8f7BFDghw-1; Fri, 26 Aug 2022 10:32:14 -0400
+X-MC-Unique: 7S53NThmPhWOT8f7BFDghw-1
+Received: by mail-qv1-f69.google.com with SMTP id c1-20020a0cfb01000000b00495ad218c74so1077067qvp.20
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:32:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
-        bh=yFrZaBTnH0a2pdY6VSIo3LxE0IBoHhY23bZhh1lul/4=;
-        b=xfoJOWaeJH3VU6hpBsW7AQ42VE63UHEvPPDZEmEkx2A3uOnYwgKA1t8Gd1U6eXL6An
-         E8tmS7rdR+Id7Le4A651aWoQARMlyfkOWK53YW6HEb1L3QxR8MHxDMYsLyW/w25aQ3zf
-         kdob5lxVfY51iF9hdq+VYmTvOe89ejfUpFvGtNFnqT9EFsG7d8NkshaKPTvlBHxy4ftR
-         cRHJZ3ZnQVtJavkKhC/sAzLSfMp2vUaYqT3U1NnRUkzOQbcjF9ZI/WYDjk8RUqgG4PCJ
-         kJcMwmkab4Oy/ucynejYTLyjUc9BwplP0tyTy1OFwI1pabo7vRydkqIkBQypcvMKeowT
-         PMfw==
-X-Gm-Message-State: ACgBeo2SBH6Ng+fv37VRWVT4pcKqOodrxuZyTEGF+6FKUZkiE2HpEqQs
-        kc/1cFuuALv9bJS6xVb7IIu3eg==
-X-Google-Smtp-Source: AA6agR6WDhjZH1snE7ayBYircn9IOuKD4o9SkoI3aQDed45sxvpGE5W9/8qngYJIN9FyOb99e/d6NQ==
-X-Received: by 2002:a17:902:ab55:b0:173:4116:8d3d with SMTP id ij21-20020a170902ab5500b0017341168d3dmr3843210plb.157.1661524311800;
-        Fri, 26 Aug 2022 07:31:51 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id q1-20020a6557c1000000b0042b5b036da4sm1497841pgr.68.2022.08.26.07.31.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rx2FKGUlOIaH18EmtIfbPwlvVef3uy1QGtBjrZhEA+U=;
+        b=3cXjlibMlEHpxJZbmJjewitjqFqO7x8tsqdVCoUKSFrIFBphRM1KZfTTIGrvBOP/Sa
+         z1L5PtureSMqrzlBjEoXfy0UcN+bLrgfTrvFqOAlu1DBi12eOZJtnO0CiRMxvJ7wUXoY
+         N8oNcFayfDuvQ1HyRxh+95mKx0ptKDPo64c2/s06yQkI5j1dpMFABzDSiwHCGWXmtHa8
+         0yuAVlMxxViyyjB04ZpW00WwNrKBJSKZ1OygOJnzEAQQYOqjDu+W0ELzfIeLxNt0+yuy
+         J6XdtGgtEjAc2scCat6xqI121DPTkBXi5Vl6m95tw2ihLyGIqp0ZMyf4hLxj5FhdZFXf
+         gSYQ==
+X-Gm-Message-State: ACgBeo2RWDnmImUxGrTr9WoxJaluiMTY3UbkAaZWxq8VMjuwLmyOQmUb
+        EnOyen7yRAi5GXiqpr0uVvrCcF/milBriwR+ol8yU/z5AGzHZxHSTeW0XRcxYsnrAP7W3UlvuEo
+        wOIyPD5VZGBmQJwOKOnXb+2Q9
+X-Received: by 2002:a05:620a:1404:b0:6ba:c2c2:5eca with SMTP id d4-20020a05620a140400b006bac2c25ecamr6734924qkj.220.1661524333946;
+        Fri, 26 Aug 2022 07:32:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5H2DPJrrTdbtaxbHHrpQykfjh2vpuVbPL5I2n1u2lNVZP8JaHXyWomoNuISyWTWhIM87OAtA==
+X-Received: by 2002:a05:620a:1404:b0:6ba:c2c2:5eca with SMTP id d4-20020a05620a140400b006bac2c25ecamr6734907qkj.220.1661524333696;
+        Fri, 26 Aug 2022 07:32:13 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id bj11-20020a05620a190b00b006a6ab259261sm1836181qkb.29.2022.08.26.07.32.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 07:31:51 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 07:31:51 -0700 (PDT)
-X-Google-Original-Date: Fri, 26 Aug 2022 07:31:37 PDT (-0700)
-Subject:     Re: linux-next: Signed-off-by missing for commit in the risc-v-fixes tree
-In-Reply-To: <20220826175646.77554fff@canb.auug.org.au>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-5cd1212f-2476-438d-8eb1-32e6ab61f517@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 Aug 2022 07:32:12 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 10:32:10 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>
+Subject: Re: [PATCH v3 2/3] mm/migrate_device.c: Copy pte dirty bit to page
+Message-ID: <YwjZamk4n/dz+Y/M@xz-m1.local>
+References: <3b01af093515ce2960ac39bb16ff77473150d179.1661309831.git-series.apopple@nvidia.com>
+ <ffbc824af5daa2c44b91c66834a341894fba4ce6.1661309831.git-series.apopple@nvidia.com>
+ <YwZGHyYJiJ+CGLn2@xz-m1.local>
+ <8735dkeyyg.fsf@nvdebian.thelocal>
+ <YwgFRLn43+U/hxwt@xz-m1.local>
+ <8735dj7qwb.fsf@nvdebian.thelocal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8735dj7qwb.fsf@nvdebian.thelocal>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 00:56:46 PDT (-0700), Stephen Rothwell wrote:
-> Hi all,
->
-> Commit
->
->   5024d917e5f6 ("MAINTAINERS: add the Polarfire SoC's i2c driver")
->
-> is missing a Signed-off-by from its committer.
+On Fri, Aug 26, 2022 at 11:02:58AM +1000, Alistair Popple wrote:
+> 
+> Peter Xu <peterx@redhat.com> writes:
+> 
+> > On Fri, Aug 26, 2022 at 08:21:44AM +1000, Alistair Popple wrote:
+> >>
+> >> Peter Xu <peterx@redhat.com> writes:
+> >>
+> >> > On Wed, Aug 24, 2022 at 01:03:38PM +1000, Alistair Popple wrote:
+> >> >> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
+> >> >> installs migration entries directly if it can lock the migrating page.
+> >> >> When removing a dirty pte the dirty bit is supposed to be carried over
+> >> >> to the underlying page to prevent it being lost.
+> >> >>
+> >> >> Currently migrate_vma_*() can only be used for private anonymous
+> >> >> mappings. That means loss of the dirty bit usually doesn't result in
+> >> >> data loss because these pages are typically not file-backed. However
+> >> >> pages may be backed by swap storage which can result in data loss if an
+> >> >> attempt is made to migrate a dirty page that doesn't yet have the
+> >> >> PageDirty flag set.
+> >> >>
+> >> >> In this case migration will fail due to unexpected references but the
+> >> >> dirty pte bit will be lost. If the page is subsequently reclaimed data
+> >> >> won't be written back to swap storage as it is considered uptodate,
+> >> >> resulting in data loss if the page is subsequently accessed.
+> >> >>
+> >> >> Prevent this by copying the dirty bit to the page when removing the pte
+> >> >> to match what try_to_migrate_one() does.
+> >> >>
+> >> >> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> >> >> Acked-by: Peter Xu <peterx@redhat.com>
+> >> >> Reported-by: Huang Ying <ying.huang@intel.com>
+> >> >> Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
+> >> >> Cc: stable@vger.kernel.org
+> >> >>
+> >> >> ---
+> >> >>
+> >> >> Changes for v3:
+> >> >>
+> >> >>  - Defer TLB flushing
+> >> >>  - Split a TLB flushing fix into a separate change.
+> >> >>
+> >> >> Changes for v2:
+> >> >>
+> >> >>  - Fixed up Reported-by tag.
+> >> >>  - Added Peter's Acked-by.
+> >> >>  - Atomically read and clear the pte to prevent the dirty bit getting
+> >> >>    set after reading it.
+> >> >>  - Added fixes tag
+> >> >> ---
+> >> >>  mm/migrate_device.c |  9 +++++++--
+> >> >>  1 file changed, 7 insertions(+), 2 deletions(-)
+> >> >>
+> >> >> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+> >> >> index 6a5ef9f..51d9afa 100644
+> >> >> --- a/mm/migrate_device.c
+> >> >> +++ b/mm/migrate_device.c
+> >> >> @@ -7,6 +7,7 @@
+> >> >>  #include <linux/export.h>
+> >> >>  #include <linux/memremap.h>
+> >> >>  #include <linux/migrate.h>
+> >> >> +#include <linux/mm.h>
+> >> >>  #include <linux/mm_inline.h>
+> >> >>  #include <linux/mmu_notifier.h>
+> >> >>  #include <linux/oom.h>
+> >> >> @@ -196,7 +197,7 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+> >> >>  			anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+> >> >>  			if (anon_exclusive) {
+> >> >>  				flush_cache_page(vma, addr, pte_pfn(*ptep));
+> >> >> -				ptep_clear_flush(vma, addr, ptep);
+> >> >> +				pte = ptep_clear_flush(vma, addr, ptep);
+> >> >>
+> >> >>  				if (page_try_share_anon_rmap(page)) {
+> >> >>  					set_pte_at(mm, addr, ptep, pte);
+> >> >> @@ -206,11 +207,15 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+> >> >>  					goto next;
+> >> >>  				}
+> >> >>  			} else {
+> >> >> -				ptep_get_and_clear(mm, addr, ptep);
+> >> >> +				pte = ptep_get_and_clear(mm, addr, ptep);
+> >> >>  			}
+> >> >
+> >> > I remember that in v2 both flush_cache_page() and ptep_get_and_clear() are
+> >> > moved above the condition check so they're called unconditionally.  Could
+> >> > you explain the rational on why it's changed back (since I think v2 was the
+> >> > correct approach)?
+> >>
+> >> Mainly because I agree with your original comments, that it would be
+> >> better to keep the batching of TLB flushing if possible. After the
+> >> discussion I don't think there is any issues with HW pte dirty bits
+> >> here. There are already other cases where HW needs to get that right
+> >> anyway (eg. zap_pte_range).
+> >
+> > Yes tlb batching was kept, thanks for doing that way.  Though if only apply
+> > patch 1 we'll have both ptep_clear_flush() and batched flush which seems to
+> > be redundant.
+> >
+> >>
+> >> > The other question is if we want to split the patch, would it be better to
+> >> > move the tlb changes to patch 1, and leave the dirty bit fix in patch 2?
+> >>
+> >> Isn't that already the case? Patch 1 moves the TLB flush before the PTL
+> >> as suggested, patch 2 atomically copies the dirty bit without changing
+> >> any TLB flushing.
+> >
+> > IMHO it's cleaner to have patch 1 fix batch flush, replace
+> > ptep_clear_flush() with ptep_get_and_clear() and update pte properly.
+> 
+> Which ptep_clear_flush() are you referring to? This one?
+> 
+> 			if (anon_exclusive) {
+> 				flush_cache_page(vma, addr, pte_pfn(*ptep));
+> 				ptep_clear_flush(vma, addr, ptep);
 
-Sorry about that, it's fixed.
+Correct.
+
+> 
+> My understanding is that we need to do a flush for anon_exclusive.
+
+To me anon exclusive only shows this mm exclusively owns this page. I
+didn't quickly figure out why that requires different handling on tlb
+flushs.  Did I perhaps miss something?
+
+Thanks,
+
+-- 
+Peter Xu
+

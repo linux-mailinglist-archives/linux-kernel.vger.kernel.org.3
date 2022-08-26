@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF1F5A1DC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 02:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857CE5A1DC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 02:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243070AbiHZAmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 20:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S242922AbiHZApz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 Aug 2022 20:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiHZAm2 (ORCPT
+        with ESMTP id S235364AbiHZApw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 20:42:28 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CED11B7B8;
-        Thu, 25 Aug 2022 17:42:28 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6F89D5C009C;
-        Thu, 25 Aug 2022 20:42:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 25 Aug 2022 20:42:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1661474547; x=1661560947; bh=8y
-        +/T3N0SqWF6NxVxIldRMBVIEBEY0pHYfeqFdDVrBc=; b=UOgFY3LerbKgwZ2lqa
-        U/sdnptlZxbObnT1caomdpjkM35N14N6WI4qgsUUih+eTqldZN5ErE/Tx3tspecx
-        //WYQxTgBCRxlozUmbp4ECFIx2zNuroAEPJVFJpm4a2prYvbzKCj004aNxjnjNKj
-        +Lu2yGeRNsL/KwehBrBjTaTGTuYKbMugagtRkp725djiBAphEZU66Oq7a3wkbbkZ
-        hnRo8g88ZUT0fK4hdE+ZqVMku9magv2Wj266kKjhCOvFCakeHRxWL5ZepNbdKWCJ
-        0l43+XOean3NQ6mVlfwTbqWv7PGGe7ZvqHu/VDVRErk2eA9w+7v0U0+4P9iR3Bf6
-        dhIg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1661474547; x=1661560947; bh=8y+/T3N0SqWF6
-        NxVxIldRMBVIEBEY0pHYfeqFdDVrBc=; b=iu4l+VsjM76o4EaZfRTXiKo/1kKiG
-        XUIhqOu3zFk9wsaynYSPABqZ4PlLEx3lx4smH9SY9ON/ekKjmS61VvKKFb/Ds5J2
-        sD6XPUzpHaqHZwyA2J21gIDRxCPbdhgNajdEMj7F2LIyuzn8w/mO+DEiobXFm0u7
-        GY4FS8k8zNbfYfid5I25t/6e1tRHZVPjfoCOwytiJwo0StFeZ2LD6Ty1cA9zdZ74
-        qR3lchAL9pl77tEFwYJ0Lx8ZtjxbjRmzh/NaPPOuwZjjbeb6z58wRDPnQculjIfv
-        pgTA+33Vxudull76N1EOLiMa8kVENjiUqfVnoHz+/18PwAs9SmHYxkhgw==
-X-ME-Sender: <xms:8xYIY_m-_TJpqogzz1jCkDUIocuQhDtNHAOsaQ0tPcfWGz7iMsvrsQ>
-    <xme:8xYIYy0iIPNahLUodqH3-AIRyXl2S4oapa916zdBQDEAEeFmXtl8hxt5QG8JKfS0S
-    pgIg2BL_v_2sK6_Gb4>
-X-ME-Received: <xmr:8xYIY1pTP-JkOUaM61jBFRgTOCTtT9ElfAH40WVxDba-MB-hihjRRcGiDWlf>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgedgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepuden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:8xYIY3nFtGG9tP1HNprdQLpp1j21stobadg5IfHPuKhy2NyLKVsrQA>
-    <xmx:8xYIY92OMjmBd1rCkr4qLE9l09hk5p1QomuX5HZlciJPiaaiS_aUYw>
-    <xmx:8xYIY2v-g6EpHzE2srVAXEhK8yEhgzOq5bYF-JxIYOGFNwalDmMsYg>
-    <xmx:8xYIY7C6-2t4xVsLtzXg-G2CNSQ56C1UvwnWeUKwkog_PiKiv0xLFg>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 Aug 2022 20:42:25 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v2 2/2] asus-wmi: Support the GPU fan on TUF laptops
-Date:   Fri, 26 Aug 2022 12:42:10 +1200
-Message-Id: <20220826004210.356534-3-luke@ljones.dev>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220826004210.356534-1-luke@ljones.dev>
-References: <20220826004210.356534-1-luke@ljones.dev>
+        Thu, 25 Aug 2022 20:45:52 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A731BC7FB6;
+        Thu, 25 Aug 2022 17:45:50 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27Q0iRjuD005132, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27Q0iRjuD005132
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Fri, 26 Aug 2022 08:44:27 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 26 Aug 2022 08:44:42 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 26 Aug 2022 08:44:42 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97]) by
+ RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97%5]) with mapi id
+ 15.01.2375.007; Fri, 26 Aug 2022 08:44:42 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        Bernie Huang <phhuang@realtek.com>
+Subject: RE: [PATCH -next] wifi: rtw88: add missing destroy_workqueue() on error path in rtw_core_init()
+Thread-Topic: [PATCH -next] wifi: rtw88: add missing destroy_workqueue() on
+ error path in rtw_core_init()
+Thread-Index: AQHYuIbMIe6iUQ1BjUawKWBN0SU+yq3AWAlQ
+Date:   Fri, 26 Aug 2022 00:44:42 +0000
+Message-ID: <2f08c305927a43d78d6ab86468609288@realtek.com>
+References: <20220825133731.1877569-1-yangyingliang@huawei.com>
+In-Reply-To: <20220825133731.1877569-1-yangyingliang@huawei.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/8/25_=3F=3F_10:39:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,156 +75,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for TUF laptops which have the ability to control
-the GPU fan. This will show as a second fan in hwmon, and has
-the ability to run as boost (fullspeed), or auto.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/platform/x86/asus-wmi.c            | 71 ++++++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h |  1 +
- 2 files changed, 72 insertions(+)
+> -----Original Message-----
+> From: Yang Yingliang <yangyingliang@huawei.com>
+> Sent: Thursday, August 25, 2022 9:38 PM
+> To: linux-kernel@vger.kernel.org; netdev@vger.kernel.org; linux-wireless@vger.kernel.org
+> Cc: tony0620emma@gmail.com; kvalo@kernel.org; Bernie Huang <phhuang@realtek.com>
+> Subject: [PATCH -next] wifi: rtw88: add missing destroy_workqueue() on error path in rtw_core_init()
+> 
+> Add the missing destroy_workqueue() before return from rtw_core_init()
+> in error path.
+> 
+> Fixes: fe101716c7c9 ("rtw88: replace tx tasklet with work queue")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/net/wireless/realtek/rtw88/main.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw88/main.c b/drivers/net/wireless/realtek/rtw88/main.c
+> index 790dcfed1125..557213e52761 100644
+> --- a/drivers/net/wireless/realtek/rtw88/main.c
+> +++ b/drivers/net/wireless/realtek/rtw88/main.c
+> @@ -2094,7 +2094,7 @@ int rtw_core_init(struct rtw_dev *rtwdev)
+>  	ret = rtw_load_firmware(rtwdev, RTW_NORMAL_FW);
+>  	if (ret) {
+>  		rtw_warn(rtwdev, "no firmware loaded\n");
+> -		return ret;
+> +		goto destroy_workqueue;
+>  	}
+> 
+>  	if (chip->wow_fw_name) {
+> @@ -2104,11 +2104,15 @@ int rtw_core_init(struct rtw_dev *rtwdev)
+>  			wait_for_completion(&rtwdev->fw.completion);
+>  			if (rtwdev->fw.firmware)
+>  				release_firmware(rtwdev->fw.firmware);
+> -			return ret;
+> +			goto destroy_workqueue;
+>  		}
+>  	}
+> 
+>  	return 0;
+> +
+> +destroy_workqueue:
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index ea45e10302f7..d05684194f2d 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -226,7 +226,9 @@ struct asus_wmi {
- 	u32 tablet_switch_dev_id;
- 
- 	enum fan_type fan_type;
-+	enum fan_type gpu_fan_type;
- 	int fan_pwm_mode;
-+	int gpu_fan_pwm_mode;
- 	int agfn_pwm;
- 
- 	bool fan_boost_mode_available;
-@@ -1861,6 +1863,18 @@ static int asus_fan_set_auto(struct asus_wmi *asus)
- 		return -ENXIO;
- 	}
- 
-+	/*
-+	 * Modern models like the G713 also have GPU fan control (this is not AGFN)
-+	 */
-+	if (asus->gpu_fan_type == FAN_TYPE_SPEC83) {
-+		status = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_FAN_CTRL,
-+					       0, &retval);
-+		if (status)
-+			return status;
-+
-+		if (retval != 1)
-+			return -EIO;
-+	}
- 
- 	return 0;
- }
-@@ -2063,9 +2077,57 @@ static ssize_t asus_hwmon_temp1(struct device *dev,
- 		       deci_kelvin_to_millicelsius(value & 0xFFFF));
- }
- 
-+/* GPU fan on modern ROG laptops */
-+static ssize_t pwm2_enable_show(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", asus->gpu_fan_pwm_mode);
-+}
-+
-+static ssize_t pwm2_enable_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf, size_t count)
-+{
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+	int state;
-+	int value;
-+	int ret;
-+	u32 retval;
-+
-+	ret = kstrtouint(buf, 10, &state);
-+	if (ret)
-+		return ret;
-+
-+	switch (state) { /* standard documented hwmon values */
-+	case ASUS_FAN_CTRL_FULLSPEED:
-+		value = 1;
-+		break;
-+	case ASUS_FAN_CTRL_AUTO:
-+		value = 0;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_FAN_CTRL,
-+				    value, &retval);
-+	if (ret)
-+		return ret;
-+
-+	if (retval != 1)
-+		return -EIO;
-+
-+	asus->gpu_fan_pwm_mode = state;
-+	return count;
-+}
-+
- /* Fan1 */
- static DEVICE_ATTR_RW(pwm1);
- static DEVICE_ATTR_RW(pwm1_enable);
-+static DEVICE_ATTR_RW(pwm2_enable);
- static DEVICE_ATTR_RO(fan1_input);
- static DEVICE_ATTR_RO(fan1_label);
- 
-@@ -2075,6 +2137,7 @@ static DEVICE_ATTR(temp1_input, S_IRUGO, asus_hwmon_temp1, NULL);
- static struct attribute *hwmon_attributes[] = {
- 	&dev_attr_pwm1.attr,
- 	&dev_attr_pwm1_enable.attr,
-+	&dev_attr_pwm2_enable.attr,
- 	&dev_attr_fan1_input.attr,
- 	&dev_attr_fan1_label.attr,
- 
-@@ -2097,6 +2160,9 @@ static umode_t asus_hwmon_sysfs_is_visible(struct kobject *kobj,
- 	    || attr == &dev_attr_pwm1_enable.attr) {
- 		if (asus->fan_type == FAN_TYPE_NONE)
- 			return 0;
-+	} else if (attr == &dev_attr_pwm2_enable.attr) {
-+		if (asus->gpu_fan_type == FAN_TYPE_NONE)
-+			return 0;
- 	} else if (attr == &dev_attr_temp1_input.attr) {
- 		int err = asus_wmi_get_devstate(asus,
- 						ASUS_WMI_DEVID_THERMAL_CTRL,
-@@ -2139,6 +2205,7 @@ static int asus_wmi_hwmon_init(struct asus_wmi *asus)
- 
- static int asus_wmi_fan_init(struct asus_wmi *asus)
- {
-+	asus->gpu_fan_type = FAN_TYPE_NONE;
- 	asus->fan_type = FAN_TYPE_NONE;
- 	asus->agfn_pwm = -1;
- 
-@@ -2147,6 +2214,10 @@ static int asus_wmi_fan_init(struct asus_wmi *asus)
- 	else if (asus_wmi_has_agfn_fan(asus))
- 		asus->fan_type = FAN_TYPE_AGFN;
- 
-+	/*  Modern models like G713 also have GPU fan control */
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_FAN_CTRL))
-+		asus->gpu_fan_type = FAN_TYPE_SPEC83;
-+
- 	if (asus->fan_type == FAN_TYPE_NONE)
- 		return -ENODEV;
- 
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index 7dd580fdc61c..28234dc9fa6a 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -79,6 +79,7 @@
- #define ASUS_WMI_DEVID_THERMAL_CTRL	0x00110011
- #define ASUS_WMI_DEVID_FAN_CTRL		0x00110012 /* deprecated */
- #define ASUS_WMI_DEVID_CPU_FAN_CTRL	0x00110013
-+#define ASUS_WMI_DEVID_GPU_FAN_CTRL	0x00110014
- #define ASUS_WMI_DEVID_CPU_FAN_CURVE	0x00110024
- #define ASUS_WMI_DEVID_GPU_FAN_CURVE	0x00110025
- 
--- 
-2.37.2
+It's not so good that the label 'destroy_workqueue' is the same as function name.
+I suggest to just use 'out' instead.
 
+> +	destroy_workqueue(rtwdev->tx_wq);
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL(rtw_core_init);
+> 
+> --
+> 2.25.1
+> 
+> 
+> ------Please consider the environment before printing this e-mail.

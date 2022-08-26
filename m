@@ -2,99 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4945A207A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57C85A207F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242726AbiHZFv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
+        id S235408AbiHZFxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiHZFvz (ORCPT
+        with ESMTP id S231315AbiHZFxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:51:55 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A45C04DA
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661493113; x=1693029113;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5rJxMTQV0P3rcT5R2f0m7QLY0y5vYKqa1BnBPwfkBew=;
-  b=HtZgbiilNP7PuIzVq26yhV2aG0dGD1ndW+1CO9XJMSbx656pH68yMFpt
-   nDlWCTOpac67PWqrCmCEEbCLO+AB0bFKpRlIIns6JsET4kM9RvngIOLVN
-   JlT1KNNFB5TioHcuPNA38zEf3CwRQm4I2rwFQEFBc+YxQ8AgucOwi6W2D
-   pNZSQkusUOHrH0zWQPrd+dJr3wqjycIlh4MOqNmYUd5aj5ODG0PFog+gC
-   d3qCafr4PiAhmxCBPekZGg6qCy+T3KaigU/dOV9UVITczVrlfwrkJHX7o
-   wXziY1lNXPAqGDSTGkmqbFXgsUHnMqNFmZCsvQp9osOs37OIkpc6ndnr4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="281402024"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="281402024"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 22:51:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="938632228"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Aug 2022 22:51:52 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRSFz-0003Ua-1R;
-        Fri, 26 Aug 2022 05:51:51 +0000
-Date:   Fri, 26 Aug 2022 13:51:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-6.0.y-rt-rebase 23/59] kernel/softirq.c:641:1:
- sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not
- declared. Should it be static?
-Message-ID: <202208261333.gsZk17N6-lkp@intel.com>
+        Fri, 26 Aug 2022 01:53:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51683CCD4D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:53:13 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oRSHD-00020d-Rx; Fri, 26 Aug 2022 07:53:07 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oRSHD-00071E-0q; Fri, 26 Aug 2022 07:53:07 +0200
+Date:   Fri, 26 Aug 2022 07:53:07 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH 1/2] gpio: Add gpio latch driver
+Message-ID: <20220826055306.tdsmdambl6fjoiop@pengutronix.de>
+References: <20220825094132.1268174-1-s.hauer@pengutronix.de>
+ <20220825094132.1268174-2-s.hauer@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220825094132.1268174-2-s.hauer@pengutronix.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.0.y-rt-rebase
-head:   1d8c2694d3f649c97636d991dca099bd86f63f97
-commit: 6b4c722d9a8c4017626b41c4321539a74c62b6ad [23/59] tick: Fix timer storm since introduction of timersd
-config: alpha-randconfig-s051-20220824 (https://download.01.org/0day-ci/archive/20220826/202208261333.gsZk17N6-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=6b4c722d9a8c4017626b41c4321539a74c62b6ad
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-6.0.y-rt-rebase
-        git checkout 6b4c722d9a8c4017626b41c4321539a74c62b6ad
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash
+Hi Sascha,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+nice patche, please see inline.
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
->> kernel/softirq.c:641:1: sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not declared. Should it be static?
+On 22-08-25, Sascha Hauer wrote:
+> This driver implements a GPIO multiplexer based on latches connected to
+> other GPIOs. A set of data GPIOs is connected to the data input of
+> multiple latches. The clock input of each latch is driven by another
+> set of GPIOs. With two 8-bit latches 10 GPIOs can be multiplexed into
+> 16 GPIOs. GPOs might be a better term as in fact the multiplexed pins
+> are output only.
+> 
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
+>  drivers/gpio/Kconfig      |   6 ++
+>  drivers/gpio/Makefile     |   1 +
+>  drivers/gpio/gpio-latch.c | 188 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 195 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-latch.c
+> 
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 0642f579196f2..e4603810ec910 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1690,6 +1690,12 @@ config GPIO_AGGREGATOR
+>  	      industrial control context, to be operated from userspace using
+>  	      the GPIO chardev interface.
+>  
+> +config GPIO_LATCH
+> +	tristate "GPIO latch driver"
+> +	help
+> +	  Say yes here to enable a driver for GPIO multiplexers based on latches
+> +	  connected to other GPIOs.
+> +
+>  config GPIO_MOCKUP
+>  	tristate "GPIO Testing Driver"
+>  	select IRQ_SIM
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index a0985d30f51bb..310fa08decc69 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -75,6 +75,7 @@ obj-$(CONFIG_GPIO_IT87)			+= gpio-it87.o
+>  obj-$(CONFIG_GPIO_IXP4XX)		+= gpio-ixp4xx.o
+>  obj-$(CONFIG_GPIO_JANZ_TTL)		+= gpio-janz-ttl.o
+>  obj-$(CONFIG_GPIO_KEMPLD)		+= gpio-kempld.o
+> +obj-$(CONFIG_GPIO_LATCH)		+= gpio-latch.o
+>  obj-$(CONFIG_GPIO_LOGICVC)		+= gpio-logicvc.o
+>  obj-$(CONFIG_GPIO_LOONGSON1)		+= gpio-loongson1.o
+>  obj-$(CONFIG_GPIO_LOONGSON)		+= gpio-loongson.o
+> diff --git a/drivers/gpio/gpio-latch.c b/drivers/gpio/gpio-latch.c
+> new file mode 100644
+> index 0000000000000..117fcadf76a51
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-latch.c
+> @@ -0,0 +1,188 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * GPIO latch driver
+> + *
+> + *  Copyright (C) 2022 Sascha Hauer <s.hauer@pengutronix.de>
+> + *
+> + * This driver implements a GPIO (or better GPO as there is no input)
+> + * multiplexer based on latches like this:
+> + *
+> + * CLK0 ----------------------.        ,--------.
+> + * CLK1 -------------------.  `--------|>    #0 |
+> + *                         |           |        |
+> + * OUT0 ----------------+--|-----------|D0    Q0|-----|<
+> + * OUT1 --------------+-|--|-----------|D1    Q1|-----|<
+> + * OUT2 ------------+-|-|--|-----------|D2    Q2|-----|<
+> + * OUT3 ----------+-|-|-|--|-----------|D3    Q3|-----|<
+> + * OUT4 --------+-|-|-|-|--|-----------|D4    Q4|-----|<
+> + * OUT5 ------+-|-|-|-|-|--|-----------|D5    Q5|-----|<
+> + * OUT6 ----+-|-|-|-|-|-|--|-----------|D6    Q6|-----|<
+> + * OUT7 --+-|-|-|-|-|-|-|--|-----------|D7    Q7|-----|<
+> + *        | | | | | | | |  |           `--------'
+> + *        | | | | | | | |  |
+> + *        | | | | | | | |  |           ,--------.
+> + *        | | | | | | | |  `-----------|>    #1 |
+> + *        | | | | | | | |              |        |
+> + *        | | | | | | | `--------------|D0    Q0|-----|<
+> + *        | | | | | | `----------------|D1    Q1|-----|<
+> + *        | | | | | `------------------|D2    Q2|-----|<
+> + *        | | | | `--------------------|D3    Q3|-----|<
+> + *        | | | `----------------------|D4    Q4|-----|<
+> + *        | | `------------------------|D5    Q5|-----|<
+> + *        | `--------------------------|D6    Q6|-----|<
+> + *        `----------------------------|D7    Q7|-----|<
+> + *                                     `--------'
+> + *
+> + * The above is just an example. The actual number of number of latches and
+> + * the number of inputs per latch is derived from the number of GPIOs given
+> + * in the corresponding device tree properties.
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/gpio/consumer.h>
+> +
+> +#include "gpiolib.h"
+> +
+> +struct gpio_latch_priv {
+> +	struct gpio_chip gc;
+> +	struct gpio_descs *clk_gpios;
+> +	struct gpio_descs *data_gpios;
+> +	spinlock_t lock;
+> +	int n_ports;
+> +	int n_pins;
+> +	unsigned int *shadow;
+> +	struct mutex mutex;
+> +	spinlock_t spinlock;
+> +};
+> +
+> +static const struct of_device_id gpio_latch_ids[] = {
+> +	{
+> +		.compatible	= "gpio-latch",
+> +	}, {
+> +		/* sentinel */
+> +	}
+> +};
+> +MODULE_DEVICE_TABLE(of, gpio_latch_ids);
 
-vim +/__pcpu_scope_pending_timer_softirq +641 kernel/softirq.c
+Nit normally this is at the end of the file.
 
-   639	
-   640	DEFINE_PER_CPU(struct task_struct *, timersd);
- > 641	DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
-   642	
+> +static int gpio_latch_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	return GPIO_LINE_DIRECTION_OUT;
+> +}
+> +
+> +static void __gpio_latch_set(struct gpio_latch_priv *priv, unsigned int offset, int val)
+> +{
+> +	int latch = offset / priv->n_pins;
+> +	int i;
+> +
+> +	if (val)
+> +		priv->shadow[latch] |= BIT(offset % priv->n_pins);
+> +	else
+> +		priv->shadow[latch] &= ~BIT(offset % priv->n_pins);
+> +
+> +	for (i = 0; i < priv->n_pins; i++)
+> +		gpiod_set_value(priv->data_gpios->desc[i], priv->shadow[latch] & BIT(i));
+> +
+> +	gpiod_set_value(priv->clk_gpios->desc[latch], 1);
+> +	gpiod_set_value(priv->clk_gpios->desc[latch], 0);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Your have two access function for _can_sleep and "can not sleep" but
+here you don't resepect it.
+
+Regards,
+  Marco
+
+> +}
+> +
+> +static void gpio_latch_set(struct gpio_chip *gc, unsigned int offset, int val)
+> +{
+> +	struct gpio_latch_priv *priv = gpiochip_get_data(gc);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&priv->spinlock, flags);
+> +
+> +	__gpio_latch_set(priv, offset, val);
+> +
+> +	spin_unlock_irqrestore(&priv->spinlock, flags);
+> +}
+> +
+> +static void gpio_latch_set_can_sleep(struct gpio_chip *gc, unsigned int offset, int val)
+> +{
+> +	struct gpio_latch_priv *priv = gpiochip_get_data(gc);
+> +
+> +	mutex_lock(&priv->mutex);
+> +
+> +	__gpio_latch_set(priv, offset, val);
+> +
+> +	mutex_unlock(&priv->mutex);
+> +}
+> +
+> +static bool gpio_latch_can_sleep(struct gpio_latch_priv *priv)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < priv->n_ports; i++)
+> +		if (gpiod_cansleep(priv->clk_gpios->desc[i]))
+> +			return true;
+> +
+> +	for (i = 0; i < priv->n_pins; i++)
+> +		if (gpiod_cansleep(priv->data_gpios->desc[i]))
+> +			return true;
+> +	
+> +	return false;
+> +}
+> +
+> +static int gpio_latch_probe(struct platform_device *pdev)
+> +{
+> +	struct gpio_latch_priv *priv;
+> +
+> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->clk_gpios = devm_gpiod_get_array(&pdev->dev, "clk", GPIOD_OUT_LOW);
+> +	if (IS_ERR(priv->clk_gpios))
+> +		return PTR_ERR(priv->clk_gpios);
+> +
+> +	priv->data_gpios = devm_gpiod_get_array(&pdev->dev, "data", GPIOD_OUT_LOW);
+> +	if (IS_ERR(priv->data_gpios))
+> +		return PTR_ERR(priv->data_gpios);
+> +
+> +	priv->n_ports = priv->clk_gpios->ndescs;
+> +	priv->n_pins = priv->data_gpios->ndescs;
+> +
+> +	priv->shadow = devm_kcalloc(&pdev->dev, priv->n_ports, sizeof(*priv->shadow),
+> +				    GFP_KERNEL);
+> +	if (!priv->shadow)
+> +		return -ENOMEM;
+> +
+> +	if (gpio_latch_can_sleep(priv)) {
+> +		priv->gc.can_sleep = true;
+> +		priv->gc.set = gpio_latch_set_can_sleep;
+> +		mutex_init(&priv->mutex);
+> +	} else {
+> +		priv->gc.can_sleep = false;
+> +		priv->gc.set = gpio_latch_set;
+> +		spin_lock_init(&priv->spinlock);
+> +	}
+> +	
+> +	priv->gc.get_direction = gpio_latch_get_direction;
+> +	priv->gc.ngpio = priv->n_ports * priv->n_pins;
+> +	priv->gc.owner = THIS_MODULE;
+> +	priv->gc.base = -1;
+> +	priv->gc.parent = &pdev->dev;
+> +	priv->gc.of_node = pdev->dev.of_node;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
+> +}
+> +
+> +static struct platform_driver gpio_latch_driver = {
+> +	.driver	= {
+> +		.name		= "gpio-latch",
+> +		.of_match_table	= gpio_latch_ids,
+> +	},
+> +	.probe	= gpio_latch_probe,
+> +};
+> +module_platform_driver(gpio_latch_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Sascha Hauer <s.hauer@pengutronix.de>");
+> +MODULE_DESCRIPTION("GPIO latch driver");
+> -- 
+> 2.30.2
+> 
+> 
+> 

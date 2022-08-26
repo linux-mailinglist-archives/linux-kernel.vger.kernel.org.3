@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A7E5A2E1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200785A2E23
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243202AbiHZSQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S1344829AbiHZSRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiHZSQm (ORCPT
+        with ESMTP id S245175AbiHZSRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:16:42 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E6D1E17;
-        Fri, 26 Aug 2022 11:16:41 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id d8so3052220lfq.0;
-        Fri, 26 Aug 2022 11:16:41 -0700 (PDT)
+        Fri, 26 Aug 2022 14:17:06 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFE6CCE3D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:17:05 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b16so3077853edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:17:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=vHBHTJgzZJYWI8oV62UeYLgpgt+QcSdAaz2tHS/pNcQ=;
-        b=mnTBfZrugKU6Ahscb41Y9BWnJzirIn34mbG0LDdyX8MJs0LBp+8uRkSCklKCC0hF/M
-         LtMHkjoOU10UImooZwu4hUYKY4eu9GS1W+KU8s1Z9CXHqOcRxxgqgxMyZRxALLMznfGV
-         tTDHEq4v52EcWdEXLVsUemNG7bqik3FWiLamjMHIx0doqN/dPRssILTtdGU4rS1z0gAu
-         caJcbY4uNHzKgRL7zbasrxB52zN0x9H4R5fTRVAn9959hnt1AOqOBFPSOKMlC2RcosTd
-         rTmCwQWwlzwH0XuBoBj3EtvZY+FFAUoW7sCVzvuadQ7R2xuG9KaLSDx3vYgSFjKVhC0F
-         Yquw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=XnP47D2a+NfTs/kKZwaTdIdxwiCYCTPoKf3Nst+QNqM=;
+        b=MJccE0t6UXng4JnP+czJWRP/siy5ayy03+Ez+0NNbsvQizm+awEbThpgN9ow4KbUoK
+         ZFvbNdkR8HtTVUXE0cULcfDZdg/S2X3m1kwyP+vtJcDjfgH8VNiL6ePm2CFX8D4xiAn7
+         u3i3a2MqU4YJ71SZsSRiBuckf80cBMQXe/6r989HTxkdLpKoLQDAKPCEft5CHiSMfom6
+         CCvtry2Tm2AwyewqahV+Q4DRjgeeRxqWl5B04qUO/L4UIgbCcKT5OBwIr8r8t3I/pidj
+         copqlXuXFCRP/k5wSA79EcFTx7fhvjY/UrSOYIJDwKkMPfs7PYmFNkcWZJFbQH1XGRj/
+         iR8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=vHBHTJgzZJYWI8oV62UeYLgpgt+QcSdAaz2tHS/pNcQ=;
-        b=N7MQhGbYCFhgX9z6hC/re+7Mubg6bgCeIkhjIyTIzDDEqFkLcs3T1C/jZ9zMI8Lg47
-         qeWheVcKJXxPKMi3djrGyuFCu7VtUI3jJPKe3mNxD+T1a/iuCPYZn05hzdfv+vTiwvzI
-         aTLSZV57pbYR3bcM0xFXGx4u3lR/USYp8i8Uuup5J8k02rEMe/ZRFYFhjWApKjxJMfh4
-         UwOdIX1m1BVHGL+MDou6YKN6HEp1fuMwXla6ob2ZNQKXZ06gINvyM60mrDnGfuSf6LR4
-         V9Sjmj4iBiJTgS8wjpiGthYl/3c1C6VDtexQf1CISJyu/A2HIrNbpQoaGhXqyRgjxYXH
-         WE4w==
-X-Gm-Message-State: ACgBeo1dQE38/WpMp9IZKtOo0ePI2NUBAq2dP6oNiXlwR1iiyHK6Kraw
-        GZqKnudPBu9wOzFc2b3KSGAfCzJtRtNfoQ==
-X-Google-Smtp-Source: AA6agR4PNIMIdy4s4Ezpch5htYqTvBKbhJ8uzGhlGErl2Q59Iucgjm6iSnuqzgU+mnpGUH+EXlH39g==
-X-Received: by 2002:a05:6512:b01:b0:48b:a065:2a8b with SMTP id w1-20020a0565120b0100b0048ba0652a8bmr2675180lfu.401.1661537799477;
-        Fri, 26 Aug 2022 11:16:39 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id c26-20020a05651200da00b0048b1d92991asm429782lfp.303.2022.08.26.11.16.38
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=XnP47D2a+NfTs/kKZwaTdIdxwiCYCTPoKf3Nst+QNqM=;
+        b=Fe/8eKnHyfiJRH7gTO4HDTkbWgPdaW8oV5CcXzxWO86aueolcTb6NC4ChJjsYbvtlg
+         bKKuWBSc+aUKAljyVapxoQEOFJamrOLiTxY0BjwnvFVtO//QQ2/VpAALuwWlPhH/K2BY
+         +HL+mWWeNL7kIQPiGPcQNm3iEXkK5Vq6RsH4iXs7+jXzACenCE8JqZCrDKwjLtVTZ28n
+         NPiFInJ+thKQQbbM0c11u0ta5zKaH2wCpdUZmdOwmeYOTF4XtcTtwujCs71NsI8Dlmsx
+         VN7sTePMIYs9MX1NrVNMIUo9eYNqXyqgcqjWo7NodcNutviHjCkBRpErJfNB/Es61Si1
+         tQjg==
+X-Gm-Message-State: ACgBeo2b2qy2YGZ7mqd/TJ1OIA1eK6cxRoNq99MarrV7qLb9C1nARcgD
+        g6UA48CUKSOFh5bGAoPbHqM=
+X-Google-Smtp-Source: AA6agR4E6ZpdSAyC1bg3h1uG81oJplLP4E6Oe+c1BC7qlmZr7SCAj4LjCsevF5NflhRLZVl4ReP6CA==
+X-Received: by 2002:a05:6402:448b:b0:43b:5ec6:8863 with SMTP id er11-20020a056402448b00b0043b5ec68863mr7522282edb.377.1661537823830;
+        Fri, 26 Aug 2022 11:17:03 -0700 (PDT)
+Received: from opensuse.localnet (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
+        by smtp.gmail.com with ESMTPSA id y3-20020aa7c243000000b004479ef996b8sm1640963edo.11.2022.08.26.11.17.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 11:16:38 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 21:16:36 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 01/11] spi: dw: define capability for enhanced spi
-Message-ID: <20220826181636.khl4pq2a32n265on@mobilestation>
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-2-sudip.mukherjee@sifive.com>
+        Fri, 26 Aug 2022 11:17:02 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        James Smart <james.smart@broadcom.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v3 1/1] nvmet-tcp: Don't kmap() pages which can't come from HIGHMEM
+Date:   Fri, 26 Aug 2022 20:16:59 +0200
+Message-ID: <2887364.VdNmn5OnKV@opensuse>
+In-Reply-To: <YwVjpTW6vWvdVQTK@ZenIV>
+References: <20220822142438.5954-1-fmdefrancesco@gmail.com> <20220822142438.5954-2-fmdefrancesco@gmail.com> <YwVjpTW6vWvdVQTK@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-2-sudip.mukherjee@sifive.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,61 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:57:45PM +0100, Sudip Mukherjee wrote:
-> Some Synopsys SSI controllers support enhanced SPI which includes
-> Dual mode, Quad mode and Octal mode. Define the capability and mention
-> it in the controller supported modes.
-> 
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
->  drivers/spi/spi-dw-core.c | 4 ++++
->  drivers/spi/spi-dw.h      | 1 +
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index f87d97ccd2d6..97e72da7c120 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -917,6 +917,10 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  
->  	master->use_gpio_descriptors = true;
->  	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP;
+On mercoled=C3=AC 24 agosto 2022 01:32:53 CEST Al Viro wrote:
+> On Mon, Aug 22, 2022 at 04:24:38PM +0200, Fabio M. De Francesco wrote:
+> > Therefore, replace the kmap() of sg_page(sg) with a page_address() and
+> > delete the "nr_mapped" field from "nvmet_tcp_cmd" and instead pass a
+> > local variable to iov_iter_kvec() from the call site in
+> > nvmet_tcp_map_pdu_iovec().
+>=20
+> I'd suggest looking into switching to ITER_BVEC...
 
-> +	if (dws->caps & DW_SPI_CAP_EXT_SPI)
-> +		master->mode_bits |= SPI_TX_DUAL | SPI_RX_DUAL |
-> +				SPI_TX_QUAD | SPI_RX_QUAD |
-> +				SPI_TX_OCTAL | SPI_RX_OCTAL;
+Hello Al,
 
-Is it possible to auto-detect the highest supported mode by, for
-instance, writing to the CTRL0.SPI_FRF field values up to the maximum
-one? The DW SSI hardware manual says that the unsupported mode
-combinations are reserved. Could the reserved modes still be written
-to the SPI_FRF field? If not we could use it to set the
-SPI_{TX,RX}_DUAL, SPI_{TX,RX}_QUAD, SPI_{TX,RX}_OCTAL in accordance
-with the actual device capabilities rather than setting all of them.
+It's interesting that, for the second time in a few days, I've been suggest=
+ed=20
+to switch to the use of BVEC. Christoph asked for first[1]
 
->  	if (dws->caps & DW_SPI_CAP_DFS32)
->  		master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
->  	else
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index 9e8eb2b52d5c..71d18e9291a3 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -32,6 +32,7 @@
->  /* DW SPI controller capabilities */
->  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
->  #define DW_SPI_CAP_DFS32		BIT(1)
+I responded to Christoph and, in the same email, I also asked Sagi
+(the author of nvmet_tcp_map_pdu_iovec()) if he wanted to add something to=
+=20
+that discussion.
 
-> +#define DW_SPI_CAP_EXT_SPI		BIT(2)
+As you may have already read, I'm so new to kernel development that I still
+know very little about many subsystems and drivers. I am not currently
+able to tell the difference between BVEC and KVEC. I could probably try to=
+=20
+switch from one to the other (after learning from other code), however I wo=
+n't=20
+be able to explain in the commit message why users should better use BVEC i=
+n=20
+this case.
 
-EXT-prefix is misleading. The feature is called "Enhanced SPI Modes",
-not Extended SPI modes. Perhaps something like DW_SPI_CAP_EMODE ?
+My task is to remove as many kmap() call sites I can from the entire kernel=
+,=20
+and this is all I did in nvmet-tcp. After doing many tens of call sites=20
+removals or conversions to kmap_local_page(), I learned to not go deep into=
+=20
+those details which aren't needed to accomplish the task I've been given.
 
--Sergey
+However, since you and Christoph suggested doing more (I suppose in a separ=
+ate
+patch), I did some research which seems to confirm that iov_iter_kvec() may=
+ be=20
+good for what it is supposed to do.
 
->  
->  /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
->  #define DW_SPI_CTRLR0			0x00
-> -- 
-> 2.30.2
-> 
+Since you are talking again about BVEC, soon after Christoph did the same, =
+I'd
+like to understand better which improvements do we expect from BVEC and why
+and when should developers prefer this or KVEC.
+
+Can you please provide further information or links to documentation?
+
+Thanks for your time,
+
+=46abio
+
+[1]   https://lore.kernel.org/all/8107517.T7Z3S40VBb@opensuse/
+
+
+

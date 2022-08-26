@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E705A24CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400EC5A24DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344039AbiHZJrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S1344101AbiHZJr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245187AbiHZJrF (ORCPT
+        with ESMTP id S1344080AbiHZJrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:47:05 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533CA89822;
-        Fri, 26 Aug 2022 02:47:01 -0700 (PDT)
-X-UUID: 5d42f5d9c5314e29bebdbf706d9b667a-20220826
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=2MesSwzmqG+668R8hXG9RG6Emlt91VldPxqdmS8624E=;
-        b=nhcnE4y1tzbJORS7YLn9pcgLv2as36BBmFO9IrUxSvMKkqrL9kDf7S7CobfyuuokcPoXPHzcF0yv0hi1rWecSOo04sntTR/Zam5S6DaI5QIvjS/xVVZ9PUVvqPRYnuF670KW617PBl+InwUJ6aOYncq6dFIRNbOzZ1svzuY2v8o=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:c0191fd6-d9a4-4c41-bad4-280175e6ace0,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:-5
-X-CID-META: VersionHash:84eae18,CLOUDID:3c053420-1c20-48a5-82a0-25f9c331906d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
-        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 5d42f5d9c5314e29bebdbf706d9b667a-20220826
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1687321687; Fri, 26 Aug 2022 17:46:56 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 26 Aug 2022 17:46:54 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 26 Aug 2022 17:46:53 +0800
-Message-ID: <e7cdece7bbb48a9a24778b96691b06f4eac944e6.camel@mediatek.com>
-Subject: Re: [PATCH v2, 4/6] media: mediatek: vcodec: Remove encoder driver
- get IRQ resource
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 26 Aug 2022 17:46:53 +0800
-In-Reply-To: <CAGXv+5Eqcv-K1O-5foTcHYXKh+0yipo-i+EjgYOMemS3_82fAQ@mail.gmail.com>
-References: <20220720085731.11011-1-irui.wang@mediatek.com>
-         <20220720085731.11011-5-irui.wang@mediatek.com>
-         <CAGXv+5Eqcv-K1O-5foTcHYXKh+0yipo-i+EjgYOMemS3_82fAQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 26 Aug 2022 05:47:19 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8821AD7595
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:47:17 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id l23so1078091lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:47:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=7/zLm6wYmIJxefFBwnQ6xTIL94BoETjg8bQDFj+L0EQ=;
+        b=HIdAzMqZp+CHMUJvXZDL4kQfbbHEzP9oyvYz1ueQNzPdJuFdzN/xiOWNVvAI5PypY2
+         phc7mMSMvv0CqdAk3VeOaSOG1rVJQhyoTe39lWgf29/RQtOFhD7d+DPbjBkxwJtUIkhy
+         cta3uW2ybEZW+YD8Fw2dkJR4gv7MOtmY6qC+zYXXmj+Z4l5AhOceFVfeylnXwXhn1Qg4
+         ld1fWsPQV5Kf/3HaxA9FJzTVAxTZPdCP38pgrmH64yfQ9etak3X7fthigbG+2fPn57OV
+         wm7dDnDP5PGUOjHBGcdSnq4ZOYoc68PuhJYJy371olT9dw/BL1IEEx4esBwhZD/7bnUm
+         gpNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=7/zLm6wYmIJxefFBwnQ6xTIL94BoETjg8bQDFj+L0EQ=;
+        b=5mObtMpu0lXQvRka+64ZLL5bJxLxDgxZWBV/d8l2JSXxSwJXvD3h6wyphedTdCOoWv
+         aLttE5IWA19xUaOUr7K+7vNBT6vBHkfoimoYox0kK34UQHiFUAFQPpaVlG1Updt05mQM
+         topkK1w74UzYxkEoaUf3h0yVPMnXYmCBvfNNraqSVJRlSebqcrbw6sO3woY7m/zvm7lW
+         vmel8CY08G/tE4czcqOSQkwEnjy8cHar7cV65eWdC5MH8M79FA5X+TCeiHMpngzGW+6Y
+         WqbTqBzrgol56pNIRDb8sexXe6wK4qZC/RjAqJSRumgcsIFB6X2Ux14aXQbhbV/8yJ4g
+         KyGQ==
+X-Gm-Message-State: ACgBeo2/0+m6gN53LAlleSAl5Dgd2kfvNdShIWMJ1OJQ1l51i+R+7+11
+        G7bL107zcCqIiYNvmot2IgMRUQ==
+X-Google-Smtp-Source: AA6agR4NooJqTIyf/F5iZCsGcw1gdJa0BYVeuEHWvl+KrvNFJZWMb3qoex5YNXUISP81L4uvAWNr2Q==
+X-Received: by 2002:a05:651c:179c:b0:261:8fbe:b729 with SMTP id bn28-20020a05651c179c00b002618fbeb729mr2140443ljb.114.1661507235107;
+        Fri, 26 Aug 2022 02:47:15 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id q22-20020a194316000000b004931817c487sm320823lfa.197.2022.08.26.02.47.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 02:47:14 -0700 (PDT)
+Message-ID: <e4c5a39e-6a47-6814-92f7-c751bd95bdf0@linaro.org>
+Date:   Fri, 26 Aug 2022 12:47:13 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 5/5] dt-bindings: display: drop minItems equal to maxItems
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Marek Vasut <marex@denx.de>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org
+References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
+ <20220825113334.196908-5-krzysztof.kozlowski@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220825113334.196908-5-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Chen-Yu,
+On 25/08/2022 14:33, Krzysztof Kozlowski wrote:
+> minItems, if missing, are implicitly equal to maxItems, so drop
+> redundant piece to reduce size of code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   Documentation/devicetree/bindings/display/bridge/fsl,ldb.yaml   | 1 -
+>   .../devicetree/bindings/display/msm/dsi-controller-main.yaml    | 2 --
+>   Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml | 2 --
 
-many thanks for your comments.
+For msm changes:
 
-On Fri, 2022-08-26 at 12:08 +0800, Chen-Yu Tsai wrote:
-> Hi,
-> 
-> On Wed, Jul 20, 2022 at 4:58 PM Irui Wang <irui.wang@mediatek.com>
-> wrote:
-> > 
-> > The "platform_get_resource(pdev, IORESOURCE_IRQ, 0)" is no longer
-> > used after commit a1a2b7125e107("of/platform: Drop static setup of
-> > IRQ resource from DT core"), so just remove the function in
-> > encoder driver to avoid driver probe failed.
-> > 
-> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> > ---
-> >  .../media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c   | 8 ----
-> > ----
-> >  1 file changed, 8 deletions(-)
-> > 
-> > diff --git
-> > a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-> > b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-> > index ea667b867b56..6d8964fb4fa2 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-> > @@ -228,7 +228,6 @@ static int mtk_vcodec_probe(struct
-> > platform_device *pdev)
-> >  {
-> >         struct mtk_vcodec_dev *dev;
-> >         struct video_device *vfd_enc;
-> > -       struct resource *res;
-> >         phandle rproc_phandle;
-> >         enum mtk_vcodec_fw_type fw_type;
-> >         int ret;
-> > @@ -272,13 +271,6 @@ static int mtk_vcodec_probe(struct
-> > platform_device *pdev)
-> >                 goto err_res;
-> >         }
-> > 
-> > -       res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> > -       if (res == NULL) {
-> > -               dev_err(&pdev->dev, "failed to get irq resource");
-> > -               ret = -ENOENT;
-> > -               goto err_res;
-> > -       }
-> > -
-> >         dev->enc_irq = platform_get_irq(pdev, 0);
-> 
-> platform_get_irq() returns a negative number on failure. You should
-> check for errors here as the previous check was removed.
-> 
-> The description of platform_get_irq() explicitly mentions:
-> 
->     Device drivers should check the return value for errors so as to
->     not pass a negative integer value to the request_irq() APIs.
-> 
-> Hans has queued up this patch, so maybe you could provide a follow-up
-> patch to fix this?
-> 
-Another same patch has been already merged into linux-next tree, so
-this current patch can be dropped.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c?id=750a914adb7ded3669b47daed6d9d749110b4107
- 
+>   .../bindings/display/samsung/samsung,exynos5433-decon.yaml      | 2 --
+>   .../bindings/display/samsung/samsung,exynos5433-mic.yaml        | 1 -
+>   .../bindings/display/samsung/samsung,exynos7-decon.yaml         | 1 -
+>   .../devicetree/bindings/display/samsung/samsung,fimd.yaml       | 1 -
+>   .../devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml  | 1 -
+>   .../devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml   | 2 --
+>   9 files changed, 13 deletions(-)
+> 
 
-Thanks
-Best Regards
-> 
-> Regards
-> ChenYu
-> 
-> 
-> >         irq_set_status_flags(dev->enc_irq, IRQ_NOAUTOEN);
-> >         ret = devm_request_irq(&pdev->dev, dev->enc_irq,
-> > --
-> > 2.18.0
-> > 
+-- 
+With best wishes
+Dmitry
 

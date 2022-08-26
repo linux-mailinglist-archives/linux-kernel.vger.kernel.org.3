@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3FD5A2065
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898625A2067
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244767AbiHZFmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S244800AbiHZFnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiHZFm3 (ORCPT
+        with ESMTP id S230147AbiHZFnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:42:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF04FD0201;
-        Thu, 25 Aug 2022 22:42:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FEB2619FD;
-        Fri, 26 Aug 2022 05:42:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046B6C433C1;
-        Fri, 26 Aug 2022 05:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661492547;
-        bh=+/7bgcM7XCyWZRFiTszQQDAjii7dFnz03LdfZR+j2a8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kEDrPfXuEWYVmP7eEh+msDb+GYa8Idz9/kaI3MfF1Q3RfI1sAXJhMvI85+nzf4r5C
-         Uge3vmZWoOOw3xTMv9RuRaIejaUZuTF8FEx3AFnAU6PLlKdpF/9qZu2LPc94EBHaea
-         cnk43VRd1w0vkqykz4L413jU4pYS28Z16HyKXmoGBtiJvBNkX4L5BwnHUOscmXl3mK
-         ZnsQ9JRgyKfE4HHpHjMevW/IkfLBi77MgRPLKy+2NSs1U7hK9cfXwy4TuDmm5EVR9f
-         dAZHGqx14AymofhqDu29EHJ2yia6JgZ3rJjowwMwySNWrEMoRbmp3pGbOLjpJCXyfk
-         J+DvtrRVaU/EQ==
-Date:   Fri, 26 Aug 2022 08:42:20 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     roberto.sassu@huaweicloud.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        corbet@lwn.net, dhowells@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v12 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
-Message-ID: <YwhTiGOhzvv+CYYq@kernel.org>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
- <20220818152929.402605-5-roberto.sassu@huaweicloud.com>
+        Fri, 26 Aug 2022 01:43:00 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AC2D0206;
+        Thu, 25 Aug 2022 22:42:59 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u22so691890plq.12;
+        Thu, 25 Aug 2022 22:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1YeSohKprvznhG9NRDHk53lOiY+tzruNA0zvGt6cDqA=;
+        b=QIYjs8ZjdE355CkSF1xQ6exccmZKYEc1ldYwXFNX6soDgzVvKLLilEKEW8BstaCngQ
+         u2lR5DnJVzUwuQuHiJcApUvD4PGhmBLJR6Cm7Upt4hirsCx2tM0rgj6oDvZwAb7Wwcqm
+         k0HGwVHgt+ac9cT+oqf/RhfqYcAOS3yCh8oLPtBMy7wF/0JIrVHGib2HbUu7+bXy9i83
+         txnd5pvztmmAnQyrTUc7nHr7BWNlEuZPFOHy02BU8FMod/i2iA7OHG6R6YAVim4IlB9Z
+         NTfE5Rv7iSb+N0OwR05f25fHMYpZWP1FED5BVglgO0z44oolAcCrjeLrGt9afUkb6a8e
+         tlYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1YeSohKprvznhG9NRDHk53lOiY+tzruNA0zvGt6cDqA=;
+        b=1xrOBXOKlROt0J6T40JODnTm3SO5Y1hGb2LwKGbe1Lwb6tbCER0Jx4DF2b2VX+c8QR
+         PiPuZ0G6Azaf7p/UVVxAMBvoWeeRUBB1aH11hCTBA9Xdis8bCezLBVZEfb7O34N7yJmv
+         ERG6ObpGRCI/HDgsBCt5kSM18eTjt6tUkSt5ImWkqBszG76zUdF/PwteIxNqnmVsKNSd
+         Ot170+LZJP4HjxohzqdSVPdKjRR6OqyDtbnuIVTmoJX/ygPw3E9PsAWPWWb1K2GdfJ3B
+         0/6PutqSDcCOg3tgBgPzA9EIdF8iWDsHhyia2N1N5Wjps2SqApc/KvHMKVknRifjRy1g
+         B9Ww==
+X-Gm-Message-State: ACgBeo3fIyQfsDIxTwkNCmvQrPk+fSm4ofA8fjV3QJOHgcVOU1n05btt
+        ZQ0SeMmaxVmi80NmP2qiQDzCDF50xsQAFIOKPI0=
+X-Google-Smtp-Source: AA6agR42kqYx1732sUGKVGYoHwU6CxdVQe0DWE+KnwPrgjRLwjUZgsI4L38JkYQD/RyuNhYYMhxwZyJBxYpd0NwXP2I=
+X-Received: by 2002:a17:902:d584:b0:173:19a2:b831 with SMTP id
+ k4-20020a170902d58400b0017319a2b831mr2301769plh.126.1661492578880; Thu, 25
+ Aug 2022 22:42:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818152929.402605-5-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823060200.1452663-1-floridsleeves@gmail.com> <0056a39d-d7dc-34ea-3a71-6d5d3835c2d5@intel.com>
+In-Reply-To: <0056a39d-d7dc-34ea-3a71-6d5d3835c2d5@intel.com>
+From:   Li Zhong <floridsleeves@gmail.com>
+Date:   Thu, 25 Aug 2022 22:42:48 -0700
+Message-ID: <CAMEuxRraM31C1k9u37ZyxrYVUtKuWdiYUfhw+g=p7_oq-MrMEA@mail.gmail.com>
+Subject: Re: [PATCH v1] drivers/net/ethernet: check return value of e1e_rphy()
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 05:29:23PM +0200, roberto.sassu@huaweicloud.com wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
-> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
-> validate the kfunc parameters.
-> 
-> Also, introduce key_lookup_flags_check() directly in include/linux/key.h,
-> to reduce the risk that the check is not in sync with currently defined
-> flags.
+On Tue, Aug 23, 2022 at 8:19 AM Jesse Brandeburg
+<jesse.brandeburg@intel.com> wrote:
+>
+> On 8/22/2022 11:02 PM, lily wrote:
+> > e1e_rphy() could return error value, which need to be checked.
+>
+> Thanks for having a look at the e1000e driver. Was there some bug you
+> found or is this just a fix based on a tool or observation?
+>
+> If a tool was used, what tool?
+>
+These bugs are detected by a static analysis tool to check whether a
+return error is handled.
 
-Missing the description what the heck this function even is.
+> For networking patches please follow the guidance at
+> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+>
+>
+> > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> > ---
+> >   drivers/net/ethernet/intel/e1000e/phy.c | 14 +++++++++++---
+> >   1 file changed, 11 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
+> > index fd07c3679bb1..15ac302fdee0 100644
+> > --- a/drivers/net/ethernet/intel/e1000e/phy.c
+> > +++ b/drivers/net/ethernet/intel/e1000e/phy.c
+> > @@ -2697,9 +2697,12 @@ static s32 e1000_access_phy_wakeup_reg_bm(struct e1000_hw *hw, u32 offset,
+> >   void e1000_power_up_phy_copper(struct e1000_hw *hw)
+> >   {
+> >       u16 mii_reg = 0;
+> > +     int ret;
+> >
+> >       /* The PHY will retain its settings across a power down/up cycle */
+> > -     e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > +     ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > +     if (ret)
+> > +             return ret;
+>
+> Can't return value to a void declared function, did you even compile
+> test this?
 
-Please, explain that.
+Sorry for the compilation error. We will fix it in patch v2.
 
-Also, the short subject is misleading because this *just*
-does not move flags.
+>
+> Maybe it should be like:
+>      if (ret) {
+>         // this is psuedo code
+>          dev_warn(..., "PHY read failed during power up\n");
+>          return;
+>      }
+>
+> >       mii_reg &= ~BMCR_PDOWN;
+> >       e1e_wphy(hw, MII_BMCR, mii_reg);
+> >   }
+> > @@ -2715,9 +2718,12 @@ void e1000_power_up_phy_copper(struct e1000_hw *hw)
+> >   void e1000_power_down_phy_copper(struct e1000_hw *hw)
+> >   {
+> >       u16 mii_reg = 0;
+> > +     int ret;
+> >
+> >       /* The PHY will retain its settings across a power down/up cycle */
+> > -     e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > +     ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > +     if (ret)
+> > +             return ret;
+>
+> same here.
+>
+> >       mii_reg |= BMCR_PDOWN;
+> >       e1e_wphy(hw, MII_BMCR, mii_reg);
+> >       usleep_range(1000, 2000);
+> > @@ -3037,7 +3043,9 @@ s32 e1000_link_stall_workaround_hv(struct e1000_hw *hw)
+> >               return 0;
+> >
+> >       /* Do not apply workaround if in PHY loopback bit 14 set */
+> > -     e1e_rphy(hw, MII_BMCR, &data);
+> > +     ret_val = e1e_rphy(hw, MII_BMCR, &data);
+> > +     if (ret_val)
+> > +             return ret_val;
+> >       if (data & BMCR_LOOPBACK)
+> >               return 0;
+> >
+>
+> Did any of the callers of the above function care about the return code
+> being an error value? This has been like this for a long time...
 
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: KP Singh <kpsingh@kernel.org>
-> ---
->  include/linux/key.h      | 11 +++++++++++
->  security/keys/internal.h |  2 --
->  2 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/key.h b/include/linux/key.h
-> index 7febc4881363..b5bbae77a9e7 100644
-> --- a/include/linux/key.h
-> +++ b/include/linux/key.h
-> @@ -88,6 +88,17 @@ enum key_need_perm {
->  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
->  };
->  
-> +#define KEY_LOOKUP_CREATE	0x01
-> +#define KEY_LOOKUP_PARTIAL	0x02
-> +
-
-/*
- * Explain what the heck this function is.
- */
-> +static inline int key_lookup_flags_check(u64 flags)
-> +{
-> +	if (flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-
-This is essentially a boolean function, right?
-
-I.e. the implementation can be just:
-
-!!(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
-
-Not even sure if this is needed in the first place, or
-would it be better just to open code it. How many call
-sites does it have anyway?
-
-BR, Jarkko
+We manually check this function e1e_rphy(). We think it's possible that
+this function fails and it would be better if we can check the error and
+report it for debugging and diagnosing. Though the possibility of error
+may be low and that's why it has been here for a long time.

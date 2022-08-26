@@ -2,124 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEAE5A318E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609345A3194
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242352AbiHZVyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S231483AbiHZV5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiHZVyg (ORCPT
+        with ESMTP id S231298AbiHZV44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:54:36 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B9795BB
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:54:34 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-33dc345ad78so68470927b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:54:34 -0700 (PDT)
+        Fri, 26 Aug 2022 17:56:56 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE92CACA2;
+        Fri, 26 Aug 2022 14:56:54 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-32a09b909f6so69161807b3.0;
+        Fri, 26 Aug 2022 14:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc;
-        bh=iD+oDgmA+uqkgZAjiZVwNKXzpAuCVIysHt0xaw4YizU=;
-        b=Ca+dkdvTTZAOLDvgw3Z9TkaUnMZcEWn4NTxm5+zjenuU2n7vyLOc9KPh6+KdZ5gwBJ
-         tn/9thf3hXLJO9QmMCTrPu9UeA9bqXKkdHcD3t26KAQo8P0j/mO2Wsp3546vXy2g5DVe
-         7hsSOEj3K89mu/jqNLHDZpbjrvMfyUGLE++bdQHX7CDFGQhtlU3YxsNnf8kvVYpVHf5L
-         lxVu/SLHlqgK0HT7NNi6O08XfosRfNiRI1W7yI7n62C0LRD+iwPjN2kz2hv3wdQVmP8E
-         SrxuPd7hPHS0iDGfnSjx5LwMaLY9kxqbUtS5dWAWogDi+uOzyJWbWoS9ExFdkez6KFbW
-         ThmA==
+        bh=YIsmXK/1IMUzBKPFPBCOzWlrG3vuxnAl26/EQEinaGU=;
+        b=Woi3HMQVUTh9wjBeAKXEpTFy4sf0GT5G162/idyorzEjanNHHAAO45K6yb3Gq251vx
+         vdGkWXeLHyJD1Eg5RShfMvgsW17hKDHZr/WeeDtgdpyt32v1ggnnjCHlRuAQ94Dpc11n
+         zS2IwMRHR9s2PGlSxiCxhhs3r1G6RPkeqBKCOCYCE4mPWzWmQqlnHguY0hSWkrhmHkVP
+         c80tnpQQ8aynngWmq9c20Rz5FIJYqJ1lG8EM+uu+/Bn+bD/1qLICngiaAtk0lCNG7gJn
+         U7gXacECwV1iR4jaz+0w7cw+lJzQltivxlZf7vX/cHXdyHNxlEyqXdk9GMeHqzK764xE
+         fj2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=iD+oDgmA+uqkgZAjiZVwNKXzpAuCVIysHt0xaw4YizU=;
-        b=M8yX28rVFB6dP6EMmwLGcUflGBYKvP874ZOMx/IpRw/mVLq48xJjWMtyZVNvwGzxV7
-         AYAFzWdM8ZHVQAnFwFCKOAaPvaBzcNlzOIJC2C0rZg3XSaOhIZwQd9p1ONOGBl+ma97a
-         whDbDy9ts3O/YmerZSrLCHmpiOU9sjZTYNOYmbIb26XHOX/ZL8v5dE3KyDSBjZi6f5wI
-         gcX65AqeGlxofzH0mLZ7QNQ/TcQoUYXLDjMjgl6uJefHZHjFRgkdvrQMZwDUun4iJwhF
-         2Ewxth6/A6mLNBVjBAKkT7eZ9nnR1BaP9kHwJB65aenQosNhZXago0cwvYiSI1p4R7M+
-         B3vQ==
-X-Gm-Message-State: ACgBeo0a5cRqBGzMVw9i4v2M5ioj5O7GaQfuDQmJlfDs1VTPQBul/Rfs
-        8l5NWfMxYN+dZc/ekBLU5obm4PX6+63o/0y6PcrpgQ==
-X-Google-Smtp-Source: AA6agR6/Js/n7u8uAt+Vs5/9brwPzqXD8oV9j9u5xOFLL3KiwQvGzqQugDWZuWB0GKL5dR3cPMdqCyb0gjesC5DDHLQ=
-X-Received: by 2002:a25:7902:0:b0:67b:d842:1184 with SMTP id
- u2-20020a257902000000b0067bd8421184mr1609196ybc.374.1661550874022; Fri, 26
- Aug 2022 14:54:34 -0700 (PDT)
+        bh=YIsmXK/1IMUzBKPFPBCOzWlrG3vuxnAl26/EQEinaGU=;
+        b=xtJ3U2yLwssHKz6czZ3Qs+tai4dTBlgdlPzgdlZ5kCmBHzUs4Q4+BqpIaYTYJg4xwe
+         8+vxr/EqO+65qpYAatXv95S53IEZZsG2hUZ085JMjr6AbuvME6i/pZREpB+TwwKMdVHE
+         zhSgFb++RH4cSFbCvG7DXaKiDQArf5momXl+O7c2qNE6BUgi8pfDLfxF8QZUUziI3QYR
+         Uh+Gk8zGQwFCCaU4UI2Be3KXwtXeLFSudMPcrXeJo0P1dDs3t9n9xM8UBfk8A5mpAnhj
+         tnR1KXjFx4EWJJVq5bNdBEiyhK1gyMCMIQXSmci6mxjMhgAO0fXPdePWtphaKpNjQ+lq
+         rd9w==
+X-Gm-Message-State: ACgBeo3R57Ucj1iiEZDefLlEEItyUdZ6LUMTw7XMYwhM9jqqaOQLDS4d
+        Z99ETb3AKLCcvbQuHmrV/AEaeUx6m0PGS7sLv6Y=
+X-Google-Smtp-Source: AA6agR4UTuA3qINNphj7afBVZTaQiWFU8zQh4oSl0I8d9SplK6OhHc5jyFq4/aR+zST0rOWp264LYbZR9vv+Gc1Ll04=
+X-Received: by 2002:a5b:68e:0:b0:671:76c9:ff with SMTP id j14-20020a5b068e000000b0067176c900ffmr1606448ybq.630.1661551013566;
+ Fri, 26 Aug 2022 14:56:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
- <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
- <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
- <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
- <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
- <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
- <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
- <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
- <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu> <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
- <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
-In-Reply-To: <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 23:54:22 +0200
-Message-ID: <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Courbot <gnurou@gmail.com>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
+References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com> <20220820082936.686924-5-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20220820082936.686924-5-dario.binacchi@amarulasolutions.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Sat, 27 Aug 2022 06:56:42 +0900
+Message-ID: <CAMZ6RqKQJZBVOSU7oA3AGSRG11vxdysAyRotHavUzsVRuM28Kw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 4/4] can: bxcan: add support for ST bxCAN controller
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 5:08 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 26/08/2022 =C3=A0 15:49, Linus Walleij a =C3=A9crit :
-> > On Thu, Aug 25, 2022 at 4:00 PM Christophe Leroy
-> > <christophe.leroy@csgroup.eu> wrote:
-> >
-> >>> Christophe? Will you take a stab at it?
-> >>
-> >> Which patch should I write ?
-> >
-> > One that removes CONFIG_ARCH_HAS_NR_GPIO entirely, then
-> > allocate bases for new GPIO chips from 0 and upward instead.
-> > And then see what happens.
-> >
+On Sat. 20 Aug. 2022 =C3=A0 17:32, Dario Binacchi
+<dario.binacchi@amarulasolutions.com> a =C3=A9crit :
+> Add support for the basic extended CAN controller (bxCAN) found in many
+> low- to middle-end STM32 SoCs. It supports the Basic Extended CAN
+> protocol versions 2.0A and B with a maximum bit rate of 1 Mbit/s.
 >
-> Ok, I can give it a try.
-
-Nice!
-
-> But what do I do with:
+> The controller supports two channels (CAN1 as master and CAN2 as slave)
+> and the driver can enable either or both of the channels. They share
+> some of the required logic (e. g. clocks and filters), and that means
+> you cannot use the slave CAN without enabling some hardware resources
+> managed by the master CAN.
 >
-> drivers/gpio/gpio-aggregator.c: bitmap =3D bitmap_alloc(ARCH_NR_GPIOS,
-> GFP_KERNEL);
+> Each channel has 3 transmit mailboxes, 2 receive FIFOs with 3 stages and
+> 28 scalable filter banks.
+> It also manages 4 dedicated interrupt vectors:
+> - transmit interrupt
+> - FIFO 0 receive interrupt
+> - FIFO 1 receive interrupt
+> - status change error interrupt
+>
+> Driver uses all 3 available mailboxes for transmission and FIFO 0 for
+> reception. Rx filter rules are configured to the minimum. They accept
+> all messages and assign filter 0 to CAN1 and filter 14 to CAN2 in
+> identifier mask mode with 32 bits width. It enables and uses transmit,
+> receive buffers for FIFO 0 and error and status change interrupts.
+>
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>
+> ---
 
-That's just used locally in that driver to loop over the arguments to the
-aggregator (from the file in sysfs). I would set some arbitrary root
-like
-#define AGGREGATOR_MAX_GPIOS 512
-and just search/replace with that.
+(...)
 
-Yours,
-Linus Walleij
+> +static void bxcan_handle_state_change(struct net_device *ndev, u32 esr)
+> +{
+> +       struct bxcan_priv *priv =3D netdev_priv(ndev);
+> +       struct net_device_stats *stats =3D &ndev->stats;
+> +       enum can_state new_state =3D priv->can.state;
+> +       struct can_berr_counter bec;
+> +       enum can_state rx_state, tx_state;
+> +       struct sk_buff *skb;
+> +       struct can_frame *cf;
+> +
+> +       /* Early exit if no error flag is set */
+> +       if (!(esr & (BXCAN_ESR_EWGF | BXCAN_ESR_EPVF | BXCAN_ESR_BOFF)))
+> +               return;
+> +
+> +       bec.txerr =3D BXCAN_TEC(esr);
+> +       bec.rxerr =3D BXCAN_REC(esr);
+> +
+> +       if (esr & BXCAN_ESR_BOFF)
+> +               new_state =3D CAN_STATE_BUS_OFF;
+> +       else if (esr & BXCAN_ESR_EPVF)
+> +               new_state =3D CAN_STATE_ERROR_PASSIVE;
+> +       else if (esr & BXCAN_ESR_EWGF)
+> +               new_state =3D CAN_STATE_ERROR_WARNING;
+> +
+> +       /* state hasn't changed */
+> +       if (unlikely(new_state =3D=3D priv->can.state))
+> +               return;
+> +
+> +       skb =3D alloc_can_err_skb(ndev, &cf);
+> +       if (unlikely(!skb))
+> +               return;
+> +
+> +       tx_state =3D bec.txerr >=3D bec.rxerr ? new_state : 0;
+> +       rx_state =3D bec.txerr <=3D bec.rxerr ? new_state : 0;
+> +       can_change_state(ndev, cf, tx_state, rx_state);
+> +
+> +       if (new_state =3D=3D CAN_STATE_BUS_OFF)
+> +               can_bus_off(ndev);
+> +
+> +       stats->rx_bytes +=3D cf->len;
+
+Please do not increment the stats if the frame is remote (c.f. CAN_RTR_FLAG=
+).
+
+> +       stats->rx_packets++;
+> +       netif_rx(skb);
+> +}
+
+
+Yours sincerely,
+Vincent Mailhol

@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87275A2400
+	by mail.lfdr.de (Postfix) with ESMTP id 316335A23FF
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245318AbiHZJQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
+        id S245595AbiHZJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245499AbiHZJQJ (ORCPT
+        with ESMTP id S245405AbiHZJQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:16:09 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4977ED1E33
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:16:03 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o4so1061201pjp.4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:16:03 -0700 (PDT)
+        Fri, 26 Aug 2022 05:16:17 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF1DC123E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:16:15 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id n17so1067338wrm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 02:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8JkET+M6JudLsbBuC9noyGBV8761Vdk3MiQ4Gj3TP64=;
-        b=g6yLbjzWZuEFnACRvvSR6Adru4uTw/gGAP8IJNcaVUWwTnvbMLYZt3WL2LyN/FOJFp
-         kBye54Rg63Bmpyz2mlYRrr85ZkCzdXYbAMa6WJlE/M+WQhd7kK3FdK4uQOl4PPmnKmWg
-         CfBL/7ns8M+T1fwjHLb1H73YxxHhS1RF2DlgU4fkHg+hVoxqseAqK/AkgLaGhq9ZY9bc
-         tQk/Q4zZrvmL3rCKHu+vstq5o3S4kw53SvWTOxrzgUCQceMpMukGRUD31q4g2AI/Lblt
-         ANwz7+ntVAJCfFVV6cQxYoZ8p5uEd+FvOiK0Q31Zprnp4cgygJVx/uXHLLMc05UVTuup
-         hd2Q==
+        d=6wind.com; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc;
+        bh=lu7t59Y/6eA1q6IQ9qzo0I3g1dYmEshSQSj7OaC0EW8=;
+        b=dvcCrMXMBs0DCb7ARVAJu7t+jiT75dydGgkrAu9UTeywyKhEzYBOO5aNexjt2pIx0+
+         K7MkHMPBzQghhTXWSS1Toqy02QbRGmxnsMlmLIHLKwDRkCtYWrwazDyixvtCmIUaSAZZ
+         iYIySOy7OcSPaWAMXutbQ5WDw70DSs3B3xl4BVG848jVIHdiPWMmrWYYhGoc61hzuuyo
+         vlkHZx1wftk9PboEXIyBJEYW2OI9/CDrRzyhy8aTxyJ60no+qBhaMpW5nxdGQJk/3kIc
+         Ooskhseo2rs58jBrHz9XyQNBqp6nDxZHVK+9s1jKtOXEuziecLY7K1ooQb5qK/WtMb99
+         eKNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8JkET+M6JudLsbBuC9noyGBV8761Vdk3MiQ4Gj3TP64=;
-        b=CJ1I+q8f0dSO8vvFKDETDkapf1n5lw0+ZJN6sJC/h2UneVeteOHwG1r8fWuVSmcQxY
-         glz37xdQLCstcLNhwMvs6zkcfSzjVsSqoAMg5yniubmBph/1UxFgvMjdUy8KRYr/nNie
-         IHyqpvYyAjZdSaweN3C4rXf1MmWSheTvoYHvVFz5YEomxFsZBEBDkUOsLD67Zz8CNxVQ
-         45hpA0JRtUgyyEdLh94W2S/sWwvkGwVASlcDo++djyLCb+780m1nkc7MjXq9KgfA8urj
-         SWbrh0N1h6W9WJBnlQzr2iWzmrcwOlCCJOob0l6Yi9p58nrgj9Q9ds0vzSLou93K3/7u
-         AXvw==
-X-Gm-Message-State: ACgBeo1uhy3lT1n8WJZS7360GXlE3Dfc4UwSUhNpnM6fcfRQz6g/BnSG
-        X4TJVjqK2NFM42Hijtlt7h8dG1+UeB1InNydL/Aitg==
-X-Google-Smtp-Source: AA6agR6pLmtwtrIZjtq/uf4J+tCnWLD3/QKIIUwGVBXNRbfKwUf4NIYdl+0IKMavTxhCIcoJr1gggCaPHxCmXpc0w+8=
-X-Received: by 2002:a17:90b:1804:b0:1f5:946:6b6f with SMTP id
- lw4-20020a17090b180400b001f509466b6fmr3414480pjb.160.1661505362672; Fri, 26
- Aug 2022 02:16:02 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc;
+        bh=lu7t59Y/6eA1q6IQ9qzo0I3g1dYmEshSQSj7OaC0EW8=;
+        b=5oW/O5QBuGnKItQ7bu3jZbZHQEygKE7dxNYb1p/XGRXzCGmQD0b2pfJUmR1BHytRtH
+         K0EPmFS9bWtyT0KycYUTfRSWB6UPYaY5nkb57ipo1VzHnvO0MTmYO12LOes2Goida5ig
+         vV2+dt0uWwOYXoaxnv49G9bH+2BvY3gim4hErVRJcfcSp6qQhOjQQIRzkUOesHnnryRB
+         desUUgOf9Y3M9vhMrLXhqiOKK1jIIA8HDUqdSNQtNNum7uhk0RFJSXs6tqM0oG2DXflP
+         BvebPtsH3tGOJMpNrIfcGjpa1XadslfU8DHuK0JwLlBtsh55LbjjmsVUGwpzSK2PrqAK
+         pHhw==
+X-Gm-Message-State: ACgBeo0BilqpA3ABrdulx9uvfbH+q6kiVujaDFeD49ENRQpBBoNDElyL
+        E25SNgIZE2hA0hWCyhrpzUmAgA==
+X-Google-Smtp-Source: AA6agR7xPbWca+rrzIehQRM92IvHTy6OG6rwG2aP/MoK/VzAI6XGc0rUVXUwLjGSnAvlheKNOwCTUQ==
+X-Received: by 2002:a5d:6d8f:0:b0:225:6285:47fb with SMTP id l15-20020a5d6d8f000000b00225628547fbmr4504845wrs.211.1661505373884;
+        Fri, 26 Aug 2022 02:16:13 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:5d94:b816:24d3:cd91? ([2a01:e0a:b41:c160:5d94:b816:24d3:cd91])
+        by smtp.gmail.com with ESMTPSA id t63-20020a1c4642000000b003a673055e68sm8907387wma.0.2022.08.26.02.16.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 02:16:13 -0700 (PDT)
+Message-ID: <a0e1b167-2a80-abe3-c01e-48dc89a7d543@6wind.com>
+Date:   Fri, 26 Aug 2022 11:16:11 +0200
 MIME-Version: 1.0
-References: <20220825092325.381517-1-aneesh.kumar@linux.ibm.com>
- <877d2v3h8s.fsf@yhuang6-desk2.ccr.corp.intel.com> <e2f20ae9-5761-c170-a4e7-121d6b69ebfb@linux.ibm.com>
- <CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com> <4abb84e8-8035-65aa-941a-98f0d7902c42@linux.ibm.com>
-In-Reply-To: <4abb84e8-8035-65aa-941a-98f0d7902c42@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Fri, 26 Aug 2022 02:15:51 -0700
-Message-ID: <CAAPL-u_d_vozgSum7gX8Ecvh2ZY75KmB0+Z3d0yf7McqsfOU2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] mm/demotion: Expose memory type details via sysfs
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: 747c143 caused icmp redirect to fail
+Content-Language: en-US
+To:     Heng Qi <hengqi@linux.alibaba.com>, linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, stable@vger.kernel.org,
+        edwin.brossette@6wind.com, pabeni@redhat.com
+References: <1661485971-57887-1-git-send-email-hengqi@linux.alibaba.com>
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Organization: 6WIND
+In-Reply-To: <1661485971-57887-1-git-send-email-hengqi@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,79 +77,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 1:05 AM Aneesh Kumar K V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> On 8/26/22 1:30 PM, Wei Xu wrote:
-> > On Thu, Aug 25, 2022 at 8:00 PM Aneesh Kumar K V
-> > <aneesh.kumar@linux.ibm.com> wrote:
-> >>
-> >> On 8/26/22 7:20 AM, Huang, Ying wrote:
-> >>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
-> >>>
-> >>>> This patch adds /sys/devices/virtual/memtier/ where all memory tier related
-> >>>> details can be found. All allocated memory types will be listed there as
-> >>>> /sys/devices/virtual/memtier/memtypeN/
-> >>>
-> >>> Another choice is to make memory types and memory tiers system devices.
-> >>> That is,
-> >>>
-> >>> /sys/devices/system/memory_type/memory_typeN
-> >>> /sys/devices/system/memory_tier/memory_tierN
-> >>>
-> >>
-> >> subsys_system_register() documentation says
-> >>
-> >>  * Do not use this interface for anything new, it exists for compatibility
-> >>  * with bad ideas only. New subsystems should use plain subsystems; and
-> >>  * add the subsystem-wide attributes should be added to the subsystem
-> >>  * directory itself and not some create fake root-device placed in
-> >>  * /sys/devices/system/<name>.
-> >>
-> >> memtier being a virtual device, I was under the impression that /sys/devices/virtual
-> >> is the recommended place.
-> >>
-> >>> That looks more natural to me.  Because we already have "node" and
-> >>> "memory" devices there.  Why don't you put memory types and memory tiers
-> >>> there?
-> >>>
-> >>> And, I think we shouldn't put "memory_type" in the "memory_tier"
-> >>> directory.  "memory_type" isn't a part of "memory_tier".
-> >>>
-> >>
-> >> I was looking consolidating both memory tier and memory type into the same sysfs subsystem.
-> >> Your recommendation imply we create two subsystem memory_tier and memtype. I was
-> >> trying to avoid that. May be a generic term like "memory_tiering" can help to
-> >> consolidate all tiering related details there?
-> >>
-> >
-> > A generic term "memory_tiering" sounds good to me.
-> >
-> > Given that this will be a user-facing, stable kernel API, I think we'd
-> > better to only add what is most useful for userspace and don't have to
-> > mirror the kernel internal data structures in this interface.
-> >
-> > My understanding is that we haven't fully settled down on how to
-> > customize memory tiers from userspace.  So we don't have to show
-> > memory_type yet, which is a kernel data structure at this point.
-> >
-> > The userspace does need to know what are the memory tiers and which
-> > NUMA nodes are included in each memory tier.  How about we provide the
-> > "nodelist" interface for each memory tier as in the original proposal?
-> >
-> > The userspace would also like to know which memory tiers/nodes belong
-> > to the top tiers (the promotion targets).  We can provide a "toptiers"
-> > or "toptiers_nodelist" interface to report that.
-> >
->
-> How about also including abstract distance range of a memory tier?
-> That will be useful to derive the hierarchy.
 
-With the base abstract distance in the memtier name, do we need to
-show the abstract distance range if we don't customize memory tiers?
+Le 26/08/2022 à 05:52, Heng Qi a écrit :
+> The detailed description: When testing with selftests/net/icmp_redirect.sh, a redirect exception FAIL occurred for IPv4.
+> This is not in line with actual expectations. r1 changes the route to the destination network 172.16.2.0/24 from 10.1.1.2 to 172.16.1.254. After h1 sends the ping packet, h1 continues to obtain the route to 172.16.2.2, and the result is not as expected.
+> This flaw was introduced by 747c14307214b55dbd8250e1ab44cad8305756f1. When this commit is rolled back, the test will pass.
+> 
+> bug commit: 747c14307214b55dbd8250e1ab44cad8305756f1
 
-> > Both should still be useful even if we decide to add memory_type for
-> > memory tier customization.
-> >
->
-> -aneesh
+Thanks for the report. I will investigate.

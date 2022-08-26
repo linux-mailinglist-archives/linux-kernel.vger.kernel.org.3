@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B755A2286
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7483B5A2283
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343511AbiHZIBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S1343502AbiHZIBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241772AbiHZIBK (ORCPT
+        with ESMTP id S241772AbiHZIBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:01:10 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8021CD3E71
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:01:09 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id i8-20020a17090a65c800b001fd602afda2so953146pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:01:09 -0700 (PDT)
+        Fri, 26 Aug 2022 04:01:05 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB01FD3ECE;
+        Fri, 26 Aug 2022 01:01:03 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id k9so886516wri.0;
+        Fri, 26 Aug 2022 01:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=ZXxV5H02sTf27cGjR4xFe9u/ajRHs1osMk1ZZ7VKeFA=;
-        b=GZ9AZ3KmTgLjSIPCC9LY9iLyjXG05/sw6lrzkIivXH45QE0379fs/LAe6C0lMHu0wo
-         cf0J0z/P1iD36Iq2KzxKO3pMAKh36CIW8t1q29VJVXWNEXZYkfZRnXoZADo9PSiuH0Cr
-         4qTdTNOSHOX5ejQSovpO6oP4GRp6d8v7+Dj6GKgYCysZ4GnI+WBZD/1T0g0MBVrpHCG6
-         sbx0NcdX0JMzRepJgi9zWFSJbtWvNXxuwE6ci5R4ttKYrcUhOjJ+LIxLItLdm2gk1nob
-         PaZTmEfZ+RbWMijQBTI6ELPlGBoGB3n4XOQ+Kqc3y77dUouCKgIDH0siLGpwFz7i6GLL
-         5vxQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=YKvx6Cj1xYUX2DCCsWQM+Zo2QVYcF66rAfcZQEp7iEQ=;
+        b=T42JkReyAMSo4VSqTWGrerpNlXhidixAmat1mZ0sQX1NCfY85uNUSkEv188VYmQoZv
+         tr94poynOv2itOtjfretoErIELTWi2u1CcgLTxj13h7TNV7+V1cpnCrl2/kM37TyL8w6
+         sAlgiW0FfnJUCwWa2xqAI+SeLsFzljhoO4ECrsxFTPNmrL3xO2F28KnuXhtH1/TIsbPF
+         pbhYYtri0YLLPUO75mC3QZ2k85W2/81CBLyHcBkQf8rdCJc+OBinKqOWYUaHneaZ8bzR
+         K1yNCLfCf2VC0c1sU6HihdvfKDACL1oyCXYjnnfolQUugZCy6SJxOC6HJPAdZOAszwsj
+         VcjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=ZXxV5H02sTf27cGjR4xFe9u/ajRHs1osMk1ZZ7VKeFA=;
-        b=fav3W6q2nkw7znn9DF5I2iVrGxakyZwBoZItkXjv7exyerS9k7ftiMa7T//T1yFlMq
-         3vTc/yhKMxKqzGK3WAXKTWrXgv1eNDIGTDsHUQ7lxDZVcnOO2CYwgOkYd7IrnEGaTeCr
-         zk/DKa3XYRLr8P3PGlhbvGfwHsxNlbvwRsy3MOx6QZurxCjb/iqpKGIkm0RNU5/ZEifW
-         AUQFHqP7erdgdsJqblyEToLeVEWYRV20UqygXjfFzt7ctqO9kvIHrM6U/rxXoXdhu9cG
-         xpe50zOBA2PCqgYgOOTKW+eoQJ/rXNHrYYk48Om2sX/wAimikGNYZt5kQ4FxhuWZp07c
-         8wjQ==
-X-Gm-Message-State: ACgBeo2c4b2PRIRM14A2jMP/ik55ckrx98ESkl0u9hDC7j+mTuoH0/UM
-        JvUB0Cn6ql1x63nVQ38rmPcSwav/qvOg09GRgrrgLQ==
-X-Google-Smtp-Source: AA6agR4Wl3OSQI8TTZZEDjCFzfdhMn02PO6KNg3osP2Wr6z+vXCI1pzBuek699RxCaUvkzjWdvEMDg27yJWC274avaI=
-X-Received: by 2002:a17:902:d643:b0:172:84c4:d513 with SMTP id
- y3-20020a170902d64300b0017284c4d513mr2653434plh.138.1661500868782; Fri, 26
- Aug 2022 01:01:08 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=YKvx6Cj1xYUX2DCCsWQM+Zo2QVYcF66rAfcZQEp7iEQ=;
+        b=6d5vJp3s3PIizdsEM6IYY8/feqmFfNm7cxfPJQ1Wv+0SliHGuGCX0A4duNpmKHA5hx
+         9ZfDNE2q1A99jVZhYn0mSDJx3ui1V9r9GwyG9FT9U8jmliFguvQh7oIQijFDHhRp2W97
+         uPtbLcwvH0BR0b9VCz+soWqf02wYIFz/2yFl5Ku5QxDSrbRrgWQiD7rfdgLD5iIFuFje
+         CuB4POo0B/xUapQFCvfxuAvtnO0FUGUzOYScs95p1aY0NrMQRk/wuq9Oz1TslIIvvDVJ
+         pCIszl9NJGMc3k8qFNnWomVN6n8DqUIvURbtz1+lWv2bzQbSnOhnorgPR2yQBvnqK1lt
+         ihwQ==
+X-Gm-Message-State: ACgBeo1DPaduIlEgg6COHfsFSyCDJr8CVU3baofJJMwh6912hSagg6Ca
+        pl3M3LGLMQ/Uybb28JrjGBI=
+X-Google-Smtp-Source: AA6agR50DqvB0YCyRCtnNZIMYF3rLVQtp8wNj2e/H+sDHsFqdKxFun9l/A5Ec9xDjcwIAitKznYcZA==
+X-Received: by 2002:a5d:64e2:0:b0:225:79d3:d6d9 with SMTP id g2-20020a5d64e2000000b0022579d3d6d9mr3873080wri.240.1661500862157;
+        Fri, 26 Aug 2022 01:01:02 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id o1-20020a5d6701000000b0022571d43d32sm1239859wru.21.2022.08.26.01.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 01:01:01 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 26 Aug 2022 10:00:58 +0200
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+Message-ID: <Ywh9uo7fhRMQjrSl@krava>
+References: <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
+ <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+ <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
+ <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
+ <Yv6gm09CMdZ/HMr5@krava>
+ <20220818165024.433f56fd@gandalf.local.home>
+ <CAADnVQ+n=x=CuBk23UNnD9CHVXjrXLUofbockh-SWaLwH3H9fw@mail.gmail.com>
+ <Yv6wB4El4iueJtwX@krava>
+ <Yv933mq/DTIz5g7q@krava>
+ <CAADnVQK=kbCRuj9ZF9oV0YGf0pN-am3vFXYBMQ6m2ze5--nqtQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220825092325.381517-1-aneesh.kumar@linux.ibm.com>
- <877d2v3h8s.fsf@yhuang6-desk2.ccr.corp.intel.com> <e2f20ae9-5761-c170-a4e7-121d6b69ebfb@linux.ibm.com>
-In-Reply-To: <e2f20ae9-5761-c170-a4e7-121d6b69ebfb@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Fri, 26 Aug 2022 01:00:57 -0700
-Message-ID: <CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] mm/demotion: Expose memory type details via sysfs
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQK=kbCRuj9ZF9oV0YGf0pN-am3vFXYBMQ6m2ze5--nqtQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,103 +93,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 8:00 PM Aneesh Kumar K V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> On 8/26/22 7:20 AM, Huang, Ying wrote:
-> > "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+On Tue, Aug 23, 2022 at 10:23:24AM -0700, Alexei Starovoitov wrote:
+> On Fri, Aug 19, 2022 at 4:45 AM Jiri Olsa <olsajiri@gmail.com> wrote:
 > >
-> >> This patch adds /sys/devices/virtual/memtier/ where all memory tier re=
-lated
-> >> details can be found. All allocated memory types will be listed there =
-as
-> >> /sys/devices/virtual/memtier/memtypeN/
+> > On Thu, Aug 18, 2022 at 11:32:55PM +0200, Jiri Olsa wrote:
+> > > On Thu, Aug 18, 2022 at 02:00:21PM -0700, Alexei Starovoitov wrote:
+> > > > On Thu, Aug 18, 2022 at 1:50 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > > > >
+> > > > > On Thu, 18 Aug 2022 22:27:07 +0200
+> > > > > Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > >
+> > > > > > ok, so the problem with __attribute__((patchable_function_entry(5))) is that
+> > > > > > it puts function address into __patchable_function_entries section, which is
+> > > > > > one of ftrace locations source:
+> > > > > >
+> > > > > >   #define MCOUNT_REC()    . = ALIGN(8);     \
+> > > > > >     __start_mcount_loc = .;                 \
+> > > > > >     KEEP(*(__mcount_loc))                   \
+> > > > > >     KEEP(*(__patchable_function_entries))   \
+> > > > > >     __stop_mcount_loc = .;                  \
+> > > > > >    ...
+> > > > > >
+> > > > > >
+> > > > > > it looks like __patchable_function_entries is used for other than x86 archs,
+> > > > > > so we perhaps we could have x86 specific MCOUNT_REC macro just with
+> > > > > > __mcount_loc section?
+> > > > >
+> > > > > So something like this:
+> > > > >
+> > > > > #ifdef CONFIG_X86
+> > > > > # define NON_MCOUNT_PATCHABLE KEEP(*(__patchable_function_entries))
+> > > > > # define MCOUNT_PATCHABLE
+> > > > > #else
+> > > > > # define NON_MCOUNT_PATCHABLE
+> > > > > # define MCOUNT_PATCHABLE  KEEP(*(__patchable_function_entries))
+> > > > > #endif
+> > > > >
+> > > > >   #define MCOUNT_REC()    . = ALIGN(8);     \
+> > > > >     __start_mcount_loc = .;                 \
+> > > > >     KEEP(*(__mcount_loc))                   \
+> > > > >     MCOUNT_PATCHABLE                        \
+> > > > >     __stop_mcount_loc = .;                  \
+> > > > >     NON_MCOUNT_PATCHABLE                    \
+> > > > >    ...
+> > > > >
+> > > > > ??
+> > > >
+> > > > That's what more or less Peter's patch is doing:
+> > > > Here it is again for reference:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=8d075bdf11193f1d276bf19fa56b4b8dfe24df9e
+> > >
+> > > ah nice, and discards the __patchable_function_entries section, great
+> > >
 > >
-> > Another choice is to make memory types and memory tiers system devices.
-> > That is,
-> >
-> > /sys/devices/system/memory_type/memory_typeN
-> > /sys/devices/system/memory_tier/memory_tierN
-> >
->
-> subsys_system_register() documentation says
->
->  * Do not use this interface for anything new, it exists for compatibilit=
-y
->  * with bad ideas only. New subsystems should use plain subsystems; and
->  * add the subsystem-wide attributes should be added to the subsystem
->  * directory itself and not some create fake root-device placed in
->  * /sys/devices/system/<name>.
->
-> memtier being a virtual device, I was under the impression that /sys/devi=
-ces/virtual
-> is the recommended place.
->
-> > That looks more natural to me.  Because we already have "node" and
-> > "memory" devices there.  Why don't you put memory types and memory tier=
-s
-> > there?
-> >
-> > And, I think we shouldn't put "memory_type" in the "memory_tier"
-> > directory.  "memory_type" isn't a part of "memory_tier".
-> >
->
-> I was looking consolidating both memory tier and memory type into the sam=
-e sysfs subsystem.
-> Your recommendation imply we create two subsystem memory_tier and memtype=
-. I was
-> trying to avoid that. May be a generic term like "memory_tiering" can hel=
-p to
-> consolidate all tiering related details there?
->
+> > tested change below with Peter's change above and it seems to work,
+> > once it get merged I'll send full patch
+> 
+> Peter,
+> what is the ETA to land your changes?
+> That particular commit is detached in your git tree.
+> Did you move it to a different branch?
+> 
+> Just trying to figure out the logistics to land Jiri's fix below.
+> We can take it into bpf-next, since it's harmless as-is,
+> but it won't have an effect until your change lands.
+> Sounds like they both will get in during the next merge window?
 
-A generic term "memory_tiering" sounds good to me.
+I discussed with Peter and I'll send his change together with my fix
 
-Given that this will be a user-facing, stable kernel API, I think we'd
-better to only add what is most useful for userspace and don't have to
-mirror the kernel internal data structures in this interface.
-
-My understanding is that we haven't fully settled down on how to
-customize memory tiers from userspace.  So we don't have to show
-memory_type yet, which is a kernel data structure at this point.
-
-The userspace does need to know what are the memory tiers and which
-NUMA nodes are included in each memory tier.  How about we provide the
-"nodelist" interface for each memory tier as in the original proposal?
-
-The userspace would also like to know which memory tiers/nodes belong
-to the top tiers (the promotion targets).  We can provide a "toptiers"
-or "toptiers_nodelist" interface to report that.
-
-Both should still be useful even if we decide to add memory_type for
-memory tier customization.
-
-> >> The nodes which are part of a specific memory type can be listed via
-> >> /sys/devices/system/memtier/memtypeN/nodes.
-> >
-> > How about create links to /sys/devices/system/node/nodeN in
-> > "memory_type".  But I'm OK to have "nodes" file too.
-> >
-> >> The adistance value of a specific memory type can be listed via
-> >> /sys/devices/system/memtier/memtypeN/adistance.
-> >>
-> >> A directory listing looks like:
-> >> :/sys/devices/virtual/memtier# tree memtype1
-> >> memtype1
-> >> =E2=94=9C=E2=94=80=E2=94=80 adistance
-> >
-> > Why not just use "abstract_distance"?  This is user space interface,
-> > it's better to be intuitive.
-> >
-> >> =E2=94=9C=E2=94=80=E2=94=80 nodes
-> >> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memtier
-> >> =E2=94=94=E2=94=80=E2=94=80 uevent
-> >>
-> >> Since we will be using struct device to expose details via sysfs, drop=
- struct
-> >> kref and use struct device for refcounting the memtype.
-> >>
-> >
-> > Best Regards,
-> > Huang, Ying
->
+jirka

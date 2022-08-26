@@ -2,339 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95055A2F69
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93615A2F76
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345327AbiHZS4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S1345405AbiHZS4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345543AbiHZSzx (ORCPT
+        with ESMTP id S1345208AbiHZS4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:55:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB1DC04
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:52:11 -0700 (PDT)
+        Fri, 26 Aug 2022 14:56:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145A561720;
+        Fri, 26 Aug 2022 11:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661539931; x=1693075931;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=COSxgPHDF1QO//PAjTryPLSND40+U0v04W129rm9JsU=;
-  b=CuTdrOBUYyMcvuSNZf6/NGLcOxKeH9M1rFlBJM0YXL/3m3ErbDLbYJuE
-   MUrFLK+60Tt051NvQPRHjfpjdUIV0Q8+grFYkRireSxfhVBdIWZOdNxxu
-   oiOxRrIB373KkUiZKA+NGsMFHgz93xL/OeHhvhDgmn1gCqeXwW/8ztbli
-   sEEBm9vzqPlW8V8NYmbaKCfxCKobabx1HxPWkjTnnp9otyp0PZTV7spZ+
-   pcN8L35eML9RBckWVACpB/1citzn8ko+9sTZm23ih0IQYPO3Ipy5KAg0l
-   Gn3vrwpp5FD8JWjGMv/ch65mWCOqH68SP2uDGBuaSOUrOAkPqUZaiaue7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="292152716"
+  t=1661539959; x=1693075959;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5hyOfHMGCRPY6ozMNY9uanlYd4nTpOOLMFBXCCdYf/s=;
+  b=bYUUbuKxoPRDbNiazFQFPee4Posn64oT140h6cFJl0kSyvJpXKJxP54V
+   HXNoIhmoU7crI/P6ivmf9apHEJSrlATN4vHjBnLelJrC3Meml7ejLBzQT
+   XWpaNnq0piPKyR/hYH5IlGDfLm1DHpDD1VyLXFVweG1iKMPvVNHpK2u2x
+   UilDCjivaa4lgJEYXsHFxMWOSjYW9A7c6AnX1OXrOXBDSWALOCQEVH/5h
+   9jqiNvS142jXURpWckO/wLQGmoXJsV3iq83gc8gvDUo0FcGUCS3hJn8AP
+   CdEqcBCKMraTmOPAVsobfHI/pMJJaLbnbU56Ox411YmosQqwTRYDATX8K
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294578439"
 X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="292152716"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 11:52:11 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="294578439"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 11:52:38 -0700
 X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="938852067"
-Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 11:52:09 -0700
-Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oReR6-0000Hv-2u;
-        Fri, 26 Aug 2022 18:52:08 +0000
-Date:   Sat, 27 Aug 2022 02:51:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Subject: [matthias-bgg:v6.0-next/soc 11/11]
- drivers/soc/mediatek/mtk-svs.c:887:47: error: implicit declaration of
- function 'FIELD_GET'; did you mean 'FOLL_GET'?
-Message-ID: <202208270239.HjU7TSCX-lkp@intel.com>
+   d="scan'208";a="671578974"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 11:52:27 -0700
+Message-ID: <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
+Date:   Fri, 26 Aug 2022 21:52:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
+ <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+ <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com>
+ <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
+On 26/08/22 20:45, Ian Rogers wrote:
+> On Fri, Aug 26, 2022 at 10:22 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 26/08/22 19:02, Ian Rogers wrote:
+>>> On Fri, Aug 26, 2022 at 3:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>
+>>>> On 24/08/22 18:38, Ian Rogers wrote:
+>>>>> Switch to the use of mutex wrappers that provide better error checking.
+>>>>>
+>>>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>>>> ---
+>>>>>  tools/perf/ui/browser.c           | 20 ++++++++++----------
+>>>>>  tools/perf/ui/browsers/annotate.c |  2 +-
+>>>>>  tools/perf/ui/setup.c             |  5 +++--
+>>>>>  tools/perf/ui/tui/helpline.c      |  5 ++---
+>>>>>  tools/perf/ui/tui/progress.c      |  8 ++++----
+>>>>>  tools/perf/ui/tui/setup.c         |  8 ++++----
+>>>>>  tools/perf/ui/tui/util.c          | 18 +++++++++---------
+>>>>>  tools/perf/ui/ui.h                |  4 ++--
+>>>>>  8 files changed, 35 insertions(+), 35 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+>>>>> index fa5bd5c20e96..78fb01d6ad63 100644
+>>>>> --- a/tools/perf/ui/browser.c
+>>>>> +++ b/tools/perf/ui/browser.c
+>>>>> @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
+>>>>>
+>>>>>  void ui_browser__show_title(struct ui_browser *browser, const char *title)
+>>>>>  {
+>>>>> -     pthread_mutex_lock(&ui__lock);
+>>>>> +     mutex_lock(&ui__lock);
+>>>>>       __ui_browser__show_title(browser, title);
+>>>>> -     pthread_mutex_unlock(&ui__lock);
+>>>>> +     mutex_unlock(&ui__lock);
+>>>>>  }
+>>>>>
+>>>>>  int ui_browser__show(struct ui_browser *browser, const char *title,
+>>>>> @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+>>>>>
+>>>>>       browser->refresh_dimensions(browser);
+>>>>>
+>>>>> -     pthread_mutex_lock(&ui__lock);
+>>>>> +     mutex_lock(&ui__lock);
+>>>>>       __ui_browser__show_title(browser, title);
+>>>>>
+>>>>>       browser->title = title;
+>>>>> @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+>>>>>       va_end(ap);
+>>>>>       if (err > 0)
+>>>>>               ui_helpline__push(browser->helpline);
+>>>>> -     pthread_mutex_unlock(&ui__lock);
+>>>>> +     mutex_unlock(&ui__lock);
+>>>>>       return err ? 0 : -1;
+>>>>>  }
+>>>>>
+>>>>>  void ui_browser__hide(struct ui_browser *browser)
+>>>>>  {
+>>>>> -     pthread_mutex_lock(&ui__lock);
+>>>>> +     mutex_lock(&ui__lock);
+>>>>>       ui_helpline__pop();
+>>>>>       zfree(&browser->helpline);
+>>>>> -     pthread_mutex_unlock(&ui__lock);
+>>>>> +     mutex_unlock(&ui__lock);
+>>>>>  }
+>>>>>
+>>>>>  static void ui_browser__scrollbar_set(struct ui_browser *browser)
+>>>>> @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+>>>>>
+>>>>>  int ui_browser__refresh(struct ui_browser *browser)
+>>>>>  {
+>>>>> -     pthread_mutex_lock(&ui__lock);
+>>>>> +     mutex_lock(&ui__lock);
+>>>>>       __ui_browser__refresh(browser);
+>>>>> -     pthread_mutex_unlock(&ui__lock);
+>>>>> +     mutex_unlock(&ui__lock);
+>>>>>
+>>>>>       return 0;
+>>>>>  }
+>>>>> @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+>>>>>       while (1) {
+>>>>>               off_t offset;
+>>>>>
+>>>>> -             pthread_mutex_lock(&ui__lock);
+>>>>> +             mutex_lock(&ui__lock);
+>>>>>               err = __ui_browser__refresh(browser);
+>>>>>               SLsmg_refresh();
+>>>>> -             pthread_mutex_unlock(&ui__lock);
+>>>>> +             mutex_unlock(&ui__lock);
+>>>>>               if (err < 0)
+>>>>>                       break;
+>>>>>
+>>>>> diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+>>>>> index 44ba900828f6..b8747e8dd9ea 100644
+>>>>> --- a/tools/perf/ui/browsers/annotate.c
+>>>>> +++ b/tools/perf/ui/browsers/annotate.c
+>>>>> @@ -8,11 +8,11 @@
+>>>>>  #include "../../util/hist.h"
+>>>>>  #include "../../util/sort.h"
+>>>>>  #include "../../util/map.h"
+>>>>> +#include "../../util/mutex.h"
+>>>>>  #include "../../util/symbol.h"
+>>>>>  #include "../../util/evsel.h"
+>>>>>  #include "../../util/evlist.h"
+>>>>>  #include <inttypes.h>
+>>>>> -#include <pthread.h>
+>>>>>  #include <linux/kernel.h>
+>>>>>  #include <linux/string.h>
+>>>>>  #include <linux/zalloc.h>
+>>>>> diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+>>>>> index 700335cde618..25ded88801a3 100644
+>>>>> --- a/tools/perf/ui/setup.c
+>>>>> +++ b/tools/perf/ui/setup.c
+>>>>> @@ -1,5 +1,4 @@
+>>>>>  // SPDX-License-Identifier: GPL-2.0
+>>>>> -#include <pthread.h>
+>>>>>  #include <dlfcn.h>
+>>>>>  #include <unistd.h>
+>>>>>
+>>>>> @@ -8,7 +7,7 @@
+>>>>>  #include "../util/hist.h"
+>>>>>  #include "ui.h"
+>>>>>
+>>>>> -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
+>>>>> +struct mutex ui__lock;
+>>>>>  void *perf_gtk_handle;
+>>>>>  int use_browser = -1;
+>>>>>
+>>>>> @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+>>>>>
+>>>>>  void setup_browser(bool fallback_to_pager)
+>>>>>  {
+>>>>> +     mutex_init(&ui__lock);
+>>>>>       if (use_browser < 2 && (!isatty(1) || dump_trace))
+>>>>>               use_browser = 0;
+>>>>>
+>>>>> @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+>>>>>       default:
+>>>>>               break;
+>>>>>       }
+>>>>> +     mutex_destroy(&ui__lock);
+>>>>
+>>>> Looks like exit_browser() can be called even when setup_browser()
+>>>> was never called.
+>>>>
+>>>> Note, it also looks like PTHREAD_MUTEX_INITIALIZER is all zeros so
+>>>> pthread won't notice.
+>>>
+>>> Memory sanitizer will notice some cases of this and so I didn't want
+>>> to code defensively around exit being called ahead of setup.
+>>
+>> I am not sure you understood.
+>>
+>> As I wrote, exit_browser() can be called even when setup_browser()
+>> was never called, so it is not defensive programming, it is necessary
+>> programming that you only get away without doing because
+>> PTHREAD_MUTEX_INITIALIZER is all zeros.
+> 
+> Why are we here:
+> 1) there is a memory leak
+> 2) I fix the memory and trigger a use after free
+> 3) I invent a reference count checker, use it to fix the memory leak,
+> use after free and missing locks - the patch for this in 10s of lines
+> long
+> 4) when adding the lock fixes I defensively add error checking to the
+> mutex involved - mainly because I was scared I could introduce a
+> deadlock
+> 5) I get asked to generalize this
+> 6) GSoC contributor picks up and puts this down
+> 7) I pull together the contributor's work
+> 8) I get asked to turn a search and replace 4 patch fix into an unwieldy patch
+> 9) I worry about the sanity of the change and add lock checking from clang
+> 10) I end up trying to fix perf-sched who for some reason thought it
+> was perfectly valid to have threads blocked on mutexes that were
+> deallocated on the stack.
+> 11) the UI code was written with a view that exiting something not
+> setup somehow made sense
+> 
+> I am drawing a line at fixing perf sched and the UI code. We can drop
+> this patch and keep things as a pthread_mutex_t, similarly for
+> perf-sched. I have gone about as far as I'm prepared to for the sake
+> of a 10s of line memory leak fix. Some private thoughts are, it would
+> be useful if review comments could be constructive, hey do this not
+> that, and not simply commenting on change or trying to shoehorn vast
+> amounts of tech debt clean up onto simple fixes.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+If you want help, you only need ask.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git v6.0-next/soc
-head:   a92438c5a30a27b6791da025306a45478a6ac7a4
-commit: a92438c5a30a27b6791da025306a45478a6ac7a4 [11/11] soc: mediatek: mtk-svs: Use bitfield access macros where possible
-config: arm-buildonly-randconfig-r006-20220823 (https://download.01.org/0day-ci/archive/20220827/202208270239.HjU7TSCX-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?id=a92438c5a30a27b6791da025306a45478a6ac7a4
-        git remote add matthias-bgg https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git
-        git fetch --no-tags matthias-bgg v6.0-next/soc
-        git checkout a92438c5a30a27b6791da025306a45478a6ac7a4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/soc/mediatek/
+Below seems adequate for now, at least logically, but maybe it
+would confuse clang thread-safety analysis?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+index 25ded88801a3..6d81be6a349e 100644
+--- a/tools/perf/ui/setup.c
++++ b/tools/perf/ui/setup.c
+@@ -73,9 +73,17 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+ 	return 0;
+ }
+ 
++/*
++ * exit_browser() can get called without setup_browser() having been called
++ * first, so it is necessary to keep track of whether ui__lock has been
++ * initialized.
++ */
++static bool ui__lock_initialized;
++
+ void setup_browser(bool fallback_to_pager)
+ {
+ 	mutex_init(&ui__lock);
++	ui__lock_initialized = true;
+ 	if (use_browser < 2 && (!isatty(1) || dump_trace))
+ 		use_browser = 0;
+ 
+@@ -118,5 +126,6 @@ void exit_browser(bool wait_for_ok)
+ 	default:
+ 		break;
+ 	}
+-	mutex_destroy(&ui__lock);
++	if (ui__lock_initialized)
++		mutex_destroy(&ui__lock);
+ }
 
-All errors (new ones prefixed by >>):
-
-   drivers/soc/mediatek/mtk-svs.c: In function 'svs_get_bank_volts_v3':
->> drivers/soc/mediatek/mtk-svs.c:887:47: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
-     887 |                         svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-         |                                               ^~~~~~~~~
-         |                                               FOLL_GET
-   drivers/soc/mediatek/mtk-svs.c: In function 'svs_set_bank_freq_pct_v2':
->> drivers/soc/mediatek/mtk-svs.c:1073:25: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-    1073 |         freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
-         |                         ^~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +887 drivers/soc/mediatek/mtk-svs.c
-
-   858	
-   859	static void svs_get_bank_volts_v3(struct svs_platform *svsp)
-   860	{
-   861		struct svs_bank *svsb = svsp->pbank;
-   862		u32 i, j, *vop, vop74, vop30, turn_pt = svsb->turn_pt;
-   863		u32 b_sft, shift_byte = 0, opp_start = 0, opp_stop = 0;
-   864		u32 middle_index = (svsb->opp_count / 2);
-   865	
-   866		if (svsb->phase == SVSB_PHASE_MON &&
-   867		    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
-   868			return;
-   869	
-   870		vop74 = svs_readl_relaxed(svsp, VOP74);
-   871		vop30 = svs_readl_relaxed(svsp, VOP30);
-   872	
-   873		/* Target is to set svsb->volt[] by algorithm */
-   874		if (turn_pt < middle_index) {
-   875			if (svsb->type == SVSB_HIGH) {
-   876				/* volt[0] ~ volt[turn_pt - 1] */
-   877				for (i = 0; i < turn_pt; i++) {
-   878					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   879					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   880									 &vop74;
-   881					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   882					shift_byte++;
-   883				}
-   884			} else if (svsb->type == SVSB_LOW) {
-   885				/* volt[turn_pt] + volt[j] ~ volt[opp_count - 1] */
-   886				j = svsb->opp_count - 7;
- > 887				svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-   888				shift_byte++;
-   889				for (i = j; i < svsb->opp_count; i++) {
-   890					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   891					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   892									 &vop74;
-   893					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   894					shift_byte++;
-   895				}
-   896	
-   897				/* volt[turn_pt + 1] ~ volt[j - 1] by interpolate */
-   898				for (i = turn_pt + 1; i < j; i++)
-   899					svsb->volt[i] = interpolate(svsb->freq_pct[turn_pt],
-   900								    svsb->freq_pct[j],
-   901								    svsb->volt[turn_pt],
-   902								    svsb->volt[j],
-   903								    svsb->freq_pct[i]);
-   904			}
-   905		} else {
-   906			if (svsb->type == SVSB_HIGH) {
-   907				/* volt[0] + volt[j] ~ volt[turn_pt - 1] */
-   908				j = turn_pt - 7;
-   909				svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-   910				shift_byte++;
-   911				for (i = j; i < turn_pt; i++) {
-   912					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   913					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   914									 &vop74;
-   915					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   916					shift_byte++;
-   917				}
-   918	
-   919				/* volt[1] ~ volt[j - 1] by interpolate */
-   920				for (i = 1; i < j; i++)
-   921					svsb->volt[i] = interpolate(svsb->freq_pct[0],
-   922								    svsb->freq_pct[j],
-   923								    svsb->volt[0],
-   924								    svsb->volt[j],
-   925								    svsb->freq_pct[i]);
-   926			} else if (svsb->type == SVSB_LOW) {
-   927				/* volt[turn_pt] ~ volt[opp_count - 1] */
-   928				for (i = turn_pt; i < svsb->opp_count; i++) {
-   929					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   930					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   931									 &vop74;
-   932					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   933					shift_byte++;
-   934				}
-   935			}
-   936		}
-   937	
-   938		if (svsb->type == SVSB_HIGH) {
-   939			opp_start = 0;
-   940			opp_stop = svsb->turn_pt;
-   941		} else if (svsb->type == SVSB_LOW) {
-   942			opp_start = svsb->turn_pt;
-   943			opp_stop = svsb->opp_count;
-   944		}
-   945	
-   946		for (i = opp_start; i < opp_stop; i++)
-   947			if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
-   948				svsb->volt[i] -= svsb->dvt_fixed;
-   949	}
-   950	
-   951	static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
-   952	{
-   953		struct svs_bank *svsb = svsp->pbank;
-   954		u32 i, j, *freq_pct, freq_pct74 = 0, freq_pct30 = 0;
-   955		u32 b_sft, shift_byte = 0, turn_pt;
-   956		u32 middle_index = (svsb->opp_count / 2);
-   957	
-   958		for (i = 0; i < svsb->opp_count; i++) {
-   959			if (svsb->opp_dfreq[i] <= svsb->turn_freq_base) {
-   960				svsb->turn_pt = i;
-   961				break;
-   962			}
-   963		}
-   964	
-   965		turn_pt = svsb->turn_pt;
-   966	
-   967		/* Target is to fill out freq_pct74 / freq_pct30 by algorithm */
-   968		if (turn_pt < middle_index) {
-   969			if (svsb->type == SVSB_HIGH) {
-   970				/*
-   971				 * If we don't handle this situation,
-   972				 * SVSB_HIGH's FREQPCT74 / FREQPCT30 would keep "0"
-   973				 * and this leads SVSB_LOW to work abnormally.
-   974				 */
-   975				if (turn_pt == 0)
-   976					freq_pct30 = svsb->freq_pct[0];
-   977	
-   978				/* freq_pct[0] ~ freq_pct[turn_pt - 1] */
-   979				for (i = 0; i < turn_pt; i++) {
-   980					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   981					freq_pct = (shift_byte < REG_BYTES) ?
-   982						   &freq_pct30 : &freq_pct74;
-   983					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-   984					shift_byte++;
-   985				}
-   986			} else if (svsb->type == SVSB_LOW) {
-   987				/*
-   988				 * freq_pct[turn_pt] +
-   989				 * freq_pct[opp_count - 7] ~ freq_pct[opp_count -1]
-   990				 */
-   991				freq_pct30 = svsb->freq_pct[turn_pt];
-   992				shift_byte++;
-   993				j = svsb->opp_count - 7;
-   994				for (i = j; i < svsb->opp_count; i++) {
-   995					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   996					freq_pct = (shift_byte < REG_BYTES) ?
-   997						   &freq_pct30 : &freq_pct74;
-   998					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-   999					shift_byte++;
-  1000				}
-  1001			}
-  1002		} else {
-  1003			if (svsb->type == SVSB_HIGH) {
-  1004				/*
-  1005				 * freq_pct[0] +
-  1006				 * freq_pct[turn_pt - 7] ~ freq_pct[turn_pt - 1]
-  1007				 */
-  1008				freq_pct30 = svsb->freq_pct[0];
-  1009				shift_byte++;
-  1010				j = turn_pt - 7;
-  1011				for (i = j; i < turn_pt; i++) {
-  1012					b_sft = BITS8 * (shift_byte % REG_BYTES);
-  1013					freq_pct = (shift_byte < REG_BYTES) ?
-  1014						   &freq_pct30 : &freq_pct74;
-  1015					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-  1016					shift_byte++;
-  1017				}
-  1018			} else if (svsb->type == SVSB_LOW) {
-  1019				/* freq_pct[turn_pt] ~ freq_pct[opp_count - 1] */
-  1020				for (i = turn_pt; i < svsb->opp_count; i++) {
-  1021					b_sft = BITS8 * (shift_byte % REG_BYTES);
-  1022					freq_pct = (shift_byte < REG_BYTES) ?
-  1023						   &freq_pct30 : &freq_pct74;
-  1024					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-  1025					shift_byte++;
-  1026				}
-  1027			}
-  1028		}
-  1029	
-  1030		svs_writel_relaxed(svsp, freq_pct74, FREQPCT74);
-  1031		svs_writel_relaxed(svsp, freq_pct30, FREQPCT30);
-  1032	}
-  1033	
-  1034	static void svs_get_bank_volts_v2(struct svs_platform *svsp)
-  1035	{
-  1036		struct svs_bank *svsb = svsp->pbank;
-  1037		u32 temp, i;
-  1038	
-  1039		temp = svs_readl_relaxed(svsp, VOP74);
-  1040		svsb->volt[14] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-  1041		svsb->volt[12] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
-  1042		svsb->volt[10] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
-  1043		svsb->volt[8] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
-  1044	
-  1045		temp = svs_readl_relaxed(svsp, VOP30);
-  1046		svsb->volt[6] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-  1047		svsb->volt[4] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
-  1048		svsb->volt[2] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
-  1049		svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
-  1050	
-  1051		for (i = 0; i <= 12; i += 2)
-  1052			svsb->volt[i + 1] = interpolate(svsb->freq_pct[i],
-  1053							svsb->freq_pct[i + 2],
-  1054							svsb->volt[i],
-  1055							svsb->volt[i + 2],
-  1056							svsb->freq_pct[i + 1]);
-  1057	
-  1058		svsb->volt[15] = interpolate(svsb->freq_pct[12],
-  1059					     svsb->freq_pct[14],
-  1060					     svsb->volt[12],
-  1061					     svsb->volt[14],
-  1062					     svsb->freq_pct[15]);
-  1063	
-  1064		for (i = 0; i < svsb->opp_count; i++)
-  1065			svsb->volt[i] += svsb->volt_od;
-  1066	}
-  1067	
-  1068	static void svs_set_bank_freq_pct_v2(struct svs_platform *svsp)
-  1069	{
-  1070		struct svs_bank *svsb = svsp->pbank;
-  1071		u32 freqpct74_val, freqpct30_val;
-  1072	
-> 1073		freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
-  1074				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[10]) |
-  1075				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[12]) |
-  1076				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[14]);
-  1077	
-  1078		freqpct30_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[0]) |
-  1079				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[2]) |
-  1080				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[4]) |
-  1081				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[6]);
-  1082	
-  1083		svs_writel_relaxed(svsp, freqpct74_val, FREQPCT74);
-  1084		svs_writel_relaxed(svsp, freqpct30_val, FREQPCT30);
-  1085	}
-  1086	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

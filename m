@@ -2,92 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690BA5A2A80
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8863C5A2AC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbiHZPH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S245208AbiHZPNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiHZPHy (ORCPT
+        with ESMTP id S242796AbiHZPM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:07:54 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9155DB057
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:07:52 -0700 (PDT)
+        Fri, 26 Aug 2022 11:12:27 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84773DF089
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:28 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id ga33-20020a1709070c2100b0074084f48b12so676125ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=DlyS9VMnUfX9bNLQ5BpOs4s+ujcLmR2TQssftpfhc8Q=;
-        b=PPWRpBYAqKk7cjGkCUc7S3bDcq78KGoC+3koxw2vkvwSXsJ0l5TXvGyF/icyJyias9/MTinTl8aXX
-         f11S06pFUNBmPrmkcIgO0DGqokrrgXnrNe60FPuIaTbuwh+SGxL752dAD+ISJhGSp+w6YWGTTPGrJ3
-         RMLDOMQRGz4ZzwVgSBQSyav+pXspoy5d62/Qk+rPAmQfUEQx/wx1AU920esIYa7tgpPvqJGz0lQbiC
-         oto3yF0KKxZ2AeFRp3qu/V3pYaJ79yMi/yi/XQUloA7ayS41xtx0RF0bVBaLNwDfz4crfe2NgdNVzw
-         sQVyhIet/J7eizBS0dBfMFwxJJTL/ew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=DlyS9VMnUfX9bNLQ5BpOs4s+ujcLmR2TQssftpfhc8Q=;
-        b=BDs7DWpeHdXfb/0cXVwc2hSsWJ2xlt8VHvUo92SSMGZ2RWAS+qwl97sMfKASg93BCBhpv9jOZl+eB
-         mffmrImBw==
-X-HalOne-Cookie: 79518cc8cf24dc933d0f452f0011c6eec0732090
-X-HalOne-ID: da399367-2550-11ed-a920-d0431ea8a290
-Received: from mailproxy2.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id da399367-2550-11ed-a920-d0431ea8a290;
-        Fri, 26 Aug 2022 15:07:50 +0000 (UTC)
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc;
+        bh=78OHj/gzoCKqAY5c+j3k9RRp1IwnWy2nlunSdcq054Y=;
+        b=infDBXfaloZqVmGL5DNRFAfhMOqS8NqxfxjZ9dKspnlgueeDAHoYYH+4Gi8exWGIuo
+         Nw/AkcesiN61mybTdSO3jhwM5TKCtIZhjXZo1HG7sK+cjrWBUsaf4R/cHM2iBvYj2bOA
+         WkeD3rhneP4hNHRSfpfEujFgSGje7KupjxgjkfUMA9MS0vN6o7veSyC7WryDqeiljwvb
+         FmhY2QfU0D3vj7dQTHo2CxstSRJlqjkORV6jtBYWg/wZqUdM5bvjWUyfkBV2EDhFtv/1
+         Hn+WikD7nGPTrxjpCCiMPssZSlPqnH7OceYjz25N+b1EK3r2roffSRjICRe9X9QMXNjz
+         qm8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=78OHj/gzoCKqAY5c+j3k9RRp1IwnWy2nlunSdcq054Y=;
+        b=TyxQPJgrTljvpEcifHi7eIftvt5Gtxt9/NRGDGZfMW60QVXp8T9O3ySE72M1lZR8N8
+         jzXGPYvgr3hOHjFPy1Omt/hns1vVrSgVla+mtWk8DUvTyUojf7tw5/FsW5qvyjK14dDD
+         AzYD/YLGbCOLMpZ/Sm+VbUEGko1VHFcmTqKjXmcPcdPNNVU1t8Z+mdT8UcYgipZ/nqBN
+         v7vNc73994NntHbrS3c6McUracH10TnDN6xvBGJvfTs/QWAbLFV2Qlt9tgAal3SDFgia
+         TWwEbAU+ZEOseOnEPYmTPltzoeEgEtVvu75mwGh79o4fd/AOjwR7oHNz8x446JbRhjLc
+         7GzA==
+X-Gm-Message-State: ACgBeo2sDxEhyy2jddY0aV1zRyA1+Pzos1Af5/u0dgjvZsfH/TYPXPnS
+        2wo10NddoqzsmYfF8E8QagPfpAjcFC8=
+X-Google-Smtp-Source: AA6agR6OeypAkAbsTcwRMz6skRqVX67u6RKiOQC813CDO+HQWRif6q4KXUdIv6HG7IvLOSgOm7Y2kqCqBbc=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:5207:ac36:fdd3:502d])
+ (user=glider job=sendgmr) by 2002:a50:fc17:0:b0:446:861b:ee10 with SMTP id
+ i23-20020a50fc17000000b00446861bee10mr7463262edr.251.1661526565221; Fri, 26
+ Aug 2022 08:09:25 -0700 (PDT)
 Date:   Fri, 26 Aug 2022 17:07:49 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add myself as a reviewer for panel-edp.c
-Message-ID: <YwjhxQjiJeQ0u5rh@ravnborg.org>
-References: <20220822105340.1.I66a9a5577f9b0af66492ef13c47bc78ed85e5d6b@changeid>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220822105340.1.I66a9a5577f9b0af66492ef13c47bc78ed85e5d6b@changeid>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220826150807.723137-1-glider@google.com>
+Mime-Version: 1.0
+References: <20220826150807.723137-1-glider@google.com>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220826150807.723137-27-glider@google.com>
+Subject: [PATCH v5 26/44] kmsan: disable strscpy() optimization under KMSAN
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 10:53:59AM -0700, Douglas Anderson wrote:
-> panel-edp changes go through the drm-misc tree (as per the "DRM PANEL
-> DRIVERS" entry in MAINTAINERS), but ever since splitting panel-edp out
-> of panel-simple I've been trying to keep a close eye on it. Make that
-> official by listing me as a reviewer.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
-> 
->  MAINTAINERS | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0f9366144d31..fc62434f693f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6343,6 +6343,11 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30d.yaml
->  F:	drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
->  
-> +DRM DRIVER FOR GENERIC EDP PANELS
-> +R:	Douglas Anderson <dianders@chromium.org>
-> +F:	Documentation/devicetree/bindings/display/panel/panel-edp.yaml
-> +F:	drivers/gpu/drm/panel/panel-edp.c
-> +
->  DRM DRIVER FOR GENERIC USB DISPLAY
->  M:	Noralf Trønnes <noralf@tronnes.org>
->  S:	Maintained
-> -- 
-> 2.37.2.609.g9ff673ca1a-goog
+Disable the efficient 8-byte reading under KMSAN to avoid false positives.
+
+Signed-off-by: Alexander Potapenko <glider@google.com>
+
+---
+
+Link: https://linux-review.googlesource.com/id/Iffd8336965e88fce915db2e6a9d6524422975f69
+---
+ lib/string.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/lib/string.c b/lib/string.c
+index 6f334420f6871..3371d26a0e390 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -197,6 +197,14 @@ ssize_t strscpy(char *dest, const char *src, size_t count)
+ 		max = 0;
+ #endif
+ 
++	/*
++	 * read_word_at_a_time() below may read uninitialized bytes after the
++	 * trailing zero and use them in comparisons. Disable this optimization
++	 * under KMSAN to prevent false positive reports.
++	 */
++	if (IS_ENABLED(CONFIG_KMSAN))
++		max = 0;
++
+ 	while (max >= sizeof(unsigned long)) {
+ 		unsigned long c, data;
+ 
+-- 
+2.37.2.672.g94769d06f0-goog
+

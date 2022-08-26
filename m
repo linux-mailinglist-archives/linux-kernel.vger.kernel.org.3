@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30DD5A2DF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F6A5A2DF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344752AbiHZSDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S242482AbiHZSHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiHZSDe (ORCPT
+        with ESMTP id S230151AbiHZSHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:03:34 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8D99D13C;
-        Fri, 26 Aug 2022 11:03:32 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m3so2947044lfg.10;
-        Fri, 26 Aug 2022 11:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nN6w6sWQ+M9O3+SbU/L9UQPJ6uhDVHY44yRSnhXBG2Q=;
-        b=Zjcw2tEC7LCiCHeV9kInMVYMRpmy9FO40aLz7vstZ8VBdbHoWrY8VbN+grSflt4dt0
-         vpt/oW/a57hcgZD6dD9zCxw7sMDThJkaTtBP9PR80z40B7LPGoLviZDDV0SW8OMzagTr
-         QxUkoSMgkWMsUZoO8eEEHGu8QROsLF4QqFO3xCldYhya2drghTmwshfm7cMkV49KfKP/
-         vltjWUEY/O48ijdLXiRgtH1t0CcP3HIrAK8dngL06VvAB7d/pR7N1wohyuRbTP1IB7/O
-         NoJBL5IV3PRWUP+lFc6zx8Km85H0uDBid07u3vIfjcC/GORkMbxC5oIllQ2Ptd6bW6vO
-         0weg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nN6w6sWQ+M9O3+SbU/L9UQPJ6uhDVHY44yRSnhXBG2Q=;
-        b=mKixcI91A4kNV2S5WjisdWVU6qrOrukw8bXro5p+kdVNiy+8pyz5B+slTXdCfZetg9
-         2kGD9WQl5Ys9r+taxGnwTqzgCm/7r9CfVBHIolA5b5YNAfVK1U3B5haW1FgL1/Eop1QI
-         jphCjKRR+6uh7qpSdrIjJsGY8wZ4w2kpoRt13dnm4527nPONcklu4pt5BKdgqE/mR1cM
-         nkjZLr7+R63Dh9De49UM7asvrWcNoTOLWcPPv7RM52J6zhPw+v+cNUZx/yzZmLDOg3rk
-         SZbtLLDT33sbXtHGiqkTWAZ0zBwTw84L9uSU1fkhfcsAvunJncRITwr10Kd21QIcW4T7
-         o6sA==
-X-Gm-Message-State: ACgBeo0o/oQF0o/GcvfwTCaHOn9kPTWpfJqa8VPtKUWnID0lgC/GDMJI
-        B+qnSJRHpxKdMTGTtfRc4IE=
-X-Google-Smtp-Source: AA6agR72FDX83CKrMH1ppMdJEGUa7hjVbvDIDtWig2tmOQcmWnVFTMlWLKO6CWjN64R3I+BNEm/x/w==
-X-Received: by 2002:a05:6512:131f:b0:494:5d2f:c34b with SMTP id x31-20020a056512131f00b004945d2fc34bmr34433lfu.324.1661537010406;
-        Fri, 26 Aug 2022 11:03:30 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id be18-20020a05651c171200b0025e41bbf225sm534412ljb.39.2022.08.26.11.03.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 11:03:29 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 21:03:27 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI
- controllers
-Message-ID: <20220826180327.yazfoydjiyygd7qf@mobilestation>
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+        Fri, 26 Aug 2022 14:07:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4302F192BB;
+        Fri, 26 Aug 2022 11:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661537246;
+        bh=hRvarPt/vDEjfDmjGnhrdNuhWBISD4yTkXxXIrBjPH8=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=cRFzDJrMMCjBHSp1zbo9hLGg72uMaDYQW0UQL1A7pXJXvEZsl5F8n34U060qQoMJ8
+         a3E9wpIM1XPqIvY4FypzMp9kKQ7/IaslgXhrLDC5lsopwOf0yhVtpLLeOI2OI1Yyy9
+         zeEXTbjeIiWxkMzTESMAbliNeezsFlawTFquUF2E=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKsjH-1ohvX91VO9-00LHX7; Fri, 26
+ Aug 2022 20:07:26 +0200
+Subject: Re: [PATCH 1/2] hwmon: Add include stubs
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220825214341.2743-1-W_Armin@gmx.de>
+ <20220825214341.2743-2-W_Armin@gmx.de>
+ <20220826124742.GD2897306@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <2127da59-c8aa-301e-4648-2abf48ea7d61@gmx.de>
+Date:   Fri, 26 Aug 2022 20:07:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220826124742.GD2897306@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:JRX2b73jr3GBB6kJTSCx+kfTwnxbMr2JBDz/M9uA2E5ks1tqc0+
+ mlN7JimZNQBXFdEVVThFO1gfN9ciCMRRe3nrgUA7Si8uEoiFCVLql3Q+1wDiDSLu/QxmZjy
+ y17Otnu9CNACzrpJVPCfTsM8ZQxl8tYQI9YHW6bFcOmaceICcOGViYiKvDBTo4Blh+CAJ7C
+ 4Ax54RiCPIEVNm4QKuJ4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5EPKsk3ZGKs=:X1soPrpPdhiYRzW0i8GXJd
+ Aj82lLDcrOXncI84u3h97EAOWjFVTQDxHN//nojQNjHngOqnu5y1zq2LDs/I5xKnZZsJI4BNs
+ XRWxVszOjXPKRsc0LzJLTMsXVE0qKvD9wI3HDTs0eiVz3V1U72UcD2hTs3QmQf9IYbiS8Rn9g
+ lgxcIKy/Gwl+5o4hmnyKN1/XlElmvnCXcYqg19wzvJGIGwPx9b+qGpxWMVYizl8SWtQy9yMbR
+ Np0UlDLUXDmSXUeeJ3yI/S8cbuUgG1urmAXQxPOathTSSeEEJaj47nrUnKD0EjuoBtidXi1NO
+ lZWYg20bEaaAoGBcQsa9VmF03yoipr9hvUNYslOlareuchb964LN7AcHgb9CYeXOsHCXc6Ju4
+ Tmiq+eaQXci6AokHaa9+3eWpticRPG6yR3vLk8Dgiy1pFHkcaxwAQt/KURkSMO60kREQbuiRZ
+ OKjqEYz8iWgP6m0sowAWUNDXtx1PZLWpxFtQgS50jmWFDoMhlcZUD2yI4klsJya+8kI1pGbXN
+ 1NKGtllkMnocAQrjYgMun05Qj+wu++UQdgQtlnJopg4Qr0gy9ovplnL38UAtC4vzSCeNmF4BB
+ +5Iof9iy5xmKzbr1qM7HghywYWnJGNfpyHlbOc6O03+6Cc43GsA0JGPaFbWzxS9b8UzXahZiq
+ cLThSkO0RJFqUslfQdq4stEJAmHURjIlz5pV9MKofFC3pPbOoFpsBNCcNnPpgVVHmfW3jLV2v
+ MvSch6uaTf3gzvpgaMpJgCJm/OLtOrQki6F5RHVTJ77fbYx7qS/fYWuVWWtjHitjvdCWXVoAt
+ 5zs94SuL4z759o3wG7MtotxIliPLUTb+VjNJHVfjPrQRKDcto/D6enhn4KDPnQWvOSyoQR2Ii
+ 127t8saR66UgmP+dn6iC4dHvwFVPVIsH9sEc2dF/jL5orGoDjtKlc1yI7DomI8a8LsNIZYEEM
+ VZ8WJy9PCJhhhQuqJnF6NkixxPpDBqwloJipxVaiQBVHyn1Ol6Mw50e2SlkfnekL+dKrc8d2V
+ agb3lzGfgIG857Kdziaijup6rGYL1vHYx1iz9Ur+XjhHyeh2zArEHm6X9x30yEBDsx3qGL8yb
+ umoLcM2iRk/1CEnGRb/3acqepUkGatFdCyrIaWKJrQWYirfSOT2XoTF7A==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,121 +74,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sudip
+Am 26.08.22 um 14:47 schrieb Guenter Roeck:
 
-On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
-> Some Synopsys SSI controllers support enhanced SPI which includes
-> Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
-> feature in enhanced SPI modes which can be used to prevent FIFO underflow
-> and overflow conditions while transmitting or receiving the data respectively.
-> This is only tested on controller version 1.03a.
+> On Thu, Aug 25, 2022 at 11:43:40PM +0200, Armin Wolf wrote:
+>> If CONFIG_HWMON/CONFIG_HWMON_VID was disabled during compile
+>> time, driver using the hwmon subsystem might fail to compile.
+> That would be a bug in driver dependencies and is not a problem
+> to be solved in the hwmon subsystem. Dummies are not provided on
+> purpose so far because we _want_ driver developers to think about
+> usage and for them to understand what happens if HWMON is not enabled.
 
-Thank you very much the patchset. As I already said adding new
-controller features support is always welcome. Yet there are some
-things which need to be fixed before the series would be fully
-suitable to be merged in into the kernel. Here is a short summary
-of ones:
+My wording might have been incorrect, i meant that currently, code who uses
+the hwmon subsystem must either select CONFIG_HWMON or provide #ifdef guards.
 
-1. The eSPI capability isn't specific for the DW AHB SSI controller
-only. It can be found on the DW APB SSI controllers of v4.x and newer
-(though the SPI_FRF field is placed at different offset in CTRL0 CSR).
-Thus your patches will need to be fixed so the in-driver infrastructure
-would imply that.
+> The benefit is that it would reduce the need for conditional code
+> in drivers registering with hwmon from outside the hwmon subsystem.
+>
+>> Provide stubs for such cases.
+>>
+> HWMON_VID is not user selectable, it is only needed by hwmon drivers,
+> it is mandatory for the drivers needing it, those drivers _must_ select
+> it, and there must be no dummies.
+>
+> I am not really sure about the benefits of dummies for HWMON either,
+> but I am open to discussion. Either case that must be accompanied
+> by matching driver patches to show its usage, to make sure that there
+> is no negative impact, to show the benefits, and to get a wider audience.
+>
+Understandable, i will include such patches in the next revision.
 
-2. The mem ops check procedure provided by you doesn't verify whether
-the passed cmd, address and dummy data lengths meet the controller
-constraints or at least the constraints set by your code. You always
-expect the address and command being 4 and 1 bytes long, which is way
-not always true. So the implementation provided by you just won't
-correctly work for the unsupported cases with no any error returned.
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>>   include/linux/hwmon-vid.h | 18 ++++++++++
+>>   include/linux/hwmon.h     | 76 ++++++++++++++++++++++++++++++++++++++-
+>>   2 files changed, 93 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/hwmon-vid.h b/include/linux/hwmon-vid.h
+>> index 9409e1d207ef..329151416c47 100644
+>> --- a/include/linux/hwmon-vid.h
+>> +++ b/include/linux/hwmon-vid.h
+>> @@ -11,9 +11,27 @@
+>>   #ifndef _LINUX_HWMON_VID_H
+>>   #define _LINUX_HWMON_VID_H
+>>
+>> +#include <linux/kconfig.h>
+>> +
+>> +#if IS_ENABLED(CONFIG_HWMON_VID)
+>> +
+>>   int vid_from_reg(int val, u8 vrm);
+>>   u8 vid_which_vrm(void);
+>>
+>> +#else
+>> +
+>> +static inline int vid_from_reg(int val, u8 vrm)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline u8 vid_which_vrm(void)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +#endif /* CONFIG_HWMON_VID */
+>> +
+>>   /* vrm is the VRM/VRD document version multiplied by 10.
+>>      val is in mV to avoid floating point in the kernel.
+>>      Returned value is the 4-, 5- or 6-bit VID code.
+>> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+>> index 14325f93c6b2..281387ee03bc 100644
+>> --- a/include/linux/hwmon.h
+>> +++ b/include/linux/hwmon.h
+>> @@ -13,6 +13,9 @@
+>>   #define _HWMON_H_
+>>
+>>   #include <linux/bitops.h>
+>> +#include <linux/err.h>
+>> +#include <linux/errno.h>
+>> +#include <linux/kconfig.h>
+>>
+>>   struct device;
+>>   struct attribute_group;
+>> @@ -433,6 +436,8 @@ struct hwmon_chip_info {
+>>   	const struct hwmon_channel_info **info;
+>>   };
+>>
+>> +#if IS_ENABLED(CONFIG_HWMON)
+> This should be IS_REACHABLE(). It doesn't help if HWMON is built as
+> module and called from an in-kernel driver. Otherwise drivers using it
+> would still need "depends on HWMON || HWMON=n" and it would still require
+> conditional code to catch "HWMON enabled but not reachable".
+>
+>> +
+>>   /* hwmon_device_register() is deprecated */
+>>   struct device *hwmon_device_register(struct device *dev);
+>>
+>> @@ -467,6 +472,75 @@ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
+>>   char *hwmon_sanitize_name(const char *name);
+>>   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+>>
+>> +#else
+>> +
+>> +static inline struct device *hwmon_device_register(struct device *dev)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+> -ENOTSUPP would probably be a more suitable error code.
 
-3. From what I see WAIT_CYCLES is specific for the Read-operations
-only (see the controller HW manual, the paragraphs like "Write
-Operation in Enhanced SPI Modes" or the SPI_CTRL0.WAIT_CYCLES field
-description). So any dummy-bytes requested for the Tx operations just
-won't be sent. Even though AFAICS the dummy cycles are specific for
-the Read SPI NAND/NOR operations it still would be correct to
-explicitly refuse the non-Rx transactions with non-zero dummy data
-length.
+The stubs found in other header files do return -ENODEV, so i though
+that this should also be done inside hwmon.h
 
-4. I don't really see a reason of adding the address, command and
-dummy data length constraints. You can as easily update the
-command/address/dummy lengths passed in the SPI mem-op structure
-thus providing wider SPI memory devices range support.
+Armin Wolf
 
-5. The main problem I can see in your implementation is that you try
-to assimilate the eSPI feature for the current DW SSI EEPROM
-read/write infrastructure. Note the SPI MEM ops currently available in
-the driver have been specifically created for the platforms with the
-native CS'es used to access the EEPROM devices. For such cases I had to
-use some not that nice solutions like IRQ-less transfers, local IRQs
-disabling and the outbound data collection in a single buffer in order
-to bypass the nasty DW SSI controller peculiarities. All of that isn't
-required in your case. You can implement a very nice and robust
-algorithm.
-
-6. You said your controller supports the clock stretching on Tx and Rx
-transfers. This is a very useful feature which can be used to bypass
-the main DW SSI controller problem connected with the native CS
-auto-toggling when the Tx FIFO gets empty or data loose due to the Rx
-FIFO overruns. Thus you won't need to always keep up with the Tx/Rx
-FIFO levels and implement the IRQ-based SPI MEM transfers.
-
-7. You unconditionally enable the eSPI support for the generic device
-snps,dwc-ssi-1.03a while this is an optional feature which yet can be
-disabled for any new controllers (see the SSI_SPI_MODE IP-core
-synthesize parameter). What you really need is to simply auto-detect
-the eSPI feature availability by checking whether the SPI_FRF field is
-writable for the DW APB SSI v4.0a and newer and for any DWC AHB SSI.
-
-8. There is no need in the IP-core version added to the compatible
-string because it can be retrieved from the SSI_VERSION_ID CSR. I
-would suggest to add a new generic compatible string "snps,dw-ahb-ssi"
-for the DW AHB SSI controllers and forget about the compatible strings
-versioning.
-
-9. Always study the driver coding convention before updating. In this
-particular case should you need to add new methods, macros, etc please
-add the vendor-specific prefix as is done for the rest of the driver
-entities.
-
-I've deliberately collected all the generic comments here so you'd be
-aware of the required changes in total, because I very much doubt all
-of them could be fixed at once via a single patchset iteration. But as
-soon as all of them are fixed we'll get a very nice and neat solution
-for the eSPI feature.
-
-I'll give you some more detailed comments right in the corresponding
-patches, but they won't cover all the issues noted above on this
-patchset iteration. So feel free to update your series based on your
-understanding of the issues (you can ask me if you don't fully get
-what I said above). It may reduce the number of the further series
-re-submissions.
-
--Sergey
-
-> 
-> Ben Dooks (1):
->   spi: dw-apb-ssi: add generic 1.03a version
-> 
-> Sudip Mukherjee (10):
->   spi: dw: define capability for enhanced spi
->   spi: dw: add check for support of dual/quad/octal
->   spi: dw: define spi_frf for dual/quad/octal modes
->   spi: dw: use TMOD_RO to read in enhanced spi modes
->   spi: dw: define SPI_CTRLR0 register and its fields
->   spi: dw: update SPI_CTRLR0 register
->   spi: dw: update NDF while writing in enhanced spi mode
->   spi: dw: update buffer for enhanced spi mode
->   spi: dw: prepare the transfer routine for enhanced mode
->   spi: dw: initialize dwc-ssi-1.03a controller
-> 
->  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
->  drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
->  drivers/spi/spi-dw-mmio.c                     |  10 +
->  drivers/spi/spi-dw.h                          |  19 ++
->  4 files changed, 291 insertions(+), 27 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+>> +}
+>> +
+>> +static inline struct device
+>> +*hwmon_device_register_with_groups(struct device *dev, const char *name, void *drvdata,
+>> +				   const struct attribute_group **groups)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +static inline struct device
+>> +*devm_hwmon_device_register_with_groups(struct device *dev, const char *name, void *drvdata,
+>> +					const struct attribute_group **groups)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +static inline struct device
+>> +*hwmon_device_register_with_info(struct device *dev, const char *name, void *drvdata,
+>> +				 const struct hwmon_chip_info *info,
+>> +				 const struct attribute_group **extra_groups)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +static inline struct device *hwmon_device_register_for_thermal(struct device *dev, const char *name,
+>> +							       void *drvdata)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +static inline struct device
+>> +*devm_hwmon_device_register_with_info(struct device *dev, const char *name, void *drvdata,
+>> +				      const struct hwmon_chip_info *info,
+>> +				      const struct attribute_group **extra_groups)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +static inline void hwmon_device_unregister(struct device *dev)
+>> +{
+>> +}
+>> +
+>> +static inline void devm_hwmon_device_unregister(struct device *dev)
+>> +{
+>> +}
+>> +
+>> +static inline int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>> +				     int channel)
+>> +{
+>> +	return -ENODEV;
+>> +}
+>> +
+>> +static inline char *hwmon_sanitize_name(const char *name)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +static inline char *devm_hwmon_sanitize_name(struct device *dev, const char *name)
+>> +{
+>> +	return ERR_PTR(-ENODEV);
+>> +}
+>> +
+>> +#endif /* CONFIG_HWMON */
+>> +
+>>   /**
+>>    * hwmon_is_bad_char - Is the char invalid in a hwmon name
+>>    * @ch: the char to be considered
+>> @@ -490,4 +564,4 @@ static inline bool hwmon_is_bad_char(const char ch)
+>>   	}
+>>   }
+>>
+>> -#endif
+>> +#endif /* _HWMON_H_ */
+>> --
+>> 2.30.2
+>>

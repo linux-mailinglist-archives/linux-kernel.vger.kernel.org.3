@@ -2,464 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9848A5A2CEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A345A2CEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243730AbiHZQ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S1343731AbiHZQ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiHZQ4r (ORCPT
+        with ESMTP id S229717AbiHZQ5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:56:47 -0400
-Received: from smtpout30.security-mail.net (smtpout30.security-mail.net [85.31.212.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96157A52E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:56:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by fx306.security-mail.net (Postfix) with ESMTP id 13CA53994E8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:56:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661533000;
-        bh=RUEEvXqouYqNkm0U0P1EZVTQX1P0TCPoxuusWsEw05Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=QJKnzMlB88DNE6j/w1z0lpqRZiCtiNWVv2ABBXjhCz8WDgjU2bIIVNjmuktOu0Dcc
-         esn4bAQFXCIohgU91I18Hyk9WXpelyuGeLSFrsnlFVXooVUkt+rb0nMf05g3xNiZ2T
-         Sx7Gi9yUVdU8MO5Anelew6Hv9EhKqiLlRH8Is5so=
-Received: from fx306 (localhost [127.0.0.1])
-        by fx306.security-mail.net (Postfix) with ESMTP id B2B3C3994A1;
-        Fri, 26 Aug 2022 18:56:39 +0200 (CEST)
-X-Virus-Scanned: E-securemail
-Secumail-id: <4ee8.6308fb47.17078.0>
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx306.security-mail.net (Postfix) with ESMTPS id 17CEC3993D0;
-        Fri, 26 Aug 2022 18:56:39 +0200 (CEST)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id E1DD327E0392;
-        Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id C7AEB27E0396;
-        Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu C7AEB27E0396
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661532998;
-        bh=8QCQcukmddoAigmi2bZXjK4ovAPrdFjkKWbgX4jEFsM=;
-        h=From:To:Date:Message-Id;
-        b=Ky3mkNDjGKaPdpw13LbXBd9Oska6WxZfcKcGZCuBMU848nE944hqS0MAvfJ1Lza2C
-         zNGPUi0EPvju+XA3e2dbHIezkOoG3Or5e0kftzKjAUMAWnbhAcXtunJJnFW0B1ZJLP
-         BJlKY2/jP8dtpIRuapp9eNv55H1a10d/8Ll3Y3FI=
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id e0zIwA12G-6z; Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id B09C827E0392;
-        Fri, 26 Aug 2022 18:56:38 +0200 (CEST)
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>, Conor.Dooley@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
-Subject: [PATCH v4] Remove duplicated words across the whole documentation
-Date:   Fri, 26 Aug 2022 18:56:34 +0200
-Message-Id: <20220826165634.5617-1-jmaselbas@kalray.eu>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220826163458.1142-1-jmaselbas@kalray.eu>
-References: <20220826163458.1142-1-jmaselbas@kalray.eu>
-X-Virus-Scanned: by Secumail
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 26 Aug 2022 12:57:24 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7C3B7294;
+        Fri, 26 Aug 2022 09:57:23 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QFNnd6005325;
+        Fri, 26 Aug 2022 09:57:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=pA1PRmZp4ZzqwIlze3LerbsCW3Y2ail6VzvP+zEu7l4=;
+ b=E0V+4xuJYCvnL7SW/7ZaHjZq2SJESkh4N3OMeZ0iQqprIAyM7BwZ65wiftuCLjeqEnLn
+ t83/VbbjZUWzs0Wi/jIrCj7Z1EHNTLHmMENUTeR0JTRNGE1Y1rANJKlRHDIsE88plqBX
+ EH24yEuMvCEg98Bw06oBIpMCL/nFDx2G4CE= 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j70s9rnu9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Aug 2022 09:57:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E1X0/cJQgk49eZbkZ2u2FNQqVHGwG/ZKn0lSgdVW8CBbS2LA/6djp4R4+xzaINdawnPyoZIcxCE/SwnvfO0/Jk4hBlV8jE5bb7IFly8RvQK1VfGByLWvBcyP3VGGgJfuvGLqqjQD0/oJ8c4WimfFuOBrSNxm892vR8JCEnWHC7F0fRKGOiy8J/zX7ZcZp7srg1tgEy/WdLFfhUyss9IvYVUAvh6NBEufa5UImy+Ir5KQmZs/Vg8a1zAbQ8jKuITS3VltujIczxcH3riue8kaOZFbaBO1L6gbOsyDmMjVs48O0cpnLEUHyK5Ozcq0XuBqDQcB3eaUokYsvnRAgMZc7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pA1PRmZp4ZzqwIlze3LerbsCW3Y2ail6VzvP+zEu7l4=;
+ b=ee/t+JX3Mli21p3Rce5lU1c4lanNKXlPRj7Pb09vhbKqg/0PuQc2d9jTJNZ9fe9QYel+TAsqDnrPEvVXP2spfKeNtuEk/C/jmKrd99gg3HCdcSxVmaMx33OlNlxO1+evbNWvewUWtvt9sC3GWPniQABkLj+edFfgsDIb8nQIDbNCBF275NSGEtWfgHNfPL9GZzUR+SXoPr3D4a1ziL4pczNyGE+M54C/2AUM1rhH4UbFtj99Z5aITtk2ZVyAIZ320zejwIwJwbWARwNp6+d+RyruqRLZXZxO7qT7BIp2L5zivV4qYnf+jGOPBUbKaZgV8UR8GvljIysmG4tIRysO3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by DM6PR15MB3749.namprd15.prod.outlook.com (2603:10b6:5:2b9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Fri, 26 Aug
+ 2022 16:57:20 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::c488:891f:57b:d5da]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::c488:891f:57b:d5da%9]) with mapi id 15.20.5566.015; Fri, 26 Aug 2022
+ 16:57:20 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Paul Moore <paul@paul-moore.com>
+CC:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "eparis@parisplace.org" <eparis@parisplace.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
+        "cgzones@googlemail.com" <cgzones@googlemail.com>,
+        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
+        "tixxdz@gmail.com" <tixxdz@gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+Thread-Topic: [PATCH v5 0/4] Introduce security_create_user_ns()
+Thread-Index: AQHYsML1s5QOEDIN+UabdnIDmWJJf62yExMAgAEh2FOAAA7TgIAAQiRwgAAERYCAAAwHXoAAA3iAgAAEXA2AAReTgIAAEl8AgAGLNoCAAGuIgIAJPUDAgAARoYCAACyYgIAAA2MAgAAI1YCAARGwgIAAIDWA
+Date:   Fri, 26 Aug 2022 16:57:19 +0000
+Message-ID: <7F90B59E-6AC3-4B82-8467-637945E181FB@fb.com>
+References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
+ <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com>
+ <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+ <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
+ <CAHC9VhS4ROEY6uBwJPaTKX_bLiDRCyFJ9_+_08gFP0VWF_s-bQ@mail.gmail.com>
+ <ABA58A31-E4BE-445A-B98C-F462D2ED7679@fb.com>
+ <CAHC9VhRU-b8LC3722tBHAzd6atrgiSAaGm16sRf_M7hywWFOOA@mail.gmail.com>
+In-Reply-To: <CAHC9VhRU-b8LC3722tBHAzd6atrgiSAaGm16sRf_M7hywWFOOA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 90895645-1304-4775-8f2b-08da87840a04
+x-ms-traffictypediagnostic: DM6PR15MB3749:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WAiLpFfHncrBh2bFbq9VKLWqYg40seeDoka/oFkbtwlgrlKJMwUvNvl8Dc8boDRVB1rzC8RH8K6DrVPgXFa0JmQMugwZI6L8XA+8KICVGSSrESvad006S82en0F9t/QSI3PJEohtP5G/wyWkJKZzhmjdVCjZnPi49VdF5CUBBr+uwujBEIvmyWGDyUu4sxZzpgjFv+wnP9lyzQRbtO6vCbsoBTRR58CanYMQ/AL9fb1hy7WqilOV+qSWBO8uUqHbLzyUdi/LfihZIBGlTPXd0bulf9Y7hUy+rUroeSqolKmfxKrd7C12O//5S9FP6HZ1xfKZEAA9Yo5hTh8hRF7b69xxJqVqXWO+6dkLRGNk0AbqnunAwTOr3AQ84LYBFD5gBctFd1nHKA32HKuGX44Ci6mEGUAeO0BV2OOBFit+f1E6Wy036ewW0rR/VWDX5Ly8Dt59w6QsHn4kUtjhUZBkKNfQtPk6fuDjQplzQmvs1FmVtskBxS8qNAi5YkC4ec26mvWv2MtPPxZ71MAkoJPe6h38ryQmvGWdOrLBDZo7d8lIW0DvJHOpeYN4xILJJ+JSbAM/6QrtAlM4AH/Q7gIef1q95pw/cSkPg1i7Ula8eFIBuUM1dhF7B/+GsbhoQ1uwab53jnGPUrUOoP/voDHMOPgklTjk+andi4xTxGgaGikkFwMIWT9oNLrD4MQBEQ0q2/BhSVqjRJ9g3uvNJj7/x5ocdw3k9wtvFlNyjgaqBn/u1yj5tkdi1gm0ndHgoYbv1ZwHYEK8KyGW4NWYZ2ONUFgE3VqnjFacfSMGU9O4uFE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(39860400002)(136003)(396003)(71200400001)(76116006)(91956017)(41300700001)(54906003)(64756008)(5660300002)(316002)(122000001)(4326008)(6486002)(8676002)(36756003)(478600001)(66476007)(66556008)(66946007)(66446008)(7416002)(6916009)(8936002)(53546011)(2616005)(2906002)(6506007)(33656002)(186003)(83380400001)(15650500001)(6512007)(38070700005)(86362001)(38100700002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XdvXdyX098kVy1yjRaqSoFy5AzvIdsYMu6mj3iGf6PlskEMCrPNkzlyTimml?=
+ =?us-ascii?Q?c/iO9Hh9ZQnafrU0WeRVdAS0AyFOIuPQNvFQRnstPhpRGnAnLivDI76rOgVn?=
+ =?us-ascii?Q?0K39eqChBP9Z9cNvpwbR35H4fL+rV+HOElIUuf48DLNEI6diecsBVUcOvh4w?=
+ =?us-ascii?Q?nhIjOuNMhXmsLCsx/L2jDk4O9ZQAA3baW1JDIaEdgmrmA0jhW975oPvimlec?=
+ =?us-ascii?Q?m7qJB+e3XvamvrcUPyzjMbHhz0NjOjk6OklYyjwqLCi7tEWVWsbzZBQ4id4z?=
+ =?us-ascii?Q?/hmPxCq6QygD6S98LFvzLeTKLdjfnfU2ItCEx/iRJDu2YN/NkIe0GoVFZTHl?=
+ =?us-ascii?Q?q0O8DPZ6D15Pl8G4E3OpfQIhVti1dQ50OiUimPa7GRZ1LHPdpZ21OkX92pjU?=
+ =?us-ascii?Q?nLom3iocEvA1MLYKeyIyojfjm91v2ahPEFBO04gc5HwC+8XNeiQQkv0mVZQT?=
+ =?us-ascii?Q?o54gXS++fKGbWn11c0P42iZLyQ91UOXfC66VZCZ2DIYvdaOec4BHs7BqNSqJ?=
+ =?us-ascii?Q?ut61hnrUcHtea8nE2XaaQfm4r1g2XOM6u4jOBNq2qtFHQM0Pd6QeH5XHD89p?=
+ =?us-ascii?Q?2jJcOpG9PJxKAZU/k9nJYZY8iRzHq1VZJjEThFNg6C5PdYAfOMOs/gXxEHpy?=
+ =?us-ascii?Q?Q1sWO9HszPMNXCJ+W+yKTLARLcSZMocp7Uyo9H93LonwTBDSJO7GkJBAjp37?=
+ =?us-ascii?Q?HZeEEch5tadQVX9+b8uCmObl3MlwsL38bk0tQz2Qq6J0bcchXIVbOTPAo8ne?=
+ =?us-ascii?Q?t151jdtiGz4QgABIAktKwAdVOMDIwhNIJB4DdtgBZaYtiKMEWXv+2l7NUOOv?=
+ =?us-ascii?Q?fBUNImd2Xb/FQojysf1ebSSiiw/dGGKXYW+WkRz5Z8D/H9Tv+F4J6fVkLHcj?=
+ =?us-ascii?Q?jwDwPagSVUQpiDyQg0cczOqv6hmxoI5o9XZKSiyOzYBCApBzB2N7ZfuEqv8A?=
+ =?us-ascii?Q?ZSeAOdjW05eYdHbWDXGpi5xvjnOJk8E5FqpwtiBk9w93z8NQeCul96YsMxz/?=
+ =?us-ascii?Q?Gg9Am0BTwpLw9KSDNWV64TmAf7cg9sAIovYg/9+V3ppAuQ3954JRbCI5iDP5?=
+ =?us-ascii?Q?J85wWKsM0c9huJ0YRzSfaC7TX0rPJ0SZ/rlv/N+Kojg1f9+r4+TpyBDJyEz1?=
+ =?us-ascii?Q?y9ycYEJRkNxnhUdFTz/939v/1wpSTOd+3gRAxm5twm7Ahb5IgUtxjHC8UMGU?=
+ =?us-ascii?Q?XPy8lYQ/vLmiYJ30cRGnSIaYwiDpwey7z7K4GWYT+ofY402lu49KbJh9fHIr?=
+ =?us-ascii?Q?J2Hr+2NlMZWCK7cGWbpTaLcDHsjHFBwHZpdq881P0bAxmTdBI1OKXG0MwGqT?=
+ =?us-ascii?Q?onZxuzwLP3kEX0REfDYlFdpKB9HCMC4nrLVUf/IrXhhmZjblWg5Sb3N2Q1iV?=
+ =?us-ascii?Q?tqyaAwHGEgqG4rK6wXb+HCvE9dvHGcCNnKXo+qkcb4QyUlZZkNl4g0ecxgPg?=
+ =?us-ascii?Q?g6A+/6+CgmePtcMKm0mHoJ6eHI9nw3LpL4QocOmSMzOOE2Ucr+lY8AooD3I6?=
+ =?us-ascii?Q?u60jtXeO8R5j8uqK5G2FksR81ZuEwC1ivjdXzObClfQQ4PSM6G9Zo9WJy7Ex?=
+ =?us-ascii?Q?syY46eLRgoH7VXD7ZUcwksM3KNpXJCfHk6r3VdqfAvNjpCPmf54LW5Sj+xMl?=
+ =?us-ascii?Q?cD1xqf7YN64xOdIj/Dg1YJs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <443A331CCF194741BAB57C53D0711B48@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90895645-1304-4775-8f2b-08da87840a04
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2022 16:57:19.9694
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SsSYaYOUrr1N2qMO5YOydvN0R2+M2NwU39ICbKeHTHE3S6SIcv1ewelAF/o/s3x44PhS7JdDCj8q/bno1Ve7Pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3749
+X-Proofpoint-GUID: gAUNh8dV1cldht3aO5CTxXI_N30H0H_i
+X-Proofpoint-ORIG-GUID: gAUNh8dV1cldht3aO5CTxXI_N30H0H_i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-26_08,2022-08-25_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicated words (the, at, be ...) across the whole documentation.
-In some cases the duplicated words are replaced by something that makes
-more sense, for instance: "be be" is replaced by "can be" when possible.
 
-There are likely more duplicated words.
 
-CC: Conor.Dooley@microchip.com
-CC: Randy Dunlap <rdunlap@infradead.org>
-CC: Bagas Sanjaya <bagasdotme@gmail.com>
-CC: linux-doc@vger.kernel.org
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
----
-in v4:
- - remove spurious changes reported by Conor Dooley
-in v3:
- as suggested by Randy Dunlap:
- - remove duplicated 'The the '
- - remove duplicated 'at at ' (some are replaced by 'at a ')
- - remove duplicated be, is, to, we, on ...
-in v2:
- - also remove the second 'the' in one sentence as suggested by
-   Bagas Sanjaya
----
- Documentation/RCU/checklist.rst                               | 2 +-
- Documentation/admin-guide/kdump/vmcoreinfo.rst                | 2 +-
- Documentation/bpf/instruction-set.rst                         | 2 +-
- Documentation/bpf/map_cgroup_storage.rst                      | 4 ++--
- Documentation/core-api/cpu_hotplug.rst                        | 3 +--
- Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml  | 4 ++--
- .../devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt      | 2 +-
- Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt     | 2 +-
- Documentation/devicetree/bindings/fpga/fpga-region.txt        | 4 ++--
- Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml      | 2 +-
- Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml      | 2 +-
- Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml      | 2 +-
- .../devicetree/bindings/net/amlogic,meson-dwmac.yaml          | 2 +-
- .../devicetree/bindings/net/can/microchip,mcp251xfd.yaml      | 2 +-
- Documentation/driver-api/isa.rst                              | 2 +-
- Documentation/filesystems/caching/backend-api.rst             | 2 +-
- Documentation/filesystems/journalling.rst                     | 2 +-
- Documentation/hwmon/f71882fg.rst                              | 2 +-
- Documentation/locking/seqlock.rst                             | 2 +-
- Documentation/networking/switchdev.rst                        | 2 +-
- Documentation/sphinx/cdomain.py                               | 2 +-
- Documentation/trace/histogram.rst                             | 2 +-
- Documentation/userspace-api/media/dvb/dmx-reqbufs.rst         | 2 +-
- Documentation/userspace-api/media/dvb/frontend_f_open.rst     | 2 +-
- 24 files changed, 27 insertions(+), 28 deletions(-)
+> On Aug 26, 2022, at 8:02 AM, Paul Moore <paul@paul-moore.com> wrote:
+> 
+> On Thu, Aug 25, 2022 at 6:42 PM Song Liu <songliubraving@fb.com> wrote:
+>>> On Aug 25, 2022, at 3:10 PM, Paul Moore <paul@paul-moore.com> wrote:
+>>> On Thu, Aug 25, 2022 at 5:58 PM Song Liu <songliubraving@fb.com> wrote:
+> 
+> ...
+> 
+>>>> I am new to user_namespace and security work, so please pardon me if
+>>>> anything below is very wrong.
+>>>> 
+>>>> IIUC, user_namespace is a tool that enables trusted userspace code to
+>>>> control the behavior of untrusted (or less trusted) userspace code.
+>>>> Failing create_user_ns() doesn't make the system more reliable.
+>>>> Specifically, we call create_user_ns() via two paths: fork/clone and
+>>>> unshare. For both paths, we need the userspace to use user_namespace,
+>>>> and to honor failed create_user_ns().
+>>>> 
+>>>> On the other hand, I would echo that killing the process is not
+>>>> practical in some use cases. Specifically, allowing the application to
+>>>> run in a less secure environment for a short period of time might be
+>>>> much better than killing it and taking down the whole service. Of
+>>>> course, there are other cases that security is more important, and
+>>>> taking down the whole service is the better choice.
+>>>> 
+>>>> I guess the ultimate solution is a way to enforce using user_namespace
+>>>> in the kernel (if it ever makes sense...).
+>>> 
+>>> The LSM framework, and the BPF and SELinux LSM implementations in this
+>>> patchset, provide a mechanism to do just that: kernel enforced access
+>>> controls using flexible security policies which can be tailored by the
+>>> distro, solution provider, or end user to meet the specific needs of
+>>> their use case.
+>> 
+>> In this case, I wouldn't call the kernel is enforcing access control.
+>> (I might be wrong). There are 3 components here: kernel, LSM, and
+>> trusted userspace (whoever calls unshare).
+> 
+> The LSM layer, and the LSMs themselves are part of the kernel; look at
+> the changes in this patchset to see the LSM, BPF LSM, and SELinux
+> kernel changes.  Explaining how the different LSMs work is quite a bit
+> beyond the scope of this discussion, but there is plenty of
+> information available online that should be able to serve as an
+> introduction, not to mention the kernel source itself.  However, in
+> very broad terms you can think of the individual LSMs as somewhat
+> analogous to filesystem drivers, e.g. ext4, and the LSM itself as the
+> VFS layer.
 
-diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index 42cc5d891bd2..7b1c85a16dc3 100644
---- a/Documentation/RCU/checklist.rst
-+++ b/Documentation/RCU/checklist.rst
-@@ -477,6 +477,6 @@ over a rather long period of time, but improvements are always welcome!
- 	So if you need to wait for both an RCU grace period and for
- 	all pre-existing call_rcu() callbacks, you will need to execute
- 	both rcu_barrier() and synchronize_rcu(), if necessary, using
--	something like workqueues to to execute them concurrently.
-+	something like workqueues to execute them concurrently.
- 
- 	See rcubarrier.rst for more information.
-diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-index 8419019b6a88..6726f439958c 100644
---- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-+++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-@@ -200,7 +200,7 @@ prb
- 
- A pointer to the printk ringbuffer (struct printk_ringbuffer). This
- may be pointing to the static boot ringbuffer or the dynamically
--allocated ringbuffer, depending on when the the core dump occurred.
-+allocated ringbuffer, depending on when the core dump occurred.
- Used by user-space tools to read the active kernel log buffer.
- 
- printk_rb_static
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index 1b0e6711dec9..0ac7ae40be37 100644
---- a/Documentation/bpf/instruction-set.rst
-+++ b/Documentation/bpf/instruction-set.rst
-@@ -133,7 +133,7 @@ code field of ``BPF_END``.
- The byte swap instructions operate on the destination register
- only and do not use a separate source register or immediate value.
- 
--The 1-bit source operand field in the opcode is used to to select what byte
-+The 1-bit source operand field in the opcode is used to select what byte
- order the operation convert from or to:
- 
-   =========  =====  =================================================
-diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
-index cab9543017bf..8e5fe532c07e 100644
---- a/Documentation/bpf/map_cgroup_storage.rst
-+++ b/Documentation/bpf/map_cgroup_storage.rst
-@@ -31,7 +31,7 @@ The map uses key of type of either ``__u64 cgroup_inode_id`` or
-     };
- 
- ``cgroup_inode_id`` is the inode id of the cgroup directory.
--``attach_type`` is the the program's attach type.
-+``attach_type`` is the program's attach type.
- 
- Linux 5.9 added support for type ``__u64 cgroup_inode_id`` as the key type.
- When this key type is used, then all attach types of the particular cgroup and
-@@ -155,7 +155,7 @@ However, the BPF program can still only associate with one map of each type
- ``BPF_MAP_TYPE_CGROUP_STORAGE`` or more than one
- ``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE``.
- 
--In all versions, userspace may use the the attach parameters of cgroup and
-+In all versions, userspace may use the attach parameters of cgroup and
- attach type pair in ``struct bpf_cgroup_storage_key`` as the key to the BPF map
- APIs to read or update the storage for a given attachment. For Linux 5.9
- attach type shared storages, only the first value in the struct, cgroup inode
-diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
-index c6f4ba2fb32d..c326f4a86d34 100644
---- a/Documentation/core-api/cpu_hotplug.rst
-+++ b/Documentation/core-api/cpu_hotplug.rst
-@@ -560,8 +560,7 @@ available:
-   * cpuhp_state_remove_instance(state, node)
-   * cpuhp_state_remove_instance_nocalls(state, node)
- 
--The arguments are the same as for the the cpuhp_state_add_instance*()
--variants above.
-+The arguments are the same as for cpuhp_state_add_instance*() variants above.
- 
- The functions differ in the way how the installed callbacks are treated:
- 
-diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-index a4b4452afc1d..e5b56ee500bc 100644
---- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-+++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-@@ -121,7 +121,7 @@ properties:
- 
-   arm,vexpress,position:
-     description: When daughterboards are stacked on one site, their position
--      in the stack be be described this attribute.
-+      in the stack can be described with this attribute.
-     $ref: '/schemas/types.yaml#/definitions/uint32'
-     minimum: 0
-     maximum: 3
-@@ -139,7 +139,7 @@ patternProperties:
-       the connection between the motherboard and any tiles. Sometimes the
-       compatible is placed directly under this node, sometimes it is placed
-       in a subnode named "motherboard-bus". Sometimes the compatible includes
--      "arm,vexpress,v2?-p1" sometimes (on software models) is is just
-+      "arm,vexpress,v2?-p1" sometimes (on software models) it is just
-       "simple-bus". If the compatible is placed in the "motherboard-bus" node,
-       it is stricter and always has two compatibles.
-     type: object
-diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
-index 9a4295b54539..b300c42c52d7 100644
---- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
-+++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
-@@ -8,7 +8,7 @@ Required properties:
- - reg : Should contain 1 register ranges(address and length).  For
-   Tegra20, Tegra30, and Tegra114 chips, the value must be <0x6000c004
-   0x10c>.  For Tegra124, Tegra132 and Tegra210 chips, the value should
--  be be <0x6000c000 0x150>.
-+  be <0x6000c000 0x150>.
- 
- Example (for a Tegra20 chip):
- 	ahb: ahb@6000c004 {
-diff --git a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
-index b849a1ed389d..47e477cce6d2 100644
---- a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
-+++ b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
-@@ -4,7 +4,7 @@ Required properties:
- - compatible:	"ti,dra7-dma-crossbar" for DRA7xx DMA crossbar
- 		"ti,am335x-edma-crossbar" for AM335x and AM437x
- - reg:		Memory map for accessing module
--- #dma-cells:	Should be set to to match with the DMA controller's dma-cells
-+- #dma-cells:	Should be set to match with the DMA controller's dma-cells
- 		for ti,dra7-dma-crossbar and <3> for ti,am335x-edma-crossbar.
- - dma-requests:	Number of DMA requests the crossbar can receive
- - dma-masters:	phandle pointing to the DMA controller
-diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-index 6694ef29a267..095b5e728dff 100644
---- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
-+++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-@@ -50,7 +50,7 @@ Partial Reconfiguration Region (PRR)
- Persona
-  * Also called a "partial bit stream"
-  * An FPGA image that is designed to be loaded into a PRR.  There may be
--   any number of personas designed to fit into a PRR, but only one at at time
-+   any number of personas designed to fit into a PRR, but only one at a time
-    may be loaded.
-  * A persona may create more regions.
- 
-@@ -127,7 +127,7 @@ add the child devices:
- 
-  * FPGA Manager
-  * FPGA Bridges
-- * image-specific information needed to to the programming.
-+ * image-specific information needed to do the programming.
-  * child nodes
- 
- The intended use is that a Device Tree overlay (DTO) can be used to reprogram an
-diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
-index f6cac4b1079c..3549a32452ec 100644
---- a/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
-+++ b/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
-@@ -26,7 +26,7 @@ properties:
-   '#gpio-cells':
-     description:
-       The first cell is the pin number.
--      The second cell is is used to specify flags.
-+      The second cell is used to specify flags.
-       See ../gpio/gpio.txt for more information.
-     const: 2
- 
-diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
-index dc5a29b5ef7d..43a3f7ccaf36 100644
---- a/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
-+++ b/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
-@@ -26,7 +26,7 @@ properties:
-   '#gpio-cells':
-     description:
-       The first cell is the pin number.
--      The second cell is is used to specify flags.
-+      The second cell is used to specify flags.
-       See ../gpio/gpio.txt for more information.
-     const: 2
- 
-diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
-index 012d25111054..373c4f89c4ea 100644
---- a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
-+++ b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
-@@ -28,7 +28,7 @@ properties:
-   '#gpio-cells':
-     description:
-       The first cell is the pin number.
--      The second cell is is used to specify flags.
-+      The second cell is used to specify flags.
-       See ../gpio/gpio.txt for more information.
-     const: 2
- 
-diff --git a/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml b/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
-index 608e1d62bed5..3eb0513d824c 100644
---- a/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
-@@ -149,7 +149,7 @@ properties:
-       - description:
-           The first register range should be the one of the DWMAC controller
-       - description:
--          The second range is is for the Amlogic specific configuration
-+          The second range is for the Amlogic specific configuration
-           (for example the PRG_ETHERNET register range on Meson8b and newer)
- 
- required:
-diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
-index 7a73057707b4..0415c3a886ca 100644
---- a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
-@@ -42,7 +42,7 @@ properties:
- 
-   microchip,rx-int-gpios:
-     description:
--      GPIO phandle of GPIO connected to to INT1 pin of the MCP251XFD, which
-+      GPIO phandle of GPIO connected to INT1 pin of the MCP251XFD, which
-       signals a pending RX interrupt.
-     maxItems: 1
- 
-diff --git a/Documentation/driver-api/isa.rst b/Documentation/driver-api/isa.rst
-index def4a7b690b5..3df1b1696524 100644
---- a/Documentation/driver-api/isa.rst
-+++ b/Documentation/driver-api/isa.rst
-@@ -100,7 +100,7 @@ I believe platform_data is available for this, but if rather not, moving
- the isa_driver pointer to the private struct isa_dev is ofcourse fine as
- well.
- 
--Then, if the the driver did not provide a .match, it matches. If it did,
-+Then, if the driver did not provide a .match, it matches. If it did,
- the driver match() method is called to determine a match.
- 
- If it did **not** match, dev->platform_data is reset to indicate this to
-diff --git a/Documentation/filesystems/caching/backend-api.rst b/Documentation/filesystems/caching/backend-api.rst
-index d7507becf674..3a199fc50828 100644
---- a/Documentation/filesystems/caching/backend-api.rst
-+++ b/Documentation/filesystems/caching/backend-api.rst
-@@ -122,7 +122,7 @@ volumes, calling::
- to tell fscache that a volume has been withdrawn.  This waits for all
- outstanding accesses on the volume to complete before returning.
- 
--When the the cache is completely withdrawn, fscache should be notified by
-+When the cache is completely withdrawn, fscache should be notified by
- calling::
- 
- 	void fscache_relinquish_cache(struct fscache_cache *cache);
-diff --git a/Documentation/filesystems/journalling.rst b/Documentation/filesystems/journalling.rst
-index e18f90ffc6fd..2a69bd2d95ed 100644
---- a/Documentation/filesystems/journalling.rst
-+++ b/Documentation/filesystems/journalling.rst
-@@ -93,7 +93,7 @@ easily as on jbd2_journal_start().
- 
- Try to reserve the right number of blocks the first time. ;-). This will
- be the maximum number of blocks you are going to touch in this
--transaction. I advise having a look at at least ext4_jbd.h to see the
-+transaction. I advise having at least a look at ext4_jbd.h to see the
- basis on which ext4 uses to make these decisions.
- 
- Another wriggle to watch out for is your on-disk block allocation
-diff --git a/Documentation/hwmon/f71882fg.rst b/Documentation/hwmon/f71882fg.rst
-index 38e30fbd4806..ab83bc7bbbdf 100644
---- a/Documentation/hwmon/f71882fg.rst
-+++ b/Documentation/hwmon/f71882fg.rst
-@@ -179,7 +179,7 @@ Writing an unsupported mode will result in an invalid parameter error.
- 
- * 2: Normal auto mode
-   You can define a number of temperature/fan speed trip points, which % the
--  fan should run at at this temp and which temp a fan should follow using the
-+  fan should run at this temp and which temp a fan should follow using the
-   standard sysfs interface. The number and type of trip points is chip
-   depended, see which files are available in sysfs.
-   Fan/PWM channel 3 of the F8000 is always in this mode!
-diff --git a/Documentation/locking/seqlock.rst b/Documentation/locking/seqlock.rst
-index 64405e5da63e..bfda1a5fecad 100644
---- a/Documentation/locking/seqlock.rst
-+++ b/Documentation/locking/seqlock.rst
-@@ -39,7 +39,7 @@ as the writer can invalidate a pointer that the reader is following.
- Sequence counters (``seqcount_t``)
- ==================================
- 
--This is the the raw counting mechanism, which does not protect against
-+This is the raw counting mechanism, which does not protect against
- multiple writers.  Write side critical sections must thus be serialized
- by an external lock.
- 
-diff --git a/Documentation/networking/switchdev.rst b/Documentation/networking/switchdev.rst
-index f1f4e6a85a29..6a0c2cc722eb 100644
---- a/Documentation/networking/switchdev.rst
-+++ b/Documentation/networking/switchdev.rst
-@@ -161,7 +161,7 @@ The switchdev driver can know a particular port's position in the topology by
- monitoring NETDEV_CHANGEUPPER notifications.  For example, a port moved into a
- bond will see it's upper master change.  If that bond is moved into a bridge,
- the bond's upper master will change.  And so on.  The driver will track such
--movements to know what position a port is in in the overall topology by
-+movements to know what position a port is in the overall topology by
- registering for netdevice events and acting on NETDEV_CHANGEUPPER.
- 
- L2 Forwarding Offload
-diff --git a/Documentation/sphinx/cdomain.py b/Documentation/sphinx/cdomain.py
-index ca8ac9e59ded..a7d1866e72ff 100644
---- a/Documentation/sphinx/cdomain.py
-+++ b/Documentation/sphinx/cdomain.py
-@@ -151,7 +151,7 @@ class CObject(Base_CObject):
-     def handle_func_like_macro(self, sig, signode):
-         u"""Handles signatures of function-like macros.
- 
--        If the objtype is 'function' and the the signature ``sig`` is a
-+        If the objtype is 'function' and the signature ``sig`` is a
-         function-like macro, the name of the macro is returned. Otherwise
-         ``False`` is returned.  """
- 
-diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
-index 859fd1b76c63..c1b685a38f6b 100644
---- a/Documentation/trace/histogram.rst
-+++ b/Documentation/trace/histogram.rst
-@@ -412,7 +412,7 @@ Extended error information
-   Because the default sort key above is 'hitcount', the above shows a
-   the list of call_sites by increasing hitcount, so that at the bottom
-   we see the functions that made the most kmalloc calls during the
--  run.  If instead we we wanted to see the top kmalloc callers in
-+  run.  If instead we wanted to see the top kmalloc callers in
-   terms of the number of bytes requested rather than the number of
-   calls, and we wanted the top caller to appear at the top, we can use
-   the 'sort' parameter, along with the 'descending' modifier::
-diff --git a/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst b/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
-index d2bb1909ec98..18810f0bbca8 100644
---- a/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
-+++ b/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
-@@ -72,4 +72,4 @@ appropriately. The generic error codes are described at the
- :ref:`Generic Error Codes <gen-errors>` chapter.
- 
- EOPNOTSUPP
--    The  the requested I/O method is not supported.
-+    The requested I/O method is not supported.
-diff --git a/Documentation/userspace-api/media/dvb/frontend_f_open.rst b/Documentation/userspace-api/media/dvb/frontend_f_open.rst
-index bb37eded0870..70e169b8f601 100644
---- a/Documentation/userspace-api/media/dvb/frontend_f_open.rst
-+++ b/Documentation/userspace-api/media/dvb/frontend_f_open.rst
-@@ -91,7 +91,7 @@ appropriately.
-        -  The caller has no permission to access the device.
- 
-     -  - ``EBUSY``
--       -  The the device driver is already in use.
-+       -  The device driver is already in use.
- 
-     -  - ``EMFILE``
-        -  The process already has the maximum number of files open.
--- 
-2.17.1
+Thanks for the explanation. This matches my understanding with LSM. 
+
+> 
+>> AFAICT, kernel simply passes
+>> the decision made by LSM (BPF or SELinux) to the trusted userspace. It
+>> is up to the trusted userspace to honor the return value of unshare().
+> 
+> With a LSM enabled and enforcing a security policy on user namespace
+> creation, which appears to be the case of most concern, the kernel
+> would make a decision on the namespace creation based on various
+> factors (e.g. for SELinux this would be the calling process' security
+> domain and the domain's permission set as determined by the configured
+> security policy) and if the operation was rejected an error code would
+> be returned to userspace and the operation rejected.  It is the exact
+> same thing as what would happen if the calling process is chrooted or
+> doesn't have a proper UID/GID mapping.  Don't forget that the
+> create_user_ns() function already enforces a security policy and
+> returns errors to userspace; this patchset doesn't add anything new in
+> that regard, it just allows for a richer and more flexible security
+> policy to be built on top of the existing constraints.
+
+I believe I don't understand user namespace enough to agree or disagree
+here. I guess I should read more. 
+
+Thanks,
+Song
+
+> 
+>> If the userspace simply ignores unshare failures, or does not call
+>> unshare(CLONE_NEWUSER), kernel and LSM cannot do much about it, right?
+> 
+> The process is still subject to any security policies that are active
+> and being enforced by the kernel.  A malicious or misconfigured
+> application can still be constrained by the kernel using both the
+> kernel's legacy Discretionary Access Controls (DAC) as well as the
+> more comprehensive Mandatory Access Controls (MAC) provided by many of
+> the LSMs.
+> 
+> -- 
+> paul-moore.com
 

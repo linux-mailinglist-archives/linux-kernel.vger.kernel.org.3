@@ -2,106 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A525A26FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980FF5A26FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245009AbiHZLlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S245468AbiHZLmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHZLlR (ORCPT
+        with ESMTP id S229752AbiHZLmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:41:17 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C93ABD5F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:41:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VNJ.2OZ_1661514050;
-Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VNJ.2OZ_1661514050)
-          by smtp.aliyun-inc.com;
-          Fri, 26 Aug 2022 19:41:13 +0800
-From:   Liu Song <liusong@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: spectre: increase parameters that can be used to turn off bhb mitigation individually
-Date:   Fri, 26 Aug 2022 19:40:50 +0800
-Message-Id: <1661514050-22263-1-git-send-email-liusong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 Aug 2022 07:42:44 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A6CCE493
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:42:42 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id z8so1813104edb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=zrOUwjMiJLEQnorFwBXUXwNV/zm3wEQOoRsBf8uog7Q=;
+        b=U4rUv4EoAmPfiCoSUnphA6oOwJ4BIldC5W7psWAbxmS9oPKkwzKYseYdRVD8E6ceVu
+         prVJAzz31O0Z5bI1YbQkz9SwwxG3pRT5YNdHG6oMp1M1CYdMLkN88b8dcxqtdytJeCue
+         iCD1p9Yj2M7si13UrRlq80NqMDRx/0e0aS7azGxXY1Xmb0AcsXK0m1+yXx2lo9yyP1he
+         mstz/rJ5RF4kWk6ERLEHG+N/vF7SnP+oXR3MTiaJFaWjp7RBofwrpydMYkREi2tQ1Ibx
+         nQxEXbqeiWv7OA4qS3udBUzz2DzeBa0zfjlLs8VLw+OUpFqYlPKkY8Tg7uLBllUBbXae
+         jzrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=zrOUwjMiJLEQnorFwBXUXwNV/zm3wEQOoRsBf8uog7Q=;
+        b=QkK1p69fhLohL4nmtbLAXUGtAe23ieg8HLIcfwOWV3N8NAvIecEg88K7sekWtPjwin
+         7/MZ5SMXPlNcOWGwgzSO2nxT6a3F6h05ngptPzS7p2KVtVlw6vtLhqL1OTazECPLIB7B
+         J1eeMgj4eSx2yPbsprj5p4k2vTy9AdwY/2lw+rt+wpmi/2nHs3Jqn/0e2H9FHnLj4i0w
+         Th/tYWbiddXXD6XkpuJSk7u+Wt1qYpQnEK4/Ei4ON827+rDEo6t597+E+ZxjOm9BoWBq
+         or8PQJqqeMq9lMS7I+ozNKtB6GJi1FTgA/yLx1197MAOGxJ/2ZrbFNAd829kPA8Mv6w2
+         b/Bg==
+X-Gm-Message-State: ACgBeo3YdMRCYwjDHy73EfjTdz2E3jqtW88ytfZENwomYvVxwTKdPz0T
+        nNx5qHAVBGpVdsgH8oKuQYLrFqjEaBxzMddFvK7+Yw==
+X-Google-Smtp-Source: AA6agR4qgeBuy8ICwhXd8sQJYQGeXtvsZdgXOMuTzqsLARLDSJmZWXMNu6KxWCfFajUhlPbY0jiQTw0Z6OanDBXf5Ng=
+X-Received: by 2002:a05:6402:1f8c:b0:43e:8fab:76c with SMTP id
+ c12-20020a0564021f8c00b0043e8fab076cmr6453960edc.126.1661514161435; Fri, 26
+ Aug 2022 04:42:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220823004243.11596-1-rdunlap@infradead.org>
+In-Reply-To: <20220823004243.11596-1-rdunlap@infradead.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 13:42:30 +0200
+Message-ID: <CACRpkdZyk0OT2LuvHJRQgv+UjUgSzvyu1RECUEPu2T+8bcBziA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm: fix drm_mipi_dbi build errors
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Song <liusong@linux.alibaba.com>
+On Tue, Aug 23, 2022 at 2:42 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 
-In our environment, it was found that the mitigation BHB has a great
-impact on the benchmark performance. For example, in the lmbench test,
-the "process fork && exit" test performance drops by 20%.
-So it is necessary to have the ability to turn off the mitigation
-individually through cmdline, thus avoiding having to compile the
-kernel by adjusting the config.
+> drm_mipi_dbi needs lots of DRM_KMS_HELPER support, so select
+> that Kconfig symbol like it is done is most other uses, and
+> the way that it was before MIPS_DBI was moved from tinydrm
+> to its core location.
+>
+> Fixes these build errors:
+>
+> ld: drivers/gpu/drm/drm_mipi_dbi.o: in function `mipi_dbi_buf_copy':
+> drivers/gpu/drm/drm_mipi_dbi.c:205: undefined reference to `drm_gem_fb_ge=
+t_obj'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:211: undefined reference to `drm_gem_f=
+b_begin_cpu_access'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:215: undefined reference to `drm_gem_f=
+b_vmap'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:222: undefined reference to `drm_fb_sw=
+ab'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:224: undefined reference to `drm_fb_me=
+mcpy'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:227: undefined reference to `drm_fb_xr=
+gb8888_to_rgb565'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:235: undefined reference to `drm_gem_f=
+b_vunmap'
+> ld: drivers/gpu/drm/drm_mipi_dbi.c:237: undefined reference to `drm_gem_f=
+b_end_cpu_access'
+> ld: drivers/gpu/drm/drm_mipi_dbi.o: in function `mipi_dbi_dev_init_with_f=
+ormats':
+> ld: drivers/gpu/drm/drm_mipi_dbi.o:/X64/../drivers/gpu/drm/drm_mipi_dbi.c=
+:469: undefined reference to `drm_gem_fb_create_with_dirty'
+>
+> Fixes: 174102f4de23 ("drm/tinydrm: Move mipi-dbi")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Dillon Min <dillon.minfei@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
 
-Signed-off-by: Liu Song <liusong@linux.alibaba.com>
----
- Documentation/admin-guide/kernel-parameters.txt |  5 +++++
- arch/arm64/kernel/proton-pack.c                 | 10 +++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+Patch applied to drm-misc-next
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index d7f3090..1edc9a6 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3207,6 +3207,7 @@
- 					       spectre_v2_user=off [X86]
- 					       spec_store_bypass_disable=off [X86,PPC]
- 					       ssbd=force-off [ARM64]
-+					       nospectre_bhb [ARM64]
- 					       l1tf=off [X86]
- 					       mds=off [X86]
- 					       tsx_async_abort=off [X86]
-@@ -3631,6 +3632,10 @@
- 			vulnerability. System may allow data leaks with this
- 			option.
- 
-+	nospectre_bhb	[ARM64] Disable all mitigations for Spectre-BHB (branch
-+			history injection) vulnerability. System may allow data leaks
-+			with this option.
-+
- 	nospec_store_bypass_disable
- 			[HW] Disable all mitigations for the Speculative Store Bypass vulnerability
- 
-diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
-index 40be3a7..bd16903 100644
---- a/arch/arm64/kernel/proton-pack.c
-+++ b/arch/arm64/kernel/proton-pack.c
-@@ -988,6 +988,14 @@ static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
- 	isb();
- }
- 
-+static bool __read_mostly __nospectre_bhb;
-+static int __init parse_spectre_bhb_param(char *str)
-+{
-+	__nospectre_bhb = true;
-+	return 0;
-+}
-+early_param("nospectre_bhb", parse_spectre_bhb_param);
-+
- void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
- {
- 	bp_hardening_cb_t cpu_cb;
-@@ -1001,7 +1009,7 @@ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
- 		/* No point mitigating Spectre-BHB alone. */
- 	} else if (!IS_ENABLED(CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY)) {
- 		pr_info_once("spectre-bhb mitigation disabled by compile time option\n");
--	} else if (cpu_mitigations_off()) {
-+	} else if (cpu_mitigations_off() || __nospectre_bhb) {
- 		pr_info_once("spectre-bhb mitigation disabled by command line option\n");
- 	} else if (supports_ecbhb(SCOPE_LOCAL_CPU)) {
- 		state = SPECTRE_MITIGATED;
--- 
-1.8.3.1
-
+Yours,
+Linus Walleij

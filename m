@@ -2,220 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C315A1EDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEC35A1ED9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 04:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244607AbiHZCff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 22:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        id S244036AbiHZCfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 22:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244818AbiHZCfX (ORCPT
+        with ESMTP id S235832AbiHZCfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 22:35:23 -0400
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C4913FBF;
-        Thu, 25 Aug 2022 19:35:17 -0700 (PDT)
-Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
-        by mx0b-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PNVF22031767;
-        Thu, 25 Aug 2022 19:34:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
- bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
- b=XXTRu1a6QHQlLoOAJ/TZiuKXF1pg0skW01ghFhqrACcnijNwQNKfnyX1jZiRKCX8jsF/
- iWk6SLNpgji6bMlIltm8EaOuFaJ7xJ2A5pEyzVO34ArJ6ZG3D0RhaJnugAs7fiL2mBDC
- 0IoaFPs+iYxQ4nf4klNxS/Y8MxAVRfRAQtW8N4NdCYppHvc/tuI+6yVCQqGMHhDr4COa
- BWPABEBvjTub1lpB7oB8mxBAK8Klalz45YGMJISAT2zqI/CWWPFo1zyqlN1nY3+6Ji9l
- SLYm3D/4eIUn7lBsXbK6nvNUlDQKI4NpBQMlaIQVR5RXaO9FE1hnjoGIZnrZp52ev5am nQ== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3j5abrpyu6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 19:34:34 -0700
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 497F7C00F3;
-        Fri, 26 Aug 2022 02:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1661481273; bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=bUzzaTYIT4cVZKtkDRNYQPy50KoHO6fPMq+DxjX2lPHXso2VKI+Ezo53u3pVkByr7
-         ZbKCsFlwyw0WVA1s/WjLtv1/v8vN1QVMFhUMBzZH9nfTNNzeTdtR22i46AIEaT4+rX
-         3jm/W8R15OqkfubbJNyTRrvPEW/mxKUVlN2xhVTaZEVA6KUYqDIXJ0etIreJRsXiN3
-         jQQf5Bubh7iTtBJfUWXGVtTr8A2ZGS21DTupS9+qU+x7wgJHCnWSmjTDXrhZiMs2eE
-         6k1UAhMib815RkcxmjumWYgB3gDv91fKo0Mr1wTGkFynyPfwWCHVUT32HybX+O9wif
-         QnuUKspguhBvg==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id BD9F8A0076;
-        Fri, 26 Aug 2022 02:34:28 +0000 (UTC)
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2174.outbound.protection.outlook.com [104.47.73.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 9CF9480199;
-        Fri, 26 Aug 2022 02:34:25 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="YE1EY7+u";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oZ9IjhhHlZmBQYaphYW2g9ueSU/bIIy9UF0I9uaSEIVwCXnWh98keV45azBIDQFYOncvFjadRwbPW7Fj2keR0DBl1Ih1X6vdFWX6v0fwehGccbWcPECgewzJndOOHJtHRE8nd4/XQic/R0/0RdGOkJtrzYTXK3o09Tl93Qj04+6ZCckgSBkY5zWRtduRGr5GaoTgTzIYVzAD1i+WxFLIbZle/Uo57I4lFDK5zXH2M/rxl7TjVTLDSvDQvq46I+DPBJKEeXxG2KmeBHajGN4sqfCciR7wP76KULUOUCTKkoE2OA8SgSsKZ2KcL2BPyqs0ii1CgyKM2cTKXW84E+ZdXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
- b=X8ccExV5MMUvnN1b+rx5uZYzb7zIqthrNSQRPq1CLphQ5vehn7P6TrP+fnGEYkszhOyYlw/lDoQJLWUBGCBTO7GhzKemwGRuZg91b3zEzbjLjluseZxoBoztgrPObErDgafi7qHZmi11n/bXuQYUmA/vfYlhjPfoO5ePRGcTG+lUQQ0DfEOzyBcFX2hy/l2SAnbj38hgmKrfQ1rk3fE9zscLunxC+DqcucDpkSU8zpZ+w38SKS0yLZY7YXaY2JoBWOQRPocq7+lWx2S+YA652yzbcvQG23JHMG8yjQ4ya5orymDgv9RbdEsQcfx9i+nHwlgZXvV0tRS/veje1LjZRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
- b=YE1EY7+u2+z7cwMx1ZjY9016zPYRMGiYmLzsp3fJrdW3YfzPFeJPscmBaiBg3Q2/yGLOrp7UfrSMwTJDY7tOApVDCCzezZxmGRIfFg21Yia/AZ9rQFHZgFt6R2tgxleepFw/y3UjaqI/Q9L9FiIQotJ5iGrhVeUSlP668kdSxfQ=
-Received: from BN8PR12MB4787.namprd12.prod.outlook.com (2603:10b6:408:a1::11)
- by BN6PR12MB1348.namprd12.prod.outlook.com (2603:10b6:404:1f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Fri, 26 Aug
- 2022 02:34:22 +0000
-Received: from BN8PR12MB4787.namprd12.prod.outlook.com
- ([fe80::34d0:5282:1e1e:98d5]) by BN8PR12MB4787.namprd12.prod.outlook.com
- ([fe80::34d0:5282:1e1e:98d5%7]) with mapi id 15.20.5566.015; Fri, 26 Aug 2022
- 02:34:22 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Nicholas Bellinger <nab@linux-iscsi.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        John Youn <John.Youn@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2 00/25] usb: gadget: f_tcm: Enhance UASP driver
-Thread-Topic: [PATCH v2 00/25] usb: gadget: f_tcm: Enhance UASP driver
-Thread-Index: AQHYmw6F3vPaFvUH1UezRNMH+EVsTq22FgOAgACTPICACglBAA==
-Date:   Fri, 26 Aug 2022 02:34:21 +0000
-Message-ID: <20220826023404.un6jmymwjfortotu@synopsys.com>
-References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
- <Yv9KWyevXLegwQcK@kroah.com> <20220819171821.estwvvfkkxo64bkq@synopsys.com>
-In-Reply-To: <20220819171821.estwvvfkkxo64bkq@synopsys.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 699505bc-25e8-4298-a64d-08da870b7bf8
-x-ms-traffictypediagnostic: BN6PR12MB1348:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5AOJduuAJG/esqeSTryx2/ln79fuQAgFPs8ODpFDetp5eIgSHONpKSQcsk0/uEH3h5/eJBiJUPh6FTuHJeMz15gWhtbRuzfNsesgVYI1eyYBAwplQTHmXKjqDgJQtsYVg8r9nJMAZXFP5wmfxZkHvadxDD+pfonCg2eI5Q8Kur3PkXE3R/FW9DXVkxP7P4ZjHMP/VRGIxRApjGdA3hzUHcSbRLNOa13hQOg+Y7QTUvVGZxiXu45sLRhbZi9mgHT9FeOfVJLCXp9MglKVyd7ZGkQu4UfiNSFvAs3qgnI2BpWFhHiI2ZLMn/XtmGzAjunDOh+9+xEsvF7v+nmYyrccG8/9aTXktyGvX5NmwfPhEnq0wjvdOGq323o55OB3qF0iNgnerEEcux/D3lnUerKTahB4TkMgUYwnxP2nRx1qZDspf+delZDmq2i4TSfJrZaGRsoPmlwpfb7tJ62tV/to+UwX+jn602y90TAsQU0m48syou6nq8BAC4MQwWrnIemmdHVhiIE1Z5yqTg9abkf3VHT79W1H/32SKYzQTnGq86I0zBDvMYXTwfEsO96pT0TP2JJnKscQcjlYwDEgIFiY8p1p5rPmnmvoxOYGzrGuM6xCgTNj74Gmo35j99xv/2zxfsyfxRqGSg+3AGZK8MkusU4HLH42SJIUwq0ltdq2FyhU819X0tlCSBxs716uA7E1N3BQ0wyvBJ+4Tf7PSEuOHX5sN0YIJ8JP/kRX4tKZORQDj2CkGEMMnmiO5ZsVk9yipPNh9ZxyE9K21s4NEMFcyQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB4787.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(39860400002)(136003)(376002)(86362001)(38070700005)(122000001)(38100700002)(91956017)(316002)(54906003)(110136005)(76116006)(2906002)(8936002)(5660300002)(7416002)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(2616005)(186003)(1076003)(83380400001)(478600001)(71200400001)(6486002)(6506007)(26005)(6512007)(41300700001)(36756003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OXI5RGVTSkVZQnA3OTFkV0ZjZ0RWMStrTEU0YzJYVEZOLzdDU3lYbVF2OEEy?=
- =?utf-8?B?OUtobGR1UFI1Y3dzdlJzbmYwWTh4b0dzZmFjRVpicXd3ZmtYMnJUNnpPdG1U?=
- =?utf-8?B?d2Uxemh6SDZtNXYxbVBlbDYxK0FiM2lzeERIWU5MMURaSmJ5cTd6aWNOdkQy?=
- =?utf-8?B?NHhrVkFrS1NGRmcwRlA2WlRwZjZ1TDdsMzVTMkRVNjF6b2gyUFJSeGRZbHJz?=
- =?utf-8?B?dG5ld1ljbEdmd2xMc0R2a0dWNURWQ0lUWDVHQUZXZjJXekVKWVg5NXJqYVEz?=
- =?utf-8?B?YllyL3dWbWx6a0NHRml4SG1mRkZuSXB3cjZMYjBpWGlYMHdGSFV3WDRUclF6?=
- =?utf-8?B?VE9IM09RUFMxZnByaElWd2hCSGhWSzEySXlrVzJrT05NU3dHZ0xhd2FyeDFB?=
- =?utf-8?B?VlplUlJpNExETEdjUUhjdHcwcmxCdzNPV2lrZmdFb2o0dXBpWmdUbEZpallm?=
- =?utf-8?B?VFdBenNSeVd6OWlOaHA3d1l6ZWZKY1ZGc1ZuWlBNeVdRaEw2UkYzaDB4ejhP?=
- =?utf-8?B?NE9OUXRVaWF5MWRqeXVUUjJuUlB2Q0NaYU5UR05mRFh0MzFsNWVsSzJnV09C?=
- =?utf-8?B?cHI1TDIvb3dTLzBwMUk3bzBHYzJkN2VqUktNaGp3V2FKNktQcWdsdnBkRkd6?=
- =?utf-8?B?Zzh1OEVETGpOYXBKV1pzUlA1SzMwLzB2ZWhsQ1RKNXdJOEx4UEtoeUttRkxw?=
- =?utf-8?B?MFB3UVBRWkZGcWo0NHBzb2trYTF2L2cwZjBMRDEyb2tOd1NENSs3MVRDbkdS?=
- =?utf-8?B?L3NBdTNOTXpqMG1zeDBXVVV4ZHFwUTQ5dlA5RnFPcnlQUVlDbHRscnVmTkdY?=
- =?utf-8?B?a1Y3Vk5BSmFHaVdsN1dYaHk2OEtwcUhNNnFNNWV6L2dOOVptS1VDTGFXKzFP?=
- =?utf-8?B?Z0JwNlpWc3JzbHlHRllaNGhXQlF2eDlkaEpiVXg0bFB0SjA2T2ZBZGRLRFVz?=
- =?utf-8?B?TmI5L1lFTjlHRGwreUlmVStWOEREWG4wODhPVXVFajZoenZkc2VFaWtscm5q?=
- =?utf-8?B?N1NGT0c5dThlNUM0SU9iK1hxVjJLdUJGR2E5NE9pbmxnU2ZCWEZZTFVFODVL?=
- =?utf-8?B?UWFKUjRHNmNWZC9ncWMvNk1pcHdPenBYS3k1U1JYeCt4YnFVeUxZMGFLQjdl?=
- =?utf-8?B?TjRxVytVUnhRQS9aRnRqV1RPTDFCbEcxSGJySUxVd0FxbzBpUW9GUmZnNER6?=
- =?utf-8?B?bVc3ZmN1NUMxK2JXaVRHblQyUjhWbmdvS3E2enN5T1lGb3JDZGJOckNsQkxq?=
- =?utf-8?B?NzhVWFd2RVFpWEF3amVtU2xLTVUvMFRUaWdiSVdLUk5uWXh3SDgrdUlOaFQ2?=
- =?utf-8?B?SjhnSUFBcHlyZ1A2YXZ0MCthWU1xMmp0Sk5HaHMzeDFiUllNeFRLKzFEYThN?=
- =?utf-8?B?VFVBcFVuOXF0d0prSGJNY0YwbzRKZmdWSHZTTm5iY0w2UXZWTk9ESHZvcXNU?=
- =?utf-8?B?USt2U2d5em9OOFZ4VmtGaUh6bkFnQWVWRzBWREVSd2I4ODI5NjRTbmplbGdW?=
- =?utf-8?B?ZEU1enZxZ2hXeEtBbkl4UWpFZ0xKcUR0a3gxS3Z0eXFQREV1OWhjbGUvK0hy?=
- =?utf-8?B?U1hmT2ZrODdIVU5TU0hVb1VzWkVjVnRKODJWVVdQTkFKcXVNQ2M0TjdQKys2?=
- =?utf-8?B?Ukxma0p4ME0ydTlHMlRMY3lEbmNPNEZUYllYc3poOU5uSWpxQ3JuSllsN3dC?=
- =?utf-8?B?eFM1THZZMFhESE5SQmVGVFhRcCtFY2RRTUc3RnQzQjlLR1VyNTB3ZnNwOFh4?=
- =?utf-8?B?eWw1VVI0MWRYQmdYSWNWS1o4UG5TVkZVUXZsWTk4NUJCSnNvOVc5N0lXTjZN?=
- =?utf-8?B?UzMwOWF6bTJrNjFlVVlaR09iSXJXRDhnNS9HREtKYVYxZVVmdkJuQktpOFFC?=
- =?utf-8?B?M1ZJRVNLS2duQ1ErRS9hS1ZRTnVwWHNabmxuUXRHenhYN0RWT1padFJVaXlY?=
- =?utf-8?B?NldkM2xSMml6RFhVTEVpVHkyVE94WmhaeGRIRFpWd0hRQkZhZHlsNzQrbGZX?=
- =?utf-8?B?UUNJVDE5dTZ4cmRDVFg3M3RudEkzNHNtb1NxaEZPN1k5ZHcwL0tqcWtUdTRo?=
- =?utf-8?B?SyszY2FVTnMwK3drcVZndTdwWUswZVNUUzV6dmhPbWY2YkJZcXpDcFY5b1JV?=
- =?utf-8?Q?JhF4gGzQkNXE5O+d/kiwnX5NH?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <145DE1A491928B46A9A56B2A55336820@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 25 Aug 2022 22:35:01 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C5CCD73;
+        Thu, 25 Aug 2022 19:34:58 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDP5p2RCFzl6w5;
+        Fri, 26 Aug 2022 10:33:34 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgCnkb1OMQhj_2dsAw--.30906S3;
+        Fri, 26 Aug 2022 10:34:56 +0800 (CST)
+Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+To:     Paolo Valente <paolo.valente@unimore.it>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220610021701.2347602-1-yukuai3@huawei.com>
+ <20220610021701.2347602-4-yukuai3@huawei.com>
+ <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
+ <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
+ <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
+ <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
+ <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
+ <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
+ <5cb0e5bc-feec-86d6-6f60-3c28ee625efd@huaweicloud.com>
+ <D89DCF20-27D8-4F8F-B8B0-FD193FC4F18D@unimore.it>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <e6b53794-f93f-92b2-1f45-35ae81a28a5c@huaweicloud.com>
+Date:   Fri, 26 Aug 2022 10:34:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB4787.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 699505bc-25e8-4298-a64d-08da870b7bf8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2022 02:34:22.0004
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bdMq4WqcNsMGPqdeK0LitFVmY9MRedd5w5HdAFREn9d9ZIsBq2sYj7PKxdsSBpoGOQCNzuDQI0QeCU5aLrZqlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1348
-X-Proofpoint-GUID: _T5P2zqEA-edt0MWWCG_gf_jRcT0BjuM
-X-Proofpoint-ORIG-GUID: _T5P2zqEA-edt0MWWCG_gf_jRcT0BjuM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_11,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=16
- malwarescore=0 bulkscore=0 adultscore=0 phishscore=0 mlxscore=16
- spamscore=16 impostorscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=73 lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208260008
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <D89DCF20-27D8-4F8F-B8B0-FD193FC4F18D@unimore.it>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCnkb1OMQhj_2dsAw--.30906S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxtrWxXF4rtr18Cw1xKr1kuFg_yoWfZF47p3
+        yrGa1UAr4UXr15Jr1Utr1UXry0q34fJry8Xr1DJr1xAr1qyFn7tF17tr409ry8Xr4kJr12
+        qr1UX3srZw1UJFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCBBdWcgMTksIDIwMjIsIFRoaW5oIE5ndXllbiB3cm90ZToNCj4gSGkgTWFydGluLCBE
-bWl0cnksIGFuZCBvdGhlcnMsDQo+IA0KPiBPbiBGcmksIEF1ZyAxOSwgMjAyMiBhdCAxMDozMToy
-M0FNICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+ID4gT24gTW9uLCBKdWwgMTgs
-IDIwMjIgYXQgMDY6MjY6MDFQTSAtMDcwMCwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPiA+ID4gVGhl
-IExpbnV4IFVBU1AgZ2FkZ2V0IGRyaXZlciBpcyBpbmNvbXBsZXRlIGFuZCByZW1haW5lZCBicm9r
-ZW4gZm9yIGEgbG9uZyB0aW1lLg0KPiA+ID4gSXQgd2FzIG5vdCBpbXBsZW1lbnRlZCBmb3IgcGVy
-Zm9ybWFuY2UgZWl0aGVyLiBUaGlzIHNlcmllcyBhZGRzIHNvbWUgb2YgdGhlDQo+ID4gPiByZXF1
-aXJlZCBmZWF0dXJlcyBmb3IgdGhlIFVBU1AgZHJpdmVyIHRvIHdvcmsuIEl0IGFsc28gbWFrZXMg
-c29tZSBjaGFuZ2VzIHRvDQo+ID4gPiB0aGUgdGFyZ2V0IGNvcmUuDQo+ID4gPiANCj4gPiA+IFRo
-aXMgaXMgdGVzdGVkIGFnYWluc3QgVUFTUCBDViBhbmQgRFdDX3VzYjN4IGNvbnRyb2xsZXIuIEl0
-IHN0aWxsIG5lZWRzIHNvbWUNCj4gPiA+IGZpeGVzIGluIHRoZSB0YXJnZXQgY29yZSwgd2hpY2gg
-d2lsbCBiZSBzZXBhcmF0ZWQgZnJvbSB0aGlzIHNlcmllcy4NCj4gPiA+IA0KPiA+ID4gVGhlcmUg
-YXJlIHN0aWxsIG1vcmUgcm9vbSBmb3IgcGVyZm9ybWFuY2UgaW1wcm92ZW1lbnQgYW5kIGZpeGVz
-LiBIb3dldmVyLCB0aGlzDQo+ID4gPiBzZXJpZXMgc2hvdWxkIGJlIHN1ZmZpY2llbnQgdG8gYnJp
-bmcgdXAgYSB3b3JraW5nIFVBU1AgZGV2aWNlLg0KPiA+ID4gDQo+ID4gPiANCj4gPiA+IENoYW5n
-ZXMgaW4gdjI6DQo+ID4gPiAgLSBSZW1vdmUgbW9zdCB0YXJnZXQgY29yZSBjaGFuZ2VzIGZyb20g
-dGhpcyBzZXJpZXMgYW5kIG9ubHkga2VlcCB0aGUgbXVzdC1oYXZlDQo+ID4gPiAgICBvbmVzDQo+
-ID4gPiAgLSBTcGxpdCB0aGUgdGFzay1tYW5hZ2VtZW50IHBhdGNoIHRvIHNtYWxsZXIgcGF0Y2hl
-cw0KPiA+ID4gIC0gRG9uJ3Qgc2VuZCBmYWlsdXJlIFRhc2sgTWFuYWdlbWVudCByZXNwb25zZSB0
-byB0YXJnZXQgY29yZSwgcmVkdWNpbmcNCj4gPiA+ICAgIGRlcGVuZGVuY3kNCj4gPiA+ICAtIEFk
-ZCBVQVNQIGJyaW5ndXAgc2NyaXB0IGV4YW1wbGUgaW4gY292ZXIgcGFnZQ0KPiA+ID4gIC0gTWFr
-ZSB2YXJpb3VzIHNtYWxsIHVwZGF0ZXMgYWNjb3JkaW5nIHRvIGZlZWRiYWNrcw0KPiA+IA0KPiA+
-IEkgd291bGQgbmVlZCBhIHJldmlldyBieSB0aGUgdGFyZ2V0IG1haW50YWluZXJzIGJlZm9yZSBi
-ZWluZyBhYmxlIHRvDQo+ID4gdGFrZSBhbnkgb2YgdGhlIFVTQiBnYWRnZXQgY2hhbmdlcyBpbnRv
-IHRoZSBVU0IgdHJlZS4uLg0KPiA+IA0KPiANCj4gRG8geW91IGhhdmUgYW55IGNvbW1lbnQgb24g
-dGhpcyBzZXJpZXM/DQo+IA0KDQpIaSB0YXJnZXQgbWFpbnRhaW5lcnMsDQoNCkdlbnRsZSBwaW5n
-Li4uDQoNCkJSLA0KVGhpbmg=
+Hi, Paolo!
+
+在 2022/08/25 22:59, Paolo Valente 写道:
+> 
+> 
+>> Il giorno 11 ago 2022, alle ore 03:19, Yu Kuai 
+>> <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>
+>> Hi, Paolo
+>>
+>> 在 2022/08/10 18:49, Paolo Valente 写道:
+>>>> Il giorno 27 lug 2022, alle ore 14:11, Yu Kuai 
+>>>> <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>
+>>>> Hi, Paolo
+>>>>
+>>> hi
+>>>> Are you still interested in this patchset?
+>>>>
+>>> Yes. Sorry for replying very late again.
+>>> Probably the last fix that you suggest is enough, but I'm a little bit
+>>> concerned that it may be a little hasty.  In fact, before this fix, we
+>>> exchanged several messages, and I didn't seem to be very good at
+>>> convincing you about the need to keep into account also in-service
+>>> I/O.  So, my question is: are you sure that now you have a
+>>
+>> I'm confused here, I'm pretty aware that in-service I/O(as said pending
+>> requests is the patchset) should be counted, as you suggested in v7, are
+>> you still thinking that the way in this patchset is problematic?
+>>
+>> I'll try to explain again that how to track is bfqq has pending pending
+>> requests, please let me know if you still think there are some problems:
+>>
+>> patch 1 support to track if bfqq has pending requests, it's
+>> done by setting the flag 'entity->in_groups_with_pending_reqs' when the
+>> first request is inserted to bfqq, and it's cleared when the last
+>> request is completed. specifically the flag is set in
+>> bfq_add_bfqq_busy() when 'bfqq->dispatched' if false, and it's cleared
+>> both in bfq_completed_request() and bfq_del_bfqq_busy() when
+>> 'bfqq->diapatched' is false.
+>>
+> 
+> This general description seems correct to me. Have you already sent a 
+> new version of your patchset?
+
+It's glad that we finially on the same page here.
+
+Please take a look at patch 1, which already impelement the above
+descriptions, it seems to me there is no need to send a new version
+for now. If you think there are still some other problems, please let
+me know.
+
+Thanks,
+Kuai
+> 
+> Thanks,
+> Paolo
+> 
+>> Thanks,
+>> Kuai
+>>> clear/complete understanding of this non-trivial matter?
+>>> Consequently, are we sure that this last fix is most certainly all we
+>>> need?  Of course, I will check on my own, but if you reassure me on
+>>> this point, I will feel more confident.
+>>> Thanks,
+>>> Paolo
+>>>> 在 2022/07/20 19:38, Yu Kuai 写道:
+>>>>> Hi
+>>>>>
+>>>>> 在 2022/07/20 19:24, Paolo VALENTE 写道:
+>>>>>>
+>>>>>>
+>>>>>>> Il giorno 12 lug 2022, alle ore 15:30, Yu Kuai 
+>>>>>>> <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com> 
+>>>>>>> <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>>>>
+>>>>>>> Hi!
+>>>>>>>
+>>>>>>> I'm copying my reply with new mail address, because Paolo seems
+>>>>>>> didn't receive my reply.
+>>>>>>>
+>>>>>>> 在 2022/06/23 23:32, Paolo Valente 写道:
+>>>>>>>> Sorry for the delay.
+>>>>>>>>> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai 
+>>>>>>>>> <yukuai3@huawei.com <mailto:yukuai3@huawei.com> 
+>>>>>>>>> <mailto:yukuai3@huawei.com>> ha scritto:
+>>>>>>>>>
+>>>>>>>>> Currently, bfq can't handle sync io concurrently as long as they
+>>>>>>>>> are not issued from root group. This is because
+>>>>>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>>>>>>>> bfq_asymmetric_scenario().
+>>>>>>>>>
+>>>>>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>>>>>>>>
+>>>>>>>>> Before this patch:
+>>>>>>>>> 1) root group will never be counted.
+>>>>>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>>>>>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the 
+>>>>>>>>> requests.
+>>>>>>>>>
+>>>>>>>>> After this patch:
+>>>>>>>>> 1) root group is counted.
+>>>>>>>>> 2) Count if bfqg have pending requests.
+>>>>>>>>> 3) Don't count if bfqg complete all the requests.
+>>>>>>>>>
+>>>>>>>>> With this change, the occasion that only one group is activated 
+>>>>>>>>> can be
+>>>>>>>>> detected, and next patch will support concurrent sync io in the
+>>>>>>>>> occasion.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com 
+>>>>>>>>> <mailto:yukuai3@huawei.com> <mailto:yukuai3@huawei.com>>
+>>>>>>>>> Reviewed-by: Jan Kara <jack@suse.cz <mailto:jack@suse.cz> 
+>>>>>>>>> <mailto:jack@suse.cz>>
+>>>>>>>>> ---
+>>>>>>>>> block/bfq-iosched.c | 42 ------------------------------------------
+>>>>>>>>> block/bfq-iosched.h | 18 +++++++++---------
+>>>>>>>>> block/bfq-wf2q.c    | 19 ++++---------------
+>>>>>>>>> 3 files changed, 13 insertions(+), 66 deletions(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>>>>>>>>> index 0ec21018daba..03b04892440c 100644
+>>>>>>>>> --- a/block/bfq-iosched.c
+>>>>>>>>> +++ b/block/bfq-iosched.c
+>>>>>>>>> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct 
+>>>>>>>>> bfq_data *bfqd,
+>>>>>>>>> void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>>>>>>>>>     struct bfq_queue *bfqq)
+>>>>>>>>> {
+>>>>>>>>> -struct bfq_entity *entity = bfqq->entity.parent;
+>>>>>>>>> -
+>>>>>>>>> -for_each_entity(entity) {
+>>>>>>>>> -struct bfq_sched_data *sd = entity->my_sched_data;
+>>>>>>>>> -
+>>>>>>>>> -if (sd->next_in_service || sd->in_service_entity) {
+>>>>>>>>> -/*
+>>>>>>>>> -* entity is still active, because either
+>>>>>>>>> -* next_in_service or in_service_entity is not
+>>>>>>>>> -* NULL (see the comments on the definition of
+>>>>>>>>> -* next_in_service for details on why
+>>>>>>>>> -* in_service_entity must be checked too).
+>>>>>>>>> -*
+>>>>>>>>> -* As a consequence, its parent entities are
+>>>>>>>>> -* active as well, and thus this loop must
+>>>>>>>>> -* stop here.
+>>>>>>>>> -*/
+>>>>>>>>> -break;
+>>>>>>>>> -}
+>>>>>>>>> -
+>>>>>>>>> -/*
+>>>>>>>>> -* The decrement of num_groups_with_pending_reqs is
+>>>>>>>>> -* not performed immediately upon the deactivation of
+>>>>>>>>> -* entity, but it is delayed to when it also happens
+>>>>>>>>> -* that the first leaf descendant bfqq of entity gets
+>>>>>>>>> -* all its pending requests completed. The following
+>>>>>>>>> -* instructions perform this delayed decrement, if
+>>>>>>>>> -* needed. See the comments on
+>>>>>>>>> -* num_groups_with_pending_reqs for details.
+>>>>>>>>> -*/
+>>>>>>>>> -if (entity->in_groups_with_pending_reqs) {
+>>>>>>>>> -entity->in_groups_with_pending_reqs = false;
+>>>>>>>>> -bfqd->num_groups_with_pending_reqs--;
+>>>>>>>>> -}
+>>>>>>>>> -}
+>>>>>>>> With this part removed, I'm missing how you handle the following
+>>>>>>>> sequence of events:
+>>>>>>>> 1.  a queue Q becomes non busy but still has dispatched requests, so
+>>>>>>>> it must not be removed from the counter of queues with pending reqs
+>>>>>>>> yet
+>>>>>>>> 2.  the last request of Q is completed with Q being still idle (non
+>>>>>>>> busy).  At this point Q must be removed from the counter.  It 
+>>>>>>>> seems to
+>>>>>>>> me that this case is not handled any longer
+>>>>>>> Hi, Paolo
+>>>>>>>
+>>>>>>> 1) At first, patch 1 support to track if bfqq has pending 
+>>>>>>> requests, it's
+>>>>>>> done by setting the flag 'entity->in_groups_with_pending_reqs' 
+>>>>>>> when the
+>>>>>>> first request is inserted to bfqq, and it's cleared when the last
+>>>>>>> request is completed(based on weights_tree insertion and removal).
+>>>>>>>
+>>>>>>
+>>>>>> In patch 1 I don't see the flag cleared for the request-completion 
+>>>>>> event :(
+>>>>>>
+>>>>>> The piece of code involved is this:
+>>>>>>
+>>>>>> static void bfq_completed_request(struct bfq_queue *bfqq, struct 
+>>>>>> bfq_data *bfqd)
+>>>>>> {
+>>>>>> u64 now_ns;
+>>>>>> u32 delta_us;
+>>>>>>
+>>>>>> bfq_update_hw_tag(bfqd);
+>>>>>>
+>>>>>> bfqd->rq_in_driver[bfqq->actuator_idx]--;
+>>>>>> bfqd->tot_rq_in_driver--;
+>>>>>> bfqq->dispatched--;
+>>>>>>
+>>>>>> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq)) {
+>>>>>> /*
+>>>>>> * Set budget_timeout (which we overload to store the
+>>>>>> * time at which the queue remains with no backlog and
+>>>>>> * no outstanding request; used by the weight-raising
+>>>>>> * mechanism).
+>>>>>> */
+>>>>>> bfqq->budget_timeout = jiffies;
+>>>>>>
+>>>>>> bfq_weights_tree_remove(bfqd, bfqq);
+>>>>>> }
+>>>>>> ...
+>>>>>>
+>>>>>> Am I missing something?
+>>>>>
+>>>>> I add a new api bfq_del_bfqq_in_groups_with_pending_reqs() in patch 1
+>>>>> to clear the flag, and it's called both from bfq_del_bfqq_busy() and
+>>>>> bfq_completed_request(). I think you may miss the later:
+>>>>>
+>>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>>>>> index 0d46cb728bbf..0ec21018daba 100644
+>>>>> --- a/block/bfq-iosched.c
+>>>>> +++ b/block/bfq-iosched.c
+>>>>> @@ -6263,6 +6263,7 @@ static void bfq_completed_request(struct 
+>>>>> bfq_queue *bfqq, struct bfq_data *bfqd)
+>>>>>           */
+>>>>>          bfqq->budget_timeout = jiffies;
+>>>>>
+>>>>> +        bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+>>>>>          bfq_weights_tree_remove(bfqd, bfqq);
+>>>>>      }
+>>>>>
+>>>>> Thanks,
+>>>>> Kuai
+>>>>>>
+>>>>>> Thanks,
+>>>>>> Paolo
+>>>>
+>>> .
+> 
+

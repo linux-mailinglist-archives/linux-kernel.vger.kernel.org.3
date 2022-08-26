@@ -2,102 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D695A3295
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62CC5A32A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245185AbiHZXZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 19:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S237451AbiHZXa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 19:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiHZXZ0 (ORCPT
+        with ESMTP id S229704AbiHZXaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 19:25:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875C75721D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 16:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661556325; x=1693092325;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NmWk5k9zzw/VjsfwQZfk4wiZ8VTW8sB239V2xjy9Ybs=;
-  b=J+ee75lmwSZaYfdutQ5DMQJXxTtXM0uh9crcPe+4KcHt4FYeNWZRwBid
-   uDA6WLHkuCx+LJ/B2VuNSq/W6uBsh6ofeLijW2OQCt877yED1Bg6IO3tT
-   VYRHOY3CcU7OfBW88JwSteSt9QeDHNihhNe/k+iywUI7Xnuoy2sMRfQTB
-   hmNyYABmk5w8CAd+aXh/ZBYtms94yiNuSUEmRtGQ4kCFQJ0KXSxIpq6dp
-   +316w12yOts3GyU50zmvri+nBknYO46mNvHQtrTK0ChFaouPRjU3cOtDI
-   5hGUUBXh/Tk0IhIURfCTKfKTa1qRc+riytxKO5kh3ft3UXGto+z58ocmR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="293355415"
-X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="293355415"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 16:25:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="643831383"
-Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2022 16:25:23 -0700
-Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRihX-0000dv-0B;
-        Fri, 26 Aug 2022 23:25:23 +0000
-Date:   Sat, 27 Aug 2022 07:25:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>
-Subject: kismet: WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
- when selected by SEV_GUEST
-Message-ID: <202208270733.XIo5aiLH-lkp@intel.com>
+        Fri, 26 Aug 2022 19:30:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EF614089;
+        Fri, 26 Aug 2022 16:30:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5CB3F1F8A3;
+        Fri, 26 Aug 2022 23:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661556621; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=unGSz6GeVrKzu8z4US0hp1I7QAv6QVA+9wpL/58ggnY=;
+        b=0V1L2YmY/SO4Hg6/P1+TCnDKpYTJ3zE/ceDi2KTgXj9i8srU6zzib2FxWAHBTIDwIJJyWk
+        pVHsBDZz+FxMVfjNzStMMzL+h8LmllqfagPM6usVeIIK/UR38FTBFql0aOLiS9BaltRrmD
+        h6mxNDs9mXJcwMx5vxU2xFu1W3+WVg4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661556621;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=unGSz6GeVrKzu8z4US0hp1I7QAv6QVA+9wpL/58ggnY=;
+        b=XhFNEspwKY6y966OH86b9J1438bnvK8CLtDVQbBYzTesi9pVDPbR5ETZFt3T0gIqH7gAAg
+        U5+qhPjhcPakiIDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8332C13421;
+        Fri, 26 Aug 2022 23:30:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cLUvD4pXCWMtdwAAMHmgww
+        (envelope-from <neilb@suse.de>); Fri, 26 Aug 2022 23:30:18 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "John Stoffel" <john@stoffel.org>
+Cc:     "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Daire Byrne" <daire@dneg.com>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>,
+        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH/RFC 00/10 v5] Improve scalability of directory operations
+In-reply-to: <25352.56248.283092.213037@quad.stoffel.home>
+References: <166147828344.25420.13834885828450967910.stgit@noble.brown>,
+ <25352.56248.283092.213037@quad.stoffel.home>
+Date:   Sat, 27 Aug 2022 09:30:13 +1000
+Message-id: <166155661379.27490.6823575125331418990@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e022620b5d056e822e42eb9bc0f24fcb97389d86
-commit: fce96cf0443083e37455eff8f78fd240c621dae3 virt: Add SEV-SNP guest driver
-date:   5 months ago
-config: x86_64-kismet-CONFIG_CRYPTO_AEAD2-CONFIG_SEV_GUEST-0-0 (https://download.01.org/0day-ci/archive/20220827/202208270733.XIo5aiLH-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fce96cf0443083e37455eff8f78fd240c621dae3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fce96cf0443083e37455eff8f78fd240c621dae3
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_CRYPTO_AEAD2 --selectors CONFIG_SEV_GUEST -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+On Sat, 27 Aug 2022, John Stoffel wrote:
+> >>>>> "NeilBrown" =3D=3D NeilBrown  <neilb@suse.de> writes:
+>=20
+> NeilBrown> [I made up "v5" - I haven't been counting]
+>=20
+> My first comments, but I'm not a serious developer...
+>=20
+> NeilBrown> VFS currently holds an exclusive lock on the directory while mak=
+ing
+> NeilBrown> changes: add, remove, rename.
+> NeilBrown> When multiple threads make changes in the one directory, the con=
+tention
+> NeilBrown> can be noticeable.
+> NeilBrown> In the case of NFS with a high latency link, this can easily be
+> NeilBrown> demonstrated.  NFS doesn't really need VFS locking as the server=
+ ensures
+> NeilBrown> correctness.
+>=20
+> NeilBrown> Lustre uses a single(?) directory for object storage, and has pa=
+tches
+> NeilBrown> for ext4 to support concurrent updates (Lustre accesses ext4 dir=
+ectly,
+> NeilBrown> not via the VFS).
+>=20
+> NeilBrown> XFS (it is claimed) doesn't its own locking and doesn't need the=
+ VFS to
+> NeilBrown> help at all.
+>=20
+> This sentence makes no sense to me... I assume you meant to say "...does
+> it's own locking..."
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks - you are correct.  "does its own locking".
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for CRYPTO_AEAD2 when selected by SEV_GUEST
-   
-   WARNING: unmet direct dependencies detected for CRYPTO_GCM
-     Depends on [n]: CRYPTO [=n]
-     Selected by [y]:
-     - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
-   
-   WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
-     Depends on [n]: CRYPTO [=n]
-     Selected by [y]:
-     - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
+>=20
+> NeilBrown> This patch series allows filesystems to request a shared lock on
+> NeilBrown> directories and provides serialisation on just the affected name=
+, not the
+> NeilBrown> whole directory.  It changes both the VFS and NFSD to use shared=
+ locks
+> NeilBrown> when appropriate, and changes NFS to request shared locks.
+>=20
+> Are there any performance results?  Why wouldn't we just do a shared
+> locked across all VFS based filesystems? =20
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Daire Byrne has done some tests with NFS clients to an NFS server which
+re-exports mounts from another server - so there are a couple of levels
+of locking that can be removed.  At lease one of these levels has
+significant network latency (100ms or so I think) The results are much
+what you would expect.  Many more file creations per second are
+possible.  15 creates-per-second up to 121 crates-per-second in one
+test.
+https://lore.kernel.org/linux-nfs/CAPt2mGNjWXad6e7nSUTu=3D0ez1qU1wBNegrntgHKm=
+5hOeBs5gQA@mail.gmail.com/
+
+
+>=20
+> NeilBrown> The central enabling feature is a new dentry flag DCACHE_PAR_UPD=
+ATE
+> NeilBrown> which acts as a bit-lock.  The ->d_lock spinlock is taken to set=
+/clear
+> NeilBrown> it, and wait_var_event() is used for waiting.  This flag is set =
+on all
+> NeilBrown> dentries that are part of a directory update, not just when a sh=
+ared
+> NeilBrown> lock is taken.
+>=20
+> NeilBrown> When a shared lock is taken we must use alloc_dentry_parallel() =
+which
+> NeilBrown> needs a wq which must remain until the update is completed.  To =
+make use
+> NeilBrown> of concurrent create, kern_path_create() would need to be passed=
+ a wq.
+> NeilBrown> Rather than the churn required for that, we use exclusive lockin=
+g when
+> NeilBrown> no wq is provided.
+>=20
+> Is this a per-operation wq or a per-directory wq?  Can there be issues
+> if someone does something silly like having 1,000 directories, all of
+> which have multiple processes making parallel changes? =20
+
+It is per-operation though I expect to change that to be taken from a
+pool for shared work queues.
+
+Workqueues can be shared quite cheaply.  There is spin-lock contention
+when multiple threads add/remove waiters to/from the queues.  Having
+more queues in a pool than cores, and randomly selecting queues from the
+pool can keep that under control.
+
+If there are dozens of waiter of more, then a wakeup might run more
+slowly (and hold the lock for longer), but in this case wakeup should be
+rare. =20
+
+Most filesystem operations are uncontended at the name level. e.g. it is
+rare that two threads will try to create the same name at the same time,
+or one looks up a name that another is unlinking it.  These are the only
+times that wakeups would happen, so sharing a pool among all filesystem
+accesses is unlikely to be a problem.
+
+>=20
+> Does it degrade gracefully if a wq can't be allocated? =20
+
+In the current code, the wq is allocated on the stack.  I'm probably
+going to change to a global allocation.  In either case, there is no
+risk of allocation failure during a filesystem operation.
+
+Thanks for the questions,
+NeilBrown
+
+
+>=20
+> NeilBrown> One interesting consequence of this is that silly-rename becomes=
+ a
+> NeilBrown> little more complex.  As the directory may not be exclusively lo=
+cked,
+> NeilBrown> the new silly-name needs to be locked (DCACHE_PAR_UPDATE) as wel=
+l.
+> NeilBrown> A new LOOKUP_SILLY_RENAME is added which helps implement this us=
+ing
+> NeilBrown> common code.
+>=20
+> NeilBrown> While testing I found some odd behaviour that was caused by
+> NeilBrown> d_revalidate() racing with rename().  To resolve this I used
+> NeilBrown> DCACHE_PAR_UPDATE to ensure they cannot race any more.
+>=20
+> NeilBrown> Testing, review, or other comments would be most welcome,
+>=20
+>=20

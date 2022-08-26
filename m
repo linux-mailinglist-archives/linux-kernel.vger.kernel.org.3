@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01525A27EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3110D5A27EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 14:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237130AbiHZMpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 08:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S237428AbiHZMqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 08:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiHZMpK (ORCPT
+        with ESMTP id S240616AbiHZMqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 08:45:10 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7186949B6B;
-        Fri, 26 Aug 2022 05:45:07 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id 142so1432164pfu.10;
-        Fri, 26 Aug 2022 05:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=0Jalfc0HxjKc+GE5nZWOqr4WjxcDkHgSEA8QdLd35ec=;
-        b=oKAQfum6ZwPgjRwWQPsywTwMfH6I8xWCGt7lM56f6SMu4KGaU3XaXJKCFE8MUJL8tF
-         wHiY2O1xf08LB6FhzXEHlXbLgEu5IYuo2peNUd8h5cGGhx2UB+rutOQOC4AvVUUcyZUh
-         qw3hIejvsrec7HJphmZZdvg3Q9wGWM9lOk/FgiAUU5j0x62mcmY1vmFDhKoRjHrKXmfp
-         fbJJiyz44PkSeSTgeHDfYJqCSetS3Neq3XReqMZ15VVCM9fSpsqr+FSNwVSOD6oz7dts
-         zP+teGIXQJll4GShUA2tOmaCK/5mpAyEgad7/lzsPiS2S0LgBOYu+n7jB1JQ+pNrufpC
-         U7Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=0Jalfc0HxjKc+GE5nZWOqr4WjxcDkHgSEA8QdLd35ec=;
-        b=Vrb4yWmeXxD4LjyXo4zPs3W0tDBWA9t1x90Wj9sn7YsbEuMW/fhVB6OSUmfhWTKrg0
-         bK9hzlf7iLMXMFXz+ghV7b/GEFd4OntJP7kL1UdDSdqka1rfA6bVkTT8s8xIpeUpe6gx
-         Dopnqp0uqLjLPhL/GBK0ZBY45VeuYNcC1bTe5I4EMlskZdrWoFb+I52M76B0V4ilgSOz
-         XhMmgy8ftuL42ZpF/7tu8upjbEiSsc8KpM96wCYZPhm+EBu1kbynwrZFiOMKkQxoX6bC
-         7x05x2wMMfCKTYisOPjY6W1n3MC231/sNRxEaFfZDHWiezJvhPCzWv3Blmu4hgbwT3B+
-         fY9g==
-X-Gm-Message-State: ACgBeo1YTGuz9HCzWfpjq3Xegpm1+cYBi9aLcaLt1VZU5ySUgjiPO8cS
-        8AIiQIeIe3ochYqTf2VjAvWArtXV75M=
-X-Google-Smtp-Source: AA6agR792kiU/XsjiWsOKTCpmxxEDIyRUt9BD6Nu09EJ2dhEOQzfHlddIQZN6PqpjT1SD3gDt1mPCA==
-X-Received: by 2002:a62:ed08:0:b0:537:17a6:57aa with SMTP id u8-20020a62ed08000000b0053717a657aamr3799562pfh.6.1661517906983;
-        Fri, 26 Aug 2022 05:45:06 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-70.three.co.id. [180.214.233.70])
-        by smtp.gmail.com with ESMTPSA id w129-20020a623087000000b0052d4afc4302sm1674409pfw.175.2022.08.26.05.45.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 05:45:06 -0700 (PDT)
-Message-ID: <70f2a63b-fe1b-34bd-a5fd-374e2628ee60@gmail.com>
-Date:   Fri, 26 Aug 2022 19:45:00 +0700
+        Fri, 26 Aug 2022 08:46:20 -0400
+Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C000C0B6A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 05:46:17 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx408.security-mail.net (Postfix) with ESMTP id 64B9A1B7B355
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:46:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1661517976;
+        bh=PCNCr4gLjAzuooND/bjvQI4nTIspFNLeY0C0jqAHZCo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Byq7lhYNewtqG2I/Otk8UwNflh0QG0RPCSBNLX4N7Cht8DVLyBXqLaEM1ZAhw6Wjl
+         xoGdx+yqJpb2tmtR4utwof9sn9uzUwv/ImgcAW0jkpXS+2cJbAiy6FScXrHI4mLjYq
+         7cr2+dXL3y9EZWOqDQ9UcdRMvWqcMIFKbBgFl0uM=
+Received: from fx408 (localhost [127.0.0.1]) by fx408.security-mail.net
+ (Postfix) with ESMTP id 09D451B7B343; Fri, 26 Aug 2022 14:46:16 +0200 (CEST)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx408.security-mail.net (Postfix) with ESMTPS id 5C59B1B7B33F; Fri, 26 Aug
+ 2022 14:46:14 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 3FDAC27E02FA; Fri, 26 Aug 2022
+ 14:46:14 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id 2888427E0392; Fri, 26 Aug 2022 14:46:14 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ IugXXSCcSbbN; Fri, 26 Aug 2022 14:46:14 +0200 (CEST)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 1782627E02FA; Fri, 26 Aug 2022
+ 14:46:14 +0200 (CEST)
+X-Virus-Scanned: E-securemail, by Secumail
+Secumail-id: <124ec.6308c096.5b61f.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 2888427E0392
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661517974;
+ bh=UYA33OxQNeupL628vgL2cqS03Bi2JR/rksKhM9GIj+4=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=GL309KhJBsMGe5q62qOR9wXax82QRj2ep2rBAHM9rmFRXO2xvBc2fMIpfxWyR6hpV
+ cK4vRmwahv+hH6HFftmfCuXXVaY24zJE7w9LLJCbwh5w90HtOeOUvOiiA3Q9zgRYeT
+ iH2w/e4mvzPTNvc+PPWe0bWpnEBhCgaqLcbT2zYU=
+Date:   Fri, 26 Aug 2022 14:46:13 +0200
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: Fix repeated word in comments
+Message-ID: <20220826124612.GC10294@tellis.lin.mbt.kalray.eu>
+References: <20220826100052.22945-22-jmaselbas@kalray.eu>
+ <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] Documentation: Fix repeated words in documentation
-Content-Language: en-US
-To:     Jules Maselbas <jmaselbas@kalray.eu>, linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-References: <20220826095321.21548-1-jmaselbas@kalray.eu>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220826095321.21548-1-jmaselbas@kalray.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/26/22 16:52, Jules Maselbas wrote:
-> Remove redundant word `the`.
+Hi Jacopo,
+
+On Fri, Aug 26, 2022 at 12:24:47PM +0200, Jacopo Mondi wrote:
+> Hi Jules
 > 
-What about "Remove duplicated 'the' across the whole documentation"
-as patch subject and/or description?
+>   thanks, but as reported in patchwork and lore
+> https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=mt9v111&archive=both&delegate=
+> https://lore.kernel.org/all/20220824135433.h2udwtnub7mlmtam@uno.localdomain/
+> 
+> This is the 4th patch to fix the same repeated word in a comment.
+ 
+> As I asked to Jilin, are you submitting this as part of a new
+> contributor program ?
+No, I've search for more repeated word after I've found one (in dma-buf heaps).
+I then saw that there were already some fixed by Jilin Yuan (and
+probably others).
 
-This reminds me of typofix patch bombs from @cdjrlc.com people.
+I was expecting that some patches were sent for this, sorry for the noise. 
 
-> -The arguments are the same as for the the cpuhp_state_add_instance*()
-> +The arguments are the same as for the cpuhp_state_add_instance*()
->  variants above.
->  
+Cheers
+ 
+> Thanks
+>    j
+> 
+> On Fri, Aug 26, 2022 at 12:00:50PM +0200, Jules Maselbas wrote:
+> > Remove redundant word `the`.
+> >
+> > CC: Jacopo Mondi <jacopo@jmondi.org>
+> > CC: linux-media@vger.kernel.org
+> > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+> > ---
+> >  drivers/media/i2c/mt9v111.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
+> > index 2dc4a0f24ce8..7beca0b70b72 100644
+> > --- a/drivers/media/i2c/mt9v111.c
+> > +++ b/drivers/media/i2c/mt9v111.c
+> > @@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
+> >
+> >  	/*
+> >  	 * Set pixel integration time to the whole frame time.
+> > -	 * This value controls the the shutter delay when running with AE
+> > +	 * This value controls the shutter delay when running with AE
+> >  	 * disabled. If longer than frame time, it affects the output
+> >  	 * frame rate.
+> >  	 */
+> > --
+> > 2.17.1
+> >
 
-The second 'the' isn't necessary.
 
-Thanks.
 
--- 
-An old man doll... just what I always wanted! - Clara
+

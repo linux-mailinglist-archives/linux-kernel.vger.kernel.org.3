@@ -2,181 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51EB5A2292
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D1E5A2293
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245306AbiHZIGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S229701AbiHZIGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbiHZIGa (ORCPT
+        with ESMTP id S244376AbiHZIGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:06:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1645BD41B8
+        Fri, 26 Aug 2022 04:06:33 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F39D4744
         for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:06:30 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q7qibT026387;
-        Fri, 26 Aug 2022 08:05:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+q+mcuZT1yCtfvoq3MQBSvgKBHU0yUIHVcNQ3mpq+bU=;
- b=V/vCTwqxvCTwc1Kn1DTNMXFcn/IPK8RQScj8VK70CL1u/9rBrJyRATHzPCF6e3sSILvn
- 1FtM8jk8F49OU+qoKiwk8Cr4ACQBxo9EtsAjffDvVOar+isIEEcCHTEYb+MwutLo6OsU
- tW9vgdn3aZNWakoyV/Y9whZV+duF/MD68xgRRWRjVGmhjkVWEEO6gV/XNcULCEceR2CV
- NBFQ/nYs95ch67gb9Ncj0KYRjhEwHZVBYXw4d6Fy8FwMMpVGs13Zqn0cGYwU+MuSCD2A
- NkpVAdi5PSVS4DOGjeCmG+CMWp8nDxNUtdvGp08GdoukZE0+En2QpM4bay5CfrE/Aj9Y oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j6t62gbvh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 08:05:56 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27Q7v080038655;
-        Fri, 26 Aug 2022 08:05:55 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j6t62gbtj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 08:05:55 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27Q7pbw2003400;
-        Fri, 26 Aug 2022 08:05:53 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3j2q88ye8u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 08:05:53 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27Q85p7E35783036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Aug 2022 08:05:51 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 39C84A4053;
-        Fri, 26 Aug 2022 08:05:51 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE272A4040;
-        Fri, 26 Aug 2022 08:05:45 +0000 (GMT)
-Received: from [9.43.10.139] (unknown [9.43.10.139])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 26 Aug 2022 08:05:45 +0000 (GMT)
-Message-ID: <4abb84e8-8035-65aa-941a-98f0d7902c42@linux.ibm.com>
-Date:   Fri, 26 Aug 2022 13:35:44 +0530
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-33dc31f25f9so17136457b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=7Mq11P25bR3wlSS6rhp/KK7HEHcVP2nqSIE7qecBSHI=;
+        b=A6bJ+AnhSeKOqL2xoFgZgqXmcNg60G7gBzknU5skktv31cbrZtiqklVBvs+nmq2jBm
+         y6mTIeVsVgtR5v+CnFSal6nO1qBaDJMjwBpArsPYg63W9RrTb5QhdkZMrcMdTmgS5jkv
+         PMo5OKXzNGhw7zJ1mOVDZwD2NFY60tqzH//Wul+1voGYIhOKpA/VvmtTNtQXnVHsK7a3
+         BcWq3qzH65wl9D4aFjgTkN1zLOTRuV259Th5v16GqLTjQZyxO+JmhDNCEB4Q9PRuIt9J
+         NjkE58DwKus4IgFslbGcg0EtNvBEX/paL9LgvEz0rilkjPBepSdq5S1JAQvLlAqunZrs
+         1WFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=7Mq11P25bR3wlSS6rhp/KK7HEHcVP2nqSIE7qecBSHI=;
+        b=QXdlwDqF7n5Y0rCdOnsNz1eC3emVglZzG2AyHvEuTDgORXY23DKuQJhZejzqixAR0U
+         5+0OCuciCuEDi3DRzr5q+wqTRBZ798VjJLSaBYPIkKdvp/xMmcX1fHQdcQW9ymaR18cP
+         DaErGnM4KUTOJptKzRo29J7mYNVLSo3ogzNytmGwGtAjLtX60FmhJtLxSwK5F2OOm6Bx
+         WHCKJ1NoJQjlwL3UuJRXFGKQs/fv7g0geD+pFLbEkyUQZnIABk3fsWKYnbf8xjR+qUjB
+         m9AdhEPN8E7MaHnA5vM8BYUDEIIWKKE9+20qegxUCxj5ETWIT5h/y6A0GtscHIFYrxga
+         J+dw==
+X-Gm-Message-State: ACgBeo13eSef+ylS+TPYDTEM+MXCBVUUyUEy0+jNZ88pv/srAYmVd7L8
+        wHenImIeRN71XI3vUChNGgqJyZWy8IGxapEU8DynKw==
+X-Google-Smtp-Source: AA6agR6FRbsPnMzYQMsuZG4nfrnAtmeF6GVqmVA9wFaaxz61tGMBwBc+pUgqKF23zqjXCnnpgwdYoweEHrVV87xeqLE=
+X-Received: by 2002:a81:9296:0:b0:33c:ba30:6ff8 with SMTP id
+ j144-20020a819296000000b0033cba306ff8mr7080387ywg.285.1661501190206; Fri, 26
+ Aug 2022 01:06:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 1/2] mm/demotion: Expose memory type details via sysfs
-Content-Language: en-US
-To:     Wei Xu <weixugc@google.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-References: <20220825092325.381517-1-aneesh.kumar@linux.ibm.com>
- <877d2v3h8s.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <e2f20ae9-5761-c170-a4e7-121d6b69ebfb@linux.ibm.com>
- <CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: f5uYDCTq5rIu0455lEF1GcIUMLo4MQoc
-X-Proofpoint-ORIG-GUID: JPItfWiSpSd6K9jtVpalgu9qdigvGpiO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_03,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208260029
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-5-bchihi@baylibre.com>
+ <05fa19f7-7997-51c3-767f-c40cb321d2a4@linaro.org>
+In-Reply-To: <05fa19f7-7997-51c3-767f-c40cb321d2a4@linaro.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Fri, 26 Aug 2022 10:05:52 +0200
+Message-ID: <CAGuA+opoKKvQvC0aij_L1t8BQG2rHJDwx-U=XjgvaqK5Bg-WdQ@mail.gmail.com>
+Subject: Re: [PATCH v9,4/7] thermal: mediatek: Add LVTS driver for mt8192
+ thermal zones
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/26/22 1:30 PM, Wei Xu wrote:
-> On Thu, Aug 25, 2022 at 8:00 PM Aneesh Kumar K V
-> <aneesh.kumar@linux.ibm.com> wrote:
->>
->> On 8/26/22 7:20 AM, Huang, Ying wrote:
->>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>
->>>> This patch adds /sys/devices/virtual/memtier/ where all memory tier related
->>>> details can be found. All allocated memory types will be listed there as
->>>> /sys/devices/virtual/memtier/memtypeN/
->>>
->>> Another choice is to make memory types and memory tiers system devices.
->>> That is,
->>>
->>> /sys/devices/system/memory_type/memory_typeN
->>> /sys/devices/system/memory_tier/memory_tierN
->>>
->>
->> subsys_system_register() documentation says
->>
->>  * Do not use this interface for anything new, it exists for compatibility
->>  * with bad ideas only. New subsystems should use plain subsystems; and
->>  * add the subsystem-wide attributes should be added to the subsystem
->>  * directory itself and not some create fake root-device placed in
->>  * /sys/devices/system/<name>.
->>
->> memtier being a virtual device, I was under the impression that /sys/devices/virtual
->> is the recommended place.
->>
->>> That looks more natural to me.  Because we already have "node" and
->>> "memory" devices there.  Why don't you put memory types and memory tiers
->>> there?
->>>
->>> And, I think we shouldn't put "memory_type" in the "memory_tier"
->>> directory.  "memory_type" isn't a part of "memory_tier".
->>>
->>
->> I was looking consolidating both memory tier and memory type into the same sysfs subsystem.
->> Your recommendation imply we create two subsystem memory_tier and memtype. I was
->> trying to avoid that. May be a generic term like "memory_tiering" can help to
->> consolidate all tiering related details there?
->>
-> 
-> A generic term "memory_tiering" sounds good to me.
-> 
-> Given that this will be a user-facing, stable kernel API, I think we'd
-> better to only add what is most useful for userspace and don't have to
-> mirror the kernel internal data structures in this interface.
-> 
-> My understanding is that we haven't fully settled down on how to
-> customize memory tiers from userspace.  So we don't have to show
-> memory_type yet, which is a kernel data structure at this point.
-> 
-> The userspace does need to know what are the memory tiers and which
-> NUMA nodes are included in each memory tier.  How about we provide the
-> "nodelist" interface for each memory tier as in the original proposal?
-> 
-> The userspace would also like to know which memory tiers/nodes belong
-> to the top tiers (the promotion targets).  We can provide a "toptiers"
-> or "toptiers_nodelist" interface to report that.
-> 
+Hello Daniel,
 
-How about also including abstract distance range of a memory tier?
-That will be useful to derive the hierarchy.
+Thank you for the feedback.
 
-> Both should still be useful even if we decide to add memory_type for
-> memory tier customization.
-> 
+I hope this information will explain better the LVTS Driver.
+I will add this like the following.
+Is this ok for you?
 
--aneesh
+[v9,7/7] thermal: mediatek: Add LVTS driver settings for mt8195 thermal zon=
+es
+One Clock and one Reset for Thermal.
+Thermal have two domain : CPU related (mcu) and non-CPU related (ap).
+TC : Thermal Controller to control the thermal sensor's HW behavior.
+TS : Thermal Sensor for measuring temperature the HW module.
+thermal
+=E2=94=9C=E2=94=80=E2=94=80 ap
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS4_0 - vpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS4_1 - vpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS5_0 - gpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS5_1 - gpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_2
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_0 - vdec
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_1 - img
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS6_2 - infra
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 tc_3
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS7_0 - cam1
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS7_1 - cam2
+=E2=94=94=E2=94=80=E2=94=80 mcu
+=E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS1_0 - cpu_big1
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS1_1 - cpu_big2
+=E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS2_0 - cpu_big3
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS2_1 - cpu_big4
+=E2=94=94=E2=94=80=E2=94=80 tc_2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_0 - cpu_little1
+=E2=94=9C=E2=94=80=E2=94=80 TS3_1 - cpu_little2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_2 - cpu_little3
+=E2=94=94=E2=94=80=E2=94=80 TS3_3 - cpu_little4
+
+[v9,4/7] thermal: mediatek: Add LVTS driver for mt8192 thermal zones
+One Clock and one Reset for Thermal.
+Thermal have two domain : CPU related (mcu) and non-CPU related (ap).
+TC : Thermal Controller to control the thermal sensor's HW behavior.
+TS : Thermal Sensor for measuring temperature the HW module.
+thermal
+=E2=94=9C=E2=94=80=E2=94=80 ap
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS4_0 - vpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS4_1 - vpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS5_0 - gpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS5_1 - gpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_2
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_0 - infra
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS6_1 - cam
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 tc_3
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS7_0 - md2
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS7_1 - md3
+| =E2=94=94=E2=94=80=E2=94=80 TS6_2 - md1
+=E2=94=94=E2=94=80=E2=94=80 mcu
+=E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS1_0 - cpu_big1
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS1_1 - cpu_big2
+=E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS2_0 - cpu_big3
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS2_1 - cpu_big4
+=E2=94=94=E2=94=80=E2=94=80 tc_2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_0 - cpu_little1
+=E2=94=9C=E2=94=80=E2=94=80 TS3_1 - cpu_little2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_2 - cpu_little3
+=E2=94=94=E2=94=80=E2=94=80 TS3_3 - cpu_little4
+
+Best regards,
+Balsam.
+
+On Thu, Aug 25, 2022 at 7:29 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Balsam,
+>
+> On 17/08/2022 10:07, bchihi@baylibre.com wrote:
+> > From: Michael Kao <michael.kao@mediatek.com>
+> >
+> > Add LVTS v4 (Low Voltage Thermal Sensor) driver to report junction
+> > temperatures in MediaTek SoC mt8192 and register the maximum temperatur=
+e
+> > of sensors and each sensor as a thermal zone.
+>
+> Thanks for your work
+>
+> First of all, the patch is way too big.
+>
+> The organization of the data is hard to understand.
+>
+> Could you give a description of the sensors, how they are organized ?
+>
+> I can see the there are 'tc' and each have a group of sensing points? Is
+> that correct? Do have the 'tc's a shared clock? etc ...
+>
+> I have another email with the comments inline but without more insights
+> on the hardware it is difficult to review accurately. This driver looks
+> more complex than the other ones I've reviewed. At least that is what
+> looks like with the different macros names found.
+>
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog

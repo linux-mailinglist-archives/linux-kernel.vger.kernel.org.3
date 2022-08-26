@@ -2,66 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5380A5A26CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9AC5A26CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245025AbiHZLXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S245233AbiHZLYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235942AbiHZLXh (ORCPT
+        with ESMTP id S229917AbiHZLX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:23:37 -0400
+        Fri, 26 Aug 2022 07:23:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D96DAEE5;
-        Fri, 26 Aug 2022 04:23:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B32DAEE5;
+        Fri, 26 Aug 2022 04:23:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC41461AE3;
-        Fri, 26 Aug 2022 11:23:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C16C433D6;
-        Fri, 26 Aug 2022 11:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661513015;
-        bh=er20jhWQ9UV2GuS7npYd+p88t+RCOQWdFUwdklG856c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mXag9Tz3eD7yaq5k7rB7FvRteKYvPihN8KETnpwvU062+E9V6LLPPA1SvgtUFS8ZW
-         tgHO/0+BSgg5zG5iiKts9P69XvRzSA12ZWMBgVnI4VXf8r8yluzgWAb+HfxdYXk0E9
-         yJpq2/Z8wzxGiWkIXFzfYSbhx7dYYMCh7mM1wcB+JwtFbUs5cEZbNBW1cGLIcSzYgf
-         ZiX4ug7LyHyADE6zgTQJBCI9yt+cZBQWh2HmsDkQ8KJf7ZC9pHC6nE1FuNE7SXVB8c
-         aJnnLOXmsGVVkt5p+W1GRcK7meXQkAEUnlKnO2KxnPSZZ5uDhTpW3RYFWah+2C2ECj
-         Amvl/F+njaYEg==
-Date:   Fri, 26 Aug 2022 12:23:28 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-Message-ID: <20220826112327.GA19774@willie-the-truck>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
- <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99EAB61ABC;
+        Fri, 26 Aug 2022 11:23:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4517CC433D6;
+        Fri, 26 Aug 2022 11:23:56 +0000 (UTC)
+Message-ID: <a4fbbf75-7fad-3124-6d42-21749b507115@xs4all.nl>
+Date:   Fri, 26 Aug 2022 13:23:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] media: i2c: Fix repeated word in comments
+Content-Language: en-US
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Jules Maselbas <jmaselbas@kalray.eu>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+References: <20220826100052.22945-22-jmaselbas@kalray.eu>
+ <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220826102447.kpwpj2n5mta4k3xi@uno.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,66 +48,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 05:03:40PM -0400, Mikulas Patocka wrote:
-> Here I reworked your patch, so that test_bit_acquire is defined just like 
-> test_bit. There's some code duplication (in 
-> include/asm-generic/bitops/generic-non-atomic.h and in 
-> arch/x86/include/asm/bitops.h), but that duplication exists in the 
-> test_bit function too.
-> 
-> I tested it on x86-64 and arm64. On x86-64 it generates the "bt" 
-> instruction for variable-bit test and "shr; and $1" for constant bit test. 
-> On arm64 it generates the "ldar" instruction for both constant and 
-> variable bit test.
-> 
-> For me, the kernel 6.0-rc2 doesn't boot in an arm64 virtual machine at all 
-> (with or without this patch), so I only compile-tested it on arm64. I have 
-> to bisect it.
+I'm rejecting these patches in patchwork. All (or almost all) are duplicates.
 
-It's working fine for me and I haven't had any other reports that it's not
-booting. Please could you share some more details about your setup so we
-can try to reproduce the problem?
+Regards,
 
-> From: Mikulas Patocka <mpatocka@redhat.com>
+	Hans
+
+On 8/26/22 12:24, Jacopo Mondi wrote:
+> Hi Jules
 > 
-> There are several places in the kernel where wait_on_bit is not followed
-> by a memory barrier (for example, in drivers/md/dm-bufio.c:new_read). On
-> architectures with weak memory ordering, it may happen that memory
-> accesses that follow wait_on_bit are reordered before wait_on_bit and they
-> may return invalid data.
+>   thanks, but as reported in patchwork and lore
+> https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=mt9v111&archive=both&delegate=
+> https://lore.kernel.org/all/20220824135433.h2udwtnub7mlmtam@uno.localdomain/
 > 
-> Fix this class of bugs by introducing a new function "test_bit_acquire"
-> that works like test_bit, but has acquire memory ordering semantics.
+> This is the 4th patch to fix the same repeated word in a comment.
 > 
-> Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-> Cc: stable@vger.kernel.org
+> As I asked to Jilin, are you submitting this as part of a new
+> contributor program ?
 > 
->  arch/x86/include/asm/bitops.h                            |   13 +++++++++++++
->  include/asm-generic/bitops/generic-non-atomic.h          |   14 ++++++++++++++
->  include/asm-generic/bitops/instrumented-non-atomic.h     |   12 ++++++++++++
->  include/asm-generic/bitops/non-atomic.h                  |    1 +
->  include/asm-generic/bitops/non-instrumented-non-atomic.h |    1 +
->  include/linux/bitops.h                                   |    1 +
->  include/linux/buffer_head.h                              |    2 +-
->  include/linux/wait_bit.h                                 |    8 ++++----
->  kernel/sched/wait_bit.c                                  |    2 +-
->  9 files changed, 48 insertions(+), 6 deletions(-)
-
-This looks good to me, thanks for doing it! Just one thing that jumped out
-at me:
-
-> Index: linux-2.6/include/linux/buffer_head.h
-> ===================================================================
-> --- linux-2.6.orig/include/linux/buffer_head.h
-> +++ linux-2.6/include/linux/buffer_head.h
-> @@ -156,7 +156,7 @@ static __always_inline int buffer_uptoda
->  	 * make it consistent with folio_test_uptodate
->  	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
->  	 */
-> -	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
-> +	return test_bit_acquire(BH_Uptodate, &bh->b_state);
-
-Do you think it would be worth adding set_bit_release() and then relaxing
-set_buffer_uptodate() to use that rather than the smp_mb__before_atomic()?
-
-Will
+> Thanks
+>    j
+> 
+> On Fri, Aug 26, 2022 at 12:00:50PM +0200, Jules Maselbas wrote:
+>> Remove redundant word `the`.
+>>
+>> CC: Jacopo Mondi <jacopo@jmondi.org>
+>> CC: linux-media@vger.kernel.org
+>> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+>> ---
+>>  drivers/media/i2c/mt9v111.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
+>> index 2dc4a0f24ce8..7beca0b70b72 100644
+>> --- a/drivers/media/i2c/mt9v111.c
+>> +++ b/drivers/media/i2c/mt9v111.c
+>> @@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
+>>
+>>  	/*
+>>  	 * Set pixel integration time to the whole frame time.
+>> -	 * This value controls the the shutter delay when running with AE
+>> +	 * This value controls the shutter delay when running with AE
+>>  	 * disabled. If longer than frame time, it affects the output
+>>  	 * frame rate.
+>>  	 */
+>> --
+>> 2.17.1
+>>

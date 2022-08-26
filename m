@@ -2,122 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DD35A2F84
+	by mail.lfdr.de (Postfix) with ESMTP id B953F5A2F86
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344861AbiHZTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S232069AbiHZTBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344234AbiHZTAY (ORCPT
+        with ESMTP id S1345320AbiHZTA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:00:24 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF32B7FB;
-        Fri, 26 Aug 2022 12:00:03 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 519BE2B3;
-        Fri, 26 Aug 2022 21:00:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661540400;
-        bh=ssabbTy5MKSrv/V8sgDdoX5TEjDpuV0Khzcx+zOOY9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I7P/V+m4ueBHnBc1to1KT6ZebT537tW55GmSelssGNZL1o8f/3o6V7nNu4UhUR6Jn
-         rPLpJ87mZrj0IaXwJXCuIrd2UoTDgnwhfo9YVuAb3ULuYC9+Ja/bEo822nT5ItE3U4
-         bSaMvJAtzCxdzJ5MOTvJG08xaKTVk3hVggJymnbw=
-Date:   Fri, 26 Aug 2022 21:59:53 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 5/6] ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller
- node
-Message-ID: <YwkYKcffdRGnq+pK@pendragon.ideasonboard.com>
-References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
- <20220826182803.604563-6-paul.kocialkowski@bootlin.com>
+        Fri, 26 Aug 2022 15:00:58 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E36321E35;
+        Fri, 26 Aug 2022 12:00:55 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11e8b592421so1724064fac.0;
+        Fri, 26 Aug 2022 12:00:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0KBifXuEASh6HGcgH149nanGpV1JiDt7DyDBHIsc/vU=;
+        b=ccN8QG8hk63fsWGAxExojN7UzZ2rCOSkdNq+NTQYLKsese+mpfgjXGOL94lDldoj1o
+         0xIXZLnvHtA2J2EE9WUExGsrM28SSjxt0A+SNwvzmv4lTBFgIxZFwHeqWwOq3FpHrZWP
+         kkIzfP27OBJevc/doAFfnplwiXZi6myTciA67KTAQvZ8V6H6EiVIa8VVfKDPF1wlrN68
+         y/1MX8nT/ehYNeAPyaC1SmrJTk6WUYMt3NK+yRzjAvXwBteCVUG5FMwkGnKC6jjRU11x
+         8FdKfvta9P10uz1CnCd+101s9mYkMaY97B6OZznsES7bqfWOjd+1ZCb7LvwRVU/CRprX
+         EJtg==
+X-Gm-Message-State: ACgBeo3vqH0pjCJRWhmBogoLHBZLL/nO2/JAnhpkJFQEgjSm5xoG2+uV
+        HtcBMn8tb6ayaQS1S/Fqg8vqalkybMLHxQ430fo=
+X-Google-Smtp-Source: AA6agR6xC2kKRjF0UcRxB7gFaYxM1KXLm8OEIF0oTIJbOW+ut9BYRZXoYrKGvWMQJZt27A24Nij44wvtUz4u8g4yTkg=
+X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
+ a4-20020a056870a18400b00116bd397f94mr2563648oaf.5.1661540454852; Fri, 26 Aug
+ 2022 12:00:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220826182803.604563-6-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com> <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+ <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com> <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+ <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
+In-Reply-To: <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 26 Aug 2022 12:00:43 -0700
+Message-ID: <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> Below seems adequate for now, at least logically, but maybe it
+> would confuse clang thread-safety analysis?
 
-Thank you for the patch.
+I think it's not just about locks, the exit_browser should bail out early
+if the setup code was not called.
 
-On Fri, Aug 26, 2022 at 08:28:02PM +0200, Paul Kocialkowski wrote:
-> MIPI CSI-2 is supported on the A83T with a dedicated controller that
-> covers both the protocol and D-PHY. It can be connected to the CSI
-> interface as a V4L2 subdev through the fwnode graph.
-> 
-> This is not done by default since connecting the bridge without a
-> subdev attached to it will cause a failure on the CSI driver.
+Thanks,
+Namhyung
 
-No urgency, but would it be possible to fix this so that the CSI-2
-receiver can be connected to the CSI unconditionally in DT ? The
-connection exists at the hardware level in the SoC, and should thus
-exist here too, regardless of whether or not a sensor is connected.
 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  arch/arm/boot/dts/sun8i-a83t.dtsi | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
-> index 82fdb04122ca..ecf9f3b2c0c0 100644
-> --- a/arch/arm/boot/dts/sun8i-a83t.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
-> @@ -1064,6 +1064,32 @@ csi: camera@1cb0000 {
->  			status = "disabled";
->  		};
->  
-> +		mipi_csi2: csi@1cb1000 {
-> +			compatible = "allwinner,sun8i-a83t-mipi-csi2";
-> +			reg = <0x01cb1000 0x1000>;
-> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_CSI>,
-> +				 <&ccu CLK_CSI_SCLK>,
-> +				 <&ccu CLK_MIPI_CSI>,
-> +				 <&ccu CLK_CSI_MISC>;
-> +			clock-names = "bus", "mod", "mipi", "misc";
-> +			resets = <&ccu RST_BUS_CSI>;
-> +			status = "disabled";
+>
+> diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+> index 25ded88801a3..6d81be6a349e 100644
+> --- a/tools/perf/ui/setup.c
+> +++ b/tools/perf/ui/setup.c
+> @@ -73,9 +73,17 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+>         return 0;
+>  }
+>
+> +/*
+> + * exit_browser() can get called without setup_browser() having been called
+> + * first, so it is necessary to keep track of whether ui__lock has been
+> + * initialized.
+> + */
+> +static bool ui__lock_initialized;
 > +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				mipi_csi2_in: port@0 {
-> +					reg = <0>;
-> +				};
-> +
-> +				mipi_csi2_out: port@1 {
-> +					reg = <1>;
-> +				};
-> +			};
-> +		};
-> +
->  		hdmi: hdmi@1ee0000 {
->  			compatible = "allwinner,sun8i-a83t-dw-hdmi";
->  			reg = <0x01ee0000 0x10000>;
-
--- 
-Regards,
-
-Laurent Pinchart
+>  void setup_browser(bool fallback_to_pager)
+>  {
+>         mutex_init(&ui__lock);
+> +       ui__lock_initialized = true;
+>         if (use_browser < 2 && (!isatty(1) || dump_trace))
+>                 use_browser = 0;
+>
+> @@ -118,5 +126,6 @@ void exit_browser(bool wait_for_ok)
+>         default:
+>                 break;
+>         }
+> -       mutex_destroy(&ui__lock);
+> +       if (ui__lock_initialized)
+> +               mutex_destroy(&ui__lock);
+>  }
+>

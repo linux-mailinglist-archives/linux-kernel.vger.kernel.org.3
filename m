@@ -2,82 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4335A2340
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4615A2348
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245285AbiHZIiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S245428AbiHZIk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343682AbiHZIia (ORCPT
+        with ESMTP id S245536AbiHZIj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:38:30 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE26D5E84
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:38:09 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z2so1264211edc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:38:09 -0700 (PDT)
+        Fri, 26 Aug 2022 04:39:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B85D632D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:39:08 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31f445bd486so18620907b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=yIFcteN6sC/bfaP1WTd/RHoQds62wkqs1tJOKGjVr+0=;
-        b=TeZv4iLFDzDlcRMZdcxFYD8iBhkkl6ru8OscF0CczIJjoMszenrw8WXPQMojvZNMOK
-         yrAvVSDX9JVbS5BynSn+dLfRkI2zFiGvM0Oe6uKk7WyPVO9RJDVe9sqHugHczQfpCMDR
-         ewTeM6bWdEy+c/W+FBLIRWgyGjZ+hn85AjjApkYMhNowxNh4Am5N3s80e9FzA7pkCxNV
-         lI7T3WYv0MOOPYrSMD+bRtrut4zCc0dtxaV2bGCTh3VL/N5UfavBSYgyu6xT08ZKdnCf
-         dJtGcL1ZgCr1ZZfPa1GrAiGI8cd4GsttG4+r/CH5iYJs6K1jAgkud5zOone5CA+39eU7
-         sLiw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=Gbnh/nnDbuL5T5BvLNj3zwAmlE8d4k5PawHmbvFEFbk=;
+        b=MNjXddBAOd+w9wkV5muswSppV6x5Jv+YS9ecOjXsUWJBVbPQURDBrSTe3Rss2i0p/r
+         Jhmif2aOct4FrfcfpD9SRO9RHxr4LmccGOUui2+rtO1i6NUewZYaWAF1Uj3qq59pfr91
+         VjwTW2OAdfNyC5ON+2WWx86GER7zk9LtKCZGNCcc/bhubscXBSXf0GihTtUlUsBLA3Xn
+         vuWQ47vl8nc81EKOuzXoehfRScxfeaXU9CceWTlAIRodc4v7g6LuKc+2uSzDQqYIngTy
+         F8vTYNtLOiuY3iezgI6TMtgUOBkC4/bd55SIlfcNGNOfJt1siO9gbTktwflBScPg/B+A
+         IwQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=yIFcteN6sC/bfaP1WTd/RHoQds62wkqs1tJOKGjVr+0=;
-        b=0ZwxSQ79StM9D5qFwDkHg1xv7KVrmfNi1atW4g8UMGZr8zobktmxO2Blp/24MoPSGr
-         GItLfteuu5hshwudvb9byBvAa3z5+beMQTV93Q1jKbZ2XJMlRgiEh7Kja7Ywon5Q4f/Q
-         7quoYKpQHbGHjc/J5Mvv2Cx/2hu9Iw9hK6fkeL/gbaNbBDyFFRPHhqdzkpQDcBl3w8Zg
-         lGjL8xY6mMfxyZnzGjkNiTaUXNQX47xvmtwDS/wKlDw5zNT/Vywk92EAU9kAmK5UYzsZ
-         Gpyk0atgZTVfU1Q3InCx0hMmawgkD7Sr7Jk8SvzgsUIOYzBSJSWBp++2nN2rkeT+V5Ic
-         eB8g==
-X-Gm-Message-State: ACgBeo2QZ6+s6rsJpc+Tz0sQ7ekKsYxEN6Szgv2KwTQ/pZPaY1AQyh1a
-        fGQpJlqf667FzeBvRgaE4wtV+YxgK3H/ME3iCVCGDA==
-X-Google-Smtp-Source: AA6agR7ozWh1h3e0/Xth50fQGocQFY1NAJzq0Z5PFKq8ZMWLhAvNOdudXPHZBKkMRV1id5Oh5mABiceM7paZHMDcSNk=
-X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id
- ew4-20020a056402538400b004316d84b451mr5948537edb.46.1661503087619; Fri, 26
- Aug 2022 01:38:07 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=Gbnh/nnDbuL5T5BvLNj3zwAmlE8d4k5PawHmbvFEFbk=;
+        b=Du6OQAlKD2iXuvYq5ifEG+XEhWCouiuW7wRLucdc1OGVzCG0JWuUTFoGuKXMlCllb8
+         yrX4F5OPud/SiJK/mU6wSjUnl0bzFv3JW6ko0dZzb72aBKPSKpxGNqDNrK7R8kWnCW++
+         qn6ynrWAc7eAJkqOWdK6TZv7KKBs0Htn/Y4ubrYb0Yl8rPgHSp4JXgtuOSDISsQp92Wv
+         zUnUf6EAUBXgYMTZ/BmaFHfxqo4281L/g8SH2MvgGwtp6dflAncvBHoffQcpDZBxHXLO
+         Z9b3eaj5OXBdXzc8jLHqwL56IqCWRwIlybmUnQXGlI0CUshJAkvGC+jWUye8Rr2Mi4ZK
+         PpRw==
+X-Gm-Message-State: ACgBeo1VIBj92jHpHQDmfzISmzfZosjhWQ2Rl/FD7fAqBgNlDIQyCIcR
+        0V/pVMalKugIISYtM26pH9+izv6DgCiQFtRu1ScEUA==
+X-Google-Smtp-Source: AA6agR7kYKsB2aFgL4J8UVJXiRDCFz4t/tXSI4PkJwjvI/Lg1d/SZ2cRrdBUXdzofU6od8Ey4X/QYzkYrxgTJmY4jhk=
+X-Received: by 2002:a81:10a:0:b0:333:618e:190b with SMTP id
+ 10-20020a81010a000000b00333618e190bmr7063483ywb.10.1661503147204; Fri, 26 Aug
+ 2022 01:39:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220819024541.74191-1-michael@allwinnertech.com>
-In-Reply-To: <20220819024541.74191-1-michael@allwinnertech.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 10:37:56 +0200
-Message-ID: <CACRpkdbx+r8SLRAJKjMHGn1MzmcqmXhorXoPxouooMv6VJL89A@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: sunxi: Fix name for A100 R_PIO
-To:     Michael Wu <michael@allwinnertech.com>
-Cc:     wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        mripard@kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+References: <000000000000c98a7f05ac744f53@google.com> <000000000000734fe705acb9f3a2@google.com>
+ <a142d63c-7810-40ff-9c24-7160c63bafebn@googlegroups.com> <CAG_fn=U=Vfv3ymNM6W++sbivieQoUuXfAxsC9SsmdtQiTjSi8g@mail.gmail.com>
+ <1a0b4d24-6903-464f-7af0-65c9788545af@I-love.SAKURA.ne.jp>
+ <CAG_fn=Wq51FMbty4c_RwjBSFWS1oceL1rOAUzCyRnGEzajQRAg@mail.gmail.com> <46fee955-a5fa-fbd6-bcc4-d9344e6801d9@I-love.SAKURA.ne.jp>
+In-Reply-To: <46fee955-a5fa-fbd6-bcc4-d9344e6801d9@I-love.SAKURA.ne.jp>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 26 Aug 2022 10:38:30 +0200
+Message-ID: <CAG_fn=X5a=2vhDR6Lt_6wEUZCmDqhy0dTW62FphATNgpuDbqNg@mail.gmail.com>
+Subject: Re: KMSAN: uninit-value in ath9k_htc_rx_msg
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     ath9k-devel@qca.qualcomm.com, phil@philpotter.co.uk,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 4:45 AM Michael Wu <michael@allwinnertech.com> wrote:
-
-> The name of A100 R_PIO driver should be sun50i-a100-r-pinctrl,
-> not sun50iw10p1-r-pinctrl.
+On Fri, Aug 26, 2022 at 3:35 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
 >
-> Fixes: 473436e7647d6 ("pinctrl: sunxi: add support for the Allwinner A100 pin controller")
+> On 2022/08/26 0:09, Alexander Potapenko wrote:
+> > On Thu, Aug 25, 2022 at 4:34 PM Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> >>
+> >> Hello.
+> > Hi Tetsuo,
+> >
+> >> I found that your patch was applied. But since the reproducer tested o=
+nly 0 byte
+> >> case, I think that rejecting only less than sizeof(struct htc_frame_hd=
+r) bytes
+> >> is not sufficient.
+> >>
+> >> More complete patch with Ack from Toke is waiting at
+> >> https://lkml.kernel.org/r/7acfa1be-4b5c-b2ce-de43-95b0593fb3e5@I-love.=
+SAKURA.ne.jp .
+> >
+> > Thanks for letting me know! I just checked that your patch indeed
+> > fixes the issue I am facing.
+> > If it is more complete, I think we'd indeed better use yours.
 >
-> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> I recognized that "ath9k: fix an uninit value use in ath9k_htc_rx_msg()" =
+is
+> local to KMSAN tree.
+> https://github.com/google/kmsan/commit/d891e35583bf2e81ccc7a2ea548bf7cf47=
+329f40
+I actually did a rebase of KMSAN tree to v6.0-rc2 yesterday and
+dropped that patch (picked yours instead).
+Thanks for the heads-up!
 
-Patch applied for fixes!
+--=20
+Alexander Potapenko
+Software Engineer
 
-Yours,
-Linus Walleij
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

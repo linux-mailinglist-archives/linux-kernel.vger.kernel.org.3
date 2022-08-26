@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E885A25A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC4E5A25A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234424AbiHZKOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S230112AbiHZKPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236831AbiHZKOl (ORCPT
+        with ESMTP id S245581AbiHZKPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:14:41 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB23C2FBC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:38 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e20so1212136wri.13
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=YRpdcaJ4r7VRT3/3i///gd/6IhC/k0ujvr195lrn9Lk=;
-        b=VSUkeWQzqxVlhVFu4DC9tyaajVlj//djUl8X7BaKZwQua+k3/xBJFtIuDLjNJjQWLL
-         GUaedmIJPtnNIiSBpY5M30o+30Jmmq1+sM9Rcp9s3vlmgwWWjzOLVA9s2rUJiYwfzqSI
-         ruXSplnM+iFUnlzG+3jlq28Y6R/yJQmNN42YpzLUNlvU/DMtnH8RREhwp6CNmsiD6cAn
-         P+odQZOAnBZyjm6qfeiccNeyztJh7Y0leBhqXWaNypkUwVE/lTfDMjJZ14dvEqlveVCO
-         JbSmJo0t4quHGh+3J0eEE02Ec8Xn1LwKIkbOSGlqxJVVetWJH28se8Gz+WiQRhVspY0M
-         RAiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=YRpdcaJ4r7VRT3/3i///gd/6IhC/k0ujvr195lrn9Lk=;
-        b=A9HoUC2TGG9C5iQgn89BwowORj+i0lRPv0zXFA7TIuRAxvgsey+OJ4T8XFs8bHPpLf
-         6k3XpB6pS8/AujSPGaR+nOFuuaup7BFU01p526MQQe+zKoB9/iyCOdE4QKLiCfSN0S81
-         4PlDY/y+dCnYvO9lj1BJN83dPnViFGEzSJMgSGCMV52VSQet12CoPNY7Pzdmp+llf7i8
-         qOwEMq/yuJjmQ8Wy5U1o8aJ8EXVnQzzqN2BO8ssyPb/xAhDnFCXCz87Nhf9ae65RQ4Sx
-         jKjVnksloJ+98KWSZHTWjgEWQiW5n2ZYmPFb9B0ozpgxpiMBntj2JcuUZ72EsF3YdwZV
-         oOrQ==
-X-Gm-Message-State: ACgBeo1hT69q5V45MtaI09BXruA9msxEeOL5gY+AsR3uv8ynZXfoJ6+z
-        leinJuBmvqViWT8QZ/3l7Yh97aRpVJXV/w==
-X-Google-Smtp-Source: AA6agR6XuzcSJ7avTDDbXtkKVvQcQEVjKXh2P9x7wWoHp7sT5sEudBIMCpUai6U2OGmhHrEje1PKMg==
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr4466170wrr.583.1661508877365;
-        Fri, 26 Aug 2022 03:14:37 -0700 (PDT)
-Received: from lb02065.fritz.box ([2001:9e8:140d:2300:3a17:fa67:2b0b:b905])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c284800b003a3561d4f3fsm1920423wmb.43.2022.08.26.03.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 03:14:36 -0700 (PDT)
-From:   Jack Wang <jinpu.wang@ionos.com>
-To:     jejb@linux.ibm.com
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi/qlogicpti: Fix dma_map_sg check
-Date:   Fri, 26 Aug 2022 12:14:35 +0200
-Message-Id: <20220826101435.79170-1-jinpu.wang@ionos.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 26 Aug 2022 06:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1109D46DBD;
+        Fri, 26 Aug 2022 03:14:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C26061408;
+        Fri, 26 Aug 2022 10:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0438C43140;
+        Fri, 26 Aug 2022 10:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661508898;
+        bh=NK190jfdx00jTrDCv7zIYGo0wJWl8l2X9W8c9twpJWM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nIY/moorJ/m4y8AsNO48CqLsfSNmDBPVeSgxPLfk52PP7Y6aYXueV2aNABvSfDMUi
+         PDsp5ZmnBW+jFnyUjB+NFpeEaud2aDjGAhL/0GP4P7NeL/sMVy9bfp90MrRO4zY8m3
+         aab6J1R5XG4vEQ86+OsqWJAsQyDOSWHH0r7wlUYV87Z1shvS3i2IxpzQA9EK0vCAfP
+         mXRq/ZxVseBpULo8TA1iBO4iSt4FYmZg6Pt3c42fJBWPbpuChX7CTEq8XOz1wQJvH5
+         3T+i8q/2bsnuufE2Wetp7tEPW5GiTGzTQNKXS7ymuEskEsAhQC7Ky/ZfbW1GE3yc0I
+         f9SCR3FYOGWyQ==
+Received: by mail-wr1-f50.google.com with SMTP id e13so330836wrm.1;
+        Fri, 26 Aug 2022 03:14:58 -0700 (PDT)
+X-Gm-Message-State: ACgBeo33rVA+TcAduSoD2aTtHLvMe5Kzl9+XuoxaUrJPyJBM3/66UD2l
+        HqS/rUfslS9akDI1371pDPA43yP5HmBnRGAk0OY=
+X-Google-Smtp-Source: AA6agR543ZK5dQZzr1lpLH8yqs+KhBfAVVvO1WOBz7r4lxnkexozgQ2VhsVLtTvZFBFUFU85FdH18Lv17LDbYByPKjY=
+X-Received: by 2002:a05:6000:782:b0:225:3e46:3dd5 with SMTP id
+ bu2-20020a056000078200b002253e463dd5mr4249270wrb.103.1661508897137; Fri, 26
+ Aug 2022 03:14:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220825111715.3025694-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <20220825111715.3025694-1-sakari.ailus@linux.intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 26 Aug 2022 12:14:45 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFVnZzmYN46d0YB8ieri4vEPz49ufw1FvQ19GT+cQ+wLw@mail.gmail.com>
+Message-ID: <CAMj1kXFVnZzmYN46d0YB8ieri4vEPz49ufw1FvQ19GT+cQ+wLw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] acpi: Remove default association from integer maximum values
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sbinding@opensource.cirrus.com, andriy.shevchenko@intel.com,
+        patches@opensource.cirrus.com, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing error check for dma_map_sg.
+On Thu, 25 Aug 2022 at 13:17, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+>
+> Remove the default association from integer maximum value checks. It is
+> not necessary and has caused a bug in other associations being unnoticed.
+>
+> Fixes: 923044133367 ("ACPI: property: Unify integer value reading functions")
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
----
- drivers/scsi/qlogicpti.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
-index 57f2f4135a06..8c961ff03fcd 100644
---- a/drivers/scsi/qlogicpti.c
-+++ b/drivers/scsi/qlogicpti.c
-@@ -909,7 +909,8 @@ static inline int load_cmd(struct scsi_cmnd *Cmnd, struct Command_Entry *cmd,
- 		sg_count = dma_map_sg(&qpti->op->dev, sg,
- 				      scsi_sg_count(Cmnd),
- 				      Cmnd->sc_data_direction);
--
-+		if (!sg_count)
-+			return -1;
- 		ds = cmd->dataseg;
- 		cmd->segment_cnt = sg_count;
- 
--- 
-2.34.1
-
+> ---
+>  drivers/acpi/property.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> index 91d0e75859d37..d4c168ce428ca 100644
+> --- a/drivers/acpi/property.c
+> +++ b/drivers/acpi/property.c
+> @@ -1046,8 +1046,7 @@ static int acpi_data_prop_read_single(const struct acpi_device_data *data,
+>                                                                 u8 *: U8_MAX, \
+>                                                                 u16 *: U16_MAX, \
+>                                                                 u32 *: U32_MAX, \
+> -                                                               u64 *: U64_MAX, \
+> -                                                               default: 0U)) { \
+> +                                                               u64 *: U64_MAX)) { \
+>                                 ret = -EOVERFLOW;                       \
+>                                 break;                                  \
+>                         }                                               \
+> --
+> 2.30.2
+>

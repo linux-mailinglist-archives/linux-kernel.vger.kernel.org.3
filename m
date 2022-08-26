@@ -2,91 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7646E5A25EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9495A25F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 12:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343793AbiHZKgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 06:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S1343801AbiHZKhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 06:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343773AbiHZKgJ (ORCPT
+        with ESMTP id S242864AbiHZKhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:36:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7973D2914
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:36:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E16B60B91
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 135C7C433C1;
-        Fri, 26 Aug 2022 10:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661510164;
-        bh=+izqYcemwkG2wEvEGbT2LOTMB+U6MjsFZ3z5zG1Ndww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LkotBogPwuFdvjFwu489hKIrwIrO+dZF1iE8Fc/TPUc9tB6HIKl5SjTuBI5+ZDvRy
-         jBgBJfAhgUb8NuF9KoWLwZen3hcR3YekdW1KrtaNeFXAWuZI4WgTWrHZbXVRW3du1V
-         ErS8uKkSXzcs+7T+323H04TyjJ5aeBxgRNHkpHLWXeBcME1NJtY3Lu7TvJ9nE/Acoy
-         acoQVNwXwFSn7wWWXsPcpLHh7BwYhfDFrgQ6z3nyjJpLNilWsNvBf8cBDd/iXfZ7YN
-         5WruHb9EeBmfpzfGEjgImE6WI5zmWMeThVSSnnNLRgmWQ5yr5SamO0IJJul6WiFvxM
-         k0Lvof1UxzrRw==
-Date:   Fri, 26 Aug 2022 11:35:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ying.huang@intel.com, dave.hansen@intel.com,
-        Jonathan.Cameron@huawei.com, adobriyan@gmail.com,
-        akpm@linux-foundation.org, rf@opensource.cirrus.com
-Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
- kstrtobool()
-Message-ID: <20220826103557.GA19505@willie-the-truck>
-References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
- <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com>
- <Yt605xj898VSAsA3@casper.infradead.org>
- <YuPwLq+D8k53GZa3@smile.fi.intel.com>
- <YuPwgmHbcQYsA4Kp@smile.fi.intel.com>
- <Ywd7h68eYwGDYBtJ@alley>
+        Fri, 26 Aug 2022 06:37:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23DED570D;
+        Fri, 26 Aug 2022 03:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661510259; x=1693046259;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=9hnCuIQP0Do9Va8hiUiS3qPMSpvIWNQCjLORaXq96rM=;
+  b=SkN7+8A8mFTAywJwapYZC4VN9VBqMP4vOj9mMlam4gdn8rex+34AVvYA
+   jkCrdxf0cXhuzs0exIQ9fsVGQYS1CfbEh27VgMcmeSL3C2Rf2Meubusmq
+   1oer5ZqlWeavcdZyEyOZltAWsoyw5t+eJGDIayszalqzYlqL4edfK6AVr
+   fhHY+h50PEMqZBcvaAHI7qZcaVyHkL1RpmBez/0Rl0cMu49HTAMK+Don0
+   /FEMlYNvh6xs8Ll/r9hACXjuHis34AXg6mV8u0MpCdROhHiOrR1kYnkFI
+   xp9eVdmiJTv7SkHsXVlo8rbu6Iyir0OQtp/x2XfRw+ecUE6gMfsGONl16
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="293220362"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="293220362"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 03:37:39 -0700
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="606726872"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 03:37:26 -0700
+Message-ID: <12acbe02-bd73-07bb-d0e1-cb13dcd790c0@intel.com>
+Date:   Fri, 26 Aug 2022 13:37:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ywd7h68eYwGDYBtJ@alley>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 11/18] perf dso: Update use of pthread mutex
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-12-irogers@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220824153901.488576-12-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 03:39:19PM +0200, Petr Mladek wrote:
-> On Fri 2022-07-29 17:36:50, Andy Shevchenko wrote:
-> > Actually kstrtobool() has been designed as a generic parser that should have
-> > lowest priority. It means that the code that uses it should take care of any
-> > other custom cases _before_ calling for kstrtobool().
+On 24/08/22 18:38, Ian Rogers wrote:
+> Switch to the use of mutex wrappers that provide better error checking.
 > 
-> Makes sense.
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/dso.c    | 12 ++++++------
+
+Some not done yet
+
+$ grep -i pthread_mut tools/perf/util/dso.c
+static pthread_mutex_t dso__data_open_lock = PTHREAD_MUTEX_INITIALIZER;
+        pthread_mutex_lock(&dso__data_open_lock);
+        pthread_mutex_unlock(&dso__data_open_lock);
+        if (pthread_mutex_lock(&dso__data_open_lock) < 0)
+                pthread_mutex_unlock(&dso__data_open_lock);
+        pthread_mutex_unlock(&dso__data_open_lock);
+        pthread_mutex_lock(&dso__data_open_lock);
+        pthread_mutex_unlock(&dso__data_open_lock);
+        pthread_mutex_lock(&dso__data_open_lock);
+        pthread_mutex_unlock(&dso__data_open_lock);
+
+
+>  tools/perf/util/dso.h    |  4 ++--
+>  tools/perf/util/symbol.c |  4 ++--
+>  3 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> Jagdish, could you please send a patch fixing the "rodata" early_param
-> in arch/arm64/mm/mmu.c?
-> 
-> Please, also add:
-> 
-> Cc: stable@vger.kernel.org # v5.19+
+> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> index 5ac13958d1bd..a9789a955403 100644
+> --- a/tools/perf/util/dso.c
+> +++ b/tools/perf/util/dso.c
+> @@ -795,7 +795,7 @@ dso_cache__free(struct dso *dso)
+>  	struct rb_root *root = &dso->data.cache;
+>  	struct rb_node *next = rb_first(root);
+>  
+> -	pthread_mutex_lock(&dso->lock);
+> +	mutex_lock(&dso->lock);
+>  	while (next) {
+>  		struct dso_cache *cache;
+>  
+> @@ -804,7 +804,7 @@ dso_cache__free(struct dso *dso)
+>  		rb_erase(&cache->rb_node, root);
+>  		free(cache);
+>  	}
+> -	pthread_mutex_unlock(&dso->lock);
+> +	mutex_unlock(&dso->lock);
+>  }
+>  
+>  static struct dso_cache *__dso_cache__find(struct dso *dso, u64 offset)
+> @@ -841,7 +841,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+>  	struct dso_cache *cache;
+>  	u64 offset = new->offset;
+>  
+> -	pthread_mutex_lock(&dso->lock);
+> +	mutex_lock(&dso->lock);
+>  	while (*p != NULL) {
+>  		u64 end;
+>  
+> @@ -862,7 +862,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+>  
+>  	cache = NULL;
+>  out:
+> -	pthread_mutex_unlock(&dso->lock);
+> +	mutex_unlock(&dso->lock);
+>  	return cache;
+>  }
+>  
+> @@ -1297,7 +1297,7 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
+>  		dso->root = NULL;
+>  		INIT_LIST_HEAD(&dso->node);
+>  		INIT_LIST_HEAD(&dso->data.open_entry);
+> -		pthread_mutex_init(&dso->lock, NULL);
+> +		mutex_init(&dso->lock);
+>  		refcount_set(&dso->refcnt, 1);
+>  	}
+>  
+> @@ -1336,7 +1336,7 @@ void dso__delete(struct dso *dso)
+>  	dso__free_a2l(dso);
+>  	zfree(&dso->symsrc_filename);
+>  	nsinfo__zput(dso->nsinfo);
+> -	pthread_mutex_destroy(&dso->lock);
+> +	mutex_destroy(&dso->lock);
+>  	free(dso);
+>  }
+>  
+> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> index 66981c7a9a18..58d94175e714 100644
+> --- a/tools/perf/util/dso.h
+> +++ b/tools/perf/util/dso.h
+> @@ -2,7 +2,6 @@
+>  #ifndef __PERF_DSO
+>  #define __PERF_DSO
+>  
+> -#include <pthread.h>
+>  #include <linux/refcount.h>
+>  #include <linux/types.h>
+>  #include <linux/rbtree.h>
+> @@ -11,6 +10,7 @@
+>  #include <stdio.h>
+>  #include <linux/bitops.h>
+>  #include "build-id.h"
+> +#include "mutex.h"
+>  
+>  struct machine;
+>  struct map;
+> @@ -145,7 +145,7 @@ struct dso_cache {
+>  struct auxtrace_cache;
+>  
+>  struct dso {
+> -	pthread_mutex_t	 lock;
+> +	struct mutex	 lock;
+>  	struct list_head node;
+>  	struct rb_node	 rb_node;	/* rbtree node sorted by long name */
+>  	struct rb_root	 *root;		/* root of rbtree that rb_node is in */
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index a4b22caa7c24..656d9b4dd456 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -1800,7 +1800,7 @@ int dso__load(struct dso *dso, struct map *map)
+>  	}
+>  
+>  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> -	pthread_mutex_lock(&dso->lock);
+> +	mutex_lock(&dso->lock);
+>  
+>  	/* check again under the dso->lock */
+>  	if (dso__loaded(dso)) {
+> @@ -1964,7 +1964,7 @@ int dso__load(struct dso *dso, struct map *map)
+>  		ret = 0;
+>  out:
+>  	dso__set_loaded(dso);
+> -	pthread_mutex_unlock(&dso->lock);
+> +	mutex_unlock(&dso->lock);
+>  	nsinfo__mountns_exit(&nsc);
+>  
+>  	return ret;
 
-I have a fix already queued here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?h=for-next/fixes&id=2e8cff0a0eee87b27f0cf87ad8310eb41b5886ab
-
-Sadly, it's missing the stable tag, but we can always send it manually if
-the robot doesn't grab it.
-
-Will

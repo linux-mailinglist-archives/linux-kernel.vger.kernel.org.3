@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EB85A222E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2245A2232
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 09:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245533AbiHZHpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 03:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S245603AbiHZHp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 03:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245557AbiHZHpP (ORCPT
+        with ESMTP id S245595AbiHZHpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:45:15 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA7A6B655
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:45:13 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id y127so837190pfy.5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 00:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=qIh8T4+4nOwG9GFhkeivft0t29HmdMlLLogsNGytBt4=;
-        b=YO8O7tpev6lVgcxchYkRVcQ6hFDrP+lFEu8x2WdB49uULsX4NDK+pYzZq2mjY1aaNO
-         YIVEzlBLL5QQTtbnDZnv7KV+vCGI7b0QktibVCNxznZyArvhMwU2y+porhxQELMr2ANH
-         Ah7UGB6Jf/1Z/MYlITTd/PlDMHY4TzxGzi2Iw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=qIh8T4+4nOwG9GFhkeivft0t29HmdMlLLogsNGytBt4=;
-        b=keIWWNZJy6KCt1IMh8XMrlWPRqcoPDRcyVKfytwUwzaLdnpHPbVN7pBISGXajjY7wq
-         13RoGHkeM68fi07RSPBcm1+xBZzLRh81KpobFTiXNAgpIlR+yXWTDuBia8AWTxVVfj5O
-         vrO8pughpUVvfwmvcpi8LaSbp24yARz6yK/sqvi4Dd/fUW6vp4Q0r0Dm9k0tOQk96/Yp
-         zS/5lQrpEfmUZlJlh+syJXvbCTriIMXwQc4x978y2yDYuyh40r7JjXseAgQZ75w4AObC
-         KYXvyCoBR3QLaP6PIGw/wgydB6OPF+t8w4AwUouDBJkIVk0ftwuFVwUijNesr+/wNkv8
-         pUeg==
-X-Gm-Message-State: ACgBeo3xQzCQsE453K3uUYTkJfpRBGHTFQogZbr1neseTPHKjdMh53kQ
-        SR9c9ndw7J4oPgEZJ4JYZiMdCCQ3y8Shfw==
-X-Google-Smtp-Source: AA6agR7V0nJEYo+vZ6oEyQt6Lh08k0kUBlPTQ7+pfNeEXy0eMbx8w7SA+6es/3lIo4WTWX7ekaQasw==
-X-Received: by 2002:a63:4c05:0:b0:41d:12ad:e885 with SMTP id z5-20020a634c05000000b0041d12ade885mr2384548pga.130.1661499913066;
-        Fri, 26 Aug 2022 00:45:13 -0700 (PDT)
-Received: from localhost ([2401:fa00:9:14:2e1e:8706:dfc7:5c74])
-        by smtp.gmail.com with UTF8SMTPSA id u9-20020a170902e5c900b00172f4835f65sm851422plf.271.2022.08.26.00.45.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 00:45:12 -0700 (PDT)
-From:   Mani Milani <mani@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Mani Milani <mani@chromium.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: i801: Prefer async probe
-Date:   Fri, 26 Aug 2022 17:44:30 +1000
-Message-Id: <20220826074430.1333272-1-mani@chromium.org>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+        Fri, 26 Aug 2022 03:45:47 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E201CA260F;
+        Fri, 26 Aug 2022 00:45:45 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MDX013WslzGprJ;
+        Fri, 26 Aug 2022 15:44:01 +0800 (CST)
+Received: from [10.67.110.73] (10.67.110.73) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
+ 2022 15:45:43 +0800
+Message-ID: <1fa01bcf-15e5-279e-79ac-056c70a9401d@huawei.com>
+Date:   Fri, 26 Aug 2022 15:45:43 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH] rtc: fsl-ftm-alarm: Use module_init and add module_exit
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <a.zummo@towertech.it>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220826070017.2340617-1-chris.zjh@huawei.com>
+ <Ywh00crgSilSfZnC@mail.local>
+From:   "zhangjianhua (E)" <chris.zjh@huawei.com>
+In-Reply-To: <Ywh00crgSilSfZnC@mail.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This i801 driver probe can take more than ~190ms in some devices, since
-the "i2c_register_spd()" call was added inside
-"i801_probe_optional_slaves()".
 
-Prefer async probe so that other drivers can be probed and boot can
-continue in parallel while this driver loads, to reduce boot time. There is
-no reason to block other drivers from probing while this driver is
-loading.
+在 2022/8/26 15:22, Alexandre Belloni 写道:
+> On 26/08/2022 15:00:17+0800, Zhang Jianhua wrote:
+>> - Use module_init instead of device_initcall.
+>> - Add a function for module_exit to unregister driver.
+>>
+> I can see what you are doing but this doesn't explain why. Also, was
+> this tested on any actual hardware?
 
-Signed-off-by: Mani Milani <mani@chromium.org>
----
+I find this problem by code review, so solve it smoothly, and there is 
+no hardware, so I just test it on qemu.
 
- drivers/i2c/busses/i2c-i801.c | 1 +
- 1 file changed, 1 insertion(+)
+May I need to modify the commit message?
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a176296f4fff..e06509edc5f3 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1838,6 +1838,7 @@ static struct pci_driver i801_driver = {
- 	.shutdown	= i801_shutdown,
- 	.driver		= {
- 		.pm	= &i801_pm_ops,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
- };
- 
--- 
-2.37.2.672.g94769d06f0-goog
-
+>> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+>> ---
+>>   drivers/rtc/rtc-fsl-ftm-alarm.c | 8 +++++++-
+>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
+>> index c0df49fb978c..28bdc6c97b64 100644
+>> --- a/drivers/rtc/rtc-fsl-ftm-alarm.c
+>> +++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
+>> @@ -332,7 +332,13 @@ static int __init ftm_alarm_init(void)
+>>   	return platform_driver_register(&ftm_rtc_driver);
+>>   }
+>>   
+>> -device_initcall(ftm_alarm_init);
+>> +static void __exit ftm_alarm_exit(void)
+>> +{
+>> +	platform_driver_unregister(&ftm_rtc_driver);
+>> +}
+>> +
+>> +module_init(ftm_alarm_init)
+>> +module_exit(ftm_alarm_exit)
+>>   
+>>   MODULE_DESCRIPTION("NXP/Freescale FlexTimer alarm driver");
+>>   MODULE_AUTHOR("Biwen Li <biwen.li@nxp.com>");
+>> -- 
+>> 2.31.0
+>>

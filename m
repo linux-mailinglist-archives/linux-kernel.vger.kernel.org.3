@@ -2,159 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D4D5A2B4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7A75A2B51
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 17:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbiHZPb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 11:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S1343764AbiHZPcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 11:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344194AbiHZPaT (ORCPT
+        with ESMTP id S244831AbiHZPbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:30:19 -0400
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FF73890
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 08:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1661527772;
-        bh=vybn/ViyNZp+SZt4R+o06lIHL1/q8XEV7JitarIyZUw=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=FUbqtduUcGbzwwG/RlAdq2Iudaa+Ht+yirkgCZuksUHuemvMY/mB3Sgdc0o7RZGMm
-         ph/q9N+xhqNDrgH9fSJv0KZy5yOLUZ+np/rsjoTDoi65nQgGKPiq8zU6JTSWQXV5kr
-         Gnp2y1mauCt6TQwA4z1W3Q1sVz6UzY/MxVYW5T1c=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from gecko ([46.223.150.91]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MoNV4-1pBeOy20Fc-00oiZn; Fri, 26
- Aug 2022 17:29:32 +0200
-Date:   Fri, 26 Aug 2022 15:29:31 +0000
-From:   Lukas Straub <lukasstraub2@web.de>
-To:     linux-um <linux-um@lists.infradead.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] um: Cleanup compiler warning in arch/x86/um/tls_32.c
-Message-ID: <20220826152931.5835fdf8@gecko>
+        Fri, 26 Aug 2022 11:31:46 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA93E39B91;
+        Fri, 26 Aug 2022 08:31:43 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id a4so1483356qto.10;
+        Fri, 26 Aug 2022 08:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pFkaR9I3kc1y1ODYdxyZc39/5L+yX/CiBnUnNaHIGxA=;
+        b=E06wNRHG/V5HYt3py9iTsew/F0bF806mMjb+zUmhPmLhZEKrBsuFiwaTnPeXx9INC5
+         4RgvKQ1j8f2rBBK0ym8jIQyKRgZW1IMGi90LlIiOpM4QkG9C8olExh9FIwjX6Eja8FPv
+         E5HX/z3ZYWVnh+i6aufxxbYQzy42v5nOq1xzXCF34H5TqAHBgVeUqczRtCI8nZ1oBl+n
+         KI9ayJTiyJUDQLrt9aET5R16v/3p8fMNLx4CgH/rO/bx5a4a8J9SVVmj3mIDLruJyQXL
+         OW5z+0zUe7iCnWaNn6m72cO4TMtYN7L0C6A4A6mo3BHYVBo5O/GYokX0W0gwfARJvvs/
+         9sSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pFkaR9I3kc1y1ODYdxyZc39/5L+yX/CiBnUnNaHIGxA=;
+        b=cwVsUG4M8V6XtmD1tB6EH6MVCruRZGzxUGYjn9VgvyoWNROD578El1xkGxa3Pi67T+
+         DGWRLe4NEbxCxUHAdXWgMRD9xjgv+NQZgDE/q0GoWUFUHpKoGGOFWANsGTF1HHpEra7G
+         J7AmSCKc6bVOb8P8pnMBAzvHJT0SWiSRubZEo+PXM2+lHjZVBM70PqQgUYGSMkjpKt8K
+         2KBuDUeYgeNz0DhEfR/T1IGGeFNg5CTZcBDu8nATZOs9jzljyNObyj4XQ7BchXOpqXln
+         XDEPoNCsJppzKX/2YGiL0j3X+IuRzuzFxNOwP4fG9muZ3bDRkJcJUBsPV/etJDO1P5v3
+         2azA==
+X-Gm-Message-State: ACgBeo3GcPojPgvXJwV1UL7G88p1Je/I1vfA5Q4H5tWBOlyy6g9KaifM
+        eIwAlqa+5MtAWWGZHwNENnGdRl9zkfS0LajoH+DvpWWdX4k=
+X-Google-Smtp-Source: AA6agR7QlJJpFisCs/GBGZ58GfS6Kgl3mDrGkbdQBQdcc3JcJ4DN+vhWzw+WVEeEqruyjPzu+8VH9ATzPRUOR9DDK6g=
+X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
+ v6-20020ac85786000000b003433051170dmr190070qta.429.1661527902551; Fri, 26 Aug
+ 2022 08:31:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LZycpH1Xjhw3hn5+7RWproQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Provags-ID: V03:K1:zRfBwWFCxLDu4xtAgPM58Sbn1rcr0fvj0TQWpsr2TlOF43NWZuA
- EQe8GTqssKt+x7JhGp0DNAWhk5QM0YwPYgGn6gHFGHlg1k6Kgn8JCRvGoHzb+oYmkJAJHk+
- 7jt4tUq0hN8ArWbVXBQYX4sTur1nFVjOZSs0jQI6sS5kOps2i3Ra397XXeiZpkEIH/H27da
- DEWXxWxzxR0zloYCOqs/A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wfGKSGR36wQ=:jwBIW4fn8rS/IBz1EQSFFe
- joylk/5JRyaS3iM5ChO0yigi/Yjj19wKHqHcFiMyxmrX8UDj9wYWT6feINqO6M7qow5kAHBf/
- Xrw/dSpau28uRT+JZuZTdQtMYO1sGKh00l/GMD/hHuP3jwfGat6axd42rzL1bmCAMGFyIxDXF
- udhlLiO4q8SEJwE37g157taapWMj9W1glutvoK7RqOJYz0c7moeklun9rYeyYUwOobwQ5KqwE
- ePCqJzMzglUuD8lx/HFwLa60xCaHDj2ng/o2f3/BjFHWaQJuEx2/w+YDK6s08F29ZbRGApq66
- WTON2wuDaHsyW34xvSltW4UM5X4K4Vb8lvWcrAZjqvGGNSnDeX7alZUpKXeguoJ7oxtmS/vWb
- gf1Bsm7fxwxkZRBXK5jSOlFnITmAPkL7gNYk/VFwQLSwmP0JiGtilYK9RtKJmFEHDGaQZboi+
- Uqf68VuGCBaObrLTjzXwTlGodHfgzBspSfcAz0QByZP7g0MJeM9lm7614AvzGRCA4HavpdO4U
- tTsHgDZ3D0ijSMyGAXRjs7WHbr6neQIIdrSKr7pY2MRBQvh9TR6UfaeWyF1Az0NUA393qVSIg
- 5sW4H7ix/Rah/ZKnouONafuNK/4Oyyf8KoOSpxc5mX7uvIcg0N3EjL2iKaxDQW4v0CAwb7UH9
- JRBRRDLiSgPQ0Di64t+YkfHhML4BzUgWGTeEF7y9D8NeBr0tyBOCrMxPYgsLpouK1RIWGNrj/
- KZRkTGS6nqkfwVaFA8xGfJDrqBACVcJbzCoYIum8ZS+cQvsAj4DYiNgp6KHwGn4bKz6UTDMeA
- 3NhcxmRe/0zuzYBXIELIPWltoaE/yKtBYSoDiqglWl6w/p7tInmZgT2U0aJi38LAunJFh9BlA
- ycECYW1by6f4Zj0IMxvfC6aTvju8sVM4/6e5WcP8sfw077JEeEqWJb9API734oSZNFDwS/YUs
- E0mvTfvlQQG4IGIETowCgIHOgVCkUgAH58ZWdCQJwYnHoksiD/YXg3i7Wa94ZZbLfJb48U7yF
- UNakweCgDzBpavM/bP8WBUk7rKq+dME8hili3VtkEmqXNhMF2RHPuZGGW0QtHtcgosgtOwvtF
- OfeP62gY2KXNymSeMiKLFnqCNcCDjCgdXRRgPSkONR2J4Rq9xD7RQ/sSA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220826151457.7c13a407@endymion.delvare>
+In-Reply-To: <20220826151457.7c13a407@endymion.delvare>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 Aug 2022 18:31:06 +0300
+Message-ID: <CAHp75VdBv4EkDgTwHSxNhA91b8FMwaMvvoeWZOaxJVcvwRQ4vg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: docs: enumeration: Fix a few typos and wording mistakes
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LZycpH1Xjhw3hn5+7RWproQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Aug 26, 2022 at 4:14 PM Jean Delvare <jdelvare@suse.de> wrote:
+>
+> "sturct" -> "struct"
+> "similar than with" -> "similar to"
+> Missing comma, "it" and "to"
 
-arch.tls_array is statically allocated so checking for NULL doesn't
-make sense. This causes the compiler warning below.
+Makes sense to me, thanks!
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Remove the checks to silence these warnings.
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> ---
+>  Documentation/firmware-guide/acpi/enumeration.rst |   16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> --- linux-5.19.orig/Documentation/firmware-guide/acpi/enumeration.rst   2022-08-26 12:46:35.307949217 +0200
+> +++ linux-5.19/Documentation/firmware-guide/acpi/enumeration.rst        2022-08-26 15:02:50.245981296 +0200
+> @@ -21,7 +21,7 @@ In order to support this and re-use the
+>    - Devices behind real busses where there is a connector resource
+>      are represented as struct spi_device or struct i2c_device. Note
+>      that standard UARTs are not busses so there is no struct uart_device,
+> -    although some of them may be represented by sturct serdev_device.
+> +    although some of them may be represented by struct serdev_device.
+>
+>  As both ACPI and Device Tree represent a tree of devices (and their
+>  resources) this implementation follows the Device Tree way as much as
+> @@ -205,7 +205,7 @@ enumerated once spi_register_master() is
+>                 }
+>                 ...
+>
+> -The SPI device drivers only need to add ACPI IDs in a similar way than with
+> +The SPI device drivers only need to add ACPI IDs in a similar way to
+>  the platform device drivers. Below is an example where we add ACPI support
+>  to at25 SPI eeprom driver (this is meant for the above ACPI snippet)::
+>
+> @@ -362,7 +362,7 @@ These GPIO numbers are controller relati
+>  specifies the path to the controller. In order to use these GPIOs in Linux
+>  we need to translate them to the corresponding Linux GPIO descriptors.
+>
+> -There is a standard GPIO API for that and is documented in
+> +There is a standard GPIO API for that and it is documented in
+>  Documentation/admin-guide/gpio/.
+>
+>  In the above example we can get the corresponding two GPIO descriptors with
+> @@ -538,8 +538,8 @@ information.
+>  PCI hierarchy representation
+>  ============================
+>
+> -Sometimes could be useful to enumerate a PCI device, knowing its position on the
+> -PCI bus.
+> +Sometimes it could be useful to enumerate a PCI device, knowing its position on
+> +the PCI bus.
+>
+>  For example, some systems use PCI devices soldered directly on the mother board,
+>  in a fixed position (ethernet, Wi-Fi, serial ports, etc.). In this conditions it
+> @@ -550,7 +550,7 @@ To identify a PCI device, a complete hie
+>  the chipset root port to the final device, through all the intermediate
+>  bridges/switches of the board.
+>
+> -For example, let us assume to have a system with a PCIe serial port, an
+> +For example, let's assume we have a system with a PCIe serial port, an
+>  Exar XR17V3521, soldered on the main board. This UART chip also includes
+>  16 GPIOs and we want to add the property ``gpio-line-names`` [1] to these pins.
+>  In this case, the ``lspci`` output for this component is::
+> @@ -593,8 +593,8 @@ To describe this Exar device on the PCI
+>
+>         Bus: 0 - Device: 14 - Function: 1
+>
+> -To find this information is necessary disassemble the BIOS ACPI tables, in
+> -particular the DSDT (see also [2])::
+> +To find this information, it is necessary to disassemble the BIOS ACPI tables,
+> +in particular the DSDT (see also [2])::
+>
+>         mkdir ~/tables/
+>         cd ~/tables/
+>
+>
+> --
+> Jean Delvare
+> SUSE L3 Support
 
-../arch/x86/um/tls_32.c: In function 'get_free_idx':
-../arch/x86/um/tls_32.c:68:13: warning: the comparison will always evaluate=
- as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-   68 |         if (!t->arch.tls_array)
-      |             ^
-In file included from ../arch/x86/um/asm/processor.h:10,
-                 from ../include/linux/rcupdate.h:30,
-                 from ../include/linux/rculist.h:11,
-                 from ../include/linux/pid.h:5,
-                 from ../include/linux/sched.h:14,
-                 from ../arch/x86/um/tls_32.c:7:
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
-../arch/x86/um/tls_32.c: In function 'get_tls_entry':
-../arch/x86/um/tls_32.c:243:13: warning: the comparison will always evaluat=
-e as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-  243 |         if (!t->arch.tls_array)
-      |             ^
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
 
-Signed-off-by: Lukas Straub <lukasstraub2@web.de>
----
- arch/x86/um/tls_32.c | 6 ------
- 1 file changed, 6 deletions(-)
 
-diff --git a/arch/x86/um/tls_32.c b/arch/x86/um/tls_32.c
-index ac8eee093f9c..66162eafd8e8 100644
---- a/arch/x86/um/tls_32.c
-+++ b/arch/x86/um/tls_32.c
-@@ -65,9 +65,6 @@ static int get_free_idx(struct task_struct* task)
- 	struct thread_struct *t =3D &task->thread;
- 	int idx;
-=20
--	if (!t->arch.tls_array)
--		return GDT_ENTRY_TLS_MIN;
--
- 	for (idx =3D 0; idx < GDT_ENTRY_TLS_ENTRIES; idx++)
- 		if (!t->arch.tls_array[idx].present)
- 			return idx + GDT_ENTRY_TLS_MIN;
-@@ -240,9 +237,6 @@ static int get_tls_entry(struct task_struct *task, stru=
-ct user_desc *info,
- {
- 	struct thread_struct *t =3D &task->thread;
-=20
--	if (!t->arch.tls_array)
--		goto clear;
--
- 	if (idx < GDT_ENTRY_TLS_MIN || idx > GDT_ENTRY_TLS_MAX)
- 		return -EINVAL;
-=20
---=20
-2.37.2
-
---Sig_/LZycpH1Xjhw3hn5+7RWproQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEg/qxWKDZuPtyYo+kNasLKJxdslgFAmMI5tsACgkQNasLKJxd
-sli3qRAAkgRBGEM2oxLpbfJhsLdW21G4iDuBKV5sUnRsRzt2Wgxx8osNg28GNg+k
-xsM+8Fr2Qnjgqci8p5sIB4sqGxr5sAl3Lof7KTo2JfSs/i6pkAf4i2aXQo/8lmHd
-8lQPxzmSn6oWkGyfLYNxSMZG3ax7B1sx4tjMomaAoqF6jp0pzU9m3Kx3+c5Pw2U0
-waPRbj0R4pELzFzAinqW+tU815/UxtScYVGIJtGX5mNa0q1Nywm9iHdx7Ay2x2Bw
-QmuhfjCOQIt3hvAebILiYFLV7GBLrr93pEvnQOaozW+oHjXsM1uEXM3qCuAD/7ti
-BNpVoTTiCaNKO1PvnGpiYzky67WbsUchbSJrDcpBIPBL1NL9JDKr72B1Dg+WAUHH
-ae55V9qaye07Bg8+MiEgzGoMvE6tb4lcA6m7zhO/4uaQVv2CpNpUHNX9jyY1i3/R
-9PnR62D+kWkiqsRW5CL/bAA5mtDbkQ8gu+bov3M2IvceC9aAQe1sam5sxqcQqcFK
-CQRqAcv6hcVUx30JqLv1clx7JZwdpVrXA3DE+N2O3IKnE8xO247uAoOQ0r2Db8v3
-0964pe4JOjYprIDVyFrKAFFkntSvga5t+zJf0ZCVECn7t4IgN8xad7ar/+Yzcy2b
-FX0PVBW9FG0Vces/8byR1B/+mBwjEbb96RFK5jvQ294gXRg9LsA=
-=y+Wt
------END PGP SIGNATURE-----
-
---Sig_/LZycpH1Xjhw3hn5+7RWproQ--
+-- 
+With Best Regards,
+Andy Shevchenko

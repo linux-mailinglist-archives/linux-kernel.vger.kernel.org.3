@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85F25A1F2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC095A1F2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 05:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244691AbiHZDAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 23:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S244923AbiHZDA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 23:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235147AbiHZC77 (ORCPT
+        with ESMTP id S244929AbiHZDAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 22:59:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377E333376;
-        Thu, 25 Aug 2022 19:59:58 -0700 (PDT)
+        Thu, 25 Aug 2022 23:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C6E40E1A;
+        Thu, 25 Aug 2022 20:00:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D372861E64;
-        Fri, 26 Aug 2022 02:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B32A1C433D6;
-        Fri, 26 Aug 2022 02:59:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 823A7B82F72;
+        Fri, 26 Aug 2022 03:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 28F6CC433D7;
+        Fri, 26 Aug 2022 03:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661482797;
-        bh=G0cteGp0bxyPbU08mT1HNn/O4ILEZ4wJ+AAKm8re164=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jGvASoibfAEATRm93/PIi92grxXeMlPkH2flVQwrjkxH9ONEiVmyQF2Pea/OEqtnX
-         JMKLCmUCH9VqjOQOVbN5qtJhCQp6TDhe4izVHSRPDexYc0ZKn2XiwxZDPoUPyYPANn
-         a/RqQLbUbKtW4A0CyA4NImnutxTLgKQeAqmTk4jjUAgIODmrxZ8YXwJPTS+FpquU39
-         bbeZ6dIR6XYZph3m/ENNL6DIMz4LIlEn8jm4Vdmmre6L2jp2hWBU+ti6oLcUJVjoV+
-         DmYCiJjDbtDWiJsEF/fIdV4hu/kQ61aXWeFSm33+yg1nNRJggM5o5MKpEm23i2Y0Kj
-         j2lqXBai4h/xA==
-Date:   Fri, 26 Aug 2022 05:59:49 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        apronin@chromium.org, dlunev@google.com, rjw@rjwysocki.net,
-        linux-pm@vger.kernel.org, corbet@lwn.net, jejb@linux.ibm.com,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>, Hao Wu <hao.wu@rubrik.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>, axelj <axelj@axis.com>
-Subject: Re: [PATCH v2 01/10] tpm: Add support for in-kernel resetting of PCRs
-Message-ID: <Ywg3JZrWmRjvr/7f@kernel.org>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
+        s=k20201202; t=1661482816;
+        bh=lhOK0hN5NUnvLWU7XQhshd4+QudR/OnZ1UDqoKn9XmM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pheTM+Iv1gAfD3BqcsheVT5roQfzETnyE4zKJa6BSSSWrlLNLqQLpEmbaJOmPr/Ql
+         S69xiCm6KMof2CCr8ZtdnVYAJbNJIVW3mfFxpQWeeSIhxf1/cRwA553n3kHFPraJlx
+         OqLMqtmT71HSazDJuZ948XpI6IfrMEJF7MDp9jEZfupnziNfbmy421qGJE5DtWvkrb
+         5pGB0/12Bc674X2bfQFSnW0VBWLC8DgVznzb+l7eBjpo16gP9yTKGJbVU09LUJtjcc
+         e3iKg9kAp/F6UJmIDbGlmjIYhJQVR3v/Jq3QequRYCSFhUB6oHrvpmBbckDKSPGUwX
+         dOgoEtqp8Z/jw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05E04E2A040;
+        Fri, 26 Aug 2022 03:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823152108.v2.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] dt-bindings: net: Add missing
+ (unevaluated|additional)Properties on child nodes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166148281601.17475.2210507730801372556.git-patchwork-notify@kernel.org>
+Date:   Fri, 26 Aug 2022 03:00:16 +0000
+References: <20220825192609.1538463-1-robh@kernel.org>
+In-Reply-To: <20220825192609.1538463-1-robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        UNGLinuxDriver@microchip.com, wellslutw@gmail.com,
+        grygorii.strashko@ti.com, nsekhar@ti.com,
+        steen.hegelund@microchip.com, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,77 +65,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:25:17PM -0700, Evan Green wrote:
-> From: Matthew Garrett <matthewgarrett@google.com>
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 25 Aug 2022 14:26:07 -0500 you wrote:
+> In order to ensure only documented properties are present, node schemas
+> must have unevaluatedProperties or additionalProperties set to false
+> (typically). Add missing properties/$refs as exposed by this addition.
 > 
-> Add an internal command for resetting a PCR. This will be used by the
-> encrypted hibernation code to set PCR23 to a known value. The
-> hibernation code will seal the hibernation key with a policy specifying
-> PCR23 be set to this known value as a mechanism to ensure that the
-> hibernation key is genuine. But to do this repeatedly, resetting the PCR
-> is necessary as well.
-> 
-> From: Matthew Garrett <mjg59@google.com>
-
-This is probably here by mistake.
-
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> 
-
-No empty line here.
-
-> Signed-off-by: Evan Green <evgreen@chromium.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> Matthew's original version of this patch was at:
-> https://patchwork.kernel.org/patch/12096487/
+> v2:
+>  - Add microchip,sparx5-switch.yaml and sunplus,sp7021-emac.yaml
 > 
-> (no changes since v1)
-> 
->  drivers/char/tpm/tpm-interface.c | 28 +++++++++++++++++++++++++
->  drivers/char/tpm/tpm.h           |  2 ++
->  drivers/char/tpm/tpm1-cmd.c      | 34 ++++++++++++++++++++++++++++++
->  drivers/char/tpm/tpm2-cmd.c      | 36 ++++++++++++++++++++++++++++++++
->  include/linux/tpm.h              |  7 +++++++
->  5 files changed, 107 insertions(+)
-> 
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index 1621ce8187052c..17b8643ee109c2 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -342,6 +342,34 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
->  }
->  EXPORT_SYMBOL_GPL(tpm_pcr_extend);
->  
-> +/**
-> + * tpm_pcr_reset - reset the specified PCR
-> + * @chip:	a &struct tpm_chip instance, %NULL for the default chip
-> + * @pcr_idx:	the PCR to be reset
-> + *
-> + * Return: same as with tpm_transmit_cmd()
-> + */
-> +int tpm_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
-> +{
-> +	int rc;
-> +
-> +	chip = tpm_find_get_ops(chip);
-> +	if (!chip)
-> +		return -ENODEV;
-> +
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> +		rc = tpm2_pcr_reset(chip, pcr_idx);
-> +		goto out;
-> +	}
-> +
-> +	rc = tpm1_pcr_reset(chip, pcr_idx, "attempting to reset a PCR");
-> +
-> +out:
-> +	tpm_put_ops(chip);
+> [...]
 
-        if (chip->flags & TPM_CHIP_FLAG_TPM2)
-                rc = tpm2_pcr_reset(chip, pcr_idx);
-        else
-                rc = tpm1_pcr_reset(chip, pcr_idx, "attempting to reset a PCR");
+Here is the summary with links:
+  - [v2] dt-bindings: net: Add missing (unevaluated|additional)Properties on child nodes
+    https://git.kernel.org/netdev/net-next/c/057062adb49b
 
-Where does this asymmetry come with the parameters?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-BR, Jarkko
+

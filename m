@@ -2,169 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA635A30C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02D35A30CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345090AbiHZVAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
+        id S231700AbiHZVG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiHZVAr (ORCPT
+        with ESMTP id S229676AbiHZVG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:00:47 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3839E3433;
-        Fri, 26 Aug 2022 14:00:40 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 4A92F605; Fri, 26 Aug 2022 16:00:39 -0500 (CDT)
-Date:   Fri, 26 Aug 2022 16:00:39 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "jackmanb@chromium.org" <jackmanb@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        "cgzones@googlemail.com" <cgzones@googlemail.com>,
-        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
-        "tixxdz@gmail.com" <tixxdz@gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-Message-ID: <20220826210039.GA15952@mail.hallyn.com>
-References: <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
- <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
- <20220819144537.GA16552@mail.hallyn.com>
- <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
- <875yigp4tp.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
- <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
- <20220826152445.GB12466@mail.hallyn.com>
- <25C89E75-A900-42C7-A8E4-2800AA2E3387@fb.com>
+        Fri, 26 Aug 2022 17:06:26 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECECDD76C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:06:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id kk26so5301640ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5PwylQXedxDhkWafpzB4KIy3NiEnlvim/yfJsbpjDbQ=;
+        b=Yf9PjWlfL1r7eT/c/0AIKUjx+BKquW/wJnHvOD5xraOs6Zq6+qgnX0MvaVZZirGA29
+         MiCEjgTCWVH6qERy3ErADS+pQlFu0JZM6MMkgMyDzjmYTl7pzcjuduPfCeYXe62wir+R
+         F/0AJRGshM9LobezTNYiztGwD4ALx554BVYmphaKX7b/HqjkDb7yE0CapdGKprLHC+uD
+         NVhp5BNbj7GtIsj4wHzXNKBXu/nBCo5/+AtMQFMoQTJGxpubM3Nl1C2nlDuiKCFTD0OA
+         rUPDJDe2Jk6Y9NkE7s0OgIZFirU9LpSK8tGo9v+OA4I+pXOc2aqEI54hnwrbByRa3Csa
+         4lMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5PwylQXedxDhkWafpzB4KIy3NiEnlvim/yfJsbpjDbQ=;
+        b=lJ5DhZBEYsiKdSW+girlhObvHlt7w1LW7lwQjOk88ndq70VvRjNAh8vxZHJFIIRxZx
+         MG9ltD9htmsCW09suOtReseq7AezSe4luhlMACLfRuYoJC/gpnupCn/w0xPHJfKJNuOQ
+         RfxxOfALnbe8tsmfuKPZl5akN6oTIs/EjNo/j4sN+F6gpOwIZBZckHzFwEyUfxTHK2C5
+         GZvvRjGHjP8tDEIEbKaRSODaHfu9ZULBwlb+RBT5zequkMo65mhzCAdR3qXP0GJnFd5S
+         sJMf8t7xygB6Os6k7NDT76PqiK0GywQv1JdL2PAiJbncbp4MT6ukoLAXJR4kFlyWKvOz
+         N++Q==
+X-Gm-Message-State: ACgBeo0RVJl8rzoFAotCkWN+AfL77amS95AbZ5Cts48YCdQdRAhLBcLc
+        ngXe7lkAdiEHf7XPqTTkMVFlSp0TukXImTtydmzD9tqA5Q==
+X-Google-Smtp-Source: AA6agR6Ncxwh8sZisapap17QKB0vCPLvZPFGD64SjhSRwQj5pNJD2743vRLKzk92RbbdMrcFnobg9pLitg0Rbm61fT0=
+X-Received: by 2002:a17:907:6096:b0:73d:9d12:4b04 with SMTP id
+ ht22-20020a170907609600b0073d9d124b04mr6717363ejc.745.1661547983987; Fri, 26
+ Aug 2022 14:06:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25C89E75-A900-42C7-A8E4-2800AA2E3387@fb.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1661502678-19336-3-git-send-email-kaixuxia@tencent.com> <20220826171629.50210-1-sj@kernel.org>
+In-Reply-To: <20220826171629.50210-1-sj@kernel.org>
+From:   Kaixu Xia <xiakaixu1987@gmail.com>
+Date:   Sat, 27 Aug 2022 05:06:12 +0800
+Message-ID: <CAGjdHunJ4bRbzm6gGKaZONTa1sY8macitByxattRSbwJZR5J2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mm/damon/vaddr: remove comparison between mm and
+ last_mm when checking region accesses
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Kaixu Xia <kaixuxia@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 05:00:51PM +0000, Song Liu wrote:
-> 
-> 
-> > On Aug 26, 2022, at 8:24 AM, Serge E. Hallyn <serge@hallyn.com> wrote:
-> > 
-> > On Thu, Aug 25, 2022 at 09:58:46PM +0000, Song Liu wrote:
-> >> 
-> >> 
-> >>> On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
-> >>> 
-> >>> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >>>> Paul Moore <paul@paul-moore.com> writes:
-> >>>>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> >>>>>> I am hoping we can come up with
-> >>>>>> "something better" to address people's needs, make everyone happy, and
-> >>>>>> bring forth world peace.  Which would stack just fine with what's here
-> >>>>>> for defense in depth.
-> >>>>>> 
-> >>>>>> You may well not be interested in further work, and that's fine.  I need
-> >>>>>> to set aside a few days to think on this.
-> >>>>> 
-> >>>>> I'm happy to continue the discussion as long as it's constructive; I
-> >>>>> think we all are.  My gut feeling is that Frederick's approach falls
-> >>>>> closest to the sweet spot of "workable without being overly offensive"
-> >>>>> (*cough*), but if you've got an additional approach in mind, or an
-> >>>>> alternative approach that solves the same use case problems, I think
-> >>>>> we'd all love to hear about it.
-> >>>> 
-> >>>> I would love to actually hear the problems people are trying to solve so
-> >>>> that we can have a sensible conversation about the trade offs.
-> >>> 
-> >>> Here are several taken from the previous threads, it's surely not a
-> >>> complete list, but it should give you a good idea:
-> >>> 
-> >>> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
-> >>> 
-> >>>> As best I can tell without more information people want to use
-> >>>> the creation of a user namespace as a signal that the code is
-> >>>> attempting an exploit.
-> >>> 
-> >>> Some use cases are like that, there are several other use cases that
-> >>> go beyond this; see all of our previous discussions on this
-> >>> topic/patchset.  As has been mentioned before, there are use cases
-> >>> that require improved observability, access control, or both.
-> >>> 
-> >>>> As such let me propose instead of returning an error code which will let
-> >>>> the exploit continue, have the security hook return a bool.  With true
-> >>>> meaning the code can continue and on false it will trigger using SIGSYS
-> >>>> to terminate the program like seccomp does.
-> >>> 
-> >>> Having the kernel forcibly exit the process isn't something that most
-> >>> LSMs would likely want.  I suppose we could modify the hook/caller so
-> >>> that *if* an LSM wanted to return SIGSYS the system would kill the
-> >>> process, but I would want that to be something in addition to
-> >>> returning an error code like LSMs normally do (e.g. EACCES).
-> >> 
-> >> I am new to user_namespace and security work, so please pardon me if
-> >> anything below is very wrong. 
-> >> 
-> >> IIUC, user_namespace is a tool that enables trusted userspace code to 
-> >> control the behavior of untrusted (or less trusted) userspace code. 
-> > 
-> > No.  user namespaces are not a way for more trusted code to control the
-> > behavior of less trusted code.
-> 
-> Hmm.. In this case, I think I really need to learn more. 
-> 
-> Thanks for pointing out my misunderstanding.
+On Sat, Aug 27, 2022 at 1:16 AM SeongJae Park <sj@kernel.org> wrote:
+>
+> Hi Kaixu,
+>
+> On Fri, 26 Aug 2022 16:31:18 +0800 xiakaixu1987@gmail.com wrote:
+>
+> > From: Kaixu Xia <kaixuxia@tencent.com>
+> >
+> > The damon regions that belong to the same damon target have the same
+> > 'struct mm_struct *mm', so it's unnecessary to compare the mm and last_mm
+> > objects among the damon regions in one damon target when checking accesses.
+>
+> There could be multiple targets, and 'damon_va_check_accesses()' calls
+> '__damon_va_check_accesses()' for all the targets.  However,
+> 'damon_va_check_accesses()' doesn't note if '__damon_va_check_accesses()' is
+> called with a target that same to the target it was called with for the last
+> time.  Hence the check is necessary.
 
-(I thought maybe Eric would chime in with a better explanation, but I'll
-fill it in for now :)
+There could be many regions(1000 max limit) in one target and the mm
+is same within
+the target, maybe we don't need to maintain the 'last_mm' and do the
+check every time
+when the target is same.
+But yes, the check is necessary when the target changed in
+'__damon_va_check_accesses()',
+this RFC patch missed this case :)  will fix it.
 
-One of the main goals of user namespaces is to allow unprivileged users
-to do things like chroot and mount, which are very useful development
-tools, without needing admin privileges.  So it's almost the opposite
-of what you said: rather than to enable trusted userspace code to control
-the behavior of less trusted code, it's to allow less privileged code to
-do things which do not affect other users, without having to assume *more*
-privilege.
-
-To be precise, the goals were:
-
-1. uid mapping - allow two users to both "use uid 500" without conflicting
-2. provide (unprivileged) users privilege over their own resources
-3. absolutely no extra privilege over other resources
-4. be able to nest
-
-While (3) was technically achieved, the problem we have is that
-(2) provides unprivileged users the ability to exercise kernel code
-which they previously could not.
-
--serge
+>
+> If I'm missing something, please let me know.
+>
+>
+> Thanks,
+> SJ
+>
+> [...]

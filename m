@@ -2,108 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEF45A2BE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6575A2BE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 18:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241961AbiHZQEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 12:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S243888AbiHZQEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 12:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiHZQE1 (ORCPT
+        with ESMTP id S241183AbiHZQEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:04:27 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C74D4779;
-        Fri, 26 Aug 2022 09:04:27 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id j1so1384742qvv.8;
-        Fri, 26 Aug 2022 09:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=FeNwIbGSnin/6lpCxdAU71xVZ3XiHSxLN5ZJ0/sc5G0=;
-        b=buuUZ0d/2nkVQRZuHDDqYtaT7TzNu324SLpv4R10HSLnwhDQ96WJVTnKtR7zum0t1r
-         hqj2e0FMaD6GbufjOJ4k9zx3ZUqUNUUZyPkO0lahpnsaJBBptUclrfCtMuU9efsK6FXO
-         2UEynvZ5f62lHMWe/gcTdeOgbu5jBoMFgqkhiTV6KhEUNElx0rs4cVYkE86I1Q4HFjSY
-         2R9r/IJTqVgCguPDvErK+IEOMNmyzUp9lN4EC/OHyRu0rlB4wUvg4WTyTGdIRpTn1DGV
-         59ibKqH5KGO5FyeGk1djPNZVC5NZe+orkbYsqEKimpJUj6+jVJwK5STuzPRpCpqylF5/
-         oWZA==
+        Fri, 26 Aug 2022 12:04:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF28D41A5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661529873;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=obYa+npn1GLmAkgYbBxpj4Xt3ZyWQyXIOu4icthPymg=;
+        b=FPvAfMuFNWTXzK/6saYcIGKkYXTqlNgrthg95JZSi90ijgNJJxiNQqAzTxCjdQ5lGmO9Ld
+        y9owbQGAeKN0tJezcL6CQSwAxMatt1XbVjRiK8ROAaPLwWjAEr1XATpTrR2T3LVKOB2jqS
+        Op8X+Pk91NQyPPWY1+fdWU+ISEQ00wg=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-549-1hFrtA7xO2C5ICrgZqxl1g-1; Fri, 26 Aug 2022 12:04:32 -0400
+X-MC-Unique: 1hFrtA7xO2C5ICrgZqxl1g-1
+Received: by mail-qk1-f198.google.com with SMTP id de4-20020a05620a370400b006a9711bd9f8so1571403qkb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 09:04:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=FeNwIbGSnin/6lpCxdAU71xVZ3XiHSxLN5ZJ0/sc5G0=;
-        b=y1n6GlnSlLPsYFN2gvFfYfNkD27jqsU8Pb0/u8qdzrksvoGDy3YJDetatJynGl/ZXn
-         xLcbmAYvhQhskA/06+33W26/s3n6Zoubkg31U78Gv4sKBxUUQ6Tvo2qlGZK+jvzfRCsv
-         CyQfmPuoyFUdN80G5mVD7W+k+AMXbdYtkr5pJ+CK81a7fzXbyKMmEyi655Ygv/vSQ1Wm
-         YSTfPQQGhPUF6bFMLxWqEkfQnF8YK0iyYPZniVxGZb+quh+qPy23u9xj/ubjVzgI2H/I
-         LbHm30kiNwhH27YI61K9LbKUvOJHERpfZmNH1oHFA3uaH9/uioCq5E0bZEDKFPDsiBDI
-         BIyA==
-X-Gm-Message-State: ACgBeo0Abu4CPeTfHevSWCJk+Sa4Z4zf7pbnhAviCbcHQ1loYdJkKJ8X
-        YzhAByu52P8YIIa/5aBwUogRTeaD0uYdYfjvKjw=
-X-Google-Smtp-Source: AA6agR7GxQegK7svGSDjOShs7ExKxeZkw77WPZE227Ogs36elAiNCLBVrcaeegmHRf0Y5x7Clj39vvbXehqfnaKq9E0=
-X-Received: by 2002:ad4:5baf:0:b0:476:6a9e:b5e1 with SMTP id
- 15-20020ad45baf000000b004766a9eb5e1mr300030qvq.64.1661529866149; Fri, 26 Aug
- 2022 09:04:26 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=obYa+npn1GLmAkgYbBxpj4Xt3ZyWQyXIOu4icthPymg=;
+        b=Gy5gJwyn2XMdEflzTezjvgApMsb3uX8guybKanFYjhJVTM+VNeLJ0sR4J0X2WA3bAl
+         Jq1n5HrXEfuvTpIbc9NkM97UVK1uTz+o2AeYbd2R5/N+EtZCJ7tt+YIUiPDOc56/yIbH
+         u5ujIklSWZMh3g/BAJyanp5Qs4liRRIVzb4E9sFFfFmHaxaBdqGWBp5SsBSSgr4Y4oGY
+         8BOSrqH16Tk2XssbfqwXRqhxBCyhRX3XiR4TKb4MwYcALLGVmQrtMn7Kwf9Mj5nBbqwy
+         /HSFPPFPP1R93izQa8BOp7LG5RYqWglfEZ8vf0EFiNDfGtw/mJQjppJgmrjMxjZLz6gP
+         SAIw==
+X-Gm-Message-State: ACgBeo2FZh+X+MDW4Af00aqva7WehaHXotJc5HDXxVjCBjwgRchmAJ26
+        UShacJnaE/KetAeYS6M+w8Jo6Fjqe+obCikaQgAyLks3DlXCe0FBZjtxI9OXi8l41WkFcVJckMJ
+        i1I3UaqujhRD7XIfMjEFQgJUC
+X-Received: by 2002:a05:620a:31a7:b0:6bc:138:2828 with SMTP id bi39-20020a05620a31a700b006bc01382828mr257530qkb.733.1661529870392;
+        Fri, 26 Aug 2022 09:04:30 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5Rf7dOoH2Nl+vrOLRrnLwbhfetodlfuNtPx0kmDcFjxm+hII8W/X98LxoEHwELOlqKLVbq0w==
+X-Received: by 2002:a05:620a:31a7:b0:6bc:138:2828 with SMTP id bi39-20020a05620a31a700b006bc01382828mr257509qkb.733.1661529870087;
+        Fri, 26 Aug 2022 09:04:30 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id bp17-20020a05620a459100b006b9a24dc9d7sm42297qkb.7.2022.08.26.09.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 09:04:29 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 12:04:27 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH] mm/mprotect: Only reference swap pfn page if type match
+Message-ID: <YwjvC1wYcODUuiSf@xz-m1.local>
+References: <20220823221138.45602-1-peterx@redhat.com>
+ <411d7b8c-f914-875e-b397-856e6a894366@redhat.com>
+ <YwjXxC2BbJ5+3Isx@xz-m1.local>
+ <ca62c992-6242-5e82-22de-a6e8ffa824b1@redhat.com>
 MIME-Version: 1.0
-References: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 26 Aug 2022 19:03:50 +0300
-Message-ID: <CAHp75VeJ2KR_-JUfW_3LEgB1ezQQzJ_2jLbH8vcWOtTSDAhKdQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] serial: Add uart_xmit_advance() + fixes part (of a
- larger patch series)
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ca62c992-6242-5e82-22de-a6e8ffa824b1@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:19 PM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> Add uart_xmit_advance() helper to handle circular xmit buffer
-> advancement + accounting of Tx'ed bytes. Use it to fix a few drivers
-> that previously lacked to accounting for DMA Tx.
+On Fri, Aug 26, 2022 at 04:39:08PM +0200, David Hildenbrand wrote:
+> On 26.08.22 16:25, Peter Xu wrote:
+> > On Fri, Aug 26, 2022 at 12:49:37PM +0200, David Hildenbrand wrote:
+> >> On 24.08.22 00:11, Peter Xu wrote:
+> >>> Yu Zhao reported a bug after the commit "mm/swap: Add swp_offset_pfn() to
+> >>> fetch PFN from swap entry" added a check in swp_offset_pfn() for swap type [1]:
+> >>>
+> >>>   kernel BUG at include/linux/swapops.h:117!
+> >>>   CPU: 46 PID: 5245 Comm: EventManager_De Tainted: G S         O L 6.0.0-dbg-DEV #2
+> >>>   RIP: 0010:pfn_swap_entry_to_page+0x72/0xf0
+> >>>   Code: c6 48 8b 36 48 83 fe ff 74 53 48 01 d1 48 83 c1 08 48 8b 09 f6
+> >>>   c1 01 75 7b 66 90 48 89 c1 48 8b 09 f6 c1 01 74 74 5d c3 eb 9e <0f> 0b
+> >>>   48 ba ff ff ff ff 03 00 00 00 eb ae a9 ff 0f 00 00 75 13 48
+> >>>   RSP: 0018:ffffa59e73fabb80 EFLAGS: 00010282
+> >>>   RAX: 00000000ffffffe8 RBX: 0c00000000000000 RCX: ffffcd5440000000
+> >>>   RDX: 1ffffffffff7a80a RSI: 0000000000000000 RDI: 0c0000000000042b
+> >>>   RBP: ffffa59e73fabb80 R08: ffff9965ca6e8bb8 R09: 0000000000000000
+> >>>   R10: ffffffffa5a2f62d R11: 0000030b372e9fff R12: ffff997b79db5738
+> >>>   R13: 000000000000042b R14: 0c0000000000042b R15: 1ffffffffff7a80a
+> >>>   FS:  00007f549d1bb700(0000) GS:ffff99d3cf680000(0000) knlGS:0000000000000000
+> >>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>>   CR2: 0000440d035b3180 CR3: 0000002243176004 CR4: 00000000003706e0
+> >>>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >>>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >>>   Call Trace:
+> >>>    <TASK>
+> >>>    change_pte_range+0x36e/0x880
+> >>>    change_p4d_range+0x2e8/0x670
+> >>>    change_protection_range+0x14e/0x2c0
+> >>>    mprotect_fixup+0x1ee/0x330
+> >>>    do_mprotect_pkey+0x34c/0x440
+> >>>    __x64_sys_mprotect+0x1d/0x30
+> >>>
+> >>> It triggers because pfn_swap_entry_to_page() could be called upon e.g. a
+> >>> genuine swap entry.
+> >>>
+> >>> Fix it by only calling it when it's a write migration entry where the page*
+> >>> is used.
+> >>>
+> >>> [1] https://lore.kernel.org/lkml/CAOUHufaVC2Za-p8m0aiHw6YkheDcrO-C3wRGixwDS32VTS+k1w@mail.gmail.com/
+> >>>
+> >>> Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
+> >>> Cc: David Hildenbrand <david@redhat.com>
+> >>> Cc: <stable@vger.kernel.org>
+> >>> Reported-by: Yu Zhao <yuzhao@google.com>
+> >>> Signed-off-by: Peter Xu <peterx@redhat.com>
+> >>> ---
+> >>>  mm/mprotect.c | 3 ++-
+> >>>  1 file changed, 2 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> >>> index f2b9b1da9083..4549f5945ebe 100644
+> >>> --- a/mm/mprotect.c
+> >>> +++ b/mm/mprotect.c
+> >>> @@ -203,10 +203,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+> >>>  			pages++;
+> >>>  		} else if (is_swap_pte(oldpte)) {
+> >>>  			swp_entry_t entry = pte_to_swp_entry(oldpte);
+> >>> -			struct page *page = pfn_swap_entry_to_page(entry);
+> >>>  			pte_t newpte;
+> >>>  
+> >>>  			if (is_writable_migration_entry(entry)) {
+> >>> +				struct page *page = pfn_swap_entry_to_page(entry);
+> >>> +
+> >>>  				/*
+> >>>  				 * A protection check is difficult so
+> >>>  				 * just be safe and disable write
+> >>
+> >>
+> >> Stumbling over the THP code, I was wondering if we also want to adjust change_huge_pmd()
+> >> and hugetlb_change_protection. There are no actual swap entries, so I assume we're fine.
+> >>
+> >>
+> >> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> >> index 482c1826e723..466364e7fc5f 100644
+> >> --- a/mm/huge_memory.c
+> >> +++ b/mm/huge_memory.c
+> >> @@ -1798,10 +1798,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> >>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+> >>         if (is_swap_pmd(*pmd)) {
+> >>                 swp_entry_t entry = pmd_to_swp_entry(*pmd);
+> >> -               struct page *page = pfn_swap_entry_to_page(entry);
+> >>  
+> >>                 VM_BUG_ON(!is_pmd_migration_entry(*pmd));
+> >>                 if (is_writable_migration_entry(entry)) {
+> >> +                       struct page *page = pfn_swap_entry_to_page(entry);
+> >>                         pmd_t newpmd;
+> >>                         /*
+> >>                          * A protection check is difficult so
+> >> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> >> index 2480ba627aa5..559465fae5cd 100644
+> >> --- a/mm/hugetlb.c
+> >> +++ b/mm/hugetlb.c
+> >> @@ -6370,9 +6370,9 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+> >>                 }
+> >>                 if (unlikely(is_hugetlb_entry_migration(pte))) {
+> >>                         swp_entry_t entry = pte_to_swp_entry(pte);
+> >> -                       struct page *page = pfn_swap_entry_to_page(entry);
+> >>  
+> >>                         if (!is_readable_migration_entry(entry)) {
+> >> +                               struct page *page = pfn_swap_entry_to_page(entry);
+> >>                                 pte_t newpte;
+> >>  
+> >>                                 if (PageAnon(page))
+> >>
+> >>
+> >> @Peter, what's your thought?
+> > 
+> > IMHO they're not needed?
+> > 
+> > The rule is simple in my mind: we should only pass in a pfn-typed swap
+> > entry into pfn_swap_entry_to_page() (or the new swp_offset_pfn()), or it's
+> > a violation of the API.  In these two cases they do not violate the API and
+> > they're always safe because they're guaranteed to be pfn swap entries when
+> > calling.
+> 
+> I was wondering about extreme corner cases regarding the struct page.
+> 
+> Assume we have a hwpoison_entry that pointed at a valid struct page. We
+> can succeed in offlining+removing the section it's located on (I was
+> recently challenging if we want to keep that behavior as it's really
+> shaky already), freeing the relevant memmap entry and the memory section.
+> 
+> pfn_swap_entry_to_page() -> pfn_to_page() would be problematic if there
+> is no memmap anymore.
+> 
+> 
+> I assume it's ok to always call it for is_pfn_swap_entry(), but in the
+> PMD case we only check for is_swap_pmd()? Isn't that problematic?
 
-For the whole series
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Thanks for fixing this issue.
+I don't know extensively enough on hwpoison on validity of fetching page
+from pfn inside on online/offline ops, but.. if the only concern is about
+hwpoison entry existance here I think its fine?  Because iirc we'l split
+thp when any of the subpage got poisoned, so we should never hit a hwpoison
+entry in thp path.
 
-> Greg,
-> I've a another series on top this which is tty-next material making the
-> rest of the drivers to use uart_xmit_advance(). That series obviously
-> depends on the patch 1/3 of this series so if you end up putting these
-> 3 patches into tty-linus, I'll need it to be merged into tty-next at
-> some point (I'm not in a big hurry with this so if you choose to delay
-> the merge, it's not a big deal).
->
-> Ilpo J=C3=A4rvinen (3):
->   serial: Create uart_xmit_advance()
->   serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
->   serial: tegra-tcu: Use uart_xmit_advance(), fixes icount.tx accounting
->
->  drivers/tty/serial/serial-tegra.c |  5 ++---
->  drivers/tty/serial/tegra-tcu.c    |  2 +-
->  include/linux/serial_core.h       | 17 +++++++++++++++++
->  3 files changed, 20 insertions(+), 4 deletions(-)
->
-> --
-> 2.30.2
->
+> 
+> 
+> I was confused by the hugetlb case, it's indeed fine as we check for
+> is_hugetlb_entry_migration().
 
+Right, it's more straightforward in the hugetlb case.
 
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+Peter Xu
+

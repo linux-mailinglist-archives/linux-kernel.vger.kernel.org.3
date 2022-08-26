@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAA05A20DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6BB5A20E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 08:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244996AbiHZG0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 02:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S245005AbiHZGcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 02:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiHZG0L (ORCPT
+        with ESMTP id S229556AbiHZGcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:26:11 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4665B05D;
-        Thu, 25 Aug 2022 23:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1661495169; x=1693031169;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ru/eWDImchhw6Kz9v2fJ5UGl0jpVy/CFCbFYw8iOmFs=;
-  b=g2wVjwKDywR5wUjU+WpROA4mswRyDGjrdlnyUWAB4WtNohrPLIxM1rfm
-   i8hHrlHOn8ru3vTH1xkTwa/yOCErRUQNdk0nxoDnulCe5l1TV9tZS7jke
-   fHPbrG+hc3t4eO21/9Ndhd2glWyhyar8+/9CSOTHajRR/zA1YedX6yCQj
-   uhctC/i6qj5xvtNwGGW7Vfd5xHdvsiZ84tw3rRTY8yIwA0CZTx3GSLPtp
-   xzorXS1qhltGQXD/qCHKCoXmQPLNcm7OYK8noM3HVbq5cfkBZHM9iNuDF
-   RMuWCv0l8Fen9aQP5xWdyL0hqQUyTg45kzYvpVn73ejKeqDAqtvqtBWdM
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,264,1654552800"; 
-   d="scan'208";a="25817877"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 26 Aug 2022 08:26:08 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 26 Aug 2022 08:26:08 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 26 Aug 2022 08:26:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1661495168; x=1693031168;
-  h=from:to:cc:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding:subject;
-  bh=Ru/eWDImchhw6Kz9v2fJ5UGl0jpVy/CFCbFYw8iOmFs=;
-  b=GZlq0KSirEFrHnj29JRewBtdV51m86yAQ2aYucZ1AyNT5t+C/WnS0w0l
-   2KjJwivgu3XTmqwC6UdW4OGXj2gyb+R+GCCm4H1yGqXWuyg9hDY40VAkv
-   3BCMWM3gJQ3ASR7r89Em8RWLBrx3YxrAdbcCilr4DcqKWKUhw3XwxZXKX
-   VgopHAhotboPVEi01OdZ1/GtodJp9uLvhJBYsx/F2r+jjbE8dwU1NpBX/
-   5eIV4t+eSQCqLpj+mZ7a6JpDG5cPF/f4mfLfQh5vt6dQCuMDp5RKnKgI9
-   N/mmD1BD4fT6Ehqnz/ZLFTgKHJBHEMQPmnhfkcQCPBHfp1birUz7aXObO
+        Fri, 26 Aug 2022 02:32:17 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C89CEB26;
+        Thu, 25 Aug 2022 23:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661495537; x=1693031537;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ITboVH73O8yQJPDsSk/g1d+cvwKUeF9FmO7f/tWeck8=;
+  b=lCnBVO9qrQRnwN1+8jBiD5Vtn+7YfKLyUnFy620f3ONoKHe/QajbhbAX
+   2XDspsVntvDNQD5ktN/ibfFCVpbY/zS558tBF4l6LEg4Ow5oZ8rNHdAdN
+   78P2ZFGqJjvTYp7I1qEoL9D1GhK+x3PFmNYrxB7GNd/RjM23HbaQjPw3T
+   hzksyaLkdjXe5SCqXKuHEckyDPiXayOH/fapi7ienwmMbFqbrRyaZcR6n
+   5MP2aCwS347ZCH+Bc+yl28XOkOSt2vp0hpN3USS4+azB6elX0aflVWTKn
+   pfsIn3uaPYqs7E48yyc078vV/sBGe0Rwj+qZC75t7kwhuQ9bEI1AesYNp
    w==;
-X-IronPort-AV: E=Sophos;i="5.93,264,1654552800"; 
-   d="scan'208";a="25817876"
-Subject: Re: [PATCH v1 0/2] Fix the wrong order of phy callbacks
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 26 Aug 2022 08:26:07 +0200
-Received: from steina-w.localnet (unknown [10.123.49.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9E1C8280056;
-        Fri, 26 Aug 2022 08:26:07 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, vkoul@kernel.org,
-        marcel.ziswiler@toradex.com, kishon@ti.com,
-        linux-arm-kernel@lists.infradead.org, hongxing.zhu@nxp.com,
-        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Date:   Fri, 26 Aug 2022 08:26:05 +0200
-Message-ID: <4054884.5fSG56mABF@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="292017237"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="292017237"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 23:32:16 -0700
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="671339011"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.29.246]) ([10.255.29.246])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 23:32:13 -0700
+Message-ID: <4e383b85-6777-4452-a073-4d2f439e28b1@intel.com>
+Date:   Fri, 26 Aug 2022 14:32:10 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 2/2] KVM: VMX: Stop/resume host PT before/after VM
+ entry when PT_MODE_HOST_GUEST
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220825085625.867763-1-xiaoyao.li@intel.com>
+ <20220825085625.867763-3-xiaoyao.li@intel.com> <YweWmF3wMPRnthIh@google.com>
+ <6bcab33b-3fde-d470-88b9-7667c7dc4b2d@intel.com>
+ <YwecducnM/U6tqJT@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <YwecducnM/U6tqJT@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Richard,
-
-Am Montag, 22. August 2022, 15:10:54 CEST schrieb Richard Zhu:
-> Refer [1], phy_init() must be called before phy_power_on().
-> This series used to fix the wrong order of the phy_init() and
-> phy_power_on(), introduced by commit 1aa97b002258 ("phy: freescale: pcie:
-> Initialize the imx8 pcie standalone phy driver") Tested on i.MX8MM EVK
-> board when one NVME device is used.
+On 8/25/2022 11:59 PM, Sean Christopherson wrote:
+> On Thu, Aug 25, 2022, Xiaoyao Li wrote:
+>> On 8/25/2022 11:34 PM, Sean Christopherson wrote:
+>>> On Thu, Aug 25, 2022, Xiaoyao Li wrote:
+>>>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>>>> index d7f8331d6f7e..3e9ce8f600d2 100644
+>>>> --- a/arch/x86/kvm/vmx/vmx.c
+>>>> +++ b/arch/x86/kvm/vmx/vmx.c
+>>>> @@ -38,6 +38,7 @@
+>>>>    #include <asm/fpu/api.h>
+>>>>    #include <asm/fpu/xstate.h>
+>>>>    #include <asm/idtentry.h>
+>>>> +#include <asm/intel_pt.h>
+>>>>    #include <asm/io.h>
+>>>>    #include <asm/irq_remapping.h>
+>>>>    #include <asm/kexec.h>
+>>>> @@ -1128,13 +1129,19 @@ static void pt_guest_enter(struct vcpu_vmx *vmx)
+>>>>    	if (vmx_pt_mode_is_system())
+>>>>    		return;
+>>>> +	/*
+>>>> +	 * Stop Intel PT on host to avoid vm-entry failure since
+>>>> +	 * VM_ENTRY_LOAD_IA32_RTIT_CTL is set
+>>>> +	 */
+>>>> +	intel_pt_stop();
+>>>> +
+>>>>    	/*
+>>>>    	 * GUEST_IA32_RTIT_CTL is already set in the VMCS.
+>>>>    	 * Save host state before VM entry.
+>>>>    	 */
+>>>>    	rdmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
+>>>
+>>> KVM's manual save/restore of MSR_IA32_RTIT_CTL should be dropped.
+>>
+>> No. It cannot. Please see below.
+>>
+>>> If PT/RTIT can
+>>> trace post-VMXON, then intel_pt_stop() will disable tracing and intel_pt_resume()
+>>> will restore the host's desired value.
+>>
+>> intel_pt_stop() and intel_pt_resume() touches host's RTIT_CTL only when host
+>> enables/uses Intel PT. Otherwise, they're just noop. In this case, we cannot
+>> assume host's RTIT_CTL is zero (only the RTIT_CTL.TraceEn is 0). After
+>> VM-exit, RTIT_CTL is cleared, we need to restore it.
 > 
-> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d
-> rivers/phy/phy-core.c?id=v5.19-rc1#n233
+> But ensuring the RTIT_CTL.TraceEn=0 is all that's needed to make VM-Entry happy,
+> and if the host isn't using Intel PT, what do we care if other bits that, for all
+> intents and purposes are ignored, are lost across VM-Entry/VM-Exit?  I gotta
+> imaging the perf will fully initialize RTIT_CTL if it starts using PT.
+
+Personally, I agree with it.
+
+But I'm not sure if there is a criteria that host context needs to be 
+unchanged after being virtualized.
+
+> Actually, if the host isn't actively using Intel PT, can KVM avoid saving the
+> other RTIT MSRs?
+
+I don't think it's a good idea that it requires PT driver never and 
+won't rely on the previous value of PT MSRs. But it's OK if handing it 
+over to perf as the idea you gave below.
+
+> Even better, can we hand that off to perf?  I really dislike KVM making assumptions
+> about perf's internal behavior.  E.g. can this be made to look like
+
+you mean let perf subsystem to do the context save/restore staff of host 
+and KVM focuses on save/restore of guest context, right?
+
+I would like to see comment from perf folks on this and maybe need their 
+help on how to implement.
+
+> 	intel_pt_guest_enter(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN);
 > 
-> [PATCH v1 1/2] PCI: imx6: Fix the wrong order of phy_init() and
-> [PATCH v1 2/2] phy: freescale: imx8m-pcie: Fix the wrong order of
-
-Together with your imx8mp patch series on TQMa8MPxl + MBa8MPxL:
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-Thanks again!
-Alexander
-
-
-
+> and
+> 
+> 	intel_pt_guest_exit(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN);
+> 

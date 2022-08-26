@@ -2,163 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7483B5A2283
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB885A2289
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 10:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343502AbiHZIBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 04:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S1343498AbiHZICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 04:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241772AbiHZIBF (ORCPT
+        with ESMTP id S244686AbiHZIB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:01:05 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB01FD3ECE;
-        Fri, 26 Aug 2022 01:01:03 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id k9so886516wri.0;
-        Fri, 26 Aug 2022 01:01:03 -0700 (PDT)
+        Fri, 26 Aug 2022 04:01:57 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5354CD4754
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:01:52 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id w20so1125417edd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 01:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=YKvx6Cj1xYUX2DCCsWQM+Zo2QVYcF66rAfcZQEp7iEQ=;
-        b=T42JkReyAMSo4VSqTWGrerpNlXhidixAmat1mZ0sQX1NCfY85uNUSkEv188VYmQoZv
-         tr94poynOv2itOtjfretoErIELTWi2u1CcgLTxj13h7TNV7+V1cpnCrl2/kM37TyL8w6
-         sAlgiW0FfnJUCwWa2xqAI+SeLsFzljhoO4ECrsxFTPNmrL3xO2F28KnuXhtH1/TIsbPF
-         pbhYYtri0YLLPUO75mC3QZ2k85W2/81CBLyHcBkQf8rdCJc+OBinKqOWYUaHneaZ8bzR
-         K1yNCLfCf2VC0c1sU6HihdvfKDACL1oyCXYjnnfolQUugZCy6SJxOC6HJPAdZOAszwsj
-         VcjA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=tWIs8cEPcFM8qOdbk90dp96g6UtdbhFONDoS8mVkd8Y=;
+        b=kTBkZ/vJ5n2n97pr3kT81obP3hfsaezJ6KFMEJTL1lsNXFKhKzemQUQdgcdRNbzyTZ
+         s0HWMKsbc+lbyQDjhFij+Cp2TS2lUir7QmbYUJJbFIBEwTNB7adCi0QzywlXhPfYs8s2
+         SQdE03uMV25M1ok9gNeKENF0H6S/jqSw+Ndac2t6yXHqvPtYaTokRd+r/eDg6DIaXOTv
+         OaADBgD0JfADnq+jT76Cp3WZcNBPQ0aT5cHGaD4KjqzxPr24IRohzL371KJ72NXcLs+g
+         Nz0tqT8QLidJhxQgFiuIi4h4YJxshl+nNhA1mGcu0C4N+SmDNQKBxJrD8hH8wP5zSrv4
+         GyXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=YKvx6Cj1xYUX2DCCsWQM+Zo2QVYcF66rAfcZQEp7iEQ=;
-        b=6d5vJp3s3PIizdsEM6IYY8/feqmFfNm7cxfPJQ1Wv+0SliHGuGCX0A4duNpmKHA5hx
-         9ZfDNE2q1A99jVZhYn0mSDJx3ui1V9r9GwyG9FT9U8jmliFguvQh7oIQijFDHhRp2W97
-         uPtbLcwvH0BR0b9VCz+soWqf02wYIFz/2yFl5Ku5QxDSrbRrgWQiD7rfdgLD5iIFuFje
-         CuB4POo0B/xUapQFCvfxuAvtnO0FUGUzOYScs95p1aY0NrMQRk/wuq9Oz1TslIIvvDVJ
-         pCIszl9NJGMc3k8qFNnWomVN6n8DqUIvURbtz1+lWv2bzQbSnOhnorgPR2yQBvnqK1lt
-         ihwQ==
-X-Gm-Message-State: ACgBeo1DPaduIlEgg6COHfsFSyCDJr8CVU3baofJJMwh6912hSagg6Ca
-        pl3M3LGLMQ/Uybb28JrjGBI=
-X-Google-Smtp-Source: AA6agR50DqvB0YCyRCtnNZIMYF3rLVQtp8wNj2e/H+sDHsFqdKxFun9l/A5Ec9xDjcwIAitKznYcZA==
-X-Received: by 2002:a5d:64e2:0:b0:225:79d3:d6d9 with SMTP id g2-20020a5d64e2000000b0022579d3d6d9mr3873080wri.240.1661500862157;
-        Fri, 26 Aug 2022 01:01:02 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id o1-20020a5d6701000000b0022571d43d32sm1239859wru.21.2022.08.26.01.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 01:01:01 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 26 Aug 2022 10:00:58 +0200
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Ywh9uo7fhRMQjrSl@krava>
-References: <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
- <Yv6gm09CMdZ/HMr5@krava>
- <20220818165024.433f56fd@gandalf.local.home>
- <CAADnVQ+n=x=CuBk23UNnD9CHVXjrXLUofbockh-SWaLwH3H9fw@mail.gmail.com>
- <Yv6wB4El4iueJtwX@krava>
- <Yv933mq/DTIz5g7q@krava>
- <CAADnVQK=kbCRuj9ZF9oV0YGf0pN-am3vFXYBMQ6m2ze5--nqtQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tWIs8cEPcFM8qOdbk90dp96g6UtdbhFONDoS8mVkd8Y=;
+        b=LJlbwp1qK6Bxd+wrtxRwZ5USUFDhvrBlNCNx7q47Ac9XERWfVw4cRDxBCBMYoS4lGd
+         2CS9ORcja+ZSjksDLRn3t5cJj+/EzBCbC/3oYeOP6DNdqXoLHzN0vlrzQY9/jEB7tYcv
+         NMeUUCoTOS7b5ARAAxMaA9nj5/9H2GbNWls1YhqnbRjLyDBPcWDThVk3utzHFH34v/MN
+         mocQHY9b34BO5bFLq53hu40BpBbglgaWkIEV/bTNP3F8ZZ+YcfMTGiaMyCZonM/QlKnF
+         6srsPBvyOc06QRFunHDNw5CqhD/7UNN/iuBurM6jzOcPA34yFq1EuJF2nFJRz0yEvSP/
+         QR4g==
+X-Gm-Message-State: ACgBeo0D3qoXQ63TM7C8s8uQlTYkvM0E/Q8HRJ8QATOOk2InFTBCMLML
+        8IZs5+KxFiuaf+CAKh+9Vgu1q9DNKQOHPhw0Uknt4w==
+X-Google-Smtp-Source: AA6agR46aDo68kfNYLpzXurqLX2JUxoPuwhHyxbf0HWbQkstABaXM8HF7+f5S1ulK2ZyQnwOMdOgwGAxQUVpUedU7FI=
+X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
+ ez23-20020a056402451700b004437fe12d60mr5913742edb.133.1661500911209; Fri, 26
+ Aug 2022 01:01:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQK=kbCRuj9ZF9oV0YGf0pN-am3vFXYBMQ6m2ze5--nqtQ@mail.gmail.com>
+References: <20220826152650.2c55e482@canb.auug.org.au>
+In-Reply-To: <20220826152650.2c55e482@canb.auug.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 10:01:40 +0200
+Message-ID: <CACRpkdYZOK9NhEqqU4Wkg1XHCHEQk=AR6w9730qo_tHmgGrorA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pinctrl tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:23:24AM -0700, Alexei Starovoitov wrote:
-> On Fri, Aug 19, 2022 at 4:45 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Thu, Aug 18, 2022 at 11:32:55PM +0200, Jiri Olsa wrote:
-> > > On Thu, Aug 18, 2022 at 02:00:21PM -0700, Alexei Starovoitov wrote:
-> > > > On Thu, Aug 18, 2022 at 1:50 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > > > >
-> > > > > On Thu, 18 Aug 2022 22:27:07 +0200
-> > > > > Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > > >
-> > > > > > ok, so the problem with __attribute__((patchable_function_entry(5))) is that
-> > > > > > it puts function address into __patchable_function_entries section, which is
-> > > > > > one of ftrace locations source:
-> > > > > >
-> > > > > >   #define MCOUNT_REC()    . = ALIGN(8);     \
-> > > > > >     __start_mcount_loc = .;                 \
-> > > > > >     KEEP(*(__mcount_loc))                   \
-> > > > > >     KEEP(*(__patchable_function_entries))   \
-> > > > > >     __stop_mcount_loc = .;                  \
-> > > > > >    ...
-> > > > > >
-> > > > > >
-> > > > > > it looks like __patchable_function_entries is used for other than x86 archs,
-> > > > > > so we perhaps we could have x86 specific MCOUNT_REC macro just with
-> > > > > > __mcount_loc section?
-> > > > >
-> > > > > So something like this:
-> > > > >
-> > > > > #ifdef CONFIG_X86
-> > > > > # define NON_MCOUNT_PATCHABLE KEEP(*(__patchable_function_entries))
-> > > > > # define MCOUNT_PATCHABLE
-> > > > > #else
-> > > > > # define NON_MCOUNT_PATCHABLE
-> > > > > # define MCOUNT_PATCHABLE  KEEP(*(__patchable_function_entries))
-> > > > > #endif
-> > > > >
-> > > > >   #define MCOUNT_REC()    . = ALIGN(8);     \
-> > > > >     __start_mcount_loc = .;                 \
-> > > > >     KEEP(*(__mcount_loc))                   \
-> > > > >     MCOUNT_PATCHABLE                        \
-> > > > >     __stop_mcount_loc = .;                  \
-> > > > >     NON_MCOUNT_PATCHABLE                    \
-> > > > >    ...
-> > > > >
-> > > > > ??
-> > > >
-> > > > That's what more or less Peter's patch is doing:
-> > > > Here it is again for reference:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=8d075bdf11193f1d276bf19fa56b4b8dfe24df9e
-> > >
-> > > ah nice, and discards the __patchable_function_entries section, great
-> > >
-> >
-> > tested change below with Peter's change above and it seems to work,
-> > once it get merged I'll send full patch
-> 
-> Peter,
-> what is the ETA to land your changes?
-> That particular commit is detached in your git tree.
-> Did you move it to a different branch?
-> 
-> Just trying to figure out the logistics to land Jiri's fix below.
-> We can take it into bpf-next, since it's harmless as-is,
-> but it won't have an effect until your change lands.
-> Sounds like they both will get in during the next merge window?
+On Fri, Aug 26, 2022 at 7:26 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-I discussed with Peter and I'll send his change together with my fix
+> After merging the pinctrl tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+(...)
+> Caused by commit
+>
+>   e6cbbe42944d ("pinctrl: Add Cypress cy8c95x0 support")
+>
+> interacting with commit
+>
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>
+> from the i2c tree.
 
-jirka
+How typical, the ideal way to resolve it is if there is an immutable
+branch with the
+basic changes I can pull in from the i2c tree and apply Stephen's fix on top,
+or we can just wait for the merge window and let Torvalds sort it out?
+
+Yours,
+Linus Walleij

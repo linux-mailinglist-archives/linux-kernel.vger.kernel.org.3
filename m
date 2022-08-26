@@ -2,76 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C8B5A30EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D095A30F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 23:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344734AbiHZVVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 17:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S1344651AbiHZVXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 17:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239997AbiHZVVm (ORCPT
+        with ESMTP id S234440AbiHZVXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 17:21:42 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF51403E;
-        Fri, 26 Aug 2022 14:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jA15Q1AsL1CdeNBKwMd0iWzOfyNlFoAbN16yRdeZrpU=; b=LHSaq3B7n9zwAdH9ODgDMjlqwn
-        pjU/9JXzHBahjJC0FYcCwoRYqTxYpCn/xNGWrJC4SLynDeTpnGzeoS/Nck/2rj6607nBucn8yacCu
-        yQo21WQcSJhTEXZKxQX6Z+Xl8g5/cKhU85KHPkdi0i1+R/LmpfIgSd8rlI0adT68dA02HWEM0orva
-        bkPH5ONKMT8KRMZicpgd6wzOOpDg8W9MWF30oRIAsYBPbQB29699Ekvz3j5BdHU40hcelBIGKrxum
-        SOBYPUtgJkjQgIfMN8Nrz4Qsd/Ca/ouvP7NVByTqVp8qH6YE/xsAR5cmQyfVOKvpW5evjpaVjt0i2
-        ZwKUJdDg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oRglg-008f84-Nw;
-        Fri, 26 Aug 2022 21:21:32 +0000
-Date:   Fri, 26 Aug 2022 22:21:32 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] iov_iter: Add a function to extract an iter's
- buffers to a bvec iter
-Message-ID: <Ywk5XE6FvP5pI5d4@ZenIV>
-References: <166126392703.708021.14465850073772688008.stgit@warthog.procyon.org.uk>
- <166126393409.708021.16165278011941496946.stgit@warthog.procyon.org.uk>
+        Fri, 26 Aug 2022 17:23:44 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79435C2769
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 14:23:43 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:58148)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oRgnj-007gqt-4A; Fri, 26 Aug 2022 15:23:39 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:50386 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oRgnh-00969l-U2; Fri, 26 Aug 2022 15:23:38 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Ye Weihua <yeweihua4@huawei.com>
+Cc:     <keescook@chromium.org>, <oleg@redhat.com>, <tglx@linutronix.de>,
+        <chang.seok.bae@intel.com>, <linux-kernel@vger.kernel.org>
+References: <20220826092258.147322-1-yeweihua4@huawei.com>
+Date:   Fri, 26 Aug 2022 16:23:05 -0500
+In-Reply-To: <20220826092258.147322-1-yeweihua4@huawei.com> (Ye Weihua's
+        message of "Fri, 26 Aug 2022 17:22:58 +0800")
+Message-ID: <87k06un1hi.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166126393409.708021.16165278011941496946.stgit@warthog.procyon.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oRgnh-00969l-U2;;;mid=<87k06un1hi.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1922DM4VLhHt1xTrSuxIvOvx1SIQzKcQqo=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Ye Weihua <yeweihua4@huawei.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 600 ms - load_scoreonly_sql: 0.11 (0.0%),
+        signal_user_changed: 14 (2.3%), b_tie_ro: 11 (1.9%), parse: 1.52
+        (0.3%), extract_message_metadata: 16 (2.7%), get_uri_detail_list: 1.70
+        (0.3%), tests_pri_-1000: 20 (3.4%), tests_pri_-950: 1.75 (0.3%),
+        tests_pri_-900: 2.1 (0.4%), tests_pri_-90: 127 (21.3%), check_bayes:
+        124 (20.8%), b_tokenize: 7 (1.2%), b_tok_get_all: 6 (1.1%),
+        b_comp_prob: 2.7 (0.4%), b_tok_touch_all: 104 (17.3%), b_finish: 1.40
+        (0.2%), tests_pri_0: 389 (64.9%), check_dkim_signature: 0.86 (0.1%),
+        check_dkim_adsp: 3.2 (0.5%), poll_dns_idle: 0.57 (0.1%), tests_pri_10:
+        3.3 (0.6%), tests_pri_500: 19 (3.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] signal: fix deadlock caused by calling printk() under
+ sighand->siglock
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:12:14PM +0100, David Howells wrote:
-> +		ret = iov_iter_get_pages2(orig, pages, count, max_pages - npages,
-> +					  &start);
-> +		if (ret < 0) {
-> +			pr_err("Couldn't get user pages (rc=%zd)\n", ret);
-> +			break;
-> +		}
-> +
-> +		if (ret > count) {
-> +			pr_err("get_pages rc=%zd more than %zu\n", ret, count);
-> +			break;
-> +		}
-> +
-> +		iov_iter_advance(orig, ret);
+Ye Weihua <yeweihua4@huawei.com> writes:
 
-Have you even tested that?  iov_iter_get_pages2() advances the iterator it had been
-given.  And no, it does *not* return more than it had been asked to, so the second
-check is complete BS.
+> __dend_signal_locked() invokes __sigqueue_alloc() which may invoke a
+> normal printk() to print failure message. This can cause a deadlock in
+> the scenario reported by syz-bot below (test in 5.10):
+>
+> 	CPU0				CPU1
+> 	----				----
+> 	lock(&sighand->siglock);
+> 					lock(&tty->read_wait);
+> 					lock(&sighand->siglock);
+> 	lock(console_owner);
+>
+> This patch specities __GFP_NOWARN to __sigqueue_alloc(), so that printk
+> will not be called, and this deadlock problem can be avoided.
 
-That's aside of the usefulness of the primitive in question...
+While the patch below will in theory fix the reported deadlock, I don't
+think it is a good choice of fix.  As a rule we want to allow printk to
+be callable in as many places as possible, so that it can be used for
+debugging.  There are enough places that take siglock that outlawing
+printk under siglock will make the kernel unstable.
+
+I tried to read the current kernel and verify this deadlock to see if I
+could suggest a better location to change the code to fix the deadlock.
+Say modifying task_work_add to not take siglock.  The current
+task_work_add does not take siglock.  I encountered a few other
+significant function differences as well.  One significant difference is
+that io_poll_double_wake no longer exists.
+
+I think the amb-pl011.c driver might even be more different yet.
+
+Can you reproduce this on current kernels?
+
+Reading the code I think this is already fixed.
+
+Perhaps you want to read the code of the affected subsystems and pick
+some appropriate changes to backport to 5.10?
+
+Eric
+

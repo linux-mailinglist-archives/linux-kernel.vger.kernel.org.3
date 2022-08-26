@@ -2,347 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E1D5A26E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B0C5A26E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245480AbiHZLcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S245284AbiHZLcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245404AbiHZLc3 (ORCPT
+        with ESMTP id S245597AbiHZLcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:32:29 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7454FDABB6
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:32:27 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id q18so1280917ljg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=J+IIMRDzeOQUmvsFpcPFuxHJ3tLRpUbFCIuX7Vmx5pY=;
-        b=yujZ3GH+/OBCkV0B7NfSHwhLhkthQn2Zc4tYPfTwt5s7KBxKVgHjhRZ1afdvb0nky5
-         vbH1iDiChC+In301Mbhzc660y6StH01c9P3t06i0ToVPmIpM4FUqi5hG2KulqLWBqiNB
-         lEd1KqLQyO1Ci+2UIegn7yjVYX9a5R723toE6JJvLjFrE6WMYY96Bhyj4iGv11DyZ5lS
-         k3oo6Y8hGPj6s3MJGqIKGVqJf9dhgesVkhrnybYsop80a3UpUUKRzhU5Jk0i7tCCe1UD
-         mSIJiPyo2ZKNm2wan3zUPy3CqBn4qod40rvyo0HA2wpkUsmr6/6JFTX3HVxBHxqYj3RQ
-         j3OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=J+IIMRDzeOQUmvsFpcPFuxHJ3tLRpUbFCIuX7Vmx5pY=;
-        b=P12zQ441tsc7GN5m8xuk855bMZ7RAarYeMy64cmnsfW0jWxWuhf8Y6JEq+9tyZzDFP
-         0vsUoCxRrM6DU5NJvuHErbbryghRr2LGFagRw9QM3K5ZIurSChCBblPil/3z49UT1vXR
-         4bLcAfHDvjyTUamZBp8U6ZgyZjw3Agx46JYsiOfm3+HXz20kodm76NSwG8Hrws/IAY1N
-         x1f24aINACfBCqFl6Aix2TB+xV2AEpN/V0hXPKDlOnUuG58nzPTGORsQc34KA1lcvoYI
-         vA36+V5J02XdVVgVtHILcxlNXgOyP5mIz9UMC0YO6PHTw3JZOwb4uPCOFeFv0H4N7Rw+
-         g3zQ==
-X-Gm-Message-State: ACgBeo1OfstCaf07+J5k0lqjYcMT4z8bBzOLqDc6IJ6XU4aUQXku2Hgw
-        MrsElAYZgSHsY9mbpP4tefB/uQ==
-X-Google-Smtp-Source: AA6agR4Or5cjF3qaAbm6qzfcPGqJioUPPnGX7E1m+3N79wQRvjUtpfZrhXK6r5CeRCgL4akruiF7TQ==
-X-Received: by 2002:a2e:a551:0:b0:25f:eb63:2588 with SMTP id e17-20020a2ea551000000b0025feb632588mr2285415ljn.9.1661513545700;
-        Fri, 26 Aug 2022 04:32:25 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id w21-20020a0565120b1500b0048af9d2d119sm355961lfu.130.2022.08.26.04.32.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 04:32:25 -0700 (PDT)
-Message-ID: <04d77534-e2b5-b860-a59e-e1a511ed35ae@linaro.org>
-Date:   Fri, 26 Aug 2022 14:32:24 +0300
+        Fri, 26 Aug 2022 07:32:41 -0400
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB78BDB7D8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 04:32:36 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MDd3k0llyzMqJw4;
+        Fri, 26 Aug 2022 13:32:34 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MDd3h53G0zlh8Tc;
+        Fri, 26 Aug 2022 13:32:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661513554;
+        bh=6Ce0DbD8wbZtEwW0vPy4tMjPLJwEPK7WfwROg27KEcU=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=fUcwkiNSbKhrCDZ+7XkJsL5iJLA0dleM/dwXnxd/EHUJb5WKkeFkZr06mzLA1oDMa
+         j82ueQa+tJanonJH4eaCNTo8PwiXdBpirhrxwq20A8cOgjOOlMhRUWeE9bpEYHJ5sF
+         KQ/SzE1qfWeC3A9lwfSmbif4NQ8P9c6opoQpNSg4=
+Message-ID: <1af4aee7-b9d6-3aa4-41d9-7e5348c0b55f@digikod.net>
+Date:   Fri, 26 Aug 2022 13:32:31 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [v1] drm/msm/disp/dpu1: add support for hierarchical flush for
- dspp in sc7280
-Content-Language: en-GB
-To:     Kalyan Thota <kalyant@qti.qualcomm.com>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "dianders@chromium.org" <dianders@chromium.org>
-Cc:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
-References: <1659608930-4370-1-git-send-email-quic_kalyant@quicinc.com>
- <CAA8EJpoAN4CVMKNouh3pPtX-5rnBeL3_T60M5cNhirNEmNeEkQ@mail.gmail.com>
- <BN0PR02MB8142FFB573A4D05B0560A13996639@BN0PR02MB8142.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <BN0PR02MB8142FFB573A4D05B0560A13996639@BN0PR02MB8142.namprd02.prod.outlook.com>
+User-Agent: 
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, corbet@lwn.net,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <20220822114701.26975-3-xiujianfeng@huawei.com> <YwPKG3G9PlStYPkz@nuc>
+ <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
+ <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
+ <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
+ <c447b4d3-8bc7-5277-5d49-7f4ffd0b5a5b@huawei.com>
+ <8b4aa750-91f3-ca95-bb50-b2023676bc4e@digikod.net>
+ <f5f968d5-3e48-7e1a-d942-59136e0da4a5@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH -next 2/5] landlock: add chmod and chown support
+In-Reply-To: <f5f968d5-3e48-7e1a-d942-59136e0da4a5@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 13:44, Kalyan Thota wrote:
+
+On 26/08/2022 13:14, xiujianfeng wrote:
+> Hi,
 > 
+> 在 2022/8/26 17:36, Mickaël Salaün 写道:
+>>
+>> On 26/08/2022 10:36, xiujianfeng wrote:
+>>> Hi,
+>>>
+>>> 在 2022/8/24 19:44, Mickaël Salaün 写道:
+>>>>
+>>>> On 23/08/2022 14:50, xiujianfeng wrote:
+>>>>>
+>>>>>
+>>>>> 在 2022/8/23 5:07, Mickaël Salaün 写道:
+>>>>>>
+>>>>>> On 22/08/2022 20:25, Günther Noack wrote:
+>>>>>>> Hi!
+>>>>>>>
+>>>>>>> Thanks for sending this patch set! :)
+>>>>>>>
+>>>>>>> On Mon, Aug 22, 2022 at 07:46:58PM +0800, Xiu Jianfeng wrote:
+>>>>>>>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and
+>>>>>>>> LANDLOCK_ACCESS_FS_CHOWN to
+>>>>>>>> support restriction to chmod(2) and chown(2) with landlock.
+>>>>>>>>
+>>>>>>>> Also change the landlock ABI version from 3 to 4.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>>>>>>> ---
+>>>>>>>>      include/uapi/linux/landlock.h                |  8 ++++++--
+>>>>>>>>      security/landlock/fs.c                       | 16
+>>>>>>>> +++++++++++++++-
+>>>>>>>>      security/landlock/limits.h                   |  2 +-
+>>>>>>>>      security/landlock/syscalls.c                 |  2 +-
+>>>>>>>>      tools/testing/selftests/landlock/base_test.c |  2 +-
+>>>>>>>>      tools/testing/selftests/landlock/fs_test.c   |  6 ++++--
+>>>>>>>>      6 files changed, 28 insertions(+), 8 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/include/uapi/linux/landlock.h
+>>>>>>>> b/include/uapi/linux/landlock.h
+>>>>>>>> index 735b1fe8326e..5ce633c92722 100644
+>>>>>>>> --- a/include/uapi/linux/landlock.h
+>>>>>>>> +++ b/include/uapi/linux/landlock.h
+>>>>>>>> @@ -141,13 +141,15 @@ struct landlock_path_beneath_attr {
+>>>>>>>>       *   directory) parent.  Otherwise, such actions are denied with
+>>>>>>>> errno set to
+>>>>>>>>       *   EACCES.  The EACCES errno prevails over EXDEV to let user
+>>>>>>>> space
+>>>>>>>>       *   efficiently deal with an unrecoverable error.
+>>>>>>>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a
+>>>>>>>> file.
+>>>>>>>> + * - %LANDLOCK_ACCESS_FS_CHOWN: Change the owner and/or group of a
+>>>>>>>> file.
+>>>>>>
+>>>>>> This section talk about "access rights that only apply to the
+>>>>>> content of
+>>>>>> a directory, not the directory itself", which is not correct (see
+>>>>>> LANDLOCK_ACCESS_FS_READ_DIR). I'd like these access rights to remain
+>>>>>> here but this kernel patch and the related tests need some changes.
+>>>>>>
+>>>>>> What about a LANDLOCK_ACCESS_FS_CHGRP? I'm not sure if we need to
+>>>>>> differentiate these actions or not, but we need arguments to choose.
+>>>>>>
+>>>>>>
+>>>>>>>>       *
+>>>>>>>>       * .. warning::
+>>>>>>>>       *
+>>>>>>>>       *   It is currently not possible to restrict some file-related
+>>>>>>>> actions
+>>>>>>>>       *   accessible through these syscall families:
+>>>>>>>> :manpage:`chdir(2)`,
+>>>>>>>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+>>>>>>>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`,
+>>>>>>>> :manpage:`utime(2)`,
+>>>>>>>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`,
+>>>>>>>> + *   :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>>>>>>
+>>>>>>> *formatting nit*
+>>>>>>> We could fill up the full line width here
+>>>>>>>
+>>>>>>>>       *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`,
+>>>>>>>> :manpage:`access(2)`.
+>>>>>>>>       *   Future Landlock evolutions will enable to restrict them.
+>>>>>>>>       */
+>>>>>>>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>>>>>>>>      #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
+>>>>>>>>      #define LANDLOCK_ACCESS_FS_REFER            (1ULL << 13)
+>>>>>>>>      #define LANDLOCK_ACCESS_FS_TRUNCATE            (1ULL << 14)
+>>>>>>>> +#define LANDLOCK_ACCESS_FS_CHMOD            (1ULL << 15)
+>>>>>>>> +#define LANDLOCK_ACCESS_FS_CHOWN            (1ULL << 16)
+>>>>>>>>      /* clang-format on */
+>>>>>>>>
+>>>>>>>>      #endif /* _UAPI_LINUX_LANDLOCK_H */
+>>>>>>>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+>>>>>>>> index c57f581a9cd5..c25d5f89c8be 100644
+>>>>>>>> --- a/security/landlock/fs.c
+>>>>>>>> +++ b/security/landlock/fs.c
+>>>>>>>> @@ -147,7 +147,9 @@ static struct landlock_object
+>>>>>>>> *get_inode_object(struct inode *const inode)
+>>>>>>>>          LANDLOCK_ACCESS_FS_EXECUTE | \
+>>>>>>>>          LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>>>>>>>          LANDLOCK_ACCESS_FS_READ_FILE | \
+>>>>>>>> -    LANDLOCK_ACCESS_FS_TRUNCATE)
+>>>>>>>> +    LANDLOCK_ACCESS_FS_TRUNCATE | \
+>>>>>>>> +    LANDLOCK_ACCESS_FS_CHMOD | \
+>>>>>>>> +    LANDLOCK_ACCESS_FS_CHOWN)
+>>>>>>>>      /* clang-format on */
+>>>>>>>>
+>>>>>>>>      /*
+>>>>>>>> @@ -1146,6 +1148,16 @@ static int hook_path_truncate(const struct
+>>>>>>>> path *const path)
+>>>>>>>>          return current_check_access_path(path,
+>>>>>>>> LANDLOCK_ACCESS_FS_TRUNCATE);
+>>>>>>>>      }
+>>>>>>>>
+>>>>>>>> +static int hook_path_chmod(const struct path *const dir, umode_t
+>>>>>>>> mode)
+>>>>>>
+>>>>>> This is not a "dir" but a "path".
+>>>>>>
+>>>>>>
+>>>>>>>> +{
+>>>>>>>> +    return current_check_access_path(dir,
+>>>>>>>> LANDLOCK_ACCESS_FS_CHMOD);
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static int hook_path_chown(const struct path *const dir, kuid_t
+>>>>>>>> uid,
+>>>>>>>> kgid_t gid)
+>>>>>>
+>>>>>> Same here.
+>>>>>>
+>>>>>>
+>>>>>>>> +{
+>>>>>>>> +    return current_check_access_path(dir,
+>>>>>>>> LANDLOCK_ACCESS_FS_CHOWN);
+>>>>>>>> +}
+>>>>>>>
+>>>>>>> One implication of this approach is that the chown+chmod right on a
+>>>>>>> directory's contents are always going together with the same
+>>>>>>> rights on
+>>>>>>> the directory itself.
+>>>>>>>
+>>>>>>> For example, if you grant chmod+chown access rights for "datadir/",
+>>>>>>> the command "chmod 0600 datadir/file1" will work, but so will the
+>>>>>>> command "chmod 0600 datadir". But the approach of checking just the
+>>>>>>> parent directory's rights is also inflexible if you think through the
+>>>>>>> kinds of rights you can grant with it. (It would also not be possible
+>>>>>>> to grant chmod+chown on individual files.)
+>>>>>>
+>>>>>> Good point. For an initial chmod/chown/chgrp access right, I'd
+>>>>>> prefer to
+>>>>>> be able to set these access rights on a directory but only for its
+>>>>>> content, not the directory itself. I think it is much safer and should
+>>>>>> be enough for the majority of use cases, but let me know if I'm
+>>>>>> missing
+>>>>>> something. I'm not sure being able to change the root directory access
+>>>>>> rights may be a good idea anyway (even for containers). ;)
+>>>>>>
+>>>>>> A path_beneath rule enables to identify a file hierarchy (i.e. the
+>>>>>> content of a directory), not to make modifications visible outside of
+>>>>>> the directory identifying the hierarchy (hence the "parent_fd" field),
+>>>>>> which would be the case with the current chmod/chown access rights.
+>>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> Do you have any thoughts on how to resolve this if this flexibility
+>>>>>>> might be needed?
+>>>>>>>
+>>>>>>> I wonder whether the right way to resolve this would be to give users
+>>>>>>> a way to make that distinction at the level of landlock_add_rule(),
+>>>>>>> with an API like this (note the additional flag):
+>>>>>>>
+>>>>>>>       err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+>>>>>>>                               &path_beneath,
+>>>>>>> LANDLOCK_STRICTLY_BENEATH);
+>>>>>>>                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>>
+>>>>>>> Multiple calls of landlock_add_rule() on the same file are already
+>>>>>>> today joining the requested access rights, so it would be possible to
+>>>>>>> mix-and-match "strict beneath" with "beneath" rights on the same
+>>>>>>> directory, and it would work in the same way for other access rights
+>>>>>>> as well.
+>>>>>>
+>>>>>> This kind of option is interesting. For now, some access rights are
+>>>>>> kind
+>>>>>> of "doubled" to enable to differentiate between a file and a directory
+>>>>>> (i.e. READ_DIR/READ_FILE, REMOVE_DIR/REMOVE_FILE, WRITE_FILE/MAKE_*)
+>>>>>> when it may be useful, but this is different.
+>>>>>>
+>>>>>> I think this "strictly beneath" behavior should be the default,
+>>>>>> which is
+>>>>>> currently the case.
+>>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> To be clear: I'm proposing this approach not because I think it
+>>>>>>> should
+>>>>>>> be part of this patch set, but because it would be good to have a way
+>>>>>>> forward if that kind of flexibility is needed in the future.
+>>>>>>>
+>>>>>>> Does that seem reasonable?
+>>>>>>
+>>>>>> This is the kind of questions that made such access rights not
+>>>>>> appropriate for the initial version of Landlock. But we should talk
+>>>>>> about that now.
+>>>>>
+>>>>> Hi Günther and Mickaël,
+>>>>>
+>>>>> Thanks for your comments, so I think the conclusion here is that we
+>>>>> have
+>>>>> to make sure that in this patchset chown/chmod access rights can be set
+>>>>> on a directory only for its content, not the directory itself, right?
+>>>>> any good idea about how to implement this? :)
+>>>>
+>>>> In such hook code, you need to get the parent directory of the path
+>>>> argument. This require to use and refactor the
+>>>> check_access_path_dual/jump_up part in a dedicated helper (and take care
+>>>> of all the corner cases).
+>>>> .
+>>>
+>>> Sorry, I don't quite understand what you mean, but I have another idea,
+>>> how about this?
+>>>
+>>> static int hook_path_chown(const struct path *const path, kuid_t uid,
+>>> kgid_t gid)
+>>> {
+>>>            int ret;
+>>>            struct dentry *parent_dentry;
+>>>            struct path eff_path;
+>>>
+>>>            eff_path = *path;
+>>>            path_get(&eff_path);
+>>>            if (d_is_dir(eff_path.dentry)) {
+>>>                    parent_dentry = dget_parent(eff_path.dentry);
+>>>                    dput(eff_path.dentry);
+>>>                    eff_path.dentry = parent_dentry;
+>>>            }
+>>>            ret = current_check_access_path(&eff_path,
+>>> LANDLOCK_ACCESS_FS_CHGRP);
+>>>            path_put(&eff_path);
+>>>
+>>>            return ret;
+>>> }
+>>
+>> This is close but it ignores mount points (e.g. path being used multiple
+>> time as a mount point). This is why we need to use follow_up(), hence my
+>> previous comment. This is the kind of corner case that require tests.
+>>
+>> This helper could look like this:
+>> enum walk_result walk_to_visible_parent(struct path *path)
+>> It could then return either WALK_CONTINUE, WALK_DENIED, or WALK_ALLOWED.
+>> .
 > 
->> -----Original Message-----
->> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Sent: Thursday, August 4, 2022 9:29 PM
->> To: Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>
->> Cc: dri-devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
->> freedreno@lists.freedesktop.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; robdclark@gmail.com; dianders@chromium.org;
->> swboyd@chromium.org; Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>;
->> Abhinav Kumar (QUIC) <quic_abhinavk@quicinc.com>
->> Subject: Re: [v1] drm/msm/disp/dpu1: add support for hierarchical flush for dspp
->> in sc7280
->>
->> WARNING: This email originated from outside of Qualcomm. Please be wary of
->> any links or attachments, and do not enable macros.
->>
->> On Thu, 4 Aug 2022 at 13:29, Kalyan Thota <quic_kalyant@quicinc.com> wrote:
->>>
->>> Flush mechanism for DSPP blocks has changed in sc7280 family, it
->>> allows individual sub blocks to be flushed in coordination with master
->>> flush control.
->>>
->>> representation: master_flush && (PCC_flush | IGC_flush .. etc )
->>>
->>> This change adds necessary support for the above design.
->>>
->>> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
->>
->> I'd like to land at least patches 6-8 from [1] next cycle. They clean up the CTL
->> interface. Could you please rebase your patch on top of them?
->>
-> 
-> Sure I'll wait for the series to rebase. @Doug can you comment if this is okay and this patch is not needed immediately ?
+> Thanks, It's more clear now, except the return type, I think void type
+> like follows maybe ok:
 
-The respective patches have been picked up for 6.1 and were pushed to 
-https://gitlab.freedesktop.org/lumag/msm.git msm-next-lumag . Could you 
-please rebase your patch on top of them?
-
-All other comments also needs addressing.
+The enum return type is required to use this helper in 
+check_access_path_dual(), and to handles the same cases (e.g. internal 
+mount point).
 
 > 
->> [1] https://patchwork.freedesktop.org/series/99909/
->>
->>> ---
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  4 +++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
->>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  2 ++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 40
->> +++++++++++++++++++++++++-
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     |  3 ++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |  7 +++++
->>>   6 files changed, 59 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> index 7763558..4eca317 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> @@ -703,6 +703,10 @@ static void _dpu_crtc_setup_cp_blocks(struct
->> drm_crtc *crtc)
->>>                  mixer[i].flush_mask |= ctl->ops.get_bitmask_dspp(ctl,
->>>                          mixer[i].hw_dspp->idx);
->>>
->>> +               if(ctl->ops.set_dspp_hierarchical_flush)
->>> +                       ctl->ops.set_dspp_hierarchical_flush(ctl,
->>> +                                               mixer[i].hw_dspp->idx,
->>> + DSPP_SUB_PCC);
->>> +
->>>                  /* stage config flush mask */
->>>                  ctl->ops.update_pending_flush(ctl,
->>> mixer[i].flush_mask);
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> index 021eb2f..3b27a87 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> @@ -58,7 +58,10 @@
->>>          (PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
->>>
->>>   #define CTL_SC7280_MASK \
->>> -       (BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) |
->> BIT(DPU_CTL_VM_CFG))
->>> +       (BIT(DPU_CTL_ACTIVE_CFG) | \
->>> +        BIT(DPU_CTL_FETCH_ACTIVE) | \
->>> +        BIT(DPU_CTL_VM_CFG) | \
->>> +        BIT(DPU_CTL_HIERARCHICAL_FLUSH))
->>>
->>>   #define MERGE_3D_SM8150_MASK (0)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> index b85b24b..7922f6c 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> @@ -185,6 +185,7 @@ enum {
->>>    * @DPU_CTL_SPLIT_DISPLAY:     CTL supports video mode split display
->>>    * @DPU_CTL_FETCH_ACTIVE:      Active CTL for fetch HW (SSPPs)
->>>    * @DPU_CTL_VM_CFG:            CTL config to support multiple VMs
->>> + * @DPU_CTL_HIERARCHICAL_FLUSH: CTL config to support hierarchical
->>> + flush
->>>    * @DPU_CTL_MAX
->>>    */
->>>   enum {
->>> @@ -192,6 +193,7 @@ enum {
->>>          DPU_CTL_ACTIVE_CFG,
->>>          DPU_CTL_FETCH_ACTIVE,
->>>          DPU_CTL_VM_CFG,
->>> +       DPU_CTL_HIERARCHICAL_FLUSH,
->>>          DPU_CTL_MAX
->>>   };
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>> index 3584f5e..b34fc30 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>> @@ -28,6 +28,8 @@
->>>   #define   CTL_INTF_FLUSH                0x110
->>>   #define   CTL_INTF_MASTER               0x134
->>>   #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
->>> +#define   CTL_DSPP_0_FLUSH             0x13C
->>
->> Please change to CTL_DSPP_n_FLUSH(n).
->>
->>> +
->>>
->>>   #define CTL_MIXER_BORDER_OUT            BIT(24)
->>>   #define CTL_FLUSH_MASK_CTL              BIT(17)
->>> @@ -292,6 +294,36 @@ static uint32_t dpu_hw_ctl_get_bitmask_dspp(struct
->> dpu_hw_ctl *ctx,
->>>          return flushbits;
->>>   }
->>>
->>> +static uint32_t dpu_hw_ctl_get_bitmask_dspp_v1(struct dpu_hw_ctl *ctx,
->>> +       enum dpu_dspp dspp)
->>> +{
->>> +       return BIT(29);
->>> +}
->>> +
->>> +static void dpu_hw_ctl_set_dspp_hierarchical_flush(struct dpu_hw_ctl *ctx,
->>> +       enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk) {
->>> +       uint32_t flushbits = 0, active = 0;
->>> +
->>> +       switch (dspp_sub_blk) {
->>> +       case DSPP_SUB_IGC:
->>> +               flushbits = BIT(2);
->>> +               break;
->>> +       case DSPP_SUB_PCC:
->>> +               flushbits = BIT(4);
->>> +               break;
->>> +       case DSPP_SUB_GC:
->>> +               flushbits = BIT(5);
->>> +               break;
->>> +       default:
->>> +               return;
->>> +       }
->>> +
->>> +       active = DPU_REG_READ(&ctx->hw, CTL_DSPP_0_FLUSH + ((dspp - 1)
->>> + * 4));
->>
->> So that this line will be simpler to read.
->>
->>> +
->>> +       DPU_REG_WRITE(&ctx->hw, CTL_DSPP_0_FLUSH + ((dspp - 1) * 4),
->>> +active | flushbits); }
->>> +
->>>   static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32
->>> timeout_us)  {
->>>          struct dpu_hw_blk_reg_map *c = &ctx->hw; @@ -600,7 +632,13 @@
->>> static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
->>>          ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
->>>          ops->get_bitmask_sspp = dpu_hw_ctl_get_bitmask_sspp;
->>>          ops->get_bitmask_mixer = dpu_hw_ctl_get_bitmask_mixer;
->>> -       ops->get_bitmask_dspp = dpu_hw_ctl_get_bitmask_dspp;
->>> +       if (cap & BIT(DPU_CTL_HIERARCHICAL_FLUSH)) {
->>> +               ops->get_bitmask_dspp =
->>> + dpu_hw_ctl_get_bitmask_dspp_v1;
->>
->> We have used _v1 for active CTLs. What is the relationship between
->> CTL_HIERARCHILCAL_FLUSH and active CTLs?
-> Active CTL design replaces legacy CTL_MEM_SEL, CTL_OUT_SEL registers in grouping the resources such as WB, INTF, pingpong, DSC etc into the data path
-> DSPP hierarchical flush will gives us a finer control on which post processing blocks to be flushed as part of the composition ( like IGC, PCC, GC .. etc )
-> These blocks are contained in DSPP package.
+> static void walk_to_visible_parent(struct path *path)
+> {
+>           struct dentry *parent_dentry;
+> 
+>           path_get(path);
+>           /* don't need to follow_up if not dir */
+>           if (!d_is_dir(path->dentry))
 
-So, I assume that hierarchical DSPP flush does not exist on non-active 
-CTL SoCs. Which supported SoCs do support the hierarchichal DSPP flush?
+This check should be in hook_path_chown(), to know if it makes sense to 
+call walk_to_visible_parent().
 
->>
->>> +               ops->set_dspp_hierarchical_flush =
->> dpu_hw_ctl_set_dspp_hierarchical_flush;
->>> +       } else {
->>> +               ops->get_bitmask_dspp = dpu_hw_ctl_get_bitmask_dspp;
->>> +       }
->>> +
->>>          if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
->>>                  ops->set_active_pipes =
->>> dpu_hw_ctl_set_fetch_pipe_active;  }; diff --git
->>> a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->>> index ac15444..8ecab91 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->>> @@ -160,6 +160,9 @@ struct dpu_hw_ctl_ops {
->>>          uint32_t (*get_bitmask_dspp)(struct dpu_hw_ctl *ctx,
->>>                  enum dpu_dspp blk);
->>>
->>> +       void (*set_dspp_hierarchical_flush)(struct dpu_hw_ctl *ctx,
->>> +               enum dpu_dspp blk, enum dpu_dspp_sub_blk
->>> + dspp_sub_blk);
->>
->> The word "hierarchical" means particular (internal) implementation.
->> Please change to something like set_dspp_block_flush().
->> Or with [2] in place, it can be hidden in the
->> update_pending_flush_dspp() function. Just pass the subblock to the function and
->> let the dpu_hw_ctl care about it.
->>
->> [2] https://patchwork.freedesktop.org/patch/473159/?series=99909&rev=1
->>
->>
->>> +
->>>          /**
->>>           * Set all blend stages to disabled
->>>           * @ctx       : ctl path ctx pointer
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->>> index bb9cead..561e2ab 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->>> @@ -166,6 +166,13 @@ enum dpu_dspp {
->>>          DSPP_MAX
->>>   };
->>>
->>> +enum dpu_dspp_sub_blk{
->>> +       DSPP_SUB_PCC = 1,
->>> +       DSPP_SUB_IGC,
->>> +       DSPP_SUB_GC,
->>> +       DSPP_SUB_MAX
->>> +};
->>
->> I'd prefer if we can use DPU_DSPP_* definitions instead.
->>
->>> +
->>>   enum dpu_ctl {
->>>          CTL_0 = 1,
->>>          CTL_1,
->>
->>
->>
->> --
->> With best wishes
->> Dmitry
 
--- 
-With best wishes
-Dmitry
+>                   return;
+> 
+> jump_up:
+>           if (path->dentry == path->mnt->mnt_root) {
+>                   if (follow_up(path)) {
+>                           /* Ignores hidden mount points. */
+>                           goto jump_up;
+>                   } else {
+>                           /*Stops at the real root. */
+>                           return;
+>                   }
+>           }
+>           parent_dentry = dget_parent(path->dentry);
+>           dput(path->dentry);
+>           path->dentry = parent_dentry;
+> }
+> 
+> static void walk_to_visible_parent_end(struct path *path)
 
+This function is not useful, we could just explicitly call path_put() 
+and document that requirement. To make it easier to understand and more 
+consistent, we should not call path_get() in walk_to_visible_parent() 
+but before to make it explicit. Something like this:
+
+if (d_is_dir(path->dentry)) {
+path_get(path);
+switch (walk_to_visible_parent(path)) {
+…
+}
+path_put(path);
+…
+}
+
+
+
+
+> {
+>           path_put(path);
+> }
+> 
+> static int hook_path_chown(const struct path *const path, kuid_t uid,
+> kgid_t gid)
+> {
+>           int ret;
+>           struct path eff_path;
+
+All Landlock hooks must first check that a process is tied to a domain 
+and return immediately if it is not the case.
+
+
+> 
+>           eff_path = *path;
+>           walk_to_visible_parent(&eff_path);
+>           ret = current_check_access_path(&eff_path,
+> LANDLOCK_ACCESS_FS_CHGRP);
+>           walk_to_visible_parent_end(&eff_path);
+> 
+>           return ret;
+> }
+> 

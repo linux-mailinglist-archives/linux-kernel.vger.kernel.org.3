@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C395A2DD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFD85A2DD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 19:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244383AbiHZRqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 13:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S1344663AbiHZRsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 13:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238718AbiHZRqV (ORCPT
+        with ESMTP id S242827AbiHZRsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:46:21 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D9A9C500
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:46:19 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n17so2634620wrm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:46:19 -0700 (PDT)
+        Fri, 26 Aug 2022 13:48:16 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA49DF4F8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:48:14 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bs25so2647163wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 10:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=Uh5dFSwK4Zt6YSWyVYmlZi4W8FwEVSfgNxzBjpzWgRU=;
-        b=ASsXRXxFXGbufFEF85lod6Fj6XovOs3tY/mYL2fNrOFrUZgxQQoyt0oFzOY+F91wk1
-         GI8TIDJN/x2/q2Mim77qosgmD1MAx/eukjBGfiRDMM9OFzEwiOAMBkzp7UujOdrQ1bEm
-         WNgeidlm+XQAzuGQ9jj3eQbJCevzgt+Xcob0pGxvdEokcJSegi1kYztOTJV/RwUjwIaG
-         sTKYt5F6y/9P74lSxu3KkCeCFc8YHJjL9Bon5Hcnwo8uNM5aZL0YeoRe1SB44AxPQ/08
-         9tvtaJXrw4+t0D2X4PU5z5whKre+zxyxztg9r8tH8Qled+Yp+DKkWwrMpgoOATkPHPr6
-         2IsQ==
+        bh=9JHPKBEhnzj2Xmii0IJwAZm9bDxPzFxlEKG6x6ug6zk=;
+        b=YeShUHZAjaMfVm4ZJoT0KtWHtHVQF69k9j5LM9cpMqgaMBQIQk8RISAZ3c9Tqdk1K3
+         +u9YAnO+b7e0rlD9Hwu0FZ8cxVnXQkNbxbgHITNxqiu6DnykqjCEQzRAu1VWZ3pWMwXO
+         qV8dmBSMKtVzj95smb3JbC4Qxz6oW0AAHo4U4mvjUaCX+F/oNdn28VcnJqXUvoYxsHeL
+         LDVP5o6aCWrz15+TGMnlnF5B9lUezo3kaYrDNBfi+zhipDC3vY6zC/AYRaBblBKFZwCA
+         JCYLynPHBYuVw2A7/hRiyX8i8tRylbPycdSMmfMib/nALqD33gt64nTQzJDHFay+hhCo
+         fdEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=Uh5dFSwK4Zt6YSWyVYmlZi4W8FwEVSfgNxzBjpzWgRU=;
-        b=PPDxaHGBPdJFGoout4h4mIT2sKk6vst4k+bf+fG+c9hUSIzjZVdAAbC7llhXSYVHsQ
-         H6N37dgdPMXYuJuLpbuzee4/CPPlkwj2p+aHoEFtMbbl+YwZ/AQwjc9JSwRqbVD0SYgc
-         kiK5/p0VJbTpbnIHUKaQ/Q34XnfvCOoWq+6ffxu4dy1/gePjS6PPaxmiqbHXJhKF+W+N
-         L5QfniTe2OiMu2L8QdXjVIKroht+BVLl8ljnTt4VLEiPV6J4cMYa2PieSWfk66M6SGqz
-         nKyp65flaxcRSyZuUPwWcU0ZVuJPqWPaOiexFSouqOJDjtu/CP488t7s/qIxw0A1IiTz
-         5w1A==
-X-Gm-Message-State: ACgBeo2RLjNhzsHFcXxTXApWDfw8jFEHQSnWcRIgQWsaBvcde/vTTFlL
-        CCZo79xWcYO4yktxrcyf2jLtANOKD4R7R5sh+HsXJg==
-X-Google-Smtp-Source: AA6agR6UXgkazQ9d8SSn07/lRGYnesHuQWNqOEjB0qqIsN2zrj0kJqBzDCcQs4/3b7t17h2xp4xpiFOoZZyMRKGAjGw=
-X-Received: by 2002:a05:6000:1008:b0:225:58e0:223f with SMTP id
- a8-20020a056000100800b0022558e0223fmr419790wrx.375.1661535977496; Fri, 26 Aug
- 2022 10:46:17 -0700 (PDT)
+        bh=9JHPKBEhnzj2Xmii0IJwAZm9bDxPzFxlEKG6x6ug6zk=;
+        b=svEUEZKh/0vVVD+kTN5fFU8dSCqupU9i5JS8JrpIyvFlMU4/virgFk9S+g3GH1ku3e
+         JaM44lmYisximoRNLSP9gnOEDWE28m9aRwU27EIigRFGuQcFgwhzLsDPU1byO42u539v
+         4DSfqxbQJnUmyZizHC8VeI4s/ERfswv5pmxvD8oeXFB5tUV0pqGQP12ZroJUIENMzrwf
+         FoamxbrFOSefmsSWJp9wvdlYJbsIRkJkXaK6z129SFs3Cm8O+uHUN0oL0/kQbelQSoLz
+         G9zvRGfchNnDHLfik3nOWMh76q3ZkY3cwyVSAVstNeF4plMx2vIPTWbYHu2ohr+7MiXK
+         DvmA==
+X-Gm-Message-State: ACgBeo0HppbteQu1y6GJqBoxfX2v9vHMrjYE4lXvFrH5hy13Kl2/p5fk
+        FF4oMmeCWQ3kcnf3MLIrT4FhEB8pJQrSEhbo0zeBmA==
+X-Google-Smtp-Source: AA6agR5YTArV0z60f6fmYVbsoslFeZS5EcVg43N45kefsQs86vvqkoP4opnpC/decH7TsBShY7VKfEFc8XYLy4nqC/U=
+X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
+ v13-20020adfe28d000000b0021e4c3bb446mr431200wri.300.1661536092846; Fri, 26
+ Aug 2022 10:48:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-12-irogers@google.com>
- <12acbe02-bd73-07bb-d0e1-cb13dcd790c0@intel.com> <CAP-5=fWCpoqAhLzdMn1zHXfKpsYg0LQPMSz6Uy82+QL_MQpc8g@mail.gmail.com>
- <dc25fa1b-1c29-755a-2fc9-b30ec79eb2ac@intel.com>
-In-Reply-To: <dc25fa1b-1c29-755a-2fc9-b30ec79eb2ac@intel.com>
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
+ <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com> <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
+ <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
+In-Reply-To: <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 26 Aug 2022 10:46:05 -0700
-Message-ID: <CAP-5=fVHi9h5mgW3GGkaO4b0aR=CQea3bNSY9ghHJV4KiGC=Nw@mail.gmail.com>
-Subject: Re: [PATCH v3 11/18] perf dso: Update use of pthread mutex
+Date:   Fri, 26 Aug 2022 10:48:00 -0700
+Message-ID: <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
+Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -114,43 +114,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 10:34 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> On 26/08/22 19:05, Ian Rogers wrote:
-> > On Fri, Aug 26, 2022 at 3:37 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> On 26/08/22 19:06, Ian Rogers wrote:
+> > On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 > >>
 > >> On 24/08/22 18:38, Ian Rogers wrote:
-> >>> Switch to the use of mutex wrappers that provide better error checking.
+> >>> Add annotations to describe lock behavior. Add unlocks so that mutexes
+> >>> aren't conditionally held on exit from perf_sched__replay. Add an exit
+> >>> variable so that thread_func can terminate, rather than leaving the
+> >>> threads blocked on mutexes.
 > >>>
 > >>> Signed-off-by: Ian Rogers <irogers@google.com>
 > >>> ---
-> >>>  tools/perf/util/dso.c    | 12 ++++++------
+> >>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
+> >>>  1 file changed, 29 insertions(+), 17 deletions(-)
+> >>>
+> >>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> >>> index 7e4006d6b8bc..b483ff0d432e 100644
+> >>> --- a/tools/perf/builtin-sched.c
+> >>> +++ b/tools/perf/builtin-sched.c
+> >>> @@ -246,6 +246,7 @@ struct perf_sched {
+> >>>       const char      *time_str;
+> >>>       struct perf_time_interval ptime;
+> >>>       struct perf_time_interval hist_time;
+> >>> +     volatile bool   thread_funcs_exit;
+> >>>  };
+> >>>
+> >>>  /* per thread run time data */
+> >>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
+> >>>       prctl(PR_SET_NAME, comm2);
+> >>>       if (fd < 0)
+> >>>               return NULL;
+> >>> -again:
+> >>> -     ret = sem_post(&this_task->ready_for_work);
+> >>> -     BUG_ON(ret);
+> >>> -     mutex_lock(&sched->start_work_mutex);
+> >>> -     mutex_unlock(&sched->start_work_mutex);
+> >>>
+> >>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+> >>> +     while (!sched->thread_funcs_exit) {
+> >>> +             ret = sem_post(&this_task->ready_for_work);
+> >>> +             BUG_ON(ret);
+> >>> +             mutex_lock(&sched->start_work_mutex);
+> >>> +             mutex_unlock(&sched->start_work_mutex);
+> >>>
+> >>> -     for (i = 0; i < this_task->nr_events; i++) {
+> >>> -             this_task->curr_event = i;
+> >>> -             perf_sched__process_event(sched, this_task->atoms[i]);
+> >>> -     }
+> >>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+> >>>
+> >>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+> >>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+> >>> -     ret = sem_post(&this_task->work_done_sem);
+> >>> -     BUG_ON(ret);
+> >>> +             for (i = 0; i < this_task->nr_events; i++) {
+> >>> +                     this_task->curr_event = i;
+> >>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
+> >>> +             }
+> >>>
+> >>> -     mutex_lock(&sched->work_done_wait_mutex);
+> >>> -     mutex_unlock(&sched->work_done_wait_mutex);
+> >>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+> >>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+> >>> +             ret = sem_post(&this_task->work_done_sem);
+> >>> +             BUG_ON(ret);
+> >>>
+> >>> -     goto again;
+> >>> +             mutex_lock(&sched->work_done_wait_mutex);
+> >>> +             mutex_unlock(&sched->work_done_wait_mutex);
+> >>> +     }
+> >>> +     return NULL;
+> >>>  }
+> >>>
+> >>>  static void create_tasks(struct perf_sched *sched)
+> >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+> >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+> >>>  {
+> >>>       struct task_desc *task;
+> >>>       pthread_attr_t attr;
+> >>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
+> >>>  }
+> >>>
+> >>>  static void wait_for_tasks(struct perf_sched *sched)
+> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+> >>>  {
+> >>>       u64 cpu_usage_0, cpu_usage_1;
+> >>>       struct task_desc *task;
+> >>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+> >>>  }
+> >>>
+> >>>  static void run_one_test(struct perf_sched *sched)
+> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+> >>>  {
+> >>>       u64 T0, T1, delta, avg_delta, fluct;
+> >>>
+> >>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
+> >>>       print_task_traces(sched);
+> >>>       add_cross_task_wakeups(sched);
+> >>>
+> >>> +     sched->thread_funcs_exit = false;
+> >>>       create_tasks(sched);
+> >>>       printf("------------------------------------------------------------\n");
+> >>>       for (i = 0; i < sched->replay_repeat; i++)
+> >>>               run_one_test(sched);
+> >>>
+> >>> +     sched->thread_funcs_exit = true;
+> >>> +     mutex_unlock(&sched->start_work_mutex);
+> >>> +     mutex_unlock(&sched->work_done_wait_mutex);
 > >>
-> >> Some not done yet
-> >>
-> >> $ grep -i pthread_mut tools/perf/util/dso.c
-> >> static pthread_mutex_t dso__data_open_lock = PTHREAD_MUTEX_INITIALIZER;
-> >>         pthread_mutex_lock(&dso__data_open_lock);
-> >>         pthread_mutex_unlock(&dso__data_open_lock);
-> >>         if (pthread_mutex_lock(&dso__data_open_lock) < 0)
-> >>                 pthread_mutex_unlock(&dso__data_open_lock);
-> >>         pthread_mutex_unlock(&dso__data_open_lock);
-> >>         pthread_mutex_lock(&dso__data_open_lock);
-> >>         pthread_mutex_unlock(&dso__data_open_lock);
-> >>         pthread_mutex_lock(&dso__data_open_lock);
-> >>         pthread_mutex_unlock(&dso__data_open_lock);
+> >> I think you still need to wait for the threads to exit before
+> >> destroying the mutexes.
 > >
-> > Yes, these are all solely dso__data_open_lock that lacks any clear
-> > init/exit code to place the initialization/destruction hooks onto. I
-> > don't plan to alter these in this patch set.
+> > This is a pre-existing issue and beyond the scope of this patch set.
 >
-> Perhaps that could be explained in the change log.
->
-> But why not just add init / exit code.  Could be called out
-> of main(), or maybe use __attribute__((constructor)) /
-> __attribute__((destructor))
+> You added the mutex_destroy functions in patch 8, so it is still
+> fallout from that.
 
-Because the lock is global and not part of the dso.
+In the previous code the threads were blocked on mutexes that were
+stack allocated and the stack memory went away. You are correct to say
+that to those locks I added an init and destroy call. The lifetime of
+the mutex was wrong previously and remains wrong in this change.
 
 Thanks,
 Ian
+
+> >
+> > Thanks,
+> > Ian
+> >
+> >>>       return 0;
+> >>>  }
+> >>>
+> >>
+>

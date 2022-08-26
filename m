@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AED65A242C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE765A2434
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343601AbiHZJVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
+        id S1343643AbiHZJXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245405AbiHZJVx (ORCPT
+        with ESMTP id S245405AbiHZJXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:21:53 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AACBD2772;
-        Fri, 26 Aug 2022 02:21:52 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q7FCEs022515;
-        Fri, 26 Aug 2022 11:21:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=CVBSjOH/bwtlQxmEDweF2DMTVjTpkvUK2sI9jy9nqCc=;
- b=oNuU5Uyj1VSnFR0+pfXTcPFm2jxipKb2ey6H7RtbKGYfLb/05llcdnKOkny9/BT1R+JB
- DcuH1dMsKg6cRJ0v+sTIBViWb4JZwTn7lpBiPocVSkOOWXwlaWgHLXqTYP95wxuYDY6K
- L2ihI+dsM/uE9vnZKL83IkqKhMyBazIUWCA6okh4UbZJozj4kjiYTZUMggMPaLUttkiV
- r03x44LMzwsuSaFJqQivlJOxLXi5Fx9vbSiMdmUpRLhCh4HImYjb7hPc9BhE1iPkymd0
- U1nAjerMbfr3zPAjCllMPlcxUOIHf9vf0UkuYhBlgTQZP44QbItVXzjIyN4qlnrTIGdR kQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j58m5r4v2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 11:21:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D0D3F10002A;
-        Fri, 26 Aug 2022 11:21:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CBD39217B7B;
-        Fri, 26 Aug 2022 11:21:40 +0200 (CEST)
-Received: from [10.201.21.72] (10.75.127.122) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 26 Aug
- 2022 11:21:40 +0200
-Message-ID: <5bd8dfad-de31-a5ac-2efc-a9a3d80650f0@foss.st.com>
-Date:   Fri, 26 Aug 2022 11:21:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220826091851.1393266-1-patrice.chotard@foss.st.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20220826091851.1393266-1-patrice.chotard@foss.st.com>
+        Fri, 26 Aug 2022 05:23:44 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8719DF8C;
+        Fri, 26 Aug 2022 02:23:42 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDZ4n5G6Hz9v7Gy;
+        Fri, 26 Aug 2022 17:18:17 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCHVxPykAhjEntOAA--.37856S2;
+        Fri, 26 Aug 2022 10:23:12 +0100 (CET)
+Message-ID: <6d85d7b1f0c2341698e88bad025bd6e0b34c7666.camel@huaweicloud.com>
+Subject: Re: [PATCH v14 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and add flags check function
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 26 Aug 2022 11:22:54 +0200
+In-Reply-To: <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
+References: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
+         <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.122]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_04,2022-08-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-CM-TRANSID: LxC2BwCHVxPykAhjEntOAA--.37856S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1DurWrJFWxtFWxJF4kXrb_yoW8Kr13pF
+        yDCFyFkryUCFy7W3s3GanIya1Sg3yrGr17Cr9xWwn09Fsag3y8tr1kGF15WF15CrWUuw1j
+        qr42ga15ur1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1ebytUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj35StQAAs+
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,52 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark
-
-Patch sent with incorrect commit title, a new one is in the pipe.
-Sorry for that
-
-Patrice
-
-On 8/26/22 11:18, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Fri, 2022-08-26 at 11:12 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> The patch a557fca630cc: "spi: stm32_qspi: Add transfer_one_message()
-> spi callback" from Aug 23, 2022, leads to the following Smatch static
-> checker warning:
+> In preparation for the patch that introduces the
+> bpf_lookup_user_key() eBPF
+> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> able to
+> validate the kfunc parameters.
 > 
-> drivers/spi/spi-stm32-qspi.c:627 stm32_qspi_transfer_one_message()
-> error: uninitialized symbol 'ret'.Fix the following Smatch static checker warning:
+> Also, introduce key_lookup_flags_valid() to check if the caller set
+> in the
+> argument only defined flags. Introduce it directly in
+> include/linux/key.h,
+> to reduce the risk that the check is not in sync with currently
+> defined
+> flags.
 > 
-> Fixes: a557fca630cc ("spi: stm32_qspi: Add transfer_one_message() spi callback")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+
+Jarkko, could you please ack it if it is fine?
+
+Thanks
+
+Roberto
+
 > ---
->  drivers/spi/spi-stm32-qspi.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  include/linux/key.h      | 16 ++++++++++++++++
+>  security/keys/internal.h |  2 --
+>  2 files changed, 16 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-> index 92459daca95f..679fd1c34f7e 100644
-> --- a/drivers/spi/spi-stm32-qspi.c
-> +++ b/drivers/spi/spi-stm32-qspi.c
-> @@ -562,7 +562,7 @@ static int stm32_qspi_transfer_one_message(struct spi_controller *ctrl,
->  	struct spi_transfer *transfer;
->  	struct spi_device *spi = msg->spi;
->  	struct spi_mem_op op;
-> -	int ret;
-> +	int ret = 0;
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index 7febc4881363..e679dbf0c940 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -88,6 +88,22 @@ enum key_need_perm {
+>  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
+> deferred */
+>  };
 >  
->  	if (!spi->cs_gpiod)
->  		return -EOPNOTSUPP;
-> @@ -592,8 +592,10 @@ static int stm32_qspi_transfer_one_message(struct spi_controller *ctrl,
->  			dummy_bytes = transfer->len;
+> +#define KEY_LOOKUP_CREATE	0x01
+> +#define KEY_LOOKUP_PARTIAL	0x02
+> +
+> +/**
+> + * key_lookup_flags_valid - detect if provided key lookup flags are
+> valid
+> + * @flags: key lookup flags.
+> + *
+> + * Verify whether or not the caller set in the argument only defined
+> flags.
+> + *
+> + * Return: true if flags are valid, false if not.
+> + */
+> +static inline bool key_lookup_flags_valid(u64 flags)
+> +{
+> +	return !(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL));
+> +}
+> +
+>  struct seq_file;
+>  struct user_struct;
+>  struct signal_struct;
+> diff --git a/security/keys/internal.h b/security/keys/internal.h
+> index 9b9cf3b6fcbb..3c1e7122076b 100644
+> --- a/security/keys/internal.h
+> +++ b/security/keys/internal.h
+> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
+> key_type *type,
 >  
->  			/* if happens, means that message is not correctly built */
-> -			if (list_is_last(&transfer->transfer_list, &msg->transfers))
-> +			if (list_is_last(&transfer->transfer_list, &msg->transfers)) {
-> +				ret = -EINVAL;
->  				goto end_of_transfer;
-> +			}
+>  extern bool lookup_user_key_possessed(const struct key *key,
+>  				      const struct key_match_data
+> *match_data);
+> -#define KEY_LOOKUP_CREATE	0x01
+> -#define KEY_LOOKUP_PARTIAL	0x02
 >  
->  			transfer = list_next_entry(transfer, transfer_list);
->  		}
+>  extern long join_session_keyring(const char *name);
+>  extern void key_change_session_keyring(struct callback_head *twork);
+

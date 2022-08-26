@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC6B5A323B
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC0C5A323C
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 00:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345403AbiHZWuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 18:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S1345412AbiHZWvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 18:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbiHZWuP (ORCPT
+        with ESMTP id S234440AbiHZWv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 18:50:15 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CFD2C666;
-        Fri, 26 Aug 2022 15:50:14 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id s8so2866046ljj.5;
-        Fri, 26 Aug 2022 15:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=4pc2oAidrj6yhUG2VXLcLsOrtbTR1Oyi+VKlwu+INl8=;
-        b=R529Deg9qrsUPKylDTBFVydt0KHPodA86KNyWEzwMKDPI0qc7f8w4pm5lEpo2djUnp
-         Fmhv5RzkZ80cSkMNsf2aAgLGYoRxFPKOYW0VCqGEXtMQh7B0zzzg5kKJvHn11yLqp1er
-         HMZlhJhpY+Z8GBYcNZ1kQOHGFYPoc//n7QtnYPaa94PhR6mthEtO82rr3XSRgdC7NvQ1
-         xk64BAK3JYFyYuL28T4zOkL5YsbI9UtrYlzQYoJEgC6dWsUFlhnXnapfh7S2ZZXKgUid
-         j8BPCWa1TSwEWj384je/p1aK4Xag8JJwb3lDyJq++HkAKePjxme00RUvS/vXGGzAR3Cv
-         NITw==
+        Fri, 26 Aug 2022 18:51:28 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892F2B24AA
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 15:51:27 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id y10-20020a5d914a000000b00688fa7b2252so1701746ioq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 15:51:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=4pc2oAidrj6yhUG2VXLcLsOrtbTR1Oyi+VKlwu+INl8=;
-        b=U7yGL+3ilKMHcnt27aq4mjXIERupcLdm2OeRq/csFCWWeds33NPQKnP+ZT5e7JNt9H
-         dTon7cXR9AJ3EmQcLkyvp1DOTPOWjN/IkijLPrbZejyvOeu2rQrMSHQ7fdpAD7IPka7Y
-         7zpSi5WdNF6Ci7lXaWHSRansmdt4K+6x43zpOgiVwrz5j1WQjh8kkKtM2aLjPmPHh3qQ
-         gL4Jwu/FnCxbHnn+WkQo1XiWZSDbwRNby1rl7di0Y79i8HWy/tbgpctAJgZvtXASGpoU
-         fLGTBWhzU9DEY1/RE4woJwtk2jOUf2TjFaTaHj57vEmrFThg4ovy8N/55TpJ72ho+aDc
-         LoFA==
-X-Gm-Message-State: ACgBeo1TpKFAOcJElB84mhftvXOdLote+jaKZI0PplZXft9qbtqkN9rM
-        JsYX1gCDXW/nm1QVVb1jrRvLT0yK1S1DRw==
-X-Google-Smtp-Source: AA6agR74p1nHA8uH4eqONhVaJ6eot9xw+yA5nFlIlGeCu5x42hB1AkobVbtU+oDATjJ6jQoQZqdEqg==
-X-Received: by 2002:a05:651c:10b0:b0:261:ca24:def5 with SMTP id k16-20020a05651c10b000b00261ca24def5mr2778197ljn.169.1661554212465;
-        Fri, 26 Aug 2022 15:50:12 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id t14-20020a2e8e6e000000b0025e1ec74e25sm589154ljk.43.2022.08.26.15.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 15:50:11 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 01:50:09 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 06/11] spi: dw: update SPI_CTRLR0 register
-Message-ID: <20220826225009.hipxcffq2ddpiv4s@mobilestation>
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-7-sudip.mukherjee@sifive.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=WAlmKPmwBSHe82ADHwGi4F01afwpPrJl8TMZLAnNCjE=;
+        b=NmLHdr+4HZrDAmGUpvDhetrqTlR4RoaRF6qO+/h1TE7wqUbUKzH7KWfaob24ektMsk
+         4eRKBP4hV7JjxcRULVYKG/ylnN/D3c+1djLY9W3GfRF6CPHp68LfJgQUoTulKNNavUsa
+         MP7NoQuFiydYFy9JS8jSPK0ykIs1FAW8CsYCkt2Ld7eEZBImvUYKe0anQpm/JUb3xhOk
+         6FuqRJzYI4cnSqX/VoFwjWXnUFgHAc/q57g90kXPsWbtvkTF+RDjSdtVitDxBtabdw49
+         kSWcpbwhT7tqTE9Thx6ftH4YeNfx5JaDuEJa8WQ/Oe87SBRGcrApWuFXNz/UGU1veu1l
+         ms1Q==
+X-Gm-Message-State: ACgBeo3nOJfIkopwD5IbrhwP1iYkzpR7vjJDlT+gS7k5QC1P+dLSOzH/
+        6VC23hDzhkUpJ3B5xZbql8EcNmTKx8YHmJUjh3FBDM13Quox
+X-Google-Smtp-Source: AA6agR7gU41h4nNP8i0WnG2uQjguVj0Foa0LIGHbIVShq4fB2hgys5yrqi2HGSm2xspqBFF+AtgXW3Ovdop4vUjyqG5Me+DG5Ndq
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-7-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1914:b0:346:c2f5:632f with SMTP id
+ p20-20020a056638191400b00346c2f5632fmr5180273jal.296.1661554286947; Fri, 26
+ Aug 2022 15:51:26 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 15:51:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000c73e105e72cc106@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in log_replay
+From:   syzbot <syzbot+8379f446e2ac4365e343@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:57:50PM +0100, Sudip Mukherjee wrote:
-> If the controller supports enhanced SPI modes then update the register
-> or reset the register if the transfer is not using dual/quad/octal mode.
-> 
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
->  drivers/spi/spi-dw-core.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 8e624620864f..9d499bdf2ce6 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -676,6 +676,32 @@ static void dw_spi_stop_mem_op(struct dw_spi *dws, struct spi_device *spi)
->  	dw_spi_enable_chip(dws, 1);
->  }
->  
-> +static void update_spi_ctrl0(struct dw_spi *dws, const struct spi_mem_op *op, bool enable)
-> +{
-> +	u32 spi_ctrlr0;
-> +
-> +	spi_ctrlr0 = dw_readl(dws, DW_HSSI_SPI_CTRLR0);
-> +	if (enable) {
-> +		spi_ctrlr0 |= FIELD_PREP(DW_HSSI_SPI_CTRLR0_WAIT_CYCLE_MASK,
+Hello,
 
-> +					 op->dummy.nbytes * BITS_PER_BYTE);
-> +		/* 8 bit instruction length */
-> +		spi_ctrlr0 |= FIELD_PREP(DW_HSSI_SPI_CTRLR0_INST_L_MASK,
-> +					 DW_HSSI_SPI_CTRLR0_INST_L8);
-> +		/* 32 bit address length */
-> +		spi_ctrlr0 |= FIELD_PREP(DW_HSSI_SPI_CTRLR0_ADDR_L_MASK,
-> +					 DW_HSSI_SPI_CTRLR0_ADDR_L32);
+syzbot found the following issue on:
 
-Just add new fields dw_spi_cfg.{trans_t,inst_l,addr_l,wait_c},
-initialize them with the values taken from the spi_mem_op (trans_t -
-based on the bus widths, inst_l - cmd.nbytes, addr_l - addr.nbytes,
-wait_c - dummy.nbytes / dummy.buswidth) and use them to accordingly
-update the SPI_CTRLR0 CSR in the dw_spi_update_config() method. Update
-the CSR if spi_frf has value other than STD_SPI_FRF, otherwise
-according to the HW manual the SPI_CTRLR0 register isn't relevant so
-don't touch it.
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15eebce7080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=8379f446e2ac4365e343
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-> +		/* Enable clock stretching */
-> +		spi_ctrlr0 |= DW_HSSI_SPI_CTRLR0_CLK_STRETCH_EN;
-> +	} else {
-> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_WAIT_CYCLE_MASK;
-> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_INST_L_MASK;
-> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_ADDR_L_MASK;
-> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_CLK_STRETCH_EN;
-> +	}
-> +
-> +	dw_writel(dws, DW_HSSI_SPI_CTRLR0, spi_ctrlr0);
-> +}
-> +
->  /*
->   * The SPI memory operation implementation below is the best choice for the
->   * devices, which are selected by the native chip-select lane. It's
-> @@ -738,6 +764,9 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
->  
->  	dw_spi_enable_chip(dws, 0);
->  
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> +	if (dws->caps & DW_SPI_CAP_EXT_SPI)
-> +		update_spi_ctrl0(dws, op, enhanced_spi);
-> +
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8379f446e2ac4365e343@syzkaller.appspotmail.com
 
-This won't be needed as long as you do as I suggested above.
+ntfs3: loop4: ino=2, "/" ntfs_iget5
+ntfs3: loop4: Mark volume as dirty due to NTFS errors
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000013af0c000
+[0000000000000000] pgd=080000013af11003, p4d=080000013af11003, pud=0800000138a68003, pmd=0000000000000000
+Internal error: Oops: 96000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 17646 Comm: syz-executor.4 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : log_replay+0x4c/0x3024 fs/ntfs3/fslog.c:3774
+lr : log_replay+0x3c/0x3024 fs/ntfs3/fslog.c:3736
+sp : ffff80002180b970
+x29: ffff80002180ba80 x28: ffff0000f8a8e000 x27: ffff0000dac28000
+x26: 0000000000000018 x25: 0000000000000024 x24: ffff80002180baf4
+x23: 0000000000000030 x22: ffff00010acaff40 x21: ffff0000f8a8c000
+x20: 0000000000000000 x19: ffff0000f8a8e000 x18: 00000000000000c0
+x17: ffff80000dd7a698 x16: ffff80000dbb8658 x15: ffff0000f666cf80
+x14: 0000000000000120 x13: 00000000ffffffff x12: ffff0000f666cf80
+x11: ff80800008bf6e60 x10: 0000000000000000 x9 : ffff800008bf6e60
+x8 : ffff0000f666cf80 x7 : ffff8000085f0604 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : ffff80002180baf4 x0 : ffff00010acaff40
+Call trace:
+ log_replay+0x4c/0x3024 fs/ntfs3/fslog.c:3762
+ ntfs_loadlog_and_replay+0x114/0x1ec fs/ntfs3/fsntfs.c:299
+ ntfs_fill_super+0xc10/0x14a4 fs/ntfs/super.c:2904
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: f9400ed4 a93b7fbf f90047ff b942a2d7 (f9400288) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	f9400ed4 	ldr	x20, [x22, #24]
+   4:	a93b7fbf 	stp	xzr, xzr, [x29, #-80]
+   8:	f90047ff 	str	xzr, [sp, #136]
+   c:	b942a2d7 	ldr	w23, [x22, #672]
+* 10:	f9400288 	ldr	x8, [x20] <-- trapping instruction
 
--Sergey
 
->  	dw_spi_update_config(dws, mem->spi, &cfg);
->  
->  	dw_spi_mask_intr(dws, 0xff);
-> -- 
-> 2.30.2
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

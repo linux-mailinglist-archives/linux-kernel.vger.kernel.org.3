@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735A05A2093
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFF55A2094
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244726AbiHZF5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S229783AbiHZF5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiHZF5B (ORCPT
+        with ESMTP id S244860AbiHZF5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:57:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B230C5789;
-        Thu, 25 Aug 2022 22:56:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F5A6B82F5C;
-        Fri, 26 Aug 2022 05:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43271C4314A;
-        Fri, 26 Aug 2022 05:56:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661493417;
-        bh=/FvktWWHz025DxZFW/BBwLRligmr0a9pBYK2MH9aV5Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uCgUQCc/Qlk7Pi7/drdrT0yEzgE2IinbxX+THqgq2Tq5u0b5Kb6RL++DEn7XlDWwg
-         pYwPj+IIOFPS9bL8SODw+FRZcnizjhFomi548R9lX+YLXdbaY748aaWkVEYjme6hG7
-         kV5JeqS6f+G69EWtgP68/6H/Ms6Afj/30OGf33XPFhiV2cmSBuhN1aEjSHsCpT0drP
-         A4TKWrBDUKKkmluFZHkgYrgNYwkRrR5UNov35B1g5xgEiQfZL3lzJpBdRBuTNvHqiy
-         sSDyAl6KZkWo2fKpZ5mGp01B0TUS7PiXF0UcFhNmpv9xdEClFTjZzxL33z+aBOsBrF
-         B3BComuHnQQ1A==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-324ec5a9e97so11435067b3.7;
-        Thu, 25 Aug 2022 22:56:57 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2JzkJT2fwEKc8wnwNdSGmoyvYPTovwp5l7/ioZTM8r830icmMW
-        6wecUxg4jG/aJUqOolAfMhrP5TCQtqfLYbsFJg4=
-X-Google-Smtp-Source: AA6agR5vlJNlo+eJot0Uf/IDkuELdfK6w7/mY1PtEAOjZwbYPWIA9NBIT4itd5TdjUSZY6bc90hWaEd9s8Kvg6BA5WU=
-X-Received: by 2002:a81:7489:0:b0:33e:dca7:9750 with SMTP id
- p131-20020a817489000000b0033edca79750mr489448ywc.73.1661493416193; Thu, 25
- Aug 2022 22:56:56 -0700 (PDT)
+        Fri, 26 Aug 2022 01:57:08 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AE5D0205
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:57:05 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id s1so683856lfp.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=6sFMfV3sPsTsCOqDR27m1j2WQDafovgjMLOtMRdll3w=;
+        b=zy9dPSpOq2Sj28WwDLganDetslFdIvQvfylapmHMXB07JSgEE8NWqqe3g/AF27qczb
+         LooXFKefhbt53hzJ04EH+5H+Y/nWQyP7pb84uAyfNA8nJnb03Qkn6HJp9T/1kbOiD+gO
+         /ov60IN4aCc+6Il/sfejXZJcGRNQLd34JmL53wRqhZHs8VSdG9Ls9p92aA/uft+bMP5f
+         eyCJYtE0iCU1qRvRc8swVuPfZCsIwwglRF4O+I/e6Pc9h3mog6yPNq1gebVnPHV8KBWO
+         4vrTWjoD89tTQ3ULzxxz1B8fphhCA8n38km/w75Z/0PTMogX5x+huO0+mu3sJTxcAgGa
+         ATng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=6sFMfV3sPsTsCOqDR27m1j2WQDafovgjMLOtMRdll3w=;
+        b=NQTfPPuly6wczWhhOb+YRGtO9BJjbGSD2wHtE7IB5qepOJcVcPNQABgK1AdQ2S9XEt
+         43NWFSBTggNwtk1FUXg00rgN8STuMY67XMhp71oL2VDEQ0znQ4aYk7qjRbS7dgXHZa7F
+         hV4GuW34aKNXdIvO/Bt9S28DsdwLnWl8Jlu19IEWjnaOSXoUTKe48lfT7WGlc7708ujx
+         dYhm+U5313pu6gsCbuYoOf1xZEiF0xUTVhlt67pmrk/BcQtBlNMa+2zysuUAwudUsg7n
+         f/gRpRU5dKugbZujGBmDSkANSpcrPxflEMyWhtJ506bg13+OZVpyP+7xbRhA8tystbYV
+         c29Q==
+X-Gm-Message-State: ACgBeo1JFyGC84S70G6lEZVfjB78VhbEe4iyXGoRcbZMQAcIi3Gr9yir
+        R6M/am32yaex8RFZNe+s9rnTDA==
+X-Google-Smtp-Source: AA6agR65773YQ2l56e6A/aGdOiN59cNX1MQvGp4IdN8W3ZmzMmuXKxSGoBxPJ5uzfMwoCrB9KuDTqg==
+X-Received: by 2002:a05:6512:13a4:b0:477:a28a:2280 with SMTP id p36-20020a05651213a400b00477a28a2280mr1855419lfa.689.1661493424094;
+        Thu, 25 Aug 2022 22:57:04 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056512360600b0049288e0bd61sm250856lfs.58.2022.08.25.22.57.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 22:57:03 -0700 (PDT)
+Message-ID: <77d05dac-b4d3-e88f-ecd0-46b6e92fd637@linaro.org>
+Date:   Fri, 26 Aug 2022 08:57:02 +0300
 MIME-Version: 1.0
-References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com> <20220823150035.711534-6-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220823150035.711534-6-roberto.sassu@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 25 Aug 2022 22:56:45 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5iVRSCQsMRC7bGHw=ZHW1Y7y0SccQG-i-7=umHF2yJEQ@mail.gmail.com>
-Message-ID: <CAPhsuW5iVRSCQsMRC7bGHw=ZHW1Y7y0SccQG-i-7=umHF2yJEQ@mail.gmail.com>
-Subject: Re: [PATCH v13 05/10] bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, Shuah Khan <shuah@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH] usb: reduce kernel log spam on driver registration
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org
+References: <20220825170327.674446-1-ardb@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220825170327.674446-1-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,42 +89,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 8:02 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Add the bpf_lookup_user_key(), bpf_lookup_system_key() and bpf_key_put()
-> kfuncs, to respectively search a key with a given key handle serial number
-> and flags, obtain a key from a pre-determined ID defined in
-> include/linux/verification.h, and cleanup.
->
-> Introduce system_keyring_id_check() to validate the keyring ID parameter of
-> bpf_lookup_system_key().
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On 25/08/2022 20:03, Ard Biesheuvel wrote:
+> Drivers are typically supposed to be quiet unless they are actually
+> probed, but for some reason, USB host controllers seem to be exempt from
+> this rule, and happily broadcast their existence into the kernel log at
+> boot even if the hardware in question is nowhere to be found.
+> 
+> Let's fix that, and remove these pr_info() calls.
+> 
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: Avi Fishman <avifishman70@gmail.com>
+> Cc: Tomer Maimon <tmaimon77@gmail.com>
+> Cc: Tali Perry <tali.perry1@gmail.com>
+> Cc: Patrick Venture <venture@google.com>
+> Cc: Nancy Yuen <yuenn@google.com>
+> Cc: Benjamin Fair <benjaminfair@google.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-samsung-soc@vger.kernel.org
+> Cc: linux-omap@vger.kernel.org
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > ---
->  include/linux/bpf.h          |   6 ++
->  include/linux/verification.h |   8 +++
->  kernel/trace/bpf_trace.c     | 135 +++++++++++++++++++++++++++++++++++
->  3 files changed, 149 insertions(+)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 6041304b402e..991da09a5858 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -2586,4 +2586,10 @@ static inline void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype) {}
->  static inline void bpf_cgroup_atype_put(int cgroup_atype) {}
->  #endif /* CONFIG_BPF_LSM */
->
-> +#ifdef CONFIG_KEYS
+>  drivers/usb/host/ehci-atmel.c    | 1 -
+>  drivers/usb/host/ehci-exynos.c   | 1 -
+>  drivers/usb/host/ehci-fsl.c      | 2 --
+>  drivers/usb/host/ehci-hcd.c      | 1 -
+>  drivers/usb/host/ehci-npcm7xx.c  | 2 --
+>  drivers/usb/host/ehci-omap.c     | 2 --
+>  drivers/usb/host/ehci-orion.c    | 2 --
+>  drivers/usb/host/ehci-pci.c      | 2 --
+>  drivers/usb/host/ehci-platform.c | 2 --
+>  drivers/usb/host/ehci-spear.c    | 2 --
+>  drivers/usb/host/ehci-st.c       | 2 --
+>  drivers/usb/host/fotg210-hcd.c   | 1 -
+>  drivers/usb/host/ohci-at91.c     | 1 -
+>  drivers/usb/host/ohci-da8xx.c    | 1 -
+>  drivers/usb/host/ohci-exynos.c   | 1 -
+>  drivers/usb/host/ohci-hcd.c      | 1 -
+>  drivers/usb/host/ohci-nxp.c      | 2 --
+>  drivers/usb/host/ohci-omap.c     | 2 --
+>  drivers/usb/host/ohci-pci.c      | 2 --
+>  drivers/usb/host/ohci-platform.c | 2 --
+>  drivers/usb/host/ohci-pxa27x.c   | 2 --
+>  drivers/usb/host/ohci-s3c2410.c  | 1 -
+>  drivers/usb/host/ohci-spear.c    | 2 --
+>  drivers/usb/host/ohci-st.c       | 2 --
 
-Do we need to declare struct key here?
 
-> +struct bpf_key {
-> +       struct key *key;
-> +       bool has_ref;
-> +};
-> +#endif /* CONFIG_KEYS */
->  #endif /* _LINUX_BPF_H */
->
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

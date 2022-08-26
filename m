@@ -2,176 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD3D5A29A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9465A29AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 16:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344488AbiHZOh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 10:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S1344491AbiHZOjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 10:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHZOht (ORCPT
+        with ESMTP id S229472AbiHZOjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 10:37:49 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2072.outbound.protection.outlook.com [40.107.102.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCE6D21DC;
-        Fri, 26 Aug 2022 07:37:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PjUSRBzO3ZuZ2M2LqqKWmYbWCcn5OIh28NKg+l+K4urmnsH39kcMkQAzou2er1ojSrMyt/Q/E+zYP6GTaO4F3TnNy9FFRDje5kgrpYFMWmH7aLimHA+q4O7IfxeA4stfnl7IcpaByorCkAOFudsa9KmRFF0BPXuLJyalXzrebDZrOd0fgeN/uPstiOOTK3hSC+NHPsMaYo3tSgxHjeBCfkfjZUn4kAnYdqyuqTihViGsm7fy9orX385KzfIa6NYlges7s8nnUUjcMi5nPfcBfzrZvTWZvy0j1FDDSA9kv8TdHa+aK9vbfxxkm2xIoaWJN484lLTEF8e0GnGAOwJ3gA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tWKev4e5PxghEfpyNk6Ca6lf3EFe9BNYVtA69FeXCs8=;
- b=F9EwezaPUmciJI8aUh25xbQySt4Z44Fh7onF8jXAcLylI57ONQZf7sL0mPvAqQgNHZABuS3isLuo5HAZOl+JzQHTLHIjQfruJ4m7K2D3oRog6tBjBOdwKli7cpoZENs4ogJqGlbvo1X8dX0ON9QFAUWRMNnrRIbjhgl0OQUPNMldaf/FrAxvaRJqfVE/nP267M8u1O+M/qfpGdBS5Guo3LwSDBW4aj3J7LjiVqKRFbFjhccTpB80wBwuWdl1A4hT86fv4/vx4qU0dFLyP4Czi2qvyGxDFJ2DJ4123HAsn67kqKXEYe4BphzYnkw/1QenMlE8yTFeCm1zQqPLjqZmOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tWKev4e5PxghEfpyNk6Ca6lf3EFe9BNYVtA69FeXCs8=;
- b=nOxoHF5oDTiAlBZgK8658g6kD81AOlwdvt7UTCnDRIIck8ivbu8Ha1WtPnN2EqvfmbWNRzFJqGR7A/LzPr3Y92oaKZMR6aDfav1Oo1HveCsa7B4n9Xxe+m9Clow88/2MsIKgmXBhWkbba0HEUVzDV9onGcevguRDsTFXtsjihxwI8OYDHMjtJYSccgM6Y5p28ODNGfn+keLMikIhzrN9DM8s0hfw05REptCH82TSF0+8U8a3TDw6f8Dm9FXjcUPhmgOch5t01HcHGNRKMJ+0EluzuC/pS5Ons9bqSqLadN+d8McY67aEHSRLfzi9rHc9JaSCJSmCrKKgFQkxAzgOvA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by PH7PR12MB6539.namprd12.prod.outlook.com (2603:10b6:510:1f0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Fri, 26 Aug
- 2022 14:37:47 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
- 14:37:46 +0000
-Date:   Fri, 26 Aug 2022 11:37:45 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v12 05/17] iommu: Add attach/detach_dev_pasid iommu
- interface
-Message-ID: <YwjauaF1sTP6l2j9@nvidia.com>
-References: <20220826121141.50743-1-baolu.lu@linux.intel.com>
- <20220826121141.50743-6-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826121141.50743-6-baolu.lu@linux.intel.com>
-X-ClientProxiedBy: BLAPR05CA0017.namprd05.prod.outlook.com
- (2603:10b6:208:36e::29) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 26 Aug 2022 10:39:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFFFD31C2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661524752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ft0lQYVoEV6jBNoLlY/vGG48ZPsyM0mxyqwdiyDO9u0=;
+        b=dcwGiRGbGSRAanFnVzgiQ4iesOcWmsWNGcLBixhLCFxtZUWtAzUJy02C54lyMP8MWLm7Fy
+        hMsQogDXyR+/EDfW6jNn0zk0l9pxfdZAQi1/ZybKy3hgDG246Ro4f2F4ixy5mfOE7euq8h
+        wWRxg8x+H87sF8uUEMy3bvs7NYgfDuo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-220-t-SKtyHKNkWPMe08864wsA-1; Fri, 26 Aug 2022 10:39:11 -0400
+X-MC-Unique: t-SKtyHKNkWPMe08864wsA-1
+Received: by mail-wm1-f70.google.com with SMTP id ay21-20020a05600c1e1500b003a6271a9718so1088915wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 07:39:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=Ft0lQYVoEV6jBNoLlY/vGG48ZPsyM0mxyqwdiyDO9u0=;
+        b=kXxHyS8vNxL7TGrTwFK8v4eUQjkmX6M4JEKFvKXb4G0kyWVR48VtCL8m2Z38XBx2Y8
+         yIj9HN4D1l8oq/y1QPUoiQiyz6hDdgti+geaqG690Vz7SA3W06Q/45mPSXrfh+fcrgac
+         /FiNvc22f4c0Q6/ImHEZnSUYc2BaWs2G9Xq+kQdkFVQnIUoqEKxmVq+K6GmVBLlKICyQ
+         UeEqQGGUTfcrxZ0ctN+UwApVaRD5JtIP66KD5gLjzUSB2XU5slecShBkzAXyV7croS55
+         kpDUUHnx5REyqClR85s6ChG6LH4Dhno9qzhf9SxIDzG5M0BtCOzgWB02npqAUedAXOLW
+         /WaA==
+X-Gm-Message-State: ACgBeo0mdw2qMKSTbXPAiu8XK2GVtsuoD7l+9wsqVeNH5XZrpF/Thtpo
+        usPIk9PBHvsylH68/LRXMHlk8QAr3mRpow7mF0RoO3hhx+KCU2/lfPfjCel4UM1R4nJ+9yrjjbM
+        tGicrhax2oeHI97D1L8SQUoH5
+X-Received: by 2002:a05:600c:1f1a:b0:3a6:2569:496b with SMTP id bd26-20020a05600c1f1a00b003a62569496bmr5450955wmb.176.1661524749691;
+        Fri, 26 Aug 2022 07:39:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR78RH87xC4FNL/JmgMsnjs3esusw3W4DDiJGKyeEE33BMY6II+9QepZiEzqEmrMzkzxyftCIg==
+X-Received: by 2002:a05:600c:1f1a:b0:3a6:2569:496b with SMTP id bd26-20020a05600c1f1a00b003a62569496bmr5450936wmb.176.1661524749334;
+        Fri, 26 Aug 2022 07:39:09 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:f600:abad:360:c840:33fa? (p200300cbc708f600abad0360c84033fa.dip0.t-ipconnect.de. [2003:cb:c708:f600:abad:360:c840:33fa])
+        by smtp.gmail.com with ESMTPSA id q12-20020adfcd8c000000b00225206dd595sm2100027wrj.86.2022.08.26.07.39.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 07:39:08 -0700 (PDT)
+Message-ID: <ca62c992-6242-5e82-22de-a6e8ffa824b1@redhat.com>
+Date:   Fri, 26 Aug 2022 16:39:08 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4b8e107e-ebb0-4110-3b1b-08da87708afb
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6539:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BjrVyFC2zVy9e0VdsnJE2AjMB174+hvVGmthBc9a0yRgIuXVDxbPURfCQcTNfviHwT/NeMNzhd9ns4r7z1+toCFPCeQ8ykst2dP4fLES5EuscSIXc2Ivp0WAbJZdE6PC+Ny82TjDyXi0d4KITrpOnzXde3G8THq9+4qo2hj4uA4nc3AeyvgeZ4HM3GG8+wP8Vo9WV9ar047FIiqhZ8VBYYTwpLTK5xcA+bPhVW/7oLaXXXFBDacp0RlToEBkUQZD1rsa/rjyhT7Jjzz1Rq2qDULhdG4SecXGH8fEl1Sj23hWbL6t9fDESsNC1RRLwpzVfdqkQ6fjQeA3ActyYrj2jkLiZf8HrFz16ZKmLI/J/lNAwZ+AUZyZJh7f8MPNdSFOQXddODTp6tVrPCSQVToIL5XJJDN4anWjRSts6s5RYsw1IYG7KJaqyisg6eDtd5FLOtRqyk52xnsQj6w0klzvIGGj8MyIgLBGwxMptd8m62s6qISov6Yy9cY/LbTip0w7pocfcUDlojnwU8CAVeQ7EJKRF55eYbhqeqQDhSZpVlr+vhpnHtt++Xz1+61M70KevtQTslu6p2GtDod5GLkE1KANTeAJi2k02IT2yWQAF85SAtSNT3c5KIP9N31jf97BYA5jupZBMnhzdoSxd//U8bT1zL6XloGOhX4rKCrcDAp/vow6+MNeBtgd4SRokhi+NdVEKzwfl+mhaJWjGaU2ew==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(136003)(366004)(376002)(38100700002)(2616005)(186003)(2906002)(6506007)(6512007)(26005)(6486002)(41300700001)(83380400001)(478600001)(7416002)(36756003)(54906003)(5660300002)(6916009)(316002)(8676002)(66556008)(66476007)(66946007)(8936002)(4326008)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vJcoaM9d8JTqbfcldx5+LXTo6lPlMuUDYcaQ5hgrg5ShaWHjIACFAiWFewKC?=
- =?us-ascii?Q?0Si/COJHU/7RBbjAUnNCy5i+5SOfJePYn0p0r3YF8wx4MD8SDvuc1Ob0swuA?=
- =?us-ascii?Q?ck4VewL0KLSRVQ3s48UwLPzo+pBMI3OEwrrS9Bw6eIzONlxJG8gMOrFJyZGA?=
- =?us-ascii?Q?JxyZWezqxCKjS2PKcD4RfIJ9AlWGBaVYJYNU64RMLxKt4bkQ5lY1TydCYYCc?=
- =?us-ascii?Q?I3lKEe/9HDyhrftiDeKpEJbiRf8wQ0NglAgayw8NYexbNdqOA3CKSdug7gLu?=
- =?us-ascii?Q?y20F8DdB4D2CDPikfrVQbIcF3D2HKLVwzel9irwfbGy6mzKGDfZFbSQwBbv8?=
- =?us-ascii?Q?rbEB+xBpmNj6xeUEXAYLfHPEc9L4Tcj/y1nnNYWNE6XQ9EHQM3VsFlUEWuai?=
- =?us-ascii?Q?DjmBGTgpumk56418ANLAEwOe/BMcrGtoXG4U3x/DkznGfygjhKC8w1L1YUyr?=
- =?us-ascii?Q?pqyLtViiekAFLJsIoOBfH8vLIOazR5tCAIgWFO7QQQSZY//ZfoTMzIzoQGOM?=
- =?us-ascii?Q?9LGCuk21/HZYyLaceso8thPZpIRcwgggEFvfnrsagg1lppurlLQk51DQlIUF?=
- =?us-ascii?Q?x2/M0X0d7R/TRd/5kESmHOBR/NGURkB7M1sWmCvpYR+qqFKNGOi4MUe0HKqP?=
- =?us-ascii?Q?nrsbEmu0dO1fz/KnRo7z81p/9gAWox9bmqFPB/G6Xl2H9KAanoBWQCJ6GWKi?=
- =?us-ascii?Q?Z+DjcRIqX54nAG3cxXhdiz2Bz05IshTGIy88ArHC+OGyzOLC5PUFFsg+hsne?=
- =?us-ascii?Q?k4E1FWfVMlpcsZWvBXcfnoITSQvkJA3xEBMY0UpeT0ECyE4iQv134OksWQx0?=
- =?us-ascii?Q?bMzP00tWQ2a0mv1b5/uzAcXqSFiDIzGzAmBTyqpbatjEDc9YH5TFKusRydeX?=
- =?us-ascii?Q?2meAbggLJKfc8QaXg+9Xq5LIlqV73K3MneHdsdzR2NjH2HkiWoXt2RiJNORk?=
- =?us-ascii?Q?vsquU+U+fGH3R6QvTj8DcxCMLVk5JIfUnZBfD4ZOy1Pu2liP51NF6KQcnq+F?=
- =?us-ascii?Q?rgmFDSBkWa0OGOB4h1kZmAw0KHC3WcuNIYipHoM7caG/j9x8eVvCsKWgzBbG?=
- =?us-ascii?Q?j6n6W69Tr2v0sYQN+hCti3Ef2MzWn2pmiS0EkpI+wpmstVEkDRc0B345jje+?=
- =?us-ascii?Q?ssMYmnNPeuxUGPwD14urTrKYu0CBCf2iTZFLkSpgbhRCDMnPLnSFXaZWUb6D?=
- =?us-ascii?Q?NdM+7YWDoRGqb0WGS5fikPHij/N7+77y04Ysdq8/omRo9fEnOKJTUw93R40B?=
- =?us-ascii?Q?11bAEgUAGnVFAbB3IW/RYuSFyikwc9tBPtgH2oD9Vg3igX3xwEsHqiFX5P/4?=
- =?us-ascii?Q?9bsfV6tjmg9tpBnzLERs+IBPbYd09QriU8TwSbNW2DptDzMoggnWeytbrFUQ?=
- =?us-ascii?Q?Ghwgy7uAASoI2zlYQux1Ev/e8cqEK86DM8uTQ1/Ys3iU7hzYFA07l5TERzJe?=
- =?us-ascii?Q?1d5Q+aFTC96j4PS/EZHfDOiN2HkPIb9IuFXwEY0FhIGzMO9IMTU9HmByh07y?=
- =?us-ascii?Q?W3WBgUg+7kwV0vp13oZKwkDqV/hHPg543UN65wU6MhaTSWzsf5aMz9YJJ4NR?=
- =?us-ascii?Q?za+kS68dQ5HmL1iW8JFZGeCRfOJLWcfYJklGr3Wd?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b8e107e-ebb0-4110-3b1b-08da87708afb
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 14:37:46.6185
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P/TCduGbKuKIdghFgPRNKDaU+3Wgclnm+nioCFgs2Vc0VwSdYhYQdPml+lm3hWBu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6539
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org,
+        Yu Zhao <yuzhao@google.com>
+References: <20220823221138.45602-1-peterx@redhat.com>
+ <411d7b8c-f914-875e-b397-856e6a894366@redhat.com>
+ <YwjXxC2BbJ5+3Isx@xz-m1.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/mprotect: Only reference swap pfn page if type match
+In-Reply-To: <YwjXxC2BbJ5+3Isx@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 08:11:29PM +0800, Lu Baolu wrote:
+On 26.08.22 16:25, Peter Xu wrote:
+> On Fri, Aug 26, 2022 at 12:49:37PM +0200, David Hildenbrand wrote:
+>> On 24.08.22 00:11, Peter Xu wrote:
+>>> Yu Zhao reported a bug after the commit "mm/swap: Add swp_offset_pfn() to
+>>> fetch PFN from swap entry" added a check in swp_offset_pfn() for swap type [1]:
+>>>
+>>>   kernel BUG at include/linux/swapops.h:117!
+>>>   CPU: 46 PID: 5245 Comm: EventManager_De Tainted: G S         O L 6.0.0-dbg-DEV #2
+>>>   RIP: 0010:pfn_swap_entry_to_page+0x72/0xf0
+>>>   Code: c6 48 8b 36 48 83 fe ff 74 53 48 01 d1 48 83 c1 08 48 8b 09 f6
+>>>   c1 01 75 7b 66 90 48 89 c1 48 8b 09 f6 c1 01 74 74 5d c3 eb 9e <0f> 0b
+>>>   48 ba ff ff ff ff 03 00 00 00 eb ae a9 ff 0f 00 00 75 13 48
+>>>   RSP: 0018:ffffa59e73fabb80 EFLAGS: 00010282
+>>>   RAX: 00000000ffffffe8 RBX: 0c00000000000000 RCX: ffffcd5440000000
+>>>   RDX: 1ffffffffff7a80a RSI: 0000000000000000 RDI: 0c0000000000042b
+>>>   RBP: ffffa59e73fabb80 R08: ffff9965ca6e8bb8 R09: 0000000000000000
+>>>   R10: ffffffffa5a2f62d R11: 0000030b372e9fff R12: ffff997b79db5738
+>>>   R13: 000000000000042b R14: 0c0000000000042b R15: 1ffffffffff7a80a
+>>>   FS:  00007f549d1bb700(0000) GS:ffff99d3cf680000(0000) knlGS:0000000000000000
+>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>   CR2: 0000440d035b3180 CR3: 0000002243176004 CR4: 00000000003706e0
+>>>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>>   Call Trace:
+>>>    <TASK>
+>>>    change_pte_range+0x36e/0x880
+>>>    change_p4d_range+0x2e8/0x670
+>>>    change_protection_range+0x14e/0x2c0
+>>>    mprotect_fixup+0x1ee/0x330
+>>>    do_mprotect_pkey+0x34c/0x440
+>>>    __x64_sys_mprotect+0x1d/0x30
+>>>
+>>> It triggers because pfn_swap_entry_to_page() could be called upon e.g. a
+>>> genuine swap entry.
+>>>
+>>> Fix it by only calling it when it's a write migration entry where the page*
+>>> is used.
+>>>
+>>> [1] https://lore.kernel.org/lkml/CAOUHufaVC2Za-p8m0aiHw6YkheDcrO-C3wRGixwDS32VTS+k1w@mail.gmail.com/
+>>>
+>>> Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
+>>> Cc: David Hildenbrand <david@redhat.com>
+>>> Cc: <stable@vger.kernel.org>
+>>> Reported-by: Yu Zhao <yuzhao@google.com>
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>  mm/mprotect.c | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/mm/mprotect.c b/mm/mprotect.c
+>>> index f2b9b1da9083..4549f5945ebe 100644
+>>> --- a/mm/mprotect.c
+>>> +++ b/mm/mprotect.c
+>>> @@ -203,10 +203,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+>>>  			pages++;
+>>>  		} else if (is_swap_pte(oldpte)) {
+>>>  			swp_entry_t entry = pte_to_swp_entry(oldpte);
+>>> -			struct page *page = pfn_swap_entry_to_page(entry);
+>>>  			pte_t newpte;
+>>>  
+>>>  			if (is_writable_migration_entry(entry)) {
+>>> +				struct page *page = pfn_swap_entry_to_page(entry);
+>>> +
+>>>  				/*
+>>>  				 * A protection check is difficult so
+>>>  				 * just be safe and disable write
+>>
+>>
+>> Stumbling over the THP code, I was wondering if we also want to adjust change_huge_pmd()
+>> and hugetlb_change_protection. There are no actual swap entries, so I assume we're fine.
+>>
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index 482c1826e723..466364e7fc5f 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -1798,10 +1798,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+>>         if (is_swap_pmd(*pmd)) {
+>>                 swp_entry_t entry = pmd_to_swp_entry(*pmd);
+>> -               struct page *page = pfn_swap_entry_to_page(entry);
+>>  
+>>                 VM_BUG_ON(!is_pmd_migration_entry(*pmd));
+>>                 if (is_writable_migration_entry(entry)) {
+>> +                       struct page *page = pfn_swap_entry_to_page(entry);
+>>                         pmd_t newpmd;
+>>                         /*
+>>                          * A protection check is difficult so
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index 2480ba627aa5..559465fae5cd 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -6370,9 +6370,9 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+>>                 }
+>>                 if (unlikely(is_hugetlb_entry_migration(pte))) {
+>>                         swp_entry_t entry = pte_to_swp_entry(pte);
+>> -                       struct page *page = pfn_swap_entry_to_page(entry);
+>>  
+>>                         if (!is_readable_migration_entry(entry)) {
+>> +                               struct page *page = pfn_swap_entry_to_page(entry);
+>>                                 pte_t newpte;
+>>  
+>>                                 if (PageAnon(page))
+>>
+>>
+>> @Peter, what's your thought?
+> 
+> IMHO they're not needed?
+> 
+> The rule is simple in my mind: we should only pass in a pfn-typed swap
+> entry into pfn_swap_entry_to_page() (or the new swp_offset_pfn()), or it's
+> a violation of the API.  In these two cases they do not violate the API and
+> they're always safe because they're guaranteed to be pfn swap entries when
+> calling.
 
-> + * iommu_get_domain_for_dev_pasid() - Retrieve domain for @pasid of @dev
-> + * @dev: the queried device
-> + * @pasid: the pasid of the device
-> + * @type: matched domain type, 0 for any match
-> + *
-> + * This is a variant of iommu_get_domain_for_dev(). It returns the existing
-> + * domain attached to pasid of a device. It's only for internal use of the
-> + * IOMMU subsystem. 
+I was wondering about extreme corner cases regarding the struct page.
 
-If it is only for external use then why is it exported?
+Assume we have a hwpoison_entry that pointed at a valid struct page. We
+can succeed in offlining+removing the section it's located on (I was
+recently challenging if we want to keep that behavior as it's really
+shaky already), freeing the relevant memmap entry and the memory section.
 
-I would add something like:
+pfn_swap_entry_to_page() -> pfn_to_page() would be problematic if there
+is no memmap anymore.
 
- Callers must hold a lock around this function, and both
- iommu_attach/detach_dev_pasid() whenever a domain of type is being
- manipulated. This API does not internally resolve races with
- attach/detach.
 
-> + * detaching from the device PASID.
-> + *
-> + * Return: attached domain on success, NULL otherwise.
-> + */
-> +struct iommu_domain *iommu_get_domain_for_dev_pasid(struct device *dev,
-> +						    ioasid_t pasid,
-> +						    unsigned int type)
-> +{
-> +	struct iommu_domain *domain;
-> +	struct iommu_group *group;
-> +
-> +	group = iommu_group_get(dev);
-> +	if (!group)
-> +		return NULL;
-> +	/*
-> +	 * The xarray protects its internal state with RCU. Hence the domain
-> +	 * obtained is either NULL or fully formed.
-> +	 */
+I assume it's ok to always call it for is_pfn_swap_entry(), but in the
+PMD case we only check for is_swap_pmd()? Isn't that problematic?
 
-This has nothing to do with RCU
 
-xa_lock() is used to ensure that the domain pointer remains valid
-while we check the type since it blocks concurrent xa_erase().
+I was confused by the hugetlb case, it's indeed fine as we check for
+is_hugetlb_entry_migration().
 
-Jason
+-- 
+Thanks,
+
+David / dhildenb
+

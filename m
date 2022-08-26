@@ -2,98 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C2C5A2045
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325595A2047
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244868AbiHZFR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S235651AbiHZFWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244839AbiHZFRZ (ORCPT
+        with ESMTP id S229662AbiHZFW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:17:25 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBC8C480E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:17:24 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id jm11so647861plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=NBhfmm8W18tg1OR8/OfEDDSqTYoAFyUg9RoO0VzD8D8=;
-        b=fSgJj9xMVH+ALryiwxjs0GoztWALmqpSifZtVfIzEOzGmUfDMMql4hyhlzyLm2eC3B
-         5XRxIQTdIjSkhmtQq9m9tI6eA2cuUnnSrXOX0xtDN56dOteBG0n5PqAmyQxXmrmJM5Sy
-         ba0ErZ+Vps1Un4uWAn8BOQ30hGPFEc+uFJa8daE4x8Qh8Z925yym/aUQoW5Ub4SdVH33
-         ZKVnadh/y1tVPSt0ZRXJhuyZIzKHmOowYiUlho9wmHh2T3qw8tQGRoqmQLhyX+6/LOkz
-         CXpoXy3rru1czRbf8BIppIZxIxzBwmtXxlEnzoqoJhytx295PPB0B7O1EvyQBNS8+ZvU
-         5DkQ==
+        Fri, 26 Aug 2022 01:22:27 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACED2B621;
+        Thu, 25 Aug 2022 22:22:24 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id r10so799735oie.1;
+        Thu, 25 Aug 2022 22:22:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=NBhfmm8W18tg1OR8/OfEDDSqTYoAFyUg9RoO0VzD8D8=;
-        b=nGa1mcqkmRCPVMVanSZ/c0iGK9efCKLDv3JFy6CPtUZNR9UFFRPfQmsDP2IJV/kSmg
-         Ke4Bwmzrr5rod2tVBPGkqHtFRDRF7gtlCCSvYlHMn9sB5j4gXxcs6NoDnOk+ly/7Mj7z
-         KzHTjmh03T39PVOVz5PLiduFJ3RsX5QqyHSODqoNmWZb9G4WX7T27tT42imjKVuGvTnl
-         30gFzK7ocNUE1M3dK7gJcPvJNuKg22gPdnLCP2QZDsQVTs+lYkb0SjsUe36IZrMdagGW
-         /63hA29kP/p2W806oqs2cKA+KenERg9Z4bEFih/B1q6l7EAuQPzH3mczCH0Duz7+iRjw
-         lNhw==
-X-Gm-Message-State: ACgBeo2GnpvL7aj81nxk+PcRY5NeqHdrMGOx3XBKoL9qc6EhtgJzCY2R
-        /H2sXhR/uIHztgd0n9m28upLnw==
-X-Google-Smtp-Source: AA6agR7190F/JL5rPrzWrxKmaQD+YMfLjdIkVhVkKzPZLa52R9MrODF+m+RAaJl4J0g5a90WWBSAKA==
-X-Received: by 2002:a17:902:ce81:b0:172:9ac1:6ee with SMTP id f1-20020a170902ce8100b001729ac106eemr2106143plg.93.1661491044200;
-        Thu, 25 Aug 2022 22:17:24 -0700 (PDT)
-Received: from leoy-huanghe.lan (n058152048222.netvigator.com. [58.152.48.222])
-        by smtp.gmail.com with ESMTPSA id r7-20020aa79887000000b005367c6db0a4sm377642pfl.183.2022.08.25.22.17.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 22:17:23 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 13:17:18 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ali Saidi <alisaidi@amazon.com>, Kajol Jain <kjain@linux.ibm.com>
-Subject: Re: [PATCH RESEND v6] perf: Add SNOOP_PEER flag to perf mem data
- struct
-Message-ID: <YwhXXiuQ2VysVint@leoy-huanghe.lan>
-References: <20220826051603.174792-1-leo.yan@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=dcQ7tHEk6A4NG/f0IrJN35BtaVDu5euhRodW0KjfFhQ=;
+        b=qyD+VciCIni97gnrM1ES2Ngjj1zOkJYuQ+QmEX6+hPj3f6CBIC6TK5ESd3dIiz7LTA
+         zbWIGRKE1b/6HYBPTOPYj4v2QZ4lUvCwlGxAG9g/t+3pCSZxXbdBpfhvNmY63JNcqZ04
+         fN0/mbS9Uzu0cWpZLf/ZJeE63sNZhRJjP1rBnPMpHYwh9kkxM6Vm0gI5pturvOaqAOKz
+         aPyx435pJiUH8uaiSsLowG6ZVW+c3sV5o5DN3xintX32wFIf/plFqZ3pZPzaGBNOzMEB
+         N0ZYBliQ9NWYSFYJ+iUjbSQzg2ER5YqTJzDGV0v3N461sIOgq2YB4DJrP4EAuVpNCYWc
+         +ifg==
+X-Gm-Message-State: ACgBeo3gejO1MMuz80SlJyFf0AfHjZK8depRDobEVeJCwwGxfd8j6E7d
+        B+c4H7HJwigUjXDa9uJ/UDEJ6LPn7EGOwV3Vg2PC1HpX
+X-Google-Smtp-Source: AA6agR6AT8uD1gM87aThwAmsPqjO8xyTQXvujTgAg9PRgYnDYfKf70NH3Tr9zoh8+UpejG9uwBcfK8jdY6vbR1Ezww8=
+X-Received: by 2002:aca:ba86:0:b0:33a:c6f7:3001 with SMTP id
+ k128-20020acaba86000000b0033ac6f73001mr953755oif.5.1661491343139; Thu, 25 Aug
+ 2022 22:22:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826051603.174792-1-leo.yan@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
+ <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
+ <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com>
+In-Reply-To: <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 25 Aug 2022 22:22:14 -0700
+Message-ID: <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 01:16:03PM +0800, Leo Yan wrote:
-> From: Ali Saidi <alisaidi@amazon.com>
-> 
-> Add a flag to the perf mem data struct to signal that a request caused a
-> cache-to-cache transfer of a line from a peer of the requestor and
-> wasn't sourced from a lower cache level.  The line being moved from one
-> peer cache to another has latency and performance implications. On Arm64
-> Neoverse systems the data source can indicate a cache-to-cache transfer
-> but not if the line is dirty or clean, so instead of overloading HITM
-> define a new flag that indicates this type of transfer.
-> 
-> Update notes:
-> 
-> This patch is to sync the headers between kernel and user space, commit
-> 2e21bcf0514a ("perf tools: Sync addition of PERF_MEM_SNOOPX_PEER") for
-> updating kernel header has been merged in the mainline code.
+On Thu, Aug 25, 2022 at 7:35 PM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Aug 25, 2022, at 4:03 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Aug 25, 2022 at 3:08 PM Song Liu <songliubraving@fb.com> wrote:
+> >>
+> >>
+> >>
+> >>> On Aug 25, 2022, at 2:33 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >>>
+> >>> On Tue, Aug 23, 2022 at 2:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >>>> + * long bpf_read_raw_record(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
+> >>>> + *     Description
+> >>>> + *             For an eBPF program attached to a perf event, retrieve the
+> >>>> + *             raw record associated to *ctx* and store it in the buffer
+> >>>> + *             pointed by *buf* up to size *size* bytes.
+> >>>> + *     Return
+> >>>> + *             On success, number of bytes written to *buf*. On error, a
+> >>>> + *             negative value.
+> >>>> + *
+> >>>> + *             The *flags* can be set to **BPF_F_GET_RAW_RECORD_SIZE** to
+> >>>> + *             instead return the number of bytes required to store the raw
+> >>>> + *             record. If this flag is set, *buf* may be NULL.
+> >>>
+> >>> It looks pretty ugly from a usability standpoint to have one helper
+> >>> doing completely different things and returning two different values
+> >>> based on BPF_F_GET_RAW_RECORD_SIZE.
+> >>
+> >> Yeah, I had the same thought when I first looked at it. But that's the
+> >> exact syntax with bpf_read_branch_records(). Well, we still have time
+> >> to fix the new helper..
+> >>
+> >>>
+> >>> I'm not sure what's best, but I have two alternative proposals:
+> >>>
+> >>> 1. Add two helpers: one to get perf record information (and size will
+> >>> be one of them). Something like bpf_perf_record_query(ctx, flags)
+> >>> where you pass perf ctx and what kind of information you want to read
+> >>> (through flags), and u64 return result returns that (see
+> >>> bpf_ringbuf_query() for such approach). And then have separate helper
+> >>> to read data.
+> >>>
+> >>> 2. Keep one helper, but specify that it always returns record size,
+> >>> even if user specified smaller size to read. And then allow passing
+> >>> buf==NULL && size==0. So passing NULL, 0 -- you get record size.
+> >>> Passing non-NULL buf -- you read data.
+> >>
+> >> AFAICT, this is also confusing.
+> >>
+> >
+> > this is analogous to snprintf() behavior, so not that new and
+> > surprising when you think about it. But if query + read makes more
+> > sense, then it's fine by me
+>
+> Given the name discussion (the other email), I now like one API better.
+>
+> Actually, since we are on this, can we make it more generic, and handle
+> all possible PERF_SAMPLE_* (in enum perf_event_sample_format)? Something
+> like:
+>
+> long bpf_perf_event_read_sample(void *ctx, void *buf, u64 size, u64 flags);
+>
+> WDYT Namhyung?
 
-Hi Peter, could you help to merge this patch?  Thanks!
+Do you mean reading the whole sample data at once?
+Then it needs to parse the sample data format properly
+which is non trivial due to a number of variable length
+fields like callchains and branch stack, etc.
 
-Leo
+Also I'm afraid I might need event configuration info
+other than sample data like attr.type, attr.config,
+attr.sample_type and so on.
+
+Hmm.. maybe we can add it to the ctx directly like ctx.attr_type?
+
+>
+> Another idea is to add another parameter, so that we can pick which
+> PERF_SAMPLE_* to output via bpf_perf_event_read_sample().
+>
+> I think this will cover all cases with sample perf_event. Thoughts?
+
+Yeah, I like this more and it looks easier to use.
+
+Thanks,
+Namhyung

@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F37E5A2F55
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDF35A2F43
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 20:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344321AbiHZStV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 14:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S1345092AbiHZStZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 14:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345297AbiHZSsc (ORCPT
+        with ESMTP id S233859AbiHZSss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:48:32 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF302CDD6
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:45:45 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id m14-20020a170902db0e00b0017336b7f6b9so1552303plx.5
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:45:45 -0700 (PDT)
+        Fri, 26 Aug 2022 14:48:48 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDCAE926B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:45:56 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id d16-20020a17090ad3d000b001fb42eb7467so1431701pjw.9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 11:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=ybKUjgg6ch0GYw6EETwzWzCbbwkxj1dVORCeP7ssStQ=;
-        b=bhdBMEDzmkep7dAIdCuBqStPdNwlsq4AV2zkIiFFXbPVDlm46CrTBdBALQLBVEhgtc
-         g35/2jujy3+oZbNteXe+2HRA3wsitfCWoc9f3qMlgOr7RRJm9UsRtFhalkjq/1eTp0Sc
-         +d8CmSax4UEaJWeCXHtFN3FFcgx8GklKf9T9yRr8nuyCUUIcsYdan/duqFkIYd1Jh9LH
-         xeL5hBxRXYML7vrQk3v8TsgvgUdmKvv/0h3sWnrFdrQXptMlCY/fWBHfK6YJoIOqbj6I
-         vGpVaXscpsFrK3stnZj8usGtgx8LbqcIsTYK/iwFLeJAg7kIG3x3opMd3o88b3zpNROg
-         wkEQ==
+        bh=ed1e9YFm1bkZbR55Fi4AhXJIeJ9QRqoxJ1lB8J6isug=;
+        b=crNOK3R3j37Xfzsw7QfNA/TW9IqQ86Oi4O+K9vKqcNRVNnRTzE1oXlyg98BmhLviPJ
+         KLHYIbkEOkvBDd1CAUcAro992fVQk+vABTN3+2WkuHttTBFSOXWL7HdLVGnMNkkGlzqh
+         aLPSLCRKfUKHTR/OLGAc2hEERwQwipghOY/UpBheYsv7EHMtLiGGJziLMXC2peRxrUHF
+         cHmb9c1lPOczty49iWiq1S0AezJ119qzmB/nm9yxkjrc0X9cBCkG4wMbtm3z6vizScOL
+         mL6P55tmRz+wuKR7IF1Sis2CxD2sQYTuUpPxGvduoZg7KF2JCnPww4DF3z30H5LdM7UD
+         AunQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=ybKUjgg6ch0GYw6EETwzWzCbbwkxj1dVORCeP7ssStQ=;
-        b=zDT9A3sWV1F3HKaWl88huEiekd+RHFTiWh3IpciKTNKUbkYWD9nUpc+zFEVD3hUc9b
-         RiztkLpKNIKBX2W0DpbNKI9T7o1g8SwcDzZ+Ej8aLjBPSylapzDlLTJYl45xV+D8kxCT
-         qpfw6K0pVdrwumNpNEHSJ3+hi3r/Lts9eUaiwZIsw56GWlQ7WwsDBB9Nt9JA844hRT5z
-         GlmoTQmIJwNayW0FPpcfkXT0Vna7nK9U0llIF0UOLZVjbchwm+bI65G4t7ymgyrhwrSq
-         TrRZQgib8e47wy1p2GFelKGGKMxzGx4VGhRROpgB2z5E5OuWyKQl+JsmaWl3MtkJcBZ6
-         j8TQ==
-X-Gm-Message-State: ACgBeo1oJpSzq8YYr4V4Tj1jEyagMTc1VWiMqwXn1fFpZzFjXvjEEXBR
-        taD+hhVs2sVJRB+4Ie9VYRi84GcX/H9R
-X-Google-Smtp-Source: AA6agR40C4F/nP90aB06KBuicRVB8I2AEbMJTiexNJ65vSnFWjzRvwni2isMe6nRr7wWNlzAB4A19RsNV660
+        bh=ed1e9YFm1bkZbR55Fi4AhXJIeJ9QRqoxJ1lB8J6isug=;
+        b=3xvM5VBtX07SOEWDV/XbWyGJXL4BVd5I3k0Yar2zqyfZFYuLVuFNPS0AY9hj+U6hwc
+         Wtz1Q1MEIZW7JBoa/hfqKACkF41wdtkiK3PFx9NnTqO5Zq33d0qPOmvL9dBibuG1aDWk
+         q700NNz6q50Hb61gRg+7t5uvNj8qKqLw8f187etkqB/ERA4sTTlHL02r9zVgnK53H+Li
+         rggXycYasdeTfPI8xEZz4YpAvm0GGn/7xTuhWuKzjbn0VuVY1ai9S7Jw0ET7l50XXQMy
+         GVySh85rNlvgSht+PyCkNZI4b4mjbO0TT+AdhVc9DikrBgwzQsdALjHCYJD4rWk+k2sC
+         FdiA==
+X-Gm-Message-State: ACgBeo0I9JP+kxnMUFXaxjKVeMtTDasdFrOywwR6189w65HdTbd0Xu9M
+        PttQj3V5HVWBFlhW+CdR5Zy9BGq55Pr2
+X-Google-Smtp-Source: AA6agR4VDwzUoO8UNjuYNU++2w8cs4ot7vOoQfFlsV1MVMK5t9LYoz+dLgPORgCghxFYDB3BmNjS+AqIy1UU
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:aa7:9ac5:0:b0:537:e34f:c09c with SMTP id
- x5-20020aa79ac5000000b00537e34fc09cmr897487pfp.63.1661539545151; Fri, 26 Aug
- 2022 11:45:45 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 11:44:57 -0700
+ (user=vipinsh job=sendgmr) by 2002:a17:90a:c1:b0:1f4:f757:6b48 with SMTP id
+ v1-20020a17090a00c100b001f4f7576b48mr5715558pjd.56.1661539555510; Fri, 26 Aug
+ 2022 11:45:55 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 11:44:58 -0700
 In-Reply-To: <20220826184500.1940077-1-vipinsh@google.com>
 Mime-Version: 1.0
 References: <20220826184500.1940077-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826184500.1940077-2-vipinsh@google.com>
-Subject: [PATCH v3 1/4] KVM: selftests: Explicitly set variables based on
- options in dirty_log_perf_test
+Message-ID: <20220826184500.1940077-3-vipinsh@google.com>
+Subject: [PATCH v3 2/4] KVM: selftests: Put command line options in
+ alphabetical order in dirty_log_perf_test
 From:   Vipin Sharma <vipinsh@google.com>
 To:     seanjc@google.com, dmatlack@google.com, pbonzini@redhat.com
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -62,36 +62,97 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable set via -g are also indirectly set by -e option by omitting
-break statement. Set them explicitly so that movement of switch-case
-statements does not unintentionally break features.
+There are 13 command line options and they are not in any order. Put
+them in alphabetical order to make it easy to add new options.
 
 No functional change intended.
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/kvm/dirty_log_perf_test.c       | 36 ++++++++++---------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index f99e39a672d3..a03db7f9f4c0 100644
+index a03db7f9f4c0..acf8b80c91d1 100644
 --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
 +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -411,6 +411,8 @@ int main(int argc, char *argv[])
+@@ -406,51 +406,53 @@ int main(int argc, char *argv[])
+ 
+ 	guest_modes_append_default();
+ 
+-	while ((opt = getopt(argc, argv, "eghi:p:m:nb:f:v:os:x:")) != -1) {
++	while ((opt = getopt(argc, argv, "b:ef:ghi:m:nop:s:v:x:")) != -1) {
+ 		switch (opt) {
++		case 'b':
++			guest_percpu_mem_size = parse_size(optarg);
++			break;
  		case 'e':
  			/* 'e' is for evil. */
  			run_vcpus_while_disabling_dirty_logging = true;
-+			dirty_log_manual_caps = 0;
+ 			dirty_log_manual_caps = 0;
+ 			break;
++		case 'f':
++			p.wr_fract = atoi(optarg);
++			TEST_ASSERT(p.wr_fract >= 1,
++				    "Write fraction cannot be less than one");
 +			break;
  		case 'g':
  			dirty_log_manual_caps = 0;
+ 			break;
++		case 'h':
++			help(argv[0]);
++			break;
+ 		case 'i':
+ 			p.iterations = atoi(optarg);
+ 			break;
+-		case 'p':
+-			p.phys_offset = strtoull(optarg, NULL, 0);
+-			break;
+ 		case 'm':
+ 			guest_modes_cmdline(optarg);
+ 			break;
+ 		case 'n':
+ 			perf_test_args.nested = true;
+ 			break;
+-		case 'b':
+-			guest_percpu_mem_size = parse_size(optarg);
++		case 'o':
++			p.partition_vcpu_memory_access = false;
+ 			break;
+-		case 'f':
+-			p.wr_fract = atoi(optarg);
+-			TEST_ASSERT(p.wr_fract >= 1,
+-				    "Write fraction cannot be less than one");
++		case 'p':
++			p.phys_offset = strtoull(optarg, NULL, 0);
++			break;
++		case 's':
++			p.backing_src = parse_backing_src_type(optarg);
+ 			break;
+ 		case 'v':
+ 			nr_vcpus = atoi(optarg);
+ 			TEST_ASSERT(nr_vcpus > 0 && nr_vcpus <= max_vcpus,
+ 				    "Invalid number of vcpus, must be between 1 and %d", max_vcpus);
+ 			break;
+-		case 'o':
+-			p.partition_vcpu_memory_access = false;
+-			break;
+-		case 's':
+-			p.backing_src = parse_backing_src_type(optarg);
+-			break;
+ 		case 'x':
+ 			p.slots = atoi(optarg);
+ 			break;
+-		case 'h':
+ 		default:
+ 			help(argv[0]);
  			break;
 -- 
 2.37.2.672.g94769d06f0-goog

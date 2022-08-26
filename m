@@ -2,130 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324D35A23E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6505A23EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 11:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244992AbiHZJN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 05:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S245170AbiHZJPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 05:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiHZJNZ (ORCPT
+        with ESMTP id S230207AbiHZJPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:13:25 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A285DCD78F;
-        Fri, 26 Aug 2022 02:13:23 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDYrv5GwNz9v7Gy;
-        Fri, 26 Aug 2022 17:07:59 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCnXxeKjghjdBVRAA--.23684S2;
-        Fri, 26 Aug 2022 10:12:54 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v14 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h and add flags check function
-Date:   Fri, 26 Aug 2022 11:12:28 +0200
-Message-Id: <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
-References: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
+        Fri, 26 Aug 2022 05:15:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B0BBC80F;
+        Fri, 26 Aug 2022 02:15:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4D3CB8300D;
+        Fri, 26 Aug 2022 09:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ABDAC433D6;
+        Fri, 26 Aug 2022 09:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661505332;
+        bh=9AhPT9k1tXyM7Ex7xX37h4PGpYHrw27Da5ufXwHFroQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SS0g6pAhDcUXmHDXUuoJYXQugRLhNxAMG6WUxEKoMfiYj4H/2RgjSNb6QOFeFnFhw
+         L7JfOBe6T5v+oZLQT/NS5orBUq5XYZmC9A7GmaZBNooGrVXY+H0k9mcbRjS2rXeJbo
+         Z9me7oyRPUUx8EccB/bxGq/fywc1z9imkivYBUSWOd/1nf7opx0xe9GAyXBoKyhX1a
+         jPrSsY0ct+2jiSK3TXU8tRCLs6xtIDrQ/lFQ1d3byE2LthFwQ+F1nmllVK5LBznx9j
+         T954/J5ApjbLVaEj5QqgxIcXBQ8YZmlyFCoholKjyeYQDVkFy/8wJT3IWsBsk2mTRB
+         vWarelbCF+Flw==
+Date:   Fri, 26 Aug 2022 11:15:24 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org,
+        me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V6 2/3] PCI: vmd: Add vmd_device_data
+Message-ID: <YwiPLH3ud/+bysi5@lpieralisi>
+References: <20220301041943.2935892-1-david.e.box@linux.intel.com>
+ <20220301041943.2935892-3-david.e.box@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwCnXxeKjghjdBVRAA--.23684S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urW3JFWUGryftw1rWr4fuFg_yoW8uF1kpF
-        yUCa4rKry8GFy2g3s3GFsIya1ag3yfGr17AFZIgwn0vF9ag3y8Jrn7GF43GF15urWruFy2
-        qr42ga15uw1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4JQwgAFsx
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301041943.2935892-3-david.e.box@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, Feb 28, 2022 at 08:19:42PM -0800, David E. Box wrote:
+> Add vmd_device_data to allow adding additional info for driver data. Also
+> refactor the PCI ID list to use PCI_VDEVICE.
 
-In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
-kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
-validate the kfunc parameters.
+I think this must be two patches, (1) conversion to PCI_VDEVICE
+and (2) vmd_device_data.
 
-Also, introduce key_lookup_flags_valid() to check if the caller set in the
-argument only defined flags. Introduce it directly in include/linux/key.h,
-to reduce the risk that the check is not in sync with currently defined
-flags.
+Thanks,
+Lorenzo
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: KP Singh <kpsingh@kernel.org>
----
- include/linux/key.h      | 16 ++++++++++++++++
- security/keys/internal.h |  2 --
- 2 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/key.h b/include/linux/key.h
-index 7febc4881363..e679dbf0c940 100644
---- a/include/linux/key.h
-+++ b/include/linux/key.h
-@@ -88,6 +88,22 @@ enum key_need_perm {
- 	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
- };
- 
-+#define KEY_LOOKUP_CREATE	0x01
-+#define KEY_LOOKUP_PARTIAL	0x02
-+
-+/**
-+ * key_lookup_flags_valid - detect if provided key lookup flags are valid
-+ * @flags: key lookup flags.
-+ *
-+ * Verify whether or not the caller set in the argument only defined flags.
-+ *
-+ * Return: true if flags are valid, false if not.
-+ */
-+static inline bool key_lookup_flags_valid(u64 flags)
-+{
-+	return !(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL));
-+}
-+
- struct seq_file;
- struct user_struct;
- struct signal_struct;
-diff --git a/security/keys/internal.h b/security/keys/internal.h
-index 9b9cf3b6fcbb..3c1e7122076b 100644
---- a/security/keys/internal.h
-+++ b/security/keys/internal.h
-@@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
- 
- extern bool lookup_user_key_possessed(const struct key *key,
- 				      const struct key_match_data *match_data);
--#define KEY_LOOKUP_CREATE	0x01
--#define KEY_LOOKUP_PARTIAL	0x02
- 
- extern long join_session_keyring(const char *name);
- extern void key_change_session_keyring(struct callback_head *twork);
--- 
-2.25.1
-
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> ---
+>  V6
+>    - Inline the declarations for driver data in the vmd_ids list.
+>      Suggested by Jonathan
+>  V5
+>    - New patch
+> 
+>  drivers/pci/controller/vmd.c | 76 ++++++++++++++++++++++++------------
+>  1 file changed, 50 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index cc166c683638..cde6e2cba210 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -69,6 +69,10 @@ enum vmd_features {
+>  	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
+>  };
+>  
+> +struct vmd_device_data {
+> +	enum vmd_features features;
+> +};
+> +
+>  static DEFINE_IDA(vmd_instance_ida);
+>  
+>  /*
+> @@ -710,11 +714,12 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
+>  	vmd_bridge->native_dpc = root_bridge->native_dpc;
+>  }
+>  
+> -static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> +static int vmd_enable_domain(struct vmd_dev *vmd, struct vmd_device_data *info)
+>  {
+>  	struct pci_sysdata *sd = &vmd->sysdata;
+>  	struct resource *res;
+>  	u32 upper_bits;
+> +	unsigned long features = info->features;
+>  	unsigned long flags;
+>  	LIST_HEAD(resources);
+>  	resource_size_t offset[2] = {0};
+> @@ -881,7 +886,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  
+>  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  {
+> -	unsigned long features = (unsigned long) id->driver_data;
+> +	struct vmd_device_data *info = (struct vmd_device_data *)id->driver_data;
+> +	unsigned long features = info->features;
+>  	struct vmd_dev *vmd;
+>  	int err;
+>  
+> @@ -925,7 +931,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  
+>  	spin_lock_init(&vmd->cfg_lock);
+>  	pci_set_drvdata(dev, vmd);
+> -	err = vmd_enable_domain(vmd, features);
+> +	err = vmd_enable_domain(vmd, info);
+>  	if (err)
+>  		goto out_release_instance;
+>  
+> @@ -994,29 +1000,47 @@ static int vmd_resume(struct device *dev)
+>  static SIMPLE_DEV_PM_OPS(vmd_dev_pm_ops, vmd_suspend, vmd_resume);
+>  
+>  static const struct pci_device_id vmd_ids[] = {
+> -	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_201D),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP,},
+> -	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_28C0),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
+> -	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> -	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c3d),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> -	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0xa77f),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> -	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> -	{0,}
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_201D),
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP,
+> +		},
+> +	},
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_28C0),
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW |
+> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> +				    VMD_FEAT_CAN_BYPASS_MSI_REMAP,
+> +		},
+> +	},
+> +	{ PCI_VDEVICE(INTEL, 0x467f),
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+> +		},
+> +	},
+> +	{ PCI_VDEVICE(INTEL, 0x4c3d),
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+> +		},
+> +	},
+> +	{ PCI_VDEVICE(INTEL, 0xa77f),
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+> +		},
+> +	},
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+> +		},
+> +	},
+> +	{ }
+>  };
+>  MODULE_DEVICE_TABLE(pci, vmd_ids);
+>  
+> -- 
+> 2.25.1
+> 
+> 

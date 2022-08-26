@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B050F5A3094
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975875A3097
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 22:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiHZUk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 16:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S1344533AbiHZUlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 16:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243095AbiHZUkX (ORCPT
+        with ESMTP id S235031AbiHZUl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 16:40:23 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD8ED0765;
-        Fri, 26 Aug 2022 13:40:22 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f2a4c51c45so3504106fac.9;
-        Fri, 26 Aug 2022 13:40:22 -0700 (PDT)
+        Fri, 26 Aug 2022 16:41:28 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49935DB070
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:41:27 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-11e86b7379dso2254731fac.10
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 13:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=K/ePAycXqy51oFeXUt6JjGKkq1z8q/7xr7tRKH3+c5k=;
+        b=obakSEJ4izX3iVZj3KOtetmevh8RAX2xSvFVa7lOs66USdVv4m+7jIkQj1Ee92YRzX
+         vwdQC9/B3BhuefYfKDrm9t20eHKN0JvZbcXejyyvF1paXlrHa7K9Wjwgp7oKCM2jvMQG
+         tKJBFGvX0TDPsP1Y8Meus7j6M++aQddvKd28Xm7kNzV8c39UusrUtqyaCZrF0TjA7sKO
+         ZDm2gjuL77EL/lFb51mfkRWM5tyJwN5OaU0+A1uaIOGh1me6gckcgIhe0e18w4USDjqW
+         Hv6ildtotiYcRQgWJTMDj1UsfIthh++fIZ7OAe/gIwNrxolE1eBJNegl5ScCqzJJBjfW
+         5eHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=VC/B2aCmREbDRB0d5cj7IYjvFuzN89g85WyKxEil/CU=;
-        b=KirXgUr77bdD4gWhDmx7SpUOxQ+sRuVg1t6MA1jzD8f4nbj3F81+86jyK2ppGTiVC9
-         OU0NU+wCCXjOi1pq5bKD/1TyAjbFTBONVWrJS/Vi7WSwA1P8YE39gO0bQfnpijhXetz3
-         9dCsYbkP5ujNeGWAWS+FfHAqJwdG18RfkWIlx0UKXE7v4I9FYOzGaT7vA+1PU55YDWaY
-         2OLlKFhM4a5F4x6Qk7de6Nh0wej14vCDN9w09TMzfr1QCKTm+rDuZwaJGWpHJE/pGUEO
-         H7QHBl5stMBlEM652Q8+EXXRu5PjU4CyFGHL2nCioS6bE1NncOzDrAdXdM+zCp+5oNTt
-         wviw==
-X-Gm-Message-State: ACgBeo1roImPCfFzkRfeCxwOu2ds4a13dGcBCBMgk4/buC+NFri41bXf
-        45n3lXr6aERJidg7K+e1K9WqDoGj6JOKjDqR3KQ=
-X-Google-Smtp-Source: AA6agR4Te3dKQ6g6TKR4BckswAseo5LxEUCtZ4KSfu1JnyrPazLFBIFV26Eo/GzBpNZW/s1MlD6JFM2mGBqa6Jj4oeg=
-X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
- em4-20020a0568705b8400b0010cd1fa2f52mr2722690oab.92.1661546421646; Fri, 26
- Aug 2022 13:40:21 -0700 (PDT)
+        bh=K/ePAycXqy51oFeXUt6JjGKkq1z8q/7xr7tRKH3+c5k=;
+        b=F6dKK6JFkTy72KZ78eHi6vl9YXyHW1ceYcg2JFHogFYOfKYqIfZ1nH8u7GhY/effPK
+         qF6+cYvltVKyCDENZsTPxoxVZw3GoycIaKzzPU04O0Lh9kPrCzfZL8CQBq57cdyKNZHC
+         Za+uoGYXXKWZYOogAfQCzuemQbjKS/POh3WEnZnfiyC5xpBvxRFJ/iZVjhW+3A7q2hyJ
+         PbacV4KOAYPTsS5p2v6XLxa1ia0xZ+dN1Go4u6avkpQYNPrsTDtJ5mWk27bTZdxpzAsH
+         hU1KqNvmnADvlIfcOS18Z8BsnXATXVAxXxcSAj523FAhD1nCriqcAPere6zjb4M9q1Bv
+         GgXg==
+X-Gm-Message-State: ACgBeo1QqW2cdJSTdaDSIUCwbIClXduSDp8OFMXGRYSZZOT6lmH9MHxJ
+        d7tHXzaISpW3x0OQnAcxjvAXjGiRX+FSNVLaa1k=
+X-Google-Smtp-Source: AA6agR5p3NlrcAZYv3F09Emqjq7q5ADXiA7NQoyGpPUgZIrMlZUDjjJKMUTRMnsyxm2Jxr1CWDWn1fP7ntCneyFCZWk=
+X-Received: by 2002:a05:6870:3484:b0:11e:4465:3d9b with SMTP id
+ n4-20020a056870348400b0011e44653d9bmr2878995oah.46.1661546486597; Fri, 26 Aug
+ 2022 13:41:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
- <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com> <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
- <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com> <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
- <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com> <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
- <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
-In-Reply-To: <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 26 Aug 2022 13:40:10 -0700
-Message-ID: <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
-Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220826085754.2296572-1-yangyingliang@huawei.com>
+In-Reply-To: <20220826085754.2296572-1-yangyingliang@huawei.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 26 Aug 2022 16:41:15 -0400
+Message-ID: <CADnq5_NomUqdzmoYcsPuOiFP9BCCiC=Vtt3AGiXqc=SmP6SODA@mail.gmail.com>
+Subject: Re: [PATCH -next] drm/amdgpu: add missing pci_disable_device() in amdgpu_pmops_runtime_resume()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, alexander.deucher@amd.com,
+        pavan.ramayanam@amd.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 12:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 26/08/22 22:00, Namhyung Kim wrote:
-> > On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >> Below seems adequate for now, at least logically, but maybe it
-> >> would confuse clang thread-safety analysis?
-> >
-> > I think it's not just about locks, the exit_browser should bail out early
-> > if the setup code was not called.
->
-> In those cases, use_browser is 0 or -1 unless someone has inserted
-> an invalid perf config like "tui.script=on" or "gtk.script=on".
-> So currently, in cases where exit_browser() is called without
-> setup_browser(), it does nothing.  Which means it is only the
-> unconditional mutex_destroy() that needs to be conditional.
+Applied.  Thanks!
 
-Yeah there's a possibility that it can be called with > 0 use_browser
-on some broken config or something.  So I think it's safer and better
-for future changes.
+Alex
 
-Thanks,
-Namhyung
+On Fri, Aug 26, 2022 at 4:50 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+>
+> Add missing pci_disable_device() if amdgpu_device_resume() fails.
+>
+> Fixes: 8e4d5d43cc6c ("drm/amdgpu: Handling of amdgpu_device_resume return value for graceful teardown")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> index 429fcdf28836..de7144b06e93 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> @@ -2563,8 +2563,11 @@ static int amdgpu_pmops_runtime_resume(struct device *dev)
+>                 amdgpu_device_baco_exit(drm_dev);
+>         }
+>         ret = amdgpu_device_resume(drm_dev, false);
+> -       if (ret)
+> +       if (ret) {
+> +               if (amdgpu_device_supports_px(drm_dev))
+> +                       pci_disable_device(pdev);
+>                 return ret;
+> +       }
+>
+>         if (amdgpu_device_supports_px(drm_dev))
+>                 drm_dev->switch_power_state = DRM_SWITCH_POWER_ON;
+> --
+> 2.25.1
+>

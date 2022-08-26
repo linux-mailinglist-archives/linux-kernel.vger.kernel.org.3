@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B3F5A205C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC745A205E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 07:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244709AbiHZFhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 01:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S244482AbiHZFjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 01:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHZFhA (ORCPT
+        with ESMTP id S229631AbiHZFjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:37:00 -0400
+        Fri, 26 Aug 2022 01:39:00 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151AFCEB2A;
-        Thu, 25 Aug 2022 22:36:52 -0700 (PDT)
-X-UUID: 40cb4b3af52a4a089a91cbee1026d513-20220826
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0064ACEB37
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 22:38:58 -0700 (PDT)
+X-UUID: de99f75515ae4d33a488e423986c5be0-20220826
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=vr+SHYsQa0ePNCtafTguBsuC9if01uyMQhqyKREu3S8=;
-        b=RfUeec6gH6goFXeLfeBg1LHOrv+jbDkOZm5vi8EqcwGjwI/xhLV897O6OMOMuwuPT9xieKqnQdDyq4+kQPTvoRzH5OGH+V2z2nfGGkMW2lNbv3Z+7rcaylkMyRosdssX56wrK+37GpBBO6ys6KDwOxcegmJXHXtHjCVLGgg57qM=;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cxEgDl4+jLLmXItOb4ZpoNKLX8XnInSqhwiq/zHFf9U=;
+        b=rJqhTTcyzFTXdy5oL9LA683w4UluYE0//uU0PLz5aZqU6qhAgkswC6jut9ilTE50jh4Mnql+JApSyt2UZBAtOoAH1YLiJ1MpU5yo0LegVNludEZkz3EefCQkW699WUR46b/tntxPdut/qHTPf+5qHrOPXT1hs05VfNayEdts11I=;
+X-CID-UNFAMILIAR: 1
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:b3e1148c-2d1f-4c76-8ba7-f5d0bc246fbe,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:0245a355-e800-47dc-8adf-0c936acf4f1b,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
-        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 40cb4b3af52a4a089a91cbee1026d513-20220826
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1855589256; Fri, 26 Aug 2022 13:36:45 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 26 Aug 2022 13:36:44 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 26 Aug 2022 13:36:44 +0800
-Message-ID: <1a16cce9fe164bafc06ae193310be71c6f645d75.camel@mediatek.com>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: mediatek,tphy: add property to
- set pre-emphasis
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+X-CID-O-INFO: VERSION:1.1.10,REQID:027c1268-b6e0-4c60-814a-03a1e0785a6e,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Releas
+        e_Ham,ACTION:release,TS:49
+X-CID-INFO: VERSION:1.1.10,REQID:027c1268-b6e0-4c60-814a-03a1e0785a6e,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_
+        HamU,ACTION:release,TS:49
+X-CID-META: VersionHash:84eae18,CLOUDID:0a5e2c20-1c20-48a5-82a0-25f9c331906d,C
+        OID:58d5f93ec29e,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: de99f75515ae4d33a488e423986c5be0-20220826
+Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1514045262; Fri, 26 Aug 2022 13:38:51 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 26 Aug 2022 13:38:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 26 Aug 2022 13:38:50 +0800
+Message-ID: <57b31acfc4f5bcff3c73c35bc30805b84af3bfbd.camel@mediatek.com>
+Subject: Re: drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused
+ variable 'svs_of_match'
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     kernel test robot <lkp@intel.com>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
         <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Fri, 26 Aug 2022 13:36:43 +0800
-In-Reply-To: <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
-References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
-         <20220819091344.2274-2-chunfeng.yun@mediatek.com>
-         <438da392-f419-ad76-7e91-aa4aab36e12c@linaro.org>
-         <816ecf6287533137b750c8bde9de5830e4229c56.camel@mediatek.com>
-         <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Date:   Fri, 26 Aug 2022 13:38:50 +0800
+In-Reply-To: <202208210442.ZL8oxHze-lkp@intel.com>
+References: <202208210442.ZL8oxHze-lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -66,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 X-MTK:  N
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,55 +71,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-23 at 13:24 +0300, Krzysztof Kozlowski wrote:
-> On 22/08/2022 10:07, Chunfeng Yun wrote:
-> > On Fri, 2022-08-19 at 15:15 +0300, Krzysztof Kozlowski wrote:
-> > > On 19/08/2022 12:13, Chunfeng Yun wrote:
-> > > > Add a property to set usb2 phy's pre-emphasis.
-> > > > 
-> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml | 7
-> > > > +++++++
-> > > >  1 file changed, 7 insertions(+)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > index 848edfb1f677..aee2f3027371 100644
-> > > > --- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > +++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > @@ -219,6 +219,13 @@ patternProperties:
-> > > >          minimum: 1
-> > > >          maximum: 15
-> > > >  
-> > > > +      mediatek,pre-emphasis:
-> > > > +        description:
-> > > > +          The selection of pre-emphasis (U2 phy)
-> > > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > > > +        minimum: 1
-> > > > +        maximum: 3
-> > > 
-> > > Instead of hard-coding register values in bindings, you should
-> > > rather
-> > > describe here feature/effect. If it is in units, use unit
-> > > suffixes.
-> > > If
-> > > it is some choice, usually string enum is appropriate.
-> > 
-> > How about changing description as bellow:
-> > 
-> > "The level of pre-emphasis, increases one level, boosts the
-> > relative
-> > amplitudes of signal's higher frequencies components about 4.16%
-> > (U2
-> > phy)"
-> > 
-> 
-> Still the question is what is the unit. 4.16%?
-No unit, it's a level value, like an index of array.
+Dear all,
 
+Sorry for late reply. These issues are fixed by below patches. Thanks for the
+heads-up.
+
+  drivers/soc/mediatek/mtk-svs.c:1481:12: error: unused function 'svs_suspend'
+[-Werror,-Wunused-function]
+  static int svs_suspend(struct device *dev)
+             ^
+  drivers/soc/mediatek/mtk-svs.c:1515:12: error: unused function 'svs_resume' [-
+Werror,-Wunused-function]
+  static int svs_resume(struct device *dev)
+
+=> fixed by 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220622175649.1856337-1-nathan@kernel.org/
+
+>> drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
+'svs_of_match' [-Wunused-const-variable]
+   static const struct of_device_id svs_of_match[] = {
+
+=> fixed by 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220726141653.177948-5-angelogioacchino.delregno@collabora.com/
+
+Sincerely,
+Roger Lu.
+
+On Sun, 2022-08-21 at 04:38 +0800, kernel test robot wrote:
+> Hi Roger,
 > 
-> Best regards,
-> Krzysztof
+> FYI, the error/warning still remains.
+> 
+> tree:   
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIYXvgh9$
+>   master
+> head:   cc1807b9158a909ffe829a5e222be756c57c9a90
+> commit: 681a02e9500073cd8b9c25a04f06166254b5a879 soc: mediatek: SVS: introduce
+> MTK SVS engine
+> date:   9 weeks ago
+> config: hexagon-randconfig-r022-20220821 (
+> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220821/202208210442.ZL8oxHze-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRKmS3VSy$
+>  )
+> compiler: clang version 16.0.0 (
+> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIUR1DJG$
+> $  c9a41fe60ab62f7a40049c100adcc8087a47669b)
+> reproduce (this is a W=1 build):
+>         wget 
+> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRF4kJosK$
+>   -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # 
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=681a02e9500073cd8b9c25a04f06166254b5a879__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRNjbQMgG$
+>  
+>         git remote add linus 
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIYXvgh9$
+>  
+>         git fetch --no-tags linus master
+>         git checkout 681a02e9500073cd8b9c25a04f06166254b5a879
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
+> O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/mediatek/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/soc/mediatek/mtk-svs.c:853:12: warning: unused function
+> 'svs_suspend' [-Wunused-function]
+>    static int svs_suspend(struct device *dev)
+>               ^
+>    drivers/soc/mediatek/mtk-svs.c:880:12: warning: unused function
+> 'svs_resume' [-Wunused-function]
+>    static int svs_resume(struct device *dev)
+>               ^
+> > > drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
+> > > 'svs_of_match' [-Wunused-const-variable]
+> 
+>    static const struct of_device_id svs_of_match[] = {
+>                                     ^
+>    3 warnings generated.
+> 
+> 
+> vim +/svs_of_match +1287 drivers/soc/mediatek/mtk-svs.c
+> 
+>   1286	
+> > 1287	static const struct of_device_id svs_of_match[] = {
+> 
+>   1288		{
+>   1289			.compatible = "mediatek,mt8183-svs",
+>   1290			.data = &svs_mt8183_platform_data,
+>   1291		}, {
+>   1292			/* Sentinel */
+>   1293		},
+>   1294	};
+>   1295	
+> 
 

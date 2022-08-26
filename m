@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050755A266A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8C45A266E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 13:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343925AbiHZLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 07:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        id S245315AbiHZLEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 07:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245449AbiHZLB3 (ORCPT
+        with ESMTP id S1344172AbiHZLDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 07:01:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46123DCFC3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661511511;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jMnbTKtNSpTsqq0eZVxc5+MQ+KePmpUNSlwTet2oL2k=;
-        b=eGtLDKFj7bMqPqGtzox0UOQ3E+T//5Syz7kr6b96pblaX1i0qRwQANBTFl69SxALsp6rez
-        zQ0mF84CuWsTrk9mblo35rSzs9u2OYNus2riqZBdTNUnZOQ/vs8q/X0TfUUex4ZzmQ4NN3
-        5pe86DAZaHJyCvi7Py0dbSLTrHAdl10=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-398-lZUeC8IMPjmYj33URvZ0Tg-1; Fri, 26 Aug 2022 06:58:29 -0400
-X-MC-Unique: lZUeC8IMPjmYj33URvZ0Tg-1
-Received: by mail-ej1-f69.google.com with SMTP id hp36-20020a1709073e2400b0073d6bee146aso487257ejc.20
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 03:58:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=jMnbTKtNSpTsqq0eZVxc5+MQ+KePmpUNSlwTet2oL2k=;
-        b=BBhrN6sl3rQ1WJvhzD8vUkqlZe1/9knJWxeKqOwHHsNTMM0OuTTTqm60MP7qZXqUSy
-         R7/yKVqcC6vtFLmvCp7tFqEOokJFWjBO+k3ZnALof96HRmA+pZY1IutatiNim4O8cwlV
-         tjE53cAKz/86eI7GbsXIcNwFLI43a02n4jKXsMRG6Q6Ullx9vZNnvAtIZ6ISLXlktTx5
-         QlmNoQl8B1mDV4wwY2H1uudpTQZpS/64iTDa0kmTs2la4l/3+U7wGz/yoj/jiu8qJJLE
-         4IfkkvZ74GvQICdOkV/MVAJCsfCaEwELM28wlGzGKvfXXkBCqUYNRhkBtD3trsJ3fd+I
-         dsXw==
-X-Gm-Message-State: ACgBeo0+SfTywMI1CgH2+RIIz0UT0b0xGkdKIfk99/K/2glk5J1r7zwW
-        Rzk61sSS7MKYrQ9mpFKmxn9A67gZln+sf1QZ/Y/IhAMJujvxhI09EvX6B1LCFaJChQ4HKMWiU9d
-        F7eEjpxpR5ZRiURyZTv+Sjx/J
-X-Received: by 2002:a05:6402:5150:b0:447:933d:ec65 with SMTP id n16-20020a056402515000b00447933dec65mr6212667edd.80.1661511508657;
-        Fri, 26 Aug 2022 03:58:28 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4J7blDIUmOh5lFPHJwf/tJLIYkgJgvljjD4T11ziyn6v4vnxonXD5Bpxyrz7ntlO6vhSx/Hw==
-X-Received: by 2002:a05:6402:5150:b0:447:933d:ec65 with SMTP id n16-20020a056402515000b00447933dec65mr6212653edd.80.1661511508460;
-        Fri, 26 Aug 2022 03:58:28 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id p17-20020a50cd91000000b004479cec6496sm1102859edi.75.2022.08.26.03.58.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 03:58:27 -0700 (PDT)
-Message-ID: <99364855-b4e9-8a69-e1ca-ed09d103e4c8@redhat.com>
-Date:   Fri, 26 Aug 2022 12:58:08 +0200
+        Fri, 26 Aug 2022 07:03:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AE7DABA4;
+        Fri, 26 Aug 2022 04:01:00 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oRX58-0007DN-5g; Fri, 26 Aug 2022 13:00:58 +0200
+Message-ID: <a3ab81d9-0fe1-0bc9-b265-37793c11ff77@leemhuis.info>
+Date:   Fri, 26 Aug 2022 13:00:57 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
 Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>
-Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, peterx@redhat.com, corbet@lwn.net,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        shuah@kernel.org, seanjc@google.com, drjones@redhat.com,
-        dmatlack@google.com, bgardon@google.com, ricarkol@google.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com> <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org> <YwTn2r6FLCx9mAU7@google.com>
- <87a67uwve8.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-In-Reply-To: <87a67uwve8.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     gomapo2868@safe-cart.com, LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: [Regression] Bug 216395 - XP-Pen Star G430S stops working on any
+ kernel newer than 5.18.7
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661511661;de529bd0;
+X-HE-SMSGID: 1oRX58-0007DN-5g
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 22:35, Marc Zyngier wrote:
->> Heh, yeah I need to get that out the door. I'll also note that Gavin's
->> changes are still relevant without that series, as we do write unprotect
->> in parallel at PTE granularity after commit f783ef1c0e82 ("KVM: arm64:
->> Add fast path to handle permission relaxation during dirty logging").
->
-> Ah, true. Now if only someone could explain how the whole
-> producer-consumer thing works without a trace of a barrier, that'd be
-> great...
+Hi, this is your Linux kernel regression tracker.
 
-Do you mean this?
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported. That's why I decided to forward it by
+mail to those that afaics should handle this.
 
-void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-{
-         struct kvm_dirty_gfn *entry;
+To quote from https://bugzilla.kernel.org/show_bug.cgi?id=216395 :
 
-         /* It should never get full */
-         WARN_ON_ONCE(kvm_dirty_ring_full(ring));
+>  gomapo2868@safe-cart.com 2022-08-22 16:28:00 UTC
+> 
+> XP-Pen Star G430S stops working on newer kernels than 5.18.7 (5.18.8, 5.19, 6.0rc1 tested)
+> It seems to use the uclogic drivers.
 
-         entry = &ring->dirty_gfns[ring->dirty_index & (ring->size - 1)];
+See the ticket for details and further comments.
 
-         entry->slot = slot;
-         entry->offset = offset;
-         /*
-          * Make sure the data is filled in before we publish this to
-          * the userspace program.  There's no paired kernel-side reader.
-          */
-         smp_wmb();
-         kvm_dirty_gfn_set_dirtied(entry);
-         ring->dirty_index++;
-         trace_kvm_dirty_ring_push(ring, slot, offset);
-}
+Please look into the issue if you're among the main recipients of this
+mail (and not just CCed). I hope I picked the right people to sent this
+to, if not just let everyone know (and apologies for getting it wrong!).
 
-The matching smp_rmb() is in userspace.
+Anyway, to ensure this is not forgotten lets get this tracked by the the
+Linux kernel regression tracking bot:
 
-Paolo
+#regzbot introduced: v5.18..5.18.7
+https://bugzilla.kernel.org/show_bug.cgi?id=216395
+#regzbot ignore-activity
 
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report in bugzilla, as the kernel's documentation calls
+for; above page explains why this is important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

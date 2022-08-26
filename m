@@ -2,256 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578EF5A3019
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79B15A3013
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 21:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344726AbiHZTgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 15:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S1344469AbiHZTgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 15:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344617AbiHZTgl (ORCPT
+        with ESMTP id S230408AbiHZTgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 15:36:41 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9E8D2E8A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 12:36:37 -0700 (PDT)
-Received: from localhost.localdomain (unknown [95.31.169.23])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 7A66E40D403D;
-        Fri, 26 Aug 2022 19:36:33 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Starke <daniel.starke@siemens.com>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] tty: n_gsm: avoid call of sleeping functions from atomic context
-Date:   Fri, 26 Aug 2022 22:35:45 +0300
-Message-Id: <20220826193545.20363-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+        Fri, 26 Aug 2022 15:36:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA82DCE49A;
+        Fri, 26 Aug 2022 12:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661542571; x=1693078571;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iSj/SuZhPON+rDmdOdwBzP5dOtaScuuVxlTIXwYMKPE=;
+  b=DRt/p4S7CY0viVcYn0LywGrg+HrBcUCJhmQLo8HoqzUeYB+qRvxyVvW4
+   gWyjgvOcuAcIMJ/H1xXOgDwKthBmpEGvKcburnsLqDO6ysDPZ2UFszDkV
+   w8EBCSGY0Bxh69TojQBDItbGWGzWO5GtEP/IIuRGesOdWli5ryVA94Mcj
+   Yh5Df2M0RNiq6ZbL+DJe+ACClc+OMagH9q8VdfUUBzaNPYlBdUv5q2Txm
+   W74U0MebEUWCxTQZZnZkzyzPCwtn700sJwwjcxqFZ06ybZhAYY17fktmn
+   lXNr6sk/J9Fb0rKeMLP3vkCjjk89bpgYqqxtEzA1xqCRjFxi7zPbx2SRC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="274332374"
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="274332374"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:36:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="671592528"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:36:00 -0700
+Message-ID: <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
+Date:   Fri, 26 Aug 2022 22:35:53 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-17-irogers@google.com>
+ <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
+ <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
+ <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
+ <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
+ <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reports the following problem:
+On 26/08/22 21:26, Namhyung Kim wrote:
+> On Fri, Aug 26, 2022 at 10:48 AM Ian Rogers <irogers@google.com> wrote:
+>>
+>> On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 26/08/22 19:06, Ian Rogers wrote:
+>>>> On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>
+>>>>> On 24/08/22 18:38, Ian Rogers wrote:
+>>>>>> Add annotations to describe lock behavior. Add unlocks so that mutexes
+>>>>>> aren't conditionally held on exit from perf_sched__replay. Add an exit
+>>>>>> variable so that thread_func can terminate, rather than leaving the
+>>>>>> threads blocked on mutexes.
+>>>>>>
+>>>>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>>>>> ---
+>>>>>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
+>>>>>>  1 file changed, 29 insertions(+), 17 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+>>>>>> index 7e4006d6b8bc..b483ff0d432e 100644
+>>>>>> --- a/tools/perf/builtin-sched.c
+>>>>>> +++ b/tools/perf/builtin-sched.c
+>>>>>> @@ -246,6 +246,7 @@ struct perf_sched {
+>>>>>>       const char      *time_str;
+>>>>>>       struct perf_time_interval ptime;
+>>>>>>       struct perf_time_interval hist_time;
+>>>>>> +     volatile bool   thread_funcs_exit;
+>>>>>>  };
+>>>>>>
+>>>>>>  /* per thread run time data */
+>>>>>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
+>>>>>>       prctl(PR_SET_NAME, comm2);
+>>>>>>       if (fd < 0)
+>>>>>>               return NULL;
+>>>>>> -again:
+>>>>>> -     ret = sem_post(&this_task->ready_for_work);
+>>>>>> -     BUG_ON(ret);
+>>>>>> -     mutex_lock(&sched->start_work_mutex);
+>>>>>> -     mutex_unlock(&sched->start_work_mutex);
+>>>>>>
+>>>>>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+>>>>>> +     while (!sched->thread_funcs_exit) {
+>>>>>> +             ret = sem_post(&this_task->ready_for_work);
+>>>>>> +             BUG_ON(ret);
+>>>>>> +             mutex_lock(&sched->start_work_mutex);
+>>>>>> +             mutex_unlock(&sched->start_work_mutex);
+>>>>>>
+>>>>>> -     for (i = 0; i < this_task->nr_events; i++) {
+>>>>>> -             this_task->curr_event = i;
+>>>>>> -             perf_sched__process_event(sched, this_task->atoms[i]);
+>>>>>> -     }
+>>>>>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+>>>>>>
+>>>>>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+>>>>>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+>>>>>> -     ret = sem_post(&this_task->work_done_sem);
+>>>>>> -     BUG_ON(ret);
+>>>>>> +             for (i = 0; i < this_task->nr_events; i++) {
+>>>>>> +                     this_task->curr_event = i;
+>>>>>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
+>>>>>> +             }
+>>>>>>
+>>>>>> -     mutex_lock(&sched->work_done_wait_mutex);
+>>>>>> -     mutex_unlock(&sched->work_done_wait_mutex);
+>>>>>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+>>>>>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+>>>>>> +             ret = sem_post(&this_task->work_done_sem);
+>>>>>> +             BUG_ON(ret);
+>>>>>>
+>>>>>> -     goto again;
+>>>>>> +             mutex_lock(&sched->work_done_wait_mutex);
+>>>>>> +             mutex_unlock(&sched->work_done_wait_mutex);
+>>>>>> +     }
+>>>>>> +     return NULL;
+>>>>>>  }
+>>>>>>
+>>>>>>  static void create_tasks(struct perf_sched *sched)
+>>>>>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+>>>>>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+>>>>>>  {
+>>>>>>       struct task_desc *task;
+>>>>>>       pthread_attr_t attr;
+>>>>>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
+>>>>>>  }
+>>>>>>
+>>>>>>  static void wait_for_tasks(struct perf_sched *sched)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>>>>>>  {
+>>>>>>       u64 cpu_usage_0, cpu_usage_1;
+>>>>>>       struct task_desc *task;
+>>>>>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+>>>>>>  }
+>>>>>>
+>>>>>>  static void run_one_test(struct perf_sched *sched)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>>>>>>  {
+>>>>>>       u64 T0, T1, delta, avg_delta, fluct;
+>>>>>>
+>>>>>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
+>>>>>>       print_task_traces(sched);
+>>>>>>       add_cross_task_wakeups(sched);
+>>>>>>
+>>>>>> +     sched->thread_funcs_exit = false;
+>>>>>>       create_tasks(sched);
+>>>>>>       printf("------------------------------------------------------------\n");
+>>>>>>       for (i = 0; i < sched->replay_repeat; i++)
+>>>>>>               run_one_test(sched);
+>>>>>>
+>>>>>> +     sched->thread_funcs_exit = true;
+>>>>>> +     mutex_unlock(&sched->start_work_mutex);
+>>>>>> +     mutex_unlock(&sched->work_done_wait_mutex);
+>>>>>
+>>>>> I think you still need to wait for the threads to exit before
+>>>>> destroying the mutexes.
+>>>>
+>>>> This is a pre-existing issue and beyond the scope of this patch set.
+>>>
+>>> You added the mutex_destroy functions in patch 8, so it is still
+>>> fallout from that.
+>>
+>> In the previous code the threads were blocked on mutexes that were
+>> stack allocated and the stack memory went away. You are correct to say
+>> that to those locks I added an init and destroy call. The lifetime of
+>> the mutex was wrong previously and remains wrong in this change.
+> 
+> I think you fixed the lifetime issue with sched->thread_funcs_exit here.
+> All you need to do is calling pthread_join() after the mutex_unlock, no?
 
-BUG: sleeping function called from invalid context at kernel/printk/printk.c:2347
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1105, name: syz-executor423
-3 locks held by syz-executor423/1105:
- #0: ffff8881468b9098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x90 drivers/tty/tty_ldisc.c:266
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: tty_write_lock drivers/tty/tty_io.c:952 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: do_tty_write drivers/tty/tty_io.c:975 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: file_tty_write.constprop.0+0x2a8/0x8e0 drivers/tty/tty_io.c:1118
- #2: ffff88801b06c398 (&gsm->tx_lock){....}-{2:2}, at: gsmld_write+0x5e/0x150 drivers/tty/n_gsm.c:2717
-irq event stamp: 3482
-hardirqs last  enabled at (3481): [<ffffffff81d13343>] __get_reqs_available+0x143/0x2f0 fs/aio.c:946
-hardirqs last disabled at (3482): [<ffffffff87d39722>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (3482): [<ffffffff87d39722>] _raw_spin_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:159
-softirqs last  enabled at (3408): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-softirqs last disabled at (3401): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 2 PID: 1105 Comm: syz-executor423 Not tainted 5.10.137-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x167 lib/dump_stack.c:118
- ___might_sleep.cold+0x1e8/0x22e kernel/sched/core.c:7304
- console_lock+0x19/0x80 kernel/printk/printk.c:2347
- do_con_write+0x113/0x1de0 drivers/tty/vt/vt.c:2909
- con_write+0x22/0xc0 drivers/tty/vt/vt.c:3296
- gsmld_write+0xd0/0x150 drivers/tty/n_gsm.c:2720
- do_tty_write drivers/tty/tty_io.c:1028 [inline]
- file_tty_write.constprop.0+0x502/0x8e0 drivers/tty/tty_io.c:1118
- call_write_iter include/linux/fs.h:1903 [inline]
- aio_write+0x355/0x7b0 fs/aio.c:1580
- __io_submit_one fs/aio.c:1952 [inline]
- io_submit_one+0xf45/0x1a90 fs/aio.c:1999
- __do_sys_io_submit fs/aio.c:2058 [inline]
- __se_sys_io_submit fs/aio.c:2028 [inline]
- __x64_sys_io_submit+0x18c/0x2f0 fs/aio.c:2028
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
+Like this maybe:
 
-The problem happens in the following control flow:
-
-gsmld_write(...)
-spin_lock_irqsave(&gsm->tx_lock, flags) // taken a spinlock on TX data
- con_write(...)
-  do_con_write(...)
-   console_lock()
-    might_sleep() // -> bug
-
-As far as console_lock() might sleep it should not be called with
-spinlock held.
-
-The patch replaces tx_lock spinlock with mutex in order to avoid the
-problem.
-
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: 32dd59f96924 ("tty: n_gsm: fix race condition in gsmld_write()")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- drivers/tty/n_gsm.c | 33 +++++++++++++++------------------
- 1 file changed, 15 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index cb5ed4155a8d..475bd756f52e 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -235,7 +235,7 @@ struct gsm_mux {
- 	int old_c_iflag;		/* termios c_iflag value before attach */
- 	bool constipated;		/* Asked by remote to shut up */
- 
--	spinlock_t tx_lock;
-+	struct mutex tx_mutex;
- 	unsigned int tx_bytes;		/* TX data outstanding */
- #define TX_THRESH_HI		8192
- #define TX_THRESH_LO		2048
-@@ -825,10 +825,9 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- 
- static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- {
--	unsigned long flags;
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	__gsm_data_queue(dlci, msg);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
+diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+index b483ff0d432e..8090c1218855 100644
+--- a/tools/perf/builtin-sched.c
++++ b/tools/perf/builtin-sched.c
+@@ -3326,6 +3326,13 @@ static int perf_sched__replay(struct perf_sched *sched)
+ 	sched->thread_funcs_exit = true;
+ 	mutex_unlock(&sched->start_work_mutex);
+ 	mutex_unlock(&sched->work_done_wait_mutex);
++	/* Get rid of threads so they won't be upset by mutex destruction */
++	for (i = 0; i < sched->nr_tasks; i++) {
++		int err = pthread_join(sched->tasks[i]->thread, NULL);
++
++		if (err)
++			pr_err("pthread_join() failed for task nr %lu, error %d\n", i, err);
++	}
+ 	return 0;
  }
  
- /**
-@@ -1019,13 +1018,12 @@ static void gsm_dlci_data_sweep(struct gsm_mux *gsm)
- 
- static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- {
--	unsigned long flags;
- 	int sweep;
- 
- 	if (dlci->constipated)
- 		return;
- 
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	sweep = (dlci->gsm->tx_bytes < TX_THRESH_LO);
- 	if (dlci->gsm->tx_bytes == 0) {
-@@ -1036,7 +1034,7 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- 	}
- 	if (sweep)
- 		gsm_dlci_data_sweep(dlci->gsm);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /*
-@@ -1258,7 +1256,6 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
- 						const u8 *data, int clen)
- {
- 	u8 buf[1];
--	unsigned long flags;
- 
- 	switch (command) {
- 	case CMD_CLD: {
-@@ -1280,9 +1277,9 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
- 		gsm->constipated = false;
- 		gsm_control_reply(gsm, CMD_FCON, NULL, 0);
- 		/* Kick the link in case it is idling */
--		spin_lock_irqsave(&gsm->tx_lock, flags);
-+		mutex_lock(&gsm->tx_mutex);
- 		gsm_data_kick(gsm, NULL);
--		spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+		mutex_unlock(&gsm->tx_mutex);
- 		break;
- 	case CMD_FCOFF:
- 		/* Modem wants us to STFU */
-@@ -2203,7 +2200,7 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
- 	init_waitqueue_head(&gsm->event);
- 	spin_lock_init(&gsm->control_lock);
--	spin_lock_init(&gsm->tx_lock);
-+	mutex_init(&gsm->tx_mutex);
- 
- 	if (gsm->encoding == 0)
- 		gsm->receive = gsm0_receive;
-@@ -2234,6 +2231,7 @@ static void gsm_free_mux(struct gsm_mux *gsm)
- 		}
- 	}
- 	mutex_destroy(&gsm->mutex);
-+	mutex_destroy(&gsm->tx_mutex);
- 	kfree(gsm->txframe);
- 	kfree(gsm->buf);
- 	kfree(gsm);
-@@ -2304,6 +2302,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_lock_init(&gsm->lock);
- 	mutex_init(&gsm->mutex);
-+	mutex_init(&gsm->tx_mutex);
- 	kref_init(&gsm->ref);
- 	INIT_LIST_HEAD(&gsm->tx_list);
- 
-@@ -2331,6 +2330,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	spin_unlock(&gsm_mux_lock);
- 	if (i == MAX_MUX) {
- 		mutex_destroy(&gsm->mutex);
-+		mutex_destroy(&gsm->tx_mutex);
- 		kfree(gsm->txframe);
- 		kfree(gsm->buf);
- 		kfree(gsm);
-@@ -2654,16 +2654,15 @@ static int gsmld_open(struct tty_struct *tty)
- static void gsmld_write_wakeup(struct tty_struct *tty)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
--	unsigned long flags;
- 
- 	/* Queue poll */
- 	clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	gsm_data_kick(gsm, NULL);
- 	if (gsm->tx_bytes < TX_THRESH_LO) {
- 		gsm_dlci_data_sweep(gsm);
- 	}
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
-@@ -2706,7 +2705,6 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 			   const unsigned char *buf, size_t nr)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
--	unsigned long flags;
- 	int space;
- 	int ret;
- 
-@@ -2714,14 +2712,13 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 		return -ENODEV;
- 
- 	ret = -ENOBUFS;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	space = tty_write_room(tty);
- 	if (space >= nr)
- 		ret = tty->ops->write(tty, buf, nr);
- 	else
- 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
--
-+	mutex_unlock(&gsm->tx_mutex);
- 	return ret;
- }
- 
--- 
-2.25.1
+
 

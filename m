@@ -2,50 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7515A33AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1BD5A33B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345264AbiH0CD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 22:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S1345280AbiH0CIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 22:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiH0CD1 (ORCPT
+        with ESMTP id S230220AbiH0CIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 22:03:27 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375BBDAA37
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 19:03:24 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661565802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/7slZr7aKprYNwHgvO651SPT0Z8XLhxiDf8lcRtpQw=;
-        b=tDZZB4JRrLkqVe4E2jf4nrLsdHCCIn8o015HtLYrQN3xj39KJHXil5iV8dnAPPTXtbJecy
-        UIPJXhTCbR15TLbIwBxx3EfH+wV3DwCOQGdGWxv7WtyIGNTomfPmdWiWSpVZzjbM0urfrz
-        1NQUuRgjfzsnqMHIzpO0VYTA7Wk+Q1I=
+        Fri, 26 Aug 2022 22:08:13 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F07C0B5E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 19:08:12 -0700 (PDT)
+Received: from localhost.localdomain (unknown [80.240.223.29])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 5BDEF40D403D;
+        Sat, 27 Aug 2022 02:08:11 +0000 (UTC)
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Evgeniy Baskov <baskov@ispras.ru>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH v6 0/5] Parse CONFIG_CMDLINE in compressed kernel
+Date:   Sat, 27 Aug 2022 05:08:05 +0300
+Message-Id: <cover.1661565218.git.baskov@ispras.ru>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: Re: [PATCH 09/10] hugetlb: remove meaningless BUG_ON(huge_pte_none())
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20220826092422.39591-10-linmiaohe@huawei.com>
-Date:   Sat, 27 Aug 2022 10:03:19 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <399D37BF-B33B-476F-97D4-AEB812316617@linux.dev>
-References: <20220826092422.39591-1-linmiaohe@huawei.com>
- <20220826092422.39591-10-linmiaohe@huawei.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,16 +41,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CONFIG_CMDLINE_BOOL and CONFIG_CMDLINE_OVERRIDE were ignored during
+options lookup in compressed kernel, including earlyprintk option,
+so it was impossible to get earlyprintk messages from that stage
+of boot process via command line provided at compile time.
+Being able to enable earlyprintk via compile-time option might
+be desirable for booting on systems with broken UEFI command line
+arguments via EFISTUB.
 
+Changes in v2:
 
-> On Aug 26, 2022, at 17:24, Miaohe Lin <linmiaohe@huawei.com> wrote:
-> 
-> When code reaches here, invalid page would have been accessed if huge pte
-> is none. So this BUG_ON(huge_pte_none()) is meaningless. Remove it.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+* Compute resulting cmdline string once if needed and then reuse it.
+  Store concatenation result in a static buffer.
+* Add strlcat() to compressed kernel to simplify the code.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Changes in v3:
 
-Thanks.
+v2 had a bug: cmd_line_ptr was set to a pointer to a buffer inside
+a kernel before kernel relocation, that makes this pointer invalid.
+
+* Replace the pointer by a boolean variable to avoid storing a pointer,
+  since it becomes invalid during kernel relocation.
+
+Changes in v4:
+
+* Use better wording for commit messages.
+* Add buffer overflow check to strlcat().
+* Factor out common logic of cmdline resolving into helper function.
+
+Changes in v5:
+
+* Use strscpy() instead of strlcpy().
+
+Changes in v6:
+
+* Remove superfluous new line.
+* Rename resolve_cmdline() to cmdline_prepare().
+* Move shared/setup-cmdline.h to shared/cmdline.h
+
+Evgeniy Baskov (5):
+  x86/boot: Add strlcat() and strscpy() to compressed kernel
+  x86: Add cmdline_prepare() helper
+  x86/setup: Use cmdline_prepare() in setup.c
+  x86/boot: Use cmdline_prapare() in compressed kernel
+  x86/boot: Remove no longer needed includes
+
+ arch/x86/boot/compressed/cmdline.c      | 24 +++++++++++-
+ arch/x86/boot/compressed/ident_map_64.c |  4 --
+ arch/x86/boot/compressed/kaslr.c        |  4 --
+ arch/x86/boot/compressed/misc.h         |  1 +
+ arch/x86/boot/compressed/string.c       | 50 +++++++++++++++++++++++++
+ arch/x86/include/asm/shared/cmdline.h   | 37 ++++++++++++++++++
+ arch/x86/kernel/setup.c                 | 22 ++---------
+ arch/x86/purgatory/purgatory.c          |  1 +
+ 8 files changed, 115 insertions(+), 28 deletions(-)
+ create mode 100644 arch/x86/include/asm/shared/cmdline.h
+
+-- 
+2.37.2
 

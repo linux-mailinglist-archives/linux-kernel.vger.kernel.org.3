@@ -2,158 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E07B5A35CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD705A35D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243814AbiH0IJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 04:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S233597AbiH0I1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 04:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiH0IJk (ORCPT
+        with ESMTP id S231222AbiH0I1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 04:09:40 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85AD55AA;
-        Sat, 27 Aug 2022 01:09:38 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-333a4a5d495so86371207b3.10;
-        Sat, 27 Aug 2022 01:09:38 -0700 (PDT)
+        Sat, 27 Aug 2022 04:27:15 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5305A5C45;
+        Sat, 27 Aug 2022 01:27:12 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id t5so4583052edc.11;
+        Sat, 27 Aug 2022 01:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=7uKLDVu+yTJFrg68OXXDoJC1w3RdTjWlPGH52i69T9w=;
-        b=M/6kYRm6eCKaiCiKQQt3Zg5/XbD9sF86AuSjuQK0LerVLI4T7DCSHSEVZUNRZPkFzh
-         dIgHLulUiuXF3t6ZOGvN6oECWbpFiPYOY0hFwDQEdNnL1VAVmH/LTpAguX5KSmoQhkip
-         D7/meKfHMpDFkCJw4Jhp+CgIHN6m/M+k8e+wuPwi+v1BW6SzloIKj2OkN2j7YiqCWIQf
-         upfLzhaL7VqXD8GHDl9Y+ocp78VJbbh8M8YtUM0NyjKLKOB4/4BbVnhe96WS11/iGUyr
-         r8JErTtD/D7QUXg8zQMaPtamOjAAoeceq7DTrbaamWhbYLr4M9OYpnLYitrEXQrx3CLg
-         Mqww==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=db6wHPl1NoBxSkqFEqmoNM4w13Oy0TZZkviyKHiod6c=;
+        b=UEYLobTe2AZYd65vehbSh24XDhaWFDZNCGL1gdVQxc452u7u2Q4Y0f66RZocX0c5TR
+         DdJwU7CRlQgFC6BGI+qrfrE8odV1ul43ApbvWCBwVJ+CO5ykyfdKL69XWCEz4AxBVoPc
+         Fw9/BZpE/pwvSNqV+U8bI4UFaXmNWqGWUpCFIcgHDmb/R5YJHvw+l1Nl4PI62pOc0Mlu
+         G6Xxx2tmIx2MgPkjxhb9Qr8ZtxLsw5z8IGCfxtj4gjhzdE7BqdYB4NS6TbXn8rmeHOgA
+         wuLPmYOYHGXF2RHYZcgbY4nK+iZs8S8bbVCuzl21nt3v+hkpld1DBAXs+elsDk4x4Ohv
+         QRlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=7uKLDVu+yTJFrg68OXXDoJC1w3RdTjWlPGH52i69T9w=;
-        b=qyPJCQ2TxNfpaggIe1mjNg70O6LDazYXcxTxzdR+9eIPPLd1yRaSF9J11etBQGDbkq
-         gBjE+FnCV2GZxRApfeUYYp3QaQgUDhb9zJKXc7wyRD3rmrw4wye55IuOB38i+YSnt2Aa
-         m2CU93+H4YJeyH4m5i4K3xmzStHGG3oB0OwxHRJjgEIZneCvjatkKJR/ZcUQnvYTPK53
-         Re4VFAgYur1ssA8AkKiBEB2lx4K9I1/pvp0n54NISHJQFtWltm++LgQcq5Y8cKIhd+Ru
-         25VzfHOCI1X80co+TvYi5pxjX6W8saoJtq/eIVHmmxRmVoqKd4TecZzqBG7PEVDR20oR
-         HICQ==
-X-Gm-Message-State: ACgBeo3uSkRYM3FWwjJe+YhXuKlu2SXknnKO5DlfHo9yYOjs/kzvBIj+
-        yIoyCMG5OqkXguyYocHNSLkt4QrBAapYsIOaCjvfkeGAHOWzAQCz
-X-Google-Smtp-Source: AA6agR6vKzeoONeAvMUm5LkS9pWqLkYbLenfkw+0SAbmko6Rt9FMRb7d1t703PhkrqBK93Fg/9ImHF27EU0ecanjMxY=
-X-Received: by 2002:a0d:cbd6:0:b0:340:c4ab:7cbb with SMTP id
- n205-20020a0dcbd6000000b00340c4ab7cbbmr820874ywd.299.1661587778100; Sat, 27
- Aug 2022 01:09:38 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=db6wHPl1NoBxSkqFEqmoNM4w13Oy0TZZkviyKHiod6c=;
+        b=E4s2TfDpp7rRteYRFYRQ1zF9senJSzOH7NjijCc4GnaQ4C0Q2yY5B08FPLLhRh8LkI
+         DsaSQIoDe1Svv0TtRc/tY17tOAfrDbDQMaeWcRa8DV28yugNvhWlneekcjG3taBv1337
+         hiJdcWSRT0Jt9X0Bn0luXru8dzNOMCu31beASejJqWBHAN0gKkxuFIOi8RjPu7u4brpc
+         fTIp9Q5/F4ZLkSnFBVJdrVOVDPaGH6mDuP0ZgAnILqm8XfPFKlz3yq5+zO/wGypHgR8y
+         wpzEVYg93p4Xawa8Ksnoxr2ljqv/Q5FiTeLzH4iJUUuiTKDgDX3pYXT+nzaoVYqf5POl
+         i/jA==
+X-Gm-Message-State: ACgBeo3fJ2AhkeSEVr8edb1GxsWgBdGWN4/4te4too66nb+CiWbntbkr
+        v5LT9QW1d4TU/ZLmA1gr4+Q=
+X-Google-Smtp-Source: AA6agR7k4MkhXbRXPVNIpqB7niZw9Vuq4+jhvWLePL+17JoEYc9ENHX7DdgLIO1WI1Mrtg/N6ODRPw==
+X-Received: by 2002:a05:6402:71a:b0:447:ebb2:18f2 with SMTP id w26-20020a056402071a00b00447ebb218f2mr4862760edx.408.1661588831315;
+        Sat, 27 Aug 2022 01:27:11 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id m18-20020a056402511200b0043d5ead65a6sm2485422edd.84.2022.08.27.01.27.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 01:27:10 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <79cc1418-2448-6a80-e4b8-2041f94c419e@redhat.com>
+Date:   Sat, 27 Aug 2022 10:27:08 +0200
 MIME-Version: 1.0
-From:   Jiacheng Xu <578001344xu@gmail.com>
-Date:   Sat, 27 Aug 2022 16:09:24 +0800
-Message-ID: <CAO4S-mfk+Rb5Rjr-ZLBu0UHrQuH2+d5tC9XO_tSL-=ukMjQnPA@mail.gmail.com>
-Subject: refcount bug in bpf_exec_tx_verdict
-To:     borisp@nvidia.com, john.fastabend@gmail.com,
-        linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, yin31149@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Peter Xu <peterx@redhat.com>, Gavin Shan <gshan@redhat.com>,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+References: <20220819005601.198436-1-gshan@redhat.com>
+ <20220819005601.198436-2-gshan@redhat.com> <87lerkwtm5.wl-maz@kernel.org>
+ <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+ <87fshovtu0.wl-maz@kernel.org>
+ <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+ <YwTc++Lz6lh3aR4F@xz-m1.local> <87bksawz0w.wl-maz@kernel.org>
+ <YwVEoM1pj2MPCELp@xz-m1.local> <878rnewpaw.wl-maz@kernel.org>
+ <9e7cb09c-82c5-9492-bccd-5511f5bede26@redhat.com>
+ <8735djvwbu.wl-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <8735djvwbu.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 8/26/22 17:49, Marc Zyngier wrote:
+>> Agreed, but that's a problem for userspace to solve.  If userspace
+>> wants to reset the fields in different CPUs, it has to synchronize
+>> with its own invoking of the ioctl.
+> 
+> userspace has no choice. It cannot order on its own the reads that the
+> kernel will do to *other* rings.
 
-When using modified Syzkaller to fuzz the Linux kernel-5.19, the
-following crash was triggered.
+Those reads will never see KVM_DIRTY_GFN_F_RESET in the flags however, 
+if userspace has never interacted with the ring.  So there will be 
+exactly one read on those rings, and there's nothing to reorder.
 
-HEAD commit: 3d7cb6b04c3f Linux-5.19
-git tree: upstream
+If that's too tricky and you want to add a load-acquire I have no 
+objection though.  It also helps avoiding read-read reordering between 
+one entry's flags to the next one's, so it's a good idea to have it anyway.
 
-console output:
-https://drive.google.com/file/d/1Sdr1eSqR2fQ187gdAIn568-JBiUTgoOL/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1wgIUDwP5ho29AM-K7HhysSTfWFpfXYkG/view?usp=sharing
-syz repro: https://drive.google.com/file/d/1bP0dDQfHG4yy59rHjxQxfjnDiIjXfbBU/view?usp=sharing
-C reproducer: https://drive.google.com/file/d/1yB50TqEIAAZibpU9G_c3ryvCCnGsBRir/view?usp=sharing
+>> The main reason why I preferred a global KVM_RESET_DIRTY_RINGS ioctl
+>> was because it takes kvm->slots_lock so the execution would be
+>> serialized anyway.  Turning slots_lock into an rwsem would be even
+>> worse because it also takes kvm->mmu_lock (since slots_lock is a
+>> mutex, at least two concurrent invocations won't clash with each other
+>> on the mmu_lock).
+> 
+> Whatever the reason, the behaviour should be identical on all
+> architectures. As is is, it only really works on x86, and I contend
+> this is a bug that needs fixing.
+> 
+> Thankfully, this can be done at zero cost for x86, and at that of a
+> set of load-acquires on other architectures.
 
-Environment:
-Ubuntu 20.04 on Linux 5.4.0
-QEMU 4.2.1:
-qemu-system-x86_64 \
-  -m 2G \
-  -smp 2 \
-  -kernel /home/workdir/bzImage \
-  -append "console=ttyS0 root=/dev/sda earlyprintk=serial net.ifnames=0" \
-  -drive file=/home/workdir/stretch.img,format=raw \
-  -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 \
-  -net nic,model=e1000 \
-  -enable-kvm \
-  -nographic \
-  -pidfile vm.pid \
-  2>&1 | tee vm.log
+Yes, the global-ness of the API is orthogonal to the memory ordering 
+issue.  I just wanted to explain why a per-vCPU API probably isn't going 
+to work great.
 
-It seems there is a similar
-problem(https://lore.kernel.org/bpf/20220804082913.5dac303c@kernel.org/)
-and patch.
-Is the patch applied on Linux-5.19.4? I can still trigger the bug on
-both 5.19 and 5.19.4.
-
-If you fix this issue, please add the following tag to the commit:
-Reported-by Jiacheng Xu<578001344xu@gmail.com>,
-
------------------------------------
-refcount_t: saturated; leaking memory.
-WARNING: CPU: 2 PID: 7393 at lib/refcount.c:19
-refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Modules linked in:
-CPU: 2 PID: 7393 Comm: syz-executor Not tainted 5.19.0 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Code: 1d e2 87 9d 09 31 ff 89 de e8 58 32 72 fd 84 db 75 ab e8 2f 31
-72 fd 48 c7 c7 e0 34 28 8a c6 05 c2 87 9d 09 01 e8 63 7d 2d 05 <0f> 0b
-eb 8f e8 13 31 72 fd 0f b6 1d ac 87 9d 09 31 ff 89 de e8 23
-RSP: 0018:ffffc9000856f5c0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffffc90002949000 RSI: ffff888023841d80 RDI: fffff520010adeaa
-RBP: 0000000000000000 R08: ffffffff81619cd8 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed100c7a4f25 R12: ffff8880259e82b8
-R13: 0000000000000000 R14: 00000000912d1630 R15: ffff888014780000
-FS:  00007f5a2d44f700(0000) GS:ffff888063d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5a2c30e010 CR3: 000000002555f000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __refcount_add_not_zero include/linux/refcount.h:163 [inline]
- __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
- refcount_inc_not_zero include/linux/refcount.h:245 [inline]
- sk_psock_get include/linux/skmsg.h:439 [inline]
- bpf_exec_tx_verdict+0x1066/0x14d0 net/tls/tls_sw.c:809
- tls_sw_sendmsg+0xe53/0x1740 net/tls/tls_sw.c:1023
- inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- sock_sendmsg+0xc3/0x120 net/socket.c:729
- sock_write_iter+0x284/0x3c0 net/socket.c:1108
- call_write_iter include/linux/fs.h:2058 [inline]
- new_sync_write+0x393/0x570 fs/read_write.c:504
- vfs_write+0x7c4/0xab0 fs/read_write.c:591
- ksys_write+0x1e8/0x250 fs/read_write.c:644
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5a2c295dfd
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5a2d44ec58 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f5a2c3bc0a0 RCX: 00007f5a2c295dfd
-RDX: 000000000000fdef RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 00007f5a2c2ff4c1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f5a2c3bc0a0
-R13: 00007ffce006e15f R14: 00007ffce006e300 R15: 00007f5a2d44edc0
- </TASK>
+Paolo

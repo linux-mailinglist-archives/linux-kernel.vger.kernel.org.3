@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A115A35C5
+	by mail.lfdr.de (Postfix) with ESMTP id A0E025A35C4
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbiH0ICF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 27 Aug 2022 04:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S1345149AbiH0IDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 04:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbiH0IBu (ORCPT
+        with ESMTP id S238160AbiH0ICx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 04:01:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2732B5;
-        Sat, 27 Aug 2022 01:01:47 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MF8Fv1sfRzkWVt;
-        Sat, 27 Aug 2022 15:58:11 +0800 (CST)
-Received: from dggpemm100006.china.huawei.com (7.185.36.196) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 16:01:45 +0800
-Received: from canpemm500001.china.huawei.com (7.192.104.163) by
- dggpemm100006.china.huawei.com (7.185.36.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 16:01:45 +0800
-Received: from canpemm500001.china.huawei.com ([7.192.104.163]) by
- canpemm500001.china.huawei.com ([7.192.104.163]) with mapi id 15.01.2375.024;
- Sat, 27 Aug 2022 16:01:45 +0800
-From:   "Zhoujian (jay)" <jianjay.zhou@huawei.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        zhuangshengen <zhuangshengen@huawei.com>,
-        "Wangjing(Hogan)" <hogan.wang@huawei.com>
-Subject: RE: [Question] Any plan to support enable PCI SRIOV concurrently in
- kernel side?
-Thread-Topic: [Question] Any plan to support enable PCI SRIOV concurrently in
- kernel side?
-Thread-Index: AdiyDNZvspPz1b9KT9CKr88dkJbU8gAIpySAAeyWw1A=
-Date:   Sat, 27 Aug 2022 08:01:44 +0000
-Message-ID: <47c749ec933549b687bd0acfbb4e89f7@huawei.com>
-References: <0a8ce5714e2d4eed909cb096d4832036@huawei.com>
- <20220817194947.GA2270629@bhelgaas>
-In-Reply-To: <20220817194947.GA2270629@bhelgaas>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.151.254]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sat, 27 Aug 2022 04:02:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8636170B
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 01:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661587372; x=1693123372;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t4s7PJsF+XQiNPvI7hWCOrw+97ygo5kzYBM70ND3TtU=;
+  b=VVfhIWALDoq+vRL0ONoGbdh5WqnPNaGWvLL3oTSnluGbIdRQ0fYtdPH7
+   vdqf26gFX+RCiOrA9cxmsxq4N+lBiwWsv926Vdi427bYe44AtezWEqJrf
+   MSNIaNYQ77WPsiLUWFSAtlxl73TWqitcN7A4x3JVR13AccKpENu1dTBqj
+   0aPK1r5Ro8UhtS47RU8wdMGZ47YGxA3uqWvADjIKxN3h68Afa81x47SOC
+   T0UdqO961RbCx4CK3mo1vbGdL+53YrSONoBQvQxwEXGqgtCxA9MmD9D2s
+   kV54eb+uMxWN0JsDkMdspuAEf0GJJV+8ruDQ/HEq1CMeBO2kPCL9LK/ck
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="277661530"
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="277661530"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 01:02:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="700081484"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Aug 2022 01:02:42 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRqmA-000175-09;
+        Sat, 27 Aug 2022 08:02:42 +0000
+Date:   Sat, 27 Aug 2022 16:02:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mark:arm64/insn/rework 9/10] include/linux/compiler_types.h:354:45:
+ error: call to '__compiletime_assert_782' declared with attribute error:
+ BUILD_BUG_ON failed: !aarch64_insn_is_adrp(insn)
+Message-ID: <202208271534.S8qjhvQ9-lkp@intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,200 +62,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/insn/rework
+head:   93eeddf361d2aa52865155791d8f344896f98cb8
+commit: 484a2f552745c6634031e23e9e14bbc1f5ccd581 [9/10] arm64: insn: rework ADRP helpers
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271534.S8qjhvQ9-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=484a2f552745c6634031e23e9e14bbc1f5ccd581
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/insn/rework
+        git checkout 484a2f552745c6634031e23e9e14bbc1f5ccd581
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/arm64/kernel/module-plts.c:285:5: warning: no previous prototype for 'module_frob_arch_sections' [-Wmissing-prototypes]
+     285 | int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   In function 'aarch64_insn_adrp_get_offset',
+       inlined from 'plt_entries_equal' at arch/arm64/kernel/module-plts.c:59:14:
+>> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_782' declared with attribute error: BUILD_BUG_ON failed: !aarch64_insn_is_adrp(insn)
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/insn.h:851:9: note: in expansion of macro 'BUILD_BUG_ON'
+     851 |         BUILD_BUG_ON(!aarch64_insn_is_adrp(insn));
+         |         ^~~~~~~~~~~~
 
 
-> -----Original Message-----
-> From: Bjorn Helgaas [mailto:helgaas@kernel.org]
-> Sent: Thursday, August 18, 2022 3:50 AM
-> To: Zhoujian (jay) <jianjay.zhou@huawei.com>
-> Cc: linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org; bhelgaas@google.com;
-> Gonglei (Arei) <arei.gonglei@huawei.com>; zhuangshengen
-> <zhuangshengen@huawei.com>
-> Subject: Re: [Question] Any plan to support enable PCI SRIOV concurrently in
-> kernel side?
-> 
-> On Wed, Aug 17, 2022 at 07:43:34AM +0000, Zhoujian (jay) wrote:
-> > Hi,
-> >
-> > Enable SRIOV concurrently with many different PFs in userspace seems workable.
-> > I'm trying to do it with 8 PFs(each one with 240+ VFs), but get some
-> > warnings, here is the backtrace:
-> 
-> This definitely seems like a problem that should be fixed.  If you have a script that
-> can reproduce it, that might help people work on it.  If you can reproduce it in
-> qemu, that would be even better.
+vim +/__compiletime_assert_782 +354 include/linux/compiler_types.h
 
-The script has posted by zhuangshengen.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @354  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  355  
 
-> 
-> Some comments on the patch below.
-> 
-> > Warning 1:
-> > ---
-> > sysfs: cannot create duplicate filename
-> '/devices/pci0000:30/0000:30:02.0/pci_bus/0000:32'
-> > Call Trace:
-> >  dump_stack+0x6f/0xab
-> >  sysfs_warn_dup+0x56/0x70
-> >  sysfs_create_dir_ns+0x80/0x90
-> >  kobject_add_internal+0xa0/0x2b0
-> >  kobject_add+0x71/0xd0
-> >  device_add+0x126/0x630
-> >  pci_add_new_bus+0x17c/0x4b0
-> >  pci_iov_add_virtfn+0x336/0x390
-> >  sriov_enable+0x26e/0x450
-> >  virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
-> > ---
-> > The reason is that different VFs may create the same pci bus number
-> > and try to add new bus concurrently in virtfn_add_bus.
-> >
-> > Warning 2:
-> > ---
-> > proc_dir_entry 'pci/33' already registered
-> > WARNING: CPU: 71 PID: 893 at fs/proc/generic.c:360
-> > proc_register+0xf8/0x130 Call Trace:
-> >  proc_mkdir_data+0x5d/0x80
-> >  pci_proc_attach_device+0xe9/0x120
-> >  pci_bus_add_device+0x33/0x90
-> >  pci_iov_add_virtfn+0x375/0x390
-> >  sriov_enable+0x26e/0x450
-> >  virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
-> > ---
-> > The reason is that different VFs may create '/proc/bus/pci/bus_number'
-> > directory using the same bus number in pci_proc_attach_device concurrently.
-> >
-> > Mutex lock can avoid potential conflict. With the patch below the
-> > warnings above are no longer appear.
-> >
-> > My question is that any plan to support enable PCI SRIOV concurrently in kernel
-> side?
-> >
-> > Thanks
-> >
-> > ---
-> > drivers/pci/iov.c | 29 +++++++++++++++++++++++++++--
-> >  1 file changed, 27 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c index
-> > 952217572113..6a8a849298c4 100644
-> > --- a/drivers/pci/iov.c
-> > +++ b/drivers/pci/iov.c
-> > @@ -16,6 +16,12 @@
-> >
-> >  #define VIRTFN_ID_LEN    16
-> >
-> > +static struct mutex add_bus_mutex;
-> > +static int add_bus_mutex_initialized;
-> > +
-> > +static struct mutex add_device_mutex; static int
-> > +add_device_mutex_initialized;
-> > +
-> >  int pci_iov_virtfn_bus(struct pci_dev *dev, int vf_id)  {
-> >      if (!dev->is_physfn)
-> > @@ -127,13 +133,24 @@ static struct pci_bus *virtfn_add_bus(struct pci_bus
-> *bus, int busnr)
-> >      if (bus->number == busnr)
-> >          return bus;
-> >
-> > +    if (!add_bus_mutex_initialized) {
-> > +        mutex_init(&add_bus_mutex);
-> > +        add_bus_mutex_initialized = 1;
-> > +    }
-> 
-> I assume this patch works around the warning.  I see the intent here, but I think
+:::::: The code at line 354 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
 
-Yes, it is. We have tested for a few weeks and no new problems have found.
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
 
-> would need some rework before merging it.  These locks protect
-> pci_add_new_bus() and pci_bus_add_device(), but only for the callers in iov.c.
-> These interfaces are both called from places other than iov.c, and any mutual
-> exclusion should cover all of them.
-
-I agree.
-
-> 
-> I'm actually not sure how the other callers are protected.  I assume we're holding a
-> device_lock for some device farther up the chain.  Or, I see that
-> acpi_pci_root_add() and rescan_store() hold pci_rescan_remove_lock while calling
-> these.  
-
-The pci_rescan_remove_lock is added since 2014, see the commit below.
-
-commit 9d16947b75831acd317ab9a53e0e94d160731d33
-Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Date:   Fri Jan 10 15:22:18 2014 +0100
-
-    PCI: Add global pci_lock_rescan_remove()
-    
-    There are multiple PCI device addition and removal code paths that may be
-    run concurrently with the generic PCI bus rescan and device removal that
-    can be triggered via sysfs.  If that happens, it may lead to multiple
-    different, potentially dangerous race conditions.
-    
-    The most straightforward way to address those problems is to run
-    the code in question under the same lock that is used by the
-    generic rescan/remove code in pci-sysfs.c.  To prepare for those
-    changes, move the definition of the global PCI remove/rescan lock
-    to probe.c and provide global wrappers, pci_lock_rescan_remove()
-    and pci_unlock_rescan_remove(), allowing drivers to manipulate
-    that lock.  Also provide pci_stop_and_remove_bus_device_locked()
-    for the callers of pci_stop_and_remove_bus_device() who only need
-    to hold the rescan/remove lock around it.
-    
-    Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-Its purpose is to avoid PCI device addition and removal happen concurrently.
-IMHO it is suitable to use this lock to enable SRIOV here to avoid creating a
-new lock.
-
-> We don't seem to hold that uniformly though, which bothers me, because
-> I think there are many other paths, e.g., pci_host_probe() and its callers.
-
-I have checked the other code paths. Most of the callers have hold the
-pci_rescan_remove_lock. Some did missing. In order to hold the lock
-uniformly, it may need to add the pci_rescan_remove_lock to the missing
-place one by one(if it exists the possibility of concurrency). So what do we
-need to do now? (1) fix all of them (2) only add pci_rescan_remove_lock in iov.c
-as a start.
-
-Thanks
-
-> 
-> > +    mutex_lock(&add_bus_mutex);
-> > +
-> >      child = pci_find_bus(pci_domain_nr(bus), busnr);
-> > -    if (child)
-> > +    if (child) {
-> > +        mutex_unlock(&add_bus_mutex);
-> >          return child;
-> > +    }
-> >
-> >      child = pci_add_new_bus(bus, NULL, busnr);
-> > -    if (!child)
-> > +    if (!child) {
-> > +        mutex_unlock(&add_bus_mutex);
-> >          return NULL;
-> > +    }
-> > +    mutex_unlock(&add_bus_mutex);
-> >
-> >      pci_bus_insert_busn_res(child, busnr, busnr);
-> >
-> > @@ -339,8 +356,16 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
-> >      if (rc)
-> >          goto failed1;
-> >
-> > +    if (!add_device_mutex_initialized) {
-> > +        mutex_init(&add_device_mutex);
-> > +        add_device_mutex_initialized = 1;
-> > +    }
-> > +    mutex_lock(&add_device_mutex);
-> > +
-> >      pci_bus_add_device(virtfn);
-> >
-> > +    mutex_unlock(&add_device_mutex);
-> > +
-> >      return 0;
-> >
-> >  failed1:
-> > ---
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

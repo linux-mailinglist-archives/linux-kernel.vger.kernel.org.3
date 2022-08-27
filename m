@@ -2,178 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6525C5A361F
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 11:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BF35A3620
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 11:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbiH0JCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 05:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S233055AbiH0JCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 05:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiH0JCk (ORCPT
+        with ESMTP id S232403AbiH0JCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 05:02:40 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D440427CFC
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 02:02:39 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q63so3433537pga.9
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 02:02:39 -0700 (PDT)
+        Sat, 27 Aug 2022 05:02:47 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF2D27FC8
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 02:02:46 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id m3so4803809lfg.10
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 02:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=D7wwbAuLXWf5SB+NrnBAoFyECHS6XWLYdUvOon1TCXE=;
-        b=EdrAPX3fWMDCt2nPBgcPLvrxq6br95yWD8pDZjJZHeiC8vfwNudi1/FPnHY2e7toVy
-         i4FXOAAmjRSbloR/Ii3Ev6Q0Tn1j6+og1LqZB/vO4KQ0rK/qwL1Nj2qeBmbO783aXdSf
-         FE+kbXlPcKRfBlYiutc0bTuT5Yce9DZJvoHfa6H3B2hUdIY89GDNXE/Kbnj9uAf4kDAm
-         uxwDxWAhbBuQw3Q/VNiy7TrOiN1xQdmXwA8VSe02c4M+FFUXuL+ad2aUAj5dVcU3S+pm
-         V4GiO4/vNDYlTEn42J+WwlskCoO4CqL+keVtpqMDGincSKnZDyKDM6fQBNTrZ+EGLKkP
-         uOHQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=tSaAKzb5w2T65/FdcCDzvyichDzNAon3GE1pC83jdZw=;
+        b=ZuHqxfOwCkZJccxT0l2+1PQB9D2ShACtEkwkvAlIMBiKEretjxfkSm23NhSBLPElSO
+         B+rS8g7boSspb0ecSDz0Zmzh2G5ymNIxDtCLQ2+U0KWCQZr3aXRyvovfelhSb+5e0whg
+         RSLSh6y5FVe4SM1fknKno8wTjeUXZoKKluwztePVJDdbwfSIBTsHsxexv7hCxt3qPhbm
+         JKFjcaM7/4OEdpt4KjUjXuU4pm42B/FLD2GL/elgXmPHY12wAm3dYP/oP58rZY4basrX
+         yrX3bog1/3kCD5IGmYOFNfW6Sufs2wWUKxh9IvPtP7TDPl2dZsmaZXMOigzIsjUOHmre
+         guSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=D7wwbAuLXWf5SB+NrnBAoFyECHS6XWLYdUvOon1TCXE=;
-        b=fpCwJ/A2BCllm/gM0gV6vyytRmvqMFO9U2rT3YrGFitQloW+Jsfn3dHREReoVJVbmk
-         K2dClFL7q+dyYV1KFUR74T4LT95iS2NSoiKsETx7IGG0jSv0qaA4Ut2P7upr8Itkl0tl
-         0kNUoEmJh+8ROQ6M8fgPIoiGiQUWe6rJfO3cq7E7BFwgIESzcwPfTG1x+/QcqfZJWUH5
-         h8bTjdAWv3bxLeqO7h8zMu3JdqpWEf49bINed5SaiE2H+XNjbYqUfG+WjgwVNBS59Grf
-         UsdF0hAM/9Q7ZgYAc69IuFg9IZ/UsPsCx77EpTa7S7VWTKP9Xbrm3ci7X3nGjp+oMdxr
-         r+nA==
-X-Gm-Message-State: ACgBeo0Iqqu8QliAVo6FGjbKmwL20Bi3vszzXnCFBYe1IQzhAZGdhEIQ
-        MPnu4mHanHkO+D5cztb1Zdw=
-X-Google-Smtp-Source: AA6agR6SduTHI/dh7+uOOuXv2bOQOJLw1oK9Z9i3q8mttMJatnvVJZ+6PtRXtZKOmgbxIG+W2ljGSg==
-X-Received: by 2002:a05:6a00:22cd:b0:52f:706a:5268 with SMTP id f13-20020a056a0022cd00b0052f706a5268mr7469640pfj.80.1661590959325;
-        Sat, 27 Aug 2022 02:02:39 -0700 (PDT)
-Received: from localhost ([223.104.39.136])
-        by smtp.gmail.com with ESMTPSA id i17-20020a170902cf1100b0016d785ef6d2sm3031403plg.223.2022.08.27.02.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 02:02:38 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     dan.carpenter@oracle.com
-Cc:     akpm@linux-foundation.org, anton@tuxera.com,
-        chenxiaosong2@huawei.com, linux-kernel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net,
-        syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [PATCH] ntfs: change check order in ntfs_attr_find
-Date:   Sat, 27 Aug 2022 17:02:31 +0800
-Message-Id: <20220827090230.3287-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220827064217.GK2030@kadam>
-References: <20220827064217.GK2030@kadam>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=tSaAKzb5w2T65/FdcCDzvyichDzNAon3GE1pC83jdZw=;
+        b=nf7ZlcdQWFkJiKhNqOJ3fgs8x4ClZSheXaD/TMstzSz3EoFiccu4IR8vVng4gVl4qi
+         hfZFvm/yIpIVpu72dCk5IEl5dbRl81p2H1PjCiCLdoO+LAk61ddYpoxeXtMEyG40oz6u
+         oJSzSlzXg8oUju2urWQYotm4mvUTOksqp8pLzuJZBjjAQnc8md56nJZKLICYaY/8b51j
+         62EHebbG34X8oxAtbu1aLSky3UUAuTveCbYJfDfLcpIG7MDgGZbodrxJ6qwXwq6LnIze
+         EcwRCUh8DHLIO1//rxrWlX8YY9q6DjkLJ7JpaYQdUvgFJ3SMzzcQMtZ/9ET9kcNksJWJ
+         IzOg==
+X-Gm-Message-State: ACgBeo3GMpxZARoUpe/XetO3B/v18MzlrKGq4JqLsZNFIJ59dKebluym
+        pXqvnfXc3VLkO8QQSyyRDqjouA==
+X-Google-Smtp-Source: AA6agR6avMqu4paaaH5+k+RySA/u2b4JKe9lR72DOYOCmGAfXBduDProOI0ZX5APHtMKUGMpWcAGYg==
+X-Received: by 2002:a05:6512:909:b0:48b:954c:8e23 with SMTP id e9-20020a056512090900b0048b954c8e23mr4023915lft.670.1661590964241;
+        Sat, 27 Aug 2022 02:02:44 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id z14-20020a0565120c0e00b00491ee1bf301sm618807lfu.39.2022.08.27.02.02.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 02:02:43 -0700 (PDT)
+Message-ID: <a5266af6-af19-48f9-8bc6-94c171ba6d0c@linaro.org>
+Date:   Sat, 27 Aug 2022 12:02:39 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] ASoC: codecs: allow compile testing without MFD drivers
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220826093659.1059276-1-krzysztof.kozlowski@linaro.org>
+ <YwkSi1IIRsW2Hc/u@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YwkSi1IIRsW2Hc/u@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022 at 14:42, Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Fri, Aug 26, 2022 at 11:42:32PM +0800, Hawkins Jiawei wrote:
-> > On Fri, 26 Aug 2022 at 23:15, Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > >
-> > > On Fri, Aug 26, 2022 at 08:32:57PM +0800, Hawkins Jiawei wrote:
-> > > > > syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git   master
-> > > > >
-> > > > > Looks like it is improper check order that causes this bug.
-> > > >
-> > > > Sorry for wrong command.
-> > > > #syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git   master
-> > > >
-> > > > diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
-> > > > index 52615e6090e1..6480cd2d371d 100644
-> > > > --- a/fs/ntfs/attrib.c
-> > > > +++ b/fs/ntfs/attrib.c
-> > > > @@ -594,10 +594,11 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
-> > > >       for (;; a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
-> > > >               u8 *mrec_end = (u8 *)ctx->mrec +
-> > > >                              le32_to_cpu(ctx->mrec->bytes_allocated);
-> > > > +             if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end)
-> > > > +                     break;
-> > >
-> > > This definitely seems like a bug.  But your code won't build.  Syzbot
-> > > must have -Werror turned off?
-> > Hi Dan,
-> > Did you mean we should put the variable declares at the beginning of the function?
-> > (Correct me if I understand anything wrong)
->
-> You can declare it at the beginning of the block.
-OK, I will do like that.
+On 26/08/2022 21:35, Mark Brown wrote:
+> On Fri, Aug 26, 2022 at 12:36:59PM +0300, Krzysztof Kozlowski wrote:
+>> Motorola CPCAP, Lochnagar Sound, Rockchip RK817 and Qualcomm
+>> WCD9340/WCD9341 do not depend on parent MFD driver in build time and can
+>> be compile tested without respective MFD part for increased build
+>> coverage.
+> 
+> Although generally it's easy enough to just turn on the MFDs
+> themselves, it's not the same base platform issue as the firmware
+> interfaces can be.
 
->
-> >
-> > >
-> > > Btw, this was in the original code, but those casts are ugly.  Ideally
-> > > there would be some way to get rid of them.  But otherwise at least
-> > > put a space after the u8.  "(u8 *)a < (u8 *)ctx->mrec".
-> > >
-> > > >               u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> > > >                              a->name_length * sizeof(ntfschar);
-> > > > -             if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
-> > > > -                 name_end > mrec_end)
-> > > > +             if (name_end > mrec_end)
-> > > >                       break;
-> > >
-> > > regards,
-> > > dan carpenter
-> > So maybe I can try to refactor these codes. But I wonder if this can be
-> > done in a seperate bug
->
-> The kernel has a strict "one thing per patch rule".  Those rules are
-> for reviewers and easier backporting.  So the trick is to write the
-> commit message to persuade the reviewer that the way you've written the
-> patch is the easiest way to review it.  So here is how I would write the
-> commit message:
->
-> [PATCH] ntfs: fix out of bounds read in ntfs_attr_find()
->
-> This code deferences "a" to calculate "name_end" and then it checks to
-> ensure that "a" is within bounds.  Move the bounds checks earlier and
-> add some comments to make it more clear what they're doing.  Then
-> calculate "name_end" and check that.
->
-> (Btw, are the wrap around checks really sufficient?  It seems like it
-> could wrap to something still within the ->mrec buffer but before the
-> current entry so it would end up in a forever loop or something?)
-I am not for sure, but it seems that it is OK before.
-As for the forever loop, there is a break when a->length is 0 in the loop,
-So I think it probably would not end up in a forever loop?(Correct me if
-I am wrong)
+True, it's not the same build coverage need as subsystem/interface
+dependencies, but still:
+1. Drivers can be built independently, so why not?
+2. There is no drawback in allowing to building them independently
+(compile test).
+3. The parent MFD device could also depend on something (RK817 and
+MFD_LOCHNAGAR depends on I2C and OF; CPCAP on SPI), so it's not always
+the case of just enabling parent. IOW, you can compile test codecs
+without I2C and SPI which is valuable itself.
 
->
-> diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
-> index 52615e6090e1..90d567acb2a3 100644
-> --- a/fs/ntfs/attrib.c
-> +++ b/fs/ntfs/attrib.c
-> @@ -594,11 +594,20 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
->         for (;; a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
->                 u8 *mrec_end = (u8 *)ctx->mrec +
->                                le32_to_cpu(ctx->mrec->bytes_allocated);
-> -               u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> -                              a->name_length * sizeof(ntfschar);
-> -               if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
-> -                   name_end > mrec_end)
-> +               u8 *name_end;
-> +
-> +               /* check for wrap around */
-> +               if ((u8 *)a < (u8 *)ctx->mrec)
-> +                       break;
-> +               /* check for overflow */
-> +               if ((u8 *)a > mrec_end)
->                         break;
-> +
-> +               name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> +                          a->name_length * sizeof(ntfschar);
-> +               if (name_end > mrec_end)
-> +                       break;
-> +
->                 ctx->attr = a;
->                 if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
->                                 a->type == AT_END))
-Thanks for your suggestion, I will refactor these codes in this way.
+I find the last reason actually quite valid and applicable here. If you
+wish I can add it to the commit msg.
+
+
+Best regards,
+Krzysztof

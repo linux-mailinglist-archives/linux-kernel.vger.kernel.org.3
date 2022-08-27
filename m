@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263795A36E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 12:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63915A36F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 12:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239980AbiH0KFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 06:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S233008AbiH0KU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 06:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiH0KFS (ORCPT
+        with ESMTP id S230499AbiH0KUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 06:05:18 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A9A6393;
-        Sat, 27 Aug 2022 03:05:17 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MFC2f3wrcz6T2VL;
-        Sat, 27 Aug 2022 18:03:38 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgC3oLxY7AljpCKnAw--.52960S7;
-        Sat, 27 Aug 2022 18:05:15 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     tj@kernel.org, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v2 3/3] blk-throttle: cleanup tg_update_disptime()
-Date:   Sat, 27 Aug 2022 18:16:37 +0800
-Message-Id: <20220827101637.1775111-4-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220827101637.1775111-1-yukuai1@huaweicloud.com>
-References: <20220827101637.1775111-1-yukuai1@huaweicloud.com>
+        Sat, 27 Aug 2022 06:20:53 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6D925EA4
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 03:20:50 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MFCMk2cpyznTV8;
+        Sat, 27 Aug 2022 18:18:26 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 18:20:48 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 18:20:48 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <patches@armlinux.org.uk>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] ARM: 9220/1: amba: Add sanity check for dev->periphid in amba_probe()
+Date:   Sat, 27 Aug 2022 18:18:53 +0800
+Message-ID: <20220827101853.353-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgC3oLxY7AljpCKnAw--.52960S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cry3AFWDZw1UCry5Aw1DWrg_yoW8CFyrpr
-        W7CF4rJa1ktr4qkrW5WFnrXFWfXa1fJFWfC397GayfA3yjvryqgrnavryrZay8AF93XrW5
-        ZF4Dt3ykAa1UA3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd8n5UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+forcibly invokes device_add() even if dev->periphid is not ready. Although
+it will be remedied in amba_match(): dev->periphid will be initialized
+if everything is in place; Otherwise, return -EPROBE_DEFER to block
+__driver_attach() from further execution. But not all drivers have .match
+hook, such as pl031, the dev->bus->probe will be called directly in
+__driver_attach(). Unfortunately, if dev->periphid is still not
+initialized, the following exception will be triggered.
 
-tg_update_disptime() only need to adjust postion for 'tg' in
-'parent_sq', there is no need to call throtl_enqueue/dequeue_tg(),
-since they will set/clear flag THROTL_TG_PENDING and increase/decrease
-nr_pending, which is useless. By the way, clear the flag/decrease
-nr_pending while there are still throttled bios is not good for debugging.
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000008
+[00000008] *pgd=00000000
+Internal error: Oops: 5 [#1] SMP ARM
+Modules linked in:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc2+ #7
+Hardware name: ARM-Versatile Express
+PC is at pl031_probe+0x8/0x208
+LR is at amba_probe+0xf0/0x160
+pc : 80698df8  lr : 8050eb54  psr: 80000013
+sp : c0825df8  ip : 00000000  fp : 811fda38
+r10: 00000000  r9 : 80d72470  r8 : fffffdfb
+r7 : 811fd800  r6 : be7eb330  r5 : 00000000  r4 : 811fd900
+r3 : 80698df0  r2 : 37000000  r1 : 00000000  r0 : 811fd800
+Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 6000406a  DAC: 00000051
+... ...
+ pl031_probe from amba_probe+0xf0/0x160
+ amba_probe from really_probe+0x118/0x290
+ really_probe from __driver_probe_device+0x84/0xe4
+ __driver_probe_device from driver_probe_device+0x30/0xd0
+ driver_probe_device from __driver_attach+0x8c/0xfc
+ __driver_attach from bus_for_each_dev+0x70/0xb0
+ bus_for_each_dev from bus_add_driver+0x168/0x1f4
+ bus_add_driver from driver_register+0x7c/0x118
+ driver_register from do_one_initcall+0x44/0x1ec
+ do_one_initcall from kernel_init_freeable+0x238/0x288
+ kernel_init_freeable from kernel_init+0x18/0x12c
+ kernel_init from ret_from_fork+0x14/0x2c
+... ...
+---[ end trace 0000000000000000 ]---
 
-There are no functional changes.
+Therefore, take the same action as in amba_match(): return -EPROBE_DEFER
+if dev->periphid is not ready in amba_probe().
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Acked-by: Tejun Heo <tj@kernel.org>
+Fixes: f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- block/blk-throttle.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+KernelVersion: v6.0-rc2
+ drivers/amba/bus.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 64002435fa43..47142a1dd102 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -520,7 +520,6 @@ static void throtl_rb_erase(struct rb_node *n,
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 32b0e0b930c1068..2e5572f60692a33 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -274,9 +274,17 @@ static int amba_probe(struct device *dev)
  {
- 	rb_erase_cached(n, &parent_sq->pending_tree);
- 	RB_CLEAR_NODE(n);
--	--parent_sq->nr_pending;
- }
+ 	struct amba_device *pcdev = to_amba_device(dev);
+ 	struct amba_driver *pcdrv = to_amba_driver(dev->driver);
+-	const struct amba_id *id = amba_lookup(pcdrv->id_table, pcdev);
++	const struct amba_id *id;
+ 	int ret;
  
- static void update_min_dispatch_time(struct throtl_service_queue *parent_sq)
-@@ -572,7 +571,11 @@ static void throtl_enqueue_tg(struct throtl_grp *tg)
- static void throtl_dequeue_tg(struct throtl_grp *tg)
- {
- 	if (tg->flags & THROTL_TG_PENDING) {
--		throtl_rb_erase(&tg->rb_node, tg->service_queue.parent_sq);
-+		struct throtl_service_queue *parent_sq =
-+			tg->service_queue.parent_sq;
++	if (!pcdev->periphid) {
++		ret = amba_read_periphid(pcdev);
++		if (ret)
++			return -EPROBE_DEFER;
++	}
 +
-+		throtl_rb_erase(&tg->rb_node, parent_sq);
-+		--parent_sq->nr_pending;
- 		tg->flags &= ~THROTL_TG_PENDING;
- 	}
- }
-@@ -990,9 +993,9 @@ static void tg_update_disptime(struct throtl_grp *tg)
- 	disptime = jiffies + min_wait;
- 
- 	/* Update dispatch time */
--	throtl_dequeue_tg(tg);
-+	throtl_rb_erase(&tg->rb_node, tg->service_queue.parent_sq);
- 	tg->disptime = disptime;
--	throtl_enqueue_tg(tg);
-+	tg_service_queue_add(tg);
- 
- 	/* see throtl_add_bio_tg() */
- 	tg->flags &= ~THROTL_TG_WAS_EMPTY;
++	id = amba_lookup(pcdrv->id_table, pcdev);
++
+ 	do {
+ 		ret = of_amba_device_decode_irq(pcdev);
+ 		if (ret)
 -- 
-2.31.1
+2.25.1
 

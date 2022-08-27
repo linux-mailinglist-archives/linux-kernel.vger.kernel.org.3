@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8735A3986
+	by mail.lfdr.de (Postfix) with ESMTP id 78DF85A3987
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiH0SgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 14:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S231181AbiH0SgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 14:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiH0SgM (ORCPT
+        with ESMTP id S231142AbiH0SgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 14:36:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392AE2B613
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 11:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661625371; x=1693161371;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=koHL5CUm0Rm3QSvTUTxrrp9dPRvyCW/mFKcL42YZD6c=;
-  b=mRX7gEuag8orSyLDQRIMxj6/fi5yo9Jf8jZBw7IztvI4Wbrw5ZIIipPi
-   IRBnmlPX3UJh4K89bUCPgS7rQbBHVOmb60fcL9yYPSvlDZrOd5wlWpRS4
-   oqtVAWFY/xj0yoDxuay41j/WeDZnOWejPIEl2HqTsZri/6W4NgzBZRtcd
-   v8MlAnLhxMK0tHBAd5Qg+7yWuZEhmqqurF2peh91PB/yL9g88T+HbS8Nf
-   VkvFW9iRr2lHDh1rMicenn5GxGY5sC4S82h5I6LbY4mhlbpHswamxFTPw
-   qVixAXBNekql4nHjjBopMFSD0aZxsnhUMGmK5QGkyNc3Cw6n0biRIjrmP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="292262320"
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="292262320"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 11:36:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="644000802"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Aug 2022 11:36:08 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oS0fA-0000NE-0q;
-        Sat, 27 Aug 2022 18:36:08 +0000
-Date:   Sun, 28 Aug 2022 02:35:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shaomin Deng <dengshaomin@cdjrlc.com>, agk@redhat.com,
-        snitzer@kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: Re: [PATCH] dm: Remove the unneeeded variable
-Message-ID: <202208280213.3Ws9aJBm-lkp@intel.com>
-References: <20220827163848.24296-1-dengshaomin@cdjrlc.com>
+        Sat, 27 Aug 2022 14:36:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE062C105
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 11:36:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CD28B8095A
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 18:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51BCC433C1;
+        Sat, 27 Aug 2022 18:36:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661625371;
+        bh=RS2oGCSax7wgaznwlTTyAu1eK0J8FoYLL+3Yvwuk+4w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QrYiDhTE6woXxQswN4Vxs5HpiKUQ/Vv8931U1bf/J5qWjiWjdg76yQfoq65q4kT8k
+         BOcUobbZPgqXIn0ti+qH96wnoTK+uxmVdGAHr1whdaiUReBm9QfPorg37gnZFUE7rd
+         0dmX1+upXGgC7U5oMS2zEPZiKlbz1SvCQXNPgUcMtBYBaskUbIPVbal56P0WNS1L8A
+         FlU1KTNgWx1qYuUay33MCNCakQinl8yRAUnJQYQRaBLM/X7TbLrqFknuHKie1vcE1H
+         9hf5dlBbRtg2qG7yvlj0PQhEeVoNKXUFj4Vpmm/Qu+CBk3mgCVFkCzS7ImNHXMs4xr
+         fGqCNx327/AoQ==
+Received: by pali.im (Postfix)
+        id 23064C7A; Sat, 27 Aug 2022 20:36:08 +0200 (CEST)
+Date:   Sat, 27 Aug 2022 20:36:08 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] powerpc/boot: Don't always pass -mcpu=powerpc when
+ building 32-bit uImage
+Message-ID: <20220827183608.ezljs2houkd32764@pali>
+References: <20220820105200.30425-1-pali@kernel.org>
+ <20220827133900.16634-1-pali@kernel.org>
+ <63f4bce4-7965-9bc6-2104-42e26acd0208@csgroup.eu>
+ <20220827173610.7bdp7zychwu2u5i6@pali>
+ <1da78077-a050-a391-a002-9e25eabc89d1@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220827163848.24296-1-dengshaomin@cdjrlc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1da78077-a050-a391-a002-9e25eabc89d1@csgroup.eu>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,58 +67,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shaomin,
+On Saturday 27 August 2022 18:32:42 Christophe Leroy wrote:
+> Le 27/08/2022 à 19:36, Pali Rohár a écrit :
+> > On Saturday 27 August 2022 17:31:10 Christophe Leroy wrote:
+> >> Le 27/08/2022 à 15:39, Pali Rohár a écrit :
+> >>> For 32-bit uImage try to use CONFIG_TARGET_CPU option for -mcpu. This fixes
+> >>> following compiler error when building kernel with powerpc e500 SPE capable
+> >>> cross compilers:
+> >>>
+> >>>       BOOTAS  arch/powerpc/boot/crt0.o
+> >>>     powerpc-linux-gnuspe-gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
+> >>>     powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
+> >>>     make[1]: *** [arch/powerpc/boot/Makefile:231: arch/powerpc/boot/crt0.o] Error 1
+> >>>
+> >>> For 64-bit uImage and 64-bit kernels with 32-bit uImage wrapper there is no
+> >>> change.
+> >>>
+> >>> Similar change was already introduced for the main powerpc Makefile in
+> >>> commit 446cda1b21d9 ("powerpc/32: Don't always pass -mcpu=powerpc to the
+> >>> compiler").
+> >>>
+> >>> Fixes: 40a75584e526 ("powerpc/boot: Build wrapper for an appropriate CPU")
+> >>> Cc: stable@vger.kernel.org
+> >>> Signed-off-by: Pali Rohár <pali@kernel.org>
+> >>> ---
+> >>>    arch/powerpc/boot/Makefile | 8 ++++++++
+> >>>    1 file changed, 8 insertions(+)
+> >>>
+> >>> diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+> >>> index a9cd2ea4a861..f56a5f90a5d8 100644
+> >>> --- a/arch/powerpc/boot/Makefile
+> >>> +++ b/arch/powerpc/boot/Makefile
+> >>> @@ -44,8 +44,16 @@ else
+> >>>    BOOTCFLAGS	+= -m64 -mcpu=powerpc64
+> >>>    endif
+> >>>    else
+> >>> +ifdef CONFIG_PPC32
+> >>> +ifdef CONFIG_TARGET_CPU_BOOL
+> >>> +BOOTCFLAGS	+= -m32 -mcpu=$(CONFIG_TARGET_CPU)
+> >>> +else
+> >>> +BOOTCFLAGS	+= -m32 -mcpu=powerpc
+> >>
+> >> You can't do that. You get here only if user has selected
+> >> TOOLCHAIN_DEFAULT_CPU, in which case you don't want to for -mcpu=powerpc.
+> > 
+> > So do I understand it correctly that in this branch I should omit -mcpu=powerpc?
+> 
+> Correct.
 
-Thank you for the patch! Yet something to improve:
+Ok, I will fix it in v3.
 
-[auto build test ERROR on v6.0-rc2]
-[also build test ERROR on linus/master next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> >> -mcpu=powerpc is set when user selects CONFIG_POWERPC_CPU, in which case
+> >> CONFIG_TARGET_CPU_BOOL is set as well.
+> >>
+> >>> +endif
+> >>> +else
+> >>>    BOOTCFLAGS	+= -m32 -mcpu=powerpc
+> >>
+> >> Same, for PPC64 I think you don't want that either, unless the
+> >> CONFIG_GENERIC_CPU has been selected in which case
+> >> CONFIG_TARGET_CPU_BOOL is not set.
+> >>
+> >> When CONFIG_TARGET_CPU_BOOL is set for PPC64 you also want
+> >> -mcpu=$(CONFIG_TARGET_CPU)
+> > 
+> > I understand that this branch is called for PPC64 build with 32-bit
+> > uImage wrapper. So in this case should not be used TARGET_CPU as it
+> > would be 64-bit and not 32-bit as requited for 32-bit uImage wrapper.
+> 
+> Why ?
+> 
+> -mcpu=e6500 -m32 works as far as I can see.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shaomin-Deng/dm-Remove-the-unneeeded-variable/20220828-004044
-base:    1c23f9e627a7b412978b4e852793c5e3c3efc555
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220828/202208280213.3Ws9aJBm-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/fd20974ffc753b102401c766eb62117c276a1527
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shaomin-Deng/dm-Remove-the-unneeeded-variable/20220828-004044
-        git checkout fd20974ffc753b102401c766eb62117c276a1527
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hm... I did not know that. Ok, if you want I will put it into
+-m32 -mcpu=$(CONFIG_TARGET_CPU) branch too.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/dm-dirty-log.h:16,
-                    from drivers/md/dm-log.c:13:
-   drivers/md/dm-log.c: In function 'disk_status':
->> include/linux/device-mapper.h:615:22: error: 'sz' undeclared (first use in this function); did you mean 's8'?
-     615 | #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-         |                      ^~
-   drivers/md/dm-log.c:810:17: note: in expansion of macro 'DMEMIT'
-     810 |                 DMEMIT("3 %s %s %c", log->type->name, lc->log_dev->name,
-         |                 ^~~~~~
-   include/linux/device-mapper.h:615:22: note: each undeclared identifier is reported only once for each function it appears in
-     615 | #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-         |                      ^~
-   drivers/md/dm-log.c:810:17: note: in expansion of macro 'DMEMIT'
-     810 |                 DMEMIT("3 %s %s %c", log->type->name, lc->log_dev->name,
-         |                 ^~~~~~
-
-
-vim +615 include/linux/device-mapper.h
-
-0da336e5fab75c Alasdair G Kergon 2008-04-24  614  
-0da336e5fab75c Alasdair G Kergon 2008-04-24 @615  #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-0da336e5fab75c Alasdair G Kergon 2008-04-24  616  			  0 : scnprintf(result + sz, maxlen - sz, x))
-0da336e5fab75c Alasdair G Kergon 2008-04-24  617  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > 
+> > Anyway, in this change I'm touching only PPC32 build, so all PPC64 stay
+> > as it was before.
+> > 
+> >>>    endif
+> >>> +endif
+> >>>    
+> >>>    BOOTCFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
+> >>>    

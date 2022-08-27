@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6119E5A3864
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4FB5A3869
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiH0PfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 11:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        id S233512AbiH0Pmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 11:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiH0Pe5 (ORCPT
+        with ESMTP id S230144AbiH0Pmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 11:34:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D601EC74;
-        Sat, 27 Aug 2022 08:34:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C865A60B87;
-        Sat, 27 Aug 2022 15:34:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4B3C433D6;
-        Sat, 27 Aug 2022 15:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661614494;
-        bh=OwdC3zQvx/KCzeSOjSzdhVsw26TrxSO5sfbmeSj3vF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bXmb0bD8ESyNwnRhmb8IR14oLDFELGHgM5LbDriucEEumr3NzmxZa3KYqDkTDA84U
-         ob5PwgU3nlrEsIUThmRhklgxtfWxXONGAo3XfnYjJ/K0R5ZHrHSASCq5WFXqxGxZbA
-         pnl2HIEXo3yTpIt6sSXX07EEcxRGw5QnhFmjNbCuwvt1bk5dbaShy30tgXRfh6VWCb
-         +lleWEXp6G02g40n6LJx5+RIz77SsYmEqsElHu0c6tTJzFso2fF1DMd+yWC2HyEbKI
-         a0Fu1555e1QfSccC1hDHagmRilh25cKV8qw9KrbXliotwabiE6mxisiJYjtHwwc3ZX
-         cCABO4ZAwi3vA==
-Date:   Sat, 27 Aug 2022 08:34:53 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v5 8/8] xfs: support STATX_DIOALIGN
-Message-ID: <Ywo5nQpqKNUzm/0y@magnolia>
-References: <20220827065851.135710-1-ebiggers@kernel.org>
- <20220827065851.135710-9-ebiggers@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220827065851.135710-9-ebiggers@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 27 Aug 2022 11:42:49 -0400
+Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7F3FF642CE;
+        Sat, 27 Aug 2022 08:42:46 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [218.12.17.21])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDnet1nOgpjW00nBA--.27577S2;
+        Sat, 27 Aug 2022 23:38:23 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     netdev@vger.kernel.org
+Cc:     jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] ethernet: rocker: fix sleep in atomic context bug in neigh_timer_handler
+Date:   Sat, 27 Aug 2022 23:38:15 +0800
+Message-Id: <20220827153815.124475-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgDnet1nOgpjW00nBA--.27577S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF47GF18tF43uFWrKryDKFg_yoW8XrWrpa
+        yrWFyjqF1kKF90ga1DXanYvrWrZ3WUAF9rG3WI9w15Zws2qrWDAF9YkFyY9FW0yFy8ZF4Y
+        9F18Aw13AFnFy3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUym14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIPAVZdtbMKaAAFsk
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:58:51PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Add support for STATX_DIOALIGN to xfs, so that direct I/O alignment
-> restrictions are exposed to userspace in a generic way.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+The function neigh_timer_handler() is a timer handler that runs in an
+atomic context. When used by rocker, neigh_timer_handler() calls
+"kzalloc(.., GFP_KERNEL)" that may sleep. As a result, the sleep in
+atomic context bug will happen. One of the processes is shown below:
 
-Looks good to me; I particularly like the adjustment to report the
-device's DMA alignment.  Someone should probably fix DIONINFO, or
-perhaps turn it into a getattr wrapper and hoist it?  IMHO none of those
-suggestions are necessary to land this patch, though.
+ofdpa_fib4_add()
+ ...
+ neigh_add_timer()
 
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+(wait a timer)
 
---D
+neigh_timer_handler()
+ neigh_release()
+  neigh_destroy()
+   rocker_port_neigh_destroy()
+    rocker_world_port_neigh_destroy()
+     ofdpa_port_neigh_destroy()
+      ofdpa_port_ipv4_neigh()
+       kzalloc(sizeof(.., GFP_KERNEL) //may sleep
 
-> ---
->  fs/xfs/xfs_iops.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-> index 45518b8c613c9a..f51c60d7e2054a 100644
-> --- a/fs/xfs/xfs_iops.c
-> +++ b/fs/xfs/xfs_iops.c
-> @@ -604,6 +604,16 @@ xfs_vn_getattr(
->  		stat->blksize = BLKDEV_IOSIZE;
->  		stat->rdev = inode->i_rdev;
->  		break;
-> +	case S_IFREG:
-> +		if (request_mask & STATX_DIOALIGN) {
-> +			struct xfs_buftarg	*target = xfs_inode_buftarg(ip);
-> +			struct block_device	*bdev = target->bt_bdev;
-> +
-> +			stat->result_mask |= STATX_DIOALIGN;
-> +			stat->dio_mem_align = bdev_dma_alignment(bdev) + 1;
-> +			stat->dio_offset_align = bdev_logical_block_size(bdev);
-> +		}
-> +		fallthrough;
->  	default:
->  		stat->blksize = xfs_stat_blksize(ip);
->  		stat->rdev = 0;
-> -- 
-> 2.37.2
-> 
+This patch changes the gfp_t parameter of kzalloc() from GFP_KERNEL to
+GFP_ATOMIC in order to mitigate the bug.
+
+Fixes: 00fc0c51e35b ("rocker: Change world_ops API and implementation to be switchdev independant")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/net/ethernet/rocker/rocker_ofdpa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/rocker/rocker_ofdpa.c b/drivers/net/ethernet/rocker/rocker_ofdpa.c
+index bc70c6abd6a..58cf7cc54f4 100644
+--- a/drivers/net/ethernet/rocker/rocker_ofdpa.c
++++ b/drivers/net/ethernet/rocker/rocker_ofdpa.c
+@@ -1273,7 +1273,7 @@ static int ofdpa_port_ipv4_neigh(struct ofdpa_port *ofdpa_port,
+ 	bool removing;
+ 	int err = 0;
+ 
+-	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
++	entry = kzalloc(sizeof(*entry), GFP_ATOMIC);
+ 	if (!entry)
+ 		return -ENOMEM;
+ 
+-- 
+2.17.1
+

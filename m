@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED0A5A3441
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE645A3442
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 06:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbiH0EDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 00:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S236849AbiH0EDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 00:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH0EDM (ORCPT
+        with ESMTP id S232468AbiH0EDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 00:03:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37C2E398D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 21:03:10 -0700 (PDT)
+        Sat, 27 Aug 2022 00:03:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0579E3986
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 21:03:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0361861DCF
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:03:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38407C433C1;
-        Sat, 27 Aug 2022 04:03:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 640E561DCF
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6A7C433B5;
+        Sat, 27 Aug 2022 04:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661572989;
-        bh=ehcQFeMDwSm+yrUdn1K0FD1tIXNWCnHe2vng7L9bw0k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Em8MGkIvbEXYTGTv8xKdUV6L7pLx2z/iNBE2nzzZzzmoD0x411oXMvL5Sz2O9FCnc
-         1QreMFXTfMwfzPs1c6567XneQWwi4IRTd3ceJxj8n5tzz+D/iixzThe/cS+8qKZc1a
-         qsTSDPHwN+nmZ9zX6ljjYt0UXaNkAp5wWiDdlvXW0udkzAG8X8UkePlVl8xJPf4rLm
-         mJ0Uuv4gr3fpV0DsG83ttUGs9/VpmE4lgcmnjKqRbe/7tb98ijpP0UvE8T0+U+SptD
-         2kaDW1HZrf9nnHo7M1OsYDSHeeImIUQlM0/B6JSABnvxaxAORBFaChmPmdrcyWzNpe
-         DWYuQlyQog4Nw==
+        s=k20201202; t=1661572998;
+        bh=6h0q3HLOupjIluOvt0WI/JeaJ5DW/jOkFgt32sgYqnQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JQXR+kXgSYH5qk8Eg/0CnOXI94pve9FpGWIbzbjntjQXG1/nd0Jg/oFndYtQ7IArO
+         xGQQvT/OVioR3pFcK0VLu6uVIhFswZaE2J4ZcFYBKEF2IN2chGjUeJZpK8mL10inSh
+         1zb9GEFJFZZmr8C1bzSxCgpotUEy8wWNvPG4zr8S/KDVj2Y+iyZMLcl8zDa/b4tjtK
+         80GjR6TinlPKXJXID5OizEmBJvvCl2qCxDkXRd6TWCW+HweiOUiyyxI04xraGVGYb4
+         vb7ibFuJ8B5FRWr2Ss+tSdog6hwc8CO+kqNZ2J6sQ+eOUJEjB5zp4n9cOAZSqRMNXX
+         gz1ciOD4wg20A==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/5] tracing/hist: Add percentage histogram suffixes
-Date:   Sat, 27 Aug 2022 13:03:05 +0900
-Message-Id: <166157298537.348924.2537162090505397377.stgit@devnote2>
+Subject: [PATCH v4 1/5] tracing: Allow multiple hitcount values in histograms
+Date:   Sat, 27 Aug 2022 13:03:15 +0900
+Message-Id: <166157299482.348924.7718303119342203371.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <166157298537.348924.2537162090505397377.stgit@devnote2>
+References: <166157298537.348924.2537162090505397377.stgit@devnote2>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -54,95 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Tom Zanussi <zanussi@kernel.org>
 
-Here is the 4th version of .percent and .graph suffixes for histogram
-trigger to show the value in percentage and in bar-graph respectively.
+The hitcount is treated specially in the histograms - since it's
+always expected to be there regardless of whether the user specified
+anything or not, it's always added as the first histogram value.
 
-I've rebased on Tom's hitcount patch[1/5] on the series and added a patch
-for supressing display of hitcount[5/5] in this version.
+Currently the code doesn't allow it to be added more than once as a
+value, which is inconsistent with all the other possible values.  It
+would seem to be a pointless thing to want to do, but other features
+being added such as percent and graph modifiers don't work properly
+with the current hitcount restrictions.
 
-This will help us to check the trend of the histogram instantly
-without any post processing tool.
+Fix this by allowing multiple hitcounts to be added.
 
-Here shows an example of the percentage and the bar graph of
-the hitcount of the running tasks.
-
-  # cd /sys/kernel/debug/tracing/
-  # echo hist:keys=pid:vals=hitcount.percent,hitcount.graph:sort=pid > \
-        events/sched/sched_stat_runtime/trigger
-  # sleep 10
-  # cat events/sched/sched_stat_runtime/hist
- # event histogram
- #
- # trigger info: hist:keys=pid:vals=hitcount.percent,hitcount.graph:sort=pid:size=2048 [active]
- #
-
- { pid:         14 } hitcount (%):   4.68  hitcount: ###                 
- { pid:         16 } hitcount (%):  17.18  hitcount: ###########         
- { pid:         57 } hitcount (%):   7.81  hitcount: #####               
- { pid:         61 } hitcount (%):  31.25  hitcount: ####################
- { pid:         70 } hitcount (%):   4.68  hitcount: ###                 
- { pid:         77 } hitcount (%):   1.56  hitcount: #                   
- { pid:        145 } hitcount (%):  18.75  hitcount: ############        
- { pid:        151 } hitcount (%):   9.37  hitcount: ######              
- { pid:        152 } hitcount (%):   4.68  hitcount: ###                 
-
- Totals:
-     Hits: 64
-     Entries: 9
-     Dropped: 0
-
-Of course if you explicitly specify the hitcount, it can show the
-hitcount as below;
-
-  # cd /sys/kernel/debug/tracing/
-  # echo hist:keys=pid:vals=hitcount,runtime:sort=pid > \
-        events/sched/sched_stat_runtime/trigger
-  # sleep 10
-  # cat events/sched/sched_stat_runtime/hist
- # event histogram
- #
- # trigger info: hist:keys=pid:vals=hitcount,runtime:sort=pid:size=2048 [active]
- #
-
- { pid:         14 } hitcount:          2  runtime:     304876
- { pid:         16 } hitcount:          8  runtime:     300574
- { pid:         26 } hitcount:          2  runtime:      15578
- { pid:         32 } hitcount:          2  runtime:     219186
- { pid:         57 } hitcount:          3  runtime:     506003
- { pid:         61 } hitcount:         20  runtime:    1681473
- { pid:         69 } hitcount:          3  runtime:     201785
- { pid:         70 } hitcount:          4  runtime:     360608
- { pid:         77 } hitcount:          8  runtime:    4146935
- { pid:        145 } hitcount:         13  runtime:    7537994
- { pid:        155 } hitcount:          4  runtime:    2511937
- { pid:        156 } hitcount:          2  runtime:    1398886
-
- Totals:
-     Hits: 71
-     Entries: 12
-     Dropped: 0
-
-
-Thank you,
+Signed-off-by: Tom Zanussi <zanussi@kernel.org>
 
 ---
+ Changes in v4:
+  - Initialize n_hitcount.
+---
+ kernel/trace/trace_events_hist.c |   12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Masami Hiramatsu (Google) (4):
-      tracing: Fix to check event_mutex is held while accessing trigger list
-      tracing: Add .percent suffix option to histogram values
-      tracing: Add .graph suffix option to histogram value
-      tracing: Show hitcount value only when specified
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 92fbd72b6408..e80a41e380bb 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -1356,6 +1356,8 @@ static const char *hist_field_name(struct hist_field *field,
+ 			field_name = field->name;
+ 	} else if (field->flags & HIST_FIELD_FL_TIMESTAMP)
+ 		field_name = "common_timestamp";
++	else if (field->flags & HIST_FIELD_FL_HITCOUNT)
++		field_name = "hitcount";
+ 
+ 	if (field_name == NULL)
+ 		field_name = "";
+@@ -2328,6 +2330,8 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
+ 			hist_data->attrs->ts_in_usecs = true;
+ 	} else if (strcmp(field_name, "common_cpu") == 0)
+ 		*flags |= HIST_FIELD_FL_CPU;
++	else if (strcmp(field_name, "hitcount") == 0)
++		*flags |= HIST_FIELD_FL_HITCOUNT;
+ 	else {
+ 		field = trace_find_event_field(file->event_call, field_name);
+ 		if (!field || !field->size) {
+@@ -4328,8 +4332,8 @@ static int create_var_field(struct hist_trigger_data *hist_data,
+ static int create_val_fields(struct hist_trigger_data *hist_data,
+ 			     struct trace_event_file *file)
+ {
++	unsigned int i, j = 1, n_hitcount = 0;
+ 	char *fields_str, *field_str;
+-	unsigned int i, j = 1;
+ 	int ret;
+ 
+ 	ret = create_hitcount_val(hist_data);
+@@ -4346,8 +4350,10 @@ static int create_val_fields(struct hist_trigger_data *hist_data,
+ 		if (!field_str)
+ 			break;
+ 
+-		if (strcmp(field_str, "hitcount") == 0)
+-			continue;
++		if (strcmp(field_str, "hitcount") == 0) {
++			if (!n_hitcount++)
++				continue;
++		}
+ 
+ 		ret = create_val_field(hist_data, j++, file, field_str);
+ 		if (ret)
 
-Tom Zanussi (1):
-      tracing: Allow multiple hitcount values in histograms
-
-
- kernel/trace/trace.c                |    3 -
- kernel/trace/trace_events_hist.c    |  176 ++++++++++++++++++++++++++++++-----
- kernel/trace/trace_events_trigger.c |    3 -
- 3 files changed, 156 insertions(+), 26 deletions(-)
-
---
-Masami Hiramatsu (Google) <mhiramat@kernel.org>

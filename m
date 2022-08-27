@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766555A3332
+	by mail.lfdr.de (Postfix) with ESMTP id ED6E05A3333
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345133AbiH0Aoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 20:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S243254AbiH0Aof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 20:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiH0Aoa (ORCPT
+        with ESMTP id S1345138AbiH0Aoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 20:44:30 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9E0EA32B
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:44:29 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id g189so2821733pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:44:29 -0700 (PDT)
+        Fri, 26 Aug 2022 20:44:32 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469ABEA32B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:44:31 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id pm13so3011757pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=AeF5UjauZ4cxLdwG16cc9PyRRCH352X72B0wsJdtiC0=;
-        b=JNawRDATTyCUOF3ePGLGTTld/aziTxWNAPZ/9QyplpeUpDAi2FJ9+lgB+VyohcnEIk
-         v+/EgG7SAu2B1dw/FYJUD0Xj5f3e8yqIZJzyp1ztOEOcIvvthiRnV34/KytSrNT8rZz1
-         n3pEAg2vnSa9A67mrNj+rC0HnRiCQ5C+bNlLY=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=6JTim4nPtQtPEg9O17WZ92ebDi9nsN3vvJLg6si7U+4=;
+        b=hy9zDsLU1GpQMWDqN7TakU+s2i2SxyKg0kGWZrYloRny5Hph3DZT6z3t1gNAvNsI7C
+         cIAzCKRsemzBdWgPrw3U0R3Qb/9sRBFEhxa6GVtHr8kqm4fnUcHErs8pIBL7g7ZE7xCI
+         xkmyVivcf3Ngj978357lc809XVWDgox5FZuwo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=AeF5UjauZ4cxLdwG16cc9PyRRCH352X72B0wsJdtiC0=;
-        b=7yU58XCjQj1AFpG5h9rcA0C17qeQ2vpL7j8Dq1+7lPA9DM13M8xokiZ1hmhgZXm5Sh
-         0wgDkBMYBMCvr42fCquGPEGceDAJA/wTsB35jM/zRML3cWC7ybv3xgFYZwiFDfRWi81p
-         gDvxZ94yKgS77abhUb4mR/KdM2RXGy3yRu0Em7dDYrxp4pz/7bIg5LbxtoNpRcxkrZIL
-         Lg/KYFl+QQXdflkSwbv6FW347egixVnGi5f4TcoW1WWyB98iS6wAQiGnAzlvE61TrviA
-         d93iDoOqBkzxmSoKTqM5EtFQLgXjcp9x/qmR9/FkFEYi5x63pAAe8MGaIN4M96bm/zAu
-         dD1g==
-X-Gm-Message-State: ACgBeo1fxVFSCnj5yRIGiVnpDeLs6alRa+QtHb2eF+1qsZub+Ko9dBd6
-        fsvzktadpFceYq4Z+D9zBE/0BA==
-X-Google-Smtp-Source: AA6agR4/PsPvD/4lgDefpw9KNyNxzLYnXW2WLTucK4IJd0A+Nbw7ZH0/+lar2rhzFpbEV6z0h93pjg==
-X-Received: by 2002:a63:224a:0:b0:41e:1d36:5063 with SMTP id t10-20020a63224a000000b0041e1d365063mr5085643pgm.568.1661561068898;
-        Fri, 26 Aug 2022 17:44:28 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=6JTim4nPtQtPEg9O17WZ92ebDi9nsN3vvJLg6si7U+4=;
+        b=cpSGcqqyCGXtx7TgWGJ6mZIWyS89t3QWHyRKju3YDEOZGUJhMpVSxXFwZLSfVyKlXV
+         jF/OrDlnPHQGaZogm128grgS0Hjcxfs6bAuaXZ6GdsIWxeAxnSDIxEXMindeRI33CPSl
+         GURyES2L6Sk3cWIZnu4Z5qL6wgrVukgXkosV1PiZeHzFaHfDxcfU4AuvyokUbp5SiKHS
+         FfEnpMuWOUy2QO3quezYAARdcoxaixs7uXHT19byVNPZPXZud82HWUYYgU9wjIlLCH+4
+         H1rDLw5G8fA93dwf6h+45EfauXS2g/fjXsJ7gb5cAEo9/fM3n2NSh5Poq6bl/k0ib6HE
+         AdRg==
+X-Gm-Message-State: ACgBeo37LGxW/a75SKuAL7u9nCnrbyl1UTY0vWSagWFNdagtQX9+kdHQ
+        5qmzuryUVjmrBfY1duRKFjYz64AmZABmyg==
+X-Google-Smtp-Source: AA6agR62d3r9eNiCVwM6BiQcyCqVFzJF+RYsTRs2rWLA6fZuMfYYGaTvWnmg7BQzQs4CxZJV3GnXLw==
+X-Received: by 2002:a17:90b:4a4e:b0:1fb:a13:3730 with SMTP id lb14-20020a17090b4a4e00b001fb0a133730mr6781924pjb.136.1661561070769;
+        Fri, 26 Aug 2022 17:44:30 -0700 (PDT)
 Received: from localhost ([2620:15c:202:201:f351:6a22:e571:bde5])
-        by smtp.gmail.com with UTF8SMTPSA id n10-20020a170902f60a00b001714853e503sm2229649plg.36.2022.08.26.17.44.27
+        by smtp.gmail.com with UTF8SMTPSA id s3-20020a170902ea0300b0016f02fceff4sm2294706plg.57.2022.08.26.17.44.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 17:44:28 -0700 (PDT)
+        Fri, 26 Aug 2022 17:44:30 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -52,10 +52,12 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH 1/2] debugfs: Only clobber mode/uid/gid on remount if asked
-Date:   Fri, 26 Aug 2022 17:44:16 -0700
-Message-Id: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
+Subject: [PATCH 2/2] tracefs: Only clobber mode/uid/gid on remount if asked
+Date:   Fri, 26 Aug 2022 17:44:17 -0700
+Message-Id: <20220826174353.2.Iab6e5ea57963d6deca5311b27fb7226790d44406@changeid>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+In-Reply-To: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
+References: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,30 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Users may have explicitly configured their debugfs permissions; we
+Users may have explicitly configured their tracefs permissions; we
 shouldn't overwrite those just because a second mount appeared.
 
 Only clobber if the options were provided at mount time.
 
-  # Don't change /sys/kernel/debug/ permissions.
-  mount -t debugfs none /mnt/foo
+Note: the previous behavior was especially surprising in the presence of
+automounted /sys/kernel/debug/tracing/.
 
-  # Change /sys/kernel/debug/ mode and uid, but not gid.
-  mount -t debugfs -o uid=bar,mode=0750 none /mnt/baz
+  # Don't change /sys/kernel/tracing/ permissions on automount.
+  umount /sys/kernel/debug/tracing/
+  stat /sys/kernel/debug/tracing/.
+
+  # Don't change /sys/kernel/tracing/ permissions.
+  mount -t tracefs none /mnt/foo
+
+  # Change /sys/kernel/tracing/ mode and uid, but not gid.
+  mount -t tracefs -o uid=bar,mode=0750 none /mnt/baz
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 I'm open to writing an LTP test case for this, if that seems like a good
 idea.
 
- fs/debugfs/inode.c | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+ fs/tracefs/inode.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-index 3dcf0b8b4e93..1e36ce013631 100644
---- a/fs/debugfs/inode.c
-+++ b/fs/debugfs/inode.c
-@@ -82,6 +82,8 @@ struct debugfs_mount_opts {
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 81d26abf486f..da85b3979195 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -141,6 +141,8 @@ struct tracefs_mount_opts {
  	kuid_t uid;
  	kgid_t gid;
  	umode_t mode;
@@ -100,16 +109,16 @@ index 3dcf0b8b4e93..1e36ce013631 100644
  };
  
  enum {
-@@ -111,6 +113,7 @@ static int debugfs_parse_options(char *data, struct debugfs_mount_opts *opts)
+@@ -241,6 +243,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
  	kgid_t gid;
  	char *p;
  
 +	opts->opts = 0;
- 	opts->mode = DEBUGFS_DEFAULT_MODE;
+ 	opts->mode = TRACEFS_DEFAULT_MODE;
  
  	while ((p = strsep(&data, ",")) != NULL) {
-@@ -145,22 +148,34 @@ static int debugfs_parse_options(char *data, struct debugfs_mount_opts *opts)
- 		 * but traditionally debugfs has ignored all mount options
+@@ -275,24 +278,36 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+ 		 * but traditionally tracefs has ignored all mount options
  		 */
  		}
 +
@@ -119,12 +128,12 @@ index 3dcf0b8b4e93..1e36ce013631 100644
  	return 0;
  }
  
--static int debugfs_apply_options(struct super_block *sb)
-+static int debugfs_apply_options(struct super_block *sb, bool remount)
+-static int tracefs_apply_options(struct super_block *sb)
++static int tracefs_apply_options(struct super_block *sb, bool remount)
  {
- 	struct debugfs_fs_info *fsi = sb->s_fs_info;
+ 	struct tracefs_fs_info *fsi = sb->s_fs_info;
  	struct inode *inode = d_inode(sb->s_root);
- 	struct debugfs_mount_opts *opts = &fsi->mount_opts;
+ 	struct tracefs_mount_opts *opts = &fsi->mount_opts;
  
 -	inode->i_mode &= ~S_IALLUGO;
 -	inode->i_mode |= opts->mode;
@@ -137,32 +146,35 @@ index 3dcf0b8b4e93..1e36ce013631 100644
 +		inode->i_mode &= ~S_IALLUGO;
 +		inode->i_mode |= opts->mode;
 +	}
-+
+ 
+-	inode->i_uid = opts->uid;
 +	if (!remount || opts->opts & BIT(Opt_uid))
 +		inode->i_uid = opts->uid;
  
--	inode->i_uid = opts->uid;
--	inode->i_gid = opts->gid;
-+	if (!remount || opts->opts & BIT(Opt_gid))
-+		inode->i_gid = opts->gid;
+-	/* Set all the group ids to the mount option */
+-	set_gid(sb->s_root, opts->gid);
++	if (!remount || opts->opts & BIT(Opt_gid)) {
++		/* Set all the group ids to the mount option */
++		set_gid(sb->s_root, opts->gid);
++	}
  
  	return 0;
  }
-@@ -175,7 +190,7 @@ static int debugfs_remount(struct super_block *sb, int *flags, char *data)
+@@ -307,7 +322,7 @@ static int tracefs_remount(struct super_block *sb, int *flags, char *data)
  	if (err)
  		goto fail;
  
--	debugfs_apply_options(sb);
-+	debugfs_apply_options(sb, true);
+-	tracefs_apply_options(sb);
++	tracefs_apply_options(sb, true);
  
  fail:
  	return err;
-@@ -257,7 +272,7 @@ static int debug_fill_super(struct super_block *sb, void *data, int silent)
- 	sb->s_op = &debugfs_super_operations;
- 	sb->s_d_op = &debugfs_dops;
+@@ -359,7 +374,7 @@ static int trace_fill_super(struct super_block *sb, void *data, int silent)
  
--	debugfs_apply_options(sb);
-+	debugfs_apply_options(sb, false);
+ 	sb->s_op = &tracefs_super_operations;
+ 
+-	tracefs_apply_options(sb);
++	tracefs_apply_options(sb, false);
  
  	return 0;
  

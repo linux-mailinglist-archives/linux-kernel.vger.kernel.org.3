@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE645A3442
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 06:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232AE5A3443
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 06:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbiH0EDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 00:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S232468AbiH0EDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 00:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232468AbiH0EDU (ORCPT
+        with ESMTP id S237359AbiH0EDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 00:03:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0579E3986
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 21:03:19 -0700 (PDT)
+        Sat, 27 Aug 2022 00:03:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64253E3C03
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 21:03:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 640E561DCF
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6A7C433B5;
-        Sat, 27 Aug 2022 04:03:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C82EE61E16
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:03:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAEBC433D6;
+        Sat, 27 Aug 2022 04:03:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661572998;
-        bh=6h0q3HLOupjIluOvt0WI/JeaJ5DW/jOkFgt32sgYqnQ=;
+        s=k20201202; t=1661573008;
+        bh=tu/uBFTcTkD8ciezaLIOud2OqZdulEjwj2vtD/px5uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JQXR+kXgSYH5qk8Eg/0CnOXI94pve9FpGWIbzbjntjQXG1/nd0Jg/oFndYtQ7IArO
-         xGQQvT/OVioR3pFcK0VLu6uVIhFswZaE2J4ZcFYBKEF2IN2chGjUeJZpK8mL10inSh
-         1zb9GEFJFZZmr8C1bzSxCgpotUEy8wWNvPG4zr8S/KDVj2Y+iyZMLcl8zDa/b4tjtK
-         80GjR6TinlPKXJXID5OizEmBJvvCl2qCxDkXRd6TWCW+HweiOUiyyxI04xraGVGYb4
-         vb7ibFuJ8B5FRWr2Ss+tSdog6hwc8CO+kqNZ2J6sQ+eOUJEjB5zp4n9cOAZSqRMNXX
-         gz1ciOD4wg20A==
+        b=sOgO/3jr3dCmERi87hkG3jw3yqWXJRMOFDLMR8bRfcR7ryZdwafXXt8Z5rHLtZTFx
+         uh/P4dgzsTRlhv7pQVKMmkwEJSHiMGBPD/2Ci0hqca8T9q1s935XHo3PfalUbLWU1I
+         tD2nzUxCHmjoXLIV+ISm1AROjGYb4kUJnsqU2T+btP0WBFTBRO0BNfBS4I4Gi9ieUW
+         xo4F9yFYUsF2kr77G8806cl/TXGuVmuS9ZU9YVv0heXB/9nbmSEtEhWuhPwFfqTPHy
+         DiajW+Nvn1xAB0oS3Cy330pmQAcS8RgCbs3hAv6hH1HADfb5hN9T8zScIIb9Lz/IbG
+         ZwHA85YqOIeuA==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/5] tracing: Allow multiple hitcount values in histograms
-Date:   Sat, 27 Aug 2022 13:03:15 +0900
-Message-Id: <166157299482.348924.7718303119342203371.stgit@devnote2>
+Subject: [PATCH v4 2/5] tracing: Fix to check event_mutex is held while accessing trigger list
+Date:   Sat, 27 Aug 2022 13:03:24 +0900
+Message-Id: <166157300435.348924.14755234601275629058.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <166157298537.348924.2537162090505397377.stgit@devnote2>
 References: <166157298537.348924.2537162090505397377.stgit@devnote2>
@@ -56,72 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Zanussi <zanussi@kernel.org>
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-The hitcount is treated specially in the histograms - since it's
-always expected to be there regardless of whether the user specified
-anything or not, it's always added as the first histogram value.
+Since the check_user_trigger() is called outside of RCU
+read lock, this list_for_each_entry_rcu() caused a suspicious
+RCU usage warning.
 
-Currently the code doesn't allow it to be added more than once as a
-value, which is inconsistent with all the other possible values.  It
-would seem to be a pointless thing to want to do, but other features
-being added such as percent and graph modifiers don't work properly
-with the current hitcount restrictions.
+ # echo hist:keys=pid > events/sched/sched_stat_runtime/trigger
+ # cat events/sched/sched_stat_runtime/trigger
+[   43.167032]
+[   43.167418] =============================
+[   43.167992] WARNING: suspicious RCU usage
+[   43.168567] 5.19.0-rc5-00029-g19ebe4651abf #59 Not tainted
+[   43.169283] -----------------------------
+[   43.169863] kernel/trace/trace_events_trigger.c:145 RCU-list traversed in non-reader section!!
+...
 
-Fix this by allowing multiple hitcounts to be added.
+However, this file->triggers list is safe when it is accessed
+under event_mutex is held.
+To fix this warning, adds a lockdep_is_held check to the
+list_for_each_entry_rcu().
 
-Signed-off-by: Tom Zanussi <zanussi@kernel.org>
-
+Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- Changes in v4:
-  - Initialize n_hitcount.
----
- kernel/trace/trace_events_hist.c |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ kernel/trace/trace_events_trigger.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 92fbd72b6408..e80a41e380bb 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -1356,6 +1356,8 @@ static const char *hist_field_name(struct hist_field *field,
- 			field_name = field->name;
- 	} else if (field->flags & HIST_FIELD_FL_TIMESTAMP)
- 		field_name = "common_timestamp";
-+	else if (field->flags & HIST_FIELD_FL_HITCOUNT)
-+		field_name = "hitcount";
- 
- 	if (field_name == NULL)
- 		field_name = "";
-@@ -2328,6 +2330,8 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
- 			hist_data->attrs->ts_in_usecs = true;
- 	} else if (strcmp(field_name, "common_cpu") == 0)
- 		*flags |= HIST_FIELD_FL_CPU;
-+	else if (strcmp(field_name, "hitcount") == 0)
-+		*flags |= HIST_FIELD_FL_HITCOUNT;
- 	else {
- 		field = trace_find_event_field(file->event_call, field_name);
- 		if (!field || !field->size) {
-@@ -4328,8 +4332,8 @@ static int create_var_field(struct hist_trigger_data *hist_data,
- static int create_val_fields(struct hist_trigger_data *hist_data,
- 			     struct trace_event_file *file)
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index cb866c3141af..918730d74932 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -142,7 +142,8 @@ static bool check_user_trigger(struct trace_event_file *file)
  {
-+	unsigned int i, j = 1, n_hitcount = 0;
- 	char *fields_str, *field_str;
--	unsigned int i, j = 1;
- 	int ret;
+ 	struct event_trigger_data *data;
  
- 	ret = create_hitcount_val(hist_data);
-@@ -4346,8 +4350,10 @@ static int create_val_fields(struct hist_trigger_data *hist_data,
- 		if (!field_str)
- 			break;
- 
--		if (strcmp(field_str, "hitcount") == 0)
--			continue;
-+		if (strcmp(field_str, "hitcount") == 0) {
-+			if (!n_hitcount++)
-+				continue;
-+		}
- 
- 		ret = create_val_field(hist_data, j++, file, field_str);
- 		if (ret)
+-	list_for_each_entry_rcu(data, &file->triggers, list) {
++	list_for_each_entry_rcu(data, &file->triggers, list,
++				lockdep_is_held(&event_mutex)) {
+ 		if (data->flags & EVENT_TRIGGER_FL_PROBE)
+ 			continue;
+ 		return true;
 

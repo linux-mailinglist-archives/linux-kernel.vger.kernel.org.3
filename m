@@ -2,70 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260C95A341A
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 05:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151385A3420
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 05:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiH0DRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 23:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S1345120AbiH0DSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 23:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345100AbiH0DQ6 (ORCPT
+        with ESMTP id S233267AbiH0DSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 23:16:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2179180019;
-        Fri, 26 Aug 2022 20:16:56 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MF1zM589VzGpHJ;
-        Sat, 27 Aug 2022 11:15:11 +0800 (CST)
-Received: from [10.174.178.66] (10.174.178.66) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 11:16:54 +0800
-Message-ID: <3bee0773-dc81-79b8-bddd-852141e3258c@huawei.com>
-Date:   Sat, 27 Aug 2022 11:16:53 +0800
+        Fri, 26 Aug 2022 23:18:40 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CCFAD985
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 20:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661570318; x=1693106318;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wqnRrLNSTs3utIl7n2PhUSCEi0sLrfMrZL+3x/QLNYw=;
+  b=YWQ/yYxpH0Yp+3cyo/HQiljK1hS3qmlG6zu2wZBU6ChcZf2+q+FUF5cA
+   e1t+S+KGIiB9oYOWbrEg6N1q/MvuvtgU4uXjH9JXhyZ7sjVRweJydFbNF
+   QZs6oRlZmyYJFahMGDqDcmrTcEWlmEOFRxkgh9pstsnuo8GwdGnZwBjY4
+   8BDwoQ0PtrIjfhSvkKW/wWWXR2MG9LKClRO2G2/di71tvXoJBrWwT7nHi
+   A3VYOLq7Qt7S/ufI5NbBaUbXiCqDrNZjCCyzzLFVQHHPND8cDIXCWWGkB
+   zDx3ejK+zRA1v/Fp3YKPBftpoi5BOlTC8lKWKwtg/NxTBAR9XlkqqAyqq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="358597716"
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="358597716"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 20:18:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="643873704"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2022 20:18:35 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRmLC-0000vP-2x;
+        Sat, 27 Aug 2022 03:18:34 +0000
+Date:   Sat, 27 Aug 2022 11:18:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Subject: [matthias-bgg:v6.0-next/soc 11/11]
+ drivers/soc/mediatek/mtk-svs.c:887:26: error: call to undeclared function
+ 'FIELD_GET'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202208271156.r27CHg8A-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH net-next 0/3] net: sched: add other statistics when
- calling qdisc_drop()
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
-References: <20220825032943.34778-1-shaozhengchao@huawei.com>
- <20220826194052.7978b101@kernel.org>
-From:   shaozhengchao <shaozhengchao@huawei.com>
-In-Reply-To: <20220826194052.7978b101@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.66]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/27 10:40, Jakub Kicinski wrote:
-> On Thu, 25 Aug 2022 11:29:40 +0800 Zhengchao Shao wrote:
->> According to the description, "other" should be added when calling
->> qdisc_drop() to discard packets.
-> 
-> The fact that an old copy & pasted comment says something is not
-> in itself a sufficient justification to make code changes.
-> 
-> qdisc_drop() already counts drops, duplicating the same information
-> in another place seems like a waste of CPU cycles.
+Hi AngeloGioacchino,
 
-Hi Jakub:
-	Thank you for your reply. It seems more appropriate to delete the other 
-variable, if it is unused?
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Zhengchao Shao
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git v6.0-next/soc
+head:   a92438c5a30a27b6791da025306a45478a6ac7a4
+commit: a92438c5a30a27b6791da025306a45478a6ac7a4 [11/11] soc: mediatek: mtk-svs: Use bitfield access macros where possible
+config: hexagon-randconfig-r041-20220827 (https://download.01.org/0day-ci/archive/20220827/202208271156.r27CHg8A-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?id=a92438c5a30a27b6791da025306a45478a6ac7a4
+        git remote add matthias-bgg https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git
+        git fetch --no-tags matthias-bgg v6.0-next/soc
+        git checkout a92438c5a30a27b6791da025306a45478a6ac7a4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/mediatek/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/soc/mediatek/mtk-svs.c:887:26: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
+                                                 ^
+   drivers/soc/mediatek/mtk-svs.c:909:20: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
+                                           ^
+   drivers/soc/mediatek/mtk-svs.c:1040:19: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           svsb->volt[14] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
+                            ^
+>> drivers/soc/mediatek/mtk-svs.c:1073:18: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
+                           ^
+   drivers/soc/mediatek/mtk-svs.c:1095:13: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           des_char = FIELD_PREP(SVSB_DESCHAR_FLD_BDES, svsb->bdes) |
+                      ^
+   5 errors generated.
+
+
+vim +/FIELD_GET +887 drivers/soc/mediatek/mtk-svs.c
+
+   858	
+   859	static void svs_get_bank_volts_v3(struct svs_platform *svsp)
+   860	{
+   861		struct svs_bank *svsb = svsp->pbank;
+   862		u32 i, j, *vop, vop74, vop30, turn_pt = svsb->turn_pt;
+   863		u32 b_sft, shift_byte = 0, opp_start = 0, opp_stop = 0;
+   864		u32 middle_index = (svsb->opp_count / 2);
+   865	
+   866		if (svsb->phase == SVSB_PHASE_MON &&
+   867		    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
+   868			return;
+   869	
+   870		vop74 = svs_readl_relaxed(svsp, VOP74);
+   871		vop30 = svs_readl_relaxed(svsp, VOP30);
+   872	
+   873		/* Target is to set svsb->volt[] by algorithm */
+   874		if (turn_pt < middle_index) {
+   875			if (svsb->type == SVSB_HIGH) {
+   876				/* volt[0] ~ volt[turn_pt - 1] */
+   877				for (i = 0; i < turn_pt; i++) {
+   878					b_sft = BITS8 * (shift_byte % REG_BYTES);
+   879					vop = (shift_byte < REG_BYTES) ? &vop30 :
+   880									 &vop74;
+   881					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
+   882					shift_byte++;
+   883				}
+   884			} else if (svsb->type == SVSB_LOW) {
+   885				/* volt[turn_pt] + volt[j] ~ volt[opp_count - 1] */
+   886				j = svsb->opp_count - 7;
+ > 887				svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
+   888				shift_byte++;
+   889				for (i = j; i < svsb->opp_count; i++) {
+   890					b_sft = BITS8 * (shift_byte % REG_BYTES);
+   891					vop = (shift_byte < REG_BYTES) ? &vop30 :
+   892									 &vop74;
+   893					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
+   894					shift_byte++;
+   895				}
+   896	
+   897				/* volt[turn_pt + 1] ~ volt[j - 1] by interpolate */
+   898				for (i = turn_pt + 1; i < j; i++)
+   899					svsb->volt[i] = interpolate(svsb->freq_pct[turn_pt],
+   900								    svsb->freq_pct[j],
+   901								    svsb->volt[turn_pt],
+   902								    svsb->volt[j],
+   903								    svsb->freq_pct[i]);
+   904			}
+   905		} else {
+   906			if (svsb->type == SVSB_HIGH) {
+   907				/* volt[0] + volt[j] ~ volt[turn_pt - 1] */
+   908				j = turn_pt - 7;
+   909				svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
+   910				shift_byte++;
+   911				for (i = j; i < turn_pt; i++) {
+   912					b_sft = BITS8 * (shift_byte % REG_BYTES);
+   913					vop = (shift_byte < REG_BYTES) ? &vop30 :
+   914									 &vop74;
+   915					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
+   916					shift_byte++;
+   917				}
+   918	
+   919				/* volt[1] ~ volt[j - 1] by interpolate */
+   920				for (i = 1; i < j; i++)
+   921					svsb->volt[i] = interpolate(svsb->freq_pct[0],
+   922								    svsb->freq_pct[j],
+   923								    svsb->volt[0],
+   924								    svsb->volt[j],
+   925								    svsb->freq_pct[i]);
+   926			} else if (svsb->type == SVSB_LOW) {
+   927				/* volt[turn_pt] ~ volt[opp_count - 1] */
+   928				for (i = turn_pt; i < svsb->opp_count; i++) {
+   929					b_sft = BITS8 * (shift_byte % REG_BYTES);
+   930					vop = (shift_byte < REG_BYTES) ? &vop30 :
+   931									 &vop74;
+   932					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
+   933					shift_byte++;
+   934				}
+   935			}
+   936		}
+   937	
+   938		if (svsb->type == SVSB_HIGH) {
+   939			opp_start = 0;
+   940			opp_stop = svsb->turn_pt;
+   941		} else if (svsb->type == SVSB_LOW) {
+   942			opp_start = svsb->turn_pt;
+   943			opp_stop = svsb->opp_count;
+   944		}
+   945	
+   946		for (i = opp_start; i < opp_stop; i++)
+   947			if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
+   948				svsb->volt[i] -= svsb->dvt_fixed;
+   949	}
+   950	
+   951	static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
+   952	{
+   953		struct svs_bank *svsb = svsp->pbank;
+   954		u32 i, j, *freq_pct, freq_pct74 = 0, freq_pct30 = 0;
+   955		u32 b_sft, shift_byte = 0, turn_pt;
+   956		u32 middle_index = (svsb->opp_count / 2);
+   957	
+   958		for (i = 0; i < svsb->opp_count; i++) {
+   959			if (svsb->opp_dfreq[i] <= svsb->turn_freq_base) {
+   960				svsb->turn_pt = i;
+   961				break;
+   962			}
+   963		}
+   964	
+   965		turn_pt = svsb->turn_pt;
+   966	
+   967		/* Target is to fill out freq_pct74 / freq_pct30 by algorithm */
+   968		if (turn_pt < middle_index) {
+   969			if (svsb->type == SVSB_HIGH) {
+   970				/*
+   971				 * If we don't handle this situation,
+   972				 * SVSB_HIGH's FREQPCT74 / FREQPCT30 would keep "0"
+   973				 * and this leads SVSB_LOW to work abnormally.
+   974				 */
+   975				if (turn_pt == 0)
+   976					freq_pct30 = svsb->freq_pct[0];
+   977	
+   978				/* freq_pct[0] ~ freq_pct[turn_pt - 1] */
+   979				for (i = 0; i < turn_pt; i++) {
+   980					b_sft = BITS8 * (shift_byte % REG_BYTES);
+   981					freq_pct = (shift_byte < REG_BYTES) ?
+   982						   &freq_pct30 : &freq_pct74;
+   983					*freq_pct |= (svsb->freq_pct[i] << b_sft);
+   984					shift_byte++;
+   985				}
+   986			} else if (svsb->type == SVSB_LOW) {
+   987				/*
+   988				 * freq_pct[turn_pt] +
+   989				 * freq_pct[opp_count - 7] ~ freq_pct[opp_count -1]
+   990				 */
+   991				freq_pct30 = svsb->freq_pct[turn_pt];
+   992				shift_byte++;
+   993				j = svsb->opp_count - 7;
+   994				for (i = j; i < svsb->opp_count; i++) {
+   995					b_sft = BITS8 * (shift_byte % REG_BYTES);
+   996					freq_pct = (shift_byte < REG_BYTES) ?
+   997						   &freq_pct30 : &freq_pct74;
+   998					*freq_pct |= (svsb->freq_pct[i] << b_sft);
+   999					shift_byte++;
+  1000				}
+  1001			}
+  1002		} else {
+  1003			if (svsb->type == SVSB_HIGH) {
+  1004				/*
+  1005				 * freq_pct[0] +
+  1006				 * freq_pct[turn_pt - 7] ~ freq_pct[turn_pt - 1]
+  1007				 */
+  1008				freq_pct30 = svsb->freq_pct[0];
+  1009				shift_byte++;
+  1010				j = turn_pt - 7;
+  1011				for (i = j; i < turn_pt; i++) {
+  1012					b_sft = BITS8 * (shift_byte % REG_BYTES);
+  1013					freq_pct = (shift_byte < REG_BYTES) ?
+  1014						   &freq_pct30 : &freq_pct74;
+  1015					*freq_pct |= (svsb->freq_pct[i] << b_sft);
+  1016					shift_byte++;
+  1017				}
+  1018			} else if (svsb->type == SVSB_LOW) {
+  1019				/* freq_pct[turn_pt] ~ freq_pct[opp_count - 1] */
+  1020				for (i = turn_pt; i < svsb->opp_count; i++) {
+  1021					b_sft = BITS8 * (shift_byte % REG_BYTES);
+  1022					freq_pct = (shift_byte < REG_BYTES) ?
+  1023						   &freq_pct30 : &freq_pct74;
+  1024					*freq_pct |= (svsb->freq_pct[i] << b_sft);
+  1025					shift_byte++;
+  1026				}
+  1027			}
+  1028		}
+  1029	
+  1030		svs_writel_relaxed(svsp, freq_pct74, FREQPCT74);
+  1031		svs_writel_relaxed(svsp, freq_pct30, FREQPCT30);
+  1032	}
+  1033	
+  1034	static void svs_get_bank_volts_v2(struct svs_platform *svsp)
+  1035	{
+  1036		struct svs_bank *svsb = svsp->pbank;
+  1037		u32 temp, i;
+  1038	
+  1039		temp = svs_readl_relaxed(svsp, VOP74);
+  1040		svsb->volt[14] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
+  1041		svsb->volt[12] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
+  1042		svsb->volt[10] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
+  1043		svsb->volt[8] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
+  1044	
+  1045		temp = svs_readl_relaxed(svsp, VOP30);
+  1046		svsb->volt[6] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
+  1047		svsb->volt[4] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
+  1048		svsb->volt[2] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
+  1049		svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
+  1050	
+  1051		for (i = 0; i <= 12; i += 2)
+  1052			svsb->volt[i + 1] = interpolate(svsb->freq_pct[i],
+  1053							svsb->freq_pct[i + 2],
+  1054							svsb->volt[i],
+  1055							svsb->volt[i + 2],
+  1056							svsb->freq_pct[i + 1]);
+  1057	
+  1058		svsb->volt[15] = interpolate(svsb->freq_pct[12],
+  1059					     svsb->freq_pct[14],
+  1060					     svsb->volt[12],
+  1061					     svsb->volt[14],
+  1062					     svsb->freq_pct[15]);
+  1063	
+  1064		for (i = 0; i < svsb->opp_count; i++)
+  1065			svsb->volt[i] += svsb->volt_od;
+  1066	}
+  1067	
+  1068	static void svs_set_bank_freq_pct_v2(struct svs_platform *svsp)
+  1069	{
+  1070		struct svs_bank *svsb = svsp->pbank;
+  1071		u32 freqpct74_val, freqpct30_val;
+  1072	
+> 1073		freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
+  1074				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[10]) |
+  1075				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[12]) |
+  1076				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[14]);
+  1077	
+  1078		freqpct30_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[0]) |
+  1079				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[2]) |
+  1080				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[4]) |
+  1081				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[6]);
+  1082	
+  1083		svs_writel_relaxed(svsp, freqpct74_val, FREQPCT74);
+  1084		svs_writel_relaxed(svsp, freqpct30_val, FREQPCT30);
+  1085	}
+  1086	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

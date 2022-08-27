@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2375A3798
+	by mail.lfdr.de (Postfix) with ESMTP id 433425A3797
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbiH0MSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 08:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S232327AbiH0MVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 08:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiH0MSG (ORCPT
+        with ESMTP id S229659AbiH0MVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 08:18:06 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6373A901A5
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:18:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z2so5008644edc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JGaIku7+RSF/y1hvI5LNhxo4Hg3VWD2CcfC8Jmj90IU=;
-        b=mNjmxixskyL3QDVulUysZilIj6VwhFFmo1y39Mn/9Qx6JeehdLaA2U9aAtwpC7Q2wh
-         ZkoABaXXgq9aUFkdcn//ENYVOGUVcpQK8MtDqhDNxQyqvL1vi6ABThbgEfwMhpyb2kQM
-         7sqZIXyAtam5A/6dpImNu8NPgfRg4md/Vf8zq2A9XpGQMHbv6F6AYCp6l6g9X+FnJEja
-         ixs1D2KHZPHVJohWa0yBiVXm0vrHqFk/Ow4u5OhEeCx1LjX8hCmzJteK8HQ/+lVOx7SU
-         T9dQjTos1qJjTZooEL6O39RUT5X4RLY/pRgWUem068ZyTjPuCn37f7gRcBQcBsJfI8J8
-         oobQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JGaIku7+RSF/y1hvI5LNhxo4Hg3VWD2CcfC8Jmj90IU=;
-        b=hJo5I0wEvYPPmtlLh2APDDEaqYusBuobxS+OTy2kneGzCzkXYjFTWREIJr4i29UMt1
-         0OKhtFLW86jQjDZZn0uHAcpP6tzCwcBNvQQqMUcYOGKRwT3N0WR6CmZ2QA1TNpCCpChH
-         NPQiPrfdTpxxKEO25WzoK1WdLnvUvIlcpdR2egjPJ1q47RwC/FCCwYtWo+5XdVSldQQ8
-         3MUXcG02lr7d70ZYkVsoyBLEtEMIkJ+D8emmJwiSKg1JrTKcwzLc3LhxxdPPSr96fGIV
-         RISKzE+zNQJpAitJ5ENr+PMvsTIFAI1Yk9zrlXuu0PpiBxutG+HVIEZlIikZiV2ob1JM
-         N8iw==
-X-Gm-Message-State: ACgBeo0h55L2sUprGD6iyHa+YSiapkuAQXKibBW8MAd0qhtdPkvLuVaG
-        iVq0N6Xr5Ca/2Ec9NT7vZmk4/wCULkqxYK0mlQ==
-X-Google-Smtp-Source: AA6agR6/JB6okNR3w8D+aC2OgeUIm9S4PU4skjbrmBiidvvCsgPA+IjAhC4bgDbjbdiL8RA0TCIMfsibaItbMkwQeCE=
-X-Received: by 2002:a05:6402:19:b0:447:901f:6b28 with SMTP id
- d25-20020a056402001900b00447901f6b28mr9781327edu.392.1661602683876; Sat, 27
- Aug 2022 05:18:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAC8pb093n-OYJf8kpwyV7eDrCJZ+10oY=NeqbtPBDaTzAxGRjw@mail.gmail.com>
- <4e88d9a9-0897-8ec9-a344-b6df3f75a428@acm.org> <CAHk-=wiVFWD8+L8qH1o9OM8rxPrV2FO4Ds8XWQefJJ0idN_sVQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiVFWD8+L8qH1o9OM8rxPrV2FO4Ds8XWQefJJ0idN_sVQ@mail.gmail.com>
-From:   Fabio Comolli <fabio.comolli@gmail.com>
-Date:   Sat, 27 Aug 2022 14:17:27 +0200
-Message-ID: <CAC8pb0_FWP2_iWeb8EwLTfenwuGLqe8pFXdnevRUMYAuKEzKbg@mail.gmail.com>
-Subject: Re: [BISECTED][REGRESSION] Kernel 6.0-rcX hangs on resume on Sony
- Vaio VPCM13M1E
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sat, 27 Aug 2022 08:21:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763D63B966
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661602909; x=1693138909;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eUZxz/z522sUn+AGvgw51Mail8p638/sMS8PlT+g7gg=;
+  b=Ici92rqbhS2ZojXif6mMzSqPCbmZ1QhFLOQA1r6gHiSloWxm8ofqrMWP
+   yqGUY6rDI/z2vpI5BYejh5Fx6FNZHIEf/Vp8TiDx1997Cwn2TQUnPuGZ1
+   CW+Pjy+i8TgVReE4K5vqDg838VNnBA9DA08vAQHGhqDAkiNigKHtN5QSq
+   GiFAZcS/DgYPvMImx6ZqhUWLGFzdEClgVGINgsUmsMWMMHwdJofmNhEEx
+   9xe0ROd4EPZE5yYK68bzJsqL5mCHoaPGJXYrgya8Gffzlntlhy0jUxoXu
+   +6qBhKinqtH/+XpAB7lGBWuNzT3QyxobBRqVsP2by+qnldi8JdjMwLHdw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="275062141"
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="275062141"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 05:21:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="587619622"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 05:21:47 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRuot-00009X-0d;
+        Sat, 27 Aug 2022 12:21:47 +0000
+Date:   Sat, 27 Aug 2022 20:21:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [ardb:efi-decompressor-v4 6/10]
+ drivers/firmware/efi/libstub/zboot.c:161:23: warning: no previous prototype
+ for function 'efi_zboot_entry'
+Message-ID: <202208272044.kV41yO8J-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All good now. Thanks everyone for the prompt response.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-decompressor-v4
+head:   efcc03a013f2ddbed0ee782e5049b39432dc9db2
+commit: d2c8eb1ea770556c25e2b5d884bf6bba32940bf2 [6/10] efi/libstub: implement generic EFI zboot
+config: riscv-randconfig-r042-20220825 (https://download.01.org/0day-ci/archive/20220827/202208272044.kV41yO8J-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=d2c8eb1ea770556c25e2b5d884bf6bba32940bf2
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb efi-decompressor-v4
+        git checkout d2c8eb1ea770556c25e2b5d884bf6bba32940bf2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/
 
-Il giorno ven 26 ago 2022 alle ore 19:33 Linus Torvalds
-<torvalds@linux-foundation.org> ha scritto:
->
-> On Fri, Aug 26, 2022 at 6:37 AM Bart Van Assche <bvanassche@acm.org> wrote:
-> >
-> > On 8/26/22 00:24, Fabio Comolli wrote:
-> > > Please let me know if you need more details and CC: me as I'm not subscribed to linu-kernel.
-> >
-> > Thanks for the detailed report. A revert request has been posted here:
->
-> .. and I actually got the revert with the SCSI pull this morning as
-> commit 785538bfdd68 ("scsi: sd: Revert "Rework asynchronous resume
-> support"")
->
->                   Linus
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/efi/libstub/zboot.c:161:23: warning: no previous prototype for function 'efi_zboot_entry' [-Wmissing-prototypes]
+   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+                         ^
+   drivers/firmware/efi/libstub/zboot.c:161:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/efi_zboot_entry +161 drivers/firmware/efi/libstub/zboot.c
+
+   160	
+ > 161	efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

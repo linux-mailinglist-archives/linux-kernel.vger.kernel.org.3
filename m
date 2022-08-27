@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B57C5A382E
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 16:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C385A3830
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 16:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiH0OuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 10:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S233171AbiH0Owq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 10:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbiH0OuW (ORCPT
+        with ESMTP id S230144AbiH0Own (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 10:50:22 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1547E0A7
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 07:50:20 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id r22so3919769pgm.5
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 07:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=dZ4zlrr+go/KaBB0jREILJ4K7QdtlExm7aQVnIZgPn8=;
-        b=loHmnPaZgxZiI8nLJHM0/6F+WR9dv629rzz9HnMyYWhc5x+MavOwZaPcU/BwJVygl5
-         ArKBUI7UNJzAqSVoLrwChUEHaLq1tpoYCfxjWjkX/RGaseYmIZLbuOliNOpf3fiIey2T
-         IyRg5H0//A7Sl13WeiPhGX86Sm9TVxfM8jMVLCaXCswP0mSWBUQTj7VtDXlgxCjWUHu7
-         aDvYjYaM/4USdI5kGPpmjAMZNaIN1Z3kicc8mw1t5EAi/mBzmso1z5x5vmWndv1KnhqD
-         8ZH+8vuXog1VdwRfWpnqt5muJktTCbxYe77BYMq3rskO84l7TzVWy5iBmlOo1VivrSAz
-         ROKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=dZ4zlrr+go/KaBB0jREILJ4K7QdtlExm7aQVnIZgPn8=;
-        b=Ga4VLFuNXr9iCRGtXKryM69d48WJIBHgLLqAq/5VsQifPm5FL9E9xHNvg+XJqXgfKa
-         UDRKsB8u9KyFBdznt19dOavnV2U+s5vpUqsMBBNzTZatROjLI3D07x53ARInacjEdWz4
-         KQc9TpEspq7ZUoTRq82j5HH82hSuaEccY6dwVxgLrfcymKbOK/i7OgjryzVqm50EqY71
-         aXtkZqcht+kFG/uwQ1yaFRx4Wy+Atd1u3/k4OwgKiW+Ph0KHYLuvtquZ2fHB5sX3L/z9
-         XDiYp4s5J9QmxQ8QYr6FtKi2ocfsU7skD0faBHup+LVLKheCa8Or3rMWMg0XkRayF6Pj
-         qfeQ==
-X-Gm-Message-State: ACgBeo3FfptsiFfTkJM/zDSIk48YyZNMRRaSLSNS8ePEu9SUkIlQDhGd
-        0LoSIXoXRxgEh63fpT/mb8w=
-X-Google-Smtp-Source: AA6agR78Svaxuabnx52QbLppHuW6RmmkeGfzVNIRu3kFq6ssXA/9Eh3r3054yiZeluQ3TjLIlkYxmA==
-X-Received: by 2002:a65:468a:0:b0:42b:3b13:f7ee with SMTP id h10-20020a65468a000000b0042b3b13f7eemr7486715pgr.112.1661611820383;
-        Sat, 27 Aug 2022 07:50:20 -0700 (PDT)
-Received: from localhost ([223.104.39.136])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090a16c800b001faafa42a9esm3481850pje.26.2022.08.27.07.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 07:50:19 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     yin31149@gmail.com
-Cc:     akpm@linux-foundation.org, anton@tuxera.com,
-        chenxiaosong2@huawei.com, linux-kernel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net,
-        syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] ntfs: change check order in ntfs_attr_find
-Date:   Sat, 27 Aug 2022 22:49:44 +0800
-Message-Id: <20220827144943.5290-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220827075143.61311-1-yin31149@gmail.com>
-References: <20220827075143.61311-1-yin31149@gmail.com>
+        Sat, 27 Aug 2022 10:52:43 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2895F22BF6;
+        Sat, 27 Aug 2022 07:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=sR79VFPBCA8tZLh/TC8sfn22rbjfdEtN+K5XwPFv4Vg=; b=Zek9T16mlWliPSt+ILl7HNpUXZ
+        ISGrWQwL2tJatiOMDb2e2b04CfkM5CdEFW55s6IVJoBhZT7UxM8gmlixiyoBrkxov+dOtyGaLLV5D
+        DVXAHZYPWO77A1dqnNhvRAHngRe8TFFdoKmjJ2QK9THhzlVIhDFzptGsq39Ln3qn0jio=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oRxAr-00EmcQ-KC; Sat, 27 Aug 2022 16:52:37 +0200
+Date:   Sat, 27 Aug 2022 16:52:37 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [net-next PATCH v2] net: dsa: qca8k: convert to regmap
+ read/write API
+Message-ID: <YwovtTcGvE5OOHIz@lunn.ch>
+References: <20220827114918.8863-1-ansuelsmth@gmail.com>
+ <YwojiJdIsz/qL1XC@lunn.ch>
+ <630a2575.170a0220.be4f4.6683@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <630a2575.170a0220.be4f4.6683@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,224 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022 at 15:59, Hawkins Jiawei <yin31149@gmail.com> wrote:
->
-> On Sat, 27 Aug 2022 at 09:29, chenxiaosong (A) <chenxiaosong2@huawei.com> wrote:
+On Sat, Aug 27, 2022 at 03:48:34PM +0200, Christian Marangi wrote:
+> On Sat, Aug 27, 2022 at 04:00:40PM +0200, Andrew Lunn wrote:
+> > >  static struct regmap_config qca8k_regmap_config = {
+> > > -	.reg_bits = 16,
+> > > +	.reg_bits = 32,
+> > 
+> > Does this change really allow you to access more registers? 
 > >
-> > 在 2022/8/26 20:27, Hawkins Jiawei 写道:
-> > > syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > >
-> > > Looks like it is improper check order that causes this bug.
-> > >
-> > > Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-> > > ---
-> > >   fs/ntfs/attrib.c | 5 +++--
-> > >   1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
-> > > index 52615e6090e1..6480cd2d371d 100644
-> > > --- a/fs/ntfs/attrib.c
-> > > +++ b/fs/ntfs/attrib.c
-> > > @@ -594,10 +594,11 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
-> > >       for (;; a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
-> > >               u8 *mrec_end = (u8 *)ctx->mrec +
-> > >                              le32_to_cpu(ctx->mrec->bytes_allocated);
-> > > +             if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end)
-> > > +                     break;
-> > >               u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> > >                              a->name_length * sizeof(ntfschar);
-> > > -             if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
-> > > -                 name_end > mrec_end)
-> > > +             if (name_end > mrec_end)
-> > >                       break;
-> > >               ctx->attr = a;
-> > >               if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
-> > >
-> >
-> > The reason is that a->length is 0, it will occur uaf when deref any
-> > field of ATTR_RECORD.
-> >
-> > It seems that changing check order will not fix root cause, if the
-> > condition "if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end)" is false,
-> > uaf will still occur.
-> >
-> > Do you have any thoughts on this ?
-> Hi, chenxiaosong
->
-> I think changing the check order is able to fix this bug. But we may need
-> to check whether mft record header is out of bounds, maybe
-> "if ((u8*)a < (u8*)ctx->mrec || (u8*)a + sizeof(MFT_RECORD) > mrec_end)"
->
-> Because we just need to check if this ATTR_RECORD is in valid addresss. As for
-> situation that a->length is 0, there seems already a check in the loop
-> (Correct me if I am wrong):
-> > static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
-> >               const u32 name_len, const IGNORE_CASE_BOOL ic,
-> >               const u8 *val, const u32 val_len, ntfs_attr_search_ctx *ctx)
-> > {
-> >       ...
-> >
-> >       for (;; a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
-> >               u8 *mrec_end = (u8 *)ctx->mrec +
-> >                              le32_to_cpu(ctx->mrec->bytes_allocated);
-> >               u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> >                              a->name_length * sizeof(ntfschar);
-> >               if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
-> >                   name_end > mrec_end)
-> >                       break;
-> >               ctx->attr = a;
-> >               if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
-> >                               a->type == AT_END))
-> >                       return -ENOENT;
-> >               if (unlikely(!a->length))
-> >                       break;
-> >       ...
-> > }
->
-> And as for the root cause for use-after-free read, I think it is the
-> ctx->attr->length to be blamed.
-Apologize for my typing error, it is the ctx->attr should be blamed:
+> 
+> I could be confused but I think the value was wrong from the start. (the
+> driver is a bit old and the regmap config struct was very wrong at
+> times)
+> This should declare how wide is each address right?
+> 
+> If this is the case then at times who declared the regmap config was
+> confused by the fact that the mdio is limited to 16 bits and require
+> special handling.
+> 
+> This is not problematic for the bits ops but is problematic for the bulk
+> ops as they base the calculation on these values.
+> 
+> Or I could be totally wrong... Anyway without this change the wrong
+> address is passed to the bulk ops so it's necessary (and for the said
+> reason, the value was wrong from the start)
 
-static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
-		const u32 name_len, const IGNORE_CASE_BOOL ic,
-		const u8 *val, const u32 val_len, ntfs_attr_search_ctx *ctx)
-{
-	ATTR_RECORD *a;
-	ntfs_volume *vol = ctx->ntfs_ino->vol;
-	ntfschar *upcase = vol->upcase;
-	u32 upcase_len = vol->upcase_len;
+So please figure it out, maybe use git blame to see who added it, and
+ask etc. And then submit a patch which changes just this, including
+and explanation why it should be changed.
+ 
+> > >  	.val_bits = 32,
+> > >  	.reg_stride = 4,
+> > >  	.max_register = 0x16ac, /* end MIB - Port6 range */
+> > > -	.reg_read = qca8k_regmap_read,
+> > > -	.reg_write = qca8k_regmap_write,
+> > > +	.read = qca8k_bulk_read,
+> > > +	.write = qca8k_bulk_write,
+> > >  	.reg_update_bits = qca8k_regmap_update_bits,
+> > >  	.rd_table = &qca8k_readable_table,
+> > >  	.disable_locking = true, /* Locking is handled by qca8k read/write */
+> > >  	.cache_type = REGCACHE_NONE, /* Explicitly disable CACHE */
+> > > +	.max_raw_read = 16, /* mgmt eth can read/write up to 4 bytes at times */
+> > > +	.max_raw_write = 16,
+> > 
+> > I think the word 'bytes' in the comment is wrong. I assume you can
+> > access 4 registers, each register is one 32-bit work in size.
+> > 
+> 
+> Yes you are right. Any suggestion on how to improve?
 
-	/*
-	 * Iterate over attributes in mft record starting at @ctx->attr, or the
-	 * attribute following that, if @ctx->is_first is 'true'.
-	 */
-	if (ctx->is_first) {
-		a = ctx->attr;
-		ctx->is_first = false;
-	} else
-		a = (ATTR_RECORD*)((u8*)ctx->attr +
-				le32_to_cpu(ctx->attr->length));
-	...
-}
+s/bytes/words/
 
-The "ctx->attr" is not invalid, then the pointer "a" will probably also
-points to an invalid memory, which triggers a use-after-free read.
-This also probably explains why the memory state around the buggy address are
-all invalid in KASAN, instead of at the bounder between valid memory
-and invalid memory
-
-Yet the analysis below is still correct. ctx->attr is assigned with
-"((u8*)mrec + le16_to_cpu(mrec->attrs_offset))" in
-ntfs_attr_init_search_ctx()
->
-> To be more specific, when kernel loads the struct MFT_RECORD from disk
-> in ntfs_read_inode_mount(),  m's attrs_offset field should less than
-> m's bytes_allocated field, or it may out of the bounds:
->
-> int ntfs_read_inode_mount(struct inode *vi)
-> {
->         ...
->         MFT_RECORD *m = NULL;
->         i = vol->mft_record_size;
->
->         ...
->         m = (MFT_RECORD*)ntfs_malloc_nofs(i);
->
->         /* Determine the first block of the $MFT/$DATA attribute. */
->         block = vol->mft_lcn << vol->cluster_size_bits >>
->                         sb->s_blocksize_bits;
->         nr_blocks = vol->mft_record_size >> sb->s_blocksize_bits;
->
->         ...
->
->         /* Load $MFT/$DATA's first mft record. */
->         for (i = 0; i < nr_blocks; i++) {
->                 bh = sb_bread(sb, block++);
->                 if (!bh) {
->                         ntfs_error(sb, "Device read failed.");
->                         goto err_out;
->                 }
->                 memcpy((char*)m + (i << sb->s_blocksize_bits), bh->b_data,
->                                 sb->s_blocksize);
->                 brelse(bh);
->         }
->
->         if (le32_to_cpu(m->bytes_allocated) != vol->mft_record_size) {
->                 ntfs_error(sb, "Incorrect mft record size %u in superblock, should be %u.",
->                                 le32_to_cpu(m->bytes_allocated), vol->mft_record_size);
->                 goto err_out;
->         }
->
->         ...
->
->         ctx = ntfs_attr_get_search_ctx(ni, m);
->         if (!ctx) {
->                 err = -ENOMEM;
->                 goto err_out;
->         }
->
->         /* Find the attribute list attribute if present. */
->         err = ntfs_attr_lookup(AT_ATTRIBUTE_LIST, NULL, 0, 0, 0, NULL, 0, ctx);
->
->         ...
-> }
->
-> > ==================================================================
-> > BUG: KASAN: use-after-free in ntfs_attr_find+0xc02/0xce0 fs/ntfs/attrib.c:597
-> > Read of size 2 at addr ffff88807e352009 by task syz-executor153/3607
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> >  print_address_description mm/kasan/report.c:317 [inline]
-> >  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
-> >  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
-> >  ntfs_attr_find+0xc02/0xce0 fs/ntfs/attrib.c:597
-> >  ntfs_attr_lookup+0x1056/0x2070 fs/ntfs/attrib.c:1193
-> >  ntfs_read_inode_mount+0x89a/0x2580 fs/ntfs/inode.c:1845
-> >  ntfs_fill_super+0x1799/0x9320 fs/ntfs/super.c:2854
-> >  mount_bdev+0x34d/0x410 fs/super.c:1400
-> >  legacy_get_tree+0x105/0x220 fs/fs_context.c:610
-> >  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
-> >  do_new_mount fs/namespace.c:3040 [inline]
-> >  path_mount+0x1326/0x1e20 fs/namespace.c:3370
-> >  do_mount fs/namespace.c:3383 [inline]
-> >  __do_sys_mount fs/namespace.c:3591 [inline]
-> >  __se_sys_mount fs/namespace.c:3568 [inline]
-> >  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >  [...]
-> >  </TASK>
-> > Memory state around the buggy address:
-> >  ffff88807e351f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >  ffff88807e351f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > >ffff88807e352000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >                       ^
-> >  ffff88807e352080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >  ffff88807e352100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > ==================================================================
-> So check these fields as follow should fix the root cause for this
-> use-after-free bug(Correct me if I am wrong). I test this patch locally,
-> it doesn't trigger any issue.
->
-> diff --git a/fs/ntfs/inode.c b/fs/ntfs/inode.c
-> index db0f1995aedd..6ba99e109ca9 100644
-> --- a/fs/ntfs/inode.c
-> +++ b/fs/ntfs/inode.c
-> @@ -1822,6 +1822,11 @@ int ntfs_read_inode_mount(struct inode *vi)
->                 goto err_out;
->         }
->
-> +       if (m->attrs_offset >= le32_to_cpu(m->bytes_allocated)) {
-> +               ntfs_error(sb, "Incorrect mft record attrs_offset %u", m->attrs_offset);
-> +               goto err_out;
-> +       }
-> +
->         /* Apply the mst fixups. */
->         if (post_read_mst_fixup((NTFS_RECORD*)m, vol->mft_record_size)) {
->                 /* FIXME: Try to use the $MFTMirr now. */
->
->
-> What's your opinion?
+	Andrew

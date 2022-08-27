@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7615A33D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09815A33D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiH0Cei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 22:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S1345441AbiH0CkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 22:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiH0Cef (ORCPT
+        with ESMTP id S232193AbiH0CkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 22:34:35 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9ECDA3FF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 19:34:33 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MF10d0g98zlWHk;
-        Sat, 27 Aug 2022 10:31:13 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 10:34:30 +0800
-Subject: Re: [PATCH 10/10] hugetlb: make hugetlb selects SYSFS if !SYSCTL
-To:     Muchun Song <muchun.song@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220826092422.39591-1-linmiaohe@huawei.com>
- <20220826092422.39591-11-linmiaohe@huawei.com>
- <1BAFF85D-F7F5-4DD1-ABEF-2FF621DE34E8@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <7040e50b-fe4c-4d1d-fd8d-94c29b6e1668@huawei.com>
-Date:   Sat, 27 Aug 2022 10:34:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <1BAFF85D-F7F5-4DD1-ABEF-2FF621DE34E8@linux.dev>
+        Fri, 26 Aug 2022 22:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909AB72B52;
+        Fri, 26 Aug 2022 19:40:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 294DA61DA8;
+        Sat, 27 Aug 2022 02:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AD44C43141;
+        Sat, 27 Aug 2022 02:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661568015;
+        bh=wecaXYmu9OJO5R98rVAmEX9VavU1QyMnE5UQbxW/9i4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KE35G2raHFjd99tmQquSyMMDMDrP6sy3ZXjGqsTt+X+Lp9zT1RXUjx+404Feix9Cf
+         hmLyRNU8drxMil+piqkr0PenGqtX4oKQA4SNIY0lW37oq1uXliVb1j2dIuUHE8TBsJ
+         v6ZeW4qjXyaz/v/SyNGSY1vI25Yl58nNhZ9dDgAne1XR8CGDpS1xX9KUsWAtYgfgQ9
+         ZTYFN10VC0DPNrqcm2pOApn0sgpro472+QMYLsWAG/SRyKU0ETD99TyICJxsjtZJeb
+         BMQAKWmuwo3/GDn4H825L3DqjP64wuyAhuemfXWcWrTVU8mKQcHooFHFz48Eb451f+
+         34O2kWcE20gSg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 671F2E2A041;
+        Sat, 27 Aug 2022 02:40:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: dsa: mv88e6xxx: Allow external SMI if serial
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166156801541.24651.16548454594963692008.git-patchwork-notify@kernel.org>
+Date:   Sat, 27 Aug 2022 02:40:15 +0000
+References: <20220824093706.19049-1-marcus.carlberg@axis.com>
+In-Reply-To: <20220824093706.19049-1-marcus.carlberg@axis.com>
+To:     Marcus Carlberg <marcus.carlberg@axis.com>
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, kernel@axis.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/27 9:59, Muchun Song wrote:
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 24 Aug 2022 11:37:06 +0200 you wrote:
+> p0_mode set to one of the supported serial mode should not prevent
+> configuring the external SMI interface in
+> mv88e6xxx_g2_scratch_gpio_set_smi. The current masking of the p0_mode
+> only checks the first 2 bits. This results in switches supporting
+> serial mode cannot setup external SMI on certain serial modes
+> (Ex: 1000BASE-X and SGMII).
 > 
-> 
->> On Aug 26, 2022, at 17:24, Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> If CONFIG_SYSFS and CONFIG_SYSCTL are both undefined, hugetlb doesn't work
->> now as there's no way to set max huge pages. Make sure at least one of the
->> above configs is defined to make hugetlb works as expected.
-> 
-> Right. I think the majority of the people are usually use /proc knob to
-> reserve HugeTLB pages than /sys fs. So I suggest to add a “depends on SYSCTL”
-> item. What’s your thoughts?
+> [...]
 
-It seems some functions, e.g. demotion, is exported via SYSFS instead of SYSCTL.
-So maybe "depends on SYSFS || SYSCTL", i.e.
+Here is the summary with links:
+  - net: dsa: mv88e6xxx: Allow external SMI if serial
+    https://git.kernel.org/netdev/net-next/c/8532c60efcc5
 
-	depends on (X86 || IA64 || SPARC64 || ARCH_SUPPORTS_HUGETLBFS || BROKEN) && (SYSFS || SYSCTL)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-will be more suitable?
-
-Thanks,
-Miaohe Lin
 

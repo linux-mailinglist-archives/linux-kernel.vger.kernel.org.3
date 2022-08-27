@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D775A38FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777FB5A38FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbiH0Q7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 12:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S231876AbiH0Q76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbiH0Q7m (ORCPT
+        with ESMTP id S233957AbiH0Q7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 12:59:42 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CCB5A177
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:59:41 -0700 (PDT)
+        Sat, 27 Aug 2022 12:59:55 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F791118
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:59:51 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OyxVxeBuIYjq4IS91Gn77dyGoxNTOiq+/NH8XZQw/iCSLriGFNLLqKeMtKbMm49etWQA4nz0xPBYa2gD1B4XIJGQEphgtX+P9OZ5FW7DaiqL2c0fB9GTN0Y5Yi1Hd+hM1Q7TokUVY+3bpISYMVAiIm4Zm0UVe2ltOU1QYrj7Y4F581rpT6LyuCqtdXW+Kz7CEX5DxelR1bo5/4rwscSgV1jLFQH49fFGiuoCTfzcl/wJa1lnMpl3BpcZ1UCzypvho1sK8SSVrT63kyOMWuPRpppCpizrgK5wdPj5LUWg0RDkDgJlamG3m77M/y51Oqa56ToVxb72DTgTcxwS7W4wTA==
+ b=CMNzcndOxoRvkgdHfOpNzQ6/5DeOpkqscwh7SnThhHZOUlqpDtPqzEPYwKMDDmuSbigNiSXKXbOSHZ62NsxUsARamdCV7lzthB22U5T7orPghg1AY1oZME28SqhmSWgd2R5SDZXqNk3vFyF61ojhKiJjQM78Sksk7ytlfr9/UgdoQDqfbZODQB4rw9CT+fPjxHS6St78lod9Qklt+n4jl6w8IFZYNb3Cgf1UHKTbzghOjwct+bMYIDiuk0VMeTtEgSr6M/FiLq503qZduaHwkaQH78OBxHOrUB9ZECdjHOPgvJTKF40FeDvNEtzZze98s1jbeJTwoRiRSyYEU56Dtw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=latV6WYjA2o+ZGnYqiQTzTTy9CSBYFpwdpKF+gZpscc=;
- b=HR3lh/kggp/47PTPzjHc7dA3FU04TANmjWBaIWxTQmwT4X9pVuWaiz+kmtxXUHG7ZgJIAhR9GVWvYn5OXIb+AJ+EnxLrk1CsQEA+lcVYiSvqyt/6tv+pRelPOI8rkZO88vtwDKLEt6A2pCAmJQ0vfGqzpQiyInVCdtpADr/UeHxQq8dLTGMPwJVLAHEznPcFJRHZo8r1KivTgg69VTj6ckHJSFuVrZUDsc+MQYfgYVmqAREZccqSPdA+6D43hMZbcgHepFicD8GKlKRqtlqKQX1kD7V5Cy64pbJD/w4KiPfsMJ+eB0ZjyxULk18NIrhBJ+luZltpTfYzaM2pfdFvtQ==
+ bh=k1ZtCbAh6UmUBvQ8RjLjIlxg4WFKsFP5AKwFQeg847U=;
+ b=Flgext3U89JqZnmb5+bqJK4eKA42soJwUizH+UTNokhp9ZxUmpBi1MgkvXSSyoR9SzI7xkk53mD28wVlsL7f1OyxgLy/qEMR1U8ZAq10oQxlkedwDp4ypAKzqQXSxj4AzWJArARMNhjxJahgcafDgKlgImpi94S+lMgzwAmt0F765CfW37BiMhS4pQKL/uVyXiiLwyagTR3v+DVc0/D5s20z0m/rNKT+tQpiWCtx1RfqWsbsyWWmap87g6vF/66mppbGSW3E9OpDFkM8TYUcSoeTe/Dh2HrVPCeFWXMGC8FPZJb+fWK+lO0yKKPA2wYPt5vfODKIDjmaaLbORUJVIQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=latV6WYjA2o+ZGnYqiQTzTTy9CSBYFpwdpKF+gZpscc=;
- b=fstcHhKKeoibueX2sNofzocxLyOPyNmZ+U+pJU8haVDFk7u4b6MjwyA9YyXu6tWr3qW0cxB2RK+J/SvwPQ7Je0uCKzDGQY9p+y3/2fR1PFpUmo+TsHh6w8IcZaF/405kTuCz7TSSgfsrx/igaviUc+lGvNAjRn8zUAOgf5QxDhE=
-Received: from DM5PR08CA0047.namprd08.prod.outlook.com (2603:10b6:4:60::36) by
- CY5PR12MB6382.namprd12.prod.outlook.com (2603:10b6:930:3e::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.16; Sat, 27 Aug 2022 16:59:39 +0000
-Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:60:cafe::4f) by DM5PR08CA0047.outlook.office365.com
- (2603:10b6:4:60::36) with Microsoft SMTP Server (version=TLS1_2,
+ bh=k1ZtCbAh6UmUBvQ8RjLjIlxg4WFKsFP5AKwFQeg847U=;
+ b=UCvIjLR3pqjB2rY/gH60hTV8t+/xBRrqiGS+7b9UWlRF9jkeudCneEHijfnitDVpZ/yK5/NUccwpWPkmWszh3UiQjJvQHZbdmU4+KX/MWxzs9Y7ydt/RPl9e3rt9gl/3FaIbA7B+VSBufwzx6CoHtzcpgnyqgBF/tnkffgDiwLQ=
+Received: from BN9PR03CA0904.namprd03.prod.outlook.com (2603:10b6:408:107::9)
+ by MN2PR12MB4408.namprd12.prod.outlook.com (2603:10b6:208:26c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Sat, 27 Aug
+ 2022 16:59:49 +0000
+Received: from BN8NAM11FT099.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:107:cafe::22) by BN9PR03CA0904.outlook.office365.com
+ (2603:10b6:408:107::9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
- Transport; Sat, 27 Aug 2022 16:59:39 +0000
+ Transport; Sat, 27 Aug 2022 16:59:49 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT099.mail.protection.outlook.com (10.13.177.197) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Sat, 27 Aug 2022 16:59:39 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.5566.15 via Frontend Transport; Sat, 27 Aug 2022 16:59:48 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 27 Aug
- 2022 11:59:39 -0500
+ 2022 11:59:47 -0500
 Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
  (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 27 Aug
- 2022 11:59:38 -0500
+ 2022 11:59:46 -0500
 Received: from amd-B450M-DS3H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Sat, 27 Aug 2022 11:59:34 -0500
+ Transport; Sat, 27 Aug 2022 11:59:43 -0500
 From:   Syed Saba Kareem <Syed.SabaKareem@amd.com>
 To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
 CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
@@ -70,9 +71,9 @@ CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 03/13] ASoC: amd: add acp6.2 init/de-init functions
-Date:   Sat, 27 Aug 2022 22:26:47 +0530
-Message-ID: <20220827165657.2343818-4-Syed.SabaKareem@amd.com>
+Subject: [PATCH v2 04/13] ASoC: amd: add platform devices for acp6.2 pdm driver and dmic driver
+Date:   Sat, 27 Aug 2022 22:26:48 +0530
+Message-ID: <20220827165657.2343818-5-Syed.SabaKareem@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220827165657.2343818-1-Syed.SabaKareem@amd.com>
 References: <20220827165657.2343818-1-Syed.SabaKareem@amd.com>
@@ -81,23 +82,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 419235a8-0f1f-4880-4cf1-08da884d87c2
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6382:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bfb7a4f-dc89-4efa-3a2d-08da884d8cda
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4408:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ViOa2R6UN/ykxd3UmlJ9Cr+NVSkGTlt+eGQiTVq/GrVfPXdV7xvY5M1tVkhzqoxe75zs6VnYH3vlCfPql5UP1CUVfyakFGqxDYs08DL6wOnVZm0oosRfuQrkx5A+ARa1gwAekkUlMIinEzD0iyzsE9w2a12ihqVo5yVsR8o+AHCfzXsNelRO+s0PrbkwD+UWP2k18QyS5Zjp22POpp7RmVqSbyvSPV07R/HLsVjgYBFhh/uj+EezeCS0yFjpZffRZUNzOkiMLklBRpil6Bc1C7Tc+z6sPM81z1IWjnJlQmH1SZ44y6uf9av1Tay5bAt5HuKhhOe28OjSuaJ+zwdhDG6Iq8nX8vkALDzjRg3bHQ692zA22ConWzHCjyYlsY3cxdWwW7zaSiSEmNRScOVX/tYRdohv3TaRMVC3vTMefjX27QgK7Mm3eRw0ZRfIk8Gd4DKtkiLMkPYLYm8FTs5hwbMqWl6dnRbneDl+CgWof79/+Muhvkeckj8lyY4/sIdJr8KpvRerVSnqWO1ai9KtXr+vt2pnEFvenyYPg7YCCnnMm9WTIpZKvzLPfGYFThHWTRZ2+tUe5r6dkNCGYZxwMZo6TOA4haOfhQjztqkh8qI6R8Y/fUeeQFTzWUcAnAHlZRjqOufMnAPo79aVwm6Du7LzhQBSA5DIxt73Uf0ayXnR4gXXVQZjBieinsGsurTKX0dUsvc+WaX3/I1yJd5C2RAETGc0wYhcSycESxDOXuKB3/X9/rygJ39OcLa4AEPapzrNvGqWG3zIIxfrrHvxTeWPU3j5tmPl2a22ZLsydyhN80J1JTg9f4HkH0vsxN/I
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(396003)(376002)(40470700004)(46966006)(36840700001)(8936002)(7696005)(26005)(6666004)(40460700003)(40480700001)(478600001)(41300700001)(426003)(82310400005)(2616005)(47076005)(186003)(336012)(5660300002)(1076003)(4326008)(8676002)(2906002)(36756003)(110136005)(70206006)(70586007)(316002)(82740400003)(36860700001)(356005)(81166007)(86362001)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qg+6o1F+nelXaXC5VrVx+QVchR9Kn6fSpUaYgBr9pSBMiNP0hwbioooup5LHNp+XmI+6CJ7HCsfVR8WjXltKlwNSMeAskHIk9R0RmHx0eMmZvwOWEnw+cyXvWIXcw6PX0P0/dn2xG+zcCNZ8d52NtCK/iFAYXRc16AX1o9C/gRN92AQ8/nkkUZO4iktQsruW3zJSMwvmU/wM3GYZPEan4Z0Fh/ybvLbMHAQuXG8r8gmpDDabtXajNYgdTGIOor7+1tzB07uuodsBUd+dGQhTU8Fz0K6rrV/8GRMK414Dn8GGM7+sVdxjjEErqAu+nybgeW8SpAKiI+7rGrmv/Qgj5fXVl+7ZpzWOZlis9EfOEWa0RIN5iJKbusWilY/5XAv0fTxQ2q6ddKjUs7Yw8sG0EmV9A0rU0rUXKlXVX8w+QPKfEdCucG1c1cpY9bTHZ47OuPWYwEI05w2r+pMr9UjEhGNqnN8xEUoMpfv/g8HrCGUQSYRirFYs/F5r3UDrbCt9xj3lMUBiuCGyzDzG9EcARPQ9JQXtn6pb5LJYDA3e1jTprPO1HLAdBrWfXQ0++T22+fzbchY2nQX5mooSPR5xdLm6YaPSSVJvIx3x8bxN3a1OTgfixSThkUwEYz2c3Vw3OtBuyJGPoNPmh9rP6N00gz8/uDhYaHO2brceUBiZMV4a5tyiOk0yazQ1Ql0VlAkjgju5WJIOjOnLhQfzjUy64Y4D30AJuSg3fq8ZpIngkIFkGGmIrR/qeIeQN/Ff13jwY/Uy6mAnz7Uwa80KMRneh5KL4D8ai/WbuUFWr2M2Q62uR9SJOU/xPgWUar1ytrPN
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(346002)(39860400002)(376002)(46966006)(36840700001)(40470700004)(336012)(1076003)(426003)(47076005)(186003)(83380400001)(81166007)(356005)(86362001)(36860700001)(82740400003)(2616005)(40480700001)(8676002)(40460700003)(4326008)(70586007)(70206006)(36756003)(316002)(54906003)(82310400005)(110136005)(2906002)(5660300002)(8936002)(41300700001)(478600001)(7696005)(26005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2022 16:59:39.6769
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2022 16:59:48.2692
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 419235a8-0f1f-4880-4cf1-08da884d87c2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bfb7a4f-dc89-4efa-3a2d-08da884d8cda
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT099.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6382
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4408
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -108,176 +109,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Pink Sardine platform ACP6.2 PCI driver init/deinit functions.
+ACP6.2 IP has PDM decoder block.
+Create a platform device for it, so that the PDM platform driver
+can be bound to this device.
+Pass PCI resources like MMIO to this platform device.
+
+Create a platform device for generic dmic codec driver.
 
 Signed-off-by: Syed Saba Kareem <Syed.SabaKareem@amd.com>
 Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 ---
- sound/soc/amd/ps/acp62.h  |  12 +++++
- sound/soc/amd/ps/pci-ps.c | 106 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 118 insertions(+)
+ sound/soc/amd/ps/acp62.h  | 23 +++++++++++
+ sound/soc/amd/ps/pci-ps.c | 81 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 102 insertions(+), 2 deletions(-)
 
 diff --git a/sound/soc/amd/ps/acp62.h b/sound/soc/amd/ps/acp62.h
-index 5291585f45f9..1f5e7d758f9f 100644
+index 1f5e7d758f9f..79ad1bdb5b38 100644
 --- a/sound/soc/amd/ps/acp62.h
 +++ b/sound/soc/amd/ps/acp62.h
-@@ -9,6 +9,18 @@
+@@ -8,6 +8,10 @@
+ #include <sound/acp62_chip_offset_byte.h>
  
  #define ACP_DEVICE_ID 0x15E2
++#define ACP6x_REG_START		0x1240000
++#define ACP6x_REG_END		0x1250200
++#define ACP6x_DEVS		2
++#define ACP6x_PDM_MODE		1
  
-+#define ACP_SOFT_RESET_SOFTRESET_AUDDONE_MASK	0x00010001
-+#define ACP_PGFSM_CNTL_POWER_ON_MASK	1
-+#define ACP_PGFSM_CNTL_POWER_OFF_MASK	0
-+#define ACP_PGFSM_STATUS_MASK		3
-+#define ACP_POWERED_ON			0
-+#define ACP_POWER_ON_IN_PROGRESS	1
-+#define ACP_POWERED_OFF		2
-+#define ACP_POWER_OFF_IN_PROGRESS	3
-+
-+#define ACP_ERROR_MASK 0x20000000
-+#define ACP_EXT_INTR_STAT_CLEAR_MASK 0xFFFFFFFF
+ #define ACP_SOFT_RESET_SOFTRESET_AUDDONE_MASK	0x00010001
+ #define ACP_PGFSM_CNTL_POWER_ON_MASK	1
+@@ -21,6 +25,25 @@
+ #define ACP_ERROR_MASK 0x20000000
+ #define ACP_EXT_INTR_STAT_CLEAR_MASK 0xFFFFFFFF
+ 
++enum acp_config {
++	ACP_CONFIG_0 = 0,
++	ACP_CONFIG_1,
++	ACP_CONFIG_2,
++	ACP_CONFIG_3,
++	ACP_CONFIG_4,
++	ACP_CONFIG_5,
++	ACP_CONFIG_6,
++	ACP_CONFIG_7,
++	ACP_CONFIG_8,
++	ACP_CONFIG_9,
++	ACP_CONFIG_10,
++	ACP_CONFIG_11,
++	ACP_CONFIG_12,
++	ACP_CONFIG_13,
++	ACP_CONFIG_14,
++	ACP_CONFIG_15,
++};
 +
  static inline u32 acp62_readl(void __iomem *base_addr)
  {
  	return readl(base_addr);
 diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-index 8bb33845622a..a87dbf8847e6 100644
+index a87dbf8847e6..adad29667791 100644
 --- a/sound/soc/amd/ps/pci-ps.c
 +++ b/sound/soc/amd/ps/pci-ps.c
-@@ -8,6 +8,7 @@
- #include <linux/pci.h>
+@@ -9,11 +9,16 @@
  #include <linux/module.h>
  #include <linux/io.h>
-+#include <linux/delay.h>
+ #include <linux/delay.h>
++#include <linux/platform_device.h>
++#include <linux/acpi.h>
  
  #include "acp62.h"
  
-@@ -15,6 +16,100 @@ struct acp62_dev_data {
+ struct acp62_dev_data {
  	void __iomem *acp62_base;
++	struct resource *res;
++	bool acp62_audio_mode;
++	struct platform_device *pdev[ACP6x_DEVS];
  };
  
-+static int acp62_power_on(void __iomem *acp_base)
-+{
-+	u32 val;
-+	int timeout;
-+
-+	val = acp62_readl(acp_base + ACP_PGFSM_STATUS);
-+
-+	if (!val)
-+		return val;
-+
-+	if ((val & ACP_PGFSM_STATUS_MASK) != ACP_POWER_ON_IN_PROGRESS)
-+		acp62_writel(ACP_PGFSM_CNTL_POWER_ON_MASK, acp_base + ACP_PGFSM_CONTROL);
-+	timeout = 0;
-+	while (++timeout < 500) {
-+		val = acp62_readl(acp_base + ACP_PGFSM_STATUS);
-+		if (!val)
-+			return 0;
-+		udelay(1);
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+static int acp62_reset(void __iomem *acp_base)
-+{
-+	u32 val;
-+	int timeout;
-+
-+	acp62_writel(1, acp_base + ACP_SOFT_RESET);
-+	timeout = 0;
-+	while (++timeout < 500) {
-+		val = acp62_readl(acp_base + ACP_SOFT_RESET);
-+		if (val & ACP_SOFT_RESET_SOFTRESET_AUDDONE_MASK)
-+			break;
-+		cpu_relax();
-+	}
-+	acp62_writel(0, acp_base + ACP_SOFT_RESET);
-+	timeout = 0;
-+	while (++timeout < 500) {
-+		val = acp62_readl(acp_base + ACP_SOFT_RESET);
-+		if (!val)
-+			return 0;
-+		cpu_relax();
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+static void acp62_enable_interrupts(void __iomem *acp_base)
-+{
-+	acp62_writel(1, acp_base + ACP_EXTERNAL_INTR_ENB);
-+}
-+
-+static void acp62_disable_interrupts(void __iomem *acp_base)
-+{
-+	acp62_writel(ACP_EXT_INTR_STAT_CLEAR_MASK, acp_base +
-+		     ACP_EXTERNAL_INTR_STAT);
-+	acp62_writel(0, acp_base + ACP_EXTERNAL_INTR_CNTL);
-+	acp62_writel(0, acp_base + ACP_EXTERNAL_INTR_ENB);
-+}
-+
-+static int acp62_init(void __iomem *acp_base, struct device *dev)
-+{
-+	int ret;
-+
-+	ret = acp62_power_on(acp_base);
-+	if (ret) {
-+		dev_err(dev, "ACP power on failed\n");
-+		return ret;
-+	}
-+	acp62_writel(0x01, acp_base + ACP_CONTROL);
-+	ret = acp62_reset(acp_base);
-+	if (ret) {
-+		dev_err(dev, "ACP reset failed\n");
-+		return ret;
-+	}
-+	acp62_writel(0x03, acp_base + ACP_CLKMUX_SEL);
-+	acp62_enable_interrupts(acp_base);
-+	return 0;
-+}
-+
-+static int acp62_deinit(void __iomem *acp_base, struct device *dev)
-+{
-+	int ret;
-+
-+	acp62_disable_interrupts(acp_base);
-+	ret = acp62_reset(acp_base);
-+	if (ret) {
-+		dev_err(dev, "ACP reset failed\n");
-+		return ret;
-+	}
-+	acp62_writel(0, acp_base + ACP_CLKMUX_SEL);
-+	acp62_writel(0, acp_base + ACP_CONTROL);
-+	return 0;
-+}
-+
- static int snd_acp62_probe(struct pci_dev *pci,
+ static int acp62_power_on(void __iomem *acp_base)
+@@ -114,8 +119,12 @@ static int snd_acp62_probe(struct pci_dev *pci,
  			   const struct pci_device_id *pci_id)
  {
-@@ -56,6 +151,10 @@ static int snd_acp62_probe(struct pci_dev *pci,
- 	}
- 	pci_set_master(pci);
- 	pci_set_drvdata(pci, adata);
-+	ret = acp62_init(adata->acp62_base, &pci->dev);
-+	if (ret)
-+		goto release_regions;
+ 	struct acp62_dev_data *adata;
++	struct platform_device_info pdevinfo[ACP6x_DEVS];
++	int index, ret;
++	int val = 0x00;
++	struct acpi_device *adev;
++	const union acpi_object *obj;
+ 	u32 addr;
+-	int ret;
+ 
+ 	/* Pink Sardine device check */
+ 	switch (pci->revision) {
+@@ -154,8 +163,72 @@ static int snd_acp62_probe(struct pci_dev *pci,
+ 	ret = acp62_init(adata->acp62_base, &pci->dev);
+ 	if (ret)
+ 		goto release_regions;
++	val = acp62_readl(adata->acp62_base + ACP_PIN_CONFIG);
++	switch (val) {
++	case ACP_CONFIG_0:
++	case ACP_CONFIG_1:
++	case ACP_CONFIG_2:
++	case ACP_CONFIG_3:
++	case ACP_CONFIG_9:
++	case ACP_CONFIG_15:
++		dev_info(&pci->dev, "Audio Mode %d\n", val);
++		break;
++	default:
 +
++		/* Checking DMIC hardware*/
++		adev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), 0x02, 0);
++
++		if (!adev)
++			break;
++
++		if (!acpi_dev_get_property(adev, "acp-audio-device-type",
++					   ACPI_TYPE_INTEGER, &obj) &&
++					   obj->integer.value == 2) {
++			adata->res = devm_kzalloc(&pci->dev, sizeof(struct resource), GFP_KERNEL);
++			if (!adata->res) {
++				ret = -ENOMEM;
++				goto de_init;
++			}
++
++			adata->res->name = "acp_iomem";
++			adata->res->flags = IORESOURCE_MEM;
++			adata->res->start = addr;
++			adata->res->end = addr + (ACP6x_REG_END - ACP6x_REG_START);
++			adata->acp62_audio_mode = ACP6x_PDM_MODE;
+ 
++			memset(&pdevinfo, 0, sizeof(pdevinfo));
++			pdevinfo[0].name = "acp_ps_pdm_dma";
++			pdevinfo[0].id = 0;
++			pdevinfo[0].parent = &pci->dev;
++			pdevinfo[0].num_res = 1;
++			pdevinfo[0].res = adata->res;
++
++			pdevinfo[1].name = "dmic-codec";
++			pdevinfo[1].id = 0;
++			pdevinfo[1].parent = &pci->dev;
++
++			for (index = 0; index < ACP6x_DEVS; index++) {
++				adata->pdev[index] =
++					platform_device_register_full(&pdevinfo[index]);
++
++				if (IS_ERR(adata->pdev[index])) {
++					dev_err(&pci->dev,
++						"cannot register %s device\n",
++						 pdevinfo[index].name);
++					ret = PTR_ERR(adata->pdev[index]);
++					goto unregister_devs;
++				}
++			}
++		}
++		break;
++	}
  	return 0;
++unregister_devs:
++	for (--index; index >= 0; index--)
++		platform_device_unregister(adata->pdev[index]);
++de_init:
++	if (acp62_deinit(adata->acp62_base, &pci->dev))
++		dev_err(&pci->dev, "ACP de-init failed\n");
  release_regions:
  	pci_release_regions(pci);
-@@ -67,6 +166,13 @@ static int snd_acp62_probe(struct pci_dev *pci,
- 
+ disable_pci:
+@@ -167,9 +240,13 @@ static int snd_acp62_probe(struct pci_dev *pci,
  static void snd_acp62_remove(struct pci_dev *pci)
  {
-+	struct acp62_dev_data *adata;
-+	int ret;
-+
-+	adata = pci_get_drvdata(pci);
-+	ret = acp62_deinit(adata->acp62_base, &pci->dev);
-+	if (ret)
-+		dev_err(&pci->dev, "ACP de-init failed\n");
- 	pci_release_regions(pci);
- 	pci_disable_device(pci);
- }
+ 	struct acp62_dev_data *adata;
+-	int ret;
++	int ret, index;
+ 
+ 	adata = pci_get_drvdata(pci);
++	if (adata->acp62_audio_mode == ACP6x_PDM_MODE) {
++		for (index = 0; index < ACP6x_DEVS; index++)
++			platform_device_unregister(adata->pdev[index]);
++	}
+ 	ret = acp62_deinit(adata->acp62_base, &pci->dev);
+ 	if (ret)
+ 		dev_err(&pci->dev, "ACP de-init failed\n");
 -- 
 2.25.1
 

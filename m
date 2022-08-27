@@ -2,59 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152065A3926
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4ED5A392E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiH0RPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 13:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S234183AbiH0RXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 13:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbiH0RPK (ORCPT
+        with ESMTP id S233965AbiH0RXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 13:15:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA961E018
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661620507; x=1693156507;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fSQFqVYQTk5CXYvvW3yMbPWigoAj1zX3fsmoe9OiOoM=;
-  b=eqQO7uZr8kA53p8VtByCos8G/O5mT2JUzS+6edv7hXg1y11RszWokn5Y
-   ycQmSfcTQ10m1VMa8ujIqV2wmpf9KBzxlWYUZwLFex0UGOxae6/I8q37G
-   R6470snpVhkLd2H5s+veBhFg2xUth9h8AUls1QNIulrkr11TPBpInaR0x
-   jXLqc+z3d5wNVcrCql2AvgTzrXfO8f04Hu55IY/gQp11Y7qmCocrvabBY
-   /v8RNOPClAyb+ihdgYXGtGuvqM0rVksNHTMBG00g1938eaU9RAmfIpzIq
-   bNKxVqRE7gZROc7Dslpr0oyoH3xM4892RGbsP4FVxF5O0N+HFhzGg+2Y2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="356392857"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="356392857"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 10:15:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="643988790"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Aug 2022 10:15:05 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRzOj-0000KH-0C;
-        Sat, 27 Aug 2022 17:15:05 +0000
-Date:   Sun, 28 Aug 2022 01:14:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: net/9p/trans_fd.c:263:31: sparse: sparse: incorrect type in argument
- 1 (different address spaces)
-Message-ID: <202208280102.vCNrXRCa-lkp@intel.com>
+        Sat, 27 Aug 2022 13:23:47 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974612A72F
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:23:45 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id l8so5819302lfc.12
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=0Mev3wBjKkNkiFX8lECGnY4J/j2vehNJSt2NBjpTkII=;
+        b=zwgU9H9OFoS/MCha3D3T74FztIUntYk0w7GricFMydQ02R6PZaY8fSgXHfEIYrzsq4
+         CwTKGebSWniXKRREJn0FUhXjQ8Wbw5DhcHw2mk3L+vNbM7ts8O08TKtMdlaV5XiWCR9Y
+         dY3BvvTqZCyh1WNsfZGmx04UoSPWI9AmWd6LvU2K2kDpsJ9Rik3rsiJhkOS6ZjPjD8k1
+         XaWrUpw3T0sq3IYZpC3uyN5kfekE9FjtXYqo64ob2x9SRHVDgcucxUzooaPFiqFIAPh9
+         Yi1mbp1xuzWpFpwYXGUZOLQ+axT0p3hWsK71/j4+ub+MBZp1nCdro/4gajyMbobFlklY
+         WR3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=0Mev3wBjKkNkiFX8lECGnY4J/j2vehNJSt2NBjpTkII=;
+        b=nn2eP1DCD1SbSioUAZyusciSIc0vHsyPpZXYXAFrV4QEvTACTPW7cUhTnyJ1oX9R3Y
+         tU//yN+X3w0EWB48PxJdbF4wLYJWxUatSwZ8tMk/Y12iACKdWk5GT3uioFAbCibPfkPU
+         NL7jn+vFpCm+wVRcJPsZM3J2OhV8O5RF6JfLOgaeb4DMal62YhSRvWGsOqpMZ4YZ6z/y
+         C/2OrqlRqCPPcGAWk9Ilak+XgA9UNWsXRG+lpyXs4LeMSdcWUI8RiUuLiADbI42Xd1/k
+         tTaf1Z5dpSfZG84hEUEg/+RZXxJoqUoSnt3hqBDekMdFsas75f+CbOuyT5cer63hnzck
+         a+Bw==
+X-Gm-Message-State: ACgBeo0uX2MtgzVYQQoFKJ9LGj5OKriX+sFjOJL3XyqZT3hhBT8tpTPi
+        vJG6U7n6eMmdoQnfq4sepHDM6A==
+X-Google-Smtp-Source: AA6agR4bp19iDkCA8mqVi96q7/mlsslLYUFbkHAqosVaZwo7xhtLr4GTcc2/bXIfPNJA5sfm6qM2jQ==
+X-Received: by 2002:a05:6512:3b90:b0:494:256d:943f with SMTP id g16-20020a0565123b9000b00494256d943fmr2441662lfv.497.1661621023972;
+        Sat, 27 Aug 2022 10:23:43 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id q16-20020a0565123a9000b00492a0f02758sm725059lfu.28.2022.08.27.10.23.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 10:23:43 -0700 (PDT)
+Message-ID: <a73e509a-5260-41ff-2fb4-54b975ea59e9@linaro.org>
+Date:   Sat, 27 Aug 2022 20:23:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1 5/5] dt-bindings: imx8ulp: clock: no spaces before tabs
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220826192252.794651-1-marcel@ziswiler.com>
+ <20220826192252.794651-6-marcel@ziswiler.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220826192252.794651-6-marcel@ziswiler.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,76 +87,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220827-141406/Tetsuo-Handa/9p-trans_fd-always-use-O_NONBLOCK-read-write/20220826-233109
-head:   a1740a60720018fa78f0cfe45db5cfc85e2d3a6d
-commit: a1740a60720018fa78f0cfe45db5cfc85e2d3a6d 9p/trans_fd: perform read/write with TIF_SIGPENDING set
-date:   11 hours ago
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220828/202208280102.vCNrXRCa-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/a1740a60720018fa78f0cfe45db5cfc85e2d3a6d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220827-141406/Tetsuo-Handa/9p-trans_fd-always-use-O_NONBLOCK-read-write/20220826-233109
-        git checkout a1740a60720018fa78f0cfe45db5cfc85e2d3a6d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/9p/
+On 26/08/2022 22:22, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> This fixes the following warnings:
+> 
+> include/dt-bindings/clock/imx8ulp-clock.h:204: warning: please, no space
+>  before tabs
+> include/dt-bindings/clock/imx8ulp-clock.h:215: warning: please, no space
+>  before tabs
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
->> net/9p/trans_fd.c:263:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   net/9p/trans_fd.c:263:31: sparse:     expected struct spinlock [usertype] *lock
-   net/9p/trans_fd.c:263:31: sparse:     got struct spinlock [noderef] __rcu *
-   net/9p/trans_fd.c:265:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   net/9p/trans_fd.c:265:33: sparse:     expected struct spinlock [usertype] *lock
-   net/9p/trans_fd.c:265:33: sparse:     got struct spinlock [noderef] __rcu *
-   net/9p/trans_fd.c:431:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   net/9p/trans_fd.c:431:31: sparse:     expected struct spinlock [usertype] *lock
-   net/9p/trans_fd.c:431:31: sparse:     got struct spinlock [noderef] __rcu *
-   net/9p/trans_fd.c:433:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   net/9p/trans_fd.c:433:33: sparse:     expected struct spinlock [usertype] *lock
-   net/9p/trans_fd.c:433:33: sparse:     got struct spinlock [noderef] __rcu *
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-vim +263 net/9p/trans_fd.c
 
-   238	
-   239	/**
-   240	 * p9_fd_read- read from a fd
-   241	 * @client: client instance
-   242	 * @v: buffer to receive data into
-   243	 * @len: size of receive buffer
-   244	 *
-   245	 */
-   246	
-   247	static int p9_fd_read(struct p9_client *client, void *v, int len)
-   248	{
-   249		int ret;
-   250		struct p9_trans_fd *ts = NULL;
-   251		loff_t pos;
-   252	
-   253		if (client && client->status != Disconnected)
-   254			ts = client->trans;
-   255	
-   256		if (!ts)
-   257			return -EREMOTEIO;
-   258	
-   259		pos = ts->rd->f_pos;
-   260		/* Force non-blocking read() even without O_NONBLOCK. */
-   261		set_thread_flag(TIF_SIGPENDING);
-   262		ret = kernel_read(ts->rd, v, len, &pos);
- > 263		spin_lock_irq(&current->sighand->siglock);
-   264		recalc_sigpending();
-   265		spin_unlock_irq(&current->sighand->siglock);
-   266		if (ret <= 0 && ret != -ERESTARTSYS && ret != -EAGAIN)
-   267			client->status = Disconnected;
-   268		return ret;
-   269	}
-   270	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

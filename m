@@ -2,373 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BABE5A39EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 22:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F306D5A3A02
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 22:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiH0T4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 15:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S231683AbiH0Ukj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 16:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiH0T4J (ORCPT
+        with ESMTP id S231528AbiH0Ukg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 15:56:09 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E52E32BAA
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 12:56:07 -0700 (PDT)
-Received: from localhost.localdomain (unknown [95.31.169.23])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C037C40D403D;
-        Sat, 27 Aug 2022 19:56:04 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Starke <daniel.starke@siemens.com>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org, Hillf Danton <hdanton@sina.com>
-Subject: [PATCH v3] tty: n_gsm: avoid call of sleeping functions from atomic context
-Date:   Sat, 27 Aug 2022 22:55:48 +0300
-Message-Id: <20220827195548.191180-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220827130349.2738-1-hdanton@sina.com>
-References: 
+        Sat, 27 Aug 2022 16:40:36 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CA513F65;
+        Sat, 27 Aug 2022 13:40:34 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-33da3a391d8so113308517b3.2;
+        Sat, 27 Aug 2022 13:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=a43bxgCVH3rA1FTnedAN3yus3ZoDoZPFWJOVyvSBDyo=;
+        b=U7D7wNpxLoHE3MMbr+rI8SpJ5EBQd8lJ2Qj+mIFKdbfeOdxnXoDeLwUbl2b4QUe+S3
+         6qeGAtj9bzKy66OVlDB64sVwXIkovbAiv68z7+HKvQv52WzbTME5yv/aL8KjAfMcnarw
+         tCIExGvqCdJ9Hm7RC6RgV7AL1K41VL9Lp7Go4XDdarhrxlPOn803lG6AUoha5fz09s+X
+         ndB0akjXH+LF1mCdO9NvI2ubHbre/7rbvrExPB916v2FiTQvY+hLaUGrQb7zGncLDZuy
+         plUlRbv61ClFMYaFx09nRMqWdx6X5DJOWkiazYNCuHvxsqDFL8eDACvdkpHpy16YP2E9
+         aMrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=a43bxgCVH3rA1FTnedAN3yus3ZoDoZPFWJOVyvSBDyo=;
+        b=34JoI6DyYmZSisjOWDaQAVwkMGj9U0GXj1KuGY3q+wMhq/TPVTQeivYMJP/acIH2Bg
+         47Za8CXpDhdgDSfNVesvA9Yy1KBGfG38QSANAYknMYif+GU+3uykpJLR1CxfueDLzvTH
+         snNPE1SyJLQgCL9f55F51whukGEDxlATchL9Vo47TStIisKNM7DCapDyNgX8hPT5iEQI
+         g4Q7Aa+w6RaVE5bSATKUX+Jk1RNZJlj84Ggfn/EeDAZz1ULnoTMQmvmlopXRv8sOlCh0
+         ZQ6SS3R+CHdvNUbym17Xnyu5Zzbsm8f8NbQ/kLXYwnDCle5T2o688UqdcIoIPUwvdmCx
+         nyew==
+X-Gm-Message-State: ACgBeo0p4cVFXI2DrLyBWjVYm496NaF1lp/3k4a4nVH0pI1PgVqwEoX5
+        bi6UO0SRJxtOLgh5S9X/edh9Hsn/MxvQvgswex4=
+X-Google-Smtp-Source: AA6agR5W9bwOSWdZq6cApJvjXHDjxg1Q8AUtHvo++rxzP731ZIP5KAqE0qiM2Zw5UhXJ8VrNApYaMwOgM6p3G7fCHNo=
+X-Received: by 2002:a81:d543:0:b0:325:2240:ce5 with SMTP id
+ l3-20020a81d543000000b0032522400ce5mr4751398ywj.210.1661632833757; Sat, 27
+ Aug 2022 13:40:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220825074008.33349-1-jinpu.wang@ionos.com> <20220825074008.33349-2-jinpu.wang@ionos.com>
+In-Reply-To: <20220825074008.33349-2-jinpu.wang@ionos.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 27 Aug 2022 22:40:23 +0200
+Message-ID: <CAFBinCBZkGZcrR5Aue5N+=zTM2MAj3w=ox1Vu1+Od5BK39PGTw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mmc: meson-mx-sdhc: Fix error check for dma_map_sg
+To:     Jack Wang <jinpu.wang@ionos.com>
+Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reports the following problem:
+On Thu, Aug 25, 2022 at 9:40 AM Jack Wang <jinpu.wang@ionos.com> wrote:
+>
+> dma_map_sg return 0 on error, also change the type for dma_len
+> from int to unsigned int.
+>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-amlogic@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+>
+> Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+Thank you for this patch! It's:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-BUG: sleeping function called from invalid context at kernel/printk/printk.c:2347
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1105, name: syz-executor423
-3 locks held by syz-executor423/1105:
- #0: ffff8881468b9098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x90 drivers/tty/tty_ldisc.c:266
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: tty_write_lock drivers/tty/tty_io.c:952 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: do_tty_write drivers/tty/tty_io.c:975 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: file_tty_write.constprop.0+0x2a8/0x8e0 drivers/tty/tty_io.c:1118
- #2: ffff88801b06c398 (&gsm->tx_lock){....}-{2:2}, at: gsmld_write+0x5e/0x150 drivers/tty/n_gsm.c:2717
-irq event stamp: 3482
-hardirqs last  enabled at (3481): [<ffffffff81d13343>] __get_reqs_available+0x143/0x2f0 fs/aio.c:946
-hardirqs last disabled at (3482): [<ffffffff87d39722>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (3482): [<ffffffff87d39722>] _raw_spin_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:159
-softirqs last  enabled at (3408): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-softirqs last disabled at (3401): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 2 PID: 1105 Comm: syz-executor423 Not tainted 5.10.137-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x167 lib/dump_stack.c:118
- ___might_sleep.cold+0x1e8/0x22e kernel/sched/core.c:7304
- console_lock+0x19/0x80 kernel/printk/printk.c:2347
- do_con_write+0x113/0x1de0 drivers/tty/vt/vt.c:2909
- con_write+0x22/0xc0 drivers/tty/vt/vt.c:3296
- gsmld_write+0xd0/0x150 drivers/tty/n_gsm.c:2720
- do_tty_write drivers/tty/tty_io.c:1028 [inline]
- file_tty_write.constprop.0+0x502/0x8e0 drivers/tty/tty_io.c:1118
- call_write_iter include/linux/fs.h:1903 [inline]
- aio_write+0x355/0x7b0 fs/aio.c:1580
- __io_submit_one fs/aio.c:1952 [inline]
- io_submit_one+0xf45/0x1a90 fs/aio.c:1999
- __do_sys_io_submit fs/aio.c:2058 [inline]
- __se_sys_io_submit fs/aio.c:2028 [inline]
- __x64_sys_io_submit+0x18c/0x2f0 fs/aio.c:2028
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
 
-The problem happens in the following control flow:
-
-gsmld_write(...)
-spin_lock_irqsave(&gsm->tx_lock, flags) // taken a spinlock on TX data
- con_write(...)
-  do_con_write(...)
-   console_lock()
-    might_sleep() // -> bug
-
-As far as console_lock() might sleep it should not be called with
-spinlock held.
-
-The patch replaces tx_lock spinlock with mutex in order to avoid the
-problem. Also kick_timer timer_list is replaced with kick_timeout
-delayed_work to be able to synchronize with mutexes, as suggested by
-Hillf Danton <hdanton@sina.com>.
-
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: 32dd59f96924 ("tty: n_gsm: fix race condition in gsmld_write()")
-Fixes: c568f7086c6e ("tty: n_gsm: fix missing timer to handle stalled links")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
-v1->v2: sorry, now adapted patch from 5.10 to upstream
-v2->v3: replaced a kick_timer with a delayed_work
-
- drivers/tty/n_gsm.c | 64 +++++++++++++++++++++------------------------
- 1 file changed, 30 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index caa5c14ed57f..31e7a91fec54 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -248,7 +248,7 @@ struct gsm_mux {
- 	bool constipated;		/* Asked by remote to shut up */
- 	bool has_devices;		/* Devices were registered */
- 
--	spinlock_t tx_lock;
-+	struct mutex tx_mutex;
- 	unsigned int tx_bytes;		/* TX data outstanding */
- #define TX_THRESH_HI		8192
- #define TX_THRESH_LO		2048
-@@ -256,7 +256,7 @@ struct gsm_mux {
- 	struct list_head tx_data_list;	/* Pending data packets */
- 
- 	/* Control messages */
--	struct timer_list kick_timer;	/* Kick TX queuing on timeout */
-+	struct delayed_work kick_timeout;	/* Kick TX queuing on timeout */
- 	struct timer_list t2_timer;	/* Retransmit timer for commands */
- 	int cretries;			/* Command retry counter */
- 	struct gsm_control *pending_cmd;/* Our current pending command */
-@@ -680,7 +680,6 @@ static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 	struct gsm_msg *msg;
- 	u8 *dp;
- 	int ocr;
--	unsigned long flags;
- 
- 	msg = gsm_data_alloc(gsm, addr, 0, control);
- 	if (!msg)
-@@ -702,10 +701,10 @@ static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 
- 	gsm_print_packet("Q->", addr, cr, control, NULL, 0);
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	list_add_tail(&msg->list, &gsm->tx_ctrl_list);
- 	gsm->tx_bytes += msg->len;
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 	gsmld_write_trigger(gsm);
- 
- 	return 0;
-@@ -730,7 +729,7 @@ static void gsm_dlci_clear_queues(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 	spin_unlock_irqrestore(&dlci->lock, flags);
- 
- 	/* Clear data packets in MUX write queue */
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
- 		if (msg->addr != addr)
- 			continue;
-@@ -738,7 +737,7 @@ static void gsm_dlci_clear_queues(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 		list_del(&msg->list);
- 		kfree(msg);
- 	}
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
-@@ -1009,7 +1008,7 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- 	gsm->tx_bytes += msg->len;
- 
- 	gsmld_write_trigger(gsm);
--	mod_timer(&gsm->kick_timer, jiffies + 10 * gsm->t1 * HZ / 100);
-+	schedule_delayed_work(&gsm->kick_timeout, 10 * gsm->t1 * HZ / 100);
- }
- 
- /**
-@@ -1024,10 +1023,9 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- 
- static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- {
--	unsigned long flags;
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	__gsm_data_queue(dlci, msg);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /**
-@@ -1283,13 +1281,12 @@ static int gsm_dlci_data_sweep(struct gsm_mux *gsm)
- 
- static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- {
--	unsigned long flags;
- 	int sweep;
- 
- 	if (dlci->constipated)
- 		return;
- 
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	sweep = (dlci->gsm->tx_bytes < TX_THRESH_LO);
- 	if (dlci->gsm->tx_bytes == 0) {
-@@ -1300,7 +1297,7 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- 	}
- 	if (sweep)
- 		gsm_dlci_data_sweep(dlci->gsm);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /*
-@@ -1984,24 +1981,23 @@ static void gsm_dlci_command(struct gsm_dlci *dlci, const u8 *data, int len)
- }
- 
- /**
-- *	gsm_kick_timer	-	transmit if possible
-- *	@t: timer contained in our gsm object
-+ *	gsm_kick_timeout	-	transmit if possible
-+ *	@work: work contained in our gsm object
-  *
-  *	Transmit data from DLCIs if the queue is empty. We can't rely on
-  *	a tty wakeup except when we filled the pipe so we need to fire off
-  *	new data ourselves in other cases.
-  */
--static void gsm_kick_timer(struct timer_list *t)
-+static void gsm_kick_timeout(struct work_struct *work)
- {
--	struct gsm_mux *gsm = from_timer(gsm, t, kick_timer);
--	unsigned long flags;
-+	struct gsm_mux *gsm = container_of(work, struct gsm_mux, kick_timeout.work);
- 	int sent = 0;
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	if (gsm->tx_bytes < TX_THRESH_LO)
- 		sent = gsm_dlci_data_sweep(gsm);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	if (sent && debug & 4)
- 		pr_info("%s TX queue stalled\n", __func__);
-@@ -2458,7 +2454,7 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
- 	}
- 
- 	/* Finish outstanding timers, making sure they are done */
--	del_timer_sync(&gsm->kick_timer);
-+	cancel_delayed_work_sync(&gsm->kick_timeout);
- 	del_timer_sync(&gsm->t2_timer);
- 
- 	/* Finish writing to ldisc */
-@@ -2501,12 +2497,12 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	if (dlci == NULL)
- 		return -ENOMEM;
- 
--	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
-+	INIT_DELAYED_WORK(&gsm->kick_timeout, gsm_kick_timeout);
- 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
- 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
- 	init_waitqueue_head(&gsm->event);
- 	spin_lock_init(&gsm->control_lock);
--	spin_lock_init(&gsm->tx_lock);
-+	mutex_init(&gsm->tx_mutex);
- 
- 	if (gsm->encoding == 0)
- 		gsm->receive = gsm0_receive;
-@@ -2538,6 +2534,7 @@ static void gsm_free_mux(struct gsm_mux *gsm)
- 			break;
- 		}
- 	}
-+	mutex_destroy(&gsm->tx_mutex);
- 	mutex_destroy(&gsm->mutex);
- 	kfree(gsm->txframe);
- 	kfree(gsm->buf);
-@@ -2609,6 +2606,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_lock_init(&gsm->lock);
- 	mutex_init(&gsm->mutex);
-+	mutex_init(&gsm->tx_mutex);
- 	kref_init(&gsm->ref);
- 	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
- 	INIT_LIST_HEAD(&gsm->tx_data_list);
-@@ -2636,6 +2634,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_unlock(&gsm_mux_lock);
- 	if (i == MAX_MUX) {
-+		mutex_destroy(&gsm->tx_mutex);
- 		mutex_destroy(&gsm->mutex);
- 		kfree(gsm->txframe);
- 		kfree(gsm->buf);
-@@ -2791,17 +2790,16 @@ static void gsmld_write_trigger(struct gsm_mux *gsm)
- static void gsmld_write_task(struct work_struct *work)
- {
- 	struct gsm_mux *gsm = container_of(work, struct gsm_mux, tx_work);
--	unsigned long flags;
- 	int i, ret;
- 
- 	/* All outstanding control channel and control messages and one data
- 	 * frame is sent.
- 	 */
- 	ret = -ENODEV;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	if (gsm->tty)
- 		ret = gsm_data_kick(gsm);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	if (ret >= 0)
- 		for (i = 0; i < NUM_DLCI; i++)
-@@ -2946,7 +2944,7 @@ static int gsmld_open(struct tty_struct *tty)
- 
- 	gsmld_attach_gsm(tty, gsm);
- 
--	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
-+	INIT_DELAYED_WORK(&gsm->kick_timeout, gsm_kick_timeout);
- 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
- 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
- 
-@@ -3012,7 +3010,6 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 			   const unsigned char *buf, size_t nr)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
--	unsigned long flags;
- 	int space;
- 	int ret;
- 
-@@ -3020,13 +3017,13 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 		return -ENODEV;
- 
- 	ret = -ENOBUFS;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	space = tty_write_room(tty);
- 	if (space >= nr)
- 		ret = tty->ops->write(tty, buf, nr);
- 	else
- 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	return ret;
- }
-@@ -3323,14 +3320,13 @@ static struct tty_ldisc_ops tty_ldisc_packet = {
- static void gsm_modem_upd_via_data(struct gsm_dlci *dlci, u8 brk)
- {
- 	struct gsm_mux *gsm = dlci->gsm;
--	unsigned long flags;
- 
- 	if (dlci->state != DLCI_OPEN || dlci->adaption != 2)
- 		return;
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	gsm_dlci_modem_output(gsm, dlci, brk);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
--- 
-2.25.1
-
+Best regards,
+Martin

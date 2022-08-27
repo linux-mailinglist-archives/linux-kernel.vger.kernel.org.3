@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32D55A3719
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 12:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3544C5A371D
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 12:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240828AbiH0Ksu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 06:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S233774AbiH0K6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 06:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiH0Kss (ORCPT
+        with ESMTP id S229737AbiH0K6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 06:48:48 -0400
+        Sat, 27 Aug 2022 06:58:47 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DBF786DB
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 03:48:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD08A6DB
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 03:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661597326; x=1693133326;
+  t=1661597926; x=1693133926;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0Y7t+HB58tCKdr3mdRNCSjjQ2ogTt37LTo5xysOqJSk=;
-  b=gfNcmbRfQXJMV6J3PuOzeVMehBq3FGYtVCsSc5inrQTd0D5tiaSC2j6P
-   OZZmspDbRBbIaljl+xS9mAzpUHYfpTh7Mquom9EsCf99cvu6F8xjE4ad8
-   L+8/JtYzdi7hl1YjtHGWJag9OiNrwvsbNk37DOQxUX1m9iQSkFOwmBSnU
-   dOn+wbs/JBBzHicFDzAt5yacmyafVkmS2p5yehIprko1nI9F3bMdOVVDa
-   LtgcYPzVsnbo8+zZ2RHKVGIoNfW7PjlgaE5TzV2ktJzz5a2kyX+/+erYv
-   OsFJn5tjqYOKnN/aGh2fXE1UiuzzSdEoIAyWwZ0p/fezLPm2oW2pXKtRT
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295925153"
+  bh=wN9xsmFVwLCstqiqyFXXlK0qP6XUkjS6D9tu2gae3lI=;
+  b=ekuk9M36+S46h4gQwccJj94EZz5ZmQjTV9jJstV0H/L2G17RJUnMRn2w
+   NoRNu4rPG5D3i1o3gWIuvfhf19BsB2M8opSLioMbTMzQrypBpa4iG2eli
+   M0vzWWMOQbAb10a4Cumk2eWquXlnTq1iil/MNQN6QAysrTOERZSHc2F3V
+   L0rfgcfvgWdFKf0Vc5wI0uRaK5dYmT7vajJdPOeXBlBh7cMY+pet/6sQt
+   3HWcIr5Edup7UlnqzPloqotDfjFyjKTPxyaIEQg2QdrVzpBk66mRPIxSV
+   MndWudC1DL97gNVHOxIsrfS4SHYqfNoEHICO/5/bQIaPJ7lB67Vcdfeeh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295925536"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="295925153"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 03:48:46 -0700
+   d="scan'208";a="295925536"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 03:58:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="561710646"
+   d="scan'208";a="640367081"
 Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Aug 2022 03:48:44 -0700
+  by orsmga008.jf.intel.com with ESMTP; 27 Aug 2022 03:58:45 -0700
 Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oRtMq-00006T-04;
-        Sat, 27 Aug 2022 10:48:44 +0000
-Date:   Sat, 27 Aug 2022 18:47:58 +0800
+        id 1oRtWW-00006t-12;
+        Sat, 27 Aug 2022 10:58:44 +0000
+Date:   Sat, 27 Aug 2022 18:58:29 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>
-Subject: [ammarfaizi2-block:tj/cgroup/for-6.1 4/6] mm/memcontrol.c:5114:24:
- warning: returning 'long int' from a function with return type 'struct
- mem_cgroup *' makes pointer from integer without a cast
-Message-ID: <202208271857.Dh4yH7Ka-lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 13/36]
+ arch/x86/coco/tdx/tdx.c:531:15: sparse: sparse: symbol 'tdx_mmio_readq' was
+ not declared. Should it be static?
+Message-ID: <202208271821.QFK7WLzo-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,59 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tj/cgroup/for-6.1
-head:   075b593f54f0f3883532cb750081cae6917bc8fe
-commit: fa7e439cf90ba23ea473d0b7d85efd02ae6ccf94 [4/6] cgroup: Homogenize cgroup_get_from_id() return value
-config: arc-randconfig-r043-20220827 (https://download.01.org/0day-ci/archive/20220827/202208271857.Dh4yH7Ka-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/fa7e439cf90ba23ea473d0b7d85efd02ae6ccf94
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tj/cgroup/for-6.1
-        git checkout fa7e439cf90ba23ea473d0b7d85efd02ae6ccf94
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
+commit: 0cf382195475412201e134e2925bb276445a8460 [13/36] x86/tdx: Enable direct iomap MMIO optimizations
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220827/202208271821.QFK7WLzo-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel/tdx/commit/0cf382195475412201e134e2925bb276445a8460
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout 0cf382195475412201e134e2925bb276445a8460
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+   arch/x86/coco/tdx/tdx.c:298:14: sparse: sparse: symbol 'tdx_write_msr' was not declared. Should it be static?
+>> arch/x86/coco/tdx/tdx.c:531:15: sparse: sparse: symbol 'tdx_mmio_readq' was not declared. Should it be static?
 
-   mm/memcontrol.c: In function 'mem_cgroup_get_from_ino':
->> mm/memcontrol.c:5114:24: warning: returning 'long int' from a function with return type 'struct mem_cgroup *' makes pointer from integer without a cast [-Wint-conversion]
-    5114 |                 return PTR_ERR(cgrp);
-         |                        ^~~~~~~~~~~~~
+vim +/tdx_mmio_readq +531 arch/x86/coco/tdx/tdx.c
 
-
-vim +5114 mm/memcontrol.c
-
-  5104	
-  5105	#ifdef CONFIG_SHRINKER_DEBUG
-  5106	struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino)
-  5107	{
-  5108		struct cgroup *cgrp;
-  5109		struct cgroup_subsys_state *css;
-  5110		struct mem_cgroup *memcg;
-  5111	
-  5112		cgrp = cgroup_get_from_id(ino);
-  5113		if (IS_ERR(cgrp))
-> 5114			return PTR_ERR(cgrp);
-  5115	
-  5116		css = cgroup_get_e_css(cgrp, &memory_cgrp_subsys);
-  5117		if (css)
-  5118			memcg = container_of(css, struct mem_cgroup, css);
-  5119		else
-  5120			memcg = ERR_PTR(-ENOENT);
-  5121	
-  5122		cgroup_put(cgrp);
-  5123	
-  5124		return memcg;
-  5125	}
-  5126	#endif
-  5127	
+   530	
+ > 531	unsigned long tdx_mmio_readq(void __iomem* addr)
+   532	{
+   533		unsigned long val;
+   534	
+   535		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
+   536			return 0xffffffffffffffff;
+   537		return val;
+   538	}
+   539	
 
 -- 
 0-DAY CI Kernel Test Service

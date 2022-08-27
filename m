@@ -2,97 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24215A384E
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C21A5A384F
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbiH0PSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 11:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S233452AbiH0PS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 11:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiH0PSl (ORCPT
+        with ESMTP id S232569AbiH0PS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 11:18:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BB83F32C;
-        Sat, 27 Aug 2022 08:18:39 -0700 (PDT)
+        Sat, 27 Aug 2022 11:18:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C503FA08
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 08:18:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9BA9B808C0;
-        Sat, 27 Aug 2022 15:18:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133A0C433C1;
-        Sat, 27 Aug 2022 15:18:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4026360DD3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 15:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22CEC433D6;
+        Sat, 27 Aug 2022 15:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661613517;
-        bh=R/FPlgh+i14+wvCo3ye35JKDBc9ySPLXlmivzP/hCn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dzCuGaUc9VTghk2gQjzIr5ca2JYaVqPKhs5InSyKAUWLn6G34sldIYA9Bm8aGsyzY
-         sBMhnrfQRz0j8wOM2KUcn8QN5HUEPyDyy6TgLbqbRAXr2BU++Z/rzQLKp4Uc+WH9jW
-         aRVf3Xok72JKal9Wbw+Jkq0bw40HNdZ78v3IOVDd+PahpwdcogBh3Le2zKBtcpay6C
-         cS/jGJAZt5YQD9+blS+03LYa2wqowTeC/bv6fQUA8qgGWiMhlVhw85IEM0hTjydhMM
-         IkUrcHOY2WsFYsBeHQ5q7VN8YvIHgOJ4l+LNH7R2y1J7D/GA3JLiW6MWSlAewWKzVZ
-         sSXKNw0KvlSAw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 58330404A1; Sat, 27 Aug 2022 12:18:34 -0300 (-03)
-Date:   Sat, 27 Aug 2022 12:18:34 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
-Message-ID: <Ywo1yt/2liQwDQot@kernel.org>
-References: <20220826164027.42929-1-irogers@google.com>
- <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
-X-Url:  http://acmel.wordpress.com
+        s=k20201202; t=1661613534;
+        bh=3OskzQo5R7SlMm6IC8iuLVq2M7pHJLiJLxaUbpjauSg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hVFdy7tY+/JWR7ntiBxwTaNk5IqHnetp3O/gen8bIZV7e3OtIryikyl4cpUerSPIf
+         2JWnOlGyV4LLidV3Qr2bpn3c5bsgM97p6JShilqDJkEoq/84wrgPCJ4pSMX6faXy25
+         Dmg+4ZnHgHZIY8KOVtPrN5m691KNnCP6kc2JIppWkcQ/imf2WbiVpIipxD3Qb0vfRj
+         q/QueDaLwBiFfGFRKgwYJIKtBehRl2EH9MDr/NJcFMCoR9H3SXULfAtAwcVlSNFof2
+         R4S2WFxEL/qRmyBubdB14EWyFfjJWQraqKyZUydNEZz4i6Wbz371AEdpig8SccTIx8
+         LscuzElxS3aOw==
+Received: from [12.191.126.171] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oRxaG-006B9H-0j;
+        Sat, 27 Aug 2022 16:18:52 +0100
+Date:   Sat, 27 Aug 2022 16:18:48 +0100
+Message-ID: <87v8qdr9yf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Xu Qiang <xuqiang36@huawei.com>
+Cc:     <tglx@linutronix.de>, <frederic@kernel.org>,
+        <peterz@infradead.org>, <nitesh@redhat.com>,
+        <bigeasy@linutronix.de>, <douliyangs@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <guohanjun@huawei.com>,
+        <weiyongjun1@huawei.com>
+Subject: Re: [PATCH -next 1/3] genirq/affinity: replace managed with is_managed in irq_affinity_desc
+In-Reply-To: <20220827011351.9185-1-xuqiang36@huawei.com>
+References: <20220827011351.9185-1-xuqiang36@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 12.191.126.171
+X-SA-Exim-Rcpt-To: xuqiang36@huawei.com, tglx@linutronix.de, frederic@kernel.org, peterz@infradead.org, nitesh@redhat.com, bigeasy@linutronix.de, douliyangs@gmail.com, linux-kernel@vger.kernel.org, guohanjun@huawei.com, weiyongjun1@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -103,62 +70,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Aug 27, 2022 at 10:04:44AM +0300, Adrian Hunter escreveu:
-> On 26/08/22 19:40, Ian Rogers wrote:
-> > When fixing a locking race and memory leak in:
-> > https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
-> > 
-> > It was requested that debug mutex code be separated out into its own
-> > files. This was, in part, done by Pavithra Gurushankar in:
-> > https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
-> > 
-> > These patches fix issues with the previous patches, add in the
-> > original dso->nsinfo fix and then build on our mutex wrapper with
-> > clang's -Wthread-safety analysis. The analysis found missing unlocks
-> > in builtin-sched.c which are fixed and -Wthread-safety is enabled by
-> > default when building with clang.
-> > 
-> > v4. Adds a comment for the trylock result, fixes the new line (missed
-> >     in v3) and removes two blank lines as suggested by Adrian Hunter.
-> > v3. Adds a missing new line to the error messages and removes the
-> >     pshared argument to mutex_init by having two functions, mutex_init
-> >     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
-> > v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
-> >     annotations as requested by Arnaldo and Namhyung. A boolean is
-> >     added to builtin-sched.c to terminate thread funcs rather than
-> >     leaving them blocked on delted mutexes.
-> > 
-> > Ian Rogers (17):
-> >   perf bench: Update use of pthread mutex/cond
-> >   perf tests: Avoid pthread.h inclusion
-> >   perf hist: Update use of pthread mutex
-> >   perf bpf: Remove unused pthread.h include
-> >   perf lock: Remove unused pthread.h include
-> >   perf record: Update use of pthread mutex
-> >   perf sched: Update use of pthread mutex
-> >   perf ui: Update use of pthread mutex
-> >   perf mmap: Remove unnecessary pthread.h include
-> >   perf dso: Update use of pthread mutex
-> >   perf annotate: Update use of pthread mutex
-> >   perf top: Update use of pthread mutex
-> >   perf dso: Hold lock when accessing nsinfo
-> >   perf mutex: Add thread safety annotations
-> >   perf sched: Fixes for thread safety analysis
-> >   perf top: Fixes for thread safety analysis
-> >   perf build: Enable -Wthread-safety with clang
-> > 
-> > Pavithra Gurushankar (1):
-> >   perf mutex: Wrapped usage of mutex and cond
-> 
-> For all patches except 9 and 16
-> 
-> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+On Sat, 27 Aug 2022 02:13:49 +0100,
+Xu Qiang <xuqiang36@huawei.com> wrote:
+>=20
+> This submission is based on the following two considerations:
+>=20
+> 1. The definition of is_managed field is misleading to assume
+>    that it only uses 1 bit of memory, which is not the case;
 
-Added it, did the usual round of tests and pushed out perf/core, we can
-continue from there.
+You realise that a bitfield is not about the memory used, but the
+number of significant bits, right? The memory it uses is the
+compiler's business.
 
-It also contains Adrian's "multiple recording time ranges" series.
+> 2. from the actual use of is_managed, it should be a Boolean type;
 
-Thanks!
+Why? What is wrong with the existing bitfield? Why renaming it?
 
-- Arnaldo
+>
+> Fixes: c410abbbacb9 (=E2=80=9Cgenirq/affinity: Add is_managed to struct i=
+rq_affinity_desc=E2=80=9D)
+
+I don't see any fix here, only some seemingly pointless bike-shedding.
+If you have identified an actual issue, please spell it out for me,
+because I cannot see it.
+
+Thanks,
+
+	M.
+
+
+--=20
+Without deviation from the norm, progress is not possible.

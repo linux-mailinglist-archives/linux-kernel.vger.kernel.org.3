@@ -2,70 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999125A3806
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 15:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973915A3809
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 16:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiH0N5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 09:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S233203AbiH0N7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 09:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiH0N5o (ORCPT
+        with ESMTP id S229677AbiH0N7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 09:57:44 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCC03AB09;
-        Sat, 27 Aug 2022 06:57:39 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s206so3851729pgs.3;
-        Sat, 27 Aug 2022 06:57:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=g37hXBDxa4gAGFGLqqielVPHOcCQvgMHWIbRrDd8m/Y=;
-        b=F07IXbBU8wh/m/PCqmLQzhJR9I4XzxWT/tBBYt8bTyzZYpV8t5VCuCue3V1XjQ8qBU
-         kzKPBhZeshE46mZuxnfVqfl5o/OkbiZqIqswrx09+ucorNH9DYnsvcOZa+unp6e+lAuX
-         lDp84vOnZ25bRNAC94ftUBX7wHnz7UK4KstyUaWPNOCiki9GSN9EibPXZc0u3TA4L3xv
-         doJx3qvp1+tv4xFjZCXiK4f/0u9z0ezmdRTmYyV5rg2NsyQUkojeUwnwywCPS5yKYlpd
-         oVQr6Ms1Toky02MrBBkjzCaoQdI2k+1Q9G+4T3PxyLghHsXpA1uppahk57cZIrexIOoP
-         Ndug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=g37hXBDxa4gAGFGLqqielVPHOcCQvgMHWIbRrDd8m/Y=;
-        b=xYj4htPEENl/ZB6XTiQgpQqXriJL97X5tY7TVuZv+Dfj35boISM+FSYHTnT7wFU005
-         hRt5ecSYCcRSv0JvX6iDvZqRPQODB2Jcqquz3d+oJFB2gzcDoK6EBAG3YdYLISJDrTz4
-         leYoOC7OoD2CfKD8MVGq457cYYCJlC5XKxuSpEXl0ieWz7iHJ0ac/iRDF1XrHsJgxXwQ
-         7i0qGfC7A+URfMWSlj3xqGSlwedjmzAxFXI5xjNJWXjoZqLFzh9Z10/aNDePFjwMcdtk
-         6CSaA8z1Ac0jZWKM5D6dwv6UABAve2G248htlpNwKfBSIRNI/EccNJuZpbabGJyl0ZXL
-         A62w==
-X-Gm-Message-State: ACgBeo3AXaaUd6H0kl5AexaO5VeMOGSb1/TcSgEJYR4jED4jPU0zfIxs
-        nMCDaMC+VRH4diYJOu6W2pI=
-X-Google-Smtp-Source: AA6agR5KOIJ82rCC0BIKftcAN7uD205uJmdj0ilFp4i6CdPgvWGs6wVTFne7DqipMq26jU9HXRDoTg==
-X-Received: by 2002:a05:6a00:e8f:b0:536:c98e:8307 with SMTP id bo15-20020a056a000e8f00b00536c98e8307mr8514274pfb.73.1661608659337;
-        Sat, 27 Aug 2022 06:57:39 -0700 (PDT)
-Received: from Kk1r0a.localdomain ([15.235.171.180])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170902c60b00b0016bdcb8fbcdsm3656106plr.47.2022.08.27.06.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 06:57:38 -0700 (PDT)
-From:   Youlin Li <liulin063@gmail.com>
-To:     daniel@iogearbox.net, haoluo@google.com
-Cc:     ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Youlin Li <liulin063@gmail.com>
-Subject: [PATCH bpf v2 1/2] bpf: Do more tight ALU bounds tracking
-Date:   Sat, 27 Aug 2022 21:57:11 +0800
-Message-Id: <20220827135711.21507-1-liulin063@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <5d2addca-10e5-f7a6-9efd-43322eec8347@iogearbox.net>
-References: <5d2addca-10e5-f7a6-9efd-43322eec8347@iogearbox.net>
+        Sat, 27 Aug 2022 09:59:32 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF353AB09
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 06:59:31 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27RDVuN1015338;
+        Sat, 27 Aug 2022 13:59:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=pp1; bh=tai/MXn8ZPUgKhe/ysmYN0x9H4L+5NOCU52Yg9ft/3E=;
+ b=ciwEDzJIXYHOHtTKv7b6UQnksbrewNFkGr0sg2IkkmtU29lgtFLS87lG/9DNQgcBPq6W
+ FJa+NBbcJWeukEeFWa4henrl0NQmJR5Jnlphu4QZ6yrFAvi+bex+tkAcaV0SbjyZybaE
+ gYftDBzHHn01u7ake9fJ2OujlH9Ealg9uOWCRn2A4NKZYEX+qMk4zZA/ffE5GXHtfd3J
+ vUkJZgMn1YIwrYUUJxKJJe8H+Ap3CLuXjLbseNRjQN3Fkgt7e3tGm9SK/iUFBoAnixvt
+ Zqp1aHLtVW6xGCZCQRHt12WmLDQxM+2cmfJofUWLolfczm5tyzY62PevZWGYTTCHyLkg /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j7m82gb29-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Aug 2022 13:59:26 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27RDxQQV011950;
+        Sat, 27 Aug 2022 13:59:26 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j7m82gb23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Aug 2022 13:59:26 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27RDpc1D021976;
+        Sat, 27 Aug 2022 13:59:25 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03wdc.us.ibm.com with ESMTP id 3j7aw8td88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Aug 2022 13:59:25 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27RDxPav31981854
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 27 Aug 2022 13:59:25 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2715CAE05C;
+        Sat, 27 Aug 2022 13:59:25 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5285AE060;
+        Sat, 27 Aug 2022 13:59:21 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.57.126])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sat, 27 Aug 2022 13:59:21 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+In-Reply-To: <Ywfl/HIeO/ZbwYCg@monkey>
+References: <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+ <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+ <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com>
+ <YwVo7xSO+VebkIfQ@monkey>
+ <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
+ <7ee73879-e402-9175-eae8-41471d80d59e@redhat.com>
+ <f7544713-d856-0875-41dd-52a5c27ba015@linux.alibaba.com>
+ <Ywa1jp/6naTmUh42@monkey>
+ <887ca2e2-a7c5-93a7-46cb-185daccd4444@redhat.com>
+ <Ywfl/HIeO/ZbwYCg@monkey>
+Date:   Sat, 27 Aug 2022 19:29:18 +0530
+Message-ID: <87wnatrdmx.fsf@linux.ibm.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NJS-kW6jpW7-Foi9oUXJ4C1Nzo4P32A2
+X-Proofpoint-ORIG-GUID: Ueo1RRQG1puYe1wN0h4BG_S1cOHxJaXW
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-27_08,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0
+ clxscore=1011 mlxscore=0 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208270054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,107 +103,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In adjust_scalar_min_max_vals(), let 32bit bounds learn from 64bit bounds
-to get more tight bounds tracking. Similar operation can be found in
-reg_set_min_max().
+Mike Kravetz <mike.kravetz@oracle.com> writes:
 
-Note that we cannot simply add a call to __reg_combine_64_into_32(). In
-previous versions of the code, when __reg_combine_64_into_32() was
-called, the 32bit boundary was completely deduced from the 64bit
-boundary, so there was a call to __mark_reg32_unbounded() in
-__reg_combine_64_into_32(). But in adjust_scalar_min_max_vals(), the 32bit
-bounds are already calculated to some extent, and __mark_reg32_unbounded()
-will eliminate these information.
+>
+> On 08/25/22 09:25, David Hildenbrand wrote:
+>> > Is the primary concern the locking?  If so, I am not sure we have an issue.
+>> > As mentioned in your commit message, current code will use
+>> > pte_offset_map_lock().  pte_offset_map_lock uses pte_lockptr, and pte_lockptr
+>> > will either be the mm wide lock or pmd_page lock.  To me, it seems that
+>> > either would provide correct synchronization for CONT-PTE entries.  Am I
+>> > missing something or misreading the code?
+>> > 
+>> > I started looking at code cleanup suggested by David.  Here is a quick
+>> > patch (not tested and likely containing errors) to see if this is a step
+>> > in the right direction.
+>> > 
+>> > I like it because we get rid of/combine all those follow_huge_p*d
+>> > routines.
+>> > 
+>> 
+>> Yes, see comments below.
+>> 
+>> > From 35d117a707c1567ddf350554298697d40eace0d7 Mon Sep 17 00:00:00 2001
+>> > From: Mike Kravetz <mike.kravetz@oracle.com>
+>> > Date: Wed, 24 Aug 2022 15:59:15 -0700
+>> > Subject: [PATCH] hugetlb: call hugetlb_follow_page_mask for hugetlb pages in
+>> >  follow_page_mask
+>> > 
+>> > At the beginning of follow_page_mask, there currently is a call to
+>> > follow_huge_addr which 'may' handle hugetlb pages.  ia64 is the only
+>> > architecture which (incorrectly) provides a follow_huge_addr routine
+>> > that does not return error.  Instead, at each level of the page table a
+>> > check is made for a hugetlb entry.  If a hugetlb entry is found, a call
+>> > to a routine associated with that page table level such as
+>> > follow_huge_pmd is made.
+>> > 
+>> > All the follow_huge_p*d routines are basically the same.  In addition
+>> > huge page size can be derived from the vma, so we know where in the page
+>> > table a huge page would reside.  So, replace follow_huge_addr with a
+>> > new architecture independent routine which will provide the same
+>> > functionality as the follow_huge_p*d routines.  We can then eliminate
+>> > the p*d_huge checks in follow_page_mask page table walking as well as
+>> > the follow_huge_p*d routines themselves.>
+>> > follow_page_mask still has is_hugepd hugetlb checks during page table
+>> > walking.  This is due to these checks and follow_huge_pd being
+>> > architecture specific.  These can be eliminated if
+>> > hugetlb_follow_page_mask can be overwritten by architectures (powerpc)
+>> > that need to do follow_huge_pd processing.
+>> 
+>> But won't the
+>> 
+>> > +	/* hugetlb is special */
+>> > +	if (is_vm_hugetlb_page(vma))
+>> > +		return hugetlb_follow_page_mask(vma, address, flags);
+>> 
+>> code route everything via hugetlb_follow_page_mask() and all these
+>> (beloved) hugepd checks would essentially be unreachable?
+>> 
+>> At least my understanding is that hugepd only applies to hugetlb.
+>> 
+>> Can't we move the hugepd handling code into hugetlb_follow_page_mask()
+>> as well?
+>> 
+>> I mean, doesn't follow_hugetlb_page() also have to handle that hugepd
+>> stuff already ... ?
+>> 
+>> [...]
+>
+> I think so, but I got a little confused looking at the hugepd handling code.
+> Adding Aneesh who added support to follow_page_mask in the series at:
+> https://lore.kernel.org/linux-mm/1494926612-23928-1-git-send-email-aneesh.kumar@linux.vnet.ibm.com/
+>
+> I believe you are correct in that follow_hugetlb_page must handle as well.
+>
+> One source of my confusion is the following in follow_huge_pd:
+>
+> 	/*
+> 	 * hugepage directory entries are protected by mm->page_table_lock
+> 	 * Use this instead of huge_pte_lockptr
+> 	 */
+> 	ptl = &mm->page_table_lock;
+> 	spin_lock(ptl);
+>
+> Yet, if follow_hugetlb_page handles hugepd then it is using huge_pte_lockptr
+> to get the lock pointer and is wrong?
+>
+> Hoping Aneesh can help clear up the confusion.
 
-Simply copying a code without __mark_reg32_unbounded() should work.
 
-Also, we can now fold reg_bounds_sync() into zext_32_to_64().
+I agree it is all confusing. At some point, the goal was to teach
+generic kernel page table walking code about hugepd entries. But looking
+at this again and considering we only have hugepd entries for hugetlb,
+may be the effort is not worth the complexity it adds.
 
-Before:
+ie,  instead of teaching generic page table walk about different hugetlb
+page table layouts we special case using is_vm_hugetlb_page(vma)
+wherever we can.
 
-    func#0 @0
-    0: R1=ctx(off=0,imm=0) R10=fp0
-    0: (b7) r0 = 0                        ; R0_w=0
-    1: (b7) r1 = 0                        ; R1_w=0
-    2: (87) r1 = -r1                      ; R1_w=scalar()
-    3: (87) r1 = -r1                      ; R1_w=scalar()
-    4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
-    5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
-    6: (95) exit
+With respect to huge_pte_lockptr, it is tricky (hugepd entries are not
+PMD_SIZE) 
 
-It can be seen that even if the 64bit bounds is clear here, the 32bit
-bounds is still in the state of 'UNKNOWN'.
+static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
+					   struct mm_struct *mm, pte_t *pte)
+{
+	if (huge_page_size(h) == PMD_SIZE)
+		return pmd_lockptr(mm, (pmd_t *) pte);
+	VM_BUG_ON(huge_page_size(h) == PAGE_SIZE);
+	return &mm->page_table_lock;
+}
 
-After:
-
-    func#0 @0
-    0: R1=ctx(off=0,imm=0) R10=fp0
-    0: (b7) r0 = 0                        ; R0_w=0
-    1: (b7) r1 = 0                        ; R1_w=0
-    2: (87) r1 = -r1                      ; R1_w=scalar()
-    3: (87) r1 = -r1                      ; R1_w=scalar()
-    4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
-    5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
-    6: (95) exit
-
-Signed-off-by: Youlin Li <liulin063@gmail.com>
----
-v1 -> v2:
-    Replaced the call to __reg_combine_64_into_32() with the code in
-    __reg_combine_64_into_32(), and removed the call to
-    __mark_reg32_unbounded().
-
-Sorry for the delay, I've been busy looking for a job recently :)
-
- kernel/bpf/verifier.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3eadb14e090b..b7403773e834 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4383,6 +4383,7 @@ static void zext_32_to_64(struct bpf_reg_state *reg)
- {
- 	reg->var_off = tnum_subreg(reg->var_off);
- 	__reg_assign_32_into_64(reg);
-+	reg_bounds_sync(reg);
- }
- 
- /* truncate register to smaller size (in bytes)
-@@ -9010,10 +9011,22 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		break;
- 	}
- 
--	/* ALU32 ops are zero extended into 64bit register */
--	if (alu32)
-+	if (alu32) {
-+		/* ALU32 ops are zero extended into 64bit register */
- 		zext_32_to_64(dst_reg);
--	reg_bounds_sync(dst_reg);
-+	} else {
-+		if (__reg64_bound_s32(dst_reg->smin_value) &&
-+		    __reg64_bound_s32(dst_reg->smax_value)) {
-+			dst_reg->s32_min_value = (s32)dst_reg->smin_value;
-+			dst_reg->s32_max_value = (s32)dst_reg->smax_value;
-+		}
-+		if (__reg64_bound_u32(dst_reg->umin_value) &&
-+		    __reg64_bound_u32(dst_reg->umax_value)) {
-+			dst_reg->u32_min_value = (u32)dst_reg->umin_value;
-+			dst_reg->u32_max_value = (u32)dst_reg->umax_value;
-+		}
-+		reg_bounds_sync(dst_reg);
-+	}
- 	return 0;
- }
- 
-@@ -9202,7 +9215,6 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 							 insn->dst_reg);
- 				}
- 				zext_32_to_64(dst_reg);
--				reg_bounds_sync(dst_reg);
- 			}
- 		} else {
- 			/* case: R = imm
--- 
-2.25.1
-
+>
+> BTW, I also noticed that the above series added the comment:
+> 	/* make this handle hugepd */
+> above the call to follow_huge_addr() in follow_page_mask.  Perhaps there
+> was at one time a plan to have follow_huge_addr handle hugepd?  That
+> series removed powerpc specific follow_huge_addr routine.
+>
+> -- 
+> Mike Kravetz

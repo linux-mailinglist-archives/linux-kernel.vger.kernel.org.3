@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986ED5A3998
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223B55A3997
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiH0Spw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 14:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S231363AbiH0Sqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 14:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiH0Spe (ORCPT
+        with ESMTP id S229694AbiH0Sqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 14:45:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E7B28E23;
-        Sat, 27 Aug 2022 11:45:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 142C660E9E;
-        Sat, 27 Aug 2022 18:45:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CC7C433C1;
-        Sat, 27 Aug 2022 18:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661625932;
-        bh=sLLCKxYxGQlymSR3HEsaESbRMIEl15W7BWXkNlC/6F8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iSEtn7I7TweB+4Btk7FS//bCL0CTy4J7gn/7kuSOOVw2ze3+/59MbDvJ2Ks5nyARz
-         LSDGLiF60gMNn0XsKCETQYmpBhWINM61m1pV7PI0/idcLDo/IY69+h7lDc7PEul9eS
-         G7/V8et83SBjKAYKHh+COKZA4QV52Ax0s0gRBQ4LKvjELiIy5/MhG4ynm1xT395GoR
-         1YdV83MBOmsoMA4VAlW6x+G2nDYfiEnIbwPRs59VGBsXyV8CZeySl6uIoVgcpKQM3b
-         NORjS5jDOMbO0sRnhSQMwSSZwTKYoJO+EUoZuoZVZXoEzNQvkDcxUi4O72bHtJS3i0
-         IURDdlTRbRp4Q==
-Received: by pali.im (Postfix)
-        id ACA41C7A; Sat, 27 Aug 2022 20:45:29 +0200 (CEST)
-Date:   Sat, 27 Aug 2022 20:45:29 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add switch port 6 node
-Message-ID: <20220827184529.x6f7vacuhypaq7bb@pali>
-References: <20220825122102.18634-1-pali@kernel.org>
- <YwpldyOI5x1xgMoM@lunn.ch>
+        Sat, 27 Aug 2022 14:46:46 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AE232EE1;
+        Sat, 27 Aug 2022 11:46:45 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id q6-20020a4aa886000000b0044b06d0c453so815875oom.11;
+        Sat, 27 Aug 2022 11:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=69+9gp7OFZSr9PPlljFw2OoKkVTL805qaZz+wfhp7oE=;
+        b=FKmBCoanyLT9A3oyRzBhuDxYdYCnqYBTHQXyvl/xpyJmIkeCg+6zyc3zYSwh2hbIdT
+         NyiYi7exxe3mGWPjYDo5Ili+qJ+kR0wgbODstFsSnWIlFyS6+9uc96QvesS5sJxmwUgt
+         GNrw2b1x42ir6Qb+UFozrgytX2ohWrolzAV33B7ILthqOPGuEjp/7tmE7C5DPEdvRDjx
+         y/LZrCri/lPNtUznMdq700hcm3DDObDieBqq86+9KzlQEvUGdKM7eE+JPi5Mw0+5mPf1
+         x+3FIbowAOSVOvxTQQeyU1gs3e3X0Pgs/K080gyYTPiH5rjh06znOupaHO5Tbrz/vawU
+         PSRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=69+9gp7OFZSr9PPlljFw2OoKkVTL805qaZz+wfhp7oE=;
+        b=axQ717iKlQLr5m/mjl9Fkwcv9lXPKw/A3Jiv0igmm7xOfn2wqJwaA095/Gf8a4pbty
+         bj5qn6mUPcEpBwWc+HyHOMtbtbpl1gWcKu+Qn8osoz68HsANfzAEr/CP9gGl6M9xzWOV
+         9tEPo9BIpY3YlXrMr8JcSMj+AvNzcxsQxUTgI1Rej9cCEtKaPoXQcBflo0WMSLda2rmA
+         t6EMmS0X1QfCbSjMlUkX1rWkYhhy6T8o2z05IuvDjr2JKUBQFwlitA0u97NYypcRa4/K
+         62tjx/WtRH9vFTBCqhwOk8ApUclww8SD6TmfXYGmNcRsaAvfgfi4Jxe4/AYVDHS2J9GH
+         gzBw==
+X-Gm-Message-State: ACgBeo0hgZLxkxFheTdGfAvQ84otb7hFMjEt6SiKx+Ce7BOhREHFVBGT
+        7rraL1mgJJsCQ2PonT+9kOjrE6gmTAo=
+X-Google-Smtp-Source: AA6agR6qQnRexHuuxr8v6XkFJY/ed/0nN8p2CRauEFit5/0GJn6iFdKafGA+pw22J57PW6GlRvq+Lg==
+X-Received: by 2002:a4a:334f:0:b0:44b:460b:9a27 with SMTP id q76-20020a4a334f000000b0044b460b9a27mr3165846ooq.46.1661626004881;
+        Sat, 27 Aug 2022 11:46:44 -0700 (PDT)
+Received: from localhost ([2600:1700:65a0:ab60:e448:c1ce:ae49:d00c])
+        by smtp.gmail.com with ESMTPSA id c24-20020a4ad8d8000000b00435b646f160sm2801038oov.5.2022.08.27.11.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 11:46:44 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 11:46:43 -0700
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jhs@mojatatu.com, jiri@resnulli.us, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Subject: Re: [PATCH net-next] net: sched: red: remove unused input parameter
+ in red_get_flags()
+Message-ID: <Ywpmky1B0oh+KQgU@pop-os.localdomain>
+References: <20220827043545.248535-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YwpldyOI5x1xgMoM@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220827043545.248535-1-shaozhengchao@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 27 August 2022 20:41:59 Andrew Lunn wrote:
-> On Thu, Aug 25, 2022 at 02:21:02PM +0200, Pali Rohár wrote:
-> > Switch port 6 is connected to eth0, so add appropriate device tree node for it.
-> > 
-> > Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  arch/arm/boot/dts/armada-385-turris-omnia.dts | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> > index f655e9229d68..8215ffb6a795 100644
-> > --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> > +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> > @@ -463,7 +463,17 @@
-> >  				};
-> >  			};
-> >  
-> > -			/* port 6 is connected to eth0 */
-> > +			ports@6 {
-> > +				reg = <6>;
-> > +				label = "cpu";
-> > +				ethernet = <&eth0>;
-> > +				phy-mode = "rgmii-id";
-> > +
-> > +				fixed-link {
-> > +					speed = <1000>;
-> > +					full-duplex;
-> > +				};
-> > +			};
+On Sat, Aug 27, 2022 at 12:35:45PM +0800, Zhengchao Shao wrote:
+> The input parameter supported_mask is unused in red_get_flags().
+> Remove it.
 > 
-> Hi Pali
-> 
-> I've not been following Vladimirs work on multiple CPU ports. Is it
-> clearly defined, both for old and new kernels, what happens where
-> there are multiple CPU ports defined?
-> 
->       Andrew
 
-Hello!
+It looks like this is incomplete code unification of the following
+commit:
 
-On older kernel kernel versions just the first one cpu port works. Like
-if second node is not defined at all. So I sent this patch to have
-complete HW definition in DTS, even when kernel does not support all
-features yet.
+commit 14bc175d9c885c86239de3d730eea85ad67bfe7b
+Author: Petr Machata <petrm@mellanox.com>
+Date:   Fri Mar 13 01:10:56 2020 +0200
+
+    net: sched: Allow extending set of supported RED flags
+
+How about completing it? ;)
+
+Thanks.

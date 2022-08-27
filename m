@@ -2,82 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CFB5A3889
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5B95A3898
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiH0P4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 11:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
+        id S233887AbiH0QAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiH0P4D (ORCPT
+        with ESMTP id S233613AbiH0QAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 11:56:03 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0501B12A82;
-        Sat, 27 Aug 2022 08:56:01 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1661615757tok05pso
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 27 Aug 2022 23:55:51 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: dcYQFNbI8vGFOeb2An6mh5sV8S4PnbieXEyiavi7ic9/WJDgt59fqteMlLfZ2
-        iD27VJWq5ge4BrjODj0JOZRI6BeLqjA3vkUoh3qXrU4eLFJPbKW9+R9MstXdrPyTnxzv+Xi
-        ibdPxcwHF82UlLpiywngJFl/Dl9Eilea8xqLh0YLm6eJz7wK/bwV8iJ8OSADja4UJz0Atca
-        AvVdEkazJ3qWuR8B3krBTFG//EJjkU+tF5vRIJV1QjjIPlGpeq4ERNc7JRH11qwX4jiU0Xn
-        eT2JK8K0YiUb+r8ZOUG0LSd0phh19ZgiwE2dNTuacf3/EEdWn428PZskwWQ1fT/1K/SOjUw
-        3F0qftCANZ2yPHaerfVsr0d/Z7qZp60rMmgoLqEnqPd5qrp9nxsAbMEVjLNKNAa33nRlYLH
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
-Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] s390/sthyi: Fix comments typo
-Date:   Sat, 27 Aug 2022 11:55:50 -0400
-Message-Id: <20220827155550.12676-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 27 Aug 2022 12:00:19 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 55088FD22
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:00:16 -0700 (PDT)
+Received: (qmail 70612 invoked by uid 1000); 27 Aug 2022 12:00:15 -0400
+Date:   Sat, 27 Aug 2022 12:00:15 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, parri.andrea@gmail.com,
+        will@kernel.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Message-ID: <Ywo/j7V2GbMKMmp3@rowland.harvard.edu>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <20220826204219.GX6159@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826204219.GX6159@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the repeated word "the" in comments.
+On Fri, Aug 26, 2022 at 01:42:19PM -0700, Paul E. McKenney wrote:
+> On Fri, Aug 26, 2022 at 01:10:39PM -0400, Alan Stern wrote:
+> > On Fri, Aug 26, 2022 at 06:23:24PM +0200, Peter Zijlstra wrote:
+> > > I think we should address that first one in LKMM, it seems very weird to
+> > > me a RmW would break the chain like that.
+> > 
+> > An explicitly relaxed RMW (atomic_cmpxchg_relaxed(), to be precise).
+> > 
+> > If the authors wanted to keep the release-acquire chain intact, why not 
+> > use a cmpxchg version that has release semantics instead of going out of 
+> > their way to use a relaxed version?
+> > 
+> > To put it another way, RMW accesses and release-acquire accesses are 
+> > unrelated concepts.  You can have one without the other (in principle, 
+> > anyway).  So a relaxed RMW is just as capable of breaking a 
+> > release-acquire chain as any other relaxed operation is.
+> > 
+> > >  Is there actual hardware that
+> > > doesn't behave?
+> > 
+> > Not as far as I know, although that isn't very far.  Certainly an 
+> > other-multicopy-atomic architecture would make the litmus test succeed.  
+> > But the LKMM does not require other-multicopy-atomicity.
+> 
+> My first attempt with ppcmem suggests that powerpc does -not- behave
+> this way.  But that surprises me, just on general principles.  Most likely
+> I blew the litmus test shown below.
+> 
+> Thoughts?
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
----
- arch/s390/kernel/sthyi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The litmus test looks okay.
 
-diff --git a/arch/s390/kernel/sthyi.c b/arch/s390/kernel/sthyi.c
-index 4d141e2c132e..dfc350fab384 100644
---- a/arch/s390/kernel/sthyi.c
-+++ b/arch/s390/kernel/sthyi.c
-@@ -250,7 +250,7 @@ static void fill_diag_mac(struct sthyi_sctns *sctns,
- 	sctns->mac.infmval1 |= MAC_CNT_VLD;
- }
- 
--/* Returns a pointer to the the next partition block. */
-+/* Returns a pointer to the next partition block. */
- static struct diag204_x_part_block *lpar_cpu_inf(struct lpar_cpu_inf *part_inf,
- 						 bool this_lpar,
- 						 void *diag224_buf,
--- 
-2.35.1
+As for your surprise, remember that PPC is B-cumulative, another 
+property which the LKMM does not require.  B-cumulativity will also 
+force the original litmus test to succeed.  (The situation is like ISA2 
+in the infamous test6.pdf, except that y and z are separate variables in 
+ISA2 but are the same here.  The RMW nature of lwarx/stwcx provides 
+the necessary R-W ordering in P1.)
 
+Alan
+
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> PPC MP+lwsyncs+atomic
+> "LwSyncdWW Rfe LwSyncdRR Fre"
+> Cycle=Rfe LwSyncdRR Fre LwSyncdWW
+> {
+> 0:r2=x; 0:r4=y;
+> 1:r2=y; 1:r5=2;
+> 2:r2=y; 2:r4=x;
+> }
+>  P0           | P1              | P2           ;
+>  li r1,1      | lwarx r1,r0,r2  | lwz r1,0(r2) ;
+>  stw r1,0(r2) | stwcx. r5,r0,r2 | lwsync       ;
+>  lwsync       |                 | lwz r3,0(r4) ;
+>  li r3,1      |                 |              ;
+>  stw r3,0(r4) |                 |              ;
+> exists (1:r1=1 /\ 2:r1=2 /\ 2:r3=0)
+> 
+> ------------------------------------------------------------------------
+> 
+> $ ./ppcmem -model lwsync_read_block -model coherence_points MP+lwsyncs+atomic.litmus
+> ...
+> Test MP+lwsyncs+atomic Allowed
+> States 9
+> 1:r1=0; 2:r1=0; 2:r3=0;
+> 1:r1=0; 2:r1=0; 2:r3=1;
+> 1:r1=0; 2:r1=1; 2:r3=1;
+> 1:r1=0; 2:r1=2; 2:r3=0;
+> 1:r1=0; 2:r1=2; 2:r3=1;
+> 1:r1=1; 2:r1=0; 2:r3=0;
+> 1:r1=1; 2:r1=0; 2:r3=1;
+> 1:r1=1; 2:r1=1; 2:r3=1;
+> 1:r1=1; 2:r1=2; 2:r3=1;
+> No (allowed not found)
+> Condition exists (1:r1=1 /\ 2:r1=2 /\ 2:r3=0)
+> Hash=b7cec0e2ecbd1cb68fe500d6fe362f9c
+> Observation MP+lwsyncs+atomic Never 0 9

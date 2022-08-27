@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14405A37C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 15:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A011C5A37BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 15:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiH0NE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 09:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S233287AbiH0NET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 09:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233572AbiH0NEl (ORCPT
+        with ESMTP id S232158AbiH0NEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 09:04:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D0A58B55;
-        Sat, 27 Aug 2022 06:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661605477; x=1693141477;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2eXGrAiHgrEugs9M07n6mJPYWQ0x9mmQvYK4n6HubU4=;
-  b=hdTwDQWuyR6w3wvlGglOfvyyP/aQNNl86X24nDPimk40gFCvkYnv6taJ
-   i4yu8MhAWRANXB7a3pfPVyzsyMpTkrrjR495VFLaqw37jXY69Ryi61Fz1
-   R6oNWX9IvvYhmmqiiRXYW8oZ6a8bhSLt97aiuU4/cU54+4O7cfZi1UHDj
-   JaR5udxxERgb54JrPoRVr8aJwV8UgfEws/mNUP/JDC8SZWIylo8286J+Q
-   0VM2C38zgPLPo4F6fThVoPXXK3KKsYgJ/nB8oIvZwCJRrbewgmcmIN5Nr
-   LSttQb/qX+FaRRsdH+rVYmFd3Y7h1rlkVFAExBJT3Uv/c06xm6jth3KDl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="358627772"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="358627772"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 06:04:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="640388813"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga008.jf.intel.com with ESMTP; 27 Aug 2022 06:04:33 -0700
-Date:   Sat, 27 Aug 2022 20:55:17 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/fpga: fix repeated words in comments
-Message-ID: <YwoUNXCwsq2tBE3F@yilunxu-OptiPlex-7050>
-References: <20220825123803.13979-1-yuanjilin@cdjrlc.com>
+        Sat, 27 Aug 2022 09:04:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432EB49B7F
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 06:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661605442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+EoogJmL1LdU4qsxdiA67NtSxsci+Hnk3sRJu9JBGyA=;
+        b=Xh6i3dPfJCugjaeD6+oA5/wauk4WBUilEPeANKbSjkxhsVUiM7JB5OQA7PyGo/6llEmGlx
+        wY57LL4VutPs0i7uE610GpjzhJscb1Yc0AnTQtfn+qvQ4Hy59A2ykfkJo7VI+VoC28TeBw
+        YZEIj1fapQR7GZxdlm0Me4nvZPHVvJc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-bwYhGl34OsejDyeO-4MToA-1; Sat, 27 Aug 2022 09:03:50 -0400
+X-MC-Unique: bwYhGl34OsejDyeO-4MToA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA5F6185A7BA;
+        Sat, 27 Aug 2022 13:03:49 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.192.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E20AAC15BB3;
+        Sat, 27 Aug 2022 13:03:46 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     linux-hyperv@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH v3 0/3] Drivers: hv: Avoid allocating MMIO from framebuffer region for other passed through PCI devices
+Date:   Sat, 27 Aug 2022 15:03:42 +0200
+Message-Id: <20220827130345.1320254-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825123803.13979-1-yuanjilin@cdjrlc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,35 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-25 at 20:38:03 +0800, Jilin Yuan wrote:
->  Delete the redundant word 'if'.
+Changes since v2:
+- Add Michael's R-b tags to PATCHes1-3 and Bjorn's A-b tag to PATCH1.
+- Commit messages tweaks [Michael].
 
-No indentation please.
+Passed through PCI device sometimes misbehave on Gen1 VMs when Hyper-V
+DRM driver is also loaded. Looking at IOMEM assignment, we can see e.g.
 
-And please fix the subject, "fpga: stratix10-soc:" please
+$ cat /proc/iomem
+...
+f8000000-fffbffff : PCI Bus 0000:00
+  f8000000-fbffffff : 0000:00:08.0
+    f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+...
+fe0000000-fffffffff : PCI Bus 0000:00
+  fe0000000-fe07fffff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+    fe0000000-fe07fffff : 2ba2:00:02.0
+      fe0000000-fe07fffff : mlx4_core
 
-Thanks,
-Yilun
+the interesting part is the 'f8000000' region as it is actually the
+VM's framebuffer:
 
-> 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
-> ---
->  drivers/fpga/stratix10-soc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> index 357cea58ec98..e4f2e83a615b 100644
-> --- a/drivers/fpga/stratix10-soc.c
-> +++ b/drivers/fpga/stratix10-soc.c
-> @@ -285,7 +285,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
->  
->  	/*
->  	 * Loop waiting for buffers to be returned.  When a buffer is returned,
-> -	 * reuse it to send more data or free if if all data has been sent.
-> +	 * reuse it to send more data or free if all data has been sent.
->  	 */
->  	while (count > 0 || s10_free_buffer_count(mgr) != NUM_SVC_BUFS) {
->  		reinit_completion(&priv->status_return_completion);
-> -- 
-> 2.36.1
-> 
+$ lspci -v
+...
+0000:00:08.0 VGA compatible controller: Microsoft Corporation Hyper-V virtual VGA (prog-if 00 [VGA controller])
+	Flags: bus master, fast devsel, latency 0, IRQ 11
+	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
+...
+
+Recently merged commit a0ab5abced55 ("drm/hyperv : Removing the restruction of
+VRAM allocation with PCI bar size") improved the situation as resources,
+reserved through vmbus_allocate_mmio() can't be allocated twice:
+
+...
+f8000000-fffbffff : PCI Bus 0000:00
+  f8000000-fbffffff : 0000:00:08.0
+    f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+    f8100000-f88fffff : 5620e0c7-8062-4dce-aeb7-520c7ef76171
+...
+
+Always reserve FB region on Gen1 VMs (PATCH2) and make sure we never allocate
+anything besides framebuffer from there (PATCH3).
+
+Vitaly Kuznetsov (3):
+  PCI: Move PCI_VENDOR_ID_MICROSOFT/PCI_DEVICE_ID_HYPERV_VIDEO
+    definitions to pci_ids.h
+  Drivers: hv: Always reserve framebuffer region for Gen1 VMs
+  Drivers: hv: Never allocate anything besides framebuffer from
+    framebuffer memory region
+
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c       |  3 -
+ drivers/hv/vmbus_drv.c                        | 56 ++++++++++++++-----
+ .../net/ethernet/microsoft/mana/gdma_main.c   |  4 --
+ drivers/video/fbdev/hyperv_fb.c               |  4 --
+ include/linux/pci_ids.h                       |  3 +
+ 5 files changed, 44 insertions(+), 26 deletions(-)
+
+-- 
+2.37.1
+

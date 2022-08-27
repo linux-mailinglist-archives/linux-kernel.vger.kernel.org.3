@@ -2,83 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9738E5A3764
+	by mail.lfdr.de (Postfix) with ESMTP id DFBCF5A3765
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 13:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236813AbiH0Li4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 07:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S237097AbiH0Ljy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 07:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbiH0Liw (ORCPT
+        with ESMTP id S233660AbiH0Ljt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 07:38:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EA353D05
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661600330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aVuxalu5P1+XapIuqjdM8bU9Xz/L+P4hGuQ04daUvb4=;
-        b=KL1PNAIfWH/nEs96WfUvlReFG4TaT3rVi2WJVlTDWi3IMHuzVKGqtYA/NEq7vQtAzigJ9S
-        aCv09nZNnVQVk1mAmuWXHKdw/YHU29IqNA+esmN1K5D6pKzhbAU54BYJ5+DjMzI0y6DRju
-        DFonuWx9/rQdrOa7zAg8MFOHxayJAIo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-w-_pqjAkOMG6shxzxZynUQ-1; Sat, 27 Aug 2022 07:38:47 -0400
-X-MC-Unique: w-_pqjAkOMG6shxzxZynUQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53A2385A589;
-        Sat, 27 Aug 2022 11:38:46 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 02DD0492C3B;
-        Sat, 27 Aug 2022 11:38:45 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27RBcj6r019230;
-        Sat, 27 Aug 2022 07:38:45 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27RBcjFT019226;
-        Sat, 27 Aug 2022 07:38:45 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sat, 27 Aug 2022 07:38:45 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] provide arch_test_bit_acquire for architectures that
- define test_bit
-In-Reply-To: <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com>
-Message-ID: <alpine.LRH.2.02.2208270720500.18630@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com> <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com> <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com> <alpine.LRH.2.02.2208261620210.9648@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Sat, 27 Aug 2022 07:39:49 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7666273
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:39:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661600387; x=1693136387;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gLMBOJdeYAp1LiPWyZwBX5tq/swH15L8tbKcpP5En0E=;
+  b=Zv7MpNPOxYUI9DTtRYWMFwQzlg6EP8+q0KM7R6Ug6iudkqI2v6d+1MC+
+   Dd6SWUAQ7GPONuUX1s9u5q8Ea8MW3KpWGJk6N1sPYmtync9FLLx9O71f2
+   XLubE/PFVo2UwS9//qMtLScn9+C01TBxU76kccMBesSAI1HfsRvebICwo
+   9/o5TlGbFMRh6LE+OeolpaMHR8w0LYhihZPnxqNHwBltpsWZS/H7heWNl
+   src//egVhF1N9OQf+GTqE/lfZOgKT448ksHq4JsB4OJPdP+LTm8+o+56P
+   NabBjTlHLleBNQZtw3uMTTiBL6bZwwhVWnyoheyKP8f7b7ljEGSHD0ZIF
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="292235319"
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="292235319"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 04:39:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="640375352"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 27 Aug 2022 04:39:46 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRuAD-00008B-25;
+        Sat, 27 Aug 2022 11:39:45 +0000
+Date:   Sat, 27 Aug 2022 19:39:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 16/36]
+ arch/x86/coco/tdx/tdx-tests.c:66:12: sparse: sparse: symbol
+ 'kvm_unit_test_debug_init' was not declared. Should it be static?
+Message-ID: <202208271936.XF68Nvt2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,25 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
+commit: 5091d7c6068bf030df54dc48b303a1d25a7ef0a0 [16/36] x86/tdx-tests: Add a port of a kvm unit test
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220827/202208271936.XF68Nvt2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel/tdx/commit/5091d7c6068bf030df54dc48b303a1d25a7ef0a0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout 5091d7c6068bf030df54dc48b303a1d25a7ef0a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, 26 Aug 2022, Linus Torvalds wrote:
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/coco/tdx/tdx-tests.c:66:12: sparse: sparse: symbol 'kvm_unit_test_debug_init' was not declared. Should it be static?
 
-> On Fri, Aug 26, 2022 at 1:43 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
-> >
-> > I'm wondering why do the architectures redefine test_bit, if their
-> > definition is equivalent to the generic one? We could just delete
-> > arch_test_bit and use "#define arch_test_bit generic_test_bit" as well.
-> 
-> I think generic_test_bit() came after many of them, and when it
-> didn't, people copied earlier architectures where they had already
-> done their own.
-> 
-> > Another untested patch ... tomorrow, I'll try to compile it, at least for
-> > architectures where Debian provides cross-compiling gcc.
+vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
 
-I compile-tested this patch on alpha, s390x, m68k, sh, sparc32, sparc64. 
-So, you can commit it to close these uncompilable-kernel reports.
+    65	
+  > 66	int __init kvm_unit_test_debug_init(void)
 
-Mikulas
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

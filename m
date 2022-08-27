@@ -2,153 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DF85A3987
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19EC5A3990
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiH0SgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 14:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S231249AbiH0Si4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 14:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiH0SgQ (ORCPT
+        with ESMTP id S229884AbiH0Six (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 14:36:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE062C105
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 11:36:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CD28B8095A
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 18:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51BCC433C1;
-        Sat, 27 Aug 2022 18:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661625371;
-        bh=RS2oGCSax7wgaznwlTTyAu1eK0J8FoYLL+3Yvwuk+4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QrYiDhTE6woXxQswN4Vxs5HpiKUQ/Vv8931U1bf/J5qWjiWjdg76yQfoq65q4kT8k
-         BOcUobbZPgqXIn0ti+qH96wnoTK+uxmVdGAHr1whdaiUReBm9QfPorg37gnZFUE7rd
-         0dmX1+upXGgC7U5oMS2zEPZiKlbz1SvCQXNPgUcMtBYBaskUbIPVbal56P0WNS1L8A
-         FlU1KTNgWx1qYuUay33MCNCakQinl8yRAUnJQYQRaBLM/X7TbLrqFknuHKie1vcE1H
-         9hf5dlBbRtg2qG7yvlj0PQhEeVoNKXUFj4Vpmm/Qu+CBk3mgCVFkCzS7ImNHXMs4xr
-         fGqCNx327/AoQ==
-Received: by pali.im (Postfix)
-        id 23064C7A; Sat, 27 Aug 2022 20:36:08 +0200 (CEST)
-Date:   Sat, 27 Aug 2022 20:36:08 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] powerpc/boot: Don't always pass -mcpu=powerpc when
- building 32-bit uImage
-Message-ID: <20220827183608.ezljs2houkd32764@pali>
-References: <20220820105200.30425-1-pali@kernel.org>
- <20220827133900.16634-1-pali@kernel.org>
- <63f4bce4-7965-9bc6-2104-42e26acd0208@csgroup.eu>
- <20220827173610.7bdp7zychwu2u5i6@pali>
- <1da78077-a050-a391-a002-9e25eabc89d1@csgroup.eu>
+        Sat, 27 Aug 2022 14:38:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025CDC22B9;
+        Sat, 27 Aug 2022 11:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=GkYGAg3qcPD2jpV5HOzvtigzyj8tXyVIkxDsZezVgdI=; b=RIYJrZ+4dnmjFQXx6VLi0MZx18
+        KW7rJpigeSJk74iaPr9D1oXPmbupZjKY+PszhprVY19MqrcZrKAq219yYKA6v0wor51CAFNCi0ICw
+        mUyoQg+fg+Er3H6iaosyw6vnuqFCqvUW5v5BLCCFAEYwlyPwnzhG3yGdRnVZbjzfa7R4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oS0hW-00EnON-IQ; Sat, 27 Aug 2022 20:38:34 +0200
+Date:   Sat, 27 Aug 2022 20:38:34 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v3 6/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <Ywpkqt2pDmpzXWWn@lunn.ch>
+References: <20220827051033.3903585-1-o.rempel@pengutronix.de>
+ <20220827051033.3903585-7-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1da78077-a050-a391-a002-9e25eabc89d1@csgroup.eu>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220827051033.3903585-7-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 27 August 2022 18:32:42 Christophe Leroy wrote:
-> Le 27/08/2022 à 19:36, Pali Rohár a écrit :
-> > On Saturday 27 August 2022 17:31:10 Christophe Leroy wrote:
-> >> Le 27/08/2022 à 15:39, Pali Rohár a écrit :
-> >>> For 32-bit uImage try to use CONFIG_TARGET_CPU option for -mcpu. This fixes
-> >>> following compiler error when building kernel with powerpc e500 SPE capable
-> >>> cross compilers:
-> >>>
-> >>>       BOOTAS  arch/powerpc/boot/crt0.o
-> >>>     powerpc-linux-gnuspe-gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
-> >>>     powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
-> >>>     make[1]: *** [arch/powerpc/boot/Makefile:231: arch/powerpc/boot/crt0.o] Error 1
-> >>>
-> >>> For 64-bit uImage and 64-bit kernels with 32-bit uImage wrapper there is no
-> >>> change.
-> >>>
-> >>> Similar change was already introduced for the main powerpc Makefile in
-> >>> commit 446cda1b21d9 ("powerpc/32: Don't always pass -mcpu=powerpc to the
-> >>> compiler").
-> >>>
-> >>> Fixes: 40a75584e526 ("powerpc/boot: Build wrapper for an appropriate CPU")
-> >>> Cc: stable@vger.kernel.org
-> >>> Signed-off-by: Pali Rohár <pali@kernel.org>
-> >>> ---
-> >>>    arch/powerpc/boot/Makefile | 8 ++++++++
-> >>>    1 file changed, 8 insertions(+)
-> >>>
-> >>> diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
-> >>> index a9cd2ea4a861..f56a5f90a5d8 100644
-> >>> --- a/arch/powerpc/boot/Makefile
-> >>> +++ b/arch/powerpc/boot/Makefile
-> >>> @@ -44,8 +44,16 @@ else
-> >>>    BOOTCFLAGS	+= -m64 -mcpu=powerpc64
-> >>>    endif
-> >>>    else
-> >>> +ifdef CONFIG_PPC32
-> >>> +ifdef CONFIG_TARGET_CPU_BOOL
-> >>> +BOOTCFLAGS	+= -m32 -mcpu=$(CONFIG_TARGET_CPU)
-> >>> +else
-> >>> +BOOTCFLAGS	+= -m32 -mcpu=powerpc
-> >>
-> >> You can't do that. You get here only if user has selected
-> >> TOOLCHAIN_DEFAULT_CPU, in which case you don't want to for -mcpu=powerpc.
-> > 
-> > So do I understand it correctly that in this branch I should omit -mcpu=powerpc?
-> 
-> Correct.
+> +static int pse_set_pse_config(struct net_device *dev,
+> +			      struct netlink_ext_ack *extack,
+> +			      struct nlattr **tb)
+> +{
+> +	struct phy_device *phydev = dev->phydev;
+> +	struct pse_control_config config = {};
+> +	int ret;
+> +
+> +	if (!tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL])
+> +		return -EINVAL;
 
-Ok, I will fix it in v3.
+I would make use of extack here, and report what is missing.
 
-> > 
-> >> -mcpu=powerpc is set when user selects CONFIG_POWERPC_CPU, in which case
-> >> CONFIG_TARGET_CPU_BOOL is set as well.
-> >>
-> >>> +endif
-> >>> +else
-> >>>    BOOTCFLAGS	+= -m32 -mcpu=powerpc
-> >>
-> >> Same, for PPC64 I think you don't want that either, unless the
-> >> CONFIG_GENERIC_CPU has been selected in which case
-> >> CONFIG_TARGET_CPU_BOOL is not set.
-> >>
-> >> When CONFIG_TARGET_CPU_BOOL is set for PPC64 you also want
-> >> -mcpu=$(CONFIG_TARGET_CPU)
-> > 
-> > I understand that this branch is called for PPC64 build with 32-bit
-> > uImage wrapper. So in this case should not be used TARGET_CPU as it
-> > would be 64-bit and not 32-bit as requited for 32-bit uImage wrapper.
-> 
-> Why ?
-> 
-> -mcpu=e6500 -m32 works as far as I can see.
+> +
+> +	config.admin_cotrol = nla_get_u8(tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL]);
 
-Hm... I did not know that. Ok, if you want I will put it into
--m32 -mcpu=$(CONFIG_TARGET_CPU) branch too.
+It would be good to have some basic validation here, make sure user
+space has passed a reasonable value.
 
-> > 
-> > Anyway, in this change I'm touching only PPC32 build, so all PPC64 stay
-> > as it was before.
-> > 
-> >>>    endif
-> >>> +endif
-> >>>    
-> >>>    BOOTCFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
-> >>>    
+You should also define what 0 and
+ETHTOOL_A_PODL_PSE_ADMIN_CONTROL_UNKNOWN means here when passed in. In
+future, there could be additional things which could be configured, so
+struct pse_control_config gets additional members.
+ETHTOOL_A_PODL_PSE_ADMIN_CONTROL appears to be mandatory, you return
+-EVINAL if missing, so if you don't want to change it, but change some
+other new thing, maybe 0 should be passed here? And the driver should
+not consider it an error?  ETHTOOL_A_PODL_PSE_ADMIN_CONTROL_UNKNOWN
+however seems invalid and so should be rejected here?
+
+	Andrew

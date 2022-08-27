@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E445A3A11
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 23:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028485A3A14
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 23:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiH0VOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 17:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S229823AbiH0VYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 17:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiH0VOX (ORCPT
+        with ESMTP id S229470AbiH0VYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 17:14:23 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F4C357C5;
-        Sat, 27 Aug 2022 14:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MgTyF9gCctinASTA0Asu4gJ2nSzi2Z6PkJg3q98wFmg=; b=tiNcymmmW/z5PAO42XUOJeFps3
-        d83pw/ecS0BhGZiEEtHyFY2bWOZ8pI92IFnghM5+SoKVeQZNuAIUrg34MEEhcTUf4kXnEOK/WImrN
-        K2OZjXsNMQEHAx0XucipKAkIdmZMmYg3bFeWgzGAor+vjCiN/hT91u1XW6LbGd1+6TvQ9w2hSMF2L
-        7PdKIZ82lqFAi8mSn0bkrv8DiZNnWg6+uLPA+a+RcOhVPkoZc24q+zmSCWQN7LYNoJN2oChJCpTzL
-        ZDjZZFKp1ctz/Kr+YakSzutP+kigYwUOIzuFp9vI6baV+bVewhvlsmmL7CjBh4SGI40ZontNt5P2M
-        o3FTB6hw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oS382-0096hM-Lv;
-        Sat, 27 Aug 2022 21:14:06 +0000
-Date:   Sat, 27 Aug 2022 22:14:06 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     NeilBrown <neilb@suse.de>, Daire Byrne <daire@dneg.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
-Message-ID: <YwqJHnomJ+4xCy1n@ZenIV>
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown>
- <166147984370.25420.13019217727422217511.stgit@noble.brown>
- <CAHk-=wi_wwTxPTnFXsG8zdaem5YDnSd4OsCeP78yJgueQCb-1g@mail.gmail.com>
- <166155521174.27490.456427475820966571@noble.neil.brown.name>
- <CAHk-=whz69y=98udgGB5ujH6bapYuapwfHS2esWaFrKEoi9-Ow@mail.gmail.com>
+        Sat, 27 Aug 2022 17:24:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CC64E623
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 14:24:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1B53B807E8
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 21:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF142C433D6;
+        Sat, 27 Aug 2022 21:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661635445;
+        bh=fXm1bSisSqGSY59/IcPlbBIAN4KpPKVMt1s0HfiiqZQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TOjPeSlXP0tsnvP0jKEqd31BB9DQ4JUN2Mk4n0dAGwdwP41RLy6jJ3+wjPXLIWucE
+         HvHhHf6FRQejJBP4KvFlJG3RJ7dqzNd5O3u6jMl7hHaO8obYaKOH84sMYJRhipKa51
+         WsqViPetJNdaD1+XvnJf/G8bWQEh45dcWkQ0ZTPFp4snycbTd/sH9hunfXAXpUKs7c
+         tVkCZKW6oUf+qR1s7nepZrXE7dVbt8xkPLuwf3wTmA81pG6jFHYaG4oBUjXLLfpQ2O
+         tvo33aTHaH2II/ad1jfposZntyhGKbl1fvVjySmk+IcfE2M+9njfa4To5LI4zLmjs0
+         lCUOEAANikG5w==
+From:   SeongJae Park <sj@kernel.org>
+To:     xiakaixu1987@gmail.com
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Kaixu Xia <kaixuxia@tencent.com>
+Subject: Re: [PATCH v2 1/2] mm/damon: simplify the parameter passing for 'check_accesses'
+Date:   Sat, 27 Aug 2022 21:24:01 +0000
+Message-Id: <20220827212401.50416-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1661590971-20893-2-git-send-email-kaixuxia@tencent.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whz69y=98udgGB5ujH6bapYuapwfHS2esWaFrKEoi9-Ow@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 05:13:38PM -0700, Linus Torvalds wrote:
-> On Fri, Aug 26, 2022 at 4:07 PM NeilBrown <neilb@suse.de> wrote:
-> >
-> > As you note, by the end of the series "create" is not more different
-> > from "rename" than it already is.  I only broke up the patches to make
-> > review more manageable.
+Hi Kaixu,
+
+On Sat, 27 Aug 2022 17:02:50 +0800 xiakaixu1987@gmail.com wrote:
+
+> From: Kaixu Xia <kaixuxia@tencent.com>
 > 
-> Yes, I understand. But I'm saying that maybe a filesystem actually
-> might want to treat them differently.
+> The parameter 'struct damon_ctx *ctx' isn't used in the functions
+> __damon_{p,v}a_check_access(), so we can remove it and simplify the
+> parameter passing.
 > 
-> That said, the really nasty part was that 'wq' thing that meant that
-> different paths had different directory locking not because of
-> low-level filesystem issues, but because of caller issues.
+> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> ---
+>  mm/damon/paddr.c | 5 ++---
+>  mm/damon/vaddr.c | 6 +++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
 > 
-> So that's the one I _really_ disliked, and that I don't think should
-> exist even as a partial first step.
-> 
-> The "tie every operation together with one flag" I can live with, in
-> case it turns out that yes, that one flag is all anybody ever really
-> wants.
-
-FWIW, what's really missing is the set of rules describing what the
-methods can expect from their arguments.
-
-Things like "oh, we can safely use ->d_parent here - we know that
-foo_rmdir(dir, child) is called only with dir held exclusive and
-child that had been observed to be a child of dentry alias of
-dir after dir had been locked, while all places that might change
-child->d_parent will be doing that only with child->d_parent->d_inode
-held at least shared" rely upon the current locking scheme.
-
-Change that 'held exclusive' to 'held shared' and we need something
-different, presumably 'this new bitlock on the child is held by the caller'.
-That's nice, but...  What's to guarantee that we won't be hit by
-__d_unalias()?  It won't care about the bitlock on existing alias,
-would it?  And it only holds the old parent shared, so...
-
-My comments had been along the lines of "doing that would make the
-series easier to reason about"; I don't hate the approach, but
-	* in the current form it's hard to read; there might be
-problems I hadn't even noticed yet
-	* it's much easier to verify that stated assertions are
-guaranteed by the callers and sufficient for safety of callees
-if they *ARE* stated.  Spelling them out is on the patch series
-authors, and IME doing that helps a lot when writing a series
-like that.  At least on the level of internal notes...  Especially
-since NFS is... special (or, as they say in New York, "sophisticated" -
-sorry).  There's a plenty of things that are true for it, but do
-not hold for filesystems in general.  And without an explicitly
-spelled out warranties it's very easy to end up with a mess that
-would be hell to apply to other filesystems.  I really don't want
-to see an explosion of cargo-culted logics that might or might
-not remain valid for NFS by the time it gets copied around...
-
-
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index dc131c6a5403..6b0d9e6aa677 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -166,8 +166,7 @@ static bool damon_pa_young(unsigned long paddr, unsigned long *page_sz)
+>  	return result.accessed;
+>  }
+>  
+> -static void __damon_pa_check_access(struct damon_ctx *ctx,
+> -				    struct damon_region *r)
+> +static void __damon_pa_check_access(struct damon_region *r)
+>  {
+>  	static unsigned long last_addr;
+>  	static unsigned long last_page_sz = PAGE_SIZE;
+> @@ -196,7 +195,7 @@ static unsigned int damon_pa_check_accesses(struct damon_ctx *ctx)
+>  
+>  	damon_for_each_target(t, ctx) {
+>  		damon_for_each_region(r, t) {
+> -			__damon_pa_check_access(ctx, r);
+> +			__damon_pa_check_access(r);
+>  			max_nr_accesses = max(r->nr_accesses, max_nr_accesses);
+>  		}
+>  	}
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index 3c7b9d6dca95..e481f81c3efb 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -532,8 +532,8 @@ static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
+>   * mm	'mm_struct' for the given virtual address space
+>   * r	the region to be checked
+>   */
+> -static void __damon_va_check_access(struct damon_ctx *ctx,
+> -			       struct mm_struct *mm, struct damon_region *r)
+> +static void __damon_va_check_access(struct mm_struct *mm,
+> +				struct damon_region *r)
+>  {
+>  	static struct mm_struct *last_mm;
+>  	static unsigned long last_addr;
+> @@ -568,7 +568,7 @@ static unsigned int damon_va_check_accesses(struct damon_ctx *ctx)
+>  		if (!mm)
+>  			continue;
+>  		damon_for_each_region(r, t) {
+> -			__damon_va_check_access(ctx, mm, r);
+> +			__damon_va_check_access(mm, r);
+>  			max_nr_accesses = max(r->nr_accesses, max_nr_accesses);
+>  		}
+>  		mmput(mm);
+> -- 
+> 2.27.0

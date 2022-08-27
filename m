@@ -2,159 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78E85A390A
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B66F5A38F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbiH0RCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 13:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S233523AbiH0Q6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiH0RBj (ORCPT
+        with ESMTP id S233884AbiH0Q6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 13:01:39 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9252B182
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:01:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zj9pq72ZRAUJkl5l4IK6zdVB9m4U7cpQL7sBTL52XE0UnsjnM0MKe+5Sn56/0++Nr1cYVf0opWYHwJ2P9otQLtrp9QUEDaQoo06B7pPvG2kfuXRR0uW/V1DdMQOBOqxmHjrn+SI/1sE2T3z9leYkMtKV0w8K7HPQbiUXHcPkGhgMFNXRZQ2+S9fcX2aijzjJUd2O4XJSS3ZuujMzrJieg6IQmu7NiX6GaRSrRj/TiSawWdCEQPHK99sRKb5HjSBksp3n3XkyphUNP9kbCUjNFa9q9ermlf7CkTR9d3lnneDNKyjFdiodmmhG5FhVYSFQy7nJiN1cl1hXtHtC6O/2sQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lz7OJOfGf4ps/Au4KkYHj79h5U+ZA7XRPNKk8EuGins=;
- b=EbkQuI0lfujfqwxX8AjQeSyT3z00w/HAdGZuPZnb2AWHFu3VlW2QauuLBLUHFUnGIf+giVICTitUljl3pZsG60JsjP2RAeGMzBdH+m7eIo/V8rvwApSaU5PRZhFhZHVJAQNRpNjOE+0vNbpQCrJlnqzQQH+Lsjnk9zYmZbQZ4xa/wH9c8YpwxWS9/lUKLBobdCDBXnCkUXt+hJaqn21rWxXnah57IGXXRB5yW9weFnhLf4S47QiyGlOZ5c0+MiAkp5JhAS+fZtQiQUDdeiQ1ZQNH1Jor3bSLvaeh2evKpon9QiKAOUJNNaaxBhdtEFUXvd23rUETomSIIwDshlupMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lz7OJOfGf4ps/Au4KkYHj79h5U+ZA7XRPNKk8EuGins=;
- b=iCT32Rp9mdAtPdn4hzNAbQYeexGccwjphoAHR2003C8Xzu9ozORaWbyWmfQEFqo5xpFqBNzR5daZ4uUrmtGh6JRl0zlZSCKSaJD8rW8kqVHf5nD7XuzvXs+bpkyXv064Xf/sG0D7iLq013gbJ/vXWYzhNu0p0Ew+7TgHMGJxTSg=
-Received: from BN0PR04CA0193.namprd04.prod.outlook.com (2603:10b6:408:e9::18)
- by BN8PR12MB2977.namprd12.prod.outlook.com (2603:10b6:408:4a::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.19; Sat, 27 Aug
- 2022 17:01:04 +0000
-Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e9:cafe::1e) by BN0PR04CA0193.outlook.office365.com
- (2603:10b6:408:e9::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16 via Frontend
- Transport; Sat, 27 Aug 2022 17:01:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Sat, 27 Aug 2022 17:01:04 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 27 Aug
- 2022 12:01:03 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 27 Aug
- 2022 10:01:03 -0700
-Received: from amd-B450M-DS3H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Sat, 27 Aug 2022 12:00:58 -0500
-From:   Syed Saba Kareem <Syed.SabaKareem@amd.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
-        <Sunil-kumar.Dommati@amd.com>, <mario.limonciello@amd.com>,
-        <alexander.deucher@amd.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        "open list" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 13/13] ASoC: amd: enable Pink sardine platform machine driver build.
-Date:   Sat, 27 Aug 2022 22:26:57 +0530
-Message-ID: <20220827165657.2343818-14-Syed.SabaKareem@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220827165657.2343818-1-Syed.SabaKareem@amd.com>
-References: <20220827165657.2343818-1-Syed.SabaKareem@amd.com>
+        Sat, 27 Aug 2022 12:58:03 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C0D59250;
+        Sat, 27 Aug 2022 09:58:01 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id b5so5242273wrr.5;
+        Sat, 27 Aug 2022 09:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=R8/bF5KHLjTt9GLEnmNnJrfmlxn+HrK5JbBv33yEUFg=;
+        b=W4DsfOUo7kKFGo7dVPXf0A9z/bKIKPbGdjgVun0Q2pPxb+6oybEGLtuAk5nqHI8Uql
+         xTBMozGCA9RRFp4mcWnafvbNyeGx1Q92B142WdY3yImSz9TKkdl7O08y7irg/aLAubrm
+         lcfvbV8UIJ76iHZRoo557DhYHLf5YQxzIdUl+oWyL5xUk+zWp2aIcWvjwcIV208biuaW
+         QQVdQwaNRRkiUndjx7EB6rsyCMF92jmD/7nO2WtEA8wF4C31swCdsshyo1DLiI53VX3t
+         rzDGhqO1l8A4csN92AcBM0+dhs0/mxvH0HOumnGOCl1S2xQyRMU0ZhSVUw0SwTZAMrIW
+         EVAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=R8/bF5KHLjTt9GLEnmNnJrfmlxn+HrK5JbBv33yEUFg=;
+        b=vtqzz7lCaxM2zcXy1erSPyXtTQpspd7GAQo906mGepeI0T7WiFW4XGz2Z70azrl6Xp
+         8993V4YyBaVe/OcS4BWXbnVcdV/ZfIYZjXl+K4iRtstFomBeohwhjZfN6yqdZVwTA40L
+         dynzb6j5q0XWl6wTSukludSdNb8mXBPbpGLxNCwEsgmELsklUBO5c1owoCx2BXttSh6M
+         R8xgGOKkFCbIY56a+EyURftIM5H21h1n7exD2aFqHPTNS7giUtgFF7mdYnHq7i7QPLrW
+         o68gu+ONtID5O/UROMiAhs4iwV8xs/VUseo0yFWe3KlK2ZcCbiKMGknW1lVPSUwA1zlp
+         ZJeQ==
+X-Gm-Message-State: ACgBeo3U39nZKgAhLsY/BifUIzAlitAPmYegQyX98gxGIHFJx0Dwm158
+        AlNPsVtAxvWmEGGRw37uUOYMsIv6+iE=
+X-Google-Smtp-Source: AA6agR6UjKEFuzwxXRJQ8K7HktrS0FN9VJTqTixMwsekgRMuos7HeIk6TxzL0FmvmlvvYedZB016Kg==
+X-Received: by 2002:adf:e0c3:0:b0:226:d598:85ee with SMTP id m3-20020adfe0c3000000b00226d59885eemr405190wri.589.1661619479950;
+        Sat, 27 Aug 2022 09:57:59 -0700 (PDT)
+Received: from nuc ([2a02:168:633b:1:1e69:7aff:fe05:97e6])
+        by smtp.gmail.com with ESMTPSA id x3-20020a05600c420300b003a5bd9448e5sm3111585wmh.28.2022.08.27.09.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 09:57:59 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 18:57:57 +0200
+From:   =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To:     xiujianfeng <xiujianfeng@huawei.com>
+Cc:     mic@digikod.net, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, corbet@lwn.net,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH -next 3/5] landlock/selftests: add selftests for chmod
+ and chown
+Message-ID: <YwpNFWB9ELDLNLA1@nuc>
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <20220822114701.26975-4-xiujianfeng@huawei.com>
+ <YwPYbY/HbHTOv7Ux@nuc>
+ <64b93d8e-f2b0-31c8-0736-3194053de687@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 883ce161-ab42-4f2f-d7c6-08da884dba1d
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2977:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V/zL/YW+ScawkQ4ZeABpX0DNj3RmgmmbEdWPpX0fIm2yCTdvCHfK9kAmMAk65gRe1/8V8nrCE2EJfbeuDtbVjvCAkGoxPOd2+BKstxcdTNDONUfaLYgya5xY0MKmanFHQ7F6h527XabgbbOwsIMzAUuOgFgSGQNN4NRmZSWyeJoIugtWkUTbb/RsHOzisMT6L10ArSlQYK60OpA4YobNcS7zDLXNm8svhmYEO4JGTVUx1amR/vHD7yekeRmQwC3VQgdM924awc9AcgqdIf8yXNN6fX0gSPyoe9KUfl095SyLnRHB1ZqwNlV0gpiBTqOA/7IaxvVhPcLA/kn0NqqWtpk5YKKgxX4k5TJumEQ0JUZI/fP6EDZPtRlykHt/rP9dv+IB00uYbrEIrLtAoJoRlFTbKy8kktGr0BHC6peKBWlosNdIAcgVvAq/j1qiBwfs/hyC1GwFiKlIx7w0ADhkEIzaI4GPqoX+xeKWgcUfuLWc/UUdt9yl5d3iHdqM2C0m384o02z9eckIuUT4f4Y7vcTzW5BnA74GtZW2wJV5gfUT+3NYPEER8IPD627cn45aPHyAXIzLXGmfQcXdIGqW1M8uOZduDwK5Wyzp1xJqqbICQiuzByeXLcj//CV616UzUAVTigabQDkn0IVWCvRdJ87x+mWYwGiE+JZe00mRAoTQ2+djCUU6wVGP0kLQbMLFKRw/C+XfDh8JvMvIf7b59/8lFaQ4SkDhbfIqwcozGhxaM+Oj+q1CEZPLarLo1GiBU6J6ckdmWBTC/TKfAQNkU6QEL/94s2cAfxwY2pyfsbOGv0M0KrGou6rswtcWL+5v
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(376002)(346002)(46966006)(40470700004)(36840700001)(83380400001)(36860700001)(82740400003)(81166007)(356005)(5660300002)(316002)(110136005)(7416002)(8936002)(70206006)(54906003)(8676002)(70586007)(4326008)(1076003)(2906002)(47076005)(426003)(336012)(186003)(2616005)(41300700001)(478600001)(7696005)(40460700003)(26005)(82310400005)(40480700001)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2022 17:01:04.2098
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 883ce161-ab42-4f2f-d7c6-08da884dba1d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2977
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <64b93d8e-f2b0-31c8-0736-3194053de687@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables Pink Sardine platform machine driver build.
+On Sat, Aug 27, 2022 at 07:14:30PM +0800, xiujianfeng wrote:
+> Hi，
+>
+> 在 2022/8/23 3:26, Günther Noack 写道:
+> > On Mon, Aug 22, 2022 at 07:46:59PM +0800, Xiu Jianfeng wrote:
+> > > +TEST_F_FORK(layout1, unhandled_chmod)
+> > > +{
+> > > +	const struct rule rules[] = {
+> > > +		{
+> > > +			.path = file2_s3d1,
+> > > +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
+> > > +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
+> > > +		},
+> > > +		{
+> > > +			.path = file3_s3d1,
+> > > +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
+> > > +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
+> > > +		},
+> > > +		{},
+> > > +	};
+> > > +	const int ruleset_fd =
+> > > +		create_ruleset(_metadata, ACCESS_RW, rules);
+> > > +
+> > > +	ASSERT_LE(0, ruleset_fd);
+> > > +	enforce_ruleset(_metadata, ruleset_fd);
+> > > +	ASSERT_EQ(0, close(ruleset_fd));
+> > > +
+> > > +	ASSERT_EQ(0, test_chmod(file2_s3d1));
+> > > +	ASSERT_EQ(0, test_fchmod(file2_s3d1));
+> > > +	ASSERT_EQ(0, test_chmod(file3_s3d1));
+> > > +	ASSERT_EQ(0, test_chmod(dir_s3d1));
+> > > +}
+> >
+> > I missed it in the previous mail:
+> >
+> > There are also the chown variants lchown() and fchownat(), as well as
+> > the chmod variant fchmodat(), which might be interesting to test,
+> > especially the symlink scenarios.
+> >
+> > fchmodat() has a AT_SYMLINK_NOFOLLOW flag which does the chmod
+> > equivalent to lchown().
+> >
+>
+> man fchmodat shows as follows:
+> ...
+> AT_SYMLINK_NOFOLLOW
+> If pathname is a symbolic link, do not dereference it: instead operate on
+> the link itself. This flag is not currently implemented.
+> ...
+>
+> so I suppose this can not be test. Please correct me if I am wrong.
 
-Signed-off-by: Syed Saba Kareem <Syed.SabaKareem@amd.com>
-Reviewed-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
----
- sound/soc/amd/Kconfig     | 11 +++++++++++
- sound/soc/amd/ps/Makefile |  2 ++
- 2 files changed, 13 insertions(+)
+Good point - I didn't realize that AT_SYMLINK_NOFOLLOW was not
+implemented for fchmodat. In that case, this only applies to lchown.
 
-diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-index bd785a0efb67..68837d42736d 100644
---- a/sound/soc/amd/Kconfig
-+++ b/sound/soc/amd/Kconfig
-@@ -137,3 +137,14 @@ config SND_SOC_AMD_PS
-           triggered for ACP PCI driver, ACP PDM DMA driver.
-           Say m if you have such a device.
-           If unsure select "N".
-+
-+config SND_SOC_AMD_PS_MACH
-+        tristate "AMD PINK SARDINE support for DMIC"
-+        select SND_SOC_DMIC
-+        depends on SND_SOC_AMD_PS
-+        help
-+          This option enables machine driver for Pink Sardine platform
-+          using dmic. ACP IP has PDM Decoder block with DMA controller.
-+          DMIC can be connected directly to ACP IP.
-+          Say m if you have such a device.
-+          If unsure select "N".
-diff --git a/sound/soc/amd/ps/Makefile b/sound/soc/amd/ps/Makefile
-index 23afa5e32ffa..383973a12f6a 100644
---- a/sound/soc/amd/ps/Makefile
-+++ b/sound/soc/amd/ps/Makefile
-@@ -2,6 +2,8 @@
- # Pink Sardine platform Support
- snd-pci-ps-objs := pci-ps.o
- snd-ps-pdm-dma-objs := ps-pdm-dma.o
-+snd-soc-ps-mach-objs := ps-mach.o
- 
- obj-$(CONFIG_SND_SOC_AMD_PS) += snd-pci-ps.o
- obj-$(CONFIG_SND_SOC_AMD_PS) += snd-ps-pdm-dma.o
-+obj-$(CONFIG_SND_SOC_AMD_PS_MACH)   += snd-soc-ps-mach.o
--- 
-2.25.1
+—Günther
 
+--

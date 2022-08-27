@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7F85A3A8A
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 01:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409F75A3A91
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 02:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiH0Xz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 19:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
+        id S231501AbiH1ABW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 20:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiH0XzZ (ORCPT
+        with ESMTP id S231697AbiH1AAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 19:55:25 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2044.outbound.protection.outlook.com [40.107.212.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736EB4D819;
-        Sat, 27 Aug 2022 16:55:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eZJXm8s6hhjpbk7PyjgsoTG+rrszOpT0OWVupJo6s+AFsjs4nLKOGjgjWgP9283IzPbjGWAqn65HeLozI9B2X2wOExzt5M4/NKJfqaYw08hVfA0FScefa0j0xvJdJMJTY3MaulxiNY/ZKnYy0kttNlHVA+Js21jthVtZENnYKWYzeFI/10g3VAlm4GVUkAHRg5Zv9pb5/cqgJ3lorPWd1S56NiRZ7xzIUFfUYzV+6a0jpw+qDlNYwQwPxb5tyItussPbnYsF7f59EWlLTNx0Y2oETwRiqyB/CHGCHi3JGq7947J5rRH3KKTHOu9BDUrhz3I3cuEpXhdQXrwLwIm6pA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iLHyZYxrjiD6wsQvoNSTP8SCSq4ZaNOWlYB8CbnAuZg=;
- b=GxHXICIiv2PvGnJZy8M6pWgbQT399Y/Ky2LEJCvC28nW8eNb47urJn1lE4FAVuqIXeKk1b4Jd8GMstX8L0snKCMVnL6annbeSvlTopvZxbtTl41mr22XMeIbmR3zEKkjiJkX3iTVdok8E0RHuq6wvTharBMl6+/v9JBSswxREwgxIrGC9hCxFcby2SAReeV0ErXDxbKak22SDrssKTDjQojW/fu323vRk1Rufawi1ny0OviJuWHzQFrx3rcwGTtXVGnKvMfqrJGXpDfcxExoS9pA3TyG9WMPrwZoQSaejK0xl72H1KDqPSfw+dFIZkd1xtL3rTHXPI0qJ9FM+3iQLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iLHyZYxrjiD6wsQvoNSTP8SCSq4ZaNOWlYB8CbnAuZg=;
- b=pSVlAeUBa6MiEtQMU8nGQ8AmE/VS+BOlM5VH5etDKI+oJ2NzKz8JuTqJjryI6YjwBsJcqlryy9TEQOWdVBl9um12IC6s+soKzOpG/0iM9X7EHGEBQ9cYKevhBx/XYNMVMRqKA9G+9V/+41xZ5/L+J/Ujmzk88mA2n5RRwCSA3dDgsDN3cuvm5b1ljqa7U9/N6JhFM7HDgkPsrIyPqxfT1/VWOeM0Pc9My4FP9QWjm+qh+Zi93zPwlQYNfU7wkNtdBaWg/ncgqu4j8URyiGgoaW8YvUTRxLDLpCGrSNcNvgaEgpEgufMmV0YBw4jEV+gP12uHVSq9Bm5o2daUR75Ktg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by DM5PR1201MB2555.namprd12.prod.outlook.com (2603:10b6:3:ea::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Sat, 27 Aug
- 2022 23:55:22 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5566.021; Sat, 27 Aug 2022
- 23:55:21 +0000
-Message-ID: <353f18ac-0792-2cb7-6675-868d0bd41d3d@nvidia.com>
-Date:   Sat, 27 Aug 2022 16:55:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5/6] NFS: direct-io: convert to FOLL_PIN pages
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20220827083607.2345453-1-jhubbard@nvidia.com>
- <20220827083607.2345453-6-jhubbard@nvidia.com> <YwqfWoAE2Awp4YvT@ZenIV>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <YwqfWoAE2Awp4YvT@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0068.namprd05.prod.outlook.com
- (2603:10b6:a03:332::13) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Sat, 27 Aug 2022 20:00:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF3413F1F
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 17:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661644822; x=1693180822;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y9hrtxUvGqjPVnBe4hUbk7ZVAXNc9gmlm+YsW0+QMik=;
+  b=YE3+r+ud/c2Fpr86aD4i5iMRmwu5W7TKMlCay5mDn4688me0XctLjVlU
+   U/JIQSz03gz8Qb6ds7xVrLGMnwpNE/8cjKOKfCpdPxEFkTDiOVKtQPTYp
+   cTjaqo9ajNedux234IaJwFEcf4ZB30syOyPeEykOLeHJfzAuwCrZjSmqK
+   0B27pvLSJqQumZ/TW8qtJlLMjUI79/KbIsunTys9F49RYqIaA/UfmRm9b
+   pc85kjoSNJbeyzg9iCNvNRIDaVUROU427IaxW0EDNNZKqF4wiD/5m+jvz
+   PIXyCJasj2J5m3eHvzyUTVHJ6SgvG+TbgAhYFvkIgwrIc8Odz75REd9vC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="320811966"
+X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
+   d="scan'208";a="320811966"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 17:00:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
+   d="scan'208";a="753238570"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Aug 2022 17:00:20 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oS5iu-0000aV-0h;
+        Sun, 28 Aug 2022 00:00:20 +0000
+Date:   Sun, 28 Aug 2022 07:59:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 298/313]
+ arch/sparc/kernel/setup_32.c:86:9: error: too few arguments to function
+ 'show_free_areas'
+Message-ID: <202208280710.5Qy7NnB7-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 44385745-3554-401a-102e-08da88879a0c
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB2555:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FMVOCS0djdg/GVkjQsYjQjz4ArB0cuA/dMSf196doL0gVbzLeC8eVvrpZ9RELyoG1yYMiSopkT2jQtFdtH89JNBN3ECoCMXxrZYpDtJWU6HSY8/phe9DuKELy2mwXFF2fI7RW72GDlQpyAuDBXSwj2D//5lVAk2+0nfU7SoAkBS86+AtJhVXpW2jfNntM+WNwpX3raDDyivNeruzEgFhw0w7v4hIYjb3XLToutYtvnnT08H0VHFpklBw7HXtvzovbb7b22m7sEL42a/kg75I9C2Y7QuPwgvB3B5ELJ9QK8PRVEeoo5M4okEOae20hpZQyf0VzDTvWAh8DIorVuy8fNq49bBbKMZLk7Qo+xdHheSsjAL8JcbO8u3eSMRxL8WCVGoWsrMJKlGSdT/hjqzfju7JUxtNATonaD2VQtM/2eqgybap2D11JZCCP6weoLOU0cQAJaULaZiGOw8GTsXI7W6zF1xFL2q1EcvBODMp8BCZudeFdB2/IH1ANEMIYboq9HK/f42C+8W02iclRG2zoO8Ig96CcKKZViZVCju5WhwZGVJgsdB7Um2rZbREQZhLKwqAfejYrAzx3L5S7TUM1vtvdlcYEQ+bT4NdXta8d1RyI+WOFtVo7nxHD9f3JolDzqIRYwmLDyCaOgYSr1g8Yyg+VAApivVaKrbgPhUL83iTMcyNblwxqSERZ/bPT6HpKkwdf7HY4nr9p9vkAZN9w4ZXlTz4EsBVEmA/Rw6nJXKkySmO1cgymr/1yp0Lv9p17a2lO4l/FTF5PEg8iw9fUjMrK8KDdYwdq7uYEJz3Ieo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(4744005)(6666004)(41300700001)(186003)(26005)(6506007)(7416002)(2906002)(6512007)(53546011)(5660300002)(2616005)(4326008)(8936002)(8676002)(478600001)(66556008)(66476007)(66946007)(6486002)(54906003)(6916009)(316002)(38100700002)(31696002)(36756003)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVJyck5RNm9Mdm9sWnlFNjRmdXZoLzdHZENMQ1h1Vit5RjJZeHJaVjM1WEx2?=
- =?utf-8?B?MFcwSTVueTdwOCtjb3kvRkkxRlZWRnkzbUlEaE1Xa0I2bDF5ZXZ3YnIzbGwx?=
- =?utf-8?B?NWhYWXpNMWREOWFVVm16Ly9SVEpmSnBiZVRRZWQwWWdXL3NFOFFLRVcwZ0VF?=
- =?utf-8?B?OTlySU14SmtlS1ZGWThxM0NhWHluK0tNZFR0NXdRYVlVbFg4MzlBQWV5dWdq?=
- =?utf-8?B?bzU3SG5adk14SUNPMk5aa3p6bi9uajZVakc1VGF3QVNYVFZyUjcvcGVWcEc3?=
- =?utf-8?B?ckU4dkJrNHl1MTgzVzFXQlQzRWw2RnlhY2ZrWUIvc3RHSUlSYUVFTngvOGM0?=
- =?utf-8?B?RUJBMnJCakgyaEpmeUp6WWh0aFp5MkxGa3JmUHgrK2g1U29qdjNVWFErMHow?=
- =?utf-8?B?Q240NklBYkZLRzlIckhqWkxaa1dMRmVualdJK0tjUncwV0FRUHZMN0oyV0VZ?=
- =?utf-8?B?dFpLRm4ybEpYQTVSUjN2UXRCd2pnT0p2QTc4TDBWUTZvNlJCRzNSa0VKQXZR?=
- =?utf-8?B?ODhkYUVIcFdVTGM5U2NQdmZMYVFwTFlJcGloVXhGcDhSNEFBa0JtNE8zSko5?=
- =?utf-8?B?RElzTlN3WElwWnhTSU1qWnFRZXRGZmlWMnNFSlJMV1ZSU25kR1R5YlJFM29U?=
- =?utf-8?B?elRkbjRnNE1OYjJiR0pHK2VzN3hOZjU5bkx2Uy9KRGlrM3cvZE9CdmdaaGdM?=
- =?utf-8?B?WTl5VndtSGRCZHVhd0lrc0hBNnl0NllLVjFTNnNXSW1URDFhd0MxMGF3VlA4?=
- =?utf-8?B?NzA4UHBEaE9ZUjJESE9pTTZPdlkxa0lFNEJzNGZMR2Y0QVJnbGFYa0dKVmYv?=
- =?utf-8?B?RmhnMHo5bnJHdmcvZ0pqNzBmN2ZOT3Q1ZkhIMzBMMlNBb2tPT0pWOGYzWkRl?=
- =?utf-8?B?TEtub2RINlBGRXgvZnRKdk1aWWUxRThaMzRJaUJnakR0SWMxbnFkeUtqY2dD?=
- =?utf-8?B?RDdKOVVvMFdVMFdaUUN5cnZrUVI1RHZtaHJiaE1zYjh4akpvSmxnQlpwWVJI?=
- =?utf-8?B?cXE1Wm1kR2cyc2NFVkNTNlhXcnhaUXFpRUpkSmlKT1RZYXAyYUFvaFY3QjRD?=
- =?utf-8?B?RUsxeTlGMFMvMmZKUE03L2VLNlVuZ09ZTEUwY1RzL1czM28rTzIvVzlBSlRa?=
- =?utf-8?B?VjJXKzBxaitINjhEVXU3bnluenFnSXA5aHAvb3BkSjBnWTdKdTFseFd4dEY1?=
- =?utf-8?B?UCs3azRDcG9uaEY3QnBTc3pLUGc1WUQxZkhPTXV0R2t1ZnE4WCt2cUx2TVVH?=
- =?utf-8?B?UXNrQ3JMUFJHZTdnWTcwY2lhSzlrOWJGNnVFSEJpbkx0VDZYWVczWGg1L1Bv?=
- =?utf-8?B?dWVlalZJWldaQnVIYUdyL2prcVowTUJOV0RBQWFscXBST2FrS2RhWFZoV3Ir?=
- =?utf-8?B?MzMrZXdaSEhHdFA3UllyWDRzUGFOQnEwL2pFVXhtbVB6OTgrOVpQMDZVY3NN?=
- =?utf-8?B?NC8zMEtnQUZtcUQxS3RsSE1GNWVCV1dYbjF3MEJ2bncxc3NKa1lVdVBrTFZx?=
- =?utf-8?B?QVRHTGRvUnpCRWg1b3V3T2UzTk1WcDBSZ1gya2VTRXo2aVg3cDAydVNjQmNh?=
- =?utf-8?B?OU9kbEM2UHh1NmtPLzkyRnhSN2xXZnFIYXBERW01Yk00SEtVc2Jla0hPVlZK?=
- =?utf-8?B?L2hQakQ3cUFpRXBmbW9iZ0pjZnhsc3k1YWhwUGxuQ2IyS1REMGFpYnBiTFlI?=
- =?utf-8?B?ZjlNYWw5b0Mrcm5zdjZYeFUxOEE1Y2gwMWRGR3docGhDc2VYamxpaHZPMmcy?=
- =?utf-8?B?bmNsdXpsam56OFQ2NU5KZDA1OWtXWmcwcE5udGNyVG5acXp5clBGZFlncE5z?=
- =?utf-8?B?ZDJBblUrN0MyMTQ3MzIvdjJpZGxEM3B2cTJPSlFBNys1NlZ1NGRHMmh1c0w2?=
- =?utf-8?B?SE5JNHk2NHdEcjM5S2owby9LL0NWVVlDUEZEcmR6N1FZWENGb3pUTXhPcDZv?=
- =?utf-8?B?eTNFWmR0U2xEaHEyemtiV200cWZmWDk1MnVFQWhOUmc3eklIRUtZbERwbzhP?=
- =?utf-8?B?VHVkandCZC82T0w2d3JnQVZVSkNvblBnc1hVU1poSkRHTENocmJ0Y0doOEMx?=
- =?utf-8?B?SWxYRE41a2FKZ2wxOWljeTlRSmVzR3pWVTdETnlFTDZxakFIbzU4OVIwd3Yy?=
- =?utf-8?Q?C4DEZxWb23ampuR6SenapifSy?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44385745-3554-401a-102e-08da88879a0c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2022 23:55:21.6239
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: apsHO4zqpZhGZRr6lGRbhwtUgOTTvjO+qeTS6+QnoBNSW1SORCrePMWV1tnUeBN/s2qw4CZ0UCA+KCntncPoGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB2555
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/27/22 15:48, Al Viro wrote:
-> On Sat, Aug 27, 2022 at 01:36:06AM -0700, John Hubbard wrote:
->> Convert the NFS Direct IO layer to use pin_user_pages_fast() and
->> unpin_user_page(), instead of get_user_pages_fast() and put_page().
-> 
-> Again, this stuff can be hit with ITER_BVEC iterators
-> 
->> -		result = iov_iter_get_pages_alloc2(iter, &pagevec,
->> +		result = dio_w_iov_iter_pin_pages_alloc(iter, &pagevec,
->>  						  rsize, &pgbase);
-> 
-> and this will break on those.
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   47641223db134ff730539d1f03c2e4d8f9607100
+commit: e6b756890bbd7fdc97acec0d1ecbd5bd180b1bf3 [298/313] mm: reduce noise in show_mem for lowmem allocations
+config: sparc-defconfig (https://download.01.org/0day-ci/archive/20220828/202208280710.5Qy7NnB7-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e6b756890bbd7fdc97acec0d1ecbd5bd180b1bf3
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout e6b756890bbd7fdc97acec0d1ecbd5bd180b1bf3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash
 
-If anyone has an example handy, of a user space program that leads
-to this situation (O_DIRECT with ITER_BVEC), it would really help
-me reach enlightenment a lot quicker in this area. :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-thanks,
+All errors (new ones prefixed by >>):
+
+   arch/sparc/kernel/setup_32.c: In function 'prom_sync_me':
+>> arch/sparc/kernel/setup_32.c:86:9: error: too few arguments to function 'show_free_areas'
+      86 |         show_free_areas(0, NULL);
+         |         ^~~~~~~~~~~~~~~
+   In file included from arch/sparc/kernel/setup_32.c:12:
+   include/linux/mm.h:1845:13: note: declared here
+    1845 | extern void show_free_areas(unsigned int flags, nodemask_t *nodemask, gfp_t gfp_mask);
+         |             ^~~~~~~~~~~~~~~
+
+
+vim +/show_free_areas +86 arch/sparc/kernel/setup_32.c
+
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   65  
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   66  /* Typing sync at the prom prompt calls the function pointed to by
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   67   * romvec->pv_synchook which I set to the following function.
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   68   * This should sync all filesystems and return, for now it just
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   69   * prints out pretty messages and returns.
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   70   */
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   71  
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   72  /* Pretty sick eh? */
+c61c65cdcd1021 arch/sparc/kernel/setup.c    Adrian Bunk       2008-06-05   73  static void prom_sync_me(void)
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   74  {
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   75  	unsigned long prom_tbr, flags;
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   76  
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   77  	/* XXX Badly broken. FIX! - Anton */
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   78  	local_irq_save(flags);
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   79  	__asm__ __volatile__("rd %%tbr, %0\n\t" : "=r" (prom_tbr));
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   80  	__asm__ __volatile__("wr %0, 0x0, %%tbr\n\t"
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   81  			     "nop\n\t"
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   82  			     "nop\n\t"
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   83  			     "nop\n\t" : : "r" (&trapbase));
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   84  
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   85  	prom_printf("PROM SYNC COMMAND...\n");
+9af744d743170b arch/sparc/kernel/setup_32.c Michal Hocko      2017-02-22  @86  	show_free_areas(0, NULL);
+29f043a2caea28 arch/sparc/kernel/setup_32.c Paul E. McKenney  2011-11-10   87  	if (!is_idle_task(current)) {
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   88  		local_irq_enable();
+70f68ee81e2e9a arch/sparc/kernel/setup_32.c Dominik Brodowski 2018-03-14   89  		ksys_sync();
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   90  		local_irq_disable();
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   91  	}
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   92  	prom_printf("Returning to prom\n");
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   93  
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   94  	__asm__ __volatile__("wr %0, 0x0, %%tbr\n\t"
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   95  			     "nop\n\t"
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   96  			     "nop\n\t"
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   97  			     "nop\n\t" : : "r" (prom_tbr));
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   98  	local_irq_restore(flags);
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16   99  }
+^1da177e4c3f41 arch/sparc/kernel/setup.c    Linus Torvalds    2005-04-16  100  
+
+:::::: The code at line 86 was first introduced by commit
+:::::: 9af744d743170b5f5ef70031dea8d772d166ab28 lib/show_mem.c: teach show_mem to work with the given nodemask
+
+:::::: TO: Michal Hocko <mhocko@suse.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-John Hubbard
-NVIDIA
+0-DAY CI Kernel Test Service
+https://01.org/lkp

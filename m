@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7F95A3424
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 05:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8F25A3428
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 05:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344716AbiH0DTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 23:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S232415AbiH0DnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 23:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbiH0DTo (ORCPT
+        with ESMTP id S229453AbiH0DnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 23:19:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE24FAB420
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 20:19:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 471ED61DCE
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 03:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2770CC433D6;
-        Sat, 27 Aug 2022 03:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661570382;
-        bh=l8bh0UlqdzPrtkN84q9zam96jL20dAmmD1ZErVl3gEg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t5iUjlv6LPyc6Md5JdsZoQqIcCardc+IfYCGnm4NiFchCaQ1EqVxwfp82AB4wXlmx
-         w5u+ogExFpSIHDvlgSZl7OdBKoNu3yEmG60oS1BM5rJHe3l0Q2IuVz48qEftrsGdQP
-         tiDDxgGQS55yEwaPAj9By1hGkwDL0dNyp7FSEVJ0=
-Date:   Fri, 26 Aug 2022 20:19:41 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     <mhocko@suse.com>, <david@redhat.com>, <vbabka@suse.cz>,
-        <pasha.tatashin@soleen.com>, <shakeelb@google.com>,
-        <sieberf@amazon.com>, <sjpark@amazon.de>,
-        <william.kucharski@oracle.com>, <willy@infradead.org>,
-        <quic_pkondeti@quicinc.com>, <minchan@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-Subject: Re: [PATCH V5] mm: fix use-after free of page_ext after race with
- memory-offline
-Message-Id: <20220826201941.de6ed957a0d6547b2d501c19@linux-foundation.org>
-In-Reply-To: <1661496993-11473-1-git-send-email-quic_charante@quicinc.com>
-References: <1661496993-11473-1-git-send-email-quic_charante@quicinc.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 26 Aug 2022 23:43:13 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E065FD83FC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 20:43:12 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i1-20020a056e0212c100b002e9fda30fbdso2425520ilm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 20:43:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=eg/0057SGkW34f+W57nK/E8zdj2dLy5MUcOKQQZn8g0=;
+        b=HKhdL/IJz3IO6YBe/2MoiErDqy9BtK+h04fYj7UruKs2P+FH6GQViE02sxR3i8qdo6
+         325yEoGgvPyuRB5u3euH6NsxFqibg/h9OUCyiv1k1M6LWkH9h5onCcxQSVhP1Yy9nwOB
+         o9c2oio71admVZme0jje+NqBmykCC2XFgAVwno2J6T8Wl+JV0pnx7VDECKHrLdK1jooH
+         SOxxzQbSJWdLAminXCzBkC804TwnfnboXdnUKi1eDhBSmVzOc/m7mpj7SCYSUig4Yw+/
+         ZCbRFRt6rAbh3JX/ChpgX7kRdgyuuiJK5WADhnqB2tT25owU0DvLKxkIyG3LdWPYHqcY
+         UwGA==
+X-Gm-Message-State: ACgBeo1TlF1lAthcaLKz7NhbWIZ3rHc1iyrrsIUT2wlLRfxd/c5uo5/K
+        tWHBwZACZTdJplhoIUbLqUVMIYuQEAGhzRS4CGWW7HD3+b7l
+X-Google-Smtp-Source: AA6agR5BSyT+A3ozeV7Nis16VVVL65SPSjmK7ksWdmDQXVWGxa8/mMU1zhqOq6OyKkkaR2dm9WTKnRepMgJNERwFHjPZsK8Q2sOt
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:168d:b0:2ea:3f77:a91 with SMTP id
+ f13-20020a056e02168d00b002ea3f770a91mr5427297ila.223.1661571792280; Fri, 26
+ Aug 2022 20:43:12 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 20:43:12 -0700
+In-Reply-To: <20220827034201.2669-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000072a45605e730d4fb@google.com>
+Subject: Re: [syzbot] BUG: corrupted list in efivar_entry_remove
+From:   syzbot <syzbot+1902c359bfcaf39c46f2@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,13 +55,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 12:26:33 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
+Hello,
 
-> The below is one path where race between page_ext and  offline of the
-> respective memory blocks will cause use-after-free on the access of
-> page_ext structure.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-What are people's thoughts on a -stable backport?  It looks like the
-bug has been there for years and the means of hitting it are obscure
-and the patch isn't minor, so I'm thinking no?
+failed to checkout kernel repo https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git on commit 680fb5b009e8: failed to run ["git" "checkout" "680fb5b009e8"]: exit status 1
+error: pathspec '680fb5b009e8' did not match any file(s) known to git
+
+
+
+Tested on:
+
+commit:         [unknown 
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 680fb5b009e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=1902c359bfcaf39c46f2
+compiler:       
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=105025bd080000
 

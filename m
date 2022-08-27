@@ -2,214 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7E35A37AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD005A37B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbiH0Mqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 08:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S232941AbiH0Mti convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 27 Aug 2022 08:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiH0Mqw (ORCPT
+        with ESMTP id S232552AbiH0Mtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 08:46:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F8A4507D
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661604410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=inruV9tiW8qwXrnkVI+Ao+ITZBbbO5sFc1aw762dWrY=;
-        b=AR4s0pdDMsMU1McxfZABuUAI0PgnZK5dXtD6za75yrSWMUuJ57xTTzbnhiBLZORsWCXTsF
-        G4JaKpwPiOpKU0BuuoPNOV9ccHnVAAZrgdEJRVxLN2oAgnpvWl6AfjXwL3b3c2b8e5YS7J
-        E/8pJfwLQJogsjYDv5isXHxfpWAZYHE=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-492-EYQpl8CNPIeXOGc0jrohOg-1; Sat, 27 Aug 2022 08:46:49 -0400
-X-MC-Unique: EYQpl8CNPIeXOGc0jrohOg-1
-Received: by mail-ed1-f71.google.com with SMTP id l19-20020a056402255300b0043df64f9a0fso2712009edb.16
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:46:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=inruV9tiW8qwXrnkVI+Ao+ITZBbbO5sFc1aw762dWrY=;
-        b=KFD+2TbYCYi11evBPHPupZs4w5VirAYepp/ZUKG/GLuEK9VV2q7HZJCkyGEAHkgJBw
-         oV7cEHsfsTeyWY+pEqGrVZkkZXHI3IgpGZQ0guLvB/2jVUWstFaTPW1mDf0TWSDtc6Fk
-         AawkHxefRq8f1bYQllcVfVtFidIz+w70dq6M0drU5i8A9iThNX+E5UdoJhAZwblfb9AO
-         AKCmZXJkea07hmM2OOl/j0FE+AV79NJftVMNJTbt7tYxXjvVBU13hTg/VftR6SA2eoJ0
-         OpuAy4zbJrIVcTHi8JivtKbvOpd9l/PpntHBi8tTIbpvxwKmiUnmDzu8H4pw0qUbArm4
-         h4oQ==
-X-Gm-Message-State: ACgBeo2M8dhTrFrL/kExRrs59rz2gyUn6gXiAvW+lnrVT+/eNZ3svfnE
-        4iobBibdVWmdvw4q5/QtUlseKFVtq1x1lIktvg9s2Ml3c8loaSwFkT9WIhU56kfShlMqhOpLHHB
-        MiNwWDVwp52uuvmJgSiXX/KB+
-X-Received: by 2002:a17:907:6890:b0:73d:a567:568c with SMTP id qy16-20020a170907689000b0073da567568cmr8053185ejc.521.1661604408245;
-        Sat, 27 Aug 2022 05:46:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5TSxNxFhHIWUgDFGh6o2o5A2lHYsq2gKou43zUNTrXz2A2rDfHNazARFNTXYh+19y8woSsTQ==
-X-Received: by 2002:a17:907:6890:b0:73d:a567:568c with SMTP id qy16-20020a170907689000b0073da567568cmr8053169ejc.521.1661604408027;
-        Sat, 27 Aug 2022 05:46:48 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id cb11-20020a0564020b6b00b0044841a78c70sm104257edb.93.2022.08.27.05.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 05:46:47 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>
-Subject: RE: [PATCH v2 3/3] Drivers: hv: Never allocate anything besides
- framebuffer from framebuffer memory region
-In-Reply-To: <SN6PR2101MB16935E50795FAE1FA352C416D7729@SN6PR2101MB1693.namprd21.prod.outlook.com>
-References: <20220825090024.1007883-1-vkuznets@redhat.com>
- <20220825090024.1007883-4-vkuznets@redhat.com>
- <SN6PR2101MB16935E50795FAE1FA352C416D7729@SN6PR2101MB1693.namprd21.prod.outlook.com>
-Date:   Sat, 27 Aug 2022 14:46:46 +0200
-Message-ID: <87k06tvop5.fsf@redhat.com>
+        Sat, 27 Aug 2022 08:49:36 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54DA491FD
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:49:31 -0700 (PDT)
+Received: from mail-ej1-f48.google.com ([209.85.218.48]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MgNMV-1p4HCg3ZLL-00hxMx for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022
+ 14:49:29 +0200
+Received: by mail-ej1-f48.google.com with SMTP id sd33so7588617ejc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:49:29 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0O5sN0nMSxbKM0p9Fikk69MZnY7vef1bvF35hF3ygvq+VSYzCu
+        6PjX4Q+L/IZEZVtvI1uFffZtKIM3AYeHv8Xz3i8=
+X-Google-Smtp-Source: AA6agR4J9XTdGZjJb8R8xF2Baz3XbMezjaE/aWqaT70o2dkgXf9PwjIXOYEASc9MIhHdMWKvcgt5om3QPK6lTDMaEZo=
+X-Received: by 2002:a17:906:8450:b0:741:5b1b:5c7f with SMTP id
+ e16-20020a170906845000b007415b1b5c7fmr501641ejy.766.1661604569536; Sat, 27
+ Aug 2022 05:49:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220815032025.2685516-1-tongtiangen@huawei.com>
+ <20220815032025.2685516-2-tongtiangen@huawei.com> <CAK8P3a0ixaYimjCh77QBJpbHbVsw+9C7RiW2LEnwQ8HnwG_jHg@mail.gmail.com>
+ <c0e286b4-3005-71fb-3bb2-476944099d4e@huawei.com>
+In-Reply-To: <c0e286b4-3005-71fb-3bb2-476944099d4e@huawei.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 27 Aug 2022 14:49:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0akgBkyVQuAfi5qdi9O5DhxZJ3FknxGH-gedpJpAVw6w@mail.gmail.com>
+Message-ID: <CAK8P3a0akgBkyVQuAfi5qdi9O5DhxZJ3FknxGH-gedpJpAVw6w@mail.gmail.com>
+Subject: Re: [PATCH -next v2 1/2] riscv: uaccess: rename __get/put_user_nocheck
+ to __get/put_mem_nocheck
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Conor.Dooley@microchip.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wangkefeng.wang@huawei.com, Guohanjun <guohanjun@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:Ph1mSXHvx7ywdmimX2k4dMJltenSjeYp6dLHodCcQqPFWwPmcxZ
+ agvJVY3UUKBvOrubqP8IxCqibIKXYNaGQOFn/DYGFkq5nndB3zbahgZLzY+QiaJWWRbipdI
+ zYB2yPV3UPVlB7MnFH69lU9VnOgb1chtV0r8reEKjguN+R5Fdy+aAG1GXvAoxpQ9ZMPo0iQ
+ csAC/sPuJh+3cxK1JO9VQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zIQiTkI6cW0=:wZ0731ZaM9g/WD9beeaEqn
+ gL3lU5b9H3IORECa1TdwJEwtO+eUjoNO+Fyzvevn5xRNEdpRmO6JhG/QAdJA9VYnYkosFjODL
+ 2t2BiDRqdBNFNGOBX+xRdbQU6SIuazZf+LWGgZdgXQIgASozkfug6HVkBZUkVqnP8Dn06xX0/
+ fCCCpI1FAIqfAQTbYUqy3SA4+3WLrjL+GRglUHBToLZ0a6pJ8e0TX9C5wri0aDmcUTdoZI674
+ k43i7K2JbVqe2PTjimbOTs1y6lXVkr2ZAvukZdGFNdURpp7JqXWRAg3A1oph4vaKmC6X8dBd2
+ nfsZm4FU4aAnN/VQ6fNT1SnIbNhgZ79AZrZXIDk/rSMKQVGoXlYLUV0x1byf18bCIkoxqGsqx
+ s0sW15OKcAMLZ4wFpxuynPWLgpHgN0QwsNJ/NcASZ244VR34SJ//B728rc0CPIG6RBUlKxvms
+ W6D3opWLKhUCYgPECIHlmfLlKzfrmIvjw/I+w1So3RAi/opzjGZyjrEskfLmh74d2Y+frMRYO
+ u9Yqfo0NOiPGapq5RjylhJCaq0Mv3hMzkA+RyMqc3whu4W5ElNW7Ljq6Nt1tNcNEp4QgEkyDf
+ KPfQQxWsFyV4Dsg2isEaQTi8db/3A5gPzUEhZTpA+3q8xBvR0acaNrznlwkhPtjh1w9mmkaqp
+ ILGR8rKAPjCSS4+LvRJvRv6hue91RcfFJtAIOzyUxNzyhcjs/ZUGYAuIzLhMVVRDQaJs1Ul7C
+ F4o0LKOPucBQdP2VH5V6uGROLZY2YiscKoGojw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Michael Kelley (LINUX)" <mikelley@microsoft.com> writes:
-
-> From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Thursday, August 25, 2022 2:00 AM
->> 
->> Passed through PCI device sometimes misbehave on Gen1 VMs when Hyper-V
->> DRM driver is also loaded. Looking at IOMEM assignment, we can see e.g.
->> 
->> $ cat /proc/iomem
->> ...
->> f8000000-fffbffff : PCI Bus 0000:00
->>   f8000000-fbffffff : 0000:00:08.0
->>     f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
->> ...
->> fe0000000-fffffffff : PCI Bus 0000:00
->>   fe0000000-fe07fffff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
->>     fe0000000-fe07fffff : 2ba2:00:02.0
->>       fe0000000-fe07fffff : mlx4_core
->> 
->> the interesting part is the 'f8000000' region as it is actually the
->> VM's framebuffer:
->> 
->> $ lspci -v
->> ...
->> 0000:00:08.0 VGA compatible controller: Microsoft Corporation Hyper-V virtual VGA
->> (prog-if 00 [VGA controller])
->> 	Flags: bus master, fast devsel, latency 0, IRQ 11
->> 	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
->> ...
->> 
->>  hv_vmbus: registering driver hyperv_drm
->>  hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Synthvid Version major 3, minor 5
->>  hyperv_drm 0000:00:08.0: vgaarb: deactivate vga console
->>  hyperv_drm 0000:00:08.0: BAR 0: can't reserve [mem 0xf8000000-0xfbffffff]
->>  hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Cannot request framebuffer, boot fb still active?
->> 
->> Note: "Cannot request framebuffer" is not a fatal error in
->> hyperv_setup_gen1() as the code assumes there's some other framebuffer
->> device there but we actually have some other PCI device (mlx4 in this
->> case) config space there!
+On Sat, Aug 27, 2022 at 12:43 PM Tong Tiangen <tongtiangen@huawei.com> wrote:
+> 在 2022/8/26 17:30, Arnd Bergmann 写道:
 >
-> My apologies for not getting around to commenting on the previous
-> version of this patch.  The function hyperv_setup_gen1() and the
-> "Cannot request framebuffer" message have gone away as of
-> commit a0ab5abced55.
->
+> I am very interested in the implementation of X86. I need to investigate
+> and consider a cross architecture implementation.
 
-True, will fix!
+One more point about the cross-architecture work: it generally makes
+sense to do the most commonly used architectures first, usually
+that would be x86, arm64 and powerpc64, followed by riscv, arm,
+s390 and mips. If we can find something that the first architecture
+maintainers like, everyone else can follow and you don't have to
+rework all of them multiple times before getting to a consensus.
 
->> 
->> The problem appears to be that vmbus_allocate_mmio() can allocate from
->> the reserved framebuffer region (fb_overlap_ok), however, if the
->> request to allocate MMIO comes from some other device before
->> framebuffer region is taken, it can happily use framebuffer region for
->> it. 
->
-> Interesting. I had never looked at the details of vmbus_allocate_mmio().
-> The semantics one might assume of a parameter named "fb_overlap_ok"
-> aren't implemented because !fb_overlap_ok essentially has no effect.   The
-> existing semantics are really "prefer_fb_overlap".  This patch implements
-> the expected and needed semantics, which is to not allocate from the frame
-> buffer space when !fb_overlap_ok.
->
-> If that's an accurate high level summary, maybe this commit message
-> could describe it that way?  The other details you provide about what can
-> go wrong should still be included as well.
+> However, I understand that the modification of the current patch has
+> little to do with the two points mentioned above. We can optimize the
+> code step by step.
 
-That's acually a very good summary! Let me update the commit message,
-I'll be sending out v3 shortly.
+You are correct that this has little to do with your patch, my point
+was mainly that your patch is moving the code further away from
+the other architectures, so it would make it harder to then do the
+changes we actually want.
 
->
->> Note, Gen2 VMs are usually unaffected by the issue because
->> framebuffer region is already taken by EFI fb (in case kernel supports
->> it) but Gen1 VMs may have this region unclaimed by the time Hyper-V PCI
->> pass-through driver tries allocating MMIO space if Hyper-V DRM/FB drivers
->> load after it. Devices can be brought up in any sequence so let's
->> resolve the issue by always ignoring 'fb_mmio' region for non-FB
->> requests, even if the region is unclaimed.
->> 
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  drivers/hv/vmbus_drv.c | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
->> index 536f68e563c6..3c833ea60db6 100644
->> --- a/drivers/hv/vmbus_drv.c
->> +++ b/drivers/hv/vmbus_drv.c
->> @@ -2331,7 +2331,7 @@ int vmbus_allocate_mmio(struct resource **new, struct
->> hv_device *device_obj,
->>  			bool fb_overlap_ok)
->>  {
->>  	struct resource *iter, *shadow;
->> -	resource_size_t range_min, range_max, start;
->> +	resource_size_t range_min, range_max, start, end;
->>  	const char *dev_n = dev_name(&device_obj->device);
->>  	int retval;
->> 
->> @@ -2366,6 +2366,14 @@ int vmbus_allocate_mmio(struct resource **new, struct
->> hv_device *device_obj,
->>  		range_max = iter->end;
->>  		start = (range_min + align - 1) & ~(align - 1);
->>  		for (; start + size - 1 <= range_max; start += align) {
->> +			end = start + size - 1;
->> +
->> +			/* Skip the whole fb_mmio region if not fb_overlap_ok */
->> +			if (!fb_overlap_ok && fb_mmio &&
->> +			    (((start >= fb_mmio->start) && (start <= fb_mmio->end)) ||
->> +			     ((end >= fb_mmio->start) && (end <= fb_mmio->end))))
->> +				continue;
->> +
->>  			shadow = __request_region(iter, start, size, NULL,
->>  						  IORESOURCE_BUSY);
->>  			if (!shadow)
->> --
->> 2.37.1
->
-> Other than my musings on the commit message,
->
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
->
-
-Thanks!
-
--- 
-Vitaly
-
+       Arnd

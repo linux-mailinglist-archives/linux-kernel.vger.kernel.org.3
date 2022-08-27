@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0D05A34FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862F25A3503
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236715AbiH0GMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 02:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S232363AbiH0GVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 02:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiH0GMS (ORCPT
+        with ESMTP id S229639AbiH0GVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 02:12:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7D6B02A6;
-        Fri, 26 Aug 2022 23:12:17 -0700 (PDT)
+        Sat, 27 Aug 2022 02:21:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2195CDC092
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 23:21:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661580737; x=1693116737;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5bYgtucMS73ltpVcIqX+yP40x5iHTdC6A1Zl4wmQkII=;
-  b=RIEVdGnKlIs+y4O68joROVMADDySMufjiul8kvr16wiRJyzPe+a002Xr
-   +bRFqdLwOX5NL2lPk+nm+Hs+gPPZ3glKuyQn+3312/mVxsUyKzpt7OYqF
-   SuSNXj51KWRsoZGRkDUCfyWqiOhni3mZUs7xYsUQQbbfiaMlQcG20BYzD
-   iNTvJeaCnwDOoxfVvUr6ShrbWbWpMQ2Vqvf/YVqwV4WJBwVjoFJ21/ebP
-   b6di47tj1jrrEocZaZZ/F5WUfr1kaTEESdE2CBQwS0XkULjbKBrmaWPSz
-   AMPAZ/FLBTSV2HW9Q6szHXZKdHOPKIWJTJZvt5qs73tj21ndj9V6pJqsm
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295911102"
+  t=1661581302; x=1693117302;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aXJC/E7x5q+usZCo0oNBegtsCOu6gFfwtcdSpeMxdpI=;
+  b=TBXqAJp18TwQZhFEUOiMM6m15l6fRLChk4rOMp0UUyuoeamA6GbhdtW5
+   AX0BhMwMj/s0148cokQzAaNa7GjYrDXWTdKIJ+B19/UyPXWzQM5BCU35f
+   poNCXFYS2/+XvYt7eMkjeDK3yx6xtecAKhc2U1Iygy0eKoJ7KQVQrZ5Nb
+   ZcZE3Ov3yRISzCROg23hWEe2NNG7aoHl5eSRmKfUp4tVnf1QyA5b4lcXv
+   DDOou6ZFwe67/5Q1D8dCPlPDME8jrk7AAytZWco5X7oZy1k6Fqj/3TQj3
+   ejUzZb4/FAi0D11ew/MRhdg/IVJMeUxctpZYUmRbnF5gG89k3PeZtTok1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294649227"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="295911102"
+   d="scan'208";a="294649227"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:12:16 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:21:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="938989333"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 23:12:12 -0700
-Date:   Sat, 27 Aug 2022 14:02:56 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     git@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        trix@redhat.com, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
-        rajan.vaja@xilinx.com, abhyuday.godhasara@xilinx.com,
-        piyush.mehta@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
-        harsha.harsha@xilinx.com, linus.walleij@linaro.org,
-        nava.manne@xilinx.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH 0/4]Add afi config drivers support
-Message-ID: <YwmzkNVqgSEIgSKH@yilunxu-OptiPlex-7050>
-References: <20220824035542.706433-1-nava.kishore.manne@amd.com>
+   d="scan'208";a="938991188"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 23:21:40 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRpCN-000147-2w;
+        Sat, 27 Aug 2022 06:21:39 +0000
+Date:   Sat, 27 Aug 2022 14:21:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [ardb:efi-decompressor-v4 4/9]
+ drivers/firmware/efi/libstub/intrinsics.c:18:7: error: definition of builtin
+ function '__builtin_memcpy'
+Message-ID: <202208271446.2z1VzPD0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220824035542.706433-1-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,41 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-24 at 09:25:38 +0530, Nava kishore Manne wrote:
-> Xilinx SoC platforms (Zynq and ZynqMP) connect the PS to the programmable
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-decompressor-v4
+head:   2943178d7555c331c19e9cce9a83e47f9513f3b1
+commit: 74f59f87ddbcbacc7232ac6800916260a0632126 [4/9] efi/libstub: use EFI provided memcpy/memset routines
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271446.2z1VzPD0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=74f59f87ddbcbacc7232ac6800916260a0632126
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb efi-decompressor-v4
+        git checkout 74f59f87ddbcbacc7232ac6800916260a0632126
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Could you help explain what is PS?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Yiljn
+All errors (new ones prefixed by >>):
 
-> logic (PL) through the AXI port.This AXI port helps to establish the data
-> path between the PS and PL. In-order to establish the proper communication
-> data path between PS and PL the AXI port data path should be configured
-> with the proper Bus-width values and it will also handle the PS-PL reset
-> signals to reset the PL domain.
-> 
-> This patch series adds afi config drivers support to handle the PS-PL
-> resets and AXI port bus-width configurations.
-> 
-> Nava kishore Manne (4):
->   firmware: xilinx: Add afi ioctl support
->   bindings: fpga: Add binding doc for the zynqmp afi config driver
->   bindings: firmware: Update binding doc for the zynqmp afi config node
->   fpga: zynqmp: Add afi config driver
-> 
->  .../firmware/xilinx/xlnx,zynqmp-firmware.yaml |   7 +
->  .../bindings/fpga/xlnx,zynqmp-afi-fpga.yaml   | 100 +++++++++
->  MAINTAINERS                                   |   6 +
->  drivers/firmware/xilinx/zynqmp.c              |  14 ++
->  drivers/fpga/Kconfig                          |  13 ++
->  drivers/fpga/Makefile                         |   1 +
->  drivers/fpga/zynqmp-afi.c                     | 211 ++++++++++++++++++
->  include/linux/firmware/xlnx-zynqmp.h          |  36 +++
->  8 files changed, 388 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
->  create mode 100644 drivers/fpga/zynqmp-afi.c
-> 
-> -- 
-> 2.25.1
-> 
+>> drivers/firmware/efi/libstub/intrinsics.c:18:7: error: definition of builtin function '__builtin_memcpy'
+   void *memcpy(void *dst, const void *src, size_t len)
+         ^
+   arch/x86/include/asm/string_32.h:150:25: note: expanded from macro 'memcpy'
+   #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+                           ^
+>> drivers/firmware/efi/libstub/intrinsics.c:26:7: error: definition of builtin function '__builtin_memset'
+   void *memset(void *dst, int c, size_t len)
+         ^
+   arch/x86/include/asm/string_32.h:195:29: note: expanded from macro 'memset'
+   #define memset(s, c, count) __builtin_memset(s, c, count)
+                               ^
+   2 errors generated.
+
+
+vim +/__builtin_memcpy +18 drivers/firmware/efi/libstub/intrinsics.c
+
+    17	
+  > 18	void *memcpy(void *dst, const void *src, size_t len)
+    19	{
+    20		efi_bs_call(copy_mem, dst, src, len);
+    21		return dst;
+    22	}
+    23	
+    24	extern void *memmove(void *dst, const void *src, size_t len) __alias(memcpy);
+    25	
+  > 26	void *memset(void *dst, int c, size_t len)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

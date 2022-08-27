@@ -2,164 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DE35A38E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6D75A38EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiH0QuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 12:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S233868AbiH0Q4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbiH0QuL (ORCPT
+        with ESMTP id S230024AbiH0Q4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 12:50:11 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1DF40543;
-        Sat, 27 Aug 2022 09:50:09 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id w19so8280056ejc.7;
-        Sat, 27 Aug 2022 09:50:09 -0700 (PDT)
+        Sat, 27 Aug 2022 12:56:39 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C2B58DED
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:56:37 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id se27so564661ejb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=VJNF98Jqt99AprHtKq0G9VG/d2DqpgJHfktlSDmD0pg=;
-        b=MN8/ETsFbLJzerJD4Via51PdSRuPXLXahkl3CImMSuj4F8mgXXCxd1i7VSiHIxGCFt
-         gBttjvyy2grENAq0rDAl+cNdRaDE3lNvlKf2IeqZwyYRDjDvyPc/pN/XP/gjo4gyM/x3
-         4XXg7RiJ0uzLoKXcfRrl/IJbFKNAc1nJvBBkxWeZVMOibC4FAJgnVctwKodiVPTIDhQc
-         LTlbKqwN7Fbw69qAMl6oyXnRmHf8viBq8EaaXO6UUQC2h1AhyBinSnJBLKHSQoJrGF7d
-         qXcB4TVtkJAqlqafVN1p1VDLGDnktOE7BgFdMFAeOvhc6yegecVQM8v34b9IUzLbaDfR
-         TSZQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WAEr4zCif0zp++lZAUWZkj4GJhtO7eOsEWQzvmzftQQ=;
+        b=Usv9scAAadihgjNYDL+pCD+vdqOGF1X0cWC9MSgKis7DY1nR47sOn/fUFAwpVGARg2
+         R28Rkid0Z4bmdsM2qMAaJdSP1ygPFSKxdXwNRtDIYxO/YduZhQYknWZKo4dOrEu2FVgH
+         hZLhNoIfLH15LdDClrvelFDdmfGzL5gJ5DcEs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=VJNF98Jqt99AprHtKq0G9VG/d2DqpgJHfktlSDmD0pg=;
-        b=DUhw9xch4fR5xnCOT1h3+r4PoGZsM5q8/HckiRU08GoSzKtVdabJ3qHvc73MHC4dUq
-         yaDWMF5qagjarX467fKLQ4g0uXdbXdMuX5+fF21OwMPln9k32yyUp5mHSF+b8/pLFG1D
-         85BzVu5wzFZoZZFlvMUV4Yq/qkntWqvkOVR25h7dc/1qOi28QDsSmoUH8lOFSmLA4cIc
-         r37QBorbYe9yzd56jsWLvECVR/EPcnv+LLrT24M5FIL05ZnZIzlK8kSpVS1cRE8oKq5D
-         FcmGww7Xca96E/HtnHXp9gaqIG7v5xIqcQ75+5E2Sr3WqZpprB+QYYlwtJo4aP0kf6yb
-         P6ZA==
-X-Gm-Message-State: ACgBeo0AN1WQGPAZfDkHDF1xo1YTJW1qfTh3ei/gOFJqutgrYdMghRkB
-        /1ByA6vS2RAEMCUL67iERGBTSHFdFECB8C6YBtg=
-X-Google-Smtp-Source: AA6agR45ebN9N8dztQ/gX5HvnhEDpExulXI+ZZGejqq5d1WBpjxzmH9DKLOsuHlQFtJuyFzYNpSq3aIf5qCCqjTt62c=
-X-Received: by 2002:a17:907:8a09:b0:731:610:ff8d with SMTP id
- sc9-20020a1709078a0900b007310610ff8dmr8431923ejc.399.1661619008050; Sat, 27
- Aug 2022 09:50:08 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WAEr4zCif0zp++lZAUWZkj4GJhtO7eOsEWQzvmzftQQ=;
+        b=ZTk3wfyDy6v63Trz/4d7ZJY5WvbfQBtO7MXDKeX8DX6q+EfPGefVwasMy2HTZtRUCh
+         FjhflYIOxdJGm05P33jsOxzPja/r5sBfW+s3d6z90Jfr88llEii++89BeQtmOHWUOzcK
+         0U4TIzLevHwMiPnTp6cOYmnyxZdWFWkDkr30W2VINWpZTPCpX4n0FNsqk6+yx1FFsb8M
+         J5k8YCqCOmghKpp/2zMqMJVyJfjsnH2jJxlBnzrzjJ0VRx3kNmL+Ib1zCIoA0c+JxzEK
+         savfsNIURVPxDg9MAvvqZ6qnWCiKVFwqmgMoG1qxPiCW3eLkMeJyytiPI+yRXETkkfMK
+         rybw==
+X-Gm-Message-State: ACgBeo0WxOtCtMpUelt6ZMHu90QQVL/ZZRZOiS1JgxzrnWa0GIEGZOfW
+        iv+VRjjCT36c3iPbyYuHSUO+D/yty+eqXVQaOSI=
+X-Google-Smtp-Source: AA6agR50bgac8X1By6Mk1nVU2ngLVJ97I86XCAhgE8ygOJeilrwTNVwsqNd7c5VZJw9EL+eeMqOMzw==
+X-Received: by 2002:a17:906:cc14:b0:73d:d230:2aa8 with SMTP id ml20-20020a170906cc1400b0073dd2302aa8mr7771138ejb.218.1661619395882;
+        Sat, 27 Aug 2022 09:56:35 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id z19-20020a1709063ad300b0073dd7e586f9sm2245434ejd.193.2022.08.27.09.56.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 09:56:35 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id v7-20020a1cac07000000b003a6062a4f81so5965807wme.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:56:35 -0700 (PDT)
+X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
+ e21-20020a05600c219500b003a60b3cc100mr2617660wme.8.1661619061056; Sat, 27 Aug
+ 2022 09:51:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220821173051.155038-1-peron.clem@gmail.com> <20220821173051.155038-3-peron.clem@gmail.com>
- <72f901e6-f646-336b-70e6-2747363944ab@sholland.org>
-In-Reply-To: <72f901e6-f646-336b-70e6-2747363944ab@sholland.org>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Sat, 27 Aug 2022 18:49:56 +0200
-Message-ID: <CAJiuCcfF=1Ob1oGABtHhM88m0LST727h88fXqCKYBiWRsYmtnA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] arm64: dts: allwinner: h6: Add cooling map for GPU
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+ <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
+ <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com>
+ <alpine.LRH.2.02.2208261620210.9648@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com> <alpine.LRH.2.02.2208270720500.18630@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2208270720500.18630@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 27 Aug 2022 09:50:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whyBQzofeFc1a1d2=HKcrTCLDi_FY+K2NG0R4e-9epqPw@mail.gmail.com>
+Message-ID: <CAHk-=whyBQzofeFc1a1d2=HKcrTCLDi_FY+K2NG0R4e-9epqPw@mail.gmail.com>
+Subject: Re: [PATCH] provide arch_test_bit_acquire for architectures that
+ define test_bit
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
-
-On Tue, 23 Aug 2022 at 05:16, Samuel Holland <samuel@sholland.org> wrote:
+On Sat, Aug 27, 2022 at 4:38 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
 >
-> On 8/21/22 12:30 PM, Cl=C3=A9ment P=C3=A9ron wrote:
-> > Add a simple cooling map for the GPU.
->
-> It would be good to document where the trip point temperatures came from.
+> I compile-tested this patch on alpha, s390x, m68k, sh, sparc32, sparc64.
+> So, you can commit it to close these uncompilable-kernel reports.
 
-If I remember correctly, I got those when getting the dtb from my
-Beelink GS1 when it was running vendor Android with the oldest
-Allwinner kernel.
+Thanks, done.
 
-But now that you ask I double check with the "new" vendor kernel source:
-https://github.com/Allwinner-Homlet/H6-BSP4.9-linux/blob/master/arch/arm64/=
-boot/dts/sunxi/sun50iw6p1.dtsi#L2034-L2053
-
-And It's different from what I got in the past.
-The throttling starts when the GPU is already very hot (95, 100 and
-105=C2=B0C) and seems to only disable the highest frequency (756, 624 and
-576MHz).
-Which let the GPU running at 0.91V @ 540MHz.
-
-Which is far to be the lowest possible consumption for the GPU (0.81V
-@ 336MHz would be better in the hottest situation)
-
-I'm not an expert but either I could just try to copy/paste the same
-behavior or try to have a more smooth cooling map (70, 85, 100=C2=B0C).
-
-What do you think?
-
-Thanks,
-Clement
-
-
-
->
-> > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
->
-> Acked-by: Samuel Holland <samuel@sholland.org>
->
-> > ---
-> >  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 22 ++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/=
-boot/dts/allwinner/sun50i-h6.dtsi
-> > index 5a28303d3d4c..943ae5374dd6 100644
-> > --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-> > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-> > @@ -186,6 +186,7 @@ gpu: gpu@1800000 {
-> >                       clocks =3D <&ccu CLK_GPU>, <&ccu CLK_BUS_GPU>;
-> >                       clock-names =3D "core", "bus";
-> >                       resets =3D <&ccu RST_BUS_GPU>;
-> > +                     #cooling-cells =3D <2>;
-> >                       status =3D "disabled";
-> >               };
-> >
-> > @@ -1075,6 +1076,27 @@ gpu-thermal {
-> >                       polling-delay-passive =3D <0>;
-> >                       polling-delay =3D <0>;
-> >                       thermal-sensors =3D <&ths 1>;
-> > +
-> > +                     trips {
-> > +                             gpu_alert: gpu-alert {
-> > +                                     temperature =3D <85000>;
-> > +                                     hysteresis =3D <2000>;
-> > +                                     type =3D "passive";
-> > +                             };
-> > +
-> > +                             gpu-crit {
-> > +                                     temperature =3D <100000>;
-> > +                                     hysteresis =3D <0>;
-> > +                                     type =3D "critical";
-> > +                             };
-> > +                     };
-> > +
-> > +                     cooling-maps {
-> > +                             map0 {
-> > +                                     trip =3D <&gpu_alert>;
-> > +                                     cooling-device =3D <&gpu THERMAL_=
-NO_LIMIT THERMAL_NO_LIMIT>;
-> > +                             };
-> > +                     };
-> >               };
-> >       };
-> >  };
-> >
->
+                Linus

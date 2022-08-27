@@ -2,135 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628FB5A3454
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 06:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D695A3458
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 06:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiH0ERf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 00:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S238547AbiH0EUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 00:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH0ERd (ORCPT
+        with ESMTP id S229449AbiH0EUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 00:17:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744CD73933;
-        Fri, 26 Aug 2022 21:17:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E99B460A39;
-        Sat, 27 Aug 2022 04:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299E8C433D6;
-        Sat, 27 Aug 2022 04:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661573851;
-        bh=6Iz/eGwmp2OnF5aKahMz1qTW0tTKm7mlFOFhFDxX1AA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0wwPwPqYjbGm6Ce5o/Y1H+DJmaTo4tbspFfmRDrZEp4vlLxYw57ALtc0CXFnvMbGh
-         VFCSnWNxDc7JkINYWGfzPhl/loGQPXhQADf4HucY5q1H3K85IqB7J0Fx6rs5x3gQei
-         vqaTpKDnySwwiXOltZ9lClnMZEmM8Ob5p56kBsi0=
-Date:   Fri, 26 Aug 2022 21:17:29 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 04/44] x86: asm: instrument usercopy in get_user()
- and put_user()
-Message-Id: <20220826211729.e65d52e7919fee5c34d22efc@linux-foundation.org>
-In-Reply-To: <20220826150807.723137-5-glider@google.com>
-References: <20220826150807.723137-1-glider@google.com>
-        <20220826150807.723137-5-glider@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sat, 27 Aug 2022 00:20:35 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF6814085;
+        Fri, 26 Aug 2022 21:20:33 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MF3Nm3w3LzGpkW;
+        Sat, 27 Aug 2022 12:18:48 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 12:20:30 +0800
+Message-ID: <865db8c4-63c1-d2f4-585f-26c3be713948@huawei.com>
+Date:   Sat, 27 Aug 2022 12:20:30 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH -next] net: sched: sch_skbprio: add support for qlen
+ statistics of each priority in sch_skbprio
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
+References: <20220825102745.70728-1-shaozhengchao@huawei.com>
+ <20220826194616.37abfe9e@kernel.org>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <20220826194616.37abfe9e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 17:07:27 +0200 Alexander Potapenko <glider@google.com> wrote:
-
-> Use hooks from instrumented.h to notify bug detection tools about
-> usercopy events in variations of get_user() and put_user().
-
-And this one blows up x86_64 allmodconfig builds.
-
-> --- a/arch/x86/include/asm/uaccess.h
-> +++ b/arch/x86/include/asm/uaccess.h
-> @@ -5,6 +5,7 @@
->   * User space memory access functions
->   */
->  #include <linux/compiler.h>
-> +#include <linux/instrumented.h>
->  #include <linux/kasan-checks.h>
->  #include <linux/string.h>
->  #include <asm/asm.h>
-
-instrumented.h looks like a higher-level thing than uaccess.h, so this
-inclusion is an inappropriate layering.  Or maybe not.
-
-In file included from ./include/linux/kernel.h:22,
-                 from ./arch/x86/include/asm/percpu.h:27,
-                 from ./arch/x86/include/asm/nospec-branch.h:14,
-                 from ./arch/x86/include/asm/paravirt_types.h:40,
-                 from ./arch/x86/include/asm/ptrace.h:97,
-                 from ./arch/x86/include/asm/math_emu.h:5,
-                 from ./arch/x86/include/asm/processor.h:13,
-                 from ./arch/x86/include/asm/timex.h:5,
-                 from ./include/linux/timex.h:67,
-                 from ./include/linux/time32.h:13,
-                 from ./include/linux/time.h:60,
-                 from ./include/linux/stat.h:19,
-                 from ./include/linux/module.h:13,
-                 from init/do_mounts.c:2:
-./include/linux/page-flags.h: In function 'page_fixed_fake_head':
-./include/linux/page-flags.h:226:36: error: invalid use of undefined type 'const struct page'
-  226 |             test_bit(PG_head, &page->flags)) {
-      |                                    ^~
-
-[25000 lines snipped]
 
 
-And kmsan-add-kmsan-runtime-core.patch introduces additional build
-errors with x86_64 allmodconfig.
+On 2022/8/27 10:46, Jakub Kicinski wrote:
+> On Thu, 25 Aug 2022 18:27:45 +0800 Zhengchao Shao wrote:
+>> diff --git a/net/sched/sch_skbprio.c b/net/sched/sch_skbprio.c
+>> index 7a5e4c454715..fe2bb7bf9d2a 100644
+>> --- a/net/sched/sch_skbprio.c
+>> +++ b/net/sched/sch_skbprio.c
+>> @@ -83,6 +83,7 @@ static int skbprio_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+>>   		__skb_queue_tail(qdisc, skb);
+> 
+> The skb queue called "qdisc" here (confusingly) already maintains
+> a length (also called qlen). Can we just access that variable instead
+> of maintaining the same value manually?
+> 
+>>   		qdisc_qstats_backlog_inc(sch, skb);
+>>   		q->qstats[prio].backlog += qdisc_pkt_len(skb);
+>> +		q->qstats[prio].qlen++;
+> 
 
-This is all with CONFIG_KMSAN=n
+Hi Jakub:
+	Thank you for your reply. You are right, I have missed something. This 
+patch seems to be unnecessary.
 
-I'll disable the patch series.  Please do much more compilation testing
-- multiple architectures, allnoconfig, allmodconfig, allyesconfig,
-defconfig, randconfig, etc.  Good luck, it looks ugly :(
-
+Zhengchao Shao

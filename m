@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A7C5A3A61
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 00:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1DF5A3A62
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 01:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiH0W7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 18:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S229580AbiH0XBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 19:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiH0W7m (ORCPT
+        with ESMTP id S229462AbiH0XBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 18:59:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18694054E;
-        Sat, 27 Aug 2022 15:59:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B08E60EC5;
-        Sat, 27 Aug 2022 22:59:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 794B5C433C1;
-        Sat, 27 Aug 2022 22:59:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661641179;
-        bh=0wKh1+suBHOHM0x8NCY0MJqyrQ71HC2Hlr27mRJ5BOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S0/6c+dZgq5SPHEs8no7mHkj7cXoctmlthAFdclJj4MrbTlRbIHW18ojPOW5eYgzj
-         sWvGCmp/waOmKDADhFh5RpuR4Oak5JhY7Hi0lxWCZRh565171FXfvHKq/VtpngvHMo
-         m3HptsN83Br2cz0b8q7rSLlgvSXbpvgJ60LRhwUjy1UfkLtQbMyx16U+bF5U3Ox4I/
-         vtOIhIqvZMA/2+wrpzp8O+pICXPJG/KdJi0dDVLdaGnsGXk5BWEMsqumM0EfxJg3tH
-         2caLeMjagFZtWsPLSj9Qh7dwVKfXz3/IGzFFo3AMOcZkBVwBtRz8JW5E7N8UsnsRyn
-         sU2aJDBMydTRQ==
-Date:   Sat, 27 Aug 2022 15:59:37 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>
-Subject: Re: [PATCH RFC] s390: Fix nospec table alignments
-Message-ID: <20220827225937.b2mcmvxs7kbrtjda@treble>
-References: <8719bf1ce4a72ebdeb575200290094e9ce047bcc.1661557333.git.jpoimboe@kernel.org>
- <YwphFXr+pHxf4PGT@osiris>
+        Sat, 27 Aug 2022 19:01:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3C6165AE
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 16:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661641262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qI/TRb7yyY9YDzUGJ2R7gXKC3BcSTndOOR+KS4v4hNo=;
+        b=b7pZXfvxtcHnIHlq9OnLDNgsF3QC898O2R8+V0Qs+lZDGfSXgxUrqGGpERIMEp3LDsbRNm
+        p0KGw1URvtHL7HKN3YCke7/9RvkfuRsAeozNKL8a9hubx99DQmo9LenEApDCmoWplrfE0N
+        WN9cKHIPZWiwm7QGLf3h6R3FXcfFO6U=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-370-ZzHmAm30N929Lrgqj-s-2Q-1; Sat, 27 Aug 2022 19:00:46 -0400
+X-MC-Unique: ZzHmAm30N929Lrgqj-s-2Q-1
+Received: by mail-pl1-f198.google.com with SMTP id p18-20020a170902a41200b00172b0dc71e0so3499962plq.0
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 16:00:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=qI/TRb7yyY9YDzUGJ2R7gXKC3BcSTndOOR+KS4v4hNo=;
+        b=OoWdonWaBM0UUCXk0m5yc8KdwK8kTI0t5V7e9YNnE1Bi50SR1sM+ToXbs43gvjH0Yr
+         eJLNAD36wbxUr1zv02DgDqorsJzYZUTCkl39u5GVWCIloQhxY7WKBIK1enCDWrmGLmlP
+         vPDlBLPMfKT6rEqfKO+wVQN/6+cOz07cUJUSllYie64XSx+wdsjt0Z+hUYb89bZ1CdRF
+         99CLB2dqTE9+iGgnfH15NBZUnptZMtzLmAsE9pTq4n4F8887wpsRhWr/IONwoSLbN96E
+         9pXjLCS5HdWc/ow/cWvDBYa3/xKog1KSnb4cQzEfOXBGFImUCEiuFcBC0MAzMi7CWOsn
+         AThg==
+X-Gm-Message-State: ACgBeo3VDCIorVKWsdlNZFtKv2a2WIxM2FpevelBC4/Xfb/XeGSDqO1+
+        6lqOTVz+k3I9TMjy+orkGizeDm7QnkbxyuRSNeujrRDiHpkhDEvXsmEOLs3E9uyKST8npVf0Dlw
+        86y8JwN+vewIdIqgdh4lbl4LH
+X-Received: by 2002:a17:90a:4801:b0:1fa:98ec:fa2 with SMTP id a1-20020a17090a480100b001fa98ec0fa2mr10841747pjh.41.1661641245182;
+        Sat, 27 Aug 2022 16:00:45 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6vzdYchRF2TEFkGashATDOr6JPFXLJkrFtu01uhG5n3edGz2/gx1GA+3F8PPFkdA+TInAA5w==
+X-Received: by 2002:a17:90a:4801:b0:1fa:98ec:fa2 with SMTP id a1-20020a17090a480100b001fa98ec0fa2mr10841735pjh.41.1661641244957;
+        Sat, 27 Aug 2022 16:00:44 -0700 (PDT)
+Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
+        by smtp.gmail.com with ESMTPSA id 23-20020a631257000000b0042988a04bfdsm3647844pgs.9.2022.08.27.16.00.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 16:00:44 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     akpm@linux-foundation.org
+Cc:     apopple@nvidia.com, jhubbard@nvidia.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shigeru Yoshida <yshigeru@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] mm/gup.c: Fix uninitialized return value on __gup_longterm_locked()
+Date:   Sun, 28 Aug 2022 08:00:37 +0900
+Message-Id: <20220827230037.78876-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YwphFXr+pHxf4PGT@osiris>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,79 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 08:23:17PM +0200, Heiko Carstens wrote:
-> On Fri, Aug 26, 2022 at 04:55:44PM -0700, Josh Poimboeuf wrote:
-> > Add proper alignment for .nospec_call_table and .nospec_return_table in
-> > vmlinux.
-> > 
-> > Fixes: f19fbd5ed642 ("s390: introduce execute-trampolines for branches")
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > ---
-> > This is RFC because I don't know anything about s390 behavior for
-> > unaligned data accesses, but this seemed to fix an issue for me.
-> > 
-> > While working on another s390 issue, I was getting intermittent boot
-> > failures in __nospec_revert() when it tried to access 'instr[0]'.  I
-> > noticed the __nospec_call_start address ended in 'ff'.  This patch
-> > seemed to fix it.  I have no idea why it was (only sometimes) failing in
-> > the first place.
-> > 
-> > The intermittent part of it is probably at least partially explained by
-> > CONFIG_RANDOMIZE_BASE.  Except now I can no longer recreate it :-/
-> > 
-> > Regardless, this patch seems correct.  I just can't explain what I saw.
-> > Any ideas?
-> > 
-> >  arch/s390/kernel/vmlinux.lds.S | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-> > index 2e526f11b91e..5ea3830af0cc 100644
-> > --- a/arch/s390/kernel/vmlinux.lds.S
-> > +++ b/arch/s390/kernel/vmlinux.lds.S
-> > @@ -131,6 +131,7 @@ SECTIONS
-> >  	/*
-> >  	 * Table with the patch locations to undo expolines
-> >  	*/
-> > +	. = ALIGN(4);
-> >  	.nospec_call_table : {
-> >  		__nospec_call_start = . ;
-> >  		*(.s390_indirect*)
-> 
-> On s390 labels must be at an even address due to instructions like
-> "larl" (load address relative long), which generate a pc-relative
-> address adding the number of words encoded into the instruction to the
-> current IP.
-> 
-> With commit e6ed91fd0768 ("s390/alternatives: remove padding
-> generation code") I managed to reduce the size of struct alt_instr by
-> one byte, so it is now only 11 bytes in size. So depending on the size
-> / number of members of the __alt_instructions array nospec_call_table
-> starts at an uneven address, which would explain this.
-> 
-> Unfortunately I was unable to let any compiler generate code, that
-> would use the larl instruction. Instead the address of
-> nospec_call_table was loaded indirectly via the GOT, which again works
-> always, regardless if the table starts at an even or uneven address.
-> 
-> This needs to be fixed anyway, and your patch certainly is correct.
-> 
-> Could you maybe share your kernel config + compiler version, if you
-> are still able to reproduce this?
+From: Shigeru Yoshida <yshigeru@gmail.com>
 
-I think the trick is to disable CONFIG_RELOCATABLE.  When I compile with
-CONFIG_RELOCATABLE=n and "gcc version 11.3.1 20220421 (Red Hat 11.3.1-2)
-(GCC)", I get the following in nospec_init_branches():
+In __gup_longterm_locked(), it returns uninitialized value if
+__get_user_pages_locked() fails on the first iteration of the loop
+since rc is not initialized.
 
- 2a8:   c0 20 00 00 00 00       larl    %r2,2a8 <nospec_init_branches+0x30>     2aa: R_390_PC32DBL      __nospec_call_start+0x2
+This patch fixes this issue by properly returning error code if
+__get_user_pages_locked() fails.
 
-That said, I still haven't been able to figure out how to recreate the
-program check in __nospec_revert(), even when the nospec_call_table
-starts at an odd offset.
+Fixes: 11147539df44 (mm/gup.c: Fix return value for __gup_longterm_locked())
+Cc: Alistair Popple <apopple@nvidia.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Shigeru Yoshida <yshigeru@gmail.com>
+---
+ mm/gup.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-BTW, I only discovered this when testing with my pending patches which
-propose getting rid of -fPIE for CONFIG_RELOCATABLE, so that more than
-64k sections can be supported.  But that's a separate topic :-)
-
+diff --git a/mm/gup.c b/mm/gup.c
+index ad59c796d4d3..66d8619e02ad 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -2110,8 +2110,10 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 		nr_pinned_pages = __get_user_pages_locked(mm, start, nr_pages,
+ 							  pages, vmas, NULL,
+ 							  gup_flags);
+-		if (nr_pinned_pages <= 0)
++		if (nr_pinned_pages <= 0) {
++			rc = nr_pinned_pages;
+ 			break;
++		}
+ 		rc = check_and_migrate_movable_pages(nr_pinned_pages, pages);
+ 	} while (rc == -EAGAIN);
+ 	memalloc_pin_restore(flags);
 -- 
-Josh
+2.37.2
+

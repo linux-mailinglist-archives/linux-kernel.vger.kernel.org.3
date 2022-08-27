@@ -2,139 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B66F5A38F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1303E5A38F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiH0Q6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 12:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S233919AbiH0Q6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiH0Q6D (ORCPT
+        with ESMTP id S233907AbiH0Q6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 12:58:03 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C0D59250;
-        Sat, 27 Aug 2022 09:58:01 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id b5so5242273wrr.5;
-        Sat, 27 Aug 2022 09:58:01 -0700 (PDT)
+        Sat, 27 Aug 2022 12:58:18 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9074059250
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:58:17 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id j17so3419373qtp.12
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 09:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=R8/bF5KHLjTt9GLEnmNnJrfmlxn+HrK5JbBv33yEUFg=;
-        b=W4DsfOUo7kKFGo7dVPXf0A9z/bKIKPbGdjgVun0Q2pPxb+6oybEGLtuAk5nqHI8Uql
-         xTBMozGCA9RRFp4mcWnafvbNyeGx1Q92B142WdY3yImSz9TKkdl7O08y7irg/aLAubrm
-         lcfvbV8UIJ76iHZRoo557DhYHLf5YQxzIdUl+oWyL5xUk+zWp2aIcWvjwcIV208biuaW
-         QQVdQwaNRRkiUndjx7EB6rsyCMF92jmD/7nO2WtEA8wF4C31swCdsshyo1DLiI53VX3t
-         rzDGhqO1l8A4csN92AcBM0+dhs0/mxvH0HOumnGOCl1S2xQyRMU0ZhSVUw0SwTZAMrIW
-         EVAg==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=mar6C5J5pW/FsmjSVe8n73yMP0TCP0U4P3QSdOWkbI0=;
+        b=oih1hdnNFjJKDM+Pc/xoB3cN7mJ4MECICmiC/DIbU0MFrvZolQP5z+Ud3wq76e7Ja6
+         JwhB6MCVzo+ec41RS1N7pjQCZk0oFGygo42LLbKO3eWxPz5i1STztK7Vuxc0+9Up6wcA
+         B3ZijcHaAmbdtCL0IicEsXuW6M4ycr5Ai3Otac/zenK3sS61da/TUtiat5QWlbk9A9F/
+         hipnqFogVMCSVpx7hEcBHZ4XxFkyo0Lif3m87ITAjAgcraiW5iSmgWGu0QHYOpMGvyBv
+         8o4MfCjEbEk8I482l3VlomjI5Y8PShiLfx+sZbvoxNQCpXqOygGgWAZuWJeCQN2W5dWO
+         oRCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=R8/bF5KHLjTt9GLEnmNnJrfmlxn+HrK5JbBv33yEUFg=;
-        b=vtqzz7lCaxM2zcXy1erSPyXtTQpspd7GAQo906mGepeI0T7WiFW4XGz2Z70azrl6Xp
-         8993V4YyBaVe/OcS4BWXbnVcdV/ZfIYZjXl+K4iRtstFomBeohwhjZfN6yqdZVwTA40L
-         dynzb6j5q0XWl6wTSukludSdNb8mXBPbpGLxNCwEsgmELsklUBO5c1owoCx2BXttSh6M
-         R8xgGOKkFCbIY56a+EyURftIM5H21h1n7exD2aFqHPTNS7giUtgFF7mdYnHq7i7QPLrW
-         o68gu+ONtID5O/UROMiAhs4iwV8xs/VUseo0yFWe3KlK2ZcCbiKMGknW1lVPSUwA1zlp
-         ZJeQ==
-X-Gm-Message-State: ACgBeo3U39nZKgAhLsY/BifUIzAlitAPmYegQyX98gxGIHFJx0Dwm158
-        AlNPsVtAxvWmEGGRw37uUOYMsIv6+iE=
-X-Google-Smtp-Source: AA6agR6UjKEFuzwxXRJQ8K7HktrS0FN9VJTqTixMwsekgRMuos7HeIk6TxzL0FmvmlvvYedZB016Kg==
-X-Received: by 2002:adf:e0c3:0:b0:226:d598:85ee with SMTP id m3-20020adfe0c3000000b00226d59885eemr405190wri.589.1661619479950;
-        Sat, 27 Aug 2022 09:57:59 -0700 (PDT)
-Received: from nuc ([2a02:168:633b:1:1e69:7aff:fe05:97e6])
-        by smtp.gmail.com with ESMTPSA id x3-20020a05600c420300b003a5bd9448e5sm3111585wmh.28.2022.08.27.09.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 09:57:59 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 18:57:57 +0200
-From:   =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To:     xiujianfeng <xiujianfeng@huawei.com>
-Cc:     mic@digikod.net, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, corbet@lwn.net,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH -next 3/5] landlock/selftests: add selftests for chmod
- and chown
-Message-ID: <YwpNFWB9ELDLNLA1@nuc>
-References: <20220822114701.26975-1-xiujianfeng@huawei.com>
- <20220822114701.26975-4-xiujianfeng@huawei.com>
- <YwPYbY/HbHTOv7Ux@nuc>
- <64b93d8e-f2b0-31c8-0736-3194053de687@huawei.com>
+        bh=mar6C5J5pW/FsmjSVe8n73yMP0TCP0U4P3QSdOWkbI0=;
+        b=W5XGpDRbIm8IVW4E3Zoj+kVuyIpr429sAgKezwntSHjMmzmrVFsOigcSNCwC2Yyop6
+         LhRqVyjQ7y0/2zwUgjAyEGzkg/oaKC/7xFvaFpKZYXEfkH7l0TPKOze2qnaeENtv6Ucf
+         QChN9cK6hEs5T6Di9yhL5HBC30ReXZ4eyT778W42nX7NUP8hWkFKvqRsvIwWIVok1+4S
+         n+zXRaJO6L6/FI9vlwue4q981JtHzBMYBabhlmHvH3xLcehWP+0dQqY3V/LVmRXwWE89
+         yBcgn9N6nQlyQ0wxOm+hTqjZnj3ynbZjQ0kkcTS7ekkd6gBTZdeln09NS9lpaMYyYmLP
+         R93A==
+X-Gm-Message-State: ACgBeo07Ki3FcGyzIKFWZdAXntThKI6LwZ9litkf3Tj7dEM21lLI2B7t
+        Q36l3TydeGt/FcBiP/rR6MlSMMPIGpLcewE4vQM=
+X-Google-Smtp-Source: AA6agR6kBvgGgOZ3P99Sbu3vvDCEwq1PnesNmtmjsBwuJipS5LJI0kkdmMn2XJMx40yEiGlWS/4qDvSBPB55zhzr2tQ=
+X-Received: by 2002:a05:622a:1492:b0:344:5130:4094 with SMTP id
+ t18-20020a05622a149200b0034451304094mr4120840qtx.3.1661619496688; Sat, 27 Aug
+ 2022 09:58:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <64b93d8e-f2b0-31c8-0736-3194053de687@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a0c:fe0a:0:0:0:0:0 with HTTP; Sat, 27 Aug 2022 09:58:16
+ -0700 (PDT)
+Reply-To: mrsmargaret1960r@gmail.com
+From:   "Mrs. Margaret Christopher" <jeremiah4ahmadu@gmail.com>
+Date:   Sat, 27 Aug 2022 18:58:16 +0200
+Message-ID: <CAJ1TKfO4R16ofFUMK144Jt3bQDx7XtWvP36d_MpBUj=nG5VXTA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 07:14:30PM +0800, xiujianfeng wrote:
-> Hi，
->
-> 在 2022/8/23 3:26, Günther Noack 写道:
-> > On Mon, Aug 22, 2022 at 07:46:59PM +0800, Xiu Jianfeng wrote:
-> > > +TEST_F_FORK(layout1, unhandled_chmod)
-> > > +{
-> > > +	const struct rule rules[] = {
-> > > +		{
-> > > +			.path = file2_s3d1,
-> > > +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
-> > > +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
-> > > +		},
-> > > +		{
-> > > +			.path = file3_s3d1,
-> > > +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
-> > > +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
-> > > +		},
-> > > +		{},
-> > > +	};
-> > > +	const int ruleset_fd =
-> > > +		create_ruleset(_metadata, ACCESS_RW, rules);
-> > > +
-> > > +	ASSERT_LE(0, ruleset_fd);
-> > > +	enforce_ruleset(_metadata, ruleset_fd);
-> > > +	ASSERT_EQ(0, close(ruleset_fd));
-> > > +
-> > > +	ASSERT_EQ(0, test_chmod(file2_s3d1));
-> > > +	ASSERT_EQ(0, test_fchmod(file2_s3d1));
-> > > +	ASSERT_EQ(0, test_chmod(file3_s3d1));
-> > > +	ASSERT_EQ(0, test_chmod(dir_s3d1));
-> > > +}
-> >
-> > I missed it in the previous mail:
-> >
-> > There are also the chown variants lchown() and fchownat(), as well as
-> > the chmod variant fchmodat(), which might be interesting to test,
-> > especially the symlink scenarios.
-> >
-> > fchmodat() has a AT_SYMLINK_NOFOLLOW flag which does the chmod
-> > equivalent to lchown().
-> >
->
-> man fchmodat shows as follows:
-> ...
-> AT_SYMLINK_NOFOLLOW
-> If pathname is a symbolic link, do not dereference it: instead operate on
-> the link itself. This flag is not currently implemented.
-> ...
->
-> so I suppose this can not be test. Please correct me if I am wrong.
+-- 
+Hello Dear
 
-Good point - I didn't realize that AT_SYMLINK_NOFOLLOW was not
-implemented for fchmodat. In that case, this only applies to lchown.
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over  2 months ago. I am A business woman who is
+dealing with Gold Exportation, I Am from USA California i have a
+charitable and unfulfilling project that am about to handover to you,
+if you are interested to know more about this project please reply me.
+ Hope to hear from you
 
-—Günther
-
---
+Best Regard
+Margaret Christopher

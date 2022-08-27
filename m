@@ -2,295 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA605A3954
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752C15A395E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiH0R4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 13:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S229886AbiH0R6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 13:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiH0R4e (ORCPT
+        with ESMTP id S229490AbiH0R6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 13:56:34 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290F6E3993
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661622981;
-        bh=8mrWmTXV6n9Id+Gx7iWuD5ZGJlt9LxLt/SRZ0QpLHXY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hIMPfb6iKAdsMlF+rtszgI7TX+dLdaGykxYv/yXmRXb6IICGU+B5gzbdeaR3eA002
-         5oUUUX2ODLu3VA45KJIsSkixaujXJkoRxEGrsFYwAm3UZThh+BoHYSc7szuRL9y1Rv
-         +txeQYLKou0PLEtQOpdkbYvJeowQtLVd03iqteY4=
-Received: from xry111-x57s1.. (unknown [IPv6:240e:358:1157:dc00:dc73:854d:832e:4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 5247166804;
-        Sat, 27 Aug 2022 13:56:14 -0400 (EDT)
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH 8/8] LoongArch: Support R_LARCH_GOT_PC* in modules
-Date:   Sun, 28 Aug 2022 01:54:36 +0800
-Message-Id: <20220827175436.156464-9-xry111@xry111.site>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220827175436.156464-1-xry111@xry111.site>
-References: <20220827175436.156464-1-xry111@xry111.site>
+        Sat, 27 Aug 2022 13:58:16 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54427F32D8
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:58:10 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j6so3430211qkl.10
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 10:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=VIkFpyC7MZhExmLqlrzsIInkcJ0/ZnrZ8S6+I/EQnYk=;
+        b=XtKf9N8TN/0yjkKzfq4Wtz6xjDwYJ8VnByntVvYDnxeNDulAgmLMusPy4dOlv1NC9n
+         fAa7NxMzaGgWSgxu39qyrSxXBsFY1OsJpVHcfEBdO8chiPWCrHJQRqomDHob7lgZkNHs
+         qN6ZoNmMJmMxaHoLwcRwEE2zYLSLZLQX+kuBPQBvV4zXFsk6sA6+gnQVHAq/SslcXlsV
+         iFzCHyVCekqFMFcN24meQSshaaJiitqbYGgQ6nWQ2fN2hWhKdSLZhw8incw64hGeCB16
+         ecgaTqCTA8PDTfnuCoXYubQ6IRbbz6L/ktpVikNa265Pi76xP+WRcWwTHaTjVuDy/5yR
+         i7hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=VIkFpyC7MZhExmLqlrzsIInkcJ0/ZnrZ8S6+I/EQnYk=;
+        b=dTAOSwA6PPB1f6D26urHlaVDZQsY1P9D7Aecq2wnevj6S/XH7ubZTkm2J/wdZDkGhN
+         TVRbIPhhjhJ3fgxpjPqO57owCcVlU3btNTp6eJDRmKO/33qi06iGYeqzRLegCyx/wfWK
+         eJ+e6bSMZIBJzY4/Mo5eyINgvgmdeaC53IDy1ntdJBpxQXb37NvOflhXg+w3l0oAmdy/
+         BKCl/qpvgOR7Cjapb6RBTe6P7ydD7r0iYarBmLjffZG5Exu9UTY5Q4JIBfChhU0U0s+W
+         hYLwsc2GPtdQv6Aapaop76TjejiX/DND6aPgcrdLfYYdqEzVw062epJ02mZELCk3fz0u
+         Hx3w==
+X-Gm-Message-State: ACgBeo3gaJQ6gwslf90lXKbMtilVbOkKGg0W/9j+drfq3ZEJHq+v5WgJ
+        WiLE5eeU7gKg5Sa9BGcp5QA=
+X-Google-Smtp-Source: AA6agR7aEqeWcY4TA4/n0FYQVhbw9yYnpMo+ZOX9BI6/enkdETZkrFyCYrPv7HT/KUUv3lbwkeMiiA==
+X-Received: by 2002:a05:620a:4893:b0:6bb:869d:ecc9 with SMTP id ea19-20020a05620a489300b006bb869decc9mr3592665qkb.309.1661623089450;
+        Sat, 27 Aug 2022 10:58:09 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:2270:2454:ae5e:5655:e298])
+        by smtp.gmail.com with ESMTPSA id y13-20020a05620a44cd00b006bb8b5b79efsm2460994qkp.129.2022.08.27.10.58.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 10:58:08 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v3 0/4] lib: optimize find_bit() functions
+Date:   Sat, 27 Aug 2022 10:58:03 -0700
+Message-Id: <20220827175807.4017673-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC >= 13 and GNU assembler >= 2.40 use these relocations to address
-external symbols, so we need to add them.
+In the recent discussion, it was noticed that find_next_bit() functions may
+be improved by adding wrappers around common __find_next_bit() in .c file.
 
-Let the module loader emit GOT entries for data symbols so we would be
-able to handle GOT relocations.  The GOT entry is just the data symbol
-address.
+As suggested by Linus, I tried the meta-programming trick with the
+EXPRESSION macro, which is passed from wrapper into find_bit()
+helpers:
 
-In module.lds, emit a stub .got section for a section header entry.
-The actual content of the entry will be filled at runtime by
-module_frob_arch_sections.
+  #define BIT_FIND_BODY(addr, size, start, EXPRESSION)          \
+        BIT_FIND_SETUP(addr, size, start)                       \
+        BIT_FIND_FIRST_WORD(addr, size, start, EXPRESSION)      \
+        BIT_WORD_LOOP(addr, size, idx, val, EXPRESSION)         \
+        return size;                                            \
+  found:        BIT_WORD_SWAB(val);                             \
+        return min((idx)*BITS_PER_LONG + __ffs(val), size)
 
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
----
- arch/loongarch/include/asm/module.h     | 23 ++++++++++++
- arch/loongarch/include/asm/module.lds.h |  1 +
- arch/loongarch/kernel/module-sections.c | 49 +++++++++++++++++++++++--
- arch/loongarch/kernel/module.c          | 24 ++++++++++++
- 4 files changed, 94 insertions(+), 3 deletions(-)
+  unsigned long _find_next_and_bit(const unsigned long *addr1,
+                                 const unsigned long *addr2,
+                                 unsigned long size,
+                                 unsigned long start)
+  { BIT_FIND_BODY(addr, size, start, addr1[idx] & addr2[idx]); }
 
-diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
-index 9f6718df1854..76a98a0ab8a0 100644
---- a/arch/loongarch/include/asm/module.h
-+++ b/arch/loongarch/include/asm/module.h
-@@ -19,6 +19,7 @@ struct mod_section {
- struct mod_arch_specific {
- 	struct mod_section plt;
- 	struct mod_section plt_idx;
-+	struct mod_section got;
- };
- 
- struct plt_entry {
-@@ -28,11 +29,16 @@ struct plt_entry {
- 	u32 inst_jirl;
- };
- 
-+struct got_entry {
-+	Elf_Addr symbol_addr;
-+};
-+
- struct plt_idx_entry {
- 	unsigned long symbol_addr;
- };
- 
- Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val);
-+Elf_Addr module_emit_got_entry(struct module *mod, Elf_Addr val);
- 
- static inline struct plt_entry emit_plt_entry(unsigned long val)
- {
-@@ -51,6 +57,11 @@ static inline struct plt_idx_entry emit_plt_idx_entry(unsigned long val)
- 	return (struct plt_idx_entry) { val };
- }
- 
-+static inline struct got_entry emit_got_entry(Elf_Addr val)
-+{
-+	return (struct got_entry) { val };
-+}
-+
- static inline int get_plt_idx(unsigned long val, const struct mod_section *sec)
- {
- 	int i;
-@@ -77,4 +88,16 @@ static inline struct plt_entry *get_plt_entry(unsigned long val,
- 	return plt + plt_idx;
- }
- 
-+static inline struct got_entry *get_got_entry(Elf_Addr val,
-+					      const struct mod_section *sec)
-+{
-+	struct got_entry *got = (struct got_entry *)sec->shdr->sh_addr;
-+	int i;
-+
-+	for (i = 0; i < sec->num_entries; i++)
-+		if (got[i].symbol_addr == val)
-+			return &got[i];
-+	return NULL;
-+}
-+
- #endif /* _ASM_MODULE_H */
-diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/include/asm/module.lds.h
-index 31c1c0db11a3..57bbd0cedd26 100644
---- a/arch/loongarch/include/asm/module.lds.h
-+++ b/arch/loongarch/include/asm/module.lds.h
-@@ -4,4 +4,5 @@ SECTIONS {
- 	. = ALIGN(4);
- 	.plt : { BYTE(0) }
- 	.plt.idx : { BYTE(0) }
-+	.got : { BYTE(0) }
- }
-diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
-index c67b9cb220eb..4c99737cd8dc 100644
---- a/arch/loongarch/kernel/module-sections.c
-+++ b/arch/loongarch/kernel/module-sections.c
-@@ -33,6 +33,31 @@ Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val)
- 	return (Elf_Addr)&plt[nr];
- }
- 
-+Elf_Addr module_emit_got_entry(struct module *mod, Elf_Addr val)
-+{
-+	struct mod_section *got_sec = &mod->arch.got;
-+	int i = got_sec->num_entries;
-+	struct got_entry *got = get_got_entry(val, got_sec);
-+
-+	if (got)
-+		return (Elf_Addr)got;
-+
-+	/* There is no GOT entry existing for val yet.  Create a new one.  */
-+	got = (struct got_entry *)got_sec->shdr->sh_addr;
-+	got[i] = emit_got_entry(val);
-+
-+	got_sec->num_entries++;
-+	if (got_sec->num_entries > got_sec->max_entries) {
-+		/* This may happen when the module contains a GOT_HI20 without
-+		 * a paired GOT_LO12.  Such a module is broken, reject it.
-+		 */
-+		pr_err("%s: module contains bad GOT relocation\n", mod->name);
-+		return 0;
-+	}
-+
-+	return (Elf_Addr)&got[i];
-+}
-+
- static int is_rela_equal(const Elf_Rela *x, const Elf_Rela *y)
- {
- 	return x->r_info == y->r_info && x->r_addend == y->r_addend;
-@@ -50,7 +75,8 @@ static bool duplicate_rela(const Elf_Rela *rela, int idx)
- 	return false;
- }
- 
--static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
-+static void count_max_entries(Elf_Rela *relas, int num,
-+			      unsigned int *plts, unsigned int *gots)
- {
- 	unsigned int i, type;
- 
-@@ -62,6 +88,10 @@ static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
- 			if (!duplicate_rela(relas, i))
- 				(*plts)++;
- 			break;
-+		case R_LARCH_GOT_PC_HI20:
-+			if (!duplicate_rela(relas, i))
-+				(*gots)++;
-+			break;
- 		default:
- 			/* Do nothing. */
- 		}
-@@ -71,7 +101,7 @@ static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
- int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 			      char *secstrings, struct module *mod)
- {
--	unsigned int i, num_plts = 0;
-+	unsigned int i, num_plts = 0, num_gots = 0;
- 
- 	/*
- 	 * Find the empty .plt sections.
-@@ -81,6 +111,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 			mod->arch.plt.shdr = sechdrs + i;
- 		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
- 			mod->arch.plt_idx.shdr = sechdrs + i;
-+		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".got"))
-+			mod->arch.got.shdr = sechdrs + i;
- 	}
- 
- 	if (!mod->arch.plt.shdr) {
-@@ -91,6 +123,10 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 		pr_err("%s: module PLT.IDX section(s) missing\n", mod->name);
- 		return -ENOEXEC;
- 	}
-+	if (!mod->arch.got.shdr) {
-+		pr_err("%s: module GOT section(s) missing\n", mod->name);
-+		return -ENOEXEC;
-+	}
- 
- 	/* Calculate the maxinum number of entries */
- 	for (i = 0; i < ehdr->e_shnum; i++) {
-@@ -105,7 +141,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 		if (!(dst_sec->sh_flags & SHF_EXECINSTR))
- 			continue;
- 
--		count_max_entries(relas, num_rela, &num_plts);
-+		count_max_entries(relas, num_rela, &num_plts, &num_gots);
- 	}
- 
- 	mod->arch.plt.shdr->sh_type = SHT_NOBITS;
-@@ -122,5 +158,12 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 	mod->arch.plt_idx.num_entries = 0;
- 	mod->arch.plt_idx.max_entries = num_plts;
- 
-+	mod->arch.got.shdr->sh_type = SHT_NOBITS;
-+	mod->arch.got.shdr->sh_flags = SHF_ALLOC;
-+	mod->arch.got.shdr->sh_addralign = L1_CACHE_BYTES;
-+	mod->arch.got.shdr->sh_size = (num_gots + 1) * sizeof(struct got_entry);
-+	mod->arch.got.num_entries = 0;
-+	mod->arch.got.max_entries = num_gots;
-+
- 	return 0;
- }
-diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
-index 61ecd174dd03..2f7f516522a9 100644
---- a/arch/loongarch/kernel/module.c
-+++ b/arch/loongarch/kernel/module.c
-@@ -390,6 +390,29 @@ static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
- 	return 0;
- }
- 
-+static int apply_r_larch_got_pc(struct module *mod, u32 *location, Elf_Addr v,
-+			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-+{
-+	Elf_Addr got = module_emit_got_entry(mod, v);
-+
-+	if (!got)
-+		return -EINVAL;
-+
-+	switch (type) {
-+	case R_LARCH_GOT_PC_LO12:
-+		type = R_LARCH_PCALA_LO12;
-+		break;
-+	case R_LARCH_GOT_PC_HI20:
-+		type = R_LARCH_PCALA_HI20;
-+		break;
-+	default:
-+		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
-+		return -EINVAL;
-+	}
-+
-+	return apply_r_larch_pcala(mod, location, got, rela_stack, rela_stack_top, type);
-+}
-+
- /*
-  * reloc_handlers_rela() - Apply a particular relocation to a module
-  * @mod: the module to apply the reloc to
-@@ -422,6 +445,7 @@ static reloc_rela_handler reloc_rela_handlers[] = {
- 	[R_LARCH_B26]					     = apply_r_larch_b26,
- 	[R_LARCH_ABS_HI20...R_LARCH_ABS64_HI12]		     = apply_r_larch_abs,
- 	[R_LARCH_PCALA_HI20...R_LARCH_PCALA64_HI12]	     = apply_r_larch_pcala,
-+	[R_LARCH_GOT_PC_HI20...R_LARCH_GOT_PC_LO12]	     = apply_r_larch_got_pc,
- };
- 
- int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+I appreciated the potential of how the EXPRESSION works, but I don't like
+that the resulting macro is constructed from pieces because it makes it
+harder to understand what happens behind the ifdefery. Checkpatch isn't
+happy as well because the final macro contains 'return' statement; and I
+would agree that it's better to avoid it.
+
+I spined the idea one more time, trying to make FIND helper a more or
+less standard looking macros.
+
+This new approach saves 10-11K of Image size, and is 15% faster in the
+performance benchmark. See the 3rd patch for some statistics.
+
+v1: https://lore.kernel.org/all/20220728161208.865420-2-yury.norov@gmail.com/T/
+v2: https://lore.kernel.org/lkml/YwaXvphVpy5A7fSs@yury-laptop/t/
+v3:
+ - add a MUNGE parameter to FIND_{FIRST,NEXT}_BIT and keep all machinery
+   in lib/find_bit.c;
+ - rename EXPRESSION to FETCH, and add comments;
+ - sync tools.
+
+Yury Norov (4):
+  lib/find_bit: introduce FIND_FIRST_BIT() macro
+  lib/find_bit: create find_first_zero_bit_le()
+  lib/find_bit: optimize find_next_bit() functions
+  tools: sync find_bit() implementation
+
+ include/linux/find.h       |  46 +++++++---
+ lib/find_bit.c             | 178 ++++++++++++++++++++++---------------
+ tools/include/linux/find.h |  61 +++----------
+ tools/lib/find_bit.c       | 149 ++++++++++++++-----------------
+ 4 files changed, 220 insertions(+), 214 deletions(-)
+
 -- 
-2.37.0
+2.34.1
 

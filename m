@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433425A3797
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862C85A379A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbiH0MVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 08:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S232517AbiH0MYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 08:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiH0MVx (ORCPT
+        with ESMTP id S229659AbiH0MYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 08:21:53 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763D63B966
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661602909; x=1693138909;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eUZxz/z522sUn+AGvgw51Mail8p638/sMS8PlT+g7gg=;
-  b=Ici92rqbhS2ZojXif6mMzSqPCbmZ1QhFLOQA1r6gHiSloWxm8ofqrMWP
-   yqGUY6rDI/z2vpI5BYejh5Fx6FNZHIEf/Vp8TiDx1997Cwn2TQUnPuGZ1
-   CW+Pjy+i8TgVReE4K5vqDg838VNnBA9DA08vAQHGhqDAkiNigKHtN5QSq
-   GiFAZcS/DgYPvMImx6ZqhUWLGFzdEClgVGINgsUmsMWMMHwdJofmNhEEx
-   9xe0ROd4EPZE5yYK68bzJsqL5mCHoaPGJXYrgya8Gffzlntlhy0jUxoXu
-   +6qBhKinqtH/+XpAB7lGBWuNzT3QyxobBRqVsP2by+qnldi8JdjMwLHdw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="275062141"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="275062141"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 05:21:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="587619622"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 05:21:47 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRuot-00009X-0d;
-        Sat, 27 Aug 2022 12:21:47 +0000
-Date:   Sat, 27 Aug 2022 20:21:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ardb:efi-decompressor-v4 6/10]
- drivers/firmware/efi/libstub/zboot.c:161:23: warning: no previous prototype
- for function 'efi_zboot_entry'
-Message-ID: <202208272044.kV41yO8J-lkp@intel.com>
+        Sat, 27 Aug 2022 08:24:37 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1A93B966
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:24:36 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id w28so3111903qtc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=9nup9V/tgn3MtcA8wXBcTGVLRmFgbH3BHlvUTXQNwec=;
+        b=g2/aj1McEKHouYJxXOrcrZQUx8ROU3gZW2px0Ol4vxoJvJ+UjN3LVKnU8ziDejbeD0
+         yVtqADuyW7n/zIQ5UtNbA6OkJhkgc+ajusLBfCPAF63PttFDRFZ1Yhm2POO9SiEQuWgz
+         PzM7hOONtAED5VdtTXV4LYecxQDcDtt09EJYU6tNjXNb0UDAasnAdmFBCVxL8n/CEvn+
+         ZNsyyBXH3rW6Bjj28lsa1n1pR/EdBtSjhbn5Mu2zsJ9o9tkUIlXRdLgdyk6GwHNkmVKI
+         txtlCjL+B/F2rqaiWeY8IhtSIVb/MFTslRVmyDw6cSs1qn3wm5rykG3AuKzHZG+DZ58k
+         XLeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=9nup9V/tgn3MtcA8wXBcTGVLRmFgbH3BHlvUTXQNwec=;
+        b=AJzgzhjcoceoVNJI+IJQ0LEkZwuk+/fn5++zzOXUYfrX4/xThIe1DpmGSGmm6aInUn
+         pRxr/i2k0Ri2+LrQhrITs1mJQj/eP1/DLgBwntAYs2USc6J8iMU0jD7JtpUOUoZfptwk
+         MEvBSoNR+a8KwPrY9+LQduCmjJ8Ovx/wOZvWh8ike6GnVszmO2u4mU8cQzZkR/C/7zkR
+         kkrIWAone3FR6rPoNDVC2DtLqkw11pXf4jnqBucDwXPwuf1r/5mgdiXG7jeR6BAh38OC
+         TyfCNxutOJUryejLT6NgpYSMMKDz02JzLcz028LRIOAfqVwbHCUKWJg070g5bABPeBsi
+         wIkw==
+X-Gm-Message-State: ACgBeo3uWH2SrWOuyJ8sor4qKAtoyQzIno8bRoYDV1D3bYMLYnJBtDBt
+        sEFNzFVHHhForuEZCwy8jQqBcI3Nqe8Gi3MONqWP3A==
+X-Google-Smtp-Source: AA6agR4OlmAJ0z9M+WZyW+t/gAyhiNlneq+OQ9F5I2vSPGPmrGOgewgtRjyXI/xtQhYQF9Rinen+PQO1QezU9dl+OSU=
+X-Received: by 2002:a05:622a:206:b0:344:a554:e555 with SMTP id
+ b6-20020a05622a020600b00344a554e555mr3304002qtx.187.1661603075582; Sat, 27
+ Aug 2022 05:24:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <cover.1650539846.git.robin.murphy@arm.com> <20220421141300.GC20492@lst.de>
+ <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com>
+In-Reply-To: <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com>
+From:   Yongqin Liu <yongqin.liu@linaro.org>
+Date:   Sat, 27 Aug 2022 20:24:24 +0800
+Message-ID: <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
+Subject: Re: [PATCH 0/3] More ARM DMA ops cleanup
+To:     Robin Murphy <robin.murphy@arm.com>, Christoph Hellwig <hch@lst.de>
+Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        m.szyprowski@samsung.com, arnd@kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        "Bajjuri, Praneeth" <praneeth@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,44 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-decompressor-v4
-head:   efcc03a013f2ddbed0ee782e5049b39432dc9db2
-commit: d2c8eb1ea770556c25e2b5d884bf6bba32940bf2 [6/10] efi/libstub: implement generic EFI zboot
-config: riscv-randconfig-r042-20220825 (https://download.01.org/0day-ci/archive/20220827/202208272044.kV41yO8J-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=d2c8eb1ea770556c25e2b5d884bf6bba32940bf2
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb efi-decompressor-v4
-        git checkout d2c8eb1ea770556c25e2b5d884bf6bba32940bf2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/
+Hi, Robin, Christoph
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+With the changes landed in the mainline kernel,
+one problem is exposed with our out of tree pvr module.
+Like the source here[1], arm_dma_ops.sync_single_for_cpu is called in
+the format like the following:
+    arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
+DMA_FROM_DEVICE);
 
-All warnings (new ones prefixed by >>):
+Not sure if you could give some suggestions on what I should do next
+to make the pvr module work again.
 
->> drivers/firmware/efi/libstub/zboot.c:161:23: warning: no previous prototype for function 'efi_zboot_entry' [-Wmissing-prototypes]
-   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-                         ^
-   drivers/firmware/efi/libstub/zboot.c:161:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-   ^
-   static 
-   1 warning generated.
+Thanks in advance!
+
+[1]: https://android-git.linaro.org/kernel/omap-modules.git/tree/pvr/servic=
+es4/srvkm/env/linux/osfunc.c?h=3Dandroid-mainline#n4615
+
+Thanks,
+Yongqin Liu
+
+On Thu, 21 Apr 2022 at 22:35, Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2022-04-21 15:13, Christoph Hellwig wrote:
+> > On Thu, Apr 21, 2022 at 12:36:56PM +0100, Robin Murphy wrote:
+> >> Hi all,
+> >>
+> >> Thanks to Christoph's latest series, I'm reminded that, if we're going
+> >> to give the ARM DMA ops some cleanup this cycle, it's as good a time a=
+s
+> >> any to dust off these old patches and add them on top as well. I've
+> >> based these on the arm-dma-direct branch which I assume matches the
+> >> patches posted at [1].
+> >
+> > All these do look sensible to me.  But weren't you working on replacing
+> > the ARM iommu dma_ops with dma-=D1=96ommu anyway?
+>
+> Yes, that's somewhat entangled with the IOMMU bus ops stuff, so I'll
+> probably get to the point of having to revisit it in a couple of months
+> or so. These patches are off the bottom of that stack from my first
+> attempt, where the aim was to make the current ops the same shape first
+> so that the switch is then easier to reason about (particularly in terms
+> of sounding out any issues with the hooking up of dev->dma_coherent,
+> although your series will now be taking most of the load off there).
+>
+> Cheers,
+> Robin.
 
 
-vim +/efi_zboot_entry +161 drivers/firmware/efi/libstub/zboot.c
 
-   160	
- > 161	efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android

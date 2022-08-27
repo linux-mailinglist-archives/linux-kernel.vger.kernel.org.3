@@ -2,129 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CBE5A3507
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC715A350D
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbiH0GZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 02:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S232880AbiH0GdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 02:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiH0GZo (ORCPT
+        with ESMTP id S231808AbiH0GdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 02:25:44 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4E4DCFF0;
-        Fri, 26 Aug 2022 23:25:44 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id r1-20020a056830418100b0063938f634feso2413911otu.8;
-        Fri, 26 Aug 2022 23:25:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=2yfUK9kjN+Dqp0bNFYpyDAHMQSTacHZ/w4+QO9mpOhA=;
-        b=WQtjB597wo7aIJ1c5WsR4KfnXTHWp+NRtBEYGn/CkdJ35zsYrjvyQeo+isSRGoIh+7
-         tFGfpRA5QRTp1UPc6Wr7uCBnaphHt5P5JT+nBsLrjjYXtu8Dfi4fnNDNCDDZ5bCawtdK
-         d4xSeDFBwEQKqxE+Hmc9n8E6NNyWsitaw2lPQ1ZlJLO0Ts8wCm73BBTFE2rAivFbjZJC
-         FoHd6lMEjknsjy4Owc2eYxJhuc/WYc18YmV5+kO1rgI0PhTOkconFc4EVEUdatB4yaeL
-         MCUYlMrlPjhWdswYY+TgIKvLAbhGkHLCgU3okwQbaJmWQ2yg0s35Hk+RZf5w04KHxS7r
-         7Niw==
-X-Gm-Message-State: ACgBeo0gvH4WdotwnmaIwdUvvBE07uu93a3EcKSCg7bb9EQUGlH0rTpj
-        TUoj5bCWAJXPRLbWjXMy79HsSrip/tjcerpk06A=
-X-Google-Smtp-Source: AA6agR5lYSlxDtOUB2tat+mjJ1L2urZUGZEBskPyeIaEQ0A6tUldXiz52Mp9TzOM8dzCsDJ+g1rdIFioBIlAOvwNK3Q=
-X-Received: by 2002:a9d:6f18:0:b0:638:b4aa:a546 with SMTP id
- n24-20020a9d6f18000000b00638b4aaa546mr2612244otq.124.1661581543464; Fri, 26
- Aug 2022 23:25:43 -0700 (PDT)
+        Sat, 27 Aug 2022 02:33:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDE8DD763;
+        Fri, 26 Aug 2022 23:33:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B002B82851;
+        Sat, 27 Aug 2022 06:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D65C43140;
+        Sat, 27 Aug 2022 06:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661581977;
+        bh=qmU3paAtykBex7YGKV/aqzGRIkXBQc960SgD6HR6SY8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YEHT/bli5qd1ay+q9HVMBR0oI+9PoTqAAy0yM6hF5kclq8yMNW/F4uefUyffak5sU
+         ypg6p/CyD+jGLvDXIl5lg1S4Z/zONnl3Y7YAGB3qMP/Iw4x8Ox2h2AOkN67BmRhHzu
+         tN9veLAeutSoousW4F7HKg+Svsh5BuwXeKKqkLZEkMWnAu531Qd+pBLVcSSFovwk0P
+         nMKpkmOIe1mUWEDDWhjZRMFR0vR3TiafeqjCcIc0LKpkuXW/cPMfeQcKslxyRg4F2u
+         hIU2Q9mIk45VNGJQrbT1bTD+YihVieLVcv4MgbZyiQDQMBFj61NDFPQ/VmvUJLpQcf
+         992piLBHt21yA==
+Received: by mail-wm1-f41.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso1827828wmr.3;
+        Fri, 26 Aug 2022 23:32:57 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1V1PsYdOVpo6tTIFD6vlUWzmJC6Q0tKeFxL+abwM4s//APZ5A3
+        Q8ULSoX6tqoorScAuddTP69pyOib4DenjHbS8ic=
+X-Google-Smtp-Source: AA6agR4he6zsNcQiJrvVUUEahEtSHtY6xyW/86rJ3vJuW45ByDRjY2ilU7UTEpf5R0bj+rVl2HMTawK+DUNyZiAZmwY=
+X-Received: by 2002:a05:600c:384f:b0:3a6:603c:4338 with SMTP id
+ s15-20020a05600c384f00b003a6603c4338mr1504042wmr.192.1661581976098; Fri, 26
+ Aug 2022 23:32:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
- <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
- <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com> <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
- <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
- <CAM9d7cjTtOkRHLOosxHN8PcbVbhTK=uLDGjw8N5=1QiTHcd6rQ@mail.gmail.com>
- <C7F3F33B-4A8E-428C-9FED-FB635955C2B1@fb.com> <FCC75F8E-4C2F-42A4-B582-9BE3BB87E15A@fb.com>
- <CAM9d7cj6YNTL+u38PZjhPF2Qg_BYiJ1NMmDkPDx3N3Xe+ZTbyA@mail.gmail.com>
- <FD49F694-10FA-4346-8303-E1E185C3E6E4@fb.com> <CAM9d7cjj0X90=NsvdwaLMGCDVkMJBLAGF_q-+Eqj6b44OAnzoQ@mail.gmail.com>
- <1CA3FC40-BC8D-4836-B3E7-0EB196DE6E66@fb.com>
-In-Reply-To: <1CA3FC40-BC8D-4836-B3E7-0EB196DE6E66@fb.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 26 Aug 2022 23:25:32 -0700
-Message-ID: <CAM9d7cg-X6iobbmx3HzCz4H2c20peBVGPt3yf9m3WbqLb5H90A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220826112327.GA19774@willie-the-truck> <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220826174352.GA20386@willie-the-truck> <alpine.LRH.2.02.2208261424580.31963@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXHmXHKG4TXG+e7FgHCB2KKjmSeAdoAVR_bQTjb6NTVD4A@mail.gmail.com> <alpine.LRH.2.02.2208261447400.32583@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2208261447400.32583@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 27 Aug 2022 08:32:44 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com>
+Message-ID: <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com>
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 2:26 PM Song Liu <songliubraving@fb.com> wrote:
+On Fri, 26 Aug 2022 at 21:10, Mikulas Patocka <mpatocka@redhat.com> wrote:
 >
 >
 >
-> > On Aug 26, 2022, at 2:12 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> On Fri, 26 Aug 2022, Ard Biesheuvel wrote:
+>
+> > Could you try booting with earlycon?
 > >
-> > On Fri, Aug 26, 2022 at 1:59 PM Song Liu <songliubraving@fb.com> wrote:
-> >>
-> >>
-> >>
-> >>> On Aug 26, 2022, at 12:30 PM, Namhyung Kim <namhyung@kernel.org> wrote:
-> >>>
-> >>> On Fri, Aug 26, 2022 at 11:45 AM Song Liu <songliubraving@fb.com> wrote:
-> >>>
-> >>>>> And actually, we can just read ctx->data and get the raw record,
-> >>>>> right..?
-> >>>>
-> >>>> Played with this for a little bit. ctx->data appears to be not
-> >>>> reliable sometimes. I guess (not 100% sure) this is because we
-> >>>> call bpf program before event->orig_overflow_handler. We can
-> >>>> probably add a flag to specify we want to call orig_overflow_handler
-> >>>> first.
-> >>>
-> >>> I'm not sure.  The sample_data should be provided by the caller
-> >>> of perf_event_overflow.  So I guess the bpf program should see
-> >>> a valid ctx->data.
-> >>
-> >> Let's dig into this. Maybe we need some small changes in
-> >> pe_prog_convert_ctx_access.
-> >
-> > Sure, can you explain the problem in detail and share your program?
+> > Just 'earlycon' and if that does not help,
 >
-> I push the code to
+> It doesn't help.
 >
->  https://git.kernel.org/pub/scm/linux/kernel/git/song/linux.git/log/?h=test-perf-event
+> > 'earlycon=uart8250,mmio32,<uart PA>' [IIRC, mcbin uses 16550
+> > compatible UARTs, right?]
 >
-> The code is in tools/bpf/perf-test/.
+> mcbin is the host system (running a stable kernel fine). The crash happens
+> in a virtual machine. The vm uses /dev/ttyAMA0 as a console:
 >
-> The problem is we cannot get reliable print of data->cpu_entry in
-> /sys/kernel/tracing/trace.
+> Serial: AMBA PL011 UART driver
+> 9000000.pl011: ttyAMA0 at MMIO 0x9000000 (irq = 45, base_baud = 0) is a PL011 rev1
+> printk: console [ttyAMA0] enabled
+>
+> I tried earlycon=pl011,mmio32,0x9000000 - but it doesn't help, it hangs
+> without printing anything.
+>
 
-Ah, right.  I've realized that the sample data is passed before full
-initialized.  Please see perf_sample_data_init().  The other members
-are initialized right before written to the ring buffer in the
-orig_overflow_handler (__perf_event_output).
-
-That explains why pe_prog_convert_ctx_access() handles
-data and period specially.  We need to handle it first.
-
-Thanks,
-Namhyung
+If you are using pl011, you should drop the mmio32 - it only takes a
+physical address (and optionally baud rate etc, but QEMU doesn't need
+those)

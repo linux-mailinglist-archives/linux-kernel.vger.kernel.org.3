@@ -2,105 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D005A3649
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 11:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAB75A3653
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 11:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbiH0JXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 05:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S232660AbiH0J3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 05:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbiH0JXM (ORCPT
+        with ESMTP id S230176AbiH0J3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 05:23:12 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6F3DEDC
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 02:23:10 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id k22so3631577ljg.2
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 02:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=nhQRAKR4zHjEdCb0JVELtrGk2wyQLykl6TatRm0eanw=;
-        b=FZ6G0Dbx+imj+WfEdZ5oIvV3nFXHxmMjXXxuZOnoiBTegvtYnT5zYj9chduYPwToA+
-         lEaHcuAutIBJIcnG3aVaGE8nT7ejSTlQbAHTt6UZ4pC/Jf1XOOHbxXKwqegbTEg5rLNW
-         IhEdCQgTxoOFnqWiVgDsU2NoDA7g+m7ErjvCReMo8ptaDwUUSmD60A9Y2PWBui7i6f4F
-         CuPL+odQ0sJ+dXDK0cXkoL7kORkBzaVB3p2D/a3LOZlbXIOjee11HVv6C09L6yS+W6XX
-         +9pl1gQ17c5H68VeQbCf+Otk3mAaEeG28PLFOzyEnvBTrOR4/KXMx3LtkA0pTxtJ8CQX
-         ULWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=nhQRAKR4zHjEdCb0JVELtrGk2wyQLykl6TatRm0eanw=;
-        b=SmPVpbl4FRmogt1gA0cRwvN1eSmZWZal+n6BJHO9/2+ycZOf7WteBzJorTuSlROap3
-         qasMSgHKjVBHDQ3J6oVfJLmictNDavQJR2mHQtMtJrrlOgoIOCtXH63/uMzVPTZrXC6s
-         wKdUqx8MpHFd5v9ga0Lv6G85TIcZp2CZlGG5Xm/7XZOeSeVO3ikGahvfe0uge9WjjT2/
-         EY55MocU28ZrSYwQgCik2meW9xj6E6qkGjDR6lkHbXkIXyBhR2o5id80Ex1xc0fovrQN
-         cIBAaZpONErBuJ6Q1mUCVLMtQ3sVs1HqF3diJ/ygR7MFKOCaKek5sAuLLKauVpABBWBU
-         5Mcw==
-X-Gm-Message-State: ACgBeo0RL/QkgW84TTcsmGaT5YqigNQikCuqHRwHFaVM2zjHaeO7AUvX
-        /1i07trOpRRwR34tOv1ZFwj+og==
-X-Google-Smtp-Source: AA6agR4IOei6b7fi96xie1hkpHeN51u8OsJV5bD52jcUaGAHsunyWj3db6JHei0L9njsv+peuxbAwg==
-X-Received: by 2002:a05:651c:1149:b0:25e:6918:22bf with SMTP id h9-20020a05651c114900b0025e691822bfmr3242922ljo.258.1661592189285;
-        Sat, 27 Aug 2022 02:23:09 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05651c02ce00b00261c30d71e5sm682410ljo.67.2022.08.27.02.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Aug 2022 02:23:08 -0700 (PDT)
-Message-ID: <715c2639-c94c-259c-f6bb-cec80afa30ed@linaro.org>
-Date:   Sat, 27 Aug 2022 12:23:07 +0300
+        Sat, 27 Aug 2022 05:29:40 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467E131341;
+        Sat, 27 Aug 2022 02:29:38 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MFBFP2mrmzGpGr;
+        Sat, 27 Aug 2022 17:27:53 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 17:29:36 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 17:29:35 +0800
+Subject: Re: [PATCH -next 2/3] PCI: fix possible memory leak in error case in
+ pci_register_host_bridge()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh@kernel.org>
+References: <20220826223810.GA2961041@bhelgaas>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <83f42399-6dc3-d227-bb48-891172e061f9@huawei.com>
+Date:   Sat, 27 Aug 2022 17:29:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 3/9] dt-bindings: riscv: microchip: document the sev kit
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Shravan Chippa <shravan.chippa@microchip.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cyril Jean <Cyril.Jean@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Vattipalli Praveen <praveen.kumar@microchip.com>,
-        Wolfgang Grandegger <wg@aries-embedded.de>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220826142806.3658434-1-conor.dooley@microchip.com>
- <20220826142806.3658434-4-conor.dooley@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220826142806.3658434-4-conor.dooley@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220826223810.GA2961041@bhelgaas>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/08/2022 17:28, Conor Dooley wrote:
-> From: Shravan Chippa <shravan.chippa@microchip.com>
-> 
-> Update devicetree bindings document with PolarFire SoC Video Kit, known
-> by its "sev-kit" product code.
-> 
-> Link: https://onlinedocs.microchip.com/pr/GUID-404D3738-DC76-46BA-8683-6A77E837C2DD-en-US-1/index.html?GUID-065AEBEE-7B2C-4895-8579-B1D73D797F06
-> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
 
+On 2022/8/27 6:38, Bjorn Helgaas wrote:
+> [+cc Arnd, Rob]
+>
+> On Thu, Aug 25, 2022 at 08:27:52PM +0800, Yang Yingliang wrote:
+>> If device_register() fails in pci_register_host_bridge(), the refcount
+>> of bus device is leaked, so device name that set by dev_set_name() can
+>> not be freed. Fix this by calling put_device() when device_register()
+>> fails, so the device name will be freed in kobject_cleanup().
+>>
+>> Fixes: 37d6a0a6f470 ("PCI: Add pci_register_host_bridge() interface")
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/pci/probe.c | 17 +++++++++++------
+>>   1 file changed, 11 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+>> index e500eb9d6468..292d9da146ce 100644
+>> --- a/drivers/pci/probe.c
+>> +++ b/drivers/pci/probe.c
+>> @@ -948,8 +948,17 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>>   	name = dev_name(&bus->dev);
+>>   
+>>   	err = device_register(&bus->dev);
+>> -	if (err)
+>> -		goto unregister;
+>> +	if (err) {
+>> +		/*
+>> +		 * release_pcibus_dev() will decrease the refcount of bridge
+>> +		 * device and free the memory of bus.
+>> +		 * The memory of bus device name will be freed when the refcount
+>> +		 * get to zero.
+>> +		 */
+>> +		put_device(&bus->dev);
+>> +		device_unregister(&bridge->dev);
+>> +		return err;
+>> +	}
+> Calling put_device(X) after device_register(X) returns failure doesn't
+> need explanation because that's the standard pattern.  I think that
+> was just missing before.
+>
+> In this error case, we previously did called put_device() for the
+> *bridge* instead of the bus.  That was likely a typo and seems like
+> the important thing here.
+put_device() for the bridge will be called in the callback of put for 
+the bus.
+So it doesn't call put bridge device here.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Thanks,
+Yang
+>>   	pcibios_add_bus(bus);
+>>   
+>> @@ -1025,10 +1034,6 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>>   
+>>   	return 0;
+>>   
+>> -unregister:
+>> -	put_device(&bridge->dev);
+>> -	device_unregister(&bridge->dev);
+>> -
+>>   free:
+>>   	kfree(bus);
+>>   	return err;
+>> -- 
+>> 2.25.1
+>>
+> .

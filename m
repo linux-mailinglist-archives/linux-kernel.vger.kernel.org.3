@@ -2,81 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34355A351C
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404BC5A3517
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbiH0G42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 02:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S232684AbiH0Gy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 02:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbiH0G4X (ORCPT
+        with ESMTP id S232280AbiH0Gy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 02:56:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43E6B74;
-        Fri, 26 Aug 2022 23:56:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55621B82781;
-        Sat, 27 Aug 2022 06:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB726C433C1;
-        Sat, 27 Aug 2022 06:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661583380;
-        bh=0kJQFVfn/QK44onnEgjV2YxnAzpO9Y03TjV6Q9pAdVQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JyVB21xMPobk31I3vwIMmNqvTn1gtBl+1l9Ng2yP4KaDAohwT8Z/I5u4BK1EcF8HN
-         /qo5zEDobfhsTskKLMfwfS2mrY7eD3ou6PNK1k3xtczUVgjZc3j9LVxhvbl00WHmC8
-         mIiQv0BzZlEXZ3ImSJB0HShrgT1rNRvAX8kTVA4tLlNqJv6Lyq2j6OyqXQRdovX4pV
-         ILMqC11nGPPpLLQCeZG6VviLjOR6U+Bmgx3rd4TsunE7IivBckD8UL8LuMIsolxUqx
-         PVbzLWT09xq+ttb4IpfwgNPgZa24F+qwg2lnN2YB2DajU0SxN5MqXz4e6Nnp5//kpj
-         zIxT9vBe7bE0w==
-Received: by mail-wm1-f53.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso5439836wma.2;
-        Fri, 26 Aug 2022 23:56:19 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2qCmZKGq/TU3rsMK/Pl1LbWEoHxa3vDzQjeVXa3tO5OxpTOctj
-        Txz7byrQ2pdapr+llEu5Kg7lXzqD3oOdWPxR5ug=
-X-Google-Smtp-Source: AA6agR5hYtfKhTEXO563Z4ejBOHoGwdy+ZpGPTTQJ62gqbCE9Svz5btibkhMpgnlZqnSEOsonlWnNU+9Eda9I6Z8vSw=
-X-Received: by 2002:a05:600c:384f:b0:3a6:603c:4338 with SMTP id
- s15-20020a05600c384f00b003a6603c4338mr1546980wmr.192.1661583378170; Fri, 26
- Aug 2022 23:56:18 -0700 (PDT)
+        Sat, 27 Aug 2022 02:54:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F39F74CC6;
+        Fri, 26 Aug 2022 23:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661583264; x=1693119264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UH1E/vTeMlllSwzFZAoSra46+z3qWsWaFhDL//3BZu0=;
+  b=q0unqfFtJtNLagcwhj+IwqN53NdUXBj1vxR0QZOnrpw0Zm4kI4hHX391
+   gzh+8Roz250YivFJdF55IKZo9BrDEvjfYrTYeqWUgKoBwuwrs8K9oxMo2
+   AKgD99LtliNtD6ZNVT+ZCdpl4HX8KVVDov09q+s9on7k2gMusNEG5evfm
+   yR9kl+KinCtSp/3J48v9NrLysHHvk8anUfV6qhEP49030wmAj6RL6diqU
+   +yTplyIJcHIWpiPr9/qEXi80wH/bj3uzttWfL1OQzQ0eXXn7DvcHwEnjb
+   5nmXKxR2q73heQR2JkuGkOylHOJ7AhXKNG6SWkpkALjJBuucDhW9gVNN8
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="174423481"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Aug 2022 23:54:23 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 26 Aug 2022 23:54:23 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 26 Aug 2022 23:54:22 -0700
+Date:   Sat, 27 Aug 2022 08:58:38 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>, <michael@walle.cc>,
+        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>
+Subject: Re: [PATCH net-next v2] net: phy: micrel: Make the GPIO to be
+ non-exclusive
+Message-ID: <20220827065838.7iw3cubgtzhwqc53@soft-dev3-1.localhost>
+References: <20220825201447.1444396-1-horatiu.vultur@microchip.com>
+ <YwfYnwzQsDruVi5y@lunn.ch>
+ <20220826183711.567bc7e8@kernel.org>
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
- <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
- <20220826112327.GA19774@willie-the-truck> <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
- <20220826174352.GA20386@willie-the-truck> <alpine.LRH.2.02.2208261424580.31963@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXHmXHKG4TXG+e7FgHCB2KKjmSeAdoAVR_bQTjb6NTVD4A@mail.gmail.com>
- <alpine.LRH.2.02.2208261447400.32583@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com>
-In-Reply-To: <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 27 Aug 2022 08:56:06 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
-Message-ID: <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220826183711.567bc7e8@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,49 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022 at 08:32, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Fri, 26 Aug 2022 at 21:10, Mikulas Patocka <mpatocka@redhat.com> wrote:
-> >
-> >
-> >
-> > On Fri, 26 Aug 2022, Ard Biesheuvel wrote:
-> >
-> > > Could you try booting with earlycon?
+The 08/26/2022 18:37, Jakub Kicinski wrote:
+
+Hi Jakub,
+
+> 
+> On Thu, 25 Aug 2022 22:16:31 +0200 Andrew Lunn wrote:
+> > On Thu, Aug 25, 2022 at 10:14:47PM +0200, Horatiu Vultur wrote:
+> > > The same GPIO line can be shared by multiple phys for the coma mode pin.
+> > > If that is the case then, all the other phys that share the same line
+> > > will failed to be probed because the access to the gpio line is not
+> > > non-exclusive.
+> > > Fix this by making access to the gpio line to be nonexclusive using flag
+> > > GPIOD_FLAGS_BIT_NONEXCLUSIVE. This allows all the other PHYs to be
+> > > probed.
 > > >
-> > > Just 'earlycon' and if that does not help,
+> > > Fixes: 738871b09250ee ("net: phy: micrel: add coma mode GPIO")
+> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 > >
-> > It doesn't help.
-> >
-> > > 'earlycon=uart8250,mmio32,<uart PA>' [IIRC, mcbin uses 16550
-> > > compatible UARTs, right?]
-> >
-> > mcbin is the host system (running a stable kernel fine). The crash happens
-> > in a virtual machine. The vm uses /dev/ttyAMA0 as a console:
-> >
-> > Serial: AMBA PL011 UART driver
-> > 9000000.pl011: ttyAMA0 at MMIO 0x9000000 (irq = 45, base_baud = 0) is a PL011 rev1
-> > printk: console [ttyAMA0] enabled
-> >
-> > I tried earlycon=pl011,mmio32,0x9000000 - but it doesn't help, it hangs
-> > without printing anything.
-> >
->
-> If you are using pl011, you should drop the mmio32 - it only takes a
-> physical address (and optionally baud rate etc, but QEMU doesn't need
-> those)
+> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> 
+> The tree name switch in the subject compared to v1 is unintentional?
 
-Could you try the diff below please?
+Yes I have switch it by mistake.
+It should be net. I can send a new version if it is needed.
 
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -371,7 +371,9 @@ SYM_FUNC_END(create_idmap)
- SYM_FUNC_START_LOCAL(create_kernel_mapping)
-        adrp    x0, init_pg_dir
-        mov_q   x5, KIMAGE_VADDR                // compile time __va(_text)
-+#ifdef CONFIG_RELOCATABLE
-        add     x5, x5, x23                     // add KASLR displacement
-+#endif
-        adrp    x6, _end                        // runtime __pa(_end)
-        adrp    x3, _text                       // runtime __pa(_text)
-        sub     x6, x6, x3                      // _end - _text
+-- 
+/Horatiu

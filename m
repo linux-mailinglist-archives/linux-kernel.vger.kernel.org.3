@@ -2,141 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5575A3611
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCB95A3617
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbiH0Imu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 04:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S232784AbiH0Iui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 04:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiH0Ims (ORCPT
+        with ESMTP id S232934AbiH0Iue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 04:42:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7993CD784
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 01:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661589767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KxvlGB8SaXAMkxOej08ij1ovWmRGqx7ZcAzrOyoP74Y=;
-        b=BOfe8z/2KtuCpzYWH2iaMu7yw3Z7DNX8IugiHUiqditOKC8wA3NMk01/GTJoClaxT+b6Fj
-        NujynhITYDa5PhWrDMs3zHmF+LjavAfMHvCB1efVZaXbpLFgQGblxjPtGBC5/ZFUpB6Ebm
-        X+qN6B3U1l2mY5AcJjRILmR4ygQ0g0w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-YC8p255FNcWIac-8YjY4IA-1; Sat, 27 Aug 2022 04:42:41 -0400
-X-MC-Unique: YC8p255FNcWIac-8YjY4IA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 571B21C05AAB;
-        Sat, 27 Aug 2022 08:42:40 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 158762026D64;
-        Sat, 27 Aug 2022 08:42:40 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27R8geEL007403;
-        Sat, 27 Aug 2022 04:42:40 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27R8gb4e007399;
-        Sat, 27 Aug 2022 04:42:37 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sat, 27 Aug 2022 04:42:37 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Ard Biesheuvel <ardb@kernel.org>
-cc:     Will Deacon <will@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-In-Reply-To: <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
-Message-ID: <alpine.LRH.2.02.2208270442070.25874@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <20220826112327.GA19774@willie-the-truck> <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
- <20220826174352.GA20386@willie-the-truck> <alpine.LRH.2.02.2208261424580.31963@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXHmXHKG4TXG+e7FgHCB2KKjmSeAdoAVR_bQTjb6NTVD4A@mail.gmail.com> <alpine.LRH.2.02.2208261447400.32583@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com> <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Sat, 27 Aug 2022 04:50:34 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6CD2A435;
+        Sat, 27 Aug 2022 01:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661590200;
+        bh=sLqA9Nhv1LxIrayZxnMdcIGoDvAaLN5XDUzwmP9YimQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=EdR/oW4bV7hX9TXH3hCs1b8ae02GLGT8/zQXzlH33lbg2FD7EK5m+etim2qbck7Lo
+         KX46ga/l4XBAVynrKpj7gZqYlvgfEw0jKA707w0FqjIumz+4siXiW5elrQ8P/Pr3sz
+         DnDH3mOSIdBFfvuU833dhdLFKth5dbjzKQ9PkuCE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.78.141] ([80.245.78.141]) by web-mail.gmx.net
+ (3c-app-gmx-bs16.server.lan [172.19.170.68]) (via HTTP); Sat, 27 Aug 2022
+ 10:50:00 +0200
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <trinity-88fbbdbe-de76-4479-9580-70edc34a4181-1661590200169@3c-app-gmx-bs16>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Simon Xue <xxm@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Aw: Re: [PATCH v5 5/5] arm64: dts: rockchip: Add PCIe v3 nodes to
+ BPI-R2-Pro
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 27 Aug 2022 10:50:00 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <cae915f6-c951-ba97-346d-00922c85067d@linaro.org>
+References: <20220825193836.54262-1-linux@fw-web.de>
+ <20220825193836.54262-6-linux@fw-web.de>
+ <cae915f6-c951-ba97-346d-00922c85067d@linaro.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:ymlk8MTehRHvDLV/NMrQKgASYE/0aSiP2iwFAlrEWCCttBVnPTYScFUExZcU50B+XqKmI
+ BuXBhJkCJj+2+/eoNz7ggJl2WQsoY705NyEf1FfXeY6RoQRbpXbEhBcjGEgshMvFE1b/kzeklzyz
+ Jc+/8hiL2Y17nZT3O8suJSkmPFwGr0/x8ClhHdnHuXhW8+f/AtXrnSC0ajepwD78P6b2Wi5iFTRu
+ gZMdH2cYUDUn7qoiKoSAr5SVtZCbW0Yzw4xk9lH9dbzVhilPFBKfkY6PPotFi6k0Y4A/KyPx9UB5
+ ak=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:14K1gCFI7Lg=:IESHyz8gkpbbCdxNp9VwOq
+ g91zU7UP3wl4gBf5hwPu1Kt/Ci46gU1S5IePgbdx27d4rk+8XLkZZkTbe4lwX+bOQXhBdC9AR
+ FpG19k2DcAhUm3pDO5Cao94DPHxIasUiUjs5+TjmYes7jAfNiZeAEdiqqHVeu1m+EN4XU+Bxq
+ CxYPS63stl1VPJxrUVO5aAlOeiWVJMpHx39GTls0vFHhTsNp2VyKd1Qm+rkIATDq7NuwMk2Wr
+ PyroUfSCVp4LucSYsVvpjRhCn/OKjFR7ZTBNejGRVei+Q7qM22t3UI5zBj7e4fe9e0uY2K2j0
+ a2lzJQrhy0bcptY4+HdG2EbkQwGouZRiHTxqHF7NCf+cKg/E8i4ibWIaFilmNjL0eWj9YAewG
+ a+C7+3ejYYjoX9Y181gr2SuHQ8ATaVS8DaQfN/trfJnJH+MlfALu0IjXAWY4WPJeM+Fhx2Fqb
+ rW9GucSJyWptQaz8Fv9HvM0xundhAFv79C0boRusyZQ7ZxCL2ZW3cfiqJsn5I+N5BXAXldxwW
+ dLxaNx66xtaSb4VDHIPUjVFrfl/8TFf/Zy44PmjFq5m4VZJ62iF7dF5K1dvh4s+bvm7g8ly9n
+ C35AmnZ2vbGAOQ6RDuuCcaZuhMQT3ZB6arKVCfYBG469OZ4HatS/HHnnWudZyvYv/SE0/HZkg
+ ptCNpN7LXjFAZJK6V9fG0wXfFH0mJ4Vo0m4j3gsJc9FulmhYpPVUxYxO5HZRTRpMzDoNN8Lw2
+ idg2jRqNtU72VknArJFbOHJG4CX0CYNV1TbgpJ2XTQgJQRKWTcYcrt70zam6gq9hpKV5oHSXA
+ +Ho6+gE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
+> Gesendet: Freitag, 26. August 2022 um 08:50 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> On 25/08/2022 22:38, Frank Wunderlich wrote:
+> > From: Frank Wunderlich <frank-w@public-files.de>
 
-On Sat, 27 Aug 2022, Ard Biesheuvel wrote:
-
-> On Sat, 27 Aug 2022 at 08:32, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch=
+/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > index 93d383b8be87..40b90c052634 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > @@ -86,6 +86,66 @@ vcc5v0_sys: vcc5v0-sys {
+> >  		vin-supply =3D <&dc_12v>;
+> >  	};
 > >
-> > On Fri, 26 Aug 2022 at 21:10, Mikulas Patocka <mpatocka@redhat.com> wrote:
-> > >
-> > >
-> > >
-> > > On Fri, 26 Aug 2022, Ard Biesheuvel wrote:
-> > >
-> > > > Could you try booting with earlycon?
-> > > >
-> > > > Just 'earlycon' and if that does not help,
-> > >
-> > > It doesn't help.
-> > >
-> > > > 'earlycon=uart8250,mmio32,<uart PA>' [IIRC, mcbin uses 16550
-> > > > compatible UARTs, right?]
-> > >
-> > > mcbin is the host system (running a stable kernel fine). The crash happens
-> > > in a virtual machine. The vm uses /dev/ttyAMA0 as a console:
-> > >
-> > > Serial: AMBA PL011 UART driver
-> > > 9000000.pl011: ttyAMA0 at MMIO 0x9000000 (irq = 45, base_baud = 0) is a PL011 rev1
-> > > printk: console [ttyAMA0] enabled
-> > >
-> > > I tried earlycon=pl011,mmio32,0x9000000 - but it doesn't help, it hangs
-> > > without printing anything.
-> > >
-> >
-> > If you are using pl011, you should drop the mmio32 - it only takes a
-> > physical address (and optionally baud rate etc, but QEMU doesn't need
-> > those)
-> 
-> Could you try the diff below please?
-> 
-> --- a/arch/arm64/kernel/head.S
-> +++ b/arch/arm64/kernel/head.S
-> @@ -371,7 +371,9 @@ SYM_FUNC_END(create_idmap)
->  SYM_FUNC_START_LOCAL(create_kernel_mapping)
->         adrp    x0, init_pg_dir
->         mov_q   x5, KIMAGE_VADDR                // compile time __va(_text)
-> +#ifdef CONFIG_RELOCATABLE
->         add     x5, x5, x23                     // add KASLR displacement
-> +#endif
->         adrp    x6, _end                        // runtime __pa(_end)
->         adrp    x3, _text                       // runtime __pa(_text)
->         sub     x6, x6, x3                      // _end - _text
-> 
+> > +	pcie30_avdd0v9: pcie30-avdd0v9 {
+>
+> Use consistent naming, so if other nodes have "regulator" suffix, use it
+> here as well.
 
-Yes - this patch fixes the crash.
+only these 3 new have the suffix:
 
-Mikulas
+vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator
+vcc3v3_minipcie: vcc3v3-minipcie-regulator
+vcc3v3_ngff: vcc3v3-ngff-regulator
 
+so i would drop it there...
+
+so i end up with (including existing ones to compare):
+
+vcc3v3_sys: vcc3v3-sys
+vcc5v0_sys: vcc5v0-sys
+pcie30_avdd0v9: pcie30-avdd0v9
+pcie30_avdd1v8: pcie30-avdd1v8
+vcc3v3_pi6c_05: vcc3v3-pi6c-05
+vcc3v3_minipcie: vcc3v3-minipcie
+vcc3v3_ngff: vcc3v3-ngff
+vcc5v0_usb: vcc5v0_usb
+vcc5v0_usb_host: vcc5v0-usb-host
+vcc5v0_usb_otg: vcc5v0-usb-otg
+
+is this ok?
+
+maybe swap avdd* and pcie30 part to have voltage in front of function.
+
+> > +		compatible =3D "regulator-fixed";
+> > +		regulator-name =3D "pcie30_avdd0v9";
+> > +		regulator-always-on;
+> > +		regulator-boot-on;
+> > +		regulator-min-microvolt =3D <900000>;
+> > +		regulator-max-microvolt =3D <900000>;
+> > +		vin-supply =3D <&vcc3v3_sys>;
+> > +	};
+> > +
+> > +	pcie30_avdd1v8: pcie30-avdd1v8 {
+>
+> Ditto.
+>
+>
+> > +		compatible =3D "regulator-fixed";
+> > +		regulator-name =3D "pcie30_avdd1v8";
+> > +		regulator-always-on;
+> > +		regulator-boot-on;
+> > +		regulator-min-microvolt =3D <1800000>;
+> > +		regulator-max-microvolt =3D <1800000>;
+> > +		vin-supply =3D <&vcc3v3_sys>;
+> > +	};
+> > +
+> > +	/* pi6c pcie clock generator feeds both ports */
+> > +	vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator {
+> > +		compatible =3D "regulator-fixed";
+> > +		regulator-name =3D "vcc3v3_pcie";
+> > +		regulator-min-microvolt =3D <3300000>;
+> > +		regulator-max-microvolt =3D <3300000>;
+> > +		enable-active-high;
+> > +		gpios =3D <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
+> > +		startup-delay-us =3D <200000>;
+> > +		vin-supply =3D <&vcc5v0_sys>;
+> > +	};
+> > +
+>
+> Best regards,
+> Krzysztof
+>

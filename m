@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2F35A3327
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510D65A332B
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234416AbiH0Ad6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 20:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S243237AbiH0AkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 20:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiH0Ady (ORCPT
+        with ESMTP id S230172AbiH0AkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 20:33:54 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B830E1168
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:33:54 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id v23so2914700plo.9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=14KpB5p7sZ3dVxtoeGHlHAy+LcMprsDaESSmFVj0Geo=;
-        b=J65P8wFFHZx2QuvqZamtjeDO5Snhz0qIBKV4vBTBh8708yABn+LsVsoPenJ2C6r6H7
-         PYVcV7ugxrFDsaRxIpOKcN7IiHZrYo0ruO4DaLRyVQNUtUvVYAru7DeNFs9v6+h1T9WE
-         e/EWJIFPdM7Yc8/I3DfCoSNPZ8uQEvIvGTM1zd1A4dH6H//m3Q6A52/C3FUxKKA+YxyE
-         5+sjtMOa40Fq8s61n8LuEkCSGgJWdowMdFZ8r5j2pNfi3dv86Mq5g6DDlA5iUvSNOZdC
-         pusx0VCZOuBJX+XpyYKAwimqU96xZySW+CscIq43CN1+6wwx3MR3UuxU5JQPGhImNuB3
-         6tpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=14KpB5p7sZ3dVxtoeGHlHAy+LcMprsDaESSmFVj0Geo=;
-        b=ZfaDFsHB0f+mIg7vTryQ4OGJxfS9wpyz32Au8ufKo4ZPgUUaV7mJtJfeuaXgSiILG1
-         8Ami/SsaW+vGathkk15ngtoI319I45d1jM7y020owtPKXflY5FBQ6Aidjgy9ccjqZrME
-         SVgeEuq1dCkZWUGcV5zyugQNoAVmUhz4Ejv9wdo37AttZRbYyI/VmNHUysuPZQS/dr2p
-         634A4nICMDQJnK9ioPd3uy5ciI4+PXCT9rOwLy8yG7v2IsVsztgiVhFYb4b+4RmtwKxR
-         dLzzlbL2bZDaaXw0kJIzcoGDsCLAxAo4JkzqNrWfxL9p2ksPPVKhXS+JAe52KYwhlvm/
-         81tQ==
-X-Gm-Message-State: ACgBeo07LmABFcgFIk47sxKhrKq+00GOW6Jg5aCz6EKGIUNZiiCBYvjg
-        ecW8YulqYg2rR/WLbLc/ATg=
-X-Google-Smtp-Source: AA6agR5eU8jL6jmmJU+d6DDd9Egp4yW2wMcQn/B1CKBK8pRJMrxuvv9azaY3iDXqyeJJ0KQdm7vdQg==
-X-Received: by 2002:a17:902:d505:b0:173:cf6:f819 with SMTP id b5-20020a170902d50500b001730cf6f819mr6074130plg.117.1661560433534;
-        Fri, 26 Aug 2022 17:33:53 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709027e0e00b0016befc83c6bsm2215522plm.165.2022.08.26.17.33.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 17:33:53 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 26 Aug 2022 14:33:51 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Subject: Re: [PATCH] workqueue: Protects wq_unbound_cpumask with
- wq_pool_attach_mutex
-Message-ID: <Ywlmb1ADhHnfFUI8@slm.duckdns.org>
-References: <Yvrb3hfZuUzSpX5e@slm.duckdns.org>
- <20220818143348.1134136-1-jiangshanlai@gmail.com>
+        Fri, 26 Aug 2022 20:40:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA05613CDD;
+        Fri, 26 Aug 2022 17:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D3C9B83369;
+        Sat, 27 Aug 2022 00:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B463CC433D6;
+        Sat, 27 Aug 2022 00:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661560814;
+        bh=rkzh3nR20qW/jQRU/zac4HyBSh6rIWKYlUSOlnHbI4A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=c569Bwb5eXT6yVQHpZh7AKQXJF8J29T8tup8DzsnA0ZRyUrHVU5sm4uQfQj/PzBFz
+         /xU9AKRFRaDyzpCKTBfGx2KAsjT3WIRecDwPiGanC+M6oTLcKkANal6uXUvznpQ4I3
+         6lLOGUTQ6qU5dgU11efBv3avC8HSIWt5EBvhVM41d1FyRbuAZ2BECstSc4oLcYEh8L
+         feDP9X5YIrjOo4f1UAwj3spgFWYZSBmktzlvBtWvN/KKVkcCBtCEZoD2rQyvFc7MHm
+         wDu6J8TdqOdll3dChktz1NeOGBDb8AcYLpEoFY0j847PM71mgXlGKr9KzVCI4ouHHQ
+         vF40SgVxrMOjA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99FDDC0C3EC;
+        Sat, 27 Aug 2022 00:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818143348.1134136-1-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net/mlx4: Fix error check for dma_map_sg
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166156081462.5783.10194691553134779123.git-patchwork-notify@kernel.org>
+Date:   Sat, 27 Aug 2022 00:40:14 +0000
+References: <20220825063533.21015-1-jinpu.wang@ionos.com>
+In-Reply-To: <20220825063533.21015-1-jinpu.wang@ionos.com>
+To:     Jinpu Wang <jinpu.wang@ionos.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, tariqt@nvidia.com,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        leonro@nvidia.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello:
 
-On Thu, Aug 18, 2022 at 10:33:48PM +0800, Lai Jiangshan wrote:
-> @@ -5342,6 +5344,11 @@ static int workqueue_apply_unbound_cpumask(void)
->  		apply_wqattrs_cleanup(ctx);
->  	}
->  
-> +	if (!ret) {
-> +		mutex_lock(&wq_pool_attach_mutex);
-> +		cpumask_copy(wq_unbound_cpumask, unbound_cpumask);
-> +		mutex_unlock(&wq_pool_attach_mutex);
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Is this enough? Shouldn't the lock be protecting a wider scope? If there's
-someone reading the flag with just pool_attach_mutex, what prevents them
-reading it right before the new value is committed and keeps using the stale
-value?
+On Thu, 25 Aug 2022 08:35:33 +0200 you wrote:
+> dma_map_sg return 0 on error.
+> 
+> Cc: Tariq Toukan <tariqt@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rdma@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> [...]
 
-Thanks.
+Here is the summary with links:
+  - net/mlx4: Fix error check for dma_map_sg
+    https://git.kernel.org/netdev/net-next/c/0c1f77d87d69
 
+You are awesome, thank you!
 -- 
-tejun
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

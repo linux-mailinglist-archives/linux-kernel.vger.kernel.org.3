@@ -2,62 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC855A38D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B7F5A38DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbiH0QmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 12:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S233765AbiH0QpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiH0QmJ (ORCPT
+        with ESMTP id S229905AbiH0QpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 12:42:09 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410D5474FF;
-        Sat, 27 Aug 2022 09:42:07 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id t140so5691795oie.8;
-        Sat, 27 Aug 2022 09:42:07 -0700 (PDT)
+        Sat, 27 Aug 2022 12:45:11 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151FA37FAE;
+        Sat, 27 Aug 2022 09:45:08 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id s1so3359026qvn.11;
+        Sat, 27 Aug 2022 09:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ZmxTNJXdfZJJ2Pe5JS3kCmHqPvETpA9u1Q36GaimG9Q=;
-        b=WfNr5KGqtldRVuwfZONE+mIxQ0mEB5GJ4odOwhsZUPEPZ1UY84Rr2MF9je/ddUvf7Y
-         MV3EtpWzq6UODVlTwUDV/EHVqvmm83oWxxIEJbLPTez587GAA2c0AJEDQUAJmRW/XIhT
-         FX4YYJiDYwfId2Vc1++QvsIfsXsjxD0nNnw3fL6i75AukOj0Le9iS+qOwUsaRYlWm1Mg
-         JkczjQMz8mV7bQIdIyKE4Bo1nq5fbvDFa9UuqVFjcamJBDhwXMp5RcVhFd4ni1HuV4Gq
-         QLj9f4c11qrRbPm9MZN/STcSDtzxpp10D380N13sihUqh2CRXrwdg3l+4Af4OHmxEszP
-         rZCg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc;
+        bh=ZhfbAHlPQFx8IPZok5WapkkflkTEU7J+fDiYrhhmxIA=;
+        b=M0b5ENI57ijrrSBOdqsI4nNWdePJhQB34ojLnGx1NLyBtuxthw5HlWP80AiqIjk3lU
+         P+4RUXrRoTcBjhATVcFtXruNMuUNuq5BfeWxNcVYkhW7BRJb77nwQFSn/SSa9GWuBftT
+         X/XfiA7vA+5aXegoOnnIsISEdiPbJI81WGEtV9CC0VVX3MWrFOhfjuMfH2x99/uOOubr
+         aeb78qeaalSJoe7g7YFhlYJlRMff+XiTQRvKZ+Hv07z2YlMmENAYl3wG/9JIT+utk58T
+         ti0+hXqvLSktqm0iREGzUKghPcnhEvABZEDtSQc7UuFUhwfAC0O6CQVogaiJZecAMOD4
+         03vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZmxTNJXdfZJJ2Pe5JS3kCmHqPvETpA9u1Q36GaimG9Q=;
-        b=IqHLVjzD5790aIfuHEuRX4p3u516lvEfkFLHpWygd66n8tlCkOhuWvJ+FvY9thVWcr
-         e6nM5I2W9llvAVytre3pGuU7DHXXQR99hNOcrzRhHCbx3iXU7yZJ+5C6swWnpDnz6ojD
-         BMgi+pj8T07Ev/YZMfjAmH93N6g76p1SteUCXOGgCUQxHn8MNj3fg4x+0tzupF8piCsb
-         c4YDWPmS67zVUHWncejgEJH8/yhVLyWcFRLLN3wYLtAWCrzC2azsagLpdE2ciPg+jXAX
-         jjeNVPHX2RcH+M2CHqRjsomy4aI2kTGbMoz8g8qzrr+WpEOs2MoY2ccSC8MMa8a/n9Kg
-         dUjg==
-X-Gm-Message-State: ACgBeo3rrCmtn5HhEXknBN0LskrAJAagd0Go6v/4OAiqfKN98be6hJ0G
-        dzdgSKacBeJ7R4SXvTLlbGpiK1B+S+UiVYRjNj8=
-X-Google-Smtp-Source: AA6agR6Wqr0YeZSEMWsmFyC16ahJ1c45RKtBIAagiDq5AHfxZbKwsuTkkIACI1f83+S71M3mN6+sVUYEeO+H5K6QcNg=
-X-Received: by 2002:a05:6808:238d:b0:344:e5f9:db34 with SMTP id
- bp13-20020a056808238d00b00344e5f9db34mr3739338oib.183.1661618526484; Sat, 27
- Aug 2022 09:42:06 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc;
+        bh=ZhfbAHlPQFx8IPZok5WapkkflkTEU7J+fDiYrhhmxIA=;
+        b=zTh8Bi0RRA0wLbb8980hj52yZK5enVQrq9wXmx13yoeYRdQu14J8aS8rhOcoXVVhe7
+         jNJIP71/74A7ROQgBLq/M0ceaer/key3URlycg7X5hDd3oV5yKNYajlxQ7PvaROF3HFK
+         bRUzp3RJunqBLs9645mnpBinOW2ZzcL4izx3WPZN4nnUaPkUREQer+v5L/ubR3UrT3Gk
+         swb6ryRJuYz/J2CNltNCx9yohKas57nqUhKoP4Lzh8jSJ74daMuiAlac7eQWSJt/GRcr
+         FFnii6N5er2yccqj5MND6z12qpXIR9KWFyoiy7DfnF7Fh8RwEI8ZVm8ChZcDY6+OkfxC
+         Dd4A==
+X-Gm-Message-State: ACgBeo0WelIyAKEzUwN0sZWMeVxw6CL9XACqZax+ivmhNmc+NfxUm+KS
+        KSMLW2cqqwackZFNWN/whJBF2/rk3QE=
+X-Google-Smtp-Source: AA6agR4EA7lK9MqSZtDKKlmHSyAAvzyqsEy9HxXgmoadwDV/yIFxuEYAmu1UBax8Q8IbbfSdHwJjxw==
+X-Received: by 2002:a05:6214:5005:b0:472:e6b0:1fb2 with SMTP id jo5-20020a056214500500b00472e6b01fb2mr4073953qvb.124.1661618707237;
+        Sat, 27 Aug 2022 09:45:07 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id j10-20020ac874ca000000b003434e47515csm1886500qtr.7.2022.08.27.09.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 09:45:06 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0935527C0054;
+        Sat, 27 Aug 2022 12:45:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 27 Aug 2022 12:45:06 -0400
+X-ME-Sender: <xms:EUoKYyZfV3VCiI4JA7zHq8TLwZJ3TUUZv-qw6fi39l9fitEprqE-9g>
+    <xme:EUoKY1bDrWj3bmnYa5T5_GUfTvuL1wt4ukpp9Sw76b4Omr_vdXJEikVdI-QDGfoTD
+    fZR3az1CrVzSt4E_w>
+X-ME-Received: <xmr:EUoKY8_HI06AHdxs4QrKJxRrbgPcymeufln6GzuyevWnK9kfEAN5RCOHLG0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejjedguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnheptdegffdugfefhfdugfeiheefheekudehfeeiieegleegheejleefieek
+    veeuhfdunecuffhomhgrihhnpegvvghlrdhishdpiihulhhiphgthhgrthdrtghomhenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhn
+    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejje
+    ekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhn
+    rghmvg
+X-ME-Proxy: <xmx:EUoKY0p5d2QWI2Cl3lufmV5wxPM_dJ8N7kfW6wY15UvhYIRBTkqz_Q>
+    <xmx:EUoKY9rkUlaGjn0utSIrYVuRTVorsivMl07V0qK5qZqhENuLTPUcqg>
+    <xmx:EUoKYyTpxcDwfsyXUE-KJErT1iNoOtgwhNwtw27KQuz62hZ2Lo7ZLQ>
+    <xmx:EUoKY-6RAy8gCB6IwjQR6jQMYIjTiwcZOJJ1ka1WXClZPN_g3KTgjQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 27 Aug 2022 12:45:04 -0400 (EDT)
+Date:   Sat, 27 Aug 2022 09:44:17 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, parri.andrea@gmail.com,
+        will@kernel.org, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Message-ID: <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
+ <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20220823115409.46653-1-yuanjilin@cdjrlc.com> <658faa4e-ad16-7b13-87f3-27ea91db4ba3@linaro.org>
-In-Reply-To: <658faa4e-ad16-7b13-87f3-27ea91db4ba3@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Sat, 27 Aug 2022 09:42:42 -0700
-Message-ID: <CAF6AEGvX_J_t04tUUxserXh_rrcdu5eYTt6JOHoD-SJ6944adQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: fix repeated words in comments
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, quic_abhinavk@quicinc.com,
-        airlied@linux.ie, daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,48 +106,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 2:43 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 23/08/2022 14:54, Jilin Yuan wrote:
-> >   Delete the redundant word 'one'.
->
-> The whitespace is unnecessary.
->
-> >
-> > Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Fixes: 7198e6b03155 ("drm/msm: add a3xx gpu support")
->
+On Sat, Aug 27, 2022 at 12:05:33PM -0400, Alan Stern wrote:
+> On Sat, Aug 27, 2022 at 01:47:48AM +0200, Peter Zijlstra wrote:
+> > On Fri, Aug 26, 2022 at 01:10:39PM -0400, Alan Stern wrote:
+> > 
+> > > >  - some babbling about a missing propagation -- ISTR Linux if stuffed
+> > > >    full of them, specifically we require stores to auto propagate
+> > > >    without help from barriers
+> > > 
+> > > Not a missing propagation; a late one.
+> > > 
+> > > Don't understand what you mean by "auto propagate without help from 
+> > > barriers".
+> > 
+> > Linux hard relies on:
+> > 
+> > 	CPU0				CPU1
+> > 
+> > 	WRITE_ONCE(foo, 1);		while (!READ_ONCE(foo));
+> > 
+> > making forward progress.
+> 
+> Indeed yes.  As far as I can tell, this requirement is not explicitly 
+> mentioned in the LKMM, although it certainly is implicit.  I can't even 
+> think of a way to express it in a form Herd could verify.
+> 
 
-jfyi, this comment (and associated list-head) is removed by:
+FWIW, C++ defines this as (in https://eel.is/c++draft/atomics#order-11):
 
-https://patchwork.freedesktop.org/patch/496131/?series=105633&rev=4
+	Implementations should make atomic stores visible to atomic
+	loads within a reasonable amount of time.
 
-BR,
--R
+in other words:
 
->
-> > ---
-> >   drivers/gpu/drm/msm/msm_gem.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-> > index c75d3b879a53..e300c70e8904 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem.h
-> > +++ b/drivers/gpu/drm/msm/msm_gem.h
-> > @@ -118,7 +118,7 @@ struct msm_gem_object {
-> >        * An object is either:
-> >        *  inactive - on priv->inactive_dontneed or priv->inactive_willneed
-> >        *     (depending on purgeability status)
-> > -      *  active   - on one one of the gpu's active_list..  well, at
-> > +      *  active   - on one of the gpu's active_list..  well, at
-> >        *     least for now we don't have (I don't think) hw sync between
-> >        *     2d and 3d one devices which have both, meaning we need to
-> >        *     block on submit if a bo is already on other ring
->
-> --
-> With best wishes
-> Dmitry
->
+if one thread does an atomic store, then all other threads must see that
+store eventually.
+
+(from: https://rust-lang.zulipchat.com/#narrow/stream/136281-t-lang.2Fwg-unsafe-code-guidelines/topic/Rust.20forward.20progress.20guarantees/near/294702950)
+
+Should we add something somewhere in our model, maybe in the
+explanation.txt?
+
+Plus, I think we cannot express this in Herd because Herd uses
+graph-based model (axiomatic model) instead of an operational model to
+describe the model: axiomatic model cannot describe "something will
+eventually happen". There was also some discussion in the zulip steam
+of Rust unsafe-code-guidelines.
+
+Regards,
+Boqun
+
+> > There were a few 'funny' uarchs that were broken, see for example commit
+> > a30718868915f.
+> 
+> Ha!  That commit should be a lesson in something, although I'm not sure 
+> what.  :-)
+> 
+> Alan

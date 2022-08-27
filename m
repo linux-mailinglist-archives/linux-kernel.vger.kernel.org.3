@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F0E5A3380
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 03:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7515A33AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbiH0BeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 21:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S1345264AbiH0CD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 22:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiH0BeQ (ORCPT
+        with ESMTP id S232135AbiH0CD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 21:34:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F950C8884
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:34:15 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MDzh76jLqznTl9;
-        Sat, 27 Aug 2022 09:31:51 +0800 (CST)
-Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 09:34:13 +0800
-Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
- (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 27 Aug
- 2022 09:34:12 +0800
-From:   Shang XiaoJing <shangxiaojing@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
-CC:     <shangxiaojing@huawei.com>
-Subject: [PATCH -next] sched/deadline: Move __dl_clear_params out of dl_bw lock
-Date:   Sat, 27 Aug 2022 10:09:11 +0800
-Message-ID: <20220827020911.30641-1-shangxiaojing@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 26 Aug 2022 22:03:27 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375BBDAA37
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 19:03:24 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661565802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D/7slZr7aKprYNwHgvO651SPT0Z8XLhxiDf8lcRtpQw=;
+        b=tDZZB4JRrLkqVe4E2jf4nrLsdHCCIn8o015HtLYrQN3xj39KJHXil5iV8dnAPPTXtbJecy
+        UIPJXhTCbR15TLbIwBxx3EfH+wV3DwCOQGdGWxv7WtyIGNTomfPmdWiWSpVZzjbM0urfrz
+        1NQUuRgjfzsnqMHIzpO0VYTA7Wk+Q1I=
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600008.china.huawei.com (7.193.23.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 09/10] hugetlb: remove meaningless BUG_ON(huge_pte_none())
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20220826092422.39591-10-linmiaohe@huawei.com>
+Date:   Sat, 27 Aug 2022 10:03:19 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <399D37BF-B33B-476F-97D4-AEB812316617@linux.dev>
+References: <20220826092422.39591-1-linmiaohe@huawei.com>
+ <20220826092422.39591-10-linmiaohe@huawei.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As members in sched_dl_entity are independent with dl_bw, move
-__dl_clear_params out of dl_bw lock.
 
-Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
----
- kernel/sched/deadline.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 58ca9aaa9c44..7b15885c8608 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -431,8 +431,8 @@ static void task_non_contending(struct task_struct *p)
- 				sub_rq_bw(&p->dl, &rq->dl);
- 			raw_spin_lock(&dl_b->lock);
- 			__dl_sub(dl_b, p->dl.dl_bw, dl_bw_cpus(task_cpu(p)));
--			__dl_clear_params(p);
- 			raw_spin_unlock(&dl_b->lock);
-+			__dl_clear_params(p);
- 		}
- 
- 		return;
--- 
-2.17.1
+> On Aug 26, 2022, at 17:24, Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+> When code reaches here, invalid page would have been accessed if huge pte
+> is none. So this BUG_ON(huge_pte_none()) is meaningless. Remove it.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
 

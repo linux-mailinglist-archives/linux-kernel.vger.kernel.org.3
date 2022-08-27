@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E905A3911
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FC75A3919
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 19:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbiH0RD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 13:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S234089AbiH0REQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 13:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiH0RDV (ORCPT
+        with ESMTP id S230024AbiH0REO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 13:03:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1363C29C8C;
-        Sat, 27 Aug 2022 10:03:21 -0700 (PDT)
+        Sat, 27 Aug 2022 13:04:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F922255AC;
+        Sat, 27 Aug 2022 10:04:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E965D60DDB;
-        Sat, 27 Aug 2022 17:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5CFE8C433D6;
-        Sat, 27 Aug 2022 17:03:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFC46B80966;
+        Sat, 27 Aug 2022 17:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84600C433D6;
+        Sat, 27 Aug 2022 17:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661619800;
-        bh=Of7PCswaC3yU56t+vb5YYpZvtN+Wu46qqvVhYI4FK3Q=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=b8ay1DNeoR/aMCbTKfRZelbOmYpyhNSyqxwoW2lVmb7pI2Pbr0SXJdE9rpmFctL8f
-         M5YSzl4BnVefhlsLUgcpgHVWTjH3kGNg7Mhdz4Tr+WYdvgIYAYRMVLNDxNUToMHO9m
-         mGdOqyx5MbCTu9MVGx7RCf5Eknz41+h7ORV0mv+UJPX0DlwePAkfeRW1VBlmwMiD3s
-         vNXAaqAG4y0R4c7d0sJ6O5ARTq90dONEEcZCY7Cl0MaPKjQet0qL/9q1WBJWWz8Vn4
-         PRq4UVvWn0WgnoDY5f9mia6VtXosELMYcNGcb33YT+6Bctvlz8bmA0qL1/Oo8emCzg
-         g33gZQ9V7cooA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 486EFE2A03B;
-        Sat, 27 Aug 2022 17:03:20 +0000 (UTC)
-Subject: Re: [GIT PULL] fbdev updates & fixes for v6.0-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YwkRD5hWd4F02dxc@ls3530>
-References: <YwkRD5hWd4F02dxc@ls3530>
-X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
- <dri-devel.lists.freedesktop.org>
-X-PR-Tracked-Message-Id: <YwkRD5hWd4F02dxc@ls3530>
-X-PR-Tracked-Remote: http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.0-rc3
-X-PR-Tracked-Commit-Id: a5a923038d70d2d4a86cb4e3f32625a5ee6e7e24
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 89b749d8552d78c4dd86dea86e2e6ba8aafab9fe
-Message-Id: <166161980028.20520.16122693737421245098.pr-tracker-bot@kernel.org>
-Date:   Sat, 27 Aug 2022 17:03:20 +0000
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
+        s=k20201202; t=1661619850;
+        bh=ifCIA4dNWh8Q4AzrrjoDnXchHg7H4+UCS/oi7vz+Mj8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=A2AkI5um4s1GeoW+FJ+BIA4yYhOsndtFBlJhOGQNNzpVkOMtgpDh5yUQjPdd3zo2K
+         dZ6reXlnM3iAa4sxqAUHqnz6K3ftoK/+Tm4v9N5OhaZXizDglY87hU2sEKnOkmctWm
+         ROMs8pQ+Thxh/wXScne9SATahFytWcRdlYMWqsVdGsyNzg78m6jMYJPfk6Nzbm34LV
+         YQnaDZUb7NrZzyPensUefrxvrCkuRJK9zDB2GOrMqmkF/z/mtwaeFhSpAO0Vnyomcy
+         AtEpp3QDKRcHBNIqm98pI06jkMC6JRsgI0ccOCGxPgUkdkO8AcuO1ToV+rO0ESGazZ
+         qa2NCXKzq3R0g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2A9635C03F3; Sat, 27 Aug 2022 10:04:10 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 10:04:10 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Zijlstra <peterz@infradead.org>, parri.andrea@gmail.com,
+        will@kernel.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Message-ID: <20220827170410.GG6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <20220826204219.GX6159@paulmck-ThinkPad-P17-Gen-1>
+ <Ywo/j7V2GbMKMmp3@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ywo/j7V2GbMKMmp3@rowland.harvard.edu>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,15 +65,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 26 Aug 2022 20:29:35 +0200:
+On Sat, Aug 27, 2022 at 12:00:15PM -0400, Alan Stern wrote:
+> On Fri, Aug 26, 2022 at 01:42:19PM -0700, Paul E. McKenney wrote:
+> > On Fri, Aug 26, 2022 at 01:10:39PM -0400, Alan Stern wrote:
+> > > On Fri, Aug 26, 2022 at 06:23:24PM +0200, Peter Zijlstra wrote:
+> > > > I think we should address that first one in LKMM, it seems very weird to
+> > > > me a RmW would break the chain like that.
+> > > 
+> > > An explicitly relaxed RMW (atomic_cmpxchg_relaxed(), to be precise).
+> > > 
+> > > If the authors wanted to keep the release-acquire chain intact, why not 
+> > > use a cmpxchg version that has release semantics instead of going out of 
+> > > their way to use a relaxed version?
+> > > 
+> > > To put it another way, RMW accesses and release-acquire accesses are 
+> > > unrelated concepts.  You can have one without the other (in principle, 
+> > > anyway).  So a relaxed RMW is just as capable of breaking a 
+> > > release-acquire chain as any other relaxed operation is.
+> > > 
+> > > >  Is there actual hardware that
+> > > > doesn't behave?
+> > > 
+> > > Not as far as I know, although that isn't very far.  Certainly an 
+> > > other-multicopy-atomic architecture would make the litmus test succeed.  
+> > > But the LKMM does not require other-multicopy-atomicity.
+> > 
+> > My first attempt with ppcmem suggests that powerpc does -not- behave
+> > this way.  But that surprises me, just on general principles.  Most likely
+> > I blew the litmus test shown below.
+> > 
+> > Thoughts?
+> 
+> The litmus test looks okay.
+> 
+> As for your surprise, remember that PPC is B-cumulative, another 
+> property which the LKMM does not require.  B-cumulativity will also 
+> force the original litmus test to succeed.  (The situation is like ISA2 
+> in the infamous test6.pdf, except that y and z are separate variables in 
+> ISA2 but are the same here.  The RMW nature of lwarx/stwcx provides 
+> the necessary R-W ordering in P1.)
 
-> http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.0-rc3
+Got it, thank you!
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/89b749d8552d78c4dd86dea86e2e6ba8aafab9fe
+							Thanx, Paul
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> > ------------------------------------------------------------------------
+> > 
+> > PPC MP+lwsyncs+atomic
+> > "LwSyncdWW Rfe LwSyncdRR Fre"
+> > Cycle=Rfe LwSyncdRR Fre LwSyncdWW
+> > {
+> > 0:r2=x; 0:r4=y;
+> > 1:r2=y; 1:r5=2;
+> > 2:r2=y; 2:r4=x;
+> > }
+> >  P0           | P1              | P2           ;
+> >  li r1,1      | lwarx r1,r0,r2  | lwz r1,0(r2) ;
+> >  stw r1,0(r2) | stwcx. r5,r0,r2 | lwsync       ;
+> >  lwsync       |                 | lwz r3,0(r4) ;
+> >  li r3,1      |                 |              ;
+> >  stw r3,0(r4) |                 |              ;
+> > exists (1:r1=1 /\ 2:r1=2 /\ 2:r3=0)
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > $ ./ppcmem -model lwsync_read_block -model coherence_points MP+lwsyncs+atomic.litmus
+> > ...
+> > Test MP+lwsyncs+atomic Allowed
+> > States 9
+> > 1:r1=0; 2:r1=0; 2:r3=0;
+> > 1:r1=0; 2:r1=0; 2:r3=1;
+> > 1:r1=0; 2:r1=1; 2:r3=1;
+> > 1:r1=0; 2:r1=2; 2:r3=0;
+> > 1:r1=0; 2:r1=2; 2:r3=1;
+> > 1:r1=1; 2:r1=0; 2:r3=0;
+> > 1:r1=1; 2:r1=0; 2:r3=1;
+> > 1:r1=1; 2:r1=1; 2:r3=1;
+> > 1:r1=1; 2:r1=2; 2:r3=1;
+> > No (allowed not found)
+> > Condition exists (1:r1=1 /\ 2:r1=2 /\ 2:r3=0)
+> > Hash=b7cec0e2ecbd1cb68fe500d6fe362f9c
+> > Observation MP+lwsyncs+atomic Never 0 9

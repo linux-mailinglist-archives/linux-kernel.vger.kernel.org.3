@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0925A33A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 03:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FF25A33A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 03:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345177AbiH0Bty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 21:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S1345187AbiH0BvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 21:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234350AbiH0Btv (ORCPT
+        with ESMTP id S232193AbiH0BvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 21:49:51 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724F7110E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:49:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661564989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vkhRpcInMl8CDn6FtM8jPf8MiywjKLHZosXiSY+DWPU=;
-        b=L6xk1Kv3MMsufy8I2p1/ciii/QhxjoTWNHmSsHQb/roH7+UctZmVdYo56eADSuj0gj0eT4
-        GyZIGFoXP04nZemfNcvuy+644/wFy5mM5Pz+L2u9kQiceFNuw9CUUXReuI3w9o9KtfGJFs
-        6TfP9CIQbiVWaNuLPToBOg36j/YAzPk=
+        Fri, 26 Aug 2022 21:51:12 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F337D8B2B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:51:11 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 6506340D403D;
+        Sat, 27 Aug 2022 01:51:08 +0000 (UTC)
 MIME-Version: 1.0
-Subject: Re: [PATCH 06/10] hugetlb: pass NULL to kobj_to_hstate() if nid is
- unused
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20220826092422.39591-7-linmiaohe@huawei.com>
-Date:   Sat, 27 Aug 2022 09:49:45 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
-        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
+Date:   Sat, 27 Aug 2022 04:51:08 +0300
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] x86: Add resolve_cmdline() helper
+In-Reply-To: <YwiwCgIoIPnsyanu@zn.tnic>
+References: <cover.1653471377.git.baskov@ispras.ru>
+ <7eb917aeb1fa9f044f90ec33c8bf33bb6aee62a5.1653471377.git.baskov@ispras.ru>
+ <YwiwCgIoIPnsyanu@zn.tnic>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <0cb45c3090293039fb32e47b4fa181dc@ispras.ru>
+X-Sender: baskov@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <DA8D4CAE-B295-4EF9-8D7B-66F4D32EFB0F@linux.dev>
-References: <20220826092422.39591-1-linmiaohe@huawei.com>
- <20220826092422.39591-7-linmiaohe@huawei.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Aug 26, 2022, at 17:24, Miaohe Lin <linmiaohe@huawei.com> wrote:
+On 2022-08-26 14:35, Borislav Petkov wrote:
+> On Wed, May 25, 2022 at 01:10:10PM +0300, Evgeniy Baskov wrote:
+>> Command line needs to be combined in both compressed and uncompressed
+>> kernel from built-in and boot command line strings, which requires
+>> non-trivial logic depending on CONFIG_CMDLINE_BOOL and
+>> CONFIG_CMDLINE_OVERRIDE.
+>> 
+>> Add a helper function to avoid code duplication.
+>> 
+>> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+>> 
 > 
-> We can pass NULL to kobj_to_hstate() directly when nid is unused to
-> simplify the code. No functional change intended.
+> You have some weird configuration to your git send-email which doesn't
+> add the "---" to split the patch commit message from the diffstat.
+
+Thanks, apparently "--summary" removes that.
+
+...
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> So that has been switched to strscpy() in the meantime:
+> 
+> 8a33d96bd178 ("x86/setup: Use strscpy() to replace deprecated 
+> strlcpy()")
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+I did already replace strlcpy() in v5, but since there are new changes
+needed, I will send v6 with those changes applied soon.
+So, please, ignore v5 then.
 
-Thanks.
+> 
+> Please redo your set ontop of latest tip/master.
 
+Will do.
+
+Thanks,
+Evgeniy Baskov

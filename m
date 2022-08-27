@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0495A396A
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F9B5A396C
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 20:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiH0SOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 14:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S230087AbiH0SRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 14:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH0SOL (ORCPT
+        with ESMTP id S229445AbiH0SRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 14:14:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EBDF8FE8;
-        Sat, 27 Aug 2022 11:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=sUguMGpeELC51NsqY2/REHqyVfAcxO10QryURvNRxvA=; b=wIffhsHYLYcLNZloUpBt13xXHP
-        T4G/Emj3HSQ8DUtYa2yOsXJMv+psMjGTS2lzt11aCJwFdlcmbHN8+t8P9KSEtmoJgaY2se++hXBoN
-        +uMnksKSY1P5xb4FwYhYEUe+jZeaB0c7RAidT8HBhXlvTWNcXUXBLw0OzXxD8FGhb05LiA1BYK/KW
-        +21/wptqiyadsXygcPistYKuaNKVTBDaHEjKCSxbzZXkKkpm9jtRQtd00RtTyZQSzg7w8f6Kh32HJ
-        dxM0EeUZ4bt6H/6TnJ22fxfMyDqILFolE4DbR/Uzomeanvy6NQFVEtTBaF4eqRcpQVAHvBWLy7hEO
-        +wr8jNvg==;
-Received: from c-73-157-219-8.hsd1.or.comcast.net ([73.157.219.8] helo=[10.0.0.152])
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oS0Jr-00Gje1-1f; Sat, 27 Aug 2022 18:14:07 +0000
-Message-ID: <e552d98b-f458-05d0-7a2e-b8bc8454f932@infradead.org>
-Date:   Sat, 27 Aug 2022 11:14:06 -0700
+        Sat, 27 Aug 2022 14:17:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69113CEB11;
+        Sat, 27 Aug 2022 11:17:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03C2BB80966;
+        Sat, 27 Aug 2022 18:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC26C433C1;
+        Sat, 27 Aug 2022 18:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661624223;
+        bh=wT/bJMPMaWT/N+KIlfrP2TdLyTC5KnPrUm8pbZpJJJ8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PsFwtIasgjlbdGANRINQdd30B/47vuTUgDk5yYWXXZzwwLuVcvgIMnQXfRLDMjxs+
+         5FT9wZctXXJAvx4AX0XI09q+pk0uOYei1kJ7B/oBMIgh7SCP6426e49GG6ULVDhvGu
+         Qbtz+gOLZBWEKRQMMSy79lu+2E5GvXG+ZCZ3RbW0oxk5sXQCVIv6rJNYKvp27S6vn3
+         p6a0Cr4msGFNd94ywW0+MTcPL6k6GaoajL+UXLSpJ/Gr16jsZpDW3M7GWrg3wAxqk0
+         VGOgK0rqScSQs+F5wvHJ758mbEP6GcJJhOlbgDawMnVHHtk1z126DwOUmxy38WNa5E
+         U4zhdSdKuDG4g==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools fixes for v6.0: 2nd batch
+Date:   Sat, 27 Aug 2022 15:16:55 -0300
+Message-Id: <20220827181655.406024-1-acme@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] Remove duplicate words inside documentation
-Content-Language: en-US
-To:     Akhil Raj <lf32.dev@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net
-References: <20220827145359.32599-1-lf32.dev@gmail.com>
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220827145359.32599-1-lf32.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,31 +65,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Hi Linus,
 
-On 8/27/22 07:53, Akhil Raj wrote:
-> I have removed repeated `the` inside the documentation
-> 
-> Signed-off-by: Akhil Raj <lf32.dev@gmail.com>
-> ---
->  Documentation/admin-guide/kdump/vmcoreinfo.rst    | 2 +-
->  Documentation/bpf/map_cgroup_storage.rst          | 4 ++--
->  Documentation/core-api/cpu_hotplug.rst            | 2 +-
->  Documentation/driver-api/isa.rst                  | 2 +-
->  Documentation/filesystems/caching/backend-api.rst | 2 +-
->  Documentation/locking/seqlock.rst                 | 2 +-
->  6 files changed, 7 insertions(+), 7 deletions(-)
+	Please consider pulling,
 
-Looks good, although parts of it seem to be duplicates of another
-similar patch.
-https://lore.kernel.org/linux-doc/d785f8aa-5a41-006d-394c-2bba64047cb4@infradead.org/T/#me8fa863e9f8c00fbbf4d11af8412c3bd8df5cfc5
+Best regards,
 
+- Arnaldo
 
-And there are duplicated words other that "the" that could be
-cleaned up.
-E.g.:
-  we trace guest of when and should to in send that is on as can at
-  this are
+Test results at the end of this message, as usual.
 
--- 
-~Randy
+The following changes since commit e022620b5d056e822e42eb9bc0f24fcb97389d86:
+
+  Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux (2022-08-26 11:32:53 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.0-2022-08-27
+
+for you to fetch changes up to 48648548ef764dcb1f6ffc9c9f9057f7c610caa4:
+
+  perf stat: Capitalize topdown metrics' names (2022-08-27 11:55:17 -0300)
+
+----------------------------------------------------------------
+perf tools fixes for v6.0: 2nd batch
+
+- Fixup setup of weak groups when using 'perf stat --repeat', add a
+  'perf test' for it.
+
+- Fix memory leaks in 'perf sched record' detected with -fsanitize=address.
+
+- Fix build when PYTHON_CONFIG is user supplied.
+
+- Capitalize topdown metrics' names in 'perf stat', so that the output,
+  sometimes parsed, matches the Intel SDM docs.
+
+- Make sure the documentation for the save_type filter about Intel
+  systems with Arch LBR support (12th-Gen+ client or 4th-Gen Xeon+
+  server) reflects recent related kernel changes.
+
+- Fix 'perf record' man page formatting of description of support to hybrid systems.
+
+- Update arm64´s  KVM header from the kernel sources.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+----------------------------------------------------------------
+Andi Kleen (1):
+      perf record: Fix manpage formatting of description of support to hybrid systems
+
+Arnaldo Carvalho de Melo (1):
+      tools kvm headers arm64: Update KVM header from the kernel sources
+
+Ian Rogers (3):
+      perf stat: Clear evsel->reset_group for each stat run
+      perf test: Stat test for repeat with a weak group
+      perf sched: Fix memory leaks in __cmd_record detected with -fsanitize=address
+
+James Clark (1):
+      perf python: Fix build when PYTHON_CONFIG is user supplied
+
+Kan Liang (1):
+      perf docs: Update the documentation for the save_type filter
+
+Zhengjun Xing (1):
+      perf stat: Capitalize topdown metrics' names
+
+ tools/arch/arm64/include/uapi/asm/kvm.h   |  6 ++++--
+ tools/perf/Documentation/intel-hybrid.txt | 10 ----------
+ tools/perf/Documentation/perf-record.txt  |  7 +++++--
+ tools/perf/Makefile.config                |  2 +-
+ tools/perf/builtin-sched.c                | 24 +++++++++++++++++++-----
+ tools/perf/builtin-stat.c                 |  1 +
+ tools/perf/tests/shell/stat.sh            | 19 +++++++++++++++++++
+ tools/perf/util/stat-shadow.c             | 24 ++++++++++++------------
+ 8 files changed, 61 insertions(+), 32 deletions(-)

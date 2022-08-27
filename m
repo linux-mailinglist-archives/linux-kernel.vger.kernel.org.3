@@ -2,105 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F255A33A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C5F5A33A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345268AbiH0CAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 22:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S239982AbiH0CBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 22:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345226AbiH0CAT (ORCPT
+        with ESMTP id S1345226AbiH0CBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 22:00:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCAC12AEB;
-        Fri, 26 Aug 2022 19:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF31BB83382;
-        Sat, 27 Aug 2022 02:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 77F4CC43470;
-        Sat, 27 Aug 2022 02:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661565615;
-        bh=UWdPil+KjpEYVZEksMsL3lsjUYL8yLDXNxRbLUzMmug=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WPG6tsWN/gdiGHzgfKvsdOkORbLfuVYdtjKgvR7Q5nYeC05Tf7YQQ8gpjNE0BLK33
-         pnpbVjql5z/fNlIHI+JYddqxrcV+iALNbXtMwhLnl+M3lFrJw6Csl3XfR1StahRddM
-         2zxuq68TmyLU6Vu5sLf+L4eqh6KwcN++OOX2JTSxYwqwwvUo+RBo3TOn/VMvgfgSyE
-         6zAesBqv6R+yRxzKi6rl7ZZ8pnxIUwX5uslr4B+UGcEykCUbHmvzHny2TOYBvlDQGK
-         8e+dJOf4F06VoUsSuYGAD8N8ORYZOOWtkK5hQfBzZ4l+EEH7LwAB3q3D81Lcw2Qk4S
-         +mR296GHM57lQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53C28E2A042;
-        Sat, 27 Aug 2022 02:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 26 Aug 2022 22:01:22 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1303A26117
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 19:01:19 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MF0J72SNdzGpnw;
+        Sat, 27 Aug 2022 09:59:35 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 10:01:18 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 10:01:17 +0800
+Message-ID: <c1c22a8b-bc27-41e0-e709-c2d9fb9bc11c@huawei.com>
+Date:   Sat, 27 Aug 2022 10:01:16 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH -next 2/3] mm/zswap: delay the initializaton of zswap
+ until the first enablement
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+CC:     Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220825142037.3214152-1-liushixin2@huawei.com>
+ <20220825142037.3214152-3-liushixin2@huawei.com>
+ <YwksRZPIfXmlOmHR@dev-arch.thelio-3990X>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YwksRZPIfXmlOmHR@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] tg3: Disable tg3 device on system reboot to avoid
- triggering AER
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166156561533.8692.13682494208882962174.git-patchwork-notify@kernel.org>
-Date:   Sat, 27 Aug 2022 02:00:15 +0000
-References: <20220826002530.1153296-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220826002530.1153296-1-kai.heng.feng@canonical.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     siva.kallam@broadcom.com, prashant@broadcom.com,
-        mchan@broadcom.com, josef@toxicpanda.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 26 Aug 2022 08:25:30 +0800 you wrote:
-> Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused a
-> reboot hang on one Dell servers so the commit was reverted.
-> 
-> Someone managed to collect the AER log and it's caused by MSI:
-> [ 148.762067] ACPI: Preparing to enter system sleep state S5
-> [ 148.794638] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 5
-> [ 148.803731] {1}[Hardware Error]: event severity: recoverable
-> [ 148.810191] {1}[Hardware Error]: Error 0, type: fatal
-> [ 148.816088] {1}[Hardware Error]: section_type: PCIe error
-> [ 148.822391] {1}[Hardware Error]: port_type: 0, PCIe end point
-> [ 148.829026] {1}[Hardware Error]: version: 3.0
-> [ 148.834266] {1}[Hardware Error]: command: 0x0006, status: 0x0010
-> [ 148.841140] {1}[Hardware Error]: device_id: 0000:04:00.0
-> [ 148.847309] {1}[Hardware Error]: slot: 0
-> [ 148.852077] {1}[Hardware Error]: secondary_bus: 0x00
-> [ 148.857876] {1}[Hardware Error]: vendor_id: 0x14e4, device_id: 0x165f
-> [ 148.865145] {1}[Hardware Error]: class_code: 020000
-> [ 148.870845] {1}[Hardware Error]: aer_uncor_status: 0x00100000, aer_uncor_mask: 0x00010000
-> [ 148.879842] {1}[Hardware Error]: aer_uncor_severity: 0x000ef030
-> [ 148.886575] {1}[Hardware Error]: TLP Header: 40000001 0000030f 90028090 00000000
-> [ 148.894823] tg3 0000:04:00.0: AER: aer_status: 0x00100000, aer_mask: 0x00010000
-> [ 148.902795] tg3 0000:04:00.0: AER: [20] UnsupReq (First)
-> [ 148.910234] tg3 0000:04:00.0: AER: aer_layer=Transaction Layer, aer_agent=Requester ID
-> [ 148.918806] tg3 0000:04:00.0: AER: aer_uncor_severity: 0x000ef030
-> [ 148.925558] tg3 0000:04:00.0: AER: TLP Header: 40000001 0000030f 90028090 00000000
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2] tg3: Disable tg3 device on system reboot to avoid triggering AER
-    https://git.kernel.org/netdev/net/c/2ca1c94ce0b6
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On 2022/8/27 4:25, Nathan Chancellor wrote:
+> Hi Liu,
+>
+> On Thu, Aug 25, 2022 at 10:20:36PM +0800, Liu Shixin wrote:
+>> In the initialization of zswap, about 18MB memory will be allocated for
+>> zswap_pool in my machine. Since not all users use zswap, the memory may be
+>> wasted. Save the memory for these users by delaying the initialization of
+>> zswap to first enablement.
+>>
+>> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+>> ---
+...
+>> This change is in -next as commit 22100432cf14 ("mm/zswap: delay the
+>> initializaton of zswap until the first enablement"). I just bisected my
+>> arm64 test system running Fedora failing to boot due to that commit,
+>> with the following stack trace:
+>>
+>>    Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000000
+>>    Mem abort info:
+>>      ESR = 0x0000000096000004
+>>      EC = 0x25: DABT (current EL), IL = 32 bits
+>>      SET = 0, FnV = 0
+>>      EA = 0, S1PTW = 0
+>>      FSC = 0x04: level 0 translation fault
+>>    Data abort info:
+>>      ISV = 0, ISS = 0x00000004
+>>      CM = 0, WnR = 0
+>>    user pgtable: 4k pages, 48-bit VAs, pgdp=00000020a4fab000
+>>    [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+>>    Internal error: Oops: 96000004 [#1] SMP
+>>    Modules linked in: zram fsl_dpaa2_eth pcs_lynx phylink ahci_qoriq crct10dif_ce ghash_ce sbsa_gwdt fsl_mc_dpio nvme lm90 nvme_core at803x xhci_plat_hcd rtc_fsl_ftm_alarm xgmac_mdio ahci_platform i2c_imx ip6_tables ip_tables fuse
+>>    Unloaded tainted modules: cppc_cpufreq():1
+>>    CPU: 10 PID: 761 Comm: swapon Not tainted 6.0.0-rc2-00454-g22100432cf14 #1
+>>    Hardware name: SolidRun Ltd. SolidRun CEX7 Platform, BIOS EDK II Jun 21 2022
+>>    pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>    pc : frontswap_init+0x38/0x60
+>>    lr : __do_sys_swapon+0x8a8/0x9f4
+>>    sp : ffff80000969bcf0
+>>    x29: ffff80000969bcf0 x28: ffff37bee0d8fc00 x27: ffff80000a7f5000
+>>    x26: fffffcdefb971e80 x25: ffffaba797453b90 x24: 0000000000000064
+>>    x23: ffff37c1f209d1a8 x22: ffff37bee880e000 x21: ffffaba797748560
+>>    x20: ffff37bee0d8fce4 x19: ffffaba797748488 x18: 0000000000000014
+>>    x17: 0000000030ec029a x16: ffffaba795a479b0 x15: 0000000000000000
+>>    x14: 0000000000000000 x13: 0000000000000030 x12: 0000000000000001
+>>    x11: ffff37c63c0aba18 x10: 0000000000000000 x9 : ffffaba7956b8c88
+>>    x8 : ffff80000969bcd0 x7 : 0000000000000000 x6 : 0000000000000000
+>>    x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffffaba79730f000
+>>    x2 : ffff37bee0d8fc00 x1 : 0000000000000000 x0 : 0000000000000000
+>>    Call trace:
+>>    frontswap_init+0x38/0x60
+>>    __do_sys_swapon+0x8a8/0x9f4
+>>    __arm64_sys_swapon+0x28/0x3c
+>>    invoke_syscall+0x78/0x100
+>>    el0_svc_common.constprop.0+0xd4/0xf4
+>>    do_el0_svc+0x38/0x4c
+>>    el0_svc+0x34/0x10c
+>>    el0t_64_sync_handler+0x11c/0x150
+>>    el0t_64_sync+0x190/0x194
+>>    Code: d000e283 910003fd f9006c41 f946d461 (f9400021)
+>>    ---[ end trace 0000000000000000 ]---
+>>
+>> This is with Fedora's configuration:
+>>
+>> https://src.fedoraproject.org/rpms/kernel/raw/rawhide/f/kernel-aarch64-fedora.config
+>>
+>> If there is any more information I can provide or patches I can test, I
+>> am more than happy to do so!
+Thanks for your reporting，we will check it.
+>
+> Cheers,
+> Nathan
+>
+> .

@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C185A32D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0F55A32DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbiH0AAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 20:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S1344803AbiH0ACJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 20:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiH0AAT (ORCPT
+        with ESMTP id S241925AbiH0ACH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 20:00:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B437A27143;
-        Fri, 26 Aug 2022 17:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69296B8334D;
-        Sat, 27 Aug 2022 00:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 260ABC433D7;
-        Sat, 27 Aug 2022 00:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661558415;
-        bh=kmpN9J1gfmCEeL8ftwlH2mqA3XlLfaa49oHRSbXJlXw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kvCmFmKfBwX+KJzMgQRcBLV+ctvRvVOwdErakUp8/7DhngeEb+58A1WpWeXqXDpMR
-         roGB80GW4gtrQS7GGAH3N+lfcgZoeeGNDJh4OK2PJ8fGicOvbRuBF77UPDJGRufLqM
-         4K72E7FkSR43SI85m2DOsWOVKevwm3k4fi1a5r/udkMpGNm+blImDVdXVxChTFOb1o
-         PHHxcvJe50h1/W6+6Zm7oRperCNtbRqeMf4sUo7CaXp7imVRZVcmq3bOa0+X5St670
-         s37kOMcsCLEHK2YeRlW6OWYYoMyHd7nU0+Je1Rb+pc3oRVzstSZeXfDMTAfkncJ5ux
-         QvZsOrmJGLIkg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8AFBC0C3EC;
-        Sat, 27 Aug 2022 00:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 26 Aug 2022 20:02:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4353E58BB;
+        Fri, 26 Aug 2022 17:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661558525; x=1693094525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SkUk/earvrI4Mk539WgoAWpm1Lwgqi1nI/36sw2BwJE=;
+  b=aXlfouW/f6LWKDXeVcv17D/8ttPBqIhWwu9opXeqaXv8fCvGbWoAFxk5
+   Jb2r/mD7GNAEjZoWgsSONaBdjObUcIziuqdJcP97mmxPrQ2tUOiZpoNKG
+   s0aGtXoCGmL2UxGrc5v1tAGgUaQCnyyAuf149KAHy0gNe3Ud586LiCoEJ
+   6ZaR41HIUQfmAPYruqkSt2ERDEjuSXhe1KX+aOjRxgnFda3abCuiADLq9
+   VtBKafSYKiYgNYWCw4HnPxpQTa0Z4/5AESnHhbyc5ffl4l2/mwtfURK4e
+   MaRkOQvYy1EVpj0l4N5Viw1tgI5S4nm2Ntpy4V9SDudimwd7wJfuVOssI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="293361293"
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="293361293"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 17:02:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="679034852"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.82.226])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 17:02:04 -0700
+Date:   Fri, 26 Aug 2022 17:02:03 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH] tracepoint: Allow trace events in modules with TAINT_TEST
+Message-ID: <Ywle+96kZr5Y6Kn/@aschofie-mobl2>
+References: <20220826223511.170256-1-alison.schofield@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] net: dsa: mv88e6xxx: support RGMII cmode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166155841494.20542.16295149435804772174.git-patchwork-notify@kernel.org>
-Date:   Sat, 27 Aug 2022 00:00:14 +0000
-References: <20220822144136.16627-1-marcus.carlberg@axis.com>
-In-Reply-To: <20220822144136.16627-1-marcus.carlberg@axis.com>
-To:     Marcus Carlberg <marcus.carlberg@axis.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kernel@axis.com,
-        pavana.sharma@digi.com, kabel@kernel.org, ashkan.boldaji@digi.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826223511.170256-1-alison.schofield@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
++ David Gow - Submitter of the new taint type
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 22 Aug 2022 16:41:36 +0200 you wrote:
-> Since the probe defaults all interfaces to the highest speed possible
-> (10GBASE-X in mv88e6393x) before the phy mode configuration from the
-> devicetree is considered it is currently impossible to use port 0 in
-> RGMII mode.
+On Fri, Aug 26, 2022 at 03:35:11PM -0700, alison.schofield@intel.com wrote:
+> From: Alison Schofield <alison.schofield@intel.com>
 > 
-> This change will allow RGMII modes to be configurable for port 0
-> enabling port 0 to be configured as RGMII as well as serial depending
-> on configuration.
+> Commit 2852ca7fba9f ("panic: Taint kernel if tests are run")
+> introduced a new taint type, TAINT_TEST, to signal that an
+> in-kernel test has been run.
 > 
-> [...]
-
-Here is the summary with links:
-  - [v3] net: dsa: mv88e6xxx: support RGMII cmode
-    https://git.kernel.org/netdev/net-next/c/1d2577ab0f05
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> TAINT_TEST taint type defaults into a 'bad_taint' list for
+> kernel tracing and blocks the creation of trace events. This
+> causes a problem for CXL testing where loading the cxl_test
+> module makes all CXL modules out-of-tree, blocking any trace
+> events.
+> 
+> Trace events are in development for CXL at the moment and this
+> issue was found in test with v6.0-rc1.
+> 
+> Reported-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> ---
+>  kernel/tracepoint.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+> index 64ea283f2f86..5f17378c9dc2 100644
+> --- a/kernel/tracepoint.c
+> +++ b/kernel/tracepoint.c
+> @@ -571,7 +571,8 @@ static void for_each_tracepoint_range(
+>  bool trace_module_has_bad_taint(struct module *mod)
+>  {
+>  	return mod->taints & ~((1 << TAINT_OOT_MODULE) | (1 << TAINT_CRAP) |
+> -			       (1 << TAINT_UNSIGNED_MODULE));
+> +			       (1 << TAINT_UNSIGNED_MODULE) |
+> +			       (1 << TAINT_TEST));
+>  }
+>  
+>  static BLOCKING_NOTIFIER_HEAD(tracepoint_notify_list);
+> 
+> base-commit: 4c612826bec1441214816827979b62f84a097e91
+> -- 
+> 2.31.1
+> 

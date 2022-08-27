@@ -2,119 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6347B5A37FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 15:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8F45A3803
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 15:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbiH0Nrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 09:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S233316AbiH0Ny3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 09:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiH0Nrl (ORCPT
+        with ESMTP id S229677AbiH0Ny1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 09:47:41 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493E2E9DB
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 06:47:40 -0700 (PDT)
-Received: from fsav313.sakura.ne.jp (fsav313.sakura.ne.jp [153.120.85.144])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 27RDlNSJ032657;
-        Sat, 27 Aug 2022 22:47:23 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav313.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp);
- Sat, 27 Aug 2022 22:47:23 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 27RDlNUK032654
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 27 Aug 2022 22:47:23 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <2110618e-57f0-c1ce-b2ad-b6cacef3f60e@I-love.SAKURA.ne.jp>
-Date:   Sat, 27 Aug 2022 22:47:19 +0900
+        Sat, 27 Aug 2022 09:54:27 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55F22F662
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 06:54:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id kk26so7743584ejc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 06:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=8CiaLkECx3krBdKp6oIvGxj9L4zpqrT521rHLsVwe9c=;
+        b=g1jkYz6hbaud7MJPfP0jk8kKHIWsdovgRzcgSUPODZpbjnDzLbWqeUUvMfhcoOvP2o
+         htWSK5oUojOo772tVxb2ovafBDv5nHDssuSAXh0GJ8cr7DNbVH/vcT15T6DsrywtkG5L
+         9N2MXav1SOO5iaoM2/si+QncOtmAC0ORMqsdfWEui/zHqOVusXm259fNbVucOTCO+opN
+         5uXJo1y/7kZboMlhv5jq7zi5Bl/1QIwfHlz+GnMU49Cg/+iICR3oJzR79/HXC4KyJO1N
+         JcH24SsTQu4KQUwyRQaXQbX4+AADrP7Ie842gQXGkPCgI4H7n1r5lA5bPBLHy+glgCN6
+         L/Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=8CiaLkECx3krBdKp6oIvGxj9L4zpqrT521rHLsVwe9c=;
+        b=6iJdtzcYSYD/O49Gs12cRvAxtJ6jm8+8PFq0KDCSv5lBbWp4inByxgUWJOoM/lkRrX
+         j/C+cQmTNfyR/F1/dDdQsqae06K1deR8T1v9k+8B3Q79ZZVsB2/K3CgtnOoEHMPTLYWI
+         31VMrhFCsC3JooDdYAq6h3A/HwDGodhkgr/SF3Vzf96LSPDVvy7QC6eSMLhhtA7bYpjp
+         u2c0b4LD8kb4N9Zggfh2SDg+zGmMVbSB4BLpahnQGqLFFRWqBtcaWfHu5H2lLJmNUoGn
+         T9AwvLBPdvyOHYvGA0JRFM6nUTP1CEVWD99HPsoLujN/iPOrfj0qy84N7lhyfu4StvpY
+         NecQ==
+X-Gm-Message-State: ACgBeo1OpgLnq1cJzoaeNDf6w3vq35L3n5r+T4ruEKeMCIHK9urzCAQo
+        lH2OVH4zQ3NgKWBNIbqBNmkryg==
+X-Google-Smtp-Source: AA6agR7Ggm9FNAtOJDfVc+2duDQAqokmt0wFwHO5MhLEgQCeXkyrdXp9PBkVxYqT3pzjDOoS/CBgwA==
+X-Received: by 2002:a17:906:6a03:b0:730:a20e:cf33 with SMTP id qw3-20020a1709066a0300b00730a20ecf33mr8607603ejc.620.1661608464159;
+        Sat, 27 Aug 2022 06:54:24 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b007311eb42e40sm2107674ejf.54.2022.08.27.06.54.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 06:54:23 -0700 (PDT)
+Message-ID: <d1de0337-ae16-7dca-b212-1a4e85129c31@blackwall.org>
+Date:   Sat, 27 Aug 2022 16:54:21 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: [PATCH] tty: n_gsm: initialize more members at gsm_alloc_mux()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
 Content-Language: en-US
-To:     Daniel Starke <daniel.starke@siemens.com>
-References: <0000000000008be58e05e5b5d971@google.com>
- <000000000000434f7a05e5bab1ce@google.com>
-Cc:     syzbot <syzbot+cf155def4e717db68a12@syzkaller.appspotmail.com>,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <000000000000434f7a05e5bab1ce@google.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+ <YwoZdzVCkMV8vGtl@shredder>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <YwoZdzVCkMV8vGtl@shredder>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot is reporting use of uninitialized spinlock at gsmld_write() [1], for
-commit 32dd59f96924f45e ("tty: n_gsm: fix race condition in gsmld_write()")
-allows accessing gsm->tx_lock before gsm_activate_mux() initializes it.
+On 27/08/2022 16:17, Ido Schimmel wrote:
+> On Sat, Aug 27, 2022 at 02:30:25PM +0300, Nikolay Aleksandrov wrote:
+>> On 26/08/2022 14:45, Hans Schultz wrote:
+>> Please add the blackhole flag in a separate patch.
+> 
+> +1
+> 
+> [...]
+> 
+>>> @@ -185,6 +196,9 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+>>>  		if (test_bit(BR_FDB_LOCAL, &dst->flags))
+>>>  			return br_pass_frame_up(skb);
+>>>  
+>>> +		if (test_bit(BR_FDB_BLACKHOLE, &dst->flags))
+>>> +			goto drop;
+>>> +
+>> Not happy about adding a new test in arguably the most used fast-path, but I don't see
+>> a better way to do blackhole right now. Could you please make it an unlikely() ?
+>>
+>> I guess the blackhole flag will be allowed for user-space to set at some point, why
+>> not do it from the start?
+>>
+>> Actually adding a BR_FDB_LOCAL and BR_FDB_BLACKHOLE would be a conflict above -
+>> the packet will be received. So you should move the blackhole check above the
+>> BR_FDB_LOCAL one if user-space is allowed to set it to any entry.
+> 
+> Agree about unlikely() and making it writeable from user space from the
+> start. This flag is different from the "locked" flag that should only be
+> ever set by the kernel.
+> 
+> Regarding BR_FDB_LOCAL, I think BR_FDB_BLACKHOLE should only be allowed
+> with BR_FDB_LOCAL as these entries are similar in the following ways:
+> 
+> 1. It doesn't make sense to associate a blackhole entry with a specific
+> port. The packet will never be forwarded to this port, but dropped by
+> the bridge. This means user space will add them on the bridge itself:
+> 
 
-Since object initialization should be done right after allocation in order
-to avoid accessing uninitialized memory, move initialization of
-timer/work/waitqueue/spinlock from gsmld_open()/gsm_activate_mux() to
-gsm_alloc_mux().
+Right, good point.
 
-Link: https://syzkaller.appspot.com/bug?extid=cf155def4e717db68a12 [1]
-Reported-by: syzbot <syzbot+cf155def4e717db68a12@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+cf155def4e717db68a12@syzkaller.appspotmail.com>
-Fixes: 32dd59f96924f45e ("tty: n_gsm: fix race condition in gsmld_write()")
----
- drivers/tty/n_gsm.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+> # bridge fdb add 00:11:22:33:44:55 dev br0 self local blackhole
+> 
+> 2. If you agree that these entries should not be associated with a
+> specific port, then it also does not make sense to subject them to
+> ageing and roaming, just like existing local/permanent entries.
+> 
+> The above allows us to push the new check under the BR_FDB_LOCAL check:
+> 
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index caa5c14ed57f..70cd90474679 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2501,13 +2501,6 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	if (dlci == NULL)
- 		return -ENOMEM;
- 
--	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
--	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
--	INIT_WORK(&gsm->tx_work, gsmld_write_task);
--	init_waitqueue_head(&gsm->event);
--	spin_lock_init(&gsm->control_lock);
--	spin_lock_init(&gsm->tx_lock);
--
- 	if (gsm->encoding == 0)
- 		gsm->receive = gsm0_receive;
- 	else
-@@ -2612,6 +2605,12 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	kref_init(&gsm->ref);
- 	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
- 	INIT_LIST_HEAD(&gsm->tx_data_list);
-+	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
-+	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
-+	INIT_WORK(&gsm->tx_work, gsmld_write_task);
-+	init_waitqueue_head(&gsm->event);
-+	spin_lock_init(&gsm->control_lock);
-+	spin_lock_init(&gsm->tx_lock);
- 
- 	gsm->t1 = T1;
- 	gsm->t2 = T2;
-@@ -2946,10 +2945,6 @@ static int gsmld_open(struct tty_struct *tty)
- 
- 	gsmld_attach_gsm(tty, gsm);
- 
--	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
--	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
--	INIT_WORK(&gsm->tx_work, gsmld_write_task);
--
- 	return 0;
- }
- 
--- 
-2.34.1
+hmm.. so only the driver will be allowed to add non-BR_FDB_LOCAL blackhole
+entries with locked flag set as well, that sounds ok as they will be extern_learn
+and enforced by it. It is a little discrepancy as we cannot add similar entries in SW
+but it really doesn't make any sense to have blackhole fdbs pointing to a port.
+SW won't be able to have a locked entry w/ blackhole set, but I like that it is hidden
+in the fdb local case when fwding and that's good enough for me.
+
+> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> index 68b3e850bcb9..4357445529a5 100644
+> --- a/net/bridge/br_input.c
+> +++ b/net/bridge/br_input.c
+> @@ -182,8 +182,11 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+>         if (dst) {
+>                 unsigned long now = jiffies;
+>  
+> -               if (test_bit(BR_FDB_LOCAL, &dst->flags))
+> +               if (test_bit(BR_FDB_LOCAL, &dst->flags)) {
+> +                       if (unlikely(test_bit(BR_FDB_BLACKHOLE, &dst->flags)))
+> +                               goto drop;
+>                         return br_pass_frame_up(skb);
+> +               }
+>  
+>                 if (now != dst->used)
+>                         dst->used = now;
 

@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4815A378B
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0B75A3793
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 14:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiH0MFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 08:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S230427AbiH0MKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 08:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiH0MFx (ORCPT
+        with ESMTP id S229659AbiH0MKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 08:05:53 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5929612602;
-        Sat, 27 Aug 2022 05:05:52 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id t129so3978835pfb.6;
-        Sat, 27 Aug 2022 05:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Xm1nhA4qs4Pjpc09I2GPMsrr76SU/YUnQePs9+vlA4Y=;
-        b=PWCRF10ZlJ8x5xSxr1AjjIxi6mMod5unparcdBbL3CcXvXAQFnQ2TJoGEUCRy5POdy
-         UhgUv0+3VT6SUzsIC9qjmOULw14A76zXogxudPTe5lPsfxZVTXNvPRRLXYYgf5B2jZD+
-         59Q4eIhj9GdjbS23gzjW+4EwJpd8NFK9XOde7YUOlmMv263S/sNdE/375KtEmOsiNIgH
-         +VZS31LlrnyxD+t8LCFijQzSJiiXH2U/fB0WLRbAkuzBI4FPKw3iF4e+VSQG7aPu6+nT
-         PflxEjpZvfi4BcPt1IHw73VMAfYPxJdlgrystLflrRsW9K74a30q/vorUcCQaJg4NZpC
-         7a7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Xm1nhA4qs4Pjpc09I2GPMsrr76SU/YUnQePs9+vlA4Y=;
-        b=VmdNJQLEBl4VfqqdOF4zYoDay4Rgvwiy16mN/MEekp6FKfBF+4/DP6haJqZFM3gDDb
-         czmH7nK5pYKyirw8p+bVevHCZaLqlP0kvLLUCM7n8oHtr7bRvh6pKG7v3myV8ItPcPrx
-         w/xsvAuWY9SlMzBM9rknv6l2EbgbeG7bo35ijsB+Dvtrh/zXfkAU6YgAzeM+SdjcQMYZ
-         HL/OQpgp7O8bpiZN8u0Jes9C3ingxyUFmI1Ky2ntKyDgHM4NEUhAd+7TmIjoJJrfPBnw
-         BvvpIIAgyolzlgj8/7iuaAJFMJ8qvv+eI/fssSEZBOxdmIgcvdMkY69Ecd8FZmAFfDWu
-         TN+A==
-X-Gm-Message-State: ACgBeo3NY0IF2AM/ipP/hGFg4n0lscNuyQ0r01hSB2I0lsLwOKmuPDaW
-        NoA9cDOfy7mdmJN9dtdSDRg=
-X-Google-Smtp-Source: AA6agR7NWXqJVbjUgWkTmIL7EezW2s1Rs+B6k/9g1ebsxLxD/uvFuUTj8hLYhwKfxJkfC/wEje0t+g==
-X-Received: by 2002:a63:da13:0:b0:42a:7f03:a00e with SMTP id c19-20020a63da13000000b0042a7f03a00emr6777867pgh.332.1661601951215;
-        Sat, 27 Aug 2022 05:05:51 -0700 (PDT)
-Received: from DESKTOP-KA7F9LU.localdomain ([49.207.219.204])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709027fcf00b0017446f8d494sm2621921plb.240.2022.08.27.05.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 05:05:50 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 17:35:45 +0530
-From:   Vimal Kumar <vimal.kumar32@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] PM: runtime: Add support to disable wakeup sources
-Message-ID: <20220827120545.GA332@DESKTOP-KA7F9LU.localdomain>
-References: <20220825173457.23298-1-vimal.kumar32@gmail.com>
- <YwnPFdYL0W3e5E+n@kroah.com>
+        Sat, 27 Aug 2022 08:10:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD48B804A4
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 05:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661602249; x=1693138249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E30TlKHyMpVq2+ft4kq1Ob+zQ2NSiPpWjFxEeiQQiiI=;
+  b=mgWWVT6U92fYBssc/GsWxw8CJPW/C/6BacvTi9lDclpQQS15Th8yTFzd
+   tNsEWBnut2NJ99xQQJQpuR2VE4TGwEmqrWIXR+w45I1ec+UVDyOIukt3l
+   Zh9/k+WgiZlhUqikp0vaTRCHbNiOjj3ZnI3HOF5MLEEq1Q40Se848/ity
+   dT9dE7Z9ejs91mXUlvdPDHVgtZGCis3gtIm5vXNlAnkxzfWqfgXwgwFhk
+   d2UoxA+WfLTUA11QVLNodi4RY5wyoCmtBx0rlgaXMGzHWbPlAFXwOqFiy
+   PEet+EcoQ8FrKBBoJGrrcjqdqtcX0eFxKZ1V8qDmdjVA82mCsaIrII0lN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="281625786"
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="281625786"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 05:10:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="587617855"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 05:10:47 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRueE-000099-2n;
+        Sat, 27 Aug 2022 12:10:46 +0000
+Date:   Sat, 27 Aug 2022 20:10:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Subject: [avpatel:riscv_pmem_v1 37/38] arch/riscv/mm/cacheflush.c:100:2:
+ error: call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202208272028.IwrNZ0Ur-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwnPFdYL0W3e5E+n@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,62 +64,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 10:00:21AM +0200, Greg KH wrote:
-> On Thu, Aug 25, 2022 at 11:04:41PM +0530, Vimal Kumar wrote:
-> > User could find many wakeup sources available in the bsp, which
-> > they won't be using. Currently users can only get the status and
-> > list of enabled wakeup sources, but users can't disable it runtime.
-> > It's very difficult to find the driver for each wakeup sources from
-> > where it's getting enabled and make the changes for disabling it.
-> > 
-> > This will help users to disable any wakeup sources at runtime,
-> > avoiding any code change and re-compilation. A new class attribute
-> > "disable_ws" will be added in the wakeup calss. If user want to disable
-> > any wakeup sources, user need to find the wakeup dev node associated
-> > with the particular wakeup source and write the devnode name to the
-> > class attribute "disable_ws".
-> > 
-> > Example:
-> > Need to disable the wakeup source '1c08000.qcom,pcie'. The dev node
-> > associated with this wakeup source is:
-> > cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie", then for disabling
-> > this wakeup source :
-> > 	echo wakeup3 > /sys/class/wakeup/disable_ws
-> > 
-> > Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-> > Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-> > Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
-> > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-> > Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-wakeup | 16 +++++
-> >  drivers/base/power/wakeup_stats.c            | 65 +++++++++++++++++++-
-> >  2 files changed, 80 insertions(+), 1 deletion(-)
-> 
-> Based on previous discussions on the original submission that you seem
-> to have taken private, sorry but no, I can't even consider this
-> submission from you.
-> 
-> Please work on other portions of the kernel first to get used to the
-> development process.
-> 
-> Rafael, please don't worry about this.
-> 
-> greg k-h
+tree:   https://github.com/avpatel/linux.git riscv_pmem_v1
+head:   cfb27bb3561d70cd5e00b71c5f817b7c4452ae71
+commit: 2590647b8e45549f88977f6c2d87b9740e3df722 [37/38] RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
+config: riscv-randconfig-r042-20220825 (https://download.01.org/0day-ci/archive/20220827/202208272028.IwrNZ0Ur-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/2590647b8e45549f88977f6c2d87b9740e3df722
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_pmem_v1
+        git checkout 2590647b8e45549f88977f6c2d87b9740e3df722
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Hi Greg k-h,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-My sincere apologies for responding privetly on the original
-submission, It was not intended to do so. There was some issue
-while responding via mutt and I end up responding privetly.
+All errors (new ones prefixed by >>):
 
-I have responded publicly on original submission as well. Please 
-consider this second version, I have taken care of some previous
-reviews.
-
-Thanks Rafael, for the review comments as well, I will be respondig
-to the queries in a seperate thread.  
+>> arch/riscv/mm/cacheflush.c:100:2: error: call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           for_each_of_cpu_node(node) {
+           ^
+>> arch/riscv/mm/cacheflush.c:100:28: error: expected ';' after expression
+           for_each_of_cpu_node(node) {
+                                     ^
+                                     ;
+>> arch/riscv/mm/cacheflush.c:106:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   arch/riscv/mm/cacheflush.c:109:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+>> arch/riscv/mm/cacheflush.c:112:9: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+                         ^
+   arch/riscv/mm/cacheflush.c:114:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   6 errors generated.
 
 
-Warm Regards,
-Vimal Kumar
+vim +/for_each_of_cpu_node +100 arch/riscv/mm/cacheflush.c
+
+    92	
+    93	#ifdef CONFIG_RISCV_ISA_ZICBOM
+    94	void riscv_init_cbom_blocksize(void)
+    95	{
+    96		struct device_node *node;
+    97		int ret;
+    98		u32 val;
+    99	
+ > 100		for_each_of_cpu_node(node) {
+   101			unsigned long hartid;
+   102			int cbom_hartid;
+   103	
+   104			ret = riscv_of_processor_hartid(node, &hartid);
+   105			if (ret)
+ > 106				continue;
+   107	
+   108			if (hartid < 0)
+   109				continue;
+   110	
+   111			/* set block-size for cbom extension if available */
+ > 112			ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

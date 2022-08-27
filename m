@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058E75A3A1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 23:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB22C5A3A1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 23:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiH0ViV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 17:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S229707AbiH0VoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 17:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH0ViT (ORCPT
+        with ESMTP id S229445AbiH0VoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 17:38:19 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6C05F109
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 14:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661636298; x=1693172298;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6eynWqLNIpZ+77MTs5OlmZ76EWauuSlqSoP8zTxqwUE=;
-  b=aV6shLacHJ3h0aK3Phe1Dwo5P1sK2VmcBtzl14F2cxepTCkgQE1i1/I5
-   09HykSD/8WZ08G58T1am/7Y6NvNswtsHCn8KHMankHQgfnhJHxKT5BnK1
-   g4xeWx2mKx7vY0RZwg4dWu+ZrmH6+3D45gabq4RdJ5gwki5b9jhtf0sBG
-   VOXkzWJ7uii3b2/9f4VZghfC/zKLT8xByexztBZy75vNstTx9HifXz8xi
-   SStYxlhp1gXFyqn3mmcx4MGdv44QWLCfBIbOstdZx47I0XFIF5/2qJ2F/
-   CNWX8wJ4imtV8Xv1QJK4OnEY3k9Vro3uMaclarqkSj16PQ/UjRWoeZV3N
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="277707144"
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="277707144"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 14:38:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="640473709"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Aug 2022 14:38:16 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oS3VQ-0000VH-0m;
-        Sat, 27 Aug 2022 21:38:16 +0000
-Date:   Sun, 28 Aug 2022 05:37:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:vfio_iommufd 31/32] drivers/vfio/vfio.h:139:1: error:
- expected identifier or '(' before '{' token
-Message-ID: <202208280502.wOrVPveF-lkp@intel.com>
+        Sat, 27 Aug 2022 17:44:03 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A954A83B;
+        Sat, 27 Aug 2022 14:44:02 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id j4so2228263vki.0;
+        Sat, 27 Aug 2022 14:44:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=4NM+stoN5Dc3SGPld/SqpCYaP0qnQoboXzTlMHom+QM=;
+        b=FCgBK45gNST9ZGGp7Ocmb8PKbqlT6GBuAZkSCHCIOkyr1wJye+fejeY+k4rl/NUrbQ
+         LTcYRMD6R0PUSP1VAwdrvHL4DYEX9VmohR6+XX5SrG+2jWNn5R4Vl+Zhxkj17CZ75h0E
+         PXIx2R8/A2cU6Qh+kAtWPDUq0St3pi+YvWyxGhgAvt2St2ayh4WdMLORYALhTGGei0UL
+         Qp2vKSvtXmL4aihQLfdJf8SJk8XCKxNc995zpX+ow1Jrz+nSIhkVpyJgIWH0oZ2F2jBb
+         TMv2FnZ84FUdIu67A5Yt/s7JoBvsenLSeGkO3UOjoHxo8Fx8yU1sjvGDjV3xmvy8AB+6
+         qhqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=4NM+stoN5Dc3SGPld/SqpCYaP0qnQoboXzTlMHom+QM=;
+        b=uyG0RqQT/4q5h2i3Pv1f+3ABQ01Iqx2VJVUMifYu3jVDPnc/l480JprBQuh2FDbU4c
+         YrIC9obwtAfrsmxb8kGI2vSbVTqwACtD3xEALTXWqJvlZg5CnyV1+RIjgYVhi2IocZTi
+         Wd6r4B5EpVENWEhJ7DlEdxt7bs32EI4zs6M+mPdMS5Rxqz8GJgdpJ8QxBeNQbV0d9/K7
+         NdqgewWW7Odu1qydZY8/922dlKv2rpZnqb52yDNNKqepcGUOsNptAal7WnuEjHDALDXq
+         G20zW+v6UFH0iZ+Mi03nJKptUVg5tHQbZkBh3A6YNkhHFc4iUjqZOgeeyOuO63fPoI7I
+         I1gA==
+X-Gm-Message-State: ACgBeo3LepMNjX3EokiFBcGSx+zT0qxZRjRqGKkYqz36ODZ02PaRAJGe
+        X4382YQLmEMy9jH70W7210Z1wNW8V37UW5Y5T0cNny0J/KhbSw==
+X-Google-Smtp-Source: AA6agR5qugbEIuI0XrX9PanbeqDgXSoCLyzD4gxuK6cG+apOb1srdpEaHEr3+tQGqNw40DpArlPydzI7axxBaJie8GE=
+X-Received: by 2002:a05:6122:635:b0:389:9ad6:f974 with SMTP id
+ g21-20020a056122063500b003899ad6f974mr1681356vkp.4.1661636641675; Sat, 27 Aug
+ 2022 14:44:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 27 Aug 2022 16:43:51 -0500
+Message-ID: <CAH2r5muNM-NJOc0pehkN8gh3=UZtq4P1N_baW4sdZHB7FyPHCQ@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux vfio_iommufd
-head:   e2712af9ab672315cac202aee200eac0d63d7537
-commit: e44832b4f99da1885565bf73e49805c2f82a7386 [31/32] vfio: Make vfio_container optionally compiled
-config: sparc64-randconfig-c041-20220828 (https://download.01.org/0day-ci/archive/20220828/202208280502.wOrVPveF-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/e44832b4f99da1885565bf73e49805c2f82a7386
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe vfio_iommufd
-        git checkout e44832b4f99da1885565bf73e49805c2f82a7386
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/
+Please pull the following changes since commit
+1c23f9e627a7b412978b4e852793c5e3c3efc555:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
 
-All error/warnings (new ones prefixed by >>):
+are available in the Git repository at:
 
-   In file included from drivers/vfio/vfio_main.c:36:
->> drivers/vfio/vfio.h:139:1: error: expected identifier or '(' before '{' token
-     139 | {
-         | ^
->> drivers/vfio/vfio.h:138:19: warning: 'vfio_container_use' used but never defined
-     138 | static inline int vfio_container_use(struct vfio_group *group);
-         |                   ^~~~~~~~~~~~~~~~~~
---
-   In file included from drivers/vfio/vfio_iommufd.c:8:
->> drivers/vfio/vfio.h:139:1: error: expected identifier or '(' before '{' token
-     139 | {
-         | ^
-   drivers/vfio/vfio.h:138:19: warning: 'vfio_container_use' declared 'static' but never defined [-Wunused-function]
-     138 | static inline int vfio_container_use(struct vfio_group *group);
-         |                   ^~~~~~~~~~~~~~~~~~
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.0-rc2-smb3-client-fixes
 
+for you to fetch changes up to d291e703f420d5f8f999fe54f360d54d213bddb4:
 
-vim +139 drivers/vfio/vfio.h
+  cifs: Add helper function to check smb1+ server (2022-08-24 22:30:09 -0500)
 
-   137	
- > 138	static inline int vfio_container_use(struct vfio_group *group);
- > 139	{
-   140		return -EOPNOTSUPP;
-   141	}
-   142	
+----------------------------------------------------------------
+6 cifs/smb3 fixes, three for stable:
+- two locking fixes (zero range, punch hole)
+- DFS 9 fix (padding),  affecting some servers
+- three minor cleanup changes
+
+There are a few additional important fixes (collapse range, insert range) that
+are not included since still being tested.
+----------------------------------------------------------------
+David Howells (2):
+      smb3: missing inode locks in zero range
+      smb3: missing inode locks in punch hole
+
+Paulo Alcantara (1):
+      cifs: skip extra NULL byte in filenames
+
+Zhang Xiaoxu (3):
+      cifs: Use help macro to get the header preamble size
+      cifs: Use help macro to get the mid header size
+      cifs: Add helper function to check smb1+ server
+
+ fs/cifs/cifsencrypt.c |  3 +--
+ fs/cifs/cifsglob.h    |  7 ++++++
+ fs/cifs/connect.c     | 23 ++++++++----------
+ fs/cifs/smb2ops.c     | 67 +++++++++++++++++++++++++++------------------------
+ fs/cifs/smb2pdu.c     | 16 +++++-------
+ fs/cifs/transport.c   | 21 ++++++++--------
+ 6 files changed, 70 insertions(+), 67 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+Steve

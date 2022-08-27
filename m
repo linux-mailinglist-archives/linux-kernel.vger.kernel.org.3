@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09815A33D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F565A33DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 04:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345441AbiH0CkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 22:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S1345453AbiH0Ck6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 22:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiH0CkS (ORCPT
+        with ESMTP id S232193AbiH0Ck5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 22:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909AB72B52;
-        Fri, 26 Aug 2022 19:40:16 -0700 (PDT)
+        Fri, 26 Aug 2022 22:40:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6866A2182A;
+        Fri, 26 Aug 2022 19:40:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 294DA61DA8;
-        Sat, 27 Aug 2022 02:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AD44C43141;
-        Sat, 27 Aug 2022 02:40:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15422B83390;
+        Sat, 27 Aug 2022 02:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F775C43470;
+        Sat, 27 Aug 2022 02:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661568015;
-        bh=wecaXYmu9OJO5R98rVAmEX9VavU1QyMnE5UQbxW/9i4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KE35G2raHFjd99tmQquSyMMDMDrP6sy3ZXjGqsTt+X+Lp9zT1RXUjx+404Feix9Cf
-         hmLyRNU8drxMil+piqkr0PenGqtX4oKQA4SNIY0lW37oq1uXliVb1j2dIuUHE8TBsJ
-         v6ZeW4qjXyaz/v/SyNGSY1vI25Yl58nNhZ9dDgAne1XR8CGDpS1xX9KUsWAtYgfgQ9
-         ZTYFN10VC0DPNrqcm2pOApn0sgpro472+QMYLsWAG/SRyKU0ETD99TyICJxsjtZJeb
-         BMQAKWmuwo3/GDn4H825L3DqjP64wuyAhuemfXWcWrTVU8mKQcHooFHFz48Eb451f+
-         34O2kWcE20gSg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 671F2E2A041;
-        Sat, 27 Aug 2022 02:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1661568053;
+        bh=gW+EVdebQkvJRGGhWrUKteUychBX0QjK459mR3jEJwU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uVgmLgG3a6xAdgVmue1SY553R2KC8n0CKN8emJx5Q8Wjh9/WQCifc37JAvlj9wOTA
+         QhVuNQAqq7ZRDbKU93N54Y4KHS2gzRwbfi89YbC3moB3IPbURRQtj+gFA1qeowsIkD
+         cvG9V3DSqESfIrYaYN9QGwAZayl2ifNc5zEPyWh3LO3qffmQoMeVkmEo+ZlPNlwU2R
+         uvOx4opCUxNDe464f6kND+RU3HleJTJ3a/ZhhJ5awQvze9APriNr/j7Asv4UeMNh6+
+         b2IVbp5im4cjlOv8cp0BEhjTzFsk6LGJgjq9qf9oH0jm7XxipmGYfBtl5Bcg/66dLz
+         4TKxyo49wzfnQ==
+Date:   Fri, 26 Aug 2022 19:40:52 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
+Subject: Re: [PATCH net-next 0/3] net: sched: add other statistics when
+ calling qdisc_drop()
+Message-ID: <20220826194052.7978b101@kernel.org>
+In-Reply-To: <20220825032943.34778-1-shaozhengchao@huawei.com>
+References: <20220825032943.34778-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: dsa: mv88e6xxx: Allow external SMI if serial
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166156801541.24651.16548454594963692008.git-patchwork-notify@kernel.org>
-Date:   Sat, 27 Aug 2022 02:40:15 +0000
-References: <20220824093706.19049-1-marcus.carlberg@axis.com>
-In-Reply-To: <20220824093706.19049-1-marcus.carlberg@axis.com>
-To:     Marcus Carlberg <marcus.carlberg@axis.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kernel@axis.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,28 +57,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, 25 Aug 2022 11:29:40 +0800 Zhengchao Shao wrote:
+> According to the description, "other" should be added when calling
+> qdisc_drop() to discard packets.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+The fact that an old copy & pasted comment says something is not 
+in itself a sufficient justification to make code changes.
 
-On Wed, 24 Aug 2022 11:37:06 +0200 you wrote:
-> p0_mode set to one of the supported serial mode should not prevent
-> configuring the external SMI interface in
-> mv88e6xxx_g2_scratch_gpio_set_smi. The current masking of the p0_mode
-> only checks the first 2 bits. This results in switches supporting
-> serial mode cannot setup external SMI on certain serial modes
-> (Ex: 1000BASE-X and SGMII).
-> 
-> [...]
-
-Here is the summary with links:
-  - net: dsa: mv88e6xxx: Allow external SMI if serial
-    https://git.kernel.org/netdev/net-next/c/8532c60efcc5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+qdisc_drop() already counts drops, duplicating the same information 
+in another place seems like a waste of CPU cycles.

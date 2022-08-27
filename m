@@ -2,171 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCB95A3617
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA48B5A361C
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiH0Iui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 04:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S232649AbiH0Izb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 04:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiH0Iue (ORCPT
+        with ESMTP id S232040AbiH0Iz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 04:50:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6CD2A435;
-        Sat, 27 Aug 2022 01:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661590200;
-        bh=sLqA9Nhv1LxIrayZxnMdcIGoDvAaLN5XDUzwmP9YimQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=EdR/oW4bV7hX9TXH3hCs1b8ae02GLGT8/zQXzlH33lbg2FD7EK5m+etim2qbck7Lo
-         KX46ga/l4XBAVynrKpj7gZqYlvgfEw0jKA707w0FqjIumz+4siXiW5elrQ8P/Pr3sz
-         DnDH3mOSIdBFfvuU833dhdLFKth5dbjzKQ9PkuCE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.78.141] ([80.245.78.141]) by web-mail.gmx.net
- (3c-app-gmx-bs16.server.lan [172.19.170.68]) (via HTTP); Sat, 27 Aug 2022
- 10:50:00 +0200
+        Sat, 27 Aug 2022 04:55:28 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586F512D18;
+        Sat, 27 Aug 2022 01:55:24 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id y3so7010520ejc.1;
+        Sat, 27 Aug 2022 01:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=vOI84sZdwSXoHHFauLqlUAPvGEyu0wLF74hrJBYkpsY=;
+        b=N+ywI9yrM6vlHdtGY70f/HNljRCBO7dO8RyvHnxLlMCo3rkPlC8TLipmohew1WSAlB
+         EjYo6AsAYOEtkBY+mP+IunEm8yVdl8ssv6460V35fOdOVOxBIo+O6cQcq6L5lSV3sKGt
+         i7OslYHAvhu/bmKN/NRbPMc65VCrFccSdJI3NKUoaoBZOR1EKqjljrbO/cgbYrGtciAn
+         Juh9WVr7OHv09X21bjQkNzPlhQk0Bo4P74K4dzc+xMmeeDRCO6ecPU6A5SoTn8Rq7ZFN
+         4CHFh9vFhCawYdj7WfYDzoxpCe1gB3aw/YkFd6W0FUkLSAP6OceEDWj5TwQIXE1+WsJT
+         HNbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=vOI84sZdwSXoHHFauLqlUAPvGEyu0wLF74hrJBYkpsY=;
+        b=VUiUBwhqFD06n62ZHQ8An7+LzosAXWAzLK+HehGEL/ombUueH+5+gw9dOgJZ6KuDbZ
+         9foC+be4cLoJCoRvFYyI4HT5wfR3zzmTkZNZHfuxTRL3xV5RTMDFTz08YmlbpifTVw6s
+         LL8DQRBKoSjXVcyBhdDQbiFZT4iXFkuhE3RFVZr9FBYbudcgXmGxgWEYfnMFwPVSsEpf
+         efIc2KgDIhdm/M2bGIOvcGm3M5w31jisqSpJmxiD4jmYQZAFLakrIp8EgR407YxhMgjv
+         /pfSGXGdMH2Rk8euceOrdIAXQIUbgVcF3rlQpTchRtZ1sr7o+wu+24Kg1n8ks3ZnuSMC
+         beDw==
+X-Gm-Message-State: ACgBeo2Oa1xZGqP5jpryfrUayHo9syRTj0ImAsQmqO/V0yqnQH5ylxEz
+        lx+O0HItoxrqhgV31JQekI0=
+X-Google-Smtp-Source: AA6agR5APnxPUBh8hJPbTOu+Ra7p6g09Ym5gPLH4TmR1b8Ywmvz8v5gV7Xf8+oIavQpTp4dciwgLQg==
+X-Received: by 2002:a17:907:3da4:b0:73c:d2f4:a633 with SMTP id he36-20020a1709073da400b0073cd2f4a633mr7801398ejc.446.1661590522883;
+        Sat, 27 Aug 2022 01:55:22 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:8f53:b527:b359:d425? ([2a04:241e:502:a09c:8f53:b527:b359:d425])
+        by smtp.gmail.com with ESMTPSA id bc17-20020a056402205100b00445e1489313sm2459776edb.94.2022.08.27.01.55.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 01:55:22 -0700 (PDT)
+Message-ID: <f02ae4bb-2e50-e096-7505-3928b16d4009@gmail.com>
+Date:   Sat, 27 Aug 2022 11:55:19 +0300
 MIME-Version: 1.0
-Message-ID: <trinity-88fbbdbe-de76-4479-9580-70edc34a4181-1661590200169@3c-app-gmx-bs16>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Simon Xue <xxm@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Aw: Re: [PATCH v5 5/5] arm64: dts: rockchip: Add PCIe v3 nodes to
- BPI-R2-Pro
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 27 Aug 2022 10:50:00 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <cae915f6-c951-ba97-346d-00922c85067d@linaro.org>
-References: <20220825193836.54262-1-linux@fw-web.de>
- <20220825193836.54262-6-linux@fw-web.de>
- <cae915f6-c951-ba97-346d-00922c85067d@linaro.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:ymlk8MTehRHvDLV/NMrQKgASYE/0aSiP2iwFAlrEWCCttBVnPTYScFUExZcU50B+XqKmI
- BuXBhJkCJj+2+/eoNz7ggJl2WQsoY705NyEf1FfXeY6RoQRbpXbEhBcjGEgshMvFE1b/kzeklzyz
- Jc+/8hiL2Y17nZT3O8suJSkmPFwGr0/x8ClhHdnHuXhW8+f/AtXrnSC0ajepwD78P6b2Wi5iFTRu
- gZMdH2cYUDUn7qoiKoSAr5SVtZCbW0Yzw4xk9lH9dbzVhilPFBKfkY6PPotFi6k0Y4A/KyPx9UB5
- ak=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:14K1gCFI7Lg=:IESHyz8gkpbbCdxNp9VwOq
- g91zU7UP3wl4gBf5hwPu1Kt/Ci46gU1S5IePgbdx27d4rk+8XLkZZkTbe4lwX+bOQXhBdC9AR
- FpG19k2DcAhUm3pDO5Cao94DPHxIasUiUjs5+TjmYes7jAfNiZeAEdiqqHVeu1m+EN4XU+Bxq
- CxYPS63stl1VPJxrUVO5aAlOeiWVJMpHx39GTls0vFHhTsNp2VyKd1Qm+rkIATDq7NuwMk2Wr
- PyroUfSCVp4LucSYsVvpjRhCn/OKjFR7ZTBNejGRVei+Q7qM22t3UI5zBj7e4fe9e0uY2K2j0
- a2lzJQrhy0bcptY4+HdG2EbkQwGouZRiHTxqHF7NCf+cKg/E8i4ibWIaFilmNjL0eWj9YAewG
- a+C7+3ejYYjoX9Y181gr2SuHQ8ATaVS8DaQfN/trfJnJH+MlfALu0IjXAWY4WPJeM+Fhx2Fqb
- rW9GucSJyWptQaz8Fv9HvM0xundhAFv79C0boRusyZQ7ZxCL2ZW3cfiqJsn5I+N5BXAXldxwW
- dLxaNx66xtaSb4VDHIPUjVFrfl/8TFf/Zy44PmjFq5m4VZJ62iF7dF5K1dvh4s+bvm7g8ly9n
- C35AmnZ2vbGAOQ6RDuuCcaZuhMQT3ZB6arKVCfYBG469OZ4HatS/HHnnWudZyvYv/SE0/HZkg
- ptCNpN7LXjFAZJK6V9fG0wXfFH0mJ4Vo0m4j3gsJc9FulmhYpPVUxYxO5HZRTRpMzDoNN8Lw2
- idg2jRqNtU72VknArJFbOHJG4CX0CYNV1TbgpJ2XTQgJQRKWTcYcrt70zam6gq9hpKV5oHSXA
- +Ho6+gE
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 00/31] net/tcp: Add TCP-AO support
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>, Dmitry Safonov <dima@arista.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+References: <20220818170005.747015-1-dima@arista.com>
+ <fc05893d-7733-1426-3b12-7ba60ef2698f@gmail.com>
+ <a83e24c9-ab25-6ca0-8b81-268f92791ae5@kernel.org>
+ <8097c38e-e88e-66ad-74d3-2f4a9e3734f4@arista.com>
+ <7ad5a9be-4ee9-bab2-4a70-b0f661f91beb@gmail.com> <YwYdqEFQuQjXxATb@lunn.ch>
+From:   Leonard Crestez <cdleonard@gmail.com>
+In-Reply-To: <YwYdqEFQuQjXxATb@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-> Gesendet: Freitag, 26. August 2022 um 08:50 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-> On 25/08/2022 22:38, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
 
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch=
-/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> > index 93d383b8be87..40b90c052634 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> > @@ -86,6 +86,66 @@ vcc5v0_sys: vcc5v0-sys {
-> >  		vin-supply =3D <&dc_12v>;
-> >  	};
-> >
-> > +	pcie30_avdd0v9: pcie30-avdd0v9 {
->
-> Use consistent naming, so if other nodes have "regulator" suffix, use it
-> here as well.
+On 8/24/22 15:46, Andrew Lunn wrote:
+>> I think it would make sense to push key validity times and the key selection
+>> policy entirely in the kernel so that it can handle key rotation/expiration
+>> by itself. This way userspace only has to configure the keys and doesn't
+>> have to touch established connections at all.
+> 
+> I know nothing aobut TCP-AO, nor much about kTLS. But doesn't kTLS
+> have the same issue? Is there anything which can be learnt from kTLS?
+> Maybe the same mechanisms can be used? No point inventing something
+> new if you can copy/refactor working code?
+> 
+>> My series has a "flags" field on the key struct where it can filter by IP,
+>> prefix, ifindex and so on. It would be possible to add additional flags for
+>> making the key only valid between certain times (by wall time).
+> 
+> What out for wall clock time, it jumps around in funny ways. Plus the
+> kernel has no idea what time zone the wall the wall clock is mounted
+> on is in.
 
-only these 3 new have the suffix:
+A close equivalent seems to exist in ipsec in the "xfrm_lifetime_cfg" 
+struct, specifically the soft/hard expires timers. These are optional 
+validity times for each xfrm_state which is equivalent to a "key".
 
-vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator
-vcc3v3_minipcie: vcc3v3-minipcie-regulator
-vcc3v3_ngff: vcc3v3-ngff-regulator
+I'm not familiar with how those are used but ipsec usually relies on 
+complex userspace daemons for managing xfrm states and policies and 
+those daemons should be capable of adding and removing keys based on 
+internal timers. Still, the linux kernel supports checking for key 
+validity on it's own.
 
-so i would drop it there...
-
-so i end up with (including existing ones to compare):
-
-vcc3v3_sys: vcc3v3-sys
-vcc5v0_sys: vcc5v0-sys
-pcie30_avdd0v9: pcie30-avdd0v9
-pcie30_avdd1v8: pcie30-avdd1v8
-vcc3v3_pi6c_05: vcc3v3-pi6c-05
-vcc3v3_minipcie: vcc3v3-minipcie
-vcc3v3_ngff: vcc3v3-ngff
-vcc5v0_usb: vcc5v0_usb
-vcc5v0_usb_host: vcc5v0-usb-host
-vcc5v0_usb_otg: vcc5v0-usb-otg
-
-is this ok?
-
-maybe swap avdd* and pcie30 part to have voltage in front of function.
-
-> > +		compatible =3D "regulator-fixed";
-> > +		regulator-name =3D "pcie30_avdd0v9";
-> > +		regulator-always-on;
-> > +		regulator-boot-on;
-> > +		regulator-min-microvolt =3D <900000>;
-> > +		regulator-max-microvolt =3D <900000>;
-> > +		vin-supply =3D <&vcc3v3_sys>;
-> > +	};
-> > +
-> > +	pcie30_avdd1v8: pcie30-avdd1v8 {
->
-> Ditto.
->
->
-> > +		compatible =3D "regulator-fixed";
-> > +		regulator-name =3D "pcie30_avdd1v8";
-> > +		regulator-always-on;
-> > +		regulator-boot-on;
-> > +		regulator-min-microvolt =3D <1800000>;
-> > +		regulator-max-microvolt =3D <1800000>;
-> > +		vin-supply =3D <&vcc3v3_sys>;
-> > +	};
-> > +
-> > +	/* pi6c pcie clock generator feeds both ports */
-> > +	vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator {
-> > +		compatible =3D "regulator-fixed";
-> > +		regulator-name =3D "vcc3v3_pcie";
-> > +		regulator-min-microvolt =3D <3300000>;
-> > +		regulator-max-microvolt =3D <3300000>;
-> > +		enable-active-high;
-> > +		gpios =3D <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
-> > +		startup-delay-us =3D <200000>;
-> > +		vin-supply =3D <&vcc5v0_sys>;
-> > +	};
-> > +
->
-> Best regards,
-> Krzysztof
->
+--
+Regards,
+Leonard

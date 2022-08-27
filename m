@@ -2,129 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3595A4028
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 01:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4652C5A4075
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 02:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiH1X1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 19:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S229617AbiH2AqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 20:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiH1X1l (ORCPT
+        with ESMTP id S229446AbiH2AqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 19:27:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBE42ED63;
-        Sun, 28 Aug 2022 16:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661729260; x=1693265260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s6M+tz/8Vcsx8DVrjSwhv6Ow+s3cbQupGX0BGWGmVdM=;
-  b=lXMlVYKOX/XOahFcBBaD8djsmSdDMkLv9xtW2PozHDgA7bofbwdeocJc
-   e2t0dGTCJhI5KHhLQOmBETy6A4rtT536RQAZmHOjHYbpeYyjErc4SNHr9
-   Kv+ooM9wh5iqtJFgHPhXLiCG7ZjGDH6XrdXdwLvoSgcV+e62H0DNGhqhD
-   7frieJomiHdDzUh6dyDZri9lqJZRaWUObqctldSSYFaWdBHNg9ePEdbi6
-   yJDiTGL8kQccX2ZhBG4vrS8fpS43hIZ+VwI3KyjZpFf/v38FQhHizm6Mp
-   BzWSGgvmjA1tW/v0RKvbDxVpBowamjISgwCBEp6g6/2ErRNxlQ+NU9kMp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="293519261"
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="293519261"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 16:27:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="587953874"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Aug 2022 16:27:38 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSRgn-0001ih-1R;
-        Sun, 28 Aug 2022 23:27:37 +0000
-Date:   Mon, 29 Aug 2022 07:26:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li Zhong <floridsleeves@gmail.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, mturquette@baylibre.com, sboyd@kernel.org,
-        lily <floridsleeves@gmail.com>
-Subject: Re: [PATCH v1] drivers/clk/clk: check return value of
- clk_pm_runtime_get()
-Message-ID: <202208290728.M8AblulP-lkp@intel.com>
-References: <20220828202025.1948848-1-floridsleeves@gmail.com>
+        Sun, 28 Aug 2022 20:46:13 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6315513FB5;
+        Sun, 28 Aug 2022 17:46:08 -0700 (PDT)
+X-UUID: 343f51d3ef924ddf8bbdaa487a642f01-20220827
+X-Spam-Fingerprint: 0
+X-GW-Reason: 11109
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 103
+        audit/email.address 1
+        dict/adv 1
+        dict/contack 1
+        dict/notice 1
+        dict/operate 1
+        meta/cnt.alert 1
+X-UUID: 343f51d3ef924ddf8bbdaa487a642f01-20220827
+X-User: oushixiong@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <oushixiong@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1643997936; Sat, 27 Aug 2022 17:10:54 +0800
+From:   oushixiong <oushixiong@kylinos.cn>
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        oushixiong <oushixiong@kylinos.cn>
+Subject: [PTACH v3] drm/ast: add dmabuf/prime buffer sharing support
+Date:   Sat, 27 Aug 2022 17:10:30 +0800
+Message-Id: <20220827091030.496671-1-oushixiong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220828202025.1948848-1-floridsleeves@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+This patch adds ast specific codes for DRM prime feature, this is to
+allow for offloading of rending in one direction and outputs in other.
 
-Thank you for the patch! Perhaps something to improve:
+This patch is designed to solve the problem that the AST is not displayed
+when the server plug in a discrete graphics graphics card at the same time.
+We call the dirty callback function to copy the rendering results of the
+discrete graphics card to the ast side by dma-buf.
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on linus/master v6.0-rc2 next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+v1->v2:
+  - Fix the comment.
+v2->v3:
+  - we remove the gem_prime_import_sg_table callback and use the gem_prime_import
+    callback, becuase it just map and access the buffer with the CPU. and do not
+    to pin the buffer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhong/drivers-clk-clk-check-return-value-of-clk_pm_runtime_get/20220829-042043
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: riscv-randconfig-r042-20220828 (https://download.01.org/0day-ci/archive/20220829/202208290728.M8AblulP-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/26ebbe49c7b40cb8465ed2bba4e4e62c3a55bb93
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Li-Zhong/drivers-clk-clk-check-return-value-of-clk_pm_runtime_get/20220829-042043
-        git checkout 26ebbe49c7b40cb8465ed2bba4e4e62c3a55bb93
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/
+Signed-off-by: oushixiong <oushixiong@kylinos.cn>
+---
+ drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
+ drivers/gpu/drm/ast/ast_mode.c | 125 ++++++++++++++++++++++++++++++++-
+ 2 files changed, 151 insertions(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/clk/clk.c: In function 'clk_summary_show_subtree':
->> drivers/clk/clk.c:3014:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
-    3014 |     if (ret)
-         |     ^~
-   drivers/clk/clk.c:3016:9: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
-    3016 |         clk_summary_show_one(s, c, level);
-         |         ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +/if +3014 drivers/clk/clk.c
-
-  3006	
-  3007	static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
-  3008					     int level)
-  3009	{
-  3010		struct clk_core *child;
-  3011		int ret;
-  3012		
-  3013		ret = clk_pm_runtime_get(c);
-> 3014	    if (ret)
-  3015	        return;
-  3016		clk_summary_show_one(s, c, level);
-  3017		clk_pm_runtime_put(c);
-  3018	
-  3019		hlist_for_each_entry(child, &c->children, child_node)
-  3020			clk_summary_show_subtree(s, child, level + 1);
-  3021	}
-  3022	
-
+diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+index 7465c4f0156a..107383a56ca7 100644
+--- a/drivers/gpu/drm/ast/ast_drv.c
++++ b/drivers/gpu/drm/ast/ast_drv.c
+@@ -28,6 +28,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <linux/dma-buf.h>
+ 
+ #include <drm/drm_aperture.h>
+ #include <drm/drm_atomic_helper.h>
+@@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 0400);
+ 
+ DEFINE_DRM_GEM_FOPS(ast_fops);
+ 
++struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
++						struct dma_buf *dma_buf)
++{
++	struct drm_gem_vram_object *gbo;
++
++	gbo = drm_gem_vram_of_gem(dma_buf->priv);
++	if (gbo->bo.base.dev == dev) {
++		/*
++		* Importing dmabuf exported from out own gem increases
++		* refcount on gem itself instead of f_count of dmabuf.
++		*/
++		drm_gem_object_get(&gbo->bo.base);
++		return &gbo->bo.base;
++	}
++
++	gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
++	if (IS_ERR(gbo))
++		return NULL;
++
++	get_dma_buf(dma_buf);
++	return &gbo->bo.base;
++}
++
+ static const struct drm_driver ast_driver = {
+ 	.driver_features = DRIVER_ATOMIC |
+ 			   DRIVER_GEM |
+@@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
+ 	.minor = DRIVER_MINOR,
+ 	.patchlevel = DRIVER_PATCHLEVEL,
+ 
++	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
++	.gem_prime_import = ast_gem_prime_import,
++
+ 	DRM_GEM_VRAM_DRIVER
+ };
+ 
+diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
+index 45b56b39ad47..65a4342c5622 100644
+--- a/drivers/gpu/drm/ast/ast_mode.c
++++ b/drivers/gpu/drm/ast/ast_mode.c
+@@ -48,6 +48,8 @@
+ #include "ast_drv.h"
+ #include "ast_tables.h"
+ 
++MODULE_IMPORT_NS(DMA_BUF);
++
+ static inline void ast_load_palette_index(struct ast_private *ast,
+ 				     u8 index, u8 red, u8 green,
+ 				     u8 blue)
+@@ -1535,8 +1537,129 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
+ 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
+ };
+ 
++static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
++					int width, int height)
++{
++	struct drm_gem_vram_object *dst_bo = NULL;
++	void *dst = NULL;
++	int ret = 0, i;
++	unsigned long offset = 0;
++	bool unmap = false;
++	unsigned int bytesPerPixel;
++	struct iosys_map map;
++	struct iosys_map dmabuf_map;
++
++	bytesPerPixel = fb->format->cpp[0];
++
++	if (!fb->obj[0]->dma_buf)
++		return -EINVAL;
++
++	if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
++		ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
++		if (ret)
++			return ret;
++	} else
++		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
++
++	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
++
++	ret = drm_gem_vram_pin(dst_bo, 0);
++	if (ret) {
++		DRM_ERROR("ast_bo_pin failed\n");
++		return ret;
++	}
++
++	if (!dst_bo->map.vaddr) {
++		ret = drm_gem_vram_vmap(dst_bo, &map);
++		if (ret) {
++			drm_gem_vram_unpin(dst_bo);
++			DRM_ERROR("failed to vmap fbcon\n");
++			return ret;
++		}
++		unmap = true;
++	}
++	dst = dst_bo->map.vaddr;
++
++	for (i = y; i < y + height; i++) {
++		offset = i * fb->pitches[0] + (x * bytesPerPixel);
++		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
++			width * bytesPerPixel);
++	}
++
++	if (unmap)
++		drm_gem_vram_vunmap(dst_bo, &map);
++
++	drm_gem_vram_unpin(dst_bo);
++
++	return 0;
++}
++
++
++static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
++				struct drm_file *file,
++				unsigned int flags,
++				unsigned int color,
++				struct drm_clip_rect *clips,
++				unsigned int num_clips)
++{
++	int i, ret = 0;
++
++	drm_modeset_lock_all(fb->dev);
++	if (fb->obj[0]->dma_buf) {
++		ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
++				DMA_FROM_DEVICE);
++		if (ret)
++			goto unlock;
++	}
++
++	for (i = 0; i < num_clips; i++) {
++		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
++				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
++		if (ret)
++			break;
++	}
++
++	if (fb->obj[0]->dma_buf) {
++		dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
++				DMA_FROM_DEVICE);
++	}
++
++unlock:
++	drm_modeset_unlock_all(fb->dev);
++
++	return ret;
++}
++
++static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
++{
++	struct iosys_map dmabuf_map;
++
++	if (fb->obj[0]->dma_buf) {
++		dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
++		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
++		if (dmabuf_map.vaddr)
++			dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
++	}
++
++	drm_gem_fb_destroy(fb);
++}
++
++static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
++	.destroy	= ast_user_framebuffer_destroy,
++	.create_handle	= drm_gem_fb_create_handle,
++	.dirty		= ast_user_framebuffer_dirty,
++};
++
++static struct drm_framebuffer *
++ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
++				const struct drm_mode_fb_cmd2 *mode_cmd)
++{
++	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
++					&ast_gem_fb_funcs_dirtyfb);
++}
++
+ static const struct drm_mode_config_funcs ast_mode_config_funcs = {
+-	.fb_create = drm_gem_fb_create,
++	.fb_create = ast_gem_fb_create_with_dirty,
+ 	.mode_valid = drm_vram_helper_mode_valid,
+ 	.atomic_check = drm_atomic_helper_check,
+ 	.atomic_commit = drm_atomic_helper_commit,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus

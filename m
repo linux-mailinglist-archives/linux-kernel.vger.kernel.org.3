@@ -2,138 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E025A35C4
+	by mail.lfdr.de (Postfix) with ESMTP id 5872C5A35C3
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 10:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345149AbiH0IDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 04:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S233214AbiH0ICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 04:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238160AbiH0ICx (ORCPT
+        with ESMTP id S243326AbiH0ICp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 04:02:53 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8636170B
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 01:02:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661587372; x=1693123372;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t4s7PJsF+XQiNPvI7hWCOrw+97ygo5kzYBM70ND3TtU=;
-  b=VVfhIWALDoq+vRL0ONoGbdh5WqnPNaGWvLL3oTSnluGbIdRQ0fYtdPH7
-   vdqf26gFX+RCiOrA9cxmsxq4N+lBiwWsv926Vdi427bYe44AtezWEqJrf
-   MSNIaNYQ77WPsiLUWFSAtlxl73TWqitcN7A4x3JVR13AccKpENu1dTBqj
-   0aPK1r5Ro8UhtS47RU8wdMGZ47YGxA3uqWvADjIKxN3h68Afa81x47SOC
-   T0UdqO961RbCx4CK3mo1vbGdL+53YrSONoBQvQxwEXGqgtCxA9MmD9D2s
-   kV54eb+uMxWN0JsDkMdspuAEf0GJJV+8ruDQ/HEq1CMeBO2kPCL9LK/ck
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="277661530"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="277661530"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 01:02:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="700081484"
-Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Aug 2022 01:02:42 -0700
-Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRqmA-000175-09;
-        Sat, 27 Aug 2022 08:02:42 +0000
-Date:   Sat, 27 Aug 2022 16:02:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/insn/rework 9/10] include/linux/compiler_types.h:354:45:
- error: call to '__compiletime_assert_782' declared with attribute error:
- BUILD_BUG_ON failed: !aarch64_insn_is_adrp(insn)
-Message-ID: <202208271534.S8qjhvQ9-lkp@intel.com>
+        Sat, 27 Aug 2022 04:02:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C0E647D7
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 01:02:44 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MF8H01rR6zkWch;
+        Sat, 27 Aug 2022 15:59:08 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 16:02:41 +0800
+Subject: Re: [PATCH 4/8] hugetlb: handle truncate racing with page faults
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220824175757.20590-1-mike.kravetz@oracle.com>
+ <20220824175757.20590-5-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <b26db6af-ffde-788d-2148-2e0992f96229@huawei.com>
+Date:   Sat, 27 Aug 2022 16:02:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220824175757.20590-5-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/insn/rework
-head:   93eeddf361d2aa52865155791d8f344896f98cb8
-commit: 484a2f552745c6634031e23e9e14bbc1f5ccd581 [9/10] arm64: insn: rework ADRP helpers
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271534.S8qjhvQ9-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=484a2f552745c6634031e23e9e14bbc1f5ccd581
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/insn/rework
-        git checkout 484a2f552745c6634031e23e9e14bbc1f5ccd581
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+On 2022/8/25 1:57, Mike Kravetz wrote:
+> When page fault code needs to allocate and instantiate a new hugetlb
+> page (huegtlb_no_page), it checks early to determine if the fault is
+> beyond i_size.  When discovered early, it is easy to abort the fault and
+> return an error.  However, it becomes much more difficult to handle when
+> discovered later after allocating the page and consuming reservations
+> and adding to the page cache.  Backing out changes in such instances
+> becomes difficult and error prone.
+> 
+> Instead of trying to catch and backout all such races, use the hugetlb
+> fault mutex to handle truncate racing with page faults.  The most
+> significant change is modification of the routine remove_inode_hugepages
+> such that it will take the fault mutex for EVERY index in the truncated
+> range (or hole in the case of hole punch).  Since remove_inode_hugepages
+> is called in the truncate path after updating i_size, we can experience
+> races as follows.
+> - truncate code updates i_size and takes fault mutex before a racing
+>   fault.  After fault code takes mutex, it will notice fault beyond
+>   i_size and abort early.
+> - fault code obtains mutex, and truncate updates i_size after early
+>   checks in fault code.  fault code will add page beyond i_size.
+>   When truncate code takes mutex for page/index, it will remove the
+>   page.
+> - truncate updates i_size, but fault code obtains mutex first.  If
+>   fault code sees updated i_size it will abort early.  If fault code
+>   does not see updated i_size, it will add page beyond i_size and
+>   truncate code will remove page when it obtains fault mutex.
+> 
+> Note, for performance reasons remove_inode_hugepages will still use
+> filemap_get_folios for bulk folio lookups.  For indicies not returned in
+> the bulk lookup, it will need to lookup individual folios to check for
+> races with page fault.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  fs/hugetlbfs/inode.c | 184 +++++++++++++++++++++++++++++++------------
+>  mm/hugetlb.c         |  41 +++++-----
+>  2 files changed, 152 insertions(+), 73 deletions(-)
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index d98c6edbd1a4..e83fd31671b3 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -411,6 +411,95 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
+>  	}
+>  }
+>  
+> +/*
+> + * Called with hugetlb fault mutex held.
+> + * Returns true if page was actually removed, false otherwise.
+> + */
+> +static bool remove_inode_single_folio(struct hstate *h, struct inode *inode,
+> +					struct address_space *mapping,
+> +					struct folio *folio, pgoff_t index,
+> +					bool truncate_op)
+> +{
+> +	bool ret = false;
+> +
+> +	/*
+> +	 * If folio is mapped, it was faulted in after being
+> +	 * unmapped in caller.  Unmap (again) while holding
+> +	 * the fault mutex.  The mutex will prevent faults
+> +	 * until we finish removing the folio.
+> +	 */
+> +	if (unlikely(folio_mapped(folio))) {
+> +		i_mmap_lock_write(mapping);
+> +		hugetlb_vmdelete_list(&mapping->i_mmap,
+> +					index * pages_per_huge_page(h),
+> +					(index + 1) * pages_per_huge_page(h),
+> +					ZAP_FLAG_DROP_MARKER);
+> +		i_mmap_unlock_write(mapping);
+> +	}
+> +
+> +	folio_lock(folio);
+> +	/*
+> +	 * After locking page, make sure mapping is the same.
+> +	 * We could have raced with page fault populate and
+> +	 * backout code.
+> +	 */
+> +	if (folio_mapping(folio) == mapping) {
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Could you explain this more? IIUC, page fault won't remove the hugetlb page from page
+cache anymore. So this check is unneeded? Or we should always check this in case future
+code changing?
 
-All errors (new ones prefixed by >>):
+> +		/*
+> +		 * We must remove the folio from page cache before removing
+> +		 * the region/ reserve map (hugetlb_unreserve_pages).  In
+> +		 * rare out of memory conditions, removal of the region/reserve
+> +		 * map could fail.  Correspondingly, the subpool and global
+> +		 * reserve usage count can need to be adjusted.
+> +		 */
+> +		VM_BUG_ON(HPageRestoreReserve(&folio->page));
+> +		hugetlb_delete_from_page_cache(&folio->page);
+> +		ret = true;
+> +		if (!truncate_op) {
+> +			if (unlikely(hugetlb_unreserve_pages(inode, index,
+> +								index + 1, 1)))
+> +				hugetlb_fix_reserve_counts(inode);
+> +		}
+> +	}
+> +
+> +	folio_unlock(folio);
+> +	return ret;
+> +}
 
-   arch/arm64/kernel/module-plts.c:285:5: warning: no previous prototype for 'module_frob_arch_sections' [-Wmissing-prototypes]
-     285 | int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from <command-line>:
-   In function 'aarch64_insn_adrp_get_offset',
-       inlined from 'plt_entries_equal' at arch/arm64/kernel/module-plts.c:59:14:
->> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_782' declared with attribute error: BUILD_BUG_ON failed: !aarch64_insn_is_adrp(insn)
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/insn.h:851:9: note: in expansion of macro 'BUILD_BUG_ON'
-     851 |         BUILD_BUG_ON(!aarch64_insn_is_adrp(insn));
-         |         ^~~~~~~~~~~~
+<snip>
+> @@ -5584,9 +5585,13 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>  		clear_huge_page(page, address, pages_per_huge_page(h));
+>  		__SetPageUptodate(page);
+>  		new_page = true;
+> +		if (HPageRestoreReserve(page))
+> +			reserve_alloc = true;
+>  
+>  		if (vma->vm_flags & VM_MAYSHARE) {
+> -			int err = hugetlb_add_to_page_cache(page, mapping, idx);
+> +			int err;
+> +
+> +			err = hugetlb_add_to_page_cache(page, mapping, idx);
+>  			if (err) {
+>  				restore_reserve_on_error(h, vma, haddr, page);
+>  				put_page(page);
+> @@ -5642,10 +5647,6 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>  	}
+>  
+>  	ptl = huge_pte_lock(h, mm, ptep);
+> -	size = i_size_read(mapping->host) >> huge_page_shift(h);
+> -	if (idx >= size)
+> -		goto backout;
+> -
+>  	ret = 0;
+>  	/* If pte changed from under us, retry */
+>  	if (!pte_same(huge_ptep_get(ptep), old_pte))
+> @@ -5689,10 +5690,18 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>  backout:
+>  	spin_unlock(ptl);
+>  backout_unlocked:
+> -	unlock_page(page);
+> -	/* restore reserve for newly allocated pages not in page cache */
+> -	if (new_page && !new_pagecache_page)
+> +	if (new_page && !new_pagecache_page) {
+> +		/*
+> +		 * If reserve was consumed, make sure flag is set so that it
+> +		 * will be restored in free_huge_page().
+> +		 */
+> +		if (reserve_alloc)
+> +			SetHPageRestoreReserve(page);
 
+If code reaches here, it should be a newly allocated page and it's not added to the hugetlb page cache.
+Note that failing to add the page to hugetlb page cache should have returned already. So the page must be
+anon? If so, HPageRestoreReserve isn't cleared yet as it's cleared right before set_huge_pte. Thus above
+check can be removed?
 
-vim +/__compiletime_assert_782 +354 include/linux/compiler_types.h
+Anyway, the patch looks good to me.
 
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @354  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  355  
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-:::::: The code at line 354 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+Thanks,
+Miaohe Lin
 
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

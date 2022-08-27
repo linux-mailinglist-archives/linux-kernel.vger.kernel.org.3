@@ -2,260 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F355A3395
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 03:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0925A33A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 03:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbiH0Bqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 21:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
+        id S1345177AbiH0Bty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 21:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiH0Bqh (ORCPT
+        with ESMTP id S234350AbiH0Btv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 21:46:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA86FEA8A2;
-        Fri, 26 Aug 2022 18:46:35 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MDzx05Z7vz1N7QR;
-        Sat, 27 Aug 2022 09:43:00 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 27 Aug
- 2022 09:46:33 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <toke@toke.dk>, <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>,
-        <jiri@resnulli.us>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <stephen@networkplumber.org>
-CC:     <cake@lists.bufferbloat.net>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next] net: sched: remove redundant NULL check in change hook function
-Date:   Sat, 27 Aug 2022 09:49:10 +0800
-Message-ID: <20220827014910.215062-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 26 Aug 2022 21:49:51 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724F7110E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:49:50 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661564989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vkhRpcInMl8CDn6FtM8jPf8MiywjKLHZosXiSY+DWPU=;
+        b=L6xk1Kv3MMsufy8I2p1/ciii/QhxjoTWNHmSsHQb/roH7+UctZmVdYo56eADSuj0gj0eT4
+        GyZIGFoXP04nZemfNcvuy+644/wFy5mM5Pz+L2u9kQiceFNuw9CUUXReuI3w9o9KtfGJFs
+        6TfP9CIQbiVWaNuLPToBOg36j/YAzPk=
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 06/10] hugetlb: pass NULL to kobj_to_hstate() if nid is
+ unused
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20220826092422.39591-7-linmiaohe@huawei.com>
+Date:   Sat, 27 Aug 2022 09:49:45 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
+        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <DA8D4CAE-B295-4EF9-8D7B-66F4D32EFB0F@linux.dev>
+References: <20220826092422.39591-1-linmiaohe@huawei.com>
+ <20220826092422.39591-7-linmiaohe@huawei.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the change function can be called by two ways. The one way is
-that qdisc_change() will call it. Before calling change function,
-qdisc_change() ensures tca[TCA_OPTIONS] is not empty. The other way is
-that .init() will call it. The opt parameter is also checked before
-calling change function in .init(). Therefore, it's no need to check the
-input parameter opt in change function.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- net/sched/sch_cake.c     | 3 ---
- net/sched/sch_codel.c    | 3 ---
- net/sched/sch_ets.c      | 5 -----
- net/sched/sch_fq.c       | 3 ---
- net/sched/sch_fq_codel.c | 3 ---
- net/sched/sch_fq_pie.c   | 3 ---
- net/sched/sch_gred.c     | 3 ---
- net/sched/sch_hfsc.c     | 2 +-
- net/sched/sch_hhf.c      | 3 ---
- net/sched/sch_netem.c    | 3 ---
- net/sched/sch_pie.c      | 3 ---
- net/sched/sch_plug.c     | 3 ---
- net/sched/sch_red.c      | 3 ---
- 13 files changed, 1 insertion(+), 39 deletions(-)
 
-diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
-index a43a58a73d09..36acc95d611e 100644
---- a/net/sched/sch_cake.c
-+++ b/net/sched/sch_cake.c
-@@ -2569,9 +2569,6 @@ static int cake_change(struct Qdisc *sch, struct nlattr *opt,
- 	struct nlattr *tb[TCA_CAKE_MAX + 1];
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_CAKE_MAX, opt, cake_policy,
- 					  extack);
- 	if (err < 0)
-diff --git a/net/sched/sch_codel.c b/net/sched/sch_codel.c
-index 30169b3adbbb..d7a4874543de 100644
---- a/net/sched/sch_codel.c
-+++ b/net/sched/sch_codel.c
-@@ -138,9 +138,6 @@ static int codel_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int qlen, dropped = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_CODEL_MAX, opt,
- 					  codel_policy, NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
-index d73393493553..caeaa17b89bc 100644
---- a/net/sched/sch_ets.c
-+++ b/net/sched/sch_ets.c
-@@ -594,11 +594,6 @@ static int ets_qdisc_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int i;
- 	int err;
- 
--	if (!opt) {
--		NL_SET_ERR_MSG(extack, "ETS options are required for this operation");
--		return -EINVAL;
--	}
--
- 	err = nla_parse_nested(tb, TCA_ETS_MAX, opt, ets_policy, extack);
- 	if (err < 0)
- 		return err;
-diff --git a/net/sched/sch_fq.c b/net/sched/sch_fq.c
-index 2fb76fc0cc31..48d14fb90ba0 100644
---- a/net/sched/sch_fq.c
-+++ b/net/sched/sch_fq.c
-@@ -808,9 +808,6 @@ static int fq_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned drop_len = 0;
- 	u32 fq_log;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_FQ_MAX, opt, fq_policy,
- 					  NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-index 839e1235db05..5ceb96bc8c65 100644
---- a/net/sched/sch_fq_codel.c
-+++ b/net/sched/sch_fq_codel.c
-@@ -374,9 +374,6 @@ static int fq_codel_change(struct Qdisc *sch, struct nlattr *opt,
- 	u32 quantum = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_FQ_CODEL_MAX, opt,
- 					  fq_codel_policy, NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
-index d6aba6edd16e..b81476d63c74 100644
---- a/net/sched/sch_fq_pie.c
-+++ b/net/sched/sch_fq_pie.c
-@@ -283,9 +283,6 @@ static int fq_pie_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int num_dropped = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested(tb, TCA_FQ_PIE_MAX, opt, fq_pie_policy, extack);
- 	if (err < 0)
- 		return err;
-diff --git a/net/sched/sch_gred.c b/net/sched/sch_gred.c
-index c50a0853dcb9..e23d3dbb7272 100644
---- a/net/sched/sch_gred.c
-+++ b/net/sched/sch_gred.c
-@@ -413,9 +413,6 @@ static int gred_change_table_def(struct Qdisc *sch, struct nlattr *dps,
- 	bool red_flags_changed;
- 	int i;
- 
--	if (!dps)
--		return -EINVAL;
--
- 	sopt = nla_data(dps);
- 
- 	if (sopt->DPs > MAX_DPs) {
-diff --git a/net/sched/sch_hfsc.c b/net/sched/sch_hfsc.c
-index d3979a6000e7..05e4ba87acae 100644
---- a/net/sched/sch_hfsc.c
-+++ b/net/sched/sch_hfsc.c
-@@ -1430,7 +1430,7 @@ hfsc_change_qdisc(struct Qdisc *sch, struct nlattr *opt,
- 	struct hfsc_sched *q = qdisc_priv(sch);
- 	struct tc_hfsc_qopt *qopt;
- 
--	if (opt == NULL || nla_len(opt) < sizeof(*qopt))
-+	if (nla_len(opt) < sizeof(*qopt))
- 		return -EINVAL;
- 	qopt = nla_data(opt);
- 
-diff --git a/net/sched/sch_hhf.c b/net/sched/sch_hhf.c
-index 420ede875322..d26cd436cbe3 100644
---- a/net/sched/sch_hhf.c
-+++ b/net/sched/sch_hhf.c
-@@ -516,9 +516,6 @@ static int hhf_change(struct Qdisc *sch, struct nlattr *opt,
- 	u32 new_quantum = q->quantum;
- 	u32 new_hhf_non_hh_weight = q->hhf_non_hh_weight;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_HHF_MAX, opt, hhf_policy,
- 					  NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
-index 5449ed114e40..b70ac04110dd 100644
---- a/net/sched/sch_netem.c
-+++ b/net/sched/sch_netem.c
-@@ -961,9 +961,6 @@ static int netem_change(struct Qdisc *sch, struct nlattr *opt,
- 	int old_loss_model = CLG_RANDOM;
- 	int ret;
- 
--	if (opt == NULL)
--		return -EINVAL;
--
- 	qopt = nla_data(opt);
- 	ret = parse_attr(tb, TCA_NETEM_MAX, opt, netem_policy, sizeof(*qopt));
- 	if (ret < 0)
-diff --git a/net/sched/sch_pie.c b/net/sched/sch_pie.c
-index 5a457ff61acd..974038ba6c7b 100644
---- a/net/sched/sch_pie.c
-+++ b/net/sched/sch_pie.c
-@@ -143,9 +143,6 @@ static int pie_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int qlen, dropped = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_PIE_MAX, opt, pie_policy,
- 					  NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_plug.c b/net/sched/sch_plug.c
-index cbc2ebca4548..ea8c4a7174bb 100644
---- a/net/sched/sch_plug.c
-+++ b/net/sched/sch_plug.c
-@@ -161,9 +161,6 @@ static int plug_change(struct Qdisc *sch, struct nlattr *opt,
- 	struct plug_sched_data *q = qdisc_priv(sch);
- 	struct tc_plug_qopt *msg;
- 
--	if (opt == NULL)
--		return -EINVAL;
--
- 	msg = nla_data(opt);
- 	if (nla_len(opt) < sizeof(*msg))
- 		return -EINVAL;
-diff --git a/net/sched/sch_red.c b/net/sched/sch_red.c
-index cdf9d8611e41..cae3b80e4d9d 100644
---- a/net/sched/sch_red.c
-+++ b/net/sched/sch_red.c
-@@ -371,9 +371,6 @@ static int red_change(struct Qdisc *sch, struct nlattr *opt,
- 	struct nlattr *tb[TCA_RED_MAX + 1];
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_RED_MAX, opt, red_policy,
- 					  extack);
- 	if (err < 0)
--- 
-2.17.1
+> On Aug 26, 2022, at 17:24, Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+> We can pass NULL to kobj_to_hstate() directly when nid is unused to
+> simplify the code. No functional change intended.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
 

@@ -2,165 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A3C5A3781
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 13:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CC85A377F
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 13:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiH0Ltk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 07:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S231805AbiH0LvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 07:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiH0Lst (ORCPT
+        with ESMTP id S232670AbiH0Ltk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 07:48:49 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F486580B
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661600928; x=1693136928;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EvkrzLLpK87ZvgDK7H66AG8iAN1MeP4gE4ySPsk3FAY=;
-  b=QKY+BYLvEWkUfhuaMclzBMseujYMYuSXwq2Dr05WAVLT4rDkyP+b/FxY
-   UTeeS3aHXDkK9b3Z7mnvisVBjl9cKahRJGrhRLHdNrrlfQVJoD0UiuqTz
-   lmz437d+yETGHSp4vHNn9RN9Wv1Jc7XGPOBPMNY8gVOVG9uoQOx+Trg8y
-   3SmfDOfonnal+e8+GxlgeufnUMUWkkrbLfDpoBd0WPqii2sGrp1rfc1Hf
-   7atedkxM5eKO1E1BBPn2N6dHnuWQRre2bJorZlgPPCFgCexjKfb3eydSS
-   TJbK/bzeN7kbNpel5AM9rOF/78KFD7ufMDdQ6wQges5LYFWNvbnMZv5Y4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295927818"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="295927818"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 04:48:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="939041671"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Aug 2022 04:48:46 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRuIv-00008h-2z;
-        Sat, 27 Aug 2022 11:48:45 +0000
-Date:   Sat, 27 Aug 2022 19:48:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS
- 3051ee34ccb5a821bc46ef06639ff275e9c810b7
-Message-ID: <630a0481.Yt/9ryxGIfcsAp2N%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 27 Aug 2022 07:49:40 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79D865811;
+        Sat, 27 Aug 2022 04:49:38 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w10so4951066edc.3;
+        Sat, 27 Aug 2022 04:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=BNJgC72AfpKIQnb1cHvCbNdeeyBRjYBsxilXEw1s+b4=;
+        b=JBVTrcuHo3vu2cIL12cUK3btsvVf3xkxKhycstbYi6JGAWzzoFBrcsSoSknIuqmiv5
+         k4ct2GOLJC2FUM6sDQe3grNJlbhQ/E5Ze7YVFAehplhHvjoREkBN9LVTB6EWgR+GbQTw
+         qYReHiewnYkT7+5DZYzvw74rCURHdtp7jl5Hn6g3OZRPIeiMD2mASmjYlvDv6wXqNmhO
+         iWuoWJJnnfJliuCKMs6S7Bj//7FjDIk3oVCXwjoMlRjroCZsZuSLXVaIZTi1RPY/giF/
+         x6kdRwTBHT7fVtfMplvaSOfbwIgvs/6dAcDx7fFYitLTaTWMKCqb6gUSCo40Gac9t3Vx
+         k1Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=BNJgC72AfpKIQnb1cHvCbNdeeyBRjYBsxilXEw1s+b4=;
+        b=FPGtZ/v7wTSjpXY2KVObpvEfc40bsnzFTI54Og9T0NrthF3C+fCQcIT2t4dE3vNR2C
+         LIvMLnIRdl1YkQYM8iI15iKI8ewkH2vX+pcXwo72vgnNf0MSDBuEsGAXXRptnM2lDF+p
+         2VZsHWMBKYczKAcvaWWDescby6PBGrw5+dMo6W0jw0PZx7gsY0RJQRckZMXSWx/rJB3I
+         W2rXjyCLoxTeypg0eApvoddlb/4ORtap6rnfsz+/WL83EGAgDTrZWOSweR0CJQbNgGvl
+         A5hSEoy73Gjs9PmeEK6ZD6na8fdRE1dMVCfnCGKwl9ZMMCYGc2Wm/0X3OWxI16y+fETb
+         orYA==
+X-Gm-Message-State: ACgBeo3KZMdyaaaNYRArzzgHUwCYYrpUGhmz82VshnjOJtBlI5GZE8ac
+        QUSn1ldkmdEmtFbgk/zmg0w=
+X-Google-Smtp-Source: AA6agR46kwmpaNii76+kHULnGaX0OY3DgTjx0MB8aeXmnfihjX24Zz0Ony4sXUo6LtDahfYMGGAQNQ==
+X-Received: by 2002:a05:6402:25c6:b0:43b:7797:d953 with SMTP id x6-20020a05640225c600b0043b7797d953mr9930577edb.254.1661600977315;
+        Sat, 27 Aug 2022 04:49:37 -0700 (PDT)
+Received: from localhost.localdomain (host-95-247-89-207.retail.telecomitalia.it. [95.247.89.207])
+        by smtp.googlemail.com with ESMTPSA id f20-20020a17090631d400b006fee7b5dff2sm2021683ejf.143.2022.08.27.04.49.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 04:49:36 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: [net-next PATCH v2] net: dsa: qca8k: convert to regmap read/write API
+Date:   Sat, 27 Aug 2022 13:49:18 +0200
+Message-Id: <20220827114918.8863-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
-branch HEAD: 3051ee34ccb5a821bc46ef06639ff275e9c810b7  perf: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
+Convert qca8k to regmap read/write bulk API. The mgmt eth can write up
+to 16 bytes of data at times. Currently we use a custom function to do
+it but regmap now supports declaration of read/write bulk even without a
+bus.
 
-elapsed time: 803m
+Drop the custom function and rework the regmap function to this new
+implementation.
 
-configs tested: 83
-configs skipped: 3
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/net/dsa/qca/qca8k-8xxx.c   | 94 +++++++++++++++++++++++-------
+ drivers/net/dsa/qca/qca8k-common.c | 49 ++--------------
+ drivers/net/dsa/qca/qca8k.h        |  5 +-
+ 3 files changed, 82 insertions(+), 66 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+v2:
+- Move out of RFC.
+- CC Mark Brown for first implementation of this kind of regmap stuff.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-loongarch                         allnoconfig
-arc                                 defconfig
-s390                             allmodconfig
-loongarch                           defconfig
-alpha                               defconfig
-s390                                defconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20220827
-x86_64                        randconfig-a002
-s390                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-m68k                             allyesconfig
-mips                             allyesconfig
-m68k                             allmodconfig
-powerpc                          allmodconfig
-x86_64                              defconfig
-i386                          randconfig-a012
-i386                                defconfig
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                               rhel-8.3
-parisc                              defconfig
-x86_64                           allyesconfig
-nios2                               defconfig
-i386                          randconfig-a001
-x86_64                           rhel-8.3-syz
-parisc64                            defconfig
-i386                          randconfig-a003
-nios2                            allyesconfig
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-i386                          randconfig-a005
-parisc                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                    rhel-8.3-kselftests
-i386                             allyesconfig
-arc                  randconfig-r043-20220823
-arc                  randconfig-r043-20220825
-arm                              allyesconfig
-arm64                            allyesconfig
-riscv                            allmodconfig
-powerpc                          allyesconfig
-riscv                            allyesconfig
-ia64                             allmodconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-i386                          debian-10.3-kvm
-
-clang tested configs:
-hexagon              randconfig-r041-20220827
-hexagon              randconfig-r045-20220827
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-riscv                randconfig-r042-20220827
-s390                 randconfig-r044-20220827
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r041-20220825
-hexagon              randconfig-r041-20220823
-hexagon              randconfig-r045-20220825
-s390                 randconfig-r044-20220823
-riscv                randconfig-r042-20220825
-s390                 randconfig-r044-20220825
-riscv                randconfig-r042-20220823
-hexagon              randconfig-r045-20220823
-
+diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
+index 1d3e7782a71f..c9ddc4848f58 100644
+--- a/drivers/net/dsa/qca/qca8k-8xxx.c
++++ b/drivers/net/dsa/qca/qca8k-8xxx.c
+@@ -342,16 +342,12 @@ qca8k_regmap_update_bits_eth(struct qca8k_priv *priv, u32 reg, u32 mask, u32 wri
+ }
+ 
+ static int
+-qca8k_regmap_read(void *ctx, uint32_t reg, uint32_t *val)
++qca8k_read_mii(struct qca8k_priv *priv, uint32_t reg, uint32_t *val)
+ {
+-	struct qca8k_priv *priv = (struct qca8k_priv *)ctx;
+ 	struct mii_bus *bus = priv->bus;
+ 	u16 r1, r2, page;
+ 	int ret;
+ 
+-	if (!qca8k_read_eth(priv, reg, val, sizeof(*val)))
+-		return 0;
+-
+ 	qca8k_split_addr(reg, &r1, &r2, &page);
+ 
+ 	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+@@ -368,16 +364,12 @@ qca8k_regmap_read(void *ctx, uint32_t reg, uint32_t *val)
+ }
+ 
+ static int
+-qca8k_regmap_write(void *ctx, uint32_t reg, uint32_t val)
++qca8k_write_mii(struct qca8k_priv *priv, uint32_t reg, uint32_t val)
+ {
+-	struct qca8k_priv *priv = (struct qca8k_priv *)ctx;
+ 	struct mii_bus *bus = priv->bus;
+ 	u16 r1, r2, page;
+ 	int ret;
+ 
+-	if (!qca8k_write_eth(priv, reg, &val, sizeof(val)))
+-		return 0;
+-
+ 	qca8k_split_addr(reg, &r1, &r2, &page);
+ 
+ 	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+@@ -394,17 +386,14 @@ qca8k_regmap_write(void *ctx, uint32_t reg, uint32_t val)
+ }
+ 
+ static int
+-qca8k_regmap_update_bits(void *ctx, uint32_t reg, uint32_t mask, uint32_t write_val)
++qca8k_regmap_update_bits_mii(struct qca8k_priv *priv, uint32_t reg,
++			     uint32_t mask, uint32_t write_val)
+ {
+-	struct qca8k_priv *priv = (struct qca8k_priv *)ctx;
+ 	struct mii_bus *bus = priv->bus;
+ 	u16 r1, r2, page;
+ 	u32 val;
+ 	int ret;
+ 
+-	if (!qca8k_regmap_update_bits_eth(priv, reg, mask, write_val))
+-		return 0;
+-
+ 	qca8k_split_addr(reg, &r1, &r2, &page);
+ 
+ 	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+@@ -427,17 +416,84 @@ qca8k_regmap_update_bits(void *ctx, uint32_t reg, uint32_t mask, uint32_t write_
+ 	return ret;
+ }
+ 
++static int
++qca8k_bulk_read(void *ctx, const void *reg_buf, size_t reg_len,
++		void *val_buf, size_t val_len)
++{
++	int i, count = val_len / sizeof(u32), ret;
++	struct qca8k_priv *priv = ctx;
++	u32 reg = *(u32 *)reg_buf;
++
++	if (priv->mgmt_master &&
++	    !qca8k_read_eth(priv, reg, val_buf, val_len))
++		return 0;
++
++	/* loop count times and increment reg of 4 */
++	for (i = 0; i < count; i++, reg += sizeof(u32)) {
++		ret = qca8k_read_mii(priv, reg, val_buf + i);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int
++qca8k_bulk_gather_write(void *ctx, const void *reg_buf, size_t reg_len,
++			const void *val_buf, size_t val_len)
++{
++	int i, count = val_len / sizeof(u32), ret;
++	struct qca8k_priv *priv = ctx;
++	u32 *val = (u32 *)val_buf;
++	u32 reg = *(u32 *)reg_buf;
++
++	if (priv->mgmt_master &&
++	    !qca8k_write_eth(priv, reg, val, val_len))
++		return 0;
++
++	/* loop count times, increment reg of 4 and increment val ptr to
++	 * the next value
++	 */
++	for (i = 0; i < count; i++, reg += sizeof(u32), val++) {
++		ret = qca8k_write_mii(priv, reg, *val);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int
++qca8k_bulk_write(void *ctx, const void *data, size_t bytes)
++{
++	return qca8k_bulk_gather_write(ctx, data, sizeof(u32), data + sizeof(u32),
++				       bytes - sizeof(u32));
++}
++
++static int
++qca8k_regmap_update_bits(void *ctx, uint32_t reg, uint32_t mask, uint32_t write_val)
++{
++	struct qca8k_priv *priv = (struct qca8k_priv *)ctx;
++
++	if (!qca8k_regmap_update_bits_eth(priv, reg, mask, write_val))
++		return 0;
++
++	return qca8k_regmap_update_bits_mii(priv, reg, mask, write_val);
++}
++
+ static struct regmap_config qca8k_regmap_config = {
+-	.reg_bits = 16,
++	.reg_bits = 32,
+ 	.val_bits = 32,
+ 	.reg_stride = 4,
+ 	.max_register = 0x16ac, /* end MIB - Port6 range */
+-	.reg_read = qca8k_regmap_read,
+-	.reg_write = qca8k_regmap_write,
++	.read = qca8k_bulk_read,
++	.write = qca8k_bulk_write,
+ 	.reg_update_bits = qca8k_regmap_update_bits,
+ 	.rd_table = &qca8k_readable_table,
+ 	.disable_locking = true, /* Locking is handled by qca8k read/write */
+ 	.cache_type = REGCACHE_NONE, /* Explicitly disable CACHE */
++	.max_raw_read = 16, /* mgmt eth can read/write up to 4 bytes at times */
++	.max_raw_write = 16,
+ };
+ 
+ static int
+@@ -2014,8 +2070,6 @@ static SIMPLE_DEV_PM_OPS(qca8k_pm_ops,
+ 
+ static const struct qca8k_info_ops qca8xxx_ops = {
+ 	.autocast_mib = qca8k_get_ethtool_stats_eth,
+-	.read_eth = qca8k_read_eth,
+-	.write_eth = qca8k_write_eth,
+ };
+ 
+ static const struct qca8k_match_data qca8327 = {
+diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
+index bba95613e218..a3bcff4bac29 100644
+--- a/drivers/net/dsa/qca/qca8k-common.c
++++ b/drivers/net/dsa/qca/qca8k-common.c
+@@ -101,45 +101,6 @@ const struct regmap_access_table qca8k_readable_table = {
+ 	.n_yes_ranges = ARRAY_SIZE(qca8k_readable_ranges),
+ };
+ 
+-/* TODO: remove these extra ops when we can support regmap bulk read/write */
+-static int qca8k_bulk_read(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
+-{
+-	int i, count = len / sizeof(u32), ret;
+-
+-	if (priv->mgmt_master && priv->info->ops->read_eth &&
+-	    !priv->info->ops->read_eth(priv, reg, val, len))
+-		return 0;
+-
+-	for (i = 0; i < count; i++) {
+-		ret = regmap_read(priv->regmap, reg + (i * 4), val + i);
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	return 0;
+-}
+-
+-/* TODO: remove these extra ops when we can support regmap bulk read/write */
+-static int qca8k_bulk_write(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
+-{
+-	int i, count = len / sizeof(u32), ret;
+-	u32 tmp;
+-
+-	if (priv->mgmt_master && priv->info->ops->write_eth &&
+-	    !priv->info->ops->write_eth(priv, reg, val, len))
+-		return 0;
+-
+-	for (i = 0; i < count; i++) {
+-		tmp = val[i];
+-
+-		ret = regmap_write(priv->regmap, reg + (i * 4), tmp);
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	return 0;
+-}
+-
+ static int qca8k_busy_wait(struct qca8k_priv *priv, u32 reg, u32 mask)
+ {
+ 	u32 val;
+@@ -150,11 +111,12 @@ static int qca8k_busy_wait(struct qca8k_priv *priv, u32 reg, u32 mask)
+ 
+ static int qca8k_fdb_read(struct qca8k_priv *priv, struct qca8k_fdb *fdb)
+ {
+-	u32 reg[3];
++	u32 reg[QCA8K_ATU_TABLE_SIZE];
+ 	int ret;
+ 
+ 	/* load the ARL table into an array */
+-	ret = qca8k_bulk_read(priv, QCA8K_REG_ATU_DATA0, reg, sizeof(reg));
++	ret = regmap_bulk_read(priv->regmap, QCA8K_REG_ATU_DATA0, reg,
++			       QCA8K_ATU_TABLE_SIZE);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -178,7 +140,7 @@ static int qca8k_fdb_read(struct qca8k_priv *priv, struct qca8k_fdb *fdb)
+ static void qca8k_fdb_write(struct qca8k_priv *priv, u16 vid, u8 port_mask,
+ 			    const u8 *mac, u8 aging)
+ {
+-	u32 reg[3] = { 0 };
++	u32 reg[QCA8K_ATU_TABLE_SIZE] = { 0 };
+ 
+ 	/* vid - 83:72 */
+ 	reg[2] = FIELD_PREP(QCA8K_ATU_VID_MASK, vid);
+@@ -195,7 +157,8 @@ static void qca8k_fdb_write(struct qca8k_priv *priv, u16 vid, u8 port_mask,
+ 	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR5_MASK, mac[5]);
+ 
+ 	/* load the array into the ARL table */
+-	qca8k_bulk_write(priv, QCA8K_REG_ATU_DATA0, reg, sizeof(reg));
++	regmap_bulk_write(priv->regmap, QCA8K_REG_ATU_DATA0, reg,
++			  QCA8K_ATU_TABLE_SIZE);
+ }
+ 
+ static int qca8k_fdb_access(struct qca8k_priv *priv, enum qca8k_fdb_cmd cmd,
+diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
+index e36ecc9777f4..fc5766a40b8a 100644
+--- a/drivers/net/dsa/qca/qca8k.h
++++ b/drivers/net/dsa/qca/qca8k.h
+@@ -148,6 +148,8 @@
+ #define QCA8K_REG_IPV4_PRI_ADDR_MASK			0x474
+ 
+ /* Lookup registers */
++#define QCA8K_ATU_TABLE_SIZE				3 /* 12 bytes wide table / sizeof(u32) */
++
+ #define QCA8K_REG_ATU_DATA0				0x600
+ #define   QCA8K_ATU_ADDR2_MASK				GENMASK(31, 24)
+ #define   QCA8K_ATU_ADDR3_MASK				GENMASK(23, 16)
+@@ -328,9 +330,6 @@ struct qca8k_priv;
+ 
+ struct qca8k_info_ops {
+ 	int (*autocast_mib)(struct dsa_switch *ds, int port, u64 *data);
+-	/* TODO: remove these extra ops when we can support regmap bulk read/write */
+-	int (*read_eth)(struct qca8k_priv *priv, u32 reg, u32 *val, int len);
+-	int (*write_eth)(struct qca8k_priv *priv, u32 reg, u32 *val, int len);
+ };
+ 
+ struct qca8k_match_data {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

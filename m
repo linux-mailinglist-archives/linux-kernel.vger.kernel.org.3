@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3D55A3846
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A2B5A3849
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 17:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbiH0PMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 11:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S233442AbiH0PNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 11:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiH0PMs (ORCPT
+        with ESMTP id S233384AbiH0PNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 11:12:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F351B79C
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 08:12:46 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRxTw-0000AE-Gf; Sat, 27 Aug 2022 17:12:20 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oRxTt-00010K-Ml; Sat, 27 Aug 2022 17:12:17 +0200
-Date:   Sat, 27 Aug 2022 17:12:17 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v2 1/7] dt-bindings: net: pse-dt: add bindings
- for generic PSE controller
-Message-ID: <20220827151217.GG2116@pengutronix.de>
-References: <20220825130211.3730461-1-o.rempel@pengutronix.de>
- <20220825130211.3730461-2-o.rempel@pengutronix.de>
- <Ywf3Z+1VFy/2+P78@lunn.ch>
- <20220826074940.GC2116@pengutronix.de>
- <Ywou0na2zy3cLJG+@lunn.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ywou0na2zy3cLJG+@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Sat, 27 Aug 2022 11:13:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C39929CBE
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 08:13:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19E41B808BF
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 15:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CA1C433C1;
+        Sat, 27 Aug 2022 15:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661613184;
+        bh=5SNvnZMs1SKkIb2edRqrtUf5+QVsBSTktjQt9Y2dpYg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S9AhIjNxDtaN/V1OOjKPRv7HQs2ZNsKg3sxO81ZmnOlqWZ06/XWH48f1Kd3DjXFim
+         H8fk8hF3H+XIKWSfqfVAEFTGdUxzaWMNsheuTyc2gj82eaJCvoMFAOTxsD8PPttwID
+         h0dJBq7z+lCq8tGy1/33qbkzgI03jjD1M5ZIypK6v2fR40VQ+H/ibRJ+W/5eeGRUo8
+         CO87/fqX9WSajDBbB17YK71nVyFO4q8vZc3Zf6mLSzveGSNGG5UkAS4p8wPrRYxkge
+         nWQUwnG4RwJxNr41Aa2R+l7GwEwG/62BNinSIov30fVzkylp6w4UgdZZn07nbBsLSP
+         vsvji7eXxcXPg==
+Received: from [12.191.126.171] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oRxUc-006B4L-9R;
+        Sat, 27 Aug 2022 16:13:02 +0100
+Date:   Sat, 27 Aug 2022 16:13:00 +0100
+Message-ID: <87wnatra83.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Puyou Lu <puyou.lu@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Robert Richter <rrichter@cavium.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3: do runtime cpu cap check only when necessary
+In-Reply-To: <20220827051328.GA18042@lu-N56VJ>
+References: <20220827051328.GA18042@lu-N56VJ>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 12.191.126.171
+X-SA-Exim-Rcpt-To: puyou.lu@gmail.com, tglx@linutronix.de, rrichter@cavium.com, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,163 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 04:48:50PM +0200, Andrew Lunn wrote:
-> On Fri, Aug 26, 2022 at 09:49:40AM +0200, Oleksij Rempel wrote:
-> > On Fri, Aug 26, 2022 at 12:27:51AM +0200, Andrew Lunn wrote:
-> > > > +  ieee802.3-pairs:
-> > > > +    $ref: /schemas/types.yaml#/definitions/int8-array
-> > > > +    description: Array of number of twisted-pairs capable to deliver power.
-> > > > +      Since not all circuits are able to support all pair variants, the array of
-> > > > +      supported variants should be specified.
-> > > > +      Note - single twisted-pair PSE is formally know as PoDL PSE.
-> > > > +    items:
-> > > > +      enum: [1, 2, 4]
-> > > 
-> > > It is not clear to me what you are describing here. It looks like the
-> > > number of pairs? That does not seem like a hardware property. The
-> > > controller itself should be able to tell you how many pairs it can
-> > > feed.
-> > > 
-> > > A hardware property would be which pairs of the socket are connected
-> > > to a PSE and so can be used to deliver power.
-> > 
-> > Good point, this will be needed as well. But not right now.
+On Sat, 27 Aug 2022 06:19:27 +0100,
+Puyou Lu <puyou.lu@gmail.com> wrote:
 > 
-> That is another point. You are adding properties which no driver
-> actually uses. That is unusual.
+> Now cpu cap check is done every exception happens on every arm64 platform,
+> but this check is necessary on just few of then, so we can drop this
+> check at compile time on others. This can decrease exception handle time
+> on most cases.
 > 
-> I think i would rename your current driver to regulator. That is all
-> it is, and it only needs one property, the regulator itself. Its yaml
-> description should only have the regulator, and nothing else.
+> Fixes: 6d4e11c5e2e8 ("irqchip/gicv3: Workaround for Cavium ThunderX erratum 23154")
+> Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
+> ---
+>  drivers/irqchip/irq-gic-v3.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> When other drivers start to be added, we can think about each property
-> they add, and decided if they are generic, or specific to a
-> driver/board. Generic properties we can add to one shared .yaml file,
-> device/board specific properties get added to that drivers .yaml
-> 
-> > > But i'm not sure how
-> > > that would be useful to know. I suppose a controller capable of
-> > > powering 4 pair, but connected to a socket only wired to supply 2, can
-> > > then disable 2 pairs?
-> > 
-> > Not only. Here are following reasons:
-> > - not all boards use a controller in form of IC. Some boards are the
-> >   controller. So, there is no other place to describe, what kind of
-> >   controller this board is. For example - currently there are no known
-> >   ICs to support PoDL (ieee802.3-pairs == 1), early adopters are
-> >   implementing it by using MOSFETs coupled with ADCs and some extra
-> >   logic on CPU side:
-> >   https://www.ti.com/lit/an/snla395/snla395.pdf
-> > - not all ICs provide a way for advanced communication (I2C, SPI, MDIO).
-> >   Some of them will provide only bootstrapping and some pin status
-> >   feedback:
-> >   https://www.analog.com/media/en/technical-documentation/data-sheets/4279fa.pdf
-> > - Even if we are able to communicate with the IC, there are still board
-> >   specific limitations.
-> 
-> I expect each of these will provide some sort of driver. It could be
-> board specific, or it could be MCU specific if the same MCU is used
-> multiple times and each implementation looks the same to Linux. I
-> suppose there could even be a library which implements SCCP via a
-> bit-banging GPIO line, and it has a binding for the two GPIO?
-> 
-> And if there is no communication at all with it, you cannot represent
-> it in Linux, so you don't need to worry about it.
-> 
-> Each driver should come with its own .yaml file, and we should review
-> it, and decided are the properties common or not.
-> 
-> > I hope we can agree that some property is need to tell what kind of PSE
-> > specification is used by this node.
-> > 
-> > The next challenge is to name it. We have following options:
-> > 1. PoE, PoE+, PoE++, 4PPoE, PoDL
-> > 2. 802.3af, 802.3at, 802.bt, 802.3bu, 802.3cg
-> > 3. Physical property of this specifications
-> > 
-> > Option 1 is mostly using marketing names, except of PoDL. This names are
-> > not used in the ieee 802.3-2018 specification. Systematic research of
-> > this marketing names would give following results:
-> > - PoE is about delivering power over two twisted pairs and is related to
-> >   802.3af and 802.3at specs.
-> > - PoE+ is about delivering power over two twisted pairs and is related
-> >   only to 802.3at.
-> > - PoE++ is the same as 4PPoE or power over four twisted pairs and is related
-> >   to 802.3bt.
-> > - PoDL is related to 802.3bu and 802.3cg. Which is power over one
-> >   twisted pair
-> > 
-> > All of this names combine different properties: number of twisted pairs
-> > used to deliver power, maximal supported power by the system and
-> > recommendation for digital interface to communicate with the PSE
-> > controller (MDIO registers). Since system I currently use do not follow
-> > all of this recommendations, it is needed to describe them separately.
-> > 
-> > Option 2 is interesting only for archaeological investigation. Final
-> > snapshots of 802.3 specification do not provide mapping of extensions to
-> > actual parts of the spec. I assume, no software developer will be able
-> > to properly set the devicetree property by using specification extension
-> > names.
-> > 
-> > Option 3 provide exact physical property of implementation by using same
-> > wording provided by the  802.3-2018 spec. This option is easy to verify
-> > by reviewing the board schematics and it is easy to understand without
-> > doing historical analysis of 802.3 spec.
-> 
-> I would go for option 3. We want well defined concepts, and
-> specifications provide that.
-> 
-> > > > +
-> > > > +  ieee802.3-pse-type:
-> > > > +    $ref: /schemas/types.yaml#/definitions/uint8
-> > > > +    minimum: 1
-> > > > +    maximum: 2
-> > > > +    description: PSE Type. Describes classification- and class-capabilities.
-> > > > +      Not compatible with PoDL PSE Type.
-> > > > +      Type 1 - provides a Class 0, 1, 2, or 3 signature during Physical Layer
-> > > > +      classification.
-> > > > +      Type 2 - provides a Class 4 signature during Physical Layer
-> > > > +      classification, understands 2-Event classification, and is capable of
-> > > > +      Data Link Layer classification.
-> > > 
-> > > Again, the controller should know what class it can support. Why do we
-> > > need to specify it?  What could make sense is we want to limit the
-> > > controller to a specific type? 
-> > 
-> > If we are using existing controller - yes. But this binding is designed for the
-> > system where no special PSE IC is used.
-> 
-> I would expect a discreet implementation to also have a driver. The
-> specific discreet implementation should have a compatible, and a yaml
-> file describing whatever properties it needs. And since the driver is
-> specific to the discreet implementation, it should know what it can do
-> in terms of PSE Type, etc.
-> 
-> If the same discrete implementation is used on multiple boards, and
-> there are board specific limitations, then we need properties to limit
-> what it can do. Maybe those limits are then described in the shared
-> .yaml file, since limits like this probably are generic.
-> 
-> In general, i expect we will end up with two classes of properties:
-> 
-> Hardware controls: I2C bus address, SPI address, gpios for bit banging
-> SCCP, GPIOs for turning power on/off and sensing etc.
-> 
-> Board specific limitations: Max class, Max current, max Type etc.
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 262658fd5f9e..3f08c2ef1251 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -237,9 +237,11 @@ static void gic_redist_wait_for_rwp(void)
+>  
+>  static u64 __maybe_unused gic_read_iar(void)
+>  {
+> +#ifdef CONFIG_CAVIUM_ERRATUM_23154
+>  	if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM_23154))
+>  		return gic_read_iar_cavium_thunderx();
+>  	else
+> +#endif
+>  		return gic_read_iar_common();
+>  }
+>  #endif
 
-Ok, so current plan is:
-- rename this driver and binding to pse-regulator
-- i will integrate the "ieee802.3-pairs" property, since this driver
-  need to know which field it need to fill in the ethtool response (PSE
-  vs PoDL PSE)
-- compatible will be "ieee802.3-pse-regulator"
+You realise that cpus_have_const_cap() results purely in a couple of
+branches once the caps have been finalised, right?
 
-Correct?
+Please provide data showing that it actually "can decrease exception
+handle time on most cases", because I'm pretty sure you cannot measure
+the difference in any meaningful way.
 
-Regards,
-Oleksij
+	M.
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Without deviation from the norm, progress is not possible.

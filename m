@@ -2,112 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD38E5A3715
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 12:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF6A5A36EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 12:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbiH0KnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 06:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S231645AbiH0KLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 06:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiH0KnL (ORCPT
+        with ESMTP id S231890AbiH0KLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 06:43:11 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0087572EE0
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 03:43:09 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MFCrP2pptzlVhw;
-        Sat, 27 Aug 2022 18:39:49 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+        Sat, 27 Aug 2022 06:11:42 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739C020F5D
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 03:11:39 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MFC7l50fVz1N7Z8;
+        Sat, 27 Aug 2022 18:08:03 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 18:43:08 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 18:43:06 +0800
-Message-ID: <c0e286b4-3005-71fb-3bb2-476944099d4e@huawei.com>
-Date:   Sat, 27 Aug 2022 18:43:06 +0800
+ 15.1.2375.24; Sat, 27 Aug 2022 18:11:37 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 27 Aug
+ 2022 18:11:36 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next v3 0/5] Delay the initializaton of zswap
+Date:   Sat, 27 Aug 2022 18:45:55 +0800
+Message-ID: <20220827104600.1813214-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v2 1/2] riscv: uaccess: rename
- __get/put_user_nocheck to __get/put_mem_nocheck
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <Conor.Dooley@microchip.com>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220815032025.2685516-1-tongtiangen@huawei.com>
- <20220815032025.2685516-2-tongtiangen@huawei.com>
- <CAK8P3a0ixaYimjCh77QBJpbHbVsw+9C7RiW2LEnwQ8HnwG_jHg@mail.gmail.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <CAK8P3a0ixaYimjCh77QBJpbHbVsw+9C7RiW2LEnwQ8HnwG_jHg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the initialization of zswap, about 18MB memory will be allocated for       
+zswap_pool. Since not all users use zswap, the memory may be wasted. Save  
+the memory for these users by delaying the initialization of zswap to         
+first enablement.                                                             
+                                                                              
+v2->v3: Fix frontswap_ops NULL reported by Nathan and add init for online
+swap device in backend register.
+v1->v2: Change init_zswap to zswap_init suggested by Andrew.
 
+Liu Shixin (5):
+  frontswap: skip frontswap_ops init if zswap init failed.
+  frontswap: invoke ops->init for online swap device in
+    frontswap_register_ops
+  mm/zswap: replace zswap_init_{started/failed} with zswap_init_state
+  mm/zswap: delay the initializaton of zswap until the first enablement
+  mm/zswap: skip confusing print info
 
-在 2022/8/26 17:30, Arnd Bergmann 写道:
-> On Mon, Aug 15, 2022 at 5:20 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>
->> Current, The helpers __get/put_user_nocheck() is used by get/put_user() and
->> __get/put_kernel_nofault(), which is not always uaccess, so the name with
->> *user* is not appropriate.
->>
->> Also rename xxx_user_xxx to xxx_mem_xx  on the call path of
->> __get/put_user_nocheck()
->>
->> Only refactor code without any functional changes.
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> 
-> I would prefer this not being done, it just makes riscv diverge from the
-> code on other architectures. While the new name does make more sense,
-> it ends up making it harder to refactor this across architectures in the end.
-> 
-> There are two important cleanups that I would like to see done in
-> asm/uaccess.h across architectures:
-> 
->   - generalize the __get_user()/__put_user()/__get_kernel_nofault()/
->    __put_kernel_nofault() wrappers to the point that architectures do not
->    need to worry about the variable type stuff but instead just provide
->    trivial fixed-length helpers of some sort
-> 
-> - change the calling conventions in a way that allows the use of the
->    asm-goto-with-output method for better object code on modern
->    compilers.
-> 
-> The x86 version already has most of this, with their
-> __get_user_size() macro supporting both the asm-goto label
-> and the error code assignment, so the generalized code should
-> probably be based on that approach.
+ include/linux/swapfile.h |  2 ++
+ mm/frontswap.c           | 50 +++++++++++++++++++++++++-
+ mm/swapfile.c            |  4 +--
+ mm/zswap.c               | 77 ++++++++++++++++++++++++++++++----------
+ 4 files changed, 111 insertions(+), 22 deletions(-)
 
-I am very interested in the implementation of X86. I need to investigate 
-and consider a cross architecture implementation.
-However, I understand that the modification of the current patch has 
-little to do with the two points mentioned above. We can optimize the 
-code step by step.
+-- 
+2.25.1
 
-Thanks,
-Tong.
-
-> 
->         Arnd
-> 
-> .

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747775A34DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 07:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27005A34E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 07:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239374AbiH0Fna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 01:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
+        id S241974AbiH0Fne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 01:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239702AbiH0FnS (ORCPT
+        with ESMTP id S240872AbiH0FnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 01:43:18 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDD28FD77
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 22:43:16 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id c2so3313578plo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 22:43:16 -0700 (PDT)
+        Sat, 27 Aug 2022 01:43:23 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAEC9753E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 22:43:19 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id f12so3136486plb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 22:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=XpaDCgaNDjkSJ6ouWuy15GpLHx7QrwbtY+TYZtbLU8o=;
-        b=J6FCM4MLwtK1NsBwLorHs+TxCYiScin33aRJ4Pcy9OsJ6dozF/XTHK3IQg854+WdiH
-         g08HNAcQ8fWq2Ku1ETrUV1tMxiWfrV+t7KOiCJwACJZS99/8G/s6+8aMJyOcA1eoG/Sq
-         5F70Q2WF5G7emHfE9wWZOSR/Oq2sy+o40RjzzhIjNaiTbBm/4oER/0g1+JVBvpY8QMu4
-         cPCbcMEQC58iTDHXfyxmtYsYQdD3FpYWH2JamPFfUrzhGIqnOZ6v0/RO1Qu18TbRtTps
-         47pCxse9f+tvSet6kXXCNbENOHNh1WKaqnvSqeRslwPWUIra/7pvPh9vIsd6JrwV1WzC
-         RRqA==
+        bh=bIYHfqktNh/eqEb6V5tq+qHzRjZARC98d3iyP3Svfn4=;
+        b=iFpKejPcFJZCI22k05uYM44mQSRCGsBfHaSvShpsPY9fwkTooUqtXOQGyy3FnIUyaq
+         2f7lVofSq6YyuqRWfwcSXqm76zsW7P5Y6yoAlc49NM/VvZZLZAOEIiR+V9a0RSA2CLZZ
+         dimPnoi8zOp9d2yA2JRyRIOFIZaO7xXZtNjJyBy+RWpzTYu2vofBjvefTqkiZqmUP9Dh
+         InuxE2d1NwdEt9kyC/s1NOfHXbQUmfQSRSaKWXqCqeyf2b8YDsAtcCzrX0tgdQpxeNP8
+         OwA783dCfrR0UTC5MbYmkIP7VPqKt1bpSJzFiq3OB3CJNkOhxg5txNSXeq9hfNFEyIjj
+         Jcgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=XpaDCgaNDjkSJ6ouWuy15GpLHx7QrwbtY+TYZtbLU8o=;
-        b=VF6poBhsrziNUEJZk9nySfDYSLI6RbU4kxCCSOrDoDphRfmaGz5pBdX+V8JjaF8xD+
-         MEC/67ECxZPHZIoO5ECA7Oz2UYgj1N2ZD4H8SG4AA33y1LswBMS0igUd101xKsQ+yG+/
-         e2SuPa2SwJBcULohGQBp6fq6fhz7HyPQddGRwMHFYDIWwPeqabL96VWXfcXrKRKJ2MzH
-         pk/UjrZ1bJJvtOJuJxASbkYSkdW9JH78EbQUB81y5p8qf8p3NqU8xlVWMAOwapuDhH7i
-         tyHW70GJj+WT07EDTBtCzVS4wiXF+v4yH6R2cA4MGvwPDCwBR+VVgl0eduTLwzjxu0lD
-         xnrg==
-X-Gm-Message-State: ACgBeo1vcerPAN0aW15L7xuBTPJFBp/q1a06T2z600/fMIENZtuDXq8P
-        gPRU3kxHChenlcu2aFbJYOU=
-X-Google-Smtp-Source: AA6agR5K5+ALSpoaWs+oaXSoJ90hsRVstw8Dm2SC8B6cHUBwUBN7A4tehruJvON9/Od/YODoPZaggw==
-X-Received: by 2002:a17:903:11d2:b0:172:6ea1:b6e6 with SMTP id q18-20020a17090311d200b001726ea1b6e6mr6832845plh.72.1661578995212;
-        Fri, 26 Aug 2022 22:43:15 -0700 (PDT)
+        bh=bIYHfqktNh/eqEb6V5tq+qHzRjZARC98d3iyP3Svfn4=;
+        b=6XpWQ3zhwf+wFcXarE8c0tPp9CgI/Eog/Box/XrOw8jwIahzSkK6Z8pdw6c84Pjett
+         G7CDlLZBq/DOEh6X1ctz5kL+qcB9r8sArxCkWm1RHWdwAl+L/xkLTSlwF+NYUoqjKCFp
+         kz7/bfqVVjdgs5NhZfQW/zxK3i3gXDJT88MYXqZP/oB+LZYwKxIifiPrnhvSf2jrWkfP
+         2KKmmBRWUGLcK93DbNZpAqyFvfPUKzknpWsHs02q5aOmPtkEZTVNZHMCqH/EjIDjQyVx
+         5WNtwx8Jqxq0lRwPd9FnvdYy0dHwcUU/7UpEccsulgM5KPCdNyB350B6ZbPWCctoauZw
+         lWJw==
+X-Gm-Message-State: ACgBeo0/2Uq49FusyNoIzPf/+m7riPjiAo6fTKnj27DJrgbYZxnmsG/1
+        Vs5bamVAYbks4Pvys8HS1U0=
+X-Google-Smtp-Source: AA6agR4jMDFkUNkk4X8ZWC+l7U/F7VDhoXMuQWpDiQEoUT0ipkAwnFu6sfic/v8ixoGJpv6DURuF6Q==
+X-Received: by 2002:a17:90b:3b81:b0:1fd:7249:6a80 with SMTP id pc1-20020a17090b3b8100b001fd72496a80mr4518665pjb.205.1661578999163;
+        Fri, 26 Aug 2022 22:43:19 -0700 (PDT)
 Received: from sophie ([89.46.114.37])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa79a4e000000b00537cfbb2810sm2275427pfj.65.2022.08.26.22.43.14
+        by smtp.gmail.com with ESMTPSA id s12-20020a170902ea0c00b0016bcc35000asm2607270plg.302.2022.08.26.22.43.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 22:43:14 -0700 (PDT)
+        Fri, 26 Aug 2022 22:43:18 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v3 4/8] memblock tests: add additional tests for basic api and memblock_alloc
-Date:   Sat, 27 Aug 2022 00:42:46 -0500
-Message-Id: <c23c0393c5b9a53fe7f676996913c629495e9727.1661578349.git.remckee0@gmail.com>
+Subject: [PATCH v3 5/8] memblock tests: update alloc_api to test memblock_alloc_raw
+Date:   Sat, 27 Aug 2022 00:42:47 -0500
+Message-Id: <5a7cfb2f807ee2cb53ee77f9f5c910107b253d6e.1661578349.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1661578349.git.remckee0@gmail.com>
 References: <cover.1661578349.git.remckee0@gmail.com>
@@ -71,662 +71,332 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for memblock_add(), memblock_reserve(), memblock_remove(),
-memblock_free(), and memblock_alloc() for the following test scenarios.
+Update memblock_alloc() tests so that they test either memblock_alloc()
+or memblock_alloc_raw() depending on the value of alloc_test_flags. Run
+through all the existing tests in memblock_alloc_api twice: once for
+memblock_alloc() and once for memblock_alloc_raw().
 
-memblock_add() and memblock_reserve():
-- add/reserve a memory block in the gap between two existing memory
-  blocks, and check that the blocks are merged into one region
-- try to add/reserve memblock regions that extend past PHYS_ADDR_MAX
+When the tests run memblock_alloc(), they test that the entire memory
+region is zero. When the tests run memblock_alloc_raw(), they test that
+the entire memory region is nonzero. The content of the memory region is
+initialized to nonzero, and we expect it to remain unchanged if running
+memblock_alloc_raw().
 
-memblock_remove() and memblock_free():
-- remove/free a region when it is the only available region
-    + These tests ensure that the first region is overwritten with a
-      "dummy" region when the last remaining region of that type is
-      removed or freed.
-- remove/free() a region that overlaps with two existing regions of the
-  relevant type
-- try to remove/free memblock regions that extend past PHYS_ADDR_MAX
-
-memblock_alloc():
-- try to allocate a region that is larger than the total size of available
-  memory (memblock.memory)
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- tools/testing/memblock/tests/alloc_api.c |  44 ++
- tools/testing/memblock/tests/basic_api.c | 499 +++++++++++++++++++++++
- 2 files changed, 543 insertions(+)
+ tools/testing/memblock/tests/alloc_api.c | 91 +++++++++++++++---------
+ tools/testing/memblock/tests/common.h    | 27 +++++++
+ 2 files changed, 85 insertions(+), 33 deletions(-)
 
 diff --git a/tools/testing/memblock/tests/alloc_api.c b/tools/testing/memblock/tests/alloc_api.c
-index de3405634f8a..e20e326d636f 100644
+index e20e326d636f..36dd7e254cce 100644
 --- a/tools/testing/memblock/tests/alloc_api.c
 +++ b/tools/testing/memblock/tests/alloc_api.c
-@@ -469,6 +469,40 @@ static int alloc_no_memory_generic_check(void)
- 	return 0;
- }
+@@ -1,6 +1,22 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ #include "alloc_api.h"
  
-+/*
-+ * A test that tries to allocate a region that is larger than the total size of
-+ * available memory (memblock.memory):
-+ *
-+ *  +-----------------------------------+
-+ *  |                 new               |
-+ *  +-----------------------------------+
-+ *  |                                 |
-+ *  |                                 |
-+ *  +---------------------------------+
-+ *
-+ * Expect no allocation to happen.
-+ */
-+static int alloc_too_large_generic_check(void)
++static int alloc_test_flags = TEST_F_NONE;
++
++static inline const char * const get_memblock_alloc_name(int flags)
 +{
-+	struct memblock_region *rgn = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
++	if (flags & TEST_F_RAW)
++		return "memblock_alloc_raw";
++	return "memblock_alloc";
++}
 +
-+	PREFIX_PUSH();
-+
-+	setup_memblock();
-+
-+	allocated_ptr = memblock_alloc(MEM_SIZE + SZ_2, SMP_CACHE_BYTES);
-+
-+	ASSERT_EQ(allocated_ptr, NULL);
-+	ASSERT_EQ(rgn->size, 0);
-+	ASSERT_EQ(rgn->base, 0);
-+	ASSERT_EQ(memblock.reserved.total_size, 0);
-+
-+	test_pass_pop();
-+
-+	return 0;
++static inline void *run_memblock_alloc(phys_addr_t size, phys_addr_t align)
++{
++	if (alloc_test_flags & TEST_F_RAW)
++		return memblock_alloc_raw(size, align);
++	return memblock_alloc(size, align);
 +}
 +
  /*
   * A simple test that tries to allocate a small memory region.
-  * Expect to allocate an aligned region at the beginning of the available
-@@ -813,6 +847,15 @@ static int alloc_no_memory_check(void)
+  * Expect to allocate an aligned region near the end of the available memory.
+@@ -19,10 +35,10 @@ static int alloc_top_down_simple_check(void)
+ 
+ 	expected_start = memblock_end_of_DRAM() - SMP_CACHE_BYTES;
+ 
+-	allocated_ptr = memblock_alloc(size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, size);
++	assert_mem_content(allocated_ptr, size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, size);
+ 	ASSERT_EQ(rgn->base, expected_start);
+@@ -79,10 +95,10 @@ static int alloc_top_down_disjoint_check(void)
+ 
+ 	memblock_reserve(r1.base, r1.size);
+ 
+-	allocated_ptr = memblock_alloc(r2_size, alignment);
++	allocated_ptr = run_memblock_alloc(r2_size, alignment);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r2_size);
++	assert_mem_content(allocated_ptr, r2_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn1->size, r1.size);
+ 	ASSERT_EQ(rgn1->base, r1.base);
+@@ -126,10 +142,10 @@ static int alloc_top_down_before_check(void)
+ 
+ 	memblock_reserve(memblock_end_of_DRAM() - total_size, r1_size);
+ 
+-	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r2_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r2_size);
++	assert_mem_content(allocated_ptr, r2_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, memblock_end_of_DRAM() - total_size);
+@@ -176,10 +192,10 @@ static int alloc_top_down_after_check(void)
+ 
+ 	memblock_reserve(r1.base, r1.size);
+ 
+-	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r2_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r2_size);
++	assert_mem_content(allocated_ptr, r2_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, r1.base - r2_size);
+@@ -228,10 +244,10 @@ static int alloc_top_down_second_fit_check(void)
+ 	memblock_reserve(r1.base, r1.size);
+ 	memblock_reserve(r2.base, r2.size);
+ 
+-	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r3_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r3_size);
++	assert_mem_content(allocated_ptr, r3_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, r2.size + r3_size);
+ 	ASSERT_EQ(rgn->base, r2.base - r3_size);
+@@ -284,10 +300,10 @@ static int alloc_in_between_generic_check(void)
+ 	memblock_reserve(r1.base, r1.size);
+ 	memblock_reserve(r2.base, r2.size);
+ 
+-	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r3_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r3_size);
++	assert_mem_content(allocated_ptr, r3_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, r1.base - r2.size - r3_size);
+@@ -332,7 +348,7 @@ static int alloc_small_gaps_generic_check(void)
+ 		region_end += gap_size + region_size;
+ 	}
+ 
+-	allocated_ptr = memblock_alloc(region_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(region_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_EQ(allocated_ptr, NULL);
+ 
+@@ -356,7 +372,7 @@ static int alloc_all_reserved_generic_check(void)
+ 	/* Simulate full memory */
+ 	memblock_reserve(memblock_start_of_DRAM(), MEM_SIZE);
+ 
+-	allocated_ptr = memblock_alloc(SZ_256, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(SZ_256, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_EQ(allocated_ptr, NULL);
+ 
+@@ -392,7 +408,7 @@ static int alloc_no_space_generic_check(void)
+ 	/* Simulate almost-full memory */
+ 	memblock_reserve(memblock_start_of_DRAM(), reserved_size);
+ 
+-	allocated_ptr = memblock_alloc(SZ_1K, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(SZ_1K, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_EQ(allocated_ptr, NULL);
+ 
+@@ -427,10 +443,10 @@ static int alloc_limited_space_generic_check(void)
+ 	/* Simulate almost-full memory */
+ 	memblock_reserve(memblock_start_of_DRAM(), reserved_size);
+ 
+-	allocated_ptr = memblock_alloc(available_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(available_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, available_size);
++	assert_mem_content(allocated_ptr, available_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, MEM_SIZE);
+ 	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+@@ -457,7 +473,7 @@ static int alloc_no_memory_generic_check(void)
+ 
+ 	reset_memblock_regions();
+ 
+-	allocated_ptr = memblock_alloc(SZ_1K, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(SZ_1K, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_EQ(allocated_ptr, NULL);
+ 	ASSERT_EQ(rgn->size, 0);
+@@ -491,7 +507,7 @@ static int alloc_too_large_generic_check(void)
+ 
+ 	setup_memblock();
+ 
+-	allocated_ptr = memblock_alloc(MEM_SIZE + SZ_2, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(MEM_SIZE + SZ_2, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_EQ(allocated_ptr, NULL);
+ 	ASSERT_EQ(rgn->size, 0);
+@@ -517,10 +533,10 @@ static int alloc_bottom_up_simple_check(void)
+ 
+ 	setup_memblock();
+ 
+-	allocated_ptr = memblock_alloc(SZ_2, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(SZ_2, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, SZ_2);
++	assert_mem_content(allocated_ptr, SZ_2, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, SZ_2);
+ 	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+@@ -575,10 +591,10 @@ static int alloc_bottom_up_disjoint_check(void)
+ 
+ 	memblock_reserve(r1.base, r1.size);
+ 
+-	allocated_ptr = memblock_alloc(r2_size, alignment);
++	allocated_ptr = run_memblock_alloc(r2_size, alignment);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r2_size);
++	assert_mem_content(allocated_ptr, r2_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn1->size, r1.size);
+ 	ASSERT_EQ(rgn1->base, r1.base);
+@@ -619,10 +635,10 @@ static int alloc_bottom_up_before_check(void)
+ 
+ 	memblock_reserve(memblock_start_of_DRAM() + r1_size, r2_size);
+ 
+-	allocated_ptr = memblock_alloc(r1_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r1_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r1_size);
++	assert_mem_content(allocated_ptr, r1_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+@@ -668,10 +684,10 @@ static int alloc_bottom_up_after_check(void)
+ 
+ 	memblock_reserve(r1.base, r1.size);
+ 
+-	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r2_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r2_size);
++	assert_mem_content(allocated_ptr, r2_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, r1.base);
+@@ -721,10 +737,10 @@ static int alloc_bottom_up_second_fit_check(void)
+ 	memblock_reserve(r1.base, r1.size);
+ 	memblock_reserve(r2.base, r2.size);
+ 
+-	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
++	allocated_ptr = run_memblock_alloc(r3_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
+-	ASSERT_MEM_EQ(allocated_ptr, 0, r3_size);
++	assert_mem_content(allocated_ptr, r3_size, alloc_test_flags);
+ 
+ 	ASSERT_EQ(rgn->size, r2.size + r3_size);
+ 	ASSERT_EQ(rgn->base, r2.base);
+@@ -856,13 +872,14 @@ static int alloc_too_large_check(void)
  	return 0;
  }
  
-+static int alloc_too_large_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	run_top_down(alloc_too_large_generic_check);
-+	run_bottom_up(alloc_too_large_generic_check);
-+
-+	return 0;
-+}
-+
- int memblock_alloc_checks(void)
+-int memblock_alloc_checks(void)
++static int memblock_alloc_checks_internal(int flags)
  {
- 	const char *func_testing = "memblock_alloc";
-@@ -835,6 +878,7 @@ int memblock_alloc_checks(void)
- 	alloc_no_space_check();
- 	alloc_limited_space_check();
- 	alloc_no_memory_check();
-+	alloc_too_large_check();
+-	const char *func_testing = "memblock_alloc";
++	const char *func = get_memblock_alloc_name(flags);
  
- 	dummy_physical_memory_cleanup();
- 
-diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-index 66f46f261e66..ea79396e4611 100644
---- a/tools/testing/memblock/tests/basic_api.c
-+++ b/tools/testing/memblock/tests/basic_api.c
-@@ -326,6 +326,102 @@ static int memblock_add_twice_check(void)
- 	return 0;
- }
- 
-+/*
-+ * A test that tries to add two memory blocks that don't overlap with one
-+ * another and then add a third memory block in the space between the first two:
-+ *
-+ *  |        +--------+--------+--------+  |
-+ *  |        |   r1   |   r3   |   r2   |  |
-+ *  +--------+--------+--------+--------+--+
-+ *
-+ * Expect to merge the three entries into one region that starts at r1.base
-+ * and has size of r1.size + r2.size + r3.size. The region counter and total
-+ * size of the available memory are updated.
-+ */
-+static int memblock_add_between_check(void)
-+{
-+	struct memblock_region *rgn;
-+	phys_addr_t total_size;
-+
-+	rgn = &memblock.memory.regions[0];
-+
-+	struct region r1 = {
-+		.base = SZ_1G,
-+		.size = SZ_8K
-+	};
-+	struct region r2 = {
-+		.base = SZ_1G + SZ_16K,
-+		.size = SZ_8K
-+	};
-+	struct region r3 = {
-+		.base = SZ_1G + SZ_8K,
-+		.size = SZ_8K
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	total_size = r1.size + r2.size + r3.size;
-+
-+	reset_memblock_regions();
-+	memblock_add(r1.base, r1.size);
-+	memblock_add(r2.base, r2.size);
-+	memblock_add(r3.base, r3.size);
-+
-+	ASSERT_EQ(rgn->base, r1.base);
-+	ASSERT_EQ(rgn->size, total_size);
-+
-+	ASSERT_EQ(memblock.memory.cnt, 1);
-+	ASSERT_EQ(memblock.memory.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
-+/*
-+ * A simple test that tries to add a memory block r when r extends past
-+ * PHYS_ADDR_MAX:
-+ *
-+ *                               +--------+
-+ *                               |    r   |
-+ *                               +--------+
-+ *  |                            +----+
-+ *  |                            | rgn|
-+ *  +----------------------------+----+
-+ *
-+ * Expect to add a memory block of size PHYS_ADDR_MAX - r.base. Expect the
-+ * total size of available memory and the counter to be updated.
-+ */
-+static int memblock_add_near_max_check(void)
-+{
-+	struct memblock_region *rgn;
-+	phys_addr_t total_size;
-+
-+	rgn = &memblock.memory.regions[0];
-+
-+	struct region r = {
-+		.base = PHYS_ADDR_MAX - SZ_1M,
-+		.size = SZ_2M
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	total_size = PHYS_ADDR_MAX - r.base;
-+
-+	reset_memblock_regions();
-+	memblock_add(r.base, r.size);
-+
-+	ASSERT_EQ(rgn->base, r.base);
-+	ASSERT_EQ(rgn->size, total_size);
-+
-+	ASSERT_EQ(memblock.memory.cnt, 1);
-+	ASSERT_EQ(memblock.memory.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
- static int memblock_add_checks(void)
- {
++	alloc_test_flags = flags;
  	prefix_reset();
-@@ -339,6 +435,8 @@ static int memblock_add_checks(void)
- 	memblock_add_overlap_bottom_check();
- 	memblock_add_within_check();
- 	memblock_add_twice_check();
-+	memblock_add_between_check();
-+	memblock_add_near_max_check();
+-	prefix_push(func_testing);
+-	test_print("Running %s tests...\n", func_testing);
++	prefix_push(func);
++	test_print("Running %s tests...\n", func);
  
- 	prefix_pop();
+ 	reset_memblock_attributes();
+ 	dummy_physical_memory_init();
+@@ -886,3 +903,11 @@ int memblock_alloc_checks(void)
  
-@@ -604,6 +702,102 @@ static int memblock_reserve_twice_check(void)
  	return 0;
  }
- 
-+/*
-+ * A test that tries to mark two memory blocks that don't overlap as reserved
-+ * and then reserve a third memory block in the space between the first two:
-+ *
-+ *  |        +--------+--------+--------+  |
-+ *  |        |   r1   |   r3   |   r2   |  |
-+ *  +--------+--------+--------+--------+--+
-+ *
-+ * Expect to merge the three entries into one reserved region that starts at
-+ * r1.base and has size of r1.size + r2.size + r3.size. The region counter and
-+ * total for memblock.reserved are updated.
-+ */
-+static int memblock_reserve_between_check(void)
++
++int memblock_alloc_checks(void)
 +{
-+	struct memblock_region *rgn;
-+	phys_addr_t total_size;
-+
-+	rgn = &memblock.reserved.regions[0];
-+
-+	struct region r1 = {
-+		.base = SZ_1G,
-+		.size = SZ_8K
-+	};
-+	struct region r2 = {
-+		.base = SZ_1G + SZ_16K,
-+		.size = SZ_8K
-+	};
-+	struct region r3 = {
-+		.base = SZ_1G + SZ_8K,
-+		.size = SZ_8K
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	total_size = r1.size + r2.size + r3.size;
-+
-+	reset_memblock_regions();
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_reserve(r2.base, r2.size);
-+	memblock_reserve(r3.base, r3.size);
-+
-+	ASSERT_EQ(rgn->base, r1.base);
-+	ASSERT_EQ(rgn->size, total_size);
-+
-+	ASSERT_EQ(memblock.reserved.cnt, 1);
-+	ASSERT_EQ(memblock.reserved.total_size, total_size);
-+
-+	test_pass_pop();
++	memblock_alloc_checks_internal(TEST_F_NONE);
++	memblock_alloc_checks_internal(TEST_F_RAW);
 +
 +	return 0;
 +}
-+
-+/*
-+ * A simple test that tries to reserve a memory block r when r extends past
-+ * PHYS_ADDR_MAX:
-+ *
-+ *                               +--------+
-+ *                               |    r   |
-+ *                               +--------+
-+ *  |                            +----+
-+ *  |                            | rgn|
-+ *  +----------------------------+----+
-+ *
-+ * Expect to reserve a memory block of size PHYS_ADDR_MAX - r.base. Expect the
-+ * total size of reserved memory and the counter to be updated.
-+ */
-+static int memblock_reserve_near_max_check(void)
-+{
-+	struct memblock_region *rgn;
-+	phys_addr_t total_size;
-+
-+	rgn = &memblock.reserved.regions[0];
-+
-+	struct region r = {
-+		.base = PHYS_ADDR_MAX - SZ_1M,
-+		.size = SZ_2M
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	total_size = PHYS_ADDR_MAX - r.base;
-+
-+	reset_memblock_regions();
-+	memblock_reserve(r.base, r.size);
-+
-+	ASSERT_EQ(rgn->base, r.base);
-+	ASSERT_EQ(rgn->size, total_size);
-+
-+	ASSERT_EQ(memblock.reserved.cnt, 1);
-+	ASSERT_EQ(memblock.reserved.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
- static int memblock_reserve_checks(void)
- {
- 	prefix_reset();
-@@ -616,6 +810,8 @@ static int memblock_reserve_checks(void)
- 	memblock_reserve_overlap_bottom_check();
- 	memblock_reserve_within_check();
- 	memblock_reserve_twice_check();
-+	memblock_reserve_between_check();
-+	memblock_reserve_near_max_check();
+diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+index c53f9c365714..78128e109a95 100644
+--- a/tools/testing/memblock/tests/common.h
++++ b/tools/testing/memblock/tests/common.h
+@@ -12,6 +12,13 @@
  
+ #define MEM_SIZE SZ_16K
+ 
++enum test_flags {
++	/* No special request. */
++	TEST_F_NONE = 0x0,
++	/* Perform raw allocations (no zeroing of memory). */
++	TEST_F_RAW = 0x1,
++};
++
+ /**
+  * ASSERT_EQ():
+  * Check the condition
+@@ -63,6 +70,18 @@
+ 	} \
+ } while (0)
+ 
++/**
++ * ASSERT_MEM_NE():
++ * Check that none of the first @_size bytes of @_seen are equal to @_expected.
++ * If false, print failed test message (if running with --verbose) and then
++ * assert.
++ */
++#define ASSERT_MEM_NE(_seen, _expected, _size) do { \
++	for (int _i = 0; _i < (_size); _i++) { \
++		ASSERT_NE(((char *)_seen)[_i], (_expected)); \
++	} \
++} while (0)
++
+ #define PREFIX_PUSH() prefix_push(__func__)
+ 
+ /*
+@@ -116,4 +135,12 @@ static inline void run_bottom_up(int (*func)())
  	prefix_pop();
- 
-@@ -887,6 +1083,155 @@ static int memblock_remove_within_check(void)
- 	return 0;
  }
  
-+/*
-+ * A simple test that tries to remove a region r1 from the array of
-+ * available memory regions when r1 is the only available region.
-+ * Expect to add a memory block r1 and then remove r1 so that a dummy
-+ * region is added. The region counter stays the same, and the total size
-+ * is updated.
-+ */
-+static int memblock_remove_only_region_check(void)
++static inline void assert_mem_content(void *mem, int size, int flags)
 +{
-+	struct memblock_region *rgn;
-+
-+	rgn = &memblock.memory.regions[0];
-+
-+	struct region r1 = {
-+		.base = SZ_2K,
-+		.size = SZ_4K
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	reset_memblock_regions();
-+	memblock_add(r1.base, r1.size);
-+	memblock_remove(r1.base, r1.size);
-+
-+	ASSERT_EQ(rgn->base, 0);
-+	ASSERT_EQ(rgn->size, 0);
-+
-+	ASSERT_EQ(memblock.memory.cnt, 1);
-+	ASSERT_EQ(memblock.memory.total_size, 0);
-+
-+	test_pass_pop();
-+
-+	return 0;
++	if (flags & TEST_F_RAW)
++		ASSERT_MEM_NE(mem, 0, size);
++	else
++		ASSERT_MEM_EQ(mem, 0, size);
 +}
 +
-+/*
-+ * A simple test that tries remove a region r2 from the array of available
-+ * memory regions when r2 extends past PHYS_ADDR_MAX:
-+ *
-+ *                               +--------+
-+ *                               |   r2   |
-+ *                               +--------+
-+ *  |                        +---+....+
-+ *  |                        |rgn|    |
-+ *  +------------------------+---+----+
-+ *
-+ * Expect that only the portion between PHYS_ADDR_MAX and r2.base is removed.
-+ * Expect the total size of available memory to be updated and the counter to
-+ * not be updated.
-+ */
-+static int memblock_remove_near_max_check(void)
-+{
-+	struct memblock_region *rgn;
-+	phys_addr_t total_size;
-+
-+	rgn = &memblock.memory.regions[0];
-+
-+	struct region r1 = {
-+		.base = PHYS_ADDR_MAX - SZ_2M,
-+		.size = SZ_2M
-+	};
-+
-+	struct region r2 = {
-+		.base = PHYS_ADDR_MAX - SZ_1M,
-+		.size = SZ_2M
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	total_size = r1.size - (PHYS_ADDR_MAX - r2.base);
-+
-+	reset_memblock_regions();
-+	memblock_add(r1.base, r1.size);
-+	memblock_remove(r2.base, r2.size);
-+
-+	ASSERT_EQ(rgn->base, r1.base);
-+	ASSERT_EQ(rgn->size, total_size);
-+
-+	ASSERT_EQ(memblock.memory.cnt, 1);
-+	ASSERT_EQ(memblock.memory.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to remove a region r3 that overlaps with two existing
-+ * regions r1 and r2:
-+ *
-+ *            +----------------+
-+ *            |       r3       |
-+ *            +----------------+
-+ *  |    +----+.....   ........+--------+
-+ *  |    |    |r1  :   :       |r2      |     |
-+ *  +----+----+----+---+-------+--------+-----+
-+ *
-+ * Expect that only the intersections of r1 with r3 and r2 with r3 are removed
-+ * from the available memory pool. Expect the total size of available memory to
-+ * be updated and the counter to not be updated.
-+ */
-+static int memblock_remove_overlap_two_check(void)
-+{
-+	struct memblock_region *rgn1, *rgn2;
-+	phys_addr_t new_r1_size, new_r2_size, r2_end, r3_end, total_size;
-+
-+	rgn1 = &memblock.memory.regions[0];
-+	rgn2 = &memblock.memory.regions[1];
-+
-+	struct region r1 = {
-+		.base = SZ_16M,
-+		.size = SZ_32M
-+	};
-+	struct region r2 = {
-+		.base = SZ_64M,
-+		.size = SZ_64M
-+	};
-+	struct region r3 = {
-+		.base = SZ_32M,
-+		.size = SZ_64M
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	r2_end = r2.base + r2.size;
-+	r3_end = r3.base + r3.size;
-+	new_r1_size = r3.base - r1.base;
-+	new_r2_size = r2_end - r3_end;
-+	total_size = new_r1_size + new_r2_size;
-+
-+	reset_memblock_regions();
-+	memblock_add(r1.base, r1.size);
-+	memblock_add(r2.base, r2.size);
-+	memblock_remove(r3.base, r3.size);
-+
-+	ASSERT_EQ(rgn1->base, r1.base);
-+	ASSERT_EQ(rgn1->size, new_r1_size);
-+
-+	ASSERT_EQ(rgn2->base, r3_end);
-+	ASSERT_EQ(rgn2->size, new_r2_size);
-+
-+	ASSERT_EQ(memblock.memory.cnt, 2);
-+	ASSERT_EQ(memblock.memory.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
- static int memblock_remove_checks(void)
- {
- 	prefix_reset();
-@@ -898,6 +1243,9 @@ static int memblock_remove_checks(void)
- 	memblock_remove_overlap_top_check();
- 	memblock_remove_overlap_bottom_check();
- 	memblock_remove_within_check();
-+	memblock_remove_only_region_check();
-+	memblock_remove_near_max_check();
-+	memblock_remove_overlap_two_check();
- 
- 	prefix_pop();
- 
-@@ -1163,6 +1511,154 @@ static int memblock_free_within_check(void)
- 	return 0;
- }
- 
-+/*
-+ * A simple test that tries to free a memory block r1 that was marked
-+ * earlier as reserved when r1 is the only available region.
-+ * Expect to reserve a memory block r1 and then free r1 so that r1 is
-+ * overwritten with a dummy region. The region counter stays the same,
-+ * and the total size is updated.
-+ */
-+static int memblock_free_only_region_check(void)
-+{
-+	struct memblock_region *rgn;
-+
-+	rgn = &memblock.reserved.regions[0];
-+
-+	struct region r1 = {
-+		.base = SZ_2K,
-+		.size = SZ_4K
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	reset_memblock_regions();
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_free((void *)r1.base, r1.size);
-+
-+	ASSERT_EQ(rgn->base, 0);
-+	ASSERT_EQ(rgn->size, 0);
-+
-+	ASSERT_EQ(memblock.reserved.cnt, 1);
-+	ASSERT_EQ(memblock.reserved.total_size, 0);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
-+/*
-+ * A simple test that tries free a region r2 when r2 extends past PHYS_ADDR_MAX:
-+ *
-+ *                               +--------+
-+ *                               |   r2   |
-+ *                               +--------+
-+ *  |                        +---+....+
-+ *  |                        |rgn|    |
-+ *  +------------------------+---+----+
-+ *
-+ * Expect that only the portion between PHYS_ADDR_MAX and r2.base is freed.
-+ * Expect the total size of reserved memory to be updated and the counter to
-+ * not be updated.
-+ */
-+static int memblock_free_near_max_check(void)
-+{
-+	struct memblock_region *rgn;
-+	phys_addr_t total_size;
-+
-+	rgn = &memblock.reserved.regions[0];
-+
-+	struct region r1 = {
-+		.base = PHYS_ADDR_MAX - SZ_2M,
-+		.size = SZ_2M
-+	};
-+
-+	struct region r2 = {
-+		.base = PHYS_ADDR_MAX - SZ_1M,
-+		.size = SZ_2M
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	total_size = r1.size - (PHYS_ADDR_MAX - r2.base);
-+
-+	reset_memblock_regions();
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_free((void *)r2.base, r2.size);
-+
-+	ASSERT_EQ(rgn->base, r1.base);
-+	ASSERT_EQ(rgn->size, total_size);
-+
-+	ASSERT_EQ(memblock.reserved.cnt, 1);
-+	ASSERT_EQ(memblock.reserved.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to free a reserved region r3 that overlaps with two
-+ * existing reserved regions r1 and r2:
-+ *
-+ *            +----------------+
-+ *            |       r3       |
-+ *            +----------------+
-+ *  |    +----+.....   ........+--------+
-+ *  |    |    |r1  :   :       |r2      |     |
-+ *  +----+----+----+---+-------+--------+-----+
-+ *
-+ * Expect that only the intersections of r1 with r3 and r2 with r3 are freed
-+ * from the collection of reserved memory. Expect the total size of reserved
-+ * memory to be updated and the counter to not be updated.
-+ */
-+static int memblock_free_overlap_two_check(void)
-+{
-+	struct memblock_region *rgn1, *rgn2;
-+	phys_addr_t new_r1_size, new_r2_size, r2_end, r3_end, total_size;
-+
-+	rgn1 = &memblock.reserved.regions[0];
-+	rgn2 = &memblock.reserved.regions[1];
-+
-+	struct region r1 = {
-+		.base = SZ_16M,
-+		.size = SZ_32M
-+	};
-+	struct region r2 = {
-+		.base = SZ_64M,
-+		.size = SZ_64M
-+	};
-+	struct region r3 = {
-+		.base = SZ_32M,
-+		.size = SZ_64M
-+	};
-+
-+	PREFIX_PUSH();
-+
-+	r2_end = r2.base + r2.size;
-+	r3_end = r3.base + r3.size;
-+	new_r1_size = r3.base - r1.base;
-+	new_r2_size = r2_end - r3_end;
-+	total_size = new_r1_size + new_r2_size;
-+
-+	reset_memblock_regions();
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_reserve(r2.base, r2.size);
-+	memblock_free((void *)r3.base, r3.size);
-+
-+	ASSERT_EQ(rgn1->base, r1.base);
-+	ASSERT_EQ(rgn1->size, new_r1_size);
-+
-+	ASSERT_EQ(rgn2->base, r3_end);
-+	ASSERT_EQ(rgn2->size, new_r2_size);
-+
-+	ASSERT_EQ(memblock.reserved.cnt, 2);
-+	ASSERT_EQ(memblock.reserved.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
- static int memblock_free_checks(void)
- {
- 	prefix_reset();
-@@ -1174,6 +1670,9 @@ static int memblock_free_checks(void)
- 	memblock_free_overlap_top_check();
- 	memblock_free_overlap_bottom_check();
- 	memblock_free_within_check();
-+	memblock_free_only_region_check();
-+	memblock_free_near_max_check();
-+	memblock_free_overlap_two_check();
- 
- 	prefix_pop();
- 
+ #endif
 -- 
 2.25.1
 

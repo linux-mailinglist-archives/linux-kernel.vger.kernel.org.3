@@ -2,86 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3CC5A377D
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 13:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A3C5A3781
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 13:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345293AbiH0Lp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 07:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S232398AbiH0Ltk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 07:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbiH0Lph (ORCPT
+        with ESMTP id S231749AbiH0Lst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 07:45:37 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EEF61711;
-        Sat, 27 Aug 2022 04:45:36 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33dc345ad78so93881197b3.3;
-        Sat, 27 Aug 2022 04:45:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GvJNLP40OETwZADaZTLkmY5BZ1XY428/Y6jRF2MfT/k=;
-        b=0koRWWQDBIvEzDAEdB5RogGcJ1LplpwttddKxaSIeoleYBsQRseoWnayqMTrAxAeZl
-         VHYb7RmVD7pRKOfl3QvYJZAzhTsmLsIlUdBeF386fe7s7ekm/ydsMiSoHZHd7K+8aImF
-         nMcXYdYj0qTwiX55bqF64IBt4Mbd0UiSK3WdpuyHh92vscfAGzL/ovgOZjquvqWXZFYs
-         SxMXHG27Wi7uh3bcFnx5T6LbLd6tFIcsuFlJ2ZUJxdFA94EUPrTKQOJbkbCmWshFOm3Q
-         7sOz9aiwz7SHa4La6BOWeR9L8Aj4B0xmdhDSKxuaj0gmej/PMxh3bLM8siqsOeW/34BE
-         TW8A==
-X-Gm-Message-State: ACgBeo0vc5Af9BjRuVEGaDdrl+iYWqNibmXni8YahfIeVgsZeajXgGHp
-        MNK3D6PWzm0jS4BlM6oFEL8129F/dvZ8LSHY9TzCVkbN
-X-Google-Smtp-Source: AA6agR5XYU4nV2W34akQ3kEUoN5fw+2xswF7OURWDVx/e91zb6NiPrGIEiBZcSiSPc1sExcVdtcMAgMBp27BHQA4Pu4=
-X-Received: by 2002:a25:b749:0:b0:68f:171f:96bd with SMTP id
- e9-20020a25b749000000b0068f171f96bdmr3163102ybm.137.1661600735335; Sat, 27
- Aug 2022 04:45:35 -0700 (PDT)
+        Sat, 27 Aug 2022 07:48:49 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F486580B
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 04:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661600928; x=1693136928;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EvkrzLLpK87ZvgDK7H66AG8iAN1MeP4gE4ySPsk3FAY=;
+  b=QKY+BYLvEWkUfhuaMclzBMseujYMYuSXwq2Dr05WAVLT4rDkyP+b/FxY
+   UTeeS3aHXDkK9b3Z7mnvisVBjl9cKahRJGrhRLHdNrrlfQVJoD0UiuqTz
+   lmz437d+yETGHSp4vHNn9RN9Wv1Jc7XGPOBPMNY8gVOVG9uoQOx+Trg8y
+   3SmfDOfonnal+e8+GxlgeufnUMUWkkrbLfDpoBd0WPqii2sGrp1rfc1Hf
+   7atedkxM5eKO1E1BBPn2N6dHnuWQRre2bJorZlgPPCFgCexjKfb3eydSS
+   TJbK/bzeN7kbNpel5AM9rOF/78KFD7ufMDdQ6wQges5LYFWNvbnMZv5Y4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295927818"
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="295927818"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 04:48:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
+   d="scan'208";a="939041671"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Aug 2022 04:48:46 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRuIv-00008h-2z;
+        Sat, 27 Aug 2022 11:48:45 +0000
+Date:   Sat, 27 Aug 2022 19:48:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/core] BUILD SUCCESS
+ 3051ee34ccb5a821bc46ef06639ff275e9c810b7
+Message-ID: <630a0481.Yt/9ryxGIfcsAp2N%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220825164103.27694-1-andriy.shevchenko@linux.intel.com>
- <20220825164103.27694-5-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0if_gZpibSWx5mfoVpGXtF0sGe7MY+eRQJr09ONX0Q1rQ@mail.gmail.com>
- <CAHp75VcQkyCOo9jkKKmu=zgHgQiHD96QhTa9Ann3syTaVnBokQ@mail.gmail.com> <Ywj/Bxvv+Dtt/Dy0@smile.fi.intel.com>
-In-Reply-To: <Ywj/Bxvv+Dtt/Dy0@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 27 Aug 2022 13:45:22 +0200
-Message-ID: <CAJZ5v0iM9oZivWj6qbMfD8n2exwy7Xi=NVRZFFuam7y9Hk3cfw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] ACPI: bus: Use the matching table, if ACPI driver
- has it
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 7:12 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Aug 25, 2022 at 08:17:11PM +0300, Andy Shevchenko wrote:
-> > On Thu, Aug 25, 2022 at 8:05 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > On Thu, Aug 25, 2022 at 6:41 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > In case we have an ACPI driver, check its ID table for matching,
-> > > > This allows to use some generic device property APIs in such
-> > > > drivers.
-> > >
-> > > No new provisions for ACPI drivers, please.
-> >
-> > OK! I will think about how to refactor a driver in question, so it
-> > won't need this kind of trick. Meanwhile patches 1-3 can be applied
-> > independently, if you have no objections.
->
-> I see that you applied an equivalent patch to what I had here as patch 3.
-> Taking into account rejection of patches 4 and 5 I will send a v2 with
-> patch 1 and (modified due to drop of the 5) 2 for your convenience.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
+branch HEAD: 3051ee34ccb5a821bc46ef06639ff275e9c810b7  perf: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
 
-Appreciated, thanks!
+elapsed time: 803m
+
+configs tested: 83
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+loongarch                         allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+loongarch                           defconfig
+alpha                               defconfig
+s390                                defconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+sh                               allmodconfig
+powerpc                           allnoconfig
+arc                  randconfig-r043-20220827
+x86_64                        randconfig-a002
+s390                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+m68k                             allyesconfig
+mips                             allyesconfig
+m68k                             allmodconfig
+powerpc                          allmodconfig
+x86_64                              defconfig
+i386                          randconfig-a012
+i386                                defconfig
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                               rhel-8.3
+parisc                              defconfig
+x86_64                           allyesconfig
+nios2                               defconfig
+i386                          randconfig-a001
+x86_64                           rhel-8.3-syz
+parisc64                            defconfig
+i386                          randconfig-a003
+nios2                            allyesconfig
+arm                                 defconfig
+x86_64                          rhel-8.3-func
+i386                          randconfig-a005
+parisc                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+i386                             allyesconfig
+arc                  randconfig-r043-20220823
+arc                  randconfig-r043-20220825
+arm                              allyesconfig
+arm64                            allyesconfig
+riscv                            allmodconfig
+powerpc                          allyesconfig
+riscv                            allyesconfig
+ia64                             allmodconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+i386                          debian-10.3-kvm
+
+clang tested configs:
+hexagon              randconfig-r041-20220827
+hexagon              randconfig-r045-20220827
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+riscv                randconfig-r042-20220827
+s390                 randconfig-r044-20220827
+x86_64                        randconfig-a005
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20220825
+hexagon              randconfig-r041-20220823
+hexagon              randconfig-r045-20220825
+s390                 randconfig-r044-20220823
+riscv                randconfig-r042-20220825
+s390                 randconfig-r044-20220825
+riscv                randconfig-r042-20220823
+hexagon              randconfig-r045-20220823
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

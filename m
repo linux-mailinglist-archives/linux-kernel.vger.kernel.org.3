@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A3C5A333B
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE625A3357
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 03:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241599AbiH0AtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 20:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S238664AbiH0BKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 21:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiH0AtF (ORCPT
+        with ESMTP id S231181AbiH0BKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 20:49:05 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8E2E3C12
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:49:04 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id f17so3025026pfk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 17:49:04 -0700 (PDT)
+        Fri, 26 Aug 2022 21:10:12 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC6A4B4B2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:10:07 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id s5so1136724uar.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 Aug 2022 18:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=97zZ08Utl6HARnTvGZcj5Kpy48/dl3mZFonKGspCb6I=;
-        b=HA9yAAoleCjowV5YLuTXR7dgCp/RWxiop4nJUvuJ12gtW6IHgIsQp+4AZT9z96nG9+
-         Ot4q/4vAg0a5FughnQQ/mnp/8ipCGNhv64yUejNAwG7JJl87b6Oz+PWF7UP1Pub8pva0
-         23I/W26sQG4N9k+fiVmoV3Im8gX5638Gwi21s=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=aiXjSA13WPgAPgKh7tM/zQRSomp+DQxma2fUgKyiYTA=;
+        b=CHH3TpYZeHHoZQo5vDtO9cBAcWR65YEtTcknzN0diMBVDU1hE0wx6nWmfYLGO5qdiC
+         4Int3FfaTf8w9EkJ10zfxlXAaUP4ltDsgASxownP57CEsSdM1OPwAVHMUzDMtZRFjWM4
+         JWYz+sKeGH7giVNC2G2e/4L8yxEnoAlgqKhtLvTMorEbJKfSSkATO96mL+AIaSo/kqO4
+         2Sc5I8Knt5bRnIFwLxOx2yfYlkRHvgc3UukD/JG2/7doElBXcn5uwAO4Rm811aeRogW+
+         7dZDCueKUFE/iOypt6y+qfhCYBMPMMHT2tE/sIhHlJS9lSLtKNoMFB+uLDIVqv+6WKCC
+         YOng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=97zZ08Utl6HARnTvGZcj5Kpy48/dl3mZFonKGspCb6I=;
-        b=2l0OLhw4qQsUKJPVpqxFM5LrTKPv8mFO2WLgkg9PEFHKt7XcE0tIs0RfnG+gMtN4GE
-         QG/yIBxcyp2A+oTyNoEWSG2RmfhwZL+IjXtAFz1BIYRyNvPLaweXquvVDAT7vRabJKL2
-         Hx1H7Vh0a0MG4mPC3RVjvMrRv/c53nfPcDiIjPPs8krYZ/RhJuM61n60Kzv4yrhEnn45
-         ZOEWlP5rRo+BqH0xuXcb+LJGlIp0yHVCtfaHkiT7OfTNbla7vkwBElrlvkNsBFCHgsFe
-         aJLRByB19kOuPoQ40ZVsPLetizrH12L4CFsJwWR63eUSBPDre1EcIll++ZsZEqeBJNEO
-         efkQ==
-X-Gm-Message-State: ACgBeo2qGz/J2BTiTp3z4bI/8zmPQR2saw/3GB9aWeGMx3HYB7J2LN5d
-        ICrs95KkAi5sTBO7YmVscpdSCg==
-X-Google-Smtp-Source: AA6agR49bSDIhKd84+MMDwGyg4jTeGcSAp1B7s/VdMYbgVRXKFMixBFV+Xhl1fa2VkE/f2ieM7yKng==
-X-Received: by 2002:a05:6a00:22c8:b0:537:275e:e483 with SMTP id f8-20020a056a0022c800b00537275ee483mr6298686pfj.54.1661561343582;
-        Fri, 26 Aug 2022 17:49:03 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:4e6f:7e52:9ad5:809f])
-        by smtp.gmail.com with ESMTPSA id z10-20020a62d10a000000b00537d0ed05ecsm1842969pfg.216.2022.08.26.17.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 17:49:02 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] arm64: dts: qcom: sc7180-trogdor: Keep pm6150_adc enabled for TZ
-Date:   Fri, 26 Aug 2022 17:49:00 -0700
-Message-Id: <20220827004901.511543-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aiXjSA13WPgAPgKh7tM/zQRSomp+DQxma2fUgKyiYTA=;
+        b=5F1LWWlcmIe7EaDk8iEomzdtKg3sPq8R4OwZYNl03003KMT6SpVvSGvD5860r8b60O
+         dG5fCB9vzaYPWR7w4GuuZAJJRuf7PHOFHOPrqpgC5eQrofSzjEdtxGeryMxltonJXenC
+         2vee3yrUQbE09kUDp2PP6bQ6ttIW9PcvBDz0b7GsacwvWyI4Bk6VFLZ/cNAgKbZilZr4
+         M9Ob69ww+Uyq4w2BcM/Hg9XxBAbaKAGPAfVXmhboLOiqRHTe+Z2qMwEQ/N5W1XVYkJfc
+         qSIO+zIj4B3d0TPMM5j/4Cyplin3WPujTR7Q2P/97DxwSpttwfPdrg+oEfQArqrK3rpq
+         Kg6A==
+X-Gm-Message-State: ACgBeo0png6dMn+BtBdJzqUQcAA1D/IDbc7STbnSEBivwKwR+3Cc7Oia
+        ytBmim0z5mpUIcTaeRil8P9hfhMN5g56OIX4GxQJHA==
+X-Google-Smtp-Source: AA6agR48YHpjMmVrgshnD9gYygPhOH6EkRxMkk7dzB/R5x4NHW8gOjjrhmAjH66vLnRPNSgwRWbmq3VRTI7OQWx8UKw=
+X-Received: by 2002:ab0:14ad:0:b0:39f:255c:2ea9 with SMTP id
+ d42-20020ab014ad000000b0039f255c2ea9mr756082uae.52.1661562606818; Fri, 26 Aug
+ 2022 18:10:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220826223511.170256-1-alison.schofield@intel.com> <Ywle+96kZr5Y6Kn/@aschofie-mobl2>
+In-Reply-To: <Ywle+96kZr5Y6Kn/@aschofie-mobl2>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 27 Aug 2022 09:09:54 +0800
+Message-ID: <CABVgOSkdXPw3yx=J+=YLxgu=0kpBGD5MvPJr0=_VO4jgrSBpPw@mail.gmail.com>
+Subject: Re: [PATCH] tracepoint: Allow trace events in modules with TAINT_TEST
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cxl@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's still a thermal zone using pm6150_adc in the pm6150.dtsi file,
-pm6150_thermal. It's not super obvious because it indirectly uses the
-adc through an iio channel in pm6150_temp. Let's keep this enabled on
-lazor and coachz so that reading the temperature of the pm6150_thermal
-zone continues to work. Otherwise we get -EINVAL when reading the zone,
-and I suspect the PMIC temperature trip doesn't work properly so we
-don't shutdown when the PMIC overheats.
+On Sat, Aug 27, 2022 at 8:02 AM Alison Schofield
+<alison.schofield@intel.com> wrote:
+>
+> + David Gow - Submitter of the new taint type
+>
+> On Fri, Aug 26, 2022 at 03:35:11PM -0700, alison.schofield@intel.com wrote:
+> > From: Alison Schofield <alison.schofield@intel.com>
+> >
+> > Commit 2852ca7fba9f ("panic: Taint kernel if tests are run")
+> > introduced a new taint type, TAINT_TEST, to signal that an
+> > in-kernel test has been run.
+> >
+> > TAINT_TEST taint type defaults into a 'bad_taint' list for
+> > kernel tracing and blocks the creation of trace events. This
+> > causes a problem for CXL testing where loading the cxl_test
+> > module makes all CXL modules out-of-tree, blocking any trace
+> > events.
+> >
+> > Trace events are in development for CXL at the moment and this
+> > issue was found in test with v6.0-rc1.
+> >
+> > Reported-by: Ira Weiny <ira.weiny@intel.com>
+> > Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > ---
 
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Fixes: b8d1e3d33487 ("arm64: dts: qcom: sc7180-trogdor: Delete ADC config for unused thermistors")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts | 2 --
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi    | 2 --
- 2 files changed, 4 deletions(-)
+This seems fine to me: thanks for catching it. Test modules should be
+safe enough to load for this.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
-index 8290d036044a..edfcd47e1a00 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
-@@ -24,8 +24,6 @@ &charger_thermal {
- };
- 
- &pm6150_adc {
--	status = "disabled";
--
- 	/delete-node/ skin-temp-thermistor@4e;
- 	/delete-node/ charger-thermistor@4f;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-index 2cf7d5212c61..002663d752da 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-@@ -55,8 +55,6 @@ &panel {
- };
- 
- &pm6150_adc {
--	status = "disabled";
--
- 	/delete-node/ charger-thermistor@4f;
- };
- 
+Does the comment in tracepoint_module_coming() need updating as well?
+https://elixir.bootlin.com/linux/v6.0-rc2/source/kernel/tracepoint.c#L650
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-https://chromeos.dev
+Regardless, this is
+Reviewed-by: David Gow <davidgow@google.com>
 
+Cheers,
+-- David
+
+> >  kernel/tracepoint.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+> > index 64ea283f2f86..5f17378c9dc2 100644
+> > --- a/kernel/tracepoint.c
+> > +++ b/kernel/tracepoint.c
+> > @@ -571,7 +571,8 @@ static void for_each_tracepoint_range(
+> >  bool trace_module_has_bad_taint(struct module *mod)
+> >  {
+> >       return mod->taints & ~((1 << TAINT_OOT_MODULE) | (1 << TAINT_CRAP) |
+> > -                            (1 << TAINT_UNSIGNED_MODULE));
+> > +                            (1 << TAINT_UNSIGNED_MODULE) |
+> > +                            (1 << TAINT_TEST));
+> >  }
+> >
+> >  static BLOCKING_NOTIFIER_HEAD(tracepoint_notify_list);
+> >
+> > base-commit: 4c612826bec1441214816827979b62f84a097e91
+> > --
+> > 2.31.1
+> >

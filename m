@@ -2,196 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C835A350B
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CBE5A3507
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 08:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbiH0GbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 02:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S232353AbiH0GZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 02:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiH0GbF (ORCPT
+        with ESMTP id S229453AbiH0GZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 02:31:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C7040E0B;
-        Fri, 26 Aug 2022 23:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661581864; x=1693117864;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2RdCy6tyMucjJ+3ngZSsWyiE4xxEX4EO/OwoRyYj4oU=;
-  b=T/egcI7soO5io6EVHok/Son4qe+lEiRXzrPyYpt0qqulVpUiq8dHXJfM
-   gd/pHoXeDf5LC/CtZXHwJ418PD248nHg4zyu4B6Xo3hEC7L/9U7Ftq46h
-   IqDbbfOE54hptl/ApGpbRGj5e3PFMkTg9bxtD3mOIDDmtc1ITI9flFbC+
-   7Esk6hd+6t2EJ82NKJ2rx0O/JMCBL+HCNxafnu7nYVoPRviKRJ9nrGgo3
-   nmKJzTO3Xo4JK0B7DejmGNzZNVfcLjyPWMKnyt7XJuT41iIUHg57YTQ43
-   XZH4J0ME15vbMP3sG3yhSQqWN4/AKAeOq8g+Sq4c6D1pwQ1+69chNUwPE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="275044533"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="275044533"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:31:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="938992735"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 23:30:58 -0700
-Date:   Sat, 27 Aug 2022 14:21:42 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     git@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        trix@redhat.com, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
-        rajan.vaja@xilinx.com, abhyuday.godhasara@xilinx.com,
-        piyush.mehta@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
-        harsha.harsha@xilinx.com, linus.walleij@linaro.org,
-        nava.manne@xilinx.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, yilun.xu@intel.com
-Subject: Re: [PATCH 1/4] firmware: xilinx: Add afi ioctl support
-Message-ID: <Ywm39iYGLliU9ncv@yilunxu-OptiPlex-7050>
-References: <20220824035542.706433-1-nava.kishore.manne@amd.com>
- <20220824035542.706433-2-nava.kishore.manne@amd.com>
+        Sat, 27 Aug 2022 02:25:44 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4E4DCFF0;
+        Fri, 26 Aug 2022 23:25:44 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id r1-20020a056830418100b0063938f634feso2413911otu.8;
+        Fri, 26 Aug 2022 23:25:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2yfUK9kjN+Dqp0bNFYpyDAHMQSTacHZ/w4+QO9mpOhA=;
+        b=WQtjB597wo7aIJ1c5WsR4KfnXTHWp+NRtBEYGn/CkdJ35zsYrjvyQeo+isSRGoIh+7
+         tFGfpRA5QRTp1UPc6Wr7uCBnaphHt5P5JT+nBsLrjjYXtu8Dfi4fnNDNCDDZ5bCawtdK
+         d4xSeDFBwEQKqxE+Hmc9n8E6NNyWsitaw2lPQ1ZlJLO0Ts8wCm73BBTFE2rAivFbjZJC
+         FoHd6lMEjknsjy4Owc2eYxJhuc/WYc18YmV5+kO1rgI0PhTOkconFc4EVEUdatB4yaeL
+         MCUYlMrlPjhWdswYY+TgIKvLAbhGkHLCgU3okwQbaJmWQ2yg0s35Hk+RZf5w04KHxS7r
+         7Niw==
+X-Gm-Message-State: ACgBeo0gvH4WdotwnmaIwdUvvBE07uu93a3EcKSCg7bb9EQUGlH0rTpj
+        TUoj5bCWAJXPRLbWjXMy79HsSrip/tjcerpk06A=
+X-Google-Smtp-Source: AA6agR5lYSlxDtOUB2tat+mjJ1L2urZUGZEBskPyeIaEQ0A6tUldXiz52Mp9TzOM8dzCsDJ+g1rdIFioBIlAOvwNK3Q=
+X-Received: by 2002:a9d:6f18:0:b0:638:b4aa:a546 with SMTP id
+ n24-20020a9d6f18000000b00638b4aaa546mr2612244otq.124.1661581543464; Fri, 26
+ Aug 2022 23:25:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824035542.706433-2-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
+ <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
+ <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com> <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
+ <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
+ <CAM9d7cjTtOkRHLOosxHN8PcbVbhTK=uLDGjw8N5=1QiTHcd6rQ@mail.gmail.com>
+ <C7F3F33B-4A8E-428C-9FED-FB635955C2B1@fb.com> <FCC75F8E-4C2F-42A4-B582-9BE3BB87E15A@fb.com>
+ <CAM9d7cj6YNTL+u38PZjhPF2Qg_BYiJ1NMmDkPDx3N3Xe+ZTbyA@mail.gmail.com>
+ <FD49F694-10FA-4346-8303-E1E185C3E6E4@fb.com> <CAM9d7cjj0X90=NsvdwaLMGCDVkMJBLAGF_q-+Eqj6b44OAnzoQ@mail.gmail.com>
+ <1CA3FC40-BC8D-4836-B3E7-0EB196DE6E66@fb.com>
+In-Reply-To: <1CA3FC40-BC8D-4836-B3E7-0EB196DE6E66@fb.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 26 Aug 2022 23:25:32 -0700
+Message-ID: <CAM9d7cg-X6iobbmx3HzCz4H2c20peBVGPt3yf9m3WbqLb5H90A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-24 at 09:25:39 +0530, Nava kishore Manne wrote:
-> Adds afi ioctl to support dynamic PS-PL bus width settings.
+On Fri, Aug 26, 2022 at 2:26 PM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Aug 26, 2022, at 2:12 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Fri, Aug 26, 2022 at 1:59 PM Song Liu <songliubraving@fb.com> wrote:
+> >>
+> >>
+> >>
+> >>> On Aug 26, 2022, at 12:30 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >>>
+> >>> On Fri, Aug 26, 2022 at 11:45 AM Song Liu <songliubraving@fb.com> wrote:
+> >>>
+> >>>>> And actually, we can just read ctx->data and get the raw record,
+> >>>>> right..?
+> >>>>
+> >>>> Played with this for a little bit. ctx->data appears to be not
+> >>>> reliable sometimes. I guess (not 100% sure) this is because we
+> >>>> call bpf program before event->orig_overflow_handler. We can
+> >>>> probably add a flag to specify we want to call orig_overflow_handler
+> >>>> first.
+> >>>
+> >>> I'm not sure.  The sample_data should be provided by the caller
+> >>> of perf_event_overflow.  So I guess the bpf program should see
+> >>> a valid ctx->data.
+> >>
+> >> Let's dig into this. Maybe we need some small changes in
+> >> pe_prog_convert_ctx_access.
+> >
+> > Sure, can you explain the problem in detail and share your program?
+>
+> I push the code to
+>
+>  https://git.kernel.org/pub/scm/linux/kernel/git/song/linux.git/log/?h=test-perf-event
+>
+> The code is in tools/bpf/perf-test/.
+>
+> The problem is we cannot get reliable print of data->cpu_entry in
+> /sys/kernel/tracing/trace.
 
-Please also describe what is afi, PS, PL here, Patch #0 won't appear in
-upstream tree finally.
+Ah, right.  I've realized that the sample data is passed before full
+initialized.  Please see perf_sample_data_init().  The other members
+are initialized right before written to the ring buffer in the
+orig_overflow_handler (__perf_event_output).
+
+That explains why pe_prog_convert_ctx_access() handles
+data and period specially.  We need to handle it first.
 
 Thanks,
-Yilun
-
-> 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
->  drivers/firmware/xilinx/zynqmp.c     | 14 +++++++++++
->  include/linux/firmware/xlnx-zynqmp.h | 36 ++++++++++++++++++++++++++++
->  2 files changed, 50 insertions(+)
-> 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index d1f652802181..cbd84c96a66a 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -843,6 +843,20 @@ int zynqmp_pm_read_pggs(u32 index, u32 *value)
->  }
->  EXPORT_SYMBOL_GPL(zynqmp_pm_read_pggs);
->  
-> +/**
-> + * zynqmp_pm_afi() - PM API for setting the PS-PL bus width
-> + * @config_id:	Register index value
-> + * @bus_width:	Afi interface bus width value.
-> + *
-> + * Return:	Returns status, either success or error+reason
-
-I see other functions are also like this, but I still can't figure out
-what values for success and what for error+reason.
-
-Thanks,
-Yilun
-
-> + */
-> +int zynqmp_pm_afi(u32 config_id, u32 bus_width)
-> +{
-> +	return zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_AFI,
-> +				   config_id, bus_width, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_afi);
-> +
->  /**
->   * zynqmp_pm_set_boot_health_status() - PM API for setting healthy boot status
->   * @value:	Status value to be written
-> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> index 9f50dacbf7d6..7d0d98303acc 100644
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@ -78,6 +78,16 @@
->  #define EVENT_ERROR_PSM_ERR1	(0x28108000U)
->  #define EVENT_ERROR_PSM_ERR2	(0x2810C000U)
->  
-> +#define AFIFM_BUS_WIDTH_128_CONFIG_VAL	0x0U
-> +#define AFIFM_BUS_WIDTH_64_CONFIG_VAL	0x1U
-> +#define AFIFM_BUS_WIDTH_32_CONFIG_VAL	0x2U
-> +
-> +#define AFIFS_SS0_SS2_BUS_WIDTH_128_CONFIG_VAL	0x200U
-> +#define AFIFS_SS0_SS2_BUS_WIDTH_64_CONFIG_VAL	0x100U
-> +#define AFIFS_SS1_BUS_WIDTH_128_CONFIG_VAL	0x800U
-> +#define AFIFS_SS1_BUS_WIDTH_64_CONFIG_VAL	0x400U
-> +#define AFIFS_SS_BUS_WIDTH_32_CONFIG_VAL	0x0U
-> +
->  enum pm_api_cb_id {
->  	PM_INIT_SUSPEND_CB = 30,
->  	PM_ACKNOWLEDGE_CB = 31,
-> @@ -147,6 +157,7 @@ enum pm_ioctl_id {
->  	IOCTL_READ_PGGS = 15,
->  	/* Set healthy bit value */
->  	IOCTL_SET_BOOT_HEALTH_STATUS = 17,
-> +	IOCTL_AFI = 18,
->  	IOCTL_OSPI_MUX_SELECT = 21,
->  	/* Register SGI to ATF */
->  	IOCTL_REGISTER_SGI = 25,
-> @@ -155,6 +166,25 @@ enum pm_ioctl_id {
->  	IOCTL_GET_FEATURE_CONFIG = 27,
->  };
->  
-> +enum pm_afi_config_id {
-> +	AFIFM0_RDCTRL = 0,
-> +	AFIFM0_WRCTRL = 1,
-> +	AFIFM1_RDCTRL = 2,
-> +	AFIFM1_WRCTRL = 3,
-> +	AFIFM2_RDCTRL = 4,
-> +	AFIFM2_WRCTRL = 5,
-> +	AFIFM3_RDCTRL = 6,
-> +	AFIFM3_WRCTRL = 7,
-> +	AFIFM4_RDCTRL = 8,
-> +	AFIFM4_WRCTRL = 9,
-> +	AFIFM5_RDCTRL = 10,
-> +	AFIFM5_WRCTRL = 11,
-> +	AFIFM6_RDCTRL = 12,
-> +	AFIFM6_WRCTRL = 13,
-> +	AFIFS = 14,
-> +	AFIFS_SS2 = 15,
-> +};
-> +
->  enum pm_query_id {
->  	PM_QID_INVALID = 0,
->  	PM_QID_CLOCK_GET_NAME = 1,
-> @@ -475,6 +505,7 @@ int zynqmp_pm_is_function_supported(const u32 api_id, const u32 id);
->  int zynqmp_pm_set_feature_config(enum pm_feature_config_id id, u32 value);
->  int zynqmp_pm_get_feature_config(enum pm_feature_config_id id, u32 *payload);
->  int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
-> +int zynqmp_pm_afi(u32 config_id, u32 bus_width);
->  #else
->  static inline int zynqmp_pm_get_api_version(u32 *version)
->  {
-> @@ -745,6 +776,11 @@ static inline int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
->  {
->  	return -ENODEV;
->  }
-> +
-> +static inline int zynqmp_pm_afi(u32 config_id, u32 bus_width)
-> +{
-> +	return -ENODEV;
-> +}
->  #endif
->  
->  #endif /* __FIRMWARE_ZYNQMP_H__ */
-> -- 
-> 2.25.1
-> 
+Namhyung

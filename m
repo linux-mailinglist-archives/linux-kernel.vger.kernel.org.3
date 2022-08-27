@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2A65A32D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 01:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C185A32D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 02:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiHZXz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 Aug 2022 19:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S239595AbiH0AAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 Aug 2022 20:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiHZXzy (ORCPT
+        with ESMTP id S230416AbiH0AAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Aug 2022 19:55:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8F861DBF;
-        Fri, 26 Aug 2022 16:55:53 -0700 (PDT)
+        Fri, 26 Aug 2022 20:00:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B437A27143;
+        Fri, 26 Aug 2022 17:00:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A97961BD6;
-        Fri, 26 Aug 2022 23:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E78C433C1;
-        Fri, 26 Aug 2022 23:55:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69296B8334D;
+        Sat, 27 Aug 2022 00:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 260ABC433D7;
+        Sat, 27 Aug 2022 00:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661558152;
-        bh=XX57P/MTCtZkCrNzIPCjYslur0UOJAp7ux5igGP8TC4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XwnTUgcIQqZkwTiSuIUBpv3lK+bfamIVSO7W0LE2Q5sC/NxHrveipp8qyjIO41qqw
-         2gnPzXoZS3W5D3rhQVewyEPsxizT9v0z2bAZy0dp8i99b3tq2IB2yFFKyrP5CQL0tx
-         D2o3b0PujQW3kjaDmAIUo77FZ8XR1MTtGudex+QAMRQDOQiAnBmTjtIXRmkl90qsHB
-         Q2DB+4ZA9MGqFlrOhY54HGgJ00hQk1tPT9MuKjn68GAlwwHgtJhRTKTTvcZcGBA2kQ
-         UrUeiuejGZsFKE/rz4oubkUrs7oJ5NBPfk3o57PkggPKsV4D13IZBW0FJXyW2VvJuH
-         T/wEyw3QxzNBA==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>
-Subject: [PATCH RFC] s390: Fix nospec table alignments
-Date:   Fri, 26 Aug 2022 16:55:44 -0700
-Message-Id: <8719bf1ce4a72ebdeb575200290094e9ce047bcc.1661557333.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        s=k20201202; t=1661558415;
+        bh=kmpN9J1gfmCEeL8ftwlH2mqA3XlLfaa49oHRSbXJlXw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kvCmFmKfBwX+KJzMgQRcBLV+ctvRvVOwdErakUp8/7DhngeEb+58A1WpWeXqXDpMR
+         roGB80GW4gtrQS7GGAH3N+lfcgZoeeGNDJh4OK2PJ8fGicOvbRuBF77UPDJGRufLqM
+         4K72E7FkSR43SI85m2DOsWOVKevwm3k4fi1a5r/udkMpGNm+blImDVdXVxChTFOb1o
+         PHHxcvJe50h1/W6+6Zm7oRperCNtbRqeMf4sUo7CaXp7imVRZVcmq3bOa0+X5St670
+         s37kOMcsCLEHK2YeRlW6OWYYoMyHd7nU0+Je1Rb+pc3oRVzstSZeXfDMTAfkncJ5ux
+         QvZsOrmJGLIkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8AFBC0C3EC;
+        Sat, 27 Aug 2022 00:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] net: dsa: mv88e6xxx: support RGMII cmode
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166155841494.20542.16295149435804772174.git-patchwork-notify@kernel.org>
+Date:   Sat, 27 Aug 2022 00:00:14 +0000
+References: <20220822144136.16627-1-marcus.carlberg@axis.com>
+In-Reply-To: <20220822144136.16627-1-marcus.carlberg@axis.com>
+To:     Marcus Carlberg <marcus.carlberg@axis.com>
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, kernel@axis.com,
+        pavana.sharma@digi.com, kabel@kernel.org, ashkan.boldaji@digi.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,42 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add proper alignment for .nospec_call_table and .nospec_return_table in
-vmlinux.
+Hello:
 
-Fixes: f19fbd5ed642 ("s390: introduce execute-trampolines for branches")
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
-This is RFC because I don't know anything about s390 behavior for
-unaligned data accesses, but this seemed to fix an issue for me.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-While working on another s390 issue, I was getting intermittent boot
-failures in __nospec_revert() when it tried to access 'instr[0]'.  I
-noticed the __nospec_call_start address ended in 'ff'.  This patch
-seemed to fix it.  I have no idea why it was (only sometimes) failing in
-the first place.
+On Mon, 22 Aug 2022 16:41:36 +0200 you wrote:
+> Since the probe defaults all interfaces to the highest speed possible
+> (10GBASE-X in mv88e6393x) before the phy mode configuration from the
+> devicetree is considered it is currently impossible to use port 0 in
+> RGMII mode.
+> 
+> This change will allow RGMII modes to be configurable for port 0
+> enabling port 0 to be configured as RGMII as well as serial depending
+> on configuration.
+> 
+> [...]
 
-The intermittent part of it is probably at least partially explained by
-CONFIG_RANDOMIZE_BASE.  Except now I can no longer recreate it :-/
+Here is the summary with links:
+  - [v3] net: dsa: mv88e6xxx: support RGMII cmode
+    https://git.kernel.org/netdev/net-next/c/1d2577ab0f05
 
-Regardless, this patch seems correct.  I just can't explain what I saw.
-Any ideas?
-
- arch/s390/kernel/vmlinux.lds.S | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-index 2e526f11b91e..5ea3830af0cc 100644
---- a/arch/s390/kernel/vmlinux.lds.S
-+++ b/arch/s390/kernel/vmlinux.lds.S
-@@ -131,6 +131,7 @@ SECTIONS
- 	/*
- 	 * Table with the patch locations to undo expolines
- 	*/
-+	. = ALIGN(4);
- 	.nospec_call_table : {
- 		__nospec_call_start = . ;
- 		*(.s390_indirect*)
+You are awesome, thank you!
 -- 
-2.37.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

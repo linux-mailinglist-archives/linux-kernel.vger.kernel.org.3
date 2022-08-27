@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9349A5A38C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80395A38C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 Aug 2022 18:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbiH0QbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 12:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S233724AbiH0Qi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 12:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbiH0QbC (ORCPT
+        with ESMTP id S231362AbiH0Qi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 12:31:02 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260B4371AF;
-        Sat, 27 Aug 2022 09:30:56 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1661617853tz05ch9f
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 28 Aug 2022 00:30:47 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: NCCf6GxSCju50Zjnv1G3SZWBMuaBiM2psi+N6v8lrG4tF04IR0aXJ38AsTUQP
-        wkzX9t9jKQ9nF1JUnzM+qIt15oti78F9k6g5wyswR/+polvyNw14+e/C5nh1NnmiFHoipop
-        SATzNdheYgU7E1ZS2VwFLqYEs+i7BFcVlopei9zwdhKwHOkAWgXC1tKwAZENxYfLwjsSKDm
-        OynNAaI1mJ46pP+MXbplOWvxmC7UefNcJjzxawn7L/AkPwivOLb7a53iUk9Q3JDbxN+ZL7m
-        9qBz6KkemYXRCxSzVdqiVZ8lX3xhPVV5Gj4RRbIydNkYTWCTqenTTSf68iVCiP4jFSa2ufo
-        Sr7MoDA00eVY1ey/CkK8w/ZGxV80gMmS7+hJ9F+rOdvU6Kmp5o=
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] tty: Do not initialise statics to 0
-Date:   Sat, 27 Aug 2022 12:30:47 -0400
-Message-Id: <20220827163047.22095-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 27 Aug 2022 12:38:57 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C8A3D5BC;
+        Sat, 27 Aug 2022 09:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qsDq6twkcPcttajyeYtpJ3s54M/PihrUgBc2JHBstx4=; b=YzgXqJ5SZ7qZvI759bteJn0AIi
+        RrIh1Ud/nqLNV2GMyXT5Ly6+7padNro/7536QsVrN2NkPytXPC5Zng4RqGyr82t3i71h7QH4EeKuc
+        4cII3TfFnUA6+TJYmRj83UmnHtgmPCwVamwzU5rz9PGvas3a0WvSuSdE3QZip/No+wrE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oRypY-00EmwA-LQ; Sat, 27 Aug 2022 18:38:44 +0200
+Date:   Sat, 27 Aug 2022 18:38:44 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v3 2/7] dt-bindings: net: phy: add PoDL PSE
+ property
+Message-ID: <YwpIlMwCxr7N3XjM@lunn.ch>
+References: <20220827051033.3903585-1-o.rempel@pengutronix.de>
+ <20220827051033.3903585-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220827051033.3903585-3-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiler will initialise statics to 0, so there is no need to do that.
+On Sat, Aug 27, 2022 at 07:10:28AM +0200, Oleksij Rempel wrote:
+> Add property to reference node representing a PoDL Power Sourcing Equipment.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
----
- arch/alpha/kernel/srmcons.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-diff --git a/arch/alpha/kernel/srmcons.c b/arch/alpha/kernel/srmcons.c
-index 6dc952b0df4a..5024318b14a8 100644
---- a/arch/alpha/kernel/srmcons.c
-+++ b/arch/alpha/kernel/srmcons.c
-@@ -23,7 +23,7 @@
- 
- 
- static DEFINE_SPINLOCK(srmcons_callback_lock);
--static int srm_is_registered_console = 0;
-+static int srm_is_registered_console;
- 
- /* 
-  * The TTY driver
--- 
-2.35.1
-
+    Andrew

@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC355A3D6B
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D805A3D72
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 14:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiH1LxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 07:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
+        id S229931AbiH1MAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 08:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiH1LxD (ORCPT
+        with ESMTP id S229821AbiH1MAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 07:53:03 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CF411A0F;
-        Sun, 28 Aug 2022 04:53:02 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oSGqb-0007QJ-4K; Sun, 28 Aug 2022 13:53:01 +0200
-Message-ID: <9729ab5f-422d-19a8-d4e0-94de0877736d@leemhuis.info>
-Date:   Sun, 28 Aug 2022 13:52:59 +0200
+        Sun, 28 Aug 2022 08:00:34 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF4F18B31;
+        Sun, 28 Aug 2022 05:00:31 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 829B718845C3;
+        Sun, 28 Aug 2022 12:00:29 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 797F325032B7;
+        Sun, 28 Aug 2022 12:00:29 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 6C87D9EC0008; Sun, 28 Aug 2022 12:00:29 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
- #forregzbot
-Content-Language: en-US
-Cc:     scsi <linux-scsi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org
-References: <20220630195703.10155-1-bvanassche@acm.org>
- <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
- <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
- <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
- <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
- <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
- <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
- <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
- <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
- <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
- <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
- <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org>
- <CAMuHMdW2vOC8ZsE_XF8TbSNoF9zCrwq7UkGZ5jXen1E1mTZe+g@mail.gmail.com>
- <14ec47f3-f3b8-61c7-2c64-d96d00dd7076@acm.org>
- <CAMuHMdW7nGxV_3Z2JV_TCM+WtTdYv5P+0cE6Tw=6krcseNCdAw@mail.gmail.com>
- <40700595-8c83-1b61-ea93-ea9554bfb2db@acm.org>
- <98592410-dd31-9081-86be-fda67d3b06d2@suse.cz>
-To:     regressions@lists.linux.dev
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <98592410-dd31-9081-86be-fda67d3b06d2@suse.cz>
-Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 28 Aug 2022 14:00:29 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YwpgvkojEdytzCAB@shredder>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-7-netdev@kapio-technology.com>
+ <YwpgvkojEdytzCAB@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661687582;b4a732ba;
-X-HE-SMSGID: 1oSGqb-0007QJ-4K
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,28 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
-
-On 17.08.22 21:07, Vlastimil Babka wrote:
-> Hi, I have a T460 hanging on resume from suspend to ram in 6.0-rc1 that
-> I bisected to this commit.
+On 2022-08-27 20:21, Ido Schimmel wrote:
+> On Fri, Aug 26, 2022 at 01:45:38PM +0200, Hans Schultz wrote:
+>> +locked_port_mab()
+>> +{
+>> +	RET=0
+>> +	check_locked_port_support || return 0
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_err $? "MAB: Ping did not work before locking port"
+>> +
+>> +	bridge link set dev $swp1 locked on
+>> +	bridge link set dev $swp1 learning on
 > 
->> Unfortunately the above does not learn us anything new. The code 
->> modified by commit 88f1669019bd ("scsi: sd: Rework asynchronous resume 
->> support") is only called if sdev->manage_start_stop != 1. Only the SATA 
->> code, the Firewire code and the manage_start_stop sysfs attribute store 
->> method set that member variable:
-> [...]
-> #regzbot introduced: 88f1669019bd62b3
-> #regzbot monitor: https://lore.kernel.org/all/20220816172638.538734-1-bvanassche@acm.org/
+> "locked on learning on" is counter intuitive and IMO very much a
+> misconfiguration that we should have disallowed when the "locked" 
+> option
+> was introduced. It is my understanding that the only reason we are even
+> talking about it is because mv88e6xxx needs it for MAB for some reason.
 
-#regzbot fixed-by: 785538bfdd682c8e962341d585f9b88262a0475
+As the way mv88e6xxx implements "learning off" is to remove port 
+association for ingress packets on a port, but that breaks many other 
+things such as refreshing ATU entries and violation interrupts, so it is 
+needed and the question is then what is the worst to have 'learning on' 
+on a locked port or to have the locked port enabling learning in the 
+driver silently?
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Opinions seem to differ. Note that even on locked ports without MAB, 
+port association on ingress is still needed in future as I have a 
+dynamic ATU patch set coming, that uses age out violation and hardware 
+refreshing to let the hardware keep the dynamic entries as long as the 
+authorized station is sending, but will age the entry out if the station 
+keeps silent for the ageing time. But that patch set is dependent on 
+this patch set, and I don't think I can send it before this is 
+accepted...
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+> Please avoid leaking this implementation detail to user space and
+> instead use the "MAB" flag to enable learning if you need it in
+> mv88e6xxx.
+> 

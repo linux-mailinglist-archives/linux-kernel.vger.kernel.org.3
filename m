@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28205A3DE2
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3507C5A3DE6
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiH1NyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 09:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
+        id S229680AbiH1N5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 09:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiH1NyS (ORCPT
+        with ESMTP id S229555AbiH1N52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 09:54:18 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28F830574;
-        Sun, 28 Aug 2022 06:54:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VNSFve4_1661694851;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VNSFve4_1661694851)
-          by smtp.aliyun-inc.com;
-          Sun, 28 Aug 2022 21:54:12 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, ardb@kernel.org, guoren@kernel.org,
-        heiko@sntech.de
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the end of syscalls
-Date:   Sun, 28 Aug 2022 21:54:07 +0800
-Message-Id: <20220828135407.3897717-1-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 28 Aug 2022 09:57:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123C032D8A;
+        Sun, 28 Aug 2022 06:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661695048; x=1693231048;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=y4cNfjDDXR16p7aBOCe2GLlX4JBhY0BsBXSjUlii/Og=;
+  b=RlBichpN+zQhXtoA6F2lMHFyog/ULZw5Lul/UXMaNEkFclETsPS3jRCx
+   3F4Fc6/ZLedbQl83gPOBDjyW8k0B/EVB/TM1Ipq7H2taKC9mmn8dNqReL
+   aatRPLUcaqnSjk67s5ySd2mF9amEyFfO02zwPVUQB5OrxkEraJl3O4i0H
+   ebbu4/n0VnYNf0E04je6v3TJc903FgkLS8lrJzMjNWj18tEAZtjpxjVPI
+   zHcesrMfze3G4+KT7lAjI6hdpSRN471YlhOhPDAxHBPceGemLSRRDG34o
+   qEB6/jrRaLyGcxD99xMWE+sIzSFe1RMGxVUwsyKkvbs677I9W9Scpn40/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="296015609"
+X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
+   d="scan'208";a="296015609"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 06:57:27 -0700
+X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
+   d="scan'208";a="672065818"
+Received: from cyue-mobl1.ccr.corp.intel.com (HELO [10.254.209.98]) ([10.254.209.98])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 06:57:23 -0700
+Message-ID: <fe5c459e-9992-73b6-35b4-59ef815f1f9a@linux.intel.com>
+Date:   Sun, 28 Aug 2022 21:57:21 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v12 12/17] arm-smmu-v3/sva: Add SVA domain support
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220826121141.50743-1-baolu.lu@linux.intel.com>
+ <20220826121141.50743-13-baolu.lu@linux.intel.com>
+ <YwjfKsvKyXLdCJ/Z@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YwjfKsvKyXLdCJ/Z@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for the STACKLEAK gcc plugin to RISC-V and disables
-the plugin in EFI stub code, which is out of scope for the protection.
+On 2022/8/26 22:56, Jason Gunthorpe wrote:
+> On Fri, Aug 26, 2022 at 08:11:36PM +0800, Lu Baolu wrote:
+> 
+>> +static const struct iommu_domain_ops arm_smmu_sva_domain_ops = {
+>> +	.set_dev_pasid		= arm_smmu_sva_set_dev_pasid,
+> Do we want to permit drivers to not allow a SVA domain to be set on a
+> RID?
+> 
+> It seems like a weird restriction to me
 
-For the benefits of STACKLEAK feature, please check the commit
-afaef01c0015 ("x86/entry: Add STACKLEAK erasing the kernel stack at the end of syscalls")
+Conceptually as long as the page table is compatible and user pages are
+pinned (or I/O page fault is supported), the device drivers are valid to
+set SVA domain to a RID. But I don't see a real use case as far as I can
+see.
 
-Performance impact (tested on qemu env with 1 riscv64 hart, 1GB mem)
-    hackbench -s 512 -l 200 -g 15 -f 25 -P
-    2.0% slowdown
+A reasonable use case is sharing EPT between KVM and IOMMU. That demands
+a new type of domain and implements its own .set_dev for page table
+attachment.
 
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
----
- arch/riscv/Kconfig                    | 1 +
- arch/riscv/include/asm/processor.h    | 4 ++++
- arch/riscv/kernel/entry.S             | 3 +++
- drivers/firmware/efi/libstub/Makefile | 2 +-
- 4 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index ed66c31e4655..61fd0dad4463 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -85,6 +85,7 @@ config RISCV
- 	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
- 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
- 	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
-+	select HAVE_ARCH_STACKLEAK
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_CONTEXT_TRACKING_USER
- 	select HAVE_DEBUG_KMEMLEAK
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index 19eedd4af4cd..75620c467d25 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -85,6 +85,10 @@ int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid);
- extern void riscv_fill_hwcap(void);
- extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
- 
-+#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
-+#define on_thread_stack()	((unsigned long)((current_top_of_stack() \
-+				     - current_stack_pointer) < THREAD_SIZE))
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_PROCESSOR_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index b9eda3fcbd6d..5f98660b46d4 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -233,6 +233,9 @@ check_syscall_nr:
- ret_from_syscall:
- 	/* Set user a0 to kernel a0 */
- 	REG_S a0, PT_A0(sp)
-+#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
-+	call stackleak_erase_on_task_stack
-+#endif
- 	/*
- 	 * We didn't execute the actual syscall.
- 	 * Seccomp already set return value for the current task pt_regs.
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index d0537573501e..5e1fc4f82883 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
- 				   -fno-builtin -fpic \
- 				   $(call cc-option,-mno-single-pic-base)
- cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
--				   -fpic
-+				   -fpic $(DISABLE_STACKLEAK_PLUGIN)
- 
- cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
- 
--- 
-2.17.1
-
+Best regards,
+baolu

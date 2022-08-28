@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF375A3FAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A185A3FAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiH1UqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 16:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S229990AbiH1Url (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 16:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH1UqP (ORCPT
+        with ESMTP id S229445AbiH1Uri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 16:46:15 -0400
+        Sun, 28 Aug 2022 16:47:38 -0400
 Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3845C2B616
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 13:46:14 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-33dc31f25f9so153454307b3.11
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 13:46:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FAF2B633
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 13:47:37 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-333a4a5d495so153289107b3.10
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 13:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=rcuj4eqor/tMUl+92xtJXWtyAbmWdiW/DNBcK8L1A4E=;
-        b=EpmLESfRnDAlQrkQMdkOozd2wC8lw1XI3R60wjUECEIDUttx3DpMndFz4YUg799pwr
-         F31NQI3MX9bRqm4k5D3/Kec4ytw5SfSlAr538JlBYj+EVTAIH+TcyrtOGQLcdLGWNqvR
-         6X9P//9c7xliyx0z0QLk9SSfsXwME9+rv3KQA=
+        bh=kAoFlc805AehyA9fyFd+VfhPEKAjCfCEmxXhiLGWNEA=;
+        b=DCyGAi54ZQfZz1Pj3ySan2iv3FHNPjwl2y25Zod9yfXkzqjIl3X0JcpY4/kAPx/8Vo
+         wqrWceX9ObCgJwXwdrrDww+q2wkwXT1CJRLPgyj7O0PyKnusSoKzuKv4X+p9ia+ip1Qs
+         ZA5pxYh9vSHRz355bKMmHKQ7D/vfGdT9/W5Oo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=rcuj4eqor/tMUl+92xtJXWtyAbmWdiW/DNBcK8L1A4E=;
-        b=7f5puvyE1aGokYiyO/uGG9mJFud13NMDbTO/18Bj8+KPMW2Tj4tiJ07ecLBqsSi1mE
-         5CK3dqdswRPTbYSaPz1oaEfqae/LGHqMTtoYoHJPXORCAGUG4vXOh63Y6xZ1kqMj36Jh
-         nDfklDNMPEbN42vNrXYWx3gsspT/8auBPBrYRqA9oZ5pTZ7xxPbSGftZB/qC6DA50bmN
-         KJAXo4vl65Ix/v+eTGlUdNxyu0YXYGTUu/GycL8xLjdNlBdCmS8cXUZJzXF3PKLmeyip
-         Nzsl701f3nGetmfdVC2FtIoibVw97FHRJfjbLTqr3kX8wCzvkh7/WAQElOkfdtEHqCi8
-         gnpA==
-X-Gm-Message-State: ACgBeo3yqQAKvRdbO9zdUJn3n+1rPY+RnMHL6+V15U0qn/2Qf3rp1Rrg
-        cLirE+cchCyu0cWQDioN6k/N46KNjtwgKRX3NKdYyA==
-X-Google-Smtp-Source: AA6agR45VAs8kV8OLlYZ9u1maUeGSQDPBTo+38GVMViWyD2hj4wlTTyvZmd53uf4bM3EluQs9NIBZlu6noIjC13N12k=
-X-Received: by 2002:a05:690c:806:b0:340:a4c7:60fb with SMTP id
- bx6-20020a05690c080600b00340a4c760fbmr7562350ywb.355.1661719573357; Sun, 28
- Aug 2022 13:46:13 -0700 (PDT)
+        bh=kAoFlc805AehyA9fyFd+VfhPEKAjCfCEmxXhiLGWNEA=;
+        b=UXsmxUpTga4VXNfpMpPcTjvmzHpb+d4vzwEQd2UDdfxOxXaPiWyCLgBymMQD+5w7WT
+         1aWSM9rdryPZF444WDEjLhkedg42HkhwUrzJZ3RZcAiIAsLLBsPFKl2Pg20ZBlKVnB7m
+         aMXcfKrLfmaZxk0Wie8BDzBCZlg4hJVyUPP6jlHZtTUPCIaG7iDycwxZcpODm/Yh4hHS
+         OrsRF8kVas+7KXTX8DmbV6VsSckFKXBlXRGEOQ2bq9CqXcxh1rrlA17ObejHp7ssxrTX
+         PW/lSMXW5Uw9lGmYznZvR4XUdZtVMMDTKC2E9iAT3o/TO6U+N9RbllA5x3NLYQ8Yqxw0
+         nmaA==
+X-Gm-Message-State: ACgBeo2jIP7xTRTTdrfrcNvrqqJhdj/vqo3j+54V6RmsSIgvKdORfqoE
+        gtbwvETyYsA+t//ueS/TlAFApOzlLLq8+zRsmkQ0Aw==
+X-Google-Smtp-Source: AA6agR6iG18Lax5VtMCCCh65Zj+vVC32muhpzLTE4lF4tiDHLJwXwnRwPrJG3gEmf1sHIs7VY5gmShNrlDXdCoRWrcY=
+X-Received: by 2002:a81:6d85:0:b0:339:ace2:f30b with SMTP id
+ i127-20020a816d85000000b00339ace2f30bmr7412005ywc.328.1661719656472; Sun, 28
+ Aug 2022 13:47:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220827104600.1813214-1-liushixin2@huawei.com> <20220827104600.1813214-4-liushixin2@huawei.com>
-In-Reply-To: <20220827104600.1813214-4-liushixin2@huawei.com>
+References: <20220827104600.1813214-1-liushixin2@huawei.com> <20220827104600.1813214-3-liushixin2@huawei.com>
+In-Reply-To: <20220827104600.1813214-3-liushixin2@huawei.com>
 From:   Vitaly Wool <vitaly.wool@konsulko.com>
-Date:   Sun, 28 Aug 2022 22:46:02 +0200
-Message-ID: <CAM4kBBKYRkr6OSQ3dHcAKTSdVgsx4GKFanyBpr1jX4Yg1objBw@mail.gmail.com>
-Subject: Re: [PATCH -next v3 3/5] mm/zswap: replace zswap_init_{started/failed}
- with zswap_init_state
+Date:   Sun, 28 Aug 2022 22:47:25 +0200
+Message-ID: <CAM4kBB+-f+TF4=q5SdxHiKPdtAO7KWDGac9vNQb9rR0rUUjYrA@mail.gmail.com>
+Subject: Re: [PATCH -next v3 2/5] frontswap: invoke ops->init for online swap
+ device in frontswap_register_ops
 To:     Liu Shixin <liushixin2@huawei.com>
 Cc:     Seth Jennings <sjenning@redhat.com>,
         Dan Streetman <ddstreet@ieee.org>,
@@ -71,101 +71,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sat, Aug 27, 2022 at 12:12 PM Liu Shixin <liushixin2@huawei.com> wrote:
 >
-> zswap_init_started indicates that the initialization is started. And
-> zswap_init_failed indicates that the initialization is failed. As we will
-> support to init zswap after system startup, it's necessary to add a state
-> to indicate the initialization is complete and succeed to avoid
-> concurrency issues. Since we don't care about the difference between
-> init started with init completion. We only need three states:
-> uninitialized, initial failed, initial succeed.
+> Since we are supported to delay zswap initializaton, we need to invoke
+> ops->init for the swap device which is already online when register
+> backend.
+>
+> This patch is a revert of f328c1d16e4c ("frontswap: simplify frontswap_register_ops")
+> and 633423a09cb5 ("mm: mark swap_lock and swap_active_head static")
 >
 > Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 
-Reviewed-by: Vitaly Wool <vitaly.wool@konulko.com>
+Sorry, is this the revert of 2 patches at the same time? I would
+rather not do it like that.
+
+Thanks,
+Vitaly
 
 > ---
->  mm/zswap.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
+>  include/linux/swapfile.h |  2 ++
+>  mm/frontswap.c           | 47 ++++++++++++++++++++++++++++++++++++++++
+>  mm/swapfile.c            |  4 ++--
+>  3 files changed, 51 insertions(+), 2 deletions(-)
 >
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 2d48fd59cc7a..84e38300f571 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -214,11 +214,12 @@ static DEFINE_SPINLOCK(zswap_pools_lock);
->  /* pool counter to provide unique names to zpool */
->  static atomic_t zswap_pools_count = ATOMIC_INIT(0);
->
-> -/* used by param callback function */
-> -static bool zswap_init_started;
-> +#define ZSWAP_UNINIT           0
-> +#define ZSWAP_INIT_SUCCEED     1
-> +#define ZSWAP_INIT_FAILED      2
->
-> -/* fatal error during init */
-> -static bool zswap_init_failed;
-> +/* init state */
-> +static int zswap_init_state;
->
->  /* init completed, but couldn't create the initial pool */
->  static bool zswap_has_pool;
-> @@ -772,7 +773,7 @@ static int __zswap_param_set(const char *val, const struct kernel_param *kp,
->         char *s = strstrip((char *)val);
->         int ret;
->
-> -       if (zswap_init_failed) {
-> +       if (zswap_init_state == ZSWAP_INIT_FAILED) {
->                 pr_err("can't set param, initialization failed\n");
->                 return -ENODEV;
->         }
-> @@ -784,7 +785,7 @@ static int __zswap_param_set(const char *val, const struct kernel_param *kp,
->         /* if this is load-time (pre-init) param setting,
->          * don't create a pool; that's done during init.
->          */
-> -       if (!zswap_init_started)
-> +       if (zswap_init_state == ZSWAP_UNINIT)
->                 return param_set_charp(s, kp);
->
->         if (!type) {
-> @@ -875,11 +876,11 @@ static int zswap_zpool_param_set(const char *val,
->  static int zswap_enabled_param_set(const char *val,
->                                    const struct kernel_param *kp)
+> diff --git a/include/linux/swapfile.h b/include/linux/swapfile.h
+> index 2fbcc9afd814..75fc069594a5 100644
+> --- a/include/linux/swapfile.h
+> +++ b/include/linux/swapfile.h
+> @@ -6,6 +6,8 @@
+>   * these were static in swapfile.c but frontswap.c needs them and we don't
+>   * want to expose them to the dozens of source files that include swap.h
+>   */
+> +extern spinlock_t swap_lock;
+> +extern struct plist_head swap_active_head;
+>  extern struct swap_info_struct *swap_info[];
+>  extern unsigned long generic_max_swapfile_size(void);
+>  /* Maximum swapfile size supported for the arch (not inclusive). */
+> diff --git a/mm/frontswap.c b/mm/frontswap.c
+> index 620f95af81dd..449e6f499b88 100644
+> --- a/mm/frontswap.c
+> +++ b/mm/frontswap.c
+> @@ -96,11 +96,58 @@ static inline void inc_frontswap_invalidates(void) { }
+>   */
+>  int frontswap_register_ops(const struct frontswap_ops *ops)
 >  {
-> -       if (zswap_init_failed) {
-> +       if (zswap_init_state == ZSWAP_INIT_FAILED) {
->                 pr_err("can't enable, initialization failed\n");
->                 return -ENODEV;
->         }
-> -       if (!zswap_has_pool && zswap_init_started) {
-> +       if (!zswap_has_pool && zswap_init_state == ZSWAP_INIT_SUCCEED) {
->                 pr_err("can't enable, no pool configured\n");
->                 return -ENODEV;
->         }
-> @@ -1476,8 +1477,6 @@ static int __init init_zswap(void)
->         struct zswap_pool *pool;
->         int ret;
+> +       DECLARE_BITMAP(a, MAX_SWAPFILES);
+> +       DECLARE_BITMAP(b, MAX_SWAPFILES);
+> +       struct swap_info_struct *si;
+> +       unsigned int i;
+> +
+>         if (frontswap_ops)
+>                 return -EINVAL;
 >
-> -       zswap_init_started = true;
-> -
->         if (zswap_entry_cache_create()) {
->                 pr_err("entry cache creation failed\n");
->                 goto cache_fail;
-> @@ -1517,6 +1516,7 @@ static int __init init_zswap(void)
->                 goto destroy_wq;
->         if (zswap_debugfs_init())
->                 pr_warn("debugfs initialization failed\n");
-> +       zswap_init_state = ZSWAP_INIT_SUCCEED;
+> +       bitmap_zero(a, MAX_SWAPFILES);
+> +       bitmap_zero(b, MAX_SWAPFILES);
+> +
+> +       spin_lock(&swap_lock);
+> +       plist_for_each_entry(si, &swap_active_head, list) {
+> +               if (!WARN_ON(!si->frontswap_map))
+> +                       __set_bit(si->type, a);
+> +       }
+> +       spin_unlock(&swap_lock);
+> +
+> +       /* the new ops needs to know the currently active swap devices */
+> +       for_each_set_bit(i, a, MAX_SWAPFILES) {
+> +               pr_err("init frontswap_ops\n");
+> +               ops->init(i);
+> +       }
+> +
+>         frontswap_ops = ops;
+>         static_branch_inc(&frontswap_enabled_key);
+> +
+> +       spin_lock(&swap_lock);
+> +       plist_for_each_entry(si, &swap_active_head, list) {
+> +               if (si->frontswap_map)
+> +                       __set_bit(si->type, b);
+> +       }
+> +       spin_unlock(&swap_lock);
+> +
+> +       /*
+> +        * On the very unlikely chance that a swap device was added or
+> +        * removed between setting the "a" list bits and the ops init
+> +        * calls, we re-check and do init or invalidate for any changed
+> +        * bits.
+> +        */
+> +       if (unlikely(!bitmap_equal(a, b, MAX_SWAPFILES))) {
+> +               for (i = 0; i < MAX_SWAPFILES; i++) {
+> +                       if (!test_bit(i, a) && test_bit(i, b)) {
+> +                               pr_err("init frontswap_ops re\n");
+> +                               ops->init(i);
+> +                       } else if (test_bit(i, a) && !test_bit(i, b)) {
+> +                               pr_err("inval frontswap_ops re\n");
+> +                               ops->invalidate_area(i);
+> +                       }
+> +               }
+> +       }
+> +
 >         return 0;
->
->  destroy_wq:
-> @@ -1530,7 +1530,7 @@ static int __init init_zswap(void)
->         zswap_entry_cache_destroy();
->  cache_fail:
->         /* if built-in, we aren't unloaded on failure; don't allow use */
-> -       zswap_init_failed = true;
-> +       zswap_init_state = ZSWAP_INIT_FAILED;
->         zswap_enabled = false;
->         return -ENOMEM;
 >  }
+>
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 469d9af86be2..d383b282f269 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -51,7 +51,7 @@ static bool swap_count_continued(struct swap_info_struct *, pgoff_t,
+>                                  unsigned char);
+>  static void free_swap_count_continuations(struct swap_info_struct *);
+>
+> -static DEFINE_SPINLOCK(swap_lock);
+> +DEFINE_SPINLOCK(swap_lock);
+>  static unsigned int nr_swapfiles;
+>  atomic_long_t nr_swap_pages;
+>  /*
+> @@ -77,7 +77,7 @@ static const char Unused_offset[] = "Unused swap offset entry ";
+>   * all active swap_info_structs
+>   * protected with swap_lock, and ordered by priority.
+>   */
+> -static PLIST_HEAD(swap_active_head);
+> +PLIST_HEAD(swap_active_head);
+>
+>  /*
+>   * all available (active, not full) swap_info_structs
 > --
 > 2.25.1
 >

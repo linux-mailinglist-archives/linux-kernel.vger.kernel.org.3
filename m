@@ -2,143 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1595A3DBB
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268415A3DC7
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiH1Nbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 09:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S229744AbiH1Ndm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 09:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiH1Nbj (ORCPT
+        with ESMTP id S229500AbiH1Ndk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 09:31:39 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA6B24BF6;
-        Sun, 28 Aug 2022 06:31:38 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id kk26so10943685ejc.11;
-        Sun, 28 Aug 2022 06:31:38 -0700 (PDT)
+        Sun, 28 Aug 2022 09:33:40 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB45324F13
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 06:33:38 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kk26so10949439ejc.11
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 06:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=3kAQ5K5eIGeNzDKGV7oJwvNpJhXIVKVpoG1HfB4JozY=;
-        b=eb5Ic9mBKxmCXT4VEX4X3k03ETsaS0PsYLQ8P8JU+gR0JYwlPM99sPaBbeGhFXNKx3
-         baUT3670yeoQYOUVl6CijcTr80ZtczMvGKZFVYXM2n8oVB21oCWwP5vGMB8n8k21FHIp
-         rIbSyHTIcqsF+WuR5q5yhPVnEZebHVTU/FFWRu+99In0OE9USrDAw6acibAxcEiGavzl
-         AsgwaeZDuJXE7bZcFwt+fiZt8k/yqP2+quh/M/mmKh9WVEHLKk6NuXAjMz2B1UHjLBMz
-         vgTegNFhVP2lwoRnRdSeKXHKMkgqbS24b4QsrLImVtU51vcCoFH9pl5ZcHuZkzT3Pvc+
-         2EtQ==
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=DNUvT1ZZ3fFrLVQIyi9us/iFYLs4Qz0Ypyc3D33P4jw=;
+        b=RwRoWd9AYF8OGCjv58SePtwQnPalN5pnfcu2PcXDc0X7SEZ27f2l6auvNoy6bXv/f3
+         s1Jz5d6OXF0ydCOHiLCPggZ95FgKN7QL6W+ILfKCFECPetB1kiMS2E8RRcVVgX0n6TZj
+         CPBbEDkleISRtbCLdgimRmsY6T0ErgmyzHeAA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=3kAQ5K5eIGeNzDKGV7oJwvNpJhXIVKVpoG1HfB4JozY=;
-        b=nRUhqB2m59AFGdSXorotjABxAy6Wq3bLzUBfSp2QJh/COISo8dFPUehuvpt9msLdjI
-         dUcGLAFOya6FarXxrzDqHmZNPBV3/a43VL8Ya7Bb0AZXeL6feKHFTvEvyc6/6KapxQdm
-         wF4MGeR0YBGMchngFRbfWBvd5poRMA7+2ZhfGx0mwdMyB4vqM07Hz/sbavaJSDmfpPxA
-         FGuAbStJ7nXR2WgfYNAlJxb0XSNYbsknY5bUDpbg1DNaosDmz/F3H0XnGMhHaKeuTnph
-         QYPAV22ol9l9j686DR4oFpu53t7NESFNNrRWMO8D+KS/R5n4PCskH3KdzXOkakC74fRz
-         rDfg==
-X-Gm-Message-State: ACgBeo34YSeNToXhN/kYUkhvD71aWcXdC38CmzM6wLDHOiy76glbs3N0
-        VlG8piDKPDKJa4rHdeJCZjfUFFZf0Me2SpoFJkTvDmAqC/8=
-X-Google-Smtp-Source: AA6agR6zBCSj61ZaiC1HeGBPBcbfD8D5Jpk3eyz7rwdjBX+3i8bk51euxSQ0qpv7vpRQ8puqRxcBiIyPK8f4B6sEJGU=
-X-Received: by 2002:a17:906:730d:b0:73d:c8a1:a6ae with SMTP id
- di13-20020a170906730d00b0073dc8a1a6aemr11016005ejc.540.1661693497381; Sun, 28
- Aug 2022 06:31:37 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=DNUvT1ZZ3fFrLVQIyi9us/iFYLs4Qz0Ypyc3D33P4jw=;
+        b=HxRLjN5oD21EFiERwOKVNkpWj9pJlsWr0tBkakLacpjg4+OVcoea1AdIRTr/0zrqYK
+         KFCmWq4CoNDEj+bwR+PEzIWXYrXwfTX0k/FJLgPZtb7416NpjMPtOCzSOtCAmUUtpPhA
+         HKbiZISOGsMDaf/FM8MHhsJIAqyDT8u1yrn/dthwEAz5Ew/O1mt6VfJF7yqm93SiJhY9
+         H+7S78/KMlLi3Lbuc7Qp/n2fOU6rooDWl6urzxynZn2OPXORXNYYtY3qs9gmzwQK6Ifi
+         1eM5Z8p4rbd7Aqic3b972cKWdvgJFLSIaqAqI8fX9tJGLkkHWGi7870yOBvzf03F2pGk
+         LRWA==
+X-Gm-Message-State: ACgBeo05tpSpT/aVWSb67out5swYnNLT7qY6miJMM1h2Q6wHmAYZ9PjE
+        Ih2AIZG53qXV7pDgxoTa8SGX7RE3/PsT/Q==
+X-Google-Smtp-Source: AA6agR589FF7S2UjahMF8q4laiggfgapRLShsh241BpWLPPW6mBtYh3v02vIrAfWhFEGX8XoEZ4PZQ==
+X-Received: by 2002:a17:907:6d24:b0:731:7720:bb9b with SMTP id sa36-20020a1709076d2400b007317720bb9bmr10836381ejc.717.1661693617054;
+        Sun, 28 Aug 2022 06:33:37 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id u26-20020a1709064ada00b007313a25e56esm3247669ejt.29.2022.08.28.06.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 06:33:36 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [RFC PATCH v3 0/4] can: bxcan: add support for ST bxCAN controller
+Date:   Sun, 28 Aug 2022 15:33:25 +0200
+Message-Id: <20220828133329.793324-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220818050019.1924408-1-keguang.zhang@gmail.com> <20220821171030.wc343w6zmrtcz5to@mobilestation>
-In-Reply-To: <20220821171030.wc343w6zmrtcz5to@mobilestation>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Sun, 28 Aug 2022 21:31:25 +0800
-Message-ID: <CAJhJPsW0HTs+=PD2JvXZVTkm9zrnRYKtEwLNv3dsVsf1AUNjDQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: loongson32: Fix the validation failure of LS1B &
- LS1C Ethernet PHY
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S . Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge,
-Your patch also works for me.
-But what about the plat_dat->interface? Is it obsolete?
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-Serge Semin <fancer.lancer@gmail.com> =E4=BA=8E2022=E5=B9=B48=E6=9C=8822=E6=
-=97=A5=E5=91=A8=E4=B8=80 01:10=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hello Keguang
->
-> On Thu, Aug 18, 2022 at 01:00:19PM +0800, Keguang Zhang wrote:
-> > From: Kelvin Cheung <keguang.zhang@gmail.com>
-> >
-> > The Ethernet of LS1B/LS1C doesn't work due to the stmmac driver
-> > using phylink_generic_validate() instead of stmmac_validate().
-> > Moreover the driver assumes the PHY interface mode
-> > passed in platform data is always supported.
-> >
-> > stmmaceth stmmaceth.0 eth0: validation of gmii with support 00000000,00=
-000000,000062cf and advertisement 00000000,00000000,000062cf failed: -EINVA=
-L
-> > stmmaceth stmmaceth.0 eth0: stmmac_open: Cannot attach to PHY (error: -=
-22)
-> >
-> > This patch sets phy_interface field of platform data.
->
-> I've got a similar fix in my repo, though didn't have a chance to test
-> it out due to lacking any loongson hardware. I've discovered the
-> issues on my still going way of the STMMAC driver refactoring. Anyway
-> IMO the problem is a bit different than you describe and should be
-> fixed in a bit different way. Please see a patch attached to this
-> email. Could you test it out on your hw? If it fixes the problem you
-> can resend it as v2 patch.
->
-> -Sergey
->
-> >
-> > Fixes: 04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate(=
-)")
-> > Fixes: d194923d51c9 ("net: stmmac: fill in supported_interfaces")
-> > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> > ---
-> >  arch/mips/loongson32/common/platform.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongso=
-n32/common/platform.c
-> > index 794c96c2a4cd..741aace80b80 100644
-> > --- a/arch/mips/loongson32/common/platform.c
-> > +++ b/arch/mips/loongson32/common/platform.c
-> > @@ -147,8 +147,10 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata=
- =3D {
-> >       .phy_addr               =3D -1,
-> >  #if defined(CONFIG_LOONGSON1_LS1B)
-> >       .interface              =3D PHY_INTERFACE_MODE_MII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_MII,
-> >  #elif defined(CONFIG_LOONGSON1_LS1C)
-> >       .interface              =3D PHY_INTERFACE_MODE_RMII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_RMII,
-> >  #endif
-> >       .mdio_bus_data          =3D &ls1x_mdio_bus_data,
-> >       .dma_cfg                =3D &ls1x_eth_dma_cfg,
-> >
-> > base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> > --
-> > 2.34.1
-> >
+The driver design (one core module and one driver module) was inspired
+by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+The shared resources functions are implemented in the core module, the
+device driver in a separate module.
 
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
---=20
-Best regards,
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
 
-Kelvin Cheung
+make stm32f469_disco_sd_defconfig
+make
+
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
+
+Changes in v3:
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add description to the parent of the two child nodes.
+- Move "patterProperties:" after "properties: in top level before "required".
+- Add "clocks" to the "required:" list of the child nodes.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add "clocks" to can@0 node.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Remove a blank line.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Fix the documentation file path in the MAINTAINERS entry.
+- Do not increment the "stats->rx_bytes" if the frame is remote.
+- Remove pr_debug() call from bxcan_rmw().
+
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
+
+Dario Binacchi (4):
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
+
+ .../bindings/net/can/st,stm32-bxcan.yaml      |  142 +++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   31 +
+ drivers/net/can/Kconfig                       |    1 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan/Kconfig                 |   34 +
+ drivers/net/can/bxcan/Makefile                |    4 +
+ drivers/net/can/bxcan/bxcan-core.c            |  200 ++++
+ drivers/net/can/bxcan/bxcan-core.h            |   31 +
+ drivers/net/can/bxcan/bxcan-drv.c             | 1045 +++++++++++++++++
+ 11 files changed, 1526 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan/Kconfig
+ create mode 100644 drivers/net/can/bxcan/Makefile
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.c
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.h
+ create mode 100644 drivers/net/can/bxcan/bxcan-drv.c
+
+-- 
+2.32.0
+

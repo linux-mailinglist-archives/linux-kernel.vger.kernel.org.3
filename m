@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CD45A3D87
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 14:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061AE5A3D96
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 14:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiH1MiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 08:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S229538AbiH1MwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 08:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiH1MiG (ORCPT
+        with ESMTP id S229454AbiH1MwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 08:38:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B91A2F67B
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 05:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661690283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YWZ0OCc6Jw8ZV0oLlM1p01dda6gQGAes6Y+jsvNcrnc=;
-        b=PAq/Q6aTfvHZxDncpWTqjZeHS1iPrq6G0oBR3bYrosdDnYF3coWxXAohzRvLzPlpQYVGWg
-        ulZsXBgxwB5777P2OR82f4aIOW6hOC28ituOkHZ+TErYC/FbRm9fzcUYZzdx3PWc2+ULKv
-        fxRoxZf/P6DZtqtFUFRy8VgXWHfMUJU=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-593-35PgoV5bPJe6xC9dXEDD0A-1; Sun, 28 Aug 2022 08:38:02 -0400
-X-MC-Unique: 35PgoV5bPJe6xC9dXEDD0A-1
-Received: by mail-il1-f199.google.com with SMTP id w11-20020a056e021c8b00b002ea48389206so4320250ill.3
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 05:38:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=YWZ0OCc6Jw8ZV0oLlM1p01dda6gQGAes6Y+jsvNcrnc=;
-        b=aCV0CFO1mtFZvjQMn7P4HWbTsJkSmhGRIdMeVTGG0ANbKNBuBy7xmPyQhObp2P7aQw
-         a1Kv3hY+vTJuH7wHHSHk8OzQkUvZR8vRTSnfVIH1tRqJkiLG+nj8oz9yNVSJl3Yq2JHA
-         KtYL6dd6gDHztAvvzwayeYHVDCfNFwDrbbohJQ5jRtHJODaDOgWeKrSg/zEcRq9J4eiD
-         EDyYF+vPd3BDixG8zZf8T5b9hpwGfcFTZhRR75yO4jprj2atSuSG0c3BF2hxEdbTMdIQ
-         PCYpaXIkFkb8Sfwf/ydQWyvtpS45IczjJUmNWC73uCTDXUsRhbGQzi13vvCkgLjL8SgE
-         SKcg==
-X-Gm-Message-State: ACgBeo171u+ymXsw2xBeKCRRLUqi8cMX2Jt+lC/2CP6ooQxD54i5y8P1
-        sxiUNZ2t8WrSO6sf7A1t95b57b/E36e/qMiLFEq3F6yHPafz4wRBq/bvkvaHdomM1giIP5miiRg
-        36GXnaYNwTqH03oJY7pI+nT9b
-X-Received: by 2002:a05:6e02:1b09:b0:2df:1c60:e428 with SMTP id i9-20020a056e021b0900b002df1c60e428mr7666594ilv.227.1661690281943;
-        Sun, 28 Aug 2022 05:38:01 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5px5ANkM8ZpE9nMa44q0u7kj+R2zpLrObamHUIS2ILRuz6ZAXI92T9u3hhTeKSU/8keTmlzQ==
-X-Received: by 2002:a05:6e02:1b09:b0:2df:1c60:e428 with SMTP id i9-20020a056e021b0900b002df1c60e428mr7666578ilv.227.1661690281729;
-        Sun, 28 Aug 2022 05:38:01 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d9-20020a023f09000000b00349eece079dsm3121665jaa.35.2022.08.28.05.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 05:38:01 -0700 (PDT)
-Date:   Sun, 28 Aug 2022 06:37:59 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     akpm@linux-foundation.org, alex.sierra@amd.com,
-        willy@infradead.org, hch@lst.de, Felix.Kuehling@amd.com,
-        apopple@nvidia.com, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: re-allow pinning of zero pfns (again)
-Message-ID: <20220828063759.60c85fd6.alex.williamson@redhat.com>
-In-Reply-To: <033c2e8d-8ba9-3e0b-9dee-7d0973c708fa@nvidia.com>
-References: <166015037385.760108.16881097713975517242.stgit@omen>
-        <033c2e8d-8ba9-3e0b-9dee-7d0973c708fa@nvidia.com>
-Organization: Red Hat
+        Sun, 28 Aug 2022 08:52:22 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03085EE25;
+        Sun, 28 Aug 2022 05:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661691140; x=1693227140;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YaVpDFcSktopVayCz3BxH2mKjkt04+621MmiMmMBYRs=;
+  b=QYHyo0pqljdwou6lblZmg4Mr1X8jcrNONL92NxoJ+IHc597f0KGC0Gk+
+   10PHhzz6ndtmCKPPifTPPbDy0pJbs8K/ZNNUwYL5bszrgLJImRCg+xFiG
+   ff6LGud8YS4yjCrbdsX2iLIJyzr9/+CAUdVHFqPAU22h1MaWLV5ztYwng
+   O0AYyG8rJx33eXEAd0jShMcF7tUbI+gDo93ybDk0Sy/LP6DqXUjyOGoDx
+   h8FGcr+bV3ghSUsSBxEywsh0j4NRmvJmI98vmmUzFHH67Cwhg9vWGfGnZ
+   oIjGps61cMXLFC7FnvbmGX3cOLs9wEBPgQkBNwFmf5uvBKKfdFMvS1eH4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="294746106"
+X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
+   d="scan'208";a="294746106"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 05:52:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
+   d="scan'208";a="672051439"
+Received: from cyue-mobl1.ccr.corp.intel.com (HELO [10.254.209.98]) ([10.254.209.98])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 05:52:16 -0700
+Message-ID: <e56c8c79-4f09-3706-c66f-726e5c78b413@linux.intel.com>
+Date:   Sun, 28 Aug 2022 20:52:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v12 05/17] iommu: Add attach/detach_dev_pasid iommu
+ interface
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220826121141.50743-1-baolu.lu@linux.intel.com>
+ <20220826121141.50743-6-baolu.lu@linux.intel.com>
+ <YwjauaF1sTP6l2j9@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YwjauaF1sTP6l2j9@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,58 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022 17:59:32 -0700
-John Hubbard <jhubbard@nvidia.com> wrote:
-
-> On 8/10/22 09:53, Alex Williamson wrote:
-> > The below referenced commit makes the same error as 1c563432588d ("mm: fix
-> > is_pinnable_page against a cma page"), re-interpreting the logic to exclude
-> > pinning of the zero page, which breaks device assignment with vfio.
-> > 
-> > To avoid further subtle mistakes, split the logic into discrete tests.
-> > 
-> > Suggested-by: Matthew Wilcox <willy@infradead.org>
-> > Suggested-by: Felix Kuehling <felix.kuehling@amd.com>
-> > Link: https://lore.kernel.org/all/165490039431.944052.12458624139225785964.stgit@omen
-> > Fixes: f25cbb7a95a2 ("mm: add zone device coherent type memory support")
-> > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-> > ---
-> >  include/linux/mm.h |   17 ++++++++++++++---
-> >  1 file changed, 14 insertions(+), 3 deletions(-)  
-> Hi Alex,
+On 2022/8/26 22:37, Jason Gunthorpe wrote:
+> On Fri, Aug 26, 2022 at 08:11:29PM +0800, Lu Baolu wrote:
 > 
-> Looks good. I'm suggesting a simpler comment, below, because
-> even though the VFIO folks are thinking about VFIO, here we
-> are deep in the mm layer and there are lots of non-VFIO callers
-> that may pin the zero page.
+>> + * iommu_get_domain_for_dev_pasid() - Retrieve domain for @pasid of @dev
+>> + * @dev: the queried device
+>> + * @pasid: the pasid of the device
+>> + * @type: matched domain type, 0 for any match
+>> + *
+>> + * This is a variant of iommu_get_domain_for_dev(). It returns the existing
+>> + * domain attached to pasid of a device. It's only for internal use of the
+>> + * IOMMU subsystem.
 > 
-> > 
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 18e01474cf6b..835106a9718f 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -1544,9 +1544,20 @@ static inline bool is_longterm_pinnable_page(struct page *page)
-> >  	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
-> >  		return false;
-> >  #endif
-> > -	return !(is_device_coherent_page(page) ||
-> > -		 is_zone_movable_page(page) ||
-> > -		 is_zero_pfn(page_to_pfn(page)));
-> > +	/*
-> > +	 * The zero page might reside in a movable zone, however it may not
-> > +	 * be migrated and can therefore be pinned.  The vfio subsystem pins
-> > +	 * user mappings including the zero page for IOMMU translation.
-> > +	 */  
+> If it is only for external use then why is it exported?
 > 
-> Those notes are all about (some of) the callers. But it's a simple
-> answer, really, so how about just this:
+> I would add something like:
 > 
-> 	/* The zero page is always allowed to be pinned. */
+>   Callers must hold a lock around this function, and both
+>   iommu_attach/detach_dev_pasid() whenever a domain of type is being
+>   manipulated. This API does not internally resolve races with
+>   attach/detach.
 
-Sure.  Are we looking for a re-spin with this?  I see Andrew already
-added this incremental change to his hotfix-unstable branch separately.
-I'd hate for a comment re-spin to delay getting a fix for this problem,
-that blocks any VM use cases of VFIO, into mainline any longer.  Thanks,
+Yes. Updated. This is what this API expected.
 
-Alex
+> 
+>> + * detaching from the device PASID.
+>> + *
+>> + * Return: attached domain on success, NULL otherwise.
+>> + */
+>> +struct iommu_domain *iommu_get_domain_for_dev_pasid(struct device *dev,
+>> +						    ioasid_t pasid,
+>> +						    unsigned int type)
+>> +{
+>> +	struct iommu_domain *domain;
+>> +	struct iommu_group *group;
+>> +
+>> +	group = iommu_group_get(dev);
+>> +	if (!group)
+>> +		return NULL;
+>> +	/*
+>> +	 * The xarray protects its internal state with RCU. Hence the domain
+>> +	 * obtained is either NULL or fully formed.
+>> +	 */
+> 
+> This has nothing to do with RCU
+> 
+> xa_lock() is used to ensure that the domain pointer remains valid
+> while we check the type since it blocks concurrent xa_erase().
 
+With xa_lock() added, this comment is not needed anymore.
+
+Best regards,
+baolu

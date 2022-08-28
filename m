@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC86B5A3C1F
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748D15A3C3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiH1GT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 02:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S231658AbiH1G3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 02:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH1GTz (ORCPT
+        with ESMTP id S229445AbiH1G3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 02:19:55 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15952140CA;
-        Sat, 27 Aug 2022 23:19:55 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d12so5152548plr.6;
-        Sat, 27 Aug 2022 23:19:55 -0700 (PDT)
+        Sun, 28 Aug 2022 02:29:42 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09B04F67C
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 23:29:41 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id l5so1266207pjy.5
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 23:29:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=sLVNtThA6kbuS/oRroGdbcyy2Nj7hrpD+Ej4bmUd9L4=;
-        b=MY88iUoinQOIEQiwjpmDKiDkP4GEIuwVDcfjGm4QH+nVyUS2SiLfAilP62XrzHqy++
-         ONUHYfye7rUhS2LJ5JCU013UBUM9eyAcXglCOb7BTCWxN1tR8EUjbnOARuNMMJ2VGC+2
-         PaAGuthEzsu83i5U73UfMCDRQwNWafrm+/2hHI2ARSTCJywDsyzoWNMGZiNfNSl5Z4DB
-         as1gTNOkHqJADIqSqXYd+XaKA3AQdnspP+awsOkG6P5jzMxJQotg/DY+k3SOAhojhknR
-         FnsXTks9mui+IEC3UbBvaBeTbo9Br4cErKySTY3qxP0Z4/WqOQ+l5gEQir1IKLlMr+SC
-         JaUg==
+        bh=wGaVdZVTafY4oILQ0Q1s/zfrLr5042sPWTRzze9CiOs=;
+        b=c9VyZKBpE6E5EOIcElvwGaB4Cd4oi38Ty11LgciZW1BWNsxV09AvVeV0C40y3/dUMx
+         mGOqWidvsIHcDb6o/G6o4piplzc+cR07qORltKTMkP8PiplN1iEGCVzqgfh9Bb0iu9vi
+         8nhRco5OevZcpk2qmaRU0FCt+NP+hbrynx4QWXYrhrCkJ0XYjPoWNRqSKDuy+jmooV2Z
+         UoxGA4L8O9V5/yfVFrPi4+XC63l440dpU6xy/Hv02uzULdUTTFuD3IMLXTwdXHGWoxWp
+         B5mK1btvzYlG7uBzrmAAhZVsNr9Oy5BX2/YKknS3EscugbAKRVzPRoRxF6ig3cXw3qjC
+         plrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=sLVNtThA6kbuS/oRroGdbcyy2Nj7hrpD+Ej4bmUd9L4=;
-        b=MpqtWY5+VJhR+Mj5MQQvCohfA1zrDuLel8pwTk5ipFPKBKvbQZh1gMwwbVcGi2itcg
-         KUP2Ud6F8IaqsM5DnEX9VMUt2lP3+Ze3PIhhQf+kzjW+mx/ctmp4t0J6Qh3Syl/2pMp8
-         ND0JQhbpJC5iGsCLNfi28pwurz27vH7BPr3ZySGuE+Q+fiMd+CZGx8egwjPwK49zrIay
-         7v75pSQYWfvTwrDFInwJtnt+X2OJZ+ujCx0gFlr0pQkP2NL0WSffzq1kPWNB8whqZNn9
-         f3RV1D3AT9dQM8Z5gzV8rm+ojpJaIkSc6p/tv2DYWG/DSSkkVfiM+4goJhP+31kGgTD0
-         GCSg==
-X-Gm-Message-State: ACgBeo0vzZhkalDNa5eyTee81tXFcVDqjx+8fq5wKQOodBBzlTgPzCUl
-        os/EfVqlX80uQQFQlNqFBpA=
-X-Google-Smtp-Source: AA6agR5GXEpuUuIpVK0i7e8hmtA5JdEolz8bkSYO/QqWkrRUOSx9vsUTuR+eY7uUNYh02M5LX9oPMQ==
-X-Received: by 2002:a17:90b:3142:b0:1f7:338a:1d38 with SMTP id ip2-20020a17090b314200b001f7338a1d38mr11926797pjb.223.1661667594639;
-        Sat, 27 Aug 2022 23:19:54 -0700 (PDT)
+        bh=wGaVdZVTafY4oILQ0Q1s/zfrLr5042sPWTRzze9CiOs=;
+        b=EpLY/78FMe0Lm6fhvw4G1pLiFPa16U3Fad0LQygHhvca97YJ4mNmTx1QhEoT/CutK+
+         D+ShCM+DV+jqzeAugEoT8vsUY8QN9nDmNcy1xKHq5QHPItux8dAr1dTzxr6Qz6h1bQRL
+         k2fQ5UvMPX8qWS6dPV7s/sg8GahPkXEWMWxWt/+hwa7nNNBy2hAt88oCxfEeC53+W7/C
+         sRYIfVG8tsVrYlcu0Dn4tKXb0VvXKBcsYthqjrappYlllcU7fcPMhyoaAzI2S92vC82t
+         HUSzQup8h99MZKBpnRd/luKlkCQ36EtlyA4aEeVWV8mCv5vRRf1E8oytkr1Pg0Ewi/AI
+         ldbw==
+X-Gm-Message-State: ACgBeo1OR+ZiBsZzymA84RaeQ0LzV/FdfYLjuLb7jaRT92F4RTai4a0Y
+        AzupfQHKcIWoJbRHHuCKl7w=
+X-Google-Smtp-Source: AA6agR60Iaoj7lhpi3L0GWRz3/CESLVcYFesBorz4m0OA/DApORsCWr0GNshLH7VUGCoy8NAxJTgMA==
+X-Received: by 2002:a17:902:9886:b0:172:bb36:70f1 with SMTP id s6-20020a170902988600b00172bb3670f1mr11276961plp.139.1661668181273;
+        Sat, 27 Aug 2022 23:29:41 -0700 (PDT)
 Received: from localhost.localdomain ([112.134.152.151])
-        by smtp.gmail.com with ESMTPSA id 1-20020a621601000000b00538116baa56sm1012843pfw.102.2022.08.27.23.19.52
+        by smtp.gmail.com with ESMTPSA id 14-20020a63184e000000b0041d6cda2d60sm3969280pgy.66.2022.08.27.23.29.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 23:19:54 -0700 (PDT)
+        Sat, 27 Aug 2022 23:29:40 -0700 (PDT)
 From:   Dhanuka Warusadura <wdnuka@gmail.com>
-To:     jarkko@kernel.org, dave.hansen@linux.intel.com, shuah@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, shuah@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Dhanuka Warusadura <wdnuka@gmail.com>
-Subject: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for ERR_get_error_line
-Date:   Sun, 28 Aug 2022 11:48:59 +0530
-Message-Id: <20220828061859.181061-1-wdnuka@gmail.com>
+Subject: [PATCH] Documentation: fixes a documentation warning in serial_core.h
+Date:   Sun, 28 Aug 2022 11:59:17 +0530
+Message-Id: <20220828062917.182879-1-wdnuka@gmail.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,27 +68,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
-Since OpenSSL 3.0" warning.
+These changes fix the documentation warning: Function parameter
+or member 'start_rx' not described in 'uart_ops'
 
 Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
 ---
- tools/testing/selftests/sgx/sigstruct.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/serial_core.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index 50c5ab1aa6fa..671d9b58e274 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
- 			break;
- 
- 		had_errors = true;
--		err = ERR_get_error_line(&filename, &line);
-+		err = ERR_peek_last_error_line(&filename, &line);
- 		ERR_error_string_n(err, str, sizeof(str));
- 		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
- 	}
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index aef3145f2032..44a7b4746f36 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -149,6 +149,14 @@ struct gpio_desc;
+  *	Interrupts: locally disabled.
+  *	This call must not sleep
+  *
++ * @start_rx: ``void () (struct uart_port *)``
++ *
++ * Start receiving characters; the @port is in the process of being opened.
++ *
++ * Locking: @port->lock taken.
++ * Interrupts: locally disabled.
++ * This call must not sleep
++ *
+  * @enable_ms: ``void ()(struct uart_port *port)``
+  *
+  *	Enable the modem status interrupts.
 -- 
 2.37.2
 

@@ -2,151 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878735A3EC8
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 19:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6605A3ECA
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 19:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiH1RRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 13:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S230132AbiH1RVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 13:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiH1RRA (ORCPT
+        with ESMTP id S229882AbiH1RVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 13:17:00 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8D82CDF2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 10:16:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gNdt+Xjm/E6V+h91gEtnkulASnHMPAxAtvy1rVRti3/AgfPIgPor1MptXUitKKY1tRv/ryK5xI8ezhuRrg9mT8S7X3f2CIVenuFEJkW4Rj/F1IE3OhFA0ylwRQYg6Xib3nohqiqR4Q0oLqN458H0wNYqfNzZApwUJOci+NU4OJhnnyQqRo7B5ro3rHePzTaRSixHO6CYw8t1HhPnj8q9fxwjD/Jqdz7knDRe9HmhaCFk3EUq5n6fnOUm6kkbf7HpZ8ljqyWvnYucFGYcFiRfEuiNBjTZIfHcNSXSMQyr/tfnyepu+gAjYXObzauCmvhmR2uj0oFzZ69lxwXsiLl/Zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mR0lfdXWiTHpUfZeqyoHHYtqcCfrr1QXdQ8g2GmWDnY=;
- b=N11ZldKliuGBVslsaKC9mmUe6GJF25HWIu7SgrQfDthejulG41tF8vpmuFMbbhaU7cViS38YUw6W/qQp8+zic7WVAjl6p4e1RM/GC3YL2uURKe9aWvszzxJTv2VxKvyBKq/2XSfUZqlptgqyD9lTBEJBO6HPQKI+6Y4eb1bV7WMcSIF5f8r5gPKKItYcHdox8JgJWaUpO6rUezKGLj+kVUkuGEfLipCtPvWSpJty+QLyQ+rLQP+Rn+p2/xbMwoNgLwvRyzuNwwpe8x+xVvuLpJ9TwdlP3UJ7hLibAeyLmn/mlvMgnjnEVB4VtvPeeIZPQjt9j4o8ssrsxyiXDvwE7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mR0lfdXWiTHpUfZeqyoHHYtqcCfrr1QXdQ8g2GmWDnY=;
- b=SyihOI14E1XiXfctMji5Ql117fEHqkzcF1Hawqp39ivi7j9YBYHy8RA9K9c8hi7B0R6c/wfgrRMWtPFFxvj443eDnH4v+TA8grRve8NBLSKgkS7uAKEZMHQJ19HHK9CyDlXrVVJCpj+b6oFHQ2vhSy3iDuEFY1nNlYhFTr9OeSPuBl1MGbbR6vx97roniT2+iHz8nmEeDLjydfB8gU66F7+D4xaAxZJjwkSWLHcnHl3tYIZw4R1zDo/XsS7h7ZXtbV8g4Kkr3KEoHGKM1gLdMW7LLWbxlR6xveDprAUzI4Mrf8gBo8oSPp86X1dNSKfpSe52WEb2EGAJA1zUwga8ag==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by SN1PR12MB2493.namprd12.prod.outlook.com (2603:10b6:802:2d::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Sun, 28 Aug
- 2022 17:16:56 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5566.021; Sun, 28 Aug 2022
- 17:16:56 +0000
-Message-ID: <b120cf98-85e0-75d5-30f9-44306b036cdd@nvidia.com>
-Date:   Sun, 28 Aug 2022 10:16:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] mm: re-allow pinning of zero pfns (again)
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     akpm@linux-foundation.org, alex.sierra@amd.com,
-        willy@infradead.org, hch@lst.de, Felix.Kuehling@amd.com,
-        apopple@nvidia.com, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <166015037385.760108.16881097713975517242.stgit@omen>
- <033c2e8d-8ba9-3e0b-9dee-7d0973c708fa@nvidia.com>
- <20220828063759.60c85fd6.alex.williamson@redhat.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220828063759.60c85fd6.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR03CA0002.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::7) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Sun, 28 Aug 2022 13:21:38 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48BC6566;
+        Sun, 28 Aug 2022 10:21:36 -0700 (PDT)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 27SHLMZg016374;
+        Mon, 29 Aug 2022 02:21:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 27SHLMZg016374
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1661707283;
+        bh=/wxBK7m8lAXZFpL9USnpvkitak2d1egNjzQJgsP+0AI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nF0fZbOjdn6s7I5wZJo6mjT43EuIf/CCthIsgwiVAePFc7gqW8ZvMXhJIr7GqnR9z
+         c3PZBwjmMGjoIshkb1xoI/rVTDv9j0isAYCYLnccK4k/19Xr5p5YZCAFQFzeqyeK0B
+         nywh6tGVayn+jv4zBpcj0+qmtKjfGPmw2OvFXBJfO5K2iZJLkV25TdjGvVeUzN12iC
+         vAnyE741BQeWM8gvHWn62yTtZZzX4y9h10MlAf257TElmSbOpl+lIMRIblhNrZRlCA
+         DniJxpGs98UjvqXiQZy2/zC1HW/tEHtdupNQ46ZB/rkDqNMwcVgiVHOVAc2dCIBIsr
+         ClA9ABUL4EDqw==
+X-Nifty-SrcIP: [209.85.210.50]
+Received: by mail-ot1-f50.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so4493750otu.3;
+        Sun, 28 Aug 2022 10:21:22 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2AlioGlCj3s2/mZFWZjSnq1jDzuWwhC4Xf/QgkFO4jtsct/oBf
+        +Mv9gT2lsgUvrEC7DlGktpYYcJkAQNDF+W1Zdwg=
+X-Google-Smtp-Source: AA6agR68BX+UgxMBvfbvnw8JIecIq4RkerD74kWTFUvD19k9KrVWyW402aX0SzT1wD2UifkGw8qhmHOws4cncnOU4uk=
+X-Received: by 2002:a05:6830:2985:b0:61c:c1bb:206a with SMTP id
+ t5-20020a056830298500b0061cc1bb206amr5061631otu.343.1661707281453; Sun, 28
+ Aug 2022 10:21:21 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eaefed65-f2ed-45a6-eff5-08da89191bfb
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2493:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ws2ZyJ9evg6dliwZqZSWWaAA6DwqFloPWYYv1W3rvIv/lnAOXIIINaDyUlnHkvEQxjNy/0qMjyPbhb+p52hfpU9cCTZxZ78MvLKiPhNzxnx3No+r1RXnF6QcNF17+5kmYVFJxDpYQmPVOj2zCNY6+NQOnOThikG/m0TbA29RrRz8ZmTUkicXTGw1AJUIZQ3xAUJZ1qF7z1Zct5aonWucfpHrSs708ZFhb61ELGcTGv/IwAcRqmzpMl6kAuIWMTFpvW8R78z7J3FDwg9Bi+KF2djnNm6PJAAS1wF+16fsW28gL6EruD0mO042rt8CAEO6KKPDGaOHezGphfQmeXZdHDgcWmKHrOyv+7cuc2vQOaW21Mq8qeRZtJBgTCiQodNRiUGl2wa2JaqCLEztHrsTbsc6n/jTu3WOeaVsL8LcZSVTl6rb6FrSaEkayuZpKPZjgrfntx9ZuoANQ1GhVEAJu1Ea5cqhAS4ys9FLPrVe63PFwojwhg+KiHBfLQ0bXRC2h9LNo6RY5N9uyOKRp7ZsFY1eA1hAj/Ms4zgxVVDjytUVpNKdSF64UjTCBBopGiARgiY0LYsejINFsb3w2nJGOBB6Mwf5oWCIfKlESxRMbdTDmu2alMAIVHtN+T/vxumnBxxOWQ7E4BewBktoVzpPWtw/BudgtK5i2s9P7Q2QwqIGgq27sfDmJ1zA6D3w/IVwacO83i8fa8DbVa76KDYITZ9NcCsRHKkbfFEHfY5tpwR1bUqHW+14gZJ4ivVLx+l3LoEGOiRxrCfMUKPGhn+UsHz74GEeAelRDnhqBMMoU0k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(396003)(346002)(366004)(186003)(2616005)(316002)(6916009)(36756003)(31686004)(26005)(6512007)(2906002)(6506007)(53546011)(83380400001)(4744005)(86362001)(31696002)(8936002)(5660300002)(478600001)(6486002)(41300700001)(38100700002)(4326008)(66556008)(66476007)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RFdXR09DaDZadWRySTRkYVRVSy9EbUlXYjhCb2xyNmFPekJDRkM1eCsvV0xX?=
- =?utf-8?B?S3I5OHdhVFBQUWVxNkFJWE5UUnBjMmtrcmpKOG5ySTF2Y1NPd1FtU2R3QmJW?=
- =?utf-8?B?ZzErd01nK2owUzZnbEdjdzVlOEFHOVl6Y3VwSXZsaGFqcUQ5aUhmdm9mTWVw?=
- =?utf-8?B?OWVROWdMeTJDSGViT2l5N0hVV2Z6bWdyS0Ztai9PamswVkVicXVmM1ZuYXh5?=
- =?utf-8?B?NGNkNDRuNDBKeXhCcGlpY2RlQ0VPWHBzYm9QVnd0MmpCQ0JmWVhaN3dKN25t?=
- =?utf-8?B?UGV4b0lVdnpsVXE1ZGI0enVYQitaQ1dUTU1nRnh1dEdpaVQrWWMwUHlyaGJm?=
- =?utf-8?B?bkE4OVhQbGVoNHFva1M3NmlxTjh1RXluMGRWOUhQSVpYQjBuejR3ZXRZKzBr?=
- =?utf-8?B?TmtibFlsN0RKem00OG1KWmw1NUJrcVNvSWdFbmZJbFpDQ2JJRXV5SnJhUnhR?=
- =?utf-8?B?UFJLV3d4MTJXYkVLOEtDRnpvalBxOEcwSWRGZm9uVUVZT2J6MEgzNXJUMFR2?=
- =?utf-8?B?MnppR0xMNXZBblVsZHdBQW1NZDlteXdtcjljUlpMMW9qblZKUjVlcHlYSGkz?=
- =?utf-8?B?ZUNLbXRnMFpIcUNpYmdJYlhRMjJFcW9FeTIzSk9tZTVGSEtLZ09HQ3ErOHVJ?=
- =?utf-8?B?QnFDU0FuQ3VmeE93Z2Vqa1c1dmVsZDFFQmRrR0FBbHMwWmdNVGZjVzVYd3hV?=
- =?utf-8?B?Vjg2VHlEZTdmVFQ2STdmMHlUU29vMnlyY2VSZ256Wk80VDk5RDVSUGxUNjVv?=
- =?utf-8?B?czluSzhvRnhGZ1dNL0VIT3pHSjYxb09CcDdhb01sS2VubzgrNmpkTUd5RUNN?=
- =?utf-8?B?VytZVFcrQXVVTmhVd2lzdDJGSzhKLy9uUmJWU1lCR2xaQzFVbEIzQTFCVHox?=
- =?utf-8?B?b216L1FzaHlQTWw3TWFaZFhuRTRtbmczT2NvM3Rwc0lkYjRrczdVSkNJM1pO?=
- =?utf-8?B?cE5sVm4xSTdzRDlQNkU4TDNmLzd6ZDJYVEdxRjBxMTZVN204ZjZJNTlrS0k4?=
- =?utf-8?B?eVZXSzVLcE5INGk1MStrUVorOWlMWGxwa2g4ZC8veHI4QXZDN1JOZzBoaElF?=
- =?utf-8?B?R3JBSzczR0MvMExEQTM0dEU4Y2dsQ2RTK09xb0dHNVVLM1VEdmNvN2Q1RTNC?=
- =?utf-8?B?dnpOeEV1S1daSzlpVFZrbjRZeFkzQkZxd1phSUMva1dyZVh0RzBIUWcwYWx2?=
- =?utf-8?B?dHFRVDRJbUtPOWJheVhHSnRqdEppeUd6Kzk5VnhucmtLSGJOWFNFeEM2Y3NR?=
- =?utf-8?B?Ui9vK0wrMmt3TXVCRWM4RXJwNWRhVnljK3BSUUorVTVLMlJtaFZCRC8wbE5n?=
- =?utf-8?B?b1FjTXJKT2tWYmtGZG5mdmpUZ3A3Q3lsRWRWV3lTc2hBM0xxcmVydlY3RzRH?=
- =?utf-8?B?SDVVY21CbUlDTk9ZTmJGWUl4K0tLSlRCZG4wVmt6YmRYcHNDak5zMS9OZ2lx?=
- =?utf-8?B?S2pxb2NpVndUaUQ4VHNpZGZtaURIYTFoUkIwaUpJTWMyL2UvdytkRFFvd3FW?=
- =?utf-8?B?N012eTFoZmR3bU9OZ2YwbWhJU0kxNGpkNGIrcnp0NnoxM2kzcVhiRUhrdCtv?=
- =?utf-8?B?VW0wMFJUS0xSYlVCNjh6d1JzUmRKMll1TXFqQ0x5b0NjbTY2bkFNaXZmekhI?=
- =?utf-8?B?RzFzUTRvWmQ3cUM0REZyaVdLT01BRytFVHZKbEJDTnZnK21hSURaVmRuOHFU?=
- =?utf-8?B?K1N5NG8wcmpuMVV0M0EvRXZmRlpzdjJFSjk4aUdkaTU2Z1dOQStqVUtnL3V5?=
- =?utf-8?B?R29mcXdmSFpUYml2MzcvMHpPdC9ZdDQzdmdyelZsdzU4M3ZmUVdzV0RZRUpZ?=
- =?utf-8?B?VmJYMitjSzlWSVR6bXBKNCt5RWg4RzNmdGhlRnArT2loL2EwL2FERDFXcWZ4?=
- =?utf-8?B?M2ZGeUxjUkhNQ2lTVDYzV1E5K0pjcjR4ZzFSR09CME1zL1I2SWFtcWRheDA4?=
- =?utf-8?B?NXVicjI4ay9EZFJpaGtCdis3UWd1TzdwVmFpR2REUTB2TXMwNkpvaXE5TFpv?=
- =?utf-8?B?RnpLaDFIeEdteVQxZkR6MHBhQjdnS0l4NFRKYjIvcjlaQzU4RGlZS1c3c09v?=
- =?utf-8?B?OGJVbUdxZXZNSko0c1ZHajhtVnNjejZyUmZnZ0N4NVJYSDdFMHA3d25LZWl1?=
- =?utf-8?Q?AaHMosW9SyoMtEL18rVLGROEm?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eaefed65-f2ed-45a6-eff5-08da89191bfb
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2022 17:16:56.4435
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QVjwkaxym6COJ58v93HGqfcUsDRNE28NhWWTKJm4TvaKJoV8yx8elg4sn12XLgAGhh6DFYScsjLit9BXhMHxzw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2493
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220826181035.859042-1-ndesaulniers@google.com>
+ <20220826181035.859042-2-ndesaulniers@google.com> <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
+ <CAKwvOdmR8D_GTM=ZhnhLzR3d9Ra46WpcO1W_CujGjMb+QR-_3w@mail.gmail.com>
+In-Reply-To: <CAKwvOdmR8D_GTM=ZhnhLzR3d9Ra46WpcO1W_CujGjMb+QR-_3w@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 29 Aug 2022 02:20:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATcHt7GcXZ=jMszyH=+M_LC9Qr6yeAGRCBbE6xriLxtUQ@mail.gmail.com>
+Message-ID: <CAK7LNATcHt7GcXZ=jMszyH=+M_LC9Qr6yeAGRCBbE6xriLxtUQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/ for as-option
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        X86 ML <x86@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/28/22 05:37, Alex Williamson wrote:
->> Those notes are all about (some of) the callers. But it's a simple
->> answer, really, so how about just this:
->>
->> 	/* The zero page is always allowed to be pinned. */
-> 
-> Sure.  Are we looking for a re-spin with this?  I see Andrew already
-> added this incremental change to his hotfix-unstable branch separately.
-> I'd hate for a comment re-spin to delay getting a fix for this problem,
-> that blocks any VM use cases of VFIO, into mainline any longer.  Thanks,
-> 
+On Sat, Aug 27, 2022 at 3:35 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Fri, Aug 26, 2022 at 11:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Hi Nick,
+> >
+> > I think the title would be a little more readable if it was:
+> >
+> > Makefile.compiler: Use KBUILD_AFLAGS for as-option
+>
+> Thanks, yeah that looks better; I expect a v2 of this series will be necessary.
+>
+> >
+> > On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
+> > > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> > > cause as-option to fail unexpectedly because clang will emit
+> > > -Werror,-Wunused-command-line-argument for various -m and -f flags for
+> > > assembler sources.
+> > >
+> > > Callers of as-option (and as-instr) likely want to be adding flags to
+> > > KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
 
-Definitely not. Andrews fixup should suffice.
+Indeed, it has been weird since the day-1 of as-option.
+
+commit cad8244840d1a148f638925758afd1cdf81fc839
+Author: Paul Mundt <lethal@linux-sh.org>
+Date:   Mon Jan 16 22:14:19 2006 -0800
+
+    [PATCH] sh: Move CPU subtype configuration to its own Kconfig
 
 
-thanks,
 
--- 
-John Hubbard
-NVIDIA
+
+
+
+
+
+> > >
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1699
+> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > ---
+> > >  arch/x86/boot/compressed/Makefile | 5 +++--
+> > >  scripts/Makefile.compiler         | 6 +++---
+> > >  2 files changed, 6 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> > > index 35ce1a64068b..fb3db714a028 100644
+> > > --- a/arch/x86/boot/compressed/Makefile
+> > > +++ b/arch/x86/boot/compressed/Makefile
+> > > @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
+> > >  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+> > >  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+> > >  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+> > > -# Disable relocation relaxation in case the link is not PIE.
+> > > -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+> > >  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+> > >
+> > >  # sev.c indirectly inludes inat-table.h which is generated during
+> > > @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+> > >  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
+> > >
+> > >  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+> > > +# Disable relocation relaxation in case the link is not PIE.
+> > > +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+> > > +
+> >
+> > Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
+> > relaxation") added this to address
+> > https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
+> > move it to only being used for the .S files in arch/x86/boot/compressed?
+
+Good catch!
+
+
+>
+> + Arvind
+>
+> Hmm...that makes me think we might need two different as-option flags;
+> one that does use KBUILD_CFLAGS, and whose result is meant to be added
+> to cflags-y, then another that uses KBUILD_AFLAGS and is added to
+> aflagsy-y.
+>
+> (My patch 2/3 in the series would use the latter)
+>
+> Let's see what thoughts Masahiro has.
+
+
+How about this?
+
+KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+
+    to
+
+KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
+
+
+You can insert this one-liner before this patch.
+
+
+
+
+In Kconfig, -Wa,<as-option> is tested by cc-option.
+(See commit 4d0831e8a029c03f49f434f28b8faef9f0bd403f)
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada

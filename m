@@ -2,192 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0261A5A3E8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 18:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305985A3E82
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 18:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiH1QZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 12:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S229782AbiH1QHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 12:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiH1QZ5 (ORCPT
+        with ESMTP id S229489AbiH1QHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 12:25:57 -0400
-X-Greylist: delayed 3598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 28 Aug 2022 09:25:53 PDT
-Received: from 6.mo561.mail-out.ovh.net (6.mo561.mail-out.ovh.net [188.165.43.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FAE13EBE
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 09:25:53 -0700 (PDT)
-Received: from player756.ha.ovh.net (unknown [10.110.171.5])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 8577421A49
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:06:16 +0000 (UTC)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player756.ha.ovh.net (Postfix) with ESMTPSA id 296002D1E2613;
-        Sun, 28 Aug 2022 15:05:54 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-101G0040d0c2933-f865-4457-8ea0-b423c711832b,
-                    E8B3FA25B4F8D98D1FC0498694F8FFDB0E70245B) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Message-ID: <768ff63a-54f5-9cde-e888-206cdf018df3@milecki.pl>
-Date:   Sun, 28 Aug 2022 17:05:53 +0200
+        Sun, 28 Aug 2022 12:07:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DD32CE0C;
+        Sun, 28 Aug 2022 09:07:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CA1DDCE0924;
+        Sun, 28 Aug 2022 16:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0C8C433D6;
+        Sun, 28 Aug 2022 16:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661702828;
+        bh=6QmM8/GiuDkSpxDLj8miyaVK8Mz2SqME5orytHsgun4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iwawSyZ1CVVtLjkqYGlZjo0WWhqb3Y47lhAJj4vXDcTZT48bYySdYaCtOlWLuv1Vo
+         AqSCpcMf2SpgIOn7UtASmAoHLxWDiMRSt3joaW5icqYigDuLNx8f1Nb4rlp3WKUhbM
+         QGKEhktAGGDaNoCMW/fpn7v5zVxsXehwbrfQo/W/V6bqibtVCZ6xL36e+b6VuOgXJi
+         83GXgKnmfpI4maef9p9KchSEaACgPafiZIo/8k2ehniAW9x8onOTYpW6AMC5CX/KVj
+         uTi7+x5rG6tY4BvFJPnYM+1cQ3KMYCT01lxxkH9y7sUbAyjQIMRy9SlO+0nFjUkH0P
+         atwrlYISmNvrQ==
+Date:   Sun, 28 Aug 2022 16:32:47 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel <kernel@axis.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iio: buffer: Silence lock nesting splat
+Message-ID: <20220828163247.3d6417d9@jic23-huawei>
+In-Reply-To: <YwSLhWFbGb26B3mx@axis.com>
+References: <20220816080828.1218667-1-vincent.whitchurch@axis.com>
+        <CAHp75VebQfdHrfYTmF0w9M556ZV8fG5jJ2rAN5a3mrB1mbvOQw@mail.gmail.com>
+        <20220820120800.519b5eb5@jic23-huawei>
+        <YwSLhWFbGb26B3mx@axis.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v1 00/14] nvmem: core: introduce NVMEM layouts
-To:     Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <20220825214423.903672-1-michael@walle.cc>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-In-Reply-To: <20220825214423.903672-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 9540875810652269499
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejledgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeehkeevtdeiudeffeefjeevffdvteeuhfegfffgveefffejkeeuieetueevtdeutdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeehiedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiud
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.08.2022 23:44, Michael Walle wrote:
-> This is now the third attempt to fetch the MAC addresses from the VPD
-> for the Kontron sl28 boards. Previous discussions can be found here:
-> https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/
+On Tue, 23 Aug 2022 10:10:45 +0200
+Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
+
+> On Sat, Aug 20, 2022 at 01:08:00PM +0200, Jonathan Cameron wrote:
+> > On Fri, 19 Aug 2022 11:03:55 +0300
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:  
+> > > On top of that, Fixes tag?  
+> > It's going to be tricky to identify - the interface predates usecases that were IIO
+> > drivers by a long way.  I guess introduction of first IIO driver that used
+> > a callback buffer? No idea which one that was :(  
 > 
+> AFAICS there's only one IIO driver upstream using a callback buffer, and
+> it's lmp91000, so I can point the fixes tag to the patch which added
+> that.
+
+Ah. That's handy.
+
 > 
-> NVMEM cells are typically added by board code or by the devicetree. But
-> as the cells get more complex, there is (valid) push back from the
-> devicetree maintainers to not put that handling in the devicetree.
+> By the way, note that lmp91000 actually fails to probe in mainline
+> without extra patches, and it seems to have been that way for a while
+> now.  I noticed this lockdep splat when working on a new driver which
+> also uses a callback buffer.  I can post the fixes I used to get
+> lmp91000 to probe successfully (in roadtest) separately.
+That would be great.  Unfortunately drivers sometimes bit rot
+without testing.
 
-I dropped the ball waiting for Rob's reponse in the
-[PATCH 0/2] dt-bindings: nvmem: support describing cells
-https://lore.kernel.org/linux-arm-kernel/0b7b8f7ea6569f79524aea1a3d783665@walle.cc/T/
+Any plans to post updated roadtest soon?  I'm keen to add more test cases
+and use it to cleanup the remaining staging drivers.  Very helpful tool,
+but I don't want to be developing test sets against an old version if
+it's going to be costly to forward port it. No great rush though as
+I've bitten off a bit more than I was aiming to in prep for plumbers so
+not going to get anything significant done in IIO until mid September.
 
-Before we go any further can we have a clear answer from Rob (or
-Krzysztof now too?):
+Thanks,
 
+Jonathan
 
-Is there any point in having bindings like:
-
-compatible = "mac-address";
-
-for NVMEM cells nodes? So systems (Linux, U-Boot) can handle them in a
-more generic way?
-
-
-Or do we prefer more conditional drivers code (or layouts code as in
-this Michael's proposal) that will handle cells properly based on their
-names?
-
-
-I'm not arguing for any solution. I just want to make sure we choose the
-right way to proceed.
-
-
-> Therefore, introduce NVMEM layouts. They operate on the NVMEM device and
-> can add cells during runtime. That way it is possible to add complex
-> cells than it is possible right now with the offset/length/bits
-> description in the device tree. For example, you can have post processing
-> for individual cells (think of endian swapping, or ethernet offset
-> handling). You can also have cells which have no static offset, like the
-> ones in an u-boot environment. The last patches will convert the current
-> u-boot environment driver to a NVMEM layout and lifting the restriction
-> that it only works with mtd devices. But as it will change the required
-> compatible strings, it is marked as RFC for now. It also needs to have
-> its device tree schema update which is left out here.
-
-So do I get it right that we want to have:
-
-1. NVMEM drivers for providing I/O access to NVMEM devices
-2. NVMEM layouts for parsing & NVMEM cells and translating their content
-?
-
-I guess it sounds good and seems to be a clean solution.
-
-
-One thing I believe you need to handle is replacing "cell_post_process"
-callback with your layout thing.
-
-I find it confusing to have
-1. cell_post_process() CB at NVMEM device level
-2. post_process() CB at NVMEM cell level
-
-
-> For now, the layouts are selected by a specifc compatible string in a
-> device tree. E.g. the VPD on the kontron sl28 do (within a SPI flash node):
->    compatible = "kontron,sl28-vpd", "user-otp";
-> or if you'd use the u-boot environment (within an MTD patition):
->    compatible = "u-boot,env", "nvmem";
-> 
-> The "user-otp" (or "nvmem") will lead to a NVMEM device, the
-> "kontron,sl28-vpd" (or "u-boot,env") will then apply the specific layout
-> on top of the NVMEM device.
-> 
-> NVMEM layouts as modules?
-> While possible in principle, it doesn't make any sense because the NVMEM
-> core can't be compiled as a module. The layouts needs to be available at
-> probe time. (That is also the reason why they get registered with
-> subsys_initcall().) So if the NVMEM core would be a module, the layouts
-> could be modules, too.
-> 
-> Michael Walle (14):
->    net: add helper eth_addr_add()
->    of: base: add of_parse_phandle_with_optional_args()
->    nvmem: core: add an index parameter to the cell
->    nvmem: core: drop the removal of the cells in nvmem_add_cells()
->    nvmem: core: add nvmem_add_one_cell()
->    nvmem: core: introduce NVMEM layouts
->    nvmem: core: add per-cell post processing
->    dt-bindings: mtd: relax the nvmem compatible string
->    dt-bindings: nvmem: add YAML schema for the sl28 vpd layout
->    nvmem: layouts: add sl28vpd layout
->    nvmem: core: export nvmem device size
->    nvmem: layouts: rewrite the u-boot-env driver as a NVMEM layout
->    nvmem: layouts: u-boot-env: add device node
->    arm64: dts: ls1028a: sl28: get MAC addresses from VPD
-> 
->   .../devicetree/bindings/mtd/mtd.yaml          |   7 +-
->   .../nvmem/layouts/kontron,sl28-vpd.yaml       |  52 +++++
->   .../fsl-ls1028a-kontron-kbox-a-230-ls.dts     |   8 +
->   .../fsl-ls1028a-kontron-sl28-var1.dts         |   2 +
->   .../fsl-ls1028a-kontron-sl28-var2.dts         |   4 +
->   .../fsl-ls1028a-kontron-sl28-var4.dts         |   2 +
->   .../freescale/fsl-ls1028a-kontron-sl28.dts    |  13 ++
->   drivers/nvmem/Kconfig                         |   2 +
->   drivers/nvmem/Makefile                        |   1 +
->   drivers/nvmem/core.c                          | 183 +++++++++++----
->   drivers/nvmem/imx-ocotp.c                     |   4 +-
->   drivers/nvmem/layouts/Kconfig                 |  22 ++
->   drivers/nvmem/layouts/Makefile                |   7 +
->   drivers/nvmem/layouts/sl28vpd.c               | 144 ++++++++++++
->   drivers/nvmem/layouts/u-boot-env.c            | 147 ++++++++++++
->   drivers/nvmem/u-boot-env.c                    | 218 ------------------
->   include/linux/etherdevice.h                   |  14 ++
->   include/linux/nvmem-consumer.h                |  11 +
->   include/linux/nvmem-provider.h                |  47 +++-
->   include/linux/of.h                            |  25 ++
->   20 files changed, 649 insertions(+), 264 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->   create mode 100644 drivers/nvmem/layouts/Kconfig
->   create mode 100644 drivers/nvmem/layouts/Makefile
->   create mode 100644 drivers/nvmem/layouts/sl28vpd.c
->   create mode 100644 drivers/nvmem/layouts/u-boot-env.c
->   delete mode 100644 drivers/nvmem/u-boot-env.c

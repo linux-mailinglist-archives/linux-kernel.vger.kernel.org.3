@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DEC5A3DF7
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F8F5A3DF8
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiH1OPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 10:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        id S229895AbiH1OP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 10:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiH1OPv (ORCPT
+        with ESMTP id S229821AbiH1OPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 10:15:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ED213E84
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:15:49 -0700 (PDT)
+        Sun, 28 Aug 2022 10:15:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF3613F9F
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:15:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CBAA60F9F
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2012C43470
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:15:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFB9E60F9F
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:15:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662C5C433D7
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661696147;
-        bh=F8Rzx597evTrKV+vnDZAGsL1yBRhZNPv/ubmR5QIItQ=;
+        s=k20201202; t=1661696153;
+        bh=8zj1x1xLeLLzipXWrl/kSXEmFtyv39CyRFsnNZ5xakQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GYQWRpTlQQydmzfMIJd52PHL7WewEnlRmLXmF/ME3rKNdgaWIfkbZnfBJaetCrPYb
-         oyJXyddLIRcz9aDEWX/F5vCS8ko7dc3Cx7MykCmzpkAvVMP1sbHQLWpe97jvzzUVPH
-         SiTlvylR+SWEX3Xrvl753wmz3YfELXnOnUnMlhKM7m3iOIe/QJrDzcm9CKBmwWpL9J
-         YTXrXFaucyQo1FlJ7HP9nmpad02MmWn+Fgb0coCYE4o1du4ZcuVsXCo0F/oL41QoxL
-         3e7zokHqgssVINSHaY+ctV9momiaAwKvml0a/NQQ3to/Pm/2i8ffD7LJ7e/YLMDgGW
-         LjsA1ipeGtj9A==
-Received: by mail-ua1-f47.google.com with SMTP id a18so42379uak.12
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:15:47 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3g7DGbIXgedcbYRmmxNtVTnfbPVdqteZ9gMkyJeT+l3aLWFLXf
-        MpSu8mSiaukFBH3g60PY/EdZGxcr9yL1BZdTJ24=
-X-Google-Smtp-Source: AA6agR7e0WdTCaQoFePPh5prwSYiB3W4LOJTV9kd8n4LxfAAH2LlJFMk3MSNZGRwvCHEm7DQRDPdGOY6zGQRdIkorGo=
-X-Received: by 2002:ab0:4565:0:b0:395:b672:508 with SMTP id
- r92-20020ab04565000000b00395b6720508mr2190652uar.63.1661696146782; Sun, 28
- Aug 2022 07:15:46 -0700 (PDT)
+        b=i37PBmD/I56kOEG/Hp12wN7WnnZOXbO8r5eqEIrn7KcBqhOQPaFw+o5bW24P2bSMw
+         xzmmRV3fWZfZrChFwqRQzk1dB82lROiTgMCGj9CeTVu9CEuyIXr1uztWilIjRkpP49
+         yYqgFLBVolBvErS4FqhnxqRw6MCGFzetUNt78Tq8hQirtge5Ple7VD97ZFVyxm/eL9
+         fmZ9rrCQFDNNcesatJmjS1Ynwie0CJJYidbeYfM4u3/BS6IPcEi6Vgug0FLeCfV8Pt
+         ZyU/mDusiqgRTtZOukKsu+7HUhccTy2mDYQKkuRq2iKa63UljrktZGXttUCvidXcfh
+         TDGUDU3zyKexA==
+Received: by mail-vs1-f43.google.com with SMTP id w188so6041449vsb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:15:53 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2KPtie1M1SXF5sSqXAjuq4R2iUkKMFm3pGpc0FH3vGALNGBtWf
+        4PRbgyDfW8gDBqaH7kSAo4kll7QolwLEvj4jsQA=
+X-Google-Smtp-Source: AA6agR5/iR+N3klHacCtwT7e/hRVDUkTeliBga/Y2s2tAeAOQcVPLLhXsG0lpJ2OXLZSjKGiewymyPXVv42AKzLve5k=
+X-Received: by 2002:a67:d582:0:b0:390:d6dd:5612 with SMTP id
+ m2-20020a67d582000000b00390d6dd5612mr847117vsj.78.1661696152320; Sun, 28 Aug
+ 2022 07:15:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220827175436.156464-1-xry111@xry111.site> <20220827175436.156464-2-xry111@xry111.site>
-In-Reply-To: <20220827175436.156464-2-xry111@xry111.site>
+References: <20220827175436.156464-1-xry111@xry111.site> <20220827175436.156464-3-xry111@xry111.site>
+In-Reply-To: <20220827175436.156464-3-xry111@xry111.site>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 28 Aug 2022 22:15:34 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7-MNd9WsnB3r2kxRN7LveixGwQZ=qTVHB_XvW+uU9q4Q@mail.gmail.com>
-Message-ID: <CAAhV-H7-MNd9WsnB3r2kxRN7LveixGwQZ=qTVHB_XvW+uU9q4Q@mail.gmail.com>
-Subject: Re: [PATCH 1/8] LoongArch: Add CONFIG_CC_HAS_EXPLICIT_RELOCS
+Date:   Sun, 28 Aug 2022 22:15:39 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5S+9MZi5_LL11hCFePG9GK08ot_LK+mwZjh+5Hoyxutg@mail.gmail.com>
+Message-ID: <CAAhV-H5S+9MZi5_LL11hCFePG9GK08ot_LK+mwZjh+5Hoyxutg@mail.gmail.com>
+Subject: Re: [PATCH 2/8] LoongArch: Only use -Wa,-mla-* options for !CONFIG_CC_HAS_EXPLICIT_RELOCS
 To:     Xi Ruoyao <xry111@xry111.site>
 Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
@@ -68,38 +68,87 @@ Hi, Ruoyao,
 
 On Sun, Aug 28, 2022 at 1:55 AM Xi Ruoyao <xry111@xry111.site> wrote:
 >
-> GNU as >= 2.40 and GCC >= 13 will support using explicit relocation
-> hints in the assembly code, instead of la.* macros.  The usage of
-> explicit relocation hints can improve code generation so it's enabled
-> by default by GCC >= 13.  We need to adapt the kernel for this change,
-> introduce CONFIG_CC_HAS_EXPLICIT_RELOCS so we can use it in later
-> patches.
+> If explicit relocation hints is used by the toolchain, -Wa,-mla-*
+> options will be useless for C code.  Only use them for
+> !CONFIG_CC_HAS_EXPLICIT_RELOCS.
+>
+> Replace "la" with "la.pcrel" in head.S to keep the semantic consistent
+> with new and old toolchains for the low level startup code.
 >
 > Signed-off-by: Xi Ruoyao <xry111@xry111.site>
 > ---
->  arch/loongarch/Kconfig | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/loongarch/Makefile      | 15 ++++++++++++++-
+>  arch/loongarch/kernel/head.S | 10 +++++-----
+>  2 files changed, 19 insertions(+), 6 deletions(-)
 >
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 810096bbf853..e7cfd451024b 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -203,6 +203,9 @@ config SCHED_OMIT_FRAME_POINTER
->         bool
->         default y
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 415e09bdf31a..bd0ea6623245 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -40,10 +40,23 @@ endif
 >
-> +config CC_HAS_EXPLICIT_RELOCS
-> +       def_bool $(cc-option,-mexplicit-relocs) && $(as-instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
-Is it possible that we only change the Makefile and not touch Kconfig?
-
+>  cflags-y                       += -G0 -pipe -msoft-float
+>  LDFLAGS_vmlinux                        += -G0 -static -n -nostdlib
+> +
+> +ifdef CONFIG_CC_HAS_EXPLICIT_RELOCS
+> +# GCC may have -mexplicit-relocs off by default if it was built with an old
+> +# assembler.  But with CONFIG_CC_HAS_EXPLICIT_RELOCS we are sure explicit
+> +# relocation hints are supported by the assembler, so force it.
+> +cflags-y                       += -mexplicit-relocs
+> +else
+> +# Likewise, disable -mexplicit-relocs if GCC enables by default but the
+> +# assembler does not support it.
+> +cflags-y                       += $(call cc-option,-mno-explicit-relocs)
+> +# With -mno-explicit-relocs, use assembler options to adjust code generation
+> +# for symbol address.
+>  KBUILD_AFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
+>  KBUILD_CFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
+>  KBUILD_AFLAGS_MODULE           += -Wa,-mla-global-with-abs
+> -KBUILD_CFLAGS_MODULE           += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
+> +KBUILD_CFLAGS_MODULE           += -Wa,-mla-global-with-abs,-mla-local-with-abs
+> +endif
+Move all comments out of #ifdefs may make code more clear.
 
 
 Huacai
-> +
->  menu "Kernel type and options"
 >
->  source "kernel/Kconfig.hz"
+>  cflags-y += -ffreestanding
+>  cflags-y += $(call cc-option, -mno-check-zero-division)
+> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> index 01bac62a6442..eb3f641d5915 100644
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -55,17 +55,17 @@ SYM_CODE_START(kernel_entry)                        # kernel entry point
+>         li.w            t0, 0x00                # FPE=0, SXE=0, ASXE=0, BTE=0
+>         csrwr           t0, LOONGARCH_CSR_EUEN
+>
+> -       la              t0, __bss_start         # clear .bss
+> +       la.pcrel        t0, __bss_start         # clear .bss
+>         st.d            zero, t0, 0
+> -       la              t1, __bss_stop - LONGSIZE
+> +       la.pcrel        t1, __bss_stop - LONGSIZE
+>  1:
+>         addi.d          t0, t0, LONGSIZE
+>         st.d            zero, t0, 0
+>         bne             t0, t1, 1b
+>
+> -       la              t0, fw_arg0
+> +       la.pcrel        t0, fw_arg0
+>         st.d            a0, t0, 0               # firmware arguments
+> -       la              t0, fw_arg1
+> +       la.pcrel        t0, fw_arg1
+>         st.d            a1, t0, 0
+>
+>         /* KSave3 used for percpu base, initialized as 0 */
+> @@ -73,7 +73,7 @@ SYM_CODE_START(kernel_entry)                  # kernel entry point
+>         /* GPR21 used for percpu base (runtime), initialized as 0 */
+>         move            u0, zero
+>
+> -       la              tp, init_thread_union
+> +       la.pcrel        tp, init_thread_union
+>         /* Set the SP after an empty pt_regs.  */
+>         PTR_LI          sp, (_THREAD_SIZE - 32 - PT_SIZE)
+>         PTR_ADD         sp, sp, tp
 > --
 > 2.37.0
->
 >

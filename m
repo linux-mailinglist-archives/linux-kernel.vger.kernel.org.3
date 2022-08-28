@@ -2,221 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51625A3E14
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3225A3E15
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiH1OfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 10:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S229665AbiH1OgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 10:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiH1OfK (ORCPT
+        with ESMTP id S229535AbiH1OgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 10:35:10 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E440C205F2;
-        Sun, 28 Aug 2022 07:35:07 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-33dc31f25f9so141357927b3.11;
-        Sun, 28 Aug 2022 07:35:07 -0700 (PDT)
+        Sun, 28 Aug 2022 10:36:06 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67A022B35;
+        Sun, 28 Aug 2022 07:36:05 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id az27so7236592wrb.6;
+        Sun, 28 Aug 2022 07:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=L7p2fwvxLt8klY9HmVYKZQ+T4ndQ2z3sJvLvDAL9H4I=;
-        b=c3vUV9Avy1zJzePFlO4RzGyAhmXtEQ5USGZtKpnfA/rlQpPNcc8goIjTqeNlikTUSk
-         oja4q3Hn7+XMktkKvNu7MOhLaYoPHZVRqQgc8sgGE+2ZrpPWEzpBKaNrVHn1IPeSoXlP
-         2kQcBStHVNbKmVMoxnm8u15Ppjcx2/bSZFOZPKZKXIkFWW95DoFcE/EWG+Q97XjkjUOt
-         XWa9jZ9usIIxCmI8xw73qVo68paWIlTjIsAcsc8HwzJ7I+t+J26Ro2rQ3Juv+o0f9eWN
-         gBYkkWaRYtelFTNY+FFlBEmu/hsn9EezdLPLJy0fbK0Vt2kJvZWXocQC6gQK+96IZlD2
-         r9+g==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc;
+        bh=K0JOCpEvQd+GZuPmBflCaweEMH+nyxznMYdF4zG5P3U=;
+        b=eUZRGySOHSSsdd4gJLRfBPUI/soRSYilzZkAz4N0gygpPyzO+UzA9U5HMqfiK6Z2qD
+         DODOFyZCCJ25yG1hylyiRmb+YfyLxugBiJi3gJx70EusQ6an2WQYidnIgKjCE67b4RO5
+         kZ3wr5D8jkAN8qC3qBCATmKtElNmFhvf7jefqxKisksNp5873JrMJaDHZyHaZfeNuZBE
+         8K47f93Jt6UfATKMLVKnr4PrBNhdpRjciWlzIavgt+TfVbEinWWsCMbYsMX+5fv5Ua7i
+         yRLQZbJZmjl7bS5n2065Kbwy1h0P5stc7ai068oj49L3HXQxbhftoSnKeFvAHD/VmMkt
+         abhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=L7p2fwvxLt8klY9HmVYKZQ+T4ndQ2z3sJvLvDAL9H4I=;
-        b=4foZbHBy+m8dk9fnxN9dNOeWZSLPMNQJRglMebHk26zenvXkqM1XQ76S/SECg3di7S
-         YhNps61Dm+/yoEb/65js0jXqe0vMzdEVxvn20EvUwa7DOB2r2TOIRcfRRm3HWI/XQR3P
-         Jxfbr057v9PoNNrV+MaIArGcml5Rq3TkeUb0CE2y1XF8cpuJ4ldgsAs3zBaDrlGYg44+
-         dU077a7GPA6zFJIUVaDKvW2h6spbBxmjHUk3x5bczIwYKttgMgfNvKBFycKebENX+W+5
-         0s7Oq8VKinr4KURsgK5Codh9GDONDoozwqmXvm4zmMQ1z/UlaGHVj0fdrkcJkhwAiI1s
-         VzJw==
-X-Gm-Message-State: ACgBeo2nEXvbWCPdGNUUOFdnaB64eZeVQD/6Bn+v6oxLn3imdp8B1SPV
-        5uKgHOqMofDT5q7TZtGr3osop01KKQA7c+PE6lXCZnSd0upBs0pW
-X-Google-Smtp-Source: AA6agR5/BXsmaULJ/frA2pXy0N4/lsJ/CuEw3jScIHAzcdoqV1jd3ECni0cwlsnnBlM2DFUsHBfcEw/tz+xq3QikrKM=
-X-Received: by 2002:a25:d791:0:b0:695:9953:d27b with SMTP id
- o139-20020a25d791000000b006959953d27bmr5403124ybg.61.1661697306815; Sun, 28
- Aug 2022 07:35:06 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc;
+        bh=K0JOCpEvQd+GZuPmBflCaweEMH+nyxznMYdF4zG5P3U=;
+        b=5PCVZTKNFHoq+vWcDAn0dos/E8cFYqb6W/UtG6Ic/NxUZkHml+Z6vbN6MuvSjRvcoC
+         fOWXa6TRBr05PZeGMStwCHWuJ81cV0Qr9GYPal/74pAGunEqFBrXRSRprl7lVIrZirLX
+         ARxG8mY/BpeHyANaMEIwWyNBqGaWF1ftuhr40cnqdjslKqyRP41mnkSDfM55h37rGsmj
+         nAt5jERaL9optskG3coxBsW2eAxL6xVYTr8MhR6Q3YiZ5WLBrWQXXglK/WnTY5PDdPau
+         tPpe+faQJQF1LC8s/i8obutNLYcWXA8pjMkMDx1tybCVLr/Wqdh9hkq/sbAp1hlqrxWe
+         QlPQ==
+X-Gm-Message-State: ACgBeo24NJr3deRepjLQnA9syDw5cQWGuZp9LjS2WTZPViC7UMoce5hv
+        7p5GojH0Ext10lNE4mBN7NE=
+X-Google-Smtp-Source: AA6agR4VEKm2/r9fcwsUdsrZ41itEOT6DaSEzS9tdNEZ1A5h76XvMR9lOKdgG2aTFfR9XEgI6qRkcw==
+X-Received: by 2002:a5d:64eb:0:b0:225:74d5:7b07 with SMTP id g11-20020a5d64eb000000b0022574d57b07mr4532248wri.616.1661697364372;
+        Sun, 28 Aug 2022 07:36:04 -0700 (PDT)
+Received: from gmail.com ([31.46.246.46])
+        by smtp.gmail.com with ESMTPSA id e18-20020adff352000000b002252d897876sm4626990wrp.32.2022.08.28.07.36.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 07:36:03 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 28 Aug 2022 16:35:57 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [GIT PULL] perf fixes
+Message-ID: <Ywt9TYx6rWC5RHaV@gmail.com>
 MIME-Version: 1.0
-From:   Jiacheng Xu <578001344xu@gmail.com>
-Date:   Sun, 28 Aug 2022 22:34:52 +0800
-Message-ID: <CAO4S-meHv6Z-Wr1ZLz6j=i7fWkhPijv0CxE5JOFDWJOFH=C_3w@mail.gmail.com>
-Subject: WARNING in md_alloc
-To:     linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        martin.petersen@oracle.com, mcgrof@kernel.org
-Cc:     linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Linus,
 
-When using modified Syzkaller to fuzz the Linux kernel-5.15.58, the
-following crash was triggered.
+Please pull the latest perf/urgent git tree from:
 
-HEAD commit: 568035b01cfb Linux-5.15.58
-git tree: upstream
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-urgent-2022-08-28
 
-console output:
-https://drive.google.com/file/d/1FU_URJHWwRs2KtNZ26WzxlSGE95DWBxe/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1wgIUDwP5ho29AM-K7HhysSTfWFpfXYkG/view?usp=sharing
-syz repro: https://drive.google.com/file/d/1RYMFWOThdDCrjoFgRZrzfzXJP2AjHOLW/view?usp=sharing
-C reproducer: https://drive.google.com/file/d/1ODU9zL9mWsfjlQJzz4WjS8IfDlvt_68F/view?usp=sharing
+   # HEAD: 11745ecfe8fea4b4a4c322967a7605d2ecbd5080 perf/x86/intel/uncore: Fix broken read_counter() for SNB IMC PMU
 
-Environment:
-Ubuntu 20.04 on Linux 5.4.0
-QEMU 4.2.1:
-qemu-system-x86_64 \
-  -m 2G \
-  -smp 2 \
-  -kernel /home/workdir/bzImage \
-  -append "console=ttyS0 root=/dev/sda earlyprintk=serial net.ifnames=0" \
-  -drive file=/home/workdir/stretch.img,format=raw \
-  -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 \
-  -net nic,model=e1000 \
-  -enable-kvm \
-  -nographic \
-  -pidfile vm.pid \
-  2>&1 | tee vm.log
+Misc fixes: an Arch-LBR fix, a PEBS enumeration fix, an Intel DS fix,
+PEBS constraints fix on Alder Lake CPUs and an Intel uncore PMU fix.
 
-If you fix this issue, please add the following tag to the commit:
-Reported-by:  Jiacheng Xu<stitch@zju.edu.cn>
+ Thanks,
 
-==========================================================
-loop7: detected capacity change from 0 to 96
-NILFS (loop7): broken superblock, retrying with spare superblock
-(blocksize = 1024)
-NILFS (loop7): broken superblock, retrying with spare superblock
-(blocksize = 2048)
-NILFS (loop7): mounting unchecked fs
-NILFS (loop7): recovery complete
-sp0: Synchronizing with TNC
-FAULT_INJECTION: forcing a failure.
-name failslab, interval 1, probability 0, space 0, times 1
-CPU: 2 PID: 7259 Comm: syz-executor Not tainted 5.15.58 #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x8b/0xb3 lib/dump_stack.c:106
- fail_dump lib/fault-inject.c:52 [inline]
- should_fail.cold+0x5/0xa lib/fault-inject.c:146
- should_failslab+0x5/0x10 mm/slab_common.c:1337
- slab_pre_alloc_hook mm/slab.h:494 [inline]
- slab_alloc_node mm/slub.c:3129 [inline]
- slab_alloc mm/slub.c:3223 [inline]
- kmem_cache_alloc+0x4e/0x820 mm/slub.c:3228
- kmem_cache_zalloc include/linux/slab.h:711 [inline]
- __kernfs_new_node+0xd4/0x8b0 fs/kernfs/dir.c:593
- kernfs_new_node+0x93/0x120 fs/kernfs/dir.c:655
- __kernfs_create_file+0x51/0x350 fs/kernfs/file.c:985
- sysfs_add_file_mode_ns+0x226/0x540 fs/sysfs/file.c:317
- sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:343
- sysfs_create_file include/linux/sysfs.h:607 [inline]
- device_create_file+0xe6/0x1d0 drivers/base/core.c:2762
- device_add+0x5b0/0x1d40 drivers/base/core.c:3338
- device_add_disk+0x2fd/0xf90 block/genhd.c:446
- add_disk include/linux/genhd.h:212 [inline]
- md_alloc+0x947/0x11c0 drivers/md/md.c:5714
- md_probe+0x69/0x70 drivers/md/md.c:5744
- blk_request_module+0x111/0x1d0 block/genhd.c:681
- blkdev_get_no_open+0x178/0x1e0 block/bdev.c:740
- blkdev_get_by_dev block/bdev.c:804 [inline]
- blkdev_get_by_dev+0x73/0x900 block/bdev.c:790
- swsusp_check+0x97/0x2f0 kernel/power/swap.c:1526
- software_resume kernel/power/hibernate.c:977 [inline]
- software_resume+0x124/0x230 kernel/power/hibernate.c:912
- resume_store+0xf1/0x130 kernel/power/hibernate.c:1179
- kobj_attr_store+0x50/0x80 lib/kobject.c:856
- sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:139
- kernfs_fop_write_iter+0x337/0x500 fs/kernfs/file.c:296
- call_write_iter include/linux/fs.h:2087 [inline]
- new_sync_write+0x432/0x660 fs/read_write.c:507
- vfs_write+0x67a/0xae0 fs/read_write.c:594
- ksys_write+0x12d/0x250 fs/read_write.c:647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
-RIP: 0033:0x7f85eaf61dfd
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f85e84c9c58 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f85eb0880a0 RCX: 00007f85eaf61dfd
-RDX: 000000000000fdef RSI: 0000000020002500 RDI: 000000000000000d
-RBP: 00007f85e84c9c90 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000001a
-R13: 00007ffe899206df R14: 00007ffe89920880 R15: 00007f85e84c9dc0
- </TASK>
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 7259 at block/genhd.c:544
-device_add_disk+0x383/0xf90 block/genhd.c:544
-Modules linked in:
-CPU: 2 PID: 7259 Comm: syz-executor Not tainted 5.15.58 #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:device_add_disk+0x383/0xf90 block/genhd.c:544
-Code: 74 08 3c 03 0f 8e 02 0a 00 00 8b 5d 00 bf 03 01 00 00 89 de e8
-1e 2b a6 fd 81 fb 03 01 00 00 0f 84 3b 02 00 00 e8 ad 29 a6 fd <0f> 0b
-41 bc 01 00 00 00 e8 a0 29 a6 fd 44 89 e0 48 83 c4 38 5b 5d
-RSP: 0018:ffffc9000826fa08 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: 0000000000000009 RCX: 0000000000040000
-RDX: ffffc900018d1000 RSI: ffff888108590000 RDI: 0000000000000002
-RBP: ffff888104e6e000 R08: ffffffff83d022a3 R09: 0000000000000103
-R10: 0000000000000005 R11: ffffed1021112187 R12: 00000000fffffff4
-R13: ffff888108890c00 R14: ffff888104e6e004 R15: ffff888104e6e080
-FS:  00007f85e84ca700(0000) GS:ffff888063f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000560a42f27150 CR3: 0000000016364000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- add_disk include/linux/genhd.h:212 [inline]
- md_alloc+0x947/0x11c0 drivers/md/md.c:5714
- md_probe+0x69/0x70 drivers/md/md.c:5744
- blk_request_module+0x111/0x1d0 block/genhd.c:681
- blkdev_get_no_open+0x178/0x1e0 block/bdev.c:740
- blkdev_get_by_dev block/bdev.c:804 [inline]
- blkdev_get_by_dev+0x73/0x900 block/bdev.c:790
- swsusp_check+0x97/0x2f0 kernel/power/swap.c:1526
- software_resume kernel/power/hibernate.c:977 [inline]
- software_resume+0x124/0x230 kernel/power/hibernate.c:912
- resume_store+0xf1/0x130 kernel/power/hibernate.c:1179
- kobj_attr_store+0x50/0x80 lib/kobject.c:856
- sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:139
- kernfs_fop_write_iter+0x337/0x500 fs/kernfs/file.c:296
- call_write_iter include/linux/fs.h:2087 [inline]
- new_sync_write+0x432/0x660 fs/read_write.c:507
- vfs_write+0x67a/0xae0 fs/read_write.c:594
- ksys_write+0x12d/0x250 fs/read_write.c:647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
-RIP: 0033:0x7f85eaf61dfd
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f85e84c9c58 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f85eb0880a0 RCX: 00007f85eaf61dfd
-RDX: 000000000000fdef RSI: 0000000020002500 RDI: 000000000000000d
-RBP: 00007f85e84c9c90 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000001a
-R13: 00007ffe899206df R14: 00007ffe89920880 R15: 00007f85e84c9dc0
- </TASK>
+	Ingo
+
+------------------>
+Kan Liang (2):
+      perf/x86/lbr: Enable the branch type for the Arch LBR by default
+      perf/x86/intel: Fix pebs event constraints for ADL
+
+Peter Zijlstra (1):
+      perf/x86/core: Set pebs_capable and PMU_FL_PEBS_ALL for the Baseline
+
+Stephane Eranian (2):
+      perf/x86/intel/ds: Fix precise store latency handling
+      perf/x86/intel/uncore: Fix broken read_counter() for SNB IMC PMU
+
+
+ arch/x86/events/intel/core.c       |  4 ----
+ arch/x86/events/intel/ds.c         | 13 +++++++++++--
+ arch/x86/events/intel/lbr.c        |  8 ++++++++
+ arch/x86/events/intel/uncore_snb.c | 18 +++++++++++++++++-
+ 4 files changed, 36 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 2db93498ff71..cb98a05ee743 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -6291,10 +6291,8 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.pebs_aliases = NULL;
+ 		x86_pmu.pebs_prec_dist = true;
+ 		x86_pmu.pebs_block = true;
+-		x86_pmu.pebs_capable = ~0ULL;
+ 		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
+ 		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
+-		x86_pmu.flags |= PMU_FL_PEBS_ALL;
+ 		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
+ 		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
+ 
+@@ -6337,10 +6335,8 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.pebs_aliases = NULL;
+ 		x86_pmu.pebs_prec_dist = true;
+ 		x86_pmu.pebs_block = true;
+-		x86_pmu.pebs_capable = ~0ULL;
+ 		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
+ 		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
+-		x86_pmu.flags |= PMU_FL_PEBS_ALL;
+ 		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
+ 		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
+ 		x86_pmu.lbr_pt_coexist = true;
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index ba60427caa6d..de1f55d51784 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -291,6 +291,7 @@ static u64 load_latency_data(struct perf_event *event, u64 status)
+ static u64 store_latency_data(struct perf_event *event, u64 status)
+ {
+ 	union intel_x86_pebs_dse dse;
++	union perf_mem_data_src src;
+ 	u64 val;
+ 
+ 	dse.val = status;
+@@ -304,7 +305,14 @@ static u64 store_latency_data(struct perf_event *event, u64 status)
+ 
+ 	val |= P(BLK, NA);
+ 
+-	return val;
++	/*
++	 * the pebs_data_source table is only for loads
++	 * so override the mem_op to say STORE instead
++	 */
++	src.val = val;
++	src.mem_op = P(OP,STORE);
++
++	return src.val;
+ }
+ 
+ struct pebs_record_core {
+@@ -822,7 +830,7 @@ struct event_constraint intel_glm_pebs_event_constraints[] = {
+ 
+ struct event_constraint intel_grt_pebs_event_constraints[] = {
+ 	/* Allow all events as PEBS with no flags */
+-	INTEL_HYBRID_LAT_CONSTRAINT(0x5d0, 0xf),
++	INTEL_HYBRID_LAT_CONSTRAINT(0x5d0, 0x3),
+ 	INTEL_HYBRID_LAT_CONSTRAINT(0x6d0, 0xf),
+ 	EVENT_CONSTRAINT_END
+ };
+@@ -2262,6 +2270,7 @@ void __init intel_ds_init(void)
+ 					PERF_SAMPLE_BRANCH_STACK |
+ 					PERF_SAMPLE_TIME;
+ 				x86_pmu.flags |= PMU_FL_PEBS_ALL;
++				x86_pmu.pebs_capable = ~0ULL;
+ 				pebs_qual = "-baseline";
+ 				x86_get_pmu(smp_processor_id())->capabilities |= PERF_PMU_CAP_EXTENDED_REGS;
+ 			} else {
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 4f70fb6c2c1e..47fca6a7a8bc 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1097,6 +1097,14 @@ static int intel_pmu_setup_hw_lbr_filter(struct perf_event *event)
+ 
+ 	if (static_cpu_has(X86_FEATURE_ARCH_LBR)) {
+ 		reg->config = mask;
++
++		/*
++		 * The Arch LBR HW can retrieve the common branch types
++		 * from the LBR_INFO. It doesn't require the high overhead
++		 * SW disassemble.
++		 * Enable the branch type by default for the Arch LBR.
++		 */
++		reg->reg |= X86_BR_TYPE_SAVE;
+ 		return 0;
+ 	}
+ 
+diff --git a/arch/x86/events/intel/uncore_snb.c b/arch/x86/events/intel/uncore_snb.c
+index ce440011cc4e..1ef4f7861e2e 100644
+--- a/arch/x86/events/intel/uncore_snb.c
++++ b/arch/x86/events/intel/uncore_snb.c
+@@ -841,6 +841,22 @@ int snb_pci2phy_map_init(int devid)
+ 	return 0;
+ }
+ 
++static u64 snb_uncore_imc_read_counter(struct intel_uncore_box *box, struct perf_event *event)
++{
++	struct hw_perf_event *hwc = &event->hw;
++
++	/*
++	 * SNB IMC counters are 32-bit and are laid out back to back
++	 * in MMIO space. Therefore we must use a 32-bit accessor function
++	 * using readq() from uncore_mmio_read_counter() causes problems
++	 * because it is reading 64-bit at a time. This is okay for the
++	 * uncore_perf_event_update() function because it drops the upper
++	 * 32-bits but not okay for plain uncore_read_counter() as invoked
++	 * in uncore_pmu_event_start().
++	 */
++	return (u64)readl(box->io_addr + hwc->event_base);
++}
++
+ static struct pmu snb_uncore_imc_pmu = {
+ 	.task_ctx_nr	= perf_invalid_context,
+ 	.event_init	= snb_uncore_imc_event_init,
+@@ -860,7 +876,7 @@ static struct intel_uncore_ops snb_uncore_imc_ops = {
+ 	.disable_event	= snb_uncore_imc_disable_event,
+ 	.enable_event	= snb_uncore_imc_enable_event,
+ 	.hw_config	= snb_uncore_imc_hw_config,
+-	.read_counter	= uncore_mmio_read_counter,
++	.read_counter	= snb_uncore_imc_read_counter,
+ };
+ 
+ static struct intel_uncore_type snb_uncore_imc = {

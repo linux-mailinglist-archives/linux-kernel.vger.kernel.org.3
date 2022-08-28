@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884895A3FB3
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4183F5A3FBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiH1Uyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 16:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S230140AbiH1U5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 16:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH1Uyd (ORCPT
+        with ESMTP id S229648AbiH1U5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 16:54:33 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F027F21A;
-        Sun, 28 Aug 2022 13:54:29 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id t5so6243513pjs.0;
-        Sun, 28 Aug 2022 13:54:29 -0700 (PDT)
+        Sun, 28 Aug 2022 16:57:35 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF4530F4B;
+        Sun, 28 Aug 2022 13:57:32 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id 10so5172218iou.2;
+        Sun, 28 Aug 2022 13:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=WkR9LaSKiyJhtlTTWqMUWeVX6Mln5pRmeIixpHeSGbc=;
-        b=IceoL4PGOPoCpsJ0DfTNHNc/+4q/6ByhIWG7OStXeUIyPthBT5vcdYk+rTyzMuDjlL
-         IjVqYkgfLAmwbnSiHzIV83ehDQ/SiRfIGTbO5CBnJkm8L+3Isf3F64DdUiRV5/9pd4GQ
-         BsMnKRlfov5bLY/jpAhXOncSsD6nUuJ05gK27MUDvitzher+1jLSprVl1nMTKmhpxz7D
-         ehuupBsqjPgQThAbUnBkxSiqGl++sul2fNuG0Aq1UJaZBc0kdlRTKvw325DwQ5nYiN0v
-         B9ZktXqWISLS4dQisgL1U7qmTABLUwItkeDbIhK/Zx+3YidH3VUB6PTXATBUR4WWzMcG
-         nUWA==
+        bh=mC6gBj0kuKVX2cf4bAsxRZgtAWFeJDMdJEm3tu/7KE0=;
+        b=T0fmWP96TcARxU5ZFjM7lFdHzW89Psc3kO7UC2oX8G5q4OBprGJlGx+gGXdPZ/wkts
+         v6sbtR146h3BAhGS+pJgskLcv20KW/b7YLIbI8b6BpwK3ClfOQo4X1pDW8vEy2h/0T+H
+         XWEhAhx/I7af53VtAP4SivnEvz9f/9WWJZq01VR0dmtxybtBBEVjO9GpENg08SnGWalJ
+         /NH+tLza1adfvOw7Wj55GY0uHnK5u5uurjEYcGdBF72cfVhN1Ag9suAfhfZE86bwF9Ks
+         g//GK/9MBKN0ZB+BSjlp/d2Tm2cvcxii9112ibW4owH68tkpFVonBLjp0geC7YZwbkNv
+         4mNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=WkR9LaSKiyJhtlTTWqMUWeVX6Mln5pRmeIixpHeSGbc=;
-        b=FlQ03779q65Ud4ygKo85ggFiTvM2/zIUq9lCB8GesCrAOusJaf0cBS8ybG5uzyjTnr
-         18DLSAyakwnc0CnsaB43+bkf5BikAr/FnR4xASbdhIYwZAtZbEyJDl4jdB18q4yY7224
-         zN9nFzQ/cJYWrXEtQFlrf8q81toN14YFbSj5wFUQzpYsYS50Idnxks3wpvuuyGLCsM55
-         9LMGi5ewWqqKBtPRSMt5fPeTTissaiYizMe5fnbza2mY4b2n3z+wdomj9MQBm3JD06iu
-         Uhm9va56pHEWJs1AICDzwUmbKoEBwuxB3F8AkRLzg1Bi/L5iaGQX59gKltsGrG3vH72i
-         3dzA==
-X-Gm-Message-State: ACgBeo0Ef9QSmGeiJil3+DFVSr6yZGdE2qORYbObE3p/po8EDczLhSjx
-        8Y9sWv8KOLS1C6ktsf1uEDR4a4BrM7xQfQ==
-X-Google-Smtp-Source: AA6agR4kdxcOS9nzv3/oVdsH1XQhYuTu2SUxhvE6Agpfxe6KsXEKfWMMVPyRDcv7WONer0F6Ebv2eA==
-X-Received: by 2002:a17:902:cf42:b0:172:ed15:ee with SMTP id e2-20020a170902cf4200b00172ed1500eemr13162190plg.149.1661720069334;
-        Sun, 28 Aug 2022 13:54:29 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id 8-20020a17090a018800b001fb277223bdsm5198017pjc.2.2022.08.28.13.54.28
+        bh=mC6gBj0kuKVX2cf4bAsxRZgtAWFeJDMdJEm3tu/7KE0=;
+        b=kTjWd42MSykTpBguE0uyEmfPTHpLeFQ/xVZv1phMDFG82tSJXWEhoSDSSCb3ob48qQ
+         NIlrwHcqA5/pdwg0zUh++WNy2sBux4qwz3P7DUjaayC7P1GVYI/pcFGWaOsCZwXVvXk6
+         wTb6ADLsq9FjQmL3UWgar9lWiBW4iMZwPeJ/9vl64/inTyW/gRB0SET3SsOfL9XT3WXy
+         1nm+uXHxdSnL7ALs6M4BDas+hD6La0QYs6b4A+deUkA9cELzLEZVVlUc5ACr/jaHXo0o
+         CH2/acmi88PG/5GJcZVrWHh+vLjGrZCU48nzJubFpITY0WaNMI70Xt8J76Lky8B3xMOo
+         4ccw==
+X-Gm-Message-State: ACgBeo1tcMSi34oJq8rn1bsJciTroEjvGbEtwuyPoEIdumyipT3t9o7E
+        im3h0rlIIVc27qbuCYT0LSI=
+X-Google-Smtp-Source: AA6agR6OO+f6eE3ZKSSjmUojO8RtfbWgx8DaB8WYlp3Dx1ldjtQ//0oSwZmHxWqjfUCx/WFJwFzd2w==
+X-Received: by 2002:a05:6638:2105:b0:34a:694:4fa4 with SMTP id n5-20020a056638210500b0034a06944fa4mr9332943jaj.116.1661720251715;
+        Sun, 28 Aug 2022 13:57:31 -0700 (PDT)
+Received: from fedora.. ([2604:2d80:4d8e:a000:6063:7cd5:2f24:16a6])
+        by smtp.gmail.com with ESMTPSA id k7-20020a02c767000000b00349be1ef390sm3572404jao.121.2022.08.28.13.57.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 13:54:29 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] drivers/acpi/processor_idle: check the return value of acpi_fetch_acpi_dev()
-Date:   Sun, 28 Aug 2022 13:54:16 -0700
-Message-Id: <20220828205416.1957305-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 28 Aug 2022 13:57:31 -0700 (PDT)
+From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>
+Subject: [PATCH v4 0/4] Add support for Xiaomi Poco F1 EBBG variant
+Date:   Sun, 28 Aug 2022 15:57:19 -0500
+Message-Id: <20220828205723.20834-1-joelselvaraj.oss@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,27 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of acpi_fetch_acpi_dev() could be NULL, which will
-cause null pointer dereference if used in acpi_device_hid().
+Changes in v4:
+--------------
+- Update board's compatible and model property to distinguish between the
+two variants. (Suggested by Krzysztof Kozlowski and Marijn Suijten)
+- Update the dt-bindings as per the new compatible values.
+(Fix checkpatch.pl script warnings)
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/acpi/processor_idle.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 16a1663d02d4..519f8f741da3 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -1117,6 +1117,8 @@ static int acpi_processor_get_lpi_info(struct acpi_processor *pr)
- 	status = acpi_get_parent(handle, &pr_ahandle);
- 	while (ACPI_SUCCESS(status)) {
- 		d = acpi_fetch_acpi_dev(pr_ahandle);
-+		if (!d)
-+			break;
- 		handle = pr_ahandle;
+Changes in v3:
+--------------
+- Approach suggested by Marijn Suijten and Krzysztof Kozlowski to make
+git handle renames more appropriately and to avoid moving large chunks of
+code. Helps with reviewing the patch.
  
- 		if (strcmp(acpi_device_hid(d), ACPI_PROCESSOR_CONTAINER_HID))
+Changes in v2:
+--------------
+- Fix issue with builds breaking across multiple commits making git bisect
+harder to find where the rename has happened.
+
+There are two variants of Xiaomi Poco F1.
+- Tianma variant with NOVATEK NT36672A panel + touchscreen manufactured
+  by Tianma
+- EBBG variant with Focaltech FT8719 panel + touchscreen manufactured
+  by EBBG
+
+The current sdm845-xiaomi-beryllium.dts represents Tianma panel variant.
+
+To add support for the EBBG variant:
+------------------------------------
+- Rename sdm845-xiaomi-beryllium.dts to sdm845-xiaomi-beryllium-common.dtsi
+- Generalize the display panel node by assigning label, removing
+compatible property and renaming the panel endpoints to be generic.
+- Create a dts for the Tianma variant called
+sdm845-xiaomi-beryllium-tianma.dts which will inherit the common dtsi and
+set the compatible property for the respective display panel.
+- Adjust the Makefile since the sdm845-xiaomi-beryllium.dts is now called
+sdm845-xiaomi-beryllium-tianma.dts for the tianma variant.
+- Create sdm845-xiaomi-beryllium-ebbg.dts for the EBBG variant which will
+inherit the common dtsi and set the compatible property for the respective
+display panel.
+
+Note:
+-----
+Both the panels are already upstreamed and the split is based on them.
+There were patches earlier for both the touchscreens, but they are not
+accepted in upstream yet. Once they are accepted, we will add them to
+respective variants.
+
+Joel Selvaraj (4):
+  dt-bindings: arm: qcom: update beryllium compatible property
+  arm64: dts: qcom: split beryllium dts into common dtsi and tianma dts
+  dt-bindings: arm: qcom: Add Xiaomi Poco F1 EBBG variant bindings
+  arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce Xiaomi Poco
+    F1 EBBG variant
+
+ Documentation/devicetree/bindings/arm/qcom.yaml   |  3 ++-
+ arch/arm64/boot/dts/qcom/Makefile                 |  3 ++-
+ ...um.dts => sdm845-xiaomi-beryllium-common.dtsi} | 11 +++++------
+ .../dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts     | 15 +++++++++++++++
+ .../dts/qcom/sdm845-xiaomi-beryllium-tianma.dts   | 15 +++++++++++++++
+ 5 files changed, 39 insertions(+), 8 deletions(-)
+ rename arch/arm64/boot/dts/qcom/{sdm845-xiaomi-beryllium.dts => sdm845-xiaomi-beryllium-common.dtsi} (98%)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts
+
 -- 
-2.25.1
+2.37.2
 

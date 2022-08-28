@@ -2,61 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C2D5A3B63
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 06:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313BE5A3B69
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 06:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiH1EMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 00:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S229501AbiH1ESP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 00:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiH1EMg (ORCPT
+        with ESMTP id S229445AbiH1ESN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 00:12:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE9D32EFA;
-        Sat, 27 Aug 2022 21:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661659955; x=1693195955;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y1cvwA5B/KTDuGwWbT7lYJngHEIcaBGUlKJsOxZFDTE=;
-  b=gngvyIobVmWB4suUfw/7i8KzgVgr6WHQgsLUC2cHnR0kJwV/rrdqDD6z
-   TJwvvaR4vLM6IlMunOoJs7FlcYyHZVgHY5BVY0CgL7OM9R0X85n8399hm
-   KIFzonf+9llNiBemj3ZAZxHg82/9cDWjD8Bv4hZ4kfI8qmgLSn9maWPwp
-   UDKo6LOfI2BbDLLZ/Z40uhXjjput2+bov7m5yjuhl7gHRlO7pMVPNVL3l
-   /9kxZLGqfQyzFF+XA8+m7ceobPMzCw66T3CFqfgdIetTGrUJ6TLK8s9be
-   7C+Vo3JOmHlEwe8Wj043ys5IsV2vi8ZyelR9mcuhb/fG3QoS9hjz6eQSc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="294718541"
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="294718541"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 21:12:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="587769335"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 21:12:34 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oS9ez-0000mU-1h;
-        Sun, 28 Aug 2022 04:12:33 +0000
-Date:   Sun, 28 Aug 2022 12:12:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [intel-tdx:guest-attest 3/9] htmldocs:
- Documentation/x86/tdx.rst:275: WARNING: Field list ends without a blank
- line; unexpected unindent.
-Message-ID: <202208281215.tlxpe8Ws-lkp@intel.com>
+        Sun, 28 Aug 2022 00:18:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4643CBE0;
+        Sat, 27 Aug 2022 21:18:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14947B80AB0;
+        Sun, 28 Aug 2022 04:18:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A00DC433D6;
+        Sun, 28 Aug 2022 04:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661660289;
+        bh=b1DxuemUuHqOzbSQHotO5yGNBJEyQ9fNAcJWznoBnHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nmqpvICagbOYzuUK7zRSHuKWYR4Q6wHz8Z9BkMNnSLOBbT3S9p5jf0P52D7k/ZA34
+         bP6vV99xNBskD3SnyAx9kgBAXl7RZWs0v8z8zyi4DZ49GSquJa1D52Nop6T5IsWn9b
+         50PJkZjDYXCr5OT1/m3MiZSXOT4WN1QSb+9RZEawAlQPjul2E9aPJSWl0qAp/0zVP0
+         TLRINEII6KF7d2AcAPgWVRhqFhnirzGoVeJ73gOpnN7pybKLs78LO5I1El23pKyXGq
+         jPA+f4DkI4LJcocNVCzvyeTM7yQdnYM+rQTA8bHrXCWMPlN69lDOPDJAvOETpgzis/
+         8N8bc3zBd4WMw==
+Date:   Sun, 28 Aug 2022 07:18:02 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Subject: Re: [PATCH Part2 v6 02/49] iommu/amd: Introduce function to check
+ SEV-SNP support
+Message-ID: <YwrseptOq4tFPylD@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6r+WSYXLZj-Bs5jpo4CR3+H5cpND0GHjsmgPacBK1GH_Q@mail.gmail.com>
+ <SN6PR12MB2767A51D40E7F53395770DE58EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <CAMkAt6qorwbAXaPaCaSm0SC9o2uQ9ZQzB6s1kBkvAv2D4tkUug@mail.gmail.com>
+ <YwbQKeDRQF0XGWo7@kernel.org>
+ <YwbQtaaCkBwezpB+@kernel.org>
+ <SN6PR12MB27678E2944605E11B37267CC8E759@SN6PR12MB2767.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <SN6PR12MB27678E2944605E11B37267CC8E759@SN6PR12MB2767.namprd12.prod.outlook.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,42 +94,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-attest
-head:   32e0f882efcb0632adda39679d116f589f249d27
-commit: c7d3f5519cee8f4cc42ed709450b48dd41876418 [3/9] Documentation/x86: Document TDX attestation process
-reproduce:
-        # https://github.com/intel/tdx/commit/c7d3f5519cee8f4cc42ed709450b48dd41876418
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-attest
-        git checkout c7d3f5519cee8f4cc42ed709450b48dd41876418
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+On Fri, Aug 26, 2022 at 06:54:16PM +0000, Kalra, Ashish wrote:
+> [AMD Official Use Only - General]
+> 
+> Hello Jarkko,
+> 
+> >> 
+> >> It really should be, in order to have any practical use:
+> >> 
+> >> 	if (no_iommu) {
+> >> 		pr_err("SEV-SNP: IOMMU is disabled.\n");
+> >> 		return false;
+> >> 	}
+> >> 
+> >> 	if (iommu_default_passthrough()) {
+> >> 		pr_err("SEV-SNP: IOMMU is configured in passthrough mode.\n");
+> >> 		return false;
+> >> 	}
+> >> 
+> >> The comment is *completely* redundant, it absolutely does not serve 
+> >> any sane purpose. It just tells what the code already clearly stating.
+> >> 
+> >> The combo error message on the other hand leaves you to the question 
+> >> "which one was it", and for that reason combining the checks leaves 
+> >> you to a louse debugging experience.
+> 
+> >Also, are those really *errors*? That implies that there is something wrong.
+> 
+> >Since you can have a legit configuration, IMHO they should be either warn or info. What do you think?
+> 
+> >They are definitely not errors
+> 
+> Yes, they can be warn or info, but as I mentioned above this patch is now part of IOMMU + SNP series,
+> so these comments are now relevant for that.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yeah, warn/info/error is less relevant than the
+second point I was making.
 
-All warnings (new ones prefixed by >>):
+It's a good idea to spit out two instead of one
+to make best of spitting out anything in the first
+place :-) That way you make no mistake interpreting
+what does the log message connect to, which can
+sometimes make a difference while debugging a
+kernel issue.
 
->> Documentation/x86/tdx.rst:275: WARNING: Field list ends without a blank line; unexpected unindent.
-
-vim +275 Documentation/x86/tdx.rst
-
-   266	
-   267	Input parameters: Parameters passed to the IOCTL and related details.
-   268	Output          : Details about output data and return value (with details
- > 269	                  about the non common error values).
-   270	
-   271	TDX_CMD_GET_REPORT
-   272	------------------
-   273	
-   274	:Input parameters: struct tdx_report_req
- > 275	:Output          : Upon successful execution, TDREPORT data is copied to
-   276	                   tdx_report_req.tdreport and returns 0 or returns
-   277	                   -EIO on TDCALL failure and standard error number on
-   278	                   other common failures.
-   279	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+BR, Jarkko

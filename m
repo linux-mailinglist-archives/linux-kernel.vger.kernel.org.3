@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF23D5A3D29
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 12:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A435A3D2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 12:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiH1KT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 06:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S229602AbiH1KXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 06:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiH1KT4 (ORCPT
+        with ESMTP id S229436AbiH1KXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 06:19:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB5713FAC
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 03:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661681994; x=1693217994;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aH3rdrlnfu6yHPTlDNyVCLLXX0V0IGLJm62+sxeXb/I=;
-  b=MGbofsdFuLGkM1e6icFttEIdTP5Mr3DHIahB+3jn9YuNvnRHarK07b3O
-   ztxQpKxIRpZfKhEy+F8xiHW0lzn1Sxtfi9ROy//tz1D6YxPLbD6PD1RLn
-   YextuGoPxT2FDjnbAJZtEatSoDwo070m2JiEkkCf8myfk+cBB5xbku3/e
-   ItQwRKqXVxytJXgz7aAFXRl5J23GRWFz4XOuaZ5jn/DKM2hbbBuJ/b3Mq
-   cwXEtZTTqLFQv5nXWVNcyKdcwzmzPx9R3b07gSXiALY2iYMj23WeF4RVN
-   7sS3Jm4aN2gITw81Pqt7im7F5WTvvKI+er/rb12nN3DjtCNRO4O5AgZiC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="275131170"
-X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="275131170"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 03:19:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="587828127"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Aug 2022 03:19:52 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSFOR-0000zz-2k;
-        Sun, 28 Aug 2022 10:19:51 +0000
-Date:   Sun, 28 Aug 2022 18:19:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ardb:for-kernelci 9/26]
- drivers/firmware/efi/libstub/zboot.c:160:23: warning: no previous prototype
- for function 'efi_zboot_entry'
-Message-ID: <202208281813.FLX7bLix-lkp@intel.com>
+        Sun, 28 Aug 2022 06:23:34 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35F74B0E4;
+        Sun, 28 Aug 2022 03:23:32 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id DDFDB18845DE;
+        Sun, 28 Aug 2022 10:23:30 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D259325032B7;
+        Sun, 28 Aug 2022 10:23:30 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id C77859EC0009; Sun, 28 Aug 2022 10:23:30 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Date:   Sun, 28 Aug 2022 12:23:30 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <Ywo16vHMqxxszWzX@shredder>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <Ywo16vHMqxxszWzX@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <dd9a4156fe421f6be3a49f5b928ef77e@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,153 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   f73ff3c33fc5ad785682e0892d9fb664616cd9c0
-commit: 3d0326fd09d1289fb3b1504e65381cae574ea9dc [9/26] efi/libstub: implement generic EFI zboot
-config: riscv-randconfig-c006-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281813.FLX7bLix-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=3d0326fd09d1289fb3b1504e65381cae574ea9dc
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout 3d0326fd09d1289fb3b1504e65381cae574ea9dc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/ drivers/gpu/drm/bridge/imx/ drivers/gpu/drm/rcar-du/
+On 2022-08-27 17:19, Ido Schimmel wrote:
+> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
+>> 
+>>  	nbp_switchdev_frame_mark(p, skb);
+>> @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port *p, 
+>> struct nlattr *tb[],
+>>  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS, 
+>> BR_NEIGH_SUPPRESS);
+>>  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+>>  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+>> +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
+>> +
+>> +	if (!(p->flags & BR_PORT_LOCKED))
+>> +		p->flags &= ~BR_PORT_MAB;
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The reason for this is that I wanted it to be so that if you have MAB 
+enabled (and locked of course) and unlock the port, it will 
+automatically clear both flags instead of having to first disable MAB 
+and then unlock the port.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/firmware/efi/libstub/zboot.c:90:22: error: call to undeclared function 'get_unaligned_le32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           size = decompress ? get_unaligned_le32(_gzdata_end - 4)
-                               ^
-   drivers/firmware/efi/libstub/zboot.c:90:22: note: did you mean 'get_unaligned16'?
-   drivers/firmware/efi/libstub/../../../../lib/zlib_inflate/inffast.c:20:1: note: 'get_unaligned16' declared here
-   get_unaligned16(const unsigned short *p)
-   ^
->> drivers/firmware/efi/libstub/zboot.c:160:23: warning: no previous prototype for function 'efi_zboot_entry' [-Wmissing-prototypes]
-   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-                         ^
-   drivers/firmware/efi/libstub/zboot.c:160:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-   ^
-   static 
-   1 warning and 1 error generated.
-
-
-vim +/efi_zboot_entry +160 drivers/firmware/efi/libstub/zboot.c
-
-    57	
-    58	static efi_status_t __efiapi
-    59	load_file(efi_load_file_protocol_t *this, efi_device_path_protocol_t *rem,
-    60		  bool boot_policy, unsigned long *bufsize, void *buffer)
-    61	{
-    62		struct efi_vendor_dev_path *vendor_dp;
-    63		bool decompress = false;
-    64		unsigned long size;
-    65		int ret;
-    66	
-    67		if (rem == NULL || bufsize == NULL)
-    68			return EFI_INVALID_PARAMETER;
-    69	
-    70		if (boot_policy)
-    71			return EFI_UNSUPPORTED;
-    72	
-    73		// Look for our vendor media device node in the remaining file path
-    74		if (rem->type == EFI_DEV_MEDIA &&
-    75		    rem->sub_type == EFI_DEV_MEDIA_VENDOR) {
-    76			vendor_dp = container_of(rem, struct efi_vendor_dev_path, header);
-    77			if (!guids_eq(&vendor_dp->vendorguid, &LINUX_EFI_ZBOOT_MEDIA_GUID))
-    78				return EFI_NOT_FOUND;
-    79	
-    80			decompress = true;
-    81			rem = (void *)(vendor_dp + 1);
-    82		}
-    83	
-    84		if (rem->type != EFI_DEV_END_PATH ||
-    85		    rem->sub_type != EFI_DEV_END_ENTIRE)
-    86			return EFI_NOT_FOUND;
-    87	
-    88		// The uncompressed size of the payload is appended to the raw bit
-    89		// stream, and may therefore appear misaligned in memory
-  > 90		size = decompress ? get_unaligned_le32(_gzdata_end - 4)
-    91				  : (_gzdata_end - _gzdata_start);
-    92		if (buffer == NULL || *bufsize < size) {
-    93			*bufsize = size;
-    94			return EFI_BUFFER_TOO_SMALL;
-    95		}
-    96	
-    97		if (decompress) {
-    98			ret = __decompress(_gzdata_start, _gzdata_end - _gzdata_start,
-    99					   NULL, NULL, buffer, 0, NULL, error);
-   100			if (ret	< 0) {
-   101				log(L"Decompression failed");
-   102				return EFI_DEVICE_ERROR;
-   103			}
-   104		} else {
-   105			memcpy(buffer, _gzdata_start, size);
-   106		}
-   107	
-   108		return EFI_SUCCESS;
-   109	}
-   110	
-   111	// Return the length in bytes of the device path up to the first end node.
-   112	static int device_path_length(const efi_device_path_protocol_t *dp)
-   113	{
-   114		int len = 0;
-   115	
-   116		while (dp->type != EFI_DEV_END_PATH) {
-   117			len += dp->length;
-   118			dp = (void *)((u8 *)dp + dp->length);
-   119		}
-   120		return len;
-   121	}
-   122	
-   123	static void append_rel_offset_node(efi_device_path_protocol_t **dp,
-   124					   unsigned long start, unsigned long end)
-   125	{
-   126		struct efi_rel_offset_dev_path *rodp = (void *)*dp;
-   127	
-   128		rodp->header.type	= EFI_DEV_MEDIA;
-   129		rodp->header.sub_type	= EFI_DEV_MEDIA_REL_OFFSET;
-   130		rodp->header.length	= sizeof(struct efi_rel_offset_dev_path);
-   131		rodp->reserved		= 0;
-   132		rodp->starting_offset	= start;
-   133		rodp->ending_offset	= end;
-   134	
-   135		*dp = (void *)(rodp + 1);
-   136	}
-   137	
-   138	static void append_ven_media_node(efi_device_path_protocol_t **dp,
-   139					  efi_guid_t *guid)
-   140	{
-   141		struct efi_vendor_dev_path *vmdp = (void *)*dp;
-   142	
-   143		vmdp->header.type	= EFI_DEV_MEDIA;
-   144		vmdp->header.sub_type	= EFI_DEV_MEDIA_VENDOR;
-   145		vmdp->header.length	= sizeof(struct efi_vendor_dev_path);
-   146		vmdp->vendorguid	= *guid;
-   147	
-   148		*dp = (void *)(vmdp + 1);
-   149	}
-   150	
-   151	static void append_end_node(efi_device_path_protocol_t **dp)
-   152	{
-   153		(*dp)->type		= EFI_DEV_END_PATH;
-   154		(*dp)->sub_type		= EFI_DEV_END_ENTIRE;
-   155		(*dp)->length		= sizeof(struct efi_generic_dev_path);
-   156	
-   157		++*dp;
-   158	}
-   159	
- > 160	efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Any reason not to emit an error if MAB is enabled while the port is
+> unlocked? Something like this (untested):
+> 
+> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+> index 5aeb3646e74c..18353a4c29e1 100644
+> --- a/net/bridge/br_netlink.c
+> +++ b/net/bridge/br_netlink.c
+> @@ -944,6 +944,12 @@ static int br_setport(struct net_bridge_port *p,
+> struct nlattr *tb[],
+>         br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+>         br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+> 
+> +       if (!(p->flags & BR_PORT_LOCKED) && (p->flags & BR_PORT_MAB)) {
+> +               NL_SET_ERR_MSG(extack, "MAB cannot be enabled when
+> port is unlocked");
+> +               p->flags = old_flags;
+> +               return -EINVAL;
+> +       }
+> +
+>         changed_mask = old_flags ^ p->flags;
+> 
+>         err = br_switchdev_set_port_flag(p, p->flags, changed_mask, 
+> extack);
+> 

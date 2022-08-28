@@ -2,37 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2E75A3F15
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3B85A3F18
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiH1SXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 14:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S229973AbiH1S0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 14:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiH1SXP (ORCPT
+        with ESMTP id S229633AbiH1S0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 14:23:15 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E872A957
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 11:23:13 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1oSMwB-0006AL-MV; Sun, 28 Aug 2022 20:23:11 +0200
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-08-28]
-Date:   Sun, 28 Aug 2022 18:23:10 +0000
-Message-Id: <166170992386.1651569.17504808724724706636@leemhuis.info>
-X-Mailer: git-send-email 2.37.2
-Content-Type: text/plain; charset="utf-8"
+        Sun, 28 Aug 2022 14:26:48 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F866BC87;
+        Sun, 28 Aug 2022 11:26:47 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MG28j6SPTz9sCN;
+        Sun, 28 Aug 2022 18:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1661711206; bh=cVZKV733FhwSJ9ann5TaxDwpk2a9uxqmV7l6k2LLnyA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U8giS/jsUXGNNlx9tL6PfLaLwB+1FJ2qEoArbjQEoIseotQceUjApFUtA2Xn4yEnm
+         mrlawU81y2hJKRdtSo4Bm7LUOOBtFyT62u6snNDPRvcPaITBMgvMOSj29natpjuaSz
+         CW7JVRAXnf13ld7OxycqXhnonyai3DfV6iGxQa4w=
+X-Riseup-User-ID: 632E099168EDC2B6EA5082995449A6C79448FAD18ED28205D4B018B63EC3B43B
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MG28b1j5Qz20SJ;
+        Sun, 28 Aug 2022 18:26:39 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/mm: Reduce stack frame usage in __igt_reserve
+Date:   Sun, 28 Aug 2022 15:25:43 -0300
+Message-Id: <20220828182543.155415-1-mairacanal@riseup.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661710993;ef9f9c51;
-X-HE-SMSGID: 1oSMwB-0006AL-MV
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -41,176 +61,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below is a slightly edited report from regzbot listing all
-regression from this cycle that the bot and I are aware of. The list is
-a bit longer than last cycle, as I keep an eye on bugzilla this cycle again.
+The struct drm_mm is being allocated on the stack, which is causing the
+following -Wframe-larger-than warning on ARM:
 
-Not sure, maybe it would have been good if the following fix would have
-found the way into rc3, as it seems more than just one or two people
-already stumbled over the regression fixed by it:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&ida8e0f6b01b14b2e28ba144e112c883f03a3db2
-https://lore.kernel.org/all/?q�bffc7*
+../drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size
+(1064) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
 
-But well, it's not as bad as the regression caused by the "Rework
-asynchronous resume support" commit that you reverted on Friday, which
-iirc at least five different people had bisected in the past two
-weeks... :-/ I should have have prodded the maintainers to speed up to
-get this fixed before rc2, which would have saved a few people some
-trouble; too late now, but well, I learned my lesson.
+static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+           ^
+1 error generated.
 
-BTW, the 0-bot people make regzbot now track regressions their bot
-finds. I'm not yet sure if that is a good idea, as it seems quite a few
-developers don't even bother to reply to the reports from the bot -- at
-least that's the fate so far for four recent mainline problems 0-bot
-reported while getting regzbot involved:
+So, fix this warning by dynamically allocating the struct drm_mm.
 
-https://lore.kernel.org/lkml/c8310cba-36ef-2940-b2c2-07573e015185@intel.com/
-https://lore.kernel.org/lkml/db909f88-3f5c-afc8-424c-ced3f371037f@intel.com/
-https://lore.kernel.org/lkml/8a410343-b82a-0972-0f26-cc63b50d2ef9@intel.com/
-https://lore.kernel.org/lkml/YvpZYGa1Z1M38YcR@xsang-OptiPlex-9020/
-
-HTH, Ciao, Thorsten
-
+Fixes: fc8d29e298cf ("drm: selftest: convert drm_mm selftest to KUnit")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
 ---
-Hi, this is regzbot, the Linux kernel regression tracking bot.
+ drivers/gpu/drm/tests/drm_mm_test.c | 33 ++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
 
-Currently I'm aware of 62 regressions in linux-mainline. Find the
-current status below and the latest on the web:
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index 1e2c1aa524bd..fbd8dcbc12ee 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -344,7 +344,7 @@ static bool check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+-	struct drm_mm mm;
++	struct drm_mm *mm;
+ 	struct drm_mm_node tmp, *nodes, *node, *next;
+ 	unsigned int *order, n, m, o = 0;
+ 	int ret, err;
+@@ -366,17 +366,20 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 	nodes = vzalloc(array_size(count, sizeof(*nodes)));
+ 	KUNIT_ASSERT_TRUE(test, nodes);
+ 
++	mm = kunit_kzalloc(test, sizeof(struct drm_mm), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, mm);
++
+ 	ret = -EINVAL;
+-	drm_mm_init(&mm, 0, count * size);
++	drm_mm_init(mm, 0, count * size);
+ 
+-	if (!check_reserve_boundaries(test, &mm, count, size))
++	if (!check_reserve_boundaries(test, mm, count, size))
+ 		goto out;
+ 
+ 	for (n = 0; n < count; n++) {
+ 		nodes[n].start = order[n] * size;
+ 		nodes[n].size = size;
+ 
+-		err = drm_mm_reserve_node(&mm, &nodes[n]);
++		err = drm_mm_reserve_node(mm, &nodes[n]);
+ 		if (err) {
+ 			KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
+ 				   n, nodes[n].start);
+@@ -390,23 +393,23 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 			goto out;
+ 		}
+ 
+-		if (!expect_reserve_fail(test, &mm, &nodes[n]))
++		if (!expect_reserve_fail(test, mm, &nodes[n]))
+ 			goto out;
+ 	}
+ 
+ 	/* After random insertion the nodes should be in order */
+-	if (!assert_continuous(test, &mm, size))
++	if (!assert_continuous(test, mm, size))
+ 		goto out;
+ 
+ 	/* Repeated use should then fail */
+ 	drm_random_reorder(order, count, &prng);
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(test, &mm, set_node(&tmp, order[n] * size, 1)))
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, order[n] * size, 1)))
+ 			goto out;
+ 
+ 		/* Remove and reinsert should work */
+ 		drm_mm_remove_node(&nodes[order[n]]);
+-		err = drm_mm_reserve_node(&mm, &nodes[order[n]]);
++		err = drm_mm_reserve_node(mm, &nodes[order[n]]);
+ 		if (err) {
+ 			KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
+ 				   n, nodes[n].start);
+@@ -415,16 +418,16 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 		}
+ 	}
+ 
+-	if (!assert_continuous(test, &mm, size))
++	if (!assert_continuous(test, mm, size))
+ 		goto out;
+ 
+ 	/* Overlapping use should then fail */
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(test, &mm, set_node(&tmp, 0, size * count)))
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, 0, size * count)))
+ 			goto out;
+ 	}
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(test, &mm, set_node(&tmp, size * n, size * (count - n))))
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, size * n, size * (count - n))))
+ 			goto out;
+ 	}
+ 
+@@ -437,7 +440,7 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 
+ 		for (m = 0; m < n; m++) {
+ 			node = &nodes[order[(o + m) % count]];
+-			err = drm_mm_reserve_node(&mm, node);
++			err = drm_mm_reserve_node(mm, node);
+ 			if (err) {
+ 				KUNIT_FAIL(test, "reserve failed, step %d/%d, start %llu\n",
+ 					   m, n, node->start);
+@@ -448,15 +451,15 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 
+ 		o += n;
+ 
+-		if (!assert_continuous(test, &mm, size))
++		if (!assert_continuous(test, mm, size))
+ 			goto out;
+ 	}
+ 
+ 	ret = 0;
+ out:
+-	drm_mm_for_each_node_safe(node, next, &mm)
++	drm_mm_for_each_node_safe(node, next, mm)
+ 		drm_mm_remove_node(node);
+-	drm_mm_takedown(&mm);
++	drm_mm_takedown(mm);
+ 	vfree(nodes);
+ 	kfree(order);
+ err:
+-- 
+2.37.2
 
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-=======================================================
-current cycle (v5.19.. aka v6.0-rc), culprit identified
-=======================================================
-
-
-[ *NEW* ] pm: booting on NXP i.MX8ULP broke
--------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
-https://lore.kernel.org/linux-arm-kernel/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
-
-By Peng Fan; 12 days ago; 24 activities, latest 0 days ago.
-Introduced in 5a46079a9645 (v6.0-rc1)
-
-Fix incoming:
-* Revert "driver core: Delete driver_deferred_probe_check_state()"
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=13a8e0f6b01b14b2e28ba144e112c883f03a3db2
-
-
-[ *NEW* ] [bisected][regression] mediatek bluetooth 13d3:3563 (mt7921e) doesn't work with audio devices.
---------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/216382/
-https://bugzilla.kernel.org/show_bug.cgi?id=216382
-https://lore.kernel.org/regressions/167d11c6-68a4-c10a-9703-fceaddac3e42@leemhuis.info/
-
-By Arek Ruśniak and Arek Ruśniak; 9 days ago; 4 activities, latest 8 days ago.
-Introduced in 26afbd826ee3 (v6.0-rc1)
-
-Recent activities from: Arek Ruśniak (3), Luiz Von Dentz (1)
-
-
-===================================================
-current cycle (v5.19.. aka v6.0-rc), unkown culprit
-===================================================
-
-
-[ *NEW* ] Unable to handle kernel NULL pointer dereference at virtual address 00000008
---------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/216420/
-https://bugzilla.kernel.org/show_bug.cgi?id=216420
-https://lore.kernel.org/lkml/29a5c3e3-a590-01dd-1a2b-8415cae4a292@leemhuis.info/
-
-By frc.gabriel and frc.gabriel; 1 days ago; 4 activities, latest 0 days ago.
-Introduced in v5.19..v6.0-rc2
-
-Recent activities from: frc.gabriel (3), The Linux kernel's regression
-  tracker (Thorsten Leemhuis) (1)
-
-
-[ *NEW* ] [regression] nl80211: kernel reports: key addition failed
--------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/216421/
-https://bugzilla.kernel.org/show_bug.cgi?id=216421
-https://lore.kernel.org/lkml/dd37d8af-d7e4-daee-1f80-36c53fbac076@leemhuis.info/
-
-By XiaoYan Li and XiaoYan Li; 1 days ago; 1 activities, latest 1 days ago.
-Introduced in v6.0-rc1..v6.0-rc2
-
-Recent activities from: XiaoYan Li (1)
-
-
-[ *NEW* ] acpi wake up with black screen(failed to get iomux index)
--------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/216371/
-https://bugzilla.kernel.org/show_bug.cgi?id=216371
-https://lore.kernel.org/lkml/849a07ba-a53c-3f10-e2ec-25421c1e40ee@leemhuis.info/
-
-By neoe and neoe; 11 days ago; 16 activities, latest 1 days ago.
-Introduced in v5.19..v6.0-rc2
-
-Recent activities from: neoe (9), Mario Limonciello (AMD) (7)
-
-
-[ *NEW* ] pci or amdgpu: Uncorrected errors reported for AMD GPU
-----------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20220818203812.GA2381243@bhelgaas/
-https://lore.kernel.org/linux-pci/20220818203812.GA2381243@bhelgaas/
-https://bugzilla.kernel.org/show_bug.cgi?id=216373
-
-By Bjorn Helgaas and Tom Seewald; 9 days ago; 17 activities, latest 2 days ago.
-Introduced in v5.19..v6.0-rc1
-
-Recent activities from: Bjorn Helgaas (5), Christian König (4), Lazar,
-  Lijo (4), Tom Seewald (2), Felix Kuehling (1), Stefan Roese (1)
-
-One patch associated with this regression:
-* Re: [Bug 216373] New: Uncorrected errors reported for AMD GPU
-  https://lore.kernel.org/linux-pci/20220819171303.GA2491617@bhelgaas/
-  9 days ago, by Bjorn Helgaas
-
-
-[ *NEW* ] New 6.1 net/mac80211/rx.c warning with iwlwifi / Ultimate-N 6300 wifi
--------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/498d714c-76be-9d04-26db-a1206878de5e@redhat.com/
-https://lore.kernel.org/linux-wireless/498d714c-76be-9d04-26db-a1206878de5e@redhat.com/
-
-By Hans de Goede; 8 days ago; 3 activities, latest 6 days ago.
-Introduced in v5.19..v6.0-rc1
-
-Recent activities from: Johannes Berg (1), Luís Henriques (1), Hans de
-  Goede (1)
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/165869171256.283493.2326902986633030609@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/

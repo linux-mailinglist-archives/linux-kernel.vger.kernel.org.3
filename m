@@ -2,79 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848C55A3DDA
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28205A3DE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiH1NqY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 28 Aug 2022 09:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S229594AbiH1NyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 09:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiH1NqW (ORCPT
+        with ESMTP id S229470AbiH1NyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 09:46:22 -0400
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8572CE12;
-        Sun, 28 Aug 2022 06:46:17 -0700 (PDT)
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 6C53CAB493;
-        Sun, 28 Aug 2022 13:46:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id 3DEF520025;
-        Sun, 28 Aug 2022 13:46:15 +0000 (UTC)
-Message-ID: <2e158f8dc433b6b78d47d209495bed678d92369a.camel@perches.com>
-Subject: Re: [PATCH v2 4/4] pwm: sysfs: Utilize an array for polarity strings
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Date:   Sun, 28 Aug 2022 09:46:14 -0400
-In-Reply-To: <CAHp75VfY5RgAju5ASvAp565oF6VmYYiuowNsPTGSm=+1iFJ98A@mail.gmail.com>
-References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
-         <20220826170716.6886-4-andriy.shevchenko@linux.intel.com>
-         <5ba98dbd91dc981ec7384484b2a498805abef6b0.camel@perches.com>
-         <CAHp75VfY5RgAju5ASvAp565oF6VmYYiuowNsPTGSm=+1iFJ98A@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: 3DEF520025
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 76zegqeqc9tix8aj9gskfzf6b7iatym8
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX188JZ8rGYJxzNHOxcSKe4yGHz+58IHEFbA=
-X-HE-Tag: 1661694375-255221
+        Sun, 28 Aug 2022 09:54:18 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28F830574;
+        Sun, 28 Aug 2022 06:54:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VNSFve4_1661694851;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VNSFve4_1661694851)
+          by smtp.aliyun-inc.com;
+          Sun, 28 Aug 2022 21:54:12 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, ardb@kernel.org, guoren@kernel.org,
+        heiko@sntech.de
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the end of syscalls
+Date:   Sun, 28 Aug 2022 21:54:07 +0800
+Message-Id: <20220828135407.3897717-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-08-28 at 09:40 +0300, Andy Shevchenko wrote:
-> On Sunday, August 28, 2022, Joe Perches <joe@perches.com> wrote:
-> 
-> > On Fri, 2022-08-26 at 20:07 +0300, Andy Shevchenko wrote:
-> > > Code is smaller and looks nicer if we combine polarity strings
-> > > into an array.
-> 
-> First of all, please remove unnecessary context when replying.
+This adds support for the STACKLEAK gcc plugin to RISC-V and disables
+the plugin in EFI stub code, which is out of scope for the protection.
 
-I am _very_ aware of context.
-I specifically left the code in.
+For the benefits of STACKLEAK feature, please check the commit
+afaef01c0015 ("x86/entry: Add STACKLEAK erasing the kernel stack at the end of syscalls")
 
-> > It's less robust though as PWM_POLARITY_NORMAL and _INVERSED
-> > are now required to be 0 and 1.  As the only 2 values in
-> > an enum they are, but that's not really guaranteed unless
-> > you read the enum definition.
-> 
-> So, what do you suggest here and in many other similar places (yes, ABI
-> implied) in the kernel?
+Performance impact (tested on qemu env with 1 riscv64 hart, 1GB mem)
+    hackbench -s 512 -l 200 -g 15 -f 25 -P
+    2.0% slowdown
 
-Leaving the code alone.
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+---
+ arch/riscv/Kconfig                    | 1 +
+ arch/riscv/include/asm/processor.h    | 4 ++++
+ arch/riscv/kernel/entry.S             | 3 +++
+ drivers/firmware/efi/libstub/Makefile | 2 +-
+ 4 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index ed66c31e4655..61fd0dad4463 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -85,6 +85,7 @@ config RISCV
+ 	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+ 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+ 	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
++	select HAVE_ARCH_STACKLEAK
+ 	select HAVE_ASM_MODVERSIONS
+ 	select HAVE_CONTEXT_TRACKING_USER
+ 	select HAVE_DEBUG_KMEMLEAK
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index 19eedd4af4cd..75620c467d25 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -85,6 +85,10 @@ int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid);
+ extern void riscv_fill_hwcap(void);
+ extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
+ 
++#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
++#define on_thread_stack()	((unsigned long)((current_top_of_stack() \
++				     - current_stack_pointer) < THREAD_SIZE))
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* _ASM_RISCV_PROCESSOR_H */
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index b9eda3fcbd6d..5f98660b46d4 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -233,6 +233,9 @@ check_syscall_nr:
+ ret_from_syscall:
+ 	/* Set user a0 to kernel a0 */
+ 	REG_S a0, PT_A0(sp)
++#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
++	call stackleak_erase_on_task_stack
++#endif
+ 	/*
+ 	 * We didn't execute the actual syscall.
+ 	 * Seccomp already set return value for the current task pt_regs.
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index d0537573501e..5e1fc4f82883 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+ 				   -fno-builtin -fpic \
+ 				   $(call cc-option,-mno-single-pic-base)
+ cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+-				   -fpic
++				   -fpic $(DISABLE_STACKLEAK_PLUGIN)
+ 
+ cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+ 
+-- 
+2.17.1
 

@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE3D5A3D13
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061C75A3D0E
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiH1J6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 05:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S229549AbiH1J5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 05:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiH1J43 (ORCPT
+        with ESMTP id S229445AbiH1J5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 05:56:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9804952FDD;
-        Sun, 28 Aug 2022 02:56:28 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id i188-20020a1c3bc5000000b003a7b6ae4eb2so1690226wma.4;
-        Sun, 28 Aug 2022 02:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uF1cBWnD9V/6QV2r1LkXOLqZB9ABkh9yZksOLuQoa44=;
-        b=nwu6Q0fs/GRqHRUdjnJP1FjlGAL69zA9WwsQmQwq/J9QwNzh8+Ij66BtBS5yLFSDaU
-         O32mZYa4STFSz8AuMEVn6fZPoF5iM7+e28ooYlWc7sFkp64/e4Q73QJO8VH5uaz3kD0p
-         /WRqkB8GQpjcRkKfQEJT9aRTnnL9BMGQgMNFVHANGJ5av4z45WQWI8j2XZtCWD05PUSp
-         Cw8zYJVKVKydgyMejjvI77VwwR9qPl+42rh7ncFTVWWvq0P1NvQxnP7mDOw1dw2fNy79
-         ufkdElcBYv88+L1Tp39ZwoblwW+r8YquF6Y75tsEOmVWTlRccAkT99jNqri+09konGMQ
-         MmYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uF1cBWnD9V/6QV2r1LkXOLqZB9ABkh9yZksOLuQoa44=;
-        b=zxc2YAa3/EZB75ppNxjTAecqHVTvNE+ljayXsrnSjm1sGwjDV+Xqo3LUI/dpU1e+i/
-         Fbzd5yGn6lwxJ1ch/FcimiW0ksFDMtx+DmFuKC49LmpVpvgl6XT5ZdSMK+/g3VV2fXSn
-         n+cbU6AMqMuq9PLtr4V2R5ovKVrw8QHzZ4iaFyV/OnSI1N/Gchk6ZXBir+GNXwhlxeej
-         VZNZRzrwoF1dMhhq2CocnGZ8YjHtdxOmifq073jCRGKuPZDf9qUA1XY0QYJW5fFKI2pV
-         EF0LBOkQybq6CIaDh6W8Mg5s93uehIRJl3LtQ1B+DnmGM3/29lV4U5Uyc5gwlV1tKB6L
-         a6kA==
-X-Gm-Message-State: ACgBeo3klJNwLONbIFGQzyoRtHhwdFnb6pMA8T8aOQ3cv7jszrFJoj26
-        j/kUvZldmzrT2ROMZ+w0sm0=
-X-Google-Smtp-Source: AA6agR45gLdtzUdh1r3scAU1iZySoMqcZfZRVPLICI/RT5+UjVYJfeO7s15X8O2geEJpk9/W2iKzvg==
-X-Received: by 2002:a05:600c:1e88:b0:3a6:2ca2:e34f with SMTP id be8-20020a05600c1e8800b003a62ca2e34fmr4175835wmb.146.1661680587091;
-        Sun, 28 Aug 2022 02:56:27 -0700 (PDT)
-Received: from elementary ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id h15-20020a5d548f000000b0020e6ce4dabdsm4122020wrv.103.2022.08.28.02.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 02:56:26 -0700 (PDT)
-Date:   Sun, 28 Aug 2022 11:56:24 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: input: fix uclogic tablets
-Message-ID: <20220828095624.GA4121@elementary>
-References: <20220822062247.1146141-1-benjamin.tissoires@redhat.com>
+        Sun, 28 Aug 2022 05:57:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEF355090
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 02:57:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4708D60FA0
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 09:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C789C433D6;
+        Sun, 28 Aug 2022 09:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661680628;
+        bh=LlULD/IKynjpnLtSqXlGpYdUZVoQFXgtjS3/RSpKnMw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=c8bo5YZVuhSDQnFndpW4iAzdcEMAVonsRehPOM8APZU70KhIk5ag74U515mXJa8/b
+         S37xpSwEHmCoJt256XoXHz0K7Q0jtpmZaS4psVg4lrjVm5krHX1RrbkGzRu+hIOlHg
+         uOOhfahroinEfwulmnCWcUksrD8gLpJ5xHITEkcDju5qcKMitrg7WYs+a+ihsrdz/u
+         yXy90Hkfbjwb1TeONnRpuKhNTmMeLjv8DcrQ8T8nXHC6lj2cjs2JZQXC3k/180R75x
+         1zpYYFF8d9VDY778nPUL+7MUdjiXcfyqCRSvQ5qWArW3tGl4TTM8tzknQO1QeRfYo9
+         T9v+Ez9cSBUUw==
+Received: by pali.im (Postfix)
+        id A47937B3; Sun, 28 Aug 2022 11:57:05 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage
+Date:   Sun, 28 Aug 2022 11:56:59 +0200
+Message-Id: <20220828095659.4061-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220820105200.30425-1-pali@kernel.org>
+References: <20220820105200.30425-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822062247.1146141-1-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+When CONFIG_TARGET_CPU is specified then pass its value to the compiler
+-mcpu option. This fixes following build error when building kernel with
+powerpc e500 SPE capable cross compilers:
 
-On Mon, Aug 22, 2022 at 08:22:47AM +0200, Benjamin Tissoires wrote:
-> commit 87562fcd1342 ("HID: input: remove the need for HID_QUIRK_INVERT")
-> made the assumption that it was the only one handling tablets and thus
-> kept an internal state regarding the tool.
-> 
-> Turns out that the uclogic driver has a timer to release the in range
-> bit, effectively making hid-input ignoring all in range information
-> after the very first one.
-> 
-> Fix that by having a more rationale approach which consists in forwarding
-> every event and let the input stack filter out the duplicates.
+    BOOTAS  arch/powerpc/boot/crt0.o
+  powerpc-linux-gnuspe-gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
+  powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
+  make[1]: *** [arch/powerpc/boot/Makefile:231: arch/powerpc/boot/crt0.o] Error 1
 
-Apologies for the delayed response, I was on holiday.
+Similar change was already introduced for the main powerpc Makefile in
+commit 446cda1b21d9 ("powerpc/32: Don't always pass -mcpu=powerpc to the
+compiler").
 
-Tested on the affected device (HUION H640P) and I can confirm that the
-issue is fixed.
+Fixes: 40a75584e526 ("powerpc/boot: Build wrapper for an appropriate CPU")
+Cc: stable@vger.kernel.org # 446cda1b21d9 ("powerpc/32: Don't always pass -mcpu=powerpc to the compiler")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/powerpc/boot/Makefile | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-I also tested in other non-Wacom tablets and they keep working as
-expected.
+diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+index a9cd2ea4a861..1957a3de7a1c 100644
+--- a/arch/powerpc/boot/Makefile
++++ b/arch/powerpc/boot/Makefile
+@@ -38,13 +38,19 @@ BOOTCFLAGS    := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+ 		 $(LINUXINCLUDE)
+ 
+ ifdef CONFIG_PPC64_BOOT_WRAPPER
+-ifdef CONFIG_CPU_LITTLE_ENDIAN
+-BOOTCFLAGS	+= -m64 -mcpu=powerpc64le
++BOOTCFLAGS	+= -m64
+ else
+-BOOTCFLAGS	+= -m64 -mcpu=powerpc64
++BOOTCFLAGS	+= -m32
+ endif
++
++ifdef CONFIG_TARGET_CPU_BOOL
++BOOTCFLAGS	+= -mcpu=$(CONFIG_TARGET_CPU)
++else ifdef CONFIG_PPC64_BOOT_WRAPPER
++ifdef CONFIG_CPU_LITTLE_ENDIAN
++BOOTCFLAGS	+= -mcpu=powerpc64le
+ else
+-BOOTCFLAGS	+= -m32 -mcpu=powerpc
++BOOTCFLAGS	+= -mcpu=powerpc64
++endif
+ endif
+ 
+ BOOTCFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
+-- 
+2.20.1
 
-Best wishes,
-Jose
-
-> Reported-by: Stefan Hansson <newbie13xd@gmail.com>
-> Fixes: 87562fcd1342 ("HID: input: remove the need for HID_QUIRK_INVERT")
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> ---
->  drivers/hid/hid-input.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index 48c1c02c69f4..871a185a0f1f 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -1532,7 +1532,10 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
->  			 * assume ours
->  			 */
->  			if (!report->tool)
-> -				hid_report_set_tool(report, input, usage->code);
-> +				report->tool = usage->code;
-> +
-> +			/* drivers may have changed the value behind our back, resend it */
-> +			hid_report_set_tool(report, input, report->tool);
->  		} else {
->  			hid_report_release_tool(report, input, usage->code);
->  		}
-> -- 
-> 2.37.1
-> 

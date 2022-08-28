@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145835A3C10
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCC35A3C1B
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiH1GAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 02:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S230375AbiH1GRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 02:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiH1GA3 (ORCPT
+        with ESMTP id S229493AbiH1GRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 02:00:29 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66FF11A21;
-        Sat, 27 Aug 2022 23:00:27 -0700 (PDT)
-Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 27S606Pj000431;
-        Sun, 28 Aug 2022 15:00:06 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
- Sun, 28 Aug 2022 15:00:05 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 27S605D8000428
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 28 Aug 2022 15:00:05 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <046968f7-3245-1df5-6e11-6f29292bbbc5@I-love.SAKURA.ne.jp>
-Date:   Sun, 28 Aug 2022 15:00:02 +0900
+        Sun, 28 Aug 2022 02:17:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F4F51A08
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 23:17:06 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oSBb0-0002bl-Vt; Sun, 28 Aug 2022 08:16:34 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oSBau-0003CU-E0; Sun, 28 Aug 2022 08:16:28 +0200
+Date:   Sun, 28 Aug 2022 08:16:28 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v3 6/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <20220828061628.GA26078@pengutronix.de>
+References: <20220827051033.3903585-1-o.rempel@pengutronix.de>
+ <20220827051033.3903585-7-o.rempel@pengutronix.de>
+ <Ywpkqt2pDmpzXWWn@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [Question] iforce_serio lockup
-Content-Language: en-US
-To:     Greg Tulli <greg.iforce@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-References: <CAKEH-64YKTnb444AZsgm0MudN=KMM_EWv8SsNUwZGh9OGm4ayA@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAKEH-64YKTnb444AZsgm0MudN=KMM_EWv8SsNUwZGh9OGm4ayA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ywpkqt2pDmpzXWWn@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,104 +69,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/30 4:24, Greg Tulli wrote:
-> I was advised to use a vanilla kernel with CONFIG_PROVE_LOCKING and
-> decode the symbols in the report. So I followed
-> https://kernelnewbies.org/OutreachyfirstpatchSetup and here's the
-> result. Thanks, Tetsuo Handa.
+On Sat, Aug 27, 2022 at 08:38:34PM +0200, Andrew Lunn wrote:
+> > +static int pse_set_pse_config(struct net_device *dev,
+> > +			      struct netlink_ext_ack *extack,
+> > +			      struct nlattr **tb)
+> > +{
+> > +	struct phy_device *phydev = dev->phydev;
+> > +	struct pse_control_config config = {};
+> > +	int ret;
+> > +
+> > +	if (!tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL])
+> > +		return -EINVAL;
 > 
-> WARNING: possible circular locking dependency detected
-> 5.19.0-rc6iforce-00194-gf3a76018dd55 #2 Not tainted
-
-OK. You confirmed that this is a real deadlock.
-
-> 2022-07-11 11:32 GMT+02:00, Greg T <greg.iforce@gmail.com>:
+> I would make use of extack here, and report what is missing.
 > 
->> That problem vanishes if we don't call iforce_process_packet directly
->> from iforce_serio_irq, but from a tasklet. Is that a right approach?
+> > +
+> > +	config.admin_cotrol = nla_get_u8(tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL]);
+> 
+> It would be good to have some basic validation here, make sure user
+> space has passed a reasonable value.
 
-Does untested diff shown below solve the problem?
-I don't know about flush ordering in iforce_serio_disconnect().
+this values are already validate by the ethnl_pse_set_policy
 
- drivers/input/joystick/iforce/iforce-serio.c | 51 +++++++++++++++++++-
- 1 file changed, 49 insertions(+), 2 deletions(-)
+> You should also define what 0 and
+> ETHTOOL_A_PODL_PSE_ADMIN_CONTROL_UNKNOWN means here when passed in. In
+> future, there could be additional things which could be configured, so
+> struct pse_control_config gets additional members.
+> ETHTOOL_A_PODL_PSE_ADMIN_CONTROL appears to be mandatory, you return
+> -EVINAL if missing, so if you don't want to change it, but change some
+> other new thing, maybe 0 should be passed here? And the driver should
+> not consider it an error?
 
-diff --git a/drivers/input/joystick/iforce/iforce-serio.c b/drivers/input/joystick/iforce/iforce-serio.c
-index f95a81b9fac7..5ff650ce05ab 100644
---- a/drivers/input/joystick/iforce/iforce-serio.c
-+++ b/drivers/input/joystick/iforce/iforce-serio.c
-@@ -124,8 +124,7 @@ static void iforce_serio_write_wakeup(struct serio *serio)
- 	iforce_serio_xmit(iforce);
- }
- 
--static irqreturn_t iforce_serio_irq(struct serio *serio,
--				    unsigned char data, unsigned int flags)
-+static void do_iforce_serio(struct serio *serio, unsigned char data)
- {
- 	struct iforce_serio *iforce_serio = serio_get_drvdata(serio);
- 	struct iforce *iforce = &iforce_serio->iforce;
-@@ -183,6 +182,53 @@ static irqreturn_t iforce_serio_irq(struct serio *serio,
- 		iforce_serio->csum = 0;
- 	}
- out:
-+	return;
-+}
-+
-+struct iforce_serio_irq {
-+	struct list_head list;
-+	struct serio *serio;
-+	unsigned char data;
-+};
-+static LIST_HEAD(iforce_serio_irq_list);
-+static DEFINE_SPINLOCK(iforce_serio_irq_list_lock);
-+
-+static void iforce_serio_workfn(struct work_struct *work)
-+{
-+	static DEFINE_MUTEX(lock);
-+	struct iforce_serio_irq *ev;
-+
-+	mutex_lock(&lock);
-+	spin_lock_irq(&iforce_serio_irq_list_lock);
-+	while (!list_empty(&iforce_serio_irq_list)) {
-+		ev = list_first_entry(&iforce_serio_irq_list, struct iforce_serio_irq, list);
-+		list_del(&ev->list);
-+		spin_unlock_irq(&iforce_serio_irq_list_lock);
-+		do_iforce_serio(ev->serio, ev->data);
-+		kfree(ev);
-+		spin_lock_irq(&iforce_serio_irq_list_lock);
-+	}
-+	spin_unlock_irq(&iforce_serio_irq_list_lock);
-+	mutex_unlock(&lock);
-+}
-+static DECLARE_WORK(iforce_serio_work, iforce_serio_workfn);
-+
-+static irqreturn_t iforce_serio_irq(struct serio *serio,
-+				    unsigned char data, unsigned int flags)
-+{
-+	bool was_empty;
-+	struct iforce_serio_irq *ev = kmalloc(sizeof(*ev), GFP_ATOMIC | __GFP_NOWARN);
-+
-+	if (ev) {
-+		ev->serio = serio;
-+		ev->data = data;
-+		spin_lock(&iforce_serio_irq_list_lock);
-+		was_empty = list_empty(&iforce_serio_irq_list);
-+		list_add_tail(&ev->list, &iforce_serio_irq_list);
-+		spin_unlock(&iforce_serio_irq_list_lock);
-+		if (was_empty)
-+			queue_work(system_highpri_wq, &iforce_serio_work);
-+	}
- 	return IRQ_HANDLED;
- }
- 
-@@ -220,6 +266,7 @@ static void iforce_serio_disconnect(struct serio *serio)
- {
- 	struct iforce_serio *iforce_serio = serio_get_drvdata(serio);
- 
-+	flush_work(&iforce_serio_work);
- 	input_unregister_device(iforce_serio->iforce.dev);
- 	serio_close(serio);
- 	serio_set_drvdata(serio, NULL);
+ack. changed to 0 and added comment.
+
+> ETHTOOL_A_PODL_PSE_ADMIN_CONTROL_UNKNOWN
+> however seems invalid and so should be rejected here?
+
+yes. it is already rejected. I added comment to make it more visible
+
 -- 
-2.18.4
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,60 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827895A3C08
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 07:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145835A3C10
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiH1Fem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 01:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
+        id S229680AbiH1GAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 02:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiH1Fei (ORCPT
+        with ESMTP id S231721AbiH1GA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 01:34:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7744569
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 22:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661664878; x=1693200878;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZBbJUQRq4xYojLnSubVBT4oYkMrO602PlhVEoBrZezY=;
-  b=MnLF5SrdOoaS3HgfAbz5qQfvcvpHH0y8UIXCSNoNzY9NF2run2pwU1I/
-   U71k9BxHQD+Wy7+DtpBGEj/6fk7+wRgJXrxWiBy5EwRyBwjJOb5BJ76iy
-   HjmoGLuKKMOtmTj6pAzQ7LOEwQWNzpriMp4KNcys0n+5uTzm9dK7HibYm
-   dBYpym35vsiLK3D+zdN3nxnWPds2zo+kj/10sYqGlntFc5hp3tD9j3SuO
-   KqM88oWH/oQEbnw7qAY7wzKAA8tQbMHsJdu2lDHFMN1I8PD5VugsModPj
-   P2MfThWTls756I7Xix8u8+mT08vFId6wzZB9adJo4iij2aCRIMtVmt+id
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="295985863"
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="295985863"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 22:34:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="679282374"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Aug 2022 22:34:35 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSAwM-0000om-3A;
-        Sun, 28 Aug 2022 05:34:34 +0000
-Date:   Sun, 28 Aug 2022 13:33:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: drivers/video/fbdev/imsttfb.c:1548:20: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202208281326.rCI2rkGl-lkp@intel.com>
+        Sun, 28 Aug 2022 02:00:29 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66FF11A21;
+        Sat, 27 Aug 2022 23:00:27 -0700 (PDT)
+Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 27S606Pj000431;
+        Sun, 28 Aug 2022 15:00:06 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
+ Sun, 28 Aug 2022 15:00:05 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 27S605D8000428
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 28 Aug 2022 15:00:05 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <046968f7-3245-1df5-6e11-6f29292bbbc5@I-love.SAKURA.ne.jp>
+Date:   Sun, 28 Aug 2022 15:00:02 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [Question] iforce_serio lockup
+Content-Language: en-US
+To:     Greg Tulli <greg.iforce@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+References: <CAKEH-64YKTnb444AZsgm0MudN=KMM_EWv8SsNUwZGh9OGm4ayA@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAKEH-64YKTnb444AZsgm0MudN=KMM_EWv8SsNUwZGh9OGm4ayA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,64 +54,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   10d4879f9ef01cc6190fafe4257d06f375bab92c
-commit: d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee ARM: mm: kill unused runtime hook arch_iounmap()
-date:   9 weeks ago
-config: arm-randconfig-s031-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281326.rCI2rkGl-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/video/fbdev/
+On 2022/07/30 4:24, Greg Tulli wrote:
+> I was advised to use a vanilla kernel with CONFIG_PROVE_LOCKING and
+> decode the symbols in the report. So I followed
+> https://kernelnewbies.org/OutreachyfirstpatchSetup and here's the
+> result. Thanks, Tetsuo Handa.
+> 
+> WARNING: possible circular locking dependency detected
+> 5.19.0-rc6iforce-00194-gf3a76018dd55 #2 Not tainted
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+OK. You confirmed that this is a real deadlock.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/video/fbdev/imsttfb.c:1513:30: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/video/fbdev/imsttfb.c:1513:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char [noderef] __iomem *screen_base @@     got unsigned char [usertype] * @@
-   drivers/video/fbdev/imsttfb.c:1513:27: sparse:     expected char [noderef] __iomem *screen_base
-   drivers/video/fbdev/imsttfb.c:1513:27: sparse:     got unsigned char [usertype] *
-   drivers/video/fbdev/imsttfb.c:1522:27: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/video/fbdev/imsttfb.c:1548:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *io_addr @@     got unsigned char [usertype] *cmap_regs @@
-   drivers/video/fbdev/imsttfb.c:1548:20: sparse:     expected void volatile [noderef] __iomem *io_addr
-   drivers/video/fbdev/imsttfb.c:1548:20: sparse:     got unsigned char [usertype] *cmap_regs
-   drivers/video/fbdev/imsttfb.c:1360:15: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/video/fbdev/imsttfb.c:1361:16: sparse: sparse: cast removes address space '__iomem' of expression
+> 2022-07-11 11:32 GMT+02:00, Greg T <greg.iforce@gmail.com>:
+> 
+>> That problem vanishes if we don't call iforce_process_packet directly
+>> from iforce_serio_irq, but from a tasklet. Is that a right approach?
 
-vim +1548 drivers/video/fbdev/imsttfb.c
+Does untested diff shown below solve the problem?
+I don't know about flush ordering in iforce_serio_disconnect().
 
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1540  
-48c68c4f1b5424 drivers/video/imsttfb.c Greg Kroah-Hartman 2012-12-21  1541  static void imsttfb_remove(struct pci_dev *pdev)
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1542  {
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1543  	struct fb_info *info = pci_get_drvdata(pdev);
-94f9e09ce531d4 drivers/video/imsttfb.c Antonino A. Daplas 2006-01-09  1544  	struct imstt_par *par = info->par;
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1545  	int size = pci_resource_len(pdev, 0);
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1546  
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1547  	unregister_framebuffer(info);
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16 @1548  	iounmap(par->cmap_regs);
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1549  	iounmap(par->dc_regs);
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1550  	iounmap(info->screen_base);
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1551  	release_mem_region(info->fix.smem_start, size);
-94f9e09ce531d4 drivers/video/imsttfb.c Antonino A. Daplas 2006-01-09  1552  	framebuffer_release(info);
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1553  }
-^1da177e4c3f41 drivers/video/imsttfb.c Linus Torvalds     2005-04-16  1554  
+ drivers/input/joystick/iforce/iforce-serio.c | 51 +++++++++++++++++++-
+ 1 file changed, 49 insertions(+), 2 deletions(-)
 
-:::::: The code at line 1548 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
+diff --git a/drivers/input/joystick/iforce/iforce-serio.c b/drivers/input/joystick/iforce/iforce-serio.c
+index f95a81b9fac7..5ff650ce05ab 100644
+--- a/drivers/input/joystick/iforce/iforce-serio.c
++++ b/drivers/input/joystick/iforce/iforce-serio.c
+@@ -124,8 +124,7 @@ static void iforce_serio_write_wakeup(struct serio *serio)
+ 	iforce_serio_xmit(iforce);
+ }
+ 
+-static irqreturn_t iforce_serio_irq(struct serio *serio,
+-				    unsigned char data, unsigned int flags)
++static void do_iforce_serio(struct serio *serio, unsigned char data)
+ {
+ 	struct iforce_serio *iforce_serio = serio_get_drvdata(serio);
+ 	struct iforce *iforce = &iforce_serio->iforce;
+@@ -183,6 +182,53 @@ static irqreturn_t iforce_serio_irq(struct serio *serio,
+ 		iforce_serio->csum = 0;
+ 	}
+ out:
++	return;
++}
++
++struct iforce_serio_irq {
++	struct list_head list;
++	struct serio *serio;
++	unsigned char data;
++};
++static LIST_HEAD(iforce_serio_irq_list);
++static DEFINE_SPINLOCK(iforce_serio_irq_list_lock);
++
++static void iforce_serio_workfn(struct work_struct *work)
++{
++	static DEFINE_MUTEX(lock);
++	struct iforce_serio_irq *ev;
++
++	mutex_lock(&lock);
++	spin_lock_irq(&iforce_serio_irq_list_lock);
++	while (!list_empty(&iforce_serio_irq_list)) {
++		ev = list_first_entry(&iforce_serio_irq_list, struct iforce_serio_irq, list);
++		list_del(&ev->list);
++		spin_unlock_irq(&iforce_serio_irq_list_lock);
++		do_iforce_serio(ev->serio, ev->data);
++		kfree(ev);
++		spin_lock_irq(&iforce_serio_irq_list_lock);
++	}
++	spin_unlock_irq(&iforce_serio_irq_list_lock);
++	mutex_unlock(&lock);
++}
++static DECLARE_WORK(iforce_serio_work, iforce_serio_workfn);
++
++static irqreturn_t iforce_serio_irq(struct serio *serio,
++				    unsigned char data, unsigned int flags)
++{
++	bool was_empty;
++	struct iforce_serio_irq *ev = kmalloc(sizeof(*ev), GFP_ATOMIC | __GFP_NOWARN);
++
++	if (ev) {
++		ev->serio = serio;
++		ev->data = data;
++		spin_lock(&iforce_serio_irq_list_lock);
++		was_empty = list_empty(&iforce_serio_irq_list);
++		list_add_tail(&ev->list, &iforce_serio_irq_list);
++		spin_unlock(&iforce_serio_irq_list_lock);
++		if (was_empty)
++			queue_work(system_highpri_wq, &iforce_serio_work);
++	}
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -220,6 +266,7 @@ static void iforce_serio_disconnect(struct serio *serio)
+ {
+ 	struct iforce_serio *iforce_serio = serio_get_drvdata(serio);
+ 
++	flush_work(&iforce_serio_work);
+ 	input_unregister_device(iforce_serio->iforce.dev);
+ 	serio_close(serio);
+ 	serio_set_drvdata(serio, NULL);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.4
+

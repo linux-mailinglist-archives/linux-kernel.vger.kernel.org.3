@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F215A3EDA
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 19:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00A25A3EDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 19:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiH1RaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 13:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
+        id S230090AbiH1RcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 13:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiH1RaV (ORCPT
+        with ESMTP id S229522AbiH1RcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 13:30:21 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A4E7641;
-        Sun, 28 Aug 2022 10:30:19 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id c3so6322879vsc.6;
-        Sun, 28 Aug 2022 10:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rC/kcvyTRMZn63lmOJ8Yw6MSQcVtIHue9Gs8f5KhzxI=;
-        b=QiXycj2Fdgnnrcm4Yd55Jnz3ZDDRPTXPBhcd/BxbbSyT3Zj+SXca6TuWA3S9oQYIpK
-         +DiNwzR4IFUcCb7F93FMJvDvLeKJE1idtoAe7Z7+HxoCXOYDxacZA86EHf0KbFyIF/Uy
-         BPoEEGpBZ0ykd4SmaC1S+kWWUyPoeA8Za81JF+uKMOeoHbf7wjWIyYIrDxuESx6uaiD0
-         nuAqZ9Dd5iytqXuVa+Yl6Obc9b6h6cEANAN4FCVBoi81wp93z2O3BTXvqwFgQrENj2GK
-         ODpG5xkdP+LrQLZXOK7+xcWTXmwoQc4EIhtXhI4QTJsmbChg+T/6xKH9jzGdBoprGUPi
-         qa/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rC/kcvyTRMZn63lmOJ8Yw6MSQcVtIHue9Gs8f5KhzxI=;
-        b=G41h19QUFyVaeevEK2nMq07L+sjWbqN9qcGoL5fAO6gO5QjSkEX7mMDH5cinaNwllS
-         8/vAHfKrJDL6BvmRjGAhSfAElIJnvuRZ3r/+UBGIEA4Ddd+0B2LWFoeCqes2SoS8H93V
-         JbPNZGvoZZIpnPsiQIfabe0wIkUIoZ0aDm7CESNAa4XjDFZ8kXMfJ9eE66ktHgugmXba
-         /4Axqp43nPwZZw1Ri3KQZNtxJA9JAk2fXm24hBta+wOnGwlv0p4bSNPWmepeULW47EF8
-         Ufc4F+GxsvGHYRdTfbZyX8swmZt7zb+CAM6KEz81iY4hFG8kigD89qwRGlh+PpccYDi0
-         y3bg==
-X-Gm-Message-State: ACgBeo1Rm9TfTRcApnlj4MkOX1HlgUsYG4smilvYqBg/yInzHGfuBsPA
-        FjaAtL/ASUMApGzpC9HBJOQ3mqYhkVu4/F0Z6r4=
-X-Google-Smtp-Source: AA6agR7cmg57rCLNkmwrUUJk/RyfQYniAMvh9OKyjO2Yd3+bL6n6ixaimSWK3PPDLAo0oGuiuEXzn5LzJQt8j7+ovg4=
-X-Received: by 2002:a67:a649:0:b0:390:88c5:6a91 with SMTP id
- r9-20020a67a649000000b0039088c56a91mr2450540vsh.3.1661707819049; Sun, 28 Aug
- 2022 10:30:19 -0700 (PDT)
+        Sun, 28 Aug 2022 13:32:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9CF9FEB
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 10:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661707942; x=1693243942;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O2dR0BW2PeqIsrT4eW3b9WtboL5iwk7ul0IK/THKWAM=;
+  b=TaxZ418p2yrOjrj43riQS5OHXs4g3CHiZrcXXvWgN7KILBF/37SrKBaE
+   EyXe6WXZCLE7BYvbjBMB2y3v8UW9if/+TkSC5sw6WSmdBWrOBHZclxBAM
+   /OXhW/Z9UIMAynQi0qyiAGzKPdI20CS34R5vkI9Lbi1HSmiiYymV0dXIr
+   7HLJeIToldh9+23s9HYnFJllq9LrVJA6NTDgroMJGXGYbioSWzPeePoG6
+   dybVTvGDWeRj3HKhy6TVaRlU3HI0aUw+1STJ9MMFFvuZcnjhe83i7GSyV
+   uzuy6pxTLaHH4LD0WJCZyAY0R7khmy0NRKRWydgNs4N/oQWW8p4z7za3W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="356471398"
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="356471398"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 10:32:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="939325715"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Aug 2022 10:32:21 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oSM8y-0001RD-25;
+        Sun, 28 Aug 2022 17:32:20 +0000
+Date:   Mon, 29 Aug 2022 01:32:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_pmem_v1 23/40] arch/riscv/kvm/aia.c:204:36: sparse:
+ sparse: incorrect type in argument 2 (different address spaces)
+Message-ID: <202208290123.UHD6rzKM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220826214703.134870-1-jlayton@kernel.org> <20220826214703.134870-5-jlayton@kernel.org>
- <CAOQ4uxjzE_B_EQktLr8z8gXOhFDNm-_YpUTycfZCdaZNp-i0hQ@mail.gmail.com>
- <CAOQ4uxge86g=+HPnds-wRXkFHg67G=m9rGK7V_T8yS+2=w9tmg@mail.gmail.com>
- <35d31d0a5c6c9a20c58f55ef62355ff39a3f18c6.camel@kernel.org> <Ywo8cWRcJUpLFMxJ@magnolia>
-In-Reply-To: <Ywo8cWRcJUpLFMxJ@magnolia>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sun, 28 Aug 2022 20:30:07 +0300
-Message-ID: <CAOQ4uxj=+7n5vcxNt8CTkPCzv7u8AQYHdzF2mKS29Bj3S3NxnA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] xfs: don't bump the i_version on an atime update
- in xfs_vn_update_time
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Jeff Layton <jlayton@kernel.org>, Theodore Tso <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Dave Chinner <david@fromorbit.com>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Neil Brown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>, xiubli@redhat.com,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Lukas Czerner <lczerner@redhat.com>, Jan Kara <jack@suse.cz>,
-        Christian Brauner <brauner@kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux Btrfs <linux-btrfs@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ext4 <linux-ext4@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        ceph-devel <ceph-devel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > >
-> > > > Forensics and other applications that care about atime updates can and
-> > > > should check atime and don't need i_version to know that it was changed.
-> > > > The reliability of atime as an audit tool has dropped considerably since
-> > > > the default in relatime.
->
-> I've been waiting for Amir to appear in this discussion -- ISTR that a
-> few years ago you were wanting the ability to scan a filesystem to look
-> for files that have changed since a given point.  If XFS exported its
-> di_changecount file attribute (as it currently behaves) via BULKSTAT,
-> you'd have the ability to do that, so long as your application could
-> persist bulkstat data and compare.
->
+tree:   https://github.com/avpatel/linux.git riscv_pmem_v1
+head:   b93a90a0cf40bdff2e68b0d1c6ed27f5e7310ec9
+commit: b06e7bdfd87f2fbee3c3a0860c3cdc99d5a33386 [23/40] RISC-V: KVM: Implement guest external interrupt line management
+config: riscv-randconfig-s032-20220828 (https://download.01.org/0day-ci/archive/20220829/202208290123.UHD6rzKM-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/avpatel/linux/commit/b06e7bdfd87f2fbee3c3a0860c3cdc99d5a33386
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_pmem_v1
+        git checkout b06e7bdfd87f2fbee3c3a0860c3cdc99d5a33386
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
-It's true that exporting i_version via BULKSTAT could be useful
-to some backup/sync applications.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-For my case, I was interested in something a bit different -
-finding all the changes in a very large fs tree - or IOW finding if
-anything has changed inside a large tree since a point in time.
-So not sure if i_version would help for that use case.
+sparse warnings: (new ones prefixed by >>)
+   WARNING: invalid argument to '-march': '_zihintpause'
+>> arch/riscv/kvm/aia.c:204:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct aia_hgei_control [noderef] __percpu * @@
+   arch/riscv/kvm/aia.c:204:36: sparse:     expected void *
+   arch/riscv/kvm/aia.c:204:36: sparse:     got struct aia_hgei_control [noderef] __percpu *
 
-Thanks,
-Amir.
+vim +204 arch/riscv/kvm/aia.c
+
+   200	
+   201	static void aia_hgei_exit(void)
+   202	{
+   203		/* Free per-CPU SGEI interrupt */
+ > 204		free_irq(hgei_parent_irq, &aia_hgei);
+   205	}
+   206	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

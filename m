@@ -2,142 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B455A3E8F
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 18:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC8A5A3E92
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 18:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiH1Q2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 12:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S229850AbiH1QaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 12:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiH1Q0W (ORCPT
+        with ESMTP id S229648AbiH1QaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 12:26:22 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEB213F7B
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 09:26:21 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id r22so5704622pgm.5
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 09:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc;
-        bh=8C0bJbQzCEFFcfsrWxI0t7BFjtp2DVljC6JXCFj30lQ=;
-        b=U9g+XjwM+sAxmgza1T6GKPoRuaTAvqS8wBPXhhhDl1bqMJbhfvvywWM8Nh6xRPi1av
-         c8opNN+Vah09BMgYNQ/nunnyCqOMyXAx94RdXOQ0PTXzsdEVTWSpM/+VEQQINbhgRijL
-         2qU8G3VCIB7Fgi2nsQqOTHsozTsGKslKBrPt9y3Fwr1vY6bK4kHbVIBm7z6YHouMZZuc
-         dCNxLfbq30C/6Own/t7W4we/tyxdo+l7QSfOrgbO0AYYaHFEjJolHdDc8OoT/DDrFNOR
-         BRU/z6V/TbiVSXK15o9KtgWCNN2TpEHWl+bLO8EwWDVAvf2nVTaKVas69mZI9YGyXvpu
-         H74g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc;
-        bh=8C0bJbQzCEFFcfsrWxI0t7BFjtp2DVljC6JXCFj30lQ=;
-        b=1yucxVlwr4Cd+KtCF1wLtfIXtoipsnLOrgR8/YxQAuAqHZbMH8PgNNtKzVUyRMnqsS
-         ntYHrtfoMUnj0eAkh+jCcz+CBb2CCxELrWRYnt4RFRRdKrOU3ZzjulxKBLq4hXBkUr/p
-         BaH+AwLkGAyyeeHTuSXVnetT2BpcCdaundXJSREfuyiA7qUkR/mxwT95ZvDaiRyw++T6
-         f6Btc9ubUKHtr8G07VXZG2RUgS0ski6DC0nIiHBTUkb77WRdZSE1TM+fe+49Z4J1JAYh
-         QOgeI/q7mKJ9mJA8sraDcLiIrnxkd1XAMKIA5hNyih6jt4/aNEfKrdlYA/sQCoDWWwvn
-         EeuA==
-X-Gm-Message-State: ACgBeo3Cns16XA+XBPHni4/NDOiPmReAy8lUqmJO2NMkhGg5bU/ZITIN
-        qlkcIHwIpDNBoBdYIAbW3waaLtzuNmfq6BFi
-X-Google-Smtp-Source: AA6agR7rYAuDcg29gLiNycxpFXqp0FffhM2jislbW58raWnHf+EyySRqCvJHySmdx3H9sJWNnIEqMA==
-X-Received: by 2002:a63:1018:0:b0:42c:2e12:e79d with SMTP id f24-20020a631018000000b0042c2e12e79dmr322683pgl.508.1661703980773;
-        Sun, 28 Aug 2022 09:26:20 -0700 (PDT)
-Received: from ArchLinux ([60.177.34.208])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b00174c1855cd9sm695799plh.267.2022.08.28.09.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 09:26:20 -0700 (PDT)
-References: <20220713134823.95141-1-schspa@gmail.com>
- <20220713134823.95141-2-schspa@gmail.com>
- <aad1078b-2620-3122-7796-24e2451d36d6@arm.com>
-User-agent: mu4e 1.7.5; emacs 28.1
-From:   Schspa Shi <schspa@gmail.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/2] sched/rt: Trying to push current task when
- target disable migrating
-Date:   Sun, 28 Aug 2022 23:54:39 +0800
-In-reply-to: <aad1078b-2620-3122-7796-24e2451d36d6@arm.com>
-Message-ID: <m2sflgl4gt.fsf@gmail.com>
+        Sun, 28 Aug 2022 12:30:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021597665;
+        Sun, 28 Aug 2022 09:30:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6886DB80A75;
+        Sun, 28 Aug 2022 16:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58A44C433C1;
+        Sun, 28 Aug 2022 16:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661704205;
+        bh=hkP7Iyq9hIKsuHrAuDHR0IJBFhTR6IPli5jEcttyojE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cR2REiNat4p0xCuT1FMAu78W4EF/Mxkhpixo+uhTzTMJki6wNWwKjKV0iWMjV/CAM
+         jtUnsJHG0vNVNn4YCqE9JXBqZ7MtvciMxrQ+Gnd6D/N+WSgkvKNZwKQL7moCMpEWsm
+         fiMHV3ajyZe6xxgcAx1Tazb88PXMWw6uYb/WsxkRIEwfHfBO70IXDqufUEGN31mC52
+         Wy2D7LS4ZPz4cGQTwBgV2P2Hy2KbGB8lV4LapwMkg+iW4/lr6heyT/rhg0z6geFZb6
+         wDeg65X2EJJw/Z56blAZ+a58oC6iGofjfo70294bJV+e+tzbouyUnQOJUU/eJw1Dfo
+         LSahyPGjnlgfw==
+Date:   Sun, 28 Aug 2022 16:55:41 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "lucas.demarchi@intel.com" <lucas.demarchi@intel.com>,
+        "jani.nikula@intel.com" <jani.nikula@intel.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v5 2/7] units: complement the set of Hz units
+Message-ID: <20220828165541.2cd81c97@jic23-huawei>
+In-Reply-To: <20220812165243.22177-3-ddrokosov@sberdevices.ru>
+References: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
+        <20220812165243.22177-3-ddrokosov@sberdevices.ru>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 12 Aug 2022 16:52:26 +0000
+Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
 
-Dietmar Eggemann <dietmar.eggemann@arm.com> writes:
+> Currently, Hz units do not have milli, micro and nano Hz coefficients.
+> Some drivers (IIO especially) use their analogues to calculate
+> appropriate Hz values. This patch includes them to units.h definitions,
+> so they can be used from different kernel places.
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+I'm not really sure why Andrew Morton picked these up as no obviously
+dependencies outside of IIO and we have other patches under review that
+need these.
 
-> On 13/07/2022 15:48, Schspa Shi wrote:
->> When the task to push disable migration, retry to push the current
->> running task on this CPU away, instead doing nothing for this migrate
->> disabled task.
->> 
->> Signed-off-by: Schspa Shi <schspa@gmail.com>
->
-> Unfortunately, I can't recreate this issue on my Arm64 6 CPUs system on
-> mainline or PREEMPT_RT (linux-5.19.y-rt and v5.10.59-rt52) (the one you
-> mentioned in v6.)
->
-> With an rt-app rt workload of 12-18 periodic rt-tasks (4/16ms) all with
-> different priorities I never ran into a `is_migration_disabled(task)`
-> situation. I only ever get `task_rq(task) != rq` or `task_running(rq,
-> task)` under the `if (double_lock_balance(rq, lowest_rq))` condition in
-> find_lock_lowest_rq().
->
+Anyhow, I see they are still in Andrew's nonmm-unstable tree, so
+assuming he won't mind me picking them up through IIO instead / as well.
+If nothing else git will sort this out when the two trees reach
+linux-next or upstream anyway.
 
-I think we need to write a kernel module to add more hard irq context to
-increase the probability of recurrence.
++Cc Andrew Morton.
 
-I never recreate this issue with my test case too. But our test team can
-reproduce the problem, they have more machines to reproduce the problem,
-and the problem is easier to reproduce when the CPU is hotplugging.
+this and next two patches applied to the togreg branch of iio.git.
+I'll push that out as testing for 0-day to do it's sanity checks then
+it'll go out as iio.git / togreg and get picked up by linux-next.
 
+Thanks,
 
-> [...]
->
->>  	// XXX validate p is still the highest prio task
->>  	if (task_rq(p) == rq) {
->> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
->> index cb3b886a081c..21af20445e7f 100644
->> --- a/kernel/sched/deadline.c
->> +++ b/kernel/sched/deadline.c
->> @@ -2335,6 +2335,15 @@ static int push_dl_task(struct rq *rq)
->>  		 */
->>  		task = pick_next_pushable_dl_task(rq);
->>  		if (task == next_task) {
->> +			/*
->> +			 * If next task has now disabled migrating, see if we
->> +			 * can push the current task.
->> +			 */
->> +			if (unlikely(is_migration_disabled(task))) {
->> +				put_task_struct(next_task);
->> +				goto retry;
->> +			}
->> +
->
-> Looks like for DL this makes no sense since we're not pushing rq->curr
-> in `retry:` like for RT in case `is_migration_disabled(next_task)`.
->
+Jonathan
 
-It seems we have the opportunity to execute resched_curr, which will
-have a similar effect. I should change the comments for this for next
-patch version.
+> ---
+>  include/linux/units.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/linux/units.h b/include/linux/units.h
+> index 681fc652e3d7..2793a41e73a2 100644
+> --- a/include/linux/units.h
+> +++ b/include/linux/units.h
+> @@ -20,6 +20,9 @@
+>  #define PICO	1000000000000ULL
+>  #define FEMTO	1000000000000000ULL
+>  
+> +#define NANOHZ_PER_HZ		1000000000UL
+> +#define MICROHZ_PER_HZ		1000000UL
+> +#define MILLIHZ_PER_HZ		1000UL
+>  #define HZ_PER_KHZ		1000UL
+>  #define KHZ_PER_MHZ		1000UL
+>  #define HZ_PER_MHZ		1000000UL
 
-> [...]
->
-> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-
--- 
-BRs
-Schspa Shi

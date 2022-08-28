@@ -2,254 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612145A3CB0
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 10:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4C45A3CB2
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 10:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbiH1Ift (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 04:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S232840AbiH1Igy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 04:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbiH1Ifp (ORCPT
+        with ESMTP id S232406AbiH1Igv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 04:35:45 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A626425EA4
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:35:43 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 7349E312E19;
-        Sun, 28 Aug 2022 10:35:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1661675741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=91RPWC9lm6EmFuQ06ZRCxMuapFeAPU+WUb0848c6UKs=;
-        b=U/C4UbQcYApgt+xf4P5Vn1i9sqY1swonzE8zi8zhwtMptRuAZEa3uFxAACWVDET3lxJdKR
-        /zOLMPq4faG69lpJVdGTQn9vxYXRHu+8QQUMR6wBMFe/FTzJSWpuHiV6RKrfL90N181+oU
-        srMWGmn6v40AAzpHdCnpkXdkAc90Po16q7QSrUyeD3tNnQ1tHdccuNb7L31i7FGBvj3p98
-        DBY46U/Xq7BgYeN2GtWCMTNpi3fwAfp+DHgNXQy3gCf3IhfH1/4SqMItR/YDhhD48MCF/z
-        6pQ37B4fno6+Q1PMwQLK6j7+rHTc3r6BNVgMW87z8mCHyuDo0m/Ieg/VHj0uAw==
-Message-ID: <15255a7223fe405808bcedb5ab19bf2108637e08.camel@svanheule.net>
-Subject: Re: [PATCH v3 1/9] cpumask: Make cpumask_full() check for
- nr_cpu_ids bits
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Date:   Sun, 28 Aug 2022 10:35:38 +0200
-In-Reply-To: <YwfgQmtbr6IrPrXb@yury-laptop>
-References: <20220825181210.284283-1-vschneid@redhat.com>
-         <20220825181210.284283-2-vschneid@redhat.com>
-         <YwfgQmtbr6IrPrXb@yury-laptop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Sun, 28 Aug 2022 04:36:51 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78B52A252
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:36:50 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27S4gFSR012120;
+        Sun, 28 Aug 2022 08:36:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=oIVg7D7nYUVy8J6p1vXGkZm9gcaHYDw249/PBO20iKw=;
+ b=inQETc9wgVBlW6swuEpg/f8jLUvIzQ9KMmFls8huOYplAoFt1IS7bziT9Y2DGNV50gIo
+ AA2JD8yS9+BbwdaKKAlCVsvjxEPkcDymoNDSS4G9PTXrqqgECi/SfOPu+jmxWHPCHq+2
+ n7FvNDFab+zj0wP2HNdx4X36dMiD5bX0viaCUTr+Xb+AssLtE7sX4M97Y2SB7G3mlu7e
+ geIBs+zGdCRu1dt74cS8nYR+f7pEaZBrXbyRciPWUtiNTVWP04g31qcr4ZGFkgTdy5UO
+ i9iXzXghAEI44CZYVcJ0iaTN8n5nS/5yl3ZsZAT/OyfCV8HitSvOEMvSWjZ6D4YedUIo NQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j7w9s9jm9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Aug 2022 08:36:30 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27S8aTRb022215;
+        Sun, 28 Aug 2022 08:36:29 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j7w9s9jkx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Aug 2022 08:36:29 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27S8M5R5022497;
+        Sun, 28 Aug 2022 08:36:27 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3j7aw8rsmq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Aug 2022 08:36:27 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27S8aPJ642205606
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 28 Aug 2022 08:36:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 418EBAE053;
+        Sun, 28 Aug 2022 08:36:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D552EAE04D;
+        Sun, 28 Aug 2022 08:36:24 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.53.89])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun, 28 Aug 2022 08:36:24 +0000 (GMT)
+Date:   Sun, 28 Aug 2022 10:36:23 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@infradead.org,
+        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 01/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Message-ID: <YwspB8OP8/Phv+tO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220820003125.353570-1-bhe@redhat.com>
+ <20220820003125.353570-2-bhe@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220820003125.353570-2-bhe@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: moWxYxgyMcP1MQBpUEpo2MFCUpgenddd
+X-Proofpoint-ORIG-GUID: KUexBssiCLvdV0auCn5LDJfMDuSwsC5l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-28_04,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=933 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208280036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yury, Valentin,
+On Sat, Aug 20, 2022 at 08:31:15AM +0800, Baoquan He wrote:
 
-On Thu, 2022-08-25 at 13:49 -0700, Yury Norov wrote:
-> + Sander Vanheule
->=20
-> On Thu, Aug 25, 2022 at 07:12:02PM +0100, Valentin Schneider wrote:
-> > Consider a system with 4 CPUs and:
-> > =C2=A0 CONFIG_NR_CPUS=3D64
-> > =C2=A0 CONFIG_CPUMASK_OFFSTACK=3Dn
-> >=20
-> > In this situation, we have:
-> > =C2=A0 nr_cpumask_bits =3D=3D NR_CPUS =3D=3D 64
-> > =C2=A0 nr_cpu_ids =3D 4
-> >=20
-> > Per smp.c::setup_nr_cpu_ids(), nr_cpu_ids <=3D NR_CPUS, so we want
-> > cpumask_full() to check for nr_cpu_ids bits set.
-> >=20
-> > This issue is currently pointed out by the cpumask KUnit tests:
-> >=20
-> > =C2=A0 [=C2=A0=C2=A0 14.072028]=C2=A0=C2=A0=C2=A0=C2=A0 # test_cpumask_=
-weight: EXPECTATION FAILED at
-> > lib/test_cpumask.c:57
-> > =C2=A0 [=C2=A0=C2=A0 14.072028]=C2=A0=C2=A0=C2=A0=C2=A0 Expected cpumas=
-k_full(((const struct cpumask
-> > *)&__cpu_possible_mask)) to be true, but is false
-> > =C2=A0 [=C2=A0=C2=A0 14.079333]=C2=A0=C2=A0=C2=A0=C2=A0 not ok 1 - test=
-_cpumask_weight
-> >=20
-> > Signed-off-by: Valentin Schneider <vschneid@redhat.com>
->=20
-> It's really a puzzle, and some of my thoughts are below. So.=20
->=20
-> This is a question what for we need nr_cpumask_bits while we already
-> have nr_cpu_ids. When OFFSTACK is ON, they are obviously the same.
-> When it's of - the nr_cpumask_bits is an alias to NR_CPUS.
->=20
-> I tried to wire the nr_cpumask_bits to nr_cpu_ids unconditionally, and
-> it works even when OFFSTACK is OFF, no surprises.
->=20
-> I didn't find any discussions describing what for we need nr_cpumask_bits=
-,
-> and the code adding it dates to a very long ago.
->=20
-> If I alias nr_cpumask_bits to nr_cpu_ids unconditionally on my VM with
-> NR_CPUs =3D=3D 256 and nr_cpu_ids =3D=3D 4, there's obviously a clear win=
- in
-> performance, but the Image size gets 2.5K bigger. Probably that's the
-> reason for what nr_cpumask_bits was needed...
+Hi Baoquan,
 
-I think it makes sense to have a compile-time-constant value for nr_cpumask=
-_bits
-in some cases. For example on embedded platforms, where every opportunity t=
-o
-save a few kB should be used, or cases where NR_CPUS <=3D BITS_PER_LONG.
+>  arch_ioremap() return a bool,
+>    - IS_ERR means return an error
+>    - NULL means continue to remap
+>    - a non-NULL, non-IS_ERR pointer is returned directly
+>  arch_iounmap() return a bool,
+>    - 0 means continue to vunmap
+>    - error code means skip vunmap and return directly
 
->=20
-> There's also a very old misleading comment in cpumask.h:
->=20
-> =C2=A0*=C2=A0 If HOTPLUG is enabled, then cpu_possible_mask is forced to =
-have
-> =C2=A0*=C2=A0 all NR_CPUS bits set, otherwise it is just the set of CPUs =
-that
-> =C2=A0*=C2=A0 ACPI reports present at boot.
->=20
-> It lies, and I checked with x86_64 that cpu_possible_mask is populated
-> during boot time with 0b1111, if I create a 4-cpu VM. Hence, the
-> nr_cpu_ids is 4, while NR_CPUS =3D=3D 256.
->=20
-> Interestingly, there's no a single user of the cpumask_full(),
-> obviously, because it's broken. This is really a broken dead code.
->=20
-> Now that we have a test that checks sanity of cpumasks, this mess
-> popped up.
->=20
-> Your fix doesn't look correct, because it fixes one function, and
-> doesn't touch others. For example, the cpumask subset() may fail
-> if src1p will have set bits after nr_cpu_ids, while cpumask_full()
-> will be returning true.
+It would make more sense if the return values were described
+from the prospective of an architecture, not the caller.
+I.e true - unmapped, false - not supported, etc.
 
-It appears the documentation for cpumask_full() is also incorrect, because =
-it
-claims to check if all CPUs < nr_cpu_ids are set. Meanwhile, the implementa=
-tion
-checks if all CPUs < nr_cpumask_bits are set.
+> diff --git a/mm/ioremap.c b/mm/ioremap.c
+> index 8652426282cc..99fde69becc7 100644
+> --- a/mm/ioremap.c
+> +++ b/mm/ioremap.c
+> @@ -17,6 +17,13 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+>  	unsigned long offset, vaddr;
+>  	phys_addr_t last_addr;
+>  	struct vm_struct *area;
+> +	void __iomem *ioaddr;
+> +
+> +	ioaddr = arch_ioremap(phys_addr, size, prot);
+> +	if (IS_ERR(ioaddr))
+> +		return NULL;
+> +	else if (ioaddr)
+> +		return ioaddr;
 
-cpumask_weight() has a similar issue, and maybe also other cpumask_*() func=
-tions
-(I didn't check in detail yet).
+It seems to me arch_ioremap() could simply return an address
+or an error. Then IOMEM_ERR_PTR(-ENOSYS) if the architecture
+does not support it reads much better than the cryptic NULL.
 
->=20
-> In -next, there is an update from Sander for the cpumask test that
-> removes this check, and probably if you rebase on top of -next, you
-> can drop this and 2nd patch of your series.
->=20
-> What about proper fix? I think that a long time ago we didn't have
-> ACPI tables for possible cpus, and didn't populate cpumask_possible
-> from that, so the
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #define nr_cpumask_bits NR_CPU=
-S
->=20
-> worked well. Now that we have cpumask_possible partially filled,
-> we have to always
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #define nr_cpumask_bits nr_cpu=
-_ids
->=20
-> and pay +2.5K price in size even if OFFSTACK is OFF. At least, it wins
-> at runtime...
->=20
-> Any thoughts?
+Probably arch_iounmap() returning error would look better too,
+though not sure about that.
 
-It looks like both nr_cpumask_bits and nr_cpu_ids are used in a number of p=
-laces
-outside of lib/cpumask.c. Documentation for cpumask_*() functions almost al=
-ways
-refers to nr_cpu_ids as a highest valid value.
-
-Perhaps nr_cpumask_bits should become an variable for internal cpumask usag=
-e,
-and external users should only use nr_cpu_ids? The changes in 6.0 are my fi=
-rst
-real interaction with cpumask, so it's possible that there are things I'm
-missing here.
-
-That being said, some of the cpumask tests compare results to nr_cpumask_bi=
-ts,
-so those should then probably be fixed to compare against nr_cpu_ids instea=
-d.
-
-Best,
-Sander
-
->=20
-> ---
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index 5e2b10fb4975..0f044d93ad01 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -41,13 +41,7 @@ typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS)=
-; }
-> cpumask_t;
-> =C2=A0extern unsigned int nr_cpu_ids;
-> =C2=A0#endif
-> =C2=A0
-> -#ifdef CONFIG_CPUMASK_OFFSTACK
-> -/* Assuming NR_CPUS is huge, a runtime limit is more efficient.=C2=A0 Al=
-so,
-> - * not all bits may be allocated. */
-> =C2=A0#define nr_cpumask_bits=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0nr_cpu_ids
-> -#else
-> -#define nr_cpumask_bits=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(=
-(unsigned int)NR_CPUS)
-> -#endif
-> =C2=A0
-> =C2=A0/*
-> =C2=A0 * The following particular system cpumasks and operations manage
-> @@ -67,10 +61,6 @@ extern unsigned int nr_cpu_ids;
-> =C2=A0 *=C2=A0 cpu_online_mask is the dynamic subset of cpu_present_mask,
-> =C2=A0 *=C2=A0 indicating those CPUs available for scheduling.
-> =C2=A0 *
-> - *=C2=A0 If HOTPLUG is enabled, then cpu_possible_mask is forced to have
-> - *=C2=A0 all NR_CPUS bits set, otherwise it is just the set of CPUs that
-> - *=C2=A0 ACPI reports present at boot.
-> - *
-> =C2=A0 *=C2=A0 If HOTPLUG is enabled, then cpu_present_mask varies dynami=
-cally,
-> =C2=A0 *=C2=A0 depending on what ACPI reports as currently plugged in, ot=
-herwise
-> =C2=A0 *=C2=A0 cpu_present_mask is just a copy of cpu_possible_mask.
-
+Thanks!

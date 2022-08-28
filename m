@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57C35A3CEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A31A5A3CEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiH1JBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 05:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S231730AbiH1JBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 05:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiH1JBd (ORCPT
+        with ESMTP id S230190AbiH1JBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 05:01:33 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058C43ED6A
+        Sun, 28 Aug 2022 05:01:34 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A913ED70
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 02:01:33 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z16so6654033wrh.10
         for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 02:01:32 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id i188-20020a1c3bc5000000b003a7b6ae4eb2so1651103wma.4
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 02:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ukyn6zE4GRd1MFW/Dexs9A07F10NCcPaNwkvsxCOzJU=;
-        b=m0qFG57f4yjRW9Cy/7AOAnS9V3E3pw7LW+jz9wp3TLA3n3ZyXR9nEMVYe3JwAvs3H0
-         l5e1u2ClC9wY5EzbCaCQZKRmv4e7AuvP8P/wiVKO7b7SbreSh9PHAV5JjCvz8Q43DlJg
-         IIuvRr3Ew7Q2ojZnvjTXoapyRvimsAI+tycJ1BJTaP+VJFwKWpxEbfAz8QcQ4PB8jTa6
-         VPFCCkzW4z2HX5L9AH3icPsvajVDLiZSDjgFiLGu8IXQRiq56JjdrQYmAaIW7mcn2hdN
-         Fl5a7mT5WlS3z3D15alrmmBajQnR8TPJj7AU6iL4YXC2q8Hz1SWWFlXB4kdnXHuuCZig
-         f7pQ==
+        bh=T5aRwr6pqcsQk7PMMmsjKOURSAFgkEiep7tVEjgOEu8=;
+        b=VHkWScQVGA1O/h++o+ISeFm08ZrWQ6lklXSVLfK8Lvm9gb11iFWS0T+nIEjXLwjePZ
+         UfYwTYT3qbsxeGb1CP46+ACBKExgPPclx4VebqMm2X/++UwuvMM8ZZpuDd0HXYNWM0Xv
+         mUGNwjEtWhGKnCDis5NPLuH2/MgOZs/eYbHKphWDxDLqaGzNPyA4In6Ry2kONVNrLRz1
+         19rMHhT9dRrUKkk2bCEcTVhxV95XQULQ8afL2OyILxhFcLIScc2L575ortLL8fQ4Ci63
+         2sygGbbyto+wVPvADYcuCDGH9xLjl35j2ApkYaYGMocjDam4nwi7reQzpqQuEUyphpIc
+         On8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ukyn6zE4GRd1MFW/Dexs9A07F10NCcPaNwkvsxCOzJU=;
-        b=AjjCFD0R5mVWGAFIzWEKK05J66edgRfWyHQAusvX8qAhVCUmZt/6hBnbgHGJIqJdO7
-         nkpPqppT1u4a6gypPx0eZjFqRvT7OhhbGSG/5eFV+GWwA7yuV7fvMs5gM9NX7RYeQGyS
-         jM4y0OlMGS8urN3Gt+RaNIDXy6cFAQ5TWraWPNi+SfaoiPVw3CT4VNn0hxLmS4A08cge
-         uepp4MSY9Yget7v7rqoTuf9fQp+L4UE18Bc406RmL4uzWpU6fbv+0tdcXQBTIQD2TX0V
-         lY9n6FTFskeKqcuFc6hjlcha+pAkXFHBRBtKlv5+XL8k47Y5zTZ9OaaS3/hcgeEPlJSB
-         zFDQ==
-X-Gm-Message-State: ACgBeo0TNk3QBe6wJBAw3YIixhI5mD/oyqPctqJj98/Lr5Oe7OC5fLQ8
-        eiYqgzHfqFSEtcEmLJW3Sqs=
-X-Google-Smtp-Source: AA6agR6GSIlrIV6iE0Y9QRzAc0UvupFlSnPIfNPBalOeXbTNAY2mhCNTKeKHiTI+xlBNY9tbeOqISA==
-X-Received: by 2002:a05:600c:a49:b0:3a6:673a:2a9b with SMTP id c9-20020a05600c0a4900b003a6673a2a9bmr3943971wmq.3.1661677290418;
-        Sun, 28 Aug 2022 02:01:30 -0700 (PDT)
+        bh=T5aRwr6pqcsQk7PMMmsjKOURSAFgkEiep7tVEjgOEu8=;
+        b=kELZ2tIv9Mr33IbTO9ByW6GAPx7RobOrAPufmurhmXsrxZrBBR/yUPV2jaqGiWqZSe
+         ELMXDCHCbLdYVQNABXu2pUIxK/IF7tnxa8Z0KVSi3Gm7bdM1cy1h0+sDBzBUl3/6TfER
+         5Ao95VnNuxtfC8A7WGJcw2tfuoI1o9B49yr88+FPCzYUnUPXmXeEsO7qa9lyoq7JemfP
+         sUSUDJwGWoi9dUV2NBJ+Ui5dHZfmiOAnxqEK101tA1A/lw84Ca4luSJB2nMYFS4Hpcki
+         07KBgYUxP+EcHDIvg9CA8JJvcQKLc8qjnqef/G9fW7Ttse8YeU7ADgFotNQmM+5hTq0W
+         UHqg==
+X-Gm-Message-State: ACgBeo1vMfbz02RDKrFIV029YF9cWm1AUpiyXG8S58dLIBtymznmjm2/
+        X12oktSLEC/pp+SE/7XQj10=
+X-Google-Smtp-Source: AA6agR7DTKofji99EHJg6a2sV1p+rpbVC0NlL1922gOwraLzjeGAQxwfTtlcm2Qle43+l8k6Fe9iAQ==
+X-Received: by 2002:adf:ed0c:0:b0:225:50ce:eff8 with SMTP id a12-20020adfed0c000000b0022550ceeff8mr3828015wro.157.1661677291466;
+        Sun, 28 Aug 2022 02:01:31 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05600c351200b003a60ff7c082sm5733425wmq.15.2022.08.28.02.01.29
+        by smtp.gmail.com with ESMTPSA id h18-20020a05600c351200b003a60ff7c082sm5733425wmq.15.2022.08.28.02.01.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 02:01:30 -0700 (PDT)
+        Sun, 28 Aug 2022 02:01:31 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     javierm@redhat.com
 Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
@@ -59,9 +59,9 @@ Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH v2 2/3] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_xrgb2101010()
-Date:   Sun, 28 Aug 2022 11:01:20 +0200
-Message-Id: <20220828090121.13243-3-jose.exposito89@gmail.com>
+Subject: [PATCH v2 3/3] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_gray8()
+Date:   Sun, 28 Aug 2022 11:01:21 +0200
+Message-Id: <20220828090121.13243-4-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220828090121.13243-1-jose.exposito89@gmail.com>
 References: <20220828090121.13243-1-jose.exposito89@gmail.com>
@@ -79,102 +79,102 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Extend the existing test cases to test the conversion from XRGB8888 to
-XRGB2101010.
+grayscale.
 
 Tested-by: Maíra Canal <mairacanal@riseup.net>
 Reviewed-by: David Gow <davidgow@google.com>
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- .../gpu/drm/tests/drm_format_helper_test.c    | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ .../gpu/drm/tests/drm_format_helper_test.c    | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
 diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index 08d08e7ab19a..d8536db4de1e 100644
+index d8536db4de1e..2f548aa51a30 100644
 --- a/drivers/gpu/drm/tests/drm_format_helper_test.c
 +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -32,6 +32,11 @@ struct convert_to_rgb888_result {
- 	const u8 expected[TEST_BUF_SIZE];
+@@ -37,6 +37,11 @@ struct convert_to_xrgb2101010_result {
+ 	const u32 expected[TEST_BUF_SIZE];
  };
  
-+struct convert_to_xrgb2101010_result {
++struct convert_to_gray8_result {
 +	unsigned int dst_pitch;
-+	const u32 expected[TEST_BUF_SIZE];
++	const u8 expected[TEST_BUF_SIZE];
 +};
 +
  struct convert_xrgb8888_case {
  	const char *name;
  	unsigned int pitch;
-@@ -40,6 +45,7 @@ struct convert_xrgb8888_case {
- 	struct convert_to_rgb332_result rgb332_result;
+@@ -46,6 +51,7 @@ struct convert_xrgb8888_case {
  	struct convert_to_rgb565_result rgb565_result;
  	struct convert_to_rgb888_result rgb888_result;
-+	struct convert_to_xrgb2101010_result xrgb2101010_result;
+ 	struct convert_to_xrgb2101010_result xrgb2101010_result;
++	struct convert_to_gray8_result gray8_result;
  };
  
  static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
-@@ -61,6 +67,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+@@ -71,6 +77,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
  			.dst_pitch = 0,
- 			.expected = { 0x00, 0x00, 0xFF },
+ 			.expected = { 0x3FF00000 },
  		},
-+		.xrgb2101010_result = {
++		.gray8_result = {
 +			.dst_pitch = 0,
-+			.expected = { 0x3FF00000 },
++			.expected = { 0x4C },
 +		},
  	},
  	{
  		.name = "single_pixel_clip_rectangle",
-@@ -83,6 +93,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+@@ -97,6 +107,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
  			.dst_pitch = 0,
- 			.expected = { 0x00, 0x00, 0xFF },
+ 			.expected = { 0x3FF00000 },
  		},
-+		.xrgb2101010_result = {
++		.gray8_result = {
 +			.dst_pitch = 0,
-+			.expected = { 0x3FF00000 },
++			.expected = { 0x4C },
 +		},
  	},
  	{
  		/* Well known colors: White, black, red, green, blue, magenta,
-@@ -132,6 +146,15 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
- 				0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00,
+@@ -155,6 +169,15 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+ 				0x3FFFFC00, 0x000FFFFF,
  			},
  		},
-+		.xrgb2101010_result = {
++		.gray8_result = {
 +			.dst_pitch = 0,
 +			.expected = {
-+				0x3FFFFFFF, 0x00000000,
-+				0x3FF00000, 0x000FFC00,
-+				0x000003FF, 0x3FF003FF,
-+				0x3FFFFC00, 0x000FFFFF,
++				0xFF, 0x00,
++				0x4C, 0x99,
++				0x19, 0x66,
++				0xE5, 0xB2,
 +			},
 +		},
  	},
  	{
  		/* Randomly picked colors. Full buffer within the clip area. */
-@@ -175,6 +198,14 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
- 				0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+@@ -206,6 +229,14 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+ 				0x2A20300C, 0x1B1705CD, 0x03844672, 0x00000000, 0x00000000,
  			},
  		},
-+		.xrgb2101010_result = {
-+			.dst_pitch = 20,
++		.gray8_result = {
++			.dst_pitch = 5,
 +			.expected = {
-+				0x03844672, 0x0444D414, 0x2A20300C, 0x00000000, 0x00000000,
-+				0x1B1705CD, 0x03844672, 0x0444D414, 0x00000000, 0x00000000,
-+				0x2A20300C, 0x1B1705CD, 0x03844672, 0x00000000, 0x00000000,
++				0x3C, 0x33, 0x34, 0x00, 0x00,
++				0x6F, 0x3C, 0x33, 0x00, 0x00,
++				0x34, 0x6F, 0x3C, 0x00, 0x00,
 +			},
 +		},
  	},
  };
  
-@@ -319,10 +350,42 @@ static void xrgb8888_to_rgb888_test(struct kunit *test)
+@@ -381,11 +412,42 @@ static void xrgb8888_to_xrgb2101010_test(struct kunit *test)
  	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
  }
  
-+static void xrgb8888_to_xrgb2101010_test(struct kunit *test)
++static void xrgb8888_to_gray8_test(struct kunit *test)
 +{
 +	const struct convert_xrgb8888_case *params = test->param_value;
-+	const struct convert_to_xrgb2101010_result *result = &params->xrgb2101010_result;
++	const struct convert_to_gray8_result *result = &params->gray8_result;
 +	size_t dst_size;
-+	__u32 *buf = NULL;
++	__u8 *buf = NULL;
 +	__u32 *xrgb8888 = NULL;
 +	struct iosys_map dst, src;
 +
@@ -183,8 +183,8 @@ index 08d08e7ab19a..d8536db4de1e 100644
 +		.pitches = { params->pitch, 0, 0 },
 +	};
 +
-+	dst_size = conversion_buf_size(DRM_FORMAT_XRGB2101010,
-+				       result->dst_pitch, &params->clip);
++	dst_size = conversion_buf_size(DRM_FORMAT_R8, result->dst_pitch,
++				       &params->clip);
 +	KUNIT_ASSERT_GT(test, dst_size, 0);
 +
 +	buf = kunit_kzalloc(test, dst_size, GFP_KERNEL);
@@ -195,8 +195,7 @@ index 08d08e7ab19a..d8536db4de1e 100644
 +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
 +	iosys_map_set_vaddr(&src, xrgb8888);
 +
-+	drm_fb_xrgb8888_to_xrgb2101010(&dst, &result->dst_pitch, &src, &fb, &params->clip);
-+	buf = le32buf_to_cpu(test, buf, TEST_BUF_SIZE);
++	drm_fb_xrgb8888_to_gray8(&dst, &result->dst_pitch, &src, &fb, &params->clip);
 +	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
 +}
 +
@@ -204,7 +203,8 @@ index 08d08e7ab19a..d8536db4de1e 100644
  	KUNIT_CASE_PARAM(xrgb8888_to_rgb332_test, convert_xrgb8888_gen_params),
  	KUNIT_CASE_PARAM(xrgb8888_to_rgb565_test, convert_xrgb8888_gen_params),
  	KUNIT_CASE_PARAM(xrgb8888_to_rgb888_test, convert_xrgb8888_gen_params),
-+	KUNIT_CASE_PARAM(xrgb8888_to_xrgb2101010_test, convert_xrgb8888_gen_params),
+ 	KUNIT_CASE_PARAM(xrgb8888_to_xrgb2101010_test, convert_xrgb8888_gen_params),
++	KUNIT_CASE_PARAM(xrgb8888_to_gray8_test, convert_xrgb8888_gen_params),
  	{}
  };
  

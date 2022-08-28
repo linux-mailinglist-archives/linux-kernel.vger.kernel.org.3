@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06C25A3BA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 06:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E25E5A3BDF
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 07:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiH1Edk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 00:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S231936AbiH1E7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 00:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH1Edh (ORCPT
+        with ESMTP id S229445AbiH1E7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 00:33:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDACA4F6AC
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 21:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661661216; x=1693197216;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L0HWA6o5kX4X2iWvskmdGkc/A7c5SWQjNumMFWfU+5g=;
-  b=gNvzCdisX7wvGzAbSYNfD9EBukKP6MeDOBNKcP8iJBHK5GPxGvbGgltf
-   DjAq+u/O39gMUiIsA5m2QlbnAaK/v9H9kfi1QR5sKOmgFATlLWXwAlBlx
-   LlbW61lh43ZpXafChuFITltTmOhP7glkapjSQD9r+NOJyBR1H3TrHTR9y
-   Tz2YF2mN97n4PXKG3zYfplTEvDVMJxcIjzEowXTFF5JTPawHSH3CuJI1L
-   4hfN4XEKgWjitmhMGs5BSbpQ4EOYKBu2FoJzJljCrgX2/s0W17AEdh93r
-   KjrxzM5Iu/mr+QkKgbO92lha+e91vfLeMzx6qgSAqDFlz2t4TjkIl7qVH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="277725271"
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="277725271"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 21:33:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="587774136"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 21:33:34 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oS9zK-0000nH-0I;
-        Sun, 28 Aug 2022 04:33:34 +0000
-Date:   Sun, 28 Aug 2022 12:32:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: arch/arm/mm/copypage-fa.c:38:6: sparse: sparse: symbol
- 'fa_copy_user_highpage' was not declared. Should it be static?
-Message-ID: <202208281252.U8zOEcHO-lkp@intel.com>
+        Sun, 28 Aug 2022 00:59:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6F5275C7;
+        Sat, 27 Aug 2022 21:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jQsOWK7NX8ntAUmH3ww4h1vB+iWf3MvcUcLZSZ3JeLc=; b=pGwCUd0WB16nWcFvOHgXvmvEGi
+        mSZGQbWFo7MZZGbZcofTSSg4NxE36jrjudAuwxJEa/2LJSYz2P2XsglYU5mEEbMsyv7r+YiF7G1jw
+        sxzRNIhROzSkKoY66L8yMemd+gQz8nRbPLeDwS7HI++8W0QHUg+qnhOOE4A/IcGBiGGQC1Sme2hdB
+        xtjg4vOxQos6rN1C5FonDBR1uvxAH5bNVIYZGoLK9/JuL2rEMP++GcD+hmLVpE4zAeYBRouIUkR7f
+        iAxmj543TrmzNLbn3B9xLWDLdUvIrc8LrYxjRLY+DJqbbWa6qXfVcTpTLYSRCsMpEt9Sdps1P9Uj4
+        8wsU8mRQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSAOc-00CvtR-SQ; Sun, 28 Aug 2022 04:59:43 +0000
+Message-ID: <a79687c7-929e-19d1-97fc-9a2ecf39d38d@infradead.org>
+Date:   Sat, 27 Aug 2022 21:59:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3 2/2] docs/conf.py: Respect env variable SPHINX_IMGMATH
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-doc@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <9b8ff6d7-e97a-c03f-7d46-4b80ae3cf196@gmail.com>
+ <5a582b2b-d51c-a062-36b2-19479cf68fab@gmail.com>
+ <2032102a-e2d3-6105-f4e6-bba7decdbb66@infradead.org>
+ <e7e3cfb5-fc82-5ce4-b964-e3eec01dcc2c@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <e7e3cfb5-fc82-5ce4-b964-e3eec01dcc2c@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
 
-First bad commit (maybe != root cause):
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   10d4879f9ef01cc6190fafe4257d06f375bab92c
-commit: 3d427228f7370894680580fcd0381c0349624fa1 ARM: ixp4xx: enable multiplatform support
-date:   5 months ago
-config: arm-randconfig-s031-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281252.U8zOEcHO-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d427228f7370894680580fcd0381c0349624fa1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3d427228f7370894680580fcd0381c0349624fa1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/ drivers/video/fbdev/
+On 8/27/22 20:47, Akira Yokosawa wrote:
+> Hi Randy,  thank you for looking into this!
+> 
+> On Sat, 27 Aug 2022 17:38:41 -0700, Randy Dunlap wrote:
+>> Hi Akira,
+>>
+>> On 8/26/22 21:38, Akira Yokosawa wrote:
+>>> On some distros with coarse-grained packaging policy, dvipng is
+>>> installed along with latex.  In such cases, math rendering will
+>>> use imgmath by default.  It is possible to override the choice by
+>>> specifying the option string of "-D html_math_renderer='mathjax'"
+>>> to sphinx-build (Sphinx >= 1.8).
+>>>
+>>> To provide developers an easier-to-use knob, add code for an env
+>>> variable "SPHINX_IMGMATH" which overrides the automatic choice
+>>> of math renderer for html docs.
+>>>
+>>>     SPHINX_IMGMATH=yes : Load imgmath even if dvipng is not found
+>>>     SPHINX_IMGMATH=no  : Don't load imgmath (fall back to mathjax)
+>>
+>> Please add SPHINX_IMGMATH to Documentation/doc-guide/sphinx.rst
+>> (I guess), where other Sphinx environment variables are listed.
+> 
+> Right.
+> As I mentioned in the coverletter, (quoted below):
+> 
+>> I mentioned in the thread of [3] that imgmath can generate scalable
+>> math images in SVG.
+>>
+>> My plan was to implement that option as well.  But during tests under
+>> Fedora/CentOS/openSUSE, I encountered a couple of warnings from dvisvgm.
+>> That would be regressions on existing systems which happen to have
+>> not-working dvisvgm along with working dvipng.  I'm thinking of adding
+>> the SVG option later if I can figure out the minimal requirement for
+>> dvisvgm under imgmath.
+> 
+> , I'm working on follow-up changes related to SPHINX_IMGMATH.
+> 
+> My plan is to update related docs and help text in Makefile when I manage
+> the SVG option. At that time, SPHINX_IMGMATH will have additional options
+> like 'svg' and 'png'.
+> 
+> Hopefully, such follow-up changes can make the v6.1 merge window.
+> 
+> Does this plan work for you?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ok, yes, sure, no problem.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mm/copypage-fa.c:38:6: sparse: sparse: symbol 'fa_copy_user_highpage' was not declared. Should it be static?
->> arch/arm/mm/copypage-fa.c:55:6: sparse: sparse: symbol 'fa_clear_user_highpage' was not declared. Should it be static?
---
->> arch/arm/mm/copypage-xscale.c:84:6: sparse: sparse: symbol 'xscale_mc_copy_user_highpage' was not declared. Should it be static?
->> arch/arm/mm/copypage-xscale.c:107:1: sparse: sparse: symbol 'xscale_mc_clear_user_highpage' was not declared. Should it be static?
-
-vim +/fa_copy_user_highpage +38 arch/arm/mm/copypage-fa.c
-
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  37  
-28853ac8fe5221 Paulius Zaleckas 2009-03-25 @38  void fa_copy_user_highpage(struct page *to, struct page *from,
-a3be6327163c22 Hans Ulli Kroll  2010-04-27  39  	unsigned long vaddr, struct vm_area_struct *vma)
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  40  {
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  41  	void *kto, *kfrom;
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  42  
-5472e862de2bc4 Cong Wang        2011-11-25  43  	kto = kmap_atomic(to);
-5472e862de2bc4 Cong Wang        2011-11-25  44  	kfrom = kmap_atomic(from);
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  45  	fa_copy_user_page(kto, kfrom);
-5472e862de2bc4 Cong Wang        2011-11-25  46  	kunmap_atomic(kfrom);
-5472e862de2bc4 Cong Wang        2011-11-25  47  	kunmap_atomic(kto);
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  48  }
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  49  
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  50  /*
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  51   * Faraday optimised clear_user_page
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  52   *
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  53   * Same story as above.
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  54   */
-28853ac8fe5221 Paulius Zaleckas 2009-03-25 @55  void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  56  {
-5472e862de2bc4 Cong Wang        2011-11-25  57  	void *ptr, *kaddr = kmap_atomic(page);
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  58  	asm volatile("\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  59  	mov	r1, %2				@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  60  	mov	r2, #0				@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  61  	mov	r3, #0				@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  62  	mov	ip, #0				@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  63  	mov	lr, #0				@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  64  1:	stmia	%0, {r2, r3, ip, lr}		@ 4\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  65  	mcr	p15, 0, %0, c7, c14, 1		@ 1   clean and invalidate D line\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  66  	add	%0, %0, #16			@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  67  	stmia	%0, {r2, r3, ip, lr}		@ 4\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  68  	mcr	p15, 0, %0, c7, c14, 1		@ 1   clean and invalidate D line\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  69  	add	%0, %0, #16			@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  70  	subs	r1, r1, #1			@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  71  	bne	1b				@ 1\n\
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  72  	mcr	p15, 0, r1, c7, c10, 4		@ 1   drain WB"
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  73  	: "=r" (ptr)
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  74  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  75  	: "r1", "r2", "r3", "ip", "lr");
-5472e862de2bc4 Cong Wang        2011-11-25  76  	kunmap_atomic(kaddr);
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  77  }
-28853ac8fe5221 Paulius Zaleckas 2009-03-25  78  
-
-:::::: The code at line 38 was first introduced by commit
-:::::: 28853ac8fe5221de74a14f1182d7b2b383dfd85c ARM: Add support for FA526 v2
-
-:::::: TO: Paulius Zaleckas <paulius.zaleckas@teltonika.lt>
-:::::: CC: Paulius Zaleckas <paulius.zaleckas@teltonika.lt>
+Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

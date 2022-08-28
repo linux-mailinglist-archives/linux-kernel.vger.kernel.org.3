@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E625A3AE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 04:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAED95A3B02
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 04:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiH1Cki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 22:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S232038AbiH1Clq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 22:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH1Ck0 (ORCPT
+        with ESMTP id S231889AbiH1Cku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 22:40:26 -0400
+        Sat, 27 Aug 2022 22:40:50 -0400
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1F419C01;
-        Sat, 27 Aug 2022 19:40:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408EC2559E;
+        Sat, 27 Aug 2022 19:40:44 -0700 (PDT)
 Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Gj030639;
+        by conuserg-11.nifty.com with ESMTP id 27S2e6Gk030639;
         Sun, 28 Aug 2022 11:40:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gj030639
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gk030639
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661654407;
-        bh=GBayUjw41o8Ha0J4vO9A3wCOvGjxHrTwsRhpPXXTmuw=;
+        s=dec2015msa; t=1661654408;
+        bh=4CXgD6J2sGYGkI4a6Qbuk/WA0nBqfddOH+RIg6LYLPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ByT6NL1vCaRIYM1STLowZiUmlIgG7PkN+6+lGPAn8L/R2Cr7XzQruqQd2MVCCKMtU
-         vbFLivYm+qeSFa65gBldUTzt7dKj/u4XsGdq+1tgZ2fCLnQjg0fRaQ1llfvhrzt639
-         HPfW585oZ0YgeVqmpliddnnW+XQ5eOM8KHJW1ZUFtfYV/+23Iiam8BfcF4vduFDAPl
-         2LKRGxtoL3D2FW5vwFrMjgMp3SLhwcWfyIk0S53RMYEtCbY8cZn++Gz5twlzs47sey
-         xAXaBQDKHW1z5lgLtZiipdCn07Ec3SIdEHQXW/Jl8faI0ObNbvB6tluAUWr9+00LtZ
-         yPwMEFKL/00ow==
+        b=Aco7HsG21juUhVCgTkK8JTONguRPkeqX2Y5Kx5TTv79lflwr0pJpmtYWNLT4R2gDb
+         Chx/yk01xM/UPTSxzazlz3GL1fLZyYFT69VGJd+c2MqFy2wNjvlLLCHOXGHvrFGZ3O
+         rPjSOAr+/iiSf/Q772QlEANOi9rPoyNSIlCp9fxjRB3Jz+vS6sd7C0Ez+iencIdxD/
+         cVdQ5o3bDUhC7VzVA6gt6LUQPvFwDR2ttRJU/1EmjCQ4BjKUF98f8g79YIXA48ekSs
+         jEtjCch8hJezLHXFcymWdFP+altXIfEcoaLsF5Z1pD22Ct+xY+ii+Vg35rBNg9acW/
+         ayUBbUe9+qOKg==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 01/15] kbuild: remove duplicated dependency between modules and modules_check
-Date:   Sun, 28 Aug 2022 11:39:49 +0900
-Message-Id: <20220828024003.28873-2-masahiroy@kernel.org>
+Subject: [PATCH 02/15] kbuild: refactor single builds of *.ko
+Date:   Sun, 28 Aug 2022 11:39:50 +0900
+Message-Id: <20220828024003.28873-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
 References: <20220828024003.28873-1-masahiroy@kernel.org>
@@ -51,32 +51,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dependency, "modules: modules_check" is specified twice.
-Commit 1a998be620a1 ("kbuild: check module name conflict for external
-modules as well") missed to clean it up.
+Remove the potentially invalid modules.order instead of using
+the temporary file.
 
-'PHONY += modules' also appears twice.
+Also, KBUILD_MODULES is don't care for single builds. No need to
+cancel it.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ Makefile | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 7c955e906445..f04126181885 100644
+index f04126181885..badd318c5524 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1436,8 +1436,7 @@ endif
- # Build modules
- #
+@@ -1787,6 +1787,8 @@ modules modules_install:
+ 	@echo >&2 '***'
+ 	@exit 1
  
--PHONY += modules
--modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_check modules_prepare
-+modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_prepare
++KBUILD_MODULES :=
++
+ endif # CONFIG_MODULES
  
- cmd_modules_order = cat $(real-prereqs) > $@
+ # Single targets
+@@ -1813,18 +1815,12 @@ $(single-ko): single_modpost
+ $(single-no-ko): descend
+ 	@:
  
+-ifeq ($(KBUILD_EXTMOD),)
+-# For the single build of in-tree modules, use a temporary file to avoid
+-# the situation of modules_install installing an invalid modules.order.
+-MODORDER := .modules.tmp
+-endif
+-
++# Remove MODORDER when done because it is not the real one.
+ PHONY += single_modpost
+ single_modpost: $(single-no-ko) modules_prepare
+ 	$(Q){ $(foreach m, $(single-ko), echo $(extmod_prefix)$m;) } > $(MODORDER)
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
+-
+-KBUILD_MODULES := 1
++	$(Q)rm -f $(MODORDER)
+ 
+ export KBUILD_SINGLE_TARGETS := $(addprefix $(extmod_prefix), $(single-no-ko))
+ 
+@@ -1834,10 +1830,6 @@ build-dirs := $(foreach d, $(build-dirs), \
+ 
+ endif
+ 
+-ifndef CONFIG_MODULES
+-KBUILD_MODULES :=
+-endif
+-
+ # Handle descending into subdirectories listed in $(build-dirs)
+ # Preset locale variables to speed up the build process. Limit locale
+ # tweaks to this spot to avoid wrong language settings when running
 -- 
 2.34.1
 

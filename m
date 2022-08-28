@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EA25A3F9C
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5AF5A3FA6
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiH1UUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 16:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S229779AbiH1Uk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 16:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiH1UUd (ORCPT
+        with ESMTP id S229445AbiH1Uky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 16:20:33 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC641B784;
-        Sun, 28 Aug 2022 13:20:32 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bg22so6179576pjb.2;
-        Sun, 28 Aug 2022 13:20:32 -0700 (PDT)
+        Sun, 28 Aug 2022 16:40:54 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B09926139
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 13:40:53 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id c24so5983376pgg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 13:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=cdXy/2p9rsMPIOWZ0T02JFAzo0QjAdnfO9SJ8dve+cc=;
-        b=JgNeHCW2GSjwYdA5dGJu4BJGArLGwm+pMLYUUjc+6OlwAbE6fFdvuNLZRZ0Xt39aZ3
-         lMXqRhaYagnluWpa5we1Gt31mw8TCM0nEjhYvwD1TdFD0XbYgdghrpBpGWhiwzcZDWVJ
-         6jm9XwjRQBmA53V65DSSlx0G/p9y+0d4L9mbLB10QmfopkOY+Eozt4pCqTRISRtFku+I
-         4NpXGdG0K+Hh2wdxpolPEZqHzH6vSfMuuvMCVzL6ECWxDNbeEy3lKCzorwMQBmkIiUuM
-         okaLGv44gWiQCP7bRp07cOUGqrB9X8ygaUB2XD9MrxMxQFn3yWR7oAylT+oUdNmmt8HE
-         lPrA==
+        bh=5TKSzCkq+Hjec3ecHLHkEdqDfDjWmi1Bym5aA69ZNIA=;
+        b=mnfJBsV9a3uIqAfaRUMXms0tHpa9eIdBMuHWtBtjnkSU5zHX5mqpuJ7/3J9Yfc7LD4
+         EW+oiPnTmDKkyPmoejg2T4d1+qQOFiU89yRtRPgJAqWrk6t/CHny+8hwUSrxkNf0QMXA
+         B9hIJZNRwSBSiuN5PhiVkvrqhatAkGX4p/sdkMLcCEsFIsOrE+52BFdcz2utLPI16iji
+         lNz4tZ7yfn+hPiGe1b2YmVq0WuVMGXVUGTsqaW+lPblUsP+ZrOfAYYiUbvImBhd9kMdG
+         NyWB1pclvvn+QX2UAAl56uKFqdHia27yhQWjQxNPQahxrwexJBx4K1GJV/+AkmzYtQD4
+         uqng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=cdXy/2p9rsMPIOWZ0T02JFAzo0QjAdnfO9SJ8dve+cc=;
-        b=z5P1B+tL2zBcY5AsfDc07gSscSk5O8bIo6N3WgMw55FoFLGuXAjA6MSQkYw1dZeIFn
-         JF5rmJjb7C+1aX8WNohBErdkhsSHKp1/PUZcSrAWaHfTXrCn0Eg2aAGsLsVgA7EEGVUM
-         sgR5TbdBwVm3qbU4+4pVyAgGZ5w53bveVw9k8ViCRCFHvENzIrHI7Pa/uGzch+ED1Zwt
-         MH+vHDqbuqWgNXe5RVI6OdoajX42ZjXmLNMNciTc1lLs4wDeWYxBfjtjCDpqpxp5IxZ3
-         ty0pBKZn3Ovsa+7h/tNRTg52Ej42l6OUTYT7DJ0tOFkxznoBhr0ZHRYzCpiDtTDfKoaz
-         DE5g==
-X-Gm-Message-State: ACgBeo03LB82gzLc+0irau8tA1foAFl5XRewLgp4ZHP0cMBYUAoB1aaV
-        V8YsvRQpyKBl1W2WlfPiWCldo55lHU7pGg==
-X-Google-Smtp-Source: AA6agR4u7YKBG/AKP0OmFj31pCo2MKGpy9d/z1b9f4ys4jGXU5e1E8J7AY2b7g5Kv2KrQ84KZQzmeA==
-X-Received: by 2002:a17:902:b090:b0:172:deae:b990 with SMTP id p16-20020a170902b09000b00172deaeb990mr13186031plr.31.1661718031355;
-        Sun, 28 Aug 2022 13:20:31 -0700 (PDT)
+        bh=5TKSzCkq+Hjec3ecHLHkEdqDfDjWmi1Bym5aA69ZNIA=;
+        b=UnjOgafBegCd7+KUlsrnTo1ihQvmnAGKaxmbGAqJ1oUJCAFccGfVKxQiXEtMjBrEkd
+         uxR5YuXCTC80D8saqwp1mv5oafyiShdnMonyOnXy9VdCv8IS9pddm1Nk+wgXXi6fF/S9
+         rq2nOGRzafOaedZTZWxk0zOVchlUm6xBf+OCytNIhMwpOYJQgydNfpIHfQ8Irsn1jqLy
+         xjRIf9M+VBFJog2jEY5x8dsaIKlyRvqQgzv75GGv1a4NAYbT7cvEFQ/NQ2lDPM1ToWlO
+         WCKgIn+SN1FjS33it9KjIjdWjrSz7qwYIBq+QV9l1R6MNIN6ud4kDq/83rRgpYGe33qR
+         fx1A==
+X-Gm-Message-State: ACgBeo1wJmXQ0Cw3c5j7cwh85Xe8dOVCKqpe6vqPo1DsjGVXRYS08rXi
+        fV41p5bquIlsakFHuMVV9Dh0Vw2wduU83w==
+X-Google-Smtp-Source: AA6agR6cRtlk5MBW9Bo1jHvWWebvofHWBkmIjNaKbpizSkHJ0ByFzt3xf5Dce2jbiBIJLrXksS0b2A==
+X-Received: by 2002:a63:491c:0:b0:42b:4321:a492 with SMTP id w28-20020a63491c000000b0042b4321a492mr11172817pga.160.1661719251984;
+        Sun, 28 Aug 2022 13:40:51 -0700 (PDT)
 Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id u71-20020a62794a000000b005368341381fsm5671048pfc.106.2022.08.28.13.20.30
+        by smtp.googlemail.com with ESMTPSA id c18-20020a621c12000000b005381f50d1e8sm1531921pfc.115.2022.08.28.13.40.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 13:20:30 -0700 (PDT)
+        Sun, 28 Aug 2022 13:40:51 -0700 (PDT)
 From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
         lily <floridsleeves@gmail.com>
-Subject: [PATCH v1] drivers/clk/clk: check return value of clk_pm_runtime_get()
-Date:   Sun, 28 Aug 2022 13:20:25 -0700
-Message-Id: <20220828202025.1948848-1-floridsleeves@gmail.com>
+Subject: [PATCH v1] drivers/base/auxiliary: check return value of strrchr()
+Date:   Sun, 28 Aug 2022 13:40:40 -0700
+Message-Id: <20220828204040.1953493-1-floridsleeves@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,31 +70,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: lily <floridsleeves@gmail.com>
 
-clk_pm_runtime_get() could fail. Check the return status.
+The return value of strrchr() could be NULL, which will cause invalid
+offset in (int)(p - name). So we check it here.
 
 Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
- drivers/clk/clk.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/base/auxiliary.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 7fc191c15507..f22b86dfe2f2 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -2981,8 +2981,11 @@ static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
- 				     int level)
- {
- 	struct clk_core *child;
--
--	clk_pm_runtime_get(c);
-+	int ret;
-+	
-+	ret = clk_pm_runtime_get(c);
-+    if (ret)
-+        return;
- 	clk_summary_show_one(s, c, level);
- 	clk_pm_runtime_put(c);
+diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
+index 8c5e65930617..7ac23be47e1f 100644
+--- a/drivers/base/auxiliary.c
++++ b/drivers/base/auxiliary.c
+@@ -191,7 +191,8 @@ static int auxiliary_uevent(struct device *dev, struct kobj_uevent_env *env)
  
+ 	name = dev_name(dev);
+ 	p = strrchr(name, '.');
+-
++	if (!p)
++		return -EINVAL;
+ 	return add_uevent_var(env, "MODALIAS=%s%.*s", AUXILIARY_MODULE_PREFIX,
+ 			      (int)(p - name), name);
+ }
 -- 
 2.25.1
 

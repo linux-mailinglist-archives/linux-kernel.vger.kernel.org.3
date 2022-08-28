@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309835A3F1E
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9845A3F21
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiH1Sel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 14:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S229939AbiH1Sh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 14:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiH1Sej (ORCPT
+        with ESMTP id S229445AbiH1Sh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 14:34:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E9E28E21;
-        Sun, 28 Aug 2022 11:34:37 -0700 (PDT)
+        Sun, 28 Aug 2022 14:37:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D53206C;
+        Sun, 28 Aug 2022 11:37:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2498B80B8F;
-        Sun, 28 Aug 2022 18:34:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845DFC433C1;
-        Sun, 28 Aug 2022 18:34:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A794B60BBB;
+        Sun, 28 Aug 2022 18:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C7CC433D6;
+        Sun, 28 Aug 2022 18:37:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661711674;
-        bh=ahT+lpGrF6rTgep2rhZEVoy+99KwXWHHAI/AVZ/tUdA=;
+        s=k20201202; t=1661711874;
+        bh=jYHVQ0rSstcQBx3vvBMzsqc5C7/5CLyfa/jyYuVEQZM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=k20iq7iI159vEjYKjbs0qw4HOpSnMX6BNC8pkLthJVdpHGlJ6EsG9ErckEFAiaWP9
-         N+FqEr+z7kSPe3qQbFHIhpz8OWuEC5fskhqtduHom6G5xlISKVNyuoq+KQQd3HskF7
-         G8yhwaizhpTBgGGGPIsbqpShljYsiDe6yonbCK5bp5/38mEHevsxMRjtmWrN3NrWjb
-         dNC7svAXimn/nDnwiNRXuYZFmWHAG4Z46bqM2uiDx/tMmR3/qy0DPyAaFLIMIAfYu3
-         +i0LDN36XyAbsFT2K6JuZ8dFDloCWuJGSH8cZ5kVXjxpDiWU4tnYyXTdTpfYs/Crc+
-         KPnQy5mlqld1Q==
-Date:   Sun, 28 Aug 2022 19:00:12 +0100
+        b=Vk/UR70PdAV6jPHdLFbhzvud7dL99EaRXVPXgmgxYZ3af/F1WFsfsUijDk+CQtG84
+         /uJshm4Eukzah7YKWgzCZXD014MPovXcpB8RYK7aC0NM0Zq2s4DwFzaKGv/PAsGnWQ
+         yOQjoi9xogfeMnjhMBzOZdD/5M2BpuyA6hhZxi7KubrkU153Oky7s4SV5iOZs1JsmV
+         rH6A1m0jpJZ8Gf7zA2sDbVIQedAHJimN+7F+f3/AHQnabkLe34dIXC7ZI3TrY7/QLl
+         IqV5f8fXiBNj8KeT7Q4kbHajjadI85W5PjeFCyrnAgg0s2LcnhBwm40ldVKe4Ey9Fo
+         EyUmXVZGn0Q8A==
+Date:   Sun, 28 Aug 2022 19:03:32 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krisman@collabora.com,
-        kernel@collabora.com, alvaro.soliverez@collabora.com
-Subject: Re: [PATCH v2] iio: light: ltrf216a: Add raw attribute
-Message-ID: <20220828190012.224e2c1d@jic23-huawei>
-In-Reply-To: <5f7fd4cc-dcc5-2d47-5271-bf7bd78b5df4@collabora.com>
-References: <20220812100424.529425-1-shreeya.patel@collabora.com>
-        <20220814172232.4caeaf1c@jic23-huawei>
-        <5f7fd4cc-dcc5-2d47-5271-bf7bd78b5df4@collabora.com>
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] iio: accel: bma400: Add support for single and
+ double tap events
+Message-ID: <20220828190332.57ee9aa2@jic23-huawei>
+In-Reply-To: <CAM+2Eu+a8LM+XBELAm9H51EWVwCDqcYaxfdj4_-Sk9TtJ0gLJA@mail.gmail.com>
+References: <20220825194604.15645-1-jagathjog1996@gmail.com>
+        <20220825194604.15645-3-jagathjog1996@gmail.com>
+        <CAHp75Vc5048aQL5cLy-OfBfnH6tz_7z24sFX2H1oGRz+JUyq9Q@mail.gmail.com>
+        <CAM+2Eu+a8LM+XBELAm9H51EWVwCDqcYaxfdj4_-Sk9TtJ0gLJA@mail.gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,124 +62,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 13:08:16 +0530
-Shreeya Patel <shreeya.patel@collabora.com> wrote:
+On Sat, 27 Aug 2022 03:36:23 +0530
+Jagath Jog J <jagathjog1996@gmail.com> wrote:
 
-> On 14/08/22 21:52, Jonathan Cameron wrote:
-> > On Fri, 12 Aug 2022 15:34:24 +0530
-> > Shreeya Patel <shreeya.patel@collabora.com> wrote:
-> >  
-> >> Add IIO_CHAN_INFO_RAW to the mask to be able to read raw values
-> >> from the light sensor.
-> >>
-> >> The userspace code for brightness control in steam deck uses the
-> >> in_illuminance_input value through sysfs and multiplies it
-> >> with a constant stored in BIOS at factory calibration time.
-> >>
-> >> The downstream driver for LTRF216A that we have been using
-> >> has incorrect formula for LUX calculation which we corrected
-> >> in the upstreamed driver.
-> >>
-> >> Now to be able to use the upstreamed driver, we need to add some
-> >> magic in userspace so that the brightness control works like before
-> >> even with the updated LUX formula.
-> >>
-> >> Hence, we need the raw data to calculate a constant that can be
-> >> added in userspace code.
-> >>
-> >> Downstream driver LUX formula :-
-> >> (greendata*8*LTRF216A_WIN_FAC) / (data->als_gain_fac*data->int_time_fac*10)
-> >>
-> >> Upstreamed driver LUX formula :-
-> >> (greendata*45*LTRF216A_WIN_FAC) / (data->als_gain_fac*data->int_time_fac)
-> >>
-> >> greendata is the ALS_DATA which we would like to get through sysfs using
-> >> the raw attribute.
-> >>
-> >> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>  
-> > Hi Shreeya.
-> >
-> > Your description above makes me wonder though if we should support
-> > this as an intensity channel as we did for many of the early Ambient light
-> > sensors.  Not sure why it's called 'greendata' btw!
-> > For those early tsl2583 IIRC and similar, we had two sensors with infrared vs
-> > visible+infrared (which is basically what clear is here).
-> > The readings given were of those two sensors then we did a bunch of maths
-> > to convert those to LUX (in simplest drivers we simply subtracted
-> > the infrared part from visible and applied a scale factor)
-> >
-> > That lead to IIO_TYPE_BOTH though we later added IIO_TYPE_CLEAR which is
-> > subtly different as that was for color sensors with RGB and clearish
-> > filters.  The value you want here doesn't really correspond to any of
-> > those modifiers
-> >
-> > I guess that brings us back around to LIGHT(illuminance) + raw as you have it.
-> > or adding a 'visible' modifier which is also rather ugly and hard
-> > to define.
-> >
-> > Let's leave this on list a while longer to see if others comment.
-> > For now I'm inclined to just accept this as a dirty hack needed for this
-> > corner case.  
-> Hi Jonathan,
+> Hi Andy,
 > 
-> I was wondering if it's fine to merge this now since we haven't got
-> any other comments on it.
+> On Fri, Aug 26, 2022 at 1:53 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Thu, Aug 25, 2022 at 10:46 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:  
+> > >
+> > > Add support for single and double tap events based on the tap threshold
+> > > value, minimum quiet time before and after the tap and minimum time
+> > > between the taps in the double tap. The INT1 pin is used to interrupt
+> > > and the event is pushed to userspace.  
+> >
+> > ...
+> >  
+> > > +static int tap_reset_timeout[] = {
+> > > +       300000,
+> > > +       400000,
+> > > +       500000,
+> > > +       600000  
+> >
+> > + Comma and so on for the rest of the similar cases.  
+> 
+> This is the terminator case so I have not added a comma in the last.
+> All three tap configurations have only 4 value options.
+> 
+> >  
+> > > +};  
+> >
+> > ...
+> >  
+> > > +static int usec_to_tapreg_raw(int usec, const int *time_list)
+> > > +{
+> > > +       int index;
+> > > +
+> > > +       for (index = 0; index < 4; index++) {  
+> >
+> > Magic. Shouldn't be defined?  
+> 
+> All tap configuration value arrays are of size 4, I will define a
+> macro for that.
+> 
+> >
+> > Also you may add it to each data structure in question.  
+> 
+> Do you mean storing these values in the device's private structure?
 
-Dirty hack accepted :)
+I suspect Andy means making sure they are all 4 long via
++static int tap_reset_timeout[NEW_LENGTH_DEFINE] = {
+etc.
 
-Applied to the togreg branch of iio.git, initially pushed out as testing
-to let the autobuilders see what they can break.
-
-Thanks,
-
-Jonathan
 
 > 
+> Tap configuration values are not stored in the device's private
+> structure because.
+> - I am directly accessing the device registers in _read_event_value()
+> and _write_event_value().
+> - These configuration values are not used in the other parts of
+> the driver.
+> - Two of these configurations have a default value so instead of
+> reading and storing these values in the device's private structure
+> during device init, I am directly accessing the device's register.
 > 
-> Thanks
-> Shreeya Patel
-> > Jonathan
 > >  
-> >> ---
-> >>
-> >> Changes in v2
-> >>    - Add a better commit message explaining why we want this change.
-> >>    - Call ltrf216a_set_power_state(data, false) before return.
-> >>
-> >>
-> >>   drivers/iio/light/ltrf216a.c | 13 +++++++++++++
-> >>   1 file changed, 13 insertions(+)
-> >>
-> >> diff --git a/drivers/iio/light/ltrf216a.c b/drivers/iio/light/ltrf216a.c
-> >> index e6e24e70d2b9..4b8ef36b6912 100644
-> >> --- a/drivers/iio/light/ltrf216a.c
-> >> +++ b/drivers/iio/light/ltrf216a.c
-> >> @@ -93,6 +93,7 @@ static const struct iio_chan_spec ltrf216a_channels[] = {
-> >>   	{
-> >>   		.type = IIO_LIGHT,
-> >>   		.info_mask_separate =
-> >> +			BIT(IIO_CHAN_INFO_RAW) |
-> >>   			BIT(IIO_CHAN_INFO_PROCESSED) |
-> >>   			BIT(IIO_CHAN_INFO_INT_TIME),
-> >>   		.info_mask_separate_available =
-> >> @@ -259,6 +260,18 @@ static int ltrf216a_read_raw(struct iio_dev *indio_dev,
-> >>   	int ret;
-> >>   
-> >>   	switch (mask) {
-> >> +	case IIO_CHAN_INFO_RAW:
-> >> +		ret = ltrf216a_set_power_state(data, true);
-> >> +		if (ret)
-> >> +			return ret;
-> >> +		mutex_lock(&data->lock);
-> >> +		ret = ltrf216a_read_data(data, LTRF216A_ALS_DATA_0);
-> >> +		mutex_unlock(&data->lock);
-> >> +		ltrf216a_set_power_state(data, false);
-> >> +		if (ret < 0)
-> >> +			return ret;
-> >> +		*val = ret;
-> >> +		return IIO_VAL_INT;
-> >>   	case IIO_CHAN_INFO_PROCESSED:
-> >>   		mutex_lock(&data->lock);
-> >>   		ret = ltrf216a_get_lux(data);  
+> > > +               if (usec == time_list[index])
+> > > +                       return index;
+> > > +       }
+> > > +       return -EINVAL;
+> > > +}  
+> >
+> > ...
 > >  
+> > > +       int ret;
+> > > +       unsigned int mask, field_value;  
+> >
+> > Reversed xmas tree order?
+> >  
+> > > +        * Tap interrupts are operating with the data rate of 200Hz.  
+> >
+> > a data  
+> 
+> Sure, I will correct these in the next patch series.
+> 
+> Thank you
+> Jagath
+> 
+> >  
+> > > +        * See section 4.7 "Tap sensing interrupt" in datasheet v1.2.
+> > > +        */  
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko  
 

@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305985A3E82
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 18:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C745A3E8C
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 18:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiH1QHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 12:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S229500AbiH1QVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 12:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiH1QHQ (ORCPT
+        with ESMTP id S229489AbiH1QVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 12:07:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DD32CE0C;
-        Sun, 28 Aug 2022 09:07:13 -0700 (PDT)
+        Sun, 28 Aug 2022 12:21:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9C41CFFE;
+        Sun, 28 Aug 2022 09:21:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA1DDCE0924;
-        Sun, 28 Aug 2022 16:07:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0C8C433D6;
-        Sun, 28 Aug 2022 16:07:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 432FD60B3E;
+        Sun, 28 Aug 2022 16:21:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA299C433D7;
+        Sun, 28 Aug 2022 16:21:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661702828;
-        bh=6QmM8/GiuDkSpxDLj8miyaVK8Mz2SqME5orytHsgun4=;
+        s=k20201202; t=1661703690;
+        bh=qYruH8K/GFaVT47Q2Gp0/tqxVZZ0LOn2zgpb+Qy0tMk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iwawSyZ1CVVtLjkqYGlZjo0WWhqb3Y47lhAJj4vXDcTZT48bYySdYaCtOlWLuv1Vo
-         AqSCpcMf2SpgIOn7UtASmAoHLxWDiMRSt3joaW5icqYigDuLNx8f1Nb4rlp3WKUhbM
-         QGKEhktAGGDaNoCMW/fpn7v5zVxsXehwbrfQo/W/V6bqibtVCZ6xL36e+b6VuOgXJi
-         83GXgKnmfpI4maef9p9KchSEaACgPafiZIo/8k2ehniAW9x8onOTYpW6AMC5CX/KVj
-         uTi7+x5rG6tY4BvFJPnYM+1cQ3KMYCT01lxxkH9y7sUbAyjQIMRy9SlO+0nFjUkH0P
-         atwrlYISmNvrQ==
-Date:   Sun, 28 Aug 2022 16:32:47 +0100
+        b=LV9FfEsOCa+wpjcTo6584src7EGkGKYdBVjujp7f3pBNuPBKqXz6r6IMc0d6HIUpj
+         B1GbebuZvK6SNN41Za9QHOcnJZ4esq2/REoU3mkqWwGrf/nYrJvjJsutjPKEaZn1II
+         VEvBeaAhMjCNY8LbKFwI01+9KwtA72mCgw48hczTmbday4HA1wwJ2gHpDjImv9BEOE
+         llBLgphQePOuC2ffYZlX9MRr6gYfWd5aXZtANjfm8g/9JQfS6ZkuRESPTOWTXsxXPI
+         jKvYRF/omTJyC96i1+6uD5SqoBvqHoke9FamjSrwZ6+kiHlPHJ8OgFn9o9FSaZBcaA
+         KbxPpfhoyeh8Q==
+Date:   Sun, 28 Aug 2022 16:47:08 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel <kernel@axis.com>, Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iio: buffer: Silence lock nesting splat
-Message-ID: <20220828163247.3d6417d9@jic23-huawei>
-In-Reply-To: <YwSLhWFbGb26B3mx@axis.com>
-References: <20220816080828.1218667-1-vincent.whitchurch@axis.com>
-        <CAHp75VebQfdHrfYTmF0w9M556ZV8fG5jJ2rAN5a3mrB1mbvOQw@mail.gmail.com>
-        <20220820120800.519b5eb5@jic23-huawei>
-        <YwSLhWFbGb26B3mx@axis.com>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/3] units: complement the set of Hz units
+Message-ID: <20220828164708.017c400d@jic23-huawei>
+In-Reply-To: <20220801143811.14817-1-ddrokosov@sberdevices.ru>
+References: <20220801143811.14817-1-ddrokosov@sberdevices.ru>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -60,40 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 10:10:45 +0200
-Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
+On Mon, 1 Aug 2022 14:37:23 +0000
+Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
 
-> On Sat, Aug 20, 2022 at 01:08:00PM +0200, Jonathan Cameron wrote:
-> > On Fri, 19 Aug 2022 11:03:55 +0300
-> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:  
-> > > On top of that, Fixes tag?  
-> > It's going to be tricky to identify - the interface predates usecases that were IIO
-> > drivers by a long way.  I guess introduction of first IIO driver that used
-> > a callback buffer? No idea which one that was :(  
+> During msa311 accel IIO driver development
 > 
-> AFAICS there's only one IIO driver upstream using a callback buffer, and
-> it's lmp91000, so I can point the fixes tag to the patch which added
-> that.
-
-Ah. That's handy.
-
+> https://lore.kernel.org/linux-iio/20220616104211.9257-1-ddrokosov@sberdevices.ru/
 > 
-> By the way, note that lmp91000 actually fails to probe in mainline
-> without extra patches, and it seems to have been that way for a while
-> now.  I noticed this lockdep splat when working on a new driver which
-> also uses a callback buffer.  I can post the fixes I used to get
-> lmp91000 to probe successfully (in roadtest) separately.
-That would be great.  Unfortunately drivers sometimes bit rot
-without testing.
+> Andy requested to use proper units in the hz->ms calculation. Current
+> units.h header doesn't have milli, micro and nano HZ coefficients, so
+> some drivers (in the IIO subsystem) implement their own copies for that.
+> 
+> The current patchset resolves such a problem and intoduces general
+> MILLIHZ_PER_HZ, MICROHZ_PER_HZ and NANOHZ_PER_HZ definitions in the units.h,
+> and fixes all drivers which duplicate these units.
 
-Any plans to post updated roadtest soon?  I'm keen to add more test cases
-and use it to cleanup the remaining staging drivers.  Very helpful tool,
-but I don't want to be developing test sets against an old version if
-it's going to be costly to forward port it. No great rush though as
-I've bitten off a bit more than I was aiming to in prep for plumbers so
-not going to get anything significant done in IIO until mid September.
+Ok, I'm just about convinced this is worth doing given the precedence
+of similar cases. Applied to the togreg branch of iio.git and pushed
+out as testing.
 
 Thanks,
 
 Jonathan
+> 
+> Changes:
+> * v2->v3:
+>     - changed UHZ_PER_HZ to MICROHZ_PER_HZ and NHZ_PER_HZ to
+>       NANOHZ_PER_HZ to save name consistency for all new HZ units
+> 
+> * v1->v2:
+>     - changed MHZ_PER_HZ to a different name as Andy suggested
+>       (suppose MILLIHZ_PER_HZ is good enough)
+> 
+> Dmitry Rokosov (3):
+>   units: complement the set of Hz units
+>   iio: accel: adxl345: use HZ macro from units.h
+>   iio: common: scmi_sensors: use HZ macro from units.h
+> 
+>  drivers/iio/accel/adxl345_core.c           | 7 ++++---
+>  drivers/iio/common/scmi_sensors/scmi_iio.c | 8 ++++----
+>  include/linux/units.h                      | 3 +++
+>  3 files changed, 11 insertions(+), 7 deletions(-)
+> 
 

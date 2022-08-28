@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB905A3E3D
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 17:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460955A3E41
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 17:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiH1PMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 11:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S229893AbiH1PNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 11:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiH1PMu (ORCPT
+        with ESMTP id S229904AbiH1PNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 11:12:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795EF32B8F
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661699568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BUHt8viGrNndwp37shsvtUW2KKbCQVW2cJW1i0ePY94=;
-        b=IEl+WyFWqPRU5+2R57PmUvkYDGE24sRAHbtwjQouphZmMVIOo2P2uomXyU7wzS3l4urhhY
-        EUoGGJsfLZsVm8BkV+qTH5fhbJ/2H9fgdRJ41lCB4WmFBXIy9vOnIpfF/G1yJjLnrlZ2Cw
-        xurbeVx2YQZKyd8M0yfqVwrFAOfhdkU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-YkyWXcRwPri3No6NkYPM7Q-1; Sun, 28 Aug 2022 11:12:43 -0400
-X-MC-Unique: YkyWXcRwPri3No6NkYPM7Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DCB1429AA389;
-        Sun, 28 Aug 2022 15:12:42 +0000 (UTC)
-Received: from localhost (ovpn-12-25.pek2.redhat.com [10.72.12.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED90F2026D64;
-        Sun, 28 Aug 2022 15:12:41 +0000 (UTC)
-Date:   Sun, 28 Aug 2022 23:12:38 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v2 06/11] ia64: mm: Convert to GENERIC_IOREMAP
-Message-ID: <YwuF5oobjhahuybe@MiWiFi-R3L-srv>
-References: <20220820003125.353570-1-bhe@redhat.com>
- <20220820003125.353570-7-bhe@redhat.com>
- <YwHYeiBP4EKi1Hd8@infradead.org>
+        Sun, 28 Aug 2022 11:13:00 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188A32BB4
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:12:57 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id l8so8053483lfc.12
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=OtM7iPNjdY/5wZ1fS/xdrs+Yl/HaQkufjAk9Dk8g/F4=;
+        b=ZM9+t75/Iyhz/lVJ4dOs+/qO7x3tO4hFdfVYKfJAKuZtKyO0dYezs2g8vYXYLIPrgv
+         0THHHcwNDPJR/dGl7hpzW5jhbj7wa7lJHZvMgEFaHe1pqdTYPUEttNy2XsAXrIJL3B6s
+         OfljqMOZhjzRj2nRTGyB2cE/4MPxAesLsxCsMU8my4rlUdYwfsgzSeWjKyHHIncaTeTK
+         36DijBVMrf13XmSw/tz6YXINirzTxABTTunVY1jBpbTFOF5uTeJRmL3HZUnnhcL7wMD7
+         qetrttlyczmEIVMiPk229AcL65+w8/VHzxIUhMskDFqjvUHT7VOY9HsIrPNcK3utCzYQ
+         xe5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=OtM7iPNjdY/5wZ1fS/xdrs+Yl/HaQkufjAk9Dk8g/F4=;
+        b=2T0wYnFlsd5XpMcenhMb8FntGkGpb94T5ut+YwJjj6LxXouFxmuORdT5EqDezhiohD
+         KdihvCU5j5b83cdEhDiEba1pYcWHdmBxEnv3gplXSwI5d5r7m+xGU98/khwuYs+vS+zC
+         Uxt2nVhkfvb96f6Z+9qK1z1zcYNVwm8hgxb4cfNz04okVnTCx+nUNdO1bx16TdfGohZ+
+         ThBUY2EibtpOqjkWLMEeSyJRRbOamfzNhIgu3tHDOnAnxKX4kqkAiYRSCmZXtRmxiy/I
+         ztyytK1LeT+h/QPXQxdFsV0C056lvOrB1rzJ+NaEtSY3wBXb1tbQy1axFlIlbfS6i6g9
+         ZCdQ==
+X-Gm-Message-State: ACgBeo2r+6bt5neCQsUlFGuSuyo+7SMm+TBIHJmYZuzBJ/zQRzvOFhtM
+        HRpfXhiG79Vb9ISdWRlpm5dIbQ==
+X-Google-Smtp-Source: AA6agR5BQ9SYbGpzS3uLENZcMMQo2IUbuXQi9Ks69vuUcUBcnzw3LTesdRgczeXwLvS6raLMb76axw==
+X-Received: by 2002:a05:6512:1583:b0:492:c028:d2f3 with SMTP id bp3-20020a056512158300b00492c028d2f3mr5750535lfb.216.1661699575603;
+        Sun, 28 Aug 2022 08:12:55 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id c9-20020a2e9d89000000b002655fb689a6sm78562ljj.139.2022.08.28.08.12.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Aug 2022 08:12:55 -0700 (PDT)
+Message-ID: <cf49e23e-69f8-e8e7-056a-2b3c281ff214@linaro.org>
+Date:   Sun, 28 Aug 2022 18:12:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwHYeiBP4EKi1Hd8@infradead.org>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 07/11] dt-bindings: PCI: qcom-ep: Make PERST separation
+ optional
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org
+Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        dmitry.baryshkov@linaro.org
+References: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org>
+ <20220826181923.251564-8-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220826181923.251564-8-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,14 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/21/22 at 12:02am, Christoph Hellwig wrote:
-> On Sat, Aug 20, 2022 at 08:31:20AM +0800, Baoquan He wrote:
-> > Add hooks arch_ioremap() and arch_iounmap() for ia64's special
-> > operation when ioremap() and iounmap(), then ioremap_cache() is
-> > converted to use ioremap_prot() from GENERIC_IOREMAP.
+On 26/08/2022 21:19, Manivannan Sadhasivam wrote:
+> PERST separation is an optional debug feature used to collect the crash
+> dump from the PCIe endpoint devices by the PCIe host when the endpoint
+> crashes. This feature keeps the PCIe link up by separating the PCIe IP
+> block from the SoC reset logic.
 > 
-> Same comment about the commit log (I won't repeat it as it applies
-> to all conversions).
+> So remove the corresponding property "qcom,perst-regs" from the required
+> properties list.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Will do.
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

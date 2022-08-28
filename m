@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C045A3FC2
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 22:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876825A3FCC
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 23:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiH1U6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 16:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S230121AbiH1VEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 17:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiH1U5k (ORCPT
+        with ESMTP id S230210AbiH1VD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 16:57:40 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C4930F51;
-        Sun, 28 Aug 2022 13:57:37 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id y187so5181830iof.0;
-        Sun, 28 Aug 2022 13:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=yt4Ln5mavOnenD4+cxo4O1NwhU0jowj6f43C1oASLGc=;
-        b=Kb8lGCpoi9ULMjoH7+Um63Vl2BgEoNyKDu1/XJnj5L3lu2ga0F3D3PfIedoFMmCrGt
-         GokanMaQPm/WHcOTr8tnc/ty+LhWFdqPPKAVyJ/mOof1cb9RiEEhwiwgSogMniZv4Vu3
-         Dyr+JHDPH3oy+7Of2VibMmmmg0Rnv74dFiKQ3Tz/MN2fdYBS02oWRTpTBr2RIzcFxohS
-         CgMaTSPp/GTShmrViWmXwgId7s3oUHCOjgstZ+22KgufLqJO4AfKfAF41Gzh2eu3HqGc
-         h4S9ZMnHTqBdH2WXg0GVpCGkvSrKPMyumtsDcHpqDxI5GXUWr09Lvt1AS8tCwcUUqMtt
-         Q89A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=yt4Ln5mavOnenD4+cxo4O1NwhU0jowj6f43C1oASLGc=;
-        b=RdDNAYL8188hzkoN1PxyEpDZ9HfGuvbOPNOAeQTGsNIDoe+rhIJhKnqCrTfJx3rAI3
-         9h6o91Le1CFYAZ51uRrdtZOxcIe2+1NaEU+wb3bGelamsi52JvhdVhyexFz9K1BNgDNk
-         n7YsdZdu7xUPi8qmWcvnB/oHWHfR1N91l3sUBqG1BYnrSBfHfLW8YlnCKXb1dAXO3Lbd
-         Y6Fdoddtfup9nC6w3c/eCdP4i7crQK6rcHPkmv+pL1FQaZdz6zFk9D+uMe4xMtmPeyeS
-         qMSqcgdQjLtASX+nfVQq9tAXjIG16DmJfVRnJyDW/fHGT4ppjq9b4uAMmTrGWcsnnFjZ
-         PqPQ==
-X-Gm-Message-State: ACgBeo1Qb2naCcAg0XcTRz05KpOxWtQ6yCyYt1BabrNyRcI3tWujWjyk
-        mqsCcrlZn+3p3iVBhlX7tjhi3aJOCWU=
-X-Google-Smtp-Source: AA6agR5vNy6Eyx4YEGi8bcBzvZ3t+u1k+9V1F8fpQuE/+J/Q2WaN+41NTjso2y8ggZii5pisDfCcZg==
-X-Received: by 2002:a05:6638:32aa:b0:349:ecfb:80a with SMTP id f42-20020a05663832aa00b00349ecfb080amr8529975jav.73.1661720256643;
-        Sun, 28 Aug 2022 13:57:36 -0700 (PDT)
-Received: from fedora.. ([2604:2d80:4d8e:a000:6063:7cd5:2f24:16a6])
-        by smtp.gmail.com with ESMTPSA id k7-20020a02c767000000b00349be1ef390sm3572404jao.121.2022.08.28.13.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 13:57:36 -0700 (PDT)
-From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Subject: [PATCH v4 4/4] arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce Xiaomi Poco F1 EBBG variant
-Date:   Sun, 28 Aug 2022 15:57:23 -0500
-Message-Id: <20220828205723.20834-5-joelselvaraj.oss@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220828205723.20834-1-joelselvaraj.oss@gmail.com>
-References: <20220828205723.20834-1-joelselvaraj.oss@gmail.com>
+        Sun, 28 Aug 2022 17:03:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F075431232
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:03:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 981F7B80B6E
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 21:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577B6C433D7;
+        Sun, 28 Aug 2022 21:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661720633;
+        bh=dvr+0FsOsHb/g/YQGPJX8tDGZzGNU6WJ7c4FEWevhk4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UDXSH6F0xwcjYkF3/UgiFvOJ/gXimbJUsU2LpRndksy/Cht1hAolAVbiGVF+MCnWl
+         VpoxRaG1IrAQHa59C2u2CoGecoinG7ud9FLHhatYQvnf4upIPijUlL6hAWTemPkeKd
+         826bWsX1/ScEBHAd+XSYAaVT3umH+Q1gC2IVTUZpY+PrAiDuYMBClXZ9qsmD7AOCQB
+         NapkFQGs+tax8oQZleKDTBy+hGALKYbf+H4B8qn8u82pcqY+u2OUzr+2vRE2s9jh2r
+         WOUmvX4YYrIeMdbjYoTYpbYZmvJAo6BM4RtRs5mQRsIpfZ/DxuD+pILPk/MOCS2D8a
+         Pab0O8wmxubLA==
+From:   Mark Brown <broonie@kernel.org>
+To:     perex@perex.cz, lgirdwood@gmail.com, bgoswami@quicinc.com,
+        tiwai@suse.com, aidanmacdonald.0x0@gmail.com,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20220721102558.25457-1-aidanmacdonald.0x0@gmail.com>
+References: <20220721102558.25457-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: [PATCH -next 0/2] ASoC: Cleanup deprecated regmap-irq functionality
+Message-Id: <166172063107.600125.6867338355172165841.b4-ty@kernel.org>
+Date:   Sun, 28 Aug 2022 22:03:51 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce support for the Xiaomi Poco F1 EBBG variant. The EBBG variant
-uses EBBG FT8719 panel manufactured by EBBG.
+On Thu, 21 Jul 2022 11:25:56 +0100, Aidan MacDonald wrote:
+> Update two ASoC codec drivers to remove uses of regmap-irq type
+> registers, which have recently been deprecated by the "regmap-irq
+> cleanups and refactoring" series in linux-next.
+> 
+> Link: https://lore.kernel.org/lkml/20220623211420.918875-1-aidanmacdonald.0x0@gmail.com/
+> 
+> Aidan MacDonald (2):
+>   sound: soc: codecs: wcd9335: Convert irq chip to config regs
+>   sound: soc: codecs: wcd938x: Remove spurious type_base from irq chip
+> 
+> [...]
 
-Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- arch/arm64/boot/dts/qcom/Makefile                 |  1 +
- .../dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts     | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
+Applied to
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d0bba59d2a8c..a5045bd120c1 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -128,6 +128,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-fajita.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-akari.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-akatsuki.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-apollo.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-beryllium-ebbg.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-beryllium-tianma.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-polaris.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-new file mode 100644
-index 000000000000..76931ebad065
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "sdm845-xiaomi-beryllium-common.dtsi"
-+
-+/ {
-+	model = "Xiaomi Pocophone F1 (EBBG)";
-+	compatible = "xiaomi,beryllium-ebbg", "qcom,sdm845";
-+};
-+
-+&display_panel {
-+	compatible = "ebbg,ft8719";
-+	status = "okay";
-+};
--- 
-2.37.2
+   broonie/sound.git for-next
 
+Thanks!
+
+[1/2] sound: soc: codecs: wcd9335: Convert irq chip to config regs
+      commit: 255a03bb1bb3b10d1c1ca785c596db84723f59d7
+[2/2] sound: soc: codecs: wcd938x: Remove spurious type_base from irq chip
+      commit: de3287f177a5666409978a1a0331a33e2842d43b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

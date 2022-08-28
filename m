@@ -2,76 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76425A3F13
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2E75A3F15
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiH1SWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 14:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S229912AbiH1SXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 14:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiH1SWJ (ORCPT
+        with ESMTP id S229633AbiH1SXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 14:22:09 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E5D2A430;
-        Sun, 28 Aug 2022 11:22:05 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y127so6234539pfy.5;
-        Sun, 28 Aug 2022 11:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=fDxt/23RMfjSPySyD961NLt4VpOweqOjLnL5SIVCHSw=;
-        b=bYRe2XZSiSci2LOHFk4x2DL4UfLXQoCGgCBD1X+W6bzYL4E1x6f+eLhYmIXp7q53rW
-         Uo4HLItQM5SCdwRKOFo/PKO99zk0ev1GsMB4n8AfLYQjMlsPBBchv0gViHGlRajCZW+K
-         cA9OvTZId4uB8YFICMpI/1EkiEyyzvHs0SZdjd0LBmU+XWTWtTyb/6/HhwPbnmqlIRss
-         kEbrFVTf+Jr0SVAsukYkqK/AOqGbxpalP10Wr6ELwkCpjLKMc4yVLcoMTZQnZfCCmuvf
-         oP/IvdKyf+e3fgFbFTmyrw1IHO3wI6pgK1/WjAkAppW869soncCXuBC+5JdGn0xcr0Ni
-         udyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=fDxt/23RMfjSPySyD961NLt4VpOweqOjLnL5SIVCHSw=;
-        b=C9BOuWz1wHzIsQ6CNyycxbFXoJn/HPEWnj+xhzGQ/X9J+naXDt85twsReXUp1GQGAK
-         T2vqExh/+d1kUkJjm+LhMFfXCuTL8WQljZxH2LjF2iTpBIrzfij08ZDNp23qI2YMmWDl
-         JAWOu7iuBWcETDQdtCDCGLmKteanr5tIOhiDVNOrZaqTAH/6jmBxueWle5eM5e7fQv+Y
-         whUfnvLdmRRTQoJNorE7dsQp0qBiIYyzj595jIsSaG2Dxa2Ck5LLwLLzqXSuAR2eAaGy
-         X1VlCwTekxR81S84AVZlJDQ9rSgSZoZlPdC3c12AkQm5K/rGCqkNQzQdYL8tvJlZtvB4
-         5QuA==
-X-Gm-Message-State: ACgBeo0LtD+Vte6JvP+aKTHh7sBoXD9EENcbSsu7pwOj9hFIfq0lrLDP
-        krs27t8X+/FJGH+kKSui/K8=
-X-Google-Smtp-Source: AA6agR7tU14ikL/UQg9apn73eAvtTX2DR/yMT2CYo2OogdbUN5FCCIPInYPJGDzhUW+NCZRXkw3MpA==
-X-Received: by 2002:a63:c5:0:b0:40d:d290:24ef with SMTP id 188-20020a6300c5000000b0040dd29024efmr11059768pga.141.1661710924333;
-        Sun, 28 Aug 2022 11:22:04 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id m1-20020a170902db0100b0016eef474042sm5650821plx.262.2022.08.28.11.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 11:22:03 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 28 Aug 2022 08:22:02 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Gabriel Ryan <gabe@cs.columbia.edu>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Abhishek Shah <abhishek.shah@columbia.edu>,
-        linux-kernel@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org, daniel@iogearbox.net,
-        hannes@cmpxchg.org, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, lizefan.x@bytedance.com,
-        netdev@vger.kernel.org, songliubraving@fb.com, yhs@fb.com
-Subject: Re: data-race in cgroup_get_tree / proc_cgroup_show
-Message-ID: <YwuySgH4j6h2CGvk@slm.duckdns.org>
-References: <CAEHB249jcoG=sMGLUgqw3Yf+SjZ7ZkUfF_M+WcyQGCAe77o2kA@mail.gmail.com>
- <20220819072256.fn7ctciefy4fc4cu@wittgenstein>
- <CALbthtdFY+GHTzGH9OujzqpOtWZAqsU3MAsjv5OpwZUW6gVa7A@mail.gmail.com>
+        Sun, 28 Aug 2022 14:23:15 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E872A957
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 11:23:13 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1oSMwB-0006AL-MV; Sun, 28 Aug 2022 20:23:11 +0200
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report  for mainline [2022-08-28]
+Date:   Sun, 28 Aug 2022 18:23:10 +0000
+Message-Id: <166170992386.1651569.17504808724724706636@leemhuis.info>
+X-Mailer: git-send-email 2.37.2
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALbthtdFY+GHTzGH9OujzqpOtWZAqsU3MAsjv5OpwZUW6gVa7A@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661710993;ef9f9c51;
+X-HE-SMSGID: 1oSMwB-0006AL-MV
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,42 +41,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:04:58PM -0400, Gabriel Ryan wrote:
-> Hi Christian,
-> 
-> We ran a quick test and confirm your suggestion would eliminate the
-> data race alert we observed. If the data race is benign (and it
-> appears to be), using WRITE_ONCE(cgrp_dfl_visible, true) instead of
-> cmpxchg in cgroup_get_tree() would probably also be ok.
+Hi Linus! Below is a slightly edited report from regzbot listing all
+regression from this cycle that the bot and I are aware of. The list is
+a bit longer than last cycle, as I keep an eye on bugzilla this cycle again.
 
-I don't see how the data race can lead to anything but would the following
-work?
+Not sure, maybe it would have been good if the following fix would have
+found the way into rc3, as it seems more than just one or two people
+already stumbled over the regression fixed by it:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&ida8e0f6b01b14b2e28ba144e112c883f03a3db2
+https://lore.kernel.org/all/?q�bffc7*
 
-Thanks.
+But well, it's not as bad as the regression caused by the "Rework
+asynchronous resume support" commit that you reverted on Friday, which
+iirc at least five different people had bisected in the past two
+weeks... :-/ I should have have prodded the maintainers to speed up to
+get this fixed before rc2, which would have saved a few people some
+trouble; too late now, but well, I learned my lesson.
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index ffaccd6373f1e..a90fdba881bdb 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2172,7 +2172,7 @@ static int cgroup_get_tree(struct fs_context *fc)
- 	struct cgroup_fs_context *ctx = cgroup_fc2context(fc);
- 	int ret;
- 
--	cgrp_dfl_visible = true;
-+	WRITE_ONCE(cgrp_dfl_visible, true);
- 	cgroup_get_live(&cgrp_dfl_root.cgrp);
- 	ctx->root = &cgrp_dfl_root;
- 
-@@ -6056,7 +6056,7 @@ int proc_cgroup_show(struct seq_file *m, struct pid_namespace *ns,
- 		struct cgroup *cgrp;
- 		int ssid, count = 0;
- 
--		if (root == &cgrp_dfl_root && !cgrp_dfl_visible)
-+		if (root == &cgrp_dfl_root && !READ_ONCE(cgrp_dfl_visible))
- 			continue;
- 
- 		seq_printf(m, "%d:", root->hierarchy_id);
+BTW, the 0-bot people make regzbot now track regressions their bot
+finds. I'm not yet sure if that is a good idea, as it seems quite a few
+developers don't even bother to reply to the reports from the bot -- at
+least that's the fate so far for four recent mainline problems 0-bot
+reported while getting regzbot involved:
+
+https://lore.kernel.org/lkml/c8310cba-36ef-2940-b2c2-07573e015185@intel.com/
+https://lore.kernel.org/lkml/db909f88-3f5c-afc8-424c-ced3f371037f@intel.com/
+https://lore.kernel.org/lkml/8a410343-b82a-0972-0f26-cc63b50d2ef9@intel.com/
+https://lore.kernel.org/lkml/YvpZYGa1Z1M38YcR@xsang-OptiPlex-9020/
+
+HTH, Ciao, Thorsten
+
+---
+Hi, this is regzbot, the Linux kernel regression tracking bot.
+
+Currently I'm aware of 62 regressions in linux-mainline. Find the
+current status below and the latest on the web:
+
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
 
 
--- 
-tejun
+=======================================================
+current cycle (v5.19.. aka v6.0-rc), culprit identified
+=======================================================
+
+
+[ *NEW* ] pm: booting on NXP i.MX8ULP broke
+-------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+https://lore.kernel.org/linux-arm-kernel/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+
+By Peng Fan; 12 days ago; 24 activities, latest 0 days ago.
+Introduced in 5a46079a9645 (v6.0-rc1)
+
+Fix incoming:
+* Revert "driver core: Delete driver_deferred_probe_check_state()"
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=13a8e0f6b01b14b2e28ba144e112c883f03a3db2
+
+
+[ *NEW* ] [bisected][regression] mediatek bluetooth 13d3:3563 (mt7921e) doesn't work with audio devices.
+--------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216382/
+https://bugzilla.kernel.org/show_bug.cgi?id=216382
+https://lore.kernel.org/regressions/167d11c6-68a4-c10a-9703-fceaddac3e42@leemhuis.info/
+
+By Arek Ruśniak and Arek Ruśniak; 9 days ago; 4 activities, latest 8 days ago.
+Introduced in 26afbd826ee3 (v6.0-rc1)
+
+Recent activities from: Arek Ruśniak (3), Luiz Von Dentz (1)
+
+
+===================================================
+current cycle (v5.19.. aka v6.0-rc), unkown culprit
+===================================================
+
+
+[ *NEW* ] Unable to handle kernel NULL pointer dereference at virtual address 00000008
+--------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216420/
+https://bugzilla.kernel.org/show_bug.cgi?id=216420
+https://lore.kernel.org/lkml/29a5c3e3-a590-01dd-1a2b-8415cae4a292@leemhuis.info/
+
+By frc.gabriel and frc.gabriel; 1 days ago; 4 activities, latest 0 days ago.
+Introduced in v5.19..v6.0-rc2
+
+Recent activities from: frc.gabriel (3), The Linux kernel's regression
+  tracker (Thorsten Leemhuis) (1)
+
+
+[ *NEW* ] [regression] nl80211: kernel reports: key addition failed
+-------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216421/
+https://bugzilla.kernel.org/show_bug.cgi?id=216421
+https://lore.kernel.org/lkml/dd37d8af-d7e4-daee-1f80-36c53fbac076@leemhuis.info/
+
+By XiaoYan Li and XiaoYan Li; 1 days ago; 1 activities, latest 1 days ago.
+Introduced in v6.0-rc1..v6.0-rc2
+
+Recent activities from: XiaoYan Li (1)
+
+
+[ *NEW* ] acpi wake up with black screen(failed to get iomux index)
+-------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216371/
+https://bugzilla.kernel.org/show_bug.cgi?id=216371
+https://lore.kernel.org/lkml/849a07ba-a53c-3f10-e2ec-25421c1e40ee@leemhuis.info/
+
+By neoe and neoe; 11 days ago; 16 activities, latest 1 days ago.
+Introduced in v5.19..v6.0-rc2
+
+Recent activities from: neoe (9), Mario Limonciello (AMD) (7)
+
+
+[ *NEW* ] pci or amdgpu: Uncorrected errors reported for AMD GPU
+----------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20220818203812.GA2381243@bhelgaas/
+https://lore.kernel.org/linux-pci/20220818203812.GA2381243@bhelgaas/
+https://bugzilla.kernel.org/show_bug.cgi?id=216373
+
+By Bjorn Helgaas and Tom Seewald; 9 days ago; 17 activities, latest 2 days ago.
+Introduced in v5.19..v6.0-rc1
+
+Recent activities from: Bjorn Helgaas (5), Christian König (4), Lazar,
+  Lijo (4), Tom Seewald (2), Felix Kuehling (1), Stefan Roese (1)
+
+One patch associated with this regression:
+* Re: [Bug 216373] New: Uncorrected errors reported for AMD GPU
+  https://lore.kernel.org/linux-pci/20220819171303.GA2491617@bhelgaas/
+  9 days ago, by Bjorn Helgaas
+
+
+[ *NEW* ] New 6.1 net/mac80211/rx.c warning with iwlwifi / Ultimate-N 6300 wifi
+-------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/498d714c-76be-9d04-26db-a1206878de5e@redhat.com/
+https://lore.kernel.org/linux-wireless/498d714c-76be-9d04-26db-a1206878de5e@redhat.com/
+
+By Hans de Goede; 8 days ago; 3 activities, latest 6 days ago.
+Introduced in v5.19..v6.0-rc1
+
+Recent activities from: Johannes Berg (1), Luís Henriques (1), Hans de
+  Goede (1)
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/165869171256.283493.2326902986633030609@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/

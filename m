@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAED95A3B02
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 04:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA2C5A3AED
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 04:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiH1Clq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 22:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbiH1Cku (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231887AbiH1Cku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 27 Aug 2022 22:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231658AbiH1Ckr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 27 Aug 2022 22:40:47 -0400
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408EC2559E;
-        Sat, 27 Aug 2022 19:40:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85347252B6;
+        Sat, 27 Aug 2022 19:40:39 -0700 (PDT)
 Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Gk030639;
-        Sun, 28 Aug 2022 11:40:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gk030639
+        by conuserg-11.nifty.com with ESMTP id 27S2e6Gl030639;
+        Sun, 28 Aug 2022 11:40:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gl030639
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1661654408;
-        bh=4CXgD6J2sGYGkI4a6Qbuk/WA0nBqfddOH+RIg6LYLPA=;
+        bh=hTZUP847fbfef2g9ezPupjBY2vTehYAAacc76rjXEUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aco7HsG21juUhVCgTkK8JTONguRPkeqX2Y5Kx5TTv79lflwr0pJpmtYWNLT4R2gDb
-         Chx/yk01xM/UPTSxzazlz3GL1fLZyYFT69VGJd+c2MqFy2wNjvlLLCHOXGHvrFGZ3O
-         rPjSOAr+/iiSf/Q772QlEANOi9rPoyNSIlCp9fxjRB3Jz+vS6sd7C0Ez+iencIdxD/
-         cVdQ5o3bDUhC7VzVA6gt6LUQPvFwDR2ttRJU/1EmjCQ4BjKUF98f8g79YIXA48ekSs
-         jEtjCch8hJezLHXFcymWdFP+altXIfEcoaLsF5Z1pD22Ct+xY+ii+Vg35rBNg9acW/
-         ayUBbUe9+qOKg==
+        b=h319PIKxEJK4MmGGaPn1m3V4uTzXrMiFG9A/+f/7U31jg2yX7r3rrIQa1hTGfYU3I
+         MsO3VXgZTD6yN0xFYMOjmrnTbvzsFULe6KYawVrNpV+F0tuLjp0Rizk5kpncwtoz44
+         5uSDnYxHG4VvPE69hy8AQiriS+q7G+KKmeq8/8R9YPvQTT/P3SE+vM783waQ4WoUy1
+         sazHtjbEAQHd/thm/IC8rRfFXgz+Ztc2Ryy5Oac7/Xwuh4mUY3x00ll+6yVV68P+N2
+         eiEELw9wMEJWWdLhNbpyTbzajXd6ApryypiMmAvJgj1QqXBMumV7xQrIWfej4/na07
+         n+pmczSJdju8Q==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 02/15] kbuild: refactor single builds of *.ko
-Date:   Sun, 28 Aug 2022 11:39:50 +0900
-Message-Id: <20220828024003.28873-3-masahiroy@kernel.org>
+Subject: [PATCH 03/15] kbuild: move 'PHONY += modules_prepare' to the common part
+Date:   Sun, 28 Aug 2022 11:39:51 +0900
+Message-Id: <20220828024003.28873-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
 References: <20220828024003.28873-1-masahiroy@kernel.org>
@@ -51,63 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the potentially invalid modules.order instead of using
-the temporary file.
-
-Also, KBUILD_MODULES is don't care for single builds. No need to
-cancel it.
+Unify the code between in-tree builds and external module builds.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ Makefile | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index f04126181885..badd318c5524 100644
+index badd318c5524..54e481162608 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1787,6 +1787,8 @@ modules modules_install:
- 	@echo >&2 '***'
- 	@exit 1
+@@ -1446,7 +1446,6 @@ modules.order: $(subdir-modorder) FORCE
+ targets += modules.order
  
-+KBUILD_MODULES :=
-+
- endif # CONFIG_MODULES
+ # Target to prepare building external modules
+-PHONY += modules_prepare
+ modules_prepare: prepare
+ 	$(Q)$(MAKE) $(build)=scripts scripts/module.lds
  
- # Single targets
-@@ -1813,18 +1815,12 @@ $(single-ko): single_modpost
- $(single-no-ko): descend
- 	@:
+@@ -1747,15 +1746,12 @@ help:
+ 	@echo  '  clean           - remove generated files in module directory only'
+ 	@echo  ''
  
--ifeq ($(KBUILD_EXTMOD),)
--# For the single build of in-tree modules, use a temporary file to avoid
--# the situation of modules_install installing an invalid modules.order.
--MODORDER := .modules.tmp
--endif
+-# no-op for external module builds
+-PHONY += modules_prepare
 -
-+# Remove MODORDER when done because it is not the real one.
- PHONY += single_modpost
- single_modpost: $(single-no-ko) modules_prepare
- 	$(Q){ $(foreach m, $(single-ko), echo $(extmod_prefix)$m;) } > $(MODORDER)
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
--
--KBUILD_MODULES := 1
-+	$(Q)rm -f $(MODORDER)
+ endif # KBUILD_EXTMOD
  
- export KBUILD_SINGLE_TARGETS := $(addprefix $(extmod_prefix), $(single-no-ko))
+ # ---------------------------------------------------------------------------
+ # Modules
  
-@@ -1834,10 +1830,6 @@ build-dirs := $(foreach d, $(build-dirs), \
+-PHONY += modules modules_install
++PHONY += modules modules_install modules_prepare
  
- endif
+ ifdef CONFIG_MODULES
  
--ifndef CONFIG_MODULES
--KBUILD_MODULES :=
--endif
--
- # Handle descending into subdirectories listed in $(build-dirs)
- # Preset locale variables to speed up the build process. Limit locale
- # tweaks to this spot to avoid wrong language settings when running
 -- 
 2.34.1
 

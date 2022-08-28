@@ -2,100 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAFC5A3D73
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 14:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD8B5A3D78
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiH1MCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 08:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S229823AbiH1MEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 08:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiH1MCO (ORCPT
+        with ESMTP id S229448AbiH1MEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 08:02:14 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65A1BE84
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 05:02:14 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id x26so5752248pfo.8
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 05:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ingics-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=HOCvrbple+YuNZd/S4rMMduFVtLG71idSpBlVt7r9vY=;
-        b=zSIjoxP95WGxvA+vbKWSqWfq6JDfFszxDmK98KkVx5ZS82pjiY/QLEPw02EJ9kJiKE
-         Vt+dPsytZ31FcRUJyJN5YpLESG0B5L1ZjwEkk0tv/CJY2su11U7YWnZDZ3CJ0UBQ0V51
-         k0C+2SjVoZHtiafdAWjyYgz/m/qQ2JLuHk4qA/lRpcwodwx/aGXF3vmK2cQyBpHGdRRH
-         qJf+68uDSjRZH870dRhySmC0mKx6z3B2fc2OIzCUr0C9O9US37xxcanUNmM7/XgvGM5U
-         cNFqdmLZRaITTtVZgokMsCOPQdcExHXVwgjYp2x4WQexyFRX5LA9++fiIvGTgcbmsWFI
-         +/rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=HOCvrbple+YuNZd/S4rMMduFVtLG71idSpBlVt7r9vY=;
-        b=oYGhFaZSdfou7SHU/vzJnM1EFq8erLXHexyj4+/tAXvqCjHW9B6xmt5DGrfNYlSycB
-         z/+6TeyVYs3waJPFseXquFyJyyxeFULTwh4fk3+haRu6Oz2MPhebxw9d+nmTM297FR+S
-         5u8Cd8/2+IUa7r6OW8O+dqZfosVE1g41W4v9eCxcPiUYfEjEK1BBaFoZoL2m4dNEB6zX
-         mcFQAI8focRIIoI+ihUbGD7OgauJAr2ziOynUS47pkZeW80+73rhkAcN1UwliEXW2v+a
-         hwh9M4XT7D/EF11YCdBGZDlj/y+FdqcxHAbniSdcvY3fyOnOfGCAnEqdHiVgA7GMJSdZ
-         vrzg==
-X-Gm-Message-State: ACgBeo1NaohR03KxSvRBvxHXvSfKL0QimJUQOb8fXiJjtOB/LhwueT57
-        3xLXpxBE1DgSxdi8pv0utTWBhQ==
-X-Google-Smtp-Source: AA6agR5a8ePgGNEsMI23oLqE808FFM+vAaq+c1VnwN5yLsrdZugqZtIBdAFEbDSslXYLRs67J+7s6w==
-X-Received: by 2002:aa7:8882:0:b0:52f:1ead:2c21 with SMTP id z2-20020aa78882000000b0052f1ead2c21mr12150261pfe.15.1661688133592;
-        Sun, 28 Aug 2022 05:02:13 -0700 (PDT)
-Received: from alpha.. (122-117-179-2.hinet-ip.hinet.net. [122.117.179.2])
-        by smtp.googlemail.com with ESMTPSA id n15-20020aa7984f000000b0053645475a6dsm5148157pfq.66.2022.08.28.05.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 05:02:12 -0700 (PDT)
-From:   Axel Lin <axel.lin@ingics.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Jerome Neanne <jneanne@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Axel Lin <axel.lin@ingics.com>
-Subject: [RFT] [PATCH] regulator: tps65219: Fix .bypass_val_on setting
-Date:   Sun, 28 Aug 2022 20:01:53 +0800
-Message-Id: <20220828120153.1512508-1-axel.lin@ingics.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 28 Aug 2022 08:04:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2E81CFC9
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 05:04:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBA5960FEE
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58593C43470
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661688279;
+        bh=EPbkOq8JPEc2kCjTiNGhxLiypn6VkEpuIIxi7EoZbZ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SHAE+kGe2sPxFytEMt95ciLuQ+18eacjczlKIjy44AFd4UEoXYe01I/7x9RXuUiaL
+         Lh0xeXhH8x1IxacIkT1oe6NXLdIVp7M+W0MmgsMjkVfEVTLfkTx/91XGQ60ZV6m47S
+         lEMjN340CoOKfGn+bofyy7jYNGSeCj8uQXLhqMFNgpifExeVu7cwfd8Qymz3wX69RM
+         E4laPXbt9RAg/8OBKxNrKX7KdzgQK9DbT5zI3DqeOuWplLDH5+JdyrKfCeNci0D+ee
+         /qGKjunCYPpJKnKbaJds/8RPKFNJH44hlP5PZhs9FbPQ5GDG6fB3mNclT0bDGWj0p+
+         TJyU69cbQXBxQ==
+Received: by mail-qt1-f175.google.com with SMTP id e28so4415362qts.1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 05:04:39 -0700 (PDT)
+X-Gm-Message-State: ACgBeo05DgjRHusrEvPHOoDvYzzTCSN71C2AsgvnGXmWw6QSa/z6iIwm
+        K2SANqMD0eO9y30AdSAy8tEyZ5UNpuoSjXCZyIDkKg==
+X-Google-Smtp-Source: AA6agR4FMRX+TaApxmom9KAlHmydRBHrD8YHW7gavrNzM2Rz3w+Of9yKXe9ON7GTG1+MKtNv47+OtaQujsqaLkSoGgs=
+X-Received: by 2002:a05:620a:45a3:b0:6bb:d296:aa0d with SMTP id
+ bp35-20020a05620a45a300b006bbd296aa0dmr5219938qkb.525.1661688267813; Sun, 28
+ Aug 2022 05:04:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
+ <20220818152929.402605-5-roberto.sassu@huaweicloud.com> <YwhTiGOhzvv+CYYq@kernel.org>
+ <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com> <YwrntbSJUs2cA7Xn@kernel.org>
+In-Reply-To: <YwrntbSJUs2cA7Xn@kernel.org>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Sun, 28 Aug 2022 14:04:17 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ5zb2L18=ABUO-AnGBi-PG7SZpEA_1vGZWd4S2nC2wzPQ@mail.gmail.com>
+Message-ID: <CACYkzJ5zb2L18=ABUO-AnGBi-PG7SZpEA_1vGZWd4S2nC2wzPQ@mail.gmail.com>
+Subject: Re: [PATCH v12 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        mykolal@fb.com, corbet@lwn.net, dhowells@redhat.com,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .bypass_val_on setting does not match the .bypass_mask setting, so the
-.bypass_mask bit will never get set.  Fix it by removing .bypass_val_on
-setting, the regulator_set_bypass_regmap and regulator_get_bypass_regmap
-helpers will use rdev->desc->bypass_mask as val_on if the val_on is 0.
+On Sun, Aug 28, 2022 at 5:57 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Fri, Aug 26, 2022 at 09:14:09AM +0200, Roberto Sassu wrote:
+> > On Fri, 2022-08-26 at 08:42 +0300, Jarkko Sakkinen wrote:
+> > > On Thu, Aug 18, 2022 at 05:29:23PM +0200,
+> > > roberto.sassu@huaweicloud.com wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > >
+> > > > In preparation for the patch that introduces the
+> > > > bpf_lookup_user_key() eBPF
+> > > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> > > > able to
+> > > > validate the kfunc parameters.
+> > > >
+> > > > Also, introduce key_lookup_flags_check() directly in
+> > > > include/linux/key.h,
+> > > > to reduce the risk that the check is not in sync with currently
+> > > > defined
+> > > > flags.
+> > >
+> > > Missing the description what the heck this function even is.
+> > >
+> > > Please, explain that.
+> >
+> > Hi Jarkko
+> >
+> > sorry, forgot to update the commit description. Will do it.
+> >
+> > > Also, the short subject is misleading because this *just*
+> > > does not move flags.
+> > >
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > Reviewed-by: KP Singh <kpsingh@kernel.org>
+> > > > ---
+> > > >  include/linux/key.h      | 11 +++++++++++
+> > > >  security/keys/internal.h |  2 --
+> > > >  2 files changed, 11 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/key.h b/include/linux/key.h
+> > > > index 7febc4881363..b5bbae77a9e7 100644
+> > > > --- a/include/linux/key.h
+> > > > +++ b/include/linux/key.h
+> > > > @@ -88,6 +88,17 @@ enum key_need_perm {
+> > > >   KEY_DEFER_PERM_CHECK,   /* Special: permission check is
+> > > > deferred */
+> > > >  };
+> > > >
+> > > > +#define KEY_LOOKUP_CREATE        0x01
+> > > > +#define KEY_LOOKUP_PARTIAL       0x02
+> > > > +
+> > >
+> > > /*
+> > >  * Explain what the heck this function is.
+> > >  */
+> > > > +static inline int key_lookup_flags_check(u64 flags)
+> > > > +{
+> > > > + if (flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
+> > > > +         return -EINVAL;
+> > > > +
+> > > > + return 0;
+> > > > +}
+> > >
+> > > This is essentially a boolean function, right?
+> > >
+> > > I.e. the implementation can be just:
+> > >
+> > > !!(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
+> >
+> > Absolutely fine with that, if you prefer.
+>
+> It can be either, it more depends on if a new function
+> is needed in the first place.
+>
+> E.g. if you are worried about maintaining you could just
+> as well define a constant containing the mask, right?
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
-Hi Jerome,
-I don't have this h/w to test, please help to review and test the patch.
++1 A mask is better.
 
-thanks,
-Axel
- drivers/regulator/tps65219-regulator.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/regulator/tps65219-regulator.c b/drivers/regulator/tps65219-regulator.c
-index ab16e6665625..7054d8805dd4 100644
---- a/drivers/regulator/tps65219-regulator.c
-+++ b/drivers/regulator/tps65219-regulator.c
-@@ -117,7 +117,6 @@ struct tps65219_regulator_irq_data {
- 		.fixed_uV		= _fuv,				\
- 		.bypass_reg		= _vr,				\
- 		.bypass_mask		= _bpm,				\
--		.bypass_val_on		= 1,				\
- 	}								\
- 
- static const struct linear_range bucks_ranges[] = {
--- 
-2.34.1
-
+>
+> >
+> > > Not even sure if this is needed in the first place, or
+> > > would it be better just to open code it. How many call
+> > > sites does it have anyway?
+> > >
+> >
+> > Daniel preferred to have this check here.
+>
+> How many call sites?
+>
+> BR, Jarkko

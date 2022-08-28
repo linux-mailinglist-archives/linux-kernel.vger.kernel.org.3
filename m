@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A075A3D0D
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 315C65A3D12
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiH1Jzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 05:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S229565AbiH1J6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 05:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiH1Jzt (ORCPT
+        with ESMTP id S229684AbiH1J4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 05:55:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9613C43E5D;
-        Sun, 28 Aug 2022 02:55:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 28 Aug 2022 05:56:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F263D4CA16
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 02:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661680561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KmoVkJKn7sDlJ8XCXp6Z2DlsC39Vq8jBiod6jjguAyk=;
+        b=B7/KTyOrewLL6TOj0YQCKPfVy4cy38hotDl0AEEE8AWhLqgSua5ai5/TC832YakEBTznbq
+        3ULPsEOyq7o/hFCwRZCkNtLIz8MokFyL5WrnhNuakJVWWgnLAjXyr/T7i3/b0aOnJ7C3+r
+        sdevlVyQdlEaVquI7WMyZjNCqDarfGU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-378--Y5_IFOCNa6f2P_lc1v6tA-1; Sun, 28 Aug 2022 05:55:57 -0400
+X-MC-Unique: -Y5_IFOCNa6f2P_lc1v6tA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A1EDB80A3A;
-        Sun, 28 Aug 2022 09:55:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A978C433C1;
-        Sun, 28 Aug 2022 09:55:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661680546;
-        bh=TcwxDWZtQS6kMjN2jg9yz87Lt7T5qZ8ftJVQLc8rmrI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rxq1frQ4Y7jG/7PA4ZNlJ7bYY/4+1Ihaz96hMvhmyswpnbYQ9NfPX9HShQ2ybT6pW
-         It1NQhz+dlZPJe19lcZ+FwtAT1QC0wS7J1y0qZMHoD7pMwPnwLHGMNDo4YxxCJxpdg
-         nDMHMiQE91NuwChoGUW2JC84wJEQOE5uSBM8uP79WzpX9vAq5FH5bhXnTFAkrLlLjx
-         v3OlNw401ZIXH6LvhActC8mcqhOjRwjzPO+wygYnRinPMZaebAgt7yWX4EZAMZiQcM
-         Lgz0AKaIZMWaXfsiePeR9j5QbrhaGtdZhnfw6+8k071rcdP/AOYfBpyBuuee1BNVGS
-         bQmnUOm6KjyYg==
-Date:   Sun, 28 Aug 2022 12:55:41 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in
- mlx5e_rep_add_meta_tunnel_rule()
-Message-ID: <Yws7nQsU8hIf7gZT@unreal>
-References: <20220825180607.2707947-1-nathan@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6EB3780029D;
+        Sun, 28 Aug 2022 09:55:57 +0000 (UTC)
+Received: from localhost (ovpn-12-25.pek2.redhat.com [10.72.12.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4F5794010D43;
+        Sun, 28 Aug 2022 09:55:55 +0000 (UTC)
+Date:   Sun, 28 Aug 2022 17:55:52 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@infradead.org,
+        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 01/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Message-ID: <Yws7qGmhFG0ig/tz@MiWiFi-R3L-srv>
+References: <20220820003125.353570-1-bhe@redhat.com>
+ <20220820003125.353570-2-bhe@redhat.com>
+ <YwspB8OP8/Phv+tO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YwspB8OP8/Phv+tO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,35 +64,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:06:07AM -0700, Nathan Chancellor wrote:
-> Clang warns:
+On 08/28/22 at 10:36am, Alexander Gordeev wrote:
+> On Sat, Aug 20, 2022 at 08:31:15AM +0800, Baoquan He wrote:
 > 
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           if (IS_ERR(flow_rule)) {
->               ^~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
->           return err;
->                 ^~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
->           if (IS_ERR(flow_rule)) {
->           ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
->           int err;
->                 ^
->                   = 0
->   1 error generated.
+> Hi Baoquan,
 > 
-> There is little reason to have the 'goto + error variable' construct in
-> this function. Get rid of it and just return the PTR_ERR value in the if
-> statement and 0 at the end.
+> >  arch_ioremap() return a bool,
+> >    - IS_ERR means return an error
+> >    - NULL means continue to remap
+> >    - a non-NULL, non-IS_ERR pointer is returned directly
+> >  arch_iounmap() return a bool,
+> >    - 0 means continue to vunmap
+> >    - error code means skip vunmap and return directly
 > 
-> Fixes: 430e2d5e2a98 ("net/mlx5: E-Switch, Move send to vport meta rule creation")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1695
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
+> It would make more sense if the return values were described
+> from the prospective of an architecture, not the caller.
+> I.e true - unmapped, false - not supported, etc.
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Yes, sounds reasonable to me, thanks.
+
+While ChristopheL suggested to take another way. Please see below link.
+I will reply to Christophe to discuss that.
+
+https://lore.kernel.org/all/8df89136-a7f2-9b66-d522-a4fb9860bf22@csgroup.eu/T/#u
+
+If the current arch_ioremap() way is taken, I will change the
+description as you said.
+
+> 
+> > diff --git a/mm/ioremap.c b/mm/ioremap.c
+> > index 8652426282cc..99fde69becc7 100644
+> > --- a/mm/ioremap.c
+> > +++ b/mm/ioremap.c
+> > @@ -17,6 +17,13 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+> >  	unsigned long offset, vaddr;
+> >  	phys_addr_t last_addr;
+> >  	struct vm_struct *area;
+> > +	void __iomem *ioaddr;
+> > +
+> > +	ioaddr = arch_ioremap(phys_addr, size, prot);
+> > +	if (IS_ERR(ioaddr))
+> > +		return NULL;
+> > +	else if (ioaddr)
+> > +		return ioaddr;
+> 
+> It seems to me arch_ioremap() could simply return an address
+> or an error. Then IOMEM_ERR_PTR(-ENOSYS) if the architecture
+> does not support it reads much better than the cryptic NULL.
+
+I may not follow. Returning NULL means arch_ioremap() doesn't give out a
+mapped address and doesn't encounter wrong thing. NULL is a little
+twisting, maybe '0' is better?
+
+> 
+> Probably arch_iounmap() returning error would look better too,
+> though not sure about that.
+
+Don't follow either. arch_iounmap() is returning error now. 
+

@@ -2,171 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8755A3D31
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 12:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9335A3D38
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 12:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiH1KY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 06:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S229633AbiH1Koe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 06:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiH1KYZ (ORCPT
+        with ESMTP id S229565AbiH1Koa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 06:24:25 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B853E4CA00;
-        Sun, 28 Aug 2022 03:24:23 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oSFSn-0006qz-Ha; Sun, 28 Aug 2022 12:24:21 +0200
-Message-ID: <9968ab01-f9c4-ee47-9dd0-9e46560e459e@leemhuis.info>
-Date:   Sun, 28 Aug 2022 12:24:21 +0200
+        Sun, 28 Aug 2022 06:44:30 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B5113CFA
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 03:44:28 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i188-20020a1c3bc5000000b003a7b6ae4eb2so1728533wma.4
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 03:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=85rO0BXnVLcRaqiYDdjzNr1g4uH0voSH4cu9w//tBVc=;
+        b=R71+93xpR/gNVc40Aesq8usMDWDhuRubeaTvUt5stGxlyPjw6VTLxM6nqBm/Evbw0t
+         RPST3T6K0S2WEE9al8aMdfM7XWETD+LcEYLUTbfRX67rpuwtSkMKIja5voi79fC5rd83
+         V9SV2YJTyqeRvxP1RdE0ymvYZjO7jCfSCRXYmLr8iCLAeB4MZZ6jPkF3RjMpfmIksL0P
+         JJGK2XJkbsvg+l24gNp+7HnboGLpkU7PS1k3gbkhLYLy5wpIU3WSQVca8retsJCxsZEQ
+         K89cTRHl6hvqCulyzvCZ7bK8ddPG9R7RXYp2YoibiwJN3d3ghD1ST8wLlVUi2a2hTUw+
+         10jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=85rO0BXnVLcRaqiYDdjzNr1g4uH0voSH4cu9w//tBVc=;
+        b=sSIl3/0bKoS0qLOdUioLYhoMMaK0IxBXhb8GXhQGEYW09NhUniAeVtFDomYwG6V+UY
+         o85djZHxK4kcyWXZbtz0nkKDrPS4Mzxn7pRYkuJC4fGLhlarjb5GiUPN1MkAF0W2a9ty
+         SKRz2vkk6jobFIJUFb4k2T4KcqClPaE0o8ySNca/fbh90muwzJeZu69K20NRhVfq8mfP
+         kLdtI00q2bhE5HQX4yidVMYFA0257h79dMI7SFmZMZo91NJHRJzFpHetpnpYBMbU7wpy
+         AU6EEsCFFmzpMuNm6mWHPMJNdkBD9oTUJboV4xWej97IGe1i9LdRAYUv/kInTaGA1ctH
+         L4CQ==
+X-Gm-Message-State: ACgBeo1QR3aFx6pVeXb46Avji6YQ7XtZW82PaTEwsXUnlNfeXpms9ddX
+        +38VsVO20liUclw3YQ6AML82yqlvvjSTJxpG
+X-Google-Smtp-Source: AA6agR5pJB1ycqIn1E2FAvrQUq+bYeyS5CvdIKtscf0H0i//AtxYNVhMJH975ePw5ly8d7dyKX7h7A==
+X-Received: by 2002:a05:600c:4e8b:b0:3a5:f5bf:9c5a with SMTP id f11-20020a05600c4e8b00b003a5f5bf9c5amr4331825wmq.85.1661683467029;
+        Sun, 28 Aug 2022 03:44:27 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003a536d5aa2esm5196364wmp.11.2022.08.28.03.44.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 03:44:26 -0700 (PDT)
+Date:   Sun, 28 Aug 2022 11:44:24 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Alexander Potapenko <glider@google.com>,
+        ath9k-devel@qca.qualcomm.com, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KMSAN: uninit-value in ath9k_htc_rx_msg
+Message-ID: <YwtHCDTRMtXe/VTt@equinox>
+References: <000000000000c98a7f05ac744f53@google.com>
+ <000000000000734fe705acb9f3a2@google.com>
+ <a142d63c-7810-40ff-9c24-7160c63bafebn@googlegroups.com>
+ <CAG_fn=U=Vfv3ymNM6W++sbivieQoUuXfAxsC9SsmdtQiTjSi8g@mail.gmail.com>
+ <1a0b4d24-6903-464f-7af0-65c9788545af@I-love.SAKURA.ne.jp>
+ <CAG_fn=Wq51FMbty4c_RwjBSFWS1oceL1rOAUzCyRnGEzajQRAg@mail.gmail.com>
+ <46fee955-a5fa-fbd6-bcc4-d9344e6801d9@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: regression caused by block: freeze the queue earlier in
- del_gendisk
-Content-Language: en-US
-To:     Dusty Mabe <dusty@dustymabe.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hch@lst.de,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661682263;b86e50f9;
-X-HE-SMSGID: 1oSFSn-0006qz-Ha
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46fee955-a5fa-fbd6-bcc4-d9344e6801d9@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Thx for the report.
+On Fri, Aug 26, 2022 at 10:35:43AM +0900, Tetsuo Handa wrote:
+> On 2022/08/26 0:09, Alexander Potapenko wrote:
+> > On Thu, Aug 25, 2022 at 4:34 PM Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> >>
+> >> Hello.
+> > Hi Tetsuo,
+> > 
+> >> I found that your patch was applied. But since the reproducer tested only 0 byte
+> >> case, I think that rejecting only less than sizeof(struct htc_frame_hdr) bytes
+> >> is not sufficient.
+> >>
+> >> More complete patch with Ack from Toke is waiting at
+> >> https://lkml.kernel.org/r/7acfa1be-4b5c-b2ce-de43-95b0593fb3e5@I-love.SAKURA.ne.jp .
+> > 
+> > Thanks for letting me know! I just checked that your patch indeed
+> > fixes the issue I am facing.
+> > If it is more complete, I think we'd indeed better use yours.
+> 
+> I recognized that "ath9k: fix an uninit value use in ath9k_htc_rx_msg()" is
+> local to KMSAN tree.
+> https://github.com/google/kmsan/commit/d891e35583bf2e81ccc7a2ea548bf7cf47329f40
+> 
+> That patch needs to be dropped, for I confirmed that passing pad_len == 8 below
+> still triggers uninit value at ath9k_htc_fw_panic_report(). (My patch does not
+> trigger at ath9k_htc_fw_panic_report().)
+> 
+>         fd = syz_usb_connect_ath9k(3, 0x5a, 0x20000800, 0);
+>         *(uint16_t*)0x20000880 = 0 + pad_len;
+>         *(uint16_t*)0x20000882 = 0x4e00;
+>         memmove((uint8_t*)0x20000884, "\x99\x11\x22\x33\x00\x00\x00\x00\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF", 16);
+>         syz_usb_ep_write(fd, 0x82, 4 + pad_len, 0x20000880);
+> 
+> 
+> 
+> Also, that patch has a skb leak bug; according to comment for ath9k_htc_rx_msg()
+> 
+>  * Service messages (Data, WMI) passed to the corresponding
+>  * endpoint RX handlers, which have to free the SKB.
+> 
+> , I think that this function is supposed to free skb if skb != NULL.
+> 
+> If dev_kfree_skb_any(skb) needs to be used when epid is invalid and pipe_id != USB_REG_IN_PIPE,
+> why it is OK to use kfree_skb(skb) if epid == 0x99 and pipe_id != USB_REG_IN_PIPE ?
+> 
+> We don't call kfree_skb(skb) if 0 < epid < ENDPOINT_MAX and endpoint->ep_callbacks.rx == NULL.
+> Why it is OK not to call kfree_skb(skb) in that case?
+> 
+> Callers can't pass such combinations? I leave these questions to ath9k developers...
+>
 
-CCing the regression mailing list, as it should be in the loop for all
-regressions, as explained here:
-https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+Hi Tetsuo,
 
-On 26.08.22 18:15, Dusty Mabe wrote:
-> 
-> I think I've found a regression introduced by:
-> a09b314 o block: freeze the queue earlier in del_gendisk
+Thank you for this improved patch. My original one was somewhat naive
+attempt at a resolution.
 
-Just FYI, in case you are not aware of it already: there was another
-report that this commit causes problems. See this thread for details:
-https://lore.kernel.org/all/72a5bf2e-cd56-a85c-2b99-cb8729a66fed@deltatee.com/#t
-
-Anyway, let me add this report to the regressions tracking:
-
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
-
-> In Fedora CoreOS we have tests that set up RAID1 on the /boot/ and /root/ partitions
-> and then subsequently removes one of the disks to simulate a failure. Sometime recently
-> this test started timing out occasionally. Looking a bit closer it appears instances are
-> getting stuck during reboot with a bunch of looping messages:
-> 
-> ```
-> [   17.978854] block device autoloading is deprecated and will be removed.
-> [   17.982555] block device autoloading is deprecated and will be removed.
-> [   17.985537] block device autoloading is deprecated and will be removed.
-> [   17.987546] block device autoloading is deprecated and will be removed.
-> [   17.989540] block device autoloading is deprecated and will be removed.
-> [   17.991547] block device autoloading is deprecated and will be removed.
-> [   17.993555] block device autoloading is deprecated and will be removed.
-> [   17.995539] block device autoloading is deprecated and will be removed.
-> [   17.997577] block device autoloading is deprecated and will be removed.
-> [   17.999544] block device autoloading is deprecated and will be removed.
-> [   22.979465] blkdev_get_no_open: 1666 callbacks suppressed
-> ...
-> ...
-> ...
-> [  618.221270] blkdev_get_no_open: 1664 callbacks suppressed
-> [  618.221273] block device autoloading is deprecated and will be removed.
-> [  618.224274] block device autoloading is deprecated and will be removed.
-> [  618.227267] block device autoloading is deprecated and will be removed.
-> [  618.229274] block device autoloading is deprecated and will be removed.
-> [  618.231277] block device autoloading is deprecated and will be removed.
-> [  618.233277] block device autoloading is deprecated and will be removed.
-> [  618.235282] block device autoloading is deprecated and will be removed.
-> [  618.237370] block device autoloading is deprecated and will be removed.
-> [  618.239356] block device autoloading is deprecated and will be removed.
-> [  618.241290] block device autoloading is deprecated and will be removed.
-> ```
-> 
-> Using the Fedora kernels I narrowed it down to being introduced between 
-> `kernel-5.19.0-0.rc3.27.fc37` (good) and `kernel-5.19.0-0.rc4.33.fc37` (bad).
-> 
-> I then did a bisect and found:
-> 
-> ```
-> $ git bisect bad
-> a09b314005f3a0956ebf56e01b3b80339df577cc is the first bad commit
-> commit a09b314005f3a0956ebf56e01b3b80339df577cc
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Tue Jun 14 09:48:27 2022 +0200
-> 
->     block: freeze the queue earlier in del_gendisk
->     
->     Freeze the queue earlier in del_gendisk so that the state does not
->     change while we remove debugfs and sysfs files.
->     
->     Ming mentioned that being able to observer request in debugfs might
->     be useful while the queue is being frozen in del_gendisk, which is
->     made possible by this change.
->     
->     Signed-off-by: Christoph Hellwig <hch@lst.de>
->     Link: https://lore.kernel.org/r/20220614074827.458955-5-hch@lst.de
->     Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> 
->  block/genhd.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> ```
-> 
-> Reverting this commit on top of latest git master (4c612826b) gave me successful results.
-> 
-> Any ideas on what could be amiss here? Luckily the patch is tiny so hopefully it might
-> be obvious.
-> 
-> More details (including logs) in the following locations:
-> 
-> - https://bugzilla.redhat.com/show_bug.cgi?id=2121791
-> - https://github.com/coreos/fedora-coreos-tracker/issues/1282
-> 
-> 
-> Thanks!
-> Dusty
-> 
-
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced a09b314005f3a0
-#regzbot title block: timeouts when removing a disk from a RAID1
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Regards,
+Phil

@@ -2,149 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74345A3F86
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 21:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D335A3F89
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 21:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiH1Tuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 15:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S229912AbiH1Twr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 15:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiH1Tur (ORCPT
+        with ESMTP id S229557AbiH1Twp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 15:50:47 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F11165D7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:50:46 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id 67so6538952vsv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+v2zwEcOJT455DYq2PDJ2m5npdfWrDTIt86gNrYfAfc=;
-        b=oRjN+/A3WWnFFM0BPcVi0Rc5jIQqm8bbut4KMQbcLOXSVdF/l7ANaTrz/m76a7yhgk
-         sTfbpElKdUCXDUF2HcblLXwtEks/hAH38xZrjJCRRloAibkhv6IPg9yWoJfAOyfoEOth
-         n3Q4cOT2p8W83ogFv9rr080RipI7MCgzhsYRiOaxuRyb/Fumw3jRGN9WtM/J45Oftz0j
-         w/ISKLFvjb5v+z4OgCig/n3W4rRtb15AlKLVLUpqNh3uQ3e7zzkRcoIR15avWeNmG/vx
-         HdjoQ2KTVAUCRbtrXXPWj/TIMqOT5r6amvVOUWLumM58u3ltyHbMb/6BRHqfz1/yC+oR
-         PNYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+v2zwEcOJT455DYq2PDJ2m5npdfWrDTIt86gNrYfAfc=;
-        b=VnDOoENFcBF/13xXZb2slHzeE+16F5Gs5ZcQZsS89x/wqHwlu04KvSZzp/GBmzww5v
-         ya1oaid2AGHXLv20+sE4jzRP4nzPvDh65uHWkLbulNMfJP3NCK4CIJdBiq9+IXRCkp4n
-         dAj9UOSgOVAqUuzdsJpNs+n7+rGQiEj6kMFyNT+2xHkVtUav/BRHylv6MRFHQzdjQqo7
-         bcyl4Q3PzqJW4IrMRN9M1Vg1BaHNukVSt9tgFe9NXEUVOEb8unuHL6NpQvIQFzgaVwyj
-         hkx0KU6YlDrGBOXt38iQTIwqvuUDIkV7BXtnZYcocZjSg6vT7tXchQ6z38bjnnKr4hVm
-         YBkg==
-X-Gm-Message-State: ACgBeo2ADK9RJZS4WxtHukZcAadbzU4GqBMXn4EfQr/Haw+YG3BsD0jO
-        TiqVCh0iXbQBV0ZOv4hBvcOaUipfx4n4KmgBz9WyaA==
-X-Google-Smtp-Source: AA6agR4zBYiEXFieLaETyfJ8Rsax+YVm7x98jgZmyuW38pyWvv0P0eVR13oXtS3rt8TGtr2WBnmNel188rmvTCCwRYk=
-X-Received: by 2002:a67:b009:0:b0:38a:e0f2:4108 with SMTP id
- z9-20020a67b009000000b0038ae0f24108mr2599399vse.9.1661716245413; Sun, 28 Aug
- 2022 12:50:45 -0700 (PDT)
+        Sun, 28 Aug 2022 15:52:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180BB496;
+        Sun, 28 Aug 2022 12:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=dPawHL8qAnBSGi4I39fEFzREdQv818UwwXOztMhoVdQ=; b=X+UvY2W12TyQc6OsZRi3aiZvaW
+        f8cuW5EYrweGPsGM+HwTgl0CEDlrB3qI6Mdmlqa2IhY64vk+b/JNTcEAEiQli2xh3QlyqQbvFuyT/
+        D9Vo7mNxiX6Kz+yVvhcOLlib0Cywczq2kwHQ5G/cT+xN/9cCYH2P5GhXnj3w8jqnBULBqAa5pz972
+        /h82yWUKAorMmsyf2+UkWrIOhF3qfNJhScxJxAl5NVbrwdU28dJmGrVE3WbtleUNpGHxVCynrws8W
+        pYP2ZzD6llox/7zmGdNAXaGpqwQuk8MDs0J3tEFefJqxj5AuwZGV6H/5D6whIKM0kKbhwGEardAFg
+        UP8Z/3Zg==;
+Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSOKn-002TCH-16; Sun, 28 Aug 2022 19:52:41 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>, stable@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH] virt: sev-guest: fix kconfig warnings
+Date:   Sun, 28 Aug 2022 12:52:34 -0700
+Message-Id: <20220828195234.6604-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220531223100.510392-1-surenb@google.com> <20220531223100.510392-2-surenb@google.com>
- <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
- <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com>
- <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
- <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
- <20220822161603.9e19edfe2daaea3bf591910a@linux-foundation.org>
- <CAOUHufbyWwkOAJTD4G82sLcwE_33Yy=s4Q+gGBujwXvEBZ8iqA@mail.gmail.com> <YwSRf3LZ7gXwWaNN@dhcp22.suse.cz>
-In-Reply-To: <YwSRf3LZ7gXwWaNN@dhcp22.suse.cz>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sun, 28 Aug 2022 13:50:09 -0600
-Message-ID: <CAOUHufbauOoXshmfbBYAnPVYkrZ=jFA2wpPotXNnOjoWVRa5qQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
-        Christoph Hellwig <hch@infradead.org>, oleg@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 2:36 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 22-08-22 17:20:17, Yu Zhao wrote:
-> > On Mon, Aug 22, 2022 at 5:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Mon, 22 Aug 2022 16:59:29 -0600 Yu Zhao <yuzhao@google.com> wrote:
-> > >
-> > > > > > @@ -4109,7 +4109,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned
-> > > > > > long start, unsigned long end,
-> > > > > >
-> > > > > >                 walk_pmd_range(&val, addr, next, args);
-> > > > > >
-> > > > > > -               if (mm_is_oom_victim(args->mm))
-> > > > > > +               if (test_bit(MMF_OOM_REAP_QUEUED, &args->mm->flags))
-> > > > > >                         return 1;
-> > > > > >
-> > > > > >                 /* a racy check to curtail the waiting time */
-> > > > >
-> > > > > Oh.  Why?  What does this change do?
-> > > >
-> > > > The MMF_OOM_REAP_QUEUED flag is similar to the deleted MMF_OOM_VICTIM
-> > > > flag, but it's set at a later stage during an OOM kill.
-> > > >
-> > > > When either is set, the OOM reaper is probably already freeing the
-> > > > memory of this mm_struct, or at least it's going to. So there is no
-> > > > need to dwell on it in the reclaim path, hence not about correctness.
-> > >
-> > > Thanks.  That sounds worthy of some code comments?
-> >
-> > Will do. Thanks.
->
-> I would rather not see this abuse.
+Fix the SEV_GUEST Kconfig block to eliminate kconfig unmet
+dependency warnings:
 
-I understand where you're coming from, however, I don't share this
-POV. I see it as cooperation -- the page reclaim and the oom/reaper
-can't (or at least shouldn't) operate in isolation.
+WARNING: unmet direct dependencies detected for CRYPTO_GCM
+  Depends on [n]: CRYPTO [=n]
+  Selected by [y]:
+  - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 
-> You cannot really make any
-> assumptions about oom_reaper and how quickly it is going to free the
-> memory.
+WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+  Depends on [n]: CRYPTO [=n]
+  Selected by [y]:
+  - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 
-Agreed. But here we are talking about heuristics, not dependencies on
-certain behaviors. Assume we are playing a guessing game: there are
-multiple mm_structs available for reclaim, would the oom-killed ones
-be more profitable on average? I'd say no, because I assume it's more
-likely than unlikely that the oom reaper is doing/to do its work. Note
-that the assumption is about likelihood, hence arguably valid.
+Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: stable@vger.kernel.org
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Paul Gazzillo <paul@pgazz.com>
+Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: linux-crypto@vger.kernel.org
+---
+ drivers/virt/coco/sev-guest/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-> If this is really worth it (and I have to say I doubt it) then
-> it should be a separate patch with numbers justifying it.
-
-I definitely can artificially create a test case that runs oom a few
-times per second, to prove this two-liner is beneficial to that
-scenario. Then there is the question how much it would benefit the
-real-world scenarios.
-
-I'd recommend keeping this two-liner if we still had
-mm_is_oom_victim(), because it's simple, clear and intuitive. With
-MMF_OOM_REAP_QUEUED, I don't have a strong opinion. Since you do, I'll
-just delete it.
+--- a/drivers/virt/coco/sev-guest/Kconfig
++++ b/drivers/virt/coco/sev-guest/Kconfig
+@@ -2,6 +2,7 @@ config SEV_GUEST
+ 	tristate "AMD SEV Guest driver"
+ 	default m
+ 	depends on AMD_MEM_ENCRYPT
++	select CRYPTO
+ 	select CRYPTO_AEAD2
+ 	select CRYPTO_GCM
+ 	help

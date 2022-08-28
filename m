@@ -2,148 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C58F5A3CAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 10:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612145A3CB0
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 10:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiH1Idl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 04:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S232879AbiH1Ift (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 04:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiH1Idi (ORCPT
+        with ESMTP id S232627AbiH1Ifp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 04:33:38 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A24F252BE
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:33:37 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id i7-20020a17090adc0700b001fd7ccbec3cso2828522pjv.0
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=igzIvkpGT+nPYqgzOf8R+auGe6xkkz9GD36+hdfK3Lk=;
-        b=t4V6YyZpM/OSUDCUR3ubrb/8Uvu7c9EuFAHJwkEUWxuLP/kjalgYewUrKfKVnAHgkO
-         Q4m+2bhqbN8ZVjlgzWhf1VewQU5PzTCkd8lCH3DKAxHRZoC2Wb69NukagB1aQMoe2K/p
-         HMID02DwjdNkKHKiLZ9NUM2G76EJ098LTz4CQgRLbrd7R3xXNifDM8LgljvOEL3FkBJZ
-         WVFISx3rUKs/95+H3ItIXXgZrryP9yqMDKmqBcMliM6VQYzH34araE3C/qFlz7j9ddS7
-         aywMXfEM8Y50KAA5P4p0a1gcgA8tFXGo3KnF5/QqIPfZ2HI49Zoy2Doncibpz9JKi3da
-         3Esg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=igzIvkpGT+nPYqgzOf8R+auGe6xkkz9GD36+hdfK3Lk=;
-        b=RQFOl9WFgqafhb1Ka7VcKElor/t2tnaQkselUKqWWt2bffm7o18e3UqUHKDEpfoj2v
-         gfYP3dvV5uc538yIvv1UNS+0GEq1QEh4ZhNf3yvA9Z/9YG2xZ28M8MIdYGkh/NS+gCSE
-         WYxR088MrMhKa5u/X1UpVwqVSut+D4Jh1bo6ArcTTzWgVJPhGfb+X9RZN2OJRUxX4Shr
-         tWo89DcQSn8gcF61tCQXwqklROVPIgKIUWWkX8ZU/Z4Gf8d4fAfSxX5qzyjRF1hPeRwL
-         dzXLjunSnyG+Q7AZpJbbx84yEjLN3k3x2OvmLer7c1tRaxIHU2xg14A20IUGl05d6BZ7
-         mSGg==
-X-Gm-Message-State: ACgBeo1bTNdvu8HEp4Hq9DSNyIi3t5QciEtoRUF9aqVYHCG50zuliYYw
-        +z/7wns7U3/zOMldPChPNWAgThN6pmuLpQ==
-X-Google-Smtp-Source: AA6agR7YlDahXnkVX0waImNilO8OHqnqb1Z+dUQarxhVFoq6ok0FvXzLGd6EQapx9MGqpwmZAt1q8w==
-X-Received: by 2002:a17:902:cec7:b0:172:b20d:e666 with SMTP id d7-20020a170902cec700b00172b20de666mr11047055plg.154.1661675616564;
-        Sun, 28 Aug 2022 01:33:36 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e60:7d70:199a:6f05:bad8:24fd? ([2409:8a28:e60:7d70:199a:6f05:bad8:24fd])
-        by smtp.gmail.com with ESMTPSA id u3-20020a17090a1d4300b001fb4a8d82a7sm4415394pju.56.2022.08.28.01.33.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Aug 2022 01:33:36 -0700 (PDT)
-Message-ID: <a81e08ab-090d-0cb3-ec2d-490c5e2719ab@bytedance.com>
-Date:   Sun, 28 Aug 2022 16:33:24 +0800
+        Sun, 28 Aug 2022 04:35:45 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A626425EA4
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:35:43 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 7349E312E19;
+        Sun, 28 Aug 2022 10:35:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1661675741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=91RPWC9lm6EmFuQ06ZRCxMuapFeAPU+WUb0848c6UKs=;
+        b=U/C4UbQcYApgt+xf4P5Vn1i9sqY1swonzE8zi8zhwtMptRuAZEa3uFxAACWVDET3lxJdKR
+        /zOLMPq4faG69lpJVdGTQn9vxYXRHu+8QQUMR6wBMFe/FTzJSWpuHiV6RKrfL90N181+oU
+        srMWGmn6v40AAzpHdCnpkXdkAc90Po16q7QSrUyeD3tNnQ1tHdccuNb7L31i7FGBvj3p98
+        DBY46U/Xq7BgYeN2GtWCMTNpi3fwAfp+DHgNXQy3gCf3IhfH1/4SqMItR/YDhhD48MCF/z
+        6pQ37B4fno6+Q1PMwQLK6j7+rHTc3r6BNVgMW87z8mCHyuDo0m/Ieg/VHj0uAw==
+Message-ID: <15255a7223fe405808bcedb5ab19bf2108637e08.camel@svanheule.net>
+Subject: Re: [PATCH v3 1/9] cpumask: Make cpumask_full() check for
+ nr_cpu_ids bits
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Date:   Sun, 28 Aug 2022 10:35:38 +0200
+In-Reply-To: <YwfgQmtbr6IrPrXb@yury-laptop>
+References: <20220825181210.284283-1-vschneid@redhat.com>
+         <20220825181210.284283-2-vschneid@redhat.com>
+         <YwfgQmtbr6IrPrXb@yury-laptop>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.0
-Subject: Re: [PATCHSET v2 for-6.1] kernfs, cgroup: implement kernfs_show() and
- cgroup_file_show()
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
-References: <20220828050440.734579-1-tj@kernel.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220828050440.734579-1-tj@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/28 13:04, Tejun Heo wrote:
-> Hello,
-> 
-> Greg: If this looks good to you, can you apply 0001-0008 to your tree? I'll
-> likely have more cgroup updates on top, so I think it'd be better if I pull
-> your tree and then handle the cgroup part in cgroup tree.
-> 
-> Currently, deactivated kernfs nodes are used for two purposes - during
-> removal to kill and drain nodes and during creation to make multiple
-> kernfs_nodes creations to succeed or fail as a group.
-> 
-> This patchset implements kernfs_show() which can dynamically show and hide
-> kernfs_nodes using the [de]activation mechanisms, and, on top, implements
-> cgroup_file_show() which allows toggling cgroup file visiblity.
-> 
-> This is for the following pending patchset to allow disabling PSI on
-> per-cgroup basis:
-> 
->  https://lore.kernel.org/all/20220808110341.15799-1-zhouchengming@bytedance.com/t/#u
-> 
-> which requires hiding the corresponding cgroup interface files while
-> disabled.
-> 
-> This patchset contains the following nine patches.
-> 
->  0001-kernfs-Simply-by-replacing-kernfs_deref_open_node-wi.patch
->  0002-kernfs-Drop-unnecessary-mutex-local-variable-initial.patch
->  0003-kernfs-Refactor-kernfs_get_open_node.patch
->  0004-kernfs-Skip-kernfs_drain_open_files-more-aggressivel.patch
->  0005-kernfs-Improve-kernfs_drain-and-always-call-on-remov.patch
->  0006-kernfs-Add-KERNFS_REMOVING-flags.patch
->  0007-kernfs-Factor-out-kernfs_activate_one.patch
->  0008-kernfs-Implement-kernfs_show.patch
->  0009-cgroup-Implement-cgroup_file_show.patch
-> 
-> 0001-0003 are misc prep patches. 0004-0008 implement kernsf_deactivate().
-> 0009 implements cgroup_file_show() on top. The patches are also available in
-> the following git branch:
-> 
->  git://git.kernel.org/pub/scm/linux/kernel/git/tj/misc.git kernfs-show
-> 
-> The main difference from the previous version[1] is that while show/hide
-> still use the same mechanism as [de]activation, their states are tracked
-> separately so that e.g. an unrelated kernfs_activate() higher up in the tree
-> doesn't interfere with hidden nodes in the subtree.
+Hi Yury, Valentin,
 
-Hello,
+On Thu, 2022-08-25 at 13:49 -0700, Yury Norov wrote:
+> + Sander Vanheule
+>=20
+> On Thu, Aug 25, 2022 at 07:12:02PM +0100, Valentin Schneider wrote:
+> > Consider a system with 4 CPUs and:
+> > =C2=A0 CONFIG_NR_CPUS=3D64
+> > =C2=A0 CONFIG_CPUMASK_OFFSTACK=3Dn
+> >=20
+> > In this situation, we have:
+> > =C2=A0 nr_cpumask_bits =3D=3D NR_CPUS =3D=3D 64
+> > =C2=A0 nr_cpu_ids =3D 4
+> >=20
+> > Per smp.c::setup_nr_cpu_ids(), nr_cpu_ids <=3D NR_CPUS, so we want
+> > cpumask_full() to check for nr_cpu_ids bits set.
+> >=20
+> > This issue is currently pointed out by the cpumask KUnit tests:
+> >=20
+> > =C2=A0 [=C2=A0=C2=A0 14.072028]=C2=A0=C2=A0=C2=A0=C2=A0 # test_cpumask_=
+weight: EXPECTATION FAILED at
+> > lib/test_cpumask.c:57
+> > =C2=A0 [=C2=A0=C2=A0 14.072028]=C2=A0=C2=A0=C2=A0=C2=A0 Expected cpumas=
+k_full(((const struct cpumask
+> > *)&__cpu_possible_mask)) to be true, but is false
+> > =C2=A0 [=C2=A0=C2=A0 14.079333]=C2=A0=C2=A0=C2=A0=C2=A0 not ok 1 - test=
+_cpumask_weight
+> >=20
+> > Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+>=20
+> It's really a puzzle, and some of my thoughts are below. So.=20
+>=20
+> This is a question what for we need nr_cpumask_bits while we already
+> have nr_cpu_ids. When OFFSTACK is ON, they are obviously the same.
+> When it's of - the nr_cpumask_bits is an alias to NR_CPUS.
+>=20
+> I tried to wire the nr_cpumask_bits to nr_cpu_ids unconditionally, and
+> it works even when OFFSTACK is OFF, no surprises.
+>=20
+> I didn't find any discussions describing what for we need nr_cpumask_bits=
+,
+> and the code adding it dates to a very long ago.
+>=20
+> If I alias nr_cpumask_bits to nr_cpu_ids unconditionally on my VM with
+> NR_CPUs =3D=3D 256 and nr_cpu_ids =3D=3D 4, there's obviously a clear win=
+ in
+> performance, but the Image size gets 2.5K bigger. Probably that's the
+> reason for what nr_cpumask_bits was needed...
 
-For this series:
-Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
+I think it makes sense to have a compile-time-constant value for nr_cpumask=
+_bits
+in some cases. For example on embedded platforms, where every opportunity t=
+o
+save a few kB should be used, or cases where NR_CPUS <=3D BITS_PER_LONG.
 
-Thanks!
+>=20
+> There's also a very old misleading comment in cpumask.h:
+>=20
+> =C2=A0*=C2=A0 If HOTPLUG is enabled, then cpu_possible_mask is forced to =
+have
+> =C2=A0*=C2=A0 all NR_CPUS bits set, otherwise it is just the set of CPUs =
+that
+> =C2=A0*=C2=A0 ACPI reports present at boot.
+>=20
+> It lies, and I checked with x86_64 that cpu_possible_mask is populated
+> during boot time with 0b1111, if I create a 4-cpu VM. Hence, the
+> nr_cpu_ids is 4, while NR_CPUS =3D=3D 256.
+>=20
+> Interestingly, there's no a single user of the cpumask_full(),
+> obviously, because it's broken. This is really a broken dead code.
+>=20
+> Now that we have a test that checks sanity of cpumasks, this mess
+> popped up.
+>=20
+> Your fix doesn't look correct, because it fixes one function, and
+> doesn't touch others. For example, the cpumask subset() may fail
+> if src1p will have set bits after nr_cpu_ids, while cpumask_full()
+> will be returning true.
 
-> 
-> diffstat follows. Thanks.
-> 
->  fs/kernfs/dir.c             |  102 +++++++++++++++++++++++++++++++----------------
->  fs/kernfs/file.c            |  151 +++++++++++++++++++++++++++++++++-------------------------------------
->  fs/kernfs/kernfs-internal.h |    1
->  include/linux/cgroup.h      |    1
->  include/linux/kernfs.h      |    3 +
->  kernel/cgroup/cgroup.c      |   20 +++++++++
->  6 files changed, 166 insertions(+), 112 deletions(-)
-> 
-> --
-> tejun
-> 
-> [1] http://lkml.kernel.org/r/20220820000550.367085-1-tj@kernel.org
-> 
+It appears the documentation for cpumask_full() is also incorrect, because =
+it
+claims to check if all CPUs < nr_cpu_ids are set. Meanwhile, the implementa=
+tion
+checks if all CPUs < nr_cpumask_bits are set.
+
+cpumask_weight() has a similar issue, and maybe also other cpumask_*() func=
+tions
+(I didn't check in detail yet).
+
+>=20
+> In -next, there is an update from Sander for the cpumask test that
+> removes this check, and probably if you rebase on top of -next, you
+> can drop this and 2nd patch of your series.
+>=20
+> What about proper fix? I think that a long time ago we didn't have
+> ACPI tables for possible cpus, and didn't populate cpumask_possible
+> from that, so the
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #define nr_cpumask_bits NR_CPU=
+S
+>=20
+> worked well. Now that we have cpumask_possible partially filled,
+> we have to always
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #define nr_cpumask_bits nr_cpu=
+_ids
+>=20
+> and pay +2.5K price in size even if OFFSTACK is OFF. At least, it wins
+> at runtime...
+>=20
+> Any thoughts?
+
+It looks like both nr_cpumask_bits and nr_cpu_ids are used in a number of p=
+laces
+outside of lib/cpumask.c. Documentation for cpumask_*() functions almost al=
+ways
+refers to nr_cpu_ids as a highest valid value.
+
+Perhaps nr_cpumask_bits should become an variable for internal cpumask usag=
+e,
+and external users should only use nr_cpu_ids? The changes in 6.0 are my fi=
+rst
+real interaction with cpumask, so it's possible that there are things I'm
+missing here.
+
+That being said, some of the cpumask tests compare results to nr_cpumask_bi=
+ts,
+so those should then probably be fixed to compare against nr_cpu_ids instea=
+d.
+
+Best,
+Sander
+
+>=20
+> ---
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index 5e2b10fb4975..0f044d93ad01 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -41,13 +41,7 @@ typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS)=
+; }
+> cpumask_t;
+> =C2=A0extern unsigned int nr_cpu_ids;
+> =C2=A0#endif
+> =C2=A0
+> -#ifdef CONFIG_CPUMASK_OFFSTACK
+> -/* Assuming NR_CPUS is huge, a runtime limit is more efficient.=C2=A0 Al=
+so,
+> - * not all bits may be allocated. */
+> =C2=A0#define nr_cpumask_bits=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0nr_cpu_ids
+> -#else
+> -#define nr_cpumask_bits=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(=
+(unsigned int)NR_CPUS)
+> -#endif
+> =C2=A0
+> =C2=A0/*
+> =C2=A0 * The following particular system cpumasks and operations manage
+> @@ -67,10 +61,6 @@ extern unsigned int nr_cpu_ids;
+> =C2=A0 *=C2=A0 cpu_online_mask is the dynamic subset of cpu_present_mask,
+> =C2=A0 *=C2=A0 indicating those CPUs available for scheduling.
+> =C2=A0 *
+> - *=C2=A0 If HOTPLUG is enabled, then cpu_possible_mask is forced to have
+> - *=C2=A0 all NR_CPUS bits set, otherwise it is just the set of CPUs that
+> - *=C2=A0 ACPI reports present at boot.
+> - *
+> =C2=A0 *=C2=A0 If HOTPLUG is enabled, then cpu_present_mask varies dynami=
+cally,
+> =C2=A0 *=C2=A0 depending on what ACPI reports as currently plugged in, ot=
+herwise
+> =C2=A0 *=C2=A0 cpu_present_mask is just a copy of cpu_possible_mask.
+

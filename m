@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF7A5A3F23
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B895A3F25
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiH1Slt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 14:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S230056AbiH1SmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 14:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiH1Slr (ORCPT
+        with ESMTP id S229612AbiH1SmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 14:41:47 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A32FFD9
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 11:41:46 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id og21so11832972ejc.2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 11:41:46 -0700 (PDT)
+        Sun, 28 Aug 2022 14:42:06 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BD12FFD9;
+        Sun, 28 Aug 2022 11:42:04 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b16so82883wru.7;
+        Sun, 28 Aug 2022 11:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=9gB7GKo4ZtOkdTHaCKeZUZH/SV1sRdPkXap+dCWBmo0=;
-        b=aGoXvHIs4WqNoqTWcJQi0jqHCrwqxS4x9HKureOIIrnWBW2SSYLm2EIVGp4Nwtq6PG
-         beJuYG7QqykOnmxg9mx7xbblUzyon9aqVcmedbOQk8H6rN1ZbwKSGIN14YL4p64NifX3
-         af+UXxfhYQN9dYiiMTwXBZle8EN1cIHz4XP0g=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=nPeeJvcw+APlSjQr5GEfxQ1+CYvYngFa4Na2HCLoP7o=;
+        b=LaihOXgWdYphgrrA7SBrJOIUhVNl3ESUJDgGPDUfngsClPDVDKzpQko70TrGPfL36F
+         zf38+tv/rqp5oeiVGa+TEEOMuDZU3KT7cuYIqHTfS1JUaQLVNP3523BkxepBk1HXD7e5
+         okwFBPi/pXCcWC9gHBDusyz+XPhlomVuRkWO/z2vtgE8CEjtKqJUgYU/KKjBdUWeH2BR
+         p0O2HeopYHek3fkBGn5PIwqw/v4N7317ur4o9iZHqkzAmB6BMT9eNAu4RP008KP89wD4
+         4kCva8i3Ly5Eg2WPnf7wy8foFcNWHhAy/GQhyvl6jB3SZtuOK9GHFG+FAHYokFhOwXIv
+         GdaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=9gB7GKo4ZtOkdTHaCKeZUZH/SV1sRdPkXap+dCWBmo0=;
-        b=emasJoSgrYDeTqKw1nutQTNgcGX7PeQk5Z0KSgCVGka79uPvpDFDv10xbqolP/gNwp
-         ZTBR8MvdH+FJyF2SEnvoeQzIFT1i1rCcKzrtgHywLbVGA839yVgGL5aKDTc+q5kyKLSN
-         RSx4HVelOUpCD8BytoicMitNoBkbUYZurO7Ije+mAvKXq5CShV7AAatDMKKrhEGva+oP
-         ePrcAoQ9Ag0A00KST1cqNM8CH8ilZiIfhBh4k5g741X/1gRX85CZ/t3QToFPCAy1lVo1
-         gIGknGCOFguSfjF3rdJlkeqccSTcNE6iWtCz/GYchwBqseut8iwqHxcuENpc7cxsow64
-         2rlQ==
-X-Gm-Message-State: ACgBeo26LExa8/2YDXouFWJ7loTf06K4ugYWKCEGhB7XIjJ96BbQ2EWE
-        ub154i2bEtqPhB4kvQfDWlAD9towY0kaN1AY
-X-Google-Smtp-Source: AA6agR6o2zI1UIndE+y2RTZ/Xar5H1E5fUCNm1LEQEoXK7ggwa0ct05IXb/G5AE8CiC5mqEs1xWKhQ==
-X-Received: by 2002:a17:907:2895:b0:73d:ddfe:79d9 with SMTP id em21-20020a170907289500b0073dddfe79d9mr9388627ejc.387.1661712104707;
-        Sun, 28 Aug 2022 11:41:44 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id bh23-20020a170906a0d700b0073d7e58b1bcsm3472828ejb.157.2022.08.28.11.41.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Aug 2022 11:41:44 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id b16so82279wru.7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 11:41:44 -0700 (PDT)
-X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
- m8-20020a5d6248000000b00222cd3b94c8mr4686216wrv.97.1661712103682; Sun, 28 Aug
- 2022 11:41:43 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=nPeeJvcw+APlSjQr5GEfxQ1+CYvYngFa4Na2HCLoP7o=;
+        b=Kr/FiSuQEO5q3s+2wnXheSfpAOrfl5VrkqzR0htmnRYj8KKJHdxligMPun7A1Oy9iX
+         siicyoWKUYflZyB2ko06Sns9Hcpyz2rSV3dshnQ4vWFqVBq0IQzjx17V4IBjHyOPlp+H
+         DbBxKTmo1shnLD1oUVPCaIwG1QSl/m02nwd3Rb6FW0NkfphJPHCW8eL5ywI8stQO0zIH
+         bUEyIxGc5eBfqhG6YOHkp8AwIKY534mBBzLzms8Kn6Ku1RRGC51NiCFTfhmjW1oh6Dn0
+         NDpBZSX2jeCINJwh5oFjb8L+CjWl/21Os2onwYwtpELu44QqSSOlX+EnToQwWJKZsrFD
+         Ba3Q==
+X-Gm-Message-State: ACgBeo2va4ZVVkGVtbh39tRaLJLglG1KFLa5Uh5HEf7ro1YQ/65rJEZK
+        n98qx0aMHBOSiD3SMPq2kw==
+X-Google-Smtp-Source: AA6agR7ZQHVA++7orMaEY7LtCr7ATgaqFa5xAhWfk3pG0NldsIBx9iCH7CjFTtfP+gAErEpY1M+qFA==
+X-Received: by 2002:a05:6000:61e:b0:225:5119:94b with SMTP id bn30-20020a056000061e00b002255119094bmr4726937wrb.650.1661712122970;
+        Sun, 28 Aug 2022 11:42:02 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.248.164])
+        by smtp.gmail.com with ESMTPSA id w18-20020adfde92000000b00226d238be98sm4233967wrl.82.2022.08.28.11.42.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 11:42:02 -0700 (PDT)
+Date:   Sun, 28 Aug 2022 21:42:00 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     xu xin <cgel.zte@gmail.com>
+Cc:     akpm@linux-foundation.org, corbet@lwn.net, bagasdotme@gmail.com,
+        willy@infradead.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
+        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH v4 1/2] ksm: count allocated ksm rmap_items for each
+ process
+Message-ID: <Ywu2+OiL9oqohr1v@localhost.localdomain>
+References: <20220824124512.223103-1-xu.xin16@zte.com.cn>
+ <20220824124615.223158-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-References: <166170992386.1651569.17504808724724706636@leemhuis.info>
-In-Reply-To: <166170992386.1651569.17504808724724706636@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 28 Aug 2022 11:41:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjn-GVDLEN0F+WT0PWysqH7HMD+mBjKUr65DEhav47u3w@mail.gmail.com>
-Message-ID: <CAHk-=wjn-GVDLEN0F+WT0PWysqH7HMD+mBjKUr65DEhav47u3w@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2022-08-28]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220824124615.223158-1-xu.xin16@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 11:23 AM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> Not sure, maybe it would have been good if the following fix would have
-> found the way into rc3, as it seems more than just one or two people
-> already stumbled over the regression fixed by it:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/?h=3Dmaster&id a8e0f6b01b14b2e28ba144e112c883f03a3db2
-> https://lore.kernel.org/all/?q=C5=93bffc7*
+On Wed, Aug 24, 2022 at 12:46:15PM +0000, xu xin wrote:
+> +static int proc_pid_ksm_rmp_items(struct seq_file *m, struct pid_namespace *ns,
+> +				struct pid *pid, struct task_struct *task)
+> +{
+> +	struct mm_struct *mm;
+> +
+> +	mm = get_task_mm(task);
+> +	if (mm) {
+> +		seq_printf(m, "%lu\n", mm->ksm_rmp_items);
+> +		mmput(mm);
+> +	}
+> +
+> +	return 0;
+> +}
+>  #endif /* CONFIG_KSM */
+>  
+>  #ifdef CONFIG_STACKLEAK_METRICS
+> @@ -3334,6 +3347,7 @@ static const struct pid_entry tgid_base_stuff[] = {
+>  #endif
+>  #ifdef CONFIG_KSM
+>  	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
+> +	ONE("ksm_rmp_items",  S_IRUSR, proc_pid_ksm_rmp_items),
+>  #endif
 
-Neither of those links are valid for me.
+Another tiny /proc/$pid/ file?
 
-"a8e0f6b01b14b2e28ba144e112c883f03a3db2" doesn't exist in linux-next.
-never mind that that isn't valid link syntax anyway.
+Guys, this problem with "find /proc" instantiating megabytes is not
+getting better only worse.
 
-The lore.kernel.org link is also just random noise.
+How did KSM didn't get its own /proc/*/ksm file with many values?
 
-So I'm not actually sure what you are trying to say...
-
-           Linus
+Maybe add /proc/*/ksm and start filling it with stuff leaving
+/proc/*/ksm_merging_pages alone?

@@ -2,142 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C205A3D1E
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 12:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3E15A3D21
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 12:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiH1KEw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 28 Aug 2022 06:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S229448AbiH1KHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 06:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiH1KEu (ORCPT
+        with ESMTP id S229436AbiH1KHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 06:04:50 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6205F38B8;
-        Sun, 28 Aug 2022 03:04:48 -0700 (PDT)
-Received: from mail-ed1-f52.google.com ([209.85.208.52]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MBV2f-1oZ4VN2IWt-00D109; Sun, 28 Aug 2022 12:04:46 +0200
-Received: by mail-ed1-f52.google.com with SMTP id s11so6906814edd.13;
-        Sun, 28 Aug 2022 03:04:46 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2ch44KgL2Jb6PS39Vp5lXpwWeCEj95onF7+tkB/sw6F2G0fqEc
-        qggrG40up4ejvDwinpdmael92xQo2No+ZAUHR6A=
-X-Google-Smtp-Source: AA6agR7m5MrvDDJkIHH7Ehnt8y+ynOosCvPpdzVXCkVpgNk88mWnLMxzom1m7IDvmVq74u4+tqxm9mjiuAXVA48sEmU=
-X-Received: by 2002:a05:6402:5190:b0:448:5bdb:b27d with SMTP id
- q16-20020a056402519000b004485bdbb27dmr1665421edd.49.1661681086136; Sun, 28
- Aug 2022 03:04:46 -0700 (PDT)
+        Sun, 28 Aug 2022 06:07:19 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95FD52FFB;
+        Sun, 28 Aug 2022 03:07:18 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h5so6766514wru.7;
+        Sun, 28 Aug 2022 03:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=gN5wff+7D49gSmIVwVq0k68HaEIv4gh2Z+uJl/v6os4=;
+        b=UTQKI75Of0dE8+F7Os670doSJ2pnyqRE6C4z2lo0cDm0my3i91eh0uUaaqTl7C8OZI
+         RGo+W5rG+eAlSpjY9V2wO5VMT/62D4uyiD5a1O6kyoz+Yjp52Knkgp2q4TQqpZjNoEcL
+         vqAigBpWEu4r11TYF9CfNeC1zeQzsL4fQzqq3+ozmTKlKGdwWWRBxKch2Uof7O7gyowg
+         a94a0NGgXY0Rw79jfuQq7RUiwEALDb1WWhmtgEu071Eu9BZW44aSWu3ZoBTw1MReESdf
+         JZezsNml4boheXrA3oirydVeD4oUcQTrkv8XeITE4vpsA9WK7/mU7tNXcK4ovLQI219u
+         uCkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=gN5wff+7D49gSmIVwVq0k68HaEIv4gh2Z+uJl/v6os4=;
+        b=k9ftOw21Vy4QcMj3MVpbSuSZraE5a73/0sVma845t+yzBo2dAw/bH11P6sYyHbrodL
+         CPZdAod+DKgxmATgGE+g/ZeayhZgh+y0mKMPVNp+MwYhsEisbwTCy8wfqjyMyGa/qq9F
+         cnFnI2etp62OC154XdMBBvDZWH9aRX4W+lspUtRw8UdyPuXnqSRVdYvtNQbPwE2++feu
+         kXkwlCzHFGrQeaKXrdbU+ym6+ajjBaLQHb8zbFvkYkIh+gFRaxSHyEwhK4JEBeOoOLHO
+         5U0InmVuLKMNczI1qLFRLCPvOds6goWeCUTSt3ynvi8uS3YTdZ5rgfddxFiR6PZPDZyX
+         fUtQ==
+X-Gm-Message-State: ACgBeo2YYYzPo1AfzHcBpkmrJnPrB8rg86PG9QHdyf3I04EmRtPeYP6X
+        MNwCuVFOcUX93ZszTe3fOrMp4R7JglVUoQ==
+X-Google-Smtp-Source: AA6agR7orfVETcNZNBzso4oBSDv8P3rDpZFzUexWwMDg5Y6Y8fbxAkMzcArvLoz+rB9cDMVmJ5xy+A==
+X-Received: by 2002:adf:fa81:0:b0:224:f260:2523 with SMTP id h1-20020adffa81000000b00224f2602523mr3811529wrr.26.1661681237187;
+        Sun, 28 Aug 2022 03:07:17 -0700 (PDT)
+Received: from elementary ([94.73.32.249])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1c5444000000b003a63a3b55c3sm6138227wmi.14.2022.08.28.03.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 03:07:16 -0700 (PDT)
+Date:   Sun, 28 Aug 2022 12:07:14 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Stefan Hansson <newbie13xd@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Ping Cheng <ping.cheng@wacom.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: PROBLEM: Regression likely in hid_uclogic driver breaks Huion
+ Inspiroy H640 drawing tablet
+Message-ID: <20220828100714.GA182607@elementary>
+References: <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
+ <20220724114849.GA32182@elementary>
+ <20220725224841.GA75640@elementary>
+ <3f2e0a49-38a8-417e-1bb0-9a9f28371240@gmail.com>
+ <20220804182445.GA16569@elementary>
+ <CAO-hwJ+hBipNJpeYaHRr2-rKXA5d79XT7zE2fo2oEKUKJtKJ0g@mail.gmail.com>
+ <20220813110922.GA47526@elementary>
+ <d8b91029-4a6e-1508-1512-faea768ae580@redhat.com>
+ <97ec87e6-b0c3-f2c9-4412-41a5884b6a24@gmail.com>
+ <CAO-hwJ+MtU5w9M5rqbOPYjUUZtJ609Q0GwPJpy-9egDEjo9m7g@mail.gmail.com>
 MIME-Version: 1.0
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
- <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
- <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
- <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
- <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
- <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
- <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
- <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
- <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu> <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
- <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu> <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
- <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
-In-Reply-To: <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 28 Aug 2022 12:04:29 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
-Message-ID: <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Courbot <gnurou@gmail.com>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        Davide Ciminaghi <ciminaghi@gnudd.com>,
-        Alessandro Rubini <rubini@gnudd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:q7AU2884sD9a1G/Wzgl7haFBCm2tktWi+C9nFAcCOtfszTS0hvk
- NIg2klUjvMnQB1+DqRwaIfPTRPQtBA2OhykVvoe6NjqcCoF/gMOBliUtodlCCfocdFDssL5
- NfVg9wSHtRGjz1bXrY5Eh6XEbGBzbZfXbVizl/w34JoLYTQ7/QeDRl7GF8BT+0RbCyBAw5g
- 4VzDnQMbRsnH4xjX3fXlg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MlFDtVOvLfE=:Xe0ivX8BrMffWwzQzmP2DB
- o3m12LgKZ+9xUu7xFBcy5qw1E1b6BW0HFvCWXwSBrRWzGRbfbRb+NxjCG4A4H12EfvZmuUHyu
- AmXrinaowvZ9mQjd51DUKaibsjB+kDw8aRccN+BPzVF5zBFOLvaqBq/QWWgKvCKmXHlnGY565
- wzO1bblBqO1ctbB3R/EkJLY/UVj6lGgKdnIqBg4mtZGdw5iisj0nIvy1uytVoh4DOI2orEbWB
- HPM0QRsOTtxl2c0ZLMaTCT5Jmhnf+SMc0hhYSgx/pB2aieQKOezyjwFdpdg4n5drrLQYoE7bY
- j/d49451Eo4yTiTp+i5Ld10JjTQM3T08pejdsgoq/8MgTKO0IwtiLUAmoh8qsAwaY+2FRlEkd
- WNMIqpmgA9zQ7wdbRJVRSI8GSHG8bZ3lplhOKE+84UbC0ZgapmBFWHhpMSn1q5TqOrg9y50WV
- UwY24Yn6Km8ZZjR3nSTCAG3vP3tJmQaqy6w2F31IoGdkS9FCyVhd10OcaYE+tMO12qGcvY1u/
- 7AbPzN7RV8jviRfRHH/kMI5R8V0a98Obp6fS8oTQ4JKDPVNCcLoyGFt+CjPYrQsENpf+fEOQF
- SDxxV+zD+BuhiHm/CQgrXby5peZ/k9quOYDbrPd2W9olFT9P7VQBQSJcPAAz++eiHJONpt26L
- N3wxaFrCI9qUmRdGnIIcpriF+BZaFTdWxya3p8wfgKL9qL0HtO4Edwv9mol5pBHdp/sTQ6Ni8
- +Kta1UNTFeeHs3OnfLDftUBctYVH6JTxlVHBipO56q8Bgkdhu0MX0zXxNyNBdyeTt6WRSzy6t
- nqe2PwpxZzBOGAyBmQ/N0ZR0C3DhM4WSqV6igHch6QSByLuI2n/2RIXd8GBiHPPUPuYcnD9w7
- TDmasLgWlU+SOZCq1JFw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO-hwJ+MtU5w9M5rqbOPYjUUZtJ609Q0GwPJpy-9egDEjo9m7g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 11:06 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 26/08/2022 à 23:54, Linus Walleij a écrit :
-> >> But what do I do with:
-> >>
-> >> drivers/gpio/gpio-aggregator.c: bitmap = bitmap_alloc(ARCH_NR_GPIOS,
-> >> GFP_KERNEL);
+On Mon, Aug 22, 2022 at 08:25:52AM +0200, Benjamin Tissoires wrote:
+> On Sun, Aug 21, 2022 at 1:45 AM Stefan Hansson <newbie13xd@gmail.com> wrote:
 > >
-> > That's just used locally in that driver to loop over the arguments to the
-> > aggregator (from the file in sysfs). I would set some arbitrary root
-> > like
-> > #define AGGREGATOR_MAX_GPIOS 512
-> > and just search/replace with that.
+> > > FWIW, I found the issue: the hid-uclogic driver is emitting input data
+> > > behind hid-input, and the state between the 2 is desynchronized.
+> > >
+> > > The following patch seems to be working (with the Huion v1 protocol I
+> > > have here that I have tweaked to resemble a v2):
+> > > ---
+> > >  From aeedd318e6cb4dbee551f67616302cc7c4308c58 Mon Sep 17 00:00:00 2001
+> > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > Date: Thu, 18 Aug 2022 15:09:25 +0200
+> > > Subject: [PATCH] Fix uclogic
+> > >
+> > > ---
+> > >   drivers/hid/hid-input.c | 5 ++++-
+> > >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> > > index c6b27aab9041..a3e2397bb3a7 100644
+> > > --- a/drivers/hid/hid-input.c
+> > > +++ b/drivers/hid/hid-input.c
+> > > @@ -1530,7 +1530,10 @@ void hidinput_hid_event(struct hid_device *hid,
+> > > struct hid_field *field, struct
+> > >                * assume ours
+> > >                */
+> > >               if (!report->tool)
+> > > -                hid_report_set_tool(report, input, usage->code);
+> > > +                report->tool = usage->code;
+> > > +
+> > > +            /* drivers may have changed the value behind our back,
+> > > resend it */
+> > > +            hid_report_set_tool(report, input, report->tool);
+> > >           } else {
+> > >               hid_report_release_tool(report, input, usage->code);
+> > >           }
 > >
->
-> And what about gsta_gpio_setup() that requests base 0 with the following
-> comment:
->
->         /*
->          * ARCH_NR_GPIOS is currently 256 and dynamic allocation starts
->          * from the end. However, for compatibility, we need the first
->          * ConneXt device to start from gpio 0: it's the main chipset
->          * on most boards so documents and drivers assume gpio0..gpio127
->          */
->
->
-> And I guess there might be other drivers like that (I found that one
-> because of its comment mentioning ARCH_NR_GPIOS.
+> > What branch should this be applied on top of?
+> >
+> 
+> Sorry for that. I had some local commits in my tree that made the
+> patch unusable. I just formally sent the patch [0] based on the
+> hid.git/for-next branch which is actually applying on top of v5.19 or
+> even v5.18.
+> 
+> Cheers,
+> Benjamin
+> 
+> [0] https://lore.kernel.org/linux-input/20220822062247.1146141-1-benjamin.tissoires@redhat.com/T/#u
+> 
 
-This driver is clearly incomplete: there is an mfd portion in
-drivers/mfd/sta2x11-mfd.c, the gpio provider in
-drivers/gpio/gpio-sta2x11.c, one gpio consumer in
-drivers/media/pci/sta2x11/, and some glue logic in
-arch/x86/pci/sta2x11-fixup.c, but nothing that seems to set up
-the platform data that these need to communicate with one another.
+As I already commented in the patch, the problem is now solved on
+hid/for-next.
 
-I think that just means the code that one would have to modify
-is in vendor kernels of devices using this chip, but there is no
-way to fix those if they are not in mainline. The last meaningful
-patches on this SoC support were in 2012 by  Davide Ciminaghi
-and Alessandro Rubini, though they still Acked patches after that.
-
-I wonder if I was missing the interesting bit about it, if the driver
-is just obsolete and can be removed, or if there is something
-that is still worth fixing here.
-
-        Arnd
+Thanks!

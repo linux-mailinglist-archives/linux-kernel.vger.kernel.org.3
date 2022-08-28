@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79115A3B4B
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 06:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2695A3B53
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 06:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiH1D77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 23:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S229771AbiH1ECk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 00:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiH1D7v (ORCPT
+        with ESMTP id S229487AbiH1ECh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 23:59:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6131B101F;
-        Sat, 27 Aug 2022 20:59:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0345F60F3E;
-        Sun, 28 Aug 2022 03:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE7FC433D6;
-        Sun, 28 Aug 2022 03:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661659186;
-        bh=mxF6wWgyLzTNK1iaXUFWV3bzy0h0vd0jxhXaREnNPzw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PfxYIA2ySkWpzwIoXljHtSfNmXObhfZlc9Ol7omHsAplU4rsdmSbCXCUApPBNiWl1
-         pDg9Olu2kmT+iWoY3rf6C10AJS/4Gx7PX/bbcbcgVZ7qxuQCH2W7SBuEAuiE5DHi5n
-         J/DJxORLZ9ezv1SRkZNmSQ6REOTS+cFTMHC68ghhmzATvzhVTScpDdu1s/KpWZh701
-         e7PiAZGPxmTYeQbG9vvfEqGz7DEtiTeN5gFnF26lMDnNXCFqNZdmuWDfrDAAlYmWeZ
-         o9h4VnZGea7Dl2xdu/4pAOz57OXaOgM0u/V+6Equ8Rs/T2OPZs47eJ8wBAsDMzSi1P
-         XBYePzPgnlGGg==
-Date:   Sun, 28 Aug 2022 06:59:38 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        corbet@lwn.net, dhowells@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v14 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and add flags check function
-Message-ID: <YwroKjo7IkQDepp5@kernel.org>
-References: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
- <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
- <6d85d7b1f0c2341698e88bad025bd6e0b34c7666.camel@huaweicloud.com>
+        Sun, 28 Aug 2022 00:02:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C773CBE6
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 21:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661659356; x=1693195356;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FR/u5lcm476YZSGLivO5H2yhP3aL9f2MCcBl5AMyPyw=;
+  b=Bxmn/ADy8Kyazi/rJP8xVR2yI5+hSVr8xQhSUfujgOe7WHn3tdUw9i8H
+   mbaN4AqNdt6pv/W7rnaNJ9ncPtXYXduju8jFRnoFcw0SiDODriEanFbhC
+   cVpvSikJOlKwrq5I+QEmKSYfuL3cAwsItYsrBJa1IaVkAt2ekcBkw3nyB
+   oz7BspJWv5B9feec2d9zJlHdSbXIt2Yep+t2HQR63qk+5jgnNYTS0ft9l
+   ttTmAIlVNYn49I4IiEAByj/jNxdjfzZMgFIwIa5BgbUmUXqDTsOU6I0HI
+   FSu1bb024bOpVUuklk1MdZr+zqxOt6KtpXp6qA5xkayw4Mno5ckgamZjb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="381012309"
+X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
+   d="scan'208";a="381012309"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 21:02:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
+   d="scan'208";a="939186516"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Aug 2022 21:02:33 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oS9VJ-0000m7-0j;
+        Sun, 28 Aug 2022 04:02:33 +0000
+Date:   Sun, 28 Aug 2022 12:02:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>
+Subject: [ammarfaizi2-block:herbert/cryptodev-2.6/master 34/64] ERROR:
+ modpost: "aspeed_register_hace_hash_algs"
+ [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+Message-ID: <202208281149.MsLVjPVH-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6d85d7b1f0c2341698e88bad025bd6e0b34c7666.camel@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,31 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:22:54AM +0200, Roberto Sassu wrote:
-> On Fri, 2022-08-26 at 11:12 +0200, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for the patch that introduces the
-> > bpf_lookup_user_key() eBPF
-> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > able to
-> > validate the kfunc parameters.
-> > 
-> > Also, introduce key_lookup_flags_valid() to check if the caller set
-> > in the
-> > argument only defined flags. Introduce it directly in
-> > include/linux/key.h,
-> > to reduce the risk that the check is not in sync with currently
-> > defined
-> > flags.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: KP Singh <kpsingh@kernel.org>
-> 
-> Jarkko, could you please ack it if it is fine?
+tree:   https://github.com/ammarfaizi2/linux-block herbert/cryptodev-2.6/master
+head:   a9a98d49da52c5bf63cd8bbc1f33b52edec2e9c9
+commit: 108713a713c7e4b7d07e6cd9b808503d5bb7089b [34/64] crypto: aspeed - Add HACE hash driver
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220828/202208281149.MsLVjPVH-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/108713a713c7e4b7d07e6cd9b808503d5bb7089b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block herbert/cryptodev-2.6/master
+        git checkout 108713a713c7e4b7d07e6cd9b808503d5bb7089b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-So, as said I'm not really confident that a function is
-even needed in the first place. It's fine if there are
-enough call sites to make it legit.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-BR, Jarkko
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "aspeed_register_hace_hash_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+>> ERROR: modpost: "aspeed_unregister_hace_hash_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

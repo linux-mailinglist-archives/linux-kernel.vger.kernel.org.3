@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573FD5A3E00
+	by mail.lfdr.de (Postfix) with ESMTP id E94D65A3E02
 	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiH1OVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 10:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S229633AbiH1OVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiH1OVU (ORCPT
+        with ESMTP id S229581AbiH1OVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 10:21:20 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC01C1928D;
-        Sun, 28 Aug 2022 07:21:19 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id p187so7717462oia.9;
-        Sun, 28 Aug 2022 07:21:19 -0700 (PDT)
+        Sun, 28 Aug 2022 10:21:22 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747D1928D;
+        Sun, 28 Aug 2022 07:21:21 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id 92-20020a9d0be5000000b0063946111607so4286226oth.10;
+        Sun, 28 Aug 2022 07:21:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=sibDZma8SNC/1fdSULSJhZLiuhIbQTJjp2sPIcXm9F0=;
-        b=tpmfSrXkOh/lB/uPbLfzk1/QvyQ4FFA4KWqozCU3AbDQv8gbS/K2UpTX2BZfhEBujU
-         Wjk0Q4G992UZUjnAK+mHRkekML7svESNzZ0HcX/S59/7xRMiIxZgxLzsOct3H/JM0E5E
-         MlYQlpjf1NM+uEvQXw1ha9juiOdyVSK4FHqDOBCCTXkKPN/H4BcqqCoxMOByIUYsENrJ
-         NzFsKGXz42LAp9BKYD0CqS5ovYoxkgN5YffLMMFBfVJdeHupEB64tnjpS50t1WB8gwrL
-         0o+djr/9IIONQAt5b4oSFH6/eR6tb29sKOLJMJ1VqIT8LGYXFWMJqyN0MQUhZDaCnZnB
-         iM8Q==
-X-Gm-Message-State: ACgBeo0yft2VjS/voBlF9qFNp1v/PpishtfdisGaOvOuEf26J68uwIMb
-        PUKoEVZ0rllOO9kKgZQilw==
-X-Google-Smtp-Source: AA6agR6BEiMKL2SlsQk0aVmQ0dN6+2z35akCIfyts949Lp8DmwKEBIdcRy/TMS8pFCS2MEZvN2bb8w==
-X-Received: by 2002:a05:6808:7dd:b0:344:997f:32c3 with SMTP id f29-20020a05680807dd00b00344997f32c3mr4981010oij.11.1661696478999;
-        Sun, 28 Aug 2022 07:21:18 -0700 (PDT)
+        bh=rUI2VT6Iw56Sqt/jpeUDwdmczi3LF4N/g0TNbppEwFE=;
+        b=7oOwWB3SUOblS9nAI16fGA1buWYXAbGzts4KR4i6+MhqT4ICRPjKVZ45eJiDHGZVC6
+         DrtHOaFYxIlPqcQOfCR2kCAV/yuAjL8jtOfGgmJy9Ub0eieOaH56/ZnmsFvHIkm4drsx
+         8D5PL5irdTqcUFfkmmim4pPafGe/qEDyqdTKuSlN2d71lIL3u4/VVLBn9Q7fbDb/L7F0
+         W9zFTsUDKY0IqFlHXu/lYnSt0l5NUrJ8qhiADwH9NHKSHFpUo9SSJBKxkGB4031e+uPp
+         Z+bQKJFJvPGAx4bkHFyffvEERoajH9AJolL5E77lIEaluFppoKekeL0zId2D014GZ9KW
+         rpKA==
+X-Gm-Message-State: ACgBeo3GUrA0RwGuOSsAZjxXeRdovSe/NIzzvS9spwAG9FIOw8eIgost
+        USzQf3RK28YCyxv6Sh3Q06s8cnf2ug==
+X-Google-Smtp-Source: AA6agR7okA3F1K7VqQ8PLpFXR4j/yALNpclI5ZXmCYf1ZdhmmniWSGI8/eCGeOVDocPZwgNu2G3VLg==
+X-Received: by 2002:a9d:61d2:0:b0:639:31ca:87fe with SMTP id h18-20020a9d61d2000000b0063931ca87femr4782241otk.22.1661696480879;
+        Sun, 28 Aug 2022 07:21:20 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x26-20020a4a2a5a000000b0041ba884d42csm3867442oox.42.2022.08.28.07.21.17
+        by smtp.gmail.com with ESMTPSA id q5-20020a4a88c5000000b0043540f7701esm3735892ooh.31.2022.08.28.07.21.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 07:21:17 -0700 (PDT)
-Received: (nullmailer pid 3159699 invoked by uid 1000);
+        Sun, 28 Aug 2022 07:21:19 -0700 (PDT)
+Received: (nullmailer pid 3159704 invoked by uid 1000);
         Sun, 28 Aug 2022 14:21:16 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220826135451.526756-2-maxime.chevallier@bootlin.com>
-References: <20220826135451.526756-1-maxime.chevallier@bootlin.com> <20220826135451.526756-2-maxime.chevallier@bootlin.com>
-Subject: Re: [PATCH net-next 1/5] dt-bindings: net: Convert Altera TSE bindings to yaml
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     devicetree@vger.kernel.org, kw@linux.com, bhelgaas@google.com,
+        andersson@kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-pci@vger.kernel.org, lpieralisi@kernel.org,
+        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        robh+dt@kernel.org
+In-Reply-To: <20220826181923.251564-11-manivannan.sadhasivam@linaro.org>
+References: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org> <20220826181923.251564-11-manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH 10/11] dt-bindings: PCI: qcom-ep: Add support for SM8450 SoC
 Date:   Sun, 28 Aug 2022 09:21:16 -0500
-Message-Id: <1661696476.844936.3159698.nullmailer@robh.at.kernel.org>
+Message-Id: <1661696476.862958.3159703.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 15:54:47 +0200, Maxime Chevallier wrote:
-> This converts the bindings for the Altera Triple-Speed Ethernet to yaml.
+On Fri, 26 Aug 2022 23:49:22 +0530, Manivannan Sadhasivam wrote:
+> Add devicetree bindings support for SM8450 SoC. Only the clocks are
+> different on this platform, rest is same as SDX55.
 > 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  .../devicetree/bindings/net/altera_tse.txt    | 113 ---------------
->  .../devicetree/bindings/net/altr,tse.yaml     | 134 ++++++++++++++++++
->  2 files changed, 134 insertions(+), 113 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/altera_tse.txt
->  create mode 100644 Documentation/devicetree/bindings/net/altr,tse.yaml
+>  .../devicetree/bindings/pci/qcom,pcie-ep.yaml | 27 +++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:15:5: [error] duplication of key "const" in mapping (key-duplicates)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/altr,tse.yaml: allOf:1:then:properties:reg-names: {'maxItems': 4, 'items': [{'const': 'control_port'}, {'const': 'rx_csr'}, {'const': 'tx_csr'}, {'const': 's1'}]} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/altr,tse.yaml: allOf:2:then:properties:reg-names: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'control_port'}, {'const': 'rx_csr'}, {'const': 'rx_desc'}, {'const': 'rx_resp'}, {'const': 'tx_csr'}, {'const': 'tx_desc'}] is too long
-	[{'const': 'control_port'}, {'const': 'rx_csr'}, {'const': 'rx_desc'}, {'const': 'rx_resp'}, {'const': 'tx_csr'}, {'const': 'tx_desc'}] is too short
-	False schema does not allow 6
-	1 was expected
-	6 is greater than the maximum of 2
-	6 is greater than the maximum of 3
-	6 is greater than the maximum of 4
-	6 is greater than the maximum of 5
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/altr,tse.yaml: ignoring, error in schema: allOf: 1: then: properties: reg-names
-Documentation/devicetree/bindings/net/altr,tse.example.dtb:0:0: /example-0/ethernet@1,00001000: failed to match any schema with compatible: ['altr,tse-msgdma-1.0']
-Documentation/devicetree/bindings/net/altr,tse.example.dtb:0:0: /example-0/ethernet@1,00001000/mdio: failed to match any schema with compatible: ['altr,tse-mdio']
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dts'
+Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:15:5: found duplicate key "const" with value "qcom,sm8450-pcie-ep" (original value: "qcom,sdx55-pcie-ep")
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:15:5: found duplicate key "const" with value "qcom,sm8450-pcie-ep" (original value: "qcom,sdx55-pcie-ep")
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml: ignoring, error parsing file
+make: *** [Makefile:1420: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 

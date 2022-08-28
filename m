@@ -2,437 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AA75A400B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 00:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D075A400C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 00:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiH1W0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 18:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S229580AbiH1W1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 18:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiH1WZ5 (ORCPT
+        with ESMTP id S229679AbiH1W0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 18:25:57 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205E140BC
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:25:53 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id lb5-20020a17090b4a4500b001fd605b6e82so2359554pjb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc;
-        bh=VvwS1hKq6yqPBAQMZ/469wEe25X0TK/1Sfxh6oNBXNI=;
-        b=D1bOzxTxYBwv0//uzSojw76NeI27fzkhmpi/ONn1ji473Sck6tjlqdKQbNvXgC5x9r
-         fCyCA4rmRySzvdGwbr1piTtEfUpKhuDHvNtyI+I5gq6xXeuIIpukgRQ7zWyG4ziSxXSP
-         ty9pEuFWk5v65wvNSnHycdbVKgG0S3XNcRIrpETtFEl2Hm/AbQQAWv6lhBk9/qetp03n
-         3r9DQDjlOUCyvZN8hT9snGR39qeEWpRA4K8tZDEyOhIawom5woQwmO2JoM6Qff8gAZq6
-         QLugN6lQGq6zKVC5csQmoU5nQFhQKVLnGGDqvYNsqSUW625Sf9E72w7RtqAe1/4s85vR
-         5WYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=VvwS1hKq6yqPBAQMZ/469wEe25X0TK/1Sfxh6oNBXNI=;
-        b=bS7+TQVlcXBIbfQJDfqbZrbTXcDcZCrh5PQSk4yCuiJUvz/mJXdOUm+ei/M+xeGZcP
-         w89MfpW6D8km6CanJX3sD5qMA5g7ugxPDtTX+Y6y6EkmOjj4503v237+XTHdaQ3BS9tu
-         cLi8KBCtMQSu+J57VaCKQnOFDjSxQbWdAiiG9qjt36mto4uJHuZMxBE9EeKkPNgBA+eO
-         MKwcQVP4sVb7MQVD0f1i/qY3wvR8oq+MxUwO/aZe+koLcDrGmYiCookPFE+8qONjmWW7
-         uiUMW/gJVlSjT4eZtgpyhRAGUQth/Z1eQ/rz0sn/RG99IirmG7Hhg2NzRd5tsxHqhTCG
-         +F3Q==
-X-Gm-Message-State: ACgBeo358WstGQBU+RdxanAXyaBhlzqLNKcBlheAcXjUWFRPSn2UiCoM
-        qBoyLkdnpjBbfmNI2BckQ6ozzpV3+zuw
-X-Google-Smtp-Source: AA6agR54uhN6vlDiV0Ks9R1JiJyZpt2hjsw5CAE5/JqnOlYTVp0ssKihJ15GpKXRvNWqBb1L3qCXUnGVmQ6h
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:90b:4c4a:b0:1fb:3c1b:b7f8 with SMTP id
- np10-20020a17090b4c4a00b001fb3c1bb7f8mr15345016pjb.98.1661725552893; Sun, 28
- Aug 2022 15:25:52 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 28 Aug 2022 22:25:44 +0000
-In-Reply-To: <20220828222544.1964917-1-mizhang@google.com>
-Mime-Version: 1.0
-References: <20220828222544.1964917-1-mizhang@google.com>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220828222544.1964917-5-mizhang@google.com>
-Subject: [PATCH v2 4/4] KVM: selftests: Test if posted interrupt delivery race
- with migration
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 28 Aug 2022 18:26:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A023A4AF
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661725599; x=1693261599;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dcSE9LOG7cZJjuiBzpglSaypITbH/OCbn76AdIOCtCs=;
+  b=JW4AQGZ/FEHj9PKG9oFQV+TclJJIXkyZpxrEVBhx7vLWYbV4J8f96nIk
+   LS0fTgx9B0ksIKgw8tjeC1e3YsZPD2+0EyHtIjfWlj53WXcB2nVnj5HeY
+   7LUCWRBYzs9Oq4/jnC40lnkX68GnjcxDPTQAj+CqsUWIW39yM1p3SjYDI
+   L9Zbm3Z3cfMS149esh90Bw3SOnCAXHOaoaMyEcFeA8fZ4jojpB1MU4uxt
+   y7EmfMENU2aGfGkV+xAFbIr3lTNZVivFX+outr6lZivtud6GnWxqWvn+U
+   YI7Y1xZeXR8ArPUmomL/J3Q54UJb39OAHY1nLz5B5F5rhkn96+Robt+H/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="358737538"
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="358737538"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 15:26:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="939367547"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Aug 2022 15:26:36 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oSQjj-0001gf-2d;
+        Sun, 28 Aug 2022 22:26:35 +0000
+Date:   Mon, 29 Aug 2022 06:25:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
+ warning: format specifies type 'unsigned char' but the argument has type
+ 'unsigned int'
+Message-ID: <202208290618.wU7mHfOp-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Mattson <jmattson@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   fc32c348a52157665cd8f3f060669ef4e8a03cd4
+commit: 1a622d75985c5950a470edc50c7ad7c10e79a1d3 [124/129] iio: add MEMSensing MSA311 3-axis accelerometer driver
+config: powerpc-randconfig-r024-20220829 (https://download.01.org/0day-ci/archive/20220829/202208290618.wU7mHfOp-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=1a622d75985c5950a470edc50c7ad7c10e79a1d3
+        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+        git fetch --no-tags jic23-iio testing
+        git checkout 1a622d75985c5950a470edc50c7ad7c10e79a1d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/iio/accel/
 
-Test if posted interrupt delivery race with migration. Add a selftest
-to demonstrate a race condition between migration and posted
-interrupt for a nested VM. The consequence of this race condition causes
-the loss of a posted interrupt for a nested vCPU after migration and
-triggers a warning for unpatched kernel.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The selftest demonstrates that if a L2 vCPU is in halted state before
-migration, then after migration, it is not able to receive a posted
-interrupt from another vCPU within the same VM.
+All warnings (new ones prefixed by >>):
 
-The fundamental problem is deeply buried in the kernel logic where
-vcpu_block() will directly check vmcs12 related mappings before having a
-valid vmcs12 ready.  Because of that, it fails to process the posted
-interrupt and triggers the warning in vmx_guest_apic_has_interrupt()
+>> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]
+                                              "msa311-%hhx", partid);
+                                                      ~~~~   ^~~~~~
+                                                      %x
+   1 warning generated.
 
-static bool vmx_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
-{
-	...
-	if (WARN_ON_ONCE(!is_guest_mode(vcpu)) ||
-		!nested_cpu_has_vid(get_vmcs12(vcpu)) ||
-		WARN_ON_ONCE(!vmx->nested.virtual_apic_map.gfn)) <= HERE
-		return false;
-	...
-}
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Co-developed-by: Mingwei Zhang <mizhang@google.com>
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../kvm/x86_64/vmx_migrate_pi_pending.c       | 291 ++++++++++++++++++
- 3 files changed, 293 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/vmx_migrate_pi_pending.c
+vim +993 drivers/iio/accel/msa311.c
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index d625a3f83780..749b2be5b23c 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -51,6 +51,7 @@
- /x86_64/vmx_exception_with_invalid_guest_state
- /x86_64/vmx_invalid_nested_guest_state
- /x86_64/vmx_msrs_test
-+/x86_64/vmx_migrate_pi_pending
- /x86_64/vmx_preemption_timer_test
- /x86_64/vmx_set_nested_state_test
- /x86_64/vmx_tsc_adjust_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 4c122f1b1737..5e830c65c068 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -110,6 +110,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/vmx_dirty_log_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_exception_with_invalid_guest_state
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_msrs_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_invalid_nested_guest_state
-+TEST_GEN_PROGS_x86_64 += x86_64/vmx_migrate_pi_pending
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_set_nested_state_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_tsc_adjust_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_nested_tsc_scaling_test
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_migrate_pi_pending.c b/tools/testing/selftests/kvm/x86_64/vmx_migrate_pi_pending.c
-new file mode 100644
-index 000000000000..6f1a9f284754
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_migrate_pi_pending.c
-@@ -0,0 +1,291 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * vmx_migrate_pi_pending
-+ *
-+ * Copyright (C) 2022, Google, LLC.
-+ *
-+ * Deliver a nested posted interrupt between migration and the first
-+ * KVM_RUN on the target.
-+ */
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "vmx.h"
-+
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <linux/bitmap.h>
-+#include <pthread.h>
-+#include <signal.h>
-+
-+#include "kselftest.h"
-+
-+#define VCPU_ID0 0
-+#define VCPU_ID1 1
-+#define PI_ON_BIT 256
-+#define PI_NV    0x42
-+#define L2_INTR  0x71
-+
-+enum {
-+	PORT_L0_EXIT = 0x2000,
-+};
-+
-+/* The virtual machine object. */
-+struct vmx_pages *vmx;
-+
-+static struct kvm_vm *vm;
-+static struct kvm_vcpu *vcpu0;
-+static struct kvm_vcpu *vcpu1;
-+bool vcpu0_can_run = true;
-+bool vcpu0_running;
-+bool pi_executed;
-+pthread_t pthread_cpu0;
-+pthread_t pthread_cpu1;
-+
-+static void vcpu0_ipi_handler(struct ex_regs *regs)
-+{
-+	 asm volatile("inb %%dx, %%al"
-+		      : : [port] "d" (PORT_L0_EXIT) : "rax");
-+	asm volatile("vmcall");
-+}
-+
-+static void l2_vcpu0_guest_code(void)
-+{
-+	asm volatile("cli");
-+	asm volatile("sti; nop; hlt");
-+}
-+
-+static void l1_vcpu0_guest_code(struct vmx_pages *vmx_pages)
-+{
-+#define L2_GUEST_STACK_SIZE 64
-+	unsigned long l2_vcpu0_guest_stack[L2_GUEST_STACK_SIZE];
-+	uint32_t control;
-+
-+	x2apic_enable();
-+
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
-+	GUEST_ASSERT(load_vmcs(vmx_pages));
-+
-+	/* Prepare the VMCS for L2 execution. */
-+	prepare_vmcs(vmx_pages, l2_vcpu0_guest_code,
-+		     &l2_vcpu0_guest_stack[L2_GUEST_STACK_SIZE]);
-+	control = vmreadz(PIN_BASED_VM_EXEC_CONTROL);
-+	control |= (PIN_BASED_EXT_INTR_MASK |
-+		    PIN_BASED_POSTED_INTR);
-+	vmwrite(PIN_BASED_VM_EXEC_CONTROL, control);
-+	control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
-+	control |= (CPU_BASED_TPR_SHADOW |
-+		    CPU_BASED_ACTIVATE_SECONDARY_CONTROLS);
-+	vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
-+	control = vmreadz(SECONDARY_VM_EXEC_CONTROL);
-+	control |= (SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |
-+		    SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-+	vmwrite(SECONDARY_VM_EXEC_CONTROL, control);
-+	control = vmreadz(VM_EXIT_CONTROLS);
-+	control |= VM_EXIT_ACK_INTR_ON_EXIT;
-+	vmwrite(VM_EXIT_CONTROLS, control);
-+	vmwrite(VIRTUAL_APIC_PAGE_ADDR, vmx_pages->virtual_apic_gpa);
-+	vmwrite(POSTED_INTR_DESC_ADDR, vmx_pages->posted_intr_desc_gpa);
-+	vmwrite(POSTED_INTR_NV, PI_NV);
-+
-+	GUEST_ASSERT(!vmlaunch());
-+	GUEST_ASSERT(vmreadz(VM_EXIT_REASON) == EXIT_REASON_VMCALL);
-+	GUEST_ASSERT(!test_bit(PI_ON_BIT, (void *)vmx_pages->posted_intr_desc));
-+	GUEST_DONE();
-+}
-+
-+static void post_intr(u8 vector, void *pi_desc)
-+{
-+	set_bit(vector, pi_desc);
-+	set_bit(PI_ON_BIT, pi_desc);
-+}
-+
-+static void l1_vcpu1_guest_code(void *vcpu0_pi_desc)
-+{
-+	post_intr(L2_INTR, vcpu0_pi_desc);
-+	x2apic_enable();
-+	x2apic_write_reg(APIC_ICR, ((u64)VCPU_ID0 << 32) |
-+			 APIC_DEST_PHYSICAL | APIC_DM_FIXED | PI_NV);
-+	GUEST_DONE();
-+}
-+
-+static void save_restore_vm(struct kvm_vm *vm)
-+{
-+	struct kvm_regs regs1 = {}, regs2 = {};
-+	struct kvm_x86_state *state;
-+
-+	state = vcpu_save_state(vcpu0);
-+	vcpu_regs_get(vcpu0, &regs1);
-+
-+	kvm_vm_release(vm);
-+
-+	/* Restore state in a new VM.  */
-+	vcpu0 = vm_recreate_with_one_vcpu(vm);
-+	vcpu_load_state(vcpu0, state);
-+	kvm_x86_state_cleanup(state);
-+
-+	vcpu_regs_get(vcpu0, &regs2);
-+	TEST_ASSERT(!memcmp(&regs1, &regs2, sizeof(regs2)),
-+		    "vcpu0: Unexpected register values after vcpu_load_state; rdi: %lx rsi: %lx",
-+		    (ulong) regs2.rdi, (ulong) regs2.rsi);
-+}
-+
-+void *create_and_run_vcpu1(void *arg)
-+{
-+	struct ucall uc;
-+	struct kvm_run *run;
-+	struct kvm_mp_state vcpu0_mp_state;
-+
-+	pthread_cpu1 = pthread_self();
-+
-+	/* Keep trying to kick out vcpu0 until it is in halted state. */
-+	for (;;) {
-+		WRITE_ONCE(vcpu0_can_run, true);
-+		sleep(1);
-+		WRITE_ONCE(vcpu0_can_run, false);
-+		pthread_kill(pthread_cpu0, SIGUSR1);
-+		printf("vcpu1: Sent SIGUSR1 to vcpu0\n");
-+
-+		while (READ_ONCE(vcpu0_running))
-+			;
-+
-+		vcpu_mp_state_get(vcpu0, &vcpu0_mp_state);
-+		if (vcpu0_mp_state.mp_state == KVM_MP_STATE_HALTED)
-+			break;
-+	}
-+
-+	printf("vcpu1: Kicked out vcpu0 and ensure vcpu0 is halted\n");
-+
-+	/* Use save_restore_vm() to simulate a VM migration. */
-+	save_restore_vm(vm);
-+
-+	printf("vcpu1: Finished save and restore vm.\n");
-+	vcpu1 = vm_vcpu_add(vm, VCPU_ID1, l1_vcpu1_guest_code);
-+	vcpu_args_set(vcpu1, 1, vmx->posted_intr_desc);
-+
-+	/* Start an L1 in vcpu1 and send a posted interrupt to halted L2 in vcpu0. */
-+	for (;;) {
-+		run = vcpu1->run;
-+		vcpu_run(vcpu1);
-+
-+		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+			    "vcpu1: Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
-+			    run->exit_reason,
-+			    exit_reason_str(run->exit_reason));
-+
-+		switch (get_ucall(vcpu1, &uc)) {
-+		case UCALL_ABORT:
-+			TEST_FAIL("%s", (const char *)uc.args[0]);
-+			/* NOT REACHED */
-+		case UCALL_DONE:
-+			printf("vcpu1: Successfully send a posted interrupt to vcpu0\n");
-+			goto done;
-+		default:
-+			TEST_FAIL("vcpu1: Unknown ucall %lu", uc.cmd);
-+		}
-+	}
-+
-+done:
-+	/*
-+	 * Allow vcpu0 resume execution from L0 userspace and check if the
-+	 * posted interrupt get executed.
-+	 */
-+	WRITE_ONCE(vcpu0_can_run, true);
-+	sleep(1);
-+	TEST_ASSERT(READ_ONCE(pi_executed),
-+		    "vcpu0 did not execute the posted interrupt.\n");
-+
-+	return NULL;
-+}
-+
-+void sig_handler(int signum, siginfo_t *info, void *context)
-+{
-+	TEST_ASSERT(pthread_self() == pthread_cpu0,
-+		    "Incorrect receiver of the signal, expect pthread_cpu0: "
-+		    "%lu, but get: %lu\n", pthread_cpu0, pthread_self());
-+	printf("vcpu0: Execute sighandler for signal: %d\n", signum);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	vm_vaddr_t vmx_pages_gva;
-+	struct sigaction sig_action;
-+	struct sigaction old_action;
-+
-+	memset(&sig_action, 0, sizeof(sig_action));
-+	sig_action.sa_sigaction = sig_handler;
-+	sig_action.sa_flags = SA_RESTART | SA_SIGINFO;
-+	sigemptyset(&sig_action.sa_mask);
-+	sigaction(SIGUSR1, &sig_action, &old_action);
-+
-+	pthread_cpu0 = pthread_self();
-+	printf("vcpu0: Finish setup signal handler for SIGUSR1\n");
-+
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_NESTED_STATE));
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
-+
-+	vm = vm_create_with_one_vcpu(&vcpu0, (void *)l1_vcpu0_guest_code);
-+
-+	vm_init_descriptor_tables(vm);
-+	vcpu_init_descriptor_tables(vcpu0);
-+	vm_install_exception_handler(vm, L2_INTR, vcpu0_ipi_handler);
-+
-+	/* Allocate VMX pages and shared descriptors (vmx_pages). */
-+	vmx = vcpu_alloc_vmx(vm, &vmx_pages_gva);
-+	prepare_virtual_apic(vmx, vm);
-+	prepare_posted_intr_desc(vmx, vm);
-+	vcpu_args_set(vcpu0, 1, vmx_pages_gva);
-+
-+	pthread_create(&pthread_cpu1, NULL, create_and_run_vcpu1, NULL);
-+
-+	for (;;) {
-+		struct kvm_run *run = vcpu0->run;
-+		struct ucall uc;
-+		int rc;
-+
-+		while (!READ_ONCE(vcpu0_can_run))
-+			;
-+
-+		WRITE_ONCE(vcpu0_running, true);
-+
-+		rc = __vcpu_run(vcpu0);
-+
-+		vcpu0->run->immediate_exit = 0;
-+
-+		/*
-+		 * When vCPU is kicked out by a signal, ensure a consistent vCPU
-+		 * state to prepare for migration before setting the
-+		 * vcpu_running flag to false.
-+		 */
-+		if (rc == -1 && run->exit_reason == KVM_EXIT_INTR) {
-+			vcpu_run_complete_io(vcpu0);
-+
-+			WRITE_ONCE(vcpu0_running, false);
-+
-+			continue;
-+		}
-+
-+		WRITE_ONCE(vcpu0_running, false);
-+
-+		if (run->io.port == PORT_L0_EXIT) {
-+			printf("vcpu0: Executed the posted interrupt\n");
-+			WRITE_ONCE(pi_executed, true);
-+			continue;
-+		}
-+
-+		switch (get_ucall(vcpu0, &uc)) {
-+		case UCALL_ABORT:
-+			TEST_FAIL("%s", (const char *)uc.args[0]);
-+			/* NOT REACHED */
-+		case UCALL_DONE:
-+			goto done;
-+		default:
-+			TEST_FAIL("vcpu0: Unknown ucall %lu", uc.cmd);
-+		}
-+	}
-+
-+done:
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+   977	
+   978	static int msa311_check_partid(struct msa311_priv *msa311)
+   979	{
+   980		struct device *dev = msa311->dev;
+   981		unsigned int partid;
+   982		int err;
+   983	
+   984		err = regmap_read(msa311->regs, MSA311_PARTID_REG, &partid);
+   985		if (err)
+   986			return dev_err_probe(dev, err, "failed to read partid\n");
+   987	
+   988		if (partid != MSA311_WHO_AM_I)
+   989			dev_warn(dev, "invalid partid (%#x), expected (%#x)\n",
+   990				 partid, MSA311_WHO_AM_I);
+   991	
+   992		msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,
+ > 993						   "msa311-%hhx", partid);
+   994		if (!msa311->chip_name)
+   995			return dev_err_probe(dev, -ENOMEM, "can't alloc chip name\n");
+   996	
+   997		return 0;
+   998	}
+   999	
+
 -- 
-2.37.2.672.g94769d06f0-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

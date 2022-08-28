@@ -2,87 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C550A5A3F0D
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76425A3F13
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiH1STl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 28 Aug 2022 14:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S229895AbiH1SWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 14:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiH1ST0 (ORCPT
+        with ESMTP id S229633AbiH1SWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 14:19:26 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A160F26AF0;
-        Sun, 28 Aug 2022 11:19:25 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay03.hostedemail.com (Postfix) with ESMTP id 85B4BA08C0;
-        Sun, 28 Aug 2022 18:19:24 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 427266000A;
-        Sun, 28 Aug 2022 18:19:23 +0000 (UTC)
-Message-ID: <25705469f329005a4ff699d1f45a12dcb575adc0.camel@perches.com>
-Subject: Re: [PATCH v2 4/4] pwm: sysfs: Utilize an array for polarity strings
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Date:   Sun, 28 Aug 2022 14:19:22 -0400
-In-Reply-To: <CAHp75Vc0NtYcuSUP106V54U6EBYsj3LMx2FDJT4_pfB3gAtpPQ@mail.gmail.com>
-References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
-         <20220826170716.6886-4-andriy.shevchenko@linux.intel.com>
-         <5ba98dbd91dc981ec7384484b2a498805abef6b0.camel@perches.com>
-         <CAHp75VfY5RgAju5ASvAp565oF6VmYYiuowNsPTGSm=+1iFJ98A@mail.gmail.com>
-         <2e158f8dc433b6b78d47d209495bed678d92369a.camel@perches.com>
-         <CAHp75Vc0NtYcuSUP106V54U6EBYsj3LMx2FDJT4_pfB3gAtpPQ@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Sun, 28 Aug 2022 14:22:09 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E5D2A430;
+        Sun, 28 Aug 2022 11:22:05 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y127so6234539pfy.5;
+        Sun, 28 Aug 2022 11:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=fDxt/23RMfjSPySyD961NLt4VpOweqOjLnL5SIVCHSw=;
+        b=bYRe2XZSiSci2LOHFk4x2DL4UfLXQoCGgCBD1X+W6bzYL4E1x6f+eLhYmIXp7q53rW
+         Uo4HLItQM5SCdwRKOFo/PKO99zk0ev1GsMB4n8AfLYQjMlsPBBchv0gViHGlRajCZW+K
+         cA9OvTZId4uB8YFICMpI/1EkiEyyzvHs0SZdjd0LBmU+XWTWtTyb/6/HhwPbnmqlIRss
+         kEbrFVTf+Jr0SVAsukYkqK/AOqGbxpalP10Wr6ELwkCpjLKMc4yVLcoMTZQnZfCCmuvf
+         oP/IvdKyf+e3fgFbFTmyrw1IHO3wI6pgK1/WjAkAppW869soncCXuBC+5JdGn0xcr0Ni
+         udyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=fDxt/23RMfjSPySyD961NLt4VpOweqOjLnL5SIVCHSw=;
+        b=C9BOuWz1wHzIsQ6CNyycxbFXoJn/HPEWnj+xhzGQ/X9J+naXDt85twsReXUp1GQGAK
+         T2vqExh/+d1kUkJjm+LhMFfXCuTL8WQljZxH2LjF2iTpBIrzfij08ZDNp23qI2YMmWDl
+         JAWOu7iuBWcETDQdtCDCGLmKteanr5tIOhiDVNOrZaqTAH/6jmBxueWle5eM5e7fQv+Y
+         whUfnvLdmRRTQoJNorE7dsQp0qBiIYyzj595jIsSaG2Dxa2Ck5LLwLLzqXSuAR2eAaGy
+         X1VlCwTekxR81S84AVZlJDQ9rSgSZoZlPdC3c12AkQm5K/rGCqkNQzQdYL8tvJlZtvB4
+         5QuA==
+X-Gm-Message-State: ACgBeo0LtD+Vte6JvP+aKTHh7sBoXD9EENcbSsu7pwOj9hFIfq0lrLDP
+        krs27t8X+/FJGH+kKSui/K8=
+X-Google-Smtp-Source: AA6agR7tU14ikL/UQg9apn73eAvtTX2DR/yMT2CYo2OogdbUN5FCCIPInYPJGDzhUW+NCZRXkw3MpA==
+X-Received: by 2002:a63:c5:0:b0:40d:d290:24ef with SMTP id 188-20020a6300c5000000b0040dd29024efmr11059768pga.141.1661710924333;
+        Sun, 28 Aug 2022 11:22:04 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170902db0100b0016eef474042sm5650821plx.262.2022.08.28.11.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 11:22:03 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 28 Aug 2022 08:22:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Gabriel Ryan <gabe@cs.columbia.edu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Abhishek Shah <abhishek.shah@columbia.edu>,
+        linux-kernel@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org, daniel@iogearbox.net,
+        hannes@cmpxchg.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, lizefan.x@bytedance.com,
+        netdev@vger.kernel.org, songliubraving@fb.com, yhs@fb.com
+Subject: Re: data-race in cgroup_get_tree / proc_cgroup_show
+Message-ID: <YwuySgH4j6h2CGvk@slm.duckdns.org>
+References: <CAEHB249jcoG=sMGLUgqw3Yf+SjZ7ZkUfF_M+WcyQGCAe77o2kA@mail.gmail.com>
+ <20220819072256.fn7ctciefy4fc4cu@wittgenstein>
+ <CALbthtdFY+GHTzGH9OujzqpOtWZAqsU3MAsjv5OpwZUW6gVa7A@mail.gmail.com>
 MIME-Version: 1.0
-X-Stat-Signature: njsqjytwjmkwzj5sqq7r1n5jckk7dxyr
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 427266000A
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18/vqjLL/pG4e8NYe4xDSDL11Wp8Rlsh0k=
-X-HE-Tag: 1661710763-657123
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALbthtdFY+GHTzGH9OujzqpOtWZAqsU3MAsjv5OpwZUW6gVa7A@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-08-28 at 20:40 +0300, Andy Shevchenko wrote:
-> On Sun, Aug 28, 2022 at 4:46 PM Joe Perches <joe@perches.com> wrote:
-> > On Sun, 2022-08-28 at 09:40 +0300, Andy Shevchenko wrote:
-> > > On Sunday, August 28, 2022, Joe Perches <joe@perches.com> wrote:
-> > > > On Fri, 2022-08-26 at 20:07 +0300, Andy Shevchenko wrote:
-> > > > > Code is smaller and looks nicer if we combine polarity strings
-> > > > > into an array.
+On Mon, Aug 22, 2022 at 01:04:58PM -0400, Gabriel Ryan wrote:
+> Hi Christian,
 > 
-> > > First of all, please remove unnecessary context when replying.
-> > 
-> > I am _very_ aware of context.
-> > I specifically left the code in.
-> > 
-> > > > It's less robust though as PWM_POLARITY_NORMAL and _INVERSED
-> > > > are now required to be 0 and 1.  As the only 2 values in
-> > > > an enum they are, but that's not really guaranteed unless
-> > > > you read the enum definition.
-> > > 
-> > > So, what do you suggest here and in many other similar places (yes, ABI
-> > > implied) in the kernel?
-> > 
-> > Leaving the code alone.
-> 
-> It's good that PWM maintainers look at this differently.
+> We ran a quick test and confirm your suggestion would eliminate the
+> data race alert we observed. If the data race is benign (and it
+> appears to be), using WRITE_ONCE(cgrp_dfl_visible, true) instead of
+> cmpxchg in cgroup_get_tree() would probably also be ok.
 
-The enum is not userspace so it's not ABI.
+I don't see how the data race can lead to anything but would the following
+work?
 
-The PWM maintainers are free to do what they want but I
-prefer obviousness over compactness.
+Thanks.
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index ffaccd6373f1e..a90fdba881bdb 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2172,7 +2172,7 @@ static int cgroup_get_tree(struct fs_context *fc)
+ 	struct cgroup_fs_context *ctx = cgroup_fc2context(fc);
+ 	int ret;
+ 
+-	cgrp_dfl_visible = true;
++	WRITE_ONCE(cgrp_dfl_visible, true);
+ 	cgroup_get_live(&cgrp_dfl_root.cgrp);
+ 	ctx->root = &cgrp_dfl_root;
+ 
+@@ -6056,7 +6056,7 @@ int proc_cgroup_show(struct seq_file *m, struct pid_namespace *ns,
+ 		struct cgroup *cgrp;
+ 		int ssid, count = 0;
+ 
+-		if (root == &cgrp_dfl_root && !cgrp_dfl_visible)
++		if (root == &cgrp_dfl_root && !READ_ONCE(cgrp_dfl_visible))
+ 			continue;
+ 
+ 		seq_printf(m, "%d:", root->hierarchy_id);
+
+
+-- 
+tejun

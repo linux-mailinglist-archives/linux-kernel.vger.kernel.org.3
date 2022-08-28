@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E25E5A3BDF
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 07:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5443B5A3BE5
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 07:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbiH1E7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 00:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S232010AbiH1FE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 01:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiH1E7p (ORCPT
+        with ESMTP id S229445AbiH1FEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 00:59:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6F5275C7;
-        Sat, 27 Aug 2022 21:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=jQsOWK7NX8ntAUmH3ww4h1vB+iWf3MvcUcLZSZ3JeLc=; b=pGwCUd0WB16nWcFvOHgXvmvEGi
-        mSZGQbWFo7MZZGbZcofTSSg4NxE36jrjudAuwxJEa/2LJSYz2P2XsglYU5mEEbMsyv7r+YiF7G1jw
-        sxzRNIhROzSkKoY66L8yMemd+gQz8nRbPLeDwS7HI++8W0QHUg+qnhOOE4A/IcGBiGGQC1Sme2hdB
-        xtjg4vOxQos6rN1C5FonDBR1uvxAH5bNVIYZGoLK9/JuL2rEMP++GcD+hmLVpE4zAeYBRouIUkR7f
-        iAxmj543TrmzNLbn3B9xLWDLdUvIrc8LrYxjRLY+DJqbbWa6qXfVcTpTLYSRCsMpEt9Sdps1P9Uj4
-        8wsU8mRQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oSAOc-00CvtR-SQ; Sun, 28 Aug 2022 04:59:43 +0000
-Message-ID: <a79687c7-929e-19d1-97fc-9a2ecf39d38d@infradead.org>
-Date:   Sat, 27 Aug 2022 21:59:42 -0700
+        Sun, 28 Aug 2022 01:04:54 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C280F7653;
+        Sat, 27 Aug 2022 22:04:51 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id x23so5082512pll.7;
+        Sat, 27 Aug 2022 22:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=2qmKRYBhQjgkcIS8sasbXGpzW8nAyEQHZ39uMxMKHbk=;
+        b=jAkuqc+p6XX0Pnay2G5BThyJ9wdNgIBJtWs5tznVFuUGxtleN1cst5g0ZM7jcuvRPv
+         H+n18KPuT0PjAd6cvXkJsZUPKqzJtdlfgSh7sSlAD3riGZiWmAGcGDze5UTmATh0HyKR
+         v1cxQQYIYbXV3g1F0H2mPffc3yA5aVAqSRtscwQoXgZ5IejLztmpSwLxNU6N0HyeygRW
+         MiKyIVHyEqlat/0w8XP2Xy3ykgx7llhjBH6BPExIpP8H10lG5KcEoZrrzxj8DZVOzzrB
+         a3yNh6lH/dfcUorBAud2ExFFi9GiMGjtIm/TbnO8soMy315BfEjHIg3zH1Gs7CD7jGm/
+         RIyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=2qmKRYBhQjgkcIS8sasbXGpzW8nAyEQHZ39uMxMKHbk=;
+        b=NdW8IbvrrW7jVmPU3AKvKveVZRGB/zzTaxfd5gZeveNs2uRo/VV6ECS3VLsSVd/VZN
+         3OUqJPYiRtyqWN16f7XfNfyjeBAIk20+Sih2SLXkN8Ro9MtdfZrLM2wKmVEPcw87Bgna
+         lwkEXok/d2oJhB8BFiPeVVkP2YYHpqcOUnp6ry8nJB30mgR3YjCYWJfBOxFOSv6lHqj3
+         QHm9iy8NeMmc2/hhhy02rnNI/h3DerWrlmZdjq7YgGr90ItJRcJzST2prZLR+c7rhSf9
+         Vzj4gLvGvTtlgPsWlwu1n4ArrWJmLPHmEDuUEQJOrAJ6u6M0cfFRvBRuK8hDYX74oCm1
+         jp5w==
+X-Gm-Message-State: ACgBeo3m3UyViv05JeVUI9XnZK8+5t8qkP6zAtgMr6Kf4EUTnxVecqjm
+        UVchOmvGtmW3g2ORHzjlaZ+BsAbWu4g=
+X-Google-Smtp-Source: AA6agR6CUaYnfnddXTPSTMr5jYboLtSq3JKHhyvcKweRXU3D5g8y62j6wBw3FFszi4pWQSVEeeQ15w==
+X-Received: by 2002:a17:903:11c9:b0:172:6ea1:b727 with SMTP id q9-20020a17090311c900b001726ea1b727mr10729202plh.78.1661663091030;
+        Sat, 27 Aug 2022 22:04:51 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id mh3-20020a17090b4ac300b001fdb6ef8e2esm307890pjb.10.2022.08.27.22.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 22:04:50 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
+Subject: [PATCHSET v2 for-6.1] kernfs, cgroup: implement kernfs_show() and cgroup_file_show()
+Date:   Sat, 27 Aug 2022 19:04:31 -1000
+Message-Id: <20220828050440.734579-1-tj@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 2/2] docs/conf.py: Respect env variable SPHINX_IMGMATH
-Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     linux-doc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <9b8ff6d7-e97a-c03f-7d46-4b80ae3cf196@gmail.com>
- <5a582b2b-d51c-a062-36b2-19479cf68fab@gmail.com>
- <2032102a-e2d3-6105-f4e6-bba7decdbb66@infradead.org>
- <e7e3cfb5-fc82-5ce4-b964-e3eec01dcc2c@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <e7e3cfb5-fc82-5ce4-b964-e3eec01dcc2c@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+Greg: If this looks good to you, can you apply 0001-0008 to your tree? I'll
+likely have more cgroup updates on top, so I think it'd be better if I pull
+your tree and then handle the cgroup part in cgroup tree.
 
-On 8/27/22 20:47, Akira Yokosawa wrote:
-> Hi Randy,  thank you for looking into this!
-> 
-> On Sat, 27 Aug 2022 17:38:41 -0700, Randy Dunlap wrote:
->> Hi Akira,
->>
->> On 8/26/22 21:38, Akira Yokosawa wrote:
->>> On some distros with coarse-grained packaging policy, dvipng is
->>> installed along with latex.  In such cases, math rendering will
->>> use imgmath by default.  It is possible to override the choice by
->>> specifying the option string of "-D html_math_renderer='mathjax'"
->>> to sphinx-build (Sphinx >= 1.8).
->>>
->>> To provide developers an easier-to-use knob, add code for an env
->>> variable "SPHINX_IMGMATH" which overrides the automatic choice
->>> of math renderer for html docs.
->>>
->>>     SPHINX_IMGMATH=yes : Load imgmath even if dvipng is not found
->>>     SPHINX_IMGMATH=no  : Don't load imgmath (fall back to mathjax)
->>
->> Please add SPHINX_IMGMATH to Documentation/doc-guide/sphinx.rst
->> (I guess), where other Sphinx environment variables are listed.
-> 
-> Right.
-> As I mentioned in the coverletter, (quoted below):
-> 
->> I mentioned in the thread of [3] that imgmath can generate scalable
->> math images in SVG.
->>
->> My plan was to implement that option as well.  But during tests under
->> Fedora/CentOS/openSUSE, I encountered a couple of warnings from dvisvgm.
->> That would be regressions on existing systems which happen to have
->> not-working dvisvgm along with working dvipng.  I'm thinking of adding
->> the SVG option later if I can figure out the minimal requirement for
->> dvisvgm under imgmath.
-> 
-> , I'm working on follow-up changes related to SPHINX_IMGMATH.
-> 
-> My plan is to update related docs and help text in Makefile when I manage
-> the SVG option. At that time, SPHINX_IMGMATH will have additional options
-> like 'svg' and 'png'.
-> 
-> Hopefully, such follow-up changes can make the v6.1 merge window.
-> 
-> Does this plan work for you?
+Currently, deactivated kernfs nodes are used for two purposes - during
+removal to kill and drain nodes and during creation to make multiple
+kernfs_nodes creations to succeed or fail as a group.
 
-Ok, yes, sure, no problem.
+This patchset implements kernfs_show() which can dynamically show and hide
+kernfs_nodes using the [de]activation mechanisms, and, on top, implements
+cgroup_file_show() which allows toggling cgroup file visiblity.
 
-Thanks.
+This is for the following pending patchset to allow disabling PSI on
+per-cgroup basis:
 
--- 
-~Randy
+ https://lore.kernel.org/all/20220808110341.15799-1-zhouchengming@bytedance.com/t/#u
+
+which requires hiding the corresponding cgroup interface files while
+disabled.
+
+This patchset contains the following nine patches.
+
+ 0001-kernfs-Simply-by-replacing-kernfs_deref_open_node-wi.patch
+ 0002-kernfs-Drop-unnecessary-mutex-local-variable-initial.patch
+ 0003-kernfs-Refactor-kernfs_get_open_node.patch
+ 0004-kernfs-Skip-kernfs_drain_open_files-more-aggressivel.patch
+ 0005-kernfs-Improve-kernfs_drain-and-always-call-on-remov.patch
+ 0006-kernfs-Add-KERNFS_REMOVING-flags.patch
+ 0007-kernfs-Factor-out-kernfs_activate_one.patch
+ 0008-kernfs-Implement-kernfs_show.patch
+ 0009-cgroup-Implement-cgroup_file_show.patch
+
+0001-0003 are misc prep patches. 0004-0008 implement kernsf_deactivate().
+0009 implements cgroup_file_show() on top. The patches are also available in
+the following git branch:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/misc.git kernfs-show
+
+The main difference from the previous version[1] is that while show/hide
+still use the same mechanism as [de]activation, their states are tracked
+separately so that e.g. an unrelated kernfs_activate() higher up in the tree
+doesn't interfere with hidden nodes in the subtree.
+
+diffstat follows. Thanks.
+
+ fs/kernfs/dir.c             |  102 +++++++++++++++++++++++++++++++----------------
+ fs/kernfs/file.c            |  151 +++++++++++++++++++++++++++++++++-------------------------------------
+ fs/kernfs/kernfs-internal.h |    1
+ include/linux/cgroup.h      |    1
+ include/linux/kernfs.h      |    3 +
+ kernel/cgroup/cgroup.c      |   20 +++++++++
+ 6 files changed, 166 insertions(+), 112 deletions(-)
+
+--
+tejun
+
+[1] http://lkml.kernel.org/r/20220820000550.367085-1-tj@kernel.org
+

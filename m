@@ -2,164 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AFA5A3DD3
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFF65A3DD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 15:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiH1Ngn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 09:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S229483AbiH1No6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 09:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiH1Ngl (ORCPT
+        with ESMTP id S229500AbiH1Noz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 09:36:41 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C109A27B19
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 06:36:37 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id p16so7872569ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 06:36:37 -0700 (PDT)
+        Sun, 28 Aug 2022 09:44:55 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C94711466
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 06:44:54 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id r4so7287141edi.8
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 06:44:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=KylSzsCbG5Y50VeFVUq/wxId+S+oA2SdPnkKQYFuGQA=;
-        b=P/vZxCKI8hi+Ou7qQesWiXfrPKXDGXulKznD2F7gAdudAVF0rTWq97o+ZF6o5Fh1AK
-         ldFEp6h+zAwq2ojJSkIiSxsrz04mHlh/gtgpSuYJLhtLILCgyE5c9pb6T+cBdfIOxetU
-         QT7F7mtO5++5RlIH1ee7AULcSrEBR6JoxPqy48Z8Rtnf9C3sx4RUZQ0eSOpunV+SW9rf
-         FvCG4T5cs+MMOVj7G10CRNvMakhveXRvybM1ktbCgPByt+E0yjt9PpX6+95L/VM1vM6I
-         8Cr9Bpz5HlndC5CfTW1YRWyKYTB9ALzBTQBRSF4jXUppW9NeDf5tXxRZDQRwDWp/AOqw
-         d5ww==
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=VbCX9XubVSIS6lTvl0e6wTGkJVjRlu08SVzA0UTpaoM=;
+        b=K6rX2ZPfLK1q9Pv1KtrjxsGOT7e3NnEHARkA1R1THBe1jfD1c1DMdN4yuahkSvJXlS
+         9Q4hLEmoz/SPzv4gJ6mzzqOk4BpN5JF7ws48IXWhfftTZt5yhDGHNiJlpQc4RfooBAbA
+         Nb+sDZtP8el8EtXJSihjSRci4Lz9ryKTyL/q0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=KylSzsCbG5Y50VeFVUq/wxId+S+oA2SdPnkKQYFuGQA=;
-        b=J31sRiw0UoayxYl/gjim8WaXxBmZoRQ9nDnudoeqQCbQkpNmETKDdYjJIOXJaTat9A
-         L+TwI/JR1Y2D9XKY7bMvMi0RuWbQxDmp2F+EZulZrWweS5DoMpRooxEu9PhygWy06lHf
-         RHoiXLy7R59Pkvbg0gLGrhikfLt/eCUjr98tiXOaDZxMK2toLGOkjw44zMkUeQKN/njE
-         p25OTund0DHPev/rzyG3So1s9qJdFiFOEDLFPauTSJMkZfV+ixD/1Swx5fs+wGIFPi50
-         76s3hwp3WiokhMLaiJWfOR3R2Lh5JSDbO9Gar6n/Z+HGgc/2jVvGEOEajuBz8RroZmU2
-         f9nQ==
-X-Gm-Message-State: ACgBeo2OQXScHZqX4tgMeFwtK5KZpQ5S92S4Ov8wIZAkXhhGdF1XbAlZ
-        0aEJeA0/i1Uql/OcxM1T60GgNpit4V32x3ic2UGNnA==
-X-Google-Smtp-Source: AA6agR5b0GP1PNxq0DhS2DIhzbtjgJ6gXXYxE4LaPe+DB2soJcGSyu6I7XCcnLvqzC6ZdCmFRBFwJB+7lRuRJAJc7rY=
-X-Received: by 2002:a17:906:8a4e:b0:730:9fcd:d988 with SMTP id
- gx14-20020a1709068a4e00b007309fcdd988mr10664664ejc.636.1661693796309; Sun, 28
- Aug 2022 06:36:36 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=VbCX9XubVSIS6lTvl0e6wTGkJVjRlu08SVzA0UTpaoM=;
+        b=gqcJh4I903W0v+fJX6vhqbnYdBCly1dcuet3TnNsqH5XFGMsIEdfbrABZQ6sX7Z99W
+         3Ad4IihZBuuaj+OfQNq1lz+vOJcsHfmuoDEZpUzN4wgK5BkYHmJjqlJEUglrl081TuVU
+         el7TF4vC4zp41tnmwke6FX2P8S/6k7lSKg7DD6jEGMGVS7Q3jXhib1xd3jgkcrGUnBk9
+         fMfkIVfIUqygRjhiQEhNgYY24u9uSVVOX2tuH6bZWpKh0cFfCBeTG2JUEK7XVZpAkbGJ
+         02yZaezwMZaXZSXVGZJnCmR2uR1Q5RPjN0hV2DvdWOw/fRmt7q+NMP1KNy1ABtG9U8bK
+         GyJA==
+X-Gm-Message-State: ACgBeo33tNhyRXUGeNIp2M1Wl+1uPGRKGLPn55d5s2EF3NRZA7Lbl2pT
+        ZJiLc93MgBYh2SmfzvM+j9VZtAX828rXIQ==
+X-Google-Smtp-Source: AA6agR52Epic1B/JYaaxh0T/Atkfb5p7+3G+bqTOCsJYsgT4g4xDmu7wKaTQowXPT1T/0YI0/L6Nww==
+X-Received: by 2002:a05:6402:248f:b0:440:9bb3:5936 with SMTP id q15-20020a056402248f00b004409bb35936mr13631145eda.178.1661694292459;
+        Sun, 28 Aug 2022 06:44:52 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id wj7-20020a170907050700b0073d5948855asm3269766ejb.1.2022.08.28.06.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 06:44:52 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] docs: networking: device drivers: flexcan: fix invalid email
+Date:   Sun, 28 Aug 2022 15:44:42 +0200
+Message-Id: <20220828134442.794990-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220825104422.14156-1-henning.schild@siemens.com> <34315356-f23e-34ff-98e6-a152b588f201@redhat.com>
-In-Reply-To: <34315356-f23e-34ff-98e6-a152b588f201@redhat.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sun, 28 Aug 2022 15:36:25 +0200
-Message-ID: <CAMRc=Mc0WSi=1UN8KGEBi42Afty7NPvfOZzxDSaVvVOnsduX0A@mail.gmail.com>
-Subject: Re: [PATCH v6 0/7] add support for another simatic board
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 4:25 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 8/25/22 12:44, Henning Schild wrote:
-> > changes since v5:
-> >   - adding patch to convert to pr_fmt
-> >   - adding patch to prefix macros with "f7188x_"
-> >   - rebased p1v4 to be p3v5 and added tag
-> >
-> > changes since v4:
-> >   - remove int case from a printk in p1
-> >   - include tags into commit messages
-> >
-> > changes since v3:
-> >   - update Kconfig as well
-> >   - drop chip names from comment in driver header
-> >   - add manufacturer check for Fintek again, Nuvoton not possible
-> >   - drop revision printing for Nuvoton
-> >   - restructure defines again
-> >   - add new model 427G
-> >
-> > changes since v2: (p1 only)
-> >   - rename macros that change behavior
-> >   - use chip type not device id in the macros
-> >   - reorder defines a bit
-> >
-> > changes since v1:
-> >   - remove unused define
-> >   - fix bug where (base + 2) was used as second data bit
-> >   - add macros for "inverted" and "single data bit"
-> >
-> > The first two patches apply some style refactorings before actual
-> > functional changes are made.
-> >
-> > Later, This series enables a SuperIO GPIO driver to support a chip from
-> > the vendor Nuvoton, the driver is for Fintek devices but those just are
-> > very similar. And in watchdog and hwmon subsystems these SuperIO drivers
-> > also share code and are sometimes called a family.
-> >
-> > In another step the individual banks receive a label to tell them apart,
-> > a step which potentially changes an interface to legacy users that might
-> > rely on all banks having the same label, or an exact label. But since a
-> > later patch wants to use GPIO_LOOKUP unique labels are needed and i
-> > decided to assign them for all supported chips.
-> >
-> > In a following patch the Simatic GPIO LED driver is extended to provide
-> > LEDs in case that SuperIO GPIO driver can be loaded.
-> >
-> > Last but not least the watchdog module of that same SuperIO gets loaded
-> > on a best effort basis.
-> >
-> > The very last patch enables a second model of that same board type.
-> >
-> > Henning Schild (7):
-> >   gpio-f7188x: switch over to using pr_fmt
-> >   gpio-f7188x: add a prefix to macros to keep gpio namespace clean
-> >   gpio-f7188x: Add GPIO support for Nuvoton NCT6116
-> >   gpio-f7188x: use unique labels for banks/chips
-> >   leds: simatic-ipc-leds-gpio: add new model 227G
-> >   platform/x86: simatic-ipc: enable watchdog for 227G
-> >   platform/x86: simatic-ipc: add new model 427G
->
-> So it looks like all these patches are ready for merging now,
-> the only thing which is missing is an Ack from Pavel or
-> one of the other LED people for patch 5/7.
->
-> Pavel can have your ack for merging this through another tree
-> please?
->
-> So what is the plan for merging this?
->
-> I see 2 options:
->
-> Option a:
-> 1. Merge the GPIO changes (patches 1-4) through the GPIO tree; and
-> 2. Merge the leds + pdx86 changes through the pdx86 tree
->
-> Option b:
-> Merge everything through the pdx86 tree, and I will then provide
-> an immutable branch + signed tag for other subsystems to pull
-> (if they want to).
->
+The Amarula contact info email address is wrong, so fix it up to use the
+correct one.
 
-Hey! Sorry for the delay, I've just come back from vacation. I'm fine
-with option b and to that end:
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+ .../networking/device_drivers/can/freescale/flexcan.rst         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/networking/device_drivers/can/freescale/flexcan.rst b/Documentation/networking/device_drivers/can/freescale/flexcan.rst
+index 4e3eec6cecd2..106cd2890135 100644
+--- a/Documentation/networking/device_drivers/can/freescale/flexcan.rst
++++ b/Documentation/networking/device_drivers/can/freescale/flexcan.rst
+@@ -5,7 +5,7 @@ Flexcan CAN Controller driver
+ =============================
+ 
+ Authors: Marc Kleine-Budde <mkl@pengutronix.de>,
+-Dario Binacchi <dario.binacchi@amarula.solutions.com>
++Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ 
+ On/off RTR frames reception
+ ===========================
+-- 
+2.32.0
+

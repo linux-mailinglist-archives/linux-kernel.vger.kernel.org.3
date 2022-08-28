@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F5F5A3D44
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DA95A3D4D
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiH1LKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 07:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S229612AbiH1LVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 07:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiH1LKR (ORCPT
+        with ESMTP id S229471AbiH1LVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 07:10:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C4E16599
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 04:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661685014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Xdc5yjDQJtdeC1xQqflsPRd7xjOX2OaEJE9/AMTpio=;
-        b=ZspRXn8Yxaf+2CLlFZDOSgnAM3K+/Ke3Vr0yj3P8TmOQO9ur5Ta0ty3otV1RiFhK+i5umg
-        YNnkc/ej/7kZ2sdfA5eCF1FUe/JJzWSMbNqceFpQBfEfUSKi/IZg/gVo3to2uk/qWg7z3t
-        lsKDJDiEqEiGeljoYS2maYq4d6+0JQ4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-v66h8T_SM0ytnqYJL7TA-A-1; Sun, 28 Aug 2022 07:10:12 -0400
-X-MC-Unique: v66h8T_SM0ytnqYJL7TA-A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6804A3C021B1;
-        Sun, 28 Aug 2022 11:10:12 +0000 (UTC)
-Received: from localhost (ovpn-12-25.pek2.redhat.com [10.72.12.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B6A02166B26;
-        Sun, 28 Aug 2022 11:10:11 +0000 (UTC)
-Date:   Sun, 28 Aug 2022 19:10:07 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "hch@infradead.org" <hch@infradead.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 02/11] mm: ioremap: fixup the physical address and
- page prot
-Message-ID: <YwtND/L8xD+ViN3r@MiWiFi-R3L-srv>
-References: <20220820003125.353570-1-bhe@redhat.com>
- <20220820003125.353570-3-bhe@redhat.com>
- <e7f8798a-43ac-8083-93ac-4581bd2a5647@csgroup.eu>
- <YwQrC3X3PHa0pNDy@MiWiFi-R3L-srv>
- <54b7afcc-056d-7f33-6858-d451a3222c70@csgroup.eu>
- <YwTI6jAjY68QK5h6@MiWiFi-R3L-srv>
- <8df89136-a7f2-9b66-d522-a4fb9860bf22@csgroup.eu>
+        Sun, 28 Aug 2022 07:21:18 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDCA2F644;
+        Sun, 28 Aug 2022 04:21:15 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6BC321884548;
+        Sun, 28 Aug 2022 11:21:14 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 6273E25032B7;
+        Sun, 28 Aug 2022 11:21:14 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 5CA609EC0009; Sun, 28 Aug 2022 11:21:14 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8df89136-a7f2-9b66-d522-a4fb9860bf22@csgroup.eu>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Date:   Sun, 28 Aug 2022 13:21:14 +0200
+From:   netdev@kapio-technology.com
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+User-Agent: Gigahost Webmail
+Message-ID: <6f067e43d940330ad4355ec6d3445a7d@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,156 +75,319 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/23/22 at 07:03pm, Christophe Leroy wrote:
+On 2022-08-27 13:30, Nikolay Aleksandrov wrote:
+> On 26/08/2022 14:45, Hans Schultz wrote:
+>> Add an intermediate state for clients behind a locked port to allow 
+>> for
+>> possible opening of the port for said clients. The clients mac address
+>> will be added with the locked flag set, denying access through the 
+>> port
+>> for the mac address, but also creating a new FDB add event giving
+>> userspace daemons the ability to unlock the mac address. This feature
+>> corresponds to the Mac-Auth and MAC Authentication Bypass (MAB) named
+>> features. The latter defined by Cisco.
+>> 
+>> As locked FDB entries are a security measure to deny access for
+>> unauthorized hosts on specific ports, they will deny forwarding from
+>> any port to the (MAC, vlan) pair involved and locked entries will not
+>> be able by learning or otherwise to change the associated port.
+>> 
+>> Only the kernel can set this FDB entry flag, while userspace can read
+>> the flag and remove it by replacing or deleting the FDB entry.
+>> 
+>> Locked entries will age out with the set bridge ageing time.
+>> 
+>> Also add a 'blackhole' fdb flag, ensuring that no forwarding from any
+>> port to a destination MAC that has a FDB entry with this flag on will
+>> occur. The packets will thus be dropped.
+>> 
+>> Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
+>> ---
+>>  include/linux/if_bridge.h      |  1 +
+>>  include/uapi/linux/if_link.h   |  1 +
+>>  include/uapi/linux/neighbour.h |  4 +++-
+>>  net/bridge/br_fdb.c            | 29 +++++++++++++++++++++++++++++
+>>  net/bridge/br_input.c          | 16 +++++++++++++++-
+>>  net/bridge/br_netlink.c        |  9 ++++++++-
+>>  net/bridge/br_private.h        |  4 +++-
+>>  7 files changed, 60 insertions(+), 4 deletions(-)
+>> 
 > 
+> Hi,
+> Please add the blackhole flag in a separate patch.
+> A few more comments and questions below..
 > 
-> Le 23/08/2022 à 14:32, Baoquan He a écrit :
-> > On 08/23/22 at 05:33am, Christophe Leroy wrote:
-> >>
-> >>
-> >> Le 23/08/2022 à 03:19, Baoquan He a écrit :
-> >>> On 08/22/22 at 06:30am, Christophe Leroy wrote:
-> >>>>
-> >>>>
-> >>>> Le 20/08/2022 à 02:31, Baoquan He a écrit :
-> >>>>> On some architectures, the physical address need be fixed up before
-> >>>>> doing mapping, e.g, parisc. And on architectures, e.g arc, the
-> >>>>> parameter 'prot' passed into ioremap_prot() need be adjusted too.
-> >>>>>
-> >>>>> In oder to convert them to take GENERIC_IOREMAP method, we need wrap
-> >>>>> the address fixing up code and page prot adjusting code into arch_ioremap()
-> >>>>> and pass the new address and 'prot' out for ioremap_prot() handling.
-> >>>>
-> >>>> Is it really the best approach ? Wouldn't it be better to have helpers
-> >>>> to do that, those helpers being called by the ioremap_prot(), instead of
-> >>>> doing it inside the arch_ioremap() function ?
-> >>>
-> >>> This is suggested too by Alexander during his v1 reviewing. I tried, but
-> >>> feel the current way taken in this patchset is better. Because not all
-> >>> architecutres need the address fix up, only parisc, and only few need
-> >>> adjust the 'prot'. Introducing other helpers seems too much, that only
-> >>> increases the complexity of of ioremap() and the generic GENERIC_IOREMAP
-> >>> method for people to understand and take.
-> >>
-> >> I can't understand. Why is it difficult to do something like:
-> >>
-> >> #ifndef ioremap_adjust_prot
-> >> static inline unsigned long ioremap_adjust_prot(unsigned long flags)
-> >> {
-> >> 	return flags;
-> >> }
-> >> #endif
-> >>
-> >> Then for arc you do
-> >>
-> >> static inline unsigned long ioremap_adjust_prot(unsigned long flags)
-> >> {
-> >> 	return pgprot_val(pgprot_noncached(__pgprot(flags)));
-> >> }
-> >> #define ioremap_adjust_prot ioremap_adjust_prot
-> > 
-> > My thinking is we have four things to do in the added hookers.
-> > 1) check if we should do ioremap on ARCHes. If not, return NULL from
-> > ioremap_prot();
-> > 2) handling the mapping io address specifically on ARCHes, e.g arc,
-> > ia64, s390;
-> > 3) the original physical address passed into ioremap_prot() need be
-> > fixed up, e.g arc;
-> > 4) the 'prot' passed into ioremap_prot() need be adjusted, e.g on arc
-> > and xtensa.
-> > 
-> > With Kefeng's patches, the case 1) is handled with introduced
-> > ioremap_allowed()/iounmap_allowed(). In this patchset, what I do is
-> > rename the hooks as arch_ioremap() and arch_iounmap(), then put case 1),
-> > 2), 3), 4) handling into arch_ioremap(). Adding helpers to cover each
-> > case is not difficult from my side. I worry that as time goes by, those
-> > several hooks my cause issue, e.g if a new adjustment need be done,
-> > should we introduce a new helper or make do with the existed hook; how
-> > 
-> > When I investigated this, one arch_ioremap() looks not complicated
-> > since not all ARCHes need cover all above 4 cases. That's why I finally
-> > choose one hook. I am open to new idea, please let me know if we should
-> > change it to introduce several different helpers.
-> > 
+
+Okay, shall do. :-)
+
+>> diff --git a/include/linux/if_bridge.h b/include/linux/if_bridge.h
+>> index d62ef428e3aa..1668ac4d7adc 100644
+>> --- a/include/linux/if_bridge.h
+>> +++ b/include/linux/if_bridge.h
+>> @@ -59,6 +59,7 @@ struct br_ip_list {
+>>  #define BR_MRP_LOST_IN_CONT	BIT(19)
+>>  #define BR_TX_FWD_OFFLOAD	BIT(20)
+>>  #define BR_PORT_LOCKED		BIT(21)
+>> +#define BR_PORT_MAB		BIT(22)
+>> 
+>>  #define BR_DEFAULT_AGEING_TIME	(300 * HZ)
+>> 
+>> diff --git a/include/uapi/linux/if_link.h 
+>> b/include/uapi/linux/if_link.h
+>> index e36d9d2c65a7..fcbd0b85ad53 100644
+>> --- a/include/uapi/linux/if_link.h
+>> +++ b/include/uapi/linux/if_link.h
+>> @@ -560,6 +560,7 @@ enum {
+>>  	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
+>>  	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
+>>  	IFLA_BRPORT_LOCKED,
+>> +	IFLA_BRPORT_MAB,
+>>  	__IFLA_BRPORT_MAX
+>>  };
+>>  #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
+>> diff --git a/include/uapi/linux/neighbour.h 
+>> b/include/uapi/linux/neighbour.h
+>> index a998bf761635..bc1440a56b70 100644
+>> --- a/include/uapi/linux/neighbour.h
+>> +++ b/include/uapi/linux/neighbour.h
+>> @@ -52,7 +52,9 @@ enum {
+>>  #define NTF_STICKY	(1 << 6)
+>>  #define NTF_ROUTER	(1 << 7)
+>>  /* Extended flags under NDA_FLAGS_EXT: */
+>> -#define NTF_EXT_MANAGED	(1 << 0)
+>> +#define NTF_EXT_MANAGED		(1 << 0)
+>> +#define NTF_EXT_LOCKED		(1 << 1)
+>> +#define NTF_EXT_BLACKHOLE	(1 << 2)
+>> 
+>>  /*
+>>   *	Neighbor Cache Entry States.
+>> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+>> index e7f4fccb6adb..1962d9594a48 100644
+>> --- a/net/bridge/br_fdb.c
+>> +++ b/net/bridge/br_fdb.c
+>> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, 
+>> const struct net_bridge *br,
+>>  	struct nda_cacheinfo ci;
+>>  	struct nlmsghdr *nlh;
+>>  	struct ndmsg *ndm;
+>> +	u32 ext_flags = 0;
+>> 
+>>  	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
+>>  	if (nlh == NULL)
+>> @@ -125,11 +126,18 @@ static int fdb_fill_info(struct sk_buff *skb, 
+>> const struct net_bridge *br,
+>>  		ndm->ndm_flags |= NTF_EXT_LEARNED;
+>>  	if (test_bit(BR_FDB_STICKY, &fdb->flags))
+>>  		ndm->ndm_flags |= NTF_STICKY;
+>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
+>> +		ext_flags |= NTF_EXT_LOCKED;
+>> +	if (test_bit(BR_FDB_BLACKHOLE, &fdb->flags))
+>> +		ext_flags |= NTF_EXT_BLACKHOLE;
+>> 
+>>  	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
+>>  		goto nla_put_failure;
+>>  	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
+>>  		goto nla_put_failure;
+>> +	if (nla_put_u32(skb, NDA_FLAGS_EXT, ext_flags))
+>> +		goto nla_put_failure;
+>> +
+>>  	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
+>>  	ci.ndm_confirmed = 0;
+>>  	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
+>> @@ -171,6 +179,7 @@ static inline size_t fdb_nlmsg_size(void)
+>>  	return NLMSG_ALIGN(sizeof(struct ndmsg))
+>>  		+ nla_total_size(ETH_ALEN) /* NDA_LLADDR */
+>>  		+ nla_total_size(sizeof(u32)) /* NDA_MASTER */
+>> +		+ nla_total_size(sizeof(u32)) /* NDA_FLAGS_EXT */
+>>  		+ nla_total_size(sizeof(u16)) /* NDA_VLAN */
+>>  		+ nla_total_size(sizeof(struct nda_cacheinfo))
+>>  		+ nla_total_size(0) /* NDA_FDB_EXT_ATTRS */
+>> @@ -879,6 +888,10 @@ void br_fdb_update(struct net_bridge *br, struct 
+>> net_bridge_port *source,
+>>  						      &fdb->flags)))
+>>  					clear_bit(BR_FDB_ADDED_BY_EXT_LEARN,
+>>  						  &fdb->flags);
+>> +				if (source->flags & BR_PORT_MAB)
+>> +					set_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+>> +				else
+>> +					clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+> Please add a test for that bit and only then change it.
 > 
-> A new idea that would have my preference would be to do just like we did 
-> with arch_get_unmapped_area(). Look at 
-> https://elixir.bootlin.com/linux/v6.0-rc1/source/arch/powerpc/mm/book3s64/slice.c#L638 
-> and https://elixir.bootlin.com/linux/v6.0-rc1/source/mm/mmap.c#L2131
+
+Okay.
+
+>>  			}
+>> 
+>>  			if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, &flags)))
+>> @@ -1082,6 +1095,16 @@ static int fdb_add_entry(struct net_bridge *br, 
+>> struct net_bridge_port *source,
+>>  		modified = true;
+>>  	}
+>> 
+>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags)) {
+>> +		clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+>> +		modified = true;
+>> +	}
+>> +
+>> +	if (test_bit(BR_FDB_BLACKHOLE, &fdb->flags)) {
+>> +		clear_bit(BR_FDB_BLACKHOLE, &fdb->flags);
+>> +		modified = true;
+>> +	}
+>> +
+>>  	if (fdb_handle_notify(fdb, notify))
+>>  		modified = true;
+>> 
+>> @@ -1178,6 +1201,12 @@ int br_fdb_add(struct ndmsg *ndm, struct nlattr 
+>> *tb[],
+>>  		vg = nbp_vlan_group(p);
+>>  	}
+>> 
+>> +	if (tb[NDA_FLAGS_EXT] &&
+>> +	    (nla_get_u32(tb[NDA_FLAGS_EXT]) & (NTF_EXT_LOCKED | 
+>> NTF_EXT_BLACKHOLE))) {
+>> +		pr_info("bridge: RTM_NEWNEIGH has invalid extended flags\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>>  	if (tb[NDA_FDB_EXT_ATTRS]) {
+>>  		attr = tb[NDA_FDB_EXT_ATTRS];
+>>  		err = nla_parse_nested(nfea_tb, NFEA_MAX, attr,
+>> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+>> index 68b3e850bcb9..3d48aa7fa778 100644
+>> --- a/net/bridge/br_input.c
+>> +++ b/net/bridge/br_input.c
+>> @@ -110,8 +110,19 @@ int br_handle_frame_finish(struct net *net, 
+>> struct sock *sk, struct sk_buff *skb
+>>  			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+>> 
+>>  		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+>> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
+>> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
+>> +		    test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
+>> +			if (!fdb_src || (READ_ONCE(fdb_src->dst) != p &&
+>> +					 (p->flags & BR_LEARNING))) {
 > 
-> Instead of having the generic that calls the arch specific, make it the 
-> other way round, have the arch specific call the generic after doing its 
-> specialties.
+> please break the second part of the check on a new line instead
+> 
+>> +				unsigned long flags = 0;
+>> +
+>> +				if (p->flags & BR_PORT_MAB) {
+> 
+> combine this and the above as one "if" block, no need to have a new one 
+> here
+> which preferrably starts with the MAB check
+> 
 
-This sounds good. I made a draft patch to change code in generic code
-part, just showing what it looks like.
+As the above if is an "or", and the MAB check works as an "and", it will 
+have to be replicated for all "or" checks, thus twice in the above if.
+The first check in the above "or" is for new entries, while the second 
+part of the "or" is to allow roaming to a locked port.
 
-Both arch_ioremap() way and the arch sepcific call the generic way look
-good to me. Just it will take less effort for me to continue the
-arch_ioremap() way. I would like to hear Christoph's opinion since he
-introduced the GENERIC_IOREMAP method and suggested the earlier
-arch_ioremap() way and change in this patchset. 
+>> +					__set_bit(BR_FDB_ENTRY_LOCKED, &flags);
+>> +					br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);> 
+>> +				}
+>> +			}
+>>  			goto drop;
+>> +		}
+>>  	}
+>> 
+>>  	nbp_switchdev_frame_mark(p, skb);
+>> @@ -185,6 +196,9 @@ int br_handle_frame_finish(struct net *net, struct 
+>> sock *sk, struct sk_buff *skb
+>>  		if (test_bit(BR_FDB_LOCAL, &dst->flags))
+>>  			return br_pass_frame_up(skb);
+>> 
+>> +		if (test_bit(BR_FDB_BLACKHOLE, &dst->flags))
+>> +			goto drop;
+>> +
+> Not happy about adding a new test in arguably the most used fast-path,
+> but I don't see
+> a better way to do blackhole right now. Could you please make it an 
+> unlikely() ?
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 68a8117b30fa..4bc3e18c475f 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1047,35 +1047,18 @@ static inline void iounmap(volatile void __iomem *addr)
- #elif defined(CONFIG_GENERIC_IOREMAP)
- #include <linux/pgtable.h>
- 
--/*
-- * Arch code can implement the following two hooks when using GENERIC_IOREMAP
-- * arch_ioremap() return a bool,
-- *   - IS_ERR means return an error
-- *   - NULL means continue to remap
-- *   - a non-NULL, non-IS_ERR pointer is returned directly
-- * arch_iounmap() return a bool,
-- *   - 0 means continue to vunmap
-- *   - error code means skip vunmap and return directly
-- */
--#ifndef arch_ioremap
--#define arch_ioremap arch_ioremap
--static inline void __iomem *arch_ioremap(phys_addr_t *paddr, size_t size,
--				   unsigned long *prot_val)
--{
--	return NULL;
--}
--#endif
-+void __iomem *
-+generic_ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot);
- 
--#ifndef arch_iounmap
--#define arch_iounmap arch_iounmap
--static inline int arch_iounmap(void __iomem *addr)
-+#ifndef ioremap_prot
-+#define ioremap_prot ioremap_prot
-+void __iomem *
-+ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot);
- {
--	return 0;
-+	return generic_ioremap_prot(phys_addr, size, prot);
- }
- #endif
- 
--void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
--			   unsigned long prot);
- void iounmap(volatile void __iomem *addr);
- 
- #ifndef ioremap
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index 7914b5cf5b78..87d51003dee6 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -11,8 +11,8 @@
- #include <linux/io.h>
- #include <linux/export.h>
- 
--void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
--			   unsigned long prot)
-+void __iomem *
-+generic_ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot)
- {
- 	unsigned long offset, vaddr;
- 	phys_addr_t last_addr;
+Surely.
 
+> 
+> I guess the blackhole flag will be allowed for user-space to set at
+> some point, why
+> not do it from the start?
+
+I guess it should be so. :-)
+
+> 
+> Actually adding a BR_FDB_LOCAL and BR_FDB_BLACKHOLE would be a conflict 
+> above -
+> the packet will be received. So you should move the blackhole check 
+> above the
+> BR_FDB_LOCAL one if user-space is allowed to set it to any entry.
+> 
+>>  		if (now != dst->used)
+>>  			dst->used = now;
+>>  		br_forward(dst->dst, skb, local_rcv, false);
+>> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+>> index 5aeb3646e74c..34483420c9e4 100644
+>> --- a/net/bridge/br_netlink.c
+>> +++ b/net/bridge/br_netlink.c
+>> @@ -188,6 +188,7 @@ static inline size_t br_port_info_size(void)
+>>  		+ nla_total_size(1)	/* IFLA_BRPORT_NEIGH_SUPPRESS */
+>>  		+ nla_total_size(1)	/* IFLA_BRPORT_ISOLATED */
+>>  		+ nla_total_size(1)	/* IFLA_BRPORT_LOCKED */
+>> +		+ nla_total_size(1)	/* IFLA_BRPORT_MAB */
+>>  		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* 
+>> IFLA_BRPORT_ROOT_ID */
+>>  		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* 
+>> IFLA_BRPORT_BRIDGE_ID */
+>>  		+ nla_total_size(sizeof(u16))	/* IFLA_BRPORT_DESIGNATED_PORT */
+>> @@ -274,7 +275,8 @@ static int br_port_fill_attrs(struct sk_buff *skb,
+>>  	    nla_put_u8(skb, IFLA_BRPORT_MRP_IN_OPEN,
+>>  		       !!(p->flags & BR_MRP_LOST_IN_CONT)) ||
+>>  	    nla_put_u8(skb, IFLA_BRPORT_ISOLATED, !!(p->flags & 
+>> BR_ISOLATED)) ||
+>> -	    nla_put_u8(skb, IFLA_BRPORT_LOCKED, !!(p->flags & 
+>> BR_PORT_LOCKED)))
+>> +	    nla_put_u8(skb, IFLA_BRPORT_LOCKED, !!(p->flags & 
+>> BR_PORT_LOCKED)) ||
+>> +	    nla_put_u8(skb, IFLA_BRPORT_MAB, !!(p->flags & BR_PORT_MAB)))
+>>  		return -EMSGSIZE;
+>> 
+>>  	timerval = br_timer_value(&p->message_age_timer);
+>> @@ -876,6 +878,7 @@ static const struct nla_policy 
+>> br_port_policy[IFLA_BRPORT_MAX + 1] = {
+>>  	[IFLA_BRPORT_NEIGH_SUPPRESS] = { .type = NLA_U8 },
+>>  	[IFLA_BRPORT_ISOLATED]	= { .type = NLA_U8 },
+>>  	[IFLA_BRPORT_LOCKED] = { .type = NLA_U8 },
+>> +	[IFLA_BRPORT_MAB] = { .type = NLA_U8 },
+>>  	[IFLA_BRPORT_BACKUP_PORT] = { .type = NLA_U32 },
+>>  	[IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT] = { .type = NLA_U32 },
+>>  };
+>> @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port *p, 
+>> struct nlattr *tb[],
+>>  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS, 
+>> BR_NEIGH_SUPPRESS);
+>>  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+>>  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+>> +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
+>> +
+>> +	if (!(p->flags & BR_PORT_LOCKED))
+>> +		p->flags &= ~BR_PORT_MAB;
+>> 
+>>  	changed_mask = old_flags ^ p->flags;
+>> 
+>> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+>> index 06e5f6faa431..048e4afbc5a0 100644
+>> --- a/net/bridge/br_private.h
+>> +++ b/net/bridge/br_private.h
+>> @@ -251,7 +251,9 @@ enum {
+>>  	BR_FDB_ADDED_BY_EXT_LEARN,
+>>  	BR_FDB_OFFLOADED,
+>>  	BR_FDB_NOTIFY,
+>> -	BR_FDB_NOTIFY_INACTIVE
+>> +	BR_FDB_NOTIFY_INACTIVE,
+>> +	BR_FDB_ENTRY_LOCKED,
+>> +	BR_FDB_BLACKHOLE,
+>>  };
+>> 
+>>  struct net_bridge_fdb_key {
+> 
+> Cheers,
+>  Nik

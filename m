@@ -2,164 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017FA5A3EBC
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 19:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9168D5A3EBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 19:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiH1RIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 13:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S230075AbiH1RLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 13:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiH1RIh (ORCPT
+        with ESMTP id S229591AbiH1RLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 13:08:37 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406A33137E;
-        Sun, 28 Aug 2022 10:08:36 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 56896E5;
-        Sun, 28 Aug 2022 19:08:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661706514;
-        bh=vhgmM53K9Y+jvkYIFiuLg/mUaZWx/0ij7HFPaGKbUM8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iQiNJnJOQpGPUe21RK766ReECSJvXsiZnDSvEUkf6u6x1d9/nZFneS+mtBIST+Jch
-         8Rrs+j9UNxjOBQufNtkROwjLe/rP0nG6NPpq0V2tplm3eTFXMX+2M5wbc9Bsnp5W4Q
-         un8X6xT8uWXKM23c1XhJl/SmNjLu+BfNTk0jIPaE=
-Date:   Sun, 28 Aug 2022 20:08:26 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "nanxin.qin@amlogic.com" <nanxin.qin@amlogic.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "hao.shi" <hao.shi@amlogic.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        mchehab <mchehab@kernel.org>,
-        "hans.verkuil" <hans.verkuil@cisco.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        ezequiel <ezequiel@vanguardiasur.com.ar>,
-        "sakari.ailus" <sakari.ailus@linux.intel.com>,
-        ribalda <ribalda@chromium.org>,
-        "stanimir.varbanov" <stanimir.varbanov@linaro.org>,
-        "Hui.Zhang@amlogic.com" <Hui.Zhang@amlogic.com>
-Subject: Re: Re: [PATCH] [media] v4l2: Add AV1, AVS and AVS2 format
-Message-ID: <YwuhCkhuXpgpTC/W@pendragon.ideasonboard.com>
-References: <20220826030003.1066976-1-hao.shi@amlogic.com>
- <YwiPMOyfXKM8lxIR@pendragon.ideasonboard.com>
- <0099cb36956090f7c5f3058b353d3555870aea32.camel@ndufresne.ca>
- <202208271409184370088@amlogic.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202208271409184370088@amlogic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 28 Aug 2022 13:11:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A6033413
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 10:11:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA964B80B86
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 17:11:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB56C433C1;
+        Sun, 28 Aug 2022 17:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661706678;
+        bh=LknBfxNJzf7458Aj8Oexy8m7f0vF18tFkxbYt0jSt9Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bP7DS3eGipMDTFry+jN0V5edAb921daTuLWYd2suz6ilMXntsomQl5T0DTYU7yoyV
+         0MNaIFIdyv6ttfhFWmATsv9PgI/g9N2WtZ3uDNmg9umEP331BUpYxWl3q9QTH8Aa61
+         vPIgT+8G2Tl4Lc0v2jJLKxajEorNaciMWZbRDWnMtSGeyx13ZRraSZOXo4jyuvi9NS
+         L4PgRnYacTKvGTfaHbxGabbiB3Rds5XX1G+U3OnpuLOvS1NIkAAtv1zdi9gMhKLnF+
+         jvJP4bY8smp8/oXA4Tuuw2JDOqfddEbU90gWVBMveTTyEW0kzc8Dc0lcQ0rkXJ1LWq
+         3b8O18PwWYoyQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oSLoa-006Jzg-7R;
+        Sun, 28 Aug 2022 18:11:16 +0100
+Date:   Sun, 28 Aug 2022 18:11:15 +0100
+Message-ID: <87r110qong.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Puyou Lu <puyou.lu@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Robert Richter <rrichter@cavium.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3: do runtime cpu cap check only when necessary
+In-Reply-To: <20220828075610.GA30202@lu-N56VJ>
+References: <20220827051328.GA18042@lu-N56VJ>
+        <87wnatra83.wl-maz@kernel.org>
+        <20220828075610.GA30202@lu-N56VJ>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: puyou.lu@gmail.com, tglx@linutronix.de, rrichter@cavium.com, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 02:09:18PM +0800, nanxin.qin@amlogic.com wrote:
-> Dear Nicolas
+On Sun, 28 Aug 2022 08:56:23 +0100,
+Puyou Lu <puyou.lu@gmail.com> wrote:
 > 
-> Thanks for the review of our CL, we found that AV1 has not been submitted to
-> the kernel tree. Due to the urgency of the project, we intend to submit the public
-> changes to the kernel mainline. However, it may be more suitable for the coding
-> protocol working group to submit. 
-> 
-> I have a doubt about the reply, can we just add a description of AV1
-> in pixfmt-compressed.rst? Just like declaring vp9.
-
-Referring to the corresponding standard is fine. If the standard, or the
-V4L2 API, supports multiple formats (e.g. H.264 with or without start
-codes, or formats that contain different metadata for stateful or
-stateless codecs), the documentation should also indicate which variant
-the format refers to.
-
-> In addition, avs and avs2 are Chinese audio and video coding standards, 
-> which are mandatory for TV set-top boxes sold in China. I think it is necessary
-> to submit them to the main branch. 
-> 
-> Then there is whether it is appropriate to submit AV1 and AVS together. 
-> If it is not good, we can submit it separately. 
-> 
-> Please correct me if you have any suggestions or comments. thanks.
-> 
-> nanxin.qin@amlogic.com
->  
-> From: Nicolas Dufresne
-> Date: 2022-08-27 02:12
-> To: Laurent Pinchart; Shi Hao
-> CC: linux-media; linux-kernel; mchehab; hans.verkuil; hverkuil-cisco; ezequiel; sakari.ailus; ribalda; stanimir.varbanov; nanxin.qin
-> Subject: Re: [PATCH] [media] v4l2: Add AV1, AVS and AVS2 format
-> [ EXTERNAL EMAIL ]
->  
-> Le vendredi 26 août 2022 à 12:15 +0300, Laurent Pinchart a écrit :
-> > Hello Shi,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Fri, Aug 26, 2022 at 11:00:03AM +0800, Shi Hao wrote:
-> > > From: "hao.shi" <hao.shi@amlogic.com>
+> On Sat, Aug 27, 2022 at 04:13:00PM +0100, Marc Zyngier wrote:
+> > On Sat, 27 Aug 2022 06:19:27 +0100,
+> > Puyou Lu <puyou.lu@gmail.com> wrote:
 > > > 
-> > > Add AV1, AVS and AVS2 compressed pixel formats. They are
-> > > the more common formats.
+> > > Now cpu cap check is done every exception happens on every arm64 platform,
+> > > but this check is necessary on just few of then, so we can drop this
+> > > check at compile time on others. This can decrease exception handle time
+> > > on most cases.
 > > > 
-> > > Signed-off-by: Shi Hao <hao.shi@amlogic.com>
+> > > Fixes: 6d4e11c5e2e8 ("irqchip/gicv3: Workaround for Cavium ThunderX erratum 23154")
+> > > Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
 > > > ---
-> > >  drivers/media/v4l2-core/v4l2-ioctl.c | 3 +++
-> > >  include/uapi/linux/videodev2.h       | 3 +++
-> > 
-> > The patch also needs to document the formats, in
-> > Documentation/userspace-api/media/v4l/.
-> > 
-> > >  2 files changed, 6 insertions(+)
+> > >  drivers/irqchip/irq-gic-v3.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
 > > > 
-> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > index c314025d977e..7b102c2f59b1 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > @@ -1497,6 +1497,9 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
-> > >  case V4L2_PIX_FMT_MT21C: descr = "Mediatek Compressed Format"; break;
-> > >  case V4L2_PIX_FMT_QC08C: descr = "QCOM Compressed 8-bit Format"; break;
-> > >  case V4L2_PIX_FMT_QC10C: descr = "QCOM Compressed 10-bit Format"; break;
-> > > + case V4L2_PIX_FMT_AV1: descr = "AV1"; break;
->  
-> A recommendation while adding proper spec/doc. AV1 have multiple representation,
-> the exact expected representation should be specified in the doc. This will
-> avoid similar issues we had with H.264 (Annex B. vs AVCc formats).
->  
-> > > + case V4L2_PIX_FMT_AVS: descr = "AVS"; break;
-> > > + case V4L2_PIX_FMT_AVS2: descr = "AVS2"; break;
->  
-> Same things should be checked for these two, they aren't very common outside of
-> China, at least I didn't had a chance to play with these so far.
->  
-> cheers,
-> Nicolas
->  
-> > >  default:
-> > >  if (fmt->description[0])
-> > >  return;
-> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > > index 01e630f2ec78..fa8ec0ddde3d 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -738,6 +738,9 @@ struct v4l2_pix_format {
-> > >  #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
-> > >  #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
-> > >  #define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
-> > > +#define V4L2_PIX_FMT_AV1      v4l2_fourcc('A', 'V', '1', '0') /* AV1 */
-> > > +#define V4L2_PIX_FMT_AVS      v4l2_fourcc('A', 'V', 'S', '0') /* AVS */
-> > > +#define V4L2_PIX_FMT_AVS2     v4l2_fourcc('A', 'V', 'S', '2') /* AVS2 */
+> > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > > index 262658fd5f9e..3f08c2ef1251 100644
+> > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > @@ -237,9 +237,11 @@ static void gic_redist_wait_for_rwp(void)
 > > >  
-> > >  /*  Vendor-specific formats   */
-> > >  #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
-> > > 
-> > > base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> > >  static u64 __maybe_unused gic_read_iar(void)
+> > >  {
+> > > +#ifdef CONFIG_CAVIUM_ERRATUM_23154
+> > >  	if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM_23154))
+> > >  		return gic_read_iar_cavium_thunderx();
+> > >  	else
+> > > +#endif
+> > >  		return gic_read_iar_common();
+> > >  }
+> > >  #endif
+> > 
+> > You realise that cpus_have_const_cap() results purely in a couple of
+> > branches once the caps have been finalised, right?
+> > 
+> > Please provide data showing that it actually "can decrease exception
+> > handle time on most cases", because I'm pretty sure you cannot measure
+> > the difference in any meaningful way.
+> > 
+> > 	M.
+> > 
+> > -- 
+> > Without deviation from the norm, progress is not possible.
+> 
+> Hi Marc,
+> Thank you for the reply. Actually I did no test, just from the disassemble
+> code of vmlinux, I saw about 6 instruction generated by
+> cpus_have_const_cap, and about 36 by gic_read_iar_cavium_thunderx, which
+> is useless for most CPUs. I think this will waste some cpu cycles, as
+> exceptions can occur hunderds or thousands times per second. Also
+> (6+36)*4=168 bytes of icache is wasted, and icache misses increase
+> somewhere else.
+> If I got things wrong, please correct me.
+
+Well, what you got wrong is that these instructions are stepped over
+two branches when the caps are finalised, and that doesn't appear in
+the disassembly (you need to look at the code that is actually
+executed).
+
+Now, any optimisation of the sort must be backed by some performance
+numbers. If you can show that this has a meaningful impact on a given
+workload, I'm happy to look into it. But only if you can show that
+data.
+
+Thanks,
+
+	M.
 
 -- 
-Regards,
-
-Laurent Pinchart
+Without deviation from the norm, progress is not possible.

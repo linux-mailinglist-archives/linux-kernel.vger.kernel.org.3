@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CEB5A3E4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 17:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C435A3E54
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 17:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiH1PR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 11:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        id S229886AbiH1PUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 11:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiH1PRx (ORCPT
+        with ESMTP id S229542AbiH1PUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 11:17:53 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C8132BB6
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:17:51 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id d23so8055177lfl.13
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:17:51 -0700 (PDT)
+        Sun, 28 Aug 2022 11:20:30 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F0BA1BC
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:20:28 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id m2so4326940lfp.11
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=BMuuUb/NaeWhjQcPAxYkzgwYaDlCaxqCOLQwvGkupzQ=;
-        b=uA/eYj82exJMjuY9e7J6YvqzGs6YO2wd4Wsr7KaEG9xbmki2/uIeuU5S33fT3K9diB
-         WgVTvWBBEAMfuqfPwfQ+81YHWlEDECkcf2J6Xa6Fel+3p3pCGqorCHJjUwtbyqMsFNQj
-         jcRB9DEegyraelWmi47qRX/MJrsMOrLbAQwoqnUMgwW6jas1sIu9CC0ynj1GY5A5k75B
-         +UHOU59nFHgongKrbt1SYOzq9mSd7aBfAep+U+axYK+Lhd8wXOpUQht2R1ab5E+TWaZ5
-         ObU8XfENayynqBya3sIC3zPddyhd5LYxuNs1Sw6LoL2J0hccsru3X8bWXuInFvNIeBGP
-         7u6Q==
+        bh=vWIOQpau8zQvC+oLMoO5r2Km1y79obld+jCRMXEUpCM=;
+        b=xT1o18rUcGpZ3RG16y1ykyDsE+uYyBezJ/Yhy2Pmt4LyzuVcJTQ2P+LFPyfrTkF2xh
+         y/bgkHMP6OjtslrEWRI/ME7PAMkXHeRyVTm219hm/cU/3JrH9FQ8cmdJ+/MZe3N5etHX
+         3tus2lT9cr2R/lraI2GbcDAIe/TyIFLa9gvkBEyv0uls207JxPDyVn0FZCwyMwG6ugPe
+         /hL3TO9JZPlTVp+YAsPx4cndE8NqL4duxyWttnruKBBZ8S5cfgRDREqaMM50sSqFeXXK
+         7sDTO6x1TKobNlAxz0fsM2SvD6HdshpqZz+qgpKehUxtU9sHf9yH85Iy078Tl3N8bOvE
+         AKNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=BMuuUb/NaeWhjQcPAxYkzgwYaDlCaxqCOLQwvGkupzQ=;
-        b=LJTtM8x3+X2eOGTepczXs04+oImoD+Q/5+hHIbWYaIH23zdcIiLSpePQmoLIWSYg3+
-         DM5Qoz6j+KcERNcOjB9/xK/s/BO4lt7bhtISYOcIKgw76mIdEEvykQe+r1XgBForQiSI
-         q45PsCiN4FGSSZwM7S/P6gaXQW93Mx5SQdF6hFWnNW4tIizf1TbKEfTB5sZwqONznfnO
-         hANYBu0Ekax//FFNLAykpSMfSM4EX1o3mgCGdI8MPnoBQijwK82NmbBjgCe3jg0yzk8U
-         K+NL5vpidmbcrvsHZqjkUBiZk8E9Iruv8Tn3dQAP9r34ViwYai4XkuMH/e/Mwj5VhkaT
-         4qvw==
-X-Gm-Message-State: ACgBeo3nP5HIZDNXXPPAePKU8H/fuGPkzumtZERfObUBA8vVj69r19w6
-        RT0m+MwTBf7wjLvbjBhwqso89g==
-X-Google-Smtp-Source: AA6agR6tu+b4muuv2A0ZBoDeroPsUwu4gpumy7bfnEz+AL7GSsv6EMfNFci9UDZ+n1q+JzTVkBs05A==
-X-Received: by 2002:a05:6512:31cc:b0:494:6815:a81b with SMTP id j12-20020a05651231cc00b004946815a81bmr1214134lfe.511.1661699870192;
-        Sun, 28 Aug 2022 08:17:50 -0700 (PDT)
+        bh=vWIOQpau8zQvC+oLMoO5r2Km1y79obld+jCRMXEUpCM=;
+        b=p8NdeDYMZRwGDpi95wmynJ4Szyib8b1JeRC9y2HAYbLmWI1yQu8JsjpMyiWuWn4STd
+         vBCakKuQV+OKRWMDnx6MyHNBYKxbnjdt4/fCX12D7x+kP5XSNeV2PNt3YIk4tOi8FaJ2
+         y5Rn6NxpxYobj5GmtLOan63zHcL8Fz82UQbaDCA8Exe67Msw7tr4ltD9lH1jx9DqITxf
+         68wh6YxraaIahToRqgbf4RkYAfT6BUWYJ3ekjn0tRWGSOa4zuVgOMG1o4iUylluN3DXR
+         G7SBykNK5yFvdJbWDGoHGjwoR61+KoG13M7xOKFWZU9pDI/XAkq2ro0QRPXkqSNxnPU+
+         WZxg==
+X-Gm-Message-State: ACgBeo36V4TaMHW8Go4Eli3t0M0pRwe36jMIgFw9nIxTvzbJQNJLIXgw
+        i1K3lCkUM4BEYCkfr56et7bKLAYwT9eLN8Xa
+X-Google-Smtp-Source: AA6agR7ao95Gd2XL1wwjOZr62Pf1iHe0P8rgzdfClnLgH62TbMoV2cQubN9/jy6g3IMS28JGptP+tg==
+X-Received: by 2002:a05:6512:32b6:b0:494:6ab2:b997 with SMTP id q22-20020a05651232b600b004946ab2b997mr772250lfe.193.1661700026700;
+        Sun, 28 Aug 2022 08:20:26 -0700 (PDT)
 Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id c2-20020a056512324200b0048b0696d0b1sm121184lfr.90.2022.08.28.08.17.49
+        by smtp.gmail.com with ESMTPSA id v28-20020ac25b1c000000b00492d09aed44sm971777lfn.195.2022.08.28.08.20.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Aug 2022 08:17:49 -0700 (PDT)
-Message-ID: <53897584-f9a1-d305-4024-79a73d2837d8@linaro.org>
-Date:   Sun, 28 Aug 2022 18:17:43 +0300
+        Sun, 28 Aug 2022 08:20:25 -0700 (PDT)
+Message-ID: <b188b3fe-cc35-f902-b316-0c1632893e9d@linaro.org>
+Date:   Sun, 28 Aug 2022 18:20:21 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH 10/11] dt-bindings: PCI: qcom-ep: Add support for SM8450
- SoC
+Subject: Re: [PATCH 09/11] dt-bindings: PCI: qcom-ep: Define clocks per
+ platform
 Content-Language: en-US
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org
@@ -66,9 +66,9 @@ Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
         krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         dmitry.baryshkov@linaro.org
 References: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org>
- <20220826181923.251564-11-manivannan.sadhasivam@linaro.org>
+ <20220826181923.251564-10-manivannan.sadhasivam@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220826181923.251564-11-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20220826181923.251564-10-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,27 +82,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 26/08/2022 21:19, Manivannan Sadhasivam wrote:
-> Add devicetree bindings support for SM8450 SoC. Only the clocks are
-> different on this platform, rest is same as SDX55.
+> In preparation of adding the bindings for future SoCs, let's define the
+> clocks per platform.
 > 
 > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  .../devicetree/bindings/pci/qcom,pcie-ep.yaml | 27 +++++++++++++++++--
->  1 file changed, 25 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/pci/qcom,pcie-ep.yaml | 46 +++++++++++--------
+>  1 file changed, 27 insertions(+), 19 deletions(-)
 > 
 > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> index 83a2cfc63bc1..9914d575ec41 100644
+> index b728ede3f09f..83a2cfc63bc1 100644
 > --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
 > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> @@ -12,6 +12,7 @@ maintainers:
+> @@ -9,9 +9,6 @@ title: Qualcomm PCIe Endpoint Controller binding
+>  maintainers:
+>    - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>  
+> -allOf:
+> -  - $ref: "pci-ep.yaml#"
+> -
 >  properties:
 >    compatible:
 >      const: qcom,sdx55-pcie-ep
-> +    const: qcom,sm8450-pcie-ep
+> @@ -35,24 +32,12 @@ properties:
+>        - const: mmio
+>  
+>    clocks:
+> -    items:
+> -      - description: PCIe Auxiliary clock
+> -      - description: PCIe CFG AHB clock
+> -      - description: PCIe Master AXI clock
+> -      - description: PCIe Slave AXI clock
+> -      - description: PCIe Slave Q2A AXI clock
+> -      - description: PCIe Sleep clock
+> -      - description: PCIe Reference clock
+> +    minItems: 7
+> +    maxItems: 7
+>  
+>    clock-names:
+> -    items:
+> -      - const: aux
+> -      - const: cfg
+> -      - const: bus_master
+> -      - const: bus_slave
+> -      - const: slave_q2a
+> -      - const: sleep
+> -      - const: ref
+> +    minItems: 7
+> +    maxItems: 7
+>  
+>    qcom,perst-regs:
+>      description: Reference to a syscon representing TCSR followed by the two
+> @@ -112,6 +97,29 @@ required:
+>    - reset-names
+>    - power-domains
+>  
+> +allOf:
+> +  - $ref: "pci-ep.yaml#"
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sdx55-pcie-ep
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 7
+> +          maxItems: 7
 
-You need to test the bindings with `make dt_binding_check`. This
-requires an enum instead of two consts.
-
+One more thing - the previous way of describing items is more readable
+instead of names followed by a comment, so I propose to keep it. This
+applies also to patch 10.
 
 Best regards,
 Krzysztof

@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4FA5A3A97
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 02:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA05A5A3AA0
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 02:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiH1AM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 20:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S229704AbiH1A26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 20:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiH1AMX (ORCPT
+        with ESMTP id S229445AbiH1A24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 20:12:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86931AD83;
-        Sat, 27 Aug 2022 17:12:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F66160EFF;
-        Sun, 28 Aug 2022 00:12:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E9FC433C1;
-        Sun, 28 Aug 2022 00:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661645541;
-        bh=pKUoaQ9EcjJggSkeqY7Olvpsm3d5dLwR/wl/BB+U5g8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TMpAOVjbK9E3fz0ooSfvWL268lrlX3TxQoLp4an1G52borowaZOgsBN4HTAMzlSZh
-         n/go2Bd+b/Q7boVjtKX7sXTsnaPBkr/ToNRad4gXMu3cYY9wSWwQXUZhWqQKOjm5Zr
-         f0vMAg/QZlaEUyt8kktBXmYn5/Sp4RnqSXTXzcwA=
-Date:   Sat, 27 Aug 2022 17:12:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/6] block: add dio_w_*() wrappers for pin, unpin user
- pages
-Message-Id: <20220827171220.fa2f21f6b22c6d3047857381@linux-foundation.org>
-In-Reply-To: <4c6903d4-0612-5097-0005-4a9420890826@nvidia.com>
-References: <20220827083607.2345453-1-jhubbard@nvidia.com>
-        <20220827083607.2345453-3-jhubbard@nvidia.com>
-        <20220827152745.3dcd05e98b3a4383af650a72@linux-foundation.org>
-        <4c6903d4-0612-5097-0005-4a9420890826@nvidia.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 27 Aug 2022 20:28:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC31C33E0E;
+        Sat, 27 Aug 2022 17:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=23ph2otCZCX5I5yCccntprO67HKi3ey2WowmynKONxM=; b=bgCRJmiDBBwSAPbvtovMYFC557
+        wYA4hWSZJbs7tVfOEAUOa8T5Hez4T8u6ZymwZzDt29FxtRl22ljnrU/qzzidp0E57Z3ofJJPdPZ+X
+        gOUgtJLcOe/1mwSJ/cidnEMdS1iI6wa4QtGCpicSNewYIqzQrZe9ZnNJKpjbxU6FEoPtjNrstG4ek
+        CKdExst2zmm7y6NZ6ADM1FPgH375bAO8KUBinzcU14yOw+7jpoS/yEd3bf+k57e7iNIrnzfclxKqS
+        MixqwTPRoE1QGdkmOvxRKzHvriOwfOlLfWQpK/xsMr+U/dvljwMDKlkOOTuJmDJ9lv9OuvDhxjvtV
+        i2skl9tQ==;
+Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oS6AV-001p4v-KE; Sun, 28 Aug 2022 00:28:52 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Evgeniy Polyakov <zbr@ioremap.net>
+Subject: [PATCH] Documentation: W1: minor typo corrections
+Date:   Sat, 27 Aug 2022 17:28:45 -0700
+Message-Id: <20220828002845.7022-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022 16:59:32 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+Correct one typo/spello and remove one duplicated word in the
+W1 documentation.
 
-> Anyway, I'll change my patch locally for now, to this:
-> 
-> static inline void dio_w_unpin_user_pages(struct page **pages,
-> 					  unsigned long npages)
-> {
-> 	/* Careful, release_pages() uses a smaller integer type for npages: */
-> 	if (WARN_ON_ONCE(npages > (unsigned long)INT_MAX))
-> 		return;
-> 
-> 	release_pages(pages, (int)npages);
-> }
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Evgeniy Polyakov <zbr@ioremap.net>
+---
+@Evegniy-
+I notice that ioremap.net web site is not working for me.
+Can you do something about that or modify the URL in
+Documentation/w1/w1-netlink.rst (2. http://www.ioremap.net/archive/w1)
+for source code examples?
 
-Well, it might be slower.  release_pages() has a ton of fluff.
+ Documentation/w1/masters/ds2490.rst |    2 +-
+ Documentation/w1/w1-generic.rst     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-As mentioned, the above might be faster if the pages tend
-to have page_count()==1??
+--- a/Documentation/w1/masters/ds2490.rst
++++ b/Documentation/w1/masters/ds2490.rst
+@@ -52,7 +52,7 @@ Notes and limitations.
+   clear the entire bulk in buffer.  It would be possible to read the
+   maximum buffer size to not run into this error condition, only extra
+   bytes in the buffer is a logic error in the driver.  The code should
+-  should match reads and writes as well as data sizes.  Reads and
++  match reads and writes as well as data sizes.  Reads and
+   writes are serialized and the status verifies that the chip is idle
+   (and data is available) before the read is executed, so it should
+   not happen.
+--- a/Documentation/w1/w1-generic.rst
++++ b/Documentation/w1/w1-generic.rst
+@@ -113,7 +113,7 @@ generally only make sense when searching
+ redetect manually removed devices that are present and timeout manually
+ added devices that aren't on the bus.
+ 
+-Bus searches occur at an interval, specified as a summ of timeout and
++Bus searches occur at an interval, specified as a sum of timeout and
+ timeout_us module parameters (either of which may be 0) for as long as
+ w1_master_search remains greater than 0 or is -1.  Each search attempt
+ decrements w1_master_search by 1 (down to 0) and increments

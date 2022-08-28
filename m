@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B895A3F25
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 20:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0DD5A3F3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 21:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiH1SmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 14:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
+        id S229771AbiH1TIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 15:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiH1SmG (ORCPT
+        with ESMTP id S229585AbiH1TIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 14:42:06 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BD12FFD9;
-        Sun, 28 Aug 2022 11:42:04 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b16so82883wru.7;
-        Sun, 28 Aug 2022 11:42:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nPeeJvcw+APlSjQr5GEfxQ1+CYvYngFa4Na2HCLoP7o=;
-        b=LaihOXgWdYphgrrA7SBrJOIUhVNl3ESUJDgGPDUfngsClPDVDKzpQko70TrGPfL36F
-         zf38+tv/rqp5oeiVGa+TEEOMuDZU3KT7cuYIqHTfS1JUaQLVNP3523BkxepBk1HXD7e5
-         okwFBPi/pXCcWC9gHBDusyz+XPhlomVuRkWO/z2vtgE8CEjtKqJUgYU/KKjBdUWeH2BR
-         p0O2HeopYHek3fkBGn5PIwqw/v4N7317ur4o9iZHqkzAmB6BMT9eNAu4RP008KP89wD4
-         4kCva8i3Ly5Eg2WPnf7wy8foFcNWHhAy/GQhyvl6jB3SZtuOK9GHFG+FAHYokFhOwXIv
-         GdaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nPeeJvcw+APlSjQr5GEfxQ1+CYvYngFa4Na2HCLoP7o=;
-        b=Kr/FiSuQEO5q3s+2wnXheSfpAOrfl5VrkqzR0htmnRYj8KKJHdxligMPun7A1Oy9iX
-         siicyoWKUYflZyB2ko06Sns9Hcpyz2rSV3dshnQ4vWFqVBq0IQzjx17V4IBjHyOPlp+H
-         DbBxKTmo1shnLD1oUVPCaIwG1QSl/m02nwd3Rb6FW0NkfphJPHCW8eL5ywI8stQO0zIH
-         bUEyIxGc5eBfqhG6YOHkp8AwIKY534mBBzLzms8Kn6Ku1RRGC51NiCFTfhmjW1oh6Dn0
-         NDpBZSX2jeCINJwh5oFjb8L+CjWl/21Os2onwYwtpELu44QqSSOlX+EnToQwWJKZsrFD
-         Ba3Q==
-X-Gm-Message-State: ACgBeo2va4ZVVkGVtbh39tRaLJLglG1KFLa5Uh5HEf7ro1YQ/65rJEZK
-        n98qx0aMHBOSiD3SMPq2kw==
-X-Google-Smtp-Source: AA6agR7ZQHVA++7orMaEY7LtCr7ATgaqFa5xAhWfk3pG0NldsIBx9iCH7CjFTtfP+gAErEpY1M+qFA==
-X-Received: by 2002:a05:6000:61e:b0:225:5119:94b with SMTP id bn30-20020a056000061e00b002255119094bmr4726937wrb.650.1661712122970;
-        Sun, 28 Aug 2022 11:42:02 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.248.164])
-        by smtp.gmail.com with ESMTPSA id w18-20020adfde92000000b00226d238be98sm4233967wrl.82.2022.08.28.11.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 11:42:02 -0700 (PDT)
-Date:   Sun, 28 Aug 2022 21:42:00 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     xu xin <cgel.zte@gmail.com>
-Cc:     akpm@linux-foundation.org, corbet@lwn.net, bagasdotme@gmail.com,
-        willy@infradead.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
-        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH v4 1/2] ksm: count allocated ksm rmap_items for each
- process
-Message-ID: <Ywu2+OiL9oqohr1v@localhost.localdomain>
-References: <20220824124512.223103-1-xu.xin16@zte.com.cn>
- <20220824124615.223158-1-xu.xin16@zte.com.cn>
+        Sun, 28 Aug 2022 15:08:15 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1294E1CFD3
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:08:14 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oSNdk-0003tY-Km; Sun, 28 Aug 2022 21:08:12 +0200
+Message-ID: <9ec7563f-906f-2e72-73ae-6f373b9445d0@leemhuis.info>
+Date:   Sun, 28 Aug 2022 21:08:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220824124615.223158-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: Linux regressions report for mainline [2022-08-28]
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+References: <166170992386.1651569.17504808724724706636@leemhuis.info>
+ <CAHk-=wjn-GVDLEN0F+WT0PWysqH7HMD+mBjKUr65DEhav47u3w@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAHk-=wjn-GVDLEN0F+WT0PWysqH7HMD+mBjKUr65DEhav47u3w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661713694;033e5bf2;
+X-HE-SMSGID: 1oSNdk-0003tY-Km
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:46:15PM +0000, xu xin wrote:
-> +static int proc_pid_ksm_rmp_items(struct seq_file *m, struct pid_namespace *ns,
-> +				struct pid *pid, struct task_struct *task)
-> +{
-> +	struct mm_struct *mm;
-> +
-> +	mm = get_task_mm(task);
-> +	if (mm) {
-> +		seq_printf(m, "%lu\n", mm->ksm_rmp_items);
-> +		mmput(mm);
-> +	}
-> +
-> +	return 0;
-> +}
->  #endif /* CONFIG_KSM */
->  
->  #ifdef CONFIG_STACKLEAK_METRICS
-> @@ -3334,6 +3347,7 @@ static const struct pid_entry tgid_base_stuff[] = {
->  #endif
->  #ifdef CONFIG_KSM
->  	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-> +	ONE("ksm_rmp_items",  S_IRUSR, proc_pid_ksm_rmp_items),
->  #endif
 
-Another tiny /proc/$pid/ file?
 
-Guys, this problem with "find /proc" instantiating megabytes is not
-getting better only worse.
+On 28.08.22 20:41, Linus Torvalds wrote:
+> On Sun, Aug 28, 2022 at 11:23 AM Regzbot (on behalf of Thorsten
+> Leemhuis) <regressions@leemhuis.info> wrote:
+>>
+>> Not sure, maybe it would have been good if the following fix would have
+>> found the way into rc3, as it seems more than just one or two people
+>> already stumbled over the regression fixed by it:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id a8e0f6b01b14b2e28ba144e112c883f03a3db2
+>> https://lore.kernel.org/all/?qœbffc7*
+> 
+> Neither of those links are valid for me.
+> 
+> "a8e0f6b01b14b2e28ba144e112c883f03a3db2" doesn't exist in linux-next.
+> never mind that that isn't valid link syntax anyway.
+> 
+> The lore.kernel.org link is also just random noise.
+> 
+> So I'm not actually sure what you are trying to say...
 
-How did KSM didn't get its own /proc/*/ksm file with many values?
+Sorry, you are right, I did something really stupid when preparing the
+mail (I manually modified one that was ready so send and already
+encoded...). Here are the links:
 
-Maybe add /proc/*/ksm and start filling it with stuff leaving
-/proc/*/ksm_merging_pages alone?
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=13a8e0f6b01b14b2e28ba144e112c883f03a3db2
+https://lore.kernel.org/all/?q=9cbffc7*
+
+But I just noticed that's not the only stupid thing I did, as the linked
+commit in next (13a8e0f6b01b) is part of a series:
+
+https://lore.kernel.org/all/20220819221616.2107893-1-saravanak@google.com/
+
+The series fixes the regression "Regression: PM: domains: Delete usage
+of driver_deferred_probe_check_state" that is in the list from regzbot:
+https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+
+But there are more reports, for example:
+https://lore.kernel.org/all/YvrkjH6%2FFpIzyAv+@euler/
+
+Not sure if Greg didn't sent them to you because he think they need more
+time or because he's simply afk/busy and didn't manage to send pull
+requests.
+
+Guess waiting another week won't do too much harm.
+
+Ciao, Thorsten

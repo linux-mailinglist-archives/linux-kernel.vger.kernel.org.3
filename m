@@ -2,150 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455F95A3D68
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC355A3D6B
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiH1Lv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 07:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S229798AbiH1LxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 07:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiH1Lv5 (ORCPT
+        with ESMTP id S229497AbiH1LxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 07:51:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383C211A0D
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 04:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661687516; x=1693223516;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QK/jFmyPvCbmTTWCkm0uJvOI7SQREGdmJHxT01UAxgw=;
-  b=WIHQKUlqWQtdrEQgj5C2DDxnNuqqlkeeJT4EjgvDaqipsRjM1dZU9kNl
-   prDMMAoH40kLsTCU4FOXEvmhK9nr9OZaZJT5gyEkbORnu2f5BcPe7zJiU
-   yy1qjNlwG7vefE0LXF91omD5flsePM0cRvuTjOG/Hn/p9ZIP3sBCeXCV2
-   iuZ50lMC2qS+ZMhjXDNFuoM2uNuub9Jqfddyc84KMUzQdIRMqx6vAdsey
-   hfF5hyTus8TA5IUQSWiawrkTN2zZhNdmAD/wqZYtfB/gQN3OkZkG0gESm
-   VUcTzgygdgol7JPZQ6LdwPgRpn245yGhBPraa/WWol8caSsfVF4YF5Cgn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="277748199"
-X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="277748199"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 04:51:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="611010904"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Aug 2022 04:51:54 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSGpV-00013X-2a;
-        Sun, 28 Aug 2022 11:51:53 +0000
-Date:   Sun, 28 Aug 2022 19:51:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [lst:imx8mp-hdmi 5/11]
- drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:76:11: warning: variable
- 'bus_flags' is used uninitialized whenever 'if' condition is false
-Message-ID: <202208281910.qUZY1Xem-lkp@intel.com>
+        Sun, 28 Aug 2022 07:53:03 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CF411A0F;
+        Sun, 28 Aug 2022 04:53:02 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oSGqb-0007QJ-4K; Sun, 28 Aug 2022 13:53:01 +0200
+Message-ID: <9729ab5f-422d-19a8-d4e0-94de0877736d@leemhuis.info>
+Date:   Sun, 28 Aug 2022 13:52:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+ #forregzbot
+Content-Language: en-US
+Cc:     scsi <linux-scsi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ide@vger.kernel.org
+References: <20220630195703.10155-1-bvanassche@acm.org>
+ <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
+ <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
+ <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+ <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
+ <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
+ <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
+ <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+ <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org>
+ <CAMuHMdW2vOC8ZsE_XF8TbSNoF9zCrwq7UkGZ5jXen1E1mTZe+g@mail.gmail.com>
+ <14ec47f3-f3b8-61c7-2c64-d96d00dd7076@acm.org>
+ <CAMuHMdW7nGxV_3Z2JV_TCM+WtTdYv5P+0cE6Tw=6krcseNCdAw@mail.gmail.com>
+ <40700595-8c83-1b61-ea93-ea9554bfb2db@acm.org>
+ <98592410-dd31-9081-86be-fda67d3b06d2@suse.cz>
+To:     regressions@lists.linux.dev
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <98592410-dd31-9081-86be-fda67d3b06d2@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661687582;b4a732ba;
+X-HE-SMSGID: 1oSGqb-0007QJ-4K
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.pengutronix.de/git/lst/linux imx8mp-hdmi
-head:   7e80a6e2d0a4709e471ab951a64d323534a6776f
-commit: b3d9e9dfedb64ed82e797a87259e6f7598f5b4d5 [5/11] drm/imx: add driver for HDMI TX Parallel Video Interface
-config: riscv-randconfig-c006-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281910.qUZY1Xem-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        git remote add lst https://git.pengutronix.de/git/lst/linux
-        git fetch --no-tags lst imx8mp-hdmi
-        git checkout b3d9e9dfedb64ed82e797a87259e6f7598f5b4d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/bridge/imx/ drivers/gpu/drm/rcar-du/
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 17.08.22 21:07, Vlastimil Babka wrote:
+> Hi, I have a T460 hanging on resume from suspend to ram in 6.0-rc1 that
+> I bisected to this commit.
+> 
+>> Unfortunately the above does not learn us anything new. The code 
+>> modified by commit 88f1669019bd ("scsi: sd: Rework asynchronous resume 
+>> support") is only called if sdev->manage_start_stop != 1. Only the SATA 
+>> code, the Firewire code and the manage_start_stop sysfs attribute store 
+>> method set that member variable:
+> [...]
+> #regzbot introduced: 88f1669019bd62b3
+> #regzbot monitor: https://lore.kernel.org/all/20220816172638.538734-1-bvanassche@acm.org/
 
-All warnings (new ones prefixed by >>):
+#regzbot fixed-by: 785538bfdd682c8e962341d585f9b88262a0475
 
->> drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:76:11: warning: variable 'bus_flags' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           else if (bridge_state)
-                    ^~~~~~~~~~~~
-   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:79:6: note: uninitialized use occurs here
-           if (bus_flags & DRM_BUS_FLAG_DE_HIGH)
-               ^~~~~~~~~
-   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:76:7: note: remove the 'if' if its condition is always true
-           else if (bridge_state)
-                ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:55:15: note: initialize the variable 'bus_flags' to silence this warning
-           u32 bus_flags, val;
-                        ^
-                         = 0
-   1 warning generated.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-
-vim +76 drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
-
-    45	
-    46	static void imx_hdmi_pvi_bridge_enable(struct drm_bridge *bridge,
-    47					       struct drm_bridge_state *bridge_state)
-    48	{
-    49		struct drm_atomic_state *state = bridge_state->base.state;
-    50		struct imx_hdmi_pvi *pvi = to_imx_hdmi_pvi(bridge);
-    51		struct drm_connector_state *conn_state;
-    52		const struct drm_display_mode *mode;
-    53		struct drm_crtc_state *crtc_state;
-    54		struct drm_connector *connector;
-    55		u32 bus_flags, val;
-    56	
-    57		connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
-    58		conn_state = drm_atomic_get_new_connector_state(state, connector);
-    59		crtc_state = drm_atomic_get_new_crtc_state(state, conn_state->crtc);
-    60	
-    61		if (WARN_ON(pm_runtime_resume_and_get(pvi->dev)))
-    62			return;
-    63	
-    64		mode = &crtc_state->adjusted_mode;
-    65	
-    66		val = PVI_CTL_INPUT_LCDIF;
-    67	
-    68		if (mode->flags & DRM_MODE_FLAG_PVSYNC)
-    69			val |= PVI_CTL_OP_VSYNC_POL | PVI_CTL_INP_VSYNC_POL;
-    70	
-    71		if (mode->flags & DRM_MODE_FLAG_PHSYNC)
-    72			val |= PVI_CTL_OP_HSYNC_POL | PVI_CTL_INP_HSYNC_POL;
-    73	
-    74		if (pvi->next_bridge->timings)
-    75			bus_flags = pvi->next_bridge->timings->input_bus_flags;
-  > 76		else if (bridge_state)
-    77			bus_flags = bridge_state->input_bus_cfg.flags;
-    78	
-    79		if (bus_flags & DRM_BUS_FLAG_DE_HIGH)
-    80			val |= PVI_CTL_OP_DE_POL | PVI_CTL_INP_DE_POL;
-    81	
-    82		writel(val, pvi->regs + HTX_PVI_CTL);
-    83		val |= PVI_CTL_EN;
-    84		writel(val, pvi->regs + HTX_PVI_CTL);
-    85	}
-    86	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

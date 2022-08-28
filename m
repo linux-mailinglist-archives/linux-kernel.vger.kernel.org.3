@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C435A3E54
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 17:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7EE5A3E59
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 17:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiH1PUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 11:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S229905AbiH1PW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 11:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiH1PUa (ORCPT
+        with ESMTP id S229883AbiH1PWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 11:20:30 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F0BA1BC
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:20:28 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id m2so4326940lfp.11
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 08:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=vWIOQpau8zQvC+oLMoO5r2Km1y79obld+jCRMXEUpCM=;
-        b=xT1o18rUcGpZ3RG16y1ykyDsE+uYyBezJ/Yhy2Pmt4LyzuVcJTQ2P+LFPyfrTkF2xh
-         y/bgkHMP6OjtslrEWRI/ME7PAMkXHeRyVTm219hm/cU/3JrH9FQ8cmdJ+/MZe3N5etHX
-         3tus2lT9cr2R/lraI2GbcDAIe/TyIFLa9gvkBEyv0uls207JxPDyVn0FZCwyMwG6ugPe
-         /hL3TO9JZPlTVp+YAsPx4cndE8NqL4duxyWttnruKBBZ8S5cfgRDREqaMM50sSqFeXXK
-         7sDTO6x1TKobNlAxz0fsM2SvD6HdshpqZz+qgpKehUxtU9sHf9yH85Iy078Tl3N8bOvE
-         AKNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=vWIOQpau8zQvC+oLMoO5r2Km1y79obld+jCRMXEUpCM=;
-        b=p8NdeDYMZRwGDpi95wmynJ4Szyib8b1JeRC9y2HAYbLmWI1yQu8JsjpMyiWuWn4STd
-         vBCakKuQV+OKRWMDnx6MyHNBYKxbnjdt4/fCX12D7x+kP5XSNeV2PNt3YIk4tOi8FaJ2
-         y5Rn6NxpxYobj5GmtLOan63zHcL8Fz82UQbaDCA8Exe67Msw7tr4ltD9lH1jx9DqITxf
-         68wh6YxraaIahToRqgbf4RkYAfT6BUWYJ3ekjn0tRWGSOa4zuVgOMG1o4iUylluN3DXR
-         G7SBykNK5yFvdJbWDGoHGjwoR61+KoG13M7xOKFWZU9pDI/XAkq2ro0QRPXkqSNxnPU+
-         WZxg==
-X-Gm-Message-State: ACgBeo36V4TaMHW8Go4Eli3t0M0pRwe36jMIgFw9nIxTvzbJQNJLIXgw
-        i1K3lCkUM4BEYCkfr56et7bKLAYwT9eLN8Xa
-X-Google-Smtp-Source: AA6agR7ao95Gd2XL1wwjOZr62Pf1iHe0P8rgzdfClnLgH62TbMoV2cQubN9/jy6g3IMS28JGptP+tg==
-X-Received: by 2002:a05:6512:32b6:b0:494:6ab2:b997 with SMTP id q22-20020a05651232b600b004946ab2b997mr772250lfe.193.1661700026700;
-        Sun, 28 Aug 2022 08:20:26 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id v28-20020ac25b1c000000b00492d09aed44sm971777lfn.195.2022.08.28.08.20.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Aug 2022 08:20:25 -0700 (PDT)
-Message-ID: <b188b3fe-cc35-f902-b316-0c1632893e9d@linaro.org>
-Date:   Sun, 28 Aug 2022 18:20:21 +0300
+        Sun, 28 Aug 2022 11:22:54 -0400
+Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D0C32BBD;
+        Sun, 28 Aug 2022 08:22:51 -0700 (PDT)
+Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail.stoffel.org (Postfix) with ESMTPSA id 4B0BE1E853;
+        Sun, 28 Aug 2022 11:22:50 -0400 (EDT)
+Received: by quad.stoffel.org (Postfix, from userid 1000)
+        id DEAAEA7E25; Sun, 28 Aug 2022 11:22:49 -0400 (EDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 09/11] dt-bindings: PCI: qcom-ep: Define clocks per
- platform
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org
-Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        dmitry.baryshkov@linaro.org
-References: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org>
- <20220826181923.251564-10-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220826181923.251564-10-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Message-ID: <25355.34889.890961.350510@quad.stoffel.home>
+Date:   Sun, 28 Aug 2022 11:22:49 -0400
+From:   "John Stoffel" <john@stoffel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        brauner@kernel.org, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ceph@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages PATCH] statx, inode: document the new STATX_INO_VERSION field
+In-Reply-To: <20220826214747.134964-1-jlayton@kernel.org>
+References: <20220826214747.134964-1-jlayton@kernel.org>
+X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,79 +52,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/08/2022 21:19, Manivannan Sadhasivam wrote:
-> In preparation of adding the bindings for future SoCs, let's define the
-> clocks per platform.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../devicetree/bindings/pci/qcom,pcie-ep.yaml | 46 +++++++++++--------
->  1 file changed, 27 insertions(+), 19 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> index b728ede3f09f..83a2cfc63bc1 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> @@ -9,9 +9,6 @@ title: Qualcomm PCIe Endpoint Controller binding
->  maintainers:
->    - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->  
-> -allOf:
-> -  - $ref: "pci-ep.yaml#"
-> -
->  properties:
->    compatible:
->      const: qcom,sdx55-pcie-ep
-> @@ -35,24 +32,12 @@ properties:
->        - const: mmio
->  
->    clocks:
-> -    items:
-> -      - description: PCIe Auxiliary clock
-> -      - description: PCIe CFG AHB clock
-> -      - description: PCIe Master AXI clock
-> -      - description: PCIe Slave AXI clock
-> -      - description: PCIe Slave Q2A AXI clock
-> -      - description: PCIe Sleep clock
-> -      - description: PCIe Reference clock
-> +    minItems: 7
-> +    maxItems: 7
->  
->    clock-names:
-> -    items:
-> -      - const: aux
-> -      - const: cfg
-> -      - const: bus_master
-> -      - const: bus_slave
-> -      - const: slave_q2a
-> -      - const: sleep
-> -      - const: ref
-> +    minItems: 7
-> +    maxItems: 7
->  
->    qcom,perst-regs:
->      description: Reference to a syscon representing TCSR followed by the two
-> @@ -112,6 +97,29 @@ required:
->    - reset-names
->    - power-domains
->  
-> +allOf:
-> +  - $ref: "pci-ep.yaml#"
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sdx55-pcie-ep
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 7
-> +          maxItems: 7
+>>>>> "Jeff" == Jeff Layton <jlayton@kernel.org> writes:
 
-One more thing - the previous way of describing items is more readable
-instead of names followed by a comment, so I propose to keep it. This
-applies also to patch 10.
+Jeff> We're planning to expose the inode change attribute via statx. Document
+Jeff> what this value means and what an observer can infer from a change in
+Jeff> its value.
 
-Best regards,
-Krzysztof
+It might be nice to put in some more example verbiage of how this
+would be used by userland.  For example, if you do a statx() call and
+notice that the ino_version has changed... what would you do next to
+find out what changed?  
+
+Would you have to keep around an old copy of the statx() results and
+then compare them to find the changes?  When talking to userland
+people, don't assume they know anything about the kernel internals
+here.  
+
+
+Jeff> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Jeff> ---
+Jeff>  man2/statx.2 | 13 +++++++++++++
+Jeff>  man7/inode.7 | 10 ++++++++++
+Jeff>  2 files changed, 23 insertions(+)
+
+Jeff> diff --git a/man2/statx.2 b/man2/statx.2
+Jeff> index 0d1b4591f74c..644fb251f114 100644
+Jeff> --- a/man2/statx.2
+Jeff> +++ b/man2/statx.2
+Jeff> @@ -62,6 +62,7 @@ struct statx {
+Jeff>      __u32 stx_dev_major;   /* Major ID */
+Jeff>      __u32 stx_dev_minor;   /* Minor ID */
+Jeff>      __u64 stx_mnt_id;      /* Mount ID */
+Jeff> +    __u64 stx_ino_version; /* Inode change attribute */
+Jeff>  };
+Jeff>  .EE
+Jeff>  .in
+Jeff> @@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
+Jeff>  STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+Jeff>  	It is deprecated and should not be used.
+Jeff>  STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
+Jeff> +STATX_INO_VERSION	Want stx_ino_version (since Linux 6.1)
+Jeff>  .TE
+Jeff>  .in
+Jeff>  .PP
+Jeff> @@ -411,6 +413,17 @@ and corresponds to the number in the first field in one of the records in
+Jeff>  For further information on the above fields, see
+Jeff>  .BR inode (7).
+Jeff>  .\"
+Jeff> +.TP
+Jeff> +.I stx_ino_version
+Jeff> +The inode version, also known as the inode change attribute. This
+Jeff> +value is intended to change any time there is an inode status change. Any
+Jeff> +operation that would cause the stx_ctime to change should also cause
+Jeff> +stx_ino_version to change, even when there is no apparent change to the
+Jeff> +stx_ctime due to timestamp granularity.
+Jeff> +.IP
+Jeff> +Note that an observer cannot infer anything about the nature or
+Jeff> +magnitude of the change from the value of this field. A change in this value
+Jeff> +only indicates that there may have been an explicit change in the inode.
+Jeff>  .SS File attributes
+Jeff>  The
+Jeff>  .I stx_attributes
+Jeff> diff --git a/man7/inode.7 b/man7/inode.7
+Jeff> index 9b255a890720..d296bb6df70c 100644
+Jeff> --- a/man7/inode.7
+Jeff> +++ b/man7/inode.7
+Jeff> @@ -184,6 +184,16 @@ Last status change timestamp (ctime)
+Jeff>  This is the file's last status change timestamp.
+Jeff>  It is changed by writing or by setting inode information
+Jeff>  (i.e., owner, group, link count, mode, etc.).
+Jeff> +.TP
+Jeff> +Inode version (i_version)
+Jeff> +(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\fP
+Jeff> +.IP
+Jeff> +This is the inode change attribute. Any operation that would result in a ctime
+Jeff> +change should also result in a change to this value. The value must change even
+Jeff> +in the case where the ctime change is not evident due to timestamp granularity.
+Jeff> +An observer cannot infer anything from the actual value about the nature or
+Jeff> +magnitude of the change. If it is different from the last time it was checked,
+Jeff> +then something may have made an explicit change to the inode.
+Jeff>  .PP
+Jeff>  The timestamp fields report time measured with a zero point at the
+Jeff>  .IR Epoch ,
+Jeff> -- 
+Jeff> 2.37.2
+

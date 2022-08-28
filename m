@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EDB5A3D5B
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6185A3D5E
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 13:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiH1L2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 07:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229736AbiH1L3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 07:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiH1L1L (ORCPT
+        with ESMTP id S229591AbiH1L3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 07:27:11 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1005333E0B;
-        Sun, 28 Aug 2022 04:27:09 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 9A5F018846A8;
-        Sun, 28 Aug 2022 11:27:08 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 8DC6425032B7;
-        Sun, 28 Aug 2022 11:27:08 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 788FE9EC0009; Sun, 28 Aug 2022 11:27:08 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sun, 28 Aug 2022 07:29:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1A8356CF;
+        Sun, 28 Aug 2022 04:29:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF2A5B80A4D;
+        Sun, 28 Aug 2022 11:29:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BC7C433D6;
+        Sun, 28 Aug 2022 11:29:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661686173;
+        bh=PCobnhAmzI6CGWoCBind+iKZ7jdQQvQJAHdLjZFumHU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I4eEvRYesIRLcRqPP7aYtoK+ql38fNh5g2SJBiPywsKIQXKYfStV3mTQ7n/Xxf63+
+         kluu1/rALpCW3Y8pAU2jRR9ylUwXxd/yEtkVzglRQyK/SG2OlrtDB1rlRfOqawryG+
+         S+4Q6vogoxHVXglfkEgavqz3V1TIu+RKyQgrI18mImjzBruX+3kU1gUP3KzcP7lC+l
+         /xFbxKUimG60vTU8ExOq/e55weCqNefq730G/oBrPVdAy2RNHMkV1p/1nt0dVdF6+3
+         F12t1MT2PY7WVE/v8HJY14vZujjsmal+hKQeqFZhY4zAKde92SBcxo2NduFkNClAoZ
+         1xKqmXVZeoRAw==
+Date:   Sun, 28 Aug 2022 14:29:29 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/core: remove 'device' argument from rdma_build_skb()
+Message-ID: <YwtRmftTsXE1rLFz@unreal>
+References: <20220826143215.18111-1-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Date:   Sun, 28 Aug 2022 13:27:08 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 2/6] net: switchdev: add support for
- offloading of fdb locked flag
-In-Reply-To: <Ywo8PONgDW/lUj+X@shredder>
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-3-netdev@kapio-technology.com>
- <Ywo8PONgDW/lUj+X@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <4206d70598694689acf6b6ec30ef6523@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826143215.18111-1-linyunsheng@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +54,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-27 17:46, Ido Schimmel wrote:
-> On Fri, Aug 26, 2022 at 01:45:34PM +0200, Hans Schultz wrote:
->> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
->> index 7dcdc97c0bc3..437945179373 100644
->> --- a/include/net/switchdev.h
->> +++ b/include/net/switchdev.h
->> @@ -247,7 +247,10 @@ struct switchdev_notifier_fdb_info {
->>  	const unsigned char *addr;
->>  	u16 vid;
->>  	u8 added_by_user:1,
->> +	   sticky:1,
+On Fri, Aug 26, 2022 at 10:32:15PM +0800, Yunsheng Lin wrote:
+> 'device' argument is never used since rdma_build_skb()
+> is introduced, so remove it.
 > 
-> If mv88e6xxx reports entries with 'is_local=1, locked=1, blackhole=1',
-> then the 'sticky' bit can be removed for now (we will need it some day
-> to support sticky entries notified from the bridge). This takes care of
-> the discrepancy Nik mentioned here:
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> ---
+>  drivers/infiniband/core/lag.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> https://lore.kernel.org/netdev/d1de0337-ae16-7dca-b212-1a4e85129c31@blackwall.org/
-> 
->>  	   is_local:1,
->> +	   locked:1,
->> +	   blackhole:1,
->>  	   offloaded:1;
->>  };
 
-Right!
+Thanks, applied.

@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBB45A4003
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 00:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9395A4005
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 00:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbiH1WZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 18:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S229561AbiH1WZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 18:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiH1WZs (ORCPT
+        with ESMTP id S229527AbiH1WZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 18:25:48 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6118D13FB8
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:25:47 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id k3-20020a170902c40300b001743aafd6c6so5059850plk.20
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:25:47 -0700 (PDT)
+        Sun, 28 Aug 2022 18:25:50 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EF213FB7
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:25:48 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d6-20020a170902cec600b00174be1616c4so1031523plg.22
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 15:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc;
-        bh=OZhf1uLaFuTr7gNYIqPUtAOr7HAQ3vHIoIbMPBfApMc=;
-        b=JPuD5nYGhdwKLryC9iwHbJ7Izxhehx2hV8SaHN/50E6ywE9gtWKZnTzIgEqObCx6GE
-         lAeGZulG9oRDFPoRDJIUte96qFkl0ihFHbX4b6wZILmK0YXx9eb+ibzJsD5YQCFx5PG1
-         Dghur25hLe2I3Nn6GfdCIoJ4YGk3P5wLkwceUF1B6PquiVaxKsmPxIZ9zjsNgvdJhwji
-         lXoSQAUlEhWJhCp7GpxfHNou05vfKwDzeOhfAaomByUE+Z70b1XxFN4BMOlv6gWYDHcL
-         ST2AphaibY/HsXDK9Z23DixYcIxBL0eiXKjxtENNR3eX36fXBdrFiPJLML8CY9tLE6mv
-         fBcQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc;
+        bh=bJzhK9SKVOQc70YSCOsmEBRTVrANtgpX4ADnFqlNU4E=;
+        b=CWAFJqwl6pgZp8h7EYlQRaYnt/lP0OKs0B8JSfoq0n4dQD7VKjtlhXPBHwkb3kP5rm
+         fsbrh66CcP9AAtVteRxv8bhFS619geeXipmihzDvR+k/7ICaJ06CaOhK1G1jsfQJuIsO
+         Z/zCU1fb9+iPNg5vBeSBNWolfdla/C7X/1FA9Sv2s18eXVV5yg9IkpTgglr9vMKpRnUx
+         VrzEBtVcdrkEeuYvQ+XnM4xNBAHgNVta/ClOwEREQhaIHimQ/NXLzjshOteCBjHsG98o
+         ZCzHVpDInEm4rVfQRw/Itg0jloMDWCUp2fqgKveNcMGmQO45FsJzijLD3Oh7WqW/mAPv
+         N12g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc;
-        bh=OZhf1uLaFuTr7gNYIqPUtAOr7HAQ3vHIoIbMPBfApMc=;
-        b=rXZN/LaL7C2luVax/aWm2hUNIpgSk1UBuDtRu6vYlNX027y23fPorP6LvDlMYfhcHo
-         iEWNG/iRmzIIzEEXJv35lqocomPsUKw3LBpScRoxaGHSoBqfVQXsslxFwFdw/DtVRJ4P
-         uY5/a4Ow13i562KxXRcki5V3a6wZhNJo72U8nlJWHCNJgd/4DPzZZxy7pEzDX+31xjBf
-         UC8MD1lC626CkEv7ROAYbSp7aKvlGnzkZhlCBNMY/qJ1TJ5CownmSfd9RZRa8iJ0+iYy
-         RtwaIu1MDT+kzlm6v0AQinui3ZjQmjT/6LMC7JOiyHgtKCFDckAOQNFtLjqEUYglsWwG
-         l0KQ==
-X-Gm-Message-State: ACgBeo3IJiTa4u7/r3uXKvdaHBCYZaRSxlB4xDwZfQSmlRFzpQq5M+ss
-        vOdLtOooXdnQnNBFWdzpDwuyigQIxj7p
-X-Google-Smtp-Source: AA6agR7eSg54S0xB6NTMDfsxMenogaDTicI0NMHcR/8VnjedLqa3FE08FM0kXjaail3+A2otm8Q6rsoOX67E
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc;
+        bh=bJzhK9SKVOQc70YSCOsmEBRTVrANtgpX4ADnFqlNU4E=;
+        b=UHMfoPFzM766g7vAvG4mwc0sbM5+4BiRPf9NBFPgHF9EzE4WHx1plk4hfbhoP3QoXx
+         uhM/tTrtDONztCCasRWu23Y96/5kWrIvqsYL48Ps++G3uY2+UM1ENC7FuPLyfb9AtQgl
+         Hd3xnHybtdYtQGf5egyDWNZ2IxDAC5d3UCHF1IcAmyKwAQOvX7hOwMGCoWekIZg/AWGc
+         z7tVVlK5emzZI9L+5FUgowZv22cR9W9CzuKiqjpRpfWIo2ORdch/CK33h/sICri8V9EA
+         IxcaxTuItVU6s3Rmhb+/jDHA1F/yblLTzopGHovQWYK/lZCNNpyFss5Utpy2+4oLHmsR
+         zOJA==
+X-Gm-Message-State: ACgBeo11sw/N3kmbTNmiONaEiM0ALDdYM868SURMTGAG54q6ZJ9r91Ej
+        k6JM0s67fELvkOryoUKzuuxUp3dwQIru
+X-Google-Smtp-Source: AA6agR6aj2JFtODDYyHrp7CN/D0UPfsbQsmThliJrQuKeU+iU4k3Pg9cYu+ZkfDelt/t/B/ejt2Cao/HT200
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a05:6a00:26e2:b0:538:23a6:4d62 with SMTP
- id p34-20020a056a0026e200b0053823a64d62mr3811336pfw.26.1661725546957; Sun, 28
- Aug 2022 15:25:46 -0700 (PDT)
+ (user=mizhang job=sendgmr) by 2002:a63:81c6:0:b0:42b:c3fa:3a0 with SMTP id
+ t189-20020a6381c6000000b0042bc3fa03a0mr5326593pgd.72.1661725548439; Sun, 28
+ Aug 2022 15:25:48 -0700 (PDT)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 28 Aug 2022 22:25:40 +0000
+Date:   Sun, 28 Aug 2022 22:25:41 +0000
+In-Reply-To: <20220828222544.1964917-1-mizhang@google.com>
 Mime-Version: 1.0
+References: <20220828222544.1964917-1-mizhang@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220828222544.1964917-1-mizhang@google.com>
-Subject: [PATCH v2 0/4] Fix a race between posted interrupt delivery and
- migration in a nested VM
+Message-ID: <20220828222544.1964917-2-mizhang@google.com>
+Subject: [PATCH v2 1/4] KVM: x86: move the event handling of
+ KVM_REQ_GET_VMCS12_PAGES into a common function
 From:   Mingwei Zhang <mizhang@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -65,55 +68,88 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set aims to fix a race condition between posted interrupt
-delivery and migration for a nested VM. In particular, we proves that when
-a nested vCPU is halted and just migrated, it will lose a posted
-interrupt from another vCPU in the same VM.
+Create a common function to handle kvm request in the vcpu_run loop. KVM
+implicitly assumes the virtual APIC page being present + mapped into the
+kernel address space when executing vmx_guest_apic_has_interrupts().
+However, with demand paging KVM breaks the assumption, as the
+KVM_REQ_GET_VMCS12_PAGES event isn't assessed before entering vcpu_block.
 
-Changelog:
+Fix this by getting vmcs12 pages before inspecting the guest's APIC page.
+Because of this fix, the event handling code of
+KVM_REQ_GET_NESTED_STATE_PAGES becomes a common code path for both
+vcpu_enter_guest() and vcpu_block(). Thus, put this code snippet into a
+common helper function to avoid code duplication.
 
-v1 -> v2:
- - Replace the original vmcs12 bug fix patch into one that processes nested
-   state pages request in a common function [paolo].
- - Update the commit messages [seanjc, oupton].
- - Remove vcpu_run_interruptable(), use __vcpu_run() instead [seanjc].
- - Fix format issue in prepare_posted_intr_desc() [seanjc].
- - Rebase to kvm/queue.
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Originally-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ arch/x86/kvm/x86.c | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-v1 link:
- - https://lore.kernel.org/lkml/20220802230718.1891356-6-mizhang@google.com/t/
-
-
-Jim Mattson (1):
-  KVM: selftests: Test if posted interrupt delivery race with migration
-
-Mingwei Zhang (3):
-  KVM: x86: move the event handling of KVM_REQ_GET_VMCS12_PAGES into a
-    common function
-  KVM: selftests: Save/restore vAPIC state in migration tests
-  KVM: selftests: Add support for posted interrupt handling in L2
-
- arch/x86/kvm/x86.c                            |  29 +-
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/kvm_util_base.h     |  10 +
- .../selftests/kvm/include/x86_64/processor.h  |   1 +
- .../selftests/kvm/include/x86_64/vmx.h        |  10 +
- .../selftests/kvm/lib/x86_64/processor.c      |   2 +
- tools/testing/selftests/kvm/lib/x86_64/vmx.c  |  14 +
- .../kvm/x86_64/vmx_migrate_pi_pending.c       | 291 ++++++++++++++++++
- 9 files changed, 353 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/vmx_migrate_pi_pending.c
-
-
-base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index d7374d768296..3dcaac8f0584 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10261,12 +10261,6 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 			r = -EIO;
+ 			goto out;
+ 		}
+-		if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
+-			if (unlikely(!kvm_x86_ops.nested_ops->get_nested_state_pages(vcpu))) {
+-				r = 0;
+-				goto out;
+-			}
+-		}
+ 		if (kvm_check_request(KVM_REQ_MMU_FREE_OBSOLETE_ROOTS, vcpu))
+ 			kvm_mmu_free_obsolete_roots(vcpu);
+ 		if (kvm_check_request(KVM_REQ_MIGRATE_TIMER, vcpu))
+@@ -10666,6 +10660,23 @@ static inline bool kvm_vcpu_running(struct kvm_vcpu *vcpu)
+ 		!vcpu->arch.apf.halted);
+ }
+ 
++static int kvm_vcpu_handle_common_requests(struct kvm_vcpu *vcpu)
++{
++	if (kvm_request_pending(vcpu)) {
++		/*
++		 * Get the vmcs12 pages before checking for interrupts that
++		 * might unblock the guest if L1 is using virtual-interrupt
++		 * delivery.
++		 */
++		if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
++			if (unlikely(!kvm_x86_ops.nested_ops->get_nested_state_pages(vcpu)))
++				return 0;
++		}
++	}
++
++	return 1;
++}
++
+ /* Called within kvm->srcu read side.  */
+ static int vcpu_run(struct kvm_vcpu *vcpu)
+ {
+@@ -10681,6 +10692,12 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+ 		 * this point can start executing an instruction.
+ 		 */
+ 		vcpu->arch.at_instruction_boundary = false;
++
++		/* Process common request regardless of vcpu state. */
++		r = kvm_vcpu_handle_common_requests(vcpu);
++		if (r <= 0)
++			break;
++
+ 		if (kvm_vcpu_running(vcpu)) {
+ 			r = vcpu_enter_guest(vcpu);
+ 		} else {
 -- 
 2.37.2.672.g94769d06f0-goog
 

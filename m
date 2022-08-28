@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F8F5A3DF8
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494525A3DF9
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 16:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiH1OP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 10:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S229536AbiH1OQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 10:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiH1OPz (ORCPT
+        with ESMTP id S229801AbiH1OQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 10:15:55 -0400
+        Sun, 28 Aug 2022 10:16:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF3613F9F
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:15:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EC713F70
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:16:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFB9E60F9F
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662C5C433D7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:15:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B186461032
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2688BC4347C
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 14:16:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661696153;
-        bh=8zj1x1xLeLLzipXWrl/kSXEmFtyv39CyRFsnNZ5xakQ=;
+        s=k20201202; t=1661696168;
+        bh=kkPmcOGGsxCCHFReaCtdObyszK/ELS4wEedQBkUVZ4I=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i37PBmD/I56kOEG/Hp12wN7WnnZOXbO8r5eqEIrn7KcBqhOQPaFw+o5bW24P2bSMw
-         xzmmRV3fWZfZrChFwqRQzk1dB82lROiTgMCGj9CeTVu9CEuyIXr1uztWilIjRkpP49
-         yYqgFLBVolBvErS4FqhnxqRw6MCGFzetUNt78Tq8hQirtge5Ple7VD97ZFVyxm/eL9
-         fmZ9rrCQFDNNcesatJmjS1Ynwie0CJJYidbeYfM4u3/BS6IPcEi6Vgug0FLeCfV8Pt
-         ZyU/mDusiqgRTtZOukKsu+7HUhccTy2mDYQKkuRq2iKa63UljrktZGXttUCvidXcfh
-         TDGUDU3zyKexA==
-Received: by mail-vs1-f43.google.com with SMTP id w188so6041449vsb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:15:53 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2KPtie1M1SXF5sSqXAjuq4R2iUkKMFm3pGpc0FH3vGALNGBtWf
-        4PRbgyDfW8gDBqaH7kSAo4kll7QolwLEvj4jsQA=
-X-Google-Smtp-Source: AA6agR5/iR+N3klHacCtwT7e/hRVDUkTeliBga/Y2s2tAeAOQcVPLLhXsG0lpJ2OXLZSjKGiewymyPXVv42AKzLve5k=
-X-Received: by 2002:a67:d582:0:b0:390:d6dd:5612 with SMTP id
- m2-20020a67d582000000b00390d6dd5612mr847117vsj.78.1661696152320; Sun, 28 Aug
- 2022 07:15:52 -0700 (PDT)
+        b=jw8fk7eFoIBPjIacZtx3OYLYFkp+s3Cn1IYi5N+i6hzuxuj2p7vsj9t/tpbnk/ofV
+         gkxoF1IXJHltRPzBI0AH3N4DGJhBh4JT1tEeas8cshUA4C+eF+BbdoOyNePfk6jPXK
+         eM2DwVyhn8lseW5Wf4/mZ/SrRM8jlvk8M8YaCncNMl3mtZe1mW1PMM1j5cSGHimsT1
+         8lhWM6WxxbiG2YCgszuSmSRjgkPiIWrSevJq0fItNSBvgNbtxVke11lCllqd1AkC7J
+         SamO5kyjmHL5zkQzdlgrBzmysgrjy+E8XsvLISnSebK7A27/JDeKk6gqSyq/NuPCG8
+         HAFBCbgRfFTnw==
+Received: by mail-vk1-f176.google.com with SMTP id b81so2706905vkf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 07:16:08 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3WsFQKxXj2exY9AbpOI3bu2Xzm9unF+xEW7ol7YbNYmHHsXd3X
+        ANZk1wtkCH965w0Kjl9Pjb1LNRuVcYZ9/suzZlg=
+X-Google-Smtp-Source: AA6agR5h2iG2ixSMVSyapvLRPSHfm146j5ZVosXd1SvXe97qVJ2OyiFXNcZFh8J615F3WMKVM9LNR2xKZ33tCDlxMqs=
+X-Received: by 2002:a1f:9b90:0:b0:374:f09c:876f with SMTP id
+ d138-20020a1f9b90000000b00374f09c876fmr2167421vke.12.1661696167088; Sun, 28
+ Aug 2022 07:16:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220827175436.156464-1-xry111@xry111.site> <20220827175436.156464-3-xry111@xry111.site>
-In-Reply-To: <20220827175436.156464-3-xry111@xry111.site>
+References: <20220827175436.156464-1-xry111@xry111.site> <20220827175436.156464-7-xry111@xry111.site>
+In-Reply-To: <20220827175436.156464-7-xry111@xry111.site>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 28 Aug 2022 22:15:39 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5S+9MZi5_LL11hCFePG9GK08ot_LK+mwZjh+5Hoyxutg@mail.gmail.com>
-Message-ID: <CAAhV-H5S+9MZi5_LL11hCFePG9GK08ot_LK+mwZjh+5Hoyxutg@mail.gmail.com>
-Subject: Re: [PATCH 2/8] LoongArch: Only use -Wa,-mla-* options for !CONFIG_CC_HAS_EXPLICIT_RELOCS
+Date:   Sun, 28 Aug 2022 22:15:54 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H76ty7nkMffbgTgH-ByBdVc-HsST87ghubTDEWZUhmLuQ@mail.gmail.com>
+Message-ID: <CAAhV-H76ty7nkMffbgTgH-ByBdVc-HsST87ghubTDEWZUhmLuQ@mail.gmail.com>
+Subject: Re: [PATCH 6/8] LoongArch: Use model("extreme") attribute for per-CPU
+ variables in module if CONFIG_CC_HAS_EXPLICIT_RELOCS
 To:     Xi Ruoyao <xry111@xry111.site>
 Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
@@ -66,89 +67,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi, Ruoyao,
 
-On Sun, Aug 28, 2022 at 1:55 AM Xi Ruoyao <xry111@xry111.site> wrote:
+On Sun, Aug 28, 2022 at 1:56 AM Xi Ruoyao <xry111@xry111.site> wrote:
 >
-> If explicit relocation hints is used by the toolchain, -Wa,-mla-*
-> options will be useless for C code.  Only use them for
-> !CONFIG_CC_HAS_EXPLICIT_RELOCS.
+> On LoongArch, The "address" of a per-CPU variable symbol is actually an
+> offset from $r21.  The value is nearing the loading address of main
+> kernel image, but far from the address of modules.  We need to tell the
+> compiler that a PC-relative addressing with 32-bit offset is not
+> sufficient for local per-CPU variables.
 >
-> Replace "la" with "la.pcrel" in head.S to keep the semantic consistent
-> with new and old toolchains for the low level startup code.
+> After some discussion with GCC maintainers, we implemented this
+> attribute to indicate that a PC-relative addressing with 64-bit offset
+> should be used.
 >
+> This attribute should be available in GCC 13 release.  Some early GCC 13
+> snapshots may support -mexplicit-relocs but lack this attribute, we
+> simply reject them.
+>
+> Link: https://gcc.gnu.org/r13-2199
 > Signed-off-by: Xi Ruoyao <xry111@xry111.site>
 > ---
->  arch/loongarch/Makefile      | 15 ++++++++++++++-
->  arch/loongarch/kernel/head.S | 10 +++++-----
->  2 files changed, 19 insertions(+), 6 deletions(-)
+>  arch/loongarch/include/asm/percpu.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 >
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index 415e09bdf31a..bd0ea6623245 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -40,10 +40,23 @@ endif
+> diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
+> index 0bd6b0110198..91d4026b074e 100644
+> --- a/arch/loongarch/include/asm/percpu.h
+> +++ b/arch/loongarch/include/asm/percpu.h
+> @@ -8,6 +8,19 @@
+>  #include <asm/cmpxchg.h>
+>  #include <asm/loongarch.h>
 >
->  cflags-y                       += -G0 -pipe -msoft-float
->  LDFLAGS_vmlinux                        += -G0 -static -n -nostdlib
-> +
-> +ifdef CONFIG_CC_HAS_EXPLICIT_RELOCS
-> +# GCC may have -mexplicit-relocs off by default if it was built with an old
-> +# assembler.  But with CONFIG_CC_HAS_EXPLICIT_RELOCS we are sure explicit
-> +# relocation hints are supported by the assembler, so force it.
-> +cflags-y                       += -mexplicit-relocs
-> +else
-> +# Likewise, disable -mexplicit-relocs if GCC enables by default but the
-> +# assembler does not support it.
-> +cflags-y                       += $(call cc-option,-mno-explicit-relocs)
-> +# With -mno-explicit-relocs, use assembler options to adjust code generation
-> +# for symbol address.
->  KBUILD_AFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
->  KBUILD_CFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
->  KBUILD_AFLAGS_MODULE           += -Wa,-mla-global-with-abs
-> -KBUILD_CFLAGS_MODULE           += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
-> +KBUILD_CFLAGS_MODULE           += -Wa,-mla-global-with-abs,-mla-local-with-abs
-> +endif
-Move all comments out of #ifdefs may make code more clear.
+> +#if defined(MODULE) && defined(CONFIG_CC_HAS_EXPLICIT_RELOCS)
+> +# if __has_attribute(model)
+> +/* The "address" (in fact, offset from $r21) of a per-CPU variable is close
+> + * to the load address of main kernel image, but far from where the modules are
+> + * loaded.  Tell the compiler this fact.
+> + */
+> +#  define PER_CPU_ATTRIBUTES __attribute__((model("extreme")))
+> +# else /* __has_attribute(model) */
+> +/* This should only happen with early GCC 13 snapshots. */
+Can we judge this case in Makefile to quit earlier and make code simpler here?
 
 
 Huacai
+
+> +#  error "Compiler with explicit relocs but no model attribute is not supported"
+> +# endif /* __has_attribute(model) */
+> +#endif
+> +
+>  /* Use r21 for fast access */
+>  register unsigned long __my_cpu_offset __asm__("$r21");
 >
->  cflags-y += -ffreestanding
->  cflags-y += $(call cc-option, -mno-check-zero-division)
-> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> index 01bac62a6442..eb3f641d5915 100644
-> --- a/arch/loongarch/kernel/head.S
-> +++ b/arch/loongarch/kernel/head.S
-> @@ -55,17 +55,17 @@ SYM_CODE_START(kernel_entry)                        # kernel entry point
->         li.w            t0, 0x00                # FPE=0, SXE=0, ASXE=0, BTE=0
->         csrwr           t0, LOONGARCH_CSR_EUEN
->
-> -       la              t0, __bss_start         # clear .bss
-> +       la.pcrel        t0, __bss_start         # clear .bss
->         st.d            zero, t0, 0
-> -       la              t1, __bss_stop - LONGSIZE
-> +       la.pcrel        t1, __bss_stop - LONGSIZE
->  1:
->         addi.d          t0, t0, LONGSIZE
->         st.d            zero, t0, 0
->         bne             t0, t1, 1b
->
-> -       la              t0, fw_arg0
-> +       la.pcrel        t0, fw_arg0
->         st.d            a0, t0, 0               # firmware arguments
-> -       la              t0, fw_arg1
-> +       la.pcrel        t0, fw_arg1
->         st.d            a1, t0, 0
->
->         /* KSave3 used for percpu base, initialized as 0 */
-> @@ -73,7 +73,7 @@ SYM_CODE_START(kernel_entry)                  # kernel entry point
->         /* GPR21 used for percpu base (runtime), initialized as 0 */
->         move            u0, zero
->
-> -       la              tp, init_thread_union
-> +       la.pcrel        tp, init_thread_union
->         /* Set the SP after an empty pt_regs.  */
->         PTR_LI          sp, (_THREAD_SIZE - 32 - PT_SIZE)
->         PTR_ADD         sp, sp, tp
 > --
 > 2.37.0
 >

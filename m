@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA105A3F67
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 21:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE875A3F46
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 21:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiH1TXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 15:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S229961AbiH1TWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 15:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiH1TWm (ORCPT
+        with ESMTP id S229500AbiH1TWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 15:22:42 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082AC32A84;
-        Sun, 28 Aug 2022 12:22:34 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27SJ3Alx005468;
-        Sun, 28 Aug 2022 19:22:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=3h1aiXrphk5T2rqN3UBCgmzr+FGo6Il6A5/GglCrd1c=;
- b=Qyqb6spYS2VKS1IFGBOMsbaDW+5gwv3l1EOKSCZWVui9BofaVQzl3BlAFx3ApdI6Cgin
- KAq9L4VIrHERCTI9UhiPjKRJDFZnXtNV2ihC5nUGeHGlqacQ8dE9rH3ku1vLKGYdXRPy
- rmhyySfwE901ADd5Z75RMlpkhkFiYuC9Ym6l202lg8rZa12D9FxBOvP48jbdv8Rp1QQ3
- NeZqjZZMlmrSQaaktTSzM9muCHlsSpYvdB8LCOingC7b3Q5c5K6ugKQmu8/BxDHiV8VL
- 234704ONFxYIHzwPK1rNubdna0xtlVfQdJ+PPzK/IevbFa3NauHFD83C2y8eNx8dotKK IA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j7bc1av5j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 28 Aug 2022 19:22:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27SJMIPe006591
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 28 Aug 2022 19:22:18 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sun, 28 Aug 2022 12:22:13 -0700
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <krzysztof.kozlowski@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 6/6] arm64: dts: qcom: sc7280: Add Reset support for gpu
-Date:   Mon, 29 Aug 2022 00:51:19 +0530
-Message-ID: <20220829005035.v5.6.I6a1fca5d53c886c05ea3e24cd4282d31c9c0cd0b@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1661714479-28981-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1661714479-28981-1-git-send-email-quic_akhilpo@quicinc.com>
+        Sun, 28 Aug 2022 15:22:03 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E665248E8
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:22:03 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d12so6059553plr.6
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 12:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+ic0Yt7oxPZ1wi8BAOg3RUokNIfn9p5PWxe7nG/Tsdg=;
+        b=ICJdR/EEyYmhI2vBHZXddX9WPnY1sFjBI3l93dQ+g1qNgmHLVXHbzpsxWr+VowXKd8
+         lo44NQEYmS4JDuNw5FzsEtsNcX3mK6DfWH5BGVw/DwdvWFIVWNoLDnTLlTc1TviJcBWO
+         0pm+6lPp+TB6K0sFGGzm45rG129Lkh3QZynibszzp8r4+4ktX83dyx/8UCJIFI4h2eFP
+         YVSvm7wJnO0+HO8yVMO96vZUWYenqK0PHY7fItqnk08oYCWqFxHAH8yuGH/010tPcwyb
+         XhKzWc44EQg8F4vI+5mHVdRO2QuyOoCFkZ+mUEk5Jl76UHhFy1TjLMsGO1IGXgNyZA1G
+         K9tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=+ic0Yt7oxPZ1wi8BAOg3RUokNIfn9p5PWxe7nG/Tsdg=;
+        b=zDbLd+tZ9yej8CjmyCg45EO8f3EL/YifRLr5LqfIS1tv3l9ifxAms9sO4zURTKkGmZ
+         M5KIXrIKznHUvDE0rXI+gdotbotBEfKwff3ACwxw197KesB11/k3vin+wfNg9ysk6l+B
+         Oj6WfzQT4VkPjEBG1LoZ5msfx96+Cr7IRDyZFK63GoOEtxE8fiadSGxUIISezzHFmEij
+         qOZWlNtzXqnolE6NbLG3ApjnK+JqG+1APhBxMNnxpFjtKV7nk61q/VG2f5qJC7OyKU8m
+         cRS41bRkSmvkkNhsdHYqL2dH4U/ux9R02cRWQki2uXEb2mt0qgRiro0tuaBaWQVZwiAk
+         Zhew==
+X-Gm-Message-State: ACgBeo3Emfl0kzqXhf0rqdC7EToDtCuKz+qeGfuzyQKzn7v/a1fkaTPk
+        5LpGXhP7AuYw9K9Bg8hhilSjAw==
+X-Google-Smtp-Source: AA6agR7Y5486TlORoeIP+W8vDIEpmWVpd9xJAh/qqqMNU93qC6TcjoKgoU7gi7DQYFjQo1AdywOobw==
+X-Received: by 2002:a17:902:f606:b0:172:6522:4bfc with SMTP id n6-20020a170902f60600b0017265224bfcmr13046789plg.133.1661714522403;
+        Sun, 28 Aug 2022 12:22:02 -0700 (PDT)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b001749acb167csm1869110plg.27.2022.08.28.12.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 12:22:01 -0700 (PDT)
+Date:   Sun, 28 Aug 2022 19:21:58 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 3/5] selftests: KVM: Introduce vcpu_run_interruptable()
+Message-ID: <YwvAVtfrF9xLvpM8@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-4-mizhang@google.com>
+ <Ywa/BaYIdBi7N0iR@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DH18oDAMqqftS0tb6JdY1LwZbi37wk8F
-X-Proofpoint-GUID: DH18oDAMqqftS0tb6JdY1LwZbi37wk8F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-28_12,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 clxscore=1015 priorityscore=1501
- spamscore=0 bulkscore=0 adultscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208280080
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ywa/BaYIdBi7N0iR@google.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Reset using GPUCC driver for GPU. This helps to ensure
-that GPU state is reset by making sure that CX head switch is collapsed.
+On Thu, Aug 25, 2022, Sean Christopherson wrote:
+> On Tue, Aug 02, 2022, Mingwei Zhang wrote:
+> > Introduce vcpu_run_interruptable() to allow selftests execute their own
+> > code when a vcpu is kicked out of KVM_RUN on receiving a POSIX signal.
+> 
+> But that's what __vcpu_run() is for.  Clearing "immediate_exit" after KVM_RUN does
+> not scream "interruptible" to me.
+> 
+> There's only one user after this series, just clear vcpu->run->immediate_exit
+> manually in that test (a comment on _why_ it's cleared would be helpful).
+> 
+hmm. good point. __vcpu_run() I thought it was internal function private
+to kvm_util.c, but now after your selftest refactoring, this is useable.
+Will use __vcpu_run() instead.
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
-
-(no changes since v1)
-
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index e66fc67..f5257d6 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2243,6 +2243,9 @@
- 			nvmem-cells = <&gpu_speed_bin>;
- 			nvmem-cell-names = "speed_bin";
- 
-+			resets = <&gpucc GPU_CX_COLLAPSE>;
-+			reset-names = "cx_collapse";
-+
- 			gpu_opp_table: opp-table {
- 				compatible = "operating-points-v2";
- 
--- 
-2.7.4
-
+> > +int vcpu_run_interruptable(struct kvm_vcpu *vcpu)
+> > +{
+> > +	int rc;
+> > +
+> > +	rc = __vcpu_run(vcpu);
+> > +
+> > +	vcpu->run->immediate_exit = 0;
+> > +
+> > +	return rc;
+> > +}
+> > +
+> >  int _vcpu_run(struct kvm_vcpu *vcpu)
+> >  {
+> >  	int rc;
+> > -- 
+> > 2.37.1.455.g008518b4e5-goog
+> > 

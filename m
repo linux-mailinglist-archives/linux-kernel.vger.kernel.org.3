@@ -2,113 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCC35A3C1B
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC86B5A3C1F
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 08:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiH1GRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 02:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S231491AbiH1GT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 02:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiH1GRJ (ORCPT
+        with ESMTP id S229445AbiH1GTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 02:17:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F4F51A08
-        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 23:17:06 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oSBb0-0002bl-Vt; Sun, 28 Aug 2022 08:16:34 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oSBau-0003CU-E0; Sun, 28 Aug 2022 08:16:28 +0200
-Date:   Sun, 28 Aug 2022 08:16:28 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v3 6/7] ethtool: add interface to interact with
- Ethernet Power Equipment
-Message-ID: <20220828061628.GA26078@pengutronix.de>
-References: <20220827051033.3903585-1-o.rempel@pengutronix.de>
- <20220827051033.3903585-7-o.rempel@pengutronix.de>
- <Ywpkqt2pDmpzXWWn@lunn.ch>
+        Sun, 28 Aug 2022 02:19:55 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15952140CA;
+        Sat, 27 Aug 2022 23:19:55 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id d12so5152548plr.6;
+        Sat, 27 Aug 2022 23:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=sLVNtThA6kbuS/oRroGdbcyy2Nj7hrpD+Ej4bmUd9L4=;
+        b=MY88iUoinQOIEQiwjpmDKiDkP4GEIuwVDcfjGm4QH+nVyUS2SiLfAilP62XrzHqy++
+         ONUHYfye7rUhS2LJ5JCU013UBUM9eyAcXglCOb7BTCWxN1tR8EUjbnOARuNMMJ2VGC+2
+         PaAGuthEzsu83i5U73UfMCDRQwNWafrm+/2hHI2ARSTCJywDsyzoWNMGZiNfNSl5Z4DB
+         as1gTNOkHqJADIqSqXYd+XaKA3AQdnspP+awsOkG6P5jzMxJQotg/DY+k3SOAhojhknR
+         FnsXTks9mui+IEC3UbBvaBeTbo9Br4cErKySTY3qxP0Z4/WqOQ+l5gEQir1IKLlMr+SC
+         JaUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=sLVNtThA6kbuS/oRroGdbcyy2Nj7hrpD+Ej4bmUd9L4=;
+        b=MpqtWY5+VJhR+Mj5MQQvCohfA1zrDuLel8pwTk5ipFPKBKvbQZh1gMwwbVcGi2itcg
+         KUP2Ud6F8IaqsM5DnEX9VMUt2lP3+Ze3PIhhQf+kzjW+mx/ctmp4t0J6Qh3Syl/2pMp8
+         ND0JQhbpJC5iGsCLNfi28pwurz27vH7BPr3ZySGuE+Q+fiMd+CZGx8egwjPwK49zrIay
+         7v75pSQYWfvTwrDFInwJtnt+X2OJZ+ujCx0gFlr0pQkP2NL0WSffzq1kPWNB8whqZNn9
+         f3RV1D3AT9dQM8Z5gzV8rm+ojpJaIkSc6p/tv2DYWG/DSSkkVfiM+4goJhP+31kGgTD0
+         GCSg==
+X-Gm-Message-State: ACgBeo0vzZhkalDNa5eyTee81tXFcVDqjx+8fq5wKQOodBBzlTgPzCUl
+        os/EfVqlX80uQQFQlNqFBpA=
+X-Google-Smtp-Source: AA6agR5GXEpuUuIpVK0i7e8hmtA5JdEolz8bkSYO/QqWkrRUOSx9vsUTuR+eY7uUNYh02M5LX9oPMQ==
+X-Received: by 2002:a17:90b:3142:b0:1f7:338a:1d38 with SMTP id ip2-20020a17090b314200b001f7338a1d38mr11926797pjb.223.1661667594639;
+        Sat, 27 Aug 2022 23:19:54 -0700 (PDT)
+Received: from localhost.localdomain ([112.134.152.151])
+        by smtp.gmail.com with ESMTPSA id 1-20020a621601000000b00538116baa56sm1012843pfw.102.2022.08.27.23.19.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 23:19:54 -0700 (PDT)
+From:   Dhanuka Warusadura <wdnuka@gmail.com>
+To:     jarkko@kernel.org, dave.hansen@linux.intel.com, shuah@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dhanuka Warusadura <wdnuka@gmail.com>
+Subject: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for ERR_get_error_line
+Date:   Sun, 28 Aug 2022 11:48:59 +0530
+Message-Id: <20220828061859.181061-1-wdnuka@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ywpkqt2pDmpzXWWn@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 08:38:34PM +0200, Andrew Lunn wrote:
-> > +static int pse_set_pse_config(struct net_device *dev,
-> > +			      struct netlink_ext_ack *extack,
-> > +			      struct nlattr **tb)
-> > +{
-> > +	struct phy_device *phydev = dev->phydev;
-> > +	struct pse_control_config config = {};
-> > +	int ret;
-> > +
-> > +	if (!tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL])
-> > +		return -EINVAL;
-> 
-> I would make use of extack here, and report what is missing.
-> 
-> > +
-> > +	config.admin_cotrol = nla_get_u8(tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL]);
-> 
-> It would be good to have some basic validation here, make sure user
-> space has passed a reasonable value.
+These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
+Since OpenSSL 3.0" warning.
 
-this values are already validate by the ethnl_pse_set_policy
+Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
+---
+ tools/testing/selftests/sgx/sigstruct.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> You should also define what 0 and
-> ETHTOOL_A_PODL_PSE_ADMIN_CONTROL_UNKNOWN means here when passed in. In
-> future, there could be additional things which could be configured, so
-> struct pse_control_config gets additional members.
-> ETHTOOL_A_PODL_PSE_ADMIN_CONTROL appears to be mandatory, you return
-> -EVINAL if missing, so if you don't want to change it, but change some
-> other new thing, maybe 0 should be passed here? And the driver should
-> not consider it an error?
-
-ack. changed to 0 and added comment.
-
-> ETHTOOL_A_PODL_PSE_ADMIN_CONTROL_UNKNOWN
-> however seems invalid and so should be rejected here?
-
-yes. it is already rejected. I added comment to make it more visible
-
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+index 50c5ab1aa6fa..671d9b58e274 100644
+--- a/tools/testing/selftests/sgx/sigstruct.c
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
+ 			break;
+ 
+ 		had_errors = true;
+-		err = ERR_get_error_line(&filename, &line);
++		err = ERR_peek_last_error_line(&filename, &line);
+ 		ERR_error_string_n(err, str, sizeof(str));
+ 		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
+ 	}
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.37.2
+

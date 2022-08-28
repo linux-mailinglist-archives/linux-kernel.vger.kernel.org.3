@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70A05A3CCB
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 10:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5845A3CE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 11:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiH1Ior (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 04:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
+        id S229767AbiH1I7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 04:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbiH1IoQ (ORCPT
+        with ESMTP id S229445AbiH1I7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 04:44:16 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F102F386
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:44:03 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bq23so7374454lfb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:44:03 -0700 (PDT)
+        Sun, 28 Aug 2022 04:59:21 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF5432EE1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:59:20 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id j26so2888341wms.0
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 01:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=75ciJJEb0fjQQAUZH+zRMedVcWRRAgKZoJmNIvnx7Ts=;
-        b=mNpdriymM/xZ3/9ht8WqMck8iiOidkaMGTIesyWAq/ZRL7SwUvb6gzV+63k8OZyY+M
-         Q+FiXtYQHfGfAXECwObeYBRZpZ21u9PJI9UYEK4FwYCGOqMq990dtNYbWbkNwBaMStl7
-         DI3kqBAc1Gb1gE/1F0kZFfIv3UKBxHmgA7KOA2kOmiMteORvV+/2Uv3o5qTOaZRZ0vXv
-         r0ecyGNVqOE5IycipcrQLjYY1therN4v+a84IYi6zqAqVO2RcVcckVEyHDSl2wE8/2y3
-         cAcHvextSpHLQ3yBLbMwqGYT4QvvF/mW0gNnXeBgpxMDxrWudC0VE6hS0LlH9qtMXhBK
-         R1kg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=6n2CtwjylJHGKeOQHVvrMhmnklOgYwrq0j6ivmjhucc=;
+        b=EVbhcIus7jocM22F8kdsrRXc44SPslZj25giSfVCCzcp9vqQYmTkIYb7OmN4j936R6
+         64l3Sjx0sQDkQf4lbcHYSAtBPxTcXIfHhvlfc5zni2AZPoroj7Pxr+BQwq33Bu1z8CoH
+         HELfycweKKOle19vporRG4U5hHr/Ujv6ig44dyucmZWGoPXBky7wDv0t1AEU3UgeOwoh
+         4hAI58CHrn7LyIjYSnePTE2hgtwaBiuP5eoI0rS4i1ZK3vx9iOzJLzybPwCT3PVn0/CQ
+         ahGR1oScXrAb6dofYIcymlUkWf2vdBLXuq4CFubVHoxBH1cxmbHU5yRFa1wRe1WScOac
+         BwZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=75ciJJEb0fjQQAUZH+zRMedVcWRRAgKZoJmNIvnx7Ts=;
-        b=GId59Eaq1VL8SX13L337Wvah5RNMaJTO65DW9ZZvm1oEXHntRiPWwP5vL4Yf9p0XXO
-         YsB0f9mWNGlx6BcEqCOvmG4MVORkmuEt3a/ydijyZoMkz502gAbtGUG0z4szMPnTetlB
-         /kjEqntMagWJkjfRKGSWlENCTJWwHkzigoMgWLsarXLJwbntce5reuSdGqKAaLj2jSFx
-         nI7gwnXE98qxkJ40tiwCSTM9GKF12Oedr81NzyNO+vBPPuo/zHrBonSEvpSz6k3f3uN5
-         kh5N74ya72uTtUIfBoWPP1H9jtjuxGHXxatE4q5+w4EekOUyPxywVzC6JrpYC0VQYcgJ
-         IYNQ==
-X-Gm-Message-State: ACgBeo1ph7nuQlh/4nw4u3sE3jFsVGIELf8zKJTDuQug7G8qhTOLKGrE
-        +vIhJGEfLnEYK+vfg/EaVRQiWQ==
-X-Google-Smtp-Source: AA6agR6n0d1QebXhA3AzIiNNgXJnLXpvhckfJa56xot7iJnpPWbZAh6mB7caWu2ENnjnNRs7tAWgjQ==
-X-Received: by 2002:a05:6512:23a5:b0:492:f76b:dfea with SMTP id c37-20020a05651223a500b00492f76bdfeamr4704421lfv.5.1661676241413;
-        Sun, 28 Aug 2022 01:44:01 -0700 (PDT)
-Received: from krzk-bin.starman.ee (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id c6-20020ac25f66000000b0048afe02c925sm890114lfc.219.2022.08.28.01.44.00
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=6n2CtwjylJHGKeOQHVvrMhmnklOgYwrq0j6ivmjhucc=;
+        b=jgt9CYy4dtyPLaJTswVv8T76B1L6IhnPV52t69lcnawTQlpGqqCNaYBdXehX7gIH+d
+         UqmKdldDmgfpd9p4t1bCzOWrOssWN31cvyEXUgb6HRfP6CyudnKhhMQOrWjgsLdJ0kdy
+         tz7wiqplKWxhYFalAr88GU383ShrNS090K+/WV4ZEaZxl6vBbDYZSw39ka3bldR9VKA4
+         SD5zfVgUoyGLn9JFMRInnEsfRNzScSDs0KJiRrRNLDZyXI8Wa6TMsyur6Uw6tyxSkzRT
+         6uD0X+hp45hgBbnhXG1c4cLgQUxoO9ggZfnrsCmYfQbd+ZdqVCu8irgHhoC0Xeznt9dI
+         XMlw==
+X-Gm-Message-State: ACgBeo2Ci90cSdCKyVgUInjmp9MumcS/EG2YqquxPYkRDOtL09UAy6Ah
+        ZmrTVkMV3mbUS4XhqRij+ho=
+X-Google-Smtp-Source: AA6agR4QKmmDPIdSig2lUuLgA12j+7i/ihGNcz4Vx0b5Yitwxw3Ia77N454CBJhVbPCSgtfPSOtPeQ==
+X-Received: by 2002:a05:600c:22c7:b0:3a6:68e4:1e5f with SMTP id 7-20020a05600c22c700b003a668e41e5fmr4036845wmg.46.1661677159051;
+        Sun, 28 Aug 2022 01:59:19 -0700 (PDT)
+Received: from elementary ([94.73.32.249])
+        by smtp.gmail.com with ESMTPSA id n19-20020a05600c3b9300b003a6091b3a96sm6035822wms.23.2022.08.28.01.59.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 01:44:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 14/14] dt-bindings: mfd: qcom,spmi-pmic: fix TM ADC node schema on PM8998
-Date:   Sun, 28 Aug 2022 11:43:41 +0300
-Message-Id: <20220828084341.112146-15-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220828084341.112146-1-krzysztof.kozlowski@linaro.org>
-References: <20220828084341.112146-1-krzysztof.kozlowski@linaro.org>
+        Sun, 28 Aug 2022 01:59:18 -0700 (PDT)
+Date:   Sun, 28 Aug 2022 10:59:16 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>
+Cc:     javierm@redhat.com, davidgow@google.com, dlatypov@google.com,
+        tzimmermann@suse.de, mripard@kernel.org, daniel@ffwll.ch,
+        airlied@linux.ie, maarten.lankhorst@linux.intel.com,
+        jani.nikula@linux.intel.com, isabbasso@riseup.net,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        geert@linux-m68k.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] KUnit tests for RGB888, XRGB2101010 and grayscale
+Message-ID: <20220828085916.GA12952@elementary>
+References: <20220816102903.276879-1-jose.exposito89@gmail.com>
+ <6761eeb7-eedf-c9bb-4f7f-d42e3c6e8ae4@riseup.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6761eeb7-eedf-c9bb-4f7f-d42e3c6e8ae4@riseup.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two bindings for Qualcomm SPMI PMIC Thermal Monitoring ADC:
-one for ADC HC and one for ADC TM5 and TM7.  PM8998 uses the former one,
-so fix matching of child schema:
+On Tue, Aug 16, 2022 at 10:37:49AM -0300, Maíra Canal wrote:
+> Hi José,
+> 
+> Tested the whole series on UML, x86, i386 and PPC. All looks fine!
+> 
+> Tested-by: Maíra Canal <mairacanal@riseup.net>
+> 
+> Best Regards,
+> - Maíra Canal
+> 
+> On 8/16/22 07:29, José Expósito wrote:
+> > Hello everyone,
+> > 
+> > This series is a follow up on my work adding KUnit test to the XRGB8888
+> > conversion functions. This time RGB888, XRGB2101010 and gray8 are added.
+> > 
+> > Best wishes,
+> > Jose
+> > 
+> > José Expósito (3):
+> >    drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb888()
+> >    drm/format-helper: Add KUnit tests for
+> >      drm_fb_xrgb8888_to_xrgb2101010()
+> >    drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_gray8()
+> > 
+> >   .../gpu/drm/tests/drm_format_helper_test.c    | 190 ++++++++++++++++++
+> >   1 file changed, 190 insertions(+)
+> > 
 
-  qcom/msm8998-asus-novago-tp370ql.dtb: pmic@0: adc-tm@3400:compatible:0: 'qcom,spmi-adc-tm-hc' is not one of ['qcom,spmi-adc-tm5', 'qcom,spmi-adc-tm5-gen2', 'qcom,adc-tm7']
+Thanks a lot for testing the series Maíra and for the code review
+David.
 
-Fixes: 3f5117be9584 ("dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/mfd/qcom,spmi-pmic.yaml           | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+I added a note to my ToDo list to use KUNIT_EXPECT_MEMEQ once it gets
+merged.
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-index e062de7510ca..2946d08dd42f 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-@@ -107,7 +107,7 @@ patternProperties:
- 
-   "^adc-tm@[0-9a-f]+$":
-     type: object
--    $ref: /schemas/thermal/qcom-spmi-adc-tm5.yaml#
-+    # ref depends on compatible, see allOf below
- 
-   "^audio-codec@[0-9a-f]+$":
-     type: object
-@@ -150,6 +150,22 @@ required:
-   - compatible
-   - reg
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8998
-+    then:
-+      patternProperties:
-+        "^adc-tm@[0-9a-f]+$":
-+          $ref: /schemas/thermal/qcom-spmi-adc-tm-hc.yaml#
-+    else:
-+      patternProperties:
-+        "^adc-tm@[0-9a-f]+$":
-+          $ref: /schemas/thermal/qcom-spmi-adc-tm5.yaml#
-+
- additionalProperties: false
- 
- examples:
--- 
-2.34.1
+For the moment, I'll send v2 :)
 
+Best wishes,
+Jose

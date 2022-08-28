@@ -2,177 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14025A3ABA
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 02:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3158E5A3ABB
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 Aug 2022 02:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiH1Aqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 Aug 2022 20:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S231589AbiH1A4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 Aug 2022 20:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiH1Aqc (ORCPT
+        with ESMTP id S229493AbiH1A4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 Aug 2022 20:46:32 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A90A41993;
-        Sat, 27 Aug 2022 17:46:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SU6vQreB2R43gFI6a/q8kPaIMym4/C5rcOa+WADbh5PoWNg8MwApYI7Tqy7iADFynOm/3mkEkSmv5NOlAHx1E7TKN9BBY49lOEvga15z5AwkzRW99yCppF23v9yim0QiwIFhaTcYkxdiiu0bNZ0wJS1uB5mYx7WVDSfOJwGg3sHysIdxh3Dvn19aJOakKnX+PZkQSO+JYts2nXhzBRmXUSJrk/ml+TTBRkXjvbvf1TEwN5UupQGzoHs6OmLH/Qp4JWWKnXzxzZgw7JoP/AnkABZSQb0SQ3O9O3G7qcmQHJkKML019maKjPgR3Ela2IXwBEGHZ3denPo8ZKFVdImMiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=INed6BQQIW5xBMYZthpJVN5qYhlixuE5CsH/9pLECHQ=;
- b=Cr9L1c2efTtokLBFv1HDEb5CknurQSZJH4dWcTSrPlfqkc+8xWb7WAJDN7p7mAV18XvbXas25eg6BGcyI6bGWx06tFkO5YHt0CwhYvqS7/8LKgP2tREcg+vehkBybqBhAzGEnN3ZAOPetj6DNIi+b31/TGRskYX83pNqRPD8P2c3qZjqijFjRiTs5OMmeaJdRCSMfaH+UN90xC0kHRy3kJ9OusjGI7N76XW+Rs8PO8NTMplMeIpLulY/i4swhYrgxzcyXKj+bF4I198ymlKY77lio1ZGh8mqxXKV/720JKbcQOkox4iTffk+Apk77+F24ApB66FrP3tgSze52CGJ2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=INed6BQQIW5xBMYZthpJVN5qYhlixuE5CsH/9pLECHQ=;
- b=m/olAyVQPUGhUdZyMcnuj5fQxLJyqZOheV65Y+aGsA9SxzI9t1SFvfgoxn8jwYCziiAWKgzZSWy3fQHYLNn46Y8cItc8HW3ZEanu9nDv9dkiDbRajQDbTF/RC3Hl8CTTLi8swS+9UeZc2XlRxT5W8Byg4tKK83h/ZKaxUmGSCumhK/Ctw14MtSYmrimH2RuFzLlBeBUOI1z6QpHBIHOR738fN3moOQwanc291yoegCg/gzzlcSH0TV+fRgPhkUHfJZhw7cbDLWshk7Jm5Ud4ECPSH0oxzarx2cDKHSvbLfh4zPhJ2qQnBKmZAJxu8M3B43mtOovIw1WcRXHrv1IeBQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by PH7PR12MB6933.namprd12.prod.outlook.com (2603:10b6:510:1b7::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Sun, 28 Aug
- 2022 00:46:28 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5566.021; Sun, 28 Aug 2022
- 00:46:28 +0000
-Message-ID: <2c30c786-acad-238d-327e-2669e7ebcfcc@nvidia.com>
-Date:   Sat, 27 Aug 2022 17:46:25 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5/6] NFS: direct-io: convert to FOLL_PIN pages
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20220827083607.2345453-1-jhubbard@nvidia.com>
- <20220827083607.2345453-6-jhubbard@nvidia.com> <YwqfWoAE2Awp4YvT@ZenIV>
- <353f18ac-0792-2cb7-6675-868d0bd41d3d@nvidia.com> <Ywq5ILRNxsbWvFQe@ZenIV>
- <Ywq5VrSrY341UVpL@ZenIV>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <Ywq5VrSrY341UVpL@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0137.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::22) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Sat, 27 Aug 2022 20:56:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58534D83E
+        for <linux-kernel@vger.kernel.org>; Sat, 27 Aug 2022 17:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661648158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/aXd9q+Zc8DWwaDqektlrQ5X6iOwLmERxEPTmIKuNb8=;
+        b=L07OwzE39bt1jitgKZO0m7PTg2m3By7JlYE3/HpOffG9zgjxsDSw4v7z0YJkgNr6qG4Urh
+        34IxNaZTM1iNHIe9elfw0WyOXUFntMKlnH0o6y/wIR9ZKzJb4QQqWl+x/Cz0IZZl83Q4Ml
+        Q5A6Mzacbs8RE/1IEZyZdxhT43Pwugc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-kYNRH9X8Pau8Ncm8C5akcw-1; Sat, 27 Aug 2022 20:55:55 -0400
+X-MC-Unique: kYNRH9X8Pau8Ncm8C5akcw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C81A9800124;
+        Sun, 28 Aug 2022 00:55:54 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-25.pek2.redhat.com [10.72.12.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EBDCF492C3B;
+        Sun, 28 Aug 2022 00:55:48 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        ardb@kernel.org, rppt@kernel.org, guanghuifeng@linux.alibaba.com,
+        mark.rutland@arm.com, will@kernel.org, linux-mm@kvack.org,
+        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
+        kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>
+Subject: [PATCH 0/2] arm64, kdump: enforce to take 4G as the crashkernel low memory end
+Date:   Sun, 28 Aug 2022 08:55:43 +0800
+Message-Id: <20220828005545.94389-1-bhe@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a623983f-6156-469e-ae52-08da888ebe0b
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6933:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YgccJRSgYAtZEjKSF5TvY7/Atnw+Se+zTyjTOgj9ujsincAX71fZp7hQI5t1dohRFMaEyXO2SZLYGwHktCpt2b6OiBNTZVHfdP42tYEIlZ6TYSWrcSmmXw/4RT27ORa+Yt5UegttRIXx2TDuOgLeja5RwfRGS0g5mrJt/YbeM+WG2nmjPbMjzx76Enrj2q78EFOIWJJLaYIvi7WnclEk8XBVgZy3qZQBhG9ex/f/r4yZJ1/vKqcGUP3JlOHm64q6fQ8+QCBYIbEULeAxoF5fmIpUWx+OwozriDA3EiQMJy4IPdGZb03g+ObT5zksV7cAx0CEQKxG47ODjYBTUjDWrS8eBRhCaksaSNv/GJSRcOzYWAPNVioDjdcvgbmqRpSXYJBnzyOzUEKwAFsy3MoUrZYV8DMzl5fFeq3BTdUKi9L6/qDMPaJ9mF9Ggk/mFAdjqv3aksYXf9xKkQTnhGjvdRWYuYU4Pz3RgcO/McU9fRHdGquLCKxQmxeGGJRQjV+k3UpNX+PogGawJZ0kWrOav5X/fVwL9/3qcKAzLquMu13VEMcvWqr39uvXazmU9+0d9xbAGNU9kO0O+wZoz9XF6C1tZDr76j/gQErp3J1EbzZL5jEfy8wO3NM5DDU1mOX/0iziwo8+WZDr6/Q1ATVRW/5FaGsoJ6truW8dGNyUzJmladnZn/fcM3iXSfrOjNfG1YmOM6LtwHTgnD4rXlWLSuwAC1rAJPfw9H7nyDYtNvIXgC8+AG4INHnkr6eI4h8+cq4kBfJPUQlEK1ESgaweJec2BuDpcIgiXHMThFKnEXc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(376002)(136003)(366004)(396003)(66946007)(8676002)(66556008)(66476007)(4326008)(38100700002)(7416002)(86362001)(2906002)(31696002)(8936002)(6506007)(5660300002)(53546011)(26005)(41300700001)(6512007)(478600001)(6486002)(316002)(2616005)(186003)(6916009)(54906003)(83380400001)(36756003)(6666004)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cURlZUJ5NkwrSit5OTVjY1gzeU1hTGhGaFZSRWVNdkdIeWtRVkxiVnRiV29h?=
- =?utf-8?B?ZllHQnBuYjk4bW1iMEtCdG45bTZNUDdoZ2ZLeVZWQmVTNElRSW1ydTA4eHdE?=
- =?utf-8?B?S2hlNzJhZ1VaelFXN2hmbEcyVW42TlkwNkEzT05GQmZXMmdQakJwVWhURlVG?=
- =?utf-8?B?WU5lRzY0cUl5cnpOQVlnTjBpczBKNDlNb0gwSElWdG5pV21hclRoWWh0VkNW?=
- =?utf-8?B?alVNMXhZNUFKZ3E2NElmK2hLWGQ0dEw5cUtCTWVIcE9mdjVhb3lZY1B5ODhT?=
- =?utf-8?B?c2xUU3U2b1BoRjJyaldLQnVOdkRkT0pldlgrWGFVM1JWNXN3K2FuZ1dINWRL?=
- =?utf-8?B?WEhmR1NBQWZHd3l3emt4SU1LVzQwWFE2N1R5d1lGWnRJdW11Ym1aYng0cW9V?=
- =?utf-8?B?bzBta1pTMHNlbWozVExnRHptZG5qaWJSS0NUMm1oY0FYRi9idFdjeDJLeUFv?=
- =?utf-8?B?d2M5Vmd0YTB4R2Q5RE9paTZhRzhIbDVMbEswajFoTmxuN0I5TkVXck1UNzFP?=
- =?utf-8?B?dW1PSGhCQytBdW1zck4wZXFYcGczOFFsR1JreG9xcTBKb3Y1M2xkcWZidWg5?=
- =?utf-8?B?OUpGd0RRK1pXb0hoUVJYWkJUZFVlUDNablc5NjZrMzRLY0RscHVzS2ZiaG9l?=
- =?utf-8?B?QkQ1N3ZFaVFlcVByRmVVbWpLQjVlVElPbzVpZi9ZeU91NjA0L3FGK2ZwZFp0?=
- =?utf-8?B?NUVic001THRLZU5TaE9FcVZTb3dGWUptOWpBdUlQQWE1eFh2Rm81N1c0dzdx?=
- =?utf-8?B?RG1WUzcvU2V6Z1Y0YjNHVVJGVGlHNER0eU1nS0dKWXJCRmk2cWdDcEFkalYr?=
- =?utf-8?B?U1grME5pOER3bEF3OWxha21qVXF4VHl0UVVEWmFHQXZtS1MxdGx5aFoyaE9q?=
- =?utf-8?B?YXpZMzNjWGx6a0wzSW51dFJWaUp3THRLOG9CUnlMNDY4MEthZVJlWFpxSG4z?=
- =?utf-8?B?VTlKU1VUbkNudk9oaHc0UUUzUG5wYkdUZFBIRWcwVndtMHVET2JGd2FNWVVN?=
- =?utf-8?B?SEhKL3ozZ2k0V0t3Q0s5Nk5pSWJlejFYL1ZRZHgrVmpvV0VBNldQMEhZMTM2?=
- =?utf-8?B?eXpjUGF4ajlDZFNJdFBKSGhUcnZmb1RNQlZrR0Z3YmQzcnNPS01jZjF5dGlS?=
- =?utf-8?B?MEYzY0twL3MzTjd4TzMrcTQxY0VSSFZIYXI3dHlJQkh4RUx1SDdreWR3WWUx?=
- =?utf-8?B?eWl3QXhNL25iZlI0MWpMdi8vSTVYNCtISkduQ3AyTTVjK2xwbU5QTEFwSnp4?=
- =?utf-8?B?dEtweEJUaEQ0MG9aSUZGUWxqOUorUDBCRXhVSmNCMUY5d0pPSG9xb3FUenY4?=
- =?utf-8?B?Umlibi9TSHp5c0xzc3BxL3JVRUp2L0NaalRjQU9XT3ZSN2kyQTJMTUVpL1Rm?=
- =?utf-8?B?UUM3c28zY0ppSTkvb0htbXc2Y2JUeDFUVGFzUU50ZVJ5UHpWbnVnaG1yRVlx?=
- =?utf-8?B?R0VPRzNVK1VKbnpraEVwdGw2VUxZQlUzZGpnUDVTNHFjQWExY00wOUppQmhI?=
- =?utf-8?B?NlZJWnVIdVRTNFRVRWNaNUNVM0xDa09hbFpsQjFTOEFCVGRGTkRBTGxXRVpm?=
- =?utf-8?B?RmU3L2tQNm4zMkxxYXA3RUFzM01vbWJ2bG5CS25XT0FJME9KdXBjWUtwc2xC?=
- =?utf-8?B?bDZheEVDWlYzYkNsUzI1NGpsT0xkZzNhOHk3Mkdhb2VDV3dqTzA2UTBOSCt3?=
- =?utf-8?B?UUFBNUtpNkszYzVhTkx3NVhNVHhvaTlEazYxUjAvVkh3OXRwZlc1SkVTRHQw?=
- =?utf-8?B?N3RyUmt4RE11OFZESkY2eWxhVnBkSGdKVkZuU2RlcTVBRXBLYm5sT0JXclJZ?=
- =?utf-8?B?bVVId0xDSzVyS25aU29yUUFLb1lQb3NKNDQxdjhMYVdhOUhJcW4xa0R4Nmlm?=
- =?utf-8?B?M0M4dXhXeU5XZzRLTzZma0pOcVdDM2FTT3l1L2o2UE1yQWZLSWt6WG4xaW5F?=
- =?utf-8?B?V3NCVEt6a3psM0RZb056VnBCZlZFcGdLSkkwZ1NHeExkcjNqSFBZa3IxK2VM?=
- =?utf-8?B?bzZPcXhtWjBVU0xQV0tkY3M0MHZFYlFvUUpVb3Vqa1VCbzk1OWxPZjgyTXQy?=
- =?utf-8?B?ZVlGUjlUUGlhVnZzanhxcnBPR01SRWl3dHRDZk92cTFNSHJhNjBLdWJMOWpt?=
- =?utf-8?Q?opjdSvKnxd2ZHS2XAEcSHsrXC?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a623983f-6156-469e-ae52-08da888ebe0b
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2022 00:46:28.2609
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U/Nq9SNjF3yH5zZJmY2cH6Accvi1dAw0/vXBFLFFshDkNMCO7dt+F91l2uER9YC0SHIjhNVJblWks3N3D/T+KA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6933
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/27/22 17:39, Al Viro wrote:
-> On Sun, Aug 28, 2022 at 01:38:57AM +0100, Al Viro wrote:
->> On Sat, Aug 27, 2022 at 04:55:18PM -0700, John Hubbard wrote:
->>> On 8/27/22 15:48, Al Viro wrote:
->>>> On Sat, Aug 27, 2022 at 01:36:06AM -0700, John Hubbard wrote:
->>>>> Convert the NFS Direct IO layer to use pin_user_pages_fast() and
->>>>> unpin_user_page(), instead of get_user_pages_fast() and put_page().
->>>>
->>>> Again, this stuff can be hit with ITER_BVEC iterators
->>>>
->>>>> -		result = iov_iter_get_pages_alloc2(iter, &pagevec,
->>>>> +		result = dio_w_iov_iter_pin_pages_alloc(iter, &pagevec,
->>>>>  						  rsize, &pgbase);
->>>>
->>>> and this will break on those.
->>>
->>> If anyone has an example handy, of a user space program that leads
->>> to this situation (O_DIRECT with ITER_BVEC), it would really help
->>> me reach enlightenment a lot quicker in this area. :)
->>
->> Er...  splice(2) to O_DIRECT-opened file on e.g. ext4?  Or
->> sendfile(2) to the same, for that matter...
-> 
-> s/ext4/nfs/ to hit this particular codepath, obviously.
+Problem:
+=======
+On arm64, block and section mapping is supported to build page tables.
+However, currently it enforces to take base page mapping for the whole
+linear mapping if CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabled and
+crashkernel kernel parameter is set. This will cause longer time of the
+linear mapping process during bootup and severe performance degradation
+during running time.
 
-aha, thanks. I do remember that you alerted me earlier to splice(2)
-problems, and I thought I'd neatly sidestepped those this time, by
-staying with user_backed_iter(i) cases. 
+Root cause:
+==========
+On arm64, crashkernel reservation relies on knowing the upper limit of
+low memory zone because it needs to reserve memory in the zone so that
+devices' DMA addressing in kdump kernel can be satisfied. However, the
+limit on arm64 is variant. And the upper limit can only be decided late
+till bootmem_init() is called.
 
-But I see that it's going to take something more, after all.
+And we need to map the crashkernel region with base page granularity when
+doing linear mapping, because kdump needs to protect the crashkernel region
+via set_memory_valid(,0) after kdump kernel loading. However, arm64 doesn't
+support well on splitting the built block or section mapping due to some
+cpu reststriction [1]. And unfortunately, the linear mapping is done before
+bootmem_init().
+
+To resolve the above conflict on arm64, the compromise is enforcing to
+take base page mapping for the entire linear mapping if crashkernel is
+set, and CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabed. Hence
+performance is sacrificed.
+
+Solution:
+=========
+To fix the problem, we should always take 4G as the crashkernel low
+memory end in case CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabled.
+With this, we don't need to defer the crashkernel reservation till
+bootmem_init() is called to set the arm64_dma_phys_limit. As long as
+memblock init is done, we can conclude what is the upper limit of low
+memory zone.
+
+1) both CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 are disabled or memblock_start_of_DRAM() > 4G
+  limit = PHYS_ADDR_MAX+1  (Corner cases)
+2) CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 are enabled:
+   limit = 4G  (generic case)
+
+Justification:
+==============
+In fact, kdump kernel doesn't need to cover all peripherals'
+addressing bits. Only device taken as dump target need be taken care of
+and its addressing bits need be satified. Currently, there are two kinds
+of dumping, dumped to local storage disk or dumped through network card to
+remove storage server. It means only storage disk or netowrk card taken
+as dump target need be consider if their addressing bits are satisfied.
+For saving memory, we usually generate kdump specific initramfs including
+necessary kernel modules for dump target devices. All other unnecessary
+kernel modules are excluded and their correspondent devices won't be
+initialized during kdump kernel bootup.
+
+So far, only Raspberry Pi 4 has some peripherals whcih can only address
+30 bits memory range as reported in [2]. Devices on all other arm64 systems
+can address 32bits memory range.
+
+So by enforcing to take 4G as the crashkernel low memory end, the only
+risk is if RPi4 owns storage disk or network card which can't address
+32bits memory range because they could be set as dump target. Even if
+RPi4 truly has storage devices or network card which can only address 30
+bits memory range, it should be a corner case. We can document it since
+crashkernel is more taken as a feature on server. Besides, RPi4 still can
+use crashkernel=xM@yM to sepcify a location for 32bits addressing if it
+really has that kind of storage device or network card and kdump is expected.
+
+[1]
+https://lore.kernel.org/all/YrIIJkhKWSuAqkCx@arm.com/T/#u
+
+[2]
+[PATCH v6 0/4] Raspberry Pi 4 DMA addressing support
+https://lore.kernel.org/linux-arm-kernel/20190911182546.17094-1-nsaenzjulienne@suse.de/T/
 
 
+======
+Question to Nicolas:
 
-thanks,
+Hi Nicolas,
 
+In cover letter of [2] patchset, you told RPi4 has peripherals which
+can only address 30bits range. In below sentence, do you mean "the PCIe,
+V3D, GENET" can't address 32bit range, or they have wider view of
+address space the same as 40-bit DMA channels? I am confused about that.
+
+And the storage device or network card on RPi4 can address 32bit range
+or 32bit range, do we have document or do you happen to know that?
+
+"""
+The new Raspberry Pi 4 has up to 4GB of memory but most peripherals can
+only address the first GB: their DMA address range is
+0xc0000000-0xfc000000 which is aliased to the first GB of physical
+memory 0x00000000-0x3c000000. Note that only some peripherals have these
+limitations: the PCIe, V3D, GENET, and 40-bit DMA channels have a wider
+view of the address space by virtue of being hooked up trough a second
+interconnect.
+"""
+
+
+Baoquan He (2):
+  arm64, kdump: enforce to take 4G as the crashkernel low memory end
+  arm64: remove unneed defer_reserve_crashkernel() and crash_mem_map
+
+ arch/arm64/include/asm/memory.h |  5 ----
+ arch/arm64/mm/init.c            | 24 ++++++++-------
+ arch/arm64/mm/mmu.c             | 53 ++++++++++++++-------------------
+ 3 files changed, 36 insertions(+), 46 deletions(-)
+
+
+base-commit: 10d4879f9ef01cc6190fafe4257d06f375bab92c
 -- 
-John Hubbard
-NVIDIA
+2.34.1
+

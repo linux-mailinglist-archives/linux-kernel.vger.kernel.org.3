@@ -2,117 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152DB5A5679
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F06E5A567E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiH2VtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S229687AbiH2VvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiH2VtM (ORCPT
+        with ESMTP id S229536AbiH2VvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:49:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03549E8A7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661809751; x=1693345751;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=iFb7qo5wOiFrfJA6ZbVVrfEMUmHlZzqG1H/7tvlXzGE=;
-  b=JORu4zcZIVXknlmqhs9BOVtCglWXtTFH4p9AB2itKiZnJ+zI2GLM7fF7
-   A7uQFesb0fKLrhV8MppsPRw4LRDY/TTfNNYeJL8I1A/b14QVmJ9bi7zZY
-   /0/p2d/PEGFayt90kx0MM4CsBA0Z1njmyn+a61nyc1nzlS9fAlfbxoBGR
-   49eSPrKcKfHuRMsbNAbYWTuG+OLQuuZpKlbt3lHfg+aylrkTqTH0XPkZv
-   Ya24CYrhQPuG6vKjTCfPQ7rA9YM0Tv3w5xD4pytZkdgGuijZqZ1zwqzzv
-   Ilr9cs/2gGQF8YNtoT219v7DrQdAIj6qEliaf0IzOJH98XQuU2j3u9MYo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="321131923"
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="321131923"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 14:49:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="787245164"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 14:49:10 -0700
-Date:   Mon, 29 Aug 2022 14:49:11 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Russ Weight <russell.h.weight@intel.com>
-cc:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH v2 1/1] firmware_loader: Fix use-after-free during
- unregister
-In-Reply-To: <20220829174557.437047-1-russell.h.weight@intel.com>
-Message-ID: <alpine.DEB.2.22.394.2208291448450.2106446@rhweight-WRK1>
-References: <20220829174557.437047-1-russell.h.weight@intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 29 Aug 2022 17:51:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418A37CB49;
+        Mon, 29 Aug 2022 14:51:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3A96611B8;
+        Mon, 29 Aug 2022 21:51:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4834C433D7;
+        Mon, 29 Aug 2022 21:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661809865;
+        bh=fXRYrMEM8Kk9+epg4G5pFtUERqSSGU8XuYoO6vErhkM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SWAzvLQHq6MKKoZVJQRmwywvjem5AjdbGmOtmsa8n4SdUSrwzoKWS04r1Q7uzGnAp
+         e2Nocsr45XUJtOl78NNUowJa74WDxeB242k9Sx2Unu76qCw1sDOHMpirZWfXRaGaBT
+         mkXvf1D4Hw/Yjyz5WRG394hiET42VHptEduU+2UokaFstMkjo84qCBT/AyeiJ0Osa/
+         oPZzRWiI3ZQHnUoDC57GZw9AP1xmgUAPPwFB5nfg1zV6zUftGjHgXfDBzTm4KlWCPQ
+         4IRP51HBalW+LP0mnJ6G1TFTzGkpNs9vuZcO/VEzTAoJdSgS5KOHPG3Zw4ggPjlWq5
+         b2aFUnLyiL+dQ==
+Date:   Mon, 29 Aug 2022 16:50:59 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] can: etas_es58x: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <Yw00w6XRcq7B6ub6@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Zero-length arrays are deprecated and we are moving towards adopting
+C99 flexible-array members, instead. So, replace zero-length array
+declaration in union es58x_urb_cmd with the new DECLARE_FLEX_ARRAY()
+helper macro.
 
+This helper allows for a flexible-array member in a union.
 
-On Mon, 29 Aug 2022, Russ Weight wrote:
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/can/usb/etas_es58x/es58x_core.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> In the following code within firmware_upload_unregister(), the call to
-> device_unregister() could result in the dev_release function freeing the
-> fw_upload_priv structure before it is dereferenced for the call to
-> module_put(). This bug was found by the kernel test robot using
-> CONFIG_KASAN while running the firmware selftests.
->
->  device_unregister(&fw_sysfs->dev);
->  module_put(fw_upload_priv->module);
->
-> The problem is fixed by copying fw_upload_priv->module to a local variable
-> for use when calling device_unregister().
->
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Fixes: 97730bbb242c ("firmware_loader: Add firmware-upload support")
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
+index d769bdf740b7..640fe0a1df63 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.h
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
+@@ -222,7 +222,7 @@ union es58x_urb_cmd {
+ 		u8 cmd_type;
+ 		u8 cmd_id;
+ 	} __packed;
+-	u8 raw_cmd[0];
++	DECLARE_FLEX_ARRAY(u8, raw_cmd);
+ };
+ 
+ /**
+-- 
+2.34.1
 
-Looks good to me.
-
-Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v2: Rebased to latest linux-next branch (next-20220829)
-> ---
-> drivers/base/firmware_loader/sysfs_upload.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
-> index 87044d52322a..63e15bddd80c 100644
-> --- a/drivers/base/firmware_loader/sysfs_upload.c
-> +++ b/drivers/base/firmware_loader/sysfs_upload.c
-> @@ -377,6 +377,7 @@ void firmware_upload_unregister(struct fw_upload *fw_upload)
-> {
-> 	struct fw_sysfs *fw_sysfs = fw_upload->priv;
-> 	struct fw_upload_priv *fw_upload_priv = fw_sysfs->fw_upload_priv;
-> +	struct module *module = fw_upload_priv->module;
->
-> 	mutex_lock(&fw_upload_priv->lock);
-> 	if (fw_upload_priv->progress == FW_UPLOAD_PROG_IDLE) {
-> @@ -392,6 +393,6 @@ void firmware_upload_unregister(struct fw_upload *fw_upload)
->
-> unregister:
-> 	device_unregister(&fw_sysfs->dev);
-> -	module_put(fw_upload_priv->module);
-> +	module_put(module);
-> }
-> EXPORT_SYMBOL_GPL(firmware_upload_unregister);
-> -- 
-> 2.25.1
->
->

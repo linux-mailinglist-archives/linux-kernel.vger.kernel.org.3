@@ -2,344 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5EE5A44F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4779A5A44E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiH2IWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S229531AbiH2IWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiH2IWl (ORCPT
+        with ESMTP id S229737AbiH2IWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:22:41 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D3257230;
-        Mon, 29 Aug 2022 01:22:38 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27T8MOXo123380;
-        Mon, 29 Aug 2022 03:22:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661761344;
-        bh=JUxRBXnTVgXKXy7KaA/rhrgywLAMMkGhQrE57ffwP50=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=eQpedv4rcfO2FCFymmE00i6fxEKptDsFpaEmKEAqXw91tyXoiHY85/+Hno15k0wkQ
-         8/m2N3+Kd3rnTB5dgMl7nVXJ1XdsW2sruA79wXWl1bKba/eBCbn3kFs0oQD1FBcx1l
-         iI3AggOCfAIliklW/Kgr6GXnyfrkCnoZnkb89YOE=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27T8MOjJ029612
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 Aug 2022 03:22:24 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 29
- Aug 2022 03:22:24 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 29 Aug 2022 03:22:24 -0500
-Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27T8M7Yd059309;
-        Mon, 29 Aug 2022 03:22:21 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Mon, 29 Aug 2022 04:22:11 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FCB558D0;
+        Mon, 29 Aug 2022 01:22:09 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id C076F38F;
+        Mon, 29 Aug 2022 10:22:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1661761327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aWdMO7HBaULAwUHXrb+Mf/kwJlQruPZflZyMNyYcZy4=;
+        b=CD3VkiRpKq0rQSPmmXnVXYP8HnHoxnx+bT+s2OvBKmt9f+8sFGH65IjJMd7coGj0rRqGo/
+        NvdsJOR8IGTHkWeA2w8ZOaNVa6f8f2gBt+641QwWTeUbpb90BJnWTmhimh6YTBOmILZte4
+        2FoGkGQKq9xDiH2ByQu2PMODzhtYG7EuE70HO/DLaJcBHDrk0b2/QHfjAQkn7msTBCI7e/
+        FUbwj6tQ3/INVlIkQeWiWNbwsaJp/xji6fE4QeCcbRF7TtTItcfSBbd+yDz0W7cKwdQ4IQ
+        Ez27rLoMsce/IEQ2PPZlAwXzYnEQuq8b8BakidZVHJQACEKlpI+tmYC7I3se5Q==
+MIME-Version: 1.0
+Date:   Mon, 29 Aug 2022 10:22:07 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Bryan Brattlof <bb@ti.com>
-Subject: [PATCH 4/4] arm64: dts: ti: Add support for AM62A7-SK
-Date:   Mon, 29 Aug 2022 13:52:00 +0530
-Message-ID: <20220829082200.241653-5-vigneshr@ti.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829082200.241653-1-vigneshr@ti.com>
-References: <20220829082200.241653-1-vigneshr@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v1 00/14] nvmem: core: introduce NVMEM layouts
+In-Reply-To: <768ff63a-54f5-9cde-e888-206cdf018df3@milecki.pl>
+References: <20220825214423.903672-1-michael@walle.cc>
+ <768ff63a-54f5-9cde-e888-206cdf018df3@milecki.pl>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <267821eee5dcab79fd0ecebe0d9f8b0c@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM62A StarterKit (SK) board is a low cost, small form factor board
-designed for TI’s AM62A7 SoC. It supports the following interfaces:
-* 2 GB LPDDR4 RAM
-* x1 Gigabit Ethernet interface
-* x1 HDMI Port with audio
-* x1 Headphone Jack
-* x1 USB2.0 Hub with two Type A host and x1 USB Type-C DRP Port
-* x1 UHS-1 capable µSD card slot
-* M.2 SDIO Wifi + UART slot
-* 1Gb OSPI NAND flash
-* x4 UART through UART-USB bridge
-* XDS110 for onboard JTAG debug using USB
-* Temperature sensors, user push buttons and LEDs
-* 40-pin User Expansion Connector
-* 24-pin header for peripherals in MCU island (I2C, UART, SPI, IO)
-* 20-pin header for Programmable Realtime Unit (PRU) IO pins
-* 40-pin CSI header
+Hi,
 
-Add basic support for AM62A7-SK.
+Am 2022-08-28 17:05, schrieb Rafał Miłecki:
+> On 25.08.2022 23:44, Michael Walle wrote:
+>> This is now the third attempt to fetch the MAC addresses from the VPD
+>> for the Kontron sl28 boards. Previous discussions can be found here:
+>> https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/
+>> 
+>> 
+>> NVMEM cells are typically added by board code or by the devicetree. 
+>> But
+>> as the cells get more complex, there is (valid) push back from the
+>> devicetree maintainers to not put that handling in the devicetree.
+> 
+> I dropped the ball waiting for Rob's reponse in the
+> [PATCH 0/2] dt-bindings: nvmem: support describing cells
+> https://lore.kernel.org/linux-arm-kernel/0b7b8f7ea6569f79524aea1a3d783665@walle.cc/T/
+> 
+> Before we go any further can we have a clear answer from Rob (or
+> Krzysztof now too?):
+> 
+> 
+> Is there any point in having bindings like:
+> 
+> compatible = "mac-address";
+> 
+> for NVMEM cells nodes? So systems (Linux, U-Boot) can handle them in a
+> more generic way?
+> 
+> 
+> Or do we prefer more conditional drivers code (or layouts code as in
+> this Michael's proposal) that will handle cells properly based on their
+> names?
 
-Schematics: https://www.ti.com/lit/zip/sprr459
+What do you mean by "based on their names?".
 
-Co-developed-by: Bryan Brattlof <bb@ti.com>
-Signed-off-by: Bryan Brattlof <bb@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile         |   2 +
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 224 ++++++++++++++++++++++++
- 2 files changed, 226 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> I'm not arguing for any solution. I just want to make sure we choose 
+> the
+> right way to proceed.
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 02e5d80344d0..4555a5be2257 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -23,3 +23,5 @@ dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
- 
- dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-+
-+dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk.dtb
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-new file mode 100644
-index 000000000000..994ed6865551
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-@@ -0,0 +1,224 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * AM62A SK: https://www.ti.com/lit/zip/sprr459
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include "k3-am62a7.dtsi"
-+
-+/ {
-+	compatible =  "ti,am62a7-sk", "ti,am62a7";
-+	model = "Texas Instruments AM62A7 SK";
-+
-+	aliases {
-+		serial2 = &main_uart0;
-+		mmc1 = &sdhci1;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial2:115200n8";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		/* 2G RAM */
-+		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
-+
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		secure_tfa_ddr: tfa@9e780000 {
-+			reg = <0x00 0x9e780000 0x00 0x80000>;
-+			alignment = <0x1000>;
-+			no-map;
-+		};
-+
-+		secure_ddr: optee@9e800000 {
-+			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
-+			alignment = <0x1000>;
-+			no-map;
-+		};
-+
-+		wkup_r5fss0_core0_memory_region: r5f-dma-memory@9c900000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x00 0x9c900000 0x00 0x01e00000>;
-+			no-map;
-+		};
-+	};
-+
-+	vmain_pd: regulator-0 {
-+		/* TPS25750 PD CONTROLLER OUTPUT */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vmain_pd";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vcc_5v0: regulator-1 {
-+		/* Output of TPS63070 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_5v0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&vmain_pd>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vcc_3v3_sys: regulator-2 {
-+		/* output of LM5141-Q1 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_3v3_sys";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vmain_pd>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vdd_mmc1: regulator-3 {
-+		/* TPS22918DBVR */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_mmc1";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		enable-active-high;
-+		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usr_led_pins_default>;
-+
-+		led-0 {
-+			label = "am62a-sk:green:heartbeat";
-+			gpios = <&main_gpio1 49 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+			function = LED_FUNCTION_HEARTBEAT;
-+			default-state = "off";
-+		};
-+	};
-+};
-+
-+&main_pmx0 {
-+	main_uart0_pins_default: main-uart0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (D14) UART0_RXD */
-+			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
-+		>;
-+	};
-+
-+	main_i2c0_pins_default: main-i2c0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16) I2C0_SCL */
-+			AM62AX_IOPAD(0x1e4, PIN_INPUT_PULLUP, 0) /* (A16) I2C0_SDA */
-+		>;
-+	};
-+
-+	main_i2c1_pins_default: main-i2c1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x1e8, PIN_INPUT_PULLUP, 0) /* (B17) I2C1_SCL */
-+			AM62AX_IOPAD(0x1ec, PIN_INPUT_PULLUP, 0) /* (A17) I2C1_SDA */
-+		>;
-+	};
-+
-+	main_i2c2_pins_default: main-i2c2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x0b0, PIN_INPUT_PULLUP, 1) /* (K22) GPMC0_CSn2.I2C2_SCL */
-+			AM62AX_IOPAD(0x0b4, PIN_INPUT_PULLUP, 1) /* (K24) GPMC0_CSn3.I2C2_SDA */
-+		>;
-+	};
-+
-+	main_mmc1_pins_default: main-mmc1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x23c, PIN_INPUT, 0) /* (A21) MMC1_CMD */
-+			AM62AX_IOPAD(0x234, PIN_INPUT, 0) /* (B22) MMC1_CLK */
-+			AM62AX_IOPAD(0x230, PIN_INPUT, 0) /* (A22) MMC1_DAT0 */
-+			AM62AX_IOPAD(0x22c, PIN_INPUT, 0) /* (B21) MMC1_DAT1 */
-+			AM62AX_IOPAD(0x228, PIN_INPUT, 0) /* (C21) MMC1_DAT2 */
-+			AM62AX_IOPAD(0x224, PIN_INPUT, 0) /* (D22) MMC1_DAT3 */
-+			AM62AX_IOPAD(0x240, PIN_INPUT, 0) /* (D17) MMC1_SDCD */
-+		>;
-+	};
-+
-+	usr_led_pins_default: usr-led-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x244, PIN_OUTPUT, 7) /* (D18) MMC1_SDWP.GPIO1_49 */
-+		>;
-+	};
-+};
-+
-+&main_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+};
-+
-+&main_i2c1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c1_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	exp1: gpio@22 {
-+		compatible = "ti,tca6424";
-+		reg = <0x22>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names = "GPIO_CPSW2_RST", "GPIO_CPSW1_RST",
-+				   "BT_EN_SOC", "MMC1_SD_EN",
-+				   "VPP_EN", "EXP_PS_3V3_En",
-+				   "EXP_PS_5V0_En", "EXP_HAT_DETECT",
-+				   "GPIO_AUD_RSTn", "GPIO_eMMC_RSTn",
-+				   "UART1_FET_BUF_EN", "BT_UART_WAKE_SOC",
-+				   "GPIO_HDMI_RSTn", "CSI_GPIO0",
-+				   "CSI_GPIO1", "WLAN_ALERTn",
-+				   "HDMI_INTn", "TEST_GPIO2",
-+				   "MCASP1_FET_EN", "MCASP1_BUF_BT_EN",
-+				   "MCASP1_FET_SEL", "UART1_FET_SEL",
-+				   "PD_I2C_IRQ", "IO_EXP_TEST_LED";
-+	};
-+};
-+
-+&sdhci1 {
-+	/* SD/MMC */
-+	status = "okay";
-+	vmmc-supply = <&vdd_mmc1>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc1_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
-+&main_gpio0 {
-+	status = "okay";
-+};
-+
-+&main_gpio1 {
-+	status = "okay";
-+};
-+
-+&main_gpio_intr {
-+	status = "okay";
-+};
-+
-+&main_uart0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart0_pins_default>;
-+};
--- 
-2.25.1
+With the 'compatible = "mac-address"', how would you detect what kind
+of transformation you need to apply? You could guess ascii, yes. But
+swapping bytes? You cannot guess that. So you'd need additional 
+information
+coming from the device tree. But Rob was quite clear that this shouldn't
+be in the device tree:
 
+| I still don't think trying to encode transformations of data into the 
+DT
+| is right approach.
+
+https://lore.kernel.org/linux-devicetree/YaZ5JNCFeKcdIfu8@robh.at.kernel.org/
+
+He also mention that the compatible should be on the nvmem device level
+and should use specific compatible strings:
+https://lore.kernel.org/linux-devicetree/CAL_JsqL55mZJ6jUyQACer2pKMNDV08-FgwBREsJVgitnuF18Cg@mail.gmail.com/
+
+And IMHO that makes sense, because it matches the hardware and not any
+NVMEM cells which is the *content* of a memory device.
+
+And as you see in the sl28vpd layout, it allows you to do much more, 
+like
+checking for integrity, and make it future proof by supporting different
+versions of this sl28vpd layout.
+
+What if you use it with the u-boot,env? You wouldn't need it because
+u-boot,env will already know how to interpret it as an ascii string
+(and it also know the offset). In this sense, u-boot,env is already a
+compatible string describing the content of a NVMEM device (and the
+compatible string is at the device level).
+
+>> Therefore, introduce NVMEM layouts. They operate on the NVMEM device 
+>> and
+>> can add cells during runtime. That way it is possible to add complex
+>> cells than it is possible right now with the offset/length/bits
+>> description in the device tree. For example, you can have post 
+>> processing
+>> for individual cells (think of endian swapping, or ethernet offset
+>> handling). You can also have cells which have no static offset, like 
+>> the
+>> ones in an u-boot environment. The last patches will convert the 
+>> current
+>> u-boot environment driver to a NVMEM layout and lifting the 
+>> restriction
+>> that it only works with mtd devices. But as it will change the 
+>> required
+>> compatible strings, it is marked as RFC for now. It also needs to have
+>> its device tree schema update which is left out here.
+> 
+> So do I get it right that we want to have:
+> 
+> 1. NVMEM drivers for providing I/O access to NVMEM devices
+> 2. NVMEM layouts for parsing & NVMEM cells and translating their 
+> content
+> ?
+
+Correct.
+
+> I guess it sounds good and seems to be a clean solution.
+
+Good to hear :)
+
+> One thing I believe you need to handle is replacing "cell_post_process"
+> callback with your layout thing.
+> 
+> I find it confusing to have
+> 1. cell_post_process() CB at NVMEM device level
+> 2. post_process() CB at NVMEM cell level
+
+What is wrong with having a callback at both levels?
+
+Granted, in this particular case (it is just used at one place), I still
+think that it is the wrong approach to add this transformation in the
+driver (in this particular case). The driver is supposed to give you
+access to the SoC's fuse box, but it will magically change the content
+of a cell if the nvmem consumer named this cell "mac-address" (which
+you also found confusing the last time and I do too!).
+
+The driver itself doesn't add any cells on its own, so I cannot register
+a .post_process hook there. Therefore, you'd need that post_process hook
+on every cell, which is equivalent to have a post_process hook at
+device level.
+
+Unless you have a better idea. I'll leave that up to NXP to fix that (or
+leave it like that).
+
+-michael

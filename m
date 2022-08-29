@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4FA5A49E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A2D5A49ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiH2La2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S232414AbiH2Lao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbiH2L3A (ORCPT
+        with ESMTP id S232459AbiH2L3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:29:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066C97A745;
-        Mon, 29 Aug 2022 04:17:20 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B24272854;
+        Mon, 29 Aug 2022 04:17:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7F58B80F10;
-        Mon, 29 Aug 2022 11:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC1DFC433C1;
-        Mon, 29 Aug 2022 11:07:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93B0B6118C;
+        Mon, 29 Aug 2022 11:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912DEC433C1;
+        Mon, 29 Aug 2022 11:07:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771235;
-        bh=yjoZOiEcvdnTyVB/vFAkaEAvDwwad/7SbJUYxTfTwBQ=;
+        s=korg; t=1661771244;
+        bh=MPqYKtaN3m8iUW50zVcvP16RP0F0zXsjL+Z0G2USGs0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=coHuRp3gXTLNNKa/hLQLyUuHvXBEF5rcxbjPRiuQGiXxZYtYmureWJGiOA59oo/F4
-         ZnhK4CdJK3XlkRXNl/H4J+jXtH9/7mfpdLkR6sjidbMxyywppaOQlMPkuJJN3ZpxOb
-         4+XXoRXw4+F4M6B909wesUyNbXPbaZjK1ZSC+lv0=
+        b=DxLbwy/FkMuA7lvry8dFqF2Jlc5L4SR3CmyR8l3+d56emjqJBJp8OF9D5jPyBmulo
+         4XzVYPwgBqRbyAB8Eor59LqOU2nvuDdlL16if+Jl33qbHUmqKlSwDWYKOifSkPCnG+
+         vpOsiF+oImhW31vZAJMACVehekw01GiCrse8UvMw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 082/136] net: Fix data-races around sysctl_max_skb_frags.
-Date:   Mon, 29 Aug 2022 12:59:09 +0200
-Message-Id: <20220829105808.008903886@linuxfoundation.org>
+Subject: [PATCH 5.15 083/136] net: Fix a data-race around netdev_budget_usecs.
+Date:   Mon, 29 Aug 2022 12:59:10 +0200
+Message-Id: <20220829105808.051402613@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
 References: <20220829105804.609007228@linuxfoundation.org>
@@ -57,55 +57,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 657b991afb89d25fe6c4783b1b75a8ad4563670d ]
+[ Upstream commit fa45d484c52c73f79db2c23b0cdfc6c6455093ad ]
 
-While reading sysctl_max_skb_frags, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+While reading netdev_budget_usecs, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: 5f74f82ea34c ("net:Add sysctl_max_skb_frags")
+Fixes: 7acf8a1e8a28 ("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp.c       | 4 ++--
- net/mptcp/protocol.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ net/core/dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 52f51717f02f3..0ebef2a5950cd 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -991,7 +991,7 @@ struct sk_buff *tcp_build_frag(struct sock *sk, int size_goal, int flags,
- 
- 	i = skb_shinfo(skb)->nr_frags;
- 	can_coalesce = skb_can_coalesce(skb, i, page, offset);
--	if (!can_coalesce && i >= sysctl_max_skb_frags) {
-+	if (!can_coalesce && i >= READ_ONCE(sysctl_max_skb_frags)) {
- 		tcp_mark_push(tp, skb);
- 		goto new_segment;
- 	}
-@@ -1344,7 +1344,7 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 
- 			if (!skb_can_coalesce(skb, i, pfrag->page,
- 					      pfrag->offset)) {
--				if (i >= sysctl_max_skb_frags) {
-+				if (i >= READ_ONCE(sysctl_max_skb_frags)) {
- 					tcp_mark_push(tp, skb);
- 					goto new_segment;
- 				}
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index a089791414bfb..5df60a4b09304 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -1317,7 +1317,7 @@ static int mptcp_sendmsg_frag(struct sock *sk, struct sock *ssk,
- 
- 		i = skb_shinfo(skb)->nr_frags;
- 		can_coalesce = skb_can_coalesce(skb, i, dfrag->page, offset);
--		if (!can_coalesce && i >= sysctl_max_skb_frags) {
-+		if (!can_coalesce && i >= READ_ONCE(sysctl_max_skb_frags)) {
- 			tcp_mark_push(tcp_sk(ssk), skb);
- 			goto alloc_skb;
- 		}
+diff --git a/net/core/dev.c b/net/core/dev.c
+index fefe8ddd282fd..276cca563325e 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -7137,7 +7137,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
+ {
+ 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
+ 	unsigned long time_limit = jiffies +
+-		usecs_to_jiffies(netdev_budget_usecs);
++		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
+ 	int budget = READ_ONCE(netdev_budget);
+ 	LIST_HEAD(list);
+ 	LIST_HEAD(repoll);
 -- 
 2.35.1
 

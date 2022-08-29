@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97ADE5A49B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9974E5A4883
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiH2L2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S231153AbiH2LLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiH2L1X (ORCPT
+        with ESMTP id S230439AbiH2LKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:27:23 -0400
+        Mon, 29 Aug 2022 07:10:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2C2792D0;
-        Mon, 29 Aug 2022 04:16:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632845F93;
+        Mon, 29 Aug 2022 04:07:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A604B80F1A;
-        Mon, 29 Aug 2022 11:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E5D6C433D7;
-        Mon, 29 Aug 2022 11:16:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9975BB80F2B;
+        Mon, 29 Aug 2022 11:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B7DC433C1;
+        Mon, 29 Aug 2022 11:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771789;
-        bh=rFVOy60Ssxsd9xCHOb/9NOIGTIKPDZteDKKp7l8ln3I=;
+        s=korg; t=1661771238;
+        bh=M+k41fySf9W9qlUWewRVNfAONOL7YWGUa52LoTBbASs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aMjlZlVGbgfPGmTSDdMfZOhDb/mvYN3kQdAdw4wxjANni64FeNfSn3z6Uzri4OAH8
-         oi02MDLQk8EiGROBMdLkZcOV9haKZt0pUSh1VXByzQT1hrnM6VMpjCWljJ4z6O7tHy
-         6EfYZqxwm0uMmmow2A62wcfFLwmPkkxeXgI/Rl2E=
+        b=TptvsbQ0xjcBJmvQDlyzpnrgN77+HW1QCM3Ydx/5VplKQ2kYtd+qrUshE9ALnM65C
+         PSfJ9t6gN4JnJGkZ08X1XES14TH1/XLq6y2O9dQGkDtbJ+mbbEZoYFnRgB4+/o6yCS
+         gOlyUyjM0wI9cQaAJuUDf4s1TmtbqgngTHI/vZ4E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.19 098/158] btrfs: check if root is readonly while setting security xattr
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 42/86] netfilter: nf_tables: disallow jump to implicit chain from set element
 Date:   Mon, 29 Aug 2022 12:59:08 +0200
-Message-Id: <20220829105813.198259823@linuxfoundation.org>
+Message-Id: <20220829105758.265637135@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Goldwyn Rodrigues <rgoldwyn@suse.de>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit b51111271b0352aa596c5ae8faf06939e91b3b68 upstream.
+[ Upstream commit f323ef3a0d49e147365284bc1f02212e617b7f09 ]
 
-For a filesystem which has btrfs read-only property set to true, all
-write operations including xattr should be denied. However, security
-xattr can still be changed even if btrfs ro property is true.
+Extend struct nft_data_desc to add a flag field that specifies
+nft_data_init() is being called for set element data.
 
-This happens because xattr_permission() does not have any restrictions
-on security.*, system.*  and in some cases trusted.* from VFS and
-the decision is left to the underlying filesystem. See comments in
-xattr_permission() for more details.
+Use it to disallow jump to implicit chain from set element, only jump
+to chain via immediate expression is allowed.
 
-This patch checks if the root is read-only before performing the set
-xattr operation.
-
-Testcase:
-
-  DEV=/dev/vdb
-  MNT=/mnt
-
-  mkfs.btrfs -f $DEV
-  mount $DEV $MNT
-  echo "file one" > $MNT/f1
-
-  setfattr -n "security.one" -v 2 $MNT/f1
-  btrfs property set /mnt ro true
-
-  setfattr -n "security.one" -v 1 $MNT/f1
-
-  umount $MNT
-
-CC: stable@vger.kernel.org # 4.9+
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/xattr.c |    3 +++
- 1 file changed, 3 insertions(+)
+ include/net/netfilter/nf_tables.h | 5 +++++
+ net/netfilter/nf_tables_api.c     | 4 ++++
+ 2 files changed, 9 insertions(+)
 
---- a/fs/btrfs/xattr.c
-+++ b/fs/btrfs/xattr.c
-@@ -371,6 +371,9 @@ static int btrfs_xattr_handler_set(const
- 				   const char *name, const void *buffer,
- 				   size_t size, int flags)
- {
-+	if (btrfs_root_readonly(BTRFS_I(inode)->root))
-+		return -EROFS;
+diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
+index 6c062b2509b9b..e66fee99ed3ea 100644
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -176,10 +176,15 @@ struct nft_ctx {
+ 	bool				report;
+ };
+ 
++enum nft_data_desc_flags {
++	NFT_DATA_DESC_SETELEM	= (1 << 0),
++};
 +
- 	name = xattr_full_name(handler, name);
- 	return btrfs_setxattr_trans(inode, name, buffer, size, flags);
+ struct nft_data_desc {
+ 	enum nft_data_types		type;
+ 	unsigned int			size;
+ 	unsigned int			len;
++	unsigned int			flags;
+ };
+ 
+ int nft_data_init(const struct nft_ctx *ctx, struct nft_data *data,
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index df79ea6004a59..b36728cfc5d81 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -4865,6 +4865,7 @@ static int nft_setelem_parse_data(struct nft_ctx *ctx, struct nft_set *set,
+ 	desc->type = dtype;
+ 	desc->size = NFT_DATA_VALUE_MAXLEN;
+ 	desc->len = set->dlen;
++	desc->flags = NFT_DATA_DESC_SETELEM;
+ 
+ 	return nft_data_init(ctx, data, desc, attr);
  }
+@@ -8677,6 +8678,9 @@ static int nft_verdict_init(const struct nft_ctx *ctx, struct nft_data *data,
+ 			return PTR_ERR(chain);
+ 		if (nft_is_base_chain(chain))
+ 			return -EOPNOTSUPP;
++		if (desc->flags & NFT_DATA_DESC_SETELEM &&
++		    chain->flags & NFT_CHAIN_BINDING)
++			return -EINVAL;
+ 
+ 		chain->use++;
+ 		data->verdict.chain = chain;
+-- 
+2.35.1
+
 
 

@@ -2,74 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DA15A44A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21525A44A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiH2IK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S229787AbiH2IKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiH2IKw (ORCPT
+        with ESMTP id S229535AbiH2IKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:10:52 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88069543DB;
-        Mon, 29 Aug 2022 01:10:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id B5A022059C;
-        Mon, 29 Aug 2022 10:09:44 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eZo_ZvLRGrG9; Mon, 29 Aug 2022 10:09:44 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+        Mon, 29 Aug 2022 04:10:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DC13F1C6;
+        Mon, 29 Aug 2022 01:10:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 4364720590;
-        Mon, 29 Aug 2022 10:09:44 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout1.secunet.com (Postfix) with ESMTP id 33F2080004A;
-        Mon, 29 Aug 2022 10:09:44 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 29 Aug 2022 10:09:44 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 29 Aug
- 2022 10:09:43 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 5A91D3182ABC; Mon, 29 Aug 2022 10:09:43 +0200 (CEST)
-Date:   Mon, 29 Aug 2022 10:09:43 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Hongbin Wang <wh_bin@126.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] xfrm: Drop unused argument
-Message-ID: <20220829080943.GN566407@gauss3.secunet.de>
-References: <20220822034147.2284570-1-wh_bin@126.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D28B260B4A;
+        Mon, 29 Aug 2022 08:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 450C1C433C1;
+        Mon, 29 Aug 2022 08:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661760611;
+        bh=ghn7+0lbp5TnGMDV+RA4jLLC7eiUFlyQ9hTLHez9pJw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rbO9/u5UUBaOsqvim3f+1Aqomcquo6sV4EGA/3by6gGygz0l0JAvicMAr5e54PM7+
+         bBxFeP4uesJ+ZsvUG6ZCbSgEbrIJRxUYEXcItUh0Ur7EHotBO/yrb4zqn0cWt+Mxd0
+         3qAPqk1NEXIyjYCTa6hknc6R2G1PeEOvNFnSuBU/B73VIlatVXzZh4zIg7qOc+xKh7
+         45ME4vlZAbbU97XIHvxtNh89gSmM/Ezk+f+hiXNZnCg2GFL+T2iZoCuadDnTyWFCPr
+         UUQISYJasVOKFUKF97pJLaF4Bk+W1X44/o1uaJQMtiQT1Es7pd/431eOQ1XaQB8rEr
+         LPArsZwfLkN3w==
+Date:   Mon, 29 Aug 2022 10:10:02 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v3 1/6] reset: imx7: Add the iMX8MP PCIe PHY PERST support
+Message-ID: <Ywx0WorLvPrXGVt9@lpieralisi>
+References: <1660806153-29001-1-git-send-email-hongxing.zhu@nxp.com>
+ <1660806153-29001-2-git-send-email-hongxing.zhu@nxp.com>
+ <ddbcd90419e9bb4ce7c5b7b3055ee3227c179321.camel@pengutronix.de>
+ <AS8PR04MB867626BC5C32AA75466BB9E78C6D9@AS8PR04MB8676.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220822034147.2284570-1-wh_bin@126.com>
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR04MB867626BC5C32AA75466BB9E78C6D9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 11:41:47PM -0400, Hongbin Wang wrote:
-> Drop unused argument from xfrm_policy_match,
-> __xfrm_policy_eval_candidates and xfrm_policy_eval_candidates.
-> No functional changes intended.
-> 
-> Signed-off-by: Hongbin Wang <wh_bin@126.com>
+On Thu, Aug 18, 2022 at 10:53:24AM +0000, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Philipp Zabel <p.zabel@pengutronix.de>
+> > Sent: 2022年8月18日 16:51
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; l.stach@pengutronix.de;
+> > bhelgaas@google.com; lorenzo.pieralisi@arm.com; robh@kernel.org;
+> > shawnguo@kernel.org; vkoul@kernel.org; alexander.stein@ew.tq-group.com;
+> > marex@denx.de
+> > Cc: linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
+> > linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+> > <linux-imx@nxp.com>
+> > Subject: Re: [PATCH v3 1/6] reset: imx7: Add the iMX8MP PCIe PHY PERST
+> > support
+> > 
+> > Hi Richard,
+> > 
+> > On Do, 2022-08-18 at 15:02 +0800, Richard Zhu wrote:
+> > > On i.MX7/iMX8MM/iMX8MQ, the initialized default value of PERST
+> > > bit(BIT3) of SRC_PCIEPHY_RCR is 1b'1.
+> > > But i.MX8MP has one inversed default value 1b'0 of PERST bit.
+> > >
+> > > And the PERST bit should be kept 1b'1 after power and clocks are stable.
+> > > So add the i.MX8MP PCIe PHY PERST support here.
+> > 
+> > the description is good now. It would be nice if this could also be mentioned in
+> > the Reference Manual.
+> > 
+> > Please replace "add" with "fix" in the subject, as I requested earlier:
+> > "reset: imx7: Fix i.MX8MP PCIe PHY PERST support".
+> > 
+> > And add a fixes line:
+> > 
+> > Fixes: e08672c03981 ("reset: imx7: Add support for i.MX8MP SoC")
+> > 
+> > With those two changes,
+> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> > 
+> Hi Philipp:
+> Okay, would be changed in next version.
 
-Applied to ipsec-next, thanks!
+AFAICS there is still a pending comment on patch (2) but I will
+mark this as "Changes requested" and wait for the next version.
+
+Lorenzo
+
+> Thanks for your review.
+> 
+> Best Regards
+> Richard Zhu
+> 
+> > regards
+> > Philipp
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

@@ -2,129 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA0B5A4C2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C895A4C30
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiH2Moe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
+        id S230007AbiH2MqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiH2MoP (ORCPT
+        with ESMTP id S229573AbiH2MqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:44:15 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556B79E881
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:29:21 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id n8-20020a17090a73c800b001fd832b54f6so5752871pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=CQmPQiZbqJl3F1hmW3HEOlbIzS9LIPFvPFvLkS4xj3A=;
-        b=OYKzSZaMCxX4OXsRl1egB+pH2XdaiGlHR5RdNXaCcpG2JWVN+/X1Gg4jhGTuCDsqS3
-         xQieVSf1ZVHuHezy46Pz4X+r+auMgAbjBZQqJIJUUjOFGfo9M/1BecpJdnVqVzJcQR+D
-         5zpoqRsdzwxL0jC6akJ2u4RWY514EZfImXJpiUfHPxD8xYpSL7RelRug948NB8icEPdU
-         h+9D5swl8uKtXhJfYIVoX01taLqe2M+7S8YYVOcxB2yXMSrKBBir5LhqjRq8b+spCs4S
-         okHtMa1GHZFw9vgDHKKnENsXw1j2uNmLPbCla5eOLzm56Wev5V7DrzTS5rWp51z6BaUh
-         Tbzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=CQmPQiZbqJl3F1hmW3HEOlbIzS9LIPFvPFvLkS4xj3A=;
-        b=VGKr5xCc+SI4AzUNRMMqErhNw5K0Zt9VTABAjfwedkjzCaKn9Lm4AOvW6gnrzEaVxw
-         behAWu0H4t7RPrIMQeuLK9YyrZR8EXcGPsdnMzxpJ6ytCKKgNh8lWqfWOIeo0i4tXHIP
-         54JxhNU48LC8H/S8IUqDTfQ1WgqIES94Q9KwPcLvcpLrNbul5kzPRIF9DlUj0cI4Zle/
-         i/dmHuhMSRPiWlmT+8cFf4cjH9veDkY+LTlKPdawtX998JQoDdkUBoxCr29UzVaA7gCd
-         iJMfxWI3caJFp3clTRDRcEEnMNuyoZs/5mhvDibX6EJUOUW8ecRVHIP/f3L+VQY2cLhE
-         JzQA==
-X-Gm-Message-State: ACgBeo0WUHP8G/Z0pvlDx1XMPNgSlnQqD2rbAKoQpMgyth+eBZpmddCQ
-        xHo5ejON+hAftvrSoWHqEfI=
-X-Google-Smtp-Source: AA6agR4ERp49BkEJRZeAPhtidKBWr2tA9X2Jqu9y5S2+tKQ9seYBETGT092ViFsKvqltgF+DFoNh7A==
-X-Received: by 2002:a17:902:be16:b0:170:8ebf:204c with SMTP id r22-20020a170902be1600b001708ebf204cmr17047264pls.47.1661776160098;
-        Mon, 29 Aug 2022 05:29:20 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b202-20020a621bd3000000b005377c854b50sm7109553pfb.1.2022.08.29.05.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 05:29:19 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com
-Cc:     airlied@linux.ie, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] drm/amdkfd: remove redundant variables err and ret
-Date:   Mon, 29 Aug 2022 12:29:14 +0000
-Message-Id: <20220829122914.268251-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 Aug 2022 08:46:00 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48A796741;
+        Mon, 29 Aug 2022 05:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=oPV5NlAapyYKsMKix8J75RJ02IN7sGmLcvFnbH2RKWA=; b=20wFvXOaYJIZPTsPGsPrCPepIh
+        4rNSfHsAu4ElWMwNcC0k2+qtA5Op1OnO8WFZI/KAU1TJ5wK5gYw4Ki5LQuIRje2Uez63NKAuoCM5z
+        7K3/AnAGde4HwVjdc4LkYrhQoV81xImhX8IG8S5H2OLj+csizhCC8JYJZEoHnXgAI9Pc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oSduP-00Exg8-PQ; Mon, 29 Aug 2022 14:30:29 +0200
+Date:   Mon, 29 Aug 2022 14:30:29 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Divya.Koppera@microchip.com
+Cc:     michael@walle.cc, o.rempel@pengutronix.de,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH net-next] net: phy: micrel: Adding SQI support for
+ lan8814 phy
+Message-ID: <YwyxZQrpuJo98yGk@lunn.ch>
+References: <20220825080549.9444-1-Divya.Koppera@microchip.com>
+ <20220826084249.1031557-1-michael@walle.cc>
+ <CO1PR11MB477162C762EF35B0E115B952E2759@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <421712ea840fbe5edffcae4a6cb08150@walle.cc>
+ <CO1PR11MB47715CFC7E22969BD00F9E6AE2769@CO1PR11MB4771.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CO1PR11MB47715CFC7E22969BD00F9E6AE2769@CO1PR11MB4771.namprd11.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> Yes Channel 0 is correct.
+> 
+> > Again this is the first time I hear about SQI but it puzzles me that
+> > it only evaluate one pair in this case. So as a user who reads this
+> > SQI might be misleaded.
+> > 
+> 
+> Yeah, It needs uAPI extension.
 
-Return value from kfd_wait_on_events() and io_remap_pfn_range() directly
-instead of taking this in another redundant variable.
+I think the current uAPI actually allows it, sort of. You can have
+multiple instances of a netlink property in a netlink message.  So
+simply add 2 or 4 ETHTOOL_A_LINKSTATE_SQI properties. The existing
+user space tools will likely just print the first value it
+finds. Newer versions can walk the messages and print them all.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+The alternative is to add a new nest, like i did for cable test
+results:
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-index 664e8b5d82c0..84da1a9ce37c 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-@@ -876,14 +876,11 @@ static int kfd_ioctl_wait_events(struct file *filp, struct kfd_process *p,
- 				void *data)
- {
- 	struct kfd_ioctl_wait_events_args *args = data;
--	int err;
- 
--	err = kfd_wait_on_events(p, args->num_events,
-+	return kfd_wait_on_events(p, args->num_events,
- 			(void __user *)args->events_ptr,
- 			(args->wait_for_all != 0),
- 			&args->timeout, &args->wait_result);
--
--	return err;
- }
- static int kfd_ioctl_set_scratch_backing_va(struct file *filep,
- 					struct kfd_process *p, void *data)
-@@ -2860,7 +2857,6 @@ static int kfd_mmio_mmap(struct kfd_dev *dev, struct kfd_process *process,
- 		      struct vm_area_struct *vma)
- {
- 	phys_addr_t address;
--	int ret;
- 
- 	if (vma->vm_end - vma->vm_start != PAGE_SIZE)
- 		return -EINVAL;
-@@ -2880,12 +2876,11 @@ static int kfd_mmio_mmap(struct kfd_dev *dev, struct kfd_process *process,
- 		 process->pasid, (unsigned long long) vma->vm_start,
- 		 address, vma->vm_flags, PAGE_SIZE);
- 
--	ret = io_remap_pfn_range(vma,
-+	return io_remap_pfn_range(vma,
- 				vma->vm_start,
- 				address >> PAGE_SHIFT,
- 				PAGE_SIZE,
- 				vma->vm_page_prot);
--	return ret;
- }
- 
- 
--- 
-2.25.1
+ +-+-------------------------------------------+--------+---------------------+
+ | | ``ETHTOOL_A_CABLE_NEST_RESULT``           | nested | cable test result   |
+ +-+-+-----------------------------------------+--------+---------------------+
+ | | | ``ETHTOOL_A_CABLE_RESULTS_PAIR``        | u8     | pair number         |
+ +-+-+-----------------------------------------+--------+---------------------+
+ | | | ``ETHTOOL_A_CABLE_RESULTS_CODE``        | u8     | result code         |
+ +-+-+-----------------------------------------+--------+---------------------+
 
+You can then explicitly indicate which cable pair the SQI value
+corresponds to. In order to keep backwards compatibility, you would
+still need to provide ETHTOOL_A_LINKSTATE_SQI, and then additionally
+have these nests.
+
+     Andrew

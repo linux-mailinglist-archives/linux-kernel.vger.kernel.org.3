@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728AA5A4977
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F6F5A497D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiH2LZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S231923AbiH2LZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiH2LX0 (ORCPT
+        with ESMTP id S231899AbiH2LXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:23:26 -0400
+        Mon, 29 Aug 2022 07:23:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAE72670;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2051D21B0;
         Mon, 29 Aug 2022 04:14:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A69FB80FA8;
-        Mon, 29 Aug 2022 11:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897AFC433C1;
-        Mon, 29 Aug 2022 11:14:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C66BB80FAF;
+        Mon, 29 Aug 2022 11:14:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E3EC433D6;
+        Mon, 29 Aug 2022 11:14:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771682;
-        bh=MBel4Wq5Yz7ST7ROHnueX+ftlBhkIHjEmnLie/o22rU=;
+        s=korg; t=1661771685;
+        bh=DB3AT2IlIwSAIYhJM/lAlW92OBQo093rsc1IbSXg7mY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j0z3Zy074O8nblOWABptQVdt7MH0nMk2DpVC94Gg4NeAdZ8xIjfYAlNLk7curdA3c
-         KWr1ao9JjsWbhFcwX1ukarq6Sg9+7snYxNA78+KyHGSA7Z7Rz0l2n4Z2TURt1ci7OO
-         fcefOzR4SXO/WmaZvvIJfoRhoCAfm9gczO3qTNdA=
+        b=D4zo4AzbNvO0XdmzT/M9rsMYoWs7Nu9iPb5iKzlSsd88lazycSH/gNeVNbtYNtN03
+         3kI6tp6hkbZhIiukkabZkNvmKhm5BLervgek2h1J5n+ejeaScbHeKenEhr8KKtti3A
+         FmQGDrPoLhxu0zwkJRzQkWO7CO0wTbPXv6pNB5lU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gwangun Jung <exsociety@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 062/158] netfilter: nf_tables: disallow binding to already bound chain
-Date:   Mon, 29 Aug 2022 12:58:32 +0200
-Message-Id: <20220829105811.317082397@linuxfoundation.org>
+Subject: [PATCH 5.19 063/158] netfilter: flowtable: add function to invoke garbage collection immediately
+Date:   Mon, 29 Aug 2022 12:58:33 +0200
+Message-Id: <20220829105811.360293628@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -57,31 +56,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit e02f0d3970404bfea385b6edb86f2d936db0ea2b ]
+[ Upstream commit 759eebbcfafcefa23b59e912396306543764bd3c ]
 
-Update nft_data_init() to report EINVAL if chain is already bound.
+Expose nf_flow_table_gc_run() to force a garbage collector run from the
+offload infrastructure.
 
-Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
-Reported-by: Gwangun Jung <exsociety@gmail.com>
 Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/net/netfilter/nf_flow_table.h |  1 +
+ net/netfilter/nf_flow_table_core.c    | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index b2c89e8c2a655..bc690238a3c56 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -9657,6 +9657,8 @@ static int nft_verdict_init(const struct nft_ctx *ctx, struct nft_data *data,
- 			return PTR_ERR(chain);
- 		if (nft_is_base_chain(chain))
- 			return -EOPNOTSUPP;
-+		if (nft_chain_is_bound(chain))
-+			return -EINVAL;
- 		if (desc->flags & NFT_DATA_DESC_SETELEM &&
- 		    chain->flags & NFT_CHAIN_BINDING)
- 			return -EINVAL;
+diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+index 64daafd1fc41c..32c25122ab184 100644
+--- a/include/net/netfilter/nf_flow_table.h
++++ b/include/net/netfilter/nf_flow_table.h
+@@ -270,6 +270,7 @@ void flow_offload_refresh(struct nf_flowtable *flow_table,
+ 
+ struct flow_offload_tuple_rhash *flow_offload_lookup(struct nf_flowtable *flow_table,
+ 						     struct flow_offload_tuple *tuple);
++void nf_flow_table_gc_run(struct nf_flowtable *flow_table);
+ void nf_flow_table_gc_cleanup(struct nf_flowtable *flowtable,
+ 			      struct net_device *dev);
+ void nf_flow_table_cleanup(struct net_device *dev);
+diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+index f2def06d10709..18453fa25199c 100644
+--- a/net/netfilter/nf_flow_table_core.c
++++ b/net/netfilter/nf_flow_table_core.c
+@@ -442,12 +442,17 @@ static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
+ 	}
+ }
+ 
++void nf_flow_table_gc_run(struct nf_flowtable *flow_table)
++{
++	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
++}
++
+ static void nf_flow_offload_work_gc(struct work_struct *work)
+ {
+ 	struct nf_flowtable *flow_table;
+ 
+ 	flow_table = container_of(work, struct nf_flowtable, gc_work.work);
+-	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
++	nf_flow_table_gc_run(flow_table);
+ 	queue_delayed_work(system_power_efficient_wq, &flow_table->gc_work, HZ);
+ }
+ 
+@@ -606,10 +611,11 @@ void nf_flow_table_free(struct nf_flowtable *flow_table)
+ 
+ 	cancel_delayed_work_sync(&flow_table->gc_work);
+ 	nf_flow_table_iterate(flow_table, nf_flow_table_do_cleanup, NULL);
+-	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
++	nf_flow_table_gc_run(flow_table);
+ 	nf_flow_table_offload_flush(flow_table);
+ 	if (nf_flowtable_hw_offload(flow_table))
+-		nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
++		nf_flow_table_gc_run(flow_table);
++
+ 	rhashtable_destroy(&flow_table->rhashtable);
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_table_free);
 -- 
 2.35.1
 

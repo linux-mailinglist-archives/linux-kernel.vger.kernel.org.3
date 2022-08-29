@@ -2,158 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1D95A55BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860805A55C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiH2UqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S229579AbiH2Uri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiH2UqO (ORCPT
+        with ESMTP id S229499AbiH2Urg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:46:14 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC16642DC;
-        Mon, 29 Aug 2022 13:46:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFetXRNCGO/39URH390mk+Qw+jtZRnkJ6m4zyWwgOgbt/p6yCqc8TRh739EKM0hxabGvcxcQGs1J3/TrzStFUxi0gRV6fJK7MHUQdywU0vwwMcDBaRNRPL7VY8qjiR5RLPdwnoeOckxwElUoRnewPvYWOgE3VQLSF6pwjvuQiCOBX/nYIIuBu983vg8dVzmCTItbxwV4pSRnsdzx1SxoY6G0nktdGux3Ocv6BV5RytXGGhSr6M6w7vQDCGBN+0nSxIMzgeKoAcOBV61MksrTaHx4utLrf0BmejwxnonsAN2t8BMCswWag5JgXm73UL+toz1mzcOpI8dO9YoDDZSndg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CWp/XtUPUohUcS+iACO1Y8dXpM+R8QbHY9rueWYQGn0=;
- b=dL/I4Q/ye/9f/UwDPqo8Bl3+ToH+9gw0F7fid3h8mDiioBLZOfJb4xg+Ua5RxA5Zkx4wtMpdWNnOgLQZniNPfXbRcqlGCdKF33w0vhm2Gr6w6Ib/PK47h55x9PBQsHyQzD3Yh/vzNMdlA10inzv1A67chMgMZqDw7aC92a0CIgjrZsalg7i8aNriD1PlmpNei3wVUMe7rmRLthQk18KiLPqb/1LFYOWwv1oMaopUCOyXoWkX0ed/dG5Ewx3KmsXPPGld68GpaXPJoi9dQaaA6+I9QCca208Oojk4zU195APoAXtC1rmC6isBgMVR+nCcrMRxRWEOwgvS2jRsUogbjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CWp/XtUPUohUcS+iACO1Y8dXpM+R8QbHY9rueWYQGn0=;
- b=ti955YyPAUQO/Jv+nlk/g3N88+Kybswv1xrGvxqIgtdGivMqN0O4Ki0NHkG3AJaRDui80pzMv/VPpgzwsrr1UDaNlShfU7d2jOMNz717Qb2N+UTdrLSoGcRqeHbqU+ozOFy0bUJXjeG2MVcWnV1X6q5xi6/qG3v3MTuxY0uNtSH+XVmr1nrMx1vNreVtI9XZPvuvs9tZH3OaItoK29b6e55bGKnnVtUxaU4EHUXaBxWwDoVK5K3ZsrhN8ZZdPybMJgQmvno4krIEodcJHRNSMsbo8450pME0X7IEd/nekNDz+fSubxWiLU03xFSfAE/x72jJa5fEyi7VHWbMnJbVqA==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by DM6PR12MB3260.namprd12.prod.outlook.com (2603:10b6:5:183::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Mon, 29 Aug
- 2022 20:46:06 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::25d3:32f3:4be5:da11]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::25d3:32f3:4be5:da11%7]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
- 20:46:06 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC:     "robh@kernel.org" <robh@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 0/9] i2c-mlxbf.c: bug fixes and new feature support
-Thread-Topic: [PATCH v2 0/9] i2c-mlxbf.c: bug fixes and new feature support
-Thread-Index: AQHYtmFspLN7eEXzUE2AAJMrZ0F9+63GXGUAgAAEL0A=
-Date:   Mon, 29 Aug 2022 20:46:05 +0000
-Message-ID: <CH2PR12MB38951B9B8F189E1B991A7950D7769@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <20220822195725.12656-1-asmaa@nvidia.com>
- <Yw0fNuOWtJbe/OT1@shikoro>
-In-Reply-To: <Yw0fNuOWtJbe/OT1@shikoro>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3f61014e-14a8-4365-a784-08da89ff7e94
-x-ms-traffictypediagnostic: DM6PR12MB3260:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: S7qF7gw07D6RXDdpEVJwwaJbhIj4LVKWgrcu2rHSMzHgcWXTCMaz48qgFiGSpvrmBqX2rtk1G3HcNzM2/4/2TOugdY/EiHEc0vNw67SABXFlv3mv6ZjylTfT/UUGoZkt8myDdm9mYGFG4xMrTekhsWNVUWbU5nQDBCh1I7MmLaed/n7sRym7FMd2XscQCO07/xBY1x+IakQdVypg5IAXzgvBr/gCAexs3iAEr0Fo2RUYzHtBZQE0qE8O5sSglpiPrHbbMEeW9N+h4KZouURiXHTZbJwaUzAKzh2Ufjln0m/CB2wv4tvCTe6LqORyDSSFZMlfRrgDMBJMLgJXSdbIIdUSDIKBNJuNVdlRpKHWnjjFGPRWrki27gr16ouTLw7r2rz4hOtwc9ALqrI8QHGlJwzu+1BPy913Dkc+/PBpJz5c6MamcnQsX7TK4IYJC8mCie7jQVv1qW8fC0EDuru1ORNzzQz1hB7YWuO8mmbPj5wTgQEDw7vxietcsOWqkVPa2WgmHrhfIgHqE8aMirJbVla92z8XtUbg6UQbrsxbkBQg1Jg25/B1nPNCaBu79wthtP+um02s2FXHilhA08wfjfciGr/AaWfTToVKg494SWFuPOxLdBJlLwExwAOrcCALmJuiXawHJ9PBlPdfrhKavwdqca1H2mGqN1CabVk91yC+xd94duLfzsEzVtvGJSaeaRU02an3MZM8Es9BbGnMPtpVFRhMXwJ6fY3sfbN2MsHRQl3cawg3jr2cdRU2nBrGLoYl3KzEX3yw/oCobAbPQ/i5WNkhnFKfIpmPsu8JbuURQroO0Eeg2tBs1l7RhwAc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(122000001)(55016003)(38100700002)(86362001)(38070700005)(54906003)(66946007)(66476007)(8676002)(66556008)(76116006)(64756008)(4326008)(66446008)(41300700001)(8936002)(5660300002)(478600001)(52536014)(71200400001)(316002)(186003)(33656002)(7696005)(83380400001)(2906002)(26005)(6506007)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iFYkTz8aLVXv+xbgAgHS+PYTMDYK+7/KUEIEAPXDe/6k7q2r0mbIwA/eVWjB?=
- =?us-ascii?Q?0tkiO1ftvh7bnLdJgVPzYKELWzPqr0U7yGV1A93PsT5m8xuSPMZxq3qDcT1D?=
- =?us-ascii?Q?ckxZvUPHX61NkFpoYsGLhRprT+it9ZVhJcgnJLaPkkO7hglaxEO75vVXojzi?=
- =?us-ascii?Q?nL8OLw8K9OOWEUfTLNEVbgF+rcBv3cgBpdP7VieDndZIuXUaB4oYayXMhDYY?=
- =?us-ascii?Q?4sYNnLP9wiELukKsHKC5MFGJLZ4KPrCm9bbaQyhsOZVH1DI6wyDkj6cg+oJh?=
- =?us-ascii?Q?r+Do8A/2IrTAW4PbY6f6gYzRkjLH0/5CoQGlG+yWQw8duNQ/e70YAWkZK3TW?=
- =?us-ascii?Q?ClB9jeeTt+wcvg1n/sQt/nNpFSYaOBwsh+ejzVbS0xIfI8wSLvKLI9+Zy57r?=
- =?us-ascii?Q?EeJiS1m77+yRzYO+rI57TCG+wW9oG5GJb9sqPCA75WDon++NGflmATRmH2/5?=
- =?us-ascii?Q?2hNNp1nYgOj2VKhvkQ4WiDEfxF/9WEHvS5I4vYllSPkMJmqT2Odl7MuPCT4x?=
- =?us-ascii?Q?Ge4NvqJGPxNxcZEvwi23tLscKAGexyqG5ubpwKoNBTV2ipmsqFngJUlG2yKR?=
- =?us-ascii?Q?AkY4vfPxiTq8DRwcXGe3KT1r7hOBo9VaX0VTznkz8QzIMv12AowEIdfmIKc0?=
- =?us-ascii?Q?YVKi740llchb5Yvgn8OyVhPmMRaMGWVTuvrnIty2DNODXeZLcjYJTNtsfB51?=
- =?us-ascii?Q?MvaiTroDwbmmW7FVNePLm+4xhFNs1ZpObP73VqGxAA31pcwBe2a+h3IcBTD+?=
- =?us-ascii?Q?pCQSJNpEfmjgwvdiaQSdT+HFWOLRDFJK4HHiko/JAJ8SzKWjg+U+AKgSq9Gz?=
- =?us-ascii?Q?pmgDOS18QXzYNRLMZMYLz0VWWL2mx+Oh2ahRCsJ2rwSrUEdy20mjOIkq8tQY?=
- =?us-ascii?Q?HtddbLWsTMfxX1Kn15izeswTEnTfWPiO2m9KC0YtlkzDnAUGelrWyIvYEhJv?=
- =?us-ascii?Q?vdkOD8pdXAIkkaUmTkObtjWGb+2u/pkj6X3zLYR11cDiEZ1YQYLBws4OXVKT?=
- =?us-ascii?Q?9XCDe9U8N5+NH4bEXDZ/OU3BlseCfg8LsAmeGlJ3Fh7uc1SOaIUSnFznHDC1?=
- =?us-ascii?Q?8aL7ty0wXo4EDUQ5VqvI7q4xwsR8HABdQwsSa+RhBvhXIA6zJO9+AdM8Hh64?=
- =?us-ascii?Q?YGBWns8G5oNsBy9+FSW/AGBUvJ3zryY96QPv8VgOnqCPHII+rIQnruqSqq92?=
- =?us-ascii?Q?DorjCqtkMcusOSyrQBWzwaA6CmaxPlZ90LXTUgwFTRN5DPpCD85LkXfUUv0L?=
- =?us-ascii?Q?hy63R+3HcI+wKlbrnhyzm2tUtzg1LvBJw/4loBNRuscEy+EoLOsZCNedqyUB?=
- =?us-ascii?Q?NRVVkwvlXYq368Y3Xq8UqyFTz8kWQYge7yZqO6kJ3o/yipgFOimtNjopj2V4?=
- =?us-ascii?Q?vZ5DuHeTTgUQAOEjFplQSLZFTgRrhYAFGEaHqRkLt+u+rrkxm2cpZQdhFImC?=
- =?us-ascii?Q?z+izC8QnRoVovJ5OwMT0U1VNNQs33DcBaOjX264KFcQNfU1Co8Vvz1JLVHuG?=
- =?us-ascii?Q?Bocu04SA+OmEgyytwQ0emRAXRxfOgJovxcKr8Ls5sY2GcaEx+LtcS2R6Gy0j?=
- =?us-ascii?Q?JgaKyCHfSZWsi1pRdxs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 29 Aug 2022 16:47:36 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EED71984
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:47:34 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id t5so9215398pjs.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=S7cQYEpj0+Wy/0rxU7sQpe7ziCh6bG0rF+PkNoZ9kig=;
+        b=msb9HLjqZCX3GNCYA+ZBf0iuuY/+eKlxQQYpoWQPIjHj49gdYFZFDZILWrvHgj/PqB
+         T+UhKG9QTKqeEtJNmFl+GpA4AFswhmc4aE2Z0Zq/gizQN5yh0wGdu0NLxhJHozujRvXh
+         jHja7U4ZbA4FBLqlAf5Z/e46cB/DcZTa0kwC0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=S7cQYEpj0+Wy/0rxU7sQpe7ziCh6bG0rF+PkNoZ9kig=;
+        b=WEE0/az7N+2IAj/CqcISQFnz5z9Dz8T3yQUXfdYLV0uIlcDMGdPfFMP2NRSZxsaCaV
+         BfX3CD/ir/1WnRmuj5zgb5dBmxYn0W2NJ+u+IUtZSV7WvYW6AdZlS7nk5P9BFpBRDo5V
+         IaeTsF3iAiee1hiZObDcrzKZNv73V8OI6H/oGNHCq/M7oP73WQFSuANmrflUKsYkDot1
+         J3pGjfZsI8Tpu6lRmgWjmcSwRlUzYL7nSbbNE2Zb8hzOhCSQjrShAwXFWI2BE0/r9hGW
+         qW5pU53U2rGyt3/fhfO+oQ2URHVSXRlyzpsH3UwOXckRP1m4tmWpd06mgDRg+NM6wrEO
+         /33w==
+X-Gm-Message-State: ACgBeo0MopNAoTruD+fTiobi6xXNtBcwe+2J3nOukvjMJ+N5Ik4qYPIF
+        XPpuwqe/nUp4ON92pp47OikuhQ==
+X-Google-Smtp-Source: AA6agR5jNCxTeK380ecflHe3U18zodV1fMnLRM1sW4GLBxwCkF/xsxVO9llNAfQ+ATlOO+6W98OVDQ==
+X-Received: by 2002:a17:90a:4e0d:b0:1fb:bd1b:624a with SMTP id n13-20020a17090a4e0d00b001fbbd1b624amr20253532pjh.228.1661806054206;
+        Mon, 29 Aug 2022 13:47:34 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z1-20020a170903018100b0017515e598c5sm146599plg.40.2022.08.29.13.47.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 13:47:32 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-hardening@vger.kernel.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] overflow: Allow mixed type arguments
+Date:   Mon, 29 Aug 2022 13:47:29 -0700
+Message-Id: <20220829204729.3409270-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f61014e-14a8-4365-a784-08da89ff7e94
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Aug 2022 20:46:05.9371
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HCnCkXqvaHJpUQRccoJi4AnLnT70CBtPQTLi1W1ihWJ1iVdvWZM8AkkdWeG/yOtesnI9oFV2KF1xWn5E/wgNKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3260
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6556; h=from:subject; bh=1wrrZrTK9sGT31xuzroB1VFkTRAy5po/e9xK7KFUjD8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjDSXgxTbCiSvFKhYmgEBHMwDvvrZb89J1ZzDdh/sp 2QzExJeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYw0l4AAKCRCJcvTf3G3AJnKDEA CbTVf4QLO7t4eeUc/CkQO9lNX65jvt7NmKNe5Kd2wdXaA6kujATEO79IXdNQ6QocI8UpbQVlajOlaF guPRxOyA2gvvvOokjfVlmDy2DdFOqIavUP0kH2ukyqDgo1bvYSTM3R0/c3ZJCKtG2vYnqQMtZqigBF CiSg47Bl0IesbmsTEG/rd9NpTpbJns016wF7Aal+dPzt9Pl1JESkfQ4hPjCWVVMoFrB0ywfEqJcql7 XI6vreexRC41ZsBEFsgoOCb1CjHQlf8K+OjvnEUs71BZo1oAOD+LO3CAiOPAti4Y2k09Ww55o+qu5O hB8hEx+CRFyPAiEwEos4xKzm1TQ2DdcKVuhKdr5YNeJOkEvB9yvrKC7gdRyhYToNk8wkaJC1yvpdiT KLU//SG8k+Ojdbt7KQiFzd1SYkFk7uwuZbj2jiPrVCf1ZHucYKzuJznEtHqP7aZFhqpsxFgkByomEr 95egllrKUACepOCdMn6DfUUs31dGuXt2ZPCfs8loXfblRuw7TuM2HSqRMw4o5JCAtTBux1rB0EoftW FR1bfr8a+FXdDiRfnSWG/JOCiYeQ1bse0a04GK+ZjAAR3A/GfxNMxgiQN/hWb+CbhXUkY/Hs4F7u8p RJSW94sL5S0AOyYiMwsv78TnmGG2dCt6F0/XSX+loH0PWIqs+pNV8gKOboUQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is a series of patches fixing several bugs and implementing new=20
-> features.
+When the check_[op]_overflow() helpers were introduced, all arguments were
+required to be the same type to make the fallback macros simpler. However,
+once the fallback macros were removed[1], it is fine to allow mixed
+types, which makes using the helpers much more useful, as they can be
+used to test for type-based overflows (e.g. adding two large ints but
+storing into a u8), as would be handy in the drm core[2].
 
-What did change since v1 and where did Khalil's Rev-by tags go?
+Remove the restriction, and add additional self-tests that exercise some
+of the mixed-type overflow cases.
 
-Khalil told me to remove the rev-by : ) since it is supposed to be reserved=
- for the reviewers. I will add it back and describe what has changed in my =
-next set of patches. As a note , this is what changed from v1->v2:
-1) moved all the bug fixes to the top commits and left the features for las=
-t=20
-2) split the BlueField-3 SoC patch into 2 to address Rob's comment: one for=
- the driver code and another patch for the device tree binding yaml documen=
-tation file
-3) addressed  Rob's comment regarding keeping the device tree/acpi tables b=
-ackward compatible. So add the new resources at the end of the enum.
-4) update the license in a separate patch
+[1] https://git.kernel.org/linus/4eb6bd55cfb22ffc20652732340c4962f3ac9a91
+[2] https://lore.kernel.org/lkml/20220824084514.2261614-2-gwan-gyeong.mun@intel.com
 
-> Bug fixes:
-> 1) Fix the frequency calculation
-> 2) remove unnecessary IRQF_ONESHOT flag
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/overflow.h |  6 ----
+ lib/overflow_kunit.c     | 77 +++++++++++++++++++++++++++++-----------
+ 2 files changed, 57 insertions(+), 26 deletions(-)
 
-Is this really a bugfix?
-
-This is not a bug fix. We removed it because it is no longer needed.
-
-> 3) Fix incorrect base address passed during io write
-> 4) prevent stack overflow in mlxbf_i2c_smbus_start_transaction()
-> 5) Support lock mechanism
-
-Here, I am also not sure if this is a bugfix.
-
-I think this is a bug fix because we have an i2c driver also in UEFI so we =
-need this lock mechanism to avoid race conditions over acquiring the i2c bu=
-s. Not using this lock resulted in unexpected behavior.
-
-Thanks for the update,
-
-   Wolfram
+diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+index 0eb3b192f07a..ad692fb11bf3 100644
+--- a/include/linux/overflow.h
++++ b/include/linux/overflow.h
+@@ -63,8 +63,6 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ 	typeof(a) __a = (a);			\
+ 	typeof(b) __b = (b);			\
+ 	typeof(d) __d = (d);			\
+-	(void) (&__a == &__b);			\
+-	(void) (&__a == __d);			\
+ 	__builtin_add_overflow(__a, __b, __d);	\
+ }))
+ 
+@@ -72,8 +70,6 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ 	typeof(a) __a = (a);			\
+ 	typeof(b) __b = (b);			\
+ 	typeof(d) __d = (d);			\
+-	(void) (&__a == &__b);			\
+-	(void) (&__a == __d);			\
+ 	__builtin_sub_overflow(__a, __b, __d);	\
+ }))
+ 
+@@ -81,8 +77,6 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ 	typeof(a) __a = (a);			\
+ 	typeof(b) __b = (b);			\
+ 	typeof(d) __d = (d);			\
+-	(void) (&__a == &__b);			\
+-	(void) (&__a == __d);			\
+ 	__builtin_mul_overflow(__a, __b, __d);	\
+ }))
+ 
+diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+index 7e3e43679b73..ac771fe7e276 100644
+--- a/lib/overflow_kunit.c
++++ b/lib/overflow_kunit.c
+@@ -16,12 +16,15 @@
+ #include <linux/types.h>
+ #include <linux/vmalloc.h>
+ 
+-#define DEFINE_TEST_ARRAY(t)			\
+-	static const struct test_ ## t {	\
+-		t a, b;				\
+-		t sum, diff, prod;		\
+-		bool s_of, d_of, p_of;		\
+-	} t ## _tests[]
++#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)		\
++	static const struct test_ ## t1 ## t2 ## t {	\
++		t1 a;					\
++		t2 b;					\
++		t sum, diff, prod;			\
++		bool s_of, d_of, p_of;			\
++	} t1 ## t2 ## t ## _tests[]
++
++#define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
+ 
+ DEFINE_TEST_ARRAY(u8) = {
+ 	{0, 0, 0, 0, 0, false, false, false},
+@@ -235,8 +238,8 @@ DEFINE_TEST_ARRAY(s64) = {
+ 		a, b, r, _r, #t);				\
+ } while (0)
+ 
+-#define DEFINE_TEST_FUNC(t, fmt)					\
+-static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
++#define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
++static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
+ {							   		\
+ 	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
+ 	check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);	\
+@@ -245,15 +248,18 @@ static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
+ 	check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);	\
+ }									\
+ 									\
+-static void t ## _overflow_test(struct kunit *test) {			\
++static void n ## _overflow_test(struct kunit *test) {			\
+ 	unsigned i;							\
+ 									\
+-	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
+-		do_test_ ## t(test, &t ## _tests[i]);			\
++	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
++		do_test_ ## n(test, &n ## _tests[i]);			\
+ 	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
+-		ARRAY_SIZE(t ## _tests), #t);				\
++		ARRAY_SIZE(n ## _tests), #n);				\
+ }
+ 
++#define DEFINE_TEST_FUNC(t, fmt)					\
++	DEFINE_TEST_FUNC_TYPED(t ## t ## t, t, fmt)
++
+ DEFINE_TEST_FUNC(u8, "%d");
+ DEFINE_TEST_FUNC(s8, "%d");
+ DEFINE_TEST_FUNC(u16, "%d");
+@@ -265,6 +271,33 @@ DEFINE_TEST_FUNC(u64, "%llu");
+ DEFINE_TEST_FUNC(s64, "%lld");
+ #endif
+ 
++DEFINE_TEST_ARRAY_TYPED(u32, u32, u8) = {
++	{0, 0, 0, 0, 0, false, false, false},
++	{U8_MAX, 2, 1, U8_MAX - 2, U8_MAX - 1, true, false, true},
++	{U8_MAX + 1, 0, 0, 0, 0, true, true, false},
++};
++DEFINE_TEST_FUNC_TYPED(u32u32u8, u8, "%d");
++
++DEFINE_TEST_ARRAY_TYPED(u32, u32, int) = {
++	{0, 0, 0, 0, 0, false, false, false},
++	{U32_MAX, 0, -1, -1, 0, true, true, false},
++};
++DEFINE_TEST_FUNC_TYPED(u32u32int, int, "%d");
++
++DEFINE_TEST_ARRAY_TYPED(u8, u8, int) = {
++	{0, 0, 0, 0, 0, false, false, false},
++	{U8_MAX, U8_MAX, 2 * U8_MAX, 0, U8_MAX * U8_MAX, false, false, false},
++	{1, 2, 3, -1, 2, false, false, false},
++};
++DEFINE_TEST_FUNC_TYPED(u8u8int, int, "%d");
++
++DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
++	{0, 0, 0, 0, 0, false, false, false},
++	{1, 2, 3, U8_MAX, 2, false, true, false},
++	{-1, 0, U8_MAX, U8_MAX, 0, true, true, false},
++};
++DEFINE_TEST_FUNC_TYPED(intintu8, u8, "%d");
++
+ static void overflow_shift_test(struct kunit *test)
+ {
+ 	int count = 0;
+@@ -649,17 +682,21 @@ static void overflow_size_helpers_test(struct kunit *test)
+ }
+ 
+ static struct kunit_case overflow_test_cases[] = {
+-	KUNIT_CASE(u8_overflow_test),
+-	KUNIT_CASE(s8_overflow_test),
+-	KUNIT_CASE(u16_overflow_test),
+-	KUNIT_CASE(s16_overflow_test),
+-	KUNIT_CASE(u32_overflow_test),
+-	KUNIT_CASE(s32_overflow_test),
++	KUNIT_CASE(u8u8u8_overflow_test),
++	KUNIT_CASE(s8s8s8_overflow_test),
++	KUNIT_CASE(u16u16u16_overflow_test),
++	KUNIT_CASE(s16s16s16_overflow_test),
++	KUNIT_CASE(u32u32u32_overflow_test),
++	KUNIT_CASE(s32s32s32_overflow_test),
+ /* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
+ #if BITS_PER_LONG == 64
+-	KUNIT_CASE(u64_overflow_test),
+-	KUNIT_CASE(s64_overflow_test),
++	KUNIT_CASE(u64u64u64_overflow_test),
++	KUNIT_CASE(s64s64s64_overflow_test),
+ #endif
++	KUNIT_CASE(u32u32u8_overflow_test),
++	KUNIT_CASE(u32u32int_overflow_test),
++	KUNIT_CASE(u8u8int_overflow_test),
++	KUNIT_CASE(intintu8_overflow_test),
+ 	KUNIT_CASE(overflow_shift_test),
+ 	KUNIT_CASE(overflow_allocation_test),
+ 	KUNIT_CASE(overflow_size_helpers_test),
+-- 
+2.34.1
 

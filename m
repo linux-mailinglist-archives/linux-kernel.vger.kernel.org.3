@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3725A434F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D5C5A4353
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiH2Gd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 02:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
+        id S229839AbiH2GfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 02:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiH2Gdz (ORCPT
+        with ESMTP id S229766AbiH2GfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 02:33:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A462E9DE
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 23:33:54 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oSYL8-0003TH-DC; Mon, 29 Aug 2022 08:33:42 +0200
-Message-ID: <e6d5f688-f4c3-6094-91f6-a160b601c07d@pengutronix.de>
-Date:   Mon, 29 Aug 2022 08:33:39 +0200
+        Mon, 29 Aug 2022 02:35:11 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EDE11839;
+        Sun, 28 Aug 2022 23:35:07 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MGLDw4fThz1N7cK;
+        Mon, 29 Aug 2022 14:31:28 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 29 Aug 2022 14:35:04 +0800
+Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
+From:   xiujianfeng <xiujianfeng@huawei.com>
+To:     <mic@digikod.net>, <paul@paul-moore.com>, <jmorris@namei.org>,
+        <serge@hallyn.com>, <shuah@kernel.org>, <corbet@lwn.net>
+CC:     <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <20220827111215.131442-4-xiujianfeng@huawei.com>
+Message-ID: <1a6b3217-b709-f401-7007-5452648b70a1@huawei.com>
+Date:   Mon, 29 Aug 2022 14:35:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v1 0/2] Fix the wrong order of phy callbacks
-To:     Richard Zhu <hongxing.zhu@nxp.com>, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, vkoul@kernel.org,
-        marcel.ziswiler@toradex.com, kishon@ti.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
-Content-Language: en-US
-In-Reply-To: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20220827111215.131442-4-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,25 +54,192 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 22.08.22 15:10, Richard Zhu wrote:
-> Refer [1], phy_init() must be called before phy_power_on().
-> This series used to fix the wrong order of the phy_init() and phy_power_on(),
-> introduced by commit 1aa97b002258 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
-> Tested on i.MX8MM EVK board when one NVME device is used.
+ÔÚ 2022/8/27 19:12, Xiu Jianfeng Ð´µÀ:
+> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHGRP to
+> support restriction to chmod(2) and chown(2) with landlock.
 > 
-> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/phy/phy-core.c?id=v5.19-rc1#n233
+> If these two access rights are set on a directory, they only take effect
+> for its context, not the directory itself.
 > 
-> [PATCH v1 1/2] PCI: imx6: Fix the wrong order of phy_init() and
-> [PATCH v1 2/2] phy: freescale: imx8m-pcie: Fix the wrong order of
-
-This introduces an intermittent breakage. Can you squash?
-
+> This patch also change the landlock ABI version from 3 to 4.
 > 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>   include/uapi/linux/landlock.h                | 10 +++--
+>   security/landlock/fs.c                       | 43 +++++++++++++++++++-
+>   security/landlock/limits.h                   |  2 +-
+>   security/landlock/syscalls.c                 |  2 +-
+>   tools/testing/selftests/landlock/base_test.c |  2 +-
+>   tools/testing/selftests/landlock/fs_test.c   |  6 ++-
+>   6 files changed, 56 insertions(+), 9 deletions(-)
 > 
+> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+> index 735b1fe8326e..07b73626ff20 100644
+> --- a/include/uapi/linux/landlock.h
+> +++ b/include/uapi/linux/landlock.h
+> @@ -141,14 +141,16 @@ struct landlock_path_beneath_attr {
+>    *   directory) parent.  Otherwise, such actions are denied with errno set to
+>    *   EACCES.  The EACCES errno prevails over EXDEV to let user space
+>    *   efficiently deal with an unrecoverable error.
+> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
+> + * - %LANDLOCK_ACCESS_FS_CHGRP: Change the owner and/or group of a file.
+>    *
+>    * .. warning::
+>    *
+>    *   It is currently not possible to restrict some file-related actions
+>    *   accessible through these syscall families: :manpage:`chdir(2)`,
+> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+> - *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, :manpage:`access(2)`.
+> + *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`setxattr(2)`,
+> + *   :manpage:`utime(2)`,:manpage:`ioctl(2)`, :manpage:`fcntl(2)`,
+> + *   :manpage:`access(2)`.
+>    *   Future Landlock evolutions will enable to restrict them.
+>    */
+>   /* clang-format off */
+> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>   #define LANDLOCK_ACCESS_FS_MAKE_SYM			(1ULL << 12)
+>   #define LANDLOCK_ACCESS_FS_REFER			(1ULL << 13)
+>   #define LANDLOCK_ACCESS_FS_TRUNCATE			(1ULL << 14)
+> +#define LANDLOCK_ACCESS_FS_CHMOD			(1ULL << 15)
+> +#define LANDLOCK_ACCESS_FS_CHGRP			(1ULL << 16)
+>   /* clang-format on */
+>   
+>   #endif /* _UAPI_LINUX_LANDLOCK_H */
+> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> index 4ef614a4ea22..6ac83d96ada7 100644
+> --- a/security/landlock/fs.c
+> +++ b/security/landlock/fs.c
+> @@ -185,7 +185,9 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
+>   	LANDLOCK_ACCESS_FS_EXECUTE | \
+>   	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>   	LANDLOCK_ACCESS_FS_READ_FILE | \
+> -	LANDLOCK_ACCESS_FS_TRUNCATE)
+> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
+> +	LANDLOCK_ACCESS_FS_CHMOD | \
+> +	LANDLOCK_ACCESS_FS_CHGRP)
+>   /* clang-format on */
+>   
+>   /*
+> @@ -690,6 +692,31 @@ static inline int current_check_access_path(const struct path *const path,
+>   	return check_access_path(dom, path, access_request);
+>   }
+>   
+> +static inline int
+> +current_check_access_path_context_only(const struct path *const path,
+> +				       const access_mask_t access_request)
+> +{
+> +	const struct landlock_ruleset *const dom =
+> +		landlock_get_current_domain();
+> +	struct path eff_path;
+> +	int ret;
+> +
+> +	if (!dom)
+> +		return 0;
+> +	eff_path = *path;
+> +	/* if it's dir, check its visible parent. */
+> +	if (d_is_dir(eff_path.dentry)) {
+> +		path_get(&eff_path);
+> +		/* dont care if reaches the root or not. */
 
+I may made a mistake here, I think it should return -EACCES directly if 
+the walk result is not WALK_CONTINUE.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> +		walk_to_visible_parent(&eff_path);
+> +		ret = current_check_access_path(&eff_path, access_request);
+> +		path_put(&eff_path);
+> +	} else {
+> +		ret = current_check_access_path(&eff_path, access_request);
+> +	}
+> +	return ret;
+> +}
+> +
+>   static inline access_mask_t get_mode_access(const umode_t mode)
+>   {
+>   	switch (mode & S_IFMT) {
+> @@ -1177,6 +1204,18 @@ static int hook_path_truncate(const struct path *const path)
+>   	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
+>   }
+>   
+> +static int hook_path_chmod(const struct path *const path, umode_t mode)
+> +{
+> +	return current_check_access_path_context_only(path,
+> +					LANDLOCK_ACCESS_FS_CHMOD);
+> +}
+> +
+> +static int hook_path_chown(const struct path *const path, kuid_t uid, kgid_t gid)
+> +{
+> +	return current_check_access_path_context_only(path,
+> +					LANDLOCK_ACCESS_FS_CHGRP);
+> +}
+> +
+>   /* File hooks */
+>   
+>   static inline access_mask_t get_file_access(const struct file *const file)
+> @@ -1230,6 +1269,8 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(path_unlink, hook_path_unlink),
+>   	LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
+>   	LSM_HOOK_INIT(path_truncate, hook_path_truncate),
+> +	LSM_HOOK_INIT(path_chmod, hook_path_chmod),
+> +	LSM_HOOK_INIT(path_chown, hook_path_chown),
+>   
+>   	LSM_HOOK_INIT(file_open, hook_file_open),
+>   };
+> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
+> index 82288f0e9e5e..7cdd7d467d12 100644
+> --- a/security/landlock/limits.h
+> +++ b/security/landlock/limits.h
+> @@ -18,7 +18,7 @@
+>   #define LANDLOCK_MAX_NUM_LAYERS		16
+>   #define LANDLOCK_MAX_NUM_RULES		U32_MAX
+>   
+> -#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_TRUNCATE
+> +#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_CHGRP
+>   #define LANDLOCK_MASK_ACCESS_FS		((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
+>   #define LANDLOCK_NUM_ACCESS_FS		__const_hweight64(LANDLOCK_MASK_ACCESS_FS)
+>   
+> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> index f4d6fc7ed17f..469e0e11735c 100644
+> --- a/security/landlock/syscalls.c
+> +++ b/security/landlock/syscalls.c
+> @@ -129,7 +129,7 @@ static const struct file_operations ruleset_fops = {
+>   	.write = fop_dummy_write,
+>   };
+>   
+> -#define LANDLOCK_ABI_VERSION 3
+> +#define LANDLOCK_ABI_VERSION 4
+>   
+>   /**
+>    * sys_landlock_create_ruleset - Create a new ruleset
+> diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
+> index 72cdae277b02..9f00582f639c 100644
+> --- a/tools/testing/selftests/landlock/base_test.c
+> +++ b/tools/testing/selftests/landlock/base_test.c
+> @@ -75,7 +75,7 @@ TEST(abi_version)
+>   	const struct landlock_ruleset_attr ruleset_attr = {
+>   		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
+>   	};
+> -	ASSERT_EQ(3, landlock_create_ruleset(NULL, 0,
+> +	ASSERT_EQ(4, landlock_create_ruleset(NULL, 0,
+>   					     LANDLOCK_CREATE_RULESET_VERSION));
+>   
+>   	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0,
+> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+> index debe2d9ea6cf..f513cd8d9d51 100644
+> --- a/tools/testing/selftests/landlock/fs_test.c
+> +++ b/tools/testing/selftests/landlock/fs_test.c
+> @@ -404,9 +404,11 @@ TEST_F_FORK(layout1, inval)
+>   	LANDLOCK_ACCESS_FS_EXECUTE | \
+>   	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>   	LANDLOCK_ACCESS_FS_READ_FILE | \
+> -	LANDLOCK_ACCESS_FS_TRUNCATE)
+> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
+> +	LANDLOCK_ACCESS_FS_CHMOD | \
+> +	LANDLOCK_ACCESS_FS_CHGRP)
+>   
+> -#define ACCESS_LAST LANDLOCK_ACCESS_FS_TRUNCATE
+> +#define ACCESS_LAST LANDLOCK_ACCESS_FS_CHGRP
+>   
+>   #define ACCESS_ALL ( \
+>   	ACCESS_FILE | \
+> 

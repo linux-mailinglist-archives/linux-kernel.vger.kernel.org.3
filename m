@@ -2,174 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EE35A4F07
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6A35A4F0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiH2OU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S229588AbiH2OU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiH2OUQ (ORCPT
+        with ESMTP id S230064AbiH2OUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:20:16 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5212408C;
-        Mon, 29 Aug 2022 07:20:15 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-340f82c77baso83721117b3.1;
-        Mon, 29 Aug 2022 07:20:15 -0700 (PDT)
+        Mon, 29 Aug 2022 10:20:50 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD4D54C8F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:49 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id b16so10356635edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=F9yNwthvDThYN8PozFUnGZoAmSBhQ3+M5Ob8cdnJ9E0=;
+        b=UffHqoG7mxNZ+09NcRTvmauGvuRAlQxfBG3YjS42aMP4Xh5RLRU0qBqKGJtYmWI4UY
+         WTl0UN/p716/FEmlZKu+J1fjOHbxyymf4yHoDBoLNu/H1N8jSunLZyi77z2D9rJbueoA
+         tOe0k9xsI7JGHRoYDFDCNONP7HSwMcmwarbdk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1p7BUIQ+fp1bYUwTlQE8F/ZpBFXEYfElvWMJ48hUNkM=;
-        b=PFNe7C6I1Ep7DNMkPho9b+eKO/xovqO57lPbxkzXnmdzLdBH+/O9uZvNMOHBLFFXAB
-         K6iR7GRjNU9kDT75LyMluq9QwtCXsD3IKW+44iVGycYYQQcos8OzMqoU3ipa4q53wbjk
-         fT+zqietivvwnLQW48lOgFAGxdTuRGoC3f2sTuEgoeSX2lmIiiw7w6s0vtw/Xh1QQ0n+
-         azITUhX4i9NE1iSQAdo6HtueqbWEZxC61OAxN8hLuHBABweJG/kU8MWQWZ5cWNsLbjd4
-         swFsjRayHAfctHPVaBhwcLx/5PZ47LdWfNiENqyBMULdeSj5JXh6kxrmmJIPK4vdnRLi
-         ZR1g==
-X-Gm-Message-State: ACgBeo0ImAbr5uiDqpEHvQssiOst/sQX1OtCCXPJgkNbUFW+F37oGKXB
-        czp305pyYE9hT6OH4Xo73EZbpMqs4Zg8d9BU0rg=
-X-Google-Smtp-Source: AA6agR4F/krzLDgya0v466f9YmXrHXnnHI7/b3x8fmHCUjPhph2Yus4Xc3quzkG+1BjkSJSIjoAMAAWcOf2oVxV7IVQ=
-X-Received: by 2002:a0d:f647:0:b0:328:317c:9069 with SMTP id
- g68-20020a0df647000000b00328317c9069mr9461412ywf.301.1661782814810; Mon, 29
- Aug 2022 07:20:14 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=F9yNwthvDThYN8PozFUnGZoAmSBhQ3+M5Ob8cdnJ9E0=;
+        b=268DBDVNh5PhN/sgn1hjgQJg8PagMG80HuDauYnm/Y6yxrrC3oBmExDmutohIMSOcU
+         q2gOn7X3OWbnC05hsmck+lpHkwxrlvgqR615C/cam2Ng40wjl+++p5tEb0Mj7unu4ea2
+         igAU1F/cqUKwGE387hzqnrnVKZWZELngBFnc6YqYCxB3cTFh5gMRiWAkFyHnMzzsxLmD
+         UMzeRpL9qpb+2AjD9TfSTkVr5L19DwP851FPxIZzV8NNBqWNp+N5kruErszZUztuSG6t
+         ZSl3cx9tX4mVTyH7p/jtrelny6hID4g2iUe4tleg5u71VRk/d2V0xPpblQMapxMm1P7F
+         w2iw==
+X-Gm-Message-State: ACgBeo06H0nxOT/3dzGbaxtLmogVEHptsBkbDx2Rox7gTE/BfOWjLsfG
+        pTfRmv6/b7XiXqroCKwe90wAJwvZyeKwbQLU
+X-Google-Smtp-Source: AA6agR7Woamdq4bqBYn9tAXYZU2BpZ0/159CkwPZa07W3DWILQva7tZxDeYM74t/V2jWHJq/nImABQ==
+X-Received: by 2002:a05:6402:241d:b0:443:39c5:808b with SMTP id t29-20020a056402241d00b0044339c5808bmr16893992eda.39.1661782847505;
+        Mon, 29 Aug 2022 07:20:47 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id 22-20020a508756000000b0044780b6debasm5815786edv.32.2022.08.29.07.20.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 07:20:46 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id n17so10405911wrm.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:46 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr6500366wrr.583.1661782846549; Mon, 29
+ Aug 2022 07:20:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829132908.5254-1-mario.limonciello@amd.com> <20220829132908.5254-2-mario.limonciello@amd.com>
-In-Reply-To: <20220829132908.5254-2-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 29 Aug 2022 16:20:03 +0200
-Message-ID: <CAJZ5v0hfYhNLp+x9iFiqsQaL4XA8QdFhRK7Csgr8po8JPoimyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] ACPI: s2idle: Add a new ->enter() callback for platform_s2idle_ops
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220829030823.v2.1.If97ef7a7d84bcc2cf20e0479b3e00c4a8fb5a2fd@changeid>
+ <20220829030823.v2.2.I99d43de4a80223dee58ea1bc5b4fd3aaadc5e3c1@changeid>
+In-Reply-To: <20220829030823.v2.2.I99d43de4a80223dee58ea1bc5b4fd3aaadc5e3c1@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 29 Aug 2022 07:20:34 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VZoh-4uSWViciUgXCnTAz6HhQkOt2un_tTa1GY755TDA@mail.gmail.com>
+Message-ID: <CAD=FV=VZoh-4uSWViciUgXCnTAz6HhQkOt2un_tTa1GY755TDA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: Add sc7180-pazquel360
+To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 3:29 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+Hi,
+
+On Sun, Aug 28, 2022 at 8:09 PM Yunlong Jia
+<yunlong.jia@ecs.corp-partner.google.com> wrote:
 >
-> On some platforms it is found that Linux more aggressively enters s2idle
-> than Windows enters Modern Standby and this uncovers some synchronization
-> issues for the platform.  To aid in debugging this class of problems in
-> the future, add support for an extra optional callback intended for
-> drivers to emit extra debugging.
-
-I'm not liking this.
-
-If you want debug, why not simply add it where it is needed?
-
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Create first version device tree for pazquel360
+> pazquel360 is convertible and the pazquel it is based on is clamshell.
+> sku 20 for lte & wifi
+> sku 21 for wifi only
+> sku 22 for lte w/o esim & wifi
+>
+> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
 > ---
-> v1->v2:
->  * Add a prototype for `acpi_s2idle_enter`
 >
->  drivers/acpi/sleep.h      |  1 +
->  drivers/acpi/x86/s2idle.c | 14 ++++++++++++++
->  include/linux/acpi.h      |  1 +
->  include/linux/suspend.h   |  1 +
->  kernel/power/suspend.c    |  3 +++
->  5 files changed, 20 insertions(+)
+> Changes in v2:
+> - Remove the touchscreen setting, as a follow-up patch
 >
-> diff --git a/drivers/acpi/sleep.h b/drivers/acpi/sleep.h
-> index 7fe41ee489d6..7856930a7da9 100644
-> --- a/drivers/acpi/sleep.h
-> +++ b/drivers/acpi/sleep.h
-> @@ -18,6 +18,7 @@ static inline acpi_status acpi_set_waking_vector(u32 wakeup_address)
->  extern int acpi_s2idle_begin(void);
->  extern int acpi_s2idle_prepare(void);
->  extern int acpi_s2idle_prepare_late(void);
-> +extern void acpi_s2idle_enter(void);
+>  arch/arm64/boot/dts/qcom/Makefile             |  2 +
+>  .../qcom/sc7180-trogdor-pazquel360-lte.dts    | 22 ++++++++
+>  .../qcom/sc7180-trogdor-pazquel360-wifi.dts   | 17 +++++++
+>  .../dts/qcom/sc7180-trogdor-pazquel360.dtsi   | 50 +++++++++++++++++++
+>  4 files changed, 91 insertions(+)
 
-And this name is confusing, because it suggests that the role of the
-callback is to make the platform enter s2idle which isn't the case.
-
->  extern bool acpi_s2idle_wake(void);
->  extern void acpi_s2idle_restore_early(void);
->  extern void acpi_s2idle_restore(void);
-> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-> index f9ac12b778e6..c984093a3657 100644
-> --- a/drivers/acpi/x86/s2idle.c
-> +++ b/drivers/acpi/x86/s2idle.c
-> @@ -486,6 +486,19 @@ int acpi_s2idle_prepare_late(void)
->         return 0;
->  }
->
-> +void acpi_s2idle_enter(void)
-> +{
-> +       struct acpi_s2idle_dev_ops *handler;
-> +
-> +       if (!lps0_device_handle || sleep_no_lps0)
-> +               return;
-> +
-> +       list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
-> +               if (handler->enter)
-> +                       handler->enter();
-> +       }
-> +}
-> +
->  void acpi_s2idle_restore_early(void)
->  {
->         struct acpi_s2idle_dev_ops *handler;
-> @@ -527,6 +540,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
->         .begin = acpi_s2idle_begin,
->         .prepare = acpi_s2idle_prepare,
->         .prepare_late = acpi_s2idle_prepare_late,
-> +       .enter = acpi_s2idle_enter,
->         .wake = acpi_s2idle_wake,
->         .restore_early = acpi_s2idle_restore_early,
->         .restore = acpi_s2idle_restore,
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 6f64b2f3dc54..9df14b5a875c 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -1076,6 +1076,7 @@ struct acpi_s2idle_dev_ops {
->         struct list_head list_node;
->         void (*prepare)(void);
->         void (*restore)(void);
-> +       void (*enter)(void);
->  };
->  int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
->  void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg);
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 70f2921e2e70..5a3fdca0a628 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -191,6 +191,7 @@ struct platform_s2idle_ops {
->         int (*begin)(void);
->         int (*prepare)(void);
->         int (*prepare_late)(void);
-> +       void (*enter)(void);
->         bool (*wake)(void);
->         void (*restore_early)(void);
->         void (*restore)(void);
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 827075944d28..0c08032d6b50 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -136,6 +136,9 @@ static void s2idle_loop(void)
->                         break;
->                 }
->
-> +               if (s2idle_ops && s2idle_ops->enter)
-> +                       s2idle_ops->enter();
-> +
->                 s2idle_enter();
->         }
->
-> --
-> 2.34.1
->
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372D95A5533
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342F55A5541
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiH2UAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S229921AbiH2UBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiH2T7s (ORCPT
+        with ESMTP id S229453AbiH2UBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:59:48 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8B495E7B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:59:42 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 36-20020a17090a0fa700b001fd64c962afso3715232pjz.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
-        bh=vqgsnxf5rjaff8S5+BsqzjPD4LssFKq1fOgYeO/ES2A=;
-        b=aqxmgWD7054exX/C6tlPQGRlTYmM2uK1B0DjlSN6g8lAcZYwM9Y5r2O8io5iY1ZQ0W
-         NwX+X0Xga8McV6zvgCscpQE26jF3wZr0STuMHAi+pI6iZNAC6WMLoBwr8QmIyQVm9t3i
-         tRP6/hRWWL6WO0f7qhatKJ8ZsXqsqJ3HNDN+iRlmjZzfH2RhR+1gG0WQnM591otm31Jt
-         xqW7bpinWebERskF4v1XPVbTECKXhm9Vx5qtc66VjL6uiVamBMUuXOkmI8eB41adsy1S
-         pmHsThL4VikcOOm/8A6NHBqWd9IyORkNqFGDEP314Mte3feKFuRS8dYtGiQrlOAmJ7hQ
-         y/XQ==
+        Mon, 29 Aug 2022 16:01:50 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C2893225;
+        Mon, 29 Aug 2022 13:01:50 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11ee4649dfcso5398749fac.1;
+        Mon, 29 Aug 2022 13:01:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc;
-        bh=vqgsnxf5rjaff8S5+BsqzjPD4LssFKq1fOgYeO/ES2A=;
-        b=fkHIxlg1Ugg6wyS2i/PiOn/DxVfnhQxPFRWINZBAktJNgBW01w+fK/YwKBhbY0vjmQ
-         ETFUQVA5RVRCeQuJtrLQCKXt9+QOKzcpSCz7OGCXemp9A2oWc9MBslkeSjkCPLUQLY6N
-         BzVu97zJB9yPFE1juZA1MVnvNoHN64ceTAka6o0eVJpG2tOuxq0DytLPaP4p26/PKj6N
-         2q166uNVNo2dS/NxQcWKBVx/lNbejo1l2h8MUUEom8eDO0rnIMVYyHXKIClMZIrMcDwI
-         SVWjy382B8aZNIxp1cmEPgBm5G1xz8W6N+czuNRVDEIAiWCy+2uzX7M3eVQkk1U/YDkG
-         pgYw==
-X-Gm-Message-State: ACgBeo16EETQ09MWBV43iY0OZyv0VW1whOCUENRuhCz5kH8bMjScawg1
-        NHieTsMrSE6fVql4xFUR8bW/2b9dpVY+Tm9TaYDv
-X-Google-Smtp-Source: AA6agR7x1hGMKZjsW+y0p/M6G/93jpT9sDIIcESmhPUqFUY7m85UM2ybuRl+MK22hdOXk9v2mQ/zzfP4dkbD8Ca9ZuQ7
-X-Received: from jsl.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cdb])
- (user=justinledford job=sendgmr) by 2002:a05:6a00:10c2:b0:4f7:5af4:47b6 with
- SMTP id d2-20020a056a0010c200b004f75af447b6mr18200289pfu.6.1661803182076;
- Mon, 29 Aug 2022 12:59:42 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 19:59:30 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829195930.2521755-1-justinledford@google.com>
-Subject: [PATCH v2] hwmon: (max31790) add fanN_enable
-From:   Justin Ledford <justinledford@google.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ogC4r+k0mr20QhnHahw3ccg4AiV6JfA8GAM67/NqzeE=;
+        b=nHkDn14XQIlT0v4vnVHxxgrH0Zh/NhFPdbvELHuH+vJ998ji+qvuWeIDos0XUmhvj1
+         8HbOj4ioByQilINFhP3VuVs/jxq4Db4xxqwGs31q1eRnmEaNocP3LrroOlnDBeQU2RfB
+         z0XXaDUkYK/jiBnQCxidzh4uiN85xdn+/W+5IMpzZ1MzbXTC3tsgjaNWSZtXNLYCp5HY
+         CwBPqGnZVi4ZkzXwdiM4YYc6jfzCBJQLpPgSyOEhKm0wwCNJAlHbzLDwrRprQLTIk03s
+         C9GYVkwYtCzIbv9sqmesrzM0LYpD+H7vV66N7hofWAvL6nbwSb+w+F/xafqdxCVFYX9E
+         UikQ==
+X-Gm-Message-State: ACgBeo2I7wnkmAvpz+y0pSY06FqX5IRyy05nb9nHmN0dD3YUdn0R2Amo
+        K7sI8C1RfJoBBJ55WKDWsQ==
+X-Google-Smtp-Source: AA6agR7DOp+A6RsB1UmGlV9+oiTISpjy2cXXh0pVgvB2TxU3TV9Wi95VNYVNWNoPW19nH+WEFqwQsw==
+X-Received: by 2002:a05:6870:ac09:b0:11d:ca1b:d752 with SMTP id kw9-20020a056870ac0900b0011dca1bd752mr8164695oab.93.1661803309253;
+        Mon, 29 Aug 2022 13:01:49 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p4-20020a9d4544000000b0061cbd18bd18sm6316858oti.45.2022.08.29.13.01.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 13:01:48 -0700 (PDT)
+Received: (nullmailer pid 2322815 invoked by uid 1000);
+        Mon, 29 Aug 2022 20:01:47 -0000
+Date:   Mon, 29 Aug 2022 15:01:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>, linux-ide@vger.kernel.org,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        devicetree@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        freedreno@lists.freedesktop.org,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
         linux-kernel@vger.kernel.org,
-        Justin Ledford <justinledford@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        David Airlie <airlied@linux.ie>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-renesas-soc@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sean Paul <sean@poorly.run>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        dri-devel@lists.freedesktop.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-tegra@vger.kernel.org, Inki Dae <inki.dae@samsung.com>
+Subject: Re: [PATCH 3/5] dt-bindings: clock: drop minItems equal to maxItems
+Message-ID: <20220829200147.GA2322759-robh@kernel.org>
+References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
+ <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825113334.196908-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MAX31790 has a tach input enable bit in each fan's configuration
-register. This is only enabled by the driver if RPM mode is selected,
-but the driver doesn't provide a way to independently enable tachometer
-input regardless of the regulator mode.
+On Thu, 25 Aug 2022 14:33:32 +0300, Krzysztof Kozlowski wrote:
+> minItems, if missing, are implicitly equal to maxItems, so drop
+> redundant piece to reduce size of code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 1 -
+>  .../devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml  | 2 --
+>  Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml    | 1 -
+>  3 files changed, 4 deletions(-)
+> 
 
-By adding the fanN_enable sysfs files, we can decouple the tach input
-from the regulator mode. Also update the documentation.
-
-Signed-off-by: Justin Ledford <justinledford@google.com>
----
-Changes in v2:
-- Removed updating fan_config during max31790_update_device
----
- Documentation/hwmon/max31790.rst |  1 +
- drivers/hwmon/max31790.c         | 38 ++++++++++++++++++++++++++------
- 2 files changed, 32 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-index 7b097c3b9b90..33c5c7330efc 100644
---- a/Documentation/hwmon/max31790.rst
-+++ b/Documentation/hwmon/max31790.rst
-@@ -38,6 +38,7 @@ Sysfs entries
- fan[1-12]_input    RO  fan tachometer speed in RPM
- fan[1-12]_fault    RO  fan experienced fault
- fan[1-6]_target    RW  desired fan speed in RPM
-+fan[1-6]_enable    RW  enable or disable the tachometer input
- pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
- pwm[1-6]           RW  read: current pwm duty cycle,
-                        write: target pwm duty cycle (0-255)
-diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 7e9362f6dc29..20bf5ffadefe 100644
---- a/drivers/hwmon/max31790.c
-+++ b/drivers/hwmon/max31790.c
-@@ -202,6 +202,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
- 		}
- 		mutex_unlock(&data->update_lock);
- 		return 0;
-+	case hwmon_fan_enable:
-+		*val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -214,7 +217,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
- 	struct i2c_client *client = data->client;
- 	int target_count;
- 	int err = 0;
--	u8 bits;
-+	u8 bits, fan_config;
- 	int sr;
- 
- 	mutex_lock(&data->update_lock);
-@@ -243,6 +246,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
- 					MAX31790_REG_TARGET_COUNT(channel),
- 					data->target_count[channel]);
- 		break;
-+	case hwmon_fan_enable:
-+		fan_config = data->fan_config[channel];
-+		if (val == 0) {
-+			fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
-+		} else if (val == 1) {
-+			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
-+		} else {
-+			err = -EINVAL;
-+			break;
-+		}
-+		if (fan_config != data->fan_config[channel]) {
-+			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
-+							fan_config);
-+			if (!err)
-+				data->fan_config[channel] = fan_config;
-+		}
-+		break;
- 	default:
- 		err = -EOPNOTSUPP;
- 		break;
-@@ -270,6 +290,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
- 		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
- 			return 0644;
- 		return 0;
-+	case hwmon_fan_enable:
-+		if (channel < NR_CHANNEL)
-+			return 0644;
-+		return 0;
- 	default:
- 		return 0;
- 	}
-@@ -423,12 +447,12 @@ static umode_t max31790_is_visible(const void *data,
- 
- static const struct hwmon_channel_info *max31790_info[] = {
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
--- 
-2.37.2.672.g94769d06f0-goog
-
+Acked-by: Rob Herring <robh@kernel.org>

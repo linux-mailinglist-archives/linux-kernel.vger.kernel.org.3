@@ -2,273 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BAA5A5643
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3F95A564C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiH2VgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S229784AbiH2VjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiH2VgQ (ORCPT
+        with ESMTP id S229899AbiH2VjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:36:16 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45887AC2F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:36:13 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3321c2a8d4cso228750857b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=vpffA/2S0lCQZw66EqBoxIo3Ki9fW37f7ma72RIaoVo=;
-        b=fPOWJgin7A9WJPjvyh9KPuTG1cGCJk7IRkmGyozbbf3odnMP/FbwsuqtSI40BqYj0J
-         zdjIu/MhD+m+LFigVMkwK9DTv0foMYbzwbEJI1GLT94m3lnmfLfNXlzL5d4JBQvYrMTG
-         mRM31FoU3WyTq8t0qawC/+sDk+T4Ok5g466c+XnZ7K00aSTa7P1fWxm5ZVCoDeDzLVZo
-         DKHJQW64bNa30w1WEiIkJyLFOI4+xoZ74zVFw5MDGwJqUNoF+orW1lqJ7Cp4VIeE7C9a
-         UnmbTpE19YdWHno6Xyv0AZXl0cn+iIORtpZoppTedziFPPA8SpxgSAG/BqJXCb0/t3nS
-         iq0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=vpffA/2S0lCQZw66EqBoxIo3Ki9fW37f7ma72RIaoVo=;
-        b=OvxXJlyEbZU6cVvfGzmU+GdAZM+5uM1IIdOBP0DBbcvN5Os1MUQHqNbtLX8+tJVrtO
-         o4bpFS2Doi2JpsXGsNC2fCmyunPlMzUFMcMkfcvnYa/N18+cB/IcJV/NupwL0mw3+woz
-         PlqKqubhxBsI4TezKGhbax3y5d0B3NJUXQbDuFuN0dJHsXg4KcpfLnIiHK8fhiV/KUye
-         mLqL3Mr7s6d3CiMciPnotOYBytHzFMy6xLagk1W8cTSGOmrV4N9XHNr6UlGDh89dXn0B
-         Ixid9EwHXSRe8eZJ/GM8CzNeccUFsOV5bkhx/wwrx95Qi0+uxjkkeGXZs2Dl5doYsXoe
-         09/w==
-X-Gm-Message-State: ACgBeo0FKeUt94kSr1deqoz26UNH9S6RT45cJ+LpOuqnjmqlODY4Iv80
-        SdQl6zUo+THZxYYK2/SobX04LVQ0lfXTvRrbg/ViiQ==
-X-Google-Smtp-Source: AA6agR6KiVAPo56RwAYqMbS0k4dcCSNfKfh8YkQ+rSQc7JpUMkx11m9a9cDwzeWiscF1REUu2fH50aLLNSBpETtwewc=
-X-Received: by 2002:a81:4e8e:0:b0:340:b324:8920 with SMTP id
- c136-20020a814e8e000000b00340b3248920mr10338324ywb.218.1661808972683; Mon, 29
- Aug 2022 14:36:12 -0700 (PDT)
+        Mon, 29 Aug 2022 17:39:04 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8AF84ED8;
+        Mon, 29 Aug 2022 14:38:58 -0700 (PDT)
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TKWKeE001503;
+        Mon, 29 Aug 2022 21:38:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=CpVq0+cJCMFWSpE7UL4+jVLdlAXZ330ylvMcas2YE3M=;
+ b=jab1VVvtCX2Vs7rpOu6gXztYgls2jsTk+baSwCJVwkvKVJrkme/XamBdFw000Bnaqj8R
+ RWZeV9k2oF/MedLCS2cFk6iSop2gZ8tpOuUhiFGPUL2AU2SmFk1qf3EUOaPDuEgZ9TqY
+ VW24crzZlzhCBqP+6o2aq9Ev6GMNbEDfnsFqrvNu0Qknh5hR6BGs853kG6haPfX/LWBA
+ BQYAdRVufcTdQjsKoUKgM1m5/affVCystrWEhZSdxMI4KGoiCnxTfwyupmwAYEidj5Uf
+ OR3O9WhPofNwkWkUPTrMRSr/veXdDnvkJuXZPYmnBh0IfQQGrK9Yl21aN00jZ4sL6o5W bg== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3j940hrnem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 21:38:07 +0000
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 0254ED283;
+        Mon, 29 Aug 2022 21:38:04 +0000 (UTC)
+Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 29 Aug 2022 09:38:03 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Mon, 29 Aug 2022 09:38:03 -1200
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 29 Aug 2022 21:38:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V5YUPvW2K1JstUzLHqsbiQ2IqvVLKPlPD7CaujK/W1eMMJLG0vbuYAAB7QQHcjgX+Ol/g38kuN2HNcJLUA36vsOsgq+KJCAW+HwYYF04tSBXd/aHzX4jVik8phQGjG7U/q4aphzLH+axkcM8anF5A0tQCXqt130Q6BuEvERaVQqb49Ky47md2QwZ+YzZhnZlZIadNtSWUfzW7FWkLBS2H2OysXTFZFkI6Xf21iCcd1C8C2Mlfa/TMVJPg4Z8KPza+KkaexoG5G7S3pgwEYnBTkyIoMvG+IX1UQeGjLeiwTMHbBOGRom1jL5hoBCMfw/lKp2S7qBPUUnHHcm69cEdFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CpVq0+cJCMFWSpE7UL4+jVLdlAXZ330ylvMcas2YE3M=;
+ b=VJGaeeqqwINQEuaiiOuhLqTdonUAOuF4N8SoQVcoRyiQY8Z3gAGivmdYOYyuB985s9fyeKc9X7NSP4SSAzK3kALXQtgeKXjxMqh76us7cO9QeMRhTbM/iUlptUQMWo5nPt9GFIPeOJdXLVjrMMYv7ZgyV6E60KH5Jxo3ZKfg5TWkavjsHHGhK1dqBoD8vAbFF6wUUG3f0L0nGqhmLy/wsZZiDX7caf3cbqmAAzfpvJVEBEQc+h7XOh6/4hq6bGY4qhs8c7SRPOHE1LsOqWI3qLremEWGaLpRwdQWIucGo9Kks6Y99xqEtnLKopFYPzRcyLnTXpyNcM7IFJJ6urTn7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH7SPRMB0012.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:12d::13)
+ by SA1PR84MB3142.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:806:251::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 29 Aug
+ 2022 21:37:56 +0000
+Received: from PH7SPRMB0012.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::65ee:f14a:a73a:f231]) by PH7SPRMB0012.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::65ee:f14a:a73a:f231%7]) with mapi id 15.20.5566.015; Mon, 29 Aug 2022
+ 21:37:56 +0000
+From:   "Kani, Toshi" <toshi.kani@hpe.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>
+CC:     Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "nd@arm.com" <nd@arm.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "stable@kernel.org" <stable@kernel.org>
+Subject: RE: [RESEND PATCH v3 3/9] EDAC/ghes: Make ghes_edac a proper module
+ to remove the dependency on ghes
+Thread-Topic: [RESEND PATCH v3 3/9] EDAC/ghes: Make ghes_edac a proper module
+ to remove the dependency on ghes
+Thread-Index: AQHYtj5tQS6+//pDoEmz8BwtIUrts63Bza6AgABv7ACAA9aLAIAATjaAgAAId/A=
+Date:   Mon, 29 Aug 2022 21:37:56 +0000
+Message-ID: <PH7SPRMB0012094F02A587B859AEFDF282769@PH7SPRMB0012.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220822154048.188253-1-justin.he@arm.com>
+ <20220822154048.188253-4-justin.he@arm.com>
+ <MW5PR84MB1842F7107770654C46CB0311AB759@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <YwmqKPaYtgTS4xYT@zn.tnic> <YwziYFGWyEe2/kIp@yaz-fattaah>
+ <Yw0j+5tSZXGW0gDy@nazgul.tnic>
+In-Reply-To: <Yw0j+5tSZXGW0gDy@nazgul.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e711ea25-ecbf-4203-625e-08da8a06bca3
+x-ms-traffictypediagnostic: SA1PR84MB3142:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pozN23hq83uqEbxYmCBQIg06XW9Exj/R37P1knUOPZD3wmSu1TPZQW5QiCmX83RKPal8GKN76MQ/szwytlh7/yyOZwLSCvkSIkzJVEa0BDqW9mkrd/z2uT3fuIP3/ZGVoaCynR04ShkgIFKE2QdS6Tw8yiPGPFOobeH0/b33xKfEFRQI6D9rb956i7AgpaZLY4cSLW0HMNgeAvuDvcTqQPi1F5OpkfZn9999vJ+1SWps1O31PK/hrcHwz6mNA80t9fiaoIuPvGJtp4SxYnIphcWkbNwUe52m3+/2HKR4MRwr5rbv5AA7pbPvFWL3Z7SsRM0tMggSBQztaZ5ucoa7rJkCjEOOT7j5h+uG1xYv+YSMTzkCJNXfle55Tut4o/cYsIv0Tanw4Uur9oIE0oDY+R5cKzkHaJmdXX38a1YI9KjqeL5EvPTzoqGTwDU6hAlY3c9UuM6QRJuCCFTUiShd3xfLjuWMvUFWjhev/msUJS2Smv93/d7RiyjTnQFwGlRMvPwEiSqv8CI90bbSzjdchOwEdcjgEdcF0hnaia3rkLgiFlAF0DCRHIrl+8HGCbY/BDX5XDFpe+cD2oEfAzpvZN17DOseuszinxhd6X4aGR+43R4JLhB3Zr93RhIYf2BNx6y/dDnoxOCzBXOLFjYvPlKVsSO0BXF9Sr6ez27My5D1jn3iaN3hjx7Hxf48bv9XZv1CwGqJcV9YVxnq6TcKXZCqjPDoMB8SMdonmNAvMULWBf4asoJC3TXf3ottPZMll9oMP6+6GRrYaipw/XXmqg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0012.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(366004)(376002)(346002)(396003)(38070700005)(8676002)(4326008)(316002)(66946007)(66556008)(66476007)(66446008)(41300700001)(71200400001)(64756008)(110136005)(76116006)(6636002)(54906003)(8936002)(86362001)(478600001)(5660300002)(52536014)(7416002)(7406005)(82960400001)(7696005)(6506007)(53546011)(122000001)(2906002)(9686003)(26005)(38100700002)(55016003)(83380400001)(33656002)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWJrbjBObWR4dUlRZEpBeVgvQm5XMWJqYkQ3UXl1b0lFdEtraDdXVjB3eFlz?=
+ =?utf-8?B?NkpyU1Y5MVpvdWw4ZDlQQy9wbDhxamFtSktLMmtrVG8wbmRLUHhNR2dsVVd5?=
+ =?utf-8?B?aGhqa3pkV1dCZDZQNlRxcWREa0dpc2J6UTd2OTRQanN2TzllWDlDQWswNEJn?=
+ =?utf-8?B?YXAzeU54ZVBEY0prVGZwelFmaTdsaFFCZGlHZ0U2em55UjFlMlV2ZnJ6OG5X?=
+ =?utf-8?B?L2xONStQWStSbFYvZmJmZnNTRXBGY3ZIZWJZd2RqYVcrY2RaRUQwM0ROdGpr?=
+ =?utf-8?B?VHcrSThjTlpodDVNOTMxM1BNTE1IbXRqUEhxMmhta1UvYUZJN0FCYjF5d2RN?=
+ =?utf-8?B?ZW9XNi8xMUdpRnNvcmQ4ZWN3RzZ1azMrSlNOYjd2eVpwV3R2SEVyVkRreHpv?=
+ =?utf-8?B?K2l3QmNtZEpXeWQyZUNzRmxueDc0RVhjUWl2ZDhlTHYweWRhQUdVV2dySVF0?=
+ =?utf-8?B?Z0puV0g2b05VaFRqK2xmSmJGcUR1ZklKTjFQMWpXNnlWZkxxT2VSRFFrZ2tJ?=
+ =?utf-8?B?aU5FV1cvdmUrK1NLRDUzNEkrRERncWxrMm5HaVozSVUzUjhObjFCVzhMRW1i?=
+ =?utf-8?B?WTk0Q3RwUW5ycHh0RHZJMTNvUVYxZHQ5YTkwbXcvUGpoOTR6ei9sOVVMS0tQ?=
+ =?utf-8?B?TzBUMzZ6MzYvdnNVbG1HTW92MFpGZ29TMndxblBPSVVIMU1kZC94ZmNWUHRD?=
+ =?utf-8?B?T0QvOGNvQzVTb0hZRHFWdDg0b04vVUpNUnNYTXJwaktNNUlHb0lEMjlGUk5K?=
+ =?utf-8?B?bzdCaXVuc0FuZDk4Q0ZZMlNHeWJzdTFIei9UM3ZwWXRkdE5yQnNSbllTQjk5?=
+ =?utf-8?B?YjVta0NGL3NseVBYWG5hZGZGek1HOGhLNjc2U1QxMm5zVHRjblAxTUJyYVNP?=
+ =?utf-8?B?YzBMY0ZyMTlQREV6cmNSRnhKMWI2QnJkZHlaUmIrUFFicU9sWnRoVGVOamNj?=
+ =?utf-8?B?OVRKQkR4MVBOLzJ4cXpLKzE5UGdDcDVwZ1pQTnBNQWIwbS9oUEltNm9ZOERq?=
+ =?utf-8?B?eTdhRC9KL1dsVDZhdTVTQkVmcDBSK2p1OFpObmh0cnd0VHFBcnBGNWppS3ZK?=
+ =?utf-8?B?NDVmSTEyRUlUOE1JTlNRYTJIUVJMbEtib0xueVUzV2s2MDVXMzFIY3NsUlZq?=
+ =?utf-8?B?Z1NzSm1mYUtudUlGbkZYUG5uS3pGbUNtZG9RQ25XbytGQVc4UzVZRy94azMr?=
+ =?utf-8?B?YTU1b1Z4NEh5dXNZSmIvRnFvQWovZzhhNldOT2duV2ZFc3RhTVJsVEdsVmJL?=
+ =?utf-8?B?RUtPaXk2WkVLckx1K3BlRTVrZnFwbGpRZy9SZ1FETnM0anN2ZGt6VVRNY1ZT?=
+ =?utf-8?B?bk9WZWtjSTJnY0JEL3hsSSsyYTBoMFN1V3RpZzFYNGZ6SW9NVjgyTkFhdEIy?=
+ =?utf-8?B?bW0wcEN3OU4yMmJ1ZGZ5TXBBTlJ5RDZ6aVRabGZDTmlTbjNVRFQzdjdnZ0Nk?=
+ =?utf-8?B?NTRNWitpSXp3ZVNRYkJwUDNUekdQbi9Xd0xFUDZxS1VaZ1ZGK2RiZE9QcjVj?=
+ =?utf-8?B?dzN6WnZOcVBGWHRyRHdZbXlOWE1vMEN1ckZJZzczaFIyOWRBU1hkbXNGbEV0?=
+ =?utf-8?B?TGt5MktzM3hxUUdub2tNR1lPNzhSWlIvTjVBZU0zOVRYZVBIcEdWQVhDNU1r?=
+ =?utf-8?B?MGNNWS9XdWZKbGRUTERUcDJ5V2twY3JMdnBzcXcvZHEwZkwxOE1aVXBmVTla?=
+ =?utf-8?B?UmNkaElKU0s5QUMwNElvV1hidnVYTGN4VWpFR05uMDNtY2l5Q1N0cGQ3VXE1?=
+ =?utf-8?B?WUwxa05hK05lR3JYYitTaXhrbDAyQmJRTEJWc3dnelhZa0RNTGUwRFJ5VnU4?=
+ =?utf-8?B?bmhhSDFZakhYZktqRTFIMHNaTkhPanR3Z1hQUHJRVW8rMTVIQUJaeXF0b3Jk?=
+ =?utf-8?B?MGRzc1diRzVLaTlERFNrNzA1Uys5MUhFeEZaK3labHN6UlBSN2hJdWdNUEc0?=
+ =?utf-8?B?Y1U5cGVTdnhsZUpWQjVhd3RFZU5oemlveTdkNzdid2tqaHE2K21KUm9kT1VB?=
+ =?utf-8?B?SzZWR0RpZkZtNzlKVXV1QmxGbkJSc04yY1pFRGJTVlQyMWszc3c2VWxNNTZQ?=
+ =?utf-8?B?VFRPWTZ2Wk5zOTE5SmFVSjZsVUpxMnBzVjRxTlJoY2Vyck5hNjZGT1EyOGR5?=
+ =?utf-8?Q?XcR7llixS8Sf8thfOntvUaEYe?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <29a5c3e3-a590-01dd-1a2b-8415cae4a292@leemhuis.info>
- <9d431289-085b-5619-00f8-95d692183e28@foss.st.com> <99355482-960a-4669-19b5-926a7cd76c65@foss.st.com>
-In-Reply-To: <99355482-960a-4669-19b5-926a7cd76c65@foss.st.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 29 Aug 2022 14:35:36 -0700
-Message-ID: <CAGETcx9YvpYFf1mxHi1iA--sE5G2MZLS1x8vHnTu6Wj30ScaOA@mail.gmail.com>
-Subject: Re: [Regression] Bug 216420 - Unable to handle kernel NULL pointer
- dereference at virtual address 00000008
-To:     Yann Gautier <yann.gautier@foss.st.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Russell King <linux@armlinux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        frc.gabriel@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0012.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e711ea25-ecbf-4203-625e-08da8a06bca3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Aug 2022 21:37:56.5295
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cWJIBCrSlVSs/frFzqbCCb9P6q0s9uVS4sb1Yaz0cujTZwOWERglKL61LOqX9YC5ZeLkM73O4eDbrCJTMSyHtw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR84MB3142
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: 9eagZLlx0nQ1_ErQURwyYX78KBhceJR_
+X-Proofpoint-ORIG-GUID: 9eagZLlx0nQ1_ErQURwyYX78KBhceJR_
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_11,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 clxscore=1015
+ mlxlogscore=600 impostorscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208290095
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 6:54 AM Yann Gautier <yann.gautier@foss.st.com> wrote:
->
-> On 8/29/22 13:50, Yann Gautier wrote:
-> > On 8/28/22 13:44, Thorsten Leemhuis wrote:
-> >> Hi, this is your Linux kernel regression tracker speaking.
-> >>
-> >> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> >> kernel developer don't keep an eye on it, I decided to forward it (I
-> >> hope I picked the right recipients for this mail):
-> >>
-> >>>   frc.gabriel@gmail.com 2022-08-27 09:36:06 UTC
-> >>>
-> >>> Created attachment 301682 [details]
-> >>> full dmesg output
-> >>>
-> >>> Hi, good morning!
-> >>>
-> >>> my device is currently crashing during boot with kernel 6.0.0-rc2. I
-> >>> also tried next-20220826 and the outcome is the same.
-> >>>
-> >>> The full dmesg log can be found attached on crash-boot.txt file.
-> >>>
-> >>> Thank you and have a good day,
-> >>> Gabriel Francisco
-> >>
-> >>  From that dmesg:
-> >>
-> >>> [    2.279556] 8<--- cut here ---
-> >>> [    2.279734] s4: Bringing 0uV into 815000-815000uV
-> >>> [    2.284139] Unable to handle kernel NULL pointer dereference at
-> >>> virtual address 00000008
-> >>> [    2.288082] s1: Bringing 0uV into 1300000-1300000uV
-> >>> [    2.292017] [00000008] *pgd=00000000
-> >>> [    2.300784] s2: Bringing 0uV into 2150000-2150000uV
-> >>> [    2.304801] Internal error: Oops: 5 [#1] SMP ARM
-> >>> [    2.309033] s3: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.313196] Modules linked in:
-> >>> [    2.313208] CPU: 2 PID: 7 Comm: kworker/u8:0 Not tainted 6.0.0-rc2
-> >>> #325
-> >>> [    2.313221] Hardware name: Generic DT based system
-> >>> [    2.318516] l1: Bringing 0uV into 1225000-1225000uV
-> >>> [    2.322655] Workqueue: events_unbound deferred_probe_work_func
-> >>> [    2.326162] l2: Bringing 0uV into 1200000-1200000uV
-> >>> [    2.332290] PC is at mmci_probe+0x10/0x9b0
-> >>> [    2.332308] LR is at amba_probe+0xf0/0x174
-> >>> [    2.337399] l3: Bringing 0uV into 1225000-1225000uV
-> >>> [    2.341927] pc : [<c0b14e10>]    lr : [<c089036c>]    psr: 80000013
-> >>> [    2.348097] l4: Bringing 0uV into 1225000-1225000uV
-> >>> [    2.352601] sp : f0839dd0  ip : fffffff8  fp : c1903248
-> >>> [    2.352609] r10: c1448b9c  r9 : fffffdfb  r8 : 00000000
-> >>> [    2.352616] r7 : c1903000  r6 : eefe45bc  r5 : 00000000  r4 :
-> >>> c1903100
-> >>> [    2.357020] l5: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.360849] r3 : c0b14e00  r2 : 00000000  r1 : 00000000  r0 :
-> >>> c1903000
-> >>> [    2.365896] l6: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.371873] Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM
-> >>> Segment none
-> >>> [    2.377217] l7: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.381944] Control: 10c5787d  Table: 0020406a  DAC: 00000051
-> >>> [    2.387543] l8: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.393749] Register r0 information: slab kmalloc-1k start
-> >>> c1903000 pointer offset 0 size 1024
-> >>> [    2.398766] l9: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.405119]
-> >>> [    2.405124] Register r1 information: NULL pointer
-> >>> [    2.405137] Register r2 information:
-> >>> [    2.410141] l10: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.417186]  NULL pointer
-> >>> [    2.417193] Register r3 information: non-slab/vmalloc memory
-> >>> [    2.417205] Register r4 information:
-> >>> [    2.422124] l11: Bringing 0uV into 1300000-1300000uV
-> >>> [    2.427776]  slab kmalloc-1k start c1903000 pointer offset 256
-> >>> size 1024
-> >>> [    2.432756] l12: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.441145]
-> >>> [    2.446335] l13: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.447655] Register r5 information:
-> >>> [    2.452735] l14: Bringing 0uV into 1800000-1800000uV
-> >>> [    2.455902]  NULL pointer
-> >>> [    2.461123] l15: Bringing 0uV into 2050000-2050000uV
-> >>> [    2.463368] Register r6 information: non-slab/vmalloc memory
-> >>> [    2.463380] Register r7 information: slab kmalloc-1k start c1903000
-> >>> [    2.469373] l16: Bringing 0uV into 2700000-2700000uV
-> >>> [    2.472656]  pointer offset 0 size 1024
-> >>> [    2.472671] Register r8 information:
-> >>> [    2.477868] l17: Bringing 0uV into 2850000-2850000uV
-> >>> [    2.484288]  NULL pointer
-> >>> [    2.484294] Register r9 information: non-paged memory
-> >>> [    2.484305] Register r10 information:
-> >>> [    2.489490] l18: Bringing 0uV into 2850000-2850000uV
-> >>> [    2.490712]  non-slab/vmalloc memory
-> >>> [    2.495937] l19: Bringing 0uV into 3000000-3000000uV
-> >>> [    2.499217] Register r11 information:
-> >>> [    2.504461] l20: Bringing 0uV into 2950000-2950000uV
-> >>> [    2.506683]  slab kmalloc-1k
-> >>> [    2.512149] l21: Bringing 0uV into 2950000-2950000uV
-> >>> [    2.517361]  start c1903000 pointer offset 584 size 1024
-> >>> [    2.517382] Register r12 information:
-> >>> [    2.523805] l22: Bringing 0uV into 3000000-3000000uV
-> >>> [    2.528556]  non-paged memory
-> >>> [    2.532414] l23: Bringing 0uV into 3000000-3000000uV
-> >>> [    2.535937] Process kworker/u8:0 (pid: 7, stack limit = 0x(ptrval))
-> >>> [    2.541160] l24: Bringing 0uV into 3075000-3075000uV
-> >>> [    2.543402] Stack: (0xf0839dd0 to 0xf083a000)
-> >>> [    2.543413] 9dc0:                                     c1903000
-> >>> c1903000 00000000 7ff15a00
-> >>> [    2.543425] 9de0: 60172703 00000000 c1903000 c1903000 20000013
-> >>> c1903084 c1903000 c1903100
-> >>> [    2.627929] 9e00: 00000000 eefe45bc c1903000 00000000 fffffdfb
-> >>> c1448b9c c1903248 c089036c
-> >>> [    2.635613] 9e20: c089027c 00000000 c1903000 c1448b9c c147a260
-> >>> 00000000 c14672a0 c180f00d
-> >>> [    2.643773] 9e40: c18db480 c0940584 c1903000 00000000 c1903000
-> >>> c147a260 c1448b9c 0000000d
-> >>> [    2.651933] 9e60: 00000000 c0940950 c29b4380 c33d7380 c14c1fe4
-> >>> c1448b9c c1903000 00000000
-> >>> [    2.660092] 9e80: c14672a0 c180f00d c18db480 c0940ae4 fffffdfb
-> >>> c1448b9c f0839ee4 c1903000
-> >>> [    2.668252] 9ea0: 00000000 c0941190 00000000 f0839ee4 c09410ec
-> >>> c147a260 00000000 c093e658
-> >>> [    2.676412] 9ec0: c14672a0 c19dab6c c1b44fb8 cb719486 c1903000
-> >>> c1903044 00000001 c0940d9c
-> >>> [    2.684572] 9ee0: c147a260 c1903000 00000001 cb719486 c1903000
-> >>> c1903000 c13f37dc c093f7a0
-> >>> [    2.692731] 9f00: c1903000 c142aeec c142af00 c093fc94 c142af1c
-> >>> c1803780 c1806800 c180f000
-> >>> [    2.700890] 9f20: 00000000 c033dc60 c1803780 c18db480 c1806800
-> >>> c1806800 c180681c c1803780
-> >>> [    2.709050] 9f40: c1806800 c1803798 c180681c c1303d40 c18db480
-> >>> 00000088 c1806800 c033e148
-> >>> [    2.717211] 9f60: c1803780 c1303d40 f0821ea0 c18b7040 c18db480
-> >>> c033df2c c1803780 c18b7400
-> >>> [    2.725369] 9f80: f0821ea0 00000000 00000000 c03458ac c18b7040
-> >>> c03457dc 00000000 00000000
-> >>> [    2.733529] 9fa0: 00000000 00000000 00000000 c0300148 00000000
-> >>> 00000000 00000000 00000000
-> >>> [    2.741688] 9fc0: 00000000 00000000 00000000 00000000 00000000
-> >>> 00000000 00000000 00000000
-> >>> [    2.749850] 9fe0: 00000000 00000000 00000000 00000000 00000013
-> >>> 00000000 00000000 00000000
-> >>> [    2.758012]  mmci_probe from amba_probe+0xf0/0x174
-> >>> [    2.766161]  amba_probe from really_probe+0xe0/0x40c
-> >>> [    2.770847]  really_probe from __driver_probe_device+0xa0/0x204
-> >>> [    2.775971]  __driver_probe_device from driver_probe_device+0x30/0xc0
-> >>> [    2.781612]  driver_probe_device from
-> >>> __device_attach_driver+0xa4/0x11c
-> >>> [    2.788209]  __device_attach_driver from bus_for_each_drv+0x80/0xcc
-> >>> [    2.794633]  bus_for_each_drv from __device_attach+0xa8/0x1f0
-> >>> [    2.800881]  __device_attach from bus_probe_device+0x84/0x8c
-> >>> [    2.806784]  bus_probe_device from deferred_probe_work_func+0x8c/0xd4
-> >>> [    2.812515]  deferred_probe_work_func from
-> >>> process_one_work+0x1fc/0x4c8
-> >>> [    2.818854]  process_one_work from worker_thread+0x21c/0x540
-> >>> [    2.825275]  worker_thread from kthread+0xd0/0xec
-> >>> [    2.831177]  kthread from ret_from_fork+0x14/0x2c
-> >>> [    2.835775] Exception stack(0xf0839fb0 to 0xf0839ff8)
-> >>> [    2.840465] 9fa0:                                     00000000
-> >>> 00000000 00000000 00000000
-> >>> [    2.845509] 9fc0: 00000000 00000000 00000000 00000000 00000000
-> >>> 00000000 00000000 00000000
-> >>> [    2.853668] 9fe0: 00000000 00000000 00000000 00000000 00000013
-> >>> 00000000
-> >>> [    2.861826] Code: e92d4ff0 e590803c e24dd02c e59061a0 (e5917008)
-> >>> [    2.868280] ---[ end trace 0000000000000000 ]---
-> >>
-> >> See the ticket for more details.
-> >>
-> >> I'd also like to add the report to the list of tracked regressions to
-> >> ensure it's doesn't fall through the cracks in the end:
-> >>
-> >> #regzbot introduced: v5.19..v6.0-rc2
-> >> https://bugzilla.kernel.org/show_bug.cgi?id=216420
-> >> #regzbot ignore-activity
-> >>
-> >> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> >>
-> >> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> >> reports and sometimes miss something important when writing mails like
-> >> this. If that's the case here, don't hesitate to tell me in a public
-> >> reply, it's in everyone's interest to set the public record straight.
-> >
-> > Hi,
-> >
-> > If I'm not wrong, the mmci driver shouldn't be probed for this platform.
-> > So either there is something wrong with the device tree, or with the
-> > AMBA bus driver.
-> >
-> >
-> > Best regards,
-> > Yann
->
-> Maybe this is related (corrected?) with this patch:
-> https://lkml.org/lkml/2022/8/27/164
-
-This fix is probably this one:
-https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
-
--Saravana
+T24gTW9uZGF5LCBBdWd1c3QgMjksIDIwMjIgMjozOSBQTSwgQm9yaXNsYXYgUGV0a292IHdyb3Rl
+Og0KPiBPbiBNb24sIEF1ZyAyOSwgMjAyMiBhdCAwMzo1OToyOFBNICswMDAwLCBZYXplbiBHaGFu
+bmFtIHdyb3RlOg0KPiA+IEdIRVMgY2FuIGJlIHVzZWQgZm9yIG1vcmUgdGhhbiBqdXN0IG1lbW9y
+eSBlcnJvcnMuIFRoZXJlIGFyZSBwbGF0Zm9ybXMgd2hlcmUNCj4gPiBtZW1vcnkgZXJyb3JzIGFy
+ZSBoYW5kbGVkIHRocm91Z2ggdGhlIE9TIE1DQSwgYW5kIFBDSWUgQUVSIGVycm9ycyBhcmUgaGFu
+ZGxlZA0KPiA+IHRocm91Z2ggdGhlIEZXLCBmb3IgZXhhbXBsZS4NCj4gPg0KPiA+IElzIHRoZSBI
+UEUgU2VydmVyIHBsYXRmb3JtIGd1YXJhbnRlZWQgdG8gYWx3YXlzIHByb3ZpZGUgbWVtb3J5IGVy
+cm9ycyB0aHJvdWdoDQo+ID4gR0hFUyByZWdhcmRsZXNzIG9mIENQVSB2ZW5kb3IvYXJjaGl0ZWN0
+dXJlPw0KPiANCj4gL21lIGxvb2tzIGluIHRoZSBkaXJlY3Rpb24gb2YgSFBFIGZvbGtzLi4uDQoN
+ClRoZSBIUEUgcGxhdGZvcm1zIGVuYWJsZWQgYnkgdGhlIHBsYXRmb3JtIGNoZWNrIGFyZSBndWFy
+YW50ZWVkIHRvIGJlIG9wZXJhdGluZw0KaW4gRlcgRmlyc3QgbW9kZSwgd2hpY2ggRlcgZGVjaWRl
+cyB3aGljaCBlcnJvciB0byByZXBvcnQgdG8gdGhlIE9TIHZpYSBHSEVTIG9yIA0Kb3RoZXIgbWVh
+bnMuICBUaGlzIG1heSBpbmNsdWRlIG11bHRpcGxlIENQVSB2ZW5kb3JzL2FyY2hpdGVjdHVyZS4N
+Ck9uIHN1Y2ggcGxhdGZvcm1zLCBmb3IgaW5zdGFuY2UsIEZXIGRvZXMgbm90IHJlcG9ydCBjb3Jy
+ZWN0ZWQgZXJyb3JzIHRvIHRoZSBPUyANCnNpbmNlIEZXIG1hbmFnZXMgdGhlIHRocmVzaG9sZCAm
+IEZSVSBub3RpZmljYXRpb24uICBDaGlwc2V0LXNwZWNpZmljIGVkYWMgZHJpdmVycywNCmRlc2ln
+bmVkIGZvciBPUyBGaXJzdCBtb2RlLCBpcyBub3QgbmVjZXNzYXJ5IG9uIHN1Y2ggcGxhdGZvcm1z
+LiAgRGlzYWJsaW5nIHN1Y2ggT1MNCkZpcnN0IGVkYWMgZHJpdmVyIGlzIGFjaGlldmVkIGJ5IGVu
+YWJsaW5nIGdoZXNfZWRhYyBhcyB3ZWxsLg0KDQpPUyBNQ0EgaXMgc3RpbGwgdXNlZCBmb3IgdW5j
+b3JyZWN0ZWQgZXJyb3JzLCBzdWNoIGFzIFNSQVIgKHNvZnR3YXJlIHJlY292ZXJhYmxlDQphY3Rp
+b24gcmVxdWlyZWQpIHdoaWNoIHJlcXVpcmVzIHJlY292ZXJ5IGFjdGlvbiBzeW5jaHJvbm91cyB0
+byB0aGUgZXhlY3V0aW9uIHZpYQ0KTUNFIHNpZ25hbGxpbmcuDQoNClRvc2hpIA0K

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4355A47E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A2F5A4955
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiH2LDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S231879AbiH2LXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiH2LB5 (ORCPT
+        with ESMTP id S231814AbiH2LWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:01:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176F1C915;
-        Mon, 29 Aug 2022 04:01:56 -0700 (PDT)
+        Mon, 29 Aug 2022 07:22:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E34175FD1;
+        Mon, 29 Aug 2022 04:14:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F34AAB80EC8;
-        Mon, 29 Aug 2022 11:01:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044E3C433B5;
-        Mon, 29 Aug 2022 11:01:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBA69B80F93;
+        Mon, 29 Aug 2022 11:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23DB7C433D7;
+        Mon, 29 Aug 2022 11:11:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661770913;
-        bh=zsP5m/HM7B3yPTjrS0qFApOqZLNggpW8XOAOb0CmZP8=;
+        s=korg; t=1661771516;
+        bh=d3JNQipKIVdMRMQCi6Ms0j33x+78SPG5tZ2w5RRVZ9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OXZbAoe7g7GTPT+2qSKGTODGB+wTjnS6OpdIqAhPtLZHJ7yBKdmnEdbABWIlXBZ6d
-         imdjRdCpLnXZI5sS0ibcrsGOD1BN6eywj4+BhV2nKTkBqGY6AbylTpNPUaEOLpiPNM
-         SeJZZyuyOCloHDujzzPk5j7SUfX1I+z9MbVnS0oc=
+        b=kkv2o+zVfDa0InnPmXaGAOFZ7HDe3UZsDW399I4TE4jkKj1UuBLqxFOy9zYSiP6gU
+         fQ9JobOUf2La4sptybEA53/AftrHRjyls4DcNbhzApMbbe6A3fep/wU5UPQmQ56Jnm
+         B4mBGGviXP6nWRGPaiYZfrax0jzUVTg9v193RtSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 021/136] btrfs: put initial index value of a directory in a constant
-Date:   Mon, 29 Aug 2022 12:58:08 +0200
-Message-Id: <20220829105805.464243592@linuxfoundation.org>
+Subject: [PATCH 5.19 039/158] net: dsa: microchip: move tag_protocol to ksz_common
+Date:   Mon, 29 Aug 2022 12:58:09 +0200
+Message-Id: <20220829105810.422227660@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +56,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Arun Ramadoss <arun.ramadoss@microchip.com>
 
-[ Upstream commit 528ee697126fddaff448897c2d649bd756153c79 ]
+[ Upstream commit 534a0431e9e68959e2c0d71c141d5b911d66ad7c ]
 
-At btrfs_set_inode_index_count() we refer twice to the number 2 as the
-initial index value for a directory (when it's empty), with a proper
-comment explaining the reason for that value. In the next patch I'll
-have to use that magic value in the directory logging code, so put
-the value in a #define at btrfs_inode.h, to avoid hardcoding the
-magic value again at tree-log.c.
+This patch move the dsa hook get_tag_protocol to ksz_common file. And
+the tag_protocol is returned based on the dev->chip_id.
 
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/btrfs_inode.h | 12 ++++++++++--
- fs/btrfs/inode.c       | 10 ++--------
- 2 files changed, 12 insertions(+), 10 deletions(-)
+ drivers/net/dsa/microchip/ksz8795.c    | 13 +------------
+ drivers/net/dsa/microchip/ksz9477.c    | 14 +-------------
+ drivers/net/dsa/microchip/ksz_common.c | 24 ++++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_common.h |  2 ++
+ 4 files changed, 28 insertions(+), 25 deletions(-)
 
-diff --git a/fs/btrfs/btrfs_inode.h b/fs/btrfs/btrfs_inode.h
-index 76ee1452c57ba..37ceea85b871c 100644
---- a/fs/btrfs/btrfs_inode.h
-+++ b/fs/btrfs/btrfs_inode.h
-@@ -13,6 +13,13 @@
- #include "ordered-data.h"
- #include "delayed-inode.h"
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index 3cc51ee5fb6cc..041956e3c7b1a 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -898,17 +898,6 @@ static void ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val)
+ 	}
+ }
  
-+/*
-+ * Since we search a directory based on f_pos (struct dir_context::pos) we have
-+ * to start at 2 since '.' and '..' have f_pos of 0 and 1 respectively, so
-+ * everybody else has to start at 2 (see btrfs_real_readdir() and dir_emit_dots()).
-+ */
-+#define BTRFS_DIR_START_INDEX 2
+-static enum dsa_tag_protocol ksz8_get_tag_protocol(struct dsa_switch *ds,
+-						   int port,
+-						   enum dsa_tag_protocol mp)
+-{
+-	struct ksz_device *dev = ds->priv;
+-
+-	/* ksz88x3 uses the same tag schema as KSZ9893 */
+-	return ksz_is_ksz88x3(dev) ?
+-		DSA_TAG_PROTO_KSZ9893 : DSA_TAG_PROTO_KSZ8795;
+-}
+-
+ static u32 ksz8_sw_get_phy_flags(struct dsa_switch *ds, int port)
+ {
+ 	/* Silicon Errata Sheet (DS80000830A):
+@@ -1394,7 +1383,7 @@ static void ksz8_get_caps(struct dsa_switch *ds, int port,
+ }
+ 
+ static const struct dsa_switch_ops ksz8_switch_ops = {
+-	.get_tag_protocol	= ksz8_get_tag_protocol,
++	.get_tag_protocol	= ksz_get_tag_protocol,
+ 	.get_phy_flags		= ksz8_sw_get_phy_flags,
+ 	.setup			= ksz8_setup,
+ 	.phy_read		= ksz_phy_read16,
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index bcfdd505ca79a..31be767027feb 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -276,18 +276,6 @@ static void ksz9477_port_init_cnt(struct ksz_device *dev, int port)
+ 	mutex_unlock(&mib->cnt_mutex);
+ }
+ 
+-static enum dsa_tag_protocol ksz9477_get_tag_protocol(struct dsa_switch *ds,
+-						      int port,
+-						      enum dsa_tag_protocol mp)
+-{
+-	enum dsa_tag_protocol proto = DSA_TAG_PROTO_KSZ9477;
+-	struct ksz_device *dev = ds->priv;
+-
+-	if (dev->features & IS_9893)
+-		proto = DSA_TAG_PROTO_KSZ9893;
+-	return proto;
+-}
+-
+ static int ksz9477_phy_read16(struct dsa_switch *ds, int addr, int reg)
+ {
+ 	struct ksz_device *dev = ds->priv;
+@@ -1329,7 +1317,7 @@ static int ksz9477_setup(struct dsa_switch *ds)
+ }
+ 
+ static const struct dsa_switch_ops ksz9477_switch_ops = {
+-	.get_tag_protocol	= ksz9477_get_tag_protocol,
++	.get_tag_protocol	= ksz_get_tag_protocol,
+ 	.setup			= ksz9477_setup,
+ 	.phy_read		= ksz9477_phy_read16,
+ 	.phy_write		= ksz9477_phy_write16,
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index 4511e99823f57..0713a40685fa9 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -930,6 +930,30 @@ void ksz_port_stp_state_set(struct dsa_switch *ds, int port,
+ }
+ EXPORT_SYMBOL_GPL(ksz_port_stp_state_set);
+ 
++enum dsa_tag_protocol ksz_get_tag_protocol(struct dsa_switch *ds,
++					   int port, enum dsa_tag_protocol mp)
++{
++	struct ksz_device *dev = ds->priv;
++	enum dsa_tag_protocol proto = DSA_TAG_PROTO_NONE;
 +
- /*
-  * ordered_data_close is set by truncate when a file that used
-  * to have good data has been truncated to zero.  When it is set
-@@ -164,8 +171,9 @@ struct btrfs_inode {
- 	u64 disk_i_size;
++	if (dev->chip_id == KSZ8795_CHIP_ID ||
++	    dev->chip_id == KSZ8794_CHIP_ID ||
++	    dev->chip_id == KSZ8765_CHIP_ID)
++		proto = DSA_TAG_PROTO_KSZ8795;
++
++	if (dev->chip_id == KSZ8830_CHIP_ID ||
++	    dev->chip_id == KSZ9893_CHIP_ID)
++		proto = DSA_TAG_PROTO_KSZ9893;
++
++	if (dev->chip_id == KSZ9477_CHIP_ID ||
++	    dev->chip_id == KSZ9897_CHIP_ID ||
++	    dev->chip_id == KSZ9567_CHIP_ID)
++		proto = DSA_TAG_PROTO_KSZ9477;
++
++	return proto;
++}
++EXPORT_SYMBOL_GPL(ksz_get_tag_protocol);
++
+ static int ksz_switch_detect(struct ksz_device *dev)
+ {
+ 	u8 id1, id2;
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index e6bc5fb2b1303..21db6f79035fa 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -231,6 +231,8 @@ int ksz_port_mdb_del(struct dsa_switch *ds, int port,
+ int ksz_enable_port(struct dsa_switch *ds, int port, struct phy_device *phy);
+ void ksz_get_strings(struct dsa_switch *ds, int port,
+ 		     u32 stringset, uint8_t *buf);
++enum dsa_tag_protocol ksz_get_tag_protocol(struct dsa_switch *ds,
++					   int port, enum dsa_tag_protocol mp);
  
- 	/*
--	 * if this is a directory then index_cnt is the counter for the index
--	 * number for new files that are created
-+	 * If this is a directory then index_cnt is the counter for the index
-+	 * number for new files that are created. For an empty directory, this
-+	 * must be initialized to BTRFS_DIR_START_INDEX.
- 	 */
- 	u64 index_cnt;
- 
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index ac6ba984973c0..26a4acb856a38 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -6396,14 +6396,8 @@ static int btrfs_set_inode_index_count(struct btrfs_inode *inode)
- 		goto out;
- 	ret = 0;
- 
--	/*
--	 * MAGIC NUMBER EXPLANATION:
--	 * since we search a directory based on f_pos we have to start at 2
--	 * since '.' and '..' have f_pos of 0 and 1 respectively, so everybody
--	 * else has to start at 2
--	 */
- 	if (path->slots[0] == 0) {
--		inode->index_cnt = 2;
-+		inode->index_cnt = BTRFS_DIR_START_INDEX;
- 		goto out;
- 	}
- 
-@@ -6414,7 +6408,7 @@ static int btrfs_set_inode_index_count(struct btrfs_inode *inode)
- 
- 	if (found_key.objectid != btrfs_ino(inode) ||
- 	    found_key.type != BTRFS_DIR_INDEX_KEY) {
--		inode->index_cnt = 2;
-+		inode->index_cnt = BTRFS_DIR_START_INDEX;
- 		goto out;
- 	}
+ /* Common register access functions */
  
 -- 
 2.35.1

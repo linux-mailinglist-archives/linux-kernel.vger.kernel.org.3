@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871265A4A6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6385A4A17
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbiH2Lh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S232642AbiH2LdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiH2LhB (ORCPT
+        with ESMTP id S232336AbiH2LaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:37:01 -0400
+        Mon, 29 Aug 2022 07:30:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F766DF9E;
-        Mon, 29 Aug 2022 04:21:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296E97B787;
+        Mon, 29 Aug 2022 04:18:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2137DB80EF5;
-        Mon, 29 Aug 2022 11:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7267DC433D6;
-        Mon, 29 Aug 2022 11:09:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3A32B80F1A;
+        Mon, 29 Aug 2022 11:18:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D412C433C1;
+        Mon, 29 Aug 2022 11:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771385;
-        bh=aw/3zNij5f5EZVoU20NAljEgXvZHzpu7ZFU2j+Zl8Uo=;
+        s=korg; t=1661771896;
+        bh=mMH1hGcKpgwXBpSgbGBaRQI8Dz/52lPkbKB04R3cWOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P3EHVlYkRWME5GIDBECg3mfTmOZEO6+JCrw0pPzlsSJifvlxdTSri1pkRTkIxHVQR
-         U7dqWHpePdM8DzLoNJ5Z1pPPI66MVNJvmEFF/J7j8ZMYNFUB5MUVUdjYBrF1yIkkDX
-         wLmbis0gGYADSVfdSZ52K9/M1CPpzPNsoIHbpstg=
+        b=nGzykrWL7TvRTYIjG8ONB+YazrUqlBuQMlcXTiuwM3oVjMVJlPXv7asr18LzQT7IC
+         Z+4wehicc5/wkN6QfZM0iripm3yiv1WhKUx7BYlHUx+/ZF/cbGQ2MPTKftBDUVtGeG
+         y7oOais/pH9ItR26KmxbO2dAjwMg/8IGT0DVa2VU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 098/136] btrfs: check if root is readonly while setting security xattr
-Date:   Mon, 29 Aug 2022 12:59:25 +0200
-Message-Id: <20220829105808.695855923@linuxfoundation.org>
+        stable@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.19 116/158] bootmem: remove the vmemmap pages from kmemleak in put_page_bootmem
+Date:   Mon, 29 Aug 2022 12:59:26 +0200
+Message-Id: <20220829105813.970168702@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +58,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Goldwyn Rodrigues <rgoldwyn@suse.de>
+From: Liu Shixin <liushixin2@huawei.com>
 
-commit b51111271b0352aa596c5ae8faf06939e91b3b68 upstream.
+commit dd0ff4d12dd284c334f7e9b07f8f335af856ac78 upstream.
 
-For a filesystem which has btrfs read-only property set to true, all
-write operations including xattr should be denied. However, security
-xattr can still be changed even if btrfs ro property is true.
+The vmemmap pages is marked by kmemleak when allocated from memblock.
+Remove it from kmemleak when freeing the page.  Otherwise, when we reuse
+the page, kmemleak may report such an error and then stop working.
 
-This happens because xattr_permission() does not have any restrictions
-on security.*, system.*  and in some cases trusted.* from VFS and
-the decision is left to the underlying filesystem. See comments in
-xattr_permission() for more details.
+ kmemleak: Cannot insert 0xffff98fb6eab3d40 into the object search tree (overlaps existing)
+ kmemleak: Kernel memory leak detector disabled
+ kmemleak: Object 0xffff98fb6be00000 (size 335544320):
+ kmemleak:   comm "swapper", pid 0, jiffies 4294892296
+ kmemleak:   min_count = 0
+ kmemleak:   count = 0
+ kmemleak:   flags = 0x1
+ kmemleak:   checksum = 0
+ kmemleak:   backtrace:
 
-This patch checks if the root is read-only before performing the set
-xattr operation.
-
-Testcase:
-
-  DEV=/dev/vdb
-  MNT=/mnt
-
-  mkfs.btrfs -f $DEV
-  mount $DEV $MNT
-  echo "file one" > $MNT/f1
-
-  setfattr -n "security.one" -v 2 $MNT/f1
-  btrfs property set /mnt ro true
-
-  setfattr -n "security.one" -v 1 $MNT/f1
-
-  umount $MNT
-
-CC: stable@vger.kernel.org # 4.9+
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Link: https://lkml.kernel.org/r/20220819094005.2928241-1-liushixin2@huawei.com
+Fixes: f41f2ed43ca5 (mm: hugetlb: free the vmemmap pages associated with each HugeTLB page)
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/xattr.c |    3 +++
- 1 file changed, 3 insertions(+)
+ mm/bootmem_info.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/btrfs/xattr.c
-+++ b/fs/btrfs/xattr.c
-@@ -391,6 +391,9 @@ static int btrfs_xattr_handler_set(const
- 				   const char *name, const void *buffer,
- 				   size_t size, int flags)
+--- a/mm/bootmem_info.c
++++ b/mm/bootmem_info.c
+@@ -12,6 +12,7 @@
+ #include <linux/memblock.h>
+ #include <linux/bootmem_info.h>
+ #include <linux/memory_hotplug.h>
++#include <linux/kmemleak.h>
+ 
+ void get_page_bootmem(unsigned long info, struct page *page, unsigned long type)
  {
-+	if (btrfs_root_readonly(BTRFS_I(inode)->root))
-+		return -EROFS;
-+
- 	name = xattr_full_name(handler, name);
- 	return btrfs_setxattr_trans(inode, name, buffer, size, flags);
+@@ -33,6 +34,7 @@ void put_page_bootmem(struct page *page)
+ 		ClearPagePrivate(page);
+ 		set_page_private(page, 0);
+ 		INIT_LIST_HEAD(&page->lru);
++		kmemleak_free_part(page_to_virt(page), PAGE_SIZE);
+ 		free_reserved_page(page);
+ 	}
  }
 
 

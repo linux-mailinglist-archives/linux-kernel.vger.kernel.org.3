@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93675A4925
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736D05A49AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiH2LUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S232257AbiH2L14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiH2LTM (ORCPT
+        with ESMTP id S232058AbiH2L0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:19:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E582753A7;
-        Mon, 29 Aug 2022 04:13:09 -0700 (PDT)
+        Mon, 29 Aug 2022 07:26:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC797757F;
+        Mon, 29 Aug 2022 04:16:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E73E4611D7;
-        Mon, 29 Aug 2022 11:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE78C433C1;
-        Mon, 29 Aug 2022 11:05:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 330CBB80FB3;
+        Mon, 29 Aug 2022 11:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACB6C433C1;
+        Mon, 29 Aug 2022 11:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771153;
-        bh=qQRB+uJ/BFvcwnf2Xmkqk11LcMxxR69ZBCfWEdf6GEA=;
+        s=korg; t=1661771756;
+        bh=vvNOSQZPTkACqzlLeZw7NqwxdNK0Y6n57u+/GJac9Ww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GQUUBLsfMxLvMErLzkd5DFfe3n09SZcdJraz9GCpYT/29Qg2PPB6Ug0ykpnyGoqJt
-         UdXe6kyUm+7G1KLmGa/E8wUJJHkEaJVFKfxBRjPxgOKvOnee7YbVfex9v8+k1lkpCk
-         HT7OGfb/YCZAdgqeE8NxMzAZuJ0Uap0k8lCJBd9c=
+        b=qGLvaOTKdOd7E459LS0+51l1WJOEmxzDx9J5W81D+LwnGk16hd/iXrRtFPmVE6mLM
+         u2S6HnxuUwAT1yaGsFpjNLA+u69PTZXnKSPklvDQSiqXYVujkk1/oUY/VM7wNqe4/c
+         U+4UYdmrx8QVgHANfmdaAYM8pD87CWY0AXRpfpXs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 32/86] netfilter: nft_payload: report ERANGE for too long offset and length
+Subject: [PATCH 5.19 088/158] ionic: fix up issues with handling EAGAIN on FW cmds
 Date:   Mon, 29 Aug 2022 12:58:58 +0200
-Message-Id: <20220829105757.868827229@linuxfoundation.org>
+Message-Id: <20220829105812.745016939@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Shannon Nelson <snelson@pensando.io>
 
-[ Upstream commit 94254f990c07e9ddf1634e0b727fab821c3b5bf9 ]
+[ Upstream commit 0fc4dd452d6c14828eed6369155c75c0ac15bab3 ]
 
-Instead of offset and length are truncation to u8, report ERANGE.
+In looping on FW update tests we occasionally see the
+FW_ACTIVATE_STATUS command fail while it is in its EAGAIN loop
+waiting for the FW activate step to finsh inside the FW.  The
+firmware is complaining that the done bit is set when a new
+dev_cmd is going to be processed.
 
-Fixes: 96518518cc41 ("netfilter: add nftables")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Doing a clean on the cmd registers and doorbell before exiting
+the wait-for-done and cleaning the done bit before the sleep
+prevents this from occurring.
+
+Fixes: fbfb8031533c ("ionic: Add hardware init and device commands")
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_payload.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nft_payload.c b/net/netfilter/nft_payload.c
-index 01878c16418c2..bdb07362c0ef0 100644
---- a/net/netfilter/nft_payload.c
-+++ b/net/netfilter/nft_payload.c
-@@ -733,6 +733,7 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- {
- 	enum nft_payload_bases base;
- 	unsigned int offset, len;
-+	int err;
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+index 4029b4e021f86..56f93b0305519 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
++++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+@@ -474,8 +474,8 @@ static int __ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds,
+ 				ionic_opcode_to_str(opcode), opcode,
+ 				ionic_error_to_str(err), err);
  
- 	if (tb[NFTA_PAYLOAD_BASE] == NULL ||
- 	    tb[NFTA_PAYLOAD_OFFSET] == NULL ||
-@@ -758,8 +759,13 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- 	if (tb[NFTA_PAYLOAD_DREG] == NULL)
- 		return ERR_PTR(-EINVAL);
+-			msleep(1000);
+ 			iowrite32(0, &idev->dev_cmd_regs->done);
++			msleep(1000);
+ 			iowrite32(1, &idev->dev_cmd_regs->doorbell);
+ 			goto try_again;
+ 		}
+@@ -488,6 +488,8 @@ static int __ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds,
+ 		return ionic_error_to_errno(err);
+ 	}
  
--	offset = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_OFFSET]));
--	len    = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_LEN]));
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_OFFSET], U8_MAX, &offset);
-+	if (err < 0)
-+		return ERR_PTR(err);
++	ionic_dev_cmd_clean(ionic);
 +
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_LEN], U8_MAX, &len);
-+	if (err < 0)
-+		return ERR_PTR(err);
+ 	return 0;
+ }
  
- 	if (len <= 4 && is_power_of_2(len) && IS_ALIGNED(offset, len) &&
- 	    base != NFT_PAYLOAD_LL_HEADER)
 -- 
 2.35.1
 

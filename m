@@ -2,77 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80E65A474F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C195A4759
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiH2KiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S229939AbiH2Kjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiH2Kh5 (ORCPT
+        with ESMTP id S229536AbiH2Kjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:37:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C105AC5E;
-        Mon, 29 Aug 2022 03:37:54 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B9C4E6601EED;
-        Mon, 29 Aug 2022 11:37:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661769472;
-        bh=XUq2kdBS4OyttnvnvgNCtPhMLla0r0PwgobFNtpuStU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=X9fjiT3eZ8u5h40tuCDPa7YcPwRvCRI5eydtEfE71RWaFwh3k+S7oN18rNo3Sd8Cv
-         SxGz1sWeHALT7fh61Cw23/dZuUDSCMZudkhIm23SEoT7zxcRkGyLwsCH6WJr80QdaU
-         jmFlLHgJ6bkJTufumd1QEMOp6aOhgY/SoVeQO2yyv8JiJTHecAojLVUcz1z0y4/82q
-         0PJDAucwt8KiUOJEZF4JBiqWha0J+OI/8CfqwmR0ioM2AIp67RAaGtLaLNej+gVPKR
-         fwP02a+jJ5Mdp/mJnJ/AY68GyHyhOBzqwqSrWravlKPUGm1wWSYnL2fjxPA0yXobyk
-         f+HkH3FwMoT1g==
-Message-ID: <f473ecee-fd71-8783-dffc-7d7cf06a3b77@collabora.com>
-Date:   Mon, 29 Aug 2022 12:37:49 +0200
+        Mon, 29 Aug 2022 06:39:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738785B050
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661769576; x=1693305576;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t7GuYZO5ulomC4Kc+Yn7T0tXmir/Uia8FcI8CB074ME=;
+  b=McB4oi2QN19hkvphbvWrByY9YvBcTZryAjl6sZa5GPOXef/DaBDT2AUu
+   GHuHQpDv+ELJEBFMLjxqpHz6ww83SWhkYvhn4mAACaDU7Vc3+WbZPchj4
+   Q3TYtQ0jjFYYMCa7EvIelv/86vE6rTPcJtdzEMicOxply3cYkhoCJmkMC
+   u5LH+z2h4V7fdmOkVgjE3pv4aaaqjE8WYoNSCaBgdjh/ZssabW8Tfj264
+   eMFUWg2wxA6861kRuVjKdtp3itstJXMs2uPQAHp9ZVIjlViC0l+6ZAsgM
+   xKHsLHurc7Nc1ag0Db/1qhOZwjP826B5CVx+lJsWkaaILxI3eLnvqPBlS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="296139038"
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="296139038"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 03:39:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="679578366"
+Received: from lkp-server02.sh.intel.com (HELO a13edbbf6006) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Aug 2022 03:39:12 -0700
+Received: from kbuild by a13edbbf6006 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oScAi-00002f-0a;
+        Mon, 29 Aug 2022 10:39:12 +0000
+Date:   Mon, 29 Aug 2022 18:38:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:sc8280xp-6.0.0-rc3 156/167] undefined reference to
+ `sdw_disable_stream'
+Message-ID: <202208291807.tyAnOYIv-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: pwm: Add compatible for Mediatek MT8188
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jitao.shi@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1661744916-15441-1-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1661744916-15441-1-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/08/22 05:48, xinlei.lee@mediatek.com ha scritto:
-> From: xinlei lee <xinlei.lee@mediatek.com>
-> 
-> Base on the branch of Linux-next/master.
-> Split from series [1].
-> [1] https://patchwork.kernel.org/project/linux-mediatek/cover/1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com/
-> 
-> Add dt-binding documentation of pwm for MediaTek MT8188 SoC.
-> 
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+tree:   https://github.com/steev/linux sc8280xp-6.0.0-rc3
+head:   219615b30a2e783a7af7d39e20f9e0ce56ac082e
+commit: 7b56a20a3a015c2ee678b6d593889ac33fc93627 [156/167] ASoC: qcom: sm8250: move some code to common
+config: microblaze-randconfig-r025-20220828 (https://download.01.org/0day-ci/archive/20220829/202208291807.tyAnOYIv-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/7b56a20a3a015c2ee678b6d593889ac33fc93627
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev sc8280xp-6.0.0-rc3
+        git checkout 7b56a20a3a015c2ee678b6d593889ac33fc93627
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   microblaze-linux-ld: sound/soc/qcom/common.o: in function `qcom_snd_sdw_prepare':
+>> (.text+0x790): undefined reference to `sdw_disable_stream'
+>> microblaze-linux-ld: (.text+0x79c): undefined reference to `sdw_deprepare_stream'
+>> microblaze-linux-ld: (.text+0x7ac): undefined reference to `sdw_prepare_stream'
+>> microblaze-linux-ld: (.text+0x7c0): undefined reference to `sdw_enable_stream'
+   microblaze-linux-ld: (.text+0x7d4): undefined reference to `sdw_deprepare_stream'
+   microblaze-linux-ld: sound/soc/qcom/common.o: in function `qcom_snd_sdw_hw_free':
+   (.text+0x9a8): undefined reference to `sdw_disable_stream'
+   microblaze-linux-ld: (.text+0x9b8): undefined reference to `sdw_deprepare_stream'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

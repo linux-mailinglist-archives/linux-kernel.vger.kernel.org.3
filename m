@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488215A467D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07B55A4673
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiH2Jvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S229635AbiH2Juy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiH2Jv1 (ORCPT
+        with ESMTP id S229484AbiH2Juw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:51:27 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B30C5E326
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:51:25 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id h1so3977201wmd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:to:from:user-agent:references:from:to:cc;
-        bh=tOx2tqybefFHeIMLUW+su+XgGbavJfHYGjEPqAfEtak=;
-        b=RYKk0fDG8yPKxONFHoSpdDlNNVRBa8zF+ikdW+hDUIfh+D0dOUIanORctEiBjEypK8
-         gPTFoc9XdwBgOrXm1/IDyKsi/bdf+i8ThBebydsCJYVUngxxDUhhxQqFL9Yw5WqHE2Qr
-         VihDTL9zqrh2gbyVAic3nQ6VJY4525qfn+LE4e6Ffrok2xQ2wV0T6zykyENEKPcM3ZHB
-         tB4CYIkfgpRkfI8DIK4bHFVtI3oXP1A2ietFu9qDfyfw0S/owqfBFzXp9VfVxC9OBHS6
-         uX1KZG/3Ip8xcIoNrjSjnEmYP+Jgoh6GMpnh+/nj1MsXIrCUy0b0hNTUrOPtoAIwyzBb
-         jb0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:to:from:user-agent:references:x-gm-message-state:from:to:cc;
-        bh=tOx2tqybefFHeIMLUW+su+XgGbavJfHYGjEPqAfEtak=;
-        b=UoQZlF0CRbCz1fVOfMJmvOiLMB82097uHbv96gyLrobmmh3TJLs5P0ZLuFbJFoNdoM
-         FSQVApmi4zpupJoi0VJUPkj/aaVLS5Pp3bHGVWdAFYx9a3ucOkvpBPI9YeBVLjweqe08
-         lYXbXbMIfy6h2K7qkcRBTrPndq3/u5jUB42R+Z4fWR+9x0p/J670/TxmQfZw/CaFN6fd
-         +8VhbEY60rvFj8TRUjUSnHILcrjy26FxG+rYItLp8F2XXfgI2nG7zT7FpIkCLOfcoSGy
-         YxbbGLc5y+nRMW0CnMy25nsM/165Qf9dMK1mCrH+5cZJRGGFi5O9US+E7TpGIbsDT0so
-         rElw==
-X-Gm-Message-State: ACgBeo0/Zl0jpaBqahO6c3TFUFwmi8lFPhnsr5ccMiUHfrSXWMPNpDiK
-        7jxpMLZBFI98dASbFyO7/Bvb+52vwW14TQ==
-X-Google-Smtp-Source: AA6agR64cwUPnhx/Tf1ejw/jlZS5h7uLh23KiCPqziDo8ptC4sx4Y1k3FIdRq0G7ItXcWgl0sii7YQ==
-X-Received: by 2002:a05:600c:1e1c:b0:3a5:b668:4e2 with SMTP id ay28-20020a05600c1e1c00b003a5b66804e2mr6401869wmb.112.1661766683496;
-        Mon, 29 Aug 2022 02:51:23 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id e15-20020adffc4f000000b0021e51c039c5sm6498175wrs.80.2022.08.29.02.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 02:51:23 -0700 (PDT)
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-4-yu.tu@amlogic.com>
- <1jiln0yzgj.fsf@starbuckisacylon.baylibre.com>
- <ed4038fb-c230-fc27-800c-c99bd1770a1c@amlogic.com>
- <4e3cdd6b-5861-8a4f-1df7-af763f77bad5@amlogic.com>
-User-agent: mu4e 1.8.7; emacs 28.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V3 3/6] clk: meson: S4: add support for Amlogic S4 SoC
- PLL clock driver
-Date:   Mon, 29 Aug 2022 11:48:21 +0200
-In-reply-to: <4e3cdd6b-5861-8a4f-1df7-af763f77bad5@amlogic.com>
-Message-ID: <1jsflftm1y.fsf@starbuckisacylon.baylibre.com>
+        Mon, 29 Aug 2022 05:50:52 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226BC24BFA
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:50:52 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27T5Kb9I007486;
+        Mon, 29 Aug 2022 04:50:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=Ac1E2dHlHNO3x2YovIPvIWmXBzgoM79hvAsvFpx0KBo=;
+ b=Tc08a30i0ip9GJ71TVtXMDIYCV24uqfkO2ABQbCDQW7cAQ1iJ0VKFAyHeQxR/9K10ZX4
+ m3V1LjUdLvU4j3wExX7csAwXiEcRvwnwK70RM7TExLypYzgj2Pb9FDwOVBbXUx+WbcSs
+ ca8IW+TMsnW70E7pqbXMq43c9mp8f9UG090XtUjBy94IKSwkR0uGYrB0BpFcMsJqkRYj
+ mNVn1MoosMQCK0vqYJvEoQ4ymL3jSpUdH3woSvwMSiqa2KiQ0j0i1t0y4x9GQDHeNBk6
+ iXmpZ/fdtbNQ/D64OoLZMKUT+w8TiHnMW74DY+/WffyL1pycMiZ6tefsSOEoW5LGLXc8 NQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3j7gp21u5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 04:50:37 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Mon, 29 Aug
+ 2022 04:50:35 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.12 via Frontend
+ Transport; Mon, 29 Aug 2022 04:50:35 -0500
+Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E511F459;
+        Mon, 29 Aug 2022 09:50:34 +0000 (UTC)
+Message-ID: <b163327f-587d-d933-35de-7058cdcd6b9e@opensource.cirrus.com>
+Date:   Mon, 29 Aug 2022 10:50:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 3/3] soundwire: bus: Fix lost UNATTACH when re-enumerating
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>
+CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220825122241.273090-1-rf@opensource.cirrus.com>
+ <20220825122241.273090-4-rf@opensource.cirrus.com>
+ <adfdf06a-e1a3-e47c-a71f-5e5dccef6fd0@linux.intel.com>
+ <e9deb2fb-458a-8136-5ba7-a9e2b0f2d174@opensource.cirrus.com>
+ <01e03c55-1fcf-1e33-78e8-398a50b622ce@linux.intel.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <01e03c55-1fcf-1e33-78e8-398a50b622ce@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: ykjxJIMpY9jph5RvS6dhUuZyA2n6Im8u
+X-Proofpoint-ORIG-GUID: ykjxJIMpY9jph5RvS6dhUuZyA2n6Im8u
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,49 +75,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiBNb24gMTUgQXVnIDIwMjIgYXQgMjE6MjAsIFl1IFR1IDx5dS50dUBhbWxvZ2ljLmNvbT4g
-d3JvdGU6DQoNCj4+Pj4gKw0KPj4+PiArc3RhdGljIHN0cnVjdCBjbGtfcmVnbWFwIHM0X2hkbWlf
-cGxsX2RjbyA9IHsNCj4+Pj4gK8KgwqDCoCAuZGF0YSA9ICYoc3RydWN0IG1lc29uX2Nsa19wbGxf
-ZGF0YSl7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCAuZW4gPSB7DQo+Pj4+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIC5yZWdfb2ZmID0gQU5BQ1RSTF9IRE1JUExMX0NUUkwwLA0KPj4+PiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCAuc2hpZnTCoMKgID0gMjgsDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIC53aWR0aMKgwqAgPSAxLA0KPj4+PiArwqDCoMKgwqDCoMKgwqAgfSwNCj4+Pj4gK8Kg
-wqDCoMKgwqDCoMKgIC5tID0gew0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAucmVnX29m
-ZiA9IEFOQUNUUkxfSERNSVBMTF9DVFJMMCwNCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-LnNoaWZ0wqDCoCA9IDAsDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC53aWR0aMKgwqAg
-PSA4LA0KPj4+PiArwqDCoMKgwqDCoMKgwqAgfSwNCj4+Pj4gK8KgwqDCoMKgwqDCoMKgIC5uID0g
-ew0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAucmVnX29mZiA9IEFOQUNUUkxfSERNSVBM
-TF9DVFJMMCwNCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLnNoaWZ0wqDCoCA9IDEwLA0K
-Pj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAud2lkdGjCoMKgID0gNSwNCj4+Pj4gK8KgwqDC
-oMKgwqDCoMKgIH0sDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCAuZnJhYyA9IHsNCj4+Pj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgLnJlZ19vZmYgPSBBTkFDVFJMX0hETUlQTExfQ1RSTDEsDQo+Pj4+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC5zaGlmdMKgwqAgPSAwLA0KPj4+PiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAud2lkdGjCoMKgID0gMTcsDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCB9LA0K
-Pj4+PiArwqDCoMKgwqDCoMKgwqAgLmwgPSB7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IC5yZWdfb2ZmID0gQU5BQ1RSTF9IRE1JUExMX0NUUkwwLA0KPj4+PiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAuc2hpZnTCoMKgID0gMzEsDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC53
-aWR0aMKgwqAgPSAxLA0KPj4+PiArwqDCoMKgwqDCoMKgwqAgfSwNCj4+Pj4gK8KgwqDCoMKgwqDC
-oMKgIC5yc3QgPSB7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC5yZWdfb2ZmID0gQU5B
-Q1RSTF9IRE1JUExMX0NUUkwwLA0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAuc2hpZnTC
-oMKgID0gMjksDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC53aWR0aMKgwqAgPSAxLA0K
-Pj4+PiArwqDCoMKgwqDCoMKgwqAgfSwNCj4+Pj4gK8KgwqDCoCB9LA0KPj4+PiArwqDCoMKgIC5o
-dy5pbml0ID0gJihzdHJ1Y3QgY2xrX2luaXRfZGF0YSl7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCAu
-bmFtZSA9ICJoZG1pX3BsbF9kY28iLA0KPj4+PiArwqDCoMKgwqDCoMKgwqAgLm9wcyA9ICZtZXNv
-bl9jbGtfcGxsX3JvX29wcywNCj4+Pj4gK8KgwqDCoMKgwqDCoMKgIC5wYXJlbnRfZGF0YSA9IChj
-b25zdCBzdHJ1Y3QgY2xrX3BhcmVudF9kYXRhIFtdKSB7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHsgLmZ3X25hbWUgPSAieHRhbCIsIH0NCj4+Pj4gK8KgwqDCoMKgwqDCoMKgIH0sDQo+
-Pj4+ICvCoMKgwqDCoMKgwqDCoCAubnVtX3BhcmVudHMgPSAxLA0KPj4+PiArwqDCoMKgwqDCoMKg
-wqAgLyoNCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqAgKiBEaXNwbGF5IGRpcmVjdGx5IGhhbmRsZSBo
-ZG1pIHBsbCByZWdpc3RlcnMgQVRNLCB3ZSBuZWVkDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgICog
-Tk9DQUNIRSB0byBrZWVwIG91ciB2aWV3IG9mIHRoZSBjbG9jayBhcyBhY2N1cmF0ZSBhcw0KPj4+
-PiArwqDCoMKgwqDCoMKgwqDCoCAqIHBvc3NpYmxlDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgICov
-DQo+Pj4NCj4+PiBJcyBpdCByZWFsbHkgPw0KPj4+DQo+Pj4gR2l2ZW4gdGhhdCBIRE1JIHN1cHBv
-cnQgZm9yIHRoZSBzNCBpcyB0aGVyZSB5ZXQsIHRoZQ0KPj4+IGFkZHJlc3NlcyBoYXZlIGNoYW5n
-ZXMgYW5kIHRoZSByZWdpb24gaXMgbm8gbG9uZ2VyIGEgc3lzY29uLCBpdCBpcyB0aW1lDQo+Pj4g
-Zm9yIHRoZSBIRE1JIGRyaXZlciB0byBnZXQgZml4ZWQuDQo+IFRoZSBIRE1JIFBMTCBpcyBjb25m
-aWd1cmVkIGluIHRoZSBVYm9vdCBwaGFzZSBhbmQgZG9lcyBub3QgY2hhbmdlIHRoZQ0KPiBmcmVx
-dWVuY3kgaW4gdGhlIGtlcm5lbCBwaGFzZS4gU28gd2UgdXNlIHRoZSBOT0NBQ0hFIGZsYWcgYW5k
-DQo+ICJyb19vcHMiLg0KDQpUaGF0J3Mgbm8gcmVhc29uIHRvIHB1dCBOT0NBQ0hFIG9yIHJvLW9w
-cw0KDQpJZiB5b3Ugd2FudCB0aGUgZnJlcXVlbmNpZXMgdG8gYmUgc3RhdGljYWxseSBhc3Npbmdl
-ZCwgdGhlIGNvcnJlY3Qgd2F5DQp3b3VsZCBiZSB0aHJvdWdoIGFzc2lnbmVkLXJhdGUgaW4gRFQg
-SSBndWVzcy4NCg0K
+On 26/08/2022 09:06, Pierre-Louis Bossart wrote:
+> 
+<SNIP>
+> 
+> Thanks for the detailed answer, this sequence of events will certainly
+> defeat the Cadence IP and the way sticky bits were handled.
+> 
+> The UNATTACHED case was assumed to be a really rare case of losing sync,
+> i.e. a SOFT_RESET in SoundWire parlance.
+> 
+> If you explicitly do a device reset, that would be a new scenario that
+> was not considered before on any of the existing SoundWire commercial
+> devices. It's however something we need to support, and your work here
+> is much appreciated.
+> 
+> I still think we should re-check the actual status from a PING frame, in
+> order to work with more current data than the sticky bits taken at an
+> earlier time, but that would only be a minor improvement.
+> 
+> I also have a vague feeling that additional work is needed to make sure
+> the DAIs are not used before that second enumeration and all firmware
+> download complete. I did a couple of tests last year where I used the
+> debugfs interface to issue a device reset command while streaming audio,
+> and the detach/reattach was not handled at the ASoC level.
+> 
+> I really don't see any logical flaws in your patch as is, so
+> 
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> 
+
+I have pushed an alternative fix that waits until it sees an UNATTACHED
+status before reprogramming the device ID.
+https://lore.kernel.org/lkml/20220829094458.1169504-1-rf@opensource.cirrus.com/T/#t
+
+I've tested it with 4 amps on the same bus, all being reset after their
+firmware has been downloaded.
+
+I leave it to you to choose which fix you prefer. The second fix is
+simpler and I didn't see any problems in testing.

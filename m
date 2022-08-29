@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4325A5607
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684465A5609
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiH2VUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S229477AbiH2VUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH2VUE (ORCPT
+        with ESMTP id S229449AbiH2VUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:20:04 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E38D14027
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:20:02 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id mj6so4191126pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:20:02 -0700 (PDT)
+        Mon, 29 Aug 2022 17:20:48 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C711E53D3B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:20:47 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id v5so2985704plo.9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=7qls1+YFgdHoWEPQNmxr1ABnrXfeVNJORYv4KETXaJw=;
-        b=KN3FcLNOJnJN0y2qtOjDU2oTh7hydSZIVuf7JZC5n+MWm4t6qiTo51dwcJGuLSZuoo
-         /DbJw9VEITHb6qoU1XRG/kSZ48KoBsDa7AsnzMyxS/7mppcwlkogrSrJyyVxG2XspaO4
-         JfhUjrbpF2smMWHKBFc6mJY2nxL+NO8FSnlUA=
+        bh=vKVUa93sxM19Uy1dmsGVMayUSmR5dADcgyx6lBR87O4=;
+        b=o0LkaGgz5n3SnWPqJiKQhayAyC2kHhqiXcctuKpfeMBE9PThPrnVXe2lpwAFT8TKyg
+         BzSb9YYI8InyJTmV1CYben0Mwmlj9AcfTK5cUzkmGAoniCmH91JR2rtM72o7MaWGx906
+         xn/NkMKz7eT9KTbLEHiZKfjT8XkTE9GPNVwPDAOH8a0tfbS4mAw4UqQdUjHwaIVV/jK2
+         rjyBY/HSX2TI997mjbQD5IwZbWRcqXmU3auEN+qyI+SDyMrin8OlK8mmMN79krEarJn0
+         n0+YwmrL/Kn6rCPXuG/osXvQ8/zsMUqLM1q1Q/dJ8Uwwvt+m9O/yYeF1Ji2VoXcW0OKS
+         a0WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7qls1+YFgdHoWEPQNmxr1ABnrXfeVNJORYv4KETXaJw=;
-        b=nz/W1QnX3J4/Oe+8fQ/9oYvX/t5TUKH9JXSPwJhgBoiqB2q+wwU0TxS28ST9RF4F7u
-         zcilOnxwZOGWdPKIonXiDH1tDY/ZTnRCJ1ITU0bcJpeXDFLkxPpSb9wO5tZQ2ir5RFV7
-         BppwbUuYJ/5xorlPLMp3/11mS4OtULthS0ZsEoe2LMlBHSuxF0Z2mRTN/VKuEkJxPbKP
-         rG9pGzo4Hh+cLdiKtKVw/PMf7742b1Dn5Al+orqvGVoGmbTDGIPH0eY6FbNMTTyidYap
-         NPKK1fmCR9ecVMlcpXDonC+cQKd3Drf9kahfqHtnNme4a+2RQViJy3kn25s76a400Nln
-         f3hg==
-X-Gm-Message-State: ACgBeo3V6IV/HFOToz0nfsFkosaccX7pQaUrE29W2gguS0y6EH5ws7ml
-        bCW40qRDP30atf67usRbo0sL/i0WvNINFg==
-X-Google-Smtp-Source: AA6agR61jD/Sjyr7ltJWd00jEUu/v3VD1etBboWPbe5+r34fUI9U5fmqiJcx9D40DWp2f86yOrVbYQ==
-X-Received: by 2002:a17:90b:3ec2:b0:1f7:3f49:17bf with SMTP id rm2-20020a17090b3ec200b001f73f4917bfmr20504510pjb.4.1661808001573;
-        Mon, 29 Aug 2022 14:20:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902e84a00b00174f4316c24sm1783077plg.245.2022.08.29.14.20.00
+        bh=vKVUa93sxM19Uy1dmsGVMayUSmR5dADcgyx6lBR87O4=;
+        b=hwJWh9eYa0BqyMYfxe8Gw20obC7+5FfWqku+o5S9a+J4GBQe7f2KmJvv+ncnWJBdRm
+         hTR/vsEpyBVcXb8g7c/RblJzfUIQyiSKarHJEc2vQwiCKt47NoTmkihay7bcjxK/aN/d
+         /9AnoL0+AYiqtGJmpkOLfZ0UNcDF58rXTEkPePlX8o6PjbR+LnkWwctvzsURVrpA649z
+         SBAgOA7sdlJg53JTRKqxKp36TrbNfZOT0vXdsln2zc3DahoP5TJRIWUTGr8SGYXk+34T
+         QC1GUPkMZ3XgbO4GU6wBZQGZ/dfv8yKMzJWOai80pfQ+xNFXgCo/ZNSj7sxnp0qFiK/J
+         1q5A==
+X-Gm-Message-State: ACgBeo0GtgsJuwdvinJd0cLdgap/314K8mYf8lK83jsOG8fE21Og68Q6
+        rlt95QUTPSNYfUeyc8BFFppsqQ==
+X-Google-Smtp-Source: AA6agR4lDhKCnCY7kbEGog1W8meT77I95HpBbeYp1dmJtakPrSgvGnCq/4YUm5o4yKdEV/lI6SSNZA==
+X-Received: by 2002:a17:90b:1d0b:b0:1f5:72f:652c with SMTP id on11-20020a17090b1d0b00b001f5072f652cmr20176010pjb.38.1661808047093;
+        Mon, 29 Aug 2022 14:20:47 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170903110400b0016d6963cb12sm8044038plh.304.2022.08.29.14.20.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 14:20:00 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 14:19:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-hardening@vger.kernel.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] overflow: Allow mixed type arguments
-Message-ID: <202208291415.01271EA1@keescook>
-References: <20220829204729.3409270-1-keescook@chromium.org>
- <d325bf21-efa4-b3e9-a0d8-3662a9f7ab1a@rasmusvillemoes.dk>
+        Mon, 29 Aug 2022 14:20:45 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 21:20:42 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        kernel-team@android.com,
+        syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com,
+        syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
+Message-ID: <Yw0tqreGRPOwyAaX@google.com>
+References: <20220829201254.1814484-1-cmllamas@google.com>
+ <20220829201254.1814484-2-cmllamas@google.com>
+ <20220829133452.cd4d9abe858c940126557c41@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d325bf21-efa4-b3e9-a0d8-3662a9f7ab1a@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220829133452.cd4d9abe858c940126557c41@linux-foundation.org>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 11:14:56PM +0200, Rasmus Villemoes wrote:
-> On 29/08/2022 22.47, Kees Cook wrote:
-> > When the check_[op]_overflow() helpers were introduced, all arguments were
-> > required to be the same type to make the fallback macros simpler. However,
-> > once the fallback macros were removed[1], it is fine to allow mixed
-> > types, which makes using the helpers much more useful, as they can be
-> > used to test for type-based overflows (e.g. adding two large ints but
-> > storing into a u8), as would be handy in the drm core[2].
+On Mon, Aug 29, 2022 at 01:34:52PM -0700, Andrew Morton wrote:
+> On Mon, 29 Aug 2022 20:12:48 +0000 Carlos Llamas <cmllamas@google.com> wrote:
+> 
+> > Syzbot reported a couple issues introduced by commit 44e602b4e52f
+> > ("binder_alloc: add missing mmap_lock calls when using the VMA"), in
+> > which we attempt to acquire the mmap_lock when alloc->vma_vm_mm has not
+> > been initialized yet.
 > > 
-> > Remove the restriction, and add additional self-tests that exercise some
-> > of the mixed-type overflow cases.
+> > This can happen if a binder_proc receives a transaction without having
+> > previously called mmap() to setup the binder_proc->alloc space in [1].
+> > Also, a similar issue occurs via binder_alloc_print_pages() when we try
+> > to dump the debugfs binder stats file in [2].
 > 
-> Makes sense. I'm a little worried about the implications for -stable
-> backports to kernels that can still be built with gcc < 5.1, but we
-> can't let that dictate what is done in mainline. And even people
-> building old kernels shouldn't be using ancient compilers.
+> Thanks.  I assume you'll be merging all these into mainline?
 
-Right. I hope this will remain a theoretical problem, but if it really
-comes up, the -stable patch can get some explicit type size checking or
-something...
+Yes, I believe Greg will pick up these patches into his char-misc tree.
 
 > 
-> >  
-> > -#define DEFINE_TEST_ARRAY(t)			\
-> > -	static const struct test_ ## t {	\
-> > -		t a, b;				\
-> > -		t sum, diff, prod;		\
-> > -		bool s_of, d_of, p_of;		\
-> > -	} t ## _tests[]
-> > +#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)		\
-> > +	static const struct test_ ## t1 ## t2 ## t {	\
-> > +		t1 a;					\
-> > +		t2 b;					\
-> > +		t sum, diff, prod;			\
-> > +		bool s_of, d_of, p_of;			\
-> > +	} t1 ## t2 ## t ## _tests[]
+> > 
+> > Fixes: 44e602b4e52f ("binder_alloc: add missing mmap_lock calls when using the VMA")
+> > Reported-by: syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com
+> > Reported-by: syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com
+> > Cc: <stable@vger.kernel.org> # v5.15+
 > 
-> Can I get you to throw in some extra _, because this...
-> 
-> > +DEFINE_TEST_FUNC_TYPED(u32u32int, int, "%d");
-> 
-> ...makes my eyes hurt a little. Maybe even make it u32_u32__int, so it's
-> emphasized that the order is [src op src -> tgt] and not [tgt = src op src].
+> 44e602b4e52f is only present in 6.0-rcX?
 
-Sure! Everything I tried hurt my eyes, so I opted for fewest characters.
-;)
-
--- 
-Kees Cook
+Right, it was just added to the stable queue earlier today:
+https://lore.kernel.org/all/20220829105814.857786586@linuxfoundation.org/
+https://lore.kernel.org/all/20220829105809.855177179@linuxfoundation.org/

@@ -2,153 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101205A5394
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75265A53A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiH2Rz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S230151AbiH2R4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiH2RzV (ORCPT
+        with ESMTP id S229551AbiH2R4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:55:21 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BC428E38
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:55:17 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id ay12so4613734wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=W9xLOeQ1DMWnZYzrDwRC4aH4WmIQ6ob1xqAQ9e7Axg0=;
-        b=bcN1eiKRGwEvBCEr06wPOJLtNaLCmJqwTHiUX52Dsl4qFuL+YGXnQldOsR34jA55wa
-         W/1jLpt2jaOEwvckra6O9rD7seIilIWa0LSc4T5oLIWwb6bAa1v8GVXykItPYzE4ySqR
-         vJjhGJZ2vCXE6ZEPXkT7bGLQ30Nm/159nmMWIdm3jox4cPIHDHy3Pi6c4jYnGeJAwlzH
-         dgNnWYW2lpqdo64nZPFlwLAlH+mVq0xnd4iBq/Uvwnxy3vjMLgKYEElqZ/RgvnKXJm6X
-         NhjbnAwWlAZybe8NeDZ4dOIJxiSo6uxh8FHEvgzNwDv63pvJsxKpe2CTM89vL7VM1D+I
-         Z1XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=W9xLOeQ1DMWnZYzrDwRC4aH4WmIQ6ob1xqAQ9e7Axg0=;
-        b=iCnMYMneeEBFuaHBTK0uvHa+fXZocnboC7aGsCYPjqmWFg5uY7Cofkx6+R3sfkt8uT
-         7T2pcEm5hpqK8gSS2/fxbVVkzzthZdZQEJohEBHWoajj7qQRIGb1Od2o1hLK4+UxPMrG
-         fHPf6e4zvrXcriIIwoaMY5H63VDi7wS/oliVTBUAdvxyp6wpSjdj9HzQ+dQ7dqNOtSKD
-         NWOyKzJ1HdW/3LBwNG+qcRgSN6YNsJWW/MhI6awptmeE5onpnSxtAr1YxnPsbYnpXjFU
-         TZ7IfzSFDCY5VEvKmFwArxguVcTSV9LvrA5URHVIEhdGcJxi1jO67ogyQqlyuAOJy8qP
-         MLZw==
-X-Gm-Message-State: ACgBeo3vb8GtBqhJXhaqfPZFNPamB4uvxhJuo9LPixwwJQbVbT1rbeFx
-        HWy7HjolPBmXhXvZbt8lt13Cw0NNJYAGqO/j
-X-Google-Smtp-Source: AA6agR4mqOpzLksf1UadAbtjGlE/l+Iww+jCBb2rbTduJ9yxyWooiqsuRt8KqwGuagb8JpuIqAaQtw==
-X-Received: by 2002:a05:600c:4f48:b0:3a5:e707:bb8c with SMTP id m8-20020a05600c4f4800b003a5e707bb8cmr7681257wmq.198.1661795715955;
-        Mon, 29 Aug 2022 10:55:15 -0700 (PDT)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05600c23c900b003a6125562e1sm9444142wmb.46.2022.08.29.10.55.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 10:55:15 -0700 (PDT)
-Message-ID: <fce974f0-cea9-fa92-ecfc-4f7cc4fc95e2@arista.com>
-Date:   Mon, 29 Aug 2022 18:55:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [kbuild] Re: [PATCH 11/31] net/tcp: Add TCP-AO sign to outgoing
- packets
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Mon, 29 Aug 2022 13:56:19 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CBF77566;
+        Mon, 29 Aug 2022 10:56:17 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 933AF5C005D;
+        Mon, 29 Aug 2022 13:56:15 -0400 (EDT)
+Received: from imap49 ([10.202.2.99])
+  by compute4.internal (MEProxy); Mon, 29 Aug 2022 13:56:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1661795775; x=
+        1661882175; bh=HhMi6Ae2mKC0wqby3t/kIqrD8OSzWM6dTNwdDHPaLc8=; b=r
+        C5MUz9Yuf3ougevGbgnYWYtihM8XI/ZIBkRRFgoNkBoH+LAevk8W+NHK54ba/I0t
+        V8F+6N134I7fo3OAaytsEemXIHxbCanQtZnNfxF5YmnI+0HPCjw4TqeZCyx6olfp
+        5keZFP+pGQSTr9H/nB9WpDDGfV4wBEH76ed197OFwfM4T+NJtGLRSLTuSiuV6nkQ
+        E5dELaetPK1aGFx93xoBh6W/i0cZ0mpO12JCRQbP8mKDWhd3XenotUFYgnWCtgWI
+        QM8QJYrxQFjP1UkR6RU3A3JA7vZ/5ndYKq647a0JfNczM7IkVGXU/gKUg+X8lENE
+        S+C5u+qu6lJkXGR6j6d2g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661795775; x=1661882175; bh=HhMi6Ae2mKC0wqby3t/kIqrD8OSz
+        WM6dTNwdDHPaLc8=; b=aDrxeeDTyJ/pJoic2Skndu8eRLHguZe14DvqwL+y8Wnw
+        tyMwgnQXYfz2es7PbS7e1AxTqOS9nrwJbtGi/qJWrST6xGspXzsD2Cfm5FaC4Em+
+        oouKsKXm6ovl3hiceJbx/xVuRI10Zn8UIbyoE4a2pw6uE/AtIwQBsy/Q2MLfh48/
+        0TMFYv0XS818XHDlCzT8Rvted+kllNbArE5vDWZ7nkmeKD7LtdPIOm3LZUVBw3mq
+        DuxdEV5t3QijFPWG9Ly5nc6G2pDonmZ6T4aMIgQtp4HlTHOwyOEy3u5uyCJB+Org
+        CNsqVLYMB3QKCZF+SQwXBq/2pNABaHh14Lx4X97lMQ==
+X-ME-Sender: <xms:v_0MY2p_JQCePrAZHYk3Nkzpe_pj4Tp53EIIcTkYV2aD4-4sAypB4g>
+    <xme:v_0MY0qYHmoMSdAPq9C6c9-r2fPztRMLsRff9aL8w_hHKXx4VnFWRoRxfgi2ECOW_
+    9oIAZBxed1iveMestc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekuddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
+    lhgruggvucghrghtkhhinhhsfdcuoehslhgruggvsehslhgruggvfigrthhkihhnshdrtg
+    homheqnecuggftrfgrthhtvghrnhepjedtjeffgeekueegteefudegfeekteetvdegudfh
+    uefghfdtteeigfeggfelteeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhm
+X-ME-Proxy: <xmx:v_0MY7OrcTNNyPQv7-srLtCIzKxaifV90ZgYifIgj4s0ij_Vuye4Mg>
+    <xmx:v_0MY15ZkM8jtcmqgBjo40WyP_zv8SvEZgwDQGDGr1Rl06GsRe5HrQ>
+    <xmx:v_0MY15FrDNYZBhk7rmcNWr2Z_JXOPxJBu_0RUjaLedavSOhlD7h9w>
+    <xmx:v_0MYyzrRrYsudwWsle69RPjZGEeDWSHJ4HqKSAov-zzvB7OLB6WSQ>
+Feedback-ID: i8ae946f9:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F28E115A0087; Mon, 29 Aug 2022 13:56:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <8d92c03a-67ca-4064-9e0c-0a19c2a87904@www.fastmail.com>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
+Date:   Mon, 29 Aug 2022 13:56:14 -0400
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-crypto@vger.kernel.org
-References: <202208221901.Fs6wW5Jd-lkp@intel.com>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <202208221901.Fs6wW5Jd-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 5.10 00/86] 5.10.140-rc1 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Mon, Aug 29, 2022, at 6:58 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.140 release.
+> There are 86 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> Anything received after that time might be too late.
 
-On 8/22/22 13:03, Dan Carpenter wrote:
-> Hi Dmitry,
-[..]
-> ea66758c1795cef Paolo Abeni           2022-05-04  608  static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
-[..]
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  622  #ifdef CONFIG_TCP_AO
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  623  	if (unlikely(OPTION_AO & options)) {
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  624  		u8 maclen;
-> 33ad798c924b4a1 Adam Langley          2008-07-19  625  
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18 @626  		if (tp) {
-> 
-> Can "tp" really be NULL?  Everything else assumes it can't.
+5.10.140-rc1 compiled and booted with no errors or regressions on my x86_64 test system.
 
-It actually can be NULL, see tcp_make_synack().
-At this moment code assumes that *either* (tp == NULL) or (tcprsk == NULL).
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  627  			struct tcp_ao_info *ao_info;
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  628  
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  629  			ao_info = rcu_dereference_check(tp->ao_info,
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  630  				lockdep_sock_is_held(&tp->inet_conn.icsk_inet.sk));
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  631  			if (WARN_ON_ONCE(!ao_key || !ao_info || !ao_info->rnext_key))
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  632  				goto out_ao;
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  633  			maclen = tcp_ao_maclen(ao_key);
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  634  			*ptr++ = htonl((TCPOPT_AO << 24) |
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  635  				       (tcp_ao_len(ao_key) << 16) |
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  636  				       (ao_key->sndid << 8) |
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  637  				       (ao_info->rnext_key->rcvid));
-> 85df6b860d509a9 Dmitry Safonov        2022-08-18  638  		}
-> 
-> "maclen" not initialized on else path.
-
-Patch 15 ("net/tcp: Wire TCP-AO to request sockets") adds
-+		if (tcprsk) {
-+			u8 aolen = tcprsk->maclen + sizeof(struct tcp_ao_hdr);
-+
-+			maclen = tcprsk->maclen;
-+			*ptr++ = htonl((TCPOPT_AO << 24) | (aolen << 16) |
-+				       (tcprsk->ao_keyid << 8) |
-+				       (tcprsk->ao_rcv_next));
-+		}
-
-Assuming that tp != NULL OR tcprsk != NULL, maclen is always initialized
-_after both patches_.
-For version 2, I'll make it (break patches) in more bisect-able way for
-static analyzers and do WARN_ON(tp == NULL && tcprsk == NULL) with break
-off TCP-AO signing to make sure the assumption will be valid with
-the code changing later on.
-
-[..]
-> ea66758c1795cef Paolo Abeni           2022-05-04  731  	mptcp_options_write(th, ptr, tp, opts);
->                                                                                      ^^
-> Not checked here either.
-
-The function has checks inside.
-
-Thanks,
-          Dmitry
+Cheers, 
+-srw

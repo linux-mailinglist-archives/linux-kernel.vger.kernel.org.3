@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582CF5A561D
+	by mail.lfdr.de (Postfix) with ESMTP id A0EF85A561E
 	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiH2V0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S229923AbiH2V0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiH2V0P (ORCPT
+        with ESMTP id S229843AbiH2V0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:26:15 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F3E6EF11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:25:52 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 92-20020a17090a09e500b001d917022847so3728626pjo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:25:52 -0700 (PDT)
+        Mon, 29 Aug 2022 17:26:17 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8385AC7E
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:25:56 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id y9-20020a17090322c900b00174c881abaeso2531249plg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=tMRmbcwOZDIFaTPxLY27tBFqvxpOSXiDeb2XTcL9iTc=;
-        b=c5Ge838GLG1Fn9WCiifxSW0yY2J286Z3nb7CHVsgQeKl819oavnaneDjs0pHM1pBgc
-         6/VXxA27srsSSYsH3q/5JQwqbG7gvhz/dxlqpfYYnChp/oSAOK1144eGZRxL5H4xfU4+
-         gXjPirwbsBHls6abdkbd/Ru5neoY+5POLJLE67tmQyRoTq3+UExyJwB4xZoCc8lFIPHT
-         1JLKkVoSr3hMYFs+x98zjjRcyw2xrS1rGfAXHEq+RyZfpGyhDpyGAbYsGbpBS3qHA7OY
-         gUezPbUinXA9UrR8RhJyAbOsAhf2VqCoI/O3T8n1+HeqEuYCNoxrQ8z3jvR4TT/rnWyA
-         atPg==
+        bh=nWFFKiz2JrcFJbZNC6h3WaeWKSGRlWYuGKA4mg+JUNY=;
+        b=PCjrqm9NhycPwB3kYWPhGmirug2EAINieO21R1tkNllFgsambVeodQV2SWE+SPKnLk
+         B35opb3MQlODsxNphVo3gt2yyCr1QpWXQKLcx1/vKzcN/4STqp6cRFJdHuKeBk+NsfTT
+         tDOTylgaSdZ5nEY1ymyrW4L9evpwJBVsw8WgcZFUheAteEM8kYWXWY1xc4VUjrsXgS7n
+         TvpEAgLiNbXgMlGNPVj+MFOM++dtX+BoFzGnROjLhFZB70sHOrsgtuWSCJIJNO8R1S+2
+         S3QUIvJ5IyCicdMqNDVbeJ892T5I6yDVEmvFVjdkZe2DnjLJIY2H8E2Qt303ElEJo4Tc
+         HSMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=tMRmbcwOZDIFaTPxLY27tBFqvxpOSXiDeb2XTcL9iTc=;
-        b=WIUSLTwVEHYT0+Jviji8lyFug0u5mvHgjPSDqRHNXPXEfN+0/7ZqPLNXWJ5CAQX6NP
-         2vGXH3lecPomVFQR+ObmUZFy9+vKvykol2eAVIa5r0o0A69vTkO3MHlWA+hMbC+qMmMw
-         hXNX79bRrt7cG4njvWGkq8pf0jkO+A0+DVKQrwFE4lOWFYAJdBa7LXdn12Wc6+FymxGi
-         JcYxUuuPSSKif8eDDY+g6S8XT+yqL3G8jPWWvHiWCvz0nhn5HbP+qTHd9BFQYz4BRu4o
-         McahDhNKQen4b89UoVfco1mcW/fYtVNYBUygn6pKbRCEEsTmeApTvYQq8chqqgAkZ8Ke
-         WmWg==
-X-Gm-Message-State: ACgBeo0ZTkR5yWD+ZTR9YY+jKYDStAlOGEFerZGJwmHOvE/CK2xLJhj2
-        YcVRAwioMFlCcbCFsbx2O9rXAdhD5iE=
-X-Google-Smtp-Source: AA6agR6WFXWG6lBERn8fKgbng4pdY7+dFZ275Tti+4gL6MGpsob4z29fC0owAPSMM8vQ0mXhvHK4dQ+aJ1U=
+        bh=nWFFKiz2JrcFJbZNC6h3WaeWKSGRlWYuGKA4mg+JUNY=;
+        b=c14P+UMmU6epo/yay91QTvQ/VSrvIdMQsuGha5IlMmVsY1Q4GVwe21/mqXW9XrqoA0
+         cDnvBKKNwdpZArBZJmXgVQ6fK4SQTS1IpFU5kEfKNxfqt4d8qLpG/l+h87olxxktTYh1
+         xmm454LVNbonaz6qZCrJMXSH+dO/F8KbJ65frBtEo3+w96AEh0Vf7hidoDkpdlTC2asA
+         atJoe5ixaFJVmknKWRRHUzpAtp5Qarct7GsfN/gg1BIrBznsXlJGKIZaC6b4RcJ3kBVL
+         hqs10K0oeRbxqQ9ViYMj2tcc88rw1uZvU8u7QhNB8J2EexQhaX6KfY/qVceMKPg+YE6q
+         dZ6g==
+X-Gm-Message-State: ACgBeo2MROoQ6Bui0mEpsjBAYI3rqw8C61/775K41bpFp9iyvVn/vxi7
+        uqBPTR47EXujXh2EL+/3qdA7beyoOeI=
+X-Google-Smtp-Source: AA6agR4dglPLGzQSnoqHwxEZwo0Lk0EwUGiOTYsdKQuDkqIVlV54iwLYmhw7nxi8GDICS/TsbTVUTOyC/V4=
 X-Received: from surenb-spec.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e30])
- (user=surenb job=sendgmr) by 2002:a17:902:ab08:b0:173:320e:3316 with SMTP id
- ik8-20020a170902ab0800b00173320e3316mr17541232plb.38.1661808351535; Mon, 29
- Aug 2022 14:25:51 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 21:25:12 +0000
+ (user=surenb job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr21107pje.0.1661808353487; Mon, 29 Aug
+ 2022 14:25:53 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 21:25:13 +0000
 In-Reply-To: <20220829212531.3184856-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220829212531.3184856-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829212531.3184856-10-surenb@google.com>
-Subject: [RFC PATCH 09/28] mm/mempolicy: mark VMA as locked when changing
- protection policy
+Message-ID: <20220829212531.3184856-11-surenb@google.com>
+Subject: [RFC PATCH 10/28] mm/mmap: mark VMAs as locked in vma_adjust
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -80,46 +79,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Protect VMA from concurrent page fault handler while performing VMA
-protection policy changes.
+vma_adjust modifies a VMA and possibly its neighbors. Mark them as locked
+before making the modifications.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/mempolicy.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ mm/mmap.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index b73d3248d976..6be1e5c75556 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -383,8 +383,10 @@ void mpol_rebind_mm(struct mm_struct *mm, nodemask_t *new)
- 	struct vm_area_struct *vma;
- 
- 	mmap_write_lock(mm);
--	for (vma = mm->mmap; vma; vma = vma->vm_next)
-+	for (vma = mm->mmap; vma; vma = vma->vm_next) {
-+		vma_mark_locked(vma);
- 		mpol_rebind_policy(vma->vm_policy, new);
-+	}
- 	mmap_write_unlock(mm);
- }
- 
-@@ -632,6 +634,7 @@ unsigned long change_prot_numa(struct vm_area_struct *vma,
- 	struct mmu_gather tlb;
- 	int nr_updated;
+diff --git a/mm/mmap.c b/mm/mmap.c
+index f89c9b058105..ed58cf0689b2 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -710,6 +710,10 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ 	long adjust_next = 0;
+ 	int remove_next = 0;
  
 +	vma_mark_locked(vma);
- 	tlb_gather_mmu(&tlb, vma->vm_mm);
++	if (next)
++		vma_mark_locked(next);
++
+ 	if (next && !insert) {
+ 		struct vm_area_struct *exporter = NULL, *importer = NULL;
  
- 	nr_updated = change_protection(&tlb, vma, addr, end, PAGE_NONE,
-@@ -765,6 +768,7 @@ static int vma_replace_policy(struct vm_area_struct *vma,
- 	if (IS_ERR(new))
- 		return PTR_ERR(new);
+@@ -754,8 +758,11 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ 			 * If next doesn't have anon_vma, import from vma after
+ 			 * next, if the vma overlaps with it.
+ 			 */
+-			if (remove_next == 2 && !next->anon_vma)
++			if (remove_next == 2 && !next->anon_vma) {
+ 				exporter = next->vm_next;
++				if (exporter)
++					vma_mark_locked(exporter);
++			}
  
-+	vma_mark_locked(vma);
- 	if (vma->vm_ops && vma->vm_ops->set_policy) {
- 		err = vma->vm_ops->set_policy(vma, new);
- 		if (err)
+ 		} else if (end > next->vm_start) {
+ 			/*
+@@ -931,6 +938,8 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ 			 * "vma->vm_next" gap must be updated.
+ 			 */
+ 			next = vma->vm_next;
++			if (next)
++				vma_mark_locked(next);
+ 		} else {
+ 			/*
+ 			 * For the scope of the comment "next" and
 -- 
 2.37.2.672.g94769d06f0-goog
 

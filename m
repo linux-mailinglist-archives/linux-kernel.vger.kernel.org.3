@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD175A4092
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 03:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F165A4098
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 03:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiH2BPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 21:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S229644AbiH2BRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 21:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiH2BPl (ORCPT
+        with ESMTP id S229503AbiH2BRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 21:15:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378D21275;
-        Sun, 28 Aug 2022 18:15:40 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGC8L38RZzkWhr;
-        Mon, 29 Aug 2022 09:12:02 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        Sun, 28 Aug 2022 21:17:53 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178DE22B10;
+        Sun, 28 Aug 2022 18:17:51 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MGCF03KKhzGpt5;
+        Mon, 29 Aug 2022 09:16:04 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 29 Aug 2022 09:15:37 +0800
-Subject: Re: [PATCH -next] gpio: mockup: remove gpio debugfs when remove
- device
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     Bamvor Jian Zhang <bamv2005@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220816145225.84283-1-weiyongjun1@huawei.com>
- <CAMRc=McG5Pf4b5HymV1iaFAGqMMEtyYSQi23z9LmjvzmbF4rYg@mail.gmail.com>
- <7d1b0bb8-838e-1a1e-886f-507b75066df1@huawei.com>
- <CAMRc=McDo2MbebGGueqacEbs11r8c_MHr8WaTktGzkVWZD2K4A@mail.gmail.com>
-From:   "weiyongjun (A)" <weiyongjun1@huawei.com>
-Message-ID: <81de4aa6-a207-2be8-00c3-7bed0f0b82e4@huawei.com>
-Date:   Mon, 29 Aug 2022 09:15:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ 15.1.2375.24; Mon, 29 Aug 2022 09:17:49 +0800
+Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
+To:     =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+CC:     <mic@digikod.net>, <paul@paul-moore.com>, <jmorris@namei.org>,
+        <serge@hallyn.com>, <shuah@kernel.org>, <corbet@lwn.net>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <20220827111215.131442-4-xiujianfeng@huawei.com> <Ywpw66EYRDTQIyTx@nuc>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <de8834b6-0ff2-1a81-f2d3-af33103e9942@huawei.com>
+Date:   Mon, 29 Aug 2022 09:17:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <CAMRc=McDo2MbebGGueqacEbs11r8c_MHr8WaTktGzkVWZD2K4A@mail.gmail.com>
+In-Reply-To: <Ywpw66EYRDTQIyTx@nuc>
 Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,46 +53,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
 
-On 2022/8/28 22:00, Bartosz Golaszewski wrote:
-> On Mon, Aug 22, 2022 at 3:27 PM weiyongjun (A) <weiyongjun1@huawei.com> wrote:
+Hi,
+
+在 2022/8/28 3:30, Günther Noack 写道:
+> Hello!
+> 
+> the mapping between Landlock rights to LSM hooks is now as follows in
+> your patch set:
+> 
+> * LANDLOCK_ACCESS_FS_CHMOD controls hook_path_chmod
+> * LANDLOCK_ACCESS_FS_CHGRP controls hook_path_chown
+>    (this hook can restrict both the chown(2) and chgrp(2) syscalls)
+> 
+> Is this the desired mapping?
+> 
+> The previous discussion I found on the topic was in
+> 
+> [1] https://lore.kernel.org/all/5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net/
+> [2] https://lore.kernel.org/all/b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com/
+> [3] https://lore.kernel.org/all/c369c45d-5aa8-3e39-c7d6-b08b165495fd@digikod.net/
+> 
+> In my understanding the main arguments were the ones in [2] and [3].
+> 
+> There were no further responses to [3], so I was under the impression
+> that we were gravitating towards an approach where the
+> file-metadata-modification operations were grouped more coarsely?
+> 
+> For example with the approach suggested in [3], which would be to
+> group the operations coarsely into (a) one Landlock right for
+> modifying file metadata that is used in security contexts, and (b) one
+> Landlock right for modifying metadata that was used in non-security
+> contexts. That would mean that there would be:
+> 
+> (a) LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES to control the
+> following operations:
+>    * chmod(2)-variants through hook_path_chmod,
+>    * chown(2)-variants and chgrp(2)-variants through hook_path_chown,
+>    * setxattr(2)-variants and removexattr(2)-variants for extended
+>      attributes that are not "user extended attributes" as described in
+>      xattr(7) through hook_inode_setxattr and hook_inode_removexattr
+> 
+> (b) LANDLOCK_ACCESS_FS_MODIFY_NON_SECURITY_ATTRIBUTES to control the
+> following operations:
+>    * utimes(2) and other operations for setting other non-security
+>      sensitive attributes, probably through hook_inode_setattr(?)
+>    * xattr modifications like above, but for the "user extended
+>      attributes", though hook_inode_setxattr and hook_inode_removexattr
+> 
+> In my mind, this would be a sensible grouping, and it would also help
+> to decouple the userspace-exposed API from the underlying
+> implementation, as Casey suggested to do in [2].
+> 
+> Specifically for this patch set, if you want to use this grouping, you
+> would only need to add one new Landlock right
+> (LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES) as described above
+> under (a) (and maybe we can find a shorter name for it... :))?
+> 
+> Did I miss any operations here that would be necessary to restrict?
+> 
+> Would that make sense to you? Xiu, what is your opinion on how this
+> should be grouped? Do you have use cases in mind where a more
+> fine-grained grouping would be required?
+
+I apologize I may missed that discussion when I prepared v2:(
+
+Yes, agreed, this grouping is more sensible and resonnable. so in this 
+patchset only one right will be added, and I suppose the first commit 
+which expand access_mask_t to u32 can be droped.
+
+> 
+> —Günther
+> 
+> P.S.: Regarding utimes: The hook_inode_setattr hook *also* gets called
+> on a variety on attribute changes including file ownership, file size
+> and file mode, so it might potentially interact with a bunch of other
+> existing Landlock rights. Maybe that is not the right approach. In any
+> case, it seems like it might require more thinking and it might be
+> sensible to do that in a separate patch set IMHO.
+
+Thanks for you reminder, that seems it's more complicated to support 
+utimes, so I think we'd better not support it in this patchset.
+
+> 
+> On Sat, Aug 27, 2022 at 07:12:12PM +0800, Xiu Jianfeng wrote:
+>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHGRP to
+>> support restriction to chmod(2) and chown(2) with landlock.
 >>
->> Hi Bart,
+>> If these two access rights are set on a directory, they only take effect
+>> for its context, not the directory itself.
 >>
->> On 2022/8/19 20:49, Bartosz Golaszewski wrote:
->>> On Tue, Aug 16, 2022 at 4:34 PM Wei Yongjun <weiyongjun1@huawei.com> wrote:
->>>>
->>>> GPIO mockup debugfs is created in gpio_mockup_probe() but
->>>> forgot to remove when remove device. This patch add a devm
->>>> managed callback for removing them.
->>>>
->>>
->>> The tag -next is for patches that address issues that are in next but
->>> not yet in master.
->>>>
+>> This patch also change the landlock ABI version from 3 to 4.
 >>
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>> ---
+>>   include/uapi/linux/landlock.h                | 10 +++--
+>>   security/landlock/fs.c                       | 43 +++++++++++++++++++-
+>>   security/landlock/limits.h                   |  2 +-
+>>   security/landlock/syscalls.c                 |  2 +-
+>>   tools/testing/selftests/landlock/base_test.c |  2 +-
+>>   tools/testing/selftests/landlock/fs_test.c   |  6 ++-
+>>   6 files changed, 56 insertions(+), 9 deletions(-)
 >>
->>>
->>> This isn't very relevant as the module needs to be unloaded anyway in
->>> order to reconfigure the simulated device but I'll apply it as it's
->>> technically correct. Did you see we have a new one - gpio-sim - that
->>> uses configfs?
->>>
->>> Bart
->>>
+>> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+>> index 735b1fe8326e..07b73626ff20 100644
+>> --- a/include/uapi/linux/landlock.h
+>> +++ b/include/uapi/linux/landlock.h
+>> @@ -141,14 +141,16 @@ struct landlock_path_beneath_attr {
+>>    *   directory) parent.  Otherwise, such actions are denied with errno set to
+>>    *   EACCES.  The EACCES errno prevails over EXDEV to let user space
+>>    *   efficiently deal with an unrecoverable error.
+>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
+>> + * - %LANDLOCK_ACCESS_FS_CHGRP: Change the owner and/or group of a file.
+>>    *
+>>    * .. warning::
+>>    *
+>>    *   It is currently not possible to restrict some file-related actions
+>>    *   accessible through these syscall families: :manpage:`chdir(2)`,
+>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>> - *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, :manpage:`access(2)`.
+>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`setxattr(2)`,
+>> + *   :manpage:`utime(2)`,:manpage:`ioctl(2)`, :manpage:`fcntl(2)`,
+>> + *   :manpage:`access(2)`.
+>>    *   Future Landlock evolutions will enable to restrict them.
+>>    */
+>>   /* clang-format off */
+>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>>   #define LANDLOCK_ACCESS_FS_MAKE_SYM			(1ULL << 12)
+>>   #define LANDLOCK_ACCESS_FS_REFER			(1ULL << 13)
+>>   #define LANDLOCK_ACCESS_FS_TRUNCATE			(1ULL << 14)
+>> +#define LANDLOCK_ACCESS_FS_CHMOD			(1ULL << 15)
+>> +#define LANDLOCK_ACCESS_FS_CHGRP			(1ULL << 16)
+>>   /* clang-format on */
 >>
+>>   #endif /* _UAPI_LINUX_LANDLOCK_H */
+>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+>> index 4ef614a4ea22..6ac83d96ada7 100644
+>> --- a/security/landlock/fs.c
+>> +++ b/security/landlock/fs.c
+>> @@ -185,7 +185,9 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
+>>   	LANDLOCK_ACCESS_FS_EXECUTE | \
+>>   	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>   	LANDLOCK_ACCESS_FS_READ_FILE | \
+>> -	LANDLOCK_ACCESS_FS_TRUNCATE)
+>> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
+>> +	LANDLOCK_ACCESS_FS_CHMOD | \
+>> +	LANDLOCK_ACCESS_FS_CHGRP)
+>>   /* clang-format on */
 >>
->> I am using gpio-mockup as a interrupt-controller with the change[1],
->> it works will with overfs dts[2], and can success mockup device and
->> trigger the irq. But when switch to gpio-sim, device can not be created
->> by dts[3]. Not sure what's wrong with it. Any suggestion?
+>>   /*
+>> @@ -690,6 +692,31 @@ static inline int current_check_access_path(const struct path *const path,
+>>   	return check_access_path(dom, path, access_request);
+>>   }
+>>
+>> +static inline int
+>> +current_check_access_path_context_only(const struct path *const path,
+>> +				       const access_mask_t access_request)
+>> +{
+>> +	const struct landlock_ruleset *const dom =
+>> +		landlock_get_current_domain();
+>> +	struct path eff_path;
+>> +	int ret;
+>> +
+>> +	if (!dom)
+>> +		return 0;
+>> +	eff_path = *path;
+>> +	/* if it's dir, check its visible parent. */
+>> +	if (d_is_dir(eff_path.dentry)) {
+>> +		path_get(&eff_path);
+>> +		/* dont care if reaches the root or not. */
+>> +		walk_to_visible_parent(&eff_path);
+>> +		ret = current_check_access_path(&eff_path, access_request);
+>> +		path_put(&eff_path);
+>> +	} else {
+>> +		ret = current_check_access_path(&eff_path, access_request);
+>> +	}
+>> +	return ret;
+>> +}
+>> +
+>>   static inline access_mask_t get_mode_access(const umode_t mode)
+>>   {
+>>   	switch (mode & S_IFMT) {
+>> @@ -1177,6 +1204,18 @@ static int hook_path_truncate(const struct path *const path)
+>>   	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
+>>   }
+>>
+>> +static int hook_path_chmod(const struct path *const path, umode_t mode)
+>> +{
+>> +	return current_check_access_path_context_only(path,
+>> +					LANDLOCK_ACCESS_FS_CHMOD);
+>> +}
+>> +
+>> +static int hook_path_chown(const struct path *const path, kuid_t uid, kgid_t gid)
+>> +{
+>> +	return current_check_access_path_context_only(path,
+>> +					LANDLOCK_ACCESS_FS_CHGRP);
+>> +}
+>> +
+>>   /* File hooks */
+>>
+>>   static inline access_mask_t get_file_access(const struct file *const file)
+>> @@ -1230,6 +1269,8 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+>>   	LSM_HOOK_INIT(path_unlink, hook_path_unlink),
+>>   	LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
+>>   	LSM_HOOK_INIT(path_truncate, hook_path_truncate),
+>> +	LSM_HOOK_INIT(path_chmod, hook_path_chmod),
+>> +	LSM_HOOK_INIT(path_chown, hook_path_chown),
+>>
+>>   	LSM_HOOK_INIT(file_open, hook_file_open),
+>>   };
+>> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
+>> index 82288f0e9e5e..7cdd7d467d12 100644
+>> --- a/security/landlock/limits.h
+>> +++ b/security/landlock/limits.h
+>> @@ -18,7 +18,7 @@
+>>   #define LANDLOCK_MAX_NUM_LAYERS		16
+>>   #define LANDLOCK_MAX_NUM_RULES		U32_MAX
+>>
+>> -#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_TRUNCATE
+>> +#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_CHGRP
+>>   #define LANDLOCK_MASK_ACCESS_FS		((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
+>>   #define LANDLOCK_NUM_ACCESS_FS		__const_hweight64(LANDLOCK_MASK_ACCESS_FS)
+>>
+>> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+>> index f4d6fc7ed17f..469e0e11735c 100644
+>> --- a/security/landlock/syscalls.c
+>> +++ b/security/landlock/syscalls.c
+>> @@ -129,7 +129,7 @@ static const struct file_operations ruleset_fops = {
+>>   	.write = fop_dummy_write,
+>>   };
+>>
+>> -#define LANDLOCK_ABI_VERSION 3
+>> +#define LANDLOCK_ABI_VERSION 4
+>>
+>>   /**
+>>    * sys_landlock_create_ruleset - Create a new ruleset
+>> diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
+>> index 72cdae277b02..9f00582f639c 100644
+>> --- a/tools/testing/selftests/landlock/base_test.c
+>> +++ b/tools/testing/selftests/landlock/base_test.c
+>> @@ -75,7 +75,7 @@ TEST(abi_version)
+>>   	const struct landlock_ruleset_attr ruleset_attr = {
+>>   		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
+>>   	};
+>> -	ASSERT_EQ(3, landlock_create_ruleset(NULL, 0,
+>> +	ASSERT_EQ(4, landlock_create_ruleset(NULL, 0,
+>>   					     LANDLOCK_CREATE_RULESET_VERSION));
+>>
+>>   	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0,
+>> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+>> index debe2d9ea6cf..f513cd8d9d51 100644
+>> --- a/tools/testing/selftests/landlock/fs_test.c
+>> +++ b/tools/testing/selftests/landlock/fs_test.c
+>> @@ -404,9 +404,11 @@ TEST_F_FORK(layout1, inval)
+>>   	LANDLOCK_ACCESS_FS_EXECUTE | \
+>>   	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>   	LANDLOCK_ACCESS_FS_READ_FILE | \
+>> -	LANDLOCK_ACCESS_FS_TRUNCATE)
+>> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
+>> +	LANDLOCK_ACCESS_FS_CHMOD | \
+>> +	LANDLOCK_ACCESS_FS_CHGRP)
+>>
+>> -#define ACCESS_LAST LANDLOCK_ACCESS_FS_TRUNCATE
+>> +#define ACCESS_LAST LANDLOCK_ACCESS_FS_CHGRP
+>>
+>>   #define ACCESS_ALL ( \
+>>   	ACCESS_FILE | \
+>> --
+>> 2.17.1
 >>
 > 
-> I see you submitted a patch series for gpio-sim - does it fix this issue?
-
-
-Yes, after that patch series, gpio-sim works well in my use case.
-
-Thanks,
-Wei Yongjun
+> --
+> .
+> 

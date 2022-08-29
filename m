@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E9D5A4EE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899EE5A4F65
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiH2OM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S230143AbiH2Ogz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiH2OMI (ORCPT
+        with ESMTP id S230299AbiH2Ogr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:12:08 -0400
-Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D07596775;
-        Mon, 29 Aug 2022 07:12:06 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 16:12:00 +0200
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Olliver Schinagl <oliver@schinagl.nl>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Simon Shields <simon@lineageos.org>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 resend] dt-bindings: leds: Expand LED_COLOR_ID
- definitions
-Message-ID: <YwzJMAaYT/frJLaT@ada.ifak-system.com>
-Mail-Followup-To: Olliver Schinagl <oliver@schinagl.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Simon Shields <simon@lineageos.org>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220819152904.433514-1-oliver@schinagl.nl>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819152904.433514-1-oliver@schinagl.nl>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Mon, 29 Aug 2022 10:36:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A034F923C6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661783805; x=1693319805;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=+4TOCeNd5iz1aL0fhEmhVh+hpLbLwO+LY5ZaMMmawU0=;
+  b=VaVmqPbo/KCkuB1nVybCb68IHiMitTHYpmAiV7qiBQBn0XH6UY2tb7k0
+   zN6qFYx125HlEHGoJedIo+mNXdncfW6SNf72JQErVpL1bM5u137qvVED3
+   ocqYGgqDXGsfYX6jL5E2+F4xgAANjYb+2FZrIM+wnrkUQ6iROftvsgSCQ
+   5fKP8IydD5NTRqQxTLa/aDgkZolMBr/5GuvsR2jTcnFuEQBPX0rGMqznF
+   l/eAY/NSV1nry9DOsao47W6tU2Ls5Rx88AU87PP2NBwfeFxOQscVwLo+q
+   ML+SjrA2jBNxib8ALeJBLu6d+PzKnbwRrjAQ4Anou9zqJoTe1vO+PqE8H
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="275306188"
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="275306188"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 07:14:16 -0700
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="939591027"
+Received: from idecesar-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.53.198])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 07:14:13 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     wangjianli <wangjianli@cdjrlc.com>,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
+Subject: Re: [PATCH] drm/i915: fix repeated words in comments
+In-Reply-To: <20220823141639.13053-1-wangjianli@cdjrlc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220823141639.13053-1-wangjianli@cdjrlc.com>
+Date:   Mon, 29 Aug 2022 17:14:02 +0300
+Message-ID: <87y1v7dtn9.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,81 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hei Olliver,
+On Tue, 23 Aug 2022, wangjianli <wangjianli@cdjrlc.com> wrote:
+>  Delete the redundant word 'the'.
+>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 
-Am Fri, Aug 19, 2022 at 05:29:04PM +0200 schrieb Olliver Schinagl:
-> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
-> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
-> added. However, there's a little more very common LED colors.
-> 
-> While the documentation states 'add what is missing', engineers tend to
-> be lazy and will just use what currently exists. So this patch will take
-> (a) list from online retailers [0], [1], [2] and use the common LED colors
-> from there, this being reasonable as this is what is currently available to
-> purchase.
-> 
-> Note, that LIME seems to be the modern take to 'Yellow-green' or
-> 'Yellowish-green' from some older datasheets.
+Already fixed by commit 78f48aa6f50b ("drm/i915/irq: Fix a "the the"
+typo").
 
-Just noticed you did not send this to neither linux-leds mailing list
-nor the LED subsystem maintainer. Maybe you want to do this in v3?
+What is this sudden influx of patches fixing repeated words everywhere?
 
-Greets
-Alex
+BR,
+Jani.
 
-> 
-> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
-> [1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
-> [2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
-> 
-> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+
 > ---
-> 
-> Changes since v1: Unbreak existing definitions.
-> 
-> 
->  include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
->  1 file changed, 16 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
-> index 3be89a7c20a9..04bf94523ea3 100644
-> --- a/include/dt-bindings/leds/common.h
-> +++ b/include/dt-bindings/leds/common.h
-> @@ -22,18 +22,22 @@
->  #define LEDS_BOOST_FIXED	2
+>  drivers/gpu/drm/i915/i915_irq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
+> index 73cebc6aa650..783a6ca41a61 100644
+> --- a/drivers/gpu/drm/i915/i915_irq.c
+> +++ b/drivers/gpu/drm/i915/i915_irq.c
+> @@ -65,7 +65,7 @@
 >  
->  /* Standard LED colors */
-> -#define LED_COLOR_ID_WHITE	0
-> -#define LED_COLOR_ID_RED	1
-> -#define LED_COLOR_ID_GREEN	2
-> -#define LED_COLOR_ID_BLUE	3
-> -#define LED_COLOR_ID_AMBER	4
-> -#define LED_COLOR_ID_VIOLET	5
-> -#define LED_COLOR_ID_YELLOW	6
-> -#define LED_COLOR_ID_IR		7
-> -#define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
-> -#define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
-> -					   so this would include RGBW and similar */
-> -#define LED_COLOR_ID_MAX	10
-> +#define LED_COLOR_ID_WHITE      0
-> +#define LED_COLOR_ID_RED        1
-> +#define LED_COLOR_ID_GREEN      2
-> +#define LED_COLOR_ID_BLUE       3
-> +#define LED_COLOR_ID_AMBER      4
-> +#define LED_COLOR_ID_VIOLET     5
-> +#define LED_COLOR_ID_YELLOW     6
-> +#define LED_COLOR_ID_IR         7
-> +#define LED_COLOR_ID_MULTI      8 /* For multicolor LEDs */
-> +#define LED_COLOR_ID_RGB        9 /* For multicolor LEDs that can do arbitrary color, including RGBW etc. */
-> +#define LED_COLOR_ID_PUPRPLE   10
-> +#define LED_COLOR_ID_ORANGE    11
-> +#define LED_COLOR_ID_PINK      12
-> +#define LED_COLOR_ID_CYAN      13
-> +#define LED_COLOR_ID_LIME      14
-> +#define LED_COLOR_ID_MAX       15
->  
->  /* Standard LED functions */
->  /* Keyboard LEDs, usually it would be input4::capslock etc. */
-> -- 
-> 2.37.2
-> 
+>  /*
+>   * Interrupt statistic for PMU. Increments the counter only if the
+> - * interrupt originated from the the GPU so interrupts from a device which
+> + * interrupt originated from the GPU so interrupts from a device which
+>   * shares the interrupt line are not accounted.
+>   */
+>  static inline void pmu_irq_stats(struct drm_i915_private *i915,
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

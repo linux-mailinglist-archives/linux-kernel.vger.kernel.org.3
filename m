@@ -2,73 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2715A5010
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9275A5014
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiH2PTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S230062AbiH2PUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiH2PTf (ORCPT
+        with ESMTP id S229921AbiH2PUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:19:35 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52085AB3;
-        Mon, 29 Aug 2022 08:19:34 -0700 (PDT)
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TF2fsC030426;
-        Mon, 29 Aug 2022 15:19:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pps0720; bh=oJZ8Pnogvl2PqjImYIZJUg0Yb1Tp7C+OILy5IpO3q1Q=;
- b=Jtj7XNQ8UKZzT4qqNpKZHwJAcfyjM1bfJJvM9K6kk5qPBNa/hQh1tRK2j+jv3mjp21Le
- 8JxmxA1y+L4GMg6yhr98SJPhi6F8TNDm0e11gqzEYv0XtGry8maRvmDaFl1iZ1ki2Cl7
- Slb3hxgwI0wfBuGBGc7qrnQTJxTag0Uxizhk8udpASJ/jBMT6iAQtml6s6m644zaqmQd
- we6AURZMEsZA5bi50IOA+hsdz06HpANHJcgX7ejxxBkpMnK9udkANNJNrn1DDQPZ8Ywi
- A3zAp9WEVG/7dxqc14eNUMh5CwOZYt7kmSNb7AKx2p+lMoLvnNoVl4+EEVi34A4/fov0 ZQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3j8yj6gbpt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 15:19:16 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 3CEE5D286;
-        Mon, 29 Aug 2022 15:19:16 +0000 (UTC)
-Received: from perchik (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 830DB8080ED;
-        Mon, 29 Aug 2022 15:19:15 +0000 (UTC)
-Date:   Mon, 29 Aug 2022 09:19:13 -0600
-From:   Jerry Hoemann <jerry.hoemann@hpe.com>
-To:     linux@roeck-us.net, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] watchdog/hpwdt: Enable hpwdt for ARM64 platforms
-Message-ID: <20220828223508.GG30332@perchik>
-Reply-To: Jerry.Hoemann@hpe.com
-References: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
+        Mon, 29 Aug 2022 11:20:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84C654C8C
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:20:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oSgYf-00077I-3W; Mon, 29 Aug 2022 17:20:13 +0200
+Message-ID: <c668fff254b9f56b699a2714bb8c016e3b0cc5b5.camel@pengutronix.de>
+Subject: Re: [PATCH v4 0/6] Add iMX8MP PCIe support
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com, marex@denx.de,
+        richard.leitner@linux.dev
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Date:   Mon, 29 Aug 2022 17:20:11 +0200
+In-Reply-To: <1661760917-9558-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1661760917-9558-1-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-ORIG-GUID: hMBgF01IZHMfZWHYSviH0oTtGQq3p6wX
-X-Proofpoint-GUID: hMBgF01IZHMfZWHYSviH0oTtGQq3p6wX
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_07,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
- mlxscore=0 spamscore=0 mlxlogscore=896 suspectscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208290071
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,52 +52,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 02:28:19PM -0600, Jerry Hoemann wrote:
-> Enable hpwdt for the rl300, an ARM64 based platform.
-> 
+Hi Richard,
 
-Guenter,
+instead of review comments I sent you a two patches to rework things
+more to my liking. Hope you agree with the approach.
 
-Did you have any questions/comments on version 2 of the patch series?
+One question, though: did you test this with devices with Gen2/3
+speeds? The Marvell WiFi module on my EVK board only links with Gen1,
+while it claims Gen2 speed in the LnkCap register. However, it does
+seem to come up with Gen1 as the target link speed in LnkCtl2, so maybe
+the device is at fault here.
 
-Thanks
+Regards,
+Lucas
+ 
+Am Montag, dem 29.08.2022 um 16:15 +0800 schrieb Richard Zhu:
+> Based on the 6.0-rc1 of the pci/next branch. 
+> This series adds the i.MX8MP PCIe support and tested on i.MX8MP
+> EVK board when one PCIe NVME device is used.
+> 
+> - i.MX8MP PCIe has reversed initial PERST bit value refer to i.MX8MQ/i.MX8MM.
+>   Add the PHY PERST explicitly for i.MX8MP PCIe PHY.
+> - Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
+>   And share as much as possible codes with i.MX8MM PCIe PHY.
+> - Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
+>   driver.
+> 
+> Main changes v3-->v4:
+> - Regarding Phillip's suggestions, add fix tag into the first commit.
+> - Add Reviewed and Tested tags.
+> 
+> Main changes v2-->v3:
+> - Fix the schema checking error in the PHY dt-binding patch.
+> - Inspired by Lucas, the PLL configurations might not required when
+>   external OSC is used as PCIe referrence clock. It's true. Remove all
+>   the HSIO PLL bit manipulations, and PCIe works fine on i.MX8MP EVK board
+>   with one NVME device is used.
+> - Drop the #4 patch of v2, since it had been applied by Rob.
+> 
+> Main changes v1-->v2:
+> - It's my fault forget including Vinod, re-send v2 after include Vinod
+>   and linux-phy@lists.infradead.org.
+> - List the basements of this patch-set. The branch, codes changes and so on.
+> - Clean up some useless register and bit definitions in #3 patch.
+> 
+> Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |  16 +++++++--
+> arch/arm64/boot/dts/freescale/imx8mp-evk.dts                 |  53 +++++++++++++++++++++++++++++
+> arch/arm64/boot/dts/freescale/imx8mp.dtsi                    |  46 ++++++++++++++++++++++++-
+> drivers/pci/controller/dwc/pci-imx6.c                        |  17 +++++++++-
+> drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 150 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------
+> drivers/reset/reset-imx7.c                                   |   1 +
+> 6 files changed, 232 insertions(+), 51 deletions(-)
+> 
+> [PATCH v4 1/6] reset: imx7: Fix the iMX8MP PCIe PHY PERST support
+> [PATCH v4 2/6] dt-binding: phy: Add iMX8MP PCIe PHY binding
+> [PATCH v4 3/6] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY
+> [PATCH v4 4/6] arm64: dts: imx8mp: Add iMX8MP PCIe support
+> [PATCH v4 5/6] arm64: dts: imx8mp-evk: Add PCIe support
+> [PATCH v4 6/6] PCI: imx6: Add iMX8MP PCIe support
 
-Jerry
 
-> 
-> Patch 1: watchdog/hpwdt.c: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
-> 
-> ARM64 does not support NMI and does not have <asm/nmi.h>.  Include
-> nmi.h only if CONFIG_HPWDT_NMI_DECODING is defined.
-> 
-> Patch 2: watchdog/Kconfig:  Allow hpwdt.c to be built for ARM64.
-> 
-> Allow hpwdt.c to be built for (ARM64 || X86) as this part of hwpdt doesn't
-> use NMI.
-> 
-> Make HPWDT_NMI_DECODING dependent upon X86 as NMI handlers are specific
-> to X86 platforms.
-> 
-> 
-> == Changes for v2 ==
-> Update patch documentation.
-> 
-> 
-> 
-> 
-> Jerry Hoemann (2):
->   watchdog/hpwdt: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
->   watchdog: Enable HP_WATCHDOG for ARM64 systems.
-> 
->  drivers/watchdog/Kconfig | 4 ++--
->  drivers/watchdog/hpwdt.c | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.37.1
-
--- 
-
------------------------------------------------------------------------------
-Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
------------------------------------------------------------------------------

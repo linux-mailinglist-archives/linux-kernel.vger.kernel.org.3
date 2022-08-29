@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC375A414A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 05:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC43B5A414C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 05:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiH2DHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 23:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
+        id S229738AbiH2DIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 23:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiH2DHK (ORCPT
+        with ESMTP id S229671AbiH2DIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 23:07:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA8B3DF19
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 20:07:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661742429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Db/ObBgPT0I5ltsCA8YROcuIZJ9I4YfuTZDGnkPg1TU=;
-        b=P6aLjZ0Bvd0cmn0r2HbCAiUEaDj0NJBr977teqcVAGhC3/SAsISMNL5Hs0Yo00D0jhzOeq
-        iLTBYJkiOYNrt+z1/6w3LuuLL25HWaG+qUdc6+xarIyZhrBmnIcJiVEo6blaZeqtYBQxdi
-        f/jfEqqLGzTsUl7bHRsPdSoBHIcC+ns=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-QjFASFHYPYyFh2F6WRHltg-1; Sun, 28 Aug 2022 23:07:05 -0400
-X-MC-Unique: QjFASFHYPYyFh2F6WRHltg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD104801231;
-        Mon, 29 Aug 2022 03:07:04 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F303C15BB3;
-        Mon, 29 Aug 2022 03:07:00 +0000 (UTC)
-Date:   Mon, 29 Aug 2022 11:06:57 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, ming.lei@redhat.com
-Subject: Re: [RFC PATCH 3/9] ublk_drv: add a helper to get ioucmd from pdu
-Message-ID: <YwwtUVl51B0ve0So@T590>
-References: <20220824054744.77812-1-ZiyangZhang@linux.alibaba.com>
- <20220824054744.77812-4-ZiyangZhang@linux.alibaba.com>
+        Sun, 28 Aug 2022 23:08:02 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F693DF1A;
+        Sun, 28 Aug 2022 20:07:53 -0700 (PDT)
+Received: from localhost.localdomain (unknown [182.2.68.216])
+        by gnuweeb.org (Postfix) with ESMTPSA id 0296380866;
+        Mon, 29 Aug 2022 03:07:49 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1661742472;
+        bh=nee5pdsoj2i9027ao/qgMrR5X60OT6Gff/6ayksr9NY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QtdFqTI5I49qcChMjGj5+DXd3VaZo7BtmdWSImy5acsQvT+rCpTVsSqrPniuYJM54
+         Lp/Qo1wQxLsH9v3gNXniIrDZmp1IooiPztyo5G5a4FE61bONPifrGj0NmsxmvSQxuc
+         u7wnG8hBlbhHUl/G7gvEGcWxMp9N4Blqs9PoB2ZvX/tqBoBIKAm85G/zIztvTQodUp
+         jwqelYPzA/79arzwRhAabAiPuiR5M9KwxJTVlKRE2eThIhjKyffr+wXbZlJKvl8EME
+         In3wxX2VcnDkewUuuXQNMalZq3H6HV5i5e3tFfu8CTRiEgoV46DO1bB5YDVjuIIj46
+         9Fq2MivEkKP5g==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Caleb Sander <csander@purestorage.com>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [RFC PATCH liburing v1 0/4] Export io_uring syscall functions
+Date:   Mon, 29 Aug 2022 10:07:35 +0700
+Message-Id: <20220829030521.3373516-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824054744.77812-4-ZiyangZhang@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 01:47:38PM +0800, ZiyangZhang wrote:
-> We store pointer of task_work in pdu. And we should get ioucmd from pdu
-> since we prepare to only pass ioucmd to task_work function.
-> 
-> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-> ---
->  drivers/block/ublk_drv.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index e08f636b0b9d..8add6e3ae15f 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -555,6 +555,12 @@ static inline struct ublk_uring_cmd_pdu *ublk_get_uring_cmd_pdu(
->  	return (struct ublk_uring_cmd_pdu *)&ioucmd->pdu;
->  }
->  
-> +static inline struct io_uring_cmd *ublk_uring_cmd_from_pdu(
-> +			struct ublk_uring_cmd_pdu *pdu)
-> +{
-> +	return container_of((u8 *)pdu, struct io_uring_cmd, pdu[0]);
-> +}
-> +
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Patch isn't supposed to be written in this way, it is one helper, either
-change its caller in this patch, or merge this one wth the patch which
-applies it.
+Hi Jens,
 
-Also looks this change belong to include/linux/io_uring.h if you think
-it is useful.
+The background story of this series comes from the recent conversation with
+Caleb Sander at:
 
-thanks,
-Ming
+   https://github.com/axboe/liburing/pull/646#issuecomment-1229639532
+
+What do you think of this series?
+
+There are 4 patches in this series.
+
+1) syscall: Add io_uring syscall functions
+
+We have:
+
+  man 2 io_uring_setup;
+  man 2 io_uring_enter;
+  man 2 io_uring_register;
+
+Those entries say that io_uring syscall functions are declared in
+`<linux/io_uring.h>`. But they don't actually exist and never existed.
+This is causing confusion for people who read the manpage. Let's just
+implement them in liburing so they exist.
+
+This also allows the user to invoke io_uring syscalls directly instead
+of using the full liburing provided setup.
+
+2) Clarify "man 2" entry for io_uring.
+
+io_uring_enter(), io_uring_register(), io_uring_setup() are not
+declared in `<linux/io_uring.h>` and never were. Plus, these
+functions don't intentionally set the `errno` variable. Reflect this
+fact in the manpage.
+
+Side note: On architectures other than x86, x86-64, and aarch64, those
+functions _do_ set the `errno`, this is because the syscall is done via
+libc as we don't yet have nolibc support for the mentioned archs. Users
+should not rely on this behavior.
+
+3) man: Alias `io_uring_enter2()` to `io_uring_enter()`.
+
+We have a new function io_uring_enter2(), add the man page entry for it
+by aliasing it to io_uring_enter(). This aliased man entry has already
+explained it.
+
+4) test/io_uring_{enter,setup,register}: Use the exported syscall functions.
+
+These tests use the internal definition of __sys_io_uring* functions.
+A previous commit exported new functions that do the same thing with
+those __sys_io_uring* functions. Test the exported functions instead of
+the internal functions.
+
+No functional change is intended.
+
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+Ammar Faizi (4):
+  syscall: Add io_uring syscall functions
+  man: Clarify "man 2" entry for io_uring syscalls
+  man: Alias `io_uring_enter2()` to `io_uring_enter()`
+  test/io_uring_{enter,setup,register}: Use the exported syscall functions
+
+ man/io_uring_enter.2     |  9 ++++-----
+ man/io_uring_enter2.2    |  1 +
+ man/io_uring_register.2  |  9 ++++-----
+ man/io_uring_setup.2     |  8 +++-----
+ src/Makefile             |  2 +-
+ src/include/liburing.h   |  8 ++++++++
+ src/liburing.map         |  4 ++++
+ src/syscall.c            | 30 ++++++++++++++++++++++++++++++
+ test/io_uring_enter.c    | 10 +++++-----
+ test/io_uring_register.c | 34 ++++++++++++++++------------------
+ test/io_uring_setup.c    |  4 ++--
+ 11 files changed, 78 insertions(+), 41 deletions(-)
+ create mode 120000 man/io_uring_enter2.2
+ create mode 100644 src/syscall.c
+
+
+base-commit: bf248850dc2ae45d29d4fdde688e90d24f3dd6d2
+-- 
+Ammar Faizi
 

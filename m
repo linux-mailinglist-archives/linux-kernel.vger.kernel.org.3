@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE52B5A5016
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2715A5010
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiH2PU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S229974AbiH2PTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiH2PU4 (ORCPT
+        with ESMTP id S229556AbiH2PTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:20:56 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875D5647D3;
-        Mon, 29 Aug 2022 08:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661786455; x=1693322455;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uxJC5RyIvqRPTFaq8u3zwzY6+WnQHFd6VU87M4w9eys=;
-  b=Q8cENqbX5xpldMsAIOqW7/SkUTTvxk6Smfu4SLoeSyq00N+Qoi1OZa5H
-   J99VmjOOAn9tHL0MoVPcDvzpkZKWlSJ8Sj0u2pm4K6k8XO2HdaktZcPfR
-   yThsocjUvxNw2eW6ra6O98xusooPLdrqDuGsITZwHp23MKfxfCwDbtdEa
-   J5KfWOKGVaWwAd3sIRj9btH1HbahmciWoSZlcr+/AFREkV8eKUon3YtUC
-   ptGUOlbfexJlT3WWfFmB0ceveGSDgmVpD0Hqhm1RyfGStlP6NUgWnfamK
-   FTNz7JS3HK+VVMCyMX7kzSPgXvJ89FM57TJ4QnZf90QQu3CUCJ8kuuH5O
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="295697971"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="295697971"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 08:20:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="562255775"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 08:20:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oSgX4-005aCL-0G;
-        Mon, 29 Aug 2022 18:18:34 +0300
-Date:   Mon, 29 Aug 2022 18:18:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH v1 4/4] ACPI: platform: Keep list of ACPI IDs sorted
-Message-ID: <YwzYxTam0TLox11+@smile.fi.intel.com>
-References: <20220829141100.63934-1-andriy.shevchenko@linux.intel.com>
- <20220829141100.63934-4-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0jtk0SBz6X3cwpKbckhGdmGE39Ynd94M5C8c4RvqVWQ=A@mail.gmail.com>
+        Mon, 29 Aug 2022 11:19:35 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52085AB3;
+        Mon, 29 Aug 2022 08:19:34 -0700 (PDT)
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TF2fsC030426;
+        Mon, 29 Aug 2022 15:19:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pps0720; bh=oJZ8Pnogvl2PqjImYIZJUg0Yb1Tp7C+OILy5IpO3q1Q=;
+ b=Jtj7XNQ8UKZzT4qqNpKZHwJAcfyjM1bfJJvM9K6kk5qPBNa/hQh1tRK2j+jv3mjp21Le
+ 8JxmxA1y+L4GMg6yhr98SJPhi6F8TNDm0e11gqzEYv0XtGry8maRvmDaFl1iZ1ki2Cl7
+ Slb3hxgwI0wfBuGBGc7qrnQTJxTag0Uxizhk8udpASJ/jBMT6iAQtml6s6m644zaqmQd
+ we6AURZMEsZA5bi50IOA+hsdz06HpANHJcgX7ejxxBkpMnK9udkANNJNrn1DDQPZ8Ywi
+ A3zAp9WEVG/7dxqc14eNUMh5CwOZYt7kmSNb7AKx2p+lMoLvnNoVl4+EEVi34A4/fov0 ZQ== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3j8yj6gbpt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 15:19:16 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 3CEE5D286;
+        Mon, 29 Aug 2022 15:19:16 +0000 (UTC)
+Received: from perchik (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 830DB8080ED;
+        Mon, 29 Aug 2022 15:19:15 +0000 (UTC)
+Date:   Mon, 29 Aug 2022 09:19:13 -0600
+From:   Jerry Hoemann <jerry.hoemann@hpe.com>
+To:     linux@roeck-us.net, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] watchdog/hpwdt: Enable hpwdt for ARM64 platforms
+Message-ID: <20220828223508.GG30332@perchik>
+Reply-To: Jerry.Hoemann@hpe.com
+References: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jtk0SBz6X3cwpKbckhGdmGE39Ynd94M5C8c4RvqVWQ=A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-ORIG-GUID: hMBgF01IZHMfZWHYSviH0oTtGQq3p6wX
+X-Proofpoint-GUID: hMBgF01IZHMfZWHYSviH0oTtGQq3p6wX
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_07,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
+ mlxscore=0 spamscore=0 mlxlogscore=896 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208290071
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 04:28:23PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Aug 29, 2022 at 4:10 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > For better maintenance keep list of the ACPI IDs sorted.
-> > While at it, replace terminator with more standard '{ }'.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Sat, Aug 20, 2022 at 02:28:19PM -0600, Jerry Hoemann wrote:
+> Enable hpwdt for the rl300, an ARM64 based platform.
 > 
-> Subject: ACPI: platform: Sort forbidden_id_list[] in ascending order
-> 
-> Changelog:
-> 
-> "For easier maintenance, sort the forbidden_id_list[] table rows in
-> ascending order with respect to the device ID field.
-> 
-> While at it, use an empty row as the list terminator, which is more
-> usual in the kernel."
-> 
-> Pretty please.
 
-Sure, thanks for the corrections, will embed them in v2.
+Guenter,
+
+Did you have any questions/comments on version 2 of the patch series?
+
+Thanks
+
+Jerry
+
+> 
+> Patch 1: watchdog/hpwdt.c: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
+> 
+> ARM64 does not support NMI and does not have <asm/nmi.h>.  Include
+> nmi.h only if CONFIG_HPWDT_NMI_DECODING is defined.
+> 
+> Patch 2: watchdog/Kconfig:  Allow hpwdt.c to be built for ARM64.
+> 
+> Allow hpwdt.c to be built for (ARM64 || X86) as this part of hwpdt doesn't
+> use NMI.
+> 
+> Make HPWDT_NMI_DECODING dependent upon X86 as NMI handlers are specific
+> to X86 platforms.
+> 
+> 
+> == Changes for v2 ==
+> Update patch documentation.
+> 
+> 
+> 
+> 
+> Jerry Hoemann (2):
+>   watchdog/hpwdt: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
+>   watchdog: Enable HP_WATCHDOG for ARM64 systems.
+> 
+>  drivers/watchdog/Kconfig | 4 ++--
+>  drivers/watchdog/hpwdt.c | 2 ++
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.37.1
 
 -- 
-With Best Regards,
-Andy Shevchenko
 
-
+-----------------------------------------------------------------------------
+Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
+-----------------------------------------------------------------------------

@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F805A5489
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6138C5A548E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiH2T0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S229658AbiH2TaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiH2T0H (ORCPT
+        with ESMTP id S229450AbiH2TaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:26:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9D88A7C6;
-        Mon, 29 Aug 2022 12:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661801166; x=1693337166;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PtLKBNgjh+ULawwAW9/eSjnSKuCcdBTI5zbDgdybVL4=;
-  b=lqteU+jaYYacIoIikUCDnhdreq2m1h5Vevv0u3m0XGa6Ul+FtCgCvDDt
-   eVircrwFHwPorE4xZ+Dgtu/iUZSy6XXB2By/BvxXavHL/IlYq7LltmE4p
-   t0J0rUXguHwQtlire/kUoWrEydRnVZjEXwWXRQoZT12dorFT02ZLRLT1W
-   5fW/QfLaJKodDpsYi3AsZ8U7vW8g6HjDdHZlKmmzTS1zdOolH/TCZn+W2
-   +60uLlg6kkTpJzwi19L1szhIx7h+JaMBm02tYC560EoD2ZdV58LCm3Dnf
-   X1x2/XHcz2zmtK/NK+9pr6hmtpxDfKSzAON+cysl9sWkE4YDfweR/CKqV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="292558633"
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="292558633"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 12:26:06 -0700
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="679742081"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 12:26:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oSkOW-005ep2-2a;
-        Mon, 29 Aug 2022 22:26:00 +0300
-Date:   Mon, 29 Aug 2022 22:26:00 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] gpiolib: acpi: Add support to ignore programming
- an interrupt
-Message-ID: <Yw0SyH9nwpk6Ymsw@smile.fi.intel.com>
-References: <20220803042501.515-1-mario.limonciello@amd.com>
- <efb83a0c-7617-894e-a34d-37280238d5aa@redhat.com>
- <YwkDd+mAhyoSwVeq@smile.fi.intel.com>
- <MN0PR12MB610137D56D08C873C7647A9CE2769@MN0PR12MB6101.namprd12.prod.outlook.com>
+        Mon, 29 Aug 2022 15:30:04 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C55B491
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:30:02 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so5966682pjc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=oa2sUMnuAiCBR/aSHTo44J5ZbK5iRMO7fq7mvPz7L6c=;
+        b=RXXrIGik23Q5wbkodKbTfmCxJTWWFu3fBpG3lBPxBZ3SIK35hNbtNYjV1zOgKGDcSF
+         k2tbmzNx6qhFMrGgtXAj01SBXBwnCVuzVzVNN0hwnJRAkN4M+8Q7kviuz4YYnkYYe3hi
+         Is5tYMlhs5q1+I8QUiQKqelf0ZdKN9cEwlqOs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=oa2sUMnuAiCBR/aSHTo44J5ZbK5iRMO7fq7mvPz7L6c=;
+        b=6VAU+HUdPDaLMB4sRtGpqnXgQSaGSCXbsWWGUs0n+yCAq41H/GTckJK2NKfxkzlJID
+         EI44bK0TOndVjdSMkkssLBYfP/Jm6TBPvkw47v1aIM9Xas+c8x8+KmHMAVXtRSGcMt+J
+         tb8aUMUaUkmJyDCo6RUoRZZh9ofmausD6Xud6vE5D/QG2+nhLYCiy9vImTodmMyQ1Hwe
+         lOxGUhKQV3axuc1dgKFzn1A5up4zbNMVItnt8tJROYQcv2sruyNI4T2LoT/+cEDAAp/0
+         vl9lkKr3pUJxq+32OuByfr0PjmGhtKLe2dMkcXonNEIJ7vTkdN+huSn6IELa8vNm7S/V
+         9/3w==
+X-Gm-Message-State: ACgBeo3dLJppgTSyraDVZ81viz1eDsib/+pQL9YGZ8P3fsISYykN7501
+        E9DCVi35hJ3MNXKQmv3t+pc9gg==
+X-Google-Smtp-Source: AA6agR7rEWbkWGj+UvH4yoJayaSPb2L/jopnuBErEgocxm4OTesByP4v+djzVepNefCHe+zuMv9qNA==
+X-Received: by 2002:a17:90b:4b0c:b0:1f4:ffac:699a with SMTP id lx12-20020a17090b4b0c00b001f4ffac699amr19704898pjb.145.1661801402006;
+        Mon, 29 Aug 2022 12:30:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g11-20020a17090a290b00b001fb23c28e9asm7104515pjd.2.2022.08.29.12.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 12:30:01 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 12:30:00 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sander Vanheule <sander@svanheule.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH 1/2] testing/selftests: Add tests for the
+ is_signed_type() macro
+Message-ID: <202208291229.31D538EA@keescook>
+References: <20220826162116.1050972-1-bvanassche@acm.org>
+ <20220826162116.1050972-2-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MN0PR12MB610137D56D08C873C7647A9CE2769@MN0PR12MB6101.namprd12.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220826162116.1050972-2-bvanassche@acm.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 06:16:45PM +0000, Limonciello, Mario wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Friday, August 26, 2022 12:32
-> > On Wed, Aug 03, 2022 at 05:07:15PM +0200, Hans de Goede wrote:
-> > > On 8/3/22 06:24, Mario Limonciello wrote:
+On Fri, Aug 26, 2022 at 09:21:15AM -0700, Bart Van Assche wrote:
+> Although not documented, is_signed_type() must support the 'bool' and
+> pointer types next to scalar and enumeration types. Add a selftest that
+> verifies that this macro handles all supported types correctly.
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Isabella Basso <isabbasso@riseup.net>
+> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Cc: Sander Vanheule <sander@svanheule.net>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-...
-
-> > > Thanks, patch looks good to me:
-> > >
-> > > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> > 
-> > Pushed to my review and testing queue, thanks!
-
-> Just to double check, you meant you took both patches, not just the first right?
-
-Yes, I took 2 patches. To reduce a confusion I highly recommend to send a
-series with a cover letter, so the answer to it will definitely be equal to
-"yes, I have took all of them" if nothing else specified.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Kees Cook

@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77FA5A4B3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E505A4B50
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiH2MMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S229803AbiH2MPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiH2ML5 (ORCPT
+        with ESMTP id S231382AbiH2MPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:11:57 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2C31A048;
-        Mon, 29 Aug 2022 04:56:28 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id j5so3852440plj.5;
-        Mon, 29 Aug 2022 04:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=IhaMXTWAcaW3hhnK8+sC1vZiKgHn05Km4N0GxkG/RW0=;
-        b=XwhGiA9hLdf7jF8Z1KwDvw+bXeHaXXbVKHSnXC8988+JZyQDwigHjK54u94bXwbnrs
-         F6eKBgc/boIE1W0g7+YC2A5NpbFODdj0gooZ3ntTa+/PA8rUaJ0P9PLlhIGQ4ZdGjaoY
-         SPDBHiL3TJFEAE1On7/N3BaV0tx3NNO0w40DvkjbW7CW58KZBvmGEUtPBBou0lpl/YCA
-         aQ1gD6BwGVCBp6obAuRHo5tKKavKTxioCZXC7CrujjgxqrJ8YsSlEruXN9x2wggsBxc8
-         dAzB5Hgpb36cudOLNZ11UPq18164SpkCWXQIei9wCUUaJmLuNwS3La7IjJemcl0YO+wD
-         N9jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=IhaMXTWAcaW3hhnK8+sC1vZiKgHn05Km4N0GxkG/RW0=;
-        b=gUKmGAffws/TMHujp9mTv8TZDvJrnC4vNDNCHNkrf0pTo5ZHiX2pi2NXydEMfPwtec
-         I5G2XmAaBpDcyAp9pJZJq+z5fhb4R9KizHFozD2K1rIOGVIzodKJTNOlcN061D6rgfyw
-         G8OishivHf3XSMT7iBH5HTuk3Lj9mFxee6sJU+JPh4NEyUnMemZi1SqgZ4nKhMlrAQsr
-         lYMw//gWbhlLBmf8TDw33XYaCTrwjOqnmS9PuX1JkSpzugWDuq1bk01wEofXCtwlTe9g
-         M8Jsz82ukpvNusDY7a/+izinLN6/CnTJz2V2IvUVzIb/H5IJa+GuwW/1SVNmBxnFb+bF
-         GipQ==
-X-Gm-Message-State: ACgBeo02QZ6EnpWVwq39+/RN6rmFpcfGw3HMGzd6h/NT6SkIeH3WaJU4
-        yjfsliQNYkhmCebMYmmmh1M=
-X-Google-Smtp-Source: AA6agR7yzEYpT+OyneJp41HKj017miRViVo33bwauWIGBSTL3reK1YGOufd1Ki0uGR18e7YIWKhETQ==
-X-Received: by 2002:a17:90b:4a84:b0:1fb:60a5:96b4 with SMTP id lp4-20020a17090b4a8400b001fb60a596b4mr18164900pjb.149.1661774124518;
-        Mon, 29 Aug 2022 04:55:24 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m15-20020a170902bb8f00b00172dda377fesm7226353pls.260.2022.08.29.04.55.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 04:55:24 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     aspriel@gmail.com, franky.lin@broadcom.com,
-        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org
-Cc:     pabeni@redhat.com, johannes.berg@intel.com,
-        a.fatoum@pengutronix.de, quic_vjakkam@quicinc.com,
-        loic.poulain@linaro.org, hzamani.cs91@gmail.com,
-        hdegoede@redhat.com, smoch@web.de, prestwoj@gmail.com,
-        cui.jinpeng2@zte.com.cn, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] wifi: cfg80211: remove redundant err variable
-Date:   Mon, 29 Aug 2022 11:55:16 +0000
-Message-Id: <20220829115516.267647-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 Aug 2022 08:15:19 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB9AA00F4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B7n71/NkrtHYvF9gedtNk1oY9cS74shjCaQIwnnXV8Y=; b=fEUXVBk/2raflvOiZZ7QVgwExz
+        c6ElBLPEwxKEIBI2MKcCrp/8vlJRLsO2azx5vf2xEBCBRSE0PMqp1IrbCuQ1DfhD8t17Y8Jnb16xy
+        O0hccUeNwgUmT8u2EVeeR+guhFly0wsDlhJVVeyS5Hv85dBMoiFPJJ306VR4MzJ20HY9DyY+Csr5Q
+        BgzbajkgVVzQ3iETJpzajYNx+GF73DangpXA8midaIGww8iaQCTBEU9nRbQIZm/Klh9aYtd0NyrV0
+        CkyvxdkZOzkJjdQ1h/9maLPgq7vDMyOMl3x95PoNjkFBg2B3q6t0QZgGHZAQEtVDAFaKvpqj+QQd7
+        J7AZEePg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSdPT-007U95-6Z; Mon, 29 Aug 2022 11:58:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB506300137;
+        Mon, 29 Aug 2022 13:58:29 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9452D2083F6F4; Mon, 29 Aug 2022 13:58:29 +0200 (CEST)
+Date:   Mon, 29 Aug 2022 13:58:29 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, alexey.budankov@linux.intel.com,
+        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
+        santosh.shukla@amd.com
+Subject: Re: [RFC v2] perf: Rewrite core context handling
+Message-ID: <Ywyp5XmDTJxmmKlN@hirez.programming.kicks-ass.net>
+References: <20220113134743.1292-1-ravi.bangoria@amd.com>
+ <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+ <YqdL8LsOvxNqhz/v@hirez.programming.kicks-ass.net>
+ <f994d403-df7b-d88e-8324-c29d0ef2034e@amd.com>
+ <YwOgxhfS99Rquwct@worktop.programming.kicks-ass.net>
+ <YwOkFqqxONtoGImZ@worktop.programming.kicks-ass.net>
+ <fb28c31f-c531-4be3-e9c9-d324451d79d5@amd.com>
+ <8d91528b-e830-6ad0-8a92-621ce9f944ca@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d91528b-e830-6ad0-8a92-621ce9f944ca@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Mon, Aug 29, 2022 at 09:30:50AM +0530, Ravi Bangoria wrote:
+> > With this, I can run 'perf test' and perf_event_tests without any error in
+> > dmesg. I'll run perf fuzzer over night and see if it reports any issue.
+> 
+> I also ran fuzzer on Intel machine over the weekend. I see only one WARN_ON()
+> hit. Otherwise system is running normal. FWIW, I was running fuzzer as normal
+> user with perf_event_paranoid=0.
+> 
+>   WARNING: CPU: 3 PID: 2840537 at arch/x86/events/core.c:1606 x86_pmu_stop+0xd0/0x100
 
-Return value from brcmf_fil_iovar_data_set() and
-brcmf_config_ap_mgmt_ie() directly instead of
-taking this in another redundant variable.
+That's the WARN about PERF_HES_STOPPED already being set.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- .../wireless/broadcom/brcm80211/brcmfmac/cfg80211.c    | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+>   Call Trace:
+>    <TASK>
+>    x86_pmu_del+0x8e/0x2d0
+>    ? debug_smp_processor_id+0x17/0x20
+>    event_sched_out+0x10b/0x2b0
+>    ? x86_pmu_del+0x5c/0x2d0
+>    merge_sched_in+0x39f/0x410
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-index 7c72ea26a7d7..8a8c5a3bb2fb 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-@@ -3988,7 +3988,6 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
- 	struct brcmf_pmk_list_le *pmk_list;
- 	int i;
- 	u32 npmk;
--	s32 err;
- 
- 	pmk_list = &cfg->pmk_list;
- 	npmk = le32_to_cpu(pmk_list->npmk);
-@@ -3997,10 +3996,8 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
- 	for (i = 0; i < npmk; i++)
- 		brcmf_dbg(CONN, "PMK[%d]: %pM\n", i, &pmk_list->pmk[i].bssid);
- 
--	err = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
-+	return brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
- 				       sizeof(*pmk_list));
--
--	return err;
- }
- 
- static s32
-@@ -5046,13 +5043,10 @@ brcmf_cfg80211_change_beacon(struct wiphy *wiphy, struct net_device *ndev,
- 			     struct cfg80211_beacon_data *info)
- {
- 	struct brcmf_if *ifp = netdev_priv(ndev);
--	s32 err;
- 
- 	brcmf_dbg(TRACE, "Enter\n");
- 
--	err = brcmf_config_ap_mgmt_ie(ifp->vif, info);
--
--	return err;
-+	return brcmf_config_ap_mgmt_ie(ifp->vif, info);
- }
- 
- static int
--- 
-2.25.1
+And this callchain suggests this is the group_error path.
 
+I can't immediately spot a fail there, but I'll try and stare at it
+some.

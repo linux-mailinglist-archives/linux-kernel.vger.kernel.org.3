@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83885A4F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FC55A4EF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiH2OWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S230296AbiH2OP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiH2OWW (ORCPT
+        with ESMTP id S229980AbiH2OPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:22:22 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68378B988
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:22:21 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11edd61a9edso4483898fac.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:22:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+LNH7GWYgSUzsjvph8IQNcroBifhiDios4fo6CTY2/U=;
-        b=XVunXF3kjTus4d6ghRjoX/G3g6du/2+bZ0NFdJ4nJuVzrU0bZ1yCuXay3gzzk+mu60
-         fNgmJcD5phH4nVkxv3kCXO53Q8YaIVADSbrxGNyF17xXWi1OxEN8NI1ggco5qqjYQxqm
-         HP8C3P61XtqKmEGfrUWrxDjwD6Wulwehdu7ZbWogo/QrCcqFIb0xl/rDioRX4+qb/VME
-         MPVID9JCMLttgQa6eUivOkemGZ5Z2HnpLjjUvH97HIapXJIsaQzg4/sNHbnEUweLfVoY
-         QZzmAi4+iy/E65r/vqrvNzzfIamgrLCf8xW1rZmaXQ5qNXVCc2FqvBvgEEGL8zNvJyAC
-         EsWw==
-X-Gm-Message-State: ACgBeo2Q26yaxRm6RU8zqlq/IZCcbpDxfq1irAHB+AdsJHNKuhO+C4j6
-        zv7bby7Uk6c/HeaO/IqKrv8t3wXcIlFXSA==
-X-Google-Smtp-Source: AA6agR5N1A2Gvptc6i3QpAjwFZ0eyDsy6gap/xa1uX6YGTUyIDM3KSvJBCY2l+mVv0zkfBvbhqb+qA==
-X-Received: by 2002:a05:6870:438b:b0:11c:ecf2:e4ca with SMTP id r11-20020a056870438b00b0011cecf2e4camr8141008oah.122.1661782940808;
-        Mon, 29 Aug 2022 07:22:20 -0700 (PDT)
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com. [209.85.210.53])
-        by smtp.gmail.com with ESMTPSA id g10-20020acab60a000000b0034516ca90dcsm4791240oif.23.2022.08.29.07.22.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 07:22:20 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id t11-20020a05683014cb00b0063734a2a786so5973619otq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:22:20 -0700 (PDT)
-X-Received: by 2002:a25:415:0:b0:696:814:7c77 with SMTP id 21-20020a250415000000b0069608147c77mr8612505ybe.36.1661782506395;
- Mon, 29 Aug 2022 07:15:06 -0700 (PDT)
+        Mon, 29 Aug 2022 10:15:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B7A1A39E;
+        Mon, 29 Aug 2022 07:15:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F36E60F5B;
+        Mon, 29 Aug 2022 14:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058FDC433C1;
+        Mon, 29 Aug 2022 14:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661782522;
+        bh=+nyYdh/yy5EHKyi0lpYY9d3e+x1/y1ayeGH6tnploAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oczrsAAZRB7+HuHkBHmMN1BZNstE3epijQo1SngzYh79jhWGVjXhYhoODnqaZj5rd
+         EMofYuKj0e/AkGWSwnUBefQ+SL9FTIXG5O7Ra/XhtTL272P4t44tPus4lBzW/6Pd55
+         IBtOa+iVodOoAaKqgVW7tFxJpi6ULCiHjlUISiRayaUU9mwuoRzLAbwEsBqnXFnhDc
+         mLjLOGvOfc30vZ50DtGmdmVZumM6y5r9WTQcn1sQwFZnCWhNBKwxQfYvuvgtGfSEU1
+         Jt4Tt1ZyfJUaEyDJaeOSLCSJJg90Xxd6hxx4DVhg4IrWilJsmKf5XLeCxEwRcEq114
+         sXfWLkU9sFcJg==
+Date:   Mon, 29 Aug 2022 16:15:17 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: Re: [PATCH] fs/inode.c: change the order of initialization in
+ inode_init_always()
+Message-ID: <20220829141517.bcjbdk5zb74mrhgu@wittgenstein>
+References: <1661609366-26144-1-git-send-email-khoroshilov@ispras.ru>
 MIME-Version: 1.0
-References: <CAMuHMdUusnhYodWGCxJBu-1Hd2KW-xdT8jxE_iVdQjDo8b3Y5Q@mail.gmail.com>
- <20220817131454.qcuywcuc4ts4hswm@houat> <CAMuHMdVPEgnnsY-4uuf=FDJ0YxWpch-0kZWFT_TZfcDvXLtwWQ@mail.gmail.com>
- <20220818123934.eim2bfrgbxsmviqx@houat> <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
- <20220818134200.cr22bftmjn226ehn@houat> <CAMuHMdX6dyQaB34oeXwiCa2rDkxks0qNh=ekqh7Wd2kSNED9TA@mail.gmail.com>
- <20220818154641.ouvrar5s74qu74zn@houat> <CAMuHMdUjE0mwu8z5AksW4h1OwzDCQ5h1ZoCWDi+rC4p2Pu5O4g@mail.gmail.com>
- <6d1dfaad-7310-a596-34dd-4a6d9aa95f65@gmail.com> <20220829132953.sfv5yex2dhv76vrq@houat>
-In-Reply-To: <20220829132953.sfv5yex2dhv76vrq@houat>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 29 Aug 2022 16:14:54 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXxoEYV7v-R+o4eMJEiV_xGUgpN6sUbZ95r_qewV5QpRA@mail.gmail.com>
-Message-ID: <CAMuHMdXxoEYV7v-R+o4eMJEiV_xGUgpN6sUbZ95r_qewV5QpRA@mail.gmail.com>
-Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Mateusz Kwiatkowski <kfyatek@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1661609366-26144-1-git-send-email-khoroshilov@ispras.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+On Sat, Aug 27, 2022 at 05:09:26PM +0300, Alexey Khoroshilov wrote:
+> From: Rustam Subkhankulov <subkhankulov@ispras.ru>
+> 
+> If function 'security_inode_alloc()' returns a nonzero value at
+> [fs/inode.c: 195] due to an error (e.g. fail to allocate memory),
+> then some of the fields, including 'i_private', will not be
+> initialized.
+> 
+> After that, if the fs-specfic free_inode function is called in
+> 'i_callback', the nonzero value of 'i_private' field can be interpreted
+> as initialized. As a result, this can cause dereferencing of random
+> value pointer (e.g. nilfs2).
+> 
+> In earlier versions, a similar situation could occur with the 'u' union
+> in 'inode' structure.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+> 
+> Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> ---
+>  fs/inode.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/inode.c b/fs/inode.c
+> index bd4da9c5207e..08d093737e8c 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -192,8 +192,6 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
+>  	inode->i_wb_frn_history = 0;
+>  #endif
+>  
+> -	if (security_inode_alloc(inode))
+> -		goto out;
+>  	spin_lock_init(&inode->i_lock);
+>  	lockdep_set_class(&inode->i_lock, &sb->s_type->i_lock_key);
+>  
+> @@ -230,9 +228,10 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
+>  	inode->i_flctx = NULL;
+>  	this_cpu_inc(nr_inodes);
+>  
+> +	if (security_inode_alloc(inode))
+> +		return -ENOMEM;
 
-On Mon, Aug 29, 2022 at 3:30 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> On Wed, Aug 24, 2022 at 06:42:18PM +0200, Mateusz Kwiatkowski wrote:
-> > - Speaking of closed captioning... a lot of different stuff were put in the
-> >   blanking interval over the years. Like teletext in Europe. There are projects
-> >   like VBIT2 <https://github.com/peterkvt80/vbit2> which intentionally
-> >   reconfigure the Raspberry Pi composite output to include the blanking interval
-> >   in the framebuffer so that teletext can be output by drawing on the edge of
-> >   the "screen" (from the computer point of view).
->
-> I'm not sure how we would support this in KMS to be honest. Asking for a
-> wider mode and the userspace putting whatever it wants in the margins
-> seems like a good choice.
-
-s/wider/higher/
-
-Teletext is transmitted in the "visible" parts of (horizontal) lines, but during
-the vertical blank.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+This should probably be before this_cpu_inc(nr_inodes).

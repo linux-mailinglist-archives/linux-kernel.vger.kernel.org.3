@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA82B5A4A9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630AA5A4A0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiH2Loi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S232582AbiH2Lci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiH2LnL (ORCPT
+        with ESMTP id S232717AbiH2L3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:43:11 -0400
+        Mon, 29 Aug 2022 07:29:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86427857DC;
-        Mon, 29 Aug 2022 04:27:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1E57B2BE;
+        Mon, 29 Aug 2022 04:18:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 388F8611C2;
-        Mon, 29 Aug 2022 11:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E3CC433B5;
-        Mon, 29 Aug 2022 11:15:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B32F561202;
+        Mon, 29 Aug 2022 11:17:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D19C433D6;
+        Mon, 29 Aug 2022 11:17:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771731;
-        bh=RpKmRn+j85ozogCqWaFhx6L2PA8dH7V2AnILqV8enls=;
+        s=korg; t=1661771860;
+        bh=6EKBDqc52IalgZq0HP2UlKus3oH3wi8p+iN3Nd5JAPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C/EB0nvd93eT86OPS/ZgQCAucLrv4xNsqbyKQsLX7huA2voRywQS52Yx8wZ5NHlZJ
-         IS9X1OPPbK3U0bGuZw8Vek47UMEXEW1zMQLTrjIriJfWBVdaDhhVOHahU9rdVmgQ7W
-         0Ld6iEr/FPxA7tsv9hCf14rMazkewAyK0/HYgLCI=
+        b=jZQPWXiNdNjVx0OLdD+yUMkuRfIngHYt+Wbz8bMIUwgDLNNNHQWbJtUmMLeOPuLcZ
+         UEZ12B3KyXNvk896tIXrTM2q4l03r2nqWmneA2IQxY+s5+3ytwsOWck1jpjS3fQTRz
+         U5XSME9RJebNMckHoIWzwco8AJz6aMffjUgkBrcI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 076/158] net: Fix a data-race around netdev_budget_usecs.
-Date:   Mon, 29 Aug 2022 12:58:46 +0200
-Message-Id: <20220829105812.217130260@linuxfoundation.org>
+Subject: [PATCH 5.19 077/158] net: Fix data-races around sysctl_fb_tunnels_only_for_init_net.
+Date:   Mon, 29 Aug 2022 12:58:47 +0200
+Message-Id: <20220829105812.263072308@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -57,32 +57,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit fa45d484c52c73f79db2c23b0cdfc6c6455093ad ]
+[ Upstream commit af67508ea6cbf0e4ea27f8120056fa2efce127dd ]
 
-While reading netdev_budget_usecs, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+While reading sysctl_fb_tunnels_only_for_init_net, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: 7acf8a1e8a28 ("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
+Fixes: 79134e6ce2c9 ("net: do not create fallback tunnels for non-default namespaces")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/netdevice.h | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a330f93629314..19baeaf65a646 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6646,7 +6646,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 2563d30736e9a..78dd63a5c7c80 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -640,9 +640,14 @@ extern int sysctl_devconf_inherit_init_net;
+  */
+ static inline bool net_has_fallback_tunnels(const struct net *net)
  {
- 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
- 	unsigned long time_limit = jiffies +
--		usecs_to_jiffies(netdev_budget_usecs);
-+		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
- 	int budget = READ_ONCE(netdev_budget);
- 	LIST_HEAD(list);
- 	LIST_HEAD(repoll);
+-	return !IS_ENABLED(CONFIG_SYSCTL) ||
+-	       !sysctl_fb_tunnels_only_for_init_net ||
+-	       (net == &init_net && sysctl_fb_tunnels_only_for_init_net == 1);
++#if IS_ENABLED(CONFIG_SYSCTL)
++	int fb_tunnels_only_for_init_net = READ_ONCE(sysctl_fb_tunnels_only_for_init_net);
++
++	return !fb_tunnels_only_for_init_net ||
++		(net_eq(net, &init_net) && fb_tunnels_only_for_init_net == 1);
++#else
++	return true;
++#endif
+ }
+ 
+ static inline int netdev_queue_numa_node_read(const struct netdev_queue *q)
 -- 
 2.35.1
 

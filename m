@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAA85A4CCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0F75A4CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiH2NBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S229922AbiH2NBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiH2NBV (ORCPT
+        with ESMTP id S229992AbiH2NBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Aug 2022 09:01:21 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2901D16588
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:52:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id m2so7890039pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:52:55 -0700 (PDT)
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B63447B91
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:52:59 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso14586181pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:52:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=DF3EHZACZLIxZm103wJfkyVVUnHhmNz4e84k34pg8iM=;
-        b=VwwMibK4e1SGhbD7sfBq/VulE9XYXIwXhHxCTuKnLGjjKcyYtOU26SdNAy0JJLC328
-         OGsC0x7AUiU+rPHANfFbPQKXIrm9BPUlPQ+KLS2hnv/uHnFjNLNVCsIub5rusNcz8PaS
-         9ITaJBrp3LWW015hTkbf7G50YoCWhaNeKGQBGEcfbfe2SFMHn7uBZldruUZyDK2yoP1S
-         nc0+t/oV2jnDFCK1IxcUqlHXx/zeLtYruOq/1VDzU7WDFU8YGTmelwo+1naw5PvIe6rl
-         FQVuklwhjiugna99cpvtoiVQ3B1TnpSKwhBq/moEV0G4cBA2/9uvoYyZtF0EdJ0uXt08
-         jqqw==
+        bh=5ilaCtDntV5LvqrHcpDpXbfyMqkerLgg3poBAYZ46YQ=;
+        b=Y5QcKGoYcZUCjnyFG9953lwHuj8t9eSGvfQexdUbQBs3F5Q74O7L0rLpj+Rk2NMLRB
+         akZxLE23GhCaDZhrHVl4kvCKRrenMI/lG5N9iy1F5E1tHRv3GJsSzpnEOOs042Xuybrb
+         pe7VGMP+ilvW34wpbW2Ocm3E8BupI9Rpo2t983yVIvRf3ARenyrZYqQ507gIEbhu8AJG
+         8uhZkR4PxP+N2CQ87mbzj6ax4HHh8AvTYKL7Ck06mcZsrDe+dU3nmz8sB+eZbD3D4Ivp
+         HL9tOZqtrKj6JOn2joQwSLIbJtXPt9h0gUjBubttZ0XYW4NhHWzdx6R0CRKU1o7Gq/II
+         nMLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=DF3EHZACZLIxZm103wJfkyVVUnHhmNz4e84k34pg8iM=;
-        b=jokRXuIr5yW84NUiCh+lESQDSGFwDk3MHnngZ2jbYQCE3W3mXlQS/Tg3gktguS2u3r
-         qdAhLBbPrJqLeW/UR3+z6HCB4SegfPn/h95bC6lGIsC/5QaChraIanZeXWpF/EuE3S2r
-         QaQGiZzlOx5lwqo2VNlahgEiCnMB39yWbGAOGAmyM5Ur26p2RacB4uapWbHnkn1ZVyWN
-         kqNgN6vNO+FQVcxqmmZu7a2QixHoxd8PtiTfGA/vOHFuWG2V1drJwLPK4WUBgJa9eLWn
-         LKKdInSNJtopIUtFFLc7VYPq/NFqiuNY1q78MSAGM7R+PK6SDR4aaJ1M3stbvsG03qHX
-         to4A==
-X-Gm-Message-State: ACgBeo33WMqstaalrlutAT+Go3vXpwEuCFb2mM9FM8CAsqrE9p2MVLKO
-        p72yfjJmpD8sL7+/y0QxhvRX5A==
-X-Google-Smtp-Source: AA6agR5aA3lQRu1vS8qwSp/nS3Li+E+T9vQqImCN0tFjn0Mho9TQuefM6AnU7y3mkyQDlJtkWx7W4g==
-X-Received: by 2002:a17:903:2310:b0:173:10e1:3a76 with SMTP id d16-20020a170903231000b0017310e13a76mr16520555plh.160.1661777574577;
-        Mon, 29 Aug 2022 05:52:54 -0700 (PDT)
+        bh=5ilaCtDntV5LvqrHcpDpXbfyMqkerLgg3poBAYZ46YQ=;
+        b=iAFCRKOCbToA98e+Wmnk9X52F7BtwoqZLQSV+4LLsJ1GLFpmEUTY9Jop5oa3faFSnI
+         4FxqGO3bz85vl7UEw7vLqL/Nyl1JKcJXbWckbWBY8QImjxrGwmjxcHeXaQ9L8X6NiL8+
+         4AZeFrr6rbHSKtO95oP4Xd8qKEeBHZnFNPu/DWBc8ES5lNyOhWOTULFKkV/5iI46d640
+         d5vv17Gy4IRusrUlGlxKUSxBYoLWUsssbThG0Gzuwf0VIZtmxg8LOIlt5uRD5/2ScPeB
+         1d9qSNMmtiSUTV8w0LYkREAY+EWzSypObRjOnxkNhXAnFqyXwVSlyJb9K0ItpC/pgZ7/
+         c5wg==
+X-Gm-Message-State: ACgBeo2ejfY/IzSaz4BG49/xbJ+6NlUweEMnzhDuF0FwOeVzYT5e8uVv
+        uSOzUa9DoyFPU0+JGlAYkZM2tA==
+X-Google-Smtp-Source: AA6agR4OoFG/9b1mM+UxTLGwZsmbxe4eml0wufZpYjFVzAvxCeN1tO1qI+X9fHG9U5AkBhxKVgkPrA==
+X-Received: by 2002:a17:902:a704:b0:174:3ad5:30b8 with SMTP id w4-20020a170902a70400b001743ad530b8mr15331334plq.14.1661777578696;
+        Mon, 29 Aug 2022 05:52:58 -0700 (PDT)
 Received: from anup-ubuntu64-vm.. ([171.76.81.110])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016ed5266a5csm7517607plh.170.2022.08.29.05.52.50
+        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016ed5266a5csm7517607plh.170.2022.08.29.05.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 05:52:54 -0700 (PDT)
+        Mon, 29 Aug 2022 05:52:58 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>
@@ -57,9 +57,9 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>,
         Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: [PATCH 1/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for systems with Svpbmt
-Date:   Mon, 29 Aug 2022 18:22:23 +0530
-Message-Id: <20220829125226.511564-2-apatel@ventanamicro.com>
+Subject: [PATCH 2/4] RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
+Date:   Mon, 29 Aug 2022 18:22:24 +0530
+Message-Id: <20220829125226.511564-3-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220829125226.511564-1-apatel@ventanamicro.com>
 References: <20220829125226.511564-1-apatel@ventanamicro.com>
@@ -75,60 +75,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, all flavors of ioremap_xyz() function maps to the generic
-ioremap() which means any ioremap_xyz() call will always map the
-target memory as IO using _PAGE_IOREMAP page attributes. This breaks
-ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
-remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
-page attributes.
+The riscv_cbom_block_size parsing from DT belongs to cacheflush.c which
+is home for all cache maintenance related stuff so let us move the
+riscv_init_cbom_blocksize() and riscv_cbom_block_size to cacheflush.c.
 
-To address above (just like other architectures), we implement RISC-V
-specific ioremap_cache() and ioremap_wc() which maps memory using page
-attributes as defined by the Svpbmt specification.
-
-Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
 Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
 Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/include/asm/io.h      | 10 ++++++++++
- arch/riscv/include/asm/pgtable.h |  2 ++
- 2 files changed, 12 insertions(+)
+ arch/riscv/include/asm/cacheflush.h |  2 ++
+ arch/riscv/mm/cacheflush.c          | 37 +++++++++++++++++++++++++++++
+ arch/riscv/mm/dma-noncoherent.c     | 36 ----------------------------
+ 3 files changed, 39 insertions(+), 36 deletions(-)
 
-diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
-index 69605a474270..07ac63999575 100644
---- a/arch/riscv/include/asm/io.h
-+++ b/arch/riscv/include/asm/io.h
-@@ -133,6 +133,16 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
- #define outsq(addr, buffer, count) __outsq((void __iomem *)addr, buffer, count)
- #endif
+diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+index a60acaecfeda..de55d6b8deeb 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -42,6 +42,8 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
  
-+#ifdef CONFIG_MMU
-+#define ioremap_wc(addr, size)		\
-+	ioremap_prot((addr), (size), _PAGE_IOREMAP_WC)
-+#endif
+ #endif /* CONFIG_SMP */
+ 
++extern unsigned int riscv_cbom_block_size;
 +
- #include <asm-generic/io.h>
- 
-+#ifdef CONFIG_MMU
-+#define ioremap_cache(addr, size)	\
-+	ioremap_prot((addr), (size), _PAGE_KERNEL)
-+#endif
+ #ifdef CONFIG_RISCV_ISA_ZICBOM
+ void riscv_init_cbom_blocksize(void);
+ #else
+diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+index 6cb7d96ad9c7..26be957dcbf2 100644
+--- a/arch/riscv/mm/cacheflush.c
++++ b/arch/riscv/mm/cacheflush.c
+@@ -86,3 +86,40 @@ void flush_icache_pte(pte_t pte)
+ 		flush_icache_all();
+ }
+ #endif /* CONFIG_MMU */
 +
- #endif /* _ASM_RISCV_IO_H */
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 7ec936910a96..346b7c1a3eeb 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -182,6 +182,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
- #define PAGE_TABLE		__pgprot(_PAGE_TABLE)
++unsigned int riscv_cbom_block_size = L1_CACHE_BYTES;
++
++#ifdef CONFIG_RISCV_ISA_ZICBOM
++void riscv_init_cbom_blocksize(void)
++{
++	struct device_node *node;
++	int ret;
++	u32 val;
++
++	for_each_of_cpu_node(node) {
++		unsigned long hartid;
++		int cbom_hartid;
++
++		ret = riscv_of_processor_hartid(node, &hartid);
++		if (ret)
++			continue;
++
++		if (hartid < 0)
++			continue;
++
++		/* set block-size for cbom extension if available */
++		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
++		if (ret)
++			continue;
++
++		if (!riscv_cbom_block_size) {
++			riscv_cbom_block_size = val;
++			cbom_hartid = hartid;
++		} else {
++			if (riscv_cbom_block_size != val)
++				pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
++					cbom_hartid, hartid);
++		}
++	}
++}
++#endif
+diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
+index cd2225304c82..b09e4b431307 100644
+--- a/arch/riscv/mm/dma-noncoherent.c
++++ b/arch/riscv/mm/dma-noncoherent.c
+@@ -12,7 +12,6 @@
+ #include <linux/of_device.h>
+ #include <asm/cacheflush.h>
  
- #define _PAGE_IOREMAP	((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-+#define _PAGE_IOREMAP_WC	((_PAGE_KERNEL & ~_PAGE_MTMASK) | \
-+				 _PAGE_NOCACHE)
- #define PAGE_KERNEL_IO		__pgprot(_PAGE_IOREMAP)
+-static unsigned int riscv_cbom_block_size = L1_CACHE_BYTES;
+ static bool noncoherent_supported;
  
- extern pgd_t swapper_pg_dir[];
+ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+@@ -75,41 +74,6 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+ 	dev->dma_coherent = coherent;
+ }
+ 
+-#ifdef CONFIG_RISCV_ISA_ZICBOM
+-void riscv_init_cbom_blocksize(void)
+-{
+-	struct device_node *node;
+-	int ret;
+-	u32 val;
+-
+-	for_each_of_cpu_node(node) {
+-		unsigned long hartid;
+-		int cbom_hartid;
+-
+-		ret = riscv_of_processor_hartid(node, &hartid);
+-		if (ret)
+-			continue;
+-
+-		if (hartid < 0)
+-			continue;
+-
+-		/* set block-size for cbom extension if available */
+-		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+-		if (ret)
+-			continue;
+-
+-		if (!riscv_cbom_block_size) {
+-			riscv_cbom_block_size = val;
+-			cbom_hartid = hartid;
+-		} else {
+-			if (riscv_cbom_block_size != val)
+-				pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
+-					cbom_hartid, hartid);
+-		}
+-	}
+-}
+-#endif
+-
+ void riscv_noncoherent_supported(void)
+ {
+ 	noncoherent_supported = true;
 -- 
 2.34.1
 

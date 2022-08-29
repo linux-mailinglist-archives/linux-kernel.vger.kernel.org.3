@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4BA5A57D9
+	by mail.lfdr.de (Postfix) with ESMTP id 548345A57DA
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiH2Xqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
+        id S229817AbiH2Xqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiH2XqX (ORCPT
+        with ESMTP id S229655AbiH2XqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:46:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3F898A5A;
-        Mon, 29 Aug 2022 16:46:22 -0700 (PDT)
+        Mon, 29 Aug 2022 19:46:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17E98588;
+        Mon, 29 Aug 2022 16:46:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3F3EB815D1;
-        Mon, 29 Aug 2022 23:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F2EC43470;
-        Mon, 29 Aug 2022 23:46:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A752C61388;
+        Mon, 29 Aug 2022 23:46:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752EDC433D7;
+        Mon, 29 Aug 2022 23:46:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816780;
-        bh=WYQPNXG9dqE+9O4LnJLU3eHkWGDJlK0p2LnIx9mJadI=;
+        s=k20201202; t=1661816782;
+        bh=QVaf2ue7rS2/KW2MEYsbOa8mov9wyGulpZZV3uEQCMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IX6t+6/7xcBoY9fTbX1KRcUycV8kugLe6XHuD3dgIpIxN66ycBzlN3w7lcbP7HeSw
-         jxz4xvFNFwscRH7luSpSvtHGrut0lwOzSRsgw/JpQVTsrNjNqolj6nuG4d8RpPkJer
-         8NH+0mms0sYq6K5TojMkkauA1sk2t+90HW6E/ul6HB15mOuPqk/YKMnF1sfXe2e7+b
-         x9JrIMfE/hFDjudfw0WkaM1AAMNPCDZ5h0ToPAR3Ie7LQm12BcgJT7eS5RNpqgRxFu
-         bQm1XRITwGChz5pDjprlF2WZlNBwzKFCNGm8sWw50H07sCqhv57G3y6eJJ62HqAgJ5
-         5GB7/poDRU3dw==
+        b=udwLe6vzml7QcPwXO2cIuPXu5XRo5PE55iGm+k3x0SnchoGhpn+wIDZopvjd0cXCy
+         sBCZpWQH5qJyCcqjoi8HzmqHAbmAL6E3JvhbfIs1+4Szdm0p6Qfuk61lF+xolJl2jE
+         YKXxhDodUMqib3MzvdK614DhaB21gFXWIbRmsr7P/1POmHKwbgb46Fth74s+NtXn3p
+         CLbtxkch72OrdrcHhjEsJPo9ND1rUlOax46YJPHEBge/EzxkQQfhctxox7uvbuQBlr
+         Pf3h1f5pLygOf8cLPHHQLrFwuqWGg4bPY10J93gAzZVgggM80ki3IQR0JZIqxRd1Q1
+         jOTvnPKEdwO/Q==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>, konrad.dybcio@somainline.org,
-        mathieu.poirier@linaro.org, Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Update Bjorn's email address
-Date:   Mon, 29 Aug 2022 18:45:42 -0500
-Message-Id: <166181675993.322065.9091360700945964893.b4-ty@kernel.org>
+To:     cgel.zte@gmail.com, krzysztof.kozlowski@linaro.org
+Cc:     zealci@zte.com.cn, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cui.jinpeng2@zte.com.cn,
+        konrad.dybcio@somainline.org, agross@kernel.org
+Subject: Re: [PATCH linux-next] soc: qcom: icc-bwmon: remove redundant ret variable
+Date:   Mon, 29 Aug 2022 18:45:44 -0500
+Message-Id: <166181675990.322065.10141952054506036858.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220819142549.1605081-1-bjorn.andersson@linaro.org>
-References: <20220819142549.1605081-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
+References: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,16 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 07:25:49 -0700, Bjorn Andersson wrote:
-> Update the email address for Bjorn's maintainer entries and fill in
-> .mailmap accordingly.
+On Tue, 23 Aug 2022 13:36:20 +0000, cgel.zte@gmail.com wrote:
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> 
+> Return value from devm_regmap_field_bulk_alloc() directly
+> instead of taking this in another redundant variable.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] MAINTAINERS: Update Bjorn's email address
-      commit: 8c8d28e1f10a0359f0c704be18cf744b3513acd2
+[1/1] soc: qcom: icc-bwmon: remove redundant ret variable
+      commit: 7eb89c17abd2574f627c1277a15f6ff64bec33a4
 
 Best regards,
 -- 

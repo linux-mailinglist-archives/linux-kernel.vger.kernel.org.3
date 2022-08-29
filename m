@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4CC5A581C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA345A5808
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiH2Xsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S229807AbiH2XtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiH2Xro (ORCPT
+        with ESMTP id S230013AbiH2XsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:47:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEEFA5986;
-        Mon, 29 Aug 2022 16:47:00 -0700 (PDT)
+        Mon, 29 Aug 2022 19:48:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4082AA8302;
+        Mon, 29 Aug 2022 16:47:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF3BE61405;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48BF3B815A1;
+        Mon, 29 Aug 2022 23:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815A7C433D7;
         Mon, 29 Aug 2022 23:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94363C4347C;
-        Mon, 29 Aug 2022 23:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816806;
-        bh=Qd3AMfyY4tk6Q+pRvCfhQZF3G+wUidbn6BTwGgEO0uw=;
+        s=k20201202; t=1661816807;
+        bh=5W8nXJQsvwqgoO60z9z+SKF9VBbExPRmhz/4m2f9dIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dd+4xUqNIb31qpwyr3HEZqWaWRrdrMK1mwCfbuVKDRSrWHqiJdfB+naHLU3EqofoD
-         QmeiVcSRYdbMqN4g2eCazDzoa+UG91hE6rUVgPZXmMoYkDTwiCxRCBge2oVR/WxPQP
-         SBrVANT7MzErL+D7ZAiLJYMUSffZ8FpPH1t4AUTiVOwWqDXZ/2+7K2NSzIP1oPn4+c
-         8XYRiVr8Vyvel+Q5jsQX8hwAEz/Han0sEsLM0TmZSHTg0GQFkVoAq08ZrKGWQka80c
-         /8RgFgaexgM91PRfuVZ2PMYXT0SlQ3CaDMdTzKkoDNHQRmNl6+QvRLfJwzhGHiE7EQ
-         Dxx6ba6iEd23A==
+        b=bP4rS8Qb5QR1szW7fVMHoFB+eV6BlPsBQpXXVoQRVCEQoPhZlQyhRvgdK8Ef9aghb
+         fg+JNiXbGxvKQ6LrmjoXL2oWqIV4KUV1hCBr2SimNdNNr9f/gAWLK+vYXGRWCN6iBC
+         xx0nNvxN345Xf2GakmtrorLgtVQx4ZuFzc2Q4lFQ6w3ehPGK5i+2DfH3A1L7ox9R17
+         J4zxDkQwURymASdCnQBPP+juU0tod67CA10MOl3m1pP3iVLAdHA2t+Y9Ikx5eT6dH8
+         bcRRuwTKsGfGWdirhcaViKYtyf1idSkwdtDh8eJPM3sRSVJI69tDH8M/qAgXuB8XOo
+         AeOwjyXm0/wBQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_c_skakit@quicinc.com, Bjorn Andersson <andersson@kernel.org>,
-        robh@kernel.org
-Cc:     dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org, linux-kernel@vger.kernel.org,
-        quic_tdas@quicinc.com, devicetree@vger.kernel.org,
-        agross@kernel.org
-Subject: Re: [RESEND PATCH V4 0/3] Add DT support for audio clock gating resets for SC7280
-Date:   Mon, 29 Aug 2022 18:46:08 -0500
-Message-Id: <166181675979.322065.8110343540812445012.b4-ty@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        konrad.dybcio@somainline.org, agross@kernel.org,
+        quic_jjohnson@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lkp@intel.com
+Subject: Re: [PATCH v2] soc: qcom: qmi: use const for struct qmi_elem_info
+Date:   Mon, 29 Aug 2022 18:46:09 -0500
+Message-Id: <166181675992.322065.17670485769129008263.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1660107909-27947-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1660107909-27947-1-git-send-email-quic_c_skakit@quicinc.com>
+In-Reply-To: <20220822153435.7856-1-quic_jjohnson@quicinc.com>
+References: <20220822153435.7856-1-quic_jjohnson@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,25 +57,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 10:35:06 +0530, Satya Priya wrote:
-> This series depends on [1], which adds the dt-binding changes.
+On Mon, 22 Aug 2022 08:34:35 -0700, Jeff Johnson wrote:
+> Currently all usage of struct qmi_elem_info, which is used to define
+> the QMI message encoding/decoding rules, does not use const. This
+> prevents clients from registering const arrays. Since these arrays are
+> always pre-defined, they should be const, so add the const qualifier
+> to all places in the QMI interface where struct qmi_elem_info is used.
 > 
-> [1] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=663372
-> 
-> Satya Priya (2):
->   arm64: dts: qcom: sc7280: Cleanup the lpasscc node
->   arm64: dts: qcom: sc7280: Update lpasscore node
+> Once this patch is in place, clients can independently update their
+> pre-defined arrays to be const, as demonstrated in the QMI sample
+> code.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: sc7280: Cleanup the lpasscc node
-      commit: 8c7ebabd2e3f33ef24378d3cac00d3e59886cecb
-[2/3] arm64: dts: qcom: sc7280: Update lpassaudio clock controller for resets
-      commit: e02a16c23410a118e5497601871a2f8c3ea9bfd0
-[3/3] arm64: dts: qcom: sc7280: Update lpasscore node
-      commit: d9a1e922730389afc425f2250de361b7f07acdbc
+[1/1] soc: qcom: qmi: use const for struct qmi_elem_info
+      commit: ff6d365898d4d31bd557954c7fc53f38977b491c
 
 Best regards,
 -- 

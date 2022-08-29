@@ -2,99 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A697F5A4583
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808985A4585
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiH2Ix6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S229737AbiH2IzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiH2Ixz (ORCPT
+        with ESMTP id S229570AbiH2Iy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:53:55 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859E05A165
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:53:53 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q3so4095966pjg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=sQndcbd/4ZYZe6Nc6MH5lVEISrMVYZdfCyCWIbSeX1Q=;
-        b=IhDVnYT4ZAF5L+N1nyfslPMCUlyBgmIPIwxsA1mxHly1boJSkIDRAQz4yNvmdp3cki
-         vlK6sOljnAEi9KVsac5CaNSZoMcb2tqKz8Ky6zPwa6I00iAZkrWbkLIn3rmu/fYgqguo
-         GRAhK0x2Zkr8Zjb3QinLM75UjCRhvkPei5xrscLVvEz3WODT6m3hyjsXN2q5okuwUGbv
-         1NQocxfblQ86+8i68V4G6Cer+YPMklpLu67COzVGKimwIf6IK6CoLyzKXSY4edgg15jF
-         /ESF5v2Kb+awn4L1GpsHrZ4e5pYcO1u+lQKy2t/Mbd/4azEflTuWIagAF7GQeSmHisM4
-         DVWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=sQndcbd/4ZYZe6Nc6MH5lVEISrMVYZdfCyCWIbSeX1Q=;
-        b=uyfnhPNn63XLnLoyIvrjs/A3VZ5vgzc1AoZeRj90JZmDy3KCQwe4bJoCtKYbEv2/7V
-         277F2FyNSaVinDh82adhfEOhj88x9OpZLnUR0a1SCII1EWV/eDqpzS1sZG0Lj9S6OIMD
-         EQDUTN41G2722FCBkgPvijv1vGsLOA1ysGKJolh0G4Fxjz/nwM2ijYtVfhbJ3YIev+wi
-         /gQ5cylBrZoWgHDvWqggHm9bMHdAGbKCy3HcfSK9mc684WRjOPiPQa4RcJ7XOhuJP0AQ
-         JkqoRfDQYx0PGOJpmmobDeMPm6KubB3O0XOWq6zq1mgHtKJRoV4TWwBQIcCu72hEW863
-         phuA==
-X-Gm-Message-State: ACgBeo1qv0Pt4SCA0/C2PbqF1vZxJX0rqvB6M25mqRDT0xGRweJqUnfx
-        KX7lkoUXugSJwNSPvwObGSM=
-X-Google-Smtp-Source: AA6agR4ZQpBcinBoxMBDp+mBq2ssCJ+m5Kni0tbvDpvnToLjLBNVJ4NIfsAELN1luUpYNnlakxiP7w==
-X-Received: by 2002:a17:90b:4c08:b0:1fb:66d3:79c with SMTP id na8-20020a17090b4c0800b001fb66d3079cmr17210223pjb.121.1661763233010;
-        Mon, 29 Aug 2022 01:53:53 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-33.three.co.id. [116.206.12.33])
-        by smtp.gmail.com with ESMTPSA id b67-20020a62cf46000000b005364e0ec330sm6686498pfg.59.2022.08.29.01.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 01:53:52 -0700 (PDT)
-Message-ID: <abb075b7-ae5b-f4e7-7a77-cbfd7788406a@gmail.com>
-Date:   Mon, 29 Aug 2022 15:53:46 +0700
+        Mon, 29 Aug 2022 04:54:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B764E1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:54:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F9C5B80DA9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30CD8C433C1;
+        Mon, 29 Aug 2022 08:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661763294;
+        bh=cpD20IECoAEsU5QWrTpmUWeRwStSRURBU0+JaQT7J7E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CyMJlWd73MEePoYJ/WtOSAwPovn50mfbBDP2m/BfY4rZ401xhXc+8J/nfG7ZeLzOy
+         ZRL57h+IkrKMMKPzp4hoDWiEaFgXFfUXYnPKoF6yrNCunBKkdw7wTN3hjoHevTn765
+         byeu7aLXBA1k+PPgl1DYl1aJQjFkoAF2fqqVXLaVicqIVcKjL1DJatNBBXp6+/+HTB
+         qOT6M33x0PVS2efbyDCyWPCd+VbB30nRHiCMqqEUb9Ub9G/sAaNWYeR+UtTz8VPXNh
+         sYbXcEagfnm2+qbsgASS9ZI28oEseXeebL1QqBoUTPvtY2zG0rKTMDJpL6M7lTcQYA
+         QzJGmHeNWxprg==
+Received: by pali.im (Postfix)
+        id 4AF797DE; Mon, 29 Aug 2022 10:54:51 +0200 (CEST)
+Date:   Mon, 29 Aug 2022 10:54:51 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when
+ building 32-bit uImage
+Message-ID: <20220829085451.upubyo5e7uop72lb@pali>
+References: <20220820105200.30425-1-pali@kernel.org>
+ <20220828095659.4061-1-pali@kernel.org>
+ <e3cb2642-20e4-6c26-104d-329a04260946@csgroup.eu>
+ <c8d657db-02da-7840-5b40-755e47277a2c@csgroup.eu>
+ <20220828174135.rcql4uiunqbnn5gh@pali>
+ <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: One of reviewers and maintainers for checkpatch is inactive
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM and miscellaneous subsystems list 
-        <linux-mm@kvack.org>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <YwwiP7Erud6Ns9mu@debian.me>
- <2a870057af3d5c3b0fa6256fbc67c32e1055df06.camel@perches.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <2a870057af3d5c3b0fa6256fbc67c32e1055df06.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 13:01, Joe Perches wrote:
-> On Mon, 2022-08-29 at 09:19 +0700, Bagas Sanjaya wrote:
->> Hi,
-> 	> 
->> It seems like one of reviewers for checkpatch subsystem, Dwaipayan Ray
->> <dwaipayanray1@gmail.com>, is apparently inactive with his last post
->> about a year ago ([1]). Maybe remove him from MAINTAINERS?
->>
->> [1]: https://lore.kernel.org/lkml/CABJPP5Bpc_0c=b8kymo0fgXZARNZJ8EM5F=Gpx1=y+vOfPWM8Q@mail.gmail.com/
+On Sunday 28 August 2022 17:43:53 Christophe Leroy wrote:
+> Le 28/08/2022 à 19:41, Pali Rohár a écrit :
+> > On Sunday 28 August 2022 17:39:25 Christophe Leroy wrote:
+> >> Le 28/08/2022 à 19:33, Christophe Leroy a écrit :
+> >>>
+> >>>
+> >>> Le 28/08/2022 à 11:56, Pali Rohár a écrit :
+> >>>> When CONFIG_TARGET_CPU is specified then pass its value to the compiler
+> >>>> -mcpu option. This fixes following build error when building kernel with
+> >>>> powerpc e500 SPE capable cross compilers:
+> >>>>
+> >>>>       BOOTAS  arch/powerpc/boot/crt0.o
+> >>>>     powerpc-linux-gnuspe-gcc: error: unrecognized argument in option
+> >>>> ‘-mcpu=powerpc’
+> >>>>     powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are:
+> >>>> 8540 8548 native
+> >>>>     make[1]: *** [arch/powerpc/boot/Makefile:231:
+> >>>> arch/powerpc/boot/crt0.o] Error 1
+> >>>
+> >>> corenet64_smp_defconfig :
+> >>>
+> >>>     BOOTAS  arch/powerpc/boot/crt0.o
+> >>> powerpc64-linux-gcc: error: missing argument to '-mcpu='
+> >>> make[1]: *** [arch/powerpc/boot/Makefile:237 : arch/powerpc/boot/crt0.o]
+> >>> Erreur 1
+> >>> make: *** [arch/powerpc/Makefile:253 : uImage] Erreur 2
+> >>>
+> >>>
+> >>
+> >> Seems like in fact, E5500_CPU and E6500_CPU are not taken into account
+> >> in CONFIG_TARGET_CPU, and get special treatment directly in
+> >> arch/powerpc/Makefile.
+> >>
+> >> This goes unnoticed because of CFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=
+> >> $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+> >>
+> >> I think we need to fix that prior to your patch.
+> > 
+> > It looks like that CONFIG_TARGET_CPU is broken.
+> > 
+> >    $ make ARCH=powerpc corenet64_smp_defconfig CROSS_COMPILE=powerpc64-linux-gnu-
+> >    ...
+> >    # configuration written to .config
+> > 
+> >    $ grep CONFIG_TARGET_CPU .config
+> >    CONFIG_TARGET_CPU_BOOL=y
+> > 
+> > CONFIG_TARGET_CPU_BOOL is set but CONFIG_TARGET_CPU not!
 > 
-> Too early.
-> 
+> Yes, because there is no default value for E5500_CPU and E6500_CPU. We 
+> need to add one for each.
 
-Maybe we can try pinging him (off-list) to see if he's still have interest
-on patch reviewing.
+I see... Will you prepare this fixup for your previous patch?
 
--- 
-An old man doll... just what I always wanted! - Clara
+And I think that following construct
+
+  $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+
+should be changed just to
+
+  -mcpu=$(CONFIG_TARGET_CPU)
+
+Because if user specified that want build for specific target CPU, it
+should not be silently ignored.

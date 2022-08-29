@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0539C5A5676
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152DB5A5679
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiH2VtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S229834AbiH2VtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH2VtG (ORCPT
+        with ESMTP id S229786AbiH2VtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:49:06 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04378A6EC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:49:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b16so11836120edd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=queImgxS1otHnjm8zLjKmjWV8pL+QvReDQNcA7QCzFw=;
-        b=ftyRU6YyBgapThUUf0clcKhiLDrITpLrd4bDVeOTRjHENdiABDamruN6BTmI9PDIH0
-         uf3flFbhyKkvc/w/Ues2oOe0wmNSzhyWcFmS1oUoFHBWa503z0hysdkETpobfQ4ryMHd
-         4rOIMewDP9j125rxk/3kLEXWXe7xqQczKPwYo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=queImgxS1otHnjm8zLjKmjWV8pL+QvReDQNcA7QCzFw=;
-        b=uIZhhJaL83RJwndynnX3LYx8E/JPAY178IeOTMWqWtoSe6wKmLf6JJnsYd/8iL8Lqa
-         CHqwxNew7lGT++X0fu+TdWDDoI776Tot0Mr3Xa47bW7NrTaqJctuPiLFpZ5MneiB1X7E
-         YbNOXK2vRNQMLpvPvMY5XRAcAZFJeg2ZJUq0TtVkEPCGSuhAHiWLkoVp8GOxjDu85/v7
-         Hc0tDAE2IiSD+DSau1qoOWSjLge75adZ6rNxZlAnLhj7ZqoqRVFI4f1AOfdawg0GHoBj
-         gyniHri+G2wOW2JgIbgpWHCyVvJ8oO3Gwu//EK3CCexZPTuOq1F8AUNShXdNq/xbqiQd
-         3FqQ==
-X-Gm-Message-State: ACgBeo3ElDJQDvMynA9Ks6IsiZ2OaH2hHeyHymaYgejcvzS9iTmGzi43
-        QTa41Svv3k6bGp7epjy8KbReyuBiff5XaFxK
-X-Google-Smtp-Source: AA6agR6TesQ9ie8ZEm9zixExLvMtQhv497TM9za6XoIhf/UeqoEW9qjxAww07Zx2BAtDij1tWcTvFg==
-X-Received: by 2002:a05:6402:3203:b0:435:5a48:daa9 with SMTP id g3-20020a056402320300b004355a48daa9mr7946517eda.304.1661809744077;
-        Mon, 29 Aug 2022 14:49:04 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id v12-20020a170906b00c00b0073dd8e5a39fsm4932800ejy.156.2022.08.29.14.49.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 14:49:02 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id d5so4868058wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:49:01 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e8b:b0:3a5:f5bf:9c5a with SMTP id
- f11-20020a05600c4e8b00b003a5f5bf9c5amr8040714wmq.85.1661809740755; Mon, 29
- Aug 2022 14:49:00 -0700 (PDT)
+        Mon, 29 Aug 2022 17:49:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03549E8A7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:49:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661809751; x=1693345751;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=iFb7qo5wOiFrfJA6ZbVVrfEMUmHlZzqG1H/7tvlXzGE=;
+  b=JORu4zcZIVXknlmqhs9BOVtCglWXtTFH4p9AB2itKiZnJ+zI2GLM7fF7
+   A7uQFesb0fKLrhV8MppsPRw4LRDY/TTfNNYeJL8I1A/b14QVmJ9bi7zZY
+   /0/p2d/PEGFayt90kx0MM4CsBA0Z1njmyn+a61nyc1nzlS9fAlfbxoBGR
+   49eSPrKcKfHuRMsbNAbYWTuG+OLQuuZpKlbt3lHfg+aylrkTqTH0XPkZv
+   Ya24CYrhQPuG6vKjTCfPQ7rA9YM0Tv3w5xD4pytZkdgGuijZqZ1zwqzzv
+   Ilr9cs/2gGQF8YNtoT219v7DrQdAIj6qEliaf0IzOJH98XQuU2j3u9MYo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="321131923"
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="321131923"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 14:49:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="787245164"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 14:49:10 -0700
+Date:   Mon, 29 Aug 2022 14:49:11 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Russ Weight <russell.h.weight@intel.com>
+cc:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH v2 1/1] firmware_loader: Fix use-after-free during
+ unregister
+In-Reply-To: <20220829174557.437047-1-russell.h.weight@intel.com>
+Message-ID: <alpine.DEB.2.22.394.2208291448450.2106446@rhweight-WRK1>
+References: <20220829174557.437047-1-russell.h.weight@intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220815093905.134164-1-hsinyi@chromium.org> <CAD=FV=XYNKF8q1mttru_J188pYMjSphQsEfQAO1Bt7GvjJRKXw@mail.gmail.com>
- <CAJMQK-gjg9evLY3oP5rgaGoRdQQTLqnK2-FChaabJTCxLTTmYA@mail.gmail.com>
- <CAMuczyUH1tefU_4+dx495_5kdrxRdA3pmXS-eyjzMCcYFfjNXQ@mail.gmail.com>
- <CAJMQK-jEgRq68JXSWtS4y5_39vJ1pWCT2-Atg31__veRtnuREA@mail.gmail.com>
- <CAD=FV=UXFiA4hW8_cmO0Di-NCpqvkjTqqOfbc6DfD5Rs8aT6hA@mail.gmail.com> <CAD=FV=Vg5o-OxyQnemB+XfkGundDA-R31QhkmHJv4RmTMcF2gA@mail.gmail.com>
-In-Reply-To: <CAD=FV=Vg5o-OxyQnemB+XfkGundDA-R31QhkmHJv4RmTMcF2gA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 29 Aug 2022 14:48:48 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Vqs+wPsOUgVK9VyzqDHewBR6HyQgcddQpe9Sd6OG6Nuw@mail.gmail.com>
-Message-ID: <CAD=FV=Vqs+wPsOUgVK9VyzqDHewBR6HyQgcddQpe9Sd6OG6Nuw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ps8640: Add double reset T4 and T5 to
- power-on sequence
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Rock Chiu <rock.chiu@paradetech.corp-partner.google.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, Aug 22, 2022 at 9:33 AM Doug Anderson <dianders@chromium.org> wrote:
+
+On Mon, 29 Aug 2022, Russ Weight wrote:
+
+> In the following code within firmware_upload_unregister(), the call to
+> device_unregister() could result in the dev_release function freeing the
+> fw_upload_priv structure before it is dereferenced for the call to
+> module_put(). This bug was found by the kernel test robot using
+> CONFIG_KASAN while running the firmware selftests.
 >
-> Hi,
+>  device_unregister(&fw_sysfs->dev);
+>  module_put(fw_upload_priv->module);
 >
-> On Thu, Aug 18, 2022 at 8:03 AM Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Aug 17, 2022 at 8:22 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> > >
-> > > On Thu, Aug 18, 2022 at 11:19 AM Rock Chiu
-> > > <rock.chiu@paradetech.corp-partner.google.com> wrote:
-> > > >
-> > > > How does T4/T5  impact the real case? We talked previously the T4/T5
-> > > > shouldn't cause user impact.
-> > > > Do we have testing data from ODM?
-> > > >
-> > > Please leave comments below the previous comment's headline.
-> > >
-> > > I'm confused. The reason I upstreamed this patch is because this is in
-> > > your application note and you asked us to help upstream it. Now do you
-> > > mean that we don't need T4 and T5?
-> >
-> > I think Rock is asking what problems the extra delay is causing. In
-> > other words: why do we care about keeping these delays short?
-> >
-> > The answer is that it affects boot speed and also resume speed of
-> > devices. Adding these two delays here means that there's an extra 100
-> > ms before the user can see something on the screen. That may not seem
-> > like a lot, but those kinds of delays add up quickly. At least on
-> > Chromebooks, booting quickly is always a big goal.
+> The problem is fixed by copying fw_upload_priv->module to a local variable
+> for use when calling device_unregister().
 >
-> While I'm not very happy with this change and I don't really
-> understand why these delays need to be so long, if folks are really
-> certain that we need them and can't make them shorter then I guess we
-> can land it. I'll wait a few more days in case anyone wants to chime
-> in with their thoughts.
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Fixes: 97730bbb242c ("firmware_loader: Add firmware-upload support")
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 
-I'll continue to grumble, but I did push it.
+Looks good to me.
 
-55453c0914d9 drm/bridge: ps8640: Add double reset T4 and T5 to power-on sequence
-
-I pushed to "drm-misc-next" and not "drm-misc-fixes". It doesn't feel
-massively urgent since apparently we've been without the
-"double-reset" for years and having the extra bake time feels like the
-better way to lean.
-
--Doug
+Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v2: Rebased to latest linux-next branch (next-20220829)
+> ---
+> drivers/base/firmware_loader/sysfs_upload.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
+> index 87044d52322a..63e15bddd80c 100644
+> --- a/drivers/base/firmware_loader/sysfs_upload.c
+> +++ b/drivers/base/firmware_loader/sysfs_upload.c
+> @@ -377,6 +377,7 @@ void firmware_upload_unregister(struct fw_upload *fw_upload)
+> {
+> 	struct fw_sysfs *fw_sysfs = fw_upload->priv;
+> 	struct fw_upload_priv *fw_upload_priv = fw_sysfs->fw_upload_priv;
+> +	struct module *module = fw_upload_priv->module;
+>
+> 	mutex_lock(&fw_upload_priv->lock);
+> 	if (fw_upload_priv->progress == FW_UPLOAD_PROG_IDLE) {
+> @@ -392,6 +393,6 @@ void firmware_upload_unregister(struct fw_upload *fw_upload)
+>
+> unregister:
+> 	device_unregister(&fw_sysfs->dev);
+> -	module_put(fw_upload_priv->module);
+> +	module_put(module);
+> }
+> EXPORT_SYMBOL_GPL(firmware_upload_unregister);
+> -- 
+> 2.25.1
+>
+>

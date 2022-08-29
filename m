@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3834C5A4A20
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015E35A49DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbiH2Ldh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S232344AbiH2LaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiH2LbR (ORCPT
+        with ESMTP id S232409AbiH2L2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:31:17 -0400
+        Mon, 29 Aug 2022 07:28:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7C67C51D;
-        Mon, 29 Aug 2022 04:18:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4706A2719;
+        Mon, 29 Aug 2022 04:17:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 192426119E;
-        Mon, 29 Aug 2022 11:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E8B3C433C1;
-        Mon, 29 Aug 2022 11:18:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03E7D611B3;
+        Mon, 29 Aug 2022 11:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BEC5C433C1;
+        Mon, 29 Aug 2022 11:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771918;
-        bh=3dS8Cl8OdudEu8+bE1purv/USvTN3iusgBurK2pHTfg=;
+        s=korg; t=1661771692;
+        bh=8wcWicOBd5LoPg57jDudrOyj8i8B9hcXWR7IZJ9W3BQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGYcVOkj6cxbm73RSYQ+euU8a/4zozO2c+Wg817UJoYYGVRXeWqz/H0m2h1eu5rhJ
-         KTq2vSgS7stTb8bi4iOipER3pFarhzKJuUewRgiRpfvUeIjt4PlMrFRPw7m9dbgReS
-         pscRtmjSm0h/Jfx5+d0WKN5hcL0963Kyv2tKZoz8=
+        b=Sv0V9cLBHJTJBfvVHOZK9QN39JZpBcPjCQdotA5gMan1hO+FLTZdonL675xgefiCp
+         mctkt1DfjCxjlHGUzUVeFhtVoOzhpXX02dCUtnrLm/zo7QyMTS+bdsS4hBGAQDVMmR
+         4XHI8izKdQz1332dLInAkSRHHBlNvQHEntrt/Y7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Prike Liang <Prike.Liang@amd.com>,
-        Aaron Liu <aaron.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.19 140/158] drm/amdkfd: Fix isa version for the GC 10.3.7
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 84/86] scsi: ufs: core: Enable link lost interrupt
 Date:   Mon, 29 Aug 2022 12:59:50 +0200
-Message-Id: <20220829105814.955906840@linuxfoundation.org>
+Message-Id: <20220829105759.963958548@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prike Liang <Prike.Liang@amd.com>
+From: Kiwoong Kim <kwmad.kim@samsung.com>
 
-commit ee8086dbc1585d9f4020a19447388246a5cff5c8 upstream.
+commit 6d17a112e9a63ff6a5edffd1676b99e0ffbcd269 upstream.
 
-Correct the isa version for handling KFD test.
+Link lost is treated as fatal error with commit c99b9b230149 ("scsi: ufs:
+Treat link loss as fatal error"), but the event isn't registered as
+interrupt source. Enable it.
 
-Fixes: 7c4f4f197e0c ("drm/amdkfd: Add GC 10.3.6 and 10.3.7 KFD definitions")
-Signed-off-by: Prike Liang <Prike.Liang@amd.com>
-Reviewed-by: Aaron Liu <aaron.liu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://lore.kernel.org/r/1659404551-160958-1-git-send-email-kwmad.kim@samsung.com
+Fixes: c99b9b230149 ("scsi: ufs: Treat link loss as fatal error")
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_device.c |    6 +-----
+ drivers/scsi/ufs/ufshci.h |    6 +-----
  1 file changed, 1 insertion(+), 5 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-@@ -377,12 +377,8 @@ struct kfd_dev *kgd2kfd_probe(struct amd
- 				f2g = &gfx_v10_3_kfd2kgd;
- 			break;
- 		case IP_VERSION(10, 3, 6):
--			gfx_target_version = 100306;
--			if (!vf)
--				f2g = &gfx_v10_3_kfd2kgd;
--			break;
- 		case IP_VERSION(10, 3, 7):
--			gfx_target_version = 100307;
-+			gfx_target_version = 100306;
- 			if (!vf)
- 				f2g = &gfx_v10_3_kfd2kgd;
- 			break;
+--- a/drivers/scsi/ufs/ufshci.h
++++ b/drivers/scsi/ufs/ufshci.h
+@@ -129,11 +129,7 @@ enum {
+ 
+ #define UFSHCD_UIC_MASK		(UIC_COMMAND_COMPL | UFSHCD_UIC_PWR_MASK)
+ 
+-#define UFSHCD_ERROR_MASK	(UIC_ERROR |\
+-				DEVICE_FATAL_ERROR |\
+-				CONTROLLER_FATAL_ERROR |\
+-				SYSTEM_BUS_FATAL_ERROR |\
+-				CRYPTO_ENGINE_FATAL_ERROR)
++#define UFSHCD_ERROR_MASK	(UIC_ERROR | INT_FATAL_ERRORS)
+ 
+ #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
+ 				CONTROLLER_FATAL_ERROR |\
 
 

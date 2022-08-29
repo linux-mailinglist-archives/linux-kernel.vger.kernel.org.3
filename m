@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484F45A57BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092DC5A57BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiH2XmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S229697AbiH2Xmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiH2XmT (ORCPT
+        with ESMTP id S229475AbiH2Xmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:42:19 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E249832DE;
-        Mon, 29 Aug 2022 16:42:18 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7E947481;
-        Tue, 30 Aug 2022 01:42:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661816536;
-        bh=ngFFZ6dOmWMcFpZ3IKwPW1v4ZbMsWtMoV3OBJVEtv+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rlno3YaeDukmu2MSL5qYBY5uEvaJGMEG8W580K5sxVOZ7LhvaH7XvzImKh2oPLLq0
-         uP/2NXzr1IKTDAbY1TQlFJOlSUEmJnD1sY6+u2A8sFrlcBThNbE+e0AR8QF7kVvZrw
-         OiJohc4h23aFg/LbadFnqPnNeOT9QVUY/nc/g8bk=
-Date:   Tue, 30 Aug 2022 02:42:07 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH 2/4] media: dt-bindings: media: Document RZ/G2L CRU
-Message-ID: <Yw1Oz5Zcwgig8/Xy@pendragon.ideasonboard.com>
-References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 29 Aug 2022 19:42:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B0B832DE;
+        Mon, 29 Aug 2022 16:42:49 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MGn6v2FWSz4xFv;
+        Tue, 30 Aug 2022 09:42:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661816567;
+        bh=eS2NUppRYcx/Qav//pzH5RKfexvonoglAigO/qZeDFg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CV80bENd61839LszQIEWwJ3Nug9Tn+Sj49ppyYRuDziHIizMy4MIyqmFgXHHuA6l8
+         U1Vk8nHvtNb1JHxkwNA+dhmWG140Wu4+ds8DFtKniQow9aVGVHpY+brNum3O26SO08
+         jZqgjUpIuEeXzOfI/xjs2GGVV0zXYVoDrXi+Z5ZVB19P9Ojv9TzTa3qE2HZ7CsUSdq
+         sSQfKBz2JalCoMRdWgR9r6PIyMtRpsDguiYKNJ7dt0YPqzQJKay8YE3bTabHAFnPZ4
+         7Ff7lOEY/zm+yJ2imp378tnuiX/UMIYsJWAI0q/98WrcmLoicYzVycoHwT5nBfCO1s
+         j+pphnQJ4JZvg==
+Date:   Tue, 30 Aug 2022 09:42:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        " =?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mediatek tree
+Message-ID: <20220830094230.18c76615@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: multipart/signed; boundary="Sig_/YQosNvvXEXip9TFwjxJXq.x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,185 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+--Sig_/YQosNvvXEXip9TFwjxJXq.x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch.
+Hi all,
 
-On Mon, Aug 01, 2022 at 10:47:16PM +0100, Lad Prabhakar wrote:
-> Document the CRU block found on Renesas RZ/G2L SoC's.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> RFC v2 -> v1
-> * Dropped endpoint stuff from port1 as suggested by Rob
-> * Updated description for endpoint
-> 
-> RFC v1 -> RFC v2
-> * Dropped CSI
-> ---
->  .../bindings/media/renesas,rzg2l-cru.yaml     | 142 ++++++++++++++++++
->  1 file changed, 142 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> new file mode 100644
-> index 000000000000..d7389693dae9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> @@ -0,0 +1,142 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) 2022 Renesas Electronics Corp.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/G2L (and alike SoC's) Camera Data Receiving Unit (CRU) Image processing
-> +
-> +maintainers:
-> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> +
-> +description:
-> +  The CRU image processing module is a data conversion module equipped with pixel
-> +  color space conversion, LUT, pixel format conversion, etc. An MIPI CSI-2 input and
-> +  parallel (including ITU-R BT.656) input are provided as the image sensor interface.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
+After merging the mediatek tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-No oneOf here either.
+drivers/soc/mediatek/mtk-svs.c: In function 'svs_get_bank_volts_v3':
+drivers/soc/mediatek/mtk-svs.c:887:47: error: implicit declaration of funct=
+ion 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=3Dimplicit-function-decl=
+aration]
+  887 |                         svsb->volt[turn_pt] =3D FIELD_GET(SVSB_VOPS=
+_FLD_VOP0_4, vop30);
+      |                                               ^~~~~~~~~
+      |                                               FOLL_GET
+drivers/soc/mediatek/mtk-svs.c: In function 'svs_set_bank_freq_pct_v2':
+drivers/soc/mediatek/mtk-svs.c:1073:25: error: implicit declaration of func=
+tion 'FIELD_PREP' [-Werror=3Dimplicit-function-declaration]
+ 1073 |         freqpct74_val =3D FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb=
+->freq_pct[8]) |
+      |                         ^~~~~~~~~~
 
-> +      - items:
-> +          - enum:
-> +              - renesas,r9a07g044-cru     # RZ/G2{L,LC}
-> +              - renesas,r9a07g054-cru     # RZ/V2L
-> +          - const: renesas,rzg2l-cru
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 3
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: image_conv
-> +      - const: image_conv_err
-> +      - const: axi_mst_err
-> +
-> +  clocks:
-> +    items:
-> +      - description: CRU Main clock
-> +      - description: CPU Register access clock
-> +      - description: CRU image transfer clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: vclk
-> +      - const: pclk
-> +      - const: aclk
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    items:
-> +      - description: CRU_PRESETN reset terminal
-> +      - description: CRU_ARESETN reset terminal
-> +
-> +  reset-names:
-> +    items:
-> +      - const: presetn
-> +      - const: aresetn
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description:
-> +          Input port node, single endpoint describing a parallel input source.
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              hsync-active: true
-> +              vsync-active: true
-> +              bus-width: true
-> +              data-shift: true
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Input port node, describing the Image Processing module connected to the
-> +          CSI-2 receiver.
+Caused by commit
 
-Both ports should be mandatory as they exist at the hardware level.
-Connections (through endpoints) are optional.
+  a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros where p=
+ossible")
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+I have used the mediatek tree from next-20220829 for today.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - reset-names
-> +  - power-domains
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # Device node example with CSI-2
-> +  - |
-> +    #include <dt-bindings/clock/r9a07g044-cpg.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    cru: video@10830000 {
-> +            compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
-> +            reg = <0x10830000 0x400>;
-> +            interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
-> +                         <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
-> +                         <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-> +            interrupt-names = "image_conv", "image_conv_err", "axi_mst_err";
-> +            clocks = <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-> +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>,
-> +                     <&cpg CPG_MOD R9A07G044_CRU_ACLK>;
-> +            clock-names = "vclk", "pclk", "aclk";
-> +            power-domains = <&cpg>;
-> +            resets = <&cpg R9A07G044_CRU_PRESETN>,
-> +                     <&cpg R9A07G044_CRU_ARESETN>;
-> +            reset-names = "presetn", "aresetn";
-> +
-> +            ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    port@1 {
-> +                            #address-cells = <1>;
-> +                            #size-cells = <0>;
-> +
-> +                            reg = <1>;
-> +
-> +                            crucsi2: endpoint@0 {
-> +                                    reg = <0>;
-> +                                    remote-endpoint= <&csi2cru>;
-> +                            };
-> +                    };
-> +            };
-> +    };
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Regards,
+--Sig_/YQosNvvXEXip9TFwjxJXq.x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Laurent Pinchart
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMNTuYACgkQAVBC80lX
+0GzvLgf+Mfr7ScZ2wUWrRFzOzRAdlGiGCFwIc53S2cJlfbMIZN8P04u9qxePjskp
+zVTMhd04/RWTtLE3qoSS2kxirs8BYyCMk6cyZoLOvcaSz8O36UklKEPp/KcRaqTC
+HtTLpFrvll0wtXqg4sdM6cyuj7GvnwxE7TQkEgvrNGATrYnfmhO/BM7Ad5wLty78
+nXGiFZqviT1Te9y+CCQ08dDK3rpLjKNmcfjcXmftTKaegrc2U6cJmL7ReJl3OKxH
+OymVuL48X+VS64fsIxkM0vQAZ6cAaVEXzmv39IhiqB2IxhmkmyxaQ7jzbhpWWQ9G
+IYPmnVcpDQiKRZxaNvI963dwKs3Y7Q==
+=QOqd
+-----END PGP SIGNATURE-----
+
+--Sig_/YQosNvvXEXip9TFwjxJXq.x--

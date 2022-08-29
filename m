@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103C55A4773
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A5B5A477E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiH2Kpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S229757AbiH2Krs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiH2Kp1 (ORCPT
+        with ESMTP id S229509AbiH2Krq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:45:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1B81AD99;
-        Mon, 29 Aug 2022 03:45:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 00D2D21AEF;
-        Mon, 29 Aug 2022 10:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661769925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LDkt1HM7O2vv+7snReLnfVNzSWfCCrT2+rmvr+iyOUs=;
-        b=rEwBVkQJETkWFa7ePfs3KRQRNk7ilQ8FeL1Yv0AjYCq1PoPlqrlp8Q6GqzYu7VcFsvxY8X
-        3EVoSiEkbNwebWgVm0qpGUTicZAcMqwRPdtVROJ5498fxkQtmoXERv94OEvoJBB8JCD7h9
-        EHjFAEBAXxeEx1qEweb7sJmw/Xdk7jI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CCA99133A6;
-        Mon, 29 Aug 2022 10:45:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xa2ML8SYDGPsSwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 29 Aug 2022 10:45:24 +0000
-Date:   Mon, 29 Aug 2022 12:45:23 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
-        Christoph Hellwig <hch@infradead.org>, oleg@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-Message-ID: <YwyYwxVOv0p736gf@dhcp22.suse.cz>
-References: <20220531223100.510392-2-surenb@google.com>
- <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
- <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com>
- <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
- <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
- <20220822161603.9e19edfe2daaea3bf591910a@linux-foundation.org>
- <CAOUHufbyWwkOAJTD4G82sLcwE_33Yy=s4Q+gGBujwXvEBZ8iqA@mail.gmail.com>
- <YwSRf3LZ7gXwWaNN@dhcp22.suse.cz>
- <CAOUHufbauOoXshmfbBYAnPVYkrZ=jFA2wpPotXNnOjoWVRa5qQ@mail.gmail.com>
- <YwyXhH6k1JVgKBVl@dhcp22.suse.cz>
+        Mon, 29 Aug 2022 06:47:46 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFEA5B781;
+        Mon, 29 Aug 2022 03:47:45 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-333a4a5d495so184372247b3.10;
+        Mon, 29 Aug 2022 03:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=kSieKOlo1/WXICMwAgDNVpDovck1uNqjYZr77DgkzKg=;
+        b=HxFupa1nz/7jnMJaXoUkalkcUiimSoG9gFuCoxaCaUCWO1XeKfJjotPNX/ld43NZV+
+         xb9fofqFTbBB/m57w3kc8/VpE5FHKXIpTiXitBbscwLOjUS+PcSwh4B7+pVwnlHb6Ixr
+         OyAlUxp49g5ZsZD2zR0yZf7syBmJ/2d249ax05/nlTgDAm6W2Z9gpIfJEGwkpHv4VmfE
+         f6cOwXn93ePgjvTfxkoMmFn/GJ3OUTW6MPTmRn2qmv1sW77uoO/ZNnS0+beMWIFga/a6
+         cQ6vB+lbrghQ1z5y5NmzA9xjtjl1UL3VW7hJ1hW/lM5PtNhIZ6tewoBopKHTFPn0J2Xm
+         te3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=kSieKOlo1/WXICMwAgDNVpDovck1uNqjYZr77DgkzKg=;
+        b=AWCxutxFgggjF6KhkfGGUZz/Vcc+whMMzUOVfAbFk7825GELiqdeKws+qJxEXGaMQE
+         DmR71kjOELGnaKXAlnpqSjHHgxZm9tVwXQtgdrhnMMD7bFst8XNDkKNWPJLt/ul9MZ2c
+         jOsMarmX8zS2XSykzIk5YBLwzfPu+KdtS3pSqR48b1u2INe6Sc2BcEcmhPXH0oXZ0h9W
+         MxkzEwZ+s6bP9yi1ZOl5eKyj9cV+V+uDC/xwTR+Gf4jCT6KBgCSR8mEuY4iaAeyDgKee
+         283ncm8UTbPRpRnZpV6Bl477hvB8g1PTgbnE5/S+XyYQUN266BnkSX+F4aVMcWtCDV68
+         Lw8A==
+X-Gm-Message-State: ACgBeo3My2fAeCNpIqUpYe4jioqBrOhI/pIWwfPC4AGYhQiEniLVanrb
+        hqjHsMrORK2q39fOdEX6Ym+r7/FPjX0qh9bhdBk=
+X-Google-Smtp-Source: AA6agR6JcTZw4epIOLkyhUxCjBwgxCGzrkYktQOOZ2cfKa/x8rbYWOImx4JDCrqVO/hXWrcwsNVGLCJpt6uwMl3sqlw=
+X-Received: by 2002:a81:7882:0:b0:339:802b:b4c0 with SMTP id
+ t124-20020a817882000000b00339802bb4c0mr9521292ywc.488.1661770064718; Mon, 29
+ Aug 2022 03:47:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwyXhH6k1JVgKBVl@dhcp22.suse.cz>
+References: <YwyORp72cuDrVYdA@debian> <TY2PR06MB321356F6EB09D3D59D37B53F80769@TY2PR06MB3213.apcprd06.prod.outlook.com>
+In-Reply-To: <TY2PR06MB321356F6EB09D3D59D37B53F80769@TY2PR06MB3213.apcprd06.prod.outlook.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Mon, 29 Aug 2022 11:47:08 +0100
+Message-ID: <CADVatmMevKbZ+gHfG-7kuy3s=K2_Qe1OOVrL92OUiTMeoK7ViA@mail.gmail.com>
+Subject: Re: build failure of next-20220829 due to 108713a713c7 ("crypto:
+ aspeed - Add HACE hash driver")
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Johnny Huang <johnny_huang@aspeedtech.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 29-08-22 12:40:05, Michal Hocko wrote:
-> On Sun 28-08-22 13:50:09, Yu Zhao wrote:
-> > On Tue, Aug 23, 2022 at 2:36 AM Michal Hocko <mhocko@suse.com> wrote:
-> [...]
-> > > You cannot really make any
-> > > assumptions about oom_reaper and how quickly it is going to free the
-> > > memory.
-> > 
-> > Agreed. But here we are talking about heuristics, not dependencies on
-> > certain behaviors. Assume we are playing a guessing game: there are
-> > multiple mm_structs available for reclaim, would the oom-killed ones
-> > be more profitable on average? I'd say no, because I assume it's more
-> > likely than unlikely that the oom reaper is doing/to do its work. Note
-> > that the assumption is about likelihood, hence arguably valid.
-> 
-> Well, my main counter argument would be that we do not really want to
-> carve last resort mechanism (which the oom reaper is) into any heuristic
-> because any future changes into that mechanism will be much harder to
-> justify and change. There is a cost of the maintenance that should be
-> considered. While you might be right that this change would be
-> beneficial, there is no actual proof of that. Historically we've had
-> several examples of such a behavior which was really hard to change
-> later on because the effect would be really hard to evaluate.
+On Mon, Aug 29, 2022 at 11:04 AM Neal Liu <neal_liu@aspeedtech.com> wrote:
+>
+> > -----Original Message-----
+> > From: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
+> > Sent: Monday, August 29, 2022 6:01 PM
+> > To: Neal Liu <neal_liu@aspeedtech.com>; Johnny Huang
+> > <johnny_huang@aspeedtech.com>; Dhananjay Phadke
+> > <dphadke@linux.microsoft.com>; Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: David S. Miller <davem@davemloft.net>; Joel Stanley <joel@jms.id.au>;
+> > Andrew Jeffery <andrew@aj.id.au>; linux-aspeed@lists.ozlabs.org;
+> > linux-crypto@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; linux-next@vger.kernel.org
+> > Subject: build failure of next-20220829 due to 108713a713c7 ("crypto: aspeed
+> > - Add HACE hash driver")
+> >
+> > Hi All,
+> >
+> > The builds of arm allmodconfig have failed to build next-20220829 with the
+> > error:
+> >
+> > ERROR: modpost: "aspeed_register_hace_hash_algs"
+> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+> > ERROR: modpost: "aspeed_unregister_hace_crypto_algs"
+> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+> > ERROR: modpost: "aspeed_register_hace_crypto_algs"
+> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+> > ERROR: modpost: "aspeed_unregister_hace_hash_algs"
+> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+> >
+> >
+> > git bisect pointed to 108713a713c7 ("crypto: aspeed - Add HACE hash driver")
+> >
+> > I will be happy to test any patch or provide any extra log if needed.
+> >
+> >
+> > --
+> > Regards
+> > Sudip
+>
+> Hi Sudip,
+>
+> I already sent another patch to fix this build error, could you give it a try?
+> https://lkml.org/lkml/2022/8/29/131
 
-Forgot to mention the recent change as a clear example of the change
-which would be have a higher burden to evaluate. e4a38402c36e
-("oom_kill.c: futex: delay the OOM reaper to allow time for proper futex
-cleanup") has changed the wake up logic to be triggered after a timeout.
-This means that the task will be sitting there on the queue without any
-actual reclaim done on it. The timeout itself can be changed in the
-future and I would really hate to argue that changeing it from $FOO to
-$FOO + epsilon breaks a very subtle dependency somewhere deep in the
-reclaim path. From the oom reaper POV any timeout is reasonable becaude
-this is the _last_ resort to resolve OOM stall/deadlock when the victim
-cannot exit on its own for whatever reason. This is a considerably
-different objective from "we want to optimize which taks to scan to
-reclaim efficiently".
+Thanks, that has fixed the failure.
 
-See my point?
+
 -- 
-Michal Hocko
-SUSE Labs
+Regards
+Sudip

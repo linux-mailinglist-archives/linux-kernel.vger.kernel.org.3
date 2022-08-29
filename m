@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9175A5613
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBA45A562E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiH2VZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S229840AbiH2V2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH2VZf (ORCPT
+        with ESMTP id S229944AbiH2V1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:25:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C14D53
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661808332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GOfa2F9yg58fvogSsfGf7y2ObvFs8svdVEcJd6u8aig=;
-        b=MA0WavVihvEhq2OebVA5sYTG3duTAKH7zyKNPpkeN8bunZylxaB/ORw8AEMYWm0SrJHQfZ
-        sq8l5vQ6am5eQfBd4Zr35ztOdC7Cq6QU7EFGJ2tOxhbZpJp9+HpkKL6DUWFe8+Ie9skUKI
-        TDESZxt1nM2XGGFAuRIduxoo5PQrT40=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-629-qVHzyaGgMn2SiZkZXXzCwg-1; Mon, 29 Aug 2022 17:25:31 -0400
-X-MC-Unique: qVHzyaGgMn2SiZkZXXzCwg-1
-Received: by mail-ed1-f72.google.com with SMTP id p4-20020a056402500400b00447e8b6f62bso6204274eda.17
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:25:31 -0700 (PDT)
+        Mon, 29 Aug 2022 17:27:10 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75B29F0EB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:21 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id y16-20020a17090aa41000b001fdf0a76a4eso848687pjp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc;
+        bh=M/5Y14x1SSOe03/jfupiRT6TG6dq1ngDrWV9hskObuI=;
+        b=keg1i0nk+izk1klWl7kacG2dqLVFCBBFr7DTBR9Vkh347LyX6fgOptbA6FX9RaUao+
+         vJTGW+XEi+UTAE6ZSui/ACoLYvw+CzBRdshi7UOcb6GKyXUkGWluK1e9ViX0u2MOFUby
+         n+VIqiL1KgbaHmBILZRqDKCT7yq9OcaG3eWuWfyFbeDAc3tNJSfOayUDVB763p8OZugP
+         N6WyMveSXRyt1x9RwdvL650Tufs+g4oBOJJ5iU1MJBZM9QMXfDComRZRSTq/8D/ye7ef
+         ZSEe/ZXHQtclALcTUMn5apyFMWCE/g3tgTBxLG+Y3u9vQ4Ps1pm7jxw7nOrCfEth2Ax0
+         A9EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GOfa2F9yg58fvogSsfGf7y2ObvFs8svdVEcJd6u8aig=;
-        b=HC2J4l/Imoa3GWKOzPMQhW+qKvv4nKTR12jDxppp2cSpdQM4cL/ehiuWTf8VN0FPAC
-         uxGCil1K+reWlF5GJVAu+kF9A/EuLZF9e/yn/b807tqofhhKdyUG4zXiy/wbTgBHHx/X
-         IRI3MJQwkxVmhoPoAqbn2ZwgNJ9UBeJ0hPctv91HaL0l6+mmnU0K90iolrOCL6egy/Io
-         72nnhY5CVNqp4LLe1JTDKRfKg26s5faXnvJ10IKFArUlQqRpowmH8eteXAFRvWmfFZLr
-         UAZZ0FLnrQWtHbsIEbPMmrudwIDE7CyotCoDt28eVsfj17N/iC09G32cTHddtsBQLer8
-         rtnw==
-X-Gm-Message-State: ACgBeo2MsiF2HzPBuPpPb5iDu+fi0f35Hye0jEChct53sFegtiN6wBul
-        eng6MOdLOnP/iLwTGGf5ytkDQNw2Dn6fCPcG7YixnreUF1OeHaMyqunQsVhRP9uej9C1Q1VJVIt
-        t19VwTac3i/pvXRA7Lu3EcgoJ
-X-Received: by 2002:a05:6402:350b:b0:43e:f4be:c447 with SMTP id b11-20020a056402350b00b0043ef4bec447mr18411881edd.427.1661808330249;
-        Mon, 29 Aug 2022 14:25:30 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6/AKDPB35J+LJWWZ+VunHsJB5YDtOyhGJAoKGP8rLV4t1cWd4YHGBGegZv1ae80XyWs6HLoA==
-X-Received: by 2002:a05:6402:350b:b0:43e:f4be:c447 with SMTP id b11-20020a056402350b00b0043ef4bec447mr18411867edd.427.1661808330032;
-        Mon, 29 Aug 2022 14:25:30 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id cy19-20020a0564021c9300b00445d760fc69sm3308656edb.50.2022.08.29.14.25.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 14:25:29 -0700 (PDT)
-Message-ID: <a48011b9-a551-3547-34b6-98b10e7ff2eb@redhat.com>
-Date:   Mon, 29 Aug 2022 23:25:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: 6.0 tty regression, NULL pointer deref in flush_to_ldisc
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <4b4bba5d-d291-d9fa-8382-cdc197b7ed35@redhat.com>
- <e8d67c78-751e-2c44-edff-e7e441c3302d@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <e8d67c78-751e-2c44-edff-e7e441c3302d@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=M/5Y14x1SSOe03/jfupiRT6TG6dq1ngDrWV9hskObuI=;
+        b=8L+vhLiaG5I09SNP640CmMj8yj3iWksJ8Y2EL5WpsyMe3XjdZKywC8sNoJqywIvx8/
+         3GBtZn723DbZ/X7e8iS2RoAmVKMYWI+xhHos5iIvjoQJ1jfVel1kAVjRXq7YZ7Oi/I2X
+         /hmA41E/b6z599rdCu7giHzWX3YVjiy7cka75Qldi9cfXP3cT1uOmVnP4WPnoB6wld9V
+         NTg5iT5h/k31o1pdohiVY1+8x2mhqZn1zGsMyRxxfSa3T5REG8/F9+n+kcBmk1KkTGVg
+         r17ImoxXKAqZP3QyofbtzTw8/WziEmqFdWDLitkcYjeFGfYR67T+mhGS7I6XbfgJQS3I
+         geZw==
+X-Gm-Message-State: ACgBeo3qb091RusDWYEJFZ7N/+DgnXm9kT5l4IzsrSkmsAp2xlyLM2xO
+        x1b2v19WctA+telW24ozkr1p74EmWco=
+X-Google-Smtp-Source: AA6agR4Lx1uzJZ7T/fCqu0c+3ou3bFPxSP7qIc7HtsIZjbU9yCjHgv7Z+4FP1+5TPgAu6qrR46XQccXnjfE=
+X-Received: from surenb-spec.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e30])
+ (user=surenb job=sendgmr) by 2002:a17:90a:e558:b0:1fb:c4b7:1a24 with SMTP id
+ ei24-20020a17090ae55800b001fbc4b71a24mr21113pjb.1.1661808379380; Mon, 29 Aug
+ 2022 14:26:19 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 21:25:28 +0000
+In-Reply-To: <20220829212531.3184856-1-surenb@google.com>
+Mime-Version: 1.0
+References: <20220829212531.3184856-1-surenb@google.com>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220829212531.3184856-26-surenb@google.com>
+Subject: [RFC PATCH 25/28] arm64/mm: define ARCH_SUPPORTS_PER_VMA_LOCK
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, riel@surriel.com,
+        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
+        david@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, surenb@google.com, kernel-team@android.com,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,47 +79,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Set ARCH_SUPPORTS_PER_VMA_LOCK so that the per-VMA lock support can be
+compiled on this architecture.
 
-On 8/29/22 11:36, Ilpo Järvinen wrote:
-> On Mon, 29 Aug 2022, Hans de Goede wrote:
-> 
->> Hi All,
->>
->> This weekend I noticed that on various Bay Trail based systems which have
->> their bluetooth HCI connected over an uart (using hci_uart driver /
->> using the drivers/tty/serial bus) there is a NULL pointer deref in
->> flush_to_ldisc, see below for the full backtrace.
->>
->> I *suspect* that this is caused by commit 6bb6fa6908eb
->> ("tty: Implement lookahead to process XON/XOFF timely").
->>
->> I can cleanly revert this by reverting the following commits:
->>
->> ab24a01b2765 ("tty: Add closing marker into comment in tty_ldisc.h")
->> 65534736d9a5 ("tty: Use flow-control char function on closing path")
->> 6bb6fa6908eb ("tty: Implement lookahead to process XON/XOFF timely")
->>
->> ATM I don't have one of the affected systems handy. I will give
->> a 6.0-rc3 kernel with these 3 commits reverted a try tonight (CEST)
->> and I'll let you know the results.
->>
->> Note I can NOT confirm yet that these reverts fix things, so please
->> don't revert anything yet. I just wanted to give people a headsup
->> about this issue.
->>
->> Also maybe we can fix the new lookahead code instead of reverting.
->> I would be happy to add a patch adding some debugging prints the
->> systems run fine after the backtrace as long as I don't suspend them
->> so gathering logs is easy.
-> 
-> I guess this will help:
-> 
-> https://lore.kernel.org/linux-kernel/20220818115026.2237893-1-vincent.whitchurch@axis.com/
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ arch/arm64/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-I can confirm that that patch fixes things, thanks.
-
-Regards,
-
-Hans
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 9fb9fff08c94..0747ae1f3b39 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -93,6 +93,7 @@ config ARM64
+ 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+ 	select ARCH_SUPPORTS_NUMA_BALANCING
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
++	select ARCH_SUPPORTS_PER_VMA_LOCK
+ 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+ 	select ARCH_WANT_DEFAULT_BPF_JIT
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+-- 
+2.37.2.672.g94769d06f0-goog
 

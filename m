@@ -2,275 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A764B5A4601
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2A65A4605
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiH2JXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S229664AbiH2JZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiH2JXM (ORCPT
+        with ESMTP id S229590AbiH2JZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:23:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5C65AA13
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:23:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A32A1B80DE1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9191CC433D7;
-        Mon, 29 Aug 2022 09:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661764988;
-        bh=YbbMyFgx4fQb0f1612MP0w6ejCe0+oe51oGjlbK4RoU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OALRF5w7MFPKnNA6FBn83RDbYysv7/UW0TnbdtOqksrqx1cw+wd1faVsG5g8YM9/b
-         aH3Vs+pP8S0VOuY+LZfBXOOeMNSJXoljnJl5Z28MpzcFQKF6rcxiET9bqGbJ+X28l/
-         t6mELyL4aVb80kDi9tQDlfdlGhLLxByJ8O4nLT5dqx22kJNZZzfmCqkXTB6/xh3r/d
-         nQ/+vRMQmtbLI6l17cyBHg+w/rkKECBY+X9sO9uLbUu8//qZWMDox81zDFSJCuuWep
-         RcYzqOMY8/xpj2rchH3VekU8JVSY1vzLyXnTtImgs2n+Jh1zK8HIRK1m8n/NpZ06er
-         /+7/e/uPnAuPg==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     farah kassabri <fkassabri@habana.ai>
-Subject: [PATCH 7/7] habanalabs: send device active message to f/w
-Date:   Mon, 29 Aug 2022 12:22:54 +0300
-Message-Id: <20220829092254.930753-7-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220829092254.930753-1-ogabbay@kernel.org>
-References: <20220829092254.930753-1-ogabbay@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 05:25:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C951E10FFE;
+        Mon, 29 Aug 2022 02:24:55 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27T8oG4w014873;
+        Mon, 29 Aug 2022 09:24:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KSGmMwoVrn1SDghIExOHJJoAe/tDNSQWWv5MVB9CqVw=;
+ b=kbBQDewf0xMwbdJiP9N7B3gnRI8VCBXwJxHeBGcKOGx0EJh9ysedBgSWu3UceQ+HQYJa
+ cHACCAjKuOIuXv7FuFYkDwoQXKvNxa45NumvkKOv3q6LNxU/ltxzIzoavEXd3cyd4IOQ
+ wmZvk7x2lmxe+wXbh3JOqBRjKSwH7flSnTj7fLRTe1hQIuvVZnnFoYm3sxSQRiEuoIz2
+ oZDklyyRtj2AgiSm3cily5cG/p50YV7C+HP0jdZxxk8p3SDCbBPPo4FKnOfuqjJQyprv
+ dr4SaEusslzQNrdLNzCqYPhtO0gOI4jyhH64yNeTd8GgdSvEnqY20xup/boPqmOT60EF nQ== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j8ta1rt2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 09:24:37 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27T9LSeM016787;
+        Mon, 29 Aug 2022 09:24:35 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3j7aw8shgx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 09:24:34 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27T9Or3K43581758
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Aug 2022 09:24:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 77C2A42041;
+        Mon, 29 Aug 2022 09:24:31 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0BCEE4203F;
+        Mon, 29 Aug 2022 09:24:31 +0000 (GMT)
+Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 29 Aug 2022 09:24:30 +0000 (GMT)
+Message-ID: <39df905509721dd1f13c837b81fcf69a56096870.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] iommu/s390: Fix race with release_device ops
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
+Date:   Mon, 29 Aug 2022 11:24:30 +0200
+In-Reply-To: <20220826194721.250123-1-mjrosato@linux.ibm.com>
+References: <20220826194721.250123-1-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: EczvPnffFh08637A0kY8JNCaXiQM4bxZ
+X-Proofpoint-ORIG-GUID: EczvPnffFh08637A0kY8JNCaXiQM4bxZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_05,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
+ impostorscore=0 clxscore=1015 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208290044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: farah kassabri <fkassabri@habana.ai>
+On Fri, 2022-08-26 at 15:47 -0400, Matthew Rosato wrote:
+> With commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
+> calls") s390-iommu is supposed to handle dynamic switching between IOMMU
+> domains and the DMA API handling.  However, this commit does not
+> sufficiently handle the case where the device is released via a call
+> to the release_device op as it may occur at the same time as an opposing
+> attach_dev or detach_dev since the group mutex is not held over
+> release_device.  This was observed if the device is deconfigured during a
+> small window during vfio-pci initialization and can result in WARNs and
+> potential kernel panics.
+> 
+> Handle this by tracking when the device is probed/released via
+> dev_iommu_priv_set/get().  Ensure that once the device is released only
+> release_device handles the re-init of the device DMA.
+> 
+> Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+> Changes since v1:
+> - Use mutex instead of spinlock due to potential sleep (Pierre)
+> ---
+>  arch/s390/include/asm/pci.h |  1 +
+>  arch/s390/pci/pci.c         |  1 +
+>  drivers/iommu/s390-iommu.c  | 67 ++++++++++++++++++++++++++++---------
+>  3 files changed, 53 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+> index 7b4cdadbc023..8f2041eea741 100644
+> --- a/arch/s390/include/asm/pci.h
+> +++ b/arch/s390/include/asm/pci.h
+> @@ -157,6 +157,7 @@ struct zpci_dev {
+>  	/* DMA stuff */
+>  	unsigned long	*dma_table;
+>  	spinlock_t	dma_table_lock;
+> +	struct mutex	dma_domain_lock;
+>  	int		tlb_refresh;
+>  
+>  	spinlock_t	iommu_bitmap_lock;
+> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+> index 73cdc5539384..973edd32ecc9 100644
+> --- a/arch/s390/pci/pci.c
+> +++ b/arch/s390/pci/pci.c
+> @@ -832,6 +832,7 @@ struct zpci_dev *zpci_create_device(u32 fid, u32 fh, enum zpci_state state)
+>  	kref_init(&zdev->kref);
+>  	mutex_init(&zdev->lock);
+>  	mutex_init(&zdev->kzdev_lock);
+> +	mutex_init(&zdev->dma_domain_lock);
+>  
+>  	rc = zpci_init_iommu(zdev);
+>  	if (rc)
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index c898bcbbce11..ffb4e3cee7f6 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -90,15 +90,39 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  	struct zpci_dev *zdev = to_zpci_dev(dev);
+>  	struct s390_domain_device *domain_device;
+>  	unsigned long flags;
+> -	int cc, rc;
+> +	int cc, rc = 0;
+>  
+>  	if (!zdev)
+>  		return -ENODEV;
+>  
+> +	/* First check compatibility */
+> +	spin_lock_irqsave(&s390_domain->list_lock, flags);
+> +	/* First device defines the DMA range limits */
+> +	if (list_empty(&s390_domain->devices)) {
+> +		domain->geometry.aperture_start = zdev->start_dma;
+> +		domain->geometry.aperture_end = zdev->end_dma;
+> +		domain->geometry.force_aperture = true;
+> +	/* Allow only devices with identical DMA range limits */
+> +	} else if (domain->geometry.aperture_start != zdev->start_dma ||
+> +		   domain->geometry.aperture_end != zdev->end_dma) {
+> +		rc = -EINVAL;
+> +	}
+> +	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> +	if (rc)
+> +		return rc;
+> +
+>  	domain_device = kzalloc(sizeof(*domain_device), GFP_KERNEL);
+>  	if (!domain_device)
+>  		return -ENOMEM;
+>  
+> +	/* Leave now if the device has already been released */
+> +	mutex_lock(&zdev->dma_domain_lock);
+> +	if (!dev_iommu_priv_get(dev)) {
+> +		mutex_unlock(&zdev->dma_domain_lock);
+> +		kfree(domain_device);
+> +		return 0;
+> +	}
+> +
+>  	if (zdev->dma_table && !zdev->s390_domain) {
+>  		cc = zpci_dma_exit_device(zdev);
+>  		if (cc) {
+> @@ -117,22 +141,11 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  		rc = -EIO;
+>  		goto out_restore;
+>  	}
+> +	zdev->s390_domain = s390_domain;
+> +	mutex_unlock(&zdev->dma_domain_lock);
+>  
+>  	spin_lock_irqsave(&s390_domain->list_lock, flags);
+> -	/* First device defines the DMA range limits */
+> -	if (list_empty(&s390_domain->devices)) {
+> -		domain->geometry.aperture_start = zdev->start_dma;
+> -		domain->geometry.aperture_end = zdev->end_dma;
+> -		domain->geometry.force_aperture = true;
+> -	/* Allow only devices with identical DMA range limits */
+> -	} else if (domain->geometry.aperture_start != zdev->start_dma ||
+> -		   domain->geometry.aperture_end != zdev->end_dma) {
+> -		rc = -EINVAL;
+> -		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> -		goto out_restore;
+> -	}
+>  	domain_device->zdev = zdev;
+> -	zdev->s390_domain = s390_domain;
+>  	list_add(&domain_device->list, &s390_domain->devices);
+>  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>  
+> @@ -147,6 +160,7 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  				   virt_to_phys(zdev->dma_table));
+>  	}
+>  out_free:
+> +	mutex_unlock(&zdev->dma_domain_lock);
+>  	kfree(domain_device);
+>  
+>  	return rc;
+> @@ -176,17 +190,22 @@ static void s390_iommu_detach_device(struct iommu_domain *domain,
+>  	}
+>  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>  
+> -	if (found && (zdev->s390_domain == s390_domain)) {
+> +	mutex_lock(&zdev->dma_domain_lock);
+> +	if (found && (zdev->s390_domain == s390_domain) &&
+> +	    dev_iommu_priv_get(dev)) {
+>  		zdev->s390_domain = NULL;
+>  		zpci_unregister_ioat(zdev, 0);
+>  		zpci_dma_init_device(zdev);
+>  	}
+> +	mutex_unlock(&zdev->dma_domain_lock);
+>  }
+>  
+>  static struct iommu_device *s390_iommu_probe_device(struct device *dev)
+>  {
+>  	struct zpci_dev *zdev = to_zpci_dev(dev);
+>  
+> +	dev_iommu_priv_set(dev, zdev);
+> +
+>  	return &zdev->iommu_dev;
+>  }
+>  
+> @@ -206,10 +225,26 @@ static void s390_iommu_release_device(struct device *dev)
+>  	 *
+>  	 * So let's call detach_dev from here if it hasn't been called before.
+>  	 */
+> -	if (zdev && zdev->s390_domain) {
+> +	if (zdev) {
+> +		/*
+> +		 * Clear priv to block further attaches for this device,
+> +		 * ensure detaches don't init DMA
+> +		 */
+> +		mutex_lock(&zdev->dma_domain_lock);
+> +		dev_iommu_priv_set(dev, NULL);
+> +		mutex_unlock(&zdev->dma_domain_lock);
+> +		/* Make sure this device is removed from the domain list */
+>  		domain = iommu_get_domain_for_dev(dev);
+>  		if (domain)
+>  			s390_iommu_detach_device(domain, dev);
+> +		/* Now ensure DMA is initialized from here */
+> +		mutex_lock(&zdev->dma_domain_lock);
+> +		if (zdev->s390_domain) {
+> +			zdev->s390_domain = NULL;
+> +			zpci_unregister_ioat(zdev, 0);
+> +			zpci_dma_init_device(zdev);
+> +		}
+> +		mutex_unlock(&zdev->dma_domain_lock);
+>  	}
+>  }
+>  
 
-As part of the RAS that is done by the f/w, we should send a message
-to the f/w when a user either acquires or releases the device.
+Looks good to me now. Thanks for tackling this! Feel free to add my:
 
-Signed-off-by: farah kassabri <fkassabri@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- drivers/misc/habanalabs/common/device.c           |  2 ++
- drivers/misc/habanalabs/common/firmware_if.c      | 15 +++++++++++++++
- drivers/misc/habanalabs/common/habanalabs.h       |  3 +++
- drivers/misc/habanalabs/common/habanalabs_drv.c   |  2 ++
- drivers/misc/habanalabs/gaudi/gaudi.c             |  6 ++++++
- drivers/misc/habanalabs/gaudi2/gaudi2.c           | 12 ++++++++++++
- drivers/misc/habanalabs/gaudi2/gaudi2P.h          |  1 +
- drivers/misc/habanalabs/goya/goya.c               |  6 ++++++
- drivers/misc/habanalabs/include/common/cpucp_if.h | 11 +++++++++++
- 9 files changed, 58 insertions(+)
+Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index ea6238e614f1..986045de552e 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -492,6 +492,8 @@ static int hl_device_release(struct inode *inode, struct file *filp)
- 	hdev->last_open_session_duration_jif =
- 		jiffies - hdev->last_successful_open_jif;
- 
-+	hdev->asic_funcs->send_device_activity(hdev, false);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
-index 4ede4bb03e8e..cd2eb7e73be5 100644
---- a/drivers/misc/habanalabs/common/firmware_if.c
-+++ b/drivers/misc/habanalabs/common/firmware_if.c
-@@ -454,6 +454,21 @@ void hl_fw_cpu_accessible_dma_pool_free(struct hl_device *hdev, size_t size,
- 			size);
- }
- 
-+int hl_fw_send_device_activity(struct hl_device *hdev, bool open)
-+{
-+	struct cpucp_packet pkt;
-+	int rc;
-+
-+	memset(&pkt, 0, sizeof(pkt));
-+	pkt.ctl = cpu_to_le32(CPUCP_PACKET_ACTIVE_STATUS_SET <<	CPUCP_PKT_CTL_OPCODE_SHIFT);
-+	pkt.value = cpu_to_le64(open);
-+	rc = hdev->asic_funcs->send_cpu_message(hdev, (u32 *) &pkt, sizeof(pkt), 0, NULL);
-+	if (rc)
-+		dev_err(hdev->dev, "failed to send device activity msg(%u)\n", open);
-+
-+	return rc;
-+}
-+
- int hl_fw_send_heartbeat(struct hl_device *hdev)
- {
- 	struct cpucp_packet hb_pkt;
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index cf9cbbd09063..01426e1306ee 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -1528,6 +1528,7 @@ struct engines_data {
-  * @access_dev_mem: access device memory
-  * @set_dram_bar_base: set the base of the DRAM BAR
-  * @set_engine_cores: set a config command to enigne cores
-+ * @send_device_activity: indication to FW about device availability
-  */
- struct hl_asic_funcs {
- 	int (*early_init)(struct hl_device *hdev);
-@@ -1664,6 +1665,7 @@ struct hl_asic_funcs {
- 	u64 (*set_dram_bar_base)(struct hl_device *hdev, u64 addr);
- 	int (*set_engine_cores)(struct hl_device *hdev, u32 *core_ids,
- 					u32 num_cores, u32 core_command);
-+	int (*send_device_activity)(struct hl_device *hdev, bool open);
- };
- 
- 
-@@ -3717,6 +3719,7 @@ int hl_fw_dram_replaced_row_get(struct hl_device *hdev,
- 				struct cpucp_hbm_row_info *info);
- int hl_fw_dram_pending_row_get(struct hl_device *hdev, u32 *pend_rows_num);
- int hl_fw_cpucp_engine_core_asid_set(struct hl_device *hdev, u32 asid);
-+int hl_fw_send_device_activity(struct hl_device *hdev, bool open);
- int hl_pci_bars_map(struct hl_device *hdev, const char * const name[3],
- 			bool is_wc[3]);
- int hl_pci_elbi_read(struct hl_device *hdev, u64 addr, u32 *data);
-diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
-index 7bf0dc245d39..f9db7b91bfe3 100644
---- a/drivers/misc/habanalabs/common/habanalabs_drv.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
-@@ -204,6 +204,8 @@ int hl_device_open(struct inode *inode, struct file *filp)
- 		goto out_err;
- 	}
- 
-+	rc = hdev->asic_funcs->send_device_activity(hdev, true);
-+
- 	list_add(&hpriv->dev_node, &hdev->fpriv_list);
- 	mutex_unlock(&hdev->fpriv_list_lock);
- 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 96020693ac29..87dbdbb220da 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -9132,6 +9132,11 @@ static void gaudi_add_device_attr(struct hl_device *hdev, struct attribute_group
- 	dev_vrm_attr_grp->attrs = gaudi_vrm_dev_attrs;
- }
- 
-+static int gaudi_send_device_activity(struct hl_device *hdev, bool open)
-+{
-+	return 0;
-+}
-+
- static const struct hl_asic_funcs gaudi_funcs = {
- 	.early_init = gaudi_early_init,
- 	.early_fini = gaudi_early_fini,
-@@ -9224,6 +9229,7 @@ static const struct hl_asic_funcs gaudi_funcs = {
- 	.mmu_get_real_page_size = hl_mmu_get_real_page_size,
- 	.access_dev_mem = hl_access_dev_mem,
- 	.set_dram_bar_base = gaudi_set_hbm_bar_base,
-+	.send_device_activity = gaudi_send_device_activity,
- };
- 
- /**
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 4696da7a57c1..330869cb4c0b 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -10031,6 +10031,17 @@ static int gaudi2_get_monitor_dump(struct hl_device *hdev, void *data)
- 	return -EOPNOTSUPP;
- }
- 
-+int gaudi2_send_device_activity(struct hl_device *hdev, bool open)
-+{
-+	struct gaudi2_device *gaudi2 = hdev->asic_specific;
-+
-+	if (!(gaudi2->hw_cap_initialized & HW_CAP_CPU_Q) || hdev->fw_major_version < 37)
-+		return 0;
-+
-+	/* TODO: add check for FW version using minor ver once it's known */
-+	return hl_fw_send_device_activity(hdev, open);
-+}
-+
- static const struct hl_asic_funcs gaudi2_funcs = {
- 	.early_init = gaudi2_early_init,
- 	.early_fini = gaudi2_early_fini,
-@@ -10127,6 +10138,7 @@ static const struct hl_asic_funcs gaudi2_funcs = {
- 	.access_dev_mem = hl_access_dev_mem,
- 	.set_dram_bar_base = gaudi2_set_hbm_bar_base,
- 	.set_engine_cores = gaudi2_set_engine_cores,
-+	.send_device_activity = gaudi2_send_device_activity,
- };
- 
- void gaudi2_set_asic_funcs(struct hl_device *hdev)
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2P.h b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-index 9094a702678d..a99c348bbf39 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-@@ -553,5 +553,6 @@ void gaudi2_pb_print_security_errors(struct hl_device *hdev, u32 block_addr, u32
- 					u32 offended_addr);
- int gaudi2_init_security(struct hl_device *hdev);
- void gaudi2_ack_protection_bits_errors(struct hl_device *hdev);
-+int gaudi2_send_device_activity(struct hl_device *hdev, bool open);
- 
- #endif /* GAUDI2P_H_ */
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index d8fb91d257b9..5ef9e3ca97a6 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -5420,6 +5420,11 @@ static int goya_scrub_device_dram(struct hl_device *hdev, u64 val)
- 	return -EOPNOTSUPP;
- }
- 
-+static int goya_send_device_activity(struct hl_device *hdev, bool open)
-+{
-+	return 0;
-+}
-+
- static const struct hl_asic_funcs goya_funcs = {
- 	.early_init = goya_early_init,
- 	.early_fini = goya_early_fini,
-@@ -5512,6 +5517,7 @@ static const struct hl_asic_funcs goya_funcs = {
- 	.mmu_get_real_page_size = hl_mmu_get_real_page_size,
- 	.access_dev_mem = hl_access_dev_mem,
- 	.set_dram_bar_base = goya_set_ddr_bar_base,
-+	.send_device_activity = goya_send_device_activity,
- };
- 
- /*
-diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/misc/habanalabs/include/common/cpucp_if.h
-index abf40e1c4965..b837bb1f4cd3 100644
---- a/drivers/misc/habanalabs/include/common/cpucp_if.h
-+++ b/drivers/misc/habanalabs/include/common/cpucp_if.h
-@@ -636,6 +636,10 @@ enum pq_init_status {
-  *       passes the max size it allows the CpuCP to write to the structure, to prevent
-  *       data corruption in case of mismatched driver/FW versions.
-  *       Relevant only to Gaudi.
-+ *
-+ * CPUCP_PACKET_ACTIVE_STATUS_SET -
-+ *       LKD sends FW indication whether device is free or in use, this indication is reported
-+ *       also to the BMC.
-  */
- 
- enum cpucp_packet_id {
-@@ -691,6 +695,13 @@ enum cpucp_packet_id {
- 	CPUCP_PACKET_RESERVED4,			/* not used */
- 	CPUCP_PACKET_RESERVED5,			/* not used */
- 	CPUCP_PACKET_MONITOR_DUMP_GET,		/* debugfs */
-+	CPUCP_PACKET_RESERVED6,			/* not used */
-+	CPUCP_PACKET_RESERVED7,			/* not used */
-+	CPUCP_PACKET_RESERVED8,			/* not used */
-+	CPUCP_PACKET_RESERVED9,			/* not used */
-+	CPUCP_PACKET_RESERVED10,		/* not used */
-+	CPUCP_PACKET_ACTIVE_STATUS_SET,		/* internal */
-+	CPUCP_PACKET_ID_MAX			/* must be last */
- };
- 
- #define CPUCP_PACKET_FENCE_VAL	0xFE8CE7A5
--- 
-2.25.1
+
 

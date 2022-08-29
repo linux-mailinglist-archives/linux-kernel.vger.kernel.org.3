@@ -2,253 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5A25A5380
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC835A5384
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiH2RuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S229964AbiH2RxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiH2RuT (ORCPT
+        with ESMTP id S229468AbiH2RxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:50:19 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD5B25EB6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661795417; x=1693331417;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=doEtQpNLhVe9LzFu3Vgaaur/sI+yQ3XzlBUFA2WhErc=;
-  b=q2WMogZ3c/lC4XtD5uDhRUNtAHmvNsou3k5ld5zu3qoOxDQtpnAHpQBi
-   CiZLiounahEmXHBY0JpVxKsRx7LKbrFwgCYONplDuYW3P8mIGGRKU9d1W
-   QuwZZHARmeF4DXjSK0mvHmbyEUSWfDmp+HfatbUTOZOW+VpKNVYzh3ZSR
-   w=;
-X-IronPort-AV: E=Sophos;i="5.93,273,1654560000"; 
-   d="scan'208";a="124451371"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 17:49:58 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 8550D419FD;
-        Mon, 29 Aug 2022 17:49:56 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 29 Aug 2022 17:49:55 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.43.160.191) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Mon, 29 Aug 2022 17:49:53 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <kuniyu@amazon.com>
-CC:     <ayudutta@amazon.com>, <brauner@kernel.org>,
-        <keescook@chromium.org>, <kuni1840@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <luto@amacapital.net>,
-        <syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com>,
-        <wad@chromium.org>
-Subject: [PATCH v3] seccomp: Move copy_seccomp() to no failure path.
-Date:   Mon, 29 Aug 2022 10:49:45 -0700
-Message-ID: <20220829174945.4398-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220823154532.82913-1-kuniyu@amazon.com>
-References: <20220823154532.82913-1-kuniyu@amazon.com>
+        Mon, 29 Aug 2022 13:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FEA7C1DB;
+        Mon, 29 Aug 2022 10:53:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC72B8119D;
+        Mon, 29 Aug 2022 17:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B1AC433C1;
+        Mon, 29 Aug 2022 17:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661795579;
+        bh=OFiWblrTg9bVEo5nez7Fqe6Tqh+QPil6BbmjGo6KOkM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DydfPj8kqb2FrPMQSHDQR+tY4HvQuBtkf/2gHK1w/rMaTBaIkmxOfErDaa0xz1rT9
+         b/pLRm9I4ztj3xfQY568OitsI7tGVsljUWKf7Y219wS1Alot7Kd6YVWzy0iqxk+Gmt
+         iDeiNnR12RC47dbLqhDgcmzaWolz08krb2CwYYjrCGCEqa4joplMcb6CMSlpQmPbiv
+         7kDGwEAyj0M0X/153MYRjgr0zg89o399RuL+gxvMNs+u9dmp3ZxY6ux8KmMEItHlCv
+         W6+5tG9O/HaCVoQizduc0t3TUC103fLaszHg9Ajiko/JugH0+NTzMvF54MF4LCa6Io
+         dFlBuF5GYYqcA==
+Date:   Mon, 29 Aug 2022 10:52:57 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org, Chao Yu <chao@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
+ in set_page_dirty
+Message-ID: <Ywz8+WUhypEiUfvk@google.com>
+References: <000000000000d5b4fe05e7127662@google.com>
+ <20220825183734.0b08ae10a2e9e1bd156a19cd@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.191]
-X-ClientProxiedBy: EX13D40UWA004.ant.amazon.com (10.43.160.36) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825183734.0b08ae10a2e9e1bd156a19cd@linux-foundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On 08/25, Andrew Morton wrote:
+> (cc fsf2 developers)
+> 
+> On Thu, 25 Aug 2022 08:29:32 -0700 syzbot <syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com> wrote:
+> 
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=175def47080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=775a3440817f74fddb8c
+> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm64
+> > 
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+> > 
+> > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> > Mem abort info:
+> >   ESR = 0x0000000086000005
+> >   EC = 0x21: IABT (current EL), IL = 32 bits
+> >   SET = 0, FnV = 0
+> >   EA = 0, S1PTW = 0
+> >   FSC = 0x05: level 1 translation fault
+> > user pgtable: 4k pages, 48-bit VAs, pgdp=00000001249cc000
+> > [0000000000000000] pgd=080000012ee65003, p4d=080000012ee65003, pud=0000000000000000
+> > Internal error: Oops: 86000005 [#1] PREEMPT SMP
+> > Modules linked in:
+> > CPU: 0 PID: 3044 Comm: syz-executor.0 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+> > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > pc : 0x0
+> > lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
+> > sp : ffff800012803830
+> > x29: ffff800012803830 x28: ffff0000d02c8000 x27: 0000000000000009
+> > x26: 0000000000000001 x25: 0000000000000a00 x24: 0000000000000080
+> > x23: 0000000000000000 x22: ffff0000ef276c00 x21: 05ffc00000000007
+> > x20: ffff0000f14b83b8 x19: fffffc00036409c0 x18: fffffffffffffff5
+> > x17: ffff80000dd7a698 x16: ffff80000dbb8658 x15: 0000000000000000
+> > x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
+> > x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+> > x5 : ffff0000d9028000 x4 : ffff0000d5c31000 x3 : ffff0000d9027f80
+> > x2 : fffffffffffffff0 x1 : fffffc00036409c0 x0 : ffff0000f14b83b8
+> > Call trace:
+> >  0x0
+> >  set_page_dirty+0x38/0xbc mm/folio-compat.c:62
 
-Could you take a look at this?
+2363 void f2fs_update_meta_page(struct f2fs_sb_info *sbi,
+2364                                         void *src, block_t blk_addr)
+2365 {       
+2366         struct page *page = f2fs_grab_meta_page(sbi, blk_addr);
 
-Thank you.
+--> f2fs_grab_meta_page() gives a locked page by grab_cache_page().
 
+2367                                                         
+2368         memcpy(page_address(page), src, PAGE_SIZE);
+2369         set_page_dirty(page);
+2370         f2fs_put_page(page, 1);
+2371 } 
 
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-Date:   Tue, 23 Aug 2022 08:45:32 -0700
-> Our syzbot instance reported memory leaks in do_seccomp() [0], similar
-> to the report [1].  It shows that we miss freeing struct seccomp_filter
-> and some objects included in it.
-> 
-> We can reproduce the issue with the program below [2] which calls one
-> seccomp() and two clone() syscalls.
-> 
-> The first clone()d child exits earlier than its parent and sends a
-> signal to kill it during the second clone(), more precisely before the
-> fatal_signal_pending() test in copy_process().  When the parent receives
-> the signal, it has to destroy the embryonic process and return -EINTR to
-> user space.  In the failure path, we have to call seccomp_filter_release()
-> to decrement the filter's refcount.
-> 
-> Initially, we called it in free_task() called from the failure path, but
-> the commit 3a15fb6ed92c ("seccomp: release filter after task is fully
-> dead") moved it to release_task() to notify user space as early as possible
-> that the filter is no longer used.
-> 
-> To keep the change and current seccomp refcount semantics, let's move
-> copy_seccomp() just after the signal check and add a WARN_ON_ONCE() in
-> free_task() for future debugging.
-> 
-> [0]:
-> unreferenced object 0xffff8880063add00 (size 256):
->   comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.914s)
->   hex dump (first 32 bytes):
->     01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00  ................
->     ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
->   backtrace:
->     do_seccomp (./include/linux/slab.h:600 ./include/linux/slab.h:733 kernel/seccomp.c:666 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
->     do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
->     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> unreferenced object 0xffffc90000035000 (size 4096):
->   comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
->   hex dump (first 32 bytes):
->     01 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     __vmalloc_node_range (mm/vmalloc.c:3226)
->     __vmalloc_node (mm/vmalloc.c:3261 (discriminator 4))
->     bpf_prog_alloc_no_stats (kernel/bpf/core.c:91)
->     bpf_prog_alloc (kernel/bpf/core.c:129)
->     bpf_prog_create_from_user (net/core/filter.c:1414)
->     do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
->     do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
->     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> unreferenced object 0xffff888003fa1000 (size 1024):
->   comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     bpf_prog_alloc_no_stats (./include/linux/slab.h:600 ./include/linux/slab.h:733 kernel/bpf/core.c:95)
->     bpf_prog_alloc (kernel/bpf/core.c:129)
->     bpf_prog_create_from_user (net/core/filter.c:1414)
->     do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
->     do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
->     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> unreferenced object 0xffff888006360240 (size 16):
->   comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
->   hex dump (first 16 bytes):
->     01 00 37 00 76 65 72 6c e0 83 01 06 80 88 ff ff  ..7.verl........
->   backtrace:
->     bpf_prog_store_orig_filter (net/core/filter.c:1137)
->     bpf_prog_create_from_user (net/core/filter.c:1428)
->     do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
->     do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
->     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> unreferenced object 0xffff8880060183e0 (size 8):
->   comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
->   hex dump (first 8 bytes):
->     06 00 00 00 00 00 ff 7f                          ........
->   backtrace:
->     kmemdup (mm/util.c:129)
->     bpf_prog_store_orig_filter (net/core/filter.c:1144)
->     bpf_prog_create_from_user (net/core/filter.c:1428)
->     do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
->     do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
->     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> 
-> [1]: https://syzkaller.appspot.com/bug?id=2809bb0ac77ad9aa3f4afe42d6a610aba594a987
-> 
-> [2]:
-> #define _GNU_SOURCE
-> #include <sched.h>
-> #include <signal.h>
-> #include <unistd.h>
-> #include <sys/syscall.h>
-> #include <linux/filter.h>
-> #include <linux/seccomp.h>
-> 
-> void main(void)
-> {
-> 	struct sock_filter filter[] = {
-> 		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-> 	};
-> 	struct sock_fprog fprog = {
-> 		.len = sizeof(filter) / sizeof(filter[0]),
-> 		.filter = filter,
-> 	};
-> 	long i, pid;
-> 
-> 	syscall(__NR_seccomp, SECCOMP_SET_MODE_FILTER, 0, &fprog);
-> 
-> 	for (i = 0; i < 2; i++) {
-> 		pid = syscall(__NR_clone, CLONE_NEWNET | SIGKILL, NULL, NULL, 0);
-> 		if (pid == 0)
-> 			return;
-> 	}
-> }
-> 
-> Fixes: 3a15fb6ed92c ("seccomp: release filter after task is fully dead")
-> Reported-by: syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com
-> Reported-by: Ayushman Dutta <ayudutta@amazon.com>
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> ---
-> v3:
->   * Fix build failure for CONFIG_SECCOMP=n case
-> 
-> v2: https://lore.kernel.org/lkml/20220823004806.38681-1-kuniyu@amazon.com/
->   * Move copy_seccomp() after no failure path instead of adding
->     seccomp_filter_release() in the failure path.
-> 
-> v1: https://lore.kernel.org/lkml/20220822204436.26631-1-kuniyu@amazon.com/
-> ---
->  kernel/fork.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 90c85b17bf69..6ac1cc62f197 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -537,6 +537,9 @@ void put_task_stack(struct task_struct *tsk)
->  
->  void free_task(struct task_struct *tsk)
->  {
-> +#ifdef CONFIG_SECCOMP
-> +	WARN_ON_ONCE(tsk->seccomp.filter);
-> +#endif
->  	release_user_cpus_ptr(tsk);
->  	scs_release(tsk);
->  
-> @@ -2409,12 +2412,6 @@ static __latent_entropy struct task_struct *copy_process(
->  
->  	spin_lock(&current->sighand->siglock);
->  
-> -	/*
-> -	 * Copy seccomp details explicitly here, in case they were changed
-> -	 * before holding sighand lock.
-> -	 */
-> -	copy_seccomp(p);
-> -
->  	rv_task_fork(p);
->  
->  	rseq_fork(p, clone_flags);
-> @@ -2431,6 +2428,14 @@ static __latent_entropy struct task_struct *copy_process(
->  		goto bad_fork_cancel_cgroup;
->  	}
->  
-> +	/* No more failure paths after this point. */
-> +
-> +	/*
-> +	 * Copy seccomp details explicitly here, in case they were changed
-> +	 * before holding sighand lock.
-> +	 */
-> +	copy_seccomp(p);
-> +
->  	init_task_pid_links(p);
->  	if (likely(p->pid)) {
->  		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
-> -- 
-> 2.30.2
+Is there a change in folio?
+
+> >  get_next_nat_page+0x198/0x300 fs/f2fs/node.c:154
+> >  __flush_nat_entry_set fs/f2fs/node.c:3005 [inline]
+> >  f2fs_flush_nat_entries+0x354/0x988 fs/f2fs/node.c:3109
+> >  f2fs_write_checkpoint+0x350/0x568 fs/f2fs/checkpoint.c:1667
+> >  f2fs_issue_checkpoint+0x1b0/0x234
+> >  f2fs_sync_fs+0x8c/0xc8 fs/f2fs/super.c:1651
+> >  sync_filesystem+0xe0/0x134 fs/sync.c:66
+> >  generic_shutdown_super+0x38/0x190 fs/super.c:474
+> >  kill_block_super+0x30/0x78 fs/super.c:1427
+> >  kill_f2fs_super+0x140/0x184 fs/f2fs/super.c:4544
+> >  deactivate_locked_super+0x70/0xd4 fs/super.c:332
+> >  deactivate_super+0xb8/0xbc fs/super.c:363
+> >  cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+> >  __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+> >  task_work_run+0xc4/0x208 kernel/task_work.c:177
+> >  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+> >  do_notify_resume+0x174/0x1d0 arch/arm64/kernel/signal.c:1127
+> >  prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+> >  exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+> >  el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
+> >  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+> >  el0t_64_sync+0x18c/0x190
+> > Code: bad PC value
+> > ---[ end trace 0000000000000000 ]---
+> > 
+> > 
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > 
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

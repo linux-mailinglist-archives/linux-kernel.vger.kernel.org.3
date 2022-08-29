@@ -2,222 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8FD5A4F9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F065A5A4FA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiH2OuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S230179AbiH2Ou7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiH2OuI (ORCPT
+        with ESMTP id S229783AbiH2Ou4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:50:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDB114092;
-        Mon, 29 Aug 2022 07:49:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D5D6105C;
-        Mon, 29 Aug 2022 14:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E59DFC433C1;
-        Mon, 29 Aug 2022 14:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661784596;
-        bh=1uMmTJeyaDS2FOf4VxouNCYbBnfhrN1z1KkQuy5uQj8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XJRk6ZYCgSQvvWk8URrx6RJ6oV82AYJwt+/EXnZk3l9CBPJ1Cc2cedvM8lnX84VDB
-         JPlPDOjLBdofy4r6FWjvZLx722neGH/E0/siqa7H3FceqTWWN7D8FI4hRLz4No/Lg7
-         l8khPwDyO2GZCZvZIxG0f7Y7IYPhAR+5whqJKxJMS5hDjDCTn2L6pnlpEGNjSBX0ki
-         9lJMaYfTbyEf/qfFveknlmINrEGiDzXz79bsGnwcBpEyAqoWMQeAnxu/8QsQKnGeiR
-         K0kq4SsC3S6NSrIXu0iUEUkxhRr80OyMR1pJSXmJmXKAtu/w5X4yKHZi3wjw13ANvE
-         V5+ip6haOfpfA==
-Date:   Mon, 29 Aug 2022 07:49:55 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>
-Subject: Re: [PATCH v7] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-Message-ID: <YwzSE2U8iYLRfyxf@magnolia>
-References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
- <63093cbd43f67_259e5b2946d@dwillia2-xfh.jf.intel.com.notmuch>
- <72fa9657-741a-e099-baf8-4615145d7bd1@fujitsu.com>
+        Mon, 29 Aug 2022 10:50:56 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8301B8A7ED;
+        Mon, 29 Aug 2022 07:50:55 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id v16so7776271wrm.8;
+        Mon, 29 Aug 2022 07:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=145gOx86toxQClz74kJe2cl51jbo56v2bZWCBfLvedQ=;
+        b=B5he0l1NJFsAgePzHNhCVPDO2fy1g3NhcfJGseemre59ndFS6y61LR6DcTjGcrgmdo
+         ECBwnGuLuzwBTtq3IZ28HPY4s0dTrIk21F8ZYQPsHabpRhzbPhdKtUwSsMXgXbN6JYUv
+         ScNzIlKtaVKsItAVP04255Lx3W8Zqqc58MywaWSYNRv0pcOMiEONyRwE0pRBsXU7q2YC
+         jKg+hri79GrV8N2uQFutbuhUy4HhCJZq4UcrVWlLHalo6slkhKTNE6Hovk+AkjMvQaa8
+         5zLQhWcvLOMSf9HMOdpdQEaOrhQmOLYYvFWcETi/eogaptjlhmkWQflMW96IbPUDKTnV
+         F36Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=145gOx86toxQClz74kJe2cl51jbo56v2bZWCBfLvedQ=;
+        b=Uesyu1bFmN6fAovSz9w2W6woaMaRxz4CjRBo0uihFps/n9G34M+/ehA48lfLFhtk7s
+         RuPrKo6xxTEDKMCMQ25KQ2/jEyyLpeF1Ds+FUT3qhbYknYpjMfhU5ri8hVUzKQlhxjZz
+         Q0uptOxnhyA+7yq93FdrTkzPtPjeuDtpZs8pkGannpDnpWCRlnX5Bemmk9hMhSVm95CP
+         Pkfo/2QClfuBXTzhzoVJmJcY73haBujq1xs/ffTPALKUUzuQGQAP5570rcYLVbQspT5V
+         ny36IynGnUsEzemD2Mz/3txVIFrGgWxm2saEJfPY5ln+4pq6ZzQxJSQMVp0P/zuFmpGS
+         mqAQ==
+X-Gm-Message-State: ACgBeo2rAfsl6OvBTQD4xtdQhHOCDfSuCodlaRymNVb9Mjo8tu9zQI8I
+        QJST6nWdfaulHPmcSRlT1lw=
+X-Google-Smtp-Source: AA6agR72nddPfdDk/RdTmQ8R/2eOxuvH8F7fe3aQN3rrRmg8l2imUWwdU7Z5hPjZ73Uy8vf5OGQdBQ==
+X-Received: by 2002:a05:6000:1863:b0:225:8a83:fbea with SMTP id d3-20020a056000186300b002258a83fbeamr6698535wri.277.1661784654126;
+        Mon, 29 Aug 2022 07:50:54 -0700 (PDT)
+Received: from [192.168.0.30] ([47.62.125.55])
+        by smtp.gmail.com with ESMTPSA id b2-20020adff902000000b00226dfac0149sm1036095wrr.114.2022.08.29.07.50.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 07:50:53 -0700 (PDT)
+Message-ID: <cd178f8c-76f0-4494-71c4-a658ee517b70@gmail.com>
+Date:   Mon, 29 Aug 2022 16:50:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <72fa9657-741a-e099-baf8-4615145d7bd1@fujitsu.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3 0/5] Complete driver nodes for MT8192 SoC
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 06:02:11PM +0800, Shiyang Ruan wrote:
-> 
-> 
-> 在 2022/8/27 5:35, Dan Williams 写道:
-> > Shiyang Ruan wrote:
-> > > This patch is inspired by Dan's "mm, dax, pmem: Introduce
-> > > dev_pagemap_failure()"[1].  With the help of dax_holder and
-> > > ->notify_failure() mechanism, the pmem driver is able to ask filesystem
-> > > (or mapped device) on it to unmap all files in use and notify processes
-> > > who are using those files.
-> > > 
-> > > Call trace:
-> > > trigger unbind
-> > >    -> unbind_store()
-> > >     -> ... (skip)
-> > >      -> devres_release_all()
-> > >       -> kill_dax()
-> > >        -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
-> > >         -> xfs_dax_notify_failure()
-> > > 
-> > > Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
-> > > event.  So do not shutdown filesystem directly if something not
-> > > supported, or if failure range includes metadata area.  Make sure all
-> > > files and processes are handled correctly.
-> > > 
-> > > ==
-> > > Changes since v6:
-> > >     1. Rebase on 6.0-rc2 and Darrick's patch[2].
-> > > 
-> > > Changes since v5:
-> > >     1. Renamed MF_MEM_REMOVE to MF_MEM_PRE_REMOVE
-> > >     2. hold s_umount before sync_filesystem()
-> > >     3. do sync_filesystem() after SB_BORN check
-> > >     4. Rebased on next-20220714
-> > > 
-> > > [1]:
-> > > https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
-> > > [2]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
-> > > 
-> > > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> > > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-> > > ---
-> > >    drivers/dax/super.c         |  3 ++-
-> > >    fs/xfs/xfs_notify_failure.c | 15 +++++++++++++++
-> > >    include/linux/mm.h          |  1 +
-> > >    3 files changed, 18 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> > > index 9b5e2a5eb0ae..cf9a64563fbe 100644
-> > > --- a/drivers/dax/super.c
-> > > +++ b/drivers/dax/super.c
-> > > @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
-> > >    		return;
-> > >     	if (dax_dev->holder_data != NULL)
-> > > -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
-> > > +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
-> > > +				MF_MEM_PRE_REMOVE);
-> > >     	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
-> > >    	synchronize_srcu(&dax_srcu);
-> > > diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> > > index 65d5eb20878e..a9769f17e998 100644
-> > > --- a/fs/xfs/xfs_notify_failure.c
-> > > +++ b/fs/xfs/xfs_notify_failure.c
-> > > @@ -77,6 +77,9 @@ xfs_dax_failure_fn(
-> > >     	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
-> > >    	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
-> > > +		/* Do not shutdown so early when device is to be removed */
-> > > +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
-> > > +			return 0;
-> > >    		notify->want_shutdown = true;
-> > >    		return 0;
-> > >    	}
-> > > @@ -182,12 +185,22 @@ xfs_dax_notify_failure(
-> > >    	struct xfs_mount	*mp = dax_holder(dax_dev);
-> > >    	u64			ddev_start;
-> > >    	u64			ddev_end;
-> > > +	int			error;
-> > >     	if (!(mp->m_sb.sb_flags & SB_BORN)) {
-> > 
-> > How are you testing the SB_BORN interactions? I have a fix for this
-> > pending here:
-> > 
-> > https://lore.kernel.org/nvdimm/166153428094.2758201.7936572520826540019.stgit@dwillia2-xfh.jf.intel.com/
-> 
-> That was my mistake.  Yes, it should be mp->m_super->s_flags.
-> 
-> (I remember my testcase did pass in my dev version, but now that seems
-> impossible.  I think something was wrong when I did the test.)
-> 
-> > 
-> > >    		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
-> > >    		return -EIO;
-> > >    	}
-> > >    +	if (mf_flags & MF_MEM_PRE_REMOVE) {
-> > 
-> > It appears this patch is corrupted here. I confirmed that b4 sees the
-> > same when trying to apply it.
-> 
-> Can't this patch be applied?  It is based on 6.0-rc2 + Darrick's patch. It's
-> also ok to rebase on 6.0-rc3 + Darrick's patch.
-> 
-> > 
-> > > +		xfs_info(mp, "device is about to be removed!");
-> > > +		down_write(&mp->m_super->s_umount);
-> > > +		error = sync_filesystem(mp->m_super);
-> > 
-> > This syncs to make data persistent, but for DAX this also needs to get
-> > invalidate all current DAX mappings. I do not see that in these changes.
-> 
-> I'll add it.
+Whole series applied.
+Thanks!
 
-Are you guys going to pick up [1]?
-
---D
-
-[1] https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
-
+On 12/07/2022 13:40, Allen-KH Cheng wrote:
+> This series are based on matthias.bgg/linux.git, for-next.
 > 
-> --
-> Thanks,
-> Ruan.
+> I remove vcodec lat and core nodes PATCH from series and will comfirm
+> clocks usage then resend PATCH.
 > 
-> > 
-> > > +		up_write(&mp->m_super->s_umount);
-> > > +		if (error)
-> > > +			return error;
-> > > +	}
-> > > +
-> > >    	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
-> > >    		xfs_warn(mp,
-> > >    			 "notify_failure() not supported on realtime device!");
-> > > @@ -196,6 +209,8 @@ xfs_dax_notify_failure(
-> > >     	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
-> > >    	    mp->m_logdev_targp != mp->m_ddev_targp) {
-> > > +		if (mf_flags & MF_MEM_PRE_REMOVE)
-> > > +			return 0;
-> > >    		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
-> > >    		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
-> > >    		return -EFSCORRUPTED;
-> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > index 982f2607180b..2c7c132e6512 100644
-> > > --- a/include/linux/mm.h
-> > > +++ b/include/linux/mm.h
-> > > @@ -3176,6 +3176,7 @@ enum mf_flags {
-> > >    	MF_UNPOISON = 1 << 4,
-> > >    	MF_SW_SIMULATED = 1 << 5,
-> > >    	MF_NO_RETRY = 1 << 6,
-> > > +	MF_MEM_PRE_REMOVE = 1 << 7,
-> > >    };
-> > >    int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
-> > >    		      unsigned long count, int mf_flags);
-> > > -- 
-> > > 2.37.2
-> > > 
-> > > 
-> > 
-> > 
+> Also should reference below PATCH for dsi in chunkuang.hu/linux.git
+> dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
+> 
+> changes since v2:
+>   - add mmsys #reset-cells PATCH
+>   - add missing fallback compatible
+>   - add display aliases
+>   - remove vcodec lat and core nodes PATCH
+> 
+> changes since v1:
+>   - add Reviewed-by Tag
+>   - rename dsi-phy from dsi-dphy
+>   - add missing power-domains in disp mutex
+>   - Add remove mt8192 display rdma compatible PATCH in series
+>   - use "mediatek,mt8183-disp-rdma" as fallback
+>   - remove mediatek,larb from rdma node
+>   - remove syscon-dsi and add power-domains in dsi
+>   - add reset property in dsi and mt8192-resets.h
+>   - correct Typo: s/ndoe/node in commit message
+> 
+> Allen-KH Cheng (5):
+>    arm64: dts: mt8192: Add pwm node
+>    arm64: dts: mt8192: Add mipi_tx node
+>    arm64: dts: mediatek: Add mmsys #reset-cells property for mt8192
+>    arm64: dts: mt8192: Add display nodes
+>    arm64: dts: mt8192: Add dsi node
+> 
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 188 +++++++++++++++++++++++
+>   1 file changed, 188 insertions(+)
+> 

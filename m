@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293435A4B41
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CB55A4B83
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiH2MNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S232099AbiH2MWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiH2MMz (ORCPT
+        with ESMTP id S231390AbiH2MVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:12:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763A79E891;
-        Mon, 29 Aug 2022 04:57:20 -0700 (PDT)
+        Mon, 29 Aug 2022 08:21:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C433E61;
+        Mon, 29 Aug 2022 05:05:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E45466123C;
-        Mon, 29 Aug 2022 11:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED292C433D6;
-        Mon, 29 Aug 2022 11:18:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE754B80F03;
+        Mon, 29 Aug 2022 11:18:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DA5C43141;
+        Mon, 29 Aug 2022 11:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771909;
-        bh=k099SGT6cbJNMFaxVYzbiadsUxeStwCwgm8jejTEimg=;
+        s=korg; t=1661771912;
+        bh=lbbo5zIz7LBHyIKQSGFYcidE8T1e9xUIFuGqFczWtjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B/BnkPiBaxwpntXM3nhaXGZKXy8sKGuwrt8NEHa4OSz5fp2lHQh32JDPPkrXU/z/j
-         nhbLGccnlJgEl7y/UigruufWlw7cmyworKINUySM9R31N2d/3GyP2aCqJPJH5UOu5o
-         6kvyFJ20TuhVPfLG72KKA2+h96+TE6VRY2fPf/l4=
+        b=p08yESJLcUm4icj97KaFF7AHIXwlyVUThHDGbb8Nd7y6anR4qHHLeDeDAfhj2NqQf
+         MHl7UCajA2Uf0xaRwbOm02Vq06xHakP2EeSz2I1TNsKrfwhqoV+gaXzl+WddHdlCuA
+         TIk4IpFFSjX6tzncU+BoLQ9JOLwONSCZW3qGhXiU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shreyas K K <quic_shrekk@quicinc.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Subject: [PATCH 5.19 137/158] arm64: Fix match_list for erratum 1286807 on Arm Cortex-A76
-Date:   Mon, 29 Aug 2022 12:59:47 +0200
-Message-Id: <20220829105814.824211263@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com,
+        Carlos Llamas <cmllamas@google.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Martijn Coenen <maco@android.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Todd Kjos <tkjos@android.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.19 138/158] binder_alloc: add missing mmap_lock calls when using the VMA
+Date:   Mon, 29 Aug 2022 12:59:48 +0200
+Message-Id: <20220829105814.857786586@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -55,37 +67,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zenghui Yu <yuzenghui@huawei.com>
+From: Liam Howlett <liam.howlett@oracle.com>
 
-commit 5e1e087457c94ad7fafbe1cf6f774c6999ee29d4 upstream.
+commit 44e602b4e52f70f04620bbbf4fe46ecb40170bde upstream.
 
-Since commit 51f559d66527 ("arm64: Enable repeat tlbi workaround on KRYO4XX
-gold CPUs"), we failed to detect erratum 1286807 on Cortex-A76 because its
-entry in arm64_repeat_tlbi_list[] was accidently corrupted by this commit.
+Take the mmap_read_lock() when using the VMA in binder_alloc_print_pages()
+and when checking for a VMA in binder_alloc_new_buf_locked().
 
-Fix this issue by creating a separate entry for Kryo4xx Gold.
+It is worth noting binder_alloc_new_buf_locked() drops the VMA read lock
+after it verifies a VMA exists, but may be taken again deeper in the call
+stack, if necessary.
 
-Fixes: 51f559d66527 ("arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs")
-Cc: Shreyas K K <quic_shrekk@quicinc.com>
-Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220809043848.969-1-yuzenghui@huawei.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Link: https://lkml.kernel.org/r/20220810160209.1630707-1-Liam.Howlett@oracle.com
+Fixes: a43cfc87caaf (android: binder: stop saving a pointer to the VMA)
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Reported-by: Ondrej Mosnacek <omosnace@redhat.com>
+Reported-by: <syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com>
+Acked-by: Carlos Llamas <cmllamas@google.com>
+Tested-by: Ondrej Mosnacek <omosnace@redhat.com>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Christian Brauner (Microsoft) <brauner@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Martijn Coenen <maco@android.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Todd Kjos <tkjos@android.com>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: "Arve Hjønnevåg" <arve@android.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/cpu_errata.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/android/binder_alloc.c |   31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -208,6 +208,8 @@ static const struct arm64_cpu_capabiliti
- #ifdef CONFIG_ARM64_ERRATUM_1286807
- 	{
- 		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
-+	},
-+	{
- 		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
- 		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
- 	},
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -395,12 +395,15 @@ static struct binder_buffer *binder_allo
+ 	size_t size, data_offsets_size;
+ 	int ret;
+ 
++	mmap_read_lock(alloc->vma_vm_mm);
+ 	if (!binder_alloc_get_vma(alloc)) {
++		mmap_read_unlock(alloc->vma_vm_mm);
+ 		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
+ 				   "%d: binder_alloc_buf, no vma\n",
+ 				   alloc->pid);
+ 		return ERR_PTR(-ESRCH);
+ 	}
++	mmap_read_unlock(alloc->vma_vm_mm);
+ 
+ 	data_offsets_size = ALIGN(data_size, sizeof(void *)) +
+ 		ALIGN(offsets_size, sizeof(void *));
+@@ -922,17 +925,25 @@ void binder_alloc_print_pages(struct seq
+ 	 * Make sure the binder_alloc is fully initialized, otherwise we might
+ 	 * read inconsistent state.
+ 	 */
+-	if (binder_alloc_get_vma(alloc) != NULL) {
+-		for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
+-			page = &alloc->pages[i];
+-			if (!page->page_ptr)
+-				free++;
+-			else if (list_empty(&page->lru))
+-				active++;
+-			else
+-				lru++;
+-		}
++
++	mmap_read_lock(alloc->vma_vm_mm);
++	if (binder_alloc_get_vma(alloc) == NULL) {
++		mmap_read_unlock(alloc->vma_vm_mm);
++		goto uninitialized;
++	}
++
++	mmap_read_unlock(alloc->vma_vm_mm);
++	for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
++		page = &alloc->pages[i];
++		if (!page->page_ptr)
++			free++;
++		else if (list_empty(&page->lru))
++			active++;
++		else
++			lru++;
+ 	}
++
++uninitialized:
+ 	mutex_unlock(&alloc->mutex);
+ 	seq_printf(m, "  pages: %d:%d:%d\n", active, lru, free);
+ 	seq_printf(m, "  pages high watermark: %zu\n", alloc->pages_high);
 
 

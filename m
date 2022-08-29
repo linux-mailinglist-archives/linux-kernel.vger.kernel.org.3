@@ -2,87 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E72F5A4E01
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADED5A4E0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiH2N1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S229725AbiH2N2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiH2N0p (ORCPT
+        with ESMTP id S230026AbiH2N1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:26:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89287DED4;
-        Mon, 29 Aug 2022 06:24:53 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id u6so10088779eda.12;
-        Mon, 29 Aug 2022 06:24:53 -0700 (PDT)
+        Mon, 29 Aug 2022 09:27:09 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD4883F7;
+        Mon, 29 Aug 2022 06:26:03 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 76so8181536pfy.3;
+        Mon, 29 Aug 2022 06:26:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date;
-        bh=nuhT/P++FvT8IemUryIvS5isjY+Z8JaiL8Gjcc8y6PA=;
-        b=diDtGw1WJAEZ74lUUjBA5DzxSq5w0aEbYngWFhzqJwDN/FfewJizGKtQ85uPeCQFFj
-         n1OzbZgCuCb1BPJL9c1e/JMbN+OxPcmXRRMj2KJv7U8M8qqB+HhTr8faWV6JViG3oUmo
-         F9fKbviqJ6AH9nMK5McgLpIqS+bLo/NJDvVTQbEeXoGqIjrVv3tRJVN5BoDYuh3S7yUe
-         oyDSrYpSAcbHLGoZUpH53PGQaARyfCQJGWo6WPqelFFexcbphaB4zwJs+dw2Zf8wnLzM
-         PkdknDnVmknv68i19VMmJ01gmctLwaMgFzgPP+X+eFc9IiaaAgqp+4yr4kS/WnI/hkRi
-         M11g==
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=WG09mAhXQQfAx9IYst4qrimV9OzP+6WFIUz0RFuN5Cs=;
+        b=Sg4v28g92GjGFLglKL5FXlD6atfNS+815wMSBDIDkP3bmO6+3HRaRAtegUPWrnfqV7
+         z4m7Km8/vk0XlC7pVyGWdaGscHGV0Khj+okBm56CZTbuPagAMHgXJxRJCl/uS4ayUrr1
+         oIS9SVUtNBaP4mwBLqQBC003qh857tPtds6C2juZ2Mker3YVXkNVMTMTC/HmK8jH5tR5
+         1UsZmWDvGO1uiDFmY6ufuQ+W0Gt621KcmmLWiuMvVwDzLUhhQhNJY1iX5bRPUlfBQVWE
+         p5WXOrxRjY/0vdmOFVftBWWrbm5unFunkFYTE3bAD9aOR4TmD0esz5vf9eyFJ+EuOMl4
+         OzUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=nuhT/P++FvT8IemUryIvS5isjY+Z8JaiL8Gjcc8y6PA=;
-        b=Bhq84RBXerDwghBhpIrU2qbFmiJwI/ahHGqZ5k4TLV9lzAtWBug0b2IlMPR4BBue6N
-         ILo4wq+lCYATSDNju4T9Vq4znip9CDb1uqoYvURPWnCsdWB3+6mEoIJPwuI2eQcM6Y87
-         axWFbqoTUNu7qhrhUs461BrVaHOQyKgKJqp5TGz7lHIlqucDzIn2YIHvpymiCvm5Gxv8
-         rGV23YYQkgvmtPifN4ZUN1TPxiIH4Vhwh07MZVtBYZaX19wFTZifJ073LX9QhO/auD17
-         D66vwpqfYau8d7nHuTaqH7dZZq+gY0UFBBnUh7LD9aTl/GWs+sQ1pTVeolKAzsQ8HGQb
-         cCDQ==
-X-Gm-Message-State: ACgBeo0UBcVjUlpmeybRaEzHoaCyu2KTkEKo8JtCcWTuQ41naEB+ryzI
-        31rZA0PT/QO3d0mVwdViLQg=
-X-Google-Smtp-Source: AA6agR5F1sVpOm1FOzWqebOo51iWqKTQf0OjEXDWlIsGM1cxrldQANCfX1dd0EQrqDoK33ucoQKWWw==
-X-Received: by 2002:a05:6402:3219:b0:448:2994:df99 with SMTP id g25-20020a056402321900b004482994df99mr8079551eda.326.1661779491980;
-        Mon, 29 Aug 2022 06:24:51 -0700 (PDT)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id 1-20020a170906218100b0073d03cb868csm4438546eju.75.2022.08.29.06.24.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Aug 2022 06:24:51 -0700 (PDT)
-Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through
- DMM/TILER
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, tomba@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        merlijn@wizzup.org, tony@atomide.com,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <5b6d3e7f-c638-fdc7-5080-44d34abed610@ideasonboard.com>
- <a3ed3a2c-86ce-1c85-e8aa-c08b54ad1a43@gmail.com>
- <CAMSo37XdZSZUHLWJj373DdtOBA9=uD8SJ7ywWCYF2pU1i4cB_g@mail.gmail.com>
- <ed4fe238-4fcd-1253-658f-18fe1e1f13b0@gmail.com>
- <CAMSo37V3U5nYng77jzSnKH73CTLhGYQJu11Q5wRt289se5nFJw@mail.gmail.com>
- <4128aed0-211a-d12a-6a86-deb4457d39f7@gmail.com>
- <CAMSo37W-DePLDP=zk-nY6FGcZuk0QzHj4=usrieyV0TNcNfbXw@mail.gmail.com>
- <da2a661e-9da0-850c-3067-8c1e8d5531bc@gmail.com>
- <CAMSo37VXNQeR0qZgzZONBwp_4z9CuUSJJJzhM7k+K39BcwvW6A@mail.gmail.com>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <235621d0-2141-5ef9-bcd4-5c48b985b3a0@gmail.com>
-Date:   Mon, 29 Aug 2022 16:24:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <CAMSo37VXNQeR0qZgzZONBwp_4z9CuUSJJJzhM7k+K39BcwvW6A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=WG09mAhXQQfAx9IYst4qrimV9OzP+6WFIUz0RFuN5Cs=;
+        b=gbSkMlYq9Q7nvt1YL7qGa6ru9ZURzo1ezaIrPE9TPWBnCWgSwjJ0uU2qPpL5JPzN1O
+         3Y4E43U16ffwvomgJ2K0ncppIvlkPzyx1hDzrMOatV0OWPmzM3MzV+MKPiWUOzMxMmtI
+         FrXzDDlpPDS5Z6OOjTFiYi+fRxKvxBjBTPJ99Juky1yR16I7vnvcpNSr6Wasiz/P4VvD
+         yZO0C3iWrEyyQlT6T0/HLpqeWGFoWSSwoO4/pQy1yrvc57weYxyWYKSrkwhr0cM2lGge
+         0wKiMENPZw/hlXfGBO6gxPGq9peJWMK+8sxHkcBYUiijC5QjcFm7SP2O/mMY3Ub48pEc
+         9n7Q==
+X-Gm-Message-State: ACgBeo00XdMIXZwz6r3rbX4DQ1uhvQW26XDodh6FSpcbS5xD+HYSZJqj
+        nbFHpR1ziUD8RvzBkBn+kS+HxtbVy6xyaw==
+X-Google-Smtp-Source: AA6agR4iICr0MS6GylHzeQ7syjs6ibXQZYH8UN6xLgOVnE+vPLhhH3u9CZ+A0QdXKknbzZONJVZsDA==
+X-Received: by 2002:a63:2b02:0:b0:41d:9b5e:7d69 with SMTP id r2-20020a632b02000000b0041d9b5e7d69mr13499645pgr.165.1661779562545;
+        Mon, 29 Aug 2022 06:26:02 -0700 (PDT)
+Received: from Negi ([207.151.52.7])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090332c500b0017292073839sm1381370plr.178.2022.08.29.06.26.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 06:26:01 -0700 (PDT)
+From:   Soumya Negi <soumya.negi97@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Soumya Negi <soumya.negi97@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFT PATCH] media: em28xx: Enable v4l2 file ops at the end of em28xx_v4l2_init()
+Date:   Mon, 29 Aug 2022 06:25:48 -0700
+Message-Id: <20220829132548.23520-1-soumya.negi97@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,294 +66,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fix syzbot bug KASAN: use-after-free Read in v4l2_fh_open
+Syzbot link:
+https://syzkaller.appspot.com/bug?id=0e3c97f1c4112e102c9988afd5eff079350eab7f
+Repro: https://syzkaller.appspot.com/text?tag=ReproC&x=12663ebdd00000
 
+The bug arises because the em28xx driver registers a v4l2 video
+device(struct video_device) with the V4L2 interface in
+em28xx_v4l2_init() but the v4l2 extension initialization eventually
+fails and the video device is unregistered. v4l2_open() in the V4L2
+interface views the device as registered and allows calls to
+em28xx_v4l2_open(). Due to race between video_unregister_device() and
+v4l2_open(), em28xx_v4l2_open() is accessing video device after it has
+been freed(by the release callback) and is passing it on to
+v4l2_fh_open().
 
-On 29.08.22 г. 5:51 ч., Yongqin Liu wrote:
-> Hi, Ivaylo
-> 
-> Sorry for the late response, and Thanks very much for the detailed explanations!
-> 
-> On Thu, 18 Aug 2022 at 18:23, Ivaylo Dimitrov
-> <ivo.g.dimitrov.75@gmail.com> wrote:
->>
->> Hi,
->>
->> On 17.08.22 г. 7:52 ч., Yongqin Liu wrote:
->>> Hi, Ivaylo
->>>
->>> On Mon, 15 Aug 2022 at 14:23, Ivaylo Dimitrov
->>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>
->>>> Hi Liu,
->>>>
->>>> On 14.08.22 г. 17:27 ч., Yongqin Liu wrote:
->>>>> Hi, IvayIo
->>>>>
->>>>> Thanks very much for the reply!
->>>>>
->>>>> On Sat, 13 Aug 2022 at 14:58, Ivaylo Dimitrov
->>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>>>
->>>>>> Hi Liu,
->>>>>>
->>>>>> On 12.08.22 г. 7:35 ч., Yongqin Liu wrote:
->>>>>>> Hi, Ivaylo, Tomi
->>>>>>>
->>>>>>> We have one X15 Android AOSP master build, it could not have the home
->>>>>>> screen displayed
->>>>>>> on the hdmi monitor connected with this change, with the following
->>>>>>> message printed on the serial console
->>>>>>>         [  607.404205] omapdrm omapdrm.0: Failed to setup plane plane-0
->>>>>>>         [  607.410522] omapdrm omapdrm.0: Failed to setup plane plane-1
->>>>>>>         [  607.416381] omapdrm omapdrm.0: Failed to setup plane plane-2
->>>>>>>         [  607.422088] omapdrm omapdrm.0: Failed to setup plane plane-3
->>>>>>>
->>>>>>>        # for details, please check the link here: http://ix.io/47m1
->>>>>>>
->>>>>>> It will work with home screen displayed on the hdmi monitor if this
->>>>>>> change is reverted.
->>>>>>>
->>>>>>> Is this the broken problem you talked about here?
->>>>>>>
->>>>>>> And could you please give some suggestions on how to have the x15
->>>>>>> Android build work with this change?
->>>>>>>
->>>>>>
->>>>>> Make sure scanout (i.e. those to be displayed) buffers are actually
->>>>>> allocated as such - OMAP_BO_SCANOUT flag must be set when calling
->>>>>> omap_bo_new().
->>>>>
->>>>> I am not familiar with this area, I am sorry if I asked quite silly questions:(
->>>>> I googled omap_bo_new, and found it's a function of libdrm here[1], is
->>>>> it what you meant here?
->>>>>
->>>>
->>>> Yes, calling this function from userspace ends in kernel code the
->>>> $subject patch is part of.
->>>>
->>>>> If it's the omap_bo_new that we should pass OMAP_BO_SCANOUT when it is called,
->>>>> then is it the correct way to update omap_bo_new to add the OMAP_BO_SCANOUT flag
->>>>> before it calls omap_bo_new_impl?
->>>>>
->>>>
->>>> omap_bo_new() is fine and does not need any updates/fixes, it is the
->>>> code that uses it (whoever it is, I am not familiar with the userspace
->>>> you are using) that shall pass correct flags (third parameter) when
->>>> calling it.
->>>
->>> Sorry, I do not get the point here.
->>> Like you said, the code that calls omap_bo_new needs to pass OMAP_BO_SCANOUT,
->>> then IMO omap_bo_new should be the best place to add the OMAP_BO_SCANOUT flag,
->>> (like via flags = flags | OMAP_BO_SCANOUT), that could help avoid
->>> missing the flag by some code,
->>> and also avoids hacks/changes on the possible blob binaries.
->>>
->>> Do I misunderstand somewhere?
->>> Or is there some case that OMAP_BO_SCANOUT shouldn't be passed when
->>> omap_bo_new is called?
->>>
->>
->> Exactly. You need to pass OMAP_BO_SCANOUT only when you want your
->> buffers to be 'scanout' buffers(i.e. buffers that can be displayed on
->> screen), which is not always the case - there is no need offscreen
->> buffers or pixmaps to be scanout capable, for example. There are more
->> cases like that.
->>
->> The problem is that scanout buffer on OMAP4 allocate additional
->> resources in DMM/TILER (a piece of hardware) and those resources are
->> limited. Not only that, but DMM/TILER memory space eventually gets
->> fragmented over time (if you have lots of allocataoins/deallocations)
->> and you will start getting ENOMEM (or similar) errors.
->>
->> Ofc, in your particular use case you may never hit such issues.
-> 
-> Thanks, I understand the cases now.
-> 
-> 
->>>> BTW you shall really find who and how uses OMAP BO API, in theory it
->>>> might use ioctls directly and not call omap_bo_xxx functions.
->>>
->>> Do you mean the DRM_OMAP_GEM_NEW ioctl api?
->>> There is no place in the AOSP tree to call that except the
->>> omap_bo_new_impl function,
->>> which is called by the omap_bo_new and omap_bo_new_tiled functions.
->>> The omap_bo_new should not be called with the OMAP_BO_TILED flag,
->>> while the omap_bo_new_tiled should be called with the OMAP_BO_TILED flag
->>>
->>> Regarding to the omap_bo_new function, there are 2 places call it in
->>> the AOSP tree:
->>> #1 ./external/libkmsxx/kms++/src/omap/omapframebuffer.cpp
->>> #2 ./device/ti/beagle_x15/gpu/gralloc.am57x.so
->>>
->>> #1 seems not used in AOSP yet, and #2 is one blob binary we do not
->>> have the source for.
->>>
->>
->> I would bet on gralloc.am57x.so.
-> yeah, that's my guess as well.
-> 
->>>> strace
->>>> would be your friend there. or gdb, or whatever tools are used on
->>>> android. Or put some printfs() in omap_bo_new() that output the PID of
->>>> the calling process, etc.
->>>
->>> Thanks a lot for these great suggestions! Will use them when possible.
->>>
->>>>> And another question is that, since the userspace(libdrm) will be used
->>>>> to work with different kernel versions,
->>>>> like the old 4.14, 4.19, etc, do you think there will be problem to
->>>>> pass  OMAP_BO_SCANOUT
->>>>> from the userspace side with the old kernels(which does not have this change)?
->>>>> does this change need to be backported to the old kernel versions?
->>>>
->>>> There should not be any issue. The changes could be backported if one
->>>> hits the issues this $series is fixing, but there is no need.
->>>
->>> Thanks for the confirmation!
->>> I just boot-tested with adding OMAP_BO_SCANOUT in the omap_bo_new function,
->>> and it worked with the current 4.14, 4.19, and the mainline kernels.
->>> # via adding line "flags = flags | OMAP_BO_SCANOUT" in the omap_bo_new function.
->>>
->>
->> sure, the point is that with this change *every* BO will be allocated as
->> scanout BO, potentially leading to the above explained issues.
-> 
-> get it.
-> 
->>>>>
->>>>> And the last question is that, omap_bo_new might be called by some
->>>>> property binaries what not everyone
->>>>> could get the source to update, for such case what's your suggestions?
->>>>>
->>>>
->>>> Hard to say without knowing what that library would be.
->>>>
->>>> When I hit issues with closed blobs, sometimes I reverse-engineer them
->>>> to fix the issue, example:
->>>>
->>>> https://github.com/maemo-leste/sgx-ddk-um/tree/master/dbm
->>>>
->>>> This is REed libdbm from sgx-ddk-um 1.17.4948957, that is responsible
->>>> for allocating BOs (what omap_bo_new() does) but it uses DUMB buffers
->>>> API, instead of OMAP BO API.
->>>>
->>>> I guess you are using some older version of sgx-ddk-um, so you may fix
->>>> in similar way. Or binary patch.
->>>
->>> The blob binary that calls omap_bo_new is the gralloc.am57x.so here[2]:
->>> any suggestions with it?
->>> # sorry, I am not able to find out how you did the reverse-engineer
->>> work# with the dbm repository shared here,
->>> # not sure if you could give some tutorial steps for the similar
->>> reverse-engineer# work with gralloc.am57x.so
->>>
->>
->> Sorry, but it is like if you ask me to provide you with a tutorial on
->> how to do brain surgery :)
->>
->>> [2]: https://android.googlesource.com/device/ti/beagle-x15/+/refs/heads/master/gpu/gralloc.am57x.so
->>>
->>
->> I investigated this a bit and it seems it calls omap_bo_new() in a
->> wrapper function like:
->>
->> bo = omap_bo_new(dev, -page_size & (size + page_size - 1), ((param5 &
->> 0x800000) != 0) | OMAP_BO_WC | OMAP_BO_MEM_CONTIG);
->>
->> Didn't investigate further what param5 is, but it controls if
->> OMAP_BO_SCANOUT is passed to omap_bo_new or not.
->>
->> However, this library was not made with upstream kernel in mind, as
->> AFAIK OMAP_BO_MEM_CONTIG never made it upstream:
->>
->> https://yhbt.net/lore/all/2580272.MiZDHyRxZo@avalon/T/
->>
->> @Tomi - any comment?
->>
->> So, you have couple of options:
->>
->> 1. Ask TI for upstream-compatible library.
-> check is in progress, but it would take quite a long time I guess
->> 2. Try to push OMAP_BO_MEM_CONTIG patch upstream.
-> hmm, sounds like one impossible thing...
->> 3. Modify omap_bo_new() to something like:
->> .
->> #define OMAP_BO_MEM_CONTIG      0x00000008      /* only use contiguous dma mem */
->> .
->> if (flags & OMAP_BO_MEM_CONTIG)
->>     flags |= OMAP_BO_SCANOUT;
->> .
->> This will not achieve exactly what OMAP_BO_MEM_CONTIG is supposed to do,
->> but should make it work, at least.
-> 
-> This looks like the only doable thing at the moment, maybe one change
-> needs to be submitted to the mesa/drm repository.
-> I can submit a request on your #3 change to the mesa/drm repository
-> for discussion after some check if you do not mind.
-> 
+In em28xx_v4l2_init(), temporarily disable v4l2 file operations on
+struct video_device devices(video, vbi, radio) before registering them
+and enable the file ops at the end when v4l2 extension initialization
+succeeds.
 
-I doubt mesa/drm will accept such hack, I think you will need to support 
-your drm clone (with the above fix) until TI fixes the closed library.
+Reported-by: syzbot+b2391895514ed9ef4a8e@syzkaller.appspotmail.com
+Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+---
+ drivers/media/usb/em28xx/em28xx-video.c | 45 +++++++++++++++++++++----
+ 1 file changed, 39 insertions(+), 6 deletions(-)
 
-Regards,
-Ivo
+diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
+index 8181c0e6a25b..900a1eacb1c7 100644
+--- a/drivers/media/usb/em28xx/em28xx-video.c
++++ b/drivers/media/usb/em28xx/em28xx-video.c
+@@ -2320,6 +2320,19 @@ static int em28xx_v4l2_close(struct file *filp)
+ 	return 0;
+ }
+ 
++/* Used to temporarily disable file operations on video_device until successful
++ * initialization in em28xx_v4l2_init().
++ */
++static const struct v4l2_file_operations em28xx_v4l_fops_empty = {
++	.owner         = THIS_MODULE,
++	.open          = NULL,
++	.release       = NULL,
++	.read          = NULL,
++	.poll          = NULL,
++	.mmap          = NULL,
++	.unlocked_ioctl = NULL,
++};
++
+ static const struct v4l2_file_operations em28xx_v4l_fops = {
+ 	.owner         = THIS_MODULE,
+ 	.open          = em28xx_v4l2_open,
+@@ -2375,12 +2388,22 @@ static const struct v4l2_ioctl_ops video_ioctl_ops = {
+ };
+ 
+ static const struct video_device em28xx_video_template = {
+-	.fops		= &em28xx_v4l_fops,
++	.fops		= &em28xx_v4l_fops_empty,
+ 	.ioctl_ops	= &video_ioctl_ops,
+ 	.release	= video_device_release_empty,
+ 	.tvnorms	= V4L2_STD_ALL,
+ };
+ 
++/* Used to temporarily disable file operations on video_device until successful
++ * initialization in em28xx_v4l2_init().
++ */
++static const struct v4l2_file_operations radio_fops_empty = {
++	.owner         = THIS_MODULE,
++	.open          = NULL,
++	.release       = NULL,
++	.unlocked_ioctl = NULL,
++};
++
+ static const struct v4l2_file_operations radio_fops = {
+ 	.owner         = THIS_MODULE,
+ 	.open          = em28xx_v4l2_open,
+@@ -2404,7 +2427,7 @@ static const struct v4l2_ioctl_ops radio_ioctl_ops = {
+ };
+ 
+ static struct video_device em28xx_radio_template = {
+-	.fops		= &radio_fops,
++	.fops		= &radio_fops_empty,
+ 	.ioctl_ops	= &radio_ioctl_ops,
+ 	.release	= video_device_release_empty,
+ };
+@@ -2833,9 +2856,6 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+ 				"can't register radio device\n");
+ 			goto unregister_dev;
+ 		}
+-		dev_info(&dev->intf->dev,
+-			 "Registered radio device as %s\n",
+-			 video_device_node_name(&v4l2->radio_dev));
+ 	}
+ 
+ 	/* Init entities at the Media Controller */
+@@ -2851,14 +2871,27 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+ 	}
+ #endif
+ 
++	/* Enable v4l2 file operations for v4l2 video video_device */
++	v4l2->vdev.fops = &em28xx_v4l_fops;
+ 	dev_info(&dev->intf->dev,
+ 		 "V4L2 video device registered as %s\n",
+ 		 video_device_node_name(&v4l2->vdev));
+ 
+-	if (video_is_registered(&v4l2->vbi_dev))
++	if (video_is_registered(&v4l2->vbi_dev)) {
++		/* Enable v4l2 file operations for v4l2 vbi video_device */
++		v4l2->vbi_dev.fops = &em28xx_v4l_fops;
+ 		dev_info(&dev->intf->dev,
+ 			 "V4L2 VBI device registered as %s\n",
+ 			 video_device_node_name(&v4l2->vbi_dev));
++	}
++
++	if (video_is_registered(&v4l2->radio_dev)) {
++		/* Enable v4l2 file operations for v4l2 radio video_device */
++		v4l2->radio_dev.fops = &radio_fops;
++		dev_info(&dev->intf->dev,
++			 "Registered radio device as %s\n",
++			 video_device_node_name(&v4l2->radio_dev));
++	}
+ 
+ 	/* Save some power by putting tuner to sleep */
+ 	v4l2_device_call_all(&v4l2->v4l2_dev, 0, tuner, standby);
+-- 
+2.17.1
 
-> Thanks,
-> Yongqin Liu
-> 
->>>>>>> On Thu, 17 Feb 2022 at 23:29, Ivaylo Dimitrov
->>>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>>> On 17.02.22 г. 14:46 ч., Tomi Valkeinen wrote:
->>>>>>>>> Hi,
->>>>>>>>>
->>>>>>>>> On 19/01/2022 12:23, Ivaylo Dimitrov wrote:
->>>>>>>>>> On devices with DMM, all allocations are done through either DMM or
->>>>>>>>>> TILER.
->>>>>>>>>> DMM/TILER being a limited resource means that such allocations will start
->>>>>>>>>> to fail before actual free memory is exhausted. What is even worse is
->>>>>>>>>> that
->>>>>>>>>> with time DMM/TILER space gets fragmented to the point that even if we
->>>>>>>>>> have
->>>>>>>>>> enough free DMM/TILER space and free memory, allocation fails because
->>>>>>>>>> there
->>>>>>>>>> is no big enough free block in DMM/TILER space.
->>>>>>>>>>
->>>>>>>>>> Such failures can be easily observed with OMAP xorg DDX, for example -
->>>>>>>>>> starting few GUI applications (so buffers for their windows are
->>>>>>>>>> allocated)
->>>>>>>>>> and then rotating landscape<->portrait while closing and opening new
->>>>>>>>>> windows soon results in allocation failures.
->>>>>>>>>>
->>>>>>>>>> Fix that by mapping buffers through DMM/TILER only when really needed,
->>>>>>>>>> like, for scanout buffers.
->>>>>>>>>
->>>>>>>>> Doesn't this break users that get a buffer from omapdrm and expect it to
->>>>>>>>> be contiguous?
->>>>>>>>>
->>>>>>>>
->>>>>>>> If you mean dumb buffer, then no, this does not break users as dumb
->>>>>>>> buffers are allocated as scanout:
->>>>>>>>
->>>>>>>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/omapdrm/omap_gem.c#L603
->>>>>>>>
->>>>>>>> If you mean omap_bo allocated buffers, then if users want
->>>>>>>> linear(scanout) buffer, then they request it explicitly by passing
->>>>>>>> OMAP_BO_SCANOUT.
->>>>>>>>
->>>>>>>> Ivo
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>
->>>>>
->>>>>
->>>
->>>
->>>
-> 
-> 
-> 

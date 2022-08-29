@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD02C5A4726
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF285A4734
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbiH2K3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S229933AbiH2KcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiH2K3s (ORCPT
+        with ESMTP id S229487AbiH2KcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:29:48 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C054D283
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:29:44 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3378303138bso183763037b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1UgMDodqKRBaEBEHWcE9DSlrGdrStbBVEiwW2ZUzz2s=;
-        b=dK8ya6DukvKQUrXEWSpVF9llclw8PI6g3cJH0m7T3X/DwsxUj0+qVfBTkZxXLw0ul4
-         ZW06i5Y1Pq0kVMom3eGD1sec10knJGan7jkT968BCBGIhc5dneR8WXe7gYXxtitybbB1
-         J7uKbDih5Uem99N7Y8S87acgRAjxfYfx3RZsF6USx1gmtXWQluEzQyMQ16jBjxSSaWCw
-         9oPDoaCRIcrBBczTy9wSJiMBd4C/RGeE0d3xQwb49G0oz2nr89+onQQUyRSSFtnKPPMh
-         qV6UTPs/lt8Yn1rKD6sQtkBWykbW3J1Vrge5Snhi1Muz37gVGp9YnwNGjUVHn8riPnXj
-         i16Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1UgMDodqKRBaEBEHWcE9DSlrGdrStbBVEiwW2ZUzz2s=;
-        b=EZSl19+CXJ5UoNXVmWfn5pwcUZcU48+ixYdq/p5zqJDUSjPvtAXeTFsXNrt6KFjeuy
-         WPwwAZbJpMtvmJ/Q2rJOLaLmJAGyUYxxbM+7QPyoyzP/2+Iq3Z7ZNBe7uhFrrVXHXcrB
-         4/a7K9G8fdJfd7Sq1uaeViOY89WVbk51JqJY2fBbL1ztzV3f724/bgEOGNrPZE3GOCfb
-         AbkOw7MsvwxrAfq82/UDZZs7274dKhInyWEtJNu9UNZ/C5t06WY11ZhrmVMuoi92zUpM
-         r8nuJ/QBZIxrMNZsS40Qo503L+O0GeLKOpYDR5hx9K17hhZ/QIJIx4YuPmYiO/5EA60u
-         RMBQ==
-X-Gm-Message-State: ACgBeo3eB56OnFd5MhXN7EuhaGqu+u+4ZjrEbc3qzLxG9hi1KSBbALQh
-        E0gc9Kr99MVpXuvZyrjRAkIYTOfm3CSzPA3YB9Sf1YA2wM4=
-X-Google-Smtp-Source: AA6agR7qYl58uspYvYVcrd4twcZFSvJfDb89dVftNjQCTaRPMQLfY0kip89WMfaxTd5BRoRKF5wEAnf6riLO2sIgiAg=
-X-Received: by 2002:a81:7882:0:b0:339:802b:b4c0 with SMTP id
- t124-20020a817882000000b00339802bb4c0mr9473374ywc.488.1661768983953; Mon, 29
- Aug 2022 03:29:43 -0700 (PDT)
+        Mon, 29 Aug 2022 06:32:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C54858B7D;
+        Mon, 29 Aug 2022 03:32:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB1BF6108B;
+        Mon, 29 Aug 2022 10:32:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B60AAC433D6;
+        Mon, 29 Aug 2022 10:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661769132;
+        bh=TR5k2Yh8gwGWFbzhitEfL7Rh1/zEpiSLk+TrzVaWXOI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=HTMjuFBy6+vGraHsxJBXt61FOrZE16rCSuDIX7J9zsNP2dAfbVPhBN2fCuk+cUc6p
+         XzIGM35vwf3hugYZM/x+xlkdAOEEgAQQymtIi+eiuEszD0cssDnMZ6EBKOJpy64nyw
+         VZocptAW0fki4n5/eIVIPYhc+LchLbDuMu7IXvxjqfi2PHHHbFreCrgxkZesagAzqD
+         02vg4VIaL/JIfX8D+TgaSN/MQmVD1CpDflxZSBDbXeGX5/S7Tvi39cnVClOUyeiAvH
+         RCfc3377H6dALCZXOiswrcwKSUxQZffetMqzbCnn4umcysouB99Bq7hc5i6FfBwqt4
+         bQ5uw3PFBmo8w==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Mazin Al Haddad <mazinalhaddad05@gmail.com>
+Cc:     pontus.fuchs@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org,
+        syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3] ar5523: check endpoints type and direction in probe()
+References: <20220827110148.203104-1-mazinalhaddad05@gmail.com>
+Date:   Mon, 29 Aug 2022 13:32:06 +0300
+In-Reply-To: <20220827110148.203104-1-mazinalhaddad05@gmail.com> (Mazin Al
+        Haddad's message of "Sat, 27 Aug 2022 14:01:49 +0300")
+Message-ID: <871qszibmh.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <CAHk-=whaiqzB6a_daUpvGyDg-cvkXKwwfjwPKV4HQRcci+8BeA@mail.gmail.com>
-In-Reply-To: <CAHk-=whaiqzB6a_daUpvGyDg-cvkXKwwfjwPKV4HQRcci+8BeA@mail.gmail.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Mon, 29 Aug 2022 11:29:08 +0100
-Message-ID: <CADVatmNfM9rTNRi0GVFJt+HcxQ1+_qqYv01d7krtXVoHLSdqYA@mail.gmail.com>
-Subject: Re: Linux 6.0-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 12:22 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So as some people already noticed, last week was an anniversary week -
-> 31 years since the original Linux development announcement. How time
-> flies.
->
-> But this is not that kind of historic email - it's just the regular
-> weekly RC release announcement, and things look pretty normal. We've
-> got various fixes all over the tree, in all the usual places: drivers
-> (networking, fbdev, drm), architectures (a bit of everythinig: x86,
-> loongarch, arm64, parisc, s390 and RISC-V), filesystems (mostly btrfs
-> and cifs, minor things elsewhere), and core kernel code (networking,
-> vm, vfs and cgroup).
->
-> And some tooling support (perf and selftests).
->
-> We've got a few known issues brewing, but nothing that looks all that
-> scary. Knock wood.
->
-> Please give it a go,
+Mazin Al Haddad <mazinalhaddad05@gmail.com> writes:
 
-No new failures in my tests. But among the one I reported, these two
-are still in -rc3.
+> Fixes a bug reported by syzbot, where a warning occurs in usb_submit_urb()
+> due to the wrong endpoint type. There is no check for both the number
+> of endpoints and the type.
+>
+> Fix it by adding a check for the number of endpoints and the
+> direction/type of the endpoints. If the endpoints do not match -ENODEV is
+> returned.
+>
+> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> WARNING: CPU: 1 PID: 71 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+> Modules linked in:
+> CPU: 1 PID: 71 Comm: kworker/1:2 Not tainted 5.19.0-rc7-syzkaller-00150-g32f02a211b0a #0
+> Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>  <TASK>
+>  ar5523_cmd+0x420/0x790 drivers/net/wireless/ath/ar5523/ar5523.c:275
+>  ar5523_cmd_read drivers/net/wireless/ath/ar5523/ar5523.c:302 [inline]
+>  ar5523_host_available drivers/net/wireless/ath/ar5523/ar5523.c:1376 [inline]
+>  ar5523_probe+0xc66/0x1da0 drivers/net/wireless/ath/ar5523/ar5523.c:1655
+>
+> Link: https://syzkaller.appspot.com/bug?extid=1bc2c2afd44f820a669f
+> Reported-and-tested-by: syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
+> Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
 
-1. csky and mips allmodconfig fails with gcc-12
-Reported at https://lore.kernel.org/lkml/YvY4xdZEWAPosFdJ@debian/
-Fix at https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b840304fb46cdf7012722f456bce06f151b3e81b
-
-2. x86_64 allmodconfig fails with clang
-Reported at https://lore.kernel.org/lkml/YuwRyQYPCb1FD+mr@debian/
-No fix in linux-next yet.
-
+Has this been tested on a real ar5523 hardware?
 
 -- 
-Regards
-Sudip
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

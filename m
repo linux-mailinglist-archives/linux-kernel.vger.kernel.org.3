@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B175A582E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F245A581E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiH2XsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S229487AbiH2Xsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiH2XrS (ORCPT
+        with ESMTP id S229892AbiH2Xrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:47:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F02A6C2C;
-        Mon, 29 Aug 2022 16:46:50 -0700 (PDT)
+        Mon, 29 Aug 2022 19:47:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149C1A6ADC;
+        Mon, 29 Aug 2022 16:46:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FC73B815D7;
-        Mon, 29 Aug 2022 23:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A13C43470;
-        Mon, 29 Aug 2022 23:46:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1AC99CE16AA;
+        Mon, 29 Aug 2022 23:46:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B024C43149;
+        Mon, 29 Aug 2022 23:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816802;
-        bh=cAtzJP6mULfhyj1besIKDW4KYCtsZya/XltnSxtzGuE=;
+        s=k20201202; t=1661816803;
+        bh=4CeSxgNNAqD4J8I2xDVasWksrY8dmv4iPF35HZ2Vs9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YlKGjkIMWdl7jh8Q0MSEGJXl+r8rZraBALZ+tc+Tmbx6zs8MJdYiW6q3FrEy6+t4x
-         xyP+8xbTi3s0Ozw1o8juoiXeCVD/5Oeo2/c2sUIjrf6hmvi08sB3hfKTe0dBJjUWbF
-         V/c3EsBMO/IXVbclurgypSFwR5GpleVvC1iR+v6VxNf3lydOlZiwXAcVPLoRqx+L4T
-         QNOJ1uCl8E7joiW41QFKkPQStCBg/uo1nbh8cyJ3DNiCeqPjHV1XSlFQsuXZeeBYcB
-         F/WsrDbTKpX8XPameC13kOPhqHn+LjDfVvbsFtBI7h6AXvIxH/10mydjCcPA9lult3
-         c+QUeCMUsRlrA==
+        b=b+bIjLnAdz8YUnSAzi6vDFyEOd2FM55SLqtjwThWDGdUc56R/Sf2ZKhGhTYLjrpBt
+         dV4D4jR78zKI/YHpMnw/mSGa0+TeMxCJhIeEvFgjU8S6Fb+s31HWTTtVU4YQgnDQeY
+         Yq9HguLgDfOQT5moth4uhu5RyFOBLZlh7t+wo71eQBCR4TUZGOpIWKW8zZTFqD4971
+         qYizzeR1OhQjHN54UW8LnYtS/f/O4gyNDcDddGMU5gMfD6xnpZ5dIYYKVPAmDYM9W6
+         vnTtQ1/k8IURZusQu4937FV7QU4tb0KqxNdu1Cs3rOGsqCjIzuy/EuBpJaILYeJwj0
+         3N0UE+4BSbqDw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, luca.weiss@fairphone.com
-Cc:     robh+dt@kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 5/5] arm64: dts: qcom: sm6350: Add interconnect support
-Date:   Mon, 29 Aug 2022 18:46:04 -0500
-Message-Id: <166181675952.322065.6438908661865226238.b4-ty@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     tdas@codeaurora.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, ~postmarketos/upstreaming@lists.sr.ht,
+        jami.kettunen@somainline.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, robh@kernel.org,
+        Martin Botka <martin.botka@somainline.org>,
+        ctatlor97@gmail.com, agross@kernel.org, sboyd@kernel.org
+Subject: Re: [PATCH] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
+Date:   Mon, 29 Aug 2022 18:46:05 -0500
+Message-Id: <166181675962.322065.7577270067001229984.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220525144404.200390-6-luca.weiss@fairphone.com>
-References: <20220525144404.200390-1-luca.weiss@fairphone.com> <20220525144404.200390-6-luca.weiss@fairphone.com>
+In-Reply-To: <20220714203822.186448-1-marijn.suijten@somainline.org>
+References: <20220714203822.186448-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,16 +63,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 16:44:01 +0200, Luca Weiss wrote:
-> Add all the different NoC providers that are found in SM6350 and
-> populate different nodes that use the interconnect properties.
+On Thu, 14 Jul 2022 22:38:22 +0200, Marijn Suijten wrote:
+> In commit 3f905469c8ce ("clk: qcom: gcc: Use floor ops for SDCC clocks")
+> floor ops were applied to SDCC2 only, but flooring is also required on
+> the SDCC1 apps clock which is used by the eMMC card on Sony's Nile
+> platform, and otherwise result in the typicial "Card appears
+> overclocked" warnings observed on many other platforms before:
 > 
+>     mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
+>     mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
+>     mmc0: Card appears overclocked; req 104000000 Hz, actual 192000000 Hz
 > 
+> [...]
 
 Applied, thanks!
 
-[5/5] arm64: dts: qcom: sm6350: Add interconnect support
-      commit: 38c5c4fe17014130dee4f85e663c5d919655801e
+[1/1] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
+      commit: 6956c18f4ad9200aa945f7ea37d65a05afc49d51
 
 Best regards,
 -- 

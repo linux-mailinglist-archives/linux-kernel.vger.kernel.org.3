@@ -2,113 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9275A5014
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8405A5026
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbiH2PUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        id S229975AbiH2P0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiH2PUe (ORCPT
+        with ESMTP id S229616AbiH2P0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:20:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84C654C8C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:20:32 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oSgYf-00077I-3W; Mon, 29 Aug 2022 17:20:13 +0200
-Message-ID: <c668fff254b9f56b699a2714bb8c016e3b0cc5b5.camel@pengutronix.de>
-Subject: Re: [PATCH v4 0/6] Add iMX8MP PCIe support
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Mon, 29 Aug 2022 17:20:11 +0200
-In-Reply-To: <1661760917-9558-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1661760917-9558-1-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Mon, 29 Aug 2022 11:26:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A225E4057F;
+        Mon, 29 Aug 2022 08:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661786759; x=1693322759;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=xYdvX1PhD3Iug/xG1oZ0ioxeY0YVxwImFkNf9/6SStg=;
+  b=hWdzhzZFwVFA5mNu2jfoAjjGOwCGsK2Gc/vg0/6FixGLwv3ntrqwitCK
+   VE6ndI3r/6otqMBw8JEsVzE5Uvbi/ZSAQykMllBg3Os/pnVAIiKDQ3HlU
+   xY8Mm+ZFTSV9saVBR+6PNPX7tq+VZ9yawCIUBIumHjZdFcPxvgBx/E3Wf
+   JUsBTpRrE9g78IiId9/G7QTrxEnvaGlM/RBE6JeQtJBDW59hyOHCPVh3l
+   fzXbNNS8fkrr/PwYRG00grNSj7LWGVQw2NMn4yVzBs2ZVxNvrULoSRhqH
+   HXjd3AKajILPJoJ8tZPmlIueFtvJCTwUtMVM2nS+Sq6ft3iTb/SW5KvIP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="358886403"
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="358886403"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 08:25:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="640973244"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 29 Aug 2022 08:25:49 -0700
+Date:   Mon, 29 Aug 2022 23:21:07 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <20220829152107.GD1586678@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <CA+EHjTzpb2PcGBbN61YqMWdQ5f-55Lt12ALHQ0pdwtGvV8nS8g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTzpb2PcGBbN61YqMWdQ5f-55Lt12ALHQ0pdwtGvV8nS8g@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
+On Fri, Aug 26, 2022 at 04:19:43PM +0100, Fuad Tabba wrote:
+> > +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> >  static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+> >  {
+> >         u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> > @@ -4689,6 +4729,22 @@ static long kvm_vm_ioctl(struct file *filp,
+> >                 r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> >                 break;
+> >         }
+> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > +       case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > +       case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> > +               struct kvm_enc_region region;
+> > +
+> > +               if (!kvm_arch_private_mem_supported(kvm))
+> > +                       goto arch_vm_ioctl;
+> > +
+> > +               r = -EFAULT;
+> > +               if (copy_from_user(&region, argp, sizeof(region)))
+> > +                       goto out;
+> > +
+> > +               r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+> > +               break;
+> > +       }
+> > +#endif
+> >         case KVM_GET_DIRTY_LOG: {
+> >                 struct kvm_dirty_log log;
+> >
+> > @@ -4842,6 +4898,7 @@ static long kvm_vm_ioctl(struct file *filp,
+> >                 r = kvm_vm_ioctl_get_stats_fd(kvm);
+> >                 break;
+> >         default:
+> > +arch_vm_ioctl:
+> 
+> It might be good to make this label conditional on
+> CONFIG_HAVE_KVM_PRIVATE_MEM, otherwise you get a warning if
+> CONFIG_HAVE_KVM_PRIVATE_MEM isn't defined.
+> 
+> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+>  arch_vm_ioctl:
+> +#endif
 
-instead of review comments I sent you a two patches to rework things
-more to my liking. Hope you agree with the approach.
+Right, as the bot already complains.
 
-One question, though: did you test this with devices with Gen2/3
-speeds? The Marvell WiFi module on my EVK board only links with Gen1,
-while it claims Gen2 speed in the LnkCap register. However, it does
-seem to come up with Gen1 as the target link speed in LnkCtl2, so maybe
-the device is at fault here.
-
-Regards,
-Lucas
- 
-Am Montag, dem 29.08.2022 um 16:15 +0800 schrieb Richard Zhu:
-> Based on the 6.0-rc1 of the pci/next branch. 
-> This series adds the i.MX8MP PCIe support and tested on i.MX8MP
-> EVK board when one PCIe NVME device is used.
+Chao
 > 
-> - i.MX8MP PCIe has reversed initial PERST bit value refer to i.MX8MQ/i.MX8MM.
->   Add the PHY PERST explicitly for i.MX8MP PCIe PHY.
-> - Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
->   And share as much as possible codes with i.MX8MM PCIe PHY.
-> - Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
->   driver.
+> Cheers,
+> /fuad
 > 
-> Main changes v3-->v4:
-> - Regarding Phillip's suggestions, add fix tag into the first commit.
-> - Add Reviewed and Tested tags.
 > 
-> Main changes v2-->v3:
-> - Fix the schema checking error in the PHY dt-binding patch.
-> - Inspired by Lucas, the PLL configurations might not required when
->   external OSC is used as PCIe referrence clock. It's true. Remove all
->   the HSIO PLL bit manipulations, and PCIe works fine on i.MX8MP EVK board
->   with one NVME device is used.
-> - Drop the #4 patch of v2, since it had been applied by Rob.
 > 
-> Main changes v1-->v2:
-> - It's my fault forget including Vinod, re-send v2 after include Vinod
->   and linux-phy@lists.infradead.org.
-> - List the basements of this patch-set. The branch, codes changes and so on.
-> - Clean up some useless register and bit definitions in #3 patch.
 > 
-> Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |  16 +++++++--
-> arch/arm64/boot/dts/freescale/imx8mp-evk.dts                 |  53 +++++++++++++++++++++++++++++
-> arch/arm64/boot/dts/freescale/imx8mp.dtsi                    |  46 ++++++++++++++++++++++++-
-> drivers/pci/controller/dwc/pci-imx6.c                        |  17 +++++++++-
-> drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 150 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------
-> drivers/reset/reset-imx7.c                                   |   1 +
-> 6 files changed, 232 insertions(+), 51 deletions(-)
 > 
-> [PATCH v4 1/6] reset: imx7: Fix the iMX8MP PCIe PHY PERST support
-> [PATCH v4 2/6] dt-binding: phy: Add iMX8MP PCIe PHY binding
-> [PATCH v4 3/6] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY
-> [PATCH v4 4/6] arm64: dts: imx8mp: Add iMX8MP PCIe support
-> [PATCH v4 5/6] arm64: dts: imx8mp-evk: Add PCIe support
-> [PATCH v4 6/6] PCI: imx6: Add iMX8MP PCIe support
-
-
+> >                 r = kvm_arch_vm_ioctl(filp, ioctl, arg);
+> >         }
+> >  out:
+> > --
+> > 2.25.1
+> >

@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A12A5A4F04
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762635A4EF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiH2OUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
+        id S230336AbiH2OOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiH2OUL (ORCPT
+        with ESMTP id S230144AbiH2OOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:20:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D26B7CD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C500960F56
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300DEC433C1;
-        Mon, 29 Aug 2022 14:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661782809;
-        bh=5t9TYUD+7W9POaNmmtNmb01GYlGZ8fVGivHM4X+6f2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NB0+0Mwkdgsa95TVX/0Jeji1znYOMzQXT1a70l9QbWiHgxF3iwBjcGJrprerId8tQ
-         n/1bto5FbCQflPk49KQ54vGgbaBr7HxI7334gQxZmoyQ72qgJjrIsETi6+mzbLdAQq
-         XDjmULvnzU433k8CSsBRjjNQAfkXzhPEV6shVbUeehBKPoqdSaF0xzr1X6fN6pzV1f
-         pJCnB+RCRRLcH3JPXLCD3DUig7LJxnnhFwZ1Q179TDxVn4rvuTFoF/W6ZWkQ+vsXA4
-         7v2OlutPDVQ8mJoUketumtAbUM15OQCw35WOTub+w5zZeP/3lOJD/CAaFS239UkCZ6
-         VNfrlhqHj95kg==
-Date:   Mon, 29 Aug 2022 22:10:53 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ajones@ventanamicro.com
-Subject: Re: [PATCH v2] riscv: enable THP_SWAP for RV64
-Message-ID: <YwzI7VmfFnOvYWgf@xhacker>
-References: <20220827095815.698-1-jszhang@kernel.org>
- <0256a458-440c-171c-2a6f-e88a50c16f82@microchip.com>
+        Mon, 29 Aug 2022 10:14:47 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A14AC9;
+        Mon, 29 Aug 2022 07:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661782484; x=1693318484;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n5lFkFMiDHmXDh+teOu5BNnWiyJQmubHjavTDdvL20s=;
+  b=kURI0VAzfXpsQ/fF5XT3thXKBAtp80MKQVQw180a56YM13Twg+E0wHW+
+   cKfu5ca3MmNmxrJJxHyQmvizDOjavhPV7MoWQRPYkAI/heaDqZ5KjevDJ
+   FqQYQioUvm+GzA5WkoEbUB9LklVRB6w+qD6cOL5nF5qiKez3oHXZ6kssM
+   Q2SnugTeUsZaX1cxs2T6tsAFKe7okGGdU1idgzys+l1jRmueynOU1m7pS
+   3QRQSQX5QK1c+8IER3oU1Xnk2U0hUe1bAuaXb1sPOmWnff9lc3jWZnbtO
+   iFM8TZ4hU0adx3cvr1F48Uj8mTrzdcyrBPw/vyIvBU7XrMasUemcrHBR8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="274651484"
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="274651484"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 07:10:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="787089908"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 29 Aug 2022 07:10:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9C19D19D; Mon, 29 Aug 2022 17:11:04 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: [PATCH v1 1/4] ACPI: platform: Get rid of redundant 'else'
+Date:   Mon, 29 Aug 2022 17:10:57 +0300
+Message-Id: <20220829141100.63934-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0256a458-440c-171c-2a6f-e88a50c16f82@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 09:13:03PM +0000, Conor.Dooley@microchip.com wrote:
-> Hey Jisheng,
+In the snippets like the following
 
-Hi Conor,
+	if (...)
+		return / goto / break / continue ...;
+	else
+		...
 
-> On 27/08/2022 10:58, Jisheng Zhang wrote:
-> > I have a Sipeed Lichee RV dock board which only has 512MB DDR, so
-> > memory optimizations such as swap on zram are helpful. As is seen
-> > in commit d0637c505f8a ("arm64: enable THP_SWAP for arm64") and
-> > commit bd4c82c22c367e ("mm, THP, swap: delay splitting THP after
-> > swapped out"), THP_SWAP can improve the swap throughput significantly.
-> > 
-> > Enable THP_SWAP for RV64, testing the micro-benchmark which is
-> > introduced by commit d0637c505f8a ("arm64: enable THP_SWAP for arm64")
-> > shows below numbers on the Lichee RV dock board:
-> > 
-> > thp swp throughput w/o patch: 66908 bytes/ms (mean of 10 tests)
-> > thp swp throughput w/ patch: 322638 bytes/ms (mean of 10 tests)
-> 
-> I know the original commit message contains this, but it's a little
-> odd. If the patch /enables/ THP then how would there be THP swap
-> prior to the patch?
+the 'else' is redundant. Get rid of it.
 
-hmm, it's swap I'll send a v3 to correct the description.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/acpi/acpi_platform.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> > 
-> > Improved by 382%!
-> 
-> I could not replicate the after numbers on my nezha, so I suspect
-> I am missing something in my config/setup. zswap is enabled and is
+diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
+index 1a1c78b23fba..75e26528056d 100644
+--- a/drivers/acpi/acpi_platform.c
++++ b/drivers/acpi/acpi_platform.c
+@@ -114,9 +114,9 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+ 
+ 	INIT_LIST_HEAD(&resource_list);
+ 	count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+-	if (count < 0) {
++	if (count < 0)
+ 		return NULL;
+-	} else if (count > 0) {
++	if (count > 0) {
+ 		resources = kcalloc(count, sizeof(struct resource),
+ 				    GFP_KERNEL);
+ 		if (!resources) {
+-- 
+2.35.1
 
-swap on zram rather than zswap ;)
-
-> working, TRANSPARENT_HUGEPAGE is enabled etc. Not that it matters
-> for acceptance of the patch though.
-> 
-> I gave it a try and nothing went up in flames while using zswap so:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > ---
-> > Since v1:
-> >  - collect reviewed-by tag
-> >  - make ARCH_WANTS_THP_SWAP rely on HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> >    instead
-> > 
-> >  arch/riscv/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index ed66c31e4655..79e52441e18b 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -45,6 +45,7 @@ config RISCV
-> >  	select ARCH_WANT_FRAME_POINTERS
-> >  	select ARCH_WANT_GENERAL_HUGETLB
-> >  	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-> > +	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> >  	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
-> >  	select BUILDTIME_TABLE_SORT if MMU
-> >  	select CLONE_BACKWARDS

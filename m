@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87DD5A4E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396EB5A4E40
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiH2NfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S229830AbiH2Nfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiH2NfT (ORCPT
+        with ESMTP id S230050AbiH2NfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:35:19 -0400
+        Mon, 29 Aug 2022 09:35:23 -0400
 Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132904DB7A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:35:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69335C9FB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661780115;
-        bh=TwdAnZTgoj4EYEJwsRSSBSF3le/kWOA9MA+6UkrMJuo=;
+        s=default; t=1661780121;
+        bh=YGYJfp6hCx6eH/Nfs4eCDr4R+EBIr89AN05AxFZ+kgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gPriV1snZWAJnOMBQq3lW6JNaPqN66GxTiKaq8D6a7q+9clLZ+x/AOWezXdsBluAB
-         u7XrsElOvTmUXqxuDD4peuLrcadeobkIb2/ndMK8jwsUYSV9ksdsiVre8BEMEQuKo1
-         puenuWwYkUxIvNDjV66pnQGz7q79LpdYuHDIXIfg=
+        b=HgVw0YARg1ql0VgB+vs4jIpCMh+GAI+g78V/SbMDayWLYuMvp6XH7iHGr5r/qc6Ip
+         yuchfhet/FvBDclKH2lDff/vw6UqOe/EryIa4d3+Zcoh8svkHXaTf2DOiRcewb/Pbc
+         EW3ulmmY+0LeA0tM+/UyY4SMxfgKTJcrdZ1Rs+us=
 Received: from xry111-x57s1.. (unknown [IPv6:240e:358:11dd:1900:dc73:854d:832e:5])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
         (Client did not present a certificate)
         (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id A7BF866905;
-        Mon, 29 Aug 2022 09:35:09 -0400 (EDT)
+        by xry111.site (Postfix) with ESMTPSA id A1F9766903;
+        Mon, 29 Aug 2022 09:35:16 -0400 (EDT)
 From:   Xi Ruoyao <xry111@xry111.site>
 To:     loongarch@lists.linux.dev
 Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
         Youling Tang <tangyouling@loongson.cn>,
         Jinyang He <hejinyang@loongson.cn>,
         Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v6 3/6] LoongArch: Use model("extreme") attribute for per-CPU variables in module if CONFIG_AS_HAS_EXPLICIT_RELOCS
-Date:   Mon, 29 Aug 2022 21:31:43 +0800
-Message-Id: <20220829133146.15236-4-xry111@xry111.site>
+Subject: [PATCH v6 4/6] LoongArch: Define ELF relocation types added in v2.00 ABI
+Date:   Mon, 29 Aug 2022 21:31:44 +0800
+Message-Id: <20220829133146.15236-5-xry111@xry111.site>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829133146.15236-1-xry111@xry111.site>
 References: <20220829133146.15236-1-xry111@xry111.site>
@@ -54,60 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On LoongArch, The "address" of a per-CPU variable symbol is actually an
-offset from $r21.  The value is nearing the loading address of main
-kernel image, but far from the address of modules.  We need to tell the
-compiler that a PC-relative addressing with 32-bit offset is not
-sufficient for local per-CPU variables.
+These relocation types are used by GNU binutils >= 2.40 and GCC >= 13.
+Add their definitions so we will be able to use them in later patches.
 
-After some discussion with GCC maintainers, we implemented this
-attribute to indicate that a PC-relative addressing with 64-bit offset
-should be used.
-
-This attribute should be available in GCC 13 release.  Some early GCC 13
-snapshots may support -mexplicit-relocs but lack this attribute, we
-simply reject them.
-
+Link: https://github.com/loongson/LoongArch-Documentation/pull/57
 Signed-off-by: Xi Ruoyao <xry111@xry111.site>
-Link: https://gcc.gnu.org/r13-2199
 ---
- arch/loongarch/Makefile             | 3 +++
- arch/loongarch/include/asm/percpu.h | 8 ++++++++
- 2 files changed, 11 insertions(+)
+ arch/loongarch/include/asm/elf.h | 37 ++++++++++++++++++++++++++++++++
+ arch/loongarch/kernel/module.c   |  2 +-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index 1563747c4fa8..593818a61741 100644
---- a/arch/loongarch/Makefile
-+++ b/arch/loongarch/Makefile
-@@ -53,6 +53,9 @@ LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
- # combination of a "new" assembler and "old" compiler is not supported.  Either
- # upgrade the compiler or downgrade the assembler.
- ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
-+ifeq ($(shell echo '__has_attribute(model)' | $(CC) -E -P - 2> /dev/null), 0)
-+$(error "C compiler must support model attribute if using explicit relocs")
-+endif
- cflags-y			+= -mexplicit-relocs
- else
- cflags-y			+= $(call cc-option,-mno-explicit-relocs)
-diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
-index 0bd6b0110198..dd7fcc553efa 100644
---- a/arch/loongarch/include/asm/percpu.h
-+++ b/arch/loongarch/include/asm/percpu.h
-@@ -8,6 +8,14 @@
- #include <asm/cmpxchg.h>
- #include <asm/loongarch.h>
+diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
+index 5f3ff4781fda..7af0cebf28d7 100644
+--- a/arch/loongarch/include/asm/elf.h
++++ b/arch/loongarch/include/asm/elf.h
+@@ -74,6 +74,43 @@
+ #define R_LARCH_SUB64				56
+ #define R_LARCH_GNU_VTINHERIT			57
+ #define R_LARCH_GNU_VTENTRY			58
++#define R_LARCH_B16				64
++#define R_LARCH_B21				65
++#define R_LARCH_B26				66
++#define R_LARCH_ABS_HI20			67
++#define R_LARCH_ABS_LO12			68
++#define R_LARCH_ABS64_LO20			69
++#define R_LARCH_ABS64_HI12			70
++#define R_LARCH_PCALA_HI20			71
++#define R_LARCH_PCALA_LO12			72
++#define R_LARCH_PCALA64_LO20			73
++#define R_LARCH_PCALA64_HI12			74
++#define R_LARCH_GOT_PC_HI20			75
++#define R_LARCH_GOT_PC_LO12			76
++#define R_LARCH_GOT64_PC_LO20			77
++#define R_LARCH_GOT64_PC_HI12			78
++#define R_LARCH_GOT_HI20			79
++#define R_LARCH_GOT_LO12			80
++#define R_LARCH_GOT64_LO20			81
++#define R_LARCH_GOT64_HI12			82
++#define R_LARCH_TLS_LE_HI20			83
++#define R_LARCH_TLS_LE_LO12			84
++#define R_LARCH_TLS_LE64_LO20			85
++#define R_LARCH_TLS_LE64_HI12			86
++#define R_LARCH_TLS_IE_PC_HI20			87
++#define R_LARCH_TLS_IE_PC_LO12			88
++#define R_LARCH_TLS_IE64_PC_LO20		89
++#define R_LARCH_TLS_IE64_PC_HI12		90
++#define R_LARCH_TLS_IE_HI20			91
++#define R_LARCH_TLS_IE_LO12			92
++#define R_LARCH_TLS_IE64_LO20			93
++#define R_LARCH_TLS_IE64_HI12			94
++#define R_LARCH_TLS_LD_PC_HI20			95
++#define R_LARCH_TLS_LD_HI20			96
++#define R_LARCH_TLS_GD_PC_HI20			97
++#define R_LARCH_TLS_GD_HI20			98
++#define R_LARCH_32_PCREL			99
++#define R_LARCH_RELAX				100
  
-+#if defined(MODULE) && defined(CONFIG_AS_HAS_EXPLICIT_RELOCS)
-+/* The "address" (in fact, offset from $r21) of a per-CPU variable is close
-+ * to the load address of main kernel image, but far from where the modules are
-+ * loaded.  Tell the compiler this fact.
-+ */
-+# define PER_CPU_ATTRIBUTES __attribute__((model("extreme")))
-+#endif
-+
- /* Use r21 for fast access */
- register unsigned long __my_cpu_offset __asm__("$r21");
+ #ifndef ELF_ARCH
  
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 638427ff0d51..755d91ef8d85 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -296,7 +296,7 @@ typedef int (*reloc_rela_handler)(struct module *mod, u32 *location, Elf_Addr v,
+ 
+ /* The handlers for known reloc types */
+ static reloc_rela_handler reloc_rela_handlers[] = {
+-	[R_LARCH_NONE ... R_LARCH_SUB64]		     = apply_r_larch_error,
++	[R_LARCH_NONE ... R_LARCH_RELAX]		     = apply_r_larch_error,
+ 
+ 	[R_LARCH_NONE]					     = apply_r_larch_none,
+ 	[R_LARCH_32]					     = apply_r_larch_32,
 -- 
 2.37.0
 

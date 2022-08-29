@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244035A490F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E9F5A4845
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiH2LTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S230362AbiH2LHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiH2LSb (ORCPT
+        with ESMTP id S230020AbiH2LHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:18:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4606DAC2;
-        Mon, 29 Aug 2022 04:12:15 -0700 (PDT)
+        Mon, 29 Aug 2022 07:07:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279F813CFC;
+        Mon, 29 Aug 2022 04:05:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A8A611B5;
-        Mon, 29 Aug 2022 11:03:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43443C433D6;
-        Mon, 29 Aug 2022 11:03:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84709B80EF9;
+        Mon, 29 Aug 2022 11:03:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00A7C433D6;
+        Mon, 29 Aug 2022 11:03:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771002;
-        bh=4FghYDHna6S5rhzo+Rl9VOc4RV5gF/FkMeafEW6AivU=;
+        s=korg; t=1661771035;
+        bh=PnvFFVqJdEGEJU/TTxfEwS6N1Nj0Pz8GMnRy0JYkjWI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K5B613Zi9F+NnaJ537KBGzEsm8ZG8hvyefYTwaj0OdfNeXUF6ks3CQq/4RiFOK7x5
-         tDUYUP1RQX7+ObEB+7ScILVO8t3EE6cihfCMSupoh/MISh8Kdk3dei/ot+LKgZ9MPT
-         Ha8RjgjL7D/rRQRTxBgaBLlIlKE4+Tp3P5VOLjRY=
+        b=lSug8SLShNaRKIK2qR7JK55/gpyUf+xIsqId1cOzuuam1S0Rz8Sm+RryV4i1wHwaC
+         SXqykL07UL+ttTjbRqYXoO9mg2hs5GeufxAXjHDsvkrTwgciN/wmH50ScFprxzTHgp
+         3oOdURXC3MYB8uVZMraTa08wHz9eS3RD3OPaLDZ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Olga Kornievskaia <kolga@netapp.com>,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 033/136] NFS: Dont allocate nfs_fattr on the stack in __nfs42_ssc_open()
-Date:   Mon, 29 Aug 2022 12:58:20 +0200
-Message-Id: <20220829105805.943725596@linuxfoundation.org>
+Subject: [PATCH 5.15 034/136] NFSv4.2 fix problems with __nfs42_ssc_open
+Date:   Mon, 29 Aug 2022 12:58:21 +0200
+Message-Id: <20220829105805.992182113@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
 References: <20220829105804.609007228@linuxfoundation.org>
@@ -55,62 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit 156cd28562a4e8ca454d11b234d9f634a45d6390 ]
+[ Upstream commit fcfc8be1e9cf2f12b50dce8b579b3ae54443a014 ]
 
-The preferred behaviour is always to allocate struct nfs_fattr from the
-slab.
+A destination server while doing a COPY shouldn't accept using the
+passed in filehandle if its not a regular filehandle.
 
+If alloc_file_pseudo() has failed, we need to decrement a reference
+on the newly created inode, otherwise it leaks.
+
+Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: ec4b092508982 ("NFS: inter ssc open")
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
 Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4file.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ fs/nfs/nfs4file.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
-index 4120e1cb3feef..61ee03c8bcd2d 100644
+index 61ee03c8bcd2d..14f2efdecc2f8 100644
 --- a/fs/nfs/nfs4file.c
 +++ b/fs/nfs/nfs4file.c
-@@ -319,7 +319,7 @@ static int read_name_gen = 1;
- static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- 		struct nfs_fh *src_fh, nfs4_stateid *stateid)
- {
--	struct nfs_fattr fattr;
-+	struct nfs_fattr *fattr = nfs_alloc_fattr();
- 	struct file *filep, *res;
- 	struct nfs_server *server;
- 	struct inode *r_ino = NULL;
-@@ -330,9 +330,10 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- 
- 	server = NFS_SERVER(ss_mnt->mnt_root->d_inode);
- 
--	nfs_fattr_init(&fattr);
-+	if (!fattr)
-+		return ERR_PTR(-ENOMEM);
- 
--	status = nfs4_proc_getattr(server, src_fh, &fattr, NULL, NULL);
-+	status = nfs4_proc_getattr(server, src_fh, fattr, NULL, NULL);
- 	if (status < 0) {
- 		res = ERR_PTR(status);
+@@ -339,6 +339,11 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
  		goto out;
-@@ -345,7 +346,7 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- 		goto out;
- 	snprintf(read_name, len, SSC_READ_NAME_BODY, read_name_gen++);
+ 	}
  
--	r_ino = nfs_fhget(ss_mnt->mnt_root->d_inode->i_sb, src_fh, &fattr,
-+	r_ino = nfs_fhget(ss_mnt->mnt_root->d_inode->i_sb, src_fh, fattr,
- 			NULL);
- 	if (IS_ERR(r_ino)) {
- 		res = ERR_CAST(r_ino);
-@@ -390,6 +391,7 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- out_free_name:
- 	kfree(read_name);
- out:
-+	nfs_free_fattr(fattr);
- 	return res;
- out_stateowner:
- 	nfs4_put_state_owner(sp);
++	if (!S_ISREG(fattr->mode)) {
++		res = ERR_PTR(-EBADF);
++		goto out;
++	}
++
+ 	res = ERR_PTR(-ENOMEM);
+ 	len = strlen(SSC_READ_NAME_BODY) + 16;
+ 	read_name = kzalloc(len, GFP_NOFS);
+@@ -357,6 +362,7 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
+ 				     r_ino->i_fop);
+ 	if (IS_ERR(filep)) {
+ 		res = ERR_CAST(filep);
++		iput(r_ino);
+ 		goto out_free_name;
+ 	}
+ 	filep->f_mode |= FMODE_READ;
 -- 
 2.35.1
 

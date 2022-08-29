@@ -2,141 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC765A41B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 06:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83965A41B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 06:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiH2EDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 00:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S229633AbiH2EE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 00:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiH2EDf (ORCPT
+        with ESMTP id S229533AbiH2EEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 00:03:35 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E27D41D3B;
-        Sun, 28 Aug 2022 21:03:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 72so6996998pfx.9;
-        Sun, 28 Aug 2022 21:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=/d1aCoj8mwhQkz6vc1Xqxkc26Va3irgGJEolPmhseeg=;
-        b=eA3WGcD66qm9XgvBqd9G9EtOdEfoYHifkvzr4Rv9RR9TaTlWa5iguQ358dJld+6CcS
-         18d0rsmtgfs4GP2zSuvA+rVmVW0Yq5HNgRSZho/bL8WhgCID7zj2hiqsmGLDCbXnmXdK
-         aGLk7xpU1S2zhVK23R1hovWs7brS5QzSQf1zLiGNwJdxifjiQ8NB4OCDHSwXiMmXS9iH
-         jHZRPs7mgvLec4UwVTQCXj1sxyE6uEAQs1xxmmJMryXrGTKLw1vPeXpnB5XVlufPPWe0
-         sHjVq82/FUQSPhwxVPoHce4G7XkmUeKg7BDuh7RA3bGNut9hTvDT3lzkbwIdvM/7mrIM
-         T66A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=/d1aCoj8mwhQkz6vc1Xqxkc26Va3irgGJEolPmhseeg=;
-        b=xAwbYrV61X1uVIBZplptpudSRmSkTG3KsWjHMpQcd6B2a2ndczj+wYBVwqeW9i4lYV
-         W0pgMv3Qh8QdHkxumtOxksH+HV+2fVzrwAy0/pIaAY7UIa3jMbhD8T8w+/A9eS3ioFvP
-         uRK1sBhdN1z2Q9Ki97D4erWsmukvx2YcBPL7lKuEpG2F1taI1AtOSLtB22br6oM79DCH
-         ntPHVXYSsTExYdxFpQ3fCjiPbKIM6JPUdPt19vT4Y61y9gsCb5bMcIvJhb6rJgV9ArDJ
-         bHoVMIDg8Fj8UxG7phBZfooEEVLRf6TU2JfnVsJy1DXBl4tpbhhBNu19o5et5xN7sX9/
-         SgLQ==
-X-Gm-Message-State: ACgBeo212Eep1P1EeDWURy9CLFNmm+OEuIL1UgXwFcY9MJd9lxgr0EM/
-        cCStf7TU1OnCbx1XQ1FAktg=
-X-Google-Smtp-Source: AA6agR48/BdpEtyPznQaYdZaC5K7yfxYs+GsD7XuYijpwa6LlkPYYt7llOKdJuiyrlng0Qk5Ay7MpQ==
-X-Received: by 2002:a63:8248:0:b0:42b:b607:f74f with SMTP id w69-20020a638248000000b0042bb607f74fmr6474993pgd.70.1661745813821;
-        Sun, 28 Aug 2022 21:03:33 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f17-20020aa79691000000b00538405dfe4asm965263pfk.111.2022.08.28.21.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 21:03:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 28 Aug 2022 18:03:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, mkoutny@suse.com, ming.lei@redhat.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH v9 1/4] blk-throttle: fix that io throttle can only work
- for single bio
-Message-ID: <Yww6lPQaz/Lk4lL6@slm.duckdns.org>
-References: <20220829022240.3348319-1-yukuai1@huaweicloud.com>
- <20220829022240.3348319-2-yukuai1@huaweicloud.com>
+        Mon, 29 Aug 2022 00:04:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C792A422D1;
+        Sun, 28 Aug 2022 21:04:22 -0700 (PDT)
+X-UUID: e0704174ad5b44e98ced9ba308e31452-20220829
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=sVk2Undvd2lu/+jxUtCCeLvk7O4M0gaM2/6KiQi3Bqg=;
+        b=HuWcM4URPm3QFXETfvV4/2IwAf/12uj5DY+LUwW6yr6QSSUrDxUkwnI3RZzkOJKsXXRZdSHO4Wjp9Wgb1CI/VejYkOAZQ26e73dzCve2PsKalyNlkY5XaWvaPuArTE5iqZy+AuhuUdKxqsRekS3gp9WTBekkP82yBAGr9Gy2lwA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:dccfeccb-1bbb-4855-a94b-99e16ee2354e,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:aa87e1cf-20bd-4e5e-ace8-00692b7ab380,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e0704174ad5b44e98ced9ba308e31452-20220829
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 249186991; Mon, 29 Aug 2022 12:04:16 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 29 Aug 2022 12:04:15 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 29 Aug 2022 12:04:14 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <matthias.bgg@gmail.com>, <jitao.shi@mediatek.com>
+CC:     <linux-pwm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        xinlei lee <xinlei.lee@mediatek.com>
+Subject: [PATCH] pwm: mtk-disp: Fix the parameters calculated  by the enabled flag of disp_pwm.
+Date:   Mon, 29 Aug 2022 12:04:12 +0800
+Message-ID: <1661745852-27323-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829022240.3348319-2-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 10:22:37AM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> Test scripts:
-> cd /sys/fs/cgroup/blkio/
-> echo "8:0 1024" > blkio.throttle.write_bps_device
-> echo $$ > cgroup.procs
-> dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
-> dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
-> 
-> Test result:
-> 10240 bytes (10 kB, 10 KiB) copied, 10.0134 s, 1.0 kB/s
-> 10240 bytes (10 kB, 10 KiB) copied, 10.0135 s, 1.0 kB/s
-> 
-> The problem is that the second bio is finished after 10s instead of 20s.
-> 
-> Root cause:
-> 1) second bio will be flagged:
-> 
-> __blk_throtl_bio
->  while (true) {
->   ...
->   if (sq->nr_queued[rw]) -> some bio is throttled already
->    break
->  };
->  bio_set_flag(bio, BIO_THROTTLED); -> flag the bio
-> 
-> 2) flagged bio will be dispatched without waiting:
-> 
-> throtl_dispatch_tg
->  tg_may_dispatch
->   tg_with_in_bps_limit
->    if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED))
->     *wait = 0; -> wait time is zero
->     return true;
-> 
-> commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> support to count split bios for iops limit, thus it adds flagged bio
-> checking in tg_with_in_bps_limit() so that split bios will only count
-> once for bps limit, however, it introduce a new problem that io throttle
-> won't work if multiple bios are throttled.
-> 
-> In order to fix the problem, handle iops/bps limit in different ways:
-> 
-> 1) for iops limit, there is no flag to record if the bio is throttled,
->    and iops is always applied.
-> 2) for bps limit, original bio will be flagged with BIO_BPS_THROTTLED,
->    and io throttle will ignore bio with the flag.
-> 
-> Noted this patch also remove the code to set flag in __bio_clone(), it's
-> introduced in commit 111be8839817 ("block-throttle: avoid double
-> charge"), and author thinks split bio can be resubmited and throttled
-> again, which is wrong because split bio will continue to dispatch from
-> caller.
-> 
-> Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+From: xinlei lee <xinlei.lee@mediatek.com>
 
-Acked-by: Tejun Heo <tj@kernel.org>
+In the original mtk_disp_pwm_get_state() function, the result of reading
+con0 & BIT(0) is enabled as disp_pwm. 
+In order to conform to the register table, we should use the disp_pwm 
+base address as the enabled judgment.
 
-Thanks.
+Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
 
+Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+---
+Base on the branch of Linux-next/master.
+Split from series [1].
+[1] https://patchwork.kernel.org/project/linux-mediatek/cover/1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com/
+---
+---
+ drivers/pwm/pwm-mtk-disp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+index c605013..50425cd 100644
+--- a/drivers/pwm/pwm-mtk-disp.c
++++ b/drivers/pwm/pwm-mtk-disp.c
+@@ -197,7 +197,7 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
+ 	rate = clk_get_rate(mdp->clk_main);
+ 	con0 = readl(mdp->base + mdp->data->con0);
+ 	con1 = readl(mdp->base + mdp->data->con1);
+-	state->enabled = !!(con0 & BIT(0));
++	state->enabled = !!(readl(mdp->base) & BIT(0));
+ 	clk_div = FIELD_GET(PWM_CLKDIV_MASK, con0);
+ 	period = FIELD_GET(PWM_PERIOD_MASK, con1);
+ 	/*
 -- 
-tejun
+2.6.4
+

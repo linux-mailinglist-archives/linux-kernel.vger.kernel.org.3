@@ -2,104 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974125A4169
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 05:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3131D5A416B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 05:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiH2DQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 23:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S229868AbiH2DTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 23:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiH2DQA (ORCPT
+        with ESMTP id S229524AbiH2DTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 23:16:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C0217E0D;
-        Sun, 28 Aug 2022 20:15:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 347CC3375C;
-        Mon, 29 Aug 2022 03:15:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661742958; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBBKmXPZz0d24U2B8Ubl7UW8mvxOKfSvEgiuL0CK338=;
-        b=0oJkLg4Nrt9d2wio0Olr2XkavG7NvjmNYIas8bCPG97ZpoqWvbjIZx9U+UVlyvE1hBpF0r
-        +eqoCmq2pSKWaQFkDTbm+CbbmOFwIDjmR8viS0uUwPVMXJZp63GJu1LZ/l2SmU7gm7rcc2
-        BUFZxB9Lo/V0d8on+gDO1wzZT5YIc34=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661742958;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBBKmXPZz0d24U2B8Ubl7UW8mvxOKfSvEgiuL0CK338=;
-        b=tno6QRbZJDTSXLrCSGOiNlz0HGCByoVPljOzZbN6a6xOnbQ0/k3wih7Ww2XWL5n7zByj7b
-        eB/lCufqFM/LExDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A51DF133A6;
-        Mon, 29 Aug 2022 03:15:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FcQpGGsvDGNrIQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 29 Aug 2022 03:15:55 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Sun, 28 Aug 2022 23:19:04 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200D8402E3
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 20:19:04 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso4102771pjd.2
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 20:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=r0M9FUvZOZnp7Vmf7xtDgyqRqSJWKApPfYbePi7+It4=;
+        b=kj4Df5cr/HmTCxI1B6gqSsn1/BC0sLpiOf8WCdGFlPXFH78J82EY2tFm8ijY4U9FZ4
+         Xo89kX5U1PUzs1quar0gcZr1yMoE3Zc+PdLwiSQZsvvwLI5eCr2v0XQcyvYhe9JTE/xf
+         ZREy48456hgcCiX0ud6LQWDkmgLeG7RFEQ4pWKCPLrBImfnJ2/GtGNNw0q6OwxkOustD
+         jYRkbe/HTVET5dI+G7gx4RtKA+GYIPI1W7NcCi0davX7g/YEfLd0WyJVG4sUfiIMQvLK
+         veNsSRXi9/wJ1q9nFymsLUaGzFu72pzaYCeFWrrKXrAPC6G5omL5ux9r4AUsoOPfhrm+
+         eZ+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=r0M9FUvZOZnp7Vmf7xtDgyqRqSJWKApPfYbePi7+It4=;
+        b=c5uR6SBI91IN6YQSku8veZ1H4O9Yh36kBafSvXdl2KIiVoXe3vLf5ShqWMET5us+6K
+         DSiA15iwEPH0kOmgkYeU5trIggetvoXDgA+wshtdlYTWWqKaZ3NS1kO5Oyc1Oe9wpCA8
+         pPk93nXWZvHeJcY8dHOb5FGjXdev9jkaMSdkFEJ8caz5K83/0ORNfsL22MKhsh9Y+z5p
+         JejY1mLDdJFzSCqFbC8iCoZKEr99VVQn3SOg14ZTiQpAe1wab16PMAhro2Xwr/qbLnGu
+         tiN9S2qZlaRfv8JjoYzl0CmktPAsScVV04ybVhXPd0rRKN9VsVYKzfISoFPbt5Sxsosg
+         2WyA==
+X-Gm-Message-State: ACgBeo20FXJ7hcudW2itiLMfr5/7IeHsTvbwj31rMSUO/EqL5U+lPh4M
+        9DBu6tqA3WIm3FdIY7g0cy8=
+X-Google-Smtp-Source: AA6agR6kO9cTXhT0sZ7o01el9AKJmOZotzwdH+bfWTAL+FHq4TJ8fnP+GQcfig0K1OATUHPZW6RPtA==
+X-Received: by 2002:a17:90a:cb94:b0:1fd:86fe:ba3e with SMTP id a20-20020a17090acb9400b001fd86feba3emr10219460pju.240.1661743143607;
+        Sun, 28 Aug 2022 20:19:03 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id p124-20020a622982000000b0052e7f103138sm5977303pfp.38.2022.08.28.20.19.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 20:19:02 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 12:18:57 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: simplify size2index conversion of __kmalloc_index
+Message-ID: <YwwwIcZ6FUy6J4xh@hyeyoo>
+References: <TYCP286MB2323E622C54B765F087C073ECA779@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Al Viro" <viro@zeniv.linux.org.uk>
-Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Daire Byrne" <daire@dneg.com>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 09/10] VFS: add LOOKUP_SILLY_RENAME
-In-reply-to: <YwlxiCt3TvzdEhUl@ZenIV>
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown>,
- <166147984377.25420.5747334898411663007.stgit@noble.brown>,
- <YwlxiCt3TvzdEhUl@ZenIV>
-Date:   Mon, 29 Aug 2022 13:15:52 +1000
-Message-id: <166174295243.27490.1036858614514220411@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB2323E622C54B765F087C073ECA779@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022, Al Viro wrote:
-> On Fri, Aug 26, 2022 at 12:10:43PM +1000, NeilBrown wrote:
-> > When performing a "silly rename" to avoid removing a file that is still
-> > open, we need to perform a lookup in a directory that is already locked.
-> > 
-> > In order to allow common functions to be used for this lookup, introduce
-> > LOOKUP_SILLY_RENAME which affirms that the directory is already locked
-> > and that the vfsmnt is already writable.
-> > 
-> > When LOOKUP_SILLY_RENAME is set, path->mnt can be NULL.  As
-> > i_op->rename() doesn't make the vfsmnt available, this is unavoidable.
-> > So we ensure that a NULL ->mnt isn't fatal.
-> 
-> This one is really disgusting.  Flag-dependent locking is a pretty much
-> guaranteed source of PITA and "magical" struct path is, again, asking for
-> trouble.
-> 
-> You seem to be trying for simpler call graph and you end up paying with
-> control flow that is much harder to reason about.
-> 
-It was mostly about avoiding code duplication.
-I'll see if I can find a cleaner way.
+On Sun, Aug 28, 2022 at 11:14:48PM +0800, Dawei Li wrote:
+> Current size2index is implemented by one to one hardcode mapping,
+> which can be improved by order_base_2().
+> Must be careful to not violate compile-time optimization rule.
 
+> Generated code for caller of kmalloc:
+> 48 8b 3d 9f 0b 6b 01 mov    0x16b0b9f(%rip),%rdi
+>                             # ffffffff826d1568 <kmalloc_caches+0x48>
+> ba 08 01 00 00       mov    $0x108,%edx
+> be c0 0d 00 00       mov    $0xdc0,%esi
+> e8 98 d7 2e 00       callq  ffffffff8130e170 <kmem_cache_alloc_trace>
+> 
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+>  include/linux/slab.h | 34 +++++++++-------------------------
+>  1 file changed, 9 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 0fefdf528e0d..66452a4357c6 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -17,7 +17,7 @@
+>  #include <linux/types.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/percpu-refcount.h>
+> -
+> +#include <linux/log2.h>
+>  
+>  /*
+>   * Flags to pass to kmem_cache_create().
+> @@ -394,31 +394,16 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
+>  
+>  	if (KMALLOC_MIN_SIZE <= 32 && size > 64 && size <= 96)
+>  		return 1;
+> +
+>  	if (KMALLOC_MIN_SIZE <= 64 && size > 128 && size <= 192)
+>  		return 2;
+> -	if (size <=          8) return 3;
+> -	if (size <=         16) return 4;
+> -	if (size <=         32) return 5;
+> -	if (size <=         64) return 6;
+> -	if (size <=        128) return 7;
+> -	if (size <=        256) return 8;
+> -	if (size <=        512) return 9;
+> -	if (size <=       1024) return 10;
+> -	if (size <=   2 * 1024) return 11;
+> -	if (size <=   4 * 1024) return 12;
+> -	if (size <=   8 * 1024) return 13;
+> -	if (size <=  16 * 1024) return 14;
+> -	if (size <=  32 * 1024) return 15;
+> -	if (size <=  64 * 1024) return 16;
+> -	if (size <= 128 * 1024) return 17;
+> -	if (size <= 256 * 1024) return 18;
+> -	if (size <= 512 * 1024) return 19;
+> -	if (size <= 1024 * 1024) return 20;
+> -	if (size <=  2 * 1024 * 1024) return 21;
+> -	if (size <=  4 * 1024 * 1024) return 22;
+> -	if (size <=  8 * 1024 * 1024) return 23;
+> -	if (size <=  16 * 1024 * 1024) return 24;
+> -	if (size <=  32 * 1024 * 1024) return 25;
+
+It does not apply. better rebase it on Vlastimil's slab tree (for-next branch)
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/
+
+> +
+> +	if (size <= 8)
+> +		return 3;
+> +
+> +	/* Following compile-time optimization rule is mandatory. */
+> +	if (size <= 32 * 1024 * 1024)
+> +		return order_base_2(size);
+
+Oh, it seems order_base_2() does compile-time opitmization as well.
+
+With order_base_2(), what about using KMALLOC_MAX_CACHE_SIZE instead of 32 * 1024 * 1024?
+I think that would be more robust.
+
+Hmm also better check if it works okay with kfence tests (it passes non-constant value)
+let't check if it breaks after rebase.
+
+Thanks!
+
+>  
+>  	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES) && size_is_constant)
+>  		BUILD_BUG_ON_MSG(1, "unexpected size in kmalloc_index()");
+> @@ -700,7 +685,6 @@ static inline __alloc_size(1, 2) void *kcalloc_node(size_t n, size_t size, gfp_t
+>  	return kmalloc_array_node(n, size, flags | __GFP_ZERO, node);
+>  }
+>  
+> -
+>  #ifdef CONFIG_NUMA
+>  extern void *__kmalloc_node_track_caller(size_t size, gfp_t flags, int node,
+>  					 unsigned long caller) __alloc_size(1);
+> -- 
+> 2.25.1
+> 
+
+-- 
 Thanks,
-NeilBrown
+Hyeonggon

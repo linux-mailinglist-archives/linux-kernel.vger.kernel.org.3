@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548345A57DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1D35A57E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiH2Xqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
+        id S229468AbiH2Xqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiH2XqY (ORCPT
+        with ESMTP id S229783AbiH2Xqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:46:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17E98588;
-        Mon, 29 Aug 2022 16:46:23 -0700 (PDT)
+        Mon, 29 Aug 2022 19:46:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186459F8FE;
+        Mon, 29 Aug 2022 16:46:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A752C61388;
-        Mon, 29 Aug 2022 23:46:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752EDC433D7;
-        Mon, 29 Aug 2022 23:46:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 221BAB815C6;
+        Mon, 29 Aug 2022 23:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46637C43142;
+        Mon, 29 Aug 2022 23:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816782;
-        bh=QVaf2ue7rS2/KW2MEYsbOa8mov9wyGulpZZV3uEQCMo=;
+        s=k20201202; t=1661816787;
+        bh=UfPtaupXTtCfFxCnApqirwVWwfvDHvDQIJVpMrNPK4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=udwLe6vzml7QcPwXO2cIuPXu5XRo5PE55iGm+k3x0SnchoGhpn+wIDZopvjd0cXCy
-         sBCZpWQH5qJyCcqjoi8HzmqHAbmAL6E3JvhbfIs1+4Szdm0p6Qfuk61lF+xolJl2jE
-         YKXxhDodUMqib3MzvdK614DhaB21gFXWIbRmsr7P/1POmHKwbgb46Fth74s+NtXn3p
-         CLbtxkch72OrdrcHhjEsJPo9ND1rUlOax46YJPHEBge/EzxkQQfhctxox7uvbuQBlr
-         Pf3h1f5pLygOf8cLPHHQLrFwuqWGg4bPY10J93gAzZVgggM80ki3IQR0JZIqxRd1Q1
-         jOTvnPKEdwO/Q==
+        b=Pc+T76YvNmqKVs70qvtm3ICPZ8c8k4Mqwx5//22OcKqDk4I+lGwDwfJEordSSZq7B
+         q7ocdvLkP+NU8filQX7JP8L8JIEJv3ADHDh5DYvtl7NGYqzZYT2+Iwe94r54yB1zSp
+         9fouiAAE4ARkKSzg+wfpj8mL4Na9TBu89tw7OCT3rlSzfZxgD/fZQz0vBoDme010Lx
+         nmPHsPTYbkR+ksG3xmYl0Yh7qsidDez7/LwXTPOw1Yh4vhvS0QYZJnLQROZKLmh0Em
+         QElnbPSwDu6lGF3P6j7phsVPEYaZU8I1tR4TIquqB6XXOu85Oy4Ap3eZ/vNYYhRWiN
+         yF+8VXPn6IpFA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     cgel.zte@gmail.com, krzysztof.kozlowski@linaro.org
-Cc:     zealci@zte.com.cn, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cui.jinpeng2@zte.com.cn,
-        konrad.dybcio@somainline.org, agross@kernel.org
-Subject: Re: [PATCH linux-next] soc: qcom: icc-bwmon: remove redundant ret variable
-Date:   Mon, 29 Aug 2022 18:45:44 -0500
-Message-Id: <166181675990.322065.10141952054506036858.b4-ty@kernel.org>
+To:     geert+renesas@glider.be, Bjorn Andersson <andersson@kernel.org>,
+        mollysophia379@gmail.com, konrad.dybcio@somainline.org,
+        agross@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] [RFC] arm64: dts: qcom: sdm845-xiaomi-polaris: Fix sde_dsi_active pinctrl
+Date:   Mon, 29 Aug 2022 18:45:50 -0500
+Message-Id: <166181675969.322065.3037250302994676765.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
-References: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
+In-Reply-To: <629afd26008c2b1ba5822799ea7ea5b5271895e8.1660903997.git.geert+renesas@glider.be>
+References: <629afd26008c2b1ba5822799ea7ea5b5271895e8.1660903997.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,18 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 13:36:20 +0000, cgel.zte@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Fri, 19 Aug 2022 12:14:23 +0200, Geert Uytterhoeven wrote:
+> "make dtbs_check" says:
 > 
-> Return value from devm_regmap_field_bulk_alloc() directly
-> instead of taking this in another redundant variable.
+>     bias-disable: boolean property with value b'\x00\x00\x00\x00'
+> 
+> Fix this by dropping the offending value.
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] soc: qcom: icc-bwmon: remove redundant ret variable
-      commit: 7eb89c17abd2574f627c1277a15f6ff64bec33a4
+[1/1] arm64: dts: qcom: sdm845-xiaomi-polaris: Fix sde_dsi_active pinctrl
+      commit: 5a0504945878b4af7534c1ce668a5678dc0201cf
 
 Best regards,
 -- 

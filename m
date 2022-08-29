@@ -2,128 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB205A4AA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33B85A4ABD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiH2Lp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S231820AbiH2LuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbiH2Loe (ORCPT
+        with ESMTP id S232387AbiH2Ltq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:44:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F03DFC3;
-        Mon, 29 Aug 2022 04:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661772522; x=1693308522;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RMIzbw3S0NjAnyKRGZ1yrKelR3otHClPHqNHMk9KieA=;
-  b=NrFJZ7b+66GeuKfsLn8qUwjYzDyGZTF9/KOgYdbS0jBX3yAPZxfkp0nJ
-   8FBgbWZWtNo9UrMY46kH3S7SKZnyNRIq0Qs0EnD8DkGj+FbR7g5TLAGN8
-   wMKXqp4W4LkD7uj1d/YXxW49r+WvlA14m7Vkd/XTw8nzztdMVVylTqrSP
-   V5umwFieUrtVHyqYVu7Dcx4ywHD29ocq/cHzfAhcAorVcxXhr1VHcASi/
-   m2WjUWnf8d08y6Z3NUzRPRVAkPUYrYXgCLOpmo1cvAxtSYRaxc5KKM46i
-   LLMglk9vwia/K7+mw4Bk3VmQoEKCd+wHl1r6FK1+SxBylycjCkwq5U5A2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="275273872"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="275273872"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 04:23:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="714830573"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Aug 2022 04:23:55 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7F0BA174; Mon, 29 Aug 2022 14:24:10 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jakob Hauser <jahau@rocketmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v1 4/4] iio: magnetometer: yamaha-yas530: Use dev_err_probe()
-Date:   Mon, 29 Aug 2022 14:24:07 +0300
-Message-Id: <20220829112407.74917-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220829112407.74917-1-andriy.shevchenko@linux.intel.com>
-References: <20220829112407.74917-1-andriy.shevchenko@linux.intel.com>
+        Mon, 29 Aug 2022 07:49:46 -0400
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323478B2D1;
+        Mon, 29 Aug 2022 04:32:54 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id x19so6007856pfr.1;
+        Mon, 29 Aug 2022 04:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=pBLLGEGYnktZSeTxTWcGt32QrgAx7yVlLK4MjY1qqhI=;
+        b=ne5d51L9xjEKs7DdRagSRjMWmJdrKnT4+ZCYielLT7zYOqPWHqnyekjpB+s8YssnmY
+         nAkKS48j/zv4Ymbxp2jhiIrh923qqStFaklqrv+MZWXqJIJcGaPKYarg7bScG8de5dXu
+         9TURein/V2qkWEFJzd0rnLAv57JzEC0TaQ0VivabE22ARFpvA9egnaEEcnV2ipBdQsJX
+         ccSx5kMENmqFAGzvXpLCXkYe0tkLPiYtt523YpFL6cnIVTpy58tkOpyEeE8PB9k9JDOZ
+         0rzb+Qbl2zSz5RgKVinchg5gSPsJDejG3W4aAEvbvZV9sBmovj7MAX2UkWsjQILkLQ7E
+         AMyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=pBLLGEGYnktZSeTxTWcGt32QrgAx7yVlLK4MjY1qqhI=;
+        b=GX17oIs3EWn6ieruM3Cm2DS59AhHLKBF0lYDf8WODV1VwjpJ6CMBU7k2DqYUnu6HrP
+         S8nC72snQP6j688eIgvvBNXhI1bAbIRHjJMixuNEh0dqdECaFm8HL8knnDEjPMgAKa0g
+         c0DtspcHz1ao5dyXT7rCyAr/Ij5xyoQXde3b+w8IEau4r+TfZ25iTJhqoQZ4XV8n2Sz+
+         6uiu7hshm93DDC/d+kR3eL7oG537vdDXHZZyP4BYQgtv3HLbjT4y3lVrUgBOzEtU02MS
+         adrJgeLqYn5htHpSeCGj6B5wzuJLi393XmhRVbVp5YUoFQzCLYbfobIUAjs3E8FUfu8u
+         aO6g==
+X-Gm-Message-State: ACgBeo0MD3xy4mWYvKQUvGO5XbCbXVM00b14dsBe8ujjfIf4+B+JbmVV
+        fTNKsFgqs/mR0nmA+ci0ZN5wbE5RwMc=
+X-Google-Smtp-Source: AA6agR5XQyCzNY1WzDhZvKkWUGQF1sEJ7Yb1v2dBNb+sMJjEBq1+LrTNZhd/G+OU17ymO/VRwgp30g==
+X-Received: by 2002:a63:f747:0:b0:429:f993:da06 with SMTP id f7-20020a63f747000000b00429f993da06mr13633553pgk.291.1661772623684;
+        Mon, 29 Aug 2022 04:30:23 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 126-20020a620484000000b0053617cbe2d2sm6983286pfe.168.2022.08.29.04.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 04:30:23 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     johannes@sipsolutions.net, davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] wifi: nl80211: remove redundant err variable
+Date:   Mon, 29 Aug 2022 11:29:53 +0000
+Message-Id: <20220829112953.267100-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unify error message format by using dev_err_probe().
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Return value from rdev_set_mcast_rate() directly instead of
+taking this in another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 ---
- drivers/iio/magnetometer/yamaha-yas530.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ net/wireless/nl80211.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/iio/magnetometer/yamaha-yas530.c b/drivers/iio/magnetometer/yamaha-yas530.c
-index bacd2b783113..63bb743dc4f6 100644
---- a/drivers/iio/magnetometer/yamaha-yas530.c
-+++ b/drivers/iio/magnetometer/yamaha-yas530.c
-@@ -1420,10 +1420,8 @@ static int yas5xx_probe(struct i2c_client *i2c)
- 		return dev_err_probe(dev, ret, "cannot get regulators\n");
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index dad88d231d56..4f5e5b763a15 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -11279,7 +11279,6 @@ static int nl80211_set_mcast_rate(struct sk_buff *skb, struct genl_info *info)
+ 	struct net_device *dev = info->user_ptr[1];
+ 	int mcast_rate[NUM_NL80211_BANDS];
+ 	u32 nla_rate;
+-	int err;
  
- 	ret = regulator_bulk_enable(ARRAY_SIZE(yas5xx->regs), yas5xx->regs);
--	if (ret) {
--		dev_err(dev, "cannot enable regulators\n");
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot enable regulators\n");
+ 	if (dev->ieee80211_ptr->iftype != NL80211_IFTYPE_ADHOC &&
+ 	    dev->ieee80211_ptr->iftype != NL80211_IFTYPE_MESH_POINT &&
+@@ -11298,9 +11297,7 @@ static int nl80211_set_mcast_rate(struct sk_buff *skb, struct genl_info *info)
+ 	if (!nl80211_parse_mcast_rate(rdev, mcast_rate, nla_rate))
+ 		return -EINVAL;
  
- 	/* See comment in runtime resume callback */
- 	usleep_range(31000, 40000);
-@@ -1431,15 +1429,13 @@ static int yas5xx_probe(struct i2c_client *i2c)
- 	/* This will take the device out of reset if need be */
- 	yas5xx->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(yas5xx->reset)) {
--		ret = dev_err_probe(dev, PTR_ERR(yas5xx->reset),
--				    "failed to get reset line\n");
-+		ret = dev_err_probe(dev, PTR_ERR(yas5xx->reset), "failed to get reset line\n");
- 		goto reg_off;
- 	}
+-	err = rdev_set_mcast_rate(rdev, dev, mcast_rate);
+-
+-	return err;
++	return rdev_set_mcast_rate(rdev, dev, mcast_rate);
+ }
  
- 	yas5xx->map = devm_regmap_init_i2c(i2c, &yas5xx_regmap_config);
- 	if (IS_ERR(yas5xx->map)) {
--		dev_err(dev, "failed to allocate register map\n");
--		ret = PTR_ERR(yas5xx->map);
-+		ret = dev_err_probe(dev, PTR_ERR(yas5xx->map), "failed to allocate register map\n");
- 		goto assert_reset;
- 	}
- 
-@@ -1487,13 +1483,13 @@ static int yas5xx_probe(struct i2c_client *i2c)
- 					 yas5xx_handle_trigger,
- 					 NULL);
- 	if (ret) {
--		dev_err(dev, "triggered buffer setup failed\n");
-+		dev_err_probe(dev, ret, "triggered buffer setup failed\n");
- 		goto assert_reset;
- 	}
- 
- 	ret = iio_device_register(indio_dev);
- 	if (ret) {
--		dev_err(dev, "device register failed\n");
-+		dev_err_probe(dev, ret, "device register failed\n");
- 		goto cleanup_buffer;
- 	}
- 
+ static struct sk_buff *
 -- 
-2.35.1
+2.25.1
 

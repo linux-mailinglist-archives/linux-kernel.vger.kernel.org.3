@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6A35A4F0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D295E5A4F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiH2OU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S229712AbiH2OVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiH2OUu (ORCPT
+        with ESMTP id S229868AbiH2OVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:20:50 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD4D54C8F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:49 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b16so10356635edd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=F9yNwthvDThYN8PozFUnGZoAmSBhQ3+M5Ob8cdnJ9E0=;
-        b=UffHqoG7mxNZ+09NcRTvmauGvuRAlQxfBG3YjS42aMP4Xh5RLRU0qBqKGJtYmWI4UY
-         WTl0UN/p716/FEmlZKu+J1fjOHbxyymf4yHoDBoLNu/H1N8jSunLZyi77z2D9rJbueoA
-         tOe0k9xsI7JGHRoYDFDCNONP7HSwMcmwarbdk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=F9yNwthvDThYN8PozFUnGZoAmSBhQ3+M5Ob8cdnJ9E0=;
-        b=268DBDVNh5PhN/sgn1hjgQJg8PagMG80HuDauYnm/Y6yxrrC3oBmExDmutohIMSOcU
-         q2gOn7X3OWbnC05hsmck+lpHkwxrlvgqR615C/cam2Ng40wjl+++p5tEb0Mj7unu4ea2
-         igAU1F/cqUKwGE387hzqnrnVKZWZELngBFnc6YqYCxB3cTFh5gMRiWAkFyHnMzzsxLmD
-         UMzeRpL9qpb+2AjD9TfSTkVr5L19DwP851FPxIZzV8NNBqWNp+N5kruErszZUztuSG6t
-         ZSl3cx9tX4mVTyH7p/jtrelny6hID4g2iUe4tleg5u71VRk/d2V0xPpblQMapxMm1P7F
-         w2iw==
-X-Gm-Message-State: ACgBeo06H0nxOT/3dzGbaxtLmogVEHptsBkbDx2Rox7gTE/BfOWjLsfG
-        pTfRmv6/b7XiXqroCKwe90wAJwvZyeKwbQLU
-X-Google-Smtp-Source: AA6agR7Woamdq4bqBYn9tAXYZU2BpZ0/159CkwPZa07W3DWILQva7tZxDeYM74t/V2jWHJq/nImABQ==
-X-Received: by 2002:a05:6402:241d:b0:443:39c5:808b with SMTP id t29-20020a056402241d00b0044339c5808bmr16893992eda.39.1661782847505;
-        Mon, 29 Aug 2022 07:20:47 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id 22-20020a508756000000b0044780b6debasm5815786edv.32.2022.08.29.07.20.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 07:20:46 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id n17so10405911wrm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:46 -0700 (PDT)
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
- b13-20020adff90d000000b0020cde324d35mr6500366wrr.583.1661782846549; Mon, 29
- Aug 2022 07:20:46 -0700 (PDT)
+        Mon, 29 Aug 2022 10:21:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432126CF43
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:21:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D5FEF220F0;
+        Mon, 29 Aug 2022 14:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661782867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lqxMa1HBJ0+cGOogi0JdL8WYldDRadh4OFmol9texAQ=;
+        b=VG+DHFcicKks5ebQV7XOTDPUERxlHNDH0SVdiTkGLHb+fFIAAWV0Zv1oRAC2qTA1T+Q7UA
+        hJ/tYEFzaNaRf3nLXomDYyM42RuEX3Pzcwky7dVwZyz8EhaUyvc9lk1/0AUO3l0hb0AMq6
+        jyIqtcUKM222nKn+tsmgsalshI9CndA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661782867;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lqxMa1HBJ0+cGOogi0JdL8WYldDRadh4OFmol9texAQ=;
+        b=u57++SwFNz0+yP3FfdqhJSANUV5+nwH03ePx6bkJLBGUaVbALZo1pN0ba1ceOiwtvs/W0u
+        W3MHLyIlGwIeG2BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2502133A6;
+        Mon, 29 Aug 2022 14:21:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 46ddJlPLDGNCaQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 29 Aug 2022 14:21:07 +0000
+Message-ID: <1188aeeb-3949-b561-bec0-512ed763d857@suse.cz>
+Date:   Mon, 29 Aug 2022 16:21:07 +0200
 MIME-Version: 1.0
-References: <20220829030823.v2.1.If97ef7a7d84bcc2cf20e0479b3e00c4a8fb5a2fd@changeid>
- <20220829030823.v2.2.I99d43de4a80223dee58ea1bc5b4fd3aaadc5e3c1@changeid>
-In-Reply-To: <20220829030823.v2.2.I99d43de4a80223dee58ea1bc5b4fd3aaadc5e3c1@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 29 Aug 2022 07:20:34 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VZoh-4uSWViciUgXCnTAz6HhQkOt2un_tTa1GY755TDA@mail.gmail.com>
-Message-ID: <CAD=FV=VZoh-4uSWViciUgXCnTAz6HhQkOt2un_tTa1GY755TDA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: Add sc7180-pazquel360
-To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] mm: simplify size2index conversion of __kmalloc_index
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     Dawei Li <set_pte_at@outlook.com>, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <TYCP286MB2323E622C54B765F087C073ECA779@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+ <YwwuSBAreqUk/jFq@casper.infradead.org> <Yww0NV54DXTzPG+R@hyeyoo>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Yww0NV54DXTzPG+R@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,27 +78,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 8/29/22 05:36, Hyeonggon Yoo wrote:
+> On Mon, Aug 29, 2022 at 04:11:04AM +0100, Matthew Wilcox wrote:
+>> On Sun, Aug 28, 2022 at 11:14:48PM +0800, Dawei Li wrote:
+>> > Current size2index is implemented by one to one hardcode mapping,
+>> > which can be improved by order_base_2().
+>> > Must be careful to not violate compile-time optimization rule.
+>> 
+>> This patch has been NACKed before (when submitted by other people).
+> 
+> 
+> Hmm right.
+> https://lkml.iu.edu/hypermail/linux/kernel/1606.2/05402.html
+> 
+> Christoph Lameter wrote:
+>> On Wed, 22 Jun 2016, Yury Norov wrote:
+>> > There will be no fls() for constant at runtime because ilog2() calculates
+>> > constant values at compile-time as well. From this point of view,
+>> > this patch removes code duplication, as we already have compile-time
+>> > log() calculation in kernel, and should re-use it whenever possible.\
+> 
+>> The reason not to use ilog there was that the constant folding did not
+>> work correctly with one or the other architectures/compilers. If you want
+>> to do this then please verify that all arches reliably do produce a
+>> constant there.
+> 
+> Can we re-evaluate this?
 
-On Sun, Aug 28, 2022 at 8:09 PM Yunlong Jia
-<yunlong.jia@ecs.corp-partner.google.com> wrote:
->
-> Create first version device tree for pazquel360
-> pazquel360 is convertible and the pazquel it is based on is clamshell.
-> sku 20 for lte & wifi
-> sku 21 for wifi only
-> sku 22 for lte w/o esim & wifi
->
-> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-> ---
->
-> Changes in v2:
-> - Remove the touchscreen setting, as a follow-up patch
->
->  arch/arm64/boot/dts/qcom/Makefile             |  2 +
->  .../qcom/sc7180-trogdor-pazquel360-lte.dts    | 22 ++++++++
->  .../qcom/sc7180-trogdor-pazquel360-wifi.dts   | 17 +++++++
->  .../dts/qcom/sc7180-trogdor-pazquel360.dtsi   | 50 +++++++++++++++++++
->  4 files changed, 91 insertions(+)
+Is there a way to turn inability of compile-time calculation to a
+compile-time error? (when size_is_constant=true etc). Then we could try and
+see if anything breaks in -next.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>

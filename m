@@ -2,187 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C275A5557
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B8D5A5559
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiH2ULJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S230076AbiH2ULZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiH2ULG (ORCPT
+        with ESMTP id S230050AbiH2ULS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:11:06 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906F76B17E;
-        Mon, 29 Aug 2022 13:11:03 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id bh13so8689933pgb.4;
-        Mon, 29 Aug 2022 13:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=HRDolUsTNvb2lmoRCB55mIDNp5qf4uPKsLhS/bfXvmo=;
-        b=PX09F8oZv5Z+2cpqSgn/UWSq4NIsbSKdZWB9NDa7XVe8ddr/Ytipf3qoKOoZZPnfsw
-         rGbHJuB/FN/V+jYxC6fL4oOlbSyykzLdph6BR8cQpKGG7e8Xqy//98fFwU6vtNnwQygk
-         4e7aj1k8NO4VQekZBND7L7AnCsjtRwL7TTtRg1zxuR+IHPWTft8TeGAF1XtceaIh+fBI
-         cGmzMm7U8ZeBe3dZ/3EpDjHhyj2m1bUKMm84pSPhY5sCM9uqs9RBYPd2dQ83IqBrWF5u
-         pH2pvyGKP7SX1EP8+ylUZ5e9gVwARdC2gfVLaLHmtZ8/TkWN2hIHGm4CgLIVt5lnAru+
-         Qw4g==
+        Mon, 29 Aug 2022 16:11:18 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE2983F20;
+        Mon, 29 Aug 2022 13:11:15 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso6687950otv.1;
+        Mon, 29 Aug 2022 13:11:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=HRDolUsTNvb2lmoRCB55mIDNp5qf4uPKsLhS/bfXvmo=;
-        b=USiWZ7X8WcZ7NxW1pHMBlbdwvvvT6MN1YdkntR1OMYejqxtYwVVYpO8o8Syh7YhjSv
-         01nsqJDuk9QU6mI6dyC2ZyCu8rH9anxx3VBLqJjZWBeDmeVxc9PtBYHI+xCQwpWzd6Vi
-         SUl1TSRWkKIqsc/GltoXkdNeATv2DpA+jqLi/hA3QB3+SNC9NIui7hLlkrcLrhtf8V2V
-         vmfe7BrCip7J7frtI01BW08/gpRrQFE8rJdPXsjTM64MQBSVUzvCqgw9w0b4VO59kZIG
-         KuO54DT7TaiA+uxeRIED+W6sOkOXWM25h2Rw5QCiL6MKX4GQZribd7drxPQkb1HUWHO/
-         yclg==
-X-Gm-Message-State: ACgBeo1NYQHa22muHsGYgUXpl5yXSNpTsmyXgo93YVvDFYDjHEHpJdNa
-        ZK5p0Wd1sYH65359+7NNAFI=
-X-Google-Smtp-Source: AA6agR75eieQMi5+X8ep+VYEr22hq2d6B9AjxM2u3eiN5KC8nBwsGnl02Irn48HaYE/ywHIPLVsulA==
-X-Received: by 2002:a63:ad02:0:b0:41a:910f:5195 with SMTP id g2-20020a63ad02000000b0041a910f5195mr15414205pgf.472.1661803863122;
-        Mon, 29 Aug 2022 13:11:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 68-20020a620647000000b00537d7cc774bsm6579770pfg.139.2022.08.29.13.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 13:11:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Aug 2022 13:11:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Justin Ledford <justinledford@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (max31790) add fanN_enable
-Message-ID: <20220829201100.GA3638256@roeck-us.net>
-References: <20220829195930.2521755-1-justinledford@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=coRosjD9gelJrEV2YoGWjrUrsYYzPD3GZ/ZhjpCdkmU=;
+        b=QdPtSxl3TFO93ukfu1RexSTS9Ot2qal2NwJ0MPgNqGB5D74e+ulx5SCLTwcgUmLsSJ
+         vKRJKqHj/xe9wDudalLkGP0xFea3T+5c8YgTLxXFxIRrhvmkEXCK2hYc7h86/RAYAFRr
+         NYwVeeKJS+wSPMkx9aeV96zSd3EupsLyu8fm/sOA+QzOUEgsgNfVmdyHEpmshgr6Orwl
+         cjFr/duhw+vzICziy5PNsXpBEDM3t7iGNw2hZObBw2PgKAKZhXw1k3CP4Kwy1eem/wqw
+         N7sy80UZlmdQP8F4hMuvVIMbqKnRkVmHH0TiZ7jXzyH7kAEA/MTinNcxiZftijOSl53s
+         CS5A==
+X-Gm-Message-State: ACgBeo2dxHT+95Y3YQN3C1KJTzxExN8x0+ESIADM2kHOCXqfK0ibxiyV
+        m/ojM1bTyq2SgVdecshsRtFb3Q++7mvNuwCTdYq+Uz4Q
+X-Google-Smtp-Source: AA6agR5Bvw+RNGEMv8abZwAJt8lWnBQhR8+CSsscLfwCd/Nu4ePGjwk5nmwdDH1aAQvjjKHcOQ/qWCw/s1yE80gltk4=
+X-Received: by 2002:a9d:6f18:0:b0:638:b4aa:a546 with SMTP id
+ n24-20020a9d6f18000000b00638b4aaa546mr7012074otq.124.1661803874410; Mon, 29
+ Aug 2022 13:11:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829195930.2521755-1-justinledford@google.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
+ <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
+ <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com> <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
+ <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
+ <CAM9d7cjTtOkRHLOosxHN8PcbVbhTK=uLDGjw8N5=1QiTHcd6rQ@mail.gmail.com>
+ <C7F3F33B-4A8E-428C-9FED-FB635955C2B1@fb.com> <FCC75F8E-4C2F-42A4-B582-9BE3BB87E15A@fb.com>
+ <CAM9d7cj6YNTL+u38PZjhPF2Qg_BYiJ1NMmDkPDx3N3Xe+ZTbyA@mail.gmail.com>
+ <FD49F694-10FA-4346-8303-E1E185C3E6E4@fb.com> <CAM9d7cjj0X90=NsvdwaLMGCDVkMJBLAGF_q-+Eqj6b44OAnzoQ@mail.gmail.com>
+ <1CA3FC40-BC8D-4836-B3E7-0EB196DE6E66@fb.com> <CAM9d7cg-X6iobbmx3HzCz4H2c20peBVGPt3yf9m3WbqLb5H90A@mail.gmail.com>
+ <4E6CFFD5-7048-4F64-8F16-70DD6D081ACF@fb.com>
+In-Reply-To: <4E6CFFD5-7048-4F64-8F16-70DD6D081ACF@fb.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 29 Aug 2022 13:11:03 -0700
+Message-ID: <CAM9d7cgXdL6nnVXGGxtmrdnu4jSKqORCCT=AViAQqJamkpj7ZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 07:59:30PM +0000, Justin Ledford wrote:
-> The MAX31790 has a tach input enable bit in each fan's configuration
-> register. This is only enabled by the driver if RPM mode is selected,
-> but the driver doesn't provide a way to independently enable tachometer
-> input regardless of the regulator mode.
-> 
-> By adding the fanN_enable sysfs files, we can decouple the tach input
-> from the regulator mode. Also update the documentation.
-> 
-> Signed-off-by: Justin Ledford <justinledford@google.com>
+On Mon, Aug 29, 2022 at 12:21 AM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Aug 26, 2022, at 11:25 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Fri, Aug 26, 2022 at 2:26 PM Song Liu <songliubraving@fb.com> wrote:
+> >>
+> >>
+> >>
+> >>> On Aug 26, 2022, at 2:12 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >>>
+> >>> On Fri, Aug 26, 2022 at 1:59 PM Song Liu <songliubraving@fb.com> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>>> On Aug 26, 2022, at 12:30 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >>>>>
+> >>>>> On Fri, Aug 26, 2022 at 11:45 AM Song Liu <songliubraving@fb.com> wrote:
+> >>>>>
+> >>>>>>> And actually, we can just read ctx->data and get the raw record,
+> >>>>>>> right..?
+> >>>>>>
+> >>>>>> Played with this for a little bit. ctx->data appears to be not
+> >>>>>> reliable sometimes. I guess (not 100% sure) this is because we
+> >>>>>> call bpf program before event->orig_overflow_handler. We can
+> >>>>>> probably add a flag to specify we want to call orig_overflow_handler
+> >>>>>> first.
+> >>>>>
+> >>>>> I'm not sure.  The sample_data should be provided by the caller
+> >>>>> of perf_event_overflow.  So I guess the bpf program should see
+> >>>>> a valid ctx->data.
+> >>>>
+> >>>> Let's dig into this. Maybe we need some small changes in
+> >>>> pe_prog_convert_ctx_access.
+> >>>
+> >>> Sure, can you explain the problem in detail and share your program?
+> >>
+> >> I push the code to
+> >>
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/song/linux.git/log/?h=test-perf-event
+> >>
+> >> The code is in tools/bpf/perf-test/.
+> >>
+> >> The problem is we cannot get reliable print of data->cpu_entry in
+> >> /sys/kernel/tracing/trace.
+> >
+> > Ah, right.  I've realized that the sample data is passed before full
+> > initialized.  Please see perf_sample_data_init().  The other members
+> > are initialized right before written to the ring buffer in the
+> > orig_overflow_handler (__perf_event_output).
+> >
+> > That explains why pe_prog_convert_ctx_access() handles
+> > data and period specially.  We need to handle it first.
+>
+> Thanks for confirming this. I guess we will need a helper (or kfunc)
+> for the raw data.
+>
+> Shall we make it more generic that we can get other PERF_SAMPLE_*?
 
-Applied to hwmon-next.
+I don't think we can (or allow to) get all the sample data but some
+would be useful for filtering.  Currently I'm only interested in the raw
+data, but ip and page size seem useful too.
+
+So I think it'd be better to have a generic helper rather than a specific
+one.  But it'd require some refactoring to get the data before calling
+BPF programs.  Let me work on it first.
 
 Thanks,
-Guenter
-
-> ---
-> Changes in v2:
-> - Removed updating fan_config during max31790_update_device
-> ---
->  Documentation/hwmon/max31790.rst |  1 +
->  drivers/hwmon/max31790.c         | 38 ++++++++++++++++++++++++++------
->  2 files changed, 32 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-> index 7b097c3b9b90..33c5c7330efc 100644
-> --- a/Documentation/hwmon/max31790.rst
-> +++ b/Documentation/hwmon/max31790.rst
-> @@ -38,6 +38,7 @@ Sysfs entries
->  fan[1-12]_input    RO  fan tachometer speed in RPM
->  fan[1-12]_fault    RO  fan experienced fault
->  fan[1-6]_target    RW  desired fan speed in RPM
-> +fan[1-6]_enable    RW  enable or disable the tachometer input
->  pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
->  pwm[1-6]           RW  read: current pwm duty cycle,
->                         write: target pwm duty cycle (0-255)
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 7e9362f6dc29..20bf5ffadefe 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -202,6 +202,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
->  		}
->  		mutex_unlock(&data->update_lock);
->  		return 0;
-> +	case hwmon_fan_enable:
-> +		*val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
-> +		return 0;
->  	default:
->  		return -EOPNOTSUPP;
->  	}
-> @@ -214,7 +217,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
->  	struct i2c_client *client = data->client;
->  	int target_count;
->  	int err = 0;
-> -	u8 bits;
-> +	u8 bits, fan_config;
->  	int sr;
->  
->  	mutex_lock(&data->update_lock);
-> @@ -243,6 +246,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
->  					MAX31790_REG_TARGET_COUNT(channel),
->  					data->target_count[channel]);
->  		break;
-> +	case hwmon_fan_enable:
-> +		fan_config = data->fan_config[channel];
-> +		if (val == 0) {
-> +			fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
-> +		} else if (val == 1) {
-> +			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
-> +		} else {
-> +			err = -EINVAL;
-> +			break;
-> +		}
-> +		if (fan_config != data->fan_config[channel]) {
-> +			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
-> +							fan_config);
-> +			if (!err)
-> +				data->fan_config[channel] = fan_config;
-> +		}
-> +		break;
->  	default:
->  		err = -EOPNOTSUPP;
->  		break;
-> @@ -270,6 +290,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
->  		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
->  			return 0644;
->  		return 0;
-> +	case hwmon_fan_enable:
-> +		if (channel < NR_CHANNEL)
-> +			return 0644;
-> +		return 0;
->  	default:
->  		return 0;
->  	}
-> @@ -423,12 +447,12 @@ static umode_t max31790_is_visible(const void *data,
->  
->  static const struct hwmon_channel_info *max31790_info[] = {
->  	HWMON_CHANNEL_INFO(fan,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
->  			   HWMON_F_INPUT | HWMON_F_FAULT,
->  			   HWMON_F_INPUT | HWMON_F_FAULT,
->  			   HWMON_F_INPUT | HWMON_F_FAULT,
+Namhyung

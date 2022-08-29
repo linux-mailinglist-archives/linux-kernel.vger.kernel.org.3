@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDEAB5A56E1
+	by mail.lfdr.de (Postfix) with ESMTP id 628CD5A56E0
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiH2WOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 18:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S229635AbiH2WO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 18:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiH2WO2 (ORCPT
+        with ESMTP id S229513AbiH2WO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 18:14:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7167D78B;
-        Mon, 29 Aug 2022 15:14:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66645B81367;
-        Mon, 29 Aug 2022 22:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F268C433D6;
-        Mon, 29 Aug 2022 22:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661811264;
-        bh=8fGWeIEbosM0ZpO4CDThvrfbX/Zbz5F0j11WCl890LQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UmyCqVS675PXHgBitXiDAzQJnM4VdZZXNrUoX3KQpOxlhGDpD4iSbCbJ3pdpbyggL
-         7r/BJrBEyI0rSuXQtgIZCzXGHalTK7xyHZU2cnbsqCbk20nmxvEorNqb2qWAKjKTw4
-         8JNkhThs7W7HSYbiQY5BBdHP7jQ9Id1Lap2mJDegKv/A7EPPUTaw7O+HSQKtXZ9Jbd
-         ugRe0FM0QEMns4oA4FtzS2adm2JAgvaVKIOXYKg3v6aQKfXRQQCUVkw13eqF8zHLUR
-         OkkgBf12AuJLJi7trx4K0zPTSnRT1A1WGGnKxTJQDX80jPsgsI50rwP52ojL7YLvDD
-         GKLAng9Zvtxpw==
-Date:   Mon, 29 Aug 2022 17:14:22 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: Re: [PATCH v3 3/4] thermal: qcom: tsens: Add driver support for
- re-initialization quirk
-Message-ID: <20220829221422.2r6axgaica67lbpv@builder.lan>
-References: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
- <20220804054638.3197294-4-bhupesh.sharma@linaro.org>
+        Mon, 29 Aug 2022 18:14:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5340A7D78B;
+        Mon, 29 Aug 2022 15:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=5bh+6c/zBVS1U48Zom3Me0IcZEFs+/RPrgsPPRgOxVk=; b=mm03mYlIcQ7K8cuqTLwVw7ug27
+        jOa21wzn+kG2i6trNc84diYwqHNrvT79eRpxqN0lfqEr5Agkx6uZqwA6bURsFIzGz+gFA3XI6ROXu
+        gMDoF+jd/VVS1+QoO/JVYKRZq0vTVwIzOtfYDUDbo6rWMmdVvl8LIXObd83/6cTWJl+ABmsLdGnTL
+        yeU/WvW7qxESpQo5UWQg7Hfg03YT852YXzKQDM14XAmMId8ytPqEiOhmG8cuZTdy5F9J3T11fKnRt
+        7iSHv8B3tqRF00veRPHJz1XUAz2XPeKUNWgsEddUipTiYY7x0d/Z8ASAoRjQxFxcH9nwavstl/9WH
+        7D6q2x1g==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSn1T-00D2DE-Ot; Mon, 29 Aug 2022 22:14:23 +0000
+Message-ID: <dd8fb085-76dc-f2b0-6101-f84c93b8a0af@infradead.org>
+Date:   Mon, 29 Aug 2022 15:14:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804054638.3197294-4-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: pcieport bug?
+Content-Language: en-US
+To:     Steven J Abner <pheonix.sja@att.net>, linux-kernel@vger.kernel.org
+References: <TY1EHR.8720BA9PHAKY2.ref@att.net> <TY1EHR.8720BA9PHAKY2@att.net>
+Cc:     PCI <linux-pci@vger.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <TY1EHR.8720BA9PHAKY2@att.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,248 +52,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 11:16:37AM +0530, Bhupesh Sharma wrote:
-> Since for some Qualcomm tsens controllers, its suggested to
-> monitor the controller health periodically and in case an
-> issue is detected, to re-initialize the tsens controller
-> via trustzone, add the support for the same in the
-> qcom tsens driver.
+[adding linux-pci mailing list]
+
+
+On 8/29/22 10:59, Steven J Abner wrote:
+> Hi
+> Building a kernel tailored for AMD 2400g on ASRock B450 using 5.18.12 as base, OS
+> is Elementary 6.1 on top of Ubuntu 20.04.5.
+> In a config I changed some which lead to this query,'cause not sure what it means.
+> So up to you see if it is of concern. Notation igpu# refers to build sequence tests.
+> Also note that pcieport may affect other drivers?
 > 
-> Note that once the tsens controller is reset using scm call,
-> all SROT and TM region registers will enter the reset mode.
+> config differences
+> igpu33
+> # CONFIG_PCIEPORTBUS is not set
+> # CONFIG_PCI_IOV is not set
+> # CONFIG_VGA_ARB is not set
+> # CONFIG_HOTPLUG_PCI is not set
+> igpu32
+> CONFIG_PCIEPORTBUS=y
+> CONFIG_HOTPLUG_PCI_PCIE=y
+> CONFIG_PCIEAER=y
+> # CONFIG_PCIEAER_INJECT is not set
+> # CONFIG_PCIE_ECRC is not set
+> CONFIG_PCIE_PME=y
+> CONFIG_PCIE_DPC=y
+> # CONFIG_PCIE_EDR is not set
+> CONFIG_PCI_REALLOC_ENABLE_AUTO=y
+> # CONFIG_PCI_PF_STUB is not set
+> CONFIG_PCI_IOV=y
+> CONFIG_VGA_ARB=y
+> CONFIG_VGA_ARB_MAX_GPUS=16
+> CONFIG_HOTPLUG_PCI=y
+> CONFIG_HOTPLUG_PCI_ACPI=y
+> # CONFIG_HOTPLUG_PCI_ACPI_IBM is not set
+> CONFIG_HOTPLUG_PCI_CPCI=y
+> # CONFIG_HOTPLUG_PCI_CPCI_ZT5550 is not set
+> # CONFIG_HOTPLUG_PCI_CPCI_GENERIC is not set
+> CONFIG_HOTPLUG_PCI_SHPC=y
+> # CONFIG_RAPIDIO_TSI721 is not set
+> # CONFIG_EEEPC_LAPTOP is not set
 > 
-> While all the SROT registers will be re-programmed and
-> re-enabled in trustzone prior to the scm call exit, the TM
-> region registers will not re-initialized in trustzone and thus
-> need to be handled by the tsens driver.
+> lspci differences:
+> start with identical:
+> 00:00.0 Host bridge
+> 00:00.2 IOMMU
+> 00:01.0 Host bridge
 > 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/thermal/qcom/tsens-v2.c |   3 +
->  drivers/thermal/qcom/tsens.c    | 197 ++++++++++++++++++++++++++++++++
->  drivers/thermal/qcom/tsens.h    |  12 ++
->  3 files changed, 212 insertions(+)
+> kernel builds after igpu33 stable flags, only irq differences
+> kernel builds upto igpu32 flags differ including non-pcieport drivers,
+> there was a few builds where flags matched out of 32 different builds
+> I thought was normal that flags changed prior to 33-37 being very stable.
 > 
-> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-> index b293ed32174b..f521e4479cc5 100644
-> --- a/drivers/thermal/qcom/tsens-v2.c
-> +++ b/drivers/thermal/qcom/tsens-v2.c
-> @@ -88,6 +88,9 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
->  
->  	/* TRDY: 1=ready, 0=in progress */
->  	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
-> +
-> +	/* FIRST_ROUND_COMPLETE: 1=complete, 0=not complete */
-> +	[FIRST_ROUND_COMPLETE] = REG_FIELD(TM_TRDY_OFF, 3, 3),
->  };
->  
->  static const struct tsens_ops ops_generic_v2 = {
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index e49f58e83513..c2d085fb5447 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -7,6 +7,7 @@
->  #include <linux/debugfs.h>
->  #include <linux/err.h>
->  #include <linux/io.h>
-> +#include <linux/qcom_scm.h>
->  #include <linux/module.h>
->  #include <linux/nvmem-consumer.h>
->  #include <linux/of.h>
-> @@ -594,6 +595,113 @@ static void tsens_disable_irq(struct tsens_priv *priv)
->  	regmap_field_write(priv->rf[INT_EN], 0);
->  }
->  
-> +static int tsens_reenable_hw_after_scm(struct tsens_priv *priv)
+> under 00:01.1 PCI bridge:
+> igpu33
+> Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
+> DevCtl: CorrErr- NonFatalErr- FatalErr- UnsupReq-
+> RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna- CRSVisible+
+> Capabilities: [a0] MSI: Enable- Count=1/1 Maskable- 64bit+
+>  Address: 0000000000000000 Data: 0000
+> RootCmd: CERptEn- NFERptEn- FERptEn-
+> 
+> igpu32
+> Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+> Interrupt: pin ? routed to IRQ 26
+> DevCtl: CorrErr+ NonFatalErr+ FatalErr+ UnsupReq+
+> RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna+ CRSVisible+
+> Capabilities: [a0] MSI: Enable+ Count=1/1 Maskable- 64bit+
+>  Address: 00000000fee00000 Data: 0000
+> RootCmd: CERptEn+ NFERptEn+ FERptEn+
+> Kernel driver in use: pcieport
+> 
+> under these, nearly same readout as above (32vs33 use of pcieport)
+> 00:01.6 PCI bridge
+> 00:08.1 PCI bridge
+> 00:08.2 PCI bridge
+> 11:01.0 PCI bridge
+> 11:02.0 PCI bridge
+> 15:00.2 PCI bridge
+> 1d:00.0 PCI bridge
+> 1d:01.0 PCI bridge
+> 1d:04.0 PCI bridge
+> 1d:05.0 PCI bridge
+> 1d:06.0 PCI bridge
+> 1d:07.0 PCI bridge
+> 
+> on non-pcieport drivers minor differences in +- states
+> on nvme added line:
+> Physical Slot: 0
+> but +- state can change like others
+> 
+> dmesg differences (alphabetical):
+> igu33
+> acpi PNP0A08:00: PCIe port services disabled; not requesting _OSC control
+> igpu32
+> acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+> acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME AER PCIeCapability]
+> acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug LTR]
+> amdgpu 0000:38:00.0: vgaarb: deactivate vga console
+> pci 0000:38:00.0: vgaarb: bridge control possible
+> pci 0000:38:00.0: vgaarb: setting as boot VGA device
+> pci 0000:38:00.0: vgaarb: VGA device added: decodes=io+mem,owns=none,locks=none
+> pcieport 0000:00:01.1: AER: enabled with IRQ 26
+> pcieport 0000:00:01.1: PME: Signaling with IRQ 26
+> pcieport 0000:00:01.2: AER: enabled with IRQ 27
+> pcieport 0000:00:01.2: PME: Signaling with IRQ 27
+> pcieport 0000:00:01.6: AER: enabled with IRQ 28
+> pcieport 0000:00:01.6: pciehp: Slot #0 AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug+ Surprise- Interlock- NoCompl+ IbPresDis- LLActRep+
+> pcieport 0000:00:01.6: PME: Signaling with IRQ 28
+> pcieport 0000:00:08.1: PME: Signaling with IRQ 29
+> pcieport 0000:00:08.2: PME: Signaling with IRQ 30
+> shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+> vgaarb: loaded
+> 
+> Steve
+> 
+> I wish to be personally CC'ed the answers/comments posted to the list
+> in response to your posting, please.
+> 
+> 
+> 
+> 
+> 
+> 
 
-As written, this is a void function.
-
-> +{
-> +	/*
-> +	 * Re-enable watchdog, unmask the bark and
-> +	 * disable cycle completion monitoring.
-> +	 */
-> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 1);
-> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 0);
-> +	regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
-> +	regmap_field_write(priv->rf[CC_MON_MASK], 1);
-> +
-> +	/* Re-enable interrupts */
-> +	tsens_enable_irq(priv);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tsens_health_check_and_reinit(struct tsens_priv *priv,
-> +					 int hw_id)
-> +{
-> +	int ret, trdy, first_round, sw_reg;
-> +	unsigned long timeout;
-> +
-> +	/* First check if TRDY is SET */
-> +	ret = regmap_field_read(priv->rf[TRDY], &trdy);
-> +	if (ret)
-> +		goto err;
-> +
-> +	if (!trdy) {
-
-if (trdy)
-	return 0;
-
-Would save you one level of indentation.
-
-> +		ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
-> +		if (ret)
-> +			goto err;
-> +
-> +		if (!first_round) {
-
-if (first_round)
-	return 0;
-
-Would save you another level of indentation.
-
-> +			WARN_ON(!mutex_is_locked(&priv->reinit_mutex));
-
-At least for now the function is only called within a small locked
-region, so it's going to be locked here. But I'm wondering if there's
-any relationship between the lock state of reinit_mutex and the values
-of TRDY and FIRST_ROUND_COMPLETE.
-
-Seems like it's possible to hit this function repeatedly and have it
-exit early because of TRDY and FIRST_ROUND_COMPLETE values and then one
-day if will reach here and trip.
-
-So how about starting the function with this check, to make it more
-likely to be hit in our testing?
-
-> +
-> +			/* Wait for 2 ms for tsens controller to recover */
-> +			timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
-> +			do {
-> +				ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE],
-> +						&first_round);
-> +				if (ret)
-> +					goto err;
-> +
-> +				if (first_round) {
-> +					dev_dbg(priv->dev, "tsens controller recovered\n");
-> +					return 0; /* success */
-> +				}
-> +			} while (time_before(jiffies, timeout));
-
-I see no delays in this loop, so we're presumably going to spin here
-tightly for 2ms.
-
-I think you could write this loop as:
-
-	ret = regmap_field_read_poll_timeout(priv->rf[FIRST_ROUND_COMPLETE],
-					     &first_round, first_round, 100, 2000);
-	if (ret == 0) {
-		dev_dbg(priv->dev, "tsens controller recovered\n");
-		return 0;
-	}
-
-> +
-> +			spin_lock(&priv->reinit_lock);
-> +
-> +			/*
-> +			 * Invoke SCM call only if SW register write is
-> +			 * reflecting in controller. Try it for 2 ms.
-> +			 * In case that fails mark the tsens controller
-> +			 * as unrecoverable.
-> +			 */
-> +			timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
-> +			do {
-> +				ret = regmap_field_write(priv->rf[INT_EN], CRITICAL_INT_EN);
-> +				if (ret)
-> +					goto err;
-
-You're holding reinit_lock here.
-
-> +
-> +				ret = regmap_field_read(priv->rf[INT_EN], &sw_reg);
-> +				if (ret)
-> +					goto err;
-
-And here.
-
-> +			} while ((sw_reg & CRITICAL_INT_EN) && (time_before(jiffies, timeout)));
-
-And again, this is a tight loop. Please add a usleep_range(100, 1000),
-perhaps inbetween the write and read?
-
-> +
-> +			if (!(sw_reg & CRITICAL_INT_EN)) {
-> +				ret = -ENOTRECOVERABLE;
-> +				goto err;
-
-Again, reinit_lock is held here.
-
-> +			}
-> +
-> +			/*
-> +			 * tsens controller did not recover,
-> +			 * proceed with SCM call to re-init it.
-> +			 */
-> +			ret = qcom_scm_tsens_reinit();
-> +			if (ret) {
-> +				dev_err(priv->dev, "tsens reinit scm call failed (%d)\n", ret);
-> +				goto err;
-
-And here.
-
-> +			}
-> +
-> +			/*
-> +			 * After the SCM call, we need to re-enable
-> +			 * the interrupts and also set active threshold
-> +			 * for each sensor.
-> +			 */
-> +			ret = tsens_reenable_hw_after_scm(priv);
-
-As written tsens_reenable_hw_after_scm() doesn't return any value, so
-skip the error handling.
-
-> +			if (ret) {
-> +				dev_err(priv->dev,
-> +					"tsens re-enable after scm call failed (%d)\n", ret);
-> +				goto err;
-
-And here...
-
-> +			}
-> +
-> +			/* Notify reinit wa worker */
-> +			queue_work(system_highpri_wq, &priv->reinit_wa_notify);
-> +
-> +			spin_unlock(&priv->reinit_lock);
-> +		}
-> +	}
-> +
-> +err:
-> +	return ret;
-> +}
-> +
->  int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->  {
->  	struct tsens_priv *priv = s->priv;
-> @@ -607,6 +715,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->  	if (tsens_version(priv) == VER_0)
->  		goto get_temp;
->  
-> +	/*
-> +	 * For some tsens controllers, its suggested to
-> +	 * monitor the controller health periodically
-> +	 * and in case an issue is detected to reinit
-> +	 * tsens controller via trustzone.
-
-Please use your 80 chars.
-
-Regards,
-Bjorn
+-- 
+~Randy

@@ -2,201 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08E35A54A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD635A54A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiH2Tm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S229616AbiH2TpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiH2Tmx (ORCPT
+        with ESMTP id S229472AbiH2TpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:42:53 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272FE73336
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:42:52 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o4so9030976pjp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DRojyyEkQJaI3ruqXF8PA7dAvzuh8TA99+WmvS2ccKU=;
-        b=brVaxPBLPju5jff8Pa4EVeXfGeOA9i5nUT87DXILuVueaT0W9QC8g08MaV43qdMLt0
-         xdzv7YPwS6Ej+TFQAZmh8l/6gX8+G2XJ2GzP0H/vZaquWkB6ymcIBxY/Afg1FsytrXzX
-         o5gbJ9ODI6Q3IGOXRCjKFqa0TvtZzEMKSXieCKU6tOeXe+8W20B+CHkaQpCfqHKeWBHj
-         hHqF7WQhterfKsvpanzDK/PvEUMzp7lxtSeZY8Ps9ZPztTCNtx9XxeZmXL7MACAkuMfe
-         wtive/YlA7RDrhk6/jJJ039P2HFEVIXJqhgRx2eF5apskE3YbhKuqGR63DdXcKQvL0E5
-         jH9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DRojyyEkQJaI3ruqXF8PA7dAvzuh8TA99+WmvS2ccKU=;
-        b=JL6Kj9Jr2up5WHExcry+hWOXksOLMHse6n33S9/Uva6sjs5U+YXyWfT+4L8D5mQSHd
-         NjcCUx4P1bnwEL5w1S3/1bDdYRfw9OTZiQZnl28rbr5Szj4MhBmzkttry7kjkDZ7J5+g
-         TUnMH/O7ukk327fQY3DD1JPxZWWNlmvxMMz/qlbvGPEIfMLtUJL+4sLC5zu78EPd5A9O
-         kw18Ru9QZzf771VzOO2jLM9n/VnmYKpPzg8eUccPO0GiTBVeLjqbxMXOpI/S7piymzzO
-         0PxYYhLtiF7nFPHauoKKddfk+ZzqBieYjSZoLSyr3lelIrAmFICZee7bHezyPn28Q0Ix
-         Os0Q==
-X-Gm-Message-State: ACgBeo1+uXu2zEK2fOr77zb28alGhx3lYj0jHQq2PGf0wxGKg5x5vGl5
-        koRweZCuyVmYiQNPgDx8lDg4kQ==
-X-Google-Smtp-Source: AA6agR73dJ6zqJdEqwSre7rs9UMvyIM4SDNkPl6iDWE7C8VSfpk2HWHFiKxa7FMIROFlJaab1ETldg==
-X-Received: by 2002:a17:902:f64f:b0:172:a790:320a with SMTP id m15-20020a170902f64f00b00172a790320amr17692944plg.149.1661802171623;
-        Mon, 29 Aug 2022 12:42:51 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902b58d00b00172f4835f60sm7840088pls.189.2022.08.29.12.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 12:42:50 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 13:42:47 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        weishunc@google.com
-Subject: Re: [PATCH v2 4/9] remoteproc: mediatek: Support probing for the 2nd
- core of dual-core SCP
-Message-ID: <20220829194247.GC2264818@p14s>
-References: <20220608083553.8697-1-tinghan.shen@mediatek.com>
- <20220608083553.8697-5-tinghan.shen@mediatek.com>
+        Mon, 29 Aug 2022 15:45:16 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1861DF33
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:45:13 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 21:45:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661802311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r/j7KNO+7MM3mzFiJUvn7EIiQIDtTMugi0upufP9SQ0=;
+        b=x8mofQf4AidRk7AcPvqO1vUKJifpGlYKjoIT4GIHplgQfClRTp+ZhgMNQYJW+KzGReUWyz
+        GxTXtdNImh1NmUXESToA6RyKDpdnqGo4NZ91YqICw4XChOiVF3+/YtMel7c9IDQKJc79Kx
+        ItjnOBHIO+hZZ7y/Wax/sm9Nb7jnnyqY++LNXJK+R6HDebT8acLdXZqGbWpmwC1o/nUz77
+        rMkZJUu9NywlLdgR+rGfyAaQV8fx+DXqp2sSwI+3kn5ll9ujslA/ErsKOCA9FCuKDNcJQP
+        o/be+N1QXaJR5FKzGilurO5aUCSJJaC8OLyN5JXS5G0E3rEWKP0UncMtY5y0gA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661802311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r/j7KNO+7MM3mzFiJUvn7EIiQIDtTMugi0upufP9SQ0=;
+        b=hOtq073o5K6sicAm/uddiGxVSAkZst8NxCW06aIqp4LMHGMin7MjDkBwZCJIqsDwIt9kud
+        wiQZIZf1Gj6AOnDA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
+Subject: Re: [PATCH] random: use raw spinlocks for use on RT
+Message-ID: <Yw0XRtgh2dmSM+T1@linutronix.de>
+References: <20220801142530.133007-1-Jason@zx2c4.com>
+ <YufkZU9kGkHHUhAK@linutronix.de>
+ <YvRKm/IpbUID18FK@zx2c4.com>
+ <YvSsf5uds7zGgWPX@linutronix.de>
+ <YvUQJTDREXSAA9J6@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220608083553.8697-5-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YvUQJTDREXSAA9J6@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:35:48PM +0800, Tinghan Shen wrote:
-> The mtk_scp.c driver only supports the single core SCP and the
-> 1st core of a dual-core SCP. This patch extends it for the 2nd core.
-> 
-> MT8195 SCP is a dual-core MCU. Both cores are housed in the same subsys.
+On 2022-08-11 16:20:21 [+0200], Jason A. Donenfeld wrote:
+> Hi Sebastian,
+Hi Jason,
 
-s/subsys/subsystem
+> By grouping everything into "the rework of get_random_*()", you miss
+> important subtleties, as I mentioned before. Importantly, in this case,
+> the issue we're facing has absolutely nothing at all to do with that,
+> but is rather entirely the result of removing the async notifier
+> mechanism in favor of doing things more directly, more straight
+> forwardly. So let's not muddle what we're discussing here.
 
-> They have the same viewpoint of registers and memory.
-> 
-> Core 1 of the SCP features its own set of core configuration registers,
-> interrupt controller, timers, and DMAs. The rest of the peripherals
-> in this subsystem are shared by core 0 and core 1.
-> 
-> As for memory, core 1 has its own cache memory. the SCP SRAM is shared
+I meant the number of fallouts I saw on RT's side. The removal of the
+async notifier is a different story and no complains on my side.
 
-/the/The
+> But more generally, the RNG is supposed to be usable from any context.
+> And adding wild workarounds, or worse, adding back complex async
+> notifier stuff, seems bad. So far your proposals for the printk issue
+> haven't been acceptable at all.
 
-> by core 0 and core 1.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->  drivers/remoteproc/mtk_scp.c | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> index 3510c6d0bbc8..91b4aefde4ac 100644
-> --- a/drivers/remoteproc/mtk_scp.c
-> +++ b/drivers/remoteproc/mtk_scp.c
-> @@ -23,6 +23,10 @@
->  #define MAX_CODE_SIZE 0x500000
->  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
->  
-> +#define SCP_CORE_0 0
-> +#define SCP_CORE_1 1
-> +#define SCP_CORE_SINGLE 0xF
-> +
->  /**
->   * scp_get() - get a reference to SCP.
->   *
-> @@ -836,6 +840,7 @@ static int scp_probe(struct platform_device *pdev)
->  	struct resource *res;
->  	const char *fw_name = "scp.img";
->  	int ret, i;
-> +	u32 core_id = SCP_CORE_SINGLE;
->  
->  	ret = rproc_of_parse_firmware(dev, 0, &fw_name);
->  	if (ret < 0 && ret != -EINVAL)
-> @@ -851,8 +856,16 @@ static int scp_probe(struct platform_device *pdev)
->  	scp->data = of_device_get_match_data(dev);
->  	platform_set_drvdata(pdev, scp);
->  
-> +	ret = of_property_read_u32_index(dev->of_node, "mediatek,scp-core", 1, &core_id);
-> +	if (ret == 0)
-> +		dev_info(dev, "Boot SCP dual core %u\n", core_id);
+The printk issue a two way story:
+- I tried to avoid the print out to the console because the code is not
+  available yet and the recent reverts of already available code moved
+  the missing bits further away. Linus wasn't happy with this, it wasn't
+  merged so we have to wait for the code for the complete code.
 
-Why is the DT property "mediatek,scp-core" needed at all?  Since the compatible
-"mediatek,mt8195-scp-dual" has already been defined previously in this patchset,
-initialising the second core, if present, is a matter of looking at the
-compatile string. 
+- The vsnprintf issue I try to solve. This needs to work in any context
+  due printk. printk needs to work in any context (incl. preempt-off)
+  and it evaluates its format string upon invocation.
 
-> +
->  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
-> -	scp->sram_base = devm_ioremap_resource(dev, res);
-> +	if (core_id == SCP_CORE_1)
-> +		scp->sram_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	else
-> +		scp->sram_base = devm_ioremap_resource(dev, res);
-> +
+The second point needs to solved even after the first one has been
+solved.
 
-This looks very broken...  For this to work you would need to have two DT
-entries with the "mediatek,mt8195-scp-dual" compatible properly, one with
-"mediatek,scp-core = <&scp_dual1 0>;" and another one with "mediatek,scp-core = <&scp_dual0 1>;".
+> So why don't we actually fix this, so we don't have to keep coming up
+> with hacks? The question is: does using raw spinlocks over this code
+> result in any real issue for RT latency? If so, I'd like to know where,
+> and maybe I can do something about that (or maybe I can't). If not, then
+> this is a non problem and I'll apply this patch with your blessing.
 
-Which is also very broken...  Here you have a binding whose first argument is a
-reference to the core sibling while the second argument is a characteristic of
-the current core, which is highly confusing.
+It depends on what you do define as hacks. I suggested an explicit init
+during boot for everyone. The only "hacky" thing might be the reschedule
+of the worker every two secs in case random-core isn't ready yet.
 
-I suggest what when you see the compatible binding "mediatek,mt8195-scp", a
-single core is initialized.  If you see "mediatek,mt8195-scp-dual", both cores
-are initialized as part of the _same_ probe.
+RNG may be used from any context but I doubt if this also includes any
+context on RT. (Side note: it does not include NMI but in general any
+context, yes.)
+The work in hardirq context is limited on RT and therefore I doubt that
+there is any need to request random numbers (from hardirq, preempt or
+IRQ disabled context) on PREEMPT RT on a regular basis. We had (have)
+requests where this is needed but we managed to avoid it.
+Another example: While kmalloc() can be invoked from any context, it
+still must not be used on PREEMPT_RT from hardirq context and or
+preempt-disabled regions.
 
-If the above analysis is not correct it means I misinterpreted your
-work and if so, a serious amount of comments is needed _and_ a very detailed
-example in "mtk,scp.yaml" that leaves no room for interpretation.
+> If you don't want to spend time doing latency measurements, could you
+> instead share a document or similar to the type of methodology you
+> usually use for that, so I can do the same? And at the very least, I am
+> simply curious and want to know more about the RT world.
 
-I will stop reviewing this patchset until you have clarified how this works.
+Latency. If you check "now" and "patched" and look at the difference in
+max. latency then this a good indication as a first step if you don't
+see a difference. The next step is to hammer on the exposed API ensure
+that it does not lead to any changes. If it does lead to changes then it
+needs to be considered if the change is worth it or not.
+A global raw_spinlock_t, which can be heavy contended, will be visible if
+it is acquired from multiple CPUs at the same time (especially on a NUMA
+box with 16+ CPUs).
+A list which can is iterated under a lock and can be filled with many
+items will be visible. Therefore swake_up_all() must not be invoked with
+disabled interrupts and the function itself drops all locks after one
+loop, simply not to block for too long.
+In general, if it can be avoided to use raw_spinlock_t and does not hurt
+performance too much then why not.
 
-Thanks,
-Mathieu
+In order to do this (create a test and hammer on the exposed API), I
+applied your patch and looked at the result from get_random_bytes()
+perspective as in "can we do this?":
 
->  	if (IS_ERR(scp->sram_base))
->  		return dev_err_probe(dev, PTR_ERR(scp->sram_base),
->  				     "Failed to parse and map sram memory\n");
-> @@ -873,7 +886,12 @@ static int scp_probe(struct platform_device *pdev)
->  		scp->l1tcm_phys = res->start;
->  	}
->  
-> -	scp->reg_base = devm_platform_ioremap_resource_byname(pdev, "cfg");
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-> +	if (core_id == SCP_CORE_1)
-> +		scp->reg_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	else
-> +		scp->reg_base = devm_ioremap_resource(dev, res);
-> +
->  	if (IS_ERR(scp->reg_base))
->  		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
->  				     "Failed to parse and map cfg memory\n");
-> -- 
-> 2.18.0
-> 
+get_random_bytes()
+-> _get_random_bytes()
+  -> crng_make_state()
+    -> local_lock_irqsave(&crngs.lock, flags);
+
+So that local_lock_t is still breaking things since it can not be
+acquired from blocking context. So in order to continue this needs to be
+replaced somehow and checked again=E2=80=A6
+Assuming this has been done, round #2:
+
+get_random_bytes()
+-> _get_random_bytes()
+  -> crng_make_state()
+    -> crng_reseed()
+      -> extract_entropy()
+        -> blake2s_final()
+	  -> blake2s_compress()
+	    -> kernel_fpu_begin()=E2=80=A6
+
+This blake2s_compress() can be called again within this callchain (via
+blake2s()). The problem here is that kernel_fpu_begin() disables
+preemption and the following SIMD operation can be expensive (not to
+mention the onetime register store) and so it is attempted to have a
+scheduling point on a regular basis.
+Invoking this call chain from an already preempt-disabled section would
+not allow any scheduling at this point (and so build up the max. latency
+worst case).
+
+After looking at this after a break, while writing this and paging
+everything in, I still think that initialising the random number at boot
+up for vsprintf's sake is the easiest thing. One init for RT and non-RT
+=66rom an initcall. No hack, just one plain and simple init with no need
+to perform anything later on demand.=20
+
+> Jason
+
+Sebastian

@@ -2,257 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9185A57A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BB75A57A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiH2XdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S229721AbiH2Xdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiH2XdG (ORCPT
+        with ESMTP id S229708AbiH2Xdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:33:06 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1F39C21F;
-        Mon, 29 Aug 2022 16:32:55 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8B3A9481;
-        Tue, 30 Aug 2022 01:32:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661815972;
-        bh=W6sZ99MZm0WJIysDCG+qS83r+KGY/z25whL5L+DCuIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SxBEPtywKPcBGK9e1hRcGy/5dl5DGK5YUvK3K3cSouY1gf1x1s1fJhWZTzfkEtitK
-         sqQOPrQUPLH081pQJZFcfnNZFJdJotLrWd+lCOhwp3xU6eyJrhVoUKZt3VAQ2MPf5o
-         zsCCZzV8YuxOhyqjBY+uYfVMhDf9/TMX/UGAZ9ZU=
-Date:   Tue, 30 Aug 2022 02:32:43 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH 1/4] media: dt-bindings: media: Document RZ/G2L CSI-2
- block
-Message-ID: <Yw1MmyFxnWNpQx8q@pendragon.ideasonboard.com>
-References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 29 Aug 2022 19:33:33 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D604981B05
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:33:32 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id g5-20020a92cda5000000b002e954ecceb0so6965576ild.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:33:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=+R+0POhYwWHNdAeI2INPDZ+vmXYXil0g1qA/NRpeirA=;
+        b=fc1sm2oaBt4uB7Hni6qthVwJ1ErxbwrDhvIEGGhBM8beOzJI4kZ7JOz5+HlLGnMp1l
+         DVJJSn9NoAPNXfDN8pxcU2tXsX3T9a24LjvHzUH4F7eI8YJMtYBQUCH1+eB/shFwC6fs
+         jKNw7jOpw0e4jcC66HMLDORlXVd7GU6INs9R0gKSJBtkQLZ4AHiWWKs9u3dm0lb6jD73
+         jprSGgbX48RYT4w2mgN+/jGdqww7tYfD9xCAsfJtjVYpoa2ye3LN9Kk0mo4VY1cGLC9R
+         EqBdOw2WuSsrGvgrpnszSN5yWr1/QW9TG+depKJE+MI7Px7OFDwPoNJ/RZnQOEVaO7Yl
+         fcrw==
+X-Gm-Message-State: ACgBeo1cllUjnEhjJoSTb7nyz37s8mCCq/Mb3PQI5KvfzT8E9Q3UtqdN
+        a4Ze490S9Ywr53fTNW5GSKIDjY/qv4mof430L5XPjHzHhrGC
+X-Google-Smtp-Source: AA6agR76/ewUy/7FdUKWGxvetl2NLw9y3QxJ5/AYU0oDq6bhMKrKOp6UUn5+ZCUuiTKrblwx5vbCaze5AQefABcZycNQYHVckGbK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c569:0:b0:2eb:5c94:9a1c with SMTP id
+ b9-20020a92c569000000b002eb5c949a1cmr186312ilj.135.1661816012188; Mon, 29 Aug
+ 2022 16:33:32 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 16:33:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000016b90805e769b1d2@google.com>
+Subject: [syzbot] kernel BUG in f2fs_init_xattr_caches
+From:   syzbot <syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hello,
 
-Thank you for the patch.
+syzbot found the following issue on:
 
-On Mon, Aug 01, 2022 at 10:47:15PM +0100, Lad Prabhakar wrote:
-> Document the CSI-2 block which is part of CRU found in Renesas
-> RZ/G2L SoC.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> RFC v2 -> v1
-> * Fixed review comments pointed by Rob and Jacopo.
-> 
-> RFC v1 -> RFC v2
-> * New patch
-> ---
->  .../bindings/media/renesas,rzg2l-csi2.yaml    | 149 ++++++++++++++++++
->  1 file changed, 149 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> new file mode 100644
-> index 000000000000..f82f88c096df
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> @@ -0,0 +1,149 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) 2022 Renesas Electronics Corp.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/renesas,rzg2l-csi2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/G2L (and alike SoC's) MIPI CSI-2 receiver
-> +
-> +maintainers:
-> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> +
-> +description:
-> +  The CSI-2 receiver device provides MIPI CSI-2 capabilities for the Renesas RZ/G2L
-> +  (and alike SoCs). MIPI CSI-2 is part of the CRU block which is used in conjunction
-> +  with the Image Processing module, which provides the video capture capabilities.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a4e48b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=81684812ea68216e08c5
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114f2fa3080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cd7fa3080000
 
-You can drop the oneOf and write
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
 
-    items:
-      - enum:
-          - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
-          - renesas,r9a07g054-csi2       # RZ/V2L
-      - const: renesas,rzg2l-csi2
+loop0: detected capacity change from 0 to 20
+ loop0: unable to read partition table
+loop0: partition table beyond EOD, truncated
+F2FS-fs (loop0): Magic Mismatch, valid(0xf2f52010) - read(0x0)
+F2FS-fs (loop0): Can't find valid F2FS filesystem in 1th superblock
+------------[ cut here ]------------
+kernel BUG at mm/slub.c:5893!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3038 Comm: syz-executor368 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : create_unique_id mm/slub.c:5973 [inline]
+pc : sysfs_slab_add+0x258/0x260 mm/slub.c:5950
+lr : kmalloc include/linux/slab.h:600 [inline]
+lr : create_unique_id mm/slub.c:5890 [inline]
+lr : sysfs_slab_add+0xa0/0x260 mm/slub.c:5950
+sp : ffff80001288b990
+x29: ffff80001288b990 x28: ffff0000c9717380 x27: ffff0000c376cd00
+x26: 0000000000020000 x25: ffff80000eee7000 x24: ffff80000eef6000
+x23: 0000000000000000 x22: ffff0000c1be5b00 x21: 0000000000000008
+x20: ffff0000c376cd00 x19: ffff0000c376cd00 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000c6ae4f80
+x14: 0000000000000010 x13: 0000000000000000 x12: ffff0000c6ae4f80
+x11: ff808000095ee038 x10: 0000000000000000 x9 : 0cbee7d022858900
+x8 : 0cbee7d022858900 x7 : ffff8000084b7280 x6 : 0000000000000000
+x5 : 0000000000000cc0 x4 : 0000000000000080 x3 : 0000000000000040
+x2 : ffff0000c0001200 x1 : ffff80000cb90cf9 x0 : 0000000000000000
+Call trace:
+ sysfs_slab_add+0x258/0x260 mm/slub.c:5973
+ __kmem_cache_create+0x60/0x118 mm/slub.c:4899
+ create_cache mm/slab_common.c:229 [inline]
+ kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
+ kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
+ f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
+ f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
+ f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
+ mount_bdev+0x1b8/0x210 fs/super.c:1400
+ f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
+ legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: a9415ff8 a8c47bfd d50323bf d65f03c0 (d4210000) 
+---[ end trace 0000000000000000 ]---
 
-> +          - enum:
-> +              - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
-> +              - renesas,r9a07g054-csi2       # RZ/V2L
-> +          - const: renesas,rzg2l-csi2
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-names:
-> +    const: csi2_link
 
-If there's a single interrupt you can drop the name.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +
-> +  clocks:
-> +    items:
-> +      - description: Internal clock for connecting CRU and MIPI
-> +      - description: CRU Main clock
-> +      - description: CPU Register access clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: sysclk
-> +      - const: vclk
-> +      - const: pclk
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    items:
-> +      - description: CRU_CMN_RSTB reset terminal
-> +
-> +  reset-names:
-> +    const: cmn-rstb
-
-Same here.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description:
-> +          Input port node, single endpoint describing the CSI-2 transmitter.
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +                items:
-> +                  maximum: 4
-> +
-> +            required:
-> +              - clock-lanes
-> +              - data-lanes
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Output port node, Image Processing block connected to the CSI-2 receiver.
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +  - resets
-> +  - reset-names
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/r9a07g044-cpg.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    csi20: csi2@10830400 {
-> +            compatible = "renesas,r9a07g044-csi2", "renesas,rzg2l-csi2";
-> +            reg = <0x10830400 0xfc00>;
-> +            interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&cpg CPG_MOD R9A07G044_CRU_SYSCLK>,
-> +                     <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-> +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>;
-> +            clock-names = "sysclk", "vclk", "pclk";
-> +            power-domains = <&cpg>;
-> +            resets = <&cpg R9A07G044_CRU_CMN_RSTB>;
-> +            reset-names = "cmn-rstb";
-> +
-> +            ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    port@0 {
-> +                            reg = <0>;
-> +
-> +                            csi2_in: endpoint {
-> +                                    clock-lanes = <0>;
-> +                                    data-lanes = <1 2>;
-> +                                    remote-endpoint = <&ov5645_ep>;
-> +                            };
-> +                    };
-> +
-> +                    port@1 {
-> +                            #address-cells = <1>;
-> +                            #size-cells = <0>;
-> +
-> +                            reg = <1>;
-> +
-> +                            csi2cru: endpoint@0 {
-> +                                    reg = <0>;
-> +                                    remote-endpoint = <&crucsi2>;
-> +                            };
-> +                    };
-> +            };
-> +    };
-
--- 
-Regards,
-
-Laurent Pinchart
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

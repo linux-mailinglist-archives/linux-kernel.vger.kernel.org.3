@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070785A4A1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5141F5A4AB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiH2LdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S231589AbiH2Ls6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiH2La3 (ORCPT
+        with ESMTP id S230470AbiH2Lse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:30:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99C77B1C4;
-        Mon, 29 Aug 2022 04:18:11 -0700 (PDT)
+        Mon, 29 Aug 2022 07:48:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B49889917;
+        Mon, 29 Aug 2022 04:32:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F164E6125C;
-        Mon, 29 Aug 2022 11:17:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E0EC433D6;
-        Mon, 29 Aug 2022 11:17:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB09FB80FAF;
+        Mon, 29 Aug 2022 11:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037ABC433D6;
+        Mon, 29 Aug 2022 11:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771875;
-        bh=2wXPY9Vp+sFiohSlj8lahdsF/s7CwW0NniH6x4fkHI8=;
+        s=korg; t=1661771878;
+        bh=sqwZwaMa4ltO+ZnF2OW0LOrSQsC+7lCx8oJFCuGBDEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CpMfQy3YG/82/htlzppEoBGSa+Jw8z5LZsuMiEfc8q59Oz0nJUW8CVyai0OQJ0luH
-         flVd5sblvz4s/eZvvi9GJBOvu8G0+vsjmZDxgPrBAd+TurKFgqE08IQqTJPPqefLYZ
-         7mF3rQMOlpCPV5MuEmSvabUpKfM8zYsk45gfNvnw=
+        b=Ap5TsoJVg8esKzgaj8QhfERta/RmrVncpaM/J5g9OQr1bQ0BWr6J2P0SPthP++BfY
+         11rZSmxNsZYp4IZcI/NxsdIH9f02/pDv6DjDjz2vTrXUaaIWWnbQMQH8J+0dUHBrjY
+         FLYHgy74qgqPnhWX4FcI12Wg7ZhE7Fu9fODWjmoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heming Zhao <heming.zhao@suse.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Junxiao Bi <junxiao.bi@oracle.com>,
-        Changwei Ge <gechangwei@live.cn>, Gang He <ghe@suse.com>,
-        Jun Piao <piaojun@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.19 127/158] ocfs2: fix freeing uninitialized resource on ocfs2_dlm_shutdown
-Date:   Mon, 29 Aug 2022 12:59:37 +0200
-Message-Id: <20220829105814.414055139@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: [PATCH 5.19 128/158] xen/privcmd: fix error exit of privcmd_ioctl_dm_op()
+Date:   Mon, 29 Aug 2022 12:59:38 +0200
+Message-Id: <20220829105814.449509146@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -60,69 +57,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heming Zhao <ocfs2-devel@oss.oracle.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 550842cc60987b269e31b222283ade3e1b6c7fc8 upstream.
+commit c5deb27895e017a0267de0a20d140ad5fcc55a54 upstream.
 
-After commit 0737e01de9c4 ("ocfs2: ocfs2_mount_volume does cleanup job
-before return error"), any procedure after ocfs2_dlm_init() fails will
-trigger crash when calling ocfs2_dlm_shutdown().
+The error exit of privcmd_ioctl_dm_op() is calling unlock_pages()
+potentially with pages being NULL, leading to a NULL dereference.
 
-ie: On local mount mode, no dlm resource is initialized.  If
-ocfs2_mount_volume() fails in ocfs2_find_slot(), error handling will call
-ocfs2_dlm_shutdown(), then does dlm resource cleanup job, which will
-trigger kernel crash.
+Additionally lock_pages() doesn't check for pin_user_pages_fast()
+having been completely successful, resulting in potentially not
+locking all pages into memory. This could result in sporadic failures
+when using the related memory in user mode.
 
-This solution should bypass uninitialized resources in
-ocfs2_dlm_shutdown().
+Fix all of that by calling unlock_pages() always with the real number
+of pinned pages, which will be zero in case pages being NULL, and by
+checking the number of pages pinned by pin_user_pages_fast() matching
+the expected number of pages.
 
-Link: https://lkml.kernel.org/r/20220815085754.20417-1-heming.zhao@suse.com
-Fixes: 0737e01de9c4 ("ocfs2: ocfs2_mount_volume does cleanup job before return error")
-Signed-off-by: Heming Zhao <heming.zhao@suse.com>
-Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc: Mark Fasheh <mark@fasheh.com>
-Cc: Joel Becker <jlbec@evilplan.org>
-Cc: Junxiao Bi <junxiao.bi@oracle.com>
-Cc: Changwei Ge <gechangwei@live.cn>
-Cc: Gang He <ghe@suse.com>
-Cc: Jun Piao <piaojun@huawei.com>
 Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: ab520be8cd5d ("xen/privcmd: Add IOCTL_PRIVCMD_DM_OP")
+Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Link: https://lore.kernel.org/r/20220825141918.3581-1-jgross@suse.com
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ocfs2/dlmglue.c |    8 +++++---
- fs/ocfs2/super.c   |    3 +--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ drivers/xen/privcmd.c |   21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
---- a/fs/ocfs2/dlmglue.c
-+++ b/fs/ocfs2/dlmglue.c
-@@ -3403,10 +3403,12 @@ void ocfs2_dlm_shutdown(struct ocfs2_sup
- 	ocfs2_lock_res_free(&osb->osb_nfs_sync_lockres);
- 	ocfs2_lock_res_free(&osb->osb_orphan_scan.os_lockres);
+--- a/drivers/xen/privcmd.c
++++ b/drivers/xen/privcmd.c
+@@ -581,27 +581,30 @@ static int lock_pages(
+ 	struct privcmd_dm_op_buf kbufs[], unsigned int num,
+ 	struct page *pages[], unsigned int nr_pages, unsigned int *pinned)
+ {
+-	unsigned int i;
++	unsigned int i, off = 0;
  
--	ocfs2_cluster_disconnect(osb->cconn, hangup_pending);
--	osb->cconn = NULL;
-+	if (osb->cconn) {
-+		ocfs2_cluster_disconnect(osb->cconn, hangup_pending);
-+		osb->cconn = NULL;
+-	for (i = 0; i < num; i++) {
++	for (i = 0; i < num; ) {
+ 		unsigned int requested;
+ 		int page_count;
  
--	ocfs2_dlm_shutdown_debug(osb);
-+		ocfs2_dlm_shutdown_debug(osb);
-+	}
- }
+ 		requested = DIV_ROUND_UP(
+ 			offset_in_page(kbufs[i].uptr) + kbufs[i].size,
+-			PAGE_SIZE);
++			PAGE_SIZE) - off;
+ 		if (requested > nr_pages)
+ 			return -ENOSPC;
  
- static int ocfs2_drop_lock(struct ocfs2_super *osb,
---- a/fs/ocfs2/super.c
-+++ b/fs/ocfs2/super.c
-@@ -1914,8 +1914,7 @@ static void ocfs2_dismount_volume(struct
- 	    !ocfs2_is_hard_readonly(osb))
- 		hangup_needed = 1;
+ 		page_count = pin_user_pages_fast(
+-			(unsigned long) kbufs[i].uptr,
++			(unsigned long)kbufs[i].uptr + off * PAGE_SIZE,
+ 			requested, FOLL_WRITE, pages);
+-		if (page_count < 0)
+-			return page_count;
++		if (page_count <= 0)
++			return page_count ? : -EFAULT;
  
--	if (osb->cconn)
--		ocfs2_dlm_shutdown(osb, hangup_needed);
-+	ocfs2_dlm_shutdown(osb, hangup_needed);
+ 		*pinned += page_count;
+ 		nr_pages -= page_count;
+ 		pages += page_count;
++
++		off = (requested == page_count) ? 0 : off + page_count;
++		i += !off;
+ 	}
  
- 	ocfs2_blockcheck_stats_debugfs_remove(&osb->osb_ecc_stats);
- 	debugfs_remove_recursive(osb->osb_debug_root);
+ 	return 0;
+@@ -677,10 +680,8 @@ static long privcmd_ioctl_dm_op(struct f
+ 	}
+ 
+ 	rc = lock_pages(kbufs, kdata.num, pages, nr_pages, &pinned);
+-	if (rc < 0) {
+-		nr_pages = pinned;
++	if (rc < 0)
+ 		goto out;
+-	}
+ 
+ 	for (i = 0; i < kdata.num; i++) {
+ 		set_xen_guest_handle(xbufs[i].h, kbufs[i].uptr);
+@@ -692,7 +693,7 @@ static long privcmd_ioctl_dm_op(struct f
+ 	xen_preemptible_hcall_end();
+ 
+ out:
+-	unlock_pages(pages, nr_pages);
++	unlock_pages(pages, pinned);
+ 	kfree(xbufs);
+ 	kfree(pages);
+ 	kfree(kbufs);
 
 

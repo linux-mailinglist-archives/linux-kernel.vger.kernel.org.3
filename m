@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8FD5A5501
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7663B5A550B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiH2T43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
+        id S229940AbiH2T4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiH2T4M (ORCPT
+        with ESMTP id S229803AbiH2T4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:56:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C883BF5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:56:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A91560F4D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:56:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A3EC433D6;
-        Mon, 29 Aug 2022 19:56:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZaGNOfmQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1661802967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ah8CVAiN+uoE/qZr3aB6GUys/H3CZdI2qxXh6vsSvrg=;
-        b=ZaGNOfmQd3S9wgthc+iP/y82OiNTxmVcG7GXPjQzOKlZyFWVqbiZ2/zF8eTTVMIfilJikC
-        6r6Cp/tZinhERjmbjNIxDp6rft1LOHa3rlMAXeaGvYpMJitnbZrMAlCIaArQP5KA+chBfC
-        GGL9n6uTEcJBbIlGTKOTvw8gypfNHIc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0dc6a6af (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 29 Aug 2022 19:56:07 +0000 (UTC)
-Date:   Mon, 29 Aug 2022 15:56:06 -0400
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
-Subject: Re: [PATCH] random: use raw spinlocks for use on RT
-Message-ID: <Yw0Z1jvwHEQQq8Zw@zx2c4.com>
-References: <20220801142530.133007-1-Jason@zx2c4.com>
- <YufkZU9kGkHHUhAK@linutronix.de>
- <YvRKm/IpbUID18FK@zx2c4.com>
- <YvSsf5uds7zGgWPX@linutronix.de>
- <YvUQJTDREXSAA9J6@zx2c4.com>
- <Yw0XRtgh2dmSM+T1@linutronix.de>
+        Mon, 29 Aug 2022 15:56:18 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B17844E7;
+        Mon, 29 Aug 2022 12:56:17 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so11742612fac.12;
+        Mon, 29 Aug 2022 12:56:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AunIincOW/llkkB3oHp4ZHdcx4kpGxMU+RJ3A3IG/tY=;
+        b=ew95bmccqoC3iikOxfMO4AWtR9SWRX3dN43d3RgFfHjOsvdLzIIn9yJyIwj3rSDof2
+         sSeFsdt9ZiIW8Us2X20CwbSxhVrmd6yT3c3fzJWQlieib+xOsirjrSnr0LFcgi4gNkpM
+         jl3qlVDlepQ1qk/0v+Aio42TOuqDfZLxuhGQW+Up9BcBAPvdd23A4izyZcKWmKgkZf5l
+         CByxw5uNt0N6F2ttB7aq/dSAMwhUtRHof3L41y60LHK8GD1fxuUWAfE6aRp/eXugbaKv
+         AoGTza5bD2DqkYH2sofyH5ow9FA/Hucsi+otoIFZLokaChmEoLOBQ0ilMuCVEoq8HOiu
+         XMRQ==
+X-Gm-Message-State: ACgBeo1I0s0hicG4VCBMIIzp7EN97WY+ZAyr02XCXSVfdNeCSL40Knxk
+        tDZ7r4rKm4TJ/D4utrBTsw==
+X-Google-Smtp-Source: AA6agR4J4SxUZcpWUufmTiU9b6O//wx6vi31SnOVg0aW3VqYwToyBsF+9clL+Z+qnxJfLRs+zeT25A==
+X-Received: by 2002:a05:6870:c386:b0:102:fcb:86cd with SMTP id g6-20020a056870c38600b001020fcb86cdmr8685701oao.296.1661802976466;
+        Mon, 29 Aug 2022 12:56:16 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s1-20020a4ac101000000b0044565e7ab41sm5473469oop.32.2022.08.29.12.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 12:56:15 -0700 (PDT)
+Received: (nullmailer pid 2312686 invoked by uid 1000);
+        Mon, 29 Aug 2022 19:56:13 -0000
+Date:   Mon, 29 Aug 2022 14:56:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sean Paul <sean@poorly.run>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        linux-arm-msm@vger.kernel.org, linux-ide@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-crypto@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Inki Dae <inki.dae@samsung.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Clark <robdclark@gmail.com>
+Subject: Re: [PATCH 4/5] dt-bindings: crypto: drop minItems equal to maxItems
+Message-ID: <20220829195613.GA2312632-robh@kernel.org>
+References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
+ <20220825113334.196908-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yw0XRtgh2dmSM+T1@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220825113334.196908-4-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
-
-On Mon, Aug 29, 2022 at 09:45:10PM +0200, Sebastian Andrzej Siewior wrote:
-> > So why don't we actually fix this, so we don't have to keep coming up
-> > with hacks? The question is: does using raw spinlocks over this code
-> > result in any real issue for RT latency? If so, I'd like to know where,
-> > and maybe I can do something about that (or maybe I can't). If not, then
-> > this is a non problem and I'll apply this patch with your blessing.
+On Thu, 25 Aug 2022 14:33:33 +0300, Krzysztof Kozlowski wrote:
+> minItems, if missing, are implicitly equal to maxItems, so drop
+> redundant piece to reduce size of code.
 > 
-> It depends on what you do define as hacks. I suggested an explicit init
-> during boot for everyone. The only "hacky" thing might be the reschedule
-> of the worker every two secs in case random-core isn't ready yet.
-
-The worker solution you proposed before was problematic in that it
-changes RNG semantics by making jitter entropy run early on at boot
-before even attempting to get entropy from later. Maybe that's an okay
-change, or maybe it's not, but either way it isn't one that should be
-forced by wacky vnsprintf changes.
-
-> RNG may be used from any context but I doubt if this also includes any
-> context on RT. (Side note: it does not include NMI but in general any
-> context, yes.)
-> The work in hardirq context is limited on RT and therefore I doubt that
-> there is any need to request random numbers (from hardirq, preempt or
-> IRQ disabled context) on PREEMPT RT on a regular basis. We had (have)
-> requests where this is needed but we managed to avoid it.
-> Another example: While kmalloc() can be invoked from any context, it
-> still must not be used on PREEMPT_RT from hardirq context and or
-> preempt-disabled regions.
-
-Okay but this on-demand aspect of vnsprintf() is clearly a place where
-it makes sense to do it from the occasional irq context.
-
-> So that local_lock_t is still breaking things since it can not be
-> acquired from blocking context. So in order to continue this needs to be
-> replaced somehow and checked again…
-> Assuming this has been done, round #2:
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/crypto/samsung-slimsss.yaml | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> get_random_bytes()
-> -> _get_random_bytes()
->   -> crng_make_state()
->     -> crng_reseed()
->       -> extract_entropy()
->         -> blake2s_final()
-> 	  -> blake2s_compress()
-> 	    -> kernel_fpu_begin()…
 
-kernel_fpu_begin() is no longer used from IRQ context, since there's no
-longer SIMD in IRQ context. So this callgraph isn't representative.
-
-> This blake2s_compress() can be called again within this callchain (via
-> blake2s()). The problem here is that kernel_fpu_begin() disables
-> preemption and the following SIMD operation can be expensive (not to
-> mention the onetime register store) and so it is attempted to have a
-> scheduling point on a regular basis.
-> Invoking this call chain from an already preempt-disabled section would
-> not allow any scheduling at this point (and so build up the max. latency
-> worst case).
-
-Irrelevant, since kernel_fpu_begin() shouldn't be called in this context
-any more, right?
-
-> After looking at this after a break, while writing this and paging
-> everything in, I still think that initialising the random number at boot
-> up for vsprintf's sake is the easiest thing. One init for RT and non-RT
-> from an initcall. No hack, just one plain and simple init with no need
-> to perform anything later on demand. 
-
-The "once at boot time" thing does not work here, as I've said over and
-over, if what we're talking about is the workqueued get_random_bytes_wait()
-call. The much smarter thing to do is let entropy be collected for as
-long as possible, and when the RNG is initialized, initialize the
-siphash secret, which is exactly what the current code does. So I think
-the current vnsprintf code can stay the same. What needs fixing, rather,
-are the lack of raw spinlocks in random.c...
-
-In light of my note on kernel_fpu_begin() not being used from IRQ
-context, can you now consider this raw spinlock patch?
-
-Jason
+Applied, thanks!

@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EC85A543E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2534B5A5442
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiH2S4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 14:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S229627AbiH2S6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 14:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiH2S4I (ORCPT
+        with ESMTP id S229446AbiH2S6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 14:56:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650F87CB76;
-        Mon, 29 Aug 2022 11:56:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F9F461345;
-        Mon, 29 Aug 2022 18:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27BFC433C1;
-        Mon, 29 Aug 2022 18:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661799363;
-        bh=TamrP8iZ3a/vwgNl6jeDj9HDRxUSmknwoJjwZBLDgZY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KQSQvxsbeIzLLxiwlVjxFLR3ADrZcGpYgb0rnA2Gj7j9j3KfTgZgKN4g+/UhIvJMO
-         SOLXQwI7NIbj+ZS3tgc0smVXv1AX9v5oZzhjASP/JoZRo+vJmIms3LQhRczoIzZDGg
-         8uAtSEpbdBeKpaXA2DKuVdckUbKt5q9r7YAkguWMBM1D8I7V/sHkis490ERcpUYMfN
-         8FudKRGCp3jqO4TLZ4XywvXiKpWcae3MAYoJ4ULv210JBOxg3D5RPNtgETYiq8lW+7
-         1he/aZaCwwmgF5VySnbOYmFP/5FUowYnvS2YMvq/O8pC7Kahhi8Yafg3O+OWcAw1Cm
-         3ZL8Vw8VmBGgw==
-Received: by mail-vs1-f48.google.com with SMTP id n125so9263960vsc.5;
-        Mon, 29 Aug 2022 11:56:03 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3bFoEieJgvVV/IUFUY+z4d9DsyzzEOYKjsa85EUgpARwM9sgng
-        d51AJ2KxSgZksPhOuYBrX4g5J2g2E6g9lcUIJQ==
-X-Google-Smtp-Source: AA6agR6grX62i/E7StDauHsP3fBx3+bPYIqqhnUmd09JKq60dD7onEKO6KegzCgQzwWjRmCEa5WeupJu32B4Li6Aoes=
-X-Received: by 2002:a05:6102:3353:b0:38c:9170:a96b with SMTP id
- j19-20020a056102335300b0038c9170a96bmr4295635vse.26.1661799362886; Mon, 29
- Aug 2022 11:56:02 -0700 (PDT)
+        Mon, 29 Aug 2022 14:58:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA3C79A7F;
+        Mon, 29 Aug 2022 11:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=UfXwlVSd9EucvRTINPmg+Nml3ochWNbxQHvsL4Ct3yw=; b=TrBfmeqKVRnF8a9ehAUguspS2y
+        6R6yD/VAm6RJr7iWbzROKDf7OkiH2tP6Uc+zC6neY23VzfzhbHhTemFJcjSq3y+hSiHXSdIJCkMSU
+        8+wmS1lbCkLgUjsU29fuJnHo4zJ/BZcM9AjyC9xVS9wUpDjYA1NombofghdH6QChFJgdgapOhuwIs
+        fFnOsPWNUJtbd7MrDaik38UknXnD2/g+BJRFPVZQyi5n4pXeO4tkVp1gVVrIhzBSi1QFjtnMduiFg
+        I7Qji2dQ1Dn1+ns15GsdFoUgPWRQIOL/HVyp+iemByPxSb18uaIYacihaxc1dw6IkABhi7JHMh6ey
+        6Dno+i0Q==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSjy3-00CNpm-NX; Mon, 29 Aug 2022 18:58:39 +0000
+Message-ID: <a733a193-7709-db91-4783-8c09ff41b30f@infradead.org>
+Date:   Mon, 29 Aug 2022 11:58:37 -0700
 MIME-Version: 1.0
-References: <20220828154904.20477-1-farbere@amazon.com> <20220828154904.20477-2-farbere@amazon.com>
-In-Reply-To: <20220828154904.20477-2-farbere@amazon.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 29 Aug 2022 13:55:51 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL1UAM80wydnq7hjsKB1zO9tE_Xnba8U3KjDiFY157TOA@mail.gmail.com>
-Message-ID: <CAL_JsqL1UAM80wydnq7hjsKB1zO9tE_Xnba8U3KjDiFY157TOA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: at24: add new optional power-supply property
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Talel Shenhar <talel@amazon.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
-        Jonathan Chocron <jonnyc@amazon.com>,
-        "Hanoch, Uri" <hanochu@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dkl@amazon.com,
-        "Woodhouse, David" <dwmw@amazon.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v5] Remove duplicated words across the whole documentation
+Content-Language: en-US
+To:     Jules Maselbas <jmaselbas@kalray.eu>, linux-kernel@vger.kernel.org
+Cc:     Conor.Dooley@microchip.com, Bagas Sanjaya <bagasdotme@gmail.com>,
+        linux-doc@vger.kernel.org
+References: <20220826165634.5617-1-jmaselbas@kalray.eu>
+ <20220829092910.12267-1-jmaselbas@kalray.eu>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220829092910.12267-1-jmaselbas@kalray.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 10:49 AM Eliav Farber <farbere@amazon.com> wrote:
->
-> Boards using the AT24 EEPROMs might have a GPIO that controls the power
-> supply of the chip, and it must be set to enable the usage of it.
->
-> Add a new optional property to the device tree binding document, which
-> allows to specify a GPIO regulator for the pin that controls the power.
->
-> On Linux this means that we need to enable the GPIO at the beginning of
-> probe function, before trying to access the chip.
->
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
+
+
+On 8/29/22 02:29, Jules Maselbas wrote:
+> Remove duplicated words (the, at, be ...) across the whole documentation.
+> In some cases the duplicated words are replaced by something that makes
+> more sense, for instance: "be be" is replaced by "can be" when possible.
+> 
+> There are likely more duplicated words.
+> 
+> CC: Conor.Dooley@microchip.com
+> CC: Randy Dunlap <rdunlap@infradead.org>
+> CC: Bagas Sanjaya <bagasdotme@gmail.com>
+> CC: linux-doc@vger.kernel.org
+> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
 > ---
-> V2 -> V3:
-> Apply on top of v6.0-rc1
->
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> index d14e0accbda8..82f0046f67a9 100644
-> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> @@ -179,6 +179,10 @@ properties:
->      description:
->        phandle of the regulator that provides the supply voltage.
->
-> +  power-supply:
+> in v5:
+>  - remove spurious changes reported by Randy Dunlap
+> in v4:
+>  - remove spurious changes reported by Conor Dooley
+> in v3:
+>  as suggested by Randy Dunlap:
+>  - remove duplicated 'The the '
+>  - remove duplicated 'at at ' (some are replaced by 'at a ')
+>  - remove duplicated be, is, to, we, on ...
+> in v2:
+>  - also remove the second 'the' in one sentence as suggested by
+>    Bagas Sanjaya
+> ---
+>  Documentation/RCU/checklist.rst                               | 2 +-
+>  Documentation/admin-guide/kdump/vmcoreinfo.rst                | 2 +-
+>  Documentation/bpf/instruction-set.rst                         | 2 +-
+>  Documentation/bpf/map_cgroup_storage.rst                      | 4 ++--
+>  Documentation/core-api/cpu_hotplug.rst                        | 3 +--
+>  Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml  | 4 ++--
+>  .../devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt      | 2 +-
+>  Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt     | 2 +-
+>  Documentation/devicetree/bindings/fpga/fpga-region.txt        | 4 ++--
+>  Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml      | 2 +-
+>  Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml      | 2 +-
+>  Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml      | 2 +-
+>  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml          | 2 +-
+>  .../devicetree/bindings/net/can/microchip,mcp251xfd.yaml      | 2 +-
+>  Documentation/driver-api/isa.rst                              | 2 +-
+>  Documentation/filesystems/caching/backend-api.rst             | 2 +-
+>  Documentation/filesystems/journalling.rst                     | 2 +-
+>  Documentation/hwmon/f71882fg.rst                              | 2 +-
+>  Documentation/locking/seqlock.rst                             | 2 +-
+>  Documentation/sphinx/cdomain.py                               | 2 +-
+>  Documentation/trace/histogram.rst                             | 2 +-
+>  Documentation/userspace-api/media/dvb/dmx-reqbufs.rst         | 2 +-
+>  Documentation/userspace-api/media/dvb/frontend_f_open.rst     | 2 +-
+>  23 files changed, 26 insertions(+), 27 deletions(-)
 
-The datasheets I looked at say the supply name is 'VCC', so vcc-supply.
 
-> +    description:
-> +      phandle of the gpio regulator that provides the supply voltage.
-
-What the connection is is outside the scope of the binding. IOW, it
-might not be a GPIO controlled regulator. So drop the description.
-
-> +
->  required:
->    - compatible
->    - reg
-> --
-> 2.37.1
->
+-- 
+~Randy

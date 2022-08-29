@@ -2,114 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60C95A443D
+	by mail.lfdr.de (Postfix) with ESMTP id EDCEC5A443E
 	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiH2Hyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 03:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S229695AbiH2Hyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 03:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiH2Hys (ORCPT
+        with ESMTP id S229653AbiH2Hyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 03:54:48 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F015819;
-        Mon, 29 Aug 2022 00:54:41 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27T7KUOO008292;
-        Mon, 29 Aug 2022 07:54:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=mSNL2H0decErmIQPzyx2yynJ3rX6kVbXcPJeGbUDOfE=;
- b=nfbcHDEbLA0pihPMA/qtMz8fRi9QAgy46PR9lEDdvdxsJGeQtwhvyxVUZsdvWAPCR8As
- 4aHOsemKsYZtO4R0wHhRDV3yGjHWMS3X+Hwb36yUOjtiFbda7kq8ZOIwp3Be1mKtD9Kr
- Jdpm487oxLYM4EeDgxDKvGxETBxh3d5o0HdtXJI4/IkRkGABoYvll14g0/hWtmSq/2YN
- 8AWEEEp9OnvV/bYV0SljMU5IlX6PJyWVJh3XbsTPfvDMTQYGH/YrQ4ryoGC1FVpg8CX9
- 1zW39EghCiQ8/fNXuHElw0lZQEbg7IXTh/68U4PHZIUOtUTLtF+cxldtmaus1mIaPJ91 DA== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j7bc1bxu1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 07:54:40 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27T7saqv010194;
-        Mon, 29 Aug 2022 07:54:36 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3j7cbkg5dn-1;
-        Mon, 29 Aug 2022 07:54:36 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27T7saTj010188;
-        Mon, 29 Aug 2022 07:54:36 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 27T7sZ7W010187;
-        Mon, 29 Aug 2022 07:54:36 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 4811F4857; Mon, 29 Aug 2022 13:24:35 +0530 (+0530)
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
-        quic_majja@quicinc.com, quic_jdas@quicinc.com,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH] Allow S/G_PARM for stateful decoder
-Date:   Mon, 29 Aug 2022 13:24:30 +0530
-Message-Id: <1661759670-19902-1-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jgUeQlTTCWxNfhTq1X3XvFiKMPWcaqNl
-X-Proofpoint-GUID: jgUeQlTTCWxNfhTq1X3XvFiKMPWcaqNl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_03,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 mlxlogscore=525 mlxscore=0 clxscore=1015 priorityscore=1501
- spamscore=0 bulkscore=0 adultscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208290038
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 03:54:50 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5695733C;
+        Mon, 29 Aug 2022 00:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661759685; x=1693295685;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=uhfM4FMyio5yjxkYsMjEEFg25zVlMYOjq0nAPNvUpuA=;
+  b=EKqFIdi3mmkrlI/3xGqGN8J889YbRJH+3OnabuCefpe28m1gG5L9Rfg9
+   nvnrHjjzdx9N1a2G8VMH6xXrXm0tP91iqgD8r1UJxCYLHddBwUwkQEhyn
+   23mP/T2l0h9Tf1YN9bXDI5rAIyZVWAsUZbUzavGfjqteZPgZoluCxSN5z
+   0fSJzAO5XrAjLp0VaDxgRoeRsSXEMFLNRMFeaVKqFjrs9FCsQu17DUy7S
+   1Flf5GjVC/mLTsAhPBXPJEOEXpgZobJ1SsMmOKoiGVR0HfboL8fzhEtW1
+   EJl3s5K1HUaokKQA3AQkmmqQTezjGHFAscJuy6v8cHSFDUS+al0DY9sFc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="295613349"
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="295613349"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 00:54:44 -0700
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="672283236"
+Received: from kvehmane-mobl1.ger.corp.intel.com ([10.251.220.41])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 00:54:43 -0700
+Date:   Mon, 29 Aug 2022 10:54:43 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/3] serial: Add uart_xmit_advance() + fixes part (of a
+ larger patch series)
+In-Reply-To: <1a05800e-a3c2-12f3-135e-b81a283d71a2@kernel.org>
+Message-ID: <e4a25dfa-a2f9-5165-2f39-1730476c5220@linux.intel.com>
+References: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com> <ac383256-65f2-e4ee-0142-65bdb9dd9dae@kernel.org> <55cf3faf-2616-09c-57c3-35e7b11e55@linux.intel.com> <1a05800e-a3c2-12f3-135e-b81a283d71a2@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-669509969-1661759686=:1928"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some stateful decoder supports S/G_PARM similar to a
-stateful encoder. S_PARM(OUTPUT) reserves hardware decoder
-resources, and G_PARM(CAPTURE) returns the embedded
-frame interval. Allow the same with this change.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- utils/v4l2-compliance/v4l2-test-formats.cpp | 4 ----
- 1 file changed, 4 deletions(-)
+--8323329-669509969-1661759686=:1928
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/utils/v4l2-compliance/v4l2-test-formats.cpp b/utils/v4l2-compliance/v4l2-test-formats.cpp
-index 269a383..e996558 100644
---- a/utils/v4l2-compliance/v4l2-test-formats.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-formats.cpp
-@@ -64,8 +64,6 @@ static int testEnumFrameIntervals(struct node *node, __u32 pixfmt,
- 		ret = doioctl(node, VIDIOC_ENUM_FRAMEINTERVALS, &frmival);
- 		if (ret == ENOTTY)
- 			return ret;
--		// M2M devices don't support this, except for stateful encoders
--		fail_on_test(node->is_m2m && !(node->codec_mask & STATEFUL_ENCODER));
- 		if (f == 0 && ret == EINVAL) {
- 			if (type == V4L2_FRMSIZE_TYPE_DISCRETE)
- 				warn("found framesize %dx%d, but no frame intervals\n", w, h);
-@@ -1367,8 +1365,6 @@ static int testParmType(struct node *node, unsigned type)
- 	}
- 	if (ret == ENOTTY)
- 		return ret;
--	// M2M devices don't support this, except for stateful encoders
--	fail_on_test(node->is_m2m && !is_stateful_enc);
- 	if (ret == EINVAL)
- 		return ENOTTY;
- 	if (ret)
+On Mon, 29 Aug 2022, Jiri Slaby wrote:
+
+> On 29. 08. 22, 9:41, Ilpo Järvinen wrote:> Looking into your patches, they
+> also seemed to lack that> icount.tx++ thing.
+> 
+> Perhaps, you only overlooked it?
+> 
+> +	for (; (for_test) && (!tx_ready || tx_ready(port));
+> +			(for_post), port->icount.tx++) {		
+
+Ah, yes, I did (and its placement at the end of a multi-line for() didn't 
+help that much either for pick it up :-)).
+
 -- 
-2.7.4
+ i.
 
+--8323329-669509969-1661759686=:1928--

@@ -2,177 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD635A54A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8385A54AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiH2TpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S229711AbiH2TqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiH2TpQ (ORCPT
+        with ESMTP id S229472AbiH2TqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:45:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1861DF33
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:45:13 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 21:45:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661802311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r/j7KNO+7MM3mzFiJUvn7EIiQIDtTMugi0upufP9SQ0=;
-        b=x8mofQf4AidRk7AcPvqO1vUKJifpGlYKjoIT4GIHplgQfClRTp+ZhgMNQYJW+KzGReUWyz
-        GxTXtdNImh1NmUXESToA6RyKDpdnqGo4NZ91YqICw4XChOiVF3+/YtMel7c9IDQKJc79Kx
-        ItjnOBHIO+hZZ7y/Wax/sm9Nb7jnnyqY++LNXJK+R6HDebT8acLdXZqGbWpmwC1o/nUz77
-        rMkZJUu9NywlLdgR+rGfyAaQV8fx+DXqp2sSwI+3kn5ll9ujslA/ErsKOCA9FCuKDNcJQP
-        o/be+N1QXaJR5FKzGilurO5aUCSJJaC8OLyN5JXS5G0E3rEWKP0UncMtY5y0gA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661802311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r/j7KNO+7MM3mzFiJUvn7EIiQIDtTMugi0upufP9SQ0=;
-        b=hOtq073o5K6sicAm/uddiGxVSAkZst8NxCW06aIqp4LMHGMin7MjDkBwZCJIqsDwIt9kud
-        wiQZIZf1Gj6AOnDA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
-Subject: Re: [PATCH] random: use raw spinlocks for use on RT
-Message-ID: <Yw0XRtgh2dmSM+T1@linutronix.de>
-References: <20220801142530.133007-1-Jason@zx2c4.com>
- <YufkZU9kGkHHUhAK@linutronix.de>
- <YvRKm/IpbUID18FK@zx2c4.com>
- <YvSsf5uds7zGgWPX@linutronix.de>
- <YvUQJTDREXSAA9J6@zx2c4.com>
+        Mon, 29 Aug 2022 15:46:07 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D081F616
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:46:07 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so11677309fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=vETszXP4tpDPkrySBXLgi1EkRM0QIaqBCFSpjffSf6A=;
+        b=NwVZOfhTEFuNXz+pARnpVVoHpeMj7OR7hnfJiKnJnjG65J2EwYFa5F2LT5j9HaXnSu
+         K6QI+xlxIA0ycuifqvLzWsYCk20WPrFSVOoORLYTbZ4gJKJAYQ1rQgBmja5WPZWI7uxv
+         8zo/nsJF9knzLhre8yyB919nv5LI/zCXHZlN18axFiPgvDyI+rgwlpwp8AQXDsLUO251
+         No20kghi+90Wv6nW7MLjHFNsELraNG9l1sxa7nzYkEQ5tkMzoVeQQ3UnhJMFtJlz9LRb
+         CQmxSjFAYq/LcRVyWMw1k1XZcEEIuqfE27KTI02WzG5gLFS95VDaUAlTQW2Eh2wOnT26
+         Tp9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=vETszXP4tpDPkrySBXLgi1EkRM0QIaqBCFSpjffSf6A=;
+        b=Ho+XUNxoxYUuN1WeDH8qilTJHyxf/8uOOxEUULsIt2IyPcpKQxWz3JPyB8EUwd92ao
+         8jLxjtkJq7o00inZcJ1TOBbOkJ8HLNWFr0vO+RmM8Clk0szUvJ0AcZZ24BzY6r0ajaLE
+         BNhwS6mLdtZwf6XdB6VOf2IeX5/etLEOwug4Kwfpv/iOZO9U4kigqabgwB3SnpC+E1+j
+         ZYmg8GoUFs1PMlmIuvyOI8t7YuLvoUTcs2FgpF2yB+2pe/A/2djS8wbpih7T4UPKQy8b
+         IjMjBcbExL7zT+d3BK90KWtBrdDR19Su52k1pBxP4NJKpMTtd+xWEdoLaqaM++stg8wa
+         Yz1A==
+X-Gm-Message-State: ACgBeo1BkGiAIMHnJ/DAWITRtYCF900HezB9SjIk1PRhneeG4zy4l4DH
+        RL/C3VfwxBGaVI60J0b4F6lcxP4OqKw2ya08lcM=
+X-Google-Smtp-Source: AA6agR7YRRp6PNAzq4KftL331TiXIS5EjF73/0OlDNq0lmw7QCGwt3wKpQgAsM9gYb+yDZEiaZW0sg8C3OViNSuAqjY=
+X-Received: by 2002:a05:6808:138e:b0:345:13d1:fd66 with SMTP id
+ c14-20020a056808138e00b0034513d1fd66mr8076771oiw.96.1661802366350; Mon, 29
+ Aug 2022 12:46:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YvUQJTDREXSAA9J6@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220829121320.267892-1-cui.jinpeng2@zte.com.cn>
+In-Reply-To: <20220829121320.267892-1-cui.jinpeng2@zte.com.cn>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 29 Aug 2022 15:45:55 -0400
+Message-ID: <CADnq5_O6b5bhpppqjOrnXhyfk+jXeMcYiQCDLXDz_HcCujQ4Ag@mail.gmail.com>
+Subject: Re: [PATCH linux-next] drm/amd/display: remove redundant
+ vertical_line_start variable
+To:     cgel.zte@gmail.com
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, Anthony.Koo@amd.com, alex.hung@amd.com,
+        Roman.Li@amd.com, Yi-Ling.Chen2@amd.com, hanghong.ma@amd.com,
+        mwen@igalia.com, dingchen.zhang@amd.com, dale.zhao@amd.com,
+        Zeal Robot <zealci@zte.com.cn>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Jerry.Zuo@amd.com,
+        dri-devel@lists.freedesktop.org, isabbasso@riseup.net,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        agustin.gutierrez@amd.com, Sungjoon.Kim@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-11 16:20:21 [+0200], Jason A. Donenfeld wrote:
-> Hi Sebastian,
-Hi Jason,
+Applied.  Thanks!
 
-> By grouping everything into "the rework of get_random_*()", you miss
-> important subtleties, as I mentioned before. Importantly, in this case,
-> the issue we're facing has absolutely nothing at all to do with that,
-> but is rather entirely the result of removing the async notifier
-> mechanism in favor of doing things more directly, more straight
-> forwardly. So let's not muddle what we're discussing here.
+Alex
 
-I meant the number of fallouts I saw on RT's side. The removal of the
-async notifier is a different story and no complains on my side.
-
-> But more generally, the RNG is supposed to be usable from any context.
-> And adding wild workarounds, or worse, adding back complex async
-> notifier stuff, seems bad. So far your proposals for the printk issue
-> haven't been acceptable at all.
-
-The printk issue a two way story:
-- I tried to avoid the print out to the console because the code is not
-  available yet and the recent reverts of already available code moved
-  the missing bits further away. Linus wasn't happy with this, it wasn't
-  merged so we have to wait for the code for the complete code.
-
-- The vsnprintf issue I try to solve. This needs to work in any context
-  due printk. printk needs to work in any context (incl. preempt-off)
-  and it evaluates its format string upon invocation.
-
-The second point needs to solved even after the first one has been
-solved.
-
-> So why don't we actually fix this, so we don't have to keep coming up
-> with hacks? The question is: does using raw spinlocks over this code
-> result in any real issue for RT latency? If so, I'd like to know where,
-> and maybe I can do something about that (or maybe I can't). If not, then
-> this is a non problem and I'll apply this patch with your blessing.
-
-It depends on what you do define as hacks. I suggested an explicit init
-during boot for everyone. The only "hacky" thing might be the reschedule
-of the worker every two secs in case random-core isn't ready yet.
-
-RNG may be used from any context but I doubt if this also includes any
-context on RT. (Side note: it does not include NMI but in general any
-context, yes.)
-The work in hardirq context is limited on RT and therefore I doubt that
-there is any need to request random numbers (from hardirq, preempt or
-IRQ disabled context) on PREEMPT RT on a regular basis. We had (have)
-requests where this is needed but we managed to avoid it.
-Another example: While kmalloc() can be invoked from any context, it
-still must not be used on PREEMPT_RT from hardirq context and or
-preempt-disabled regions.
-
-> If you don't want to spend time doing latency measurements, could you
-> instead share a document or similar to the type of methodology you
-> usually use for that, so I can do the same? And at the very least, I am
-> simply curious and want to know more about the RT world.
-
-Latency. If you check "now" and "patched" and look at the difference in
-max. latency then this a good indication as a first step if you don't
-see a difference. The next step is to hammer on the exposed API ensure
-that it does not lead to any changes. If it does lead to changes then it
-needs to be considered if the change is worth it or not.
-A global raw_spinlock_t, which can be heavy contended, will be visible if
-it is acquired from multiple CPUs at the same time (especially on a NUMA
-box with 16+ CPUs).
-A list which can is iterated under a lock and can be filled with many
-items will be visible. Therefore swake_up_all() must not be invoked with
-disabled interrupts and the function itself drops all locks after one
-loop, simply not to block for too long.
-In general, if it can be avoided to use raw_spinlock_t and does not hurt
-performance too much then why not.
-
-In order to do this (create a test and hammer on the exposed API), I
-applied your patch and looked at the result from get_random_bytes()
-perspective as in "can we do this?":
-
-get_random_bytes()
--> _get_random_bytes()
-  -> crng_make_state()
-    -> local_lock_irqsave(&crngs.lock, flags);
-
-So that local_lock_t is still breaking things since it can not be
-acquired from blocking context. So in order to continue this needs to be
-replaced somehow and checked again=E2=80=A6
-Assuming this has been done, round #2:
-
-get_random_bytes()
--> _get_random_bytes()
-  -> crng_make_state()
-    -> crng_reseed()
-      -> extract_entropy()
-        -> blake2s_final()
-	  -> blake2s_compress()
-	    -> kernel_fpu_begin()=E2=80=A6
-
-This blake2s_compress() can be called again within this callchain (via
-blake2s()). The problem here is that kernel_fpu_begin() disables
-preemption and the following SIMD operation can be expensive (not to
-mention the onetime register store) and so it is attempted to have a
-scheduling point on a regular basis.
-Invoking this call chain from an already preempt-disabled section would
-not allow any scheduling at this point (and so build up the max. latency
-worst case).
-
-After looking at this after a break, while writing this and paging
-everything in, I still think that initialising the random number at boot
-up for vsprintf's sake is the easiest thing. One init for RT and non-RT
-=66rom an initcall. No hack, just one plain and simple init with no need
-to perform anything later on demand.=20
-
-> Jason
-
-Sebastian
+On Mon, Aug 29, 2022 at 8:13 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+>
+> Return value from expression directly instead of
+> taking this in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+> index 37246e965457..8f4f1ea447a7 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+> @@ -3741,7 +3741,6 @@ int dcn10_get_vupdate_offset_from_vsync(struct pipe_ctx *pipe_ctx)
+>         int vesa_sync_start;
+>         int asic_blank_end;
+>         int interlace_factor;
+> -       int vertical_line_start;
+>
+>         patched_crtc_timing = *dc_crtc_timing;
+>         apply_front_porch_workaround(&patched_crtc_timing);
+> @@ -3757,10 +3756,8 @@ int dcn10_get_vupdate_offset_from_vsync(struct pipe_ctx *pipe_ctx)
+>                         patched_crtc_timing.v_border_top)
+>                         * interlace_factor;
+>
+> -       vertical_line_start = asic_blank_end -
+> +       return asic_blank_end -
+>                         pipe_ctx->pipe_dlg_param.vstartup_start + 1;
+> -
+> -       return vertical_line_start;
+>  }
+>
+>  void dcn10_calc_vupdate_position(
+> --
+> 2.25.1
+>

@@ -2,350 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153855A4E02
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B895A4DD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiH2N1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S230095AbiH2NVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiH2N0u (ORCPT
+        with ESMTP id S230469AbiH2NUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:26:50 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75614A81F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:25:18 -0700 (PDT)
-Received: from localhost.localdomain (unknown [95.31.169.23])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 9FCB640737BF;
-        Mon, 29 Aug 2022 13:17:29 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org, Hillf Danton <hdanton@sina.com>
-Subject: [PATCH v4 2/2] tty: n_gsm: avoid call of sleeping functions from atomic context
-Date:   Mon, 29 Aug 2022 16:16:40 +0300
-Message-Id: <20220829131640.69254-3-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220829131640.69254-1-pchelkin@ispras.ru>
-References: <20220829131640.69254-1-pchelkin@ispras.ru>
+        Mon, 29 Aug 2022 09:20:38 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5F98768F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:18:09 -0700 (PDT)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1oSedY-0005QW-1I;
+        Mon, 29 Aug 2022 09:17:08 -0400
+Message-ID: <37db29410990991555362154a371b58f47d3cb0c.camel@surriel.com>
+Subject: Re: [RFC 2/3] mm: changes to split_huge_page() to free zero filled
+ tail pages
+From:   Rik van Riel <riel@surriel.com>
+To:     David Hildenbrand <david@redhat.com>, alexlzhu@fb.com,
+        linux-mm@kvack.org
+Cc:     willy@infradead.org, hannes@cmpxchg.org, akpm@linux-foundation.org,
+        kernel-team@fb.com, linux-kernel@vger.kernel.org
+Date:   Mon, 29 Aug 2022 09:17:07 -0400
+In-Reply-To: <42c164c6-8c69-7b4b-d965-ac62d1607061@redhat.com>
+References: <cover.1661461643.git.alexlzhu@fb.com>
+         <490fcdd204ae129a2e43614a569a1cf4bdde9196.1661461643.git.alexlzhu@fb.com>
+         <ead1bc0e-c9df-d590-3423-9cfa449167e7@redhat.com>
+         <6448b9a8dba8ef39e42e56a3c0ce0633fff7c6a6.camel@surriel.com>
+         <42c164c6-8c69-7b4b-d965-ac62d1607061@redhat.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-ewTTOtihmzCHaP0At5qy"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reports the following problem:
 
-BUG: sleeping function called from invalid context at kernel/printk/printk.c:2347
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1105, name: syz-executor423
-3 locks held by syz-executor423/1105:
- #0: ffff8881468b9098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x90 drivers/tty/tty_ldisc.c:266
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: tty_write_lock drivers/tty/tty_io.c:952 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: do_tty_write drivers/tty/tty_io.c:975 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: file_tty_write.constprop.0+0x2a8/0x8e0 drivers/tty/tty_io.c:1118
- #2: ffff88801b06c398 (&gsm->tx_lock){....}-{2:2}, at: gsmld_write+0x5e/0x150 drivers/tty/n_gsm.c:2717
-irq event stamp: 3482
-hardirqs last  enabled at (3481): [<ffffffff81d13343>] __get_reqs_available+0x143/0x2f0 fs/aio.c:946
-hardirqs last disabled at (3482): [<ffffffff87d39722>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (3482): [<ffffffff87d39722>] _raw_spin_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:159
-softirqs last  enabled at (3408): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-softirqs last disabled at (3401): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 2 PID: 1105 Comm: syz-executor423 Not tainted 5.10.137-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x167 lib/dump_stack.c:118
- ___might_sleep.cold+0x1e8/0x22e kernel/sched/core.c:7304
- console_lock+0x19/0x80 kernel/printk/printk.c:2347
- do_con_write+0x113/0x1de0 drivers/tty/vt/vt.c:2909
- con_write+0x22/0xc0 drivers/tty/vt/vt.c:3296
- gsmld_write+0xd0/0x150 drivers/tty/n_gsm.c:2720
- do_tty_write drivers/tty/tty_io.c:1028 [inline]
- file_tty_write.constprop.0+0x502/0x8e0 drivers/tty/tty_io.c:1118
- call_write_iter include/linux/fs.h:1903 [inline]
- aio_write+0x355/0x7b0 fs/aio.c:1580
- __io_submit_one fs/aio.c:1952 [inline]
- io_submit_one+0xf45/0x1a90 fs/aio.c:1999
- __do_sys_io_submit fs/aio.c:2058 [inline]
- __se_sys_io_submit fs/aio.c:2028 [inline]
- __x64_sys_io_submit+0x18c/0x2f0 fs/aio.c:2028
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
+--=-ewTTOtihmzCHaP0At5qy
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The problem happens in the following control flow:
+On Mon, 2022-08-29 at 12:02 +0200, David Hildenbrand wrote:
+> On 26.08.22 23:18, Rik van Riel wrote:
+> > On Fri, 2022-08-26 at 12:18 +0200, David Hildenbrand wrote:
+> > > On 25.08.22 23:30, alexlzhu@fb.com=C2=A0wrote:
+> > > > From: Alexander Zhu <alexlzhu@fb.com>
+> >=20
+> > I could see wanting to maybe consolidate the scanning between
+> > KSM and this thing at some point, if it could be done without
+> > too much complexity, but keeping this change to split_huge_page
+> > looks like it might make sense even when KSM is enabled, since
+> > it will get rid of the unnecessary memory much faster than KSM
+> > could.
+> >=20
+> > Keeping a hundred MB of unnecessary memory around for longer
+> > would simply result in more THPs getting split up, and more
+> > memory pressure for a longer time than we need.
+>=20
+> Right. I was wondering if we want to map the shared zeropage instead
+> of
+> the "detected to be zero" page, similar to how KSM would do it. For
+> example, with userfaultfd there would be an observable difference.
+>=20
+> (maybe that's already done in this patch set)
+>=20
+The patch does not currently do that, but I suppose it could?
 
-gsmld_write(...)
-spin_lock_irqsave(&gsm->tx_lock, flags) // taken a spinlock on TX data
- con_write(...)
-  do_con_write(...)
-   console_lock()
-    might_sleep() // -> bug
+What exactly are the userfaultfd differences here, and how does
+dropping 4kB pages break things vs. using the shared zeropage?
 
-As far as console_lock() might sleep it should not be called with
-spinlock held.
+--=20
+All Rights Reversed.
 
-The patch replaces tx_lock spinlock with mutex in order to avoid the
-problem.
+--=-ewTTOtihmzCHaP0At5qy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+-----BEGIN PGP SIGNATURE-----
 
-Fixes: 32dd59f96924 ("tty: n_gsm: fix race condition in gsmld_write()")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
-v1->v2: sorry, now adapted patch from 5.10 to upstream
-v2->v3: replaced a kick_timer with a delayed_work
-v3->v4: separated kick_timer and tx_mutex into different patches
+iQEyBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmMMvFMACgkQznnekoTE
+3oN0jAf4rHO+YfpYMXfHD18EnjUbWe5R2ZnUT7wVZGN2DsP5qndjRMtnerruYVI3
+0rCfGLFYBqhcYeeBcsA/jaxJDuGCJGxPkm4hyLW3kLz9x5txWVybLRaedq/47xZz
+TmGtIm5W2DWF/OROaQWBqSWM+uWFSD1VKYfE9/ZpGqVOybNaQtbFH82Hb/+Jvuyj
+QJeMWMyvpOTmcg2Rdsqj1DCbddp4U9KDOHtVuTstCpZuL1jrO3lgu1PYfkY58/Cj
+mQifBMMWmHHEyLtpjRd6okKILcz8PxKGttOZgK3c/d2A9SwqkIeK4BbbfVi44mI3
+eU4D6A9vfeg6UbW3S9M9vs9Oq+Lt
+=uOBY
+-----END PGP SIGNATURE-----
 
- drivers/tty/n_gsm.c | 54 +++++++++++++++++++++------------------------
- 1 file changed, 25 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index c4164c85ffd4..715ae2f1e90e 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -248,7 +248,7 @@ struct gsm_mux {
- 	bool constipated;		/* Asked by remote to shut up */
- 	bool has_devices;		/* Devices were registered */
- 
--	spinlock_t tx_lock;
-+	struct mutex tx_mutex;
- 	unsigned int tx_bytes;		/* TX data outstanding */
- #define TX_THRESH_HI		8192
- #define TX_THRESH_LO		2048
-@@ -680,7 +680,6 @@ static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 	struct gsm_msg *msg;
- 	u8 *dp;
- 	int ocr;
--	unsigned long flags;
- 
- 	msg = gsm_data_alloc(gsm, addr, 0, control);
- 	if (!msg)
-@@ -702,10 +701,10 @@ static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 
- 	gsm_print_packet("Q->", addr, cr, control, NULL, 0);
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	list_add_tail(&msg->list, &gsm->tx_ctrl_list);
- 	gsm->tx_bytes += msg->len;
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 	gsmld_write_trigger(gsm);
- 
- 	return 0;
-@@ -730,7 +729,7 @@ static void gsm_dlci_clear_queues(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 	spin_unlock_irqrestore(&dlci->lock, flags);
- 
- 	/* Clear data packets in MUX write queue */
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
- 		if (msg->addr != addr)
- 			continue;
-@@ -738,7 +737,7 @@ static void gsm_dlci_clear_queues(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 		list_del(&msg->list);
- 		kfree(msg);
- 	}
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
-@@ -1024,10 +1023,9 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- 
- static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- {
--	unsigned long flags;
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	__gsm_data_queue(dlci, msg);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /**
-@@ -1039,7 +1037,7 @@ static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
-  *	is data. Keep to the MRU of the mux. This path handles the usual tty
-  *	interface which is a byte stream with optional modem data.
-  *
-- *	Caller must hold the tx_lock of the mux.
-+ *	Caller must hold the tx_mutex of the mux.
-  */
- 
- static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
-@@ -1099,7 +1097,7 @@ static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
-  *	is data. Keep to the MRU of the mux. This path handles framed data
-  *	queued as skbuffs to the DLCI.
-  *
-- *	Caller must hold the tx_lock of the mux.
-+ *	Caller must hold the tx_mutex of the mux.
-  */
- 
- static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
-@@ -1115,7 +1113,7 @@ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
- 	if (dlci->adaption == 4)
- 		overhead = 1;
- 
--	/* dlci->skb is locked by tx_lock */
-+	/* dlci->skb is locked by tx_mutex */
- 	if (dlci->skb == NULL) {
- 		dlci->skb = skb_dequeue_tail(&dlci->skb_list);
- 		if (dlci->skb == NULL)
-@@ -1169,7 +1167,7 @@ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
-  *	Push an empty frame in to the transmit queue to update the modem status
-  *	bits and to transmit an optional break.
-  *
-- *	Caller must hold the tx_lock of the mux.
-+ *	Caller must hold the tx_mutex of the mux.
-  */
- 
- static int gsm_dlci_modem_output(struct gsm_mux *gsm, struct gsm_dlci *dlci,
-@@ -1283,13 +1281,12 @@ static int gsm_dlci_data_sweep(struct gsm_mux *gsm)
- 
- static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- {
--	unsigned long flags;
- 	int sweep;
- 
- 	if (dlci->constipated)
- 		return;
- 
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	sweep = (dlci->gsm->tx_bytes < TX_THRESH_LO);
- 	if (dlci->gsm->tx_bytes == 0) {
-@@ -1300,7 +1297,7 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- 	}
- 	if (sweep)
- 		gsm_dlci_data_sweep(dlci->gsm);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /*
-@@ -1994,14 +1991,13 @@ static void gsm_dlci_command(struct gsm_dlci *dlci, const u8 *data, int len)
- static void gsm_kick_timeout(struct work_struct *work)
- {
- 	struct gsm_mux *gsm = container_of(work, struct gsm_mux, kick_timeout.work);
--	unsigned long flags;
- 	int sent = 0;
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	if (gsm->tx_bytes < TX_THRESH_LO)
- 		sent = gsm_dlci_data_sweep(gsm);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	if (sent && debug & 4)
- 		pr_info("%s TX queue stalled\n", __func__);
-@@ -2506,7 +2502,7 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
- 	init_waitqueue_head(&gsm->event);
- 	spin_lock_init(&gsm->control_lock);
--	spin_lock_init(&gsm->tx_lock);
-+	mutex_init(&gsm->tx_mutex);
- 
- 	if (gsm->encoding == 0)
- 		gsm->receive = gsm0_receive;
-@@ -2538,6 +2534,7 @@ static void gsm_free_mux(struct gsm_mux *gsm)
- 			break;
- 		}
- 	}
-+	mutex_destroy(&gsm->tx_mutex);
- 	mutex_destroy(&gsm->mutex);
- 	kfree(gsm->txframe);
- 	kfree(gsm->buf);
-@@ -2609,6 +2606,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_lock_init(&gsm->lock);
- 	mutex_init(&gsm->mutex);
-+	mutex_init(&gsm->tx_mutex);
- 	kref_init(&gsm->ref);
- 	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
- 	INIT_LIST_HEAD(&gsm->tx_data_list);
-@@ -2636,6 +2634,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_unlock(&gsm_mux_lock);
- 	if (i == MAX_MUX) {
-+		mutex_destroy(&gsm->tx_mutex);
- 		mutex_destroy(&gsm->mutex);
- 		kfree(gsm->txframe);
- 		kfree(gsm->buf);
-@@ -2791,17 +2790,16 @@ static void gsmld_write_trigger(struct gsm_mux *gsm)
- static void gsmld_write_task(struct work_struct *work)
- {
- 	struct gsm_mux *gsm = container_of(work, struct gsm_mux, tx_work);
--	unsigned long flags;
- 	int i, ret;
- 
- 	/* All outstanding control channel and control messages and one data
- 	 * frame is sent.
- 	 */
- 	ret = -ENODEV;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	if (gsm->tty)
- 		ret = gsm_data_kick(gsm);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	if (ret >= 0)
- 		for (i = 0; i < NUM_DLCI; i++)
-@@ -3012,7 +3010,6 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 			   const unsigned char *buf, size_t nr)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
--	unsigned long flags;
- 	int space;
- 	int ret;
- 
-@@ -3020,13 +3017,13 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 		return -ENODEV;
- 
- 	ret = -ENOBUFS;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	space = tty_write_room(tty);
- 	if (space >= nr)
- 		ret = tty->ops->write(tty, buf, nr);
- 	else
- 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	return ret;
- }
-@@ -3323,14 +3320,13 @@ static struct tty_ldisc_ops tty_ldisc_packet = {
- static void gsm_modem_upd_via_data(struct gsm_dlci *dlci, u8 brk)
- {
- 	struct gsm_mux *gsm = dlci->gsm;
--	unsigned long flags;
- 
- 	if (dlci->state != DLCI_OPEN || dlci->adaption != 2)
- 		return;
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	gsm_dlci_modem_output(gsm, dlci, brk);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
--- 
-2.25.1
-
+--=-ewTTOtihmzCHaP0At5qy--

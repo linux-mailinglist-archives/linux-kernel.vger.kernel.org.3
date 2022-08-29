@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63785A4A73
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA775A4A34
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbiH2Lic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S232730AbiH2LfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiH2LhR (ORCPT
+        with ESMTP id S232823AbiH2LeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:37:17 -0400
+        Mon, 29 Aug 2022 07:34:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F97F24F;
-        Mon, 29 Aug 2022 04:21:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790EC7CA8C;
+        Mon, 29 Aug 2022 04:19:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D290B80F1A;
-        Mon, 29 Aug 2022 11:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D5D8C433C1;
-        Mon, 29 Aug 2022 11:19:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E613B80E4C;
+        Mon, 29 Aug 2022 11:19:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC2CC433D6;
+        Mon, 29 Aug 2022 11:19:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771958;
-        bh=wwLdWrksQLW5dniCLV2oT7GECpfGk/Axa4/6mAegmok=;
+        s=korg; t=1661771961;
+        bh=QXzMtzimhRYt8XWF/LVdnFlStaAGw59NdLQPfaF4lB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PKIGE/3FLLosENx6bTIQHTxxW755fa38FM4bYOAhTjeVmZlOZUk3B34tBw0OMXO3I
-         OK/Vqtt7ii2FnXnGPUA6P+tau5CQSbdQ0zALk0ygCIH1kQ5xJa7nB9ooeCTDuSzIMu
-         ZRHq5SC367vkADi/g/CqPJ/Ejrp0jKQ7hVr1Q9Fc=
+        b=A/F2z5j910CaZcxMB/L4oqmp0jnVl8N9JeAAAKCmxNplm5RZhD2Fn1tqM+lae8I3A
+         5MXDVqRjC8Q/jXMwq8mVIlQV4+SZjum1Lx7hqliDX39G5V368tm7hmXZ2j1239wqzB
+         JQusUXakfnebjOrY0RFQ5Mg+GcfWLF14rC2kTb74=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 5.19 120/158] s390: fix double free of GS and RI CBs on fork() failure
-Date:   Mon, 29 Aug 2022 12:59:30 +0200
-Message-Id: <20220829105814.140338292@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.19 121/158] fbdev: fbcon: Properly revert changes when vc_resize() failed
+Date:   Mon, 29 Aug 2022 12:59:31 +0200
+Message-Id: <20220829105814.184053079@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -56,81 +56,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Foster <bfoster@redhat.com>
+From: Shigeru Yoshida <syoshida@redhat.com>
 
-commit 13cccafe0edcd03bf1c841de8ab8a1c8e34f77d9 upstream.
+commit a5a923038d70d2d4a86cb4e3f32625a5ee6e7e24 upstream.
 
-The pointers for guarded storage and runtime instrumentation control
-blocks are stored in the thread_struct of the associated task. These
-pointers are initially copied on fork() via arch_dup_task_struct()
-and then cleared via copy_thread() before fork() returns. If fork()
-happens to fail after the initial task dup and before copy_thread(),
-the newly allocated task and associated thread_struct memory are
-freed via free_task() -> arch_release_task_struct(). This results in
-a double free of the guarded storage and runtime info structs
-because the fields in the failed task still refer to memory
-associated with the source task.
+fbcon_do_set_font() calls vc_resize() when font size is changed.
+However, if if vc_resize() failed, current implementation doesn't
+revert changes for font size, and this causes inconsistent state.
 
-This problem can manifest as a BUG_ON() in set_freepointer() (with
-CONFIG_SLAB_FREELIST_HARDENED enabled) or KASAN splat (if enabled)
-when running trinity syscall fuzz tests on s390x. To avoid this
-problem, clear the associated pointer fields in
-arch_dup_task_struct() immediately after the new task is copied.
-Note that the RI flag is still cleared in copy_thread() because it
-resides in thread stack memory and that is where stack info is
-copied.
+syzbot reported unable to handle page fault due to this issue [1].
+syzbot's repro uses fault injection which cause failure for memory
+allocation, so vc_resize() failed.
 
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-Fixes: 8d9047f8b967c ("s390/runtime instrumentation: simplify task exit handling")
-Fixes: 7b83c6297d2fc ("s390/guarded storage: simplify task exit handling")
-Cc: <stable@vger.kernel.org> # 4.15
-Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220816155407.537372-1-bfoster@redhat.com
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+This patch fixes this issue by properly revert changes for font
+related date when vc_resize() failed.
+
+Link: https://syzkaller.appspot.com/bug?id=3443d3a1fa6d964dd7310a0cb1696d165a3e07c4 [1]
+Reported-by: syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+CC: stable@vger.kernel.org # 5.15+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kernel/process.c |   22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ drivers/video/fbdev/core/fbcon.c |   27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
---- a/arch/s390/kernel/process.c
-+++ b/arch/s390/kernel/process.c
-@@ -91,6 +91,18 @@ int arch_dup_task_struct(struct task_str
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -2402,15 +2402,21 @@ static int fbcon_do_set_font(struct vc_d
+ 	struct fb_info *info = fbcon_info_from_console(vc->vc_num);
+ 	struct fbcon_ops *ops = info->fbcon_par;
+ 	struct fbcon_display *p = &fb_display[vc->vc_num];
+-	int resize;
++	int resize, ret, old_userfont, old_width, old_height, old_charcount;
+ 	char *old_data = NULL;
  
- 	memcpy(dst, src, arch_task_struct_size);
- 	dst->thread.fpu.regs = dst->thread.fpu.fprs;
+ 	resize = (w != vc->vc_font.width) || (h != vc->vc_font.height);
+ 	if (p->userfont)
+ 		old_data = vc->vc_font.data;
+ 	vc->vc_font.data = (void *)(p->fontdata = data);
++	old_userfont = p->userfont;
+ 	if ((p->userfont = userfont))
+ 		REFCOUNT(data)++;
 +
-+	/*
-+	 * Don't transfer over the runtime instrumentation or the guarded
-+	 * storage control block pointers. These fields are cleared here instead
-+	 * of in copy_thread() to avoid premature freeing of associated memory
-+	 * on fork() failure. Wait to clear the RI flag because ->stack still
-+	 * refers to the source thread.
-+	 */
-+	dst->thread.ri_cb = NULL;
-+	dst->thread.gs_cb = NULL;
-+	dst->thread.gs_bc_cb = NULL;
++	old_width = vc->vc_font.width;
++	old_height = vc->vc_font.height;
++	old_charcount = vc->vc_font.charcount;
 +
+ 	vc->vc_font.width = w;
+ 	vc->vc_font.height = h;
+ 	vc->vc_font.charcount = charcount;
+@@ -2426,7 +2432,9 @@ static int fbcon_do_set_font(struct vc_d
+ 		rows = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
+ 		cols /= w;
+ 		rows /= h;
+-		vc_resize(vc, cols, rows);
++		ret = vc_resize(vc, cols, rows);
++		if (ret)
++			goto err_out;
+ 	} else if (con_is_visible(vc)
+ 		   && vc->vc_mode == KD_TEXT) {
+ 		fbcon_clear_margins(vc, 0);
+@@ -2436,6 +2444,21 @@ static int fbcon_do_set_font(struct vc_d
+ 	if (old_data && (--REFCOUNT(old_data) == 0))
+ 		kfree(old_data - FONT_EXTRA_WORDS * sizeof(int));
  	return 0;
++
++err_out:
++	p->fontdata = old_data;
++	vc->vc_font.data = (void *)old_data;
++
++	if (userfont) {
++		p->userfont = old_userfont;
++		REFCOUNT(data)--;
++	}
++
++	vc->vc_font.width = old_width;
++	vc->vc_font.height = old_height;
++	vc->vc_font.charcount = old_charcount;
++
++	return ret;
  }
  
-@@ -150,13 +162,11 @@ int copy_thread(struct task_struct *p, c
- 	frame->childregs.flags = 0;
- 	if (new_stackp)
- 		frame->childregs.gprs[15] = new_stackp;
--
--	/* Don't copy runtime instrumentation info */
--	p->thread.ri_cb = NULL;
-+	/*
-+	 * Clear the runtime instrumentation flag after the above childregs
-+	 * copy. The CB pointer was already cleared in arch_dup_task_struct().
-+	 */
- 	frame->childregs.psw.mask &= ~PSW_MASK_RI;
--	/* Don't copy guarded storage control block */
--	p->thread.gs_cb = NULL;
--	p->thread.gs_bc_cb = NULL;
- 
- 	/* Set a new TLS ?  */
- 	if (clone_flags & CLONE_SETTLS) {
+ /*
 
 

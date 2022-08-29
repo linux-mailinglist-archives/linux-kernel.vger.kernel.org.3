@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D1C5A47EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA365A47F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiH2LDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S229942AbiH2LDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiH2LCB (ORCPT
+        with ESMTP id S229841AbiH2LCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:02:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4BF3AB38;
-        Mon, 29 Aug 2022 04:02:00 -0700 (PDT)
+        Mon, 29 Aug 2022 07:02:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26D94332F;
+        Mon, 29 Aug 2022 04:02:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6995C61132;
-        Mon, 29 Aug 2022 11:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E0FC433C1;
-        Mon, 29 Aug 2022 11:01:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E33EB80EF3;
+        Mon, 29 Aug 2022 11:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574A9C433C1;
+        Mon, 29 Aug 2022 11:02:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661770919;
-        bh=JFszvvfNIEW/xserBuvtdDUlhOD02mgyujNkLisWBDw=;
+        s=korg; t=1661770922;
+        bh=/iy+f312kTj5A6TMMgKiWZt1SOjvo8oZVyIccP7xceY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RsNj85ylZOjGnwfPnJ8yDFwKdu5qoLcqImVJkuvPSwfRXc3hAfqF79e0CxyDfFBwX
-         L81XQAtL/SvOXH9Vte6jiMSbNogUSxzSo1+eO1j8oVb3FXlrpr4k28R6qxt9BqCYBr
-         8Gp5VJzVy7OnMFYd6UhPlAeNeJLO1MVGNj+Yqm7A=
+        b=vrqobNOlSPILhgqmK08LKC4zZhw6StAr1vEbUGc6mknvosL/YB+s1ILOHBtb96zv1
+         aeys4zBHw196j31LZceNInlbPpvIiwc4ku+q/Uh4/OhYKlg+bbwN4piziRsv6Fg13C
+         P8fR4ufATKAnCqqxxT9Qcs7Q6I6yovoAzfbKeapc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
         David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 022/136] btrfs: pass the dentry to btrfs_log_new_name() instead of the inode
-Date:   Mon, 29 Aug 2022 12:58:09 +0200
-Message-Id: <20220829105805.495470085@linuxfoundation.org>
+Subject: [PATCH 5.15 023/136] btrfs: remove unnecessary parameter delalloc_start for writepage_delalloc()
+Date:   Mon, 29 Aug 2022 12:58:10 +0200
+Message-Id: <20220829105805.536233187@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
 References: <20220829105804.609007228@linuxfoundation.org>
@@ -55,114 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Qu Wenruo <wqu@suse.com>
 
-[ Upstream commit d5f5bd546552a94eefd68c42f40f778c40a89d2c ]
+[ Upstream commit cf3075fb36c6a98ea890f4a50b4419ff2fff9a2f ]
 
-In the next patch in the series, there will be the need to access the old
-name, and its length, of an inode when logging the inode during a rename.
-So instead of passing the inode to btrfs_log_new_name() pass the dentry,
-because from the dentry we can get the inode, the name and its length.
+In function __extent_writepage() we always pass page start to
+@delalloc_start for writepage_delalloc().
 
-This will avoid passing 3 new parameters to btrfs_log_new_name() in the
-next patch - the name, its length and an index number. This way we end
-up passing only 1 new parameter, the index number.
+Thus we don't really need @delalloc_start parameter as we can extract it
+from @page.
 
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
+Remove @delalloc_start parameter and make __extent_writepage() to
+declare @page_start and @page_end as const.
+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
 Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/inode.c    |  8 ++++----
- fs/btrfs/tree-log.c | 19 +++++++++++++++----
- fs/btrfs/tree-log.h |  2 +-
- 3 files changed, 20 insertions(+), 9 deletions(-)
+ fs/btrfs/extent_io.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 26a4acb856a38..428a56f248bba 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -6952,7 +6952,7 @@ static int btrfs_link(struct dentry *old_dentry, struct inode *dir,
- 				goto fail;
- 		}
- 		d_instantiate(dentry, inode);
--		btrfs_log_new_name(trans, BTRFS_I(inode), NULL, parent);
-+		btrfs_log_new_name(trans, old_dentry, NULL, parent);
- 	}
- 
- fail:
-@@ -9621,13 +9621,13 @@ static int btrfs_rename_exchange(struct inode *old_dir,
- 		BTRFS_I(new_inode)->dir_index = new_idx;
- 
- 	if (root_log_pinned) {
--		btrfs_log_new_name(trans, BTRFS_I(old_inode), BTRFS_I(old_dir),
-+		btrfs_log_new_name(trans, old_dentry, BTRFS_I(old_dir),
- 				   new_dentry->d_parent);
- 		btrfs_end_log_trans(root);
- 		root_log_pinned = false;
- 	}
- 	if (dest_log_pinned) {
--		btrfs_log_new_name(trans, BTRFS_I(new_inode), BTRFS_I(new_dir),
-+		btrfs_log_new_name(trans, new_dentry, BTRFS_I(new_dir),
- 				   old_dentry->d_parent);
- 		btrfs_end_log_trans(dest);
- 		dest_log_pinned = false;
-@@ -9908,7 +9908,7 @@ static int btrfs_rename(struct user_namespace *mnt_userns,
- 		BTRFS_I(old_inode)->dir_index = index;
- 
- 	if (log_pinned) {
--		btrfs_log_new_name(trans, BTRFS_I(old_inode), BTRFS_I(old_dir),
-+		btrfs_log_new_name(trans, old_dentry, BTRFS_I(old_dir),
- 				   new_dentry->d_parent);
- 		btrfs_end_log_trans(root);
- 		log_pinned = false;
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index e9e1aae89030a..1d7e9812f55e1 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -6628,14 +6628,25 @@ void btrfs_record_snapshot_destroy(struct btrfs_trans_handle *trans,
- 	mutex_unlock(&dir->log_mutex);
- }
- 
--/*
-- * Call this after adding a new name for a file and it will properly
-- * update the log to reflect the new name.
-+/**
-+ * Update the log after adding a new name for an inode.
-+ *
-+ * @trans:              Transaction handle.
-+ * @old_dentry:         The dentry associated with the old name and the old
-+ *                      parent directory.
-+ * @old_dir:            The inode of the previous parent directory for the case
-+ *                      of a rename. For a link operation, it must be NULL.
-+ * @parent:             The dentry associated with the directory under which the
-+ *                      new name is located.
-+ *
-+ * Call this after adding a new name for an inode, as a result of a link or
-+ * rename operation, and it will properly update the log to reflect the new name.
+diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+index 41862045b3de3..a72a8d4d4a72e 100644
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -3780,10 +3780,11 @@ static void update_nr_written(struct writeback_control *wbc,
   */
- void btrfs_log_new_name(struct btrfs_trans_handle *trans,
--			struct btrfs_inode *inode, struct btrfs_inode *old_dir,
-+			struct dentry *old_dentry, struct btrfs_inode *old_dir,
- 			struct dentry *parent)
+ static noinline_for_stack int writepage_delalloc(struct btrfs_inode *inode,
+ 		struct page *page, struct writeback_control *wbc,
+-		u64 delalloc_start, unsigned long *nr_written)
++		unsigned long *nr_written)
  {
-+	struct btrfs_inode *inode = BTRFS_I(d_inode(old_dentry));
- 	struct btrfs_log_ctx ctx;
+-	u64 page_end = delalloc_start + PAGE_SIZE - 1;
++	u64 page_end = page_offset(page) + PAGE_SIZE - 1;
+ 	bool found;
++	u64 delalloc_start = page_offset(page);
+ 	u64 delalloc_to_write = 0;
+ 	u64 delalloc_end = 0;
+ 	int ret;
+@@ -4068,8 +4069,8 @@ static int __extent_writepage(struct page *page, struct writeback_control *wbc,
+ 			      struct extent_page_data *epd)
+ {
+ 	struct inode *inode = page->mapping->host;
+-	u64 start = page_offset(page);
+-	u64 page_end = start + PAGE_SIZE - 1;
++	const u64 page_start = page_offset(page);
++	const u64 page_end = page_start + PAGE_SIZE - 1;
+ 	int ret;
+ 	int nr = 0;
+ 	size_t pg_offset;
+@@ -4104,8 +4105,7 @@ static int __extent_writepage(struct page *page, struct writeback_control *wbc,
+ 	}
  
- 	/*
-diff --git a/fs/btrfs/tree-log.h b/fs/btrfs/tree-log.h
-index 731bd9c029f55..7ffcac8a89905 100644
---- a/fs/btrfs/tree-log.h
-+++ b/fs/btrfs/tree-log.h
-@@ -84,7 +84,7 @@ void btrfs_record_unlink_dir(struct btrfs_trans_handle *trans,
- void btrfs_record_snapshot_destroy(struct btrfs_trans_handle *trans,
- 				   struct btrfs_inode *dir);
- void btrfs_log_new_name(struct btrfs_trans_handle *trans,
--			struct btrfs_inode *inode, struct btrfs_inode *old_dir,
-+			struct dentry *old_dentry, struct btrfs_inode *old_dir,
- 			struct dentry *parent);
- 
- #endif
+ 	if (!epd->extent_locked) {
+-		ret = writepage_delalloc(BTRFS_I(inode), page, wbc, start,
+-					 &nr_written);
++		ret = writepage_delalloc(BTRFS_I(inode), page, wbc, &nr_written);
+ 		if (ret == 1)
+ 			return 0;
+ 		if (ret)
+@@ -4155,7 +4155,7 @@ static int __extent_writepage(struct page *page, struct writeback_control *wbc,
+ 	 * capable of that.
+ 	 */
+ 	if (PageError(page))
+-		end_extent_writepage(page, ret, start, page_end);
++		end_extent_writepage(page, ret, page_start, page_end);
+ 	unlock_page(page);
+ 	ASSERT(ret <= 0);
+ 	return ret;
 -- 
 2.35.1
 

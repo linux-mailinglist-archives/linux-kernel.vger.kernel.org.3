@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D65A423B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A2F5A424A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiH2F1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 01:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S229464AbiH2F3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 01:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiH2F1u (ORCPT
+        with ESMTP id S229569AbiH2F3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 01:27:50 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A04245984
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 22:27:47 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lx1so13429885ejb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 22:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=Rl3H3kwhWRRuIV9mnCNIVAy3s7btuOoctkFdruBo/gs=;
-        b=QYoZhw2R+dKSGUHL6/g3iTZCg2fFJoYMmPT+Tnniby0tI4ULrhG/bFOu9zP9+aQ9dk
-         63s4scAsjmvPnO31UjV3YIEq/Vp2dZIs+cbyXiPRTq3fLULPjftam66LZ8HiOX9lCV6P
-         EJ9KptlID85EbmZ6czzjY8SaEuoqml0rqXpXxcP+PGxwFuc+xA2us7/qeVx/llqlCPDW
-         ygU1fzYoDKaawxdKGF+HkzNa1folwGqNudPDT21wRkqGfyyla7Xs5wv//wv/7i3UXqiM
-         RH+TyrWlFyZLZTW6UMJPfwD2KoHXVqyufdADuDT/KpWdk4BZvAjUONCtIRHcvHCwtO3I
-         Erfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Rl3H3kwhWRRuIV9mnCNIVAy3s7btuOoctkFdruBo/gs=;
-        b=5YkYNuQA3cVJir7JyH3xRBB3BkxBdAjzrf7W7nObicw2qsfF7bXoq9M6Tk5Ka17Xpc
-         0QQKzE4Ocv+Y86QVO3Mw0604RaLbb5R5PFWowZi4lgT8yGyljUqdedcbnTYxJDa86sOB
-         c2GNr5rMTlq8MVbQ/gpZvOntb1n36/UKb24RMispkViF0G00qhT11dJpP3bYm1xFGHDl
-         1QNiz3QTSd3D6qmwDQM5wJh2krOOw0ZQkauyye4fCvU44j8Fa5j8z34ej+3NOzaNzTy3
-         W7JJtQITwSVDaLTOooUNxkXnYWOBIfSdhF9RxLJ5xV54GdLyfcb355x7/Kpqpbrthohx
-         y5nA==
-X-Gm-Message-State: ACgBeo0hSObTYxhdC0GSc4ZgbmLoBryJdF6h7JC86N5Q5Qso2JEk9/Sh
-        66qKEVmIJlNUtIyDm1OD2v2ikSlWkjxjr/QS6UlHSg==
-X-Google-Smtp-Source: AA6agR7cPPJa1sKgkh6/MbfaeUh3WlrXGuwxWXehUisqM5f40Y++fv9Irl9n5l6HE90qgIxVV7Oinz8hTxi1fhykU2U=
-X-Received: by 2002:a17:907:6285:b0:738:e862:a1b with SMTP id
- nd5-20020a170907628500b00738e8620a1bmr12847279ejc.70.1661750865893; Sun, 28
- Aug 2022 22:27:45 -0700 (PDT)
+        Mon, 29 Aug 2022 01:29:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C5EB27;
+        Sun, 28 Aug 2022 22:29:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D00C60FDE;
+        Mon, 29 Aug 2022 05:29:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3260C433D7;
+        Mon, 29 Aug 2022 05:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661750985;
+        bh=hzP4nkAeBpnmq1LiTZnUTTHZIw0ee9DQKe/6c5MU3Nc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fLy5N72FEUxoJDDEA1dGVs6Pe+kHiFv+TFKmvpWj66xiNrtEZf1bDVQBzshT5kBbj
+         gwHH0EDgXUafHFCW+6uSVdX4WKOWjZddJUeEm7evgpsjTz/PEuIIqLl9FuyrtjHnhE
+         Lnyb9Ob2gI0UKAV2jcw7dHXhowWHZaN9p3S3Fofw=
+Date:   Mon, 29 Aug 2022 07:30:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Message-ID: <YwxO2L/MtCw/OHGB@kroah.com>
+References: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <dcf53e6b-d60f-5d6b-029a-38df68d66302@intel.com>
+ <c6ccbcac-c5b1-f460-01e2-e1b6684b6e65@linux.intel.com>
 MIME-Version: 1.0
-References: <20220826095615.74328-1-jinpu.wang@ionos.com> <20220826095615.74328-2-jinpu.wang@ionos.com>
- <Yws+/FLRudJE08Xk@unreal>
-In-Reply-To: <Yws+/FLRudJE08Xk@unreal>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Mon, 29 Aug 2022 07:27:35 +0200
-Message-ID: <CAMGffEnoHHeWLE=_WKT96YErXmBK-8mpvRz6=6CRaicaPi+9hg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] infiniband/mthca: Fix dma_map_sg error check
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Kees Cook <keescook@chromium.org>,
-        =?UTF-8?B?SMOla29uIEJ1Z2dl?= <haakon.bugge@oracle.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6ccbcac-c5b1-f460-01e2-e1b6684b6e65@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 12:10 PM Leon Romanovsky <leon@kernel.org> wrote:
->
-> On Fri, Aug 26, 2022 at 11:56:14AM +0200, Jack Wang wrote:
-> > dma_map_sg return 0 on error, in case of error set
-> > EIO as return code.
-> >
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: Leon Romanovsky <leon@kernel.org>
-> > Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: "H=C3=A5kon Bugge" <haakon.bugge@oracle.com>
-> > Cc: linux-rdma@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Fixes: 56483ec1b702 ("[PATCH] IB uverbs: add mthca user doorbell record=
- support")
-> > Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  drivers/infiniband/hw/mthca/mthca_memfree.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> Same answer as was here
-> https://lore.kernel.org/all/YwIbI3ktmEiLsy6s@unreal
->
-> Thanks
-ok, I see you are firm on this, we can skip the patch
+On Sun, Aug 28, 2022 at 05:19:33PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> Hi,
+> 
+> On 8/28/22 1:14 PM, Dave Hansen wrote:
+> > On 8/26/22 08:06, Kuppuswamy Sathyanarayanan wrote:
+> >> +struct tdx_report_req {
+> >> +	__u8  subtype;
+> >> +	__u64 reportdata;
+> >> +	__u32 rpd_len;
+> >> +	__u64 tdreport;
+> >> +	__u32 tdr_len;
+> >> +};
+> > 
+> > Please do take a look at how the compiler ends up building that structure.
+> > 
+> > If you sized things to "save space", the way the compiler treats that
+> > structure may surprise you.  You might also want to look at how a 32-bit
+> > compile deals with it versus a 64-bit one.
+> 
+> Since it is only used in user/kernel ABI, I did not consider the size
+> issue.
+
+That is _EXACTLY_ why you need to consider the size issues here.
+
+> But I understand your point. The size of this struct in a 64-bit
+> system is 40 bytes. So we did not gain anything with using different member
+> sizes. In a 32-bit system, size due to padding is less compared to 64-bit.
+
+That's not the issue here, please use a tool like pahole to see the
+problems with this definition.
+
+> I will re-arrange the struct as below. With this change, the size will come
+> down to 32 bytes.
+> 
+> struct tdx_report_req {
+>         __u64 reportdata;;
+>         __u64 tdreport;
+>         __u32 rpd_len
+>         __u32 tdr_len;
+>         __u8 subtype;
+> };
+
+That's better, but again, please use pahole.
+
+thanks,
+
+greg k-h

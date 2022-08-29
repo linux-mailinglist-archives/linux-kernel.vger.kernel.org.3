@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1CF5A5645
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15165A5636
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiH2Vhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S230019AbiH2Vbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiH2Vhg (ORCPT
+        with ESMTP id S229725AbiH2Vb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:37:36 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E32280F50;
-        Mon, 29 Aug 2022 14:37:34 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 9F8EB8211EE;
-        Mon, 29 Aug 2022 21:29:22 +0000 (UTC)
-Received: from pdx1-sub0-mail-a210 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 1830E8214F4;
-        Mon, 29 Aug 2022 21:29:22 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661808562; a=rsa-sha256;
-        cv=none;
-        b=889wU+ypFOzUxMo8tE7wsNg3AIyIc/z3cecJyw1ISG+NPwtjl+h/wTnEd5K2TzIi0NMf5a
-        B3OnPpWSdDJsv8NGNvKvgsjALhGxAdwJtoXP2pkRTPmZZpxTKB/1MbtMb+hNnViynGXU1a
-        FhZG3r1VNOeQEvplpdBV53hf5Ak9tS7fvqEARbZMSk3UHCXNFTgGrnvz6L4/8/DjL9UQfG
-        U+TVlYpfFHU96osU991mXYk2xQSC0yu0wkFJTqRfkjZ0BQW9V1OkjrCQg/5C7b6P4zXxVr
-        cItJfpBehRIE+hmPetg1eWyH/C4AtxZOpf6OPa7InPlouRnp3aFlIpT4pSJC4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661808562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=wPrGN55jL4h8TZE8TdRCRKUBj7LPUTZEAsucC9jQbN4=;
-        b=fHIx0ajVzaapgHX+wHAy9i3SSOOpjYSGaygTwB1lTiPccD0mI/aSoFb49HaJxbSX/j1ISg
-        V1/rvlDaEZvUnFRxs2yB9+gkc4ylnB5uk3Tz5zANwIzCyrkjSbeqQY0EXYL1i6GBYBwcit
-        GFXQ8kdR8pyuZ1LxShT2ILU95KNjLN1mJVGjedzVaRmUg5YaycMchDtaEFUYbpR1FmkwVm
-        7BQ1ulyvigt4GoHxBoKAMN66oedQaegs6reEa1C89qBIbEez6jgsHyKgyTEzc3YhC6C+ey
-        /Us23SboeeHKM8d/LsCrNUf22DL7tPZmLVQdyJh8uPf0Cuztdn0Ns7b4Tq/NAQ==
-ARC-Authentication-Results: i=1;
-        rspamd-75b4464bd-sv695;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Descriptive-Arithmetic: 79cfb0b32f60848c_1661808562489_673253421
-X-MC-Loop-Signature: 1661808562489:2375646447
-X-MC-Ingress-Time: 1661808562489
-Received: from pdx1-sub0-mail-a210 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.123.39.217 (trex/6.7.1);
-        Mon, 29 Aug 2022 21:29:22 +0000
-Received: from offworld.. (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a210 (Postfix) with ESMTPSA id 4MGk8x0m25zPZ;
-        Mon, 29 Aug 2022 14:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661808561;
-        bh=wPrGN55jL4h8TZE8TdRCRKUBj7LPUTZEAsucC9jQbN4=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=VrOY05yZROs1ioLx4CRmSRE9GcO9LhV1i39YKM/9L2L7CgMCeigurV/Za/8wK+sF1
-         gD/yJ7XqCeqQ8ao12sQa9O4nfu7CVsCIR7Yjgo9kVQC0lAv5YRClls7fEjsO6lu7QH
-         K64O2ulQfuRhkMaN314IyQII0OfEgrQkzODS6h8wtc8CobKDrdZwrKMKak95QI7ixc
-         o7caov7A0AVGadItP313BMl75g2keZxcPYDElQJWus2X55LE3hHGI0fW0ATZkoCR1e
-         qb8Uk/uewGrNKhNrLQoGi2jC4+YX/qtepWMwRXcY9Y7d53Rt7qh9YMLiQ2gug5Im9X
-         7IysfS+wHKuPw==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     dan.j.williams@intel.com
-Cc:     x86@kernel.org, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-        peterz@infradead.org, bp@alien8.de, akpm@linux-foundation.org,
-        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com,
-        a.manzanares@samsung.com, linux-kernel@vger.kernel.org,
-        dave@stgolabs.net
-Subject: [PATCH -next] memregion: Add arch_flush_memregion() interface
-Date:   Mon, 29 Aug 2022 14:29:18 -0700
-Message-Id: <20220829212918.4039240-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.37.2
+        Mon, 29 Aug 2022 17:31:27 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE7399B5E;
+        Mon, 29 Aug 2022 14:30:39 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id q81so7713221iod.9;
+        Mon, 29 Aug 2022 14:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ZzLF3Zpb2/6xSumnVVpMWDck1aMiBeVtZex1RW6P1FI=;
+        b=mmkgecyQE1OTUA7TBoutytmXccFptEA8GgRHydXKbCjhJ9/4LEJHA2yYgXFLZ3vDvr
+         t6t7xGbEV5IUrxMsmBwWfqagADcjaWjmxpMH8fa1CujXCi/SJ/wv//bUGFC9nlLmoKAk
+         iTESS9NS/78WtZmxaGLpkgYtn78DYo9u4FLRfF3nQJpu9Y0WToxNRNEOplLNV736bnKU
+         QUOutt3PJ89MkCoK85UrCpSQln1c7UsZwVrD2pextscsD+s9rfClPpiu5qoXRw6vk5E/
+         OD5NvxMbTqgM4GbKaJd/CSNgoL1qOHVoO4Wt6yueZtCCQDGWicvYrtw6jDrkvx0jvbea
+         K0lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ZzLF3Zpb2/6xSumnVVpMWDck1aMiBeVtZex1RW6P1FI=;
+        b=lDtVammyDC8zOUVBYG/qMxSy8sknuYrxQhXRXioFLymo6khCZWeiWUbWBiX2mlfPuS
+         F4ICkJcsG/7csa8dQxivoBRHVSQnDYn0P/Mm0Xq/RNuCnK/IOamqd7lGhxDM2GBEIgHc
+         rKBovFOqP38DoYcCleP3zHtpi6hNOkIpyRscQ6cjWaN0ufaQ19F/bbridEFO3G1EZbpN
+         WyuQtwBvt7G/jCktQcchz85R9LYx6FJf9o4HfYDrKh4YkBXh+rRoWFqnhUSkQsBAei1j
+         wEyElqMeLfmYuhHRyJ02I96Wn5AOdvKSEL8dJ1BIBBHVpaW8UfyCf/CsABBHoxJh6KEk
+         ulIg==
+X-Gm-Message-State: ACgBeo0tq2Nc+jun0wDu9EhzUYeM1+nR8xgYgZnuF8OlVce8IAo9akbp
+        9MnrXlHyE3+aV5392U6rlXo=
+X-Google-Smtp-Source: AA6agR4A46YqPYgmjacBLOtKx0hpt07rHl9E8iNpwSKM7/zuZLvPzv1bo8ejDH+Cl7gKH6/N09cOXQ==
+X-Received: by 2002:a05:6638:1485:b0:348:b986:6e62 with SMTP id j5-20020a056638148500b00348b9866e62mr11001575jak.236.1661808591586;
+        Mon, 29 Aug 2022 14:29:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:1485:e42c:9c81:f760? ([2600:1700:2442:6db0:1485:e42c:9c81:f760])
+        by smtp.gmail.com with ESMTPSA id i189-20020a6bb8c6000000b0068acff8cfe7sm5582926iof.44.2022.08.29.14.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 14:29:51 -0700 (PDT)
+Message-ID: <8c436553-e35c-4e46-1407-24184fd113ba@gmail.com>
+Date:   Mon, 29 Aug 2022 16:29:50 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH -next 3/4] spi: mockup: Add runtime device tree overlay
+ interface
+Content-Language: en-US
+To:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220826144341.532265-1-weiyongjun1@huawei.com>
+ <20220826144341.532265-4-weiyongjun1@huawei.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220826144341.532265-4-weiyongjun1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,274 +82,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CXL security features, global CPU cache flushing nvdimm requirements
-are no longer specific to that subsystem, even beyond the scope of
-security_ops. CXL will need such semantics for features not necessarily
-limited to persistent memory.
+comment inline below, plus adding to cc: and to: list
 
-The functionality this is enabling is to be able to instantaneously
-secure erase potentially terabytes of memory at once and the kernel
-needs to be sure that none of the data from before the secure is still
-present in the cache. It is also used when unlocking a memory device
-where speculative reads and firmware accesses could have cached poison
-from before the device was unlocked.
+On 8/26/22 09:43, Wei Yongjun wrote:
+> Add a runtime device tree overlay interface for device need dts file.
+> With it its possible to use device tree overlays without having to use
+> a per-platform overlay manager.
 
-This capability is typically only used once per-boot (for unlock), or
-once per bare metal provisioning event (secure erase), like when handing
-off the system to another tenant or decommissioning a device.
+Why is an overlay needed?  The documentation in patch 4 shows providing
+a dtb as an argument to the qemu-system-x86_64 command, which should be
+sufficient to supply the appropriate dtb.
 
-Users must first call arch_has_flush_memregion() to know whether this
-functionality is available on the architecture. Only enable it on x86-64
-via the wbinvd() hammer.
+-Frank
 
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
-
-Changes from v2 (https://lore.kernel.org/all/20220819171024.1766857-1-dave@stgolabs.net/):
-- Redid to use memregion based interfaces + VMM check on x86 (Dan)
-- Restricted the flushing to x86-64.
-
-Note: Since we still are dealing with a physical "range" at this level,
-added the spa range for nfit even though this is unused.
-
- arch/x86/Kconfig             |  1 +
- arch/x86/mm/pat/set_memory.c | 14 +++++++++++
- drivers/acpi/nfit/intel.c    | 45 ++++++++++++++++++------------------
- include/linux/memregion.h    | 25 ++++++++++++++++++++
- lib/Kconfig                  |  3 +++
- 5 files changed, 65 insertions(+), 23 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..594e6b6a4925 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -81,6 +81,7 @@ config X86
- 	select ARCH_HAS_KCOV			if X86_64
- 	select ARCH_HAS_MEM_ENCRYPT
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-+	select ARCH_HAS_MEMREGION_INVALIDATE    if X86_64
- 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	select ARCH_HAS_PMEM_API		if X86_64
- 	select ARCH_HAS_PTE_DEVMAP		if X86_64
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 1abd5438f126..18463cb704fb 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -330,6 +330,20 @@ void arch_invalidate_pmem(void *addr, size_t size)
- EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
- #endif
- 
-+#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
-+bool arch_has_flush_memregion(void)
-+{
-+	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
-+}
-+EXPORT_SYMBOL(arch_has_flush_memregion);
-+
-+void arch_flush_memregion(phys_addr_t phys, resource_size_t size)
-+{
-+	wbinvd_on_all_cpus();
-+}
-+EXPORT_SYMBOL(arch_flush_memregion);
-+#endif
-+
- static void __cpa_flush_all(void *arg)
- {
- 	unsigned long cache = (unsigned long)arg;
-diff --git a/drivers/acpi/nfit/intel.c b/drivers/acpi/nfit/intel.c
-index 8dd792a55730..32e622f51cde 100644
---- a/drivers/acpi/nfit/intel.c
-+++ b/drivers/acpi/nfit/intel.c
-@@ -3,6 +3,7 @@
- #include <linux/libnvdimm.h>
- #include <linux/ndctl.h>
- #include <linux/acpi.h>
-+#include <linux/memregion.h>
- #include <asm/smp.h>
- #include "intel.h"
- #include "nfit.h"
-@@ -190,12 +191,11 @@ static int intel_security_change_key(struct nvdimm *nvdimm,
- 	}
- }
- 
--static void nvdimm_invalidate_cache(void);
--
- static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 		const struct nvdimm_key_data *key_data)
- {
- 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
-+	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
- 	struct {
- 		struct nd_cmd_pkg pkg;
- 		struct nd_intel_unlock_unit cmd;
-@@ -213,6 +213,9 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	if (!test_bit(NVDIMM_INTEL_UNLOCK_UNIT, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!arch_has_flush_memregion())
-+		return -EINVAL;
-+
- 	memcpy(nd_cmd.cmd.passphrase, key_data->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -228,7 +231,7 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM unlocked, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	arch_flush_memregion(spa->address, spa->length);
- 
- 	return 0;
- }
-@@ -279,6 +282,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- {
- 	int rc;
- 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
-+	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
- 	unsigned int cmd = ptype == NVDIMM_MASTER ?
- 		NVDIMM_INTEL_MASTER_SECURE_ERASE : NVDIMM_INTEL_SECURE_ERASE;
- 	struct {
-@@ -297,8 +301,11 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	if (!test_bit(cmd, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!arch_has_flush_memregion())
-+		return -EINVAL;
-+
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	arch_flush_memregion(spa->address, spa->length);
- 	memcpy(nd_cmd.cmd.passphrase, key->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -318,7 +325,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM erased, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	arch_flush_memregion(spa->address, spa->length);
- 	return 0;
- }
- 
-@@ -326,6 +333,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- {
- 	int rc;
- 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
-+	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
- 	struct {
- 		struct nd_cmd_pkg pkg;
- 		struct nd_intel_query_overwrite cmd;
-@@ -341,6 +349,9 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	if (!test_bit(NVDIMM_INTEL_QUERY_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!arch_has_flush_memregion())
-+		return -EINVAL;
-+
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
- 	if (rc < 0)
- 		return rc;
-@@ -355,7 +366,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	}
- 
- 	/* flush all cache before we make the nvdimms available */
--	nvdimm_invalidate_cache();
-+	arch_flush_memregion(spa->address, spa->length);
- 	return 0;
- }
- 
-@@ -364,6 +375,7 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- {
- 	int rc;
- 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
-+	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
- 	struct {
- 		struct nd_cmd_pkg pkg;
- 		struct nd_intel_overwrite cmd;
-@@ -380,8 +392,11 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	if (!test_bit(NVDIMM_INTEL_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!arch_has_flush_memregion())
-+		return -EINVAL;
-+
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	arch_flush_memregion(spa->address, spa->length);
- 	memcpy(nd_cmd.cmd.passphrase, nkey->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -401,22 +416,6 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	}
- }
- 
--/*
-- * TODO: define a cross arch wbinvd equivalent when/if
-- * NVDIMM_FAMILY_INTEL command support arrives on another arch.
-- */
--#ifdef CONFIG_X86
--static void nvdimm_invalidate_cache(void)
--{
--	wbinvd_on_all_cpus();
--}
--#else
--static void nvdimm_invalidate_cache(void)
--{
--	WARN_ON_ONCE("cache invalidation required after unlock\n");
--}
--#endif
--
- static const struct nvdimm_security_ops __intel_security_ops = {
- 	.get_flags = intel_security_flags,
- 	.freeze = intel_security_freeze,
-diff --git a/include/linux/memregion.h b/include/linux/memregion.h
-index c04c4fd2e209..c35201c0696f 100644
---- a/include/linux/memregion.h
-+++ b/include/linux/memregion.h
-@@ -20,4 +20,29 @@ static inline void memregion_free(int id)
- {
- }
- #endif
-+
-+/*
-+ * Device memory technologies like NVDIMM and CXL have events like
-+ * secure erase and dynamic region provision that can invalidate an
-+ * entire physical memory address range at once. Limit that
-+ * functionality to architectures that have an efficient way to
-+ * writeback and invalidate potentially terabytes of memory at once.
-+ *
-+ * To ensure this, users must first call arch_has_flush_memregion()
-+ * before anything, to verify the operation is feasible.
-+ */
-+#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
-+void arch_flush_memregion(phys_addr_t phys, resource_size_t size);
-+bool arch_has_flush_memregion(void);
-+#else
-+static inline bool arch_has_flush_memregion(void)
-+{
-+       return false;
-+}
-+static inline void arch_flush_memregion(phys_addr_t phys, resource_size_t size)
-+{
-+	WARN_ON_ONCE("cache invalidation required");
-+}
-+#endif
-+
- #endif /* _MEMREGION_H_ */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index dc1ab2ed1dc6..8319e7731e7b 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -662,6 +662,9 @@ config ARCH_HAS_PMEM_API
- config MEMREGION
- 	bool
- 
-+config ARCH_HAS_MEMREGION_INVALIDATE
-+       bool
-+
- config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
- 	bool
- 
--- 
-2.37.2
+> 
+> Add a new device by command:
+> $ cat test.dtbo > /sys/class/spi_master/spi0/overlay_fdto
+> 
+> Remove the device by command:
+> $ echo remove > /sys/class/spi_master/spi0/overlay_fdto
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> ---
+>  drivers/spi/Kconfig      |  2 ++
+>  drivers/spi/spi-mockup.c | 48 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index e0f0fa2746ad..4b7c84ddb367 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -1161,6 +1161,8 @@ config SPI_TLE62X0
+>  config SPI_MOCKUP
+>  	tristate "SPI controller Testing Driver"
+>  	depends on OF
+> +	select OF_EARLY_FLATTREE
+> +	select OF_RESOLVE
+>  	select BPF_EVENTS
+>  	help
+>  	  This enables SPI controller testing driver, which provides a way to
+> diff --git a/drivers/spi/spi-mockup.c b/drivers/spi/spi-mockup.c
+> index 7a93b194ee53..404ad821bf6a 100644
+> --- a/drivers/spi/spi-mockup.c
+> +++ b/drivers/spi/spi-mockup.c
+> @@ -21,6 +21,9 @@
+>  struct mockup_spi {
+>  	struct mutex lock;
+>  	struct spi_device *devs[MOCKUP_CHIPSELECT_MAX];
+> +
+> +	void *fdto;
+> +	int ovcs_id;
+>  };
+>  
+>  static struct spi_master *to_spi_master(struct device *dev)
+> @@ -145,9 +148,53 @@ delete_device_store(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_WO(delete_device);
+>  
+> +static ssize_t
+> +overlay_fdto_store(struct device *dev, struct device_attribute *attr,
+> +		   const char *buf, size_t count)
+> +{
+> +	struct spi_master *master = to_spi_master(dev);
+> +	struct mockup_spi *mock = spi_master_get_devdata(master);
+> +	int ret;
+> +
+> +	mutex_lock(&mock->lock);
+> +
+> +	if (strncmp(buf, "remove\n", count) == 0) {
+> +		if (mock->ovcs_id < 0) {
+> +			ret = -ENOENT;
+> +			goto out_unlock;
+> +		}
+> +		of_overlay_remove(&mock->ovcs_id);
+> +		kfree(mock->fdto);
+> +		mock->ovcs_id = -1;
+> +		mock->fdto = NULL;
+> +	} else {
+> +		if (mock->ovcs_id >= 0) {
+> +			ret = -EINVAL;
+> +			goto out_unlock;
+> +		}
+> +		mock->fdto = kmemdup(buf, count, GFP_KERNEL);
+> +		if (!mock->fdto) {
+> +			ret = -ENOMEM;
+> +			goto out_unlock;
+> +		}
+> +		ret = of_overlay_fdt_apply(mock->fdto, count, &mock->ovcs_id);
+> +		if (ret < 0)
+> +			goto out_unlock;
+> +	}
+> +
+> +	mutex_unlock(&mock->lock);
+> +	return count;
+> +
+> +out_unlock:
+> +	mutex_unlock(&mock->lock);
+> +	return ret;
+> +}
+> +static DEVICE_ATTR_WO(overlay_fdto);
+> +
+>  static struct attribute *spi_mockup_attrs[] = {
+>  	&dev_attr_new_device.attr,
+>  	&dev_attr_delete_device.attr,
+> +	&dev_attr_overlay_fdto.attr,
+>  	NULL
+>  };
+>  ATTRIBUTE_GROUPS(spi_mockup);
+> @@ -227,6 +274,7 @@ static int spi_mockup_probe(struct platform_device *pdev)
+>  
+>  	mock = spi_master_get_devdata(master);
+>  	mutex_init(&mock->lock);
+> +	mock->ovcs_id = -1;
+>  
+>  	ret = spi_register_master(master);
+>  	if (ret) {
 

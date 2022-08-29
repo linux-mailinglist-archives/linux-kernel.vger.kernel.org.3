@@ -2,112 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF365A4C59
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4809C5A4C4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiH2Mtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S229790AbiH2Msz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiH2MsX (ORCPT
+        with ESMTP id S230088AbiH2Msh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:48:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AB829C87;
-        Mon, 29 Aug 2022 05:33:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71332B80EF3;
-        Mon, 29 Aug 2022 12:33:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E524C433D7;
-        Mon, 29 Aug 2022 12:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661776423;
-        bh=BVx7YbyPMDfrYRtpBOz6+GKhJ46zqHQZiBFkpP2hkz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W5uumRxhoH24u+dxOE5PNQTXrfWOPCpXPp+ngZXWVHgFu2b67Ylpp9CB+nRe/3YBf
-         TUBkgCelx4d2fAo4Q74WyvGM43PpeZdKktdwXbQkwCoceJlc+tZnov1wPtznqzGNMQ
-         xiKV9SnGt0gOlj3HQrgx3vlYItWCRrYAuAWcybqBVUWVlOjCwQJO5qSZq4s3x/CBg1
-         ENSSVnwg/ToTp8H1Zi9maNgrcPoU0qyOpvci5nodSdsRSpQ0w9bN2Y6AadQojgQmbo
-         8dkVhnGnS3YvvWz8hmHY87/o616yHrBMKbhd0juM0AFqRGVZxFOHhTHRw+tsOPYKFF
-         GXjqzfKRIEqdw==
-Date:   Mon, 29 Aug 2022 15:33:34 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        corbet@lwn.net, dhowells@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v14 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and add flags check function
-Message-ID: <YwyyHr0udrOIy7IX@kernel.org>
-References: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
- <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
- <6d85d7b1f0c2341698e88bad025bd6e0b34c7666.camel@huaweicloud.com>
- <YwroKjo7IkQDepp5@kernel.org>
- <YwrpL9b3NXtjnPru@kernel.org>
- <cead9f6ad77a66425324a880bd1df389fe258d40.camel@huaweicloud.com>
+        Mon, 29 Aug 2022 08:48:37 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81583B7761
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:34:32 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        by gnuweeb.org (Postfix) with ESMTPSA id C484A809CF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:34:31 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1661776471;
+        bh=N1uDE91BqGxI7oqT6ZPOAuib3sKIAcIKvPFQNbnaYxM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cj/5EiuksvAtUjyMmn4aZqVyxlpZLPb6ng2YG/1uTnVbncK+3A4+nBH7Zdxp6AN5e
+         fL60A9jw7nXZL15bBIUt68u1X0B2cx4R1ovBIZ2Zn1TWoEhwOi5O2nQQ8u1Ot6qy0O
+         Q5a/frtZArUHr25DgYlJb+JTWMaCJEGl0BeaEiduIcRnIfNsqVuHjw8RKXPqhx4Z6V
+         xzxa19ddlFflfNKt6ZmTpLauuMwUoo8+/4jB6wYkyuji3YM5av/lBft4vdFRsUJm3B
+         AjZoLQ8mlcWCiII6XeQd/5ypJsQW5T045sDlZyYj19OXvFp19d6hp8oS1ViKUd+jvy
+         1gCK2ThuHzyQA==
+Received: by mail-lf1-f51.google.com with SMTP id z25so10943126lfr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:34:31 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2Yu4jv5mr6TX1oTdWa31GuZwkQSUBMOUG2ZP+lMFa+RFXcPNIA
+        yO/Lzx+Bpdt1kHXlIgQDVaTr4pBHRWGOCzMxZjFQrA==
+X-Google-Smtp-Source: AA6agR5GbTehGGG7rAld1ZY9g1RxolXE4vO8PFMy3NVNbJcN02f2heEEbGWkSswl8x7LF06IOKxexLhBjrUnAxndPJM=
+X-Received: by 2002:a05:6512:12c2:b0:492:dc0c:f4ac with SMTP id
+ p2-20020a05651212c200b00492dc0cf4acmr6997012lfg.612.1661776469902; Mon, 29
+ Aug 2022 05:34:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cead9f6ad77a66425324a880bd1df389fe258d40.camel@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220829111643.266866-1-cui.jinpeng2@zte.com.cn>
+In-Reply-To: <20220829111643.266866-1-cui.jinpeng2@zte.com.cn>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Date:   Mon, 29 Aug 2022 19:34:18 +0700
+X-Gmail-Original-Message-ID: <CAGzmLMW-D8cGbZruQ=Vy7Yu8j5nCqGvNC8mMw-XeNjHr62Mf6g@mail.gmail.com>
+Message-ID: <CAGzmLMW-D8cGbZruQ=Vy7Yu8j5nCqGvNC8mMw-XeNjHr62Mf6g@mail.gmail.com>
+Subject: Re: [PATCH linux-next] wifi: cfg80211: remove redundant ret variable
+To:     cgel.zte@gmail.com
+Cc:     ajay.kathat@microchip.com, claudiu.beznea@microchip.com,
+        kvalo@kernel.org, "David S. Miller" <davem@davemloft.net>,
+        edumazet@google.com, Jakub Kicinski <kuba@kernel.org>,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 09:25:05AM +0200, Roberto Sassu wrote:
-> On Sun, 2022-08-28 at 07:03 +0300, Jarkko Sakkinen wrote:
-> > On Sun, Aug 28, 2022 at 06:59:41AM +0300, Jarkko Sakkinen wrote:
-> > > On Fri, Aug 26, 2022 at 11:22:54AM +0200, Roberto Sassu wrote:
-> > > > On Fri, 2022-08-26 at 11:12 +0200, Roberto Sassu wrote:
-> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > 
-> > > > > In preparation for the patch that introduces the
-> > > > > bpf_lookup_user_key() eBPF
-> > > > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to
-> > > > > be
-> > > > > able to
-> > > > > validate the kfunc parameters.
-> > > > > 
-> > > > > Also, introduce key_lookup_flags_valid() to check if the caller
-> > > > > set
-> > > > > in the
-> > > > > argument only defined flags. Introduce it directly in
-> > > > > include/linux/key.h,
-> > > > > to reduce the risk that the check is not in sync with currently
-> > > > > defined
-> > > > > flags.
-> > > > > 
-> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > Reviewed-by: KP Singh <kpsingh@kernel.org>
-> > > > 
-> > > > Jarkko, could you please ack it if it is fine?
-> > > 
-> > > So, as said I'm not really confident that a function is
-> > > even needed in the first place. It's fine if there are
-> > > enough call sites to make it legit.
-> > 
-> > And *if* a named constant is enough, you could probably
-> > then just squash to the same patch that uses it, right?
-> 
-> Yes, the constant seems better. Maybe, I would add in the same patch
-> that exports the lookup flags, since we have that.
+On Mon, Aug 29, 2022 at 6:35 PM <cgel.zte@gmail.com> wrote:
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+>
+> Return value from cfg80211_rx_mgmt() directly instead of
+> taking this in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Yeah, then it would be probably easier to review too
-since it is "in the context".
-
-BR, Jarkko
+Reviewed-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>

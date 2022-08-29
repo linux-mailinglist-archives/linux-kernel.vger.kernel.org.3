@@ -2,280 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289AE5A54C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FA05A54BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiH2TtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S229498AbiH2Tt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiH2TtL (ORCPT
+        with ESMTP id S229909AbiH2TtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:49:11 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9590F78BCC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:49:10 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id v4so8627082pgi.10
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=XCNEHMJr0hfjsQ+vnHehtUNGIlWFLDcrEGyzhvj9K5g=;
-        b=eV5+IDKMWHvTrLvY5qdVe2Dr8YGn8pA5uYTHFoM9WqzJ5yfWrLY1ZhR0rkfUQI52Sc
-         vNeIZmU55+sU2IZVsq+BoW6IjenTceTh1lz0uCOy5ba2iGdTso12xmH76m52E0Qvm94M
-         Zg4brhVInfvtcp34fVq8tGinJE8OAYDNsZAEc2GABsyIYfPW2MH5luiguxHSF/MZjh2V
-         eXX/eJ3nbdOGMriBwZjWgzv1hOmScTBqOfnD0bWbnATysgfikf1SixYpg17Z/LM4xhHO
-         qHCMPVShLt9YadObdhwwX9LRRyTBs+gfLrx/pWpS4bII34OeIOvtH6xGSeGQ8n6BjK38
-         gBiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=XCNEHMJr0hfjsQ+vnHehtUNGIlWFLDcrEGyzhvj9K5g=;
-        b=u6p5TmbEzZXcQguUHsUXAkJ+za3u11lNiyVYKtBmtM2SklUedxJcLYvx7ZJc09O3Mh
-         m1QRFejDXPhdd4u5pHevlAtKSwIdq+E5B4Dsig6r4I5QyJ3Mn0wjgZnjoMo8rRUgSrPU
-         +tDWb07DvkFZ81s91vkUpKrtOAnXmrOT4/NpKnkxkxg5lrYiZqD0irxuDB4svbD6ULXr
-         4gSsC2Poqqc1xdbKukfQT3Wl3ykw0MxJpyWtK5lcLAeWV4U69Cx3LWL3i9FjjiC9Nhjr
-         ERhr0qzEJctEADjEifqTX+IWVi9Sp2yLvCaiBFzUC8XgCPsyJwS/Svfx3IbJt3zKUms9
-         oa6w==
-X-Gm-Message-State: ACgBeo09JEJvBWDAsvsx3NX6l7TVYjocktYuhrFHTLI8Jrhw1LNeUmVw
-        VXowcrvTe7x0imi93Ck2DwoJ9g==
-X-Google-Smtp-Source: AA6agR5e+dxYKkxh2RPcBHN2REmqjfCB50lwaHYxN4slLs/mZYZ29Yp7izkcJL9Ihy+4bPNKYSzPeA==
-X-Received: by 2002:a63:e011:0:b0:42a:1c12:17a9 with SMTP id e17-20020a63e011000000b0042a1c1217a9mr14923316pgh.557.1661802549901;
-        Mon, 29 Aug 2022 12:49:09 -0700 (PDT)
-Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709029a0c00b0017294d80f25sm7872364plp.258.2022.08.29.12.49.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 12:49:09 -0700 (PDT)
-From:   Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Kyle Huey <me@kylehuey.com>
-Subject: [PATCH v6 2/2] selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
-Date:   Mon, 29 Aug 2022 12:49:05 -0700
-Message-Id: <20220829194905.81713-2-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829194905.81713-1-khuey@kylehuey.com>
-References: <20220829194905.81713-1-khuey@kylehuey.com>
+        Mon, 29 Aug 2022 15:49:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E887E80E;
+        Mon, 29 Aug 2022 12:49:22 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 21:49:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661802560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DkPMw4JsQ1oG6kbv2aAIz2c3TvpxBTukrq3ZfWbFv9M=;
+        b=SD4C2j1CeUAOQkbLQnLIgyr6thz6fB1AtSJdMT62jLF0cXUO8DahmmQk+YFkwZa6sBcDDg
+        ZrJp0vHf+nUEMhb/cctCMT1C8WXVwmVrvNVTY3de3BXSJMjPvRXblq44oPDtj38vdUkngR
+        frQWAirhICwwI0nb8yPEYthpIlbM3XEbHHwo6pYl+zhzoHif8Om1+nP33EfyjugK19MqMa
+        tGRs43biwAsS1L9IxnqDS0QrTjArpjuL7rL/JPH4vVmrB/63CsLngBmir9sqQhbDtK9XRo
+        YYq8b4IZ19sojERGdrLyyw5JgrnjcTjz8A887qUCEcRcywW3HaShNX9e0vNqxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661802560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DkPMw4JsQ1oG6kbv2aAIz2c3TvpxBTukrq3ZfWbFv9M=;
+        b=HPVoLoZMMB4dtcyFtDmT6JKHErJhxFcVUX+qEhsif3JG66AoMr1/kxqFt1DcKNLGXNylHY
+        1LF2h2zGiTdiY+CA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
+Subject: Re: [PATCH v2 11/25] usb: gadget: f_tcm: Execute command on write
+ completion
+Message-ID: <Yw0YP1qUYAw6inMJ@linutronix.de>
+References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <b030d10834c13aa09bbbba7b33b1957d5ba3664c.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <YwhvmpdbG8WXhhZ0@linutronix.de>
+ <20220826183732.vxogtdlwqiqbcg2t@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220826183732.vxogtdlwqiqbcg2t@synopsys.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kyle Huey <me@kylehuey.com>
+On 2022-08-26 18:37:36 [+0000], Thinh Nguyen wrote:
+> On Fri, Aug 26, 2022, Sebastian Andrzej Siewior wrote:
+> > On 2022-07-18 18:27:12 [-0700], Thinh Nguyen wrote:
+> > > index 6fea80afe2d7..ec83f2f9a858 100644
+> > > --- a/drivers/usb/gadget/function/f_tcm.c
+> > > +++ b/drivers/usb/gadget/function/f_tcm.c
+> > > @@ -955,7 +949,7 @@ static void usbg_data_write_cmpl(struct usb_ep *e=
+p, struct usb_request *req)
+> > >  				se_cmd->data_length);
+> > >  	}
+> > > =20
+> > > -	complete(&cmd->write_complete);
+> > > +	target_execute_cmd(se_cmd);
+> >=20
+> > usbg_data_write_cmpl() is invoked from interrupt service routing which
+> > may run with disabled interrupts. From looking at target_execute_cmd():
+>=20
+> It will always be called with interrupts disabled as documented in
+> usb_request API.
+>=20
+> > | void target_execute_cmd(struct se_cmd *cmd)
+> > | {
+> > =E2=80=A6
+> > |         spin_lock_irq(&cmd->t_state_lock);
+> > =E2=80=A6
+> > |         spin_unlock_irq(&cmd->t_state_lock);
+> > =E2=80=A6
+> > | }
+> >=20
+> > which means interrupts will remain open after leaving
+> > target_execute_cmd(). Now, why didn't the WARN_ONCE() in
+> > __handle_irq_event_percpu() trigger? Am I missing something?
+> >=20
+> > >  	return;
+> >=20
+>=20
+> Since target_execute_cmd() is called in usbg_data_write_cmpl(),
+> interrupts are still disabled.
 
-This tests PTRACE_SETREGSET with NT_X86_XSTATE modifying PKRU directly and
-removing the PKRU bit from XSTATE_BV.
+but you do realize that target_execute_cmd() will leave with enabled
+interrupts and this is not desired? I _think_ this was the reason why I
+ended up with the wait+complete construct instead of invoking this
+function directly.
+An _irqsave() in target_execute_cmd() would probably be all you need
+here.
 
-Signed-off-by: Kyle Huey <me@kylehuey.com>
----
- tools/testing/selftests/vm/pkey-x86.h        |  12 ++
- tools/testing/selftests/vm/protection_keys.c | 131 ++++++++++++++++++-
- 2 files changed, 141 insertions(+), 2 deletions(-)
+> Thanks,
+> Thinh
 
-diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
-index b078ce9c6d2a..72c14cd3ddc7 100644
---- a/tools/testing/selftests/vm/pkey-x86.h
-+++ b/tools/testing/selftests/vm/pkey-x86.h
-@@ -104,6 +104,18 @@ static inline int cpu_has_pkeys(void)
- 	return 1;
- }
- 
-+static inline int cpu_max_xsave_size(void)
-+{
-+	unsigned long XSTATE_CPUID = 0xd;
-+	unsigned int eax;
-+	unsigned int ebx;
-+	unsigned int ecx;
-+	unsigned int edx;
-+
-+	__cpuid_count(XSTATE_CPUID, 0, eax, ebx, ecx, edx);
-+	return ecx;
-+}
-+
- static inline u32 pkey_bit_position(int pkey)
- {
- 	return pkey * PKEY_BITS_PER_PKEY;
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 291bc1e07842..95f403a0c46d 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -18,12 +18,13 @@
-  *	do a plain mprotect() to a mprotect_pkey() area and make sure the pkey sticks
-  *
-  * Compile like this:
-- *	gcc      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-- *	gcc -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-+ *	gcc -mxsave      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-+ *	gcc -mxsave -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-  */
- #define _GNU_SOURCE
- #define __SANE_USERSPACE_TYPES__
- #include <errno.h>
-+#include <linux/elf.h>
- #include <linux/futex.h>
- #include <time.h>
- #include <sys/time.h>
-@@ -1550,6 +1551,129 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
- 	do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
- }
- 
-+#if defined(__i386__) || defined(__x86_64__)
-+void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
-+{
-+	u32 new_pkru;
-+	pid_t child;
-+	int status, ret;
-+	int pkey_offset = pkey_reg_xstate_offset();
-+	size_t xsave_size = cpu_max_xsave_size();
-+	void *xsave;
-+	u32 *pkey_register;
-+	u64 *xstate_bv;
-+	struct iovec iov;
-+
-+	new_pkru = ~read_pkey_reg();
-+	/* Don't make PROT_EXEC mappings inaccessible */
-+	new_pkru &= ~3;
-+
-+	child = fork();
-+	pkey_assert(child >= 0);
-+	dprintf3("[%d] fork() ret: %d\n", getpid(), child);
-+	if (!child) {
-+		ptrace(PTRACE_TRACEME, 0, 0, 0);
-+		/* Stop and allow the tracer to modify PKRU directly */
-+		raise(SIGSTOP);
-+
-+		/*
-+		 * need __read_pkey_reg() version so we do not do shadow_pkey_reg
-+		 * checking
-+		 */
-+		if (__read_pkey_reg() != new_pkru)
-+			exit(1);
-+
-+		/* Stop and allow the tracer to clear XSTATE_BV for PKRU */
-+		raise(SIGSTOP);
-+
-+		if (__read_pkey_reg() != 0)
-+			exit(1);
-+
-+		/* Stop and allow the tracer to examine PKRU */
-+		raise(SIGSTOP);
-+
-+		exit(0);
-+	}
-+
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	xsave = (void *)malloc(xsave_size);
-+	pkey_assert(xsave > 0);
-+
-+	/* Modify the PKRU register directly */
-+	iov.iov_base = xsave;
-+	iov.iov_len = xsave_size;
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	pkey_register = (u32 *)(xsave + pkey_offset);
-+	pkey_assert(*pkey_register == read_pkey_reg());
-+
-+	*pkey_register = new_pkru;
-+
-+	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the modification is visible in ptrace before any execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == new_pkru);
-+
-+	/* Execute the tracee */
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the tracee saw the PKRU value change */
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	/* Test that the modification is visible in ptrace after execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == new_pkru);
-+
-+	/* Clear the PKRU bit from XSTATE_BV */
-+	xstate_bv = (u64 *)(xsave + 512);
-+	*xstate_bv &= ~(1 << 9);
-+
-+	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the modification is visible in ptrace before any execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == 0);
-+
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the tracee saw the PKRU value go to 0 */
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	/* Test that the modification is visible in ptrace after execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == 0);
-+
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFEXITED(status));
-+	pkey_assert(WEXITSTATUS(status) == 0);
-+	free(xsave);
-+}
-+#endif
-+
- void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- {
- 	int size = PAGE_SIZE;
-@@ -1585,6 +1709,9 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
- 	test_pkey_syscalls_bad_args,
- 	test_pkey_alloc_exhaust,
- 	test_pkey_alloc_free_attach_pkey0,
-+#if defined(__i386__) || defined(__x86_64__)
-+	test_ptrace_modifies_pkru,
-+#endif
- };
- 
- void run_tests_once(void)
--- 
-2.37.2
-
+Sebastian

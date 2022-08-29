@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1065A4E8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91D95A4E94
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiH2Nus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
+        id S229992AbiH2Nvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiH2Nup (ORCPT
+        with ESMTP id S230051AbiH2Nvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:50:45 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B77B782;
-        Mon, 29 Aug 2022 06:50:41 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c2so8055906plo.3;
-        Mon, 29 Aug 2022 06:50:41 -0700 (PDT)
+        Mon, 29 Aug 2022 09:51:35 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659A194EEB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:51:33 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id gb36so15803851ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:51:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=0hBreP0sFKm76ra4oI39Oq0qexhwJi0T+CU6J4jc94I=;
-        b=mnsYgcEgUxpAoiOvyPca6HBWLspzWPiTPLZTcYhY0Bkbh5C330HCnK6cj2RXJJ1lTo
-         ohakg23c2DAvDvYeMbDh7CKtX4y0Zbf4wZsnxzzLeJAzHmvO/S1LbPHIs1Tg719dg/vU
-         YsmUKtFwqPpFjtYiejgPWaMTKXsdxTvT/rVIf0Hk0Ykl7pcjZw/3We6X4/iJFsgl4R3G
-         G1RCjbPFRWyyVDv1WwhfbuBCiKBpDGrCSoAXEVhUAxbmUuAswY7DS91H91x8M2ugMolO
-         GJaDwVzNo1/fsJ4LCWdZ8VtadzwEu3pcDgH5JQhDXAh7GrTfwDQiIS6IinAZ+C6b2TvY
-         LsoA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=C2AjxMNWtzIecaqFsK7iRg4ch6dPyQx/KkfOOxiXtYg=;
+        b=j6qW4o3z3baEDyFDKHuHqekQwtXbltPLi5duAgmuHm6bFSRWytH3Cvnp3br51bwDZ4
+         iVeXMqGEjF3Arg4umGGmkAMgblbqyT1rPNHDTd/JtXOmZQY+oh+D+vQfQ96oJjXfabMf
+         Up0NNnhMjRuILZTQlIw+zD4iRQdRSr85aTK2z06BHQxdOkV4p+oYwQzyHDVDHJw/SPyW
+         gY5r/Vt54KS8CkPBfrnbtkEOXPKenXrmWJRNBpWvfo8FfVVj+tEppY6T0djYnhnbMfdV
+         yWkbnXT1O7sCPmgsWAL3MfAiuqwE76UIs3Uu+BBvWdr/zrA4srpuWhnss1pf4EZHhLEe
+         uGig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=0hBreP0sFKm76ra4oI39Oq0qexhwJi0T+CU6J4jc94I=;
-        b=gRFOn5qDrBqjYNT/bE+XwL4nRYne/heVbUXmIccHzL/mHNm/2jJTQH5ovr+kR9xq4k
-         1S/ZC+mUKYYKHijQDlBEdMJBTSHi7TIgst+nx3e8uQBEPjIaxsYGU+bIG7sHiqJj95zI
-         btsyiBiAH5XT3AXG+M2KeAUHvFrgYAgOlRZCopMF6p5eRDu7WgBGTngNt/1iJpKXd94k
-         +7YGLRJTEJ4cmcC0T1ADweWsAV3ifNXNoenxbGETWgm8gYKjepZ3cGnW/EvMmgtu0BwN
-         UJAqEtQoSdnlFJs2Y0jPuQnRBZWRVG7fEgHEJPfCAkroXHlb/e5APG9u+4JaQyCCmUG1
-         DR2w==
-X-Gm-Message-State: ACgBeo3Woz9xdcPdAso8k77f6HvZnJhaFIkC1o4cAz+lY8uYAMCAWbTz
-        h0759J0B6ZadUy46vhe/+8I=
-X-Google-Smtp-Source: AA6agR5yTGFgMhsii6aw0Qs7LKZgtye3AaE2MEPVyvPTmQyaTGHJiVDclwoc5t2Ym61HMGER7CuYAw==
-X-Received: by 2002:a17:902:b489:b0:171:5091:d53b with SMTP id y9-20020a170902b48900b001715091d53bmr16947159plr.44.1661781040710;
-        Mon, 29 Aug 2022 06:50:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x11-20020a65538b000000b0041c3ab14ca1sm6509549pgq.0.2022.08.29.06.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 06:50:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Aug 2022 06:50:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (dell-smm) Add FW_BUG to SMM warning
- message
-Message-ID: <20220829135039.GA37694@roeck-us.net>
-References: <20220822174053.8750-1-W_Armin@gmx.de>
- <20220822174053.8750-2-W_Armin@gmx.de>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=C2AjxMNWtzIecaqFsK7iRg4ch6dPyQx/KkfOOxiXtYg=;
+        b=cap1q0WYABmIKCOHQ54iqRsmEW+moh5ew3iUYRGdsZWUGEI3luVTojt+6wpczxzYCa
+         +BQv0dwtxJGpJbyt2IVPHs3tWw85DMgjXtnuDr41V54d7sPaEFSAP6x87vq8d16L7Gjj
+         DMK5h1OJBN0xS6nZY411cJ9IWrSPzINHz/IFJPZrf3wkjy8exyA8X60Ho5wxkW30aAZL
+         vxq9Osd93LxyyM2wCERlEsMMxl0OuYyOSr6zvz2FZc3csEapCaBZuGEA/0cRvQfCajxf
+         o0vHWhkoEDp++Sh9kElLo51t4gxturpvHHsJ264w91h/vGub4C/DCrkNI+fITxDAjCj4
+         /BPg==
+X-Gm-Message-State: ACgBeo0nvqoTFsNaRHHi89TMCswsKJwcYvpCdCHdI0tpyatBgBOWWLUV
+        1MKpLF6grxPtNiXYxu5oB4Dmmtkjn2GiKzdAEkem5w==
+X-Google-Smtp-Source: AA6agR5N6OvgYRnL1gCQiIwUvNMBbnV9YYUPJqU898krDerbnUiyVa4rqTO2acXLCLQG7084iwFQay5QIxtE8nAp1tY=
+X-Received: by 2002:a17:906:cc5d:b0:73d:c534:1aaa with SMTP id
+ mm29-20020a170906cc5d00b0073dc5341aaamr13534876ejb.626.1661781091816; Mon, 29
+ Aug 2022 06:51:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822174053.8750-2-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220812205746.609107-1-mairacanal@riseup.net> <20220812205746.609107-2-mairacanal@riseup.net>
+In-Reply-To: <20220812205746.609107-2-mairacanal@riseup.net>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 29 Aug 2022 15:51:20 +0200
+Message-ID: <CAG3jFyuMF4+Zfu2eDrE96nO7EWfhhQE8a+VQ=HhJ+iLYaX8HZg@mail.gmail.com>
+Subject: Re: [PATCH 1/5] drm/bridge: anx7625: Drop of_gpio header
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 07:40:52PM +0200, Armin Wolf wrote:
-> When a SMM call takes very long to execute, then it definitely
-> is a firmware bug which should be marked with FW_BUG.
-> Also add the number of the buggy SMM call to the warning message
-> so BIOS developers, etc immediately know which part of the SMM
-> interface is buggy.
-> 
+Hi Maira,
 
-I am not going to apply this patch.
-
-It is well known that some of those calls take forever to execute,
-and the current limit is just an assumption. This may be a firmware
-bug, or it works as expected. We simply don't know, and we can not
-declare it to be a firmware bug unless we have confirmation from Dell.
-
-Guenter
-
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+On Fri, 12 Aug 2022 at 22:58, Ma=C3=ADra Canal <mairacanal@riseup.net> wrot=
+e:
+>
+> This driver includes the deprecated OF GPIO header <linux/of_gpio.h>
+> yet fail to use symbols from it, so drop the include.
+>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Robert Foss <robert.foss@linaro.org>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
 > ---
->  drivers/hwmon/dell-smm-hwmon.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/=
+bridge/analogix/anx7625.c
+> index 79fc7a50b497..d7d4ca1c8b30 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/types.h>
+>  #include <linux/workqueue.h>
+>
+> -#include <linux/of_gpio.h>
+>  #include <linux/of_graph.h>
+>  #include <linux/of_platform.h>
+>
 > --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 7f8d95dd2717..9cac80358072 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -26,6 +26,7 @@
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/platform_device.h>
-> +#include <linux/printk.h>
->  #include <linux/proc_fs.h>
->  #include <linux/seq_file.h>
->  #include <linux/slab.h>
-> @@ -198,7 +199,7 @@ static int i8k_smm_func(void *par)
->  		 eax, ebx, regs->eax & 0xffff, carry, duration);
-> 
->  	if (duration > DELL_SMM_MAX_DURATION)
-> -		pr_warn_once("SMM call took %lld usecs!\n", duration);
-> +		pr_warn_once(FW_BUG "SMM call 0x%.4x took %lld usecs!\n", eax, duration);
-> 
->  	if (carry || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
->  		return -EINVAL;
+> 2.37.1
+>
+
+This cleanup looks good to me.
+
+Reviewed-by: Robert Foss <robert.foss@linar.org>

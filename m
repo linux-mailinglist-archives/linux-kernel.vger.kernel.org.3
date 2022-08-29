@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F605A48A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0385A48CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiH2LNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S231400AbiH2LPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiH2LMl (ORCPT
+        with ESMTP id S231370AbiH2LNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:12:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532B16554A;
-        Mon, 29 Aug 2022 04:09:05 -0700 (PDT)
+        Mon, 29 Aug 2022 07:13:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB7E6FA19;
+        Mon, 29 Aug 2022 04:09:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3DE9611F4;
-        Mon, 29 Aug 2022 11:09:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86C4C433C1;
-        Mon, 29 Aug 2022 11:09:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F106B80FA0;
+        Mon, 29 Aug 2022 11:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD529C433C1;
+        Mon, 29 Aug 2022 11:08:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771344;
-        bh=e6jU/oDtwcagn6dm5aEppzvyyz5CM20HP0DYHvgaJ9A=;
+        s=korg; t=1661771332;
+        bh=6YiDygRTSeeoZVsPA2jsqa1DL2ai+NK4oW7uGgvyOoI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wIxUk7ndpFVlODfJrkWZQnI1WvF2Ro4DE59/5/Kk54gOfta1BjY0b6EEamrIIn6w2
-         Sik9mpHmf3tZ9w8aHJaT1wGn+DeramaNkSCGteLL0W5HSNCqI/ZkGjT+n6DZg3O+SH
-         Rb42IpAmXFXzysD85HVCmMC6kgBEF7NVq4OjlnXU=
+        b=fIMwm8rRV7cNRIaXRfdrZHW7seWZcGQJlFzGfM2nG8yLZLR2BzmFqBIXmxpDOehMk
+         R2HttuU8UOO9U28ye3op/sE1l1hoWFEq1pdmC+ZsgtbXBsiSnScXLsLAoQpbfgaYUy
+         to94oCoNCF01ypEKeFElWHVo6qWYAFzQRaUVmGqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 53/86] net: Fix a data-race around sysctl_tstamp_allow_data.
+Subject: [PATCH 5.15 092/136] ionic: fix up issues with handling EAGAIN on FW cmds
 Date:   Mon, 29 Aug 2022 12:59:19 +0200
-Message-Id: <20220829105758.708346127@linuxfoundation.org>
+Message-Id: <20220829105808.442105569@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Shannon Nelson <snelson@pensando.io>
 
-[ Upstream commit d2154b0afa73c0159b2856f875c6b4fe7cf6a95e ]
+[ Upstream commit 0fc4dd452d6c14828eed6369155c75c0ac15bab3 ]
 
-While reading sysctl_tstamp_allow_data, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its reader.
+In looping on FW update tests we occasionally see the
+FW_ACTIVATE_STATUS command fail while it is in its EAGAIN loop
+waiting for the FW activate step to finsh inside the FW.  The
+firmware is complaining that the done bit is set when a new
+dev_cmd is going to be processed.
 
-Fixes: b245be1f4db1 ("net-timestamp: no-payload only sysctl")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Doing a clean on the cmd registers and doorbell before exiting
+the wait-for-done and cleaning the done bit before the sleep
+prevents this from occurring.
+
+Fixes: fbfb8031533c ("ionic: Add hardware init and device commands")
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/skbuff.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 48b6438f2a3d9..635cabcf8794f 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -4691,7 +4691,7 @@ static bool skb_may_tx_timestamp(struct sock *sk, bool tsonly)
- {
- 	bool ret;
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+index 480f85bc17f99..9ede66842118f 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
++++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+@@ -395,8 +395,8 @@ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
+ 				ionic_opcode_to_str(opcode), opcode,
+ 				ionic_error_to_str(err), err);
  
--	if (likely(sysctl_tstamp_allow_data || tsonly))
-+	if (likely(READ_ONCE(sysctl_tstamp_allow_data) || tsonly))
- 		return true;
+-			msleep(1000);
+ 			iowrite32(0, &idev->dev_cmd_regs->done);
++			msleep(1000);
+ 			iowrite32(1, &idev->dev_cmd_regs->doorbell);
+ 			goto try_again;
+ 		}
+@@ -409,6 +409,8 @@ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
+ 		return ionic_error_to_errno(err);
+ 	}
  
- 	read_lock_bh(&sk->sk_callback_lock);
++	ionic_dev_cmd_clean(ionic);
++
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 

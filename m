@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B935D5A484A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0305A49B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiH2LIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S232263AbiH2L2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiH2LHQ (ORCPT
+        with ESMTP id S231849AbiH2L0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:07:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA40711C22;
-        Mon, 29 Aug 2022 04:05:05 -0700 (PDT)
+        Mon, 29 Aug 2022 07:26:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAF476953;
+        Mon, 29 Aug 2022 04:16:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D41FB80EFC;
-        Mon, 29 Aug 2022 11:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE416C433D7;
-        Mon, 29 Aug 2022 11:03:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6DB2B80EB8;
+        Mon, 29 Aug 2022 11:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B8CC433C1;
+        Mon, 29 Aug 2022 11:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771017;
-        bh=1DXxsGH8T/db2sgGF+1eQuMxjREEw9B8J1bXMaBHUEU=;
+        s=korg; t=1661771689;
+        bh=qFxvgxbqCuuRumcxQE0OFQD0RFRMrB8uykkH5kLX9W8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XfNtV9fATiH5u8rlECAKk8zYe9b7D3T4fjJ8QihWs5EmbJJoM48DPvaudU2cyUGlt
-         OzcEj/vKveIqB7Cy3kBpZSlG9O6fDzGddIdGbWAbA+JGedw/mP+UfAfXVPmXaQ65ei
-         E+3O6UjSXd9+Tzdm1RCWUL/VLP/haPi/yUU2/naY=
+        b=hrhh9tPG6ci7Ln+5E8WTOCTes8s9q9K24zahgyVwZ7iEOqUgIL3qBGwHqbOLja7Ih
+         lmgzrDMBYDCVmsDNAqyrSbpk07HHDUIPROP13Y9W0M5cWi+D3/94uzA39KKLCO0EKM
+         fAKQlUvtrWl6E5PZi1kfpWNgJId55VoVAUXKUbrg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 08/86] vfs: make sync_filesystem return errors from ->sync_fs
+        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 064/158] netfilter: flowtable: fix stuck flows on cleanup due to pending work
 Date:   Mon, 29 Aug 2022 12:58:34 +0200
-Message-Id: <20220829105756.882417989@linuxfoundation.org>
+Message-Id: <20220829105811.403107124@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +55,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Darrick J. Wong" <djwong@kernel.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 5679897eb104cec9e99609c3f045a0c20603da4c upstream.
+[ Upstream commit 9afb4b27349a499483ae0134282cefd0c90f480f ]
 
-[backport to 5.10 only differs in __sync_blockdev helper]
+To clear the flow table on flow table free, the following sequence
+normally happens in order:
 
-Strangely, sync_filesystem ignores the return code from the ->sync_fs
-call, which means that syscalls like syncfs(2) never see the error.
-This doesn't seem right, so fix that.
+  1) gc_step work is stopped to disable any further stats/del requests.
+  2) All flow table entries are set to teardown state.
+  3) Run gc_step which will queue HW del work for each flow table entry.
+  4) Waiting for the above del work to finish (flush).
+  5) Run gc_step again, deleting all entries from the flow table.
+  6) Flow table is freed.
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+But if a flow table entry already has pending HW stats or HW add work
+step 3 will not queue HW del work (it will be skipped), step 4 will wait
+for the pending add/stats to finish, and step 5 will queue HW del work
+which might execute after freeing of the flow table.
+
+To fix the above, this patch flushes the pending work, then it sets the
+teardown flag to all flows in the flowtable and it forces a garbage
+collector run to queue work to remove the flows from hardware, then it
+flushes this new pending work and (finally) it forces another garbage
+collector run to remove the entry from the software flowtable.
+
+Stack trace:
+[47773.882335] BUG: KASAN: use-after-free in down_read+0x99/0x460
+[47773.883634] Write of size 8 at addr ffff888103b45aa8 by task kworker/u20:6/543704
+[47773.885634] CPU: 3 PID: 543704 Comm: kworker/u20:6 Not tainted 5.12.0-rc7+ #2
+[47773.886745] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009)
+[47773.888438] Workqueue: nf_ft_offload_del flow_offload_work_handler [nf_flow_table]
+[47773.889727] Call Trace:
+[47773.890214]  dump_stack+0xbb/0x107
+[47773.890818]  print_address_description.constprop.0+0x18/0x140
+[47773.892990]  kasan_report.cold+0x7c/0xd8
+[47773.894459]  kasan_check_range+0x145/0x1a0
+[47773.895174]  down_read+0x99/0x460
+[47773.899706]  nf_flow_offload_tuple+0x24f/0x3c0 [nf_flow_table]
+[47773.907137]  flow_offload_work_handler+0x72d/0xbe0 [nf_flow_table]
+[47773.913372]  process_one_work+0x8ac/0x14e0
+[47773.921325]
+[47773.921325] Allocated by task 592159:
+[47773.922031]  kasan_save_stack+0x1b/0x40
+[47773.922730]  __kasan_kmalloc+0x7a/0x90
+[47773.923411]  tcf_ct_flow_table_get+0x3cb/0x1230 [act_ct]
+[47773.924363]  tcf_ct_init+0x71c/0x1156 [act_ct]
+[47773.925207]  tcf_action_init_1+0x45b/0x700
+[47773.925987]  tcf_action_init+0x453/0x6b0
+[47773.926692]  tcf_exts_validate+0x3d0/0x600
+[47773.927419]  fl_change+0x757/0x4a51 [cls_flower]
+[47773.928227]  tc_new_tfilter+0x89a/0x2070
+[47773.936652]
+[47773.936652] Freed by task 543704:
+[47773.937303]  kasan_save_stack+0x1b/0x40
+[47773.938039]  kasan_set_track+0x1c/0x30
+[47773.938731]  kasan_set_free_info+0x20/0x30
+[47773.939467]  __kasan_slab_free+0xe7/0x120
+[47773.940194]  slab_free_freelist_hook+0x86/0x190
+[47773.941038]  kfree+0xce/0x3a0
+[47773.941644]  tcf_ct_flow_table_cleanup_work
+
+Original patch description and stack trace by Paul Blakey.
+
+Fixes: c29f74e0df7a ("netfilter: nf_flow_table: hardware offload support")
+Reported-by: Paul Blakey <paulb@nvidia.com>
+Tested-by: Paul Blakey <paulb@nvidia.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/sync.c |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ include/net/netfilter/nf_flow_table.h | 2 ++
+ net/netfilter/nf_flow_table_core.c    | 7 +++----
+ net/netfilter/nf_flow_table_offload.c | 8 ++++++++
+ 3 files changed, 13 insertions(+), 4 deletions(-)
 
---- a/fs/sync.c
-+++ b/fs/sync.c
-@@ -28,7 +28,7 @@
-  */
- int sync_filesystem(struct super_block *sb)
- {
--	int ret;
-+	int ret = 0;
+diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+index 32c25122ab184..9c93e4981b680 100644
+--- a/include/net/netfilter/nf_flow_table.h
++++ b/include/net/netfilter/nf_flow_table.h
+@@ -307,6 +307,8 @@ void nf_flow_offload_stats(struct nf_flowtable *flowtable,
+ 			   struct flow_offload *flow);
  
- 	/*
- 	 * We need to be protected against the filesystem going from
-@@ -51,15 +51,21 @@ int sync_filesystem(struct super_block *
- 	 * at a time.
- 	 */
- 	writeback_inodes_sb(sb, WB_REASON_SYNC);
--	if (sb->s_op->sync_fs)
--		sb->s_op->sync_fs(sb, 0);
-+	if (sb->s_op->sync_fs) {
-+		ret = sb->s_op->sync_fs(sb, 0);
-+		if (ret)
-+			return ret;
-+	}
- 	ret = __sync_blockdev(sb->s_bdev, 0);
--	if (ret < 0)
-+	if (ret)
- 		return ret;
+ void nf_flow_table_offload_flush(struct nf_flowtable *flowtable);
++void nf_flow_table_offload_flush_cleanup(struct nf_flowtable *flowtable);
++
+ int nf_flow_table_offload_setup(struct nf_flowtable *flowtable,
+ 				struct net_device *dev,
+ 				enum flow_block_command cmd);
+diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+index 18453fa25199c..483b18d35cade 100644
+--- a/net/netfilter/nf_flow_table_core.c
++++ b/net/netfilter/nf_flow_table_core.c
+@@ -610,12 +610,11 @@ void nf_flow_table_free(struct nf_flowtable *flow_table)
+ 	mutex_unlock(&flowtable_lock);
  
- 	sync_inodes_sb(sb);
--	if (sb->s_op->sync_fs)
--		sb->s_op->sync_fs(sb, 1);
-+	if (sb->s_op->sync_fs) {
-+		ret = sb->s_op->sync_fs(sb, 1);
-+		if (ret)
-+			return ret;
-+	}
- 	return __sync_blockdev(sb->s_bdev, 1);
+ 	cancel_delayed_work_sync(&flow_table->gc_work);
++	nf_flow_table_offload_flush(flow_table);
++	/* ... no more pending work after this stage ... */
+ 	nf_flow_table_iterate(flow_table, nf_flow_table_do_cleanup, NULL);
+ 	nf_flow_table_gc_run(flow_table);
+-	nf_flow_table_offload_flush(flow_table);
+-	if (nf_flowtable_hw_offload(flow_table))
+-		nf_flow_table_gc_run(flow_table);
+-
++	nf_flow_table_offload_flush_cleanup(flow_table);
+ 	rhashtable_destroy(&flow_table->rhashtable);
  }
- EXPORT_SYMBOL(sync_filesystem);
+ EXPORT_SYMBOL_GPL(nf_flow_table_free);
+diff --git a/net/netfilter/nf_flow_table_offload.c b/net/netfilter/nf_flow_table_offload.c
+index 11b6e19420920..4d1169b634c5f 100644
+--- a/net/netfilter/nf_flow_table_offload.c
++++ b/net/netfilter/nf_flow_table_offload.c
+@@ -1063,6 +1063,14 @@ void nf_flow_offload_stats(struct nf_flowtable *flowtable,
+ 	flow_offload_queue_work(offload);
+ }
+ 
++void nf_flow_table_offload_flush_cleanup(struct nf_flowtable *flowtable)
++{
++	if (nf_flowtable_hw_offload(flowtable)) {
++		flush_workqueue(nf_flow_offload_del_wq);
++		nf_flow_table_gc_run(flowtable);
++	}
++}
++
+ void nf_flow_table_offload_flush(struct nf_flowtable *flowtable)
+ {
+ 	if (nf_flowtable_hw_offload(flowtable)) {
+-- 
+2.35.1
+
 
 

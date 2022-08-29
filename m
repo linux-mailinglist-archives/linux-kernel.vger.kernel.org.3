@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F775A5102
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1785A510A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiH2QHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S230223AbiH2QIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiH2QHd (ORCPT
+        with ESMTP id S229502AbiH2QIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:07:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE628307A;
-        Mon, 29 Aug 2022 09:07:31 -0700 (PDT)
-Received: from notapiano (unknown [70.107.189.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFD136601E65;
-        Mon, 29 Aug 2022 17:07:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661789250;
-        bh=HKidM7v19MiruZdK7/phGu4UFG+Bzp83idEhdT1R2Dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OT2U9NQDjXeDnOkz1Z39vD5Nf+z4Z9jS1wx8h5+pT7NtcZvECNuxYrfd/voAgOgBZ
-         8I1z90Am4d6er5TdD6+T7ESofbmiBZJM9kUYeYtBr5bbzN6EwxPgg3kBoQhr3JAgRr
-         RC43KWcYUHdjpEmiCOSSrYsn+pUHNe0QRkNnAdv2Y93GiJ5Y7MJB5IjSyDzuZbNtUy
-         j52gPs7oLwmcnp2j6hWe1q0hbJRii70NAu9LINpDQGNFe5yncFdCLpaSoklawrApTO
-         Id2BObeIQHLkDYDkjaxmdbdzL1gIrcxWPb6/4ET2rGez3H5FuJZVqMgXQBb0z+/oyY
-         9oEnIWheuaJhQ==
-Date:   Mon, 29 Aug 2022 12:07:24 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>, hsinyi@chromium.org
-Subject: Re: [PATCH v15] arm64: dts: Add MediaTek MT8186 dts and evaluation
- board and Makefile
-Message-ID: <20220829160724.xfbqxv7fs6ilr74u@notapiano>
-References: <20220825170448.17024-1-allen-kh.cheng@mediatek.com>
+        Mon, 29 Aug 2022 12:08:02 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E5C85FD0;
+        Mon, 29 Aug 2022 09:08:01 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6948518848F2;
+        Mon, 29 Aug 2022 16:08:00 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 5CC5025032B7;
+        Mon, 29 Aug 2022 16:08:00 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 4FD1A9EC0002; Mon, 29 Aug 2022 16:08:00 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220825170448.17024-1-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 29 Aug 2022 18:07:59 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YwpgvkojEdytzCAB@shredder>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-7-netdev@kapio-technology.com>
+ <YwpgvkojEdytzCAB@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <b28717f593461865bbfa6bf12e99a2a1@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 01:04:48AM +0800, Allen-KH Cheng wrote:
-> MT8186 is a SoC based on 64bit ARMv8 architecture. It contains 6 CA55
-> and 2 CA76 cores. MT8186 share many HW IP with MT65xx series.
-> 
-> We add basic chip support for MediaTek MT8186 on evaluation board.
-> 
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+On 2022-08-27 20:21, Ido Schimmel wrote:
+> On Fri, Aug 26, 2022 at 01:45:38PM +0200, Hans Schultz wrote:
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>> +	$MZ $h2 -q -t udp -a $mac -b rand
+>> +	bridge fdb show dev $swp2 | grep -q "$mac vlan 1 master br0"
+>> +	check_err $? "Locked port station move: Entry not found on unlocked 
+>> port"
+> 
+> Looks like this is going to fail with offloaded data path as according
+> to fdb_print_flags() in iproute2 both the "extern_learn" and "offload"
+> flags will be printed before "master".
+> 
 
-Thanks,
-Nícolas
+The output shows like:
+74:e1:e1:2c:4f:18 dev eth8 vlan 1 master br0 extern_learn offload sticky 
+locked blackhole
+
+"sticky" will of course become "permanent", but I can still make it more 
+resilient by piping grep.
+
+I suppose that I will keep the "sticky_no_roaming" test even though it 
+is not really needed here anymore?

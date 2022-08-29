@@ -2,172 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E9A5A579F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9185A57A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiH2Xcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S229730AbiH2XdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiH2Xck (ORCPT
+        with ESMTP id S229572AbiH2XdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:32:40 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225D980F57;
-        Mon, 29 Aug 2022 16:32:40 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so6990662otu.3;
-        Mon, 29 Aug 2022 16:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=pcwb/p5+jybv9fHerrohgcSzr7MnKBdlSMhQ4dihg0o=;
-        b=C7J0eUMt5+vJdczODpeq86N9bO2dDO1VQb/5YrmWv1PMUiRDIjHFGP2gaJk9xmOSG/
-         WsBif31jiznmqa21fK1NRx9m+oNgiG0cmEwJ9KstmIncsvQ9j11wNaZqEFUH4SR0P5vq
-         iWFQZu5mjBB4G6K0jLMq/n/tqm3+73TUqRZHuGvtZAVnM8Ee9USrxzcg2OW+OTgoC3Zm
-         wsKSQiKu5TNJFwPAcLxz+DtmO3ysL8kr30Ks26Le2Xw3ZgFJHm6p8/NCJsdjPFPXZ2R5
-         mHYl7TQ6WYVU1R/L+MKO3De7e7yo2CldLaSZ5a1ZfQ4Z94dNUK1fFNzd+rMaWUU0IraQ
-         hqTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=pcwb/p5+jybv9fHerrohgcSzr7MnKBdlSMhQ4dihg0o=;
-        b=mCo2yCi+BaMo4wpx7K6VJsLZpy8Ox6CSf3uaq5qlwmMYlciKopAUXkdvNUYUqtuXD9
-         oDjWufNuUP2hf5lzmcMrL68n3BI3mjFRQSHorJICmHtbHPbicPrsbXBJCULGUl5P6NHc
-         aOekpOLI9YRu7ZXpDPfN+iLruek/CKZOaBG0kqVG64OSI+Q7mEUNLtDBGQrurIOry/iD
-         Ikr2qtmC6vayIbshdAiUuJtPMdjTqMO1e8t6JNsc4QqC5BLed8iVAzeWr1Lu4jqXl6tX
-         /xxHGvuAtUi7N9obpwbla95Ra9k+/ngV33ThQAyf8fyfSvVyiLNnaKOSSe8h3mdab+75
-         v8RQ==
-X-Gm-Message-State: ACgBeo30W+p4zZVGjlws7WOgZ6qnxVu5wJFYm5ZEcdxitLBQZ8rnZEqj
-        t+jmAM+olu6qbfc8m7bSs48=
-X-Google-Smtp-Source: AA6agR7so/qOD3k8QI/sorSQtm+h9+oaifcFsM0/9jO8R7DDJjiEXSC/Y8aivOkbLfXussd2YDsOdg==
-X-Received: by 2002:a9d:12d:0:b0:639:41f8:df09 with SMTP id 42-20020a9d012d000000b0063941f8df09mr7417644otu.98.1661815959492;
-        Mon, 29 Aug 2022 16:32:39 -0700 (PDT)
-Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:dd06:f7b4:b579:6561])
-        by smtp.gmail.com with ESMTPSA id bu28-20020a0568300d1c00b0063b24357269sm4183611otb.13.2022.08.29.16.32.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 16:32:39 -0700 (PDT)
-From:   frowand.list@gmail.com
-To:     Frank Rowand <frowand.list@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] ktap_v2: change "version 1" to "version 2" in examples
-Date:   Mon, 29 Aug 2022 18:31:50 -0500
-Message-Id: <20220829233150.3564612-3-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220829233150.3564612-1-frowand.list@gmail.com>
-References: <20220829233150.3564612-1-frowand.list@gmail.com>
+        Mon, 29 Aug 2022 19:33:06 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1F39C21F;
+        Mon, 29 Aug 2022 16:32:55 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8B3A9481;
+        Tue, 30 Aug 2022 01:32:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661815972;
+        bh=W6sZ99MZm0WJIysDCG+qS83r+KGY/z25whL5L+DCuIQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SxBEPtywKPcBGK9e1hRcGy/5dl5DGK5YUvK3K3cSouY1gf1x1s1fJhWZTzfkEtitK
+         sqQOPrQUPLH081pQJZFcfnNZFJdJotLrWd+lCOhwp3xU6eyJrhVoUKZt3VAQ2MPf5o
+         zsCCZzV8YuxOhyqjBY+uYfVMhDf9/TMX/UGAZ9ZU=
+Date:   Tue, 30 Aug 2022 02:32:43 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 1/4] media: dt-bindings: media: Document RZ/G2L CSI-2
+ block
+Message-ID: <Yw1MmyFxnWNpQx8q@pendragon.ideasonboard.com>
+References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+Hi Prabhakar,
 
-Change the "version line" in example output from
-"KTAP version 1" to "KTAP version 2".
+Thank you for the patch.
 
-Change version that should be used by compliant tests from 1 to 2.
+On Mon, Aug 01, 2022 at 10:47:15PM +0100, Lad Prabhakar wrote:
+> Document the CSI-2 block which is part of CRU found in Renesas
+> RZ/G2L SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> RFC v2 -> v1
+> * Fixed review comments pointed by Rob and Jacopo.
+> 
+> RFC v1 -> RFC v2
+> * New patch
+> ---
+>  .../bindings/media/renesas,rzg2l-csi2.yaml    | 149 ++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+> new file mode 100644
+> index 000000000000..f82f88c096df
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+> @@ -0,0 +1,149 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Renesas Electronics Corp.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/renesas,rzg2l-csi2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/G2L (and alike SoC's) MIPI CSI-2 receiver
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +description:
+> +  The CSI-2 receiver device provides MIPI CSI-2 capabilities for the Renesas RZ/G2L
+> +  (and alike SoCs). MIPI CSI-2 is part of the CRU block which is used in conjunction
+> +  with the Image Processing module, which provides the video capture capabilities.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
 
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
+You can drop the oneOf and write
 
-Changes since patch version 2:
-   - refresh version 2 patch 2/2 for new context
+    items:
+      - enum:
+          - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
+          - renesas,r9a07g054-csi2       # RZ/V2L
+      - const: renesas,rzg2l-csi2
 
- Documentation/dev-tools/ktap.rst | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+> +          - enum:
+> +              - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
+> +              - renesas,r9a07g054-csi2       # RZ/V2L
+> +          - const: renesas,rzg2l-csi2
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-names:
+> +    const: csi2_link
 
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index b9a57ceddd4f..ff77f4aaa6ef 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -39,6 +39,7 @@ version of the (K)TAP standard the result is compliant with.
- 
- For example:
- - "KTAP version 1"
-+- "KTAP version 2"
- - "TAP version 13"
- - "TAP version 14"
- 
-@@ -46,7 +47,7 @@ Note that, in KTAP, subtests also begin with a version line, which denotes the
- start of the nested test results. This differs from TAP14, which uses a
- separate "Subtest" line.
- 
--While, going forward, "KTAP version 1" should be used by compliant tests, it
-+While, going forward, "KTAP version 2" should be used by compliant tests, it
- is expected that most parsers and other tooling will accept the other versions
- listed here for compatibility with existing tests and frameworks.
- 
-@@ -202,9 +203,9 @@ An example of a test with two nested subtests:
- 
- ::
- 
--	KTAP version 1
-+	KTAP version 2
- 	1..1
--	  KTAP version 1
-+	  KTAP version 2
- 	  1..2
- 	  ok 1 test_1
- 	  not ok 2 test_2
-@@ -215,11 +216,11 @@ An example format with multiple levels of nested testing:
- 
- ::
- 
--	KTAP version 1
-+	KTAP version 2
- 	1..2
--	  KTAP version 1
-+	  KTAP version 2
- 	  1..2
--	    KTAP version 1
-+	    KTAP version 2
- 	    1..2
- 	    not ok 1 test_1
- 	    ok 2 test_2
-@@ -250,21 +251,21 @@ Example KTAP output
- --------------------
- ::
- 
--	KTAP version 1
-+	KTAP version 2
- 	1..1
--	  KTAP version 1
-+	  KTAP version 2
- 	  1..3
--	    KTAP version 1
-+	    KTAP version 2
- 	    1..1
- 	    # test_1: initializing test_1
- 	    ok 1 test_1
- 	  ok 1 example_test_1
--	    KTAP version 1
-+	    KTAP version 2
- 	    1..2
- 	    ok 1 test_1 # SKIP test_1 skipped
- 	    ok 2 test_2
- 	  ok 2 example_test_2
--	    KTAP version 1
-+	    KTAP version 2
- 	    1..3
- 	    ok 1 test_1
- 	    # test_2: FAIL
+If there's a single interrupt you can drop the name.
+
+> +
+> +  clocks:
+> +    items:
+> +      - description: Internal clock for connecting CRU and MIPI
+> +      - description: CRU Main clock
+> +      - description: CPU Register access clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: sysclk
+> +      - const: vclk
+> +      - const: pclk
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    items:
+> +      - description: CRU_CMN_RSTB reset terminal
+> +
+> +  reset-names:
+> +    const: cmn-rstb
+
+Same here.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port node, single endpoint describing the CSI-2 transmitter.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +                items:
+> +                  maximum: 4
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Output port node, Image Processing block connected to the CSI-2 receiver.
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - resets
+> +  - reset-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r9a07g044-cpg.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    csi20: csi2@10830400 {
+> +            compatible = "renesas,r9a07g044-csi2", "renesas,rzg2l-csi2";
+> +            reg = <0x10830400 0xfc00>;
+> +            interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&cpg CPG_MOD R9A07G044_CRU_SYSCLK>,
+> +                     <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
+> +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>;
+> +            clock-names = "sysclk", "vclk", "pclk";
+> +            power-domains = <&cpg>;
+> +            resets = <&cpg R9A07G044_CRU_CMN_RSTB>;
+> +            reset-names = "cmn-rstb";
+> +
+> +            ports {
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +
+> +                    port@0 {
+> +                            reg = <0>;
+> +
+> +                            csi2_in: endpoint {
+> +                                    clock-lanes = <0>;
+> +                                    data-lanes = <1 2>;
+> +                                    remote-endpoint = <&ov5645_ep>;
+> +                            };
+> +                    };
+> +
+> +                    port@1 {
+> +                            #address-cells = <1>;
+> +                            #size-cells = <0>;
+> +
+> +                            reg = <1>;
+> +
+> +                            csi2cru: endpoint@0 {
+> +                                    reg = <0>;
+> +                                    remote-endpoint = <&crucsi2>;
+> +                            };
+> +                    };
+> +            };
+> +    };
+
 -- 
-Frank Rowand <frank.rowand@sony.com>
+Regards,
 
+Laurent Pinchart

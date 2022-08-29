@@ -2,190 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054B55A5545
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BE15A554C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiH2UD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229973AbiH2UIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiH2UDq (ORCPT
+        with ESMTP id S229468AbiH2UIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:03:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18F197D5C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661803425; x=1693339425;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XOGyC0FCcQ0lkLzShiWWDDDVAMZkETxULm71xSAJCQQ=;
-  b=UvCp6XUfd+aDBeVwM7jeL83M0h59u/i1uR2vFWs2oiNIeZgrJTspW863
-   IjUk56VoV3t39xJpIBcvBtxH30uwNZBYnHTLTnCweIbn3ZEbb9dPq+8Ky
-   ujcJu1BJ3rhVucll58PgMygXbHz2+QQjDVJ5avkXGfoOX6nsEnPHd1hOP
-   +EpFrAM9Ky9rkYyL+CRBGocGoNwj55gfsRXoP8AQIcjosQspPkrKmkPTV
-   vdf8pjf/M8F8B6HPo7J0pnEBNieNdrK3CX8lEnTpNE2GR//0+Nj3FaFCW
-   kCqeMy30LqP9W/7Wydup0jmYHqXQ2BAtbEhcfovNINKGG2WWU8SN0LCfM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="292566253"
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="292566253"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 13:03:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="939714490"
-Received: from lkp-server02.sh.intel.com (HELO e45bc14ccf4d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Aug 2022 13:03:44 -0700
-Received: from kbuild by e45bc14ccf4d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSkz1-0000CM-2a;
-        Mon, 29 Aug 2022 20:03:43 +0000
-Date:   Tue, 30 Aug 2022 04:03:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 9a5ff834d93ca2d7ebdc9a14365cb456546a072f
-Message-ID: <630d1b9d.7lS7XIzioMgVXt4i%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 29 Aug 2022 16:08:49 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C1490C6F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:08:48 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id b2so6918310qkh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qbFnYh6+yxExljXv7kC6ED4iDTkPIabJD2w6r78FSkQ=;
+        b=Gtf1g/NXxYZTaLMDW1gcFmpDCBO7bmirrujsGt82JUvmWp7Y1l2zK7QOCmSZwnJcoY
+         bOfhEL5HKvYzYnSdH6PUx0/+IDQ5DnR5jCCdMCOc90OfqgE12xC7wOlWBiMxhT5xbTSA
+         kDz22UDaG0jqo5VhkBozq3hOuahHSOyrg5fDBJ5Y99esy/ZFF649pHGKRR0hQOLehzQh
+         Etmm7LtzVwr78luRpifIl/a6iDgAgxhP5dyBnXKjQbTOdU7tQJ5PqljPi3fBJSN5uS8Z
+         ZWa0GWtVL9/dRfVBpaWhEx8Y1qY7aBbnvmSQg5oK8oSEoeuZmVFZuTFhHJXGMonruDRG
+         b9qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qbFnYh6+yxExljXv7kC6ED4iDTkPIabJD2w6r78FSkQ=;
+        b=vMjFXAu1h/FLYutmJQ2/RmB14cnEgTANKB0M+1pMAf/kZLOxVq5kYRdVHjjK4k62oE
+         8WHbX90ajPNK81Mx+H5GF7Ja0oWqBuv7YcHGupcHQwLUUIBBjCXZq1XNDksFaa/MvOZe
+         3ig34bE1TdqyWMQJ0XzoefpqNWhov1vaqWXwPxamlcrxj4mtGLE0UZkvj2jPUIxRo6wo
+         kCzS3CqPKI9FhE3MRTXIGG8cjY38Wissh0nXicmV3pnpFQ3R6By09L0j9FHX0yTsMnxh
+         hNuDO466oBHDzy5lfmbOmkMrqyBR9hsiYBOD0Uss1CMthL37WtVqbMMMk6neimWWk5bL
+         5WOQ==
+X-Gm-Message-State: ACgBeo0w6WdRTohD3aV347atC5WP+yr2mLLPFtKg7IGfI/v9RhFYnIRP
+        krZ2cdnV9tJObYmPM2lOmGgOylmkJ29GZt0uVe04mA==
+X-Google-Smtp-Source: AA6agR7AJf9AOAAtuDFL/SEeBpsglgsS3c78XCsHe+mZR6Ycv5JsqxwDnoulWonFip+nUJqMiv9nqp+8v3nbJaDxNwE=
+X-Received: by 2002:a37:e118:0:b0:6ba:e5ce:123b with SMTP id
+ c24-20020a37e118000000b006bae5ce123bmr9555944qkm.221.1661803727353; Mon, 29
+ Aug 2022 13:08:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220826230639.1249436-1-yosryahmed@google.com>
+In-Reply-To: <20220826230639.1249436-1-yosryahmed@google.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 29 Aug 2022 13:08:36 -0700
+Message-ID: <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 9a5ff834d93ca2d7ebdc9a14365cb456546a072f  Merge branch into tip/master: 'x86/timers'
+On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> The cgroup_hierarchical_stats selftest is complicated. It has to be,
+> because it tests an entire workflow of recording, aggregating, and
+> dumping cgroup stats. However, some of the complexity is unnecessary.
+> The test now enables the memory controller in a cgroup hierarchy, invokes
+> reclaim, measure reclaim time, THEN uses that reclaim time to test the
+> stats collection and aggregation. We don't need to use such a
+> complicated stat, as the context in which the stat is collected is
+> orthogonal.
+>
+> Simplify the test by using a simple stat instead of reclaim time, the
+> total number of times a process has ever entered a cgroup. This makes
+> the test simpler and removes the dependency on the memory controller and
+> the memory reclaim interface.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
 
-elapsed time: 720m
+Yosry, please tag the patch with the repo it should be applied on:
+bpf-next or bpf.
 
-configs tested: 108
-configs skipped: 2
+>
+> When the test failed on Alexei's setup because the memory controller was
+> not enabled I realized this is an unnecessary dependency for the test,
+> which inspired this patch :) I am not sure if this prompt a Fixes tag as
+> the test wasn't broken.
+>
+> ---
+>  .../prog_tests/cgroup_hierarchical_stats.c    | 157 ++++++---------
+>  .../bpf/progs/cgroup_hierarchical_stats.c     | 181 ++++++------------
+>  2 files changed, 118 insertions(+), 220 deletions(-)
+>
+[...]
+> diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> index 8ab4253a1592..c74362854948 100644
+> --- a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> +++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> @@ -1,7 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Functions to manage eBPF programs attached to cgroup subsystems
+> - *
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Please also add comments here explaining what the programs in this file do.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-csky                                defconfig
-sparc                               defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-i386                          debian-10.3-kvm
-i386                 randconfig-a001-20220829
-i386                 randconfig-a003-20220829
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20220829
-i386                 randconfig-a002-20220829
-x86_64               randconfig-a002-20220829
-x86_64               randconfig-a001-20220829
-i386                 randconfig-a005-20220829
-i386                 randconfig-a006-20220829
-i386                 randconfig-a004-20220829
-x86_64               randconfig-a004-20220829
-x86_64               randconfig-a005-20220829
-xtensa                           allyesconfig
-x86_64               randconfig-a006-20220829
-arc                                 defconfig
-x86_64                              defconfig
-alpha                               defconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-nios2                               defconfig
-nios2                            allyesconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc64                            defconfig
-x86_64                               rhel-8.3
-sh                               allmodconfig
-mips                             allyesconfig
-arc                  randconfig-r043-20220829
-i386                                defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-m68k                             allyesconfig
-i386                             allyesconfig
-arm                                 defconfig
-ia64                             allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-x86_64                           allyesconfig
-microblaze                      mmu_defconfig
-arm                         lpc18xx_defconfig
-powerpc                  storcenter_defconfig
-powerpc                          allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-riscv                               defconfig
-powerpc                       eiger_defconfig
-arc                 nsimosci_hs_smp_defconfig
-ia64                                defconfig
-i386                 randconfig-c001-20220829
-sh                           se7722_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                             ezx_defconfig
-arm                            mps2_defconfig
-xtensa                           alldefconfig
-sh                            migor_defconfig
-sh                      rts7751r2d1_defconfig
-m68k                        m5407c3_defconfig
-sh                          r7780mp_defconfig
-m68k                          multi_defconfig
-sh                                  defconfig
-sh                          r7785rp_defconfig
-sh                             shx3_defconfig
-mips                       bmips_be_defconfig
-arm                           h5000_defconfig
-arm                        keystone_defconfig
-arm64                            alldefconfig
-arc                          axs103_defconfig
-sh                          lboxre2_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
+>   * Copyright 2022 Google LLC.
+>   */
+[...]
+>
+> -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
+> -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
+> +SEC("fentry/cgroup_attach_task")
 
-clang tested configs:
-hexagon              randconfig-r041-20220829
-hexagon              randconfig-r045-20220829
-riscv                randconfig-r042-20220829
-s390                 randconfig-r044-20220829
-x86_64               randconfig-a011-20220829
-x86_64               randconfig-a014-20220829
-x86_64               randconfig-a012-20220829
-x86_64               randconfig-a013-20220829
-x86_64               randconfig-a016-20220829
-x86_64               randconfig-a015-20220829
-i386                 randconfig-a011-20220829
-i386                 randconfig-a014-20220829
-i386                 randconfig-a013-20220829
-arm                        mvebu_v5_defconfig
-i386                 randconfig-a012-20220829
-i386                 randconfig-a015-20220829
-i386                 randconfig-a016-20220829
-x86_64               randconfig-k001-20220829
+Can we select an attachpoint that is more stable? It seems
+'cgroup_attach_task' is an internal helper function in cgroup, and its
+signature can change. I'd prefer using those commonly used tracepoints
+and EXPORT'ed functions. IMHO their interfaces are more stable.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +int BPF_PROG(counter, struct cgroup *dst_cgrp, struct task_struct *leader,
+> +            bool threadgroup)
+>  {
+> -       struct task_struct *task = bpf_get_current_task_btf();
+> -       __u64 *start_time_ptr;
+> -
+> -       start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
+> -                                             BPF_LOCAL_STORAGE_GET_F_CREATE);
+> -       if (start_time_ptr)
+> -               *start_time_ptr = bpf_ktime_get_ns();
+> -       return 0;
+> -}
+[...]
+>  }
+> --
+> 2.37.2.672.g94769d06f0-goog
+>

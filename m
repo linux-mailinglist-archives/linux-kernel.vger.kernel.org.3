@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92ED15A45FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C931B5A4693
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiH2JWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        id S229822AbiH2J52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiH2JWo (ORCPT
+        with ESMTP id S229663AbiH2J50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:22:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426BA5AC5C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:22:42 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MGPyY6cyDzlWZn;
-        Mon, 29 Aug 2022 17:19:17 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 29 Aug 2022 17:22:39 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 29 Aug
- 2022 17:22:39 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH] mm/thp: simplify has_transparent_hugepage by using IS_BUILTIN
-Date:   Mon, 29 Aug 2022 17:57:09 +0800
-Message-ID: <20220829095709.3287462-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 Aug 2022 05:57:26 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A6F5E328
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:57:25 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id g5-20020a92cda5000000b002e954ecceb0so5561816ild.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:57:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=sVvRetvU66viZg03zt42J481swUWQOVgkFgrLPfYY/8=;
+        b=DcgrQ7vZGgd3ZWDwFQ/e0Mygdn7y5DC6hYP+M5pMMaBSB3ab4DU62ivsVbATE5/ru4
+         2wTK2FegKbtDfy/IYqThgbRLiYURDn2rMvCYQRj3skHhGio61V+353YeHqxfeby/XJVt
+         AeF20DsAwMcGSX7qgJIrshIXlGzq+QDJQ5IFKdbHb0Ta8D/f+yT23gxAKHwqPL/ZgtbX
+         dkIWHF3038Bwt0/hY2U/l+ReAjj3kTzRs87TdzqeUBre8jUtKeSIuFOZ6fz6z+Qz29KZ
+         ymxePrC/b/hmsobuD7mCabQhJB1ZYR1Bx370UNrwje5pOX1cAZcxIMxGmGQPy/JUWWo+
+         JOyw==
+X-Gm-Message-State: ACgBeo1rjNqGVa4Y5i5bqw6Jf062m7ZqObO+boFs7KweLuoWkerT3FLN
+        5mSDfIOaEfH36bDEgpRZMM3x9P9opejZDTdL07hrBYgXwRUY
+X-Google-Smtp-Source: AA6agR4047SUJ1BLtOuBVO5UEYKaNvW+AYfU2ca+vudLKRQqkT0iYQAwoPhxw+l2bKYQdrlt0TJE9b8wp2UaQpbPo9e6zD+ZnsF5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:dc4:b0:349:f86d:d29a with SMTP id
+ m4-20020a0566380dc400b00349f86dd29amr10201198jaj.256.1661767044603; Mon, 29
+ Aug 2022 02:57:24 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 02:57:24 -0700
+In-Reply-To: <000000000000b960c00594598949@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000064a39405e75e4aca@google.com>
+Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
+From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        stable-commits@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,32 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code of has_transparent_hugepage define by using IS_BUILTIN.
-
-No functional change.
-
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
----
- include/linux/pgtable.h | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 73fb1b2af795..a108b60a6962 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -1610,11 +1610,7 @@ typedef unsigned int pgtbl_mod_mask;
- #endif
- 
- #ifndef has_transparent_hugepage
--#ifdef CONFIG_TRANSPARENT_HUGEPAGE
--#define has_transparent_hugepage() 1
--#else
--#define has_transparent_hugepage() 0
--#endif
-+#define has_transparent_hugepage() IS_BUILTIN(CONFIG_TRANSPARENT_HUGEPAGE)
- #endif
- 
- /*
--- 
-2.25.1
-
+This bug is marked as fixed by commit:
+net: core: netlink: add helper refcount dec and lock function
+net: sched: add helper function to take reference to Qdisc
+net: sched: extend Qdisc with rcu
+net: sched: rename qdisc_destroy() to qdisc_put()
+net: sched: use Qdisc rcu API instead of relying on rtnl lock
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F405A4813
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718F05A4849
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiH2LF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S230474AbiH2LIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiH2LEy (ORCPT
+        with ESMTP id S230059AbiH2LHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:04:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F816527E;
-        Mon, 29 Aug 2022 04:03:21 -0700 (PDT)
+        Mon, 29 Aug 2022 07:07:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFA93B95A;
+        Mon, 29 Aug 2022 04:05:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05B3CB80EFA;
-        Mon, 29 Aug 2022 11:03:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3EFC433C1;
-        Mon, 29 Aug 2022 11:03:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28378611B2;
+        Mon, 29 Aug 2022 11:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFA2C433C1;
+        Mon, 29 Aug 2022 11:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661770999;
-        bh=jhb7aOIEiskUjh6w4LldF/Qs++mSvVac9e5Tc76y//0=;
+        s=korg; t=1661771008;
+        bh=SYgJSW96kZotwCCYKH6JZ1z3AKWck1OSNhjo4yZ/WZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=No5mKV9vDhz1QVDtUAreChpTXzp9krhOrngYzyZWoq/bZX99th6yU+wSSBZCvrQmq
-         iSrwivaTGBpL+X32ZZHVnUOAZsrSrz17HyiXQvYQWDLRFqU8VU0ZqD4+RiyrwQst2q
-         3fx7yb/n4vb2SNwa2mq6P6LuVgBuU9yph+9C9Ba8=
+        b=2v8KCbLmAAi96T6OSMDtt1kevXbvalVfcCjTdt9b64jahvl4KFrg1248Gku5k4hzr
+         v5NdQv9Ve5bu0IN5KgqH7xvOUUFwtl1klAVMTufgSoUxlnsS3DUy9R0TcbMi7kUhSW
+         Q0+y2uarJocFsIsCu5uxlzI1+KE+7dWaLvDLiPJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 046/136] net/mlx5e: Fix wrong application of the LRO state
-Date:   Mon, 29 Aug 2022 12:58:33 +0200
-Message-Id: <20220829105806.499981507@linuxfoundation.org>
+Subject: [PATCH 5.15 047/136] net/mlx5e: Fix wrong tc flag used when set hw-tc-offload off
+Date:   Mon, 29 Aug 2022 12:58:34 +0200
+Message-Id: <20220829105806.547269593@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
 References: <20220829105804.609007228@linuxfoundation.org>
@@ -57,52 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aya Levin <ayal@nvidia.com>
+From: Maor Dickman <maord@nvidia.com>
 
-[ Upstream commit 7b3707fc79044871ab8f3d5fa5e9603155bb5577 ]
+[ Upstream commit 550f96432e6f6770efdaee0e65239d61431062a1 ]
 
-Driver caches packet merge type in mlx5e_params instance which must be
-in perfect sync with the netdev_feature's bit.
-Prior to this patch, in certain conditions (*) LRO state was set in
-mlx5e_params, while netdev_feature's bit was off. Causing the LRO to
-be applied on the RQs (HW level).
+The cited commit reintroduced the ability to set hw-tc-offload
+in switchdev mode by reusing NIC mode calls without modifying it
+to support both modes, this can cause an illegal memory access
+when trying to turn hw-tc-offload off.
 
-(*) This can happen only on profile init (mlx5e_build_nic_params()),
-when RQ expect non-linear SKB and PCI is fast enough in comparison to
-link width.
+Fix this by using the right TC_FLAG when checking if tc rules
+are installed while disabling hw-tc-offload.
 
-Solution: remove setting of packet merge type from
-mlx5e_build_nic_params() as netdev features are not updated.
-
-Fixes: 619a8f2a42f1 ("net/mlx5e: Use linear SKB in Striding RQ")
-Signed-off-by: Aya Levin <ayal@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Fixes: d3cbd4254df8 ("net/mlx5e: Add ndo_set_feature for uplink representor")
+Signed-off-by: Maor Dickman <maord@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index e00648094fc2a..fdf8d9866042c 100644
+index fdf8d9866042c..c1c4f380803a1 100644
 --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
 +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -4350,14 +4350,6 @@ void mlx5e_build_nic_params(struct mlx5e_priv *priv, struct mlx5e_xsk *xsk, u16
- 	/* RQ */
- 	mlx5e_build_rq_params(mdev, params);
+@@ -3325,7 +3325,9 @@ static int set_feature_hw_tc(struct net_device *netdev, bool enable)
+ 	struct mlx5e_priv *priv = netdev_priv(netdev);
  
--	/* HW LRO */
--	if (MLX5_CAP_ETH(mdev, lro_cap) &&
--	    params->rq_wq_type == MLX5_WQ_TYPE_LINKED_LIST_STRIDING_RQ) {
--		/* No XSK params: checking the availability of striding RQ in general. */
--		if (!mlx5e_rx_mpwqe_is_linear_skb(mdev, params, NULL))
--			params->packet_merge.type = slow_pci_heuristic(mdev) ?
--				MLX5E_PACKET_MERGE_NONE : MLX5E_PACKET_MERGE_LRO;
--	}
- 	params->packet_merge.timeout = mlx5e_choose_lro_timeout(mdev, MLX5E_DEFAULT_LRO_TIMEOUT);
- 
- 	/* CQ moderation params */
+ #if IS_ENABLED(CONFIG_MLX5_CLS_ACT)
+-	if (!enable && mlx5e_tc_num_filters(priv, MLX5_TC_FLAG(NIC_OFFLOAD))) {
++	int tc_flag = mlx5e_is_uplink_rep(priv) ? MLX5_TC_FLAG(ESW_OFFLOAD) :
++						  MLX5_TC_FLAG(NIC_OFFLOAD);
++	if (!enable && mlx5e_tc_num_filters(priv, tc_flag)) {
+ 		netdev_err(netdev,
+ 			   "Active offloaded tc filters, can't turn hw_tc_offload off\n");
+ 		return -EINVAL;
 -- 
 2.35.1
 

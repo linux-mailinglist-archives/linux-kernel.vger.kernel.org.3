@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3C15A497E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8785A49C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiH2LZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S232289AbiH2LaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbiH2LXm (ORCPT
+        with ESMTP id S232341AbiH2L2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:23:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2B1BAA;
-        Mon, 29 Aug 2022 04:15:04 -0700 (PDT)
+        Mon, 29 Aug 2022 07:28:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0A79A6A;
+        Mon, 29 Aug 2022 04:17:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59664B80EF9;
-        Mon, 29 Aug 2022 11:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0342C433D7;
-        Mon, 29 Aug 2022 11:06:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3E6611D6;
+        Mon, 29 Aug 2022 11:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73782C433C1;
+        Mon, 29 Aug 2022 11:06:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771168;
-        bh=jnbTVIEeMlwsEC0HOnDrK7gg//cPVaL3m7qOy+obV44=;
+        s=korg; t=1661771173;
+        bh=gwq1OqMwhb/YuVfl7qY3edF58qVgD9W2LIDU7en9DcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=job3WE6JFthsmNnPe8MeBC2awttisd/RFmqOXhw3ikeJ6lOQWXmsb9clkYWOiBGpo
-         bWLWPvZJ7tJC55bpu4tRB8PzY+MvV10b6BO8scWuEZ11ICzFewh724g3xqwcXuRFgV
-         lx6N5hAtFfHvV3QWaCXibNhf3dt494sQeQinykts=
+        b=r+duUxt//B01OZ3hoFecCGj42YmU+uRwRlRiUNzxS2CofxLkVl/PHMfrwii770on9
+         mxQmhz+4e5vXDptI+kpH6Crz2Kyyy5RItB8XDxf8kLsEUGviPPfgPW+gDK6PaMzV1n
+         OtPDF24DcdrX2qhO+ST50+5w8hlSbKL+g08oH8xo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 34/86] netfilter: nf_tables: do not leave chain stats enabled on error
-Date:   Mon, 29 Aug 2022 12:59:00 +0200
-Message-Id: <20220829105757.952910160@linuxfoundation.org>
+Subject: [PATCH 5.10 35/86] netfilter: nft_osf: restrict osf to ipv4, ipv6 and inet families
+Date:   Mon, 29 Aug 2022 12:59:01 +0200
+Message-Id: <20220829105757.991970415@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
 References: <20220829105756.500128871@linuxfoundation.org>
@@ -56,51 +56,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 43eb8949cfdffa764b92bc6c54b87cbe5b0003fe ]
+[ Upstream commit 5f3b7aae14a706d0d7da9f9e39def52ff5fc3d39 ]
 
-Error might occur later in the nf_tables_addchain() codepath, enable
-static key only after transaction has been created.
+As it was originally intended, restrict extension to supported families.
 
-Fixes: 9f08ea848117 ("netfilter: nf_tables: keep chain counters away from hot path")
+Fixes: b96af92d6eaf ("netfilter: nf_tables: implement Passive OS fingerprint module in nft_osf")
 Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ net/netfilter/nft_osf.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 30bd4b867912c..456988b5c076e 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -1999,9 +1999,9 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 			      u8 policy, u32 flags)
+diff --git a/net/netfilter/nft_osf.c b/net/netfilter/nft_osf.c
+index d82677e83400b..720dc9fba6d4f 100644
+--- a/net/netfilter/nft_osf.c
++++ b/net/netfilter/nft_osf.c
+@@ -115,9 +115,21 @@ static int nft_osf_validate(const struct nft_ctx *ctx,
+ 			    const struct nft_expr *expr,
+ 			    const struct nft_data **data)
  {
- 	const struct nlattr * const *nla = ctx->nla;
-+	struct nft_stats __percpu *stats = NULL;
- 	struct nft_table *table = ctx->table;
- 	struct nft_base_chain *basechain;
--	struct nft_stats __percpu *stats;
- 	struct net *net = ctx->net;
- 	char name[NFT_NAME_MAXLEN];
- 	struct nft_trans *trans;
-@@ -2037,7 +2037,6 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 				return PTR_ERR(stats);
- 			}
- 			rcu_assign_pointer(basechain->stats, stats);
--			static_branch_inc(&nft_counters_enabled);
- 		}
- 
- 		err = nft_basechain_init(basechain, family, &hook, flags);
-@@ -2120,6 +2119,9 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 		goto err_unregister_hook;
- 	}
- 
-+	if (stats)
-+		static_branch_inc(&nft_counters_enabled);
+-	return nft_chain_validate_hooks(ctx->chain, (1 << NF_INET_LOCAL_IN) |
+-						    (1 << NF_INET_PRE_ROUTING) |
+-						    (1 << NF_INET_FORWARD));
++	unsigned int hooks;
 +
- 	table->use++;
++	switch (ctx->family) {
++	case NFPROTO_IPV4:
++	case NFPROTO_IPV6:
++	case NFPROTO_INET:
++		hooks = (1 << NF_INET_LOCAL_IN) |
++			(1 << NF_INET_PRE_ROUTING) |
++			(1 << NF_INET_FORWARD);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return nft_chain_validate_hooks(ctx->chain, hooks);
+ }
  
- 	return 0;
+ static struct nft_expr_type nft_osf_type;
 -- 
 2.35.1
 

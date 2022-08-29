@@ -2,133 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491805A55D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC395A55DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiH2VAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S229732AbiH2VCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiH2VAf (ORCPT
+        with ESMTP id S229692AbiH2VCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:00:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF57E792FF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:00:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDD7960F8B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5CBC433C1;
-        Mon, 29 Aug 2022 21:00:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661806832;
-        bh=fqUkC9EH2QbQ4N3nK6D1pL+48iTcPXtlyjw2oH45q/4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YzLdMhsGQzY9Uo73EGzk5SeI3No3H/yNk7jOt1CK79Hn4+GmU34B45BNqijkEgJuy
-         DriWl8f9UKgp7oNKDPPIuAntRS6ijcqsnwH6oySdBkq6g4Jyy707V4a8q6FKC3cq3q
-         fnS4Fpjl6aJzx5MZQELGzEyfnA52DBLv2aHUmlpY=
-Date:   Mon, 29 Aug 2022 14:00:30 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, Wei Xu <weixugc@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-Subject: Re: [PATCH v2] mm/demotion: Expose memory tier details via sysfs
-Message-Id: <20220829140030.692cfd4dfbf7f9a8b282c951@linux-foundation.org>
-In-Reply-To: <20220829060745.287468-1-aneesh.kumar@linux.ibm.com>
-References: <20220829060745.287468-1-aneesh.kumar@linux.ibm.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 17:02:43 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5210E7F0BD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:02:41 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bq23so12861934lfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=Y0O6W1EIFYUAhWdC9TPBVXlgaxDiB7GTNtP+edapuQo=;
+        b=z1OikuueYS/w0Ms/g7l8XX6nantHAtBYuktlpYNed16wdBkvtNYhV/2T37j9OnvEGV
+         62aCxWPpRQ0M9/SHtnEOWLqp5cbpAMwuzazHYhP492gVBhJe6a10j2aO8dC88chrH4qL
+         2c6itrZ3HONN0732sHty7A8HNTLifQEHne3XXeFn1sP+mPq4HPC4W6rPeQyWpeu1D7fT
+         R470oPcWzvXdrerftAyvbtERdONXBDRAU7RgNu+FhLKoCgtkuBb4LVEOFeWSQi5IuS4O
+         ZojnVDCCxdj6VuamYqz65Cz+gnzt+Q249o+EohlopMTY79KHsxxlILesdw8wSrXyl5Cc
+         WI0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Y0O6W1EIFYUAhWdC9TPBVXlgaxDiB7GTNtP+edapuQo=;
+        b=MuBVgA55RoVQpE9HkQCQncMUTMOmdFyGmPGf+XhrY6IM91ZiFlKywlkljorSkF0ual
+         jIKPmF996fAArcrZXEkiqFw0ReVD7z4m5Sv4MPw8Duewc3yc7K/Gjlv/U3eQl/tn/aGp
+         YG/Mq+/kIu+xrIXEKPN8RtTtGPKYQH5k/GT8aBMODHWchIl6NAVFALjzc+T+1gNY6j4A
+         Sq+GNXoEjm9gIUaOIhVof5P3eEFZHCUIsJ9Pp11SG/NTyu9Bxdu/GY87xeSn0phLyjbQ
+         GTewWvi/of26UdtBkaoIg5CKXKFwivvuFZ9h5qiicUOZFinIJBv1yBky+uAd9xW9WfaG
+         IoAg==
+X-Gm-Message-State: ACgBeo2LY5qUGGI7B3Pl9XoIsS1VuxKaOSg4H7iKfP909cjQYT0ZDilc
+        VI0SeVI/7OOdFGH8J0GaCfh6+65+lEbEdofutycz
+X-Google-Smtp-Source: AA6agR4AO1xvVTU52DvWOJGOcBJoURJDMNN0z6GXu4M3uNgUvRBfyu8JFpUs7A2QRuiTLLbJaIKbdwTImgBctS9F57g=
+X-Received: by 2002:a05:6512:b1c:b0:492:8835:1e4c with SMTP id
+ w28-20020a0565120b1c00b0049288351e4cmr6444944lfu.442.1661806959576; Mon, 29
+ Aug 2022 14:02:39 -0700 (PDT)
+MIME-Version: 1.0
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 29 Aug 2022 17:02:28 -0400
+Message-ID: <CAHC9VhQu7vuXMqpTzdZp2+M4pBZXDdWs7FtWdEt_3abW-ArUDA@mail.gmail.com>
+Subject: [GIT PULL] LSM fixes for v6.0 (#1)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-security-module@vger.kernel.org, io-uring@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 11:37:45 +0530 "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
+Linus,
 
-> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
-> related details can be found. All allocated memory tiers will be listed
-> there as /sys/devices/virtual/memory_tiering/memory_tierN/
-> 
-> The nodes which are part of a specific memory tier can be listed via
-> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
-> 
-> The abstract distance range value of a specific memory tier can be listed via
-> /sys/devices/virtual/memory_tiering/memory_tierN/abstract_distance
-> 
-> A directory hierarchy looks like
-> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
-> memory_tier4/
-> ├── abstract_distance
-> ├── nodes
-> ├── subsystem -> ../../../../bus/memory_tiering
-> └── uevent
-> 
-> All toptier nodes are listed via
-> /sys/devices/virtual/memory_tiering/toptier_nodes
-> 
-> :/sys/devices/virtual/memory_tiering$ cat toptier_nodes
-> 0,2
-> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
-> 0,2
-> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/abstract_distance
-> 512 - 639
-> 
-> ...
->
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -19,6 +19,7 @@ struct memory_tier {
->  	 * adistance_start .. adistance_start + MEMTIER_CHUNK_SIZE
->  	 */
->  	int adistance_start;
-> +	struct device dev;
->  	/* All the nodes that are part of all the lower memory tiers. */
->  	nodemask_t lower_tier_mask;
->  };
-> @@ -36,6 +37,13 @@ static DEFINE_MUTEX(memory_tier_lock);
->  static LIST_HEAD(memory_tiers);
->  static struct node_memory_type_map node_memory_types[MAX_NUMNODES];
->  static struct memory_dev_type *default_dram_type;
-> +
-> +#define to_memory_tier(device) container_of(device, struct memory_tier, dev)
+Four patches to add SELinux and Smack controls to the io_uring
+IORING_OP_URING_CMD.  Three of these patches are necessary as without
+them the IORING_OP_URING_CMD remains outside the purview of the LSMs
+(Luis' LSM patch, Casey's Smack patch, and my SELinux patch).  These
+patches have been discussed at length with the io_uring folks, and
+Jens has given his thumbs-up on the relevant patches (see the commit
+descriptions).  There is one patch that is not strictly necessary, but
+it makes testing much easier and is very trivial: the /dev/null
+IORING_OP_URING_CMD patch.  If you have a problem accepting the
+/dev/null patch in a rcX release, let me know and I'll remove it.
 
-Please, only use a macro when a C function cannot be used.
+As of earlier today the tag merged cleanly with your tree, so there
+should be no surprises.  Please merge for v6.0.
 
---- a/mm/memory-tiers.c~mm-demotion-expose-memory-tier-details-via-sysfs-fix
-+++ a/mm/memory-tiers.c
-@@ -38,7 +38,11 @@ static LIST_HEAD(memory_tiers);
- static struct node_memory_type_map node_memory_types[MAX_NUMNODES];
- static struct memory_dev_type *default_dram_type;
- 
--#define to_memory_tier(device) container_of(device, struct memory_tier, dev)
-+static inline struct memory_tier *to_memory_tier(struct device *device)
-+{
-+	return container_of(device, struct memory_tier, dev);
-+}
-+
- static struct bus_type memory_tier_subsys = {
- 	.name = "memory_tiering",
- 	.dev_name = "memory_tier",
+-Paul
 
-If only so it checks the type of `device'.
+--
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+ Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
+   tags/lsm-pr-20220829
+
+for you to fetch changes up to dd9373402280cf4715fdc8fd5070f7d039e43511:
+
+ Smack: Provide read control for io_uring_cmd
+   (2022-08-26 14:56:35 -0400)
+
+----------------------------------------------------------------
+lsm/stable-6.0 PR 20220829
+
+----------------------------------------------------------------
+Casey Schaufler (1):
+     Smack: Provide read control for io_uring_cmd
+
+Luis Chamberlain (1):
+     lsm,io_uring: add LSM hooks for the new uring_cmd file op
+
+Paul Moore (2):
+     selinux: implement the security_uring_cmd() LSM hook
+     /dev/null: add IORING_OP_URING_CMD support
+
+drivers/char/mem.c                  |  6 ++++++
+include/linux/lsm_hook_defs.h       |  1 +
+include/linux/lsm_hooks.h           |  3 +++
+include/linux/security.h            |  5 +++++
+io_uring/uring_cmd.c                |  5 +++++
+security/security.c                 |  4 ++++
+security/selinux/hooks.c            | 24 ++++++++++++++++++++++
+security/selinux/include/classmap.h |  2 +-
+security/smack/smack_lsm.c          | 32 ++++++++++++++++++++++++++++++
+9 files changed, 81 insertions(+), 1 deletion(-)
+
+-- 
+paul-moore.com

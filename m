@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC625A4956
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290BD5A495A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbiH2LXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S231920AbiH2LXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiH2LWh (ORCPT
+        with ESMTP id S231627AbiH2LWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:22:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9892675;
-        Mon, 29 Aug 2022 04:14:23 -0700 (PDT)
+        Mon, 29 Aug 2022 07:22:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2435E6E8B7;
+        Mon, 29 Aug 2022 04:14:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70806119C;
-        Mon, 29 Aug 2022 11:14:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01AB0C433C1;
-        Mon, 29 Aug 2022 11:14:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADE8461211;
+        Mon, 29 Aug 2022 11:14:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7482C433C1;
+        Mon, 29 Aug 2022 11:14:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771662;
-        bh=FOptRiXQdzM1zXDzZPRq7CACFeGGFFSwyIQIjjxXEHQ=;
+        s=korg; t=1661771668;
+        bh=rK/vo63zVSb2SAWkr37ODOaLG2Zf364H/XTk3h+ZdrQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2W8s2jVxqFyxJZfPzRPbu6bCFqHeNrXLMTbD+ZKQ2g40lC+9v9iTy/3PVBiC3fTB
-         575532tPD1yNOZZrznPGVTGY8UfXdrQ+hfk4vhFdM4DT48IR7x51xn3aq7EUmuewQQ
-         idpAno1BeCxvY4FKFq7oGZnerWgCUKajFJro4gZg=
+        b=tu/oxNtaJzPulAoco+j3pgI69Zwr5FuPYPVlUP9hZYZ7PiXASqtHQEJkN6mV8+Och
+         VdPu6XsvZGsoFWrzb/JvTX05SIV4FVTZHFjt184BtfybZ2Bj85w6n99ixfrYI7TcNu
+         VwowY7v0CAbxRv8rSr7U2BjfnmnoNmFvwaZid4Jk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
+        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 134/136] scsi: ufs: core: Enable link lost interrupt
-Date:   Mon, 29 Aug 2022 13:00:01 +0200
-Message-Id: <20220829105810.182175679@linuxfoundation.org>
+Subject: [PATCH 5.15 135/136] scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
+Date:   Mon, 29 Aug 2022 13:00:02 +0200
+Message-Id: <20220829105810.211811066@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
 References: <20220829105804.609007228@linuxfoundation.org>
@@ -55,38 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kiwoong Kim <kwmad.kim@samsung.com>
+From: Saurabh Sengar <ssengar@linux.microsoft.com>
 
-commit 6d17a112e9a63ff6a5edffd1676b99e0ffbcd269 upstream.
+commit d957e7ffb2c72410bcc1a514153a46719255a5da upstream.
 
-Link lost is treated as fatal error with commit c99b9b230149 ("scsi: ufs:
-Treat link loss as fatal error"), but the event isn't registered as
-interrupt source. Enable it.
+storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM as it
+doesn't need to make forward progress under memory pressure.  Marking this
+workqueue as WQ_MEM_RECLAIM may cause deadlock while flushing a
+non-WQ_MEM_RECLAIM workqueue.  In the current state it causes the following
+warning:
 
-Link: https://lore.kernel.org/r/1659404551-160958-1-git-send-email-kwmad.kim@samsung.com
-Fixes: c99b9b230149 ("scsi: ufs: Treat link loss as fatal error")
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+[   14.506347] ------------[ cut here ]------------
+[   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remove_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workfn
+[   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 check_flush_dependency+0xb5/0x130
+[   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-azure #91~18.04.1-Ubuntu
+[   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
+[   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
+[   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
+		<-snip->
+[   14.506408] Call Trace:
+[   14.506412]  __flush_work+0xf1/0x1c0
+[   14.506414]  __cancel_work_timer+0x12f/0x1b0
+[   14.506417]  ? kernfs_put+0xf0/0x190
+[   14.506418]  cancel_delayed_work_sync+0x13/0x20
+[   14.506420]  disk_block_events+0x78/0x80
+[   14.506421]  del_gendisk+0x3d/0x2f0
+[   14.506423]  sr_remove+0x28/0x70
+[   14.506427]  device_release_driver_internal+0xef/0x1c0
+[   14.506428]  device_release_driver+0x12/0x20
+[   14.506429]  bus_remove_device+0xe1/0x150
+[   14.506431]  device_del+0x167/0x380
+[   14.506432]  __scsi_remove_device+0x11d/0x150
+[   14.506433]  scsi_remove_device+0x26/0x40
+[   14.506434]  storvsc_remove_lun+0x40/0x60
+[   14.506436]  process_one_work+0x209/0x400
+[   14.506437]  worker_thread+0x34/0x400
+[   14.506439]  kthread+0x121/0x140
+[   14.506440]  ? process_one_work+0x400/0x400
+[   14.506441]  ? kthread_park+0x90/0x90
+[   14.506443]  ret_from_fork+0x35/0x40
+[   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
+
+Link: https://lore.kernel.org/r/1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com
+Fixes: 436ad9413353 ("scsi: storvsc: Allow only one remove lun work item to be issued per lun")
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufshci.h |    6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/scsi/storvsc_drv.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/ufs/ufshci.h
-+++ b/drivers/scsi/ufs/ufshci.h
-@@ -133,11 +133,7 @@ static inline u32 ufshci_version(u32 maj
- 
- #define UFSHCD_UIC_MASK		(UIC_COMMAND_COMPL | UFSHCD_UIC_PWR_MASK)
- 
--#define UFSHCD_ERROR_MASK	(UIC_ERROR |\
--				DEVICE_FATAL_ERROR |\
--				CONTROLLER_FATAL_ERROR |\
--				SYSTEM_BUS_FATAL_ERROR |\
--				CRYPTO_ENGINE_FATAL_ERROR)
-+#define UFSHCD_ERROR_MASK	(UIC_ERROR | INT_FATAL_ERRORS)
- 
- #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
- 				CONTROLLER_FATAL_ERROR |\
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -2093,7 +2093,7 @@ static int storvsc_probe(struct hv_devic
+ 	 */
+ 	host_dev->handle_error_wq =
+ 			alloc_ordered_workqueue("storvsc_error_wq_%d",
+-						WQ_MEM_RECLAIM,
++						0,
+ 						host->host_no);
+ 	if (!host_dev->handle_error_wq) {
+ 		ret = -ENOMEM;
 
 

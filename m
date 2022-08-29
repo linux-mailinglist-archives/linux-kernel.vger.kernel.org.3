@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDEC5A47C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3BF5A48F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiH2LCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
+        id S231535AbiH2LSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiH2LBp (ORCPT
+        with ESMTP id S230075AbiH2LRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:01:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9E663F1E;
-        Mon, 29 Aug 2022 04:01:24 -0700 (PDT)
+        Mon, 29 Aug 2022 07:17:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2F96CD0C;
+        Mon, 29 Aug 2022 04:11:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55A7C6119A;
-        Mon, 29 Aug 2022 11:01:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED60C433C1;
-        Mon, 29 Aug 2022 11:01:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B32FB80F98;
+        Mon, 29 Aug 2022 11:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C793BC433C1;
+        Mon, 29 Aug 2022 11:11:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661770883;
-        bh=CJRQTFu+wUrdMa03M09XgGm0xY+TyLR5hIcc/xMR2wQ=;
+        s=korg; t=1661771491;
+        bh=5fD5YTwbU+0/XNyGqfiaf0hqk11P2yRg5wws2o/JuTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NKnd0bIi7ugSGbsfjM7pvZ7q0rFCMgQOi2zH2nNMx8vpkw/Fkq/S9w21txF2EHogp
-         Vo5EhHP7TjKgRG2LiD8vqBgFYkV6EMjOlIIE/aiC4xoH18cVLmnV5QTteO0Jcnlxlu
-         ceSyo9PRtesGTUUjeABQ51VqierrcNxz/fM7S6c4=
+        b=nr5a2VlriWiMhLcR0lwz5uGpKQB3f3hV+0KOddTqoCoCUBQOhuscNjYGo4UtWuV3y
+         KGbCRvpbJajBmwdpXwlKMmcAmzyVHvUlKZK5Chh4QZXHpdGqyOXCGXa93W5IIc7bOW
+         HnpGefKHJ0XZrMNlsCLtZ7vQy7qos4g4XGT9bhdw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Jan Kara <jack@suse.cz>, Paul Moore <paul@paul-moore.com>
-Subject: [PATCH 5.15 003/136] audit: fix potential double free on error path from fsnotify_add_inode_mark
-Date:   Mon, 29 Aug 2022 12:57:50 +0200
-Message-Id: <20220829105804.767752511@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Konstantin Khlebnikov <khlebnikov@openvz.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 021/158] mm/smaps: dont access young/dirty bit if pte unpresent
+Date:   Mon, 29 Aug 2022 12:57:51 +0200
+Message-Id: <20220829105809.698936822@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +60,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gaosheng Cui <cuigaosheng1@huawei.com>
+From: Peter Xu <peterx@redhat.com>
 
-commit ad982c3be4e60c7d39c03f782733503cbd88fd2a upstream.
+[ Upstream commit efd4149342db2df41b1bbe68972ead853b30e444 ]
 
-Audit_alloc_mark() assign pathname to audit_mark->path, on error path
-from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
-of audit_mark->path, but the caller of audit_alloc_mark will free
-the pathname again, so there will be double free problem.
+These bits should only be valid when the ptes are present.  Introducing
+two booleans for it and set it to false when !pte_present() for both pte
+and pmd accountings.
 
-Fix this by resetting audit_mark->path to NULL pointer on error path
-from fsnotify_add_inode_mark().
+The bug is found during code reading and no real world issue reported, but
+logically such an error can cause incorrect readings for either smaps or
+smaps_rollup output on quite a few fields.
 
-Cc: stable@vger.kernel.org
-Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+For example, it could cause over-estimate on values like Shared_Dirty,
+Private_Dirty, Referenced.  Or it could also cause under-estimate on
+values like LazyFree, Shared_Clean, Private_Clean.
+
+Link: https://lkml.kernel.org/r/20220805160003.58929-1-peterx@redhat.com
+Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
+Fixes: c94b6923fa0a ("/proc/PID/smaps: Add PMD migration entry parsing")
+Signed-off-by: Peter Xu <peterx@redhat.com>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+Cc: Konstantin Khlebnikov <khlebnikov@openvz.org>
+Cc: Huang Ying <ying.huang@intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/audit_fsnotify.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/proc/task_mmu.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/kernel/audit_fsnotify.c
-+++ b/kernel/audit_fsnotify.c
-@@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 2d04e3470d4cd..313788bc0c307 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -525,10 +525,12 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
+-	bool migration = false;
++	bool migration = false, young = false, dirty = false;
  
- 	ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, true);
- 	if (ret < 0) {
-+		audit_mark->path = NULL;
- 		fsnotify_put_mark(&audit_mark->mark);
- 		audit_mark = ERR_PTR(ret);
- 	}
+ 	if (pte_present(*pte)) {
+ 		page = vm_normal_page(vma, addr, *pte);
++		young = pte_young(*pte);
++		dirty = pte_dirty(*pte);
+ 	} else if (is_swap_pte(*pte)) {
+ 		swp_entry_t swpent = pte_to_swp_entry(*pte);
+ 
+@@ -558,8 +560,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	if (!page)
+ 		return;
+ 
+-	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
+-		      locked, migration);
++	smaps_account(mss, page, false, young, dirty, locked, migration);
+ }
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-- 
+2.35.1
+
 
 

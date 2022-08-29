@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF435A556C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8C55A5571
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiH2UPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S229748AbiH2UTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiH2UP3 (ORCPT
+        with ESMTP id S229472AbiH2UTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:15:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EF052E4D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:15:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E2176104F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 20:15:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066ACC433C1;
-        Mon, 29 Aug 2022 20:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661804126;
-        bh=Nbea/MpIsOS17vINEQkh4l2v2+uDWkJzDxG0xnh2o5Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/4hV7AWRTtHbNO2ydnNUYecEgv9FmaqLVdaWEoK7MgoD8HiwI8djou27rIzJWCJO
-         YzDBJmkCc50zWJktltsKhtFszG1L8EZzq8wWAhHZ2QSFyG0Q7GbJBUpwcxxdvpakeJ
-         qcJttQ11Iwvhc44cpKzVA5pZExQSOxZtrTMWsm5iDdTh2xQizEwqth32AqpBxhjhqZ
-         EKrs3COkiK15uhGUkSlZCb1nwregQFDBQDX3Z6cBp69q3jhqx4Zar98kslvNxkGOMK
-         sbEU7/T9RzJ2ylxaCAsWMdbN4UuoU7CXRs9w3Lprh+2FNeLNuMR7xmmdjvKI7lxJbT
-         YTLovUp7vNtMw==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
-        linux-damon-trial@amazon.com, linux-mm@kvack.org,
+        Mon, 29 Aug 2022 16:19:07 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7E89A9A3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=fzuTow6i2u3EjlizZYTU2j4Dxo4Y
+        WeobcJx3wYrulD0=; b=EoYYYQxYKbfdkS8YgRyezaYIww0TNpBurO+M92m+HL2W
+        RlxZKm/v5Y9k0EYKT/LRcTdquXlockHinq2mwAqWGScvbAeLgCNCjviNjskLwDHl
+        HSfBa3pgH3R7vx7eOaqPBgbUUbWhbx95Gr2oocbY1GZgox+Q1aMuoxQZz2S+lkY=
+Received: (qmail 257057 invoked from network); 29 Aug 2022 22:19:02 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Aug 2022 22:19:02 +0200
+X-UD-Smtp-Session: l3s3148p1@DJ6A+WbnUZkucrIF
+Date:   Mon, 29 Aug 2022 22:19:02 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     robh@kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: DAMON Beer/Coffee/Tea chat series
-Date:   Mon, 29 Aug 2022 20:15:24 +0000
-Message-Id: <20220829201524.52009-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220810225102.124459-1-sj@kernel.org>
-References: 
+Subject: Re: [PATCH v2 0/9] i2c-mlxbf.c: bug fixes and new feature support
+Message-ID: <Yw0fNuOWtJbe/OT1@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, robh@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220822195725.12656-1-asmaa@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7Ba7C5FXgFqMN/r8"
+Content-Disposition: inline
+In-Reply-To: <20220822195725.12656-1-asmaa@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all,
+
+--7Ba7C5FXgFqMN/r8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Aug 22, 2022 at 03:57:16PM -0400, Asmaa Mnebhi wrote:
+> This is a series of patches fixing several bugs and implementing
+> new features.
+
+What did change since v1 and where did Khalil's Rev-by tags go?
+
+> Bug fixes:
+> 1) Fix the frequency calculation
+> 2) remove unnecessary IRQF_ONESHOT flag
+
+Is this really a bugfix?
+
+> 3) Fix incorrect base address passed during io write
+> 4) prevent stack overflow in mlxbf_i2c_smbus_start_transaction()
+> 5) Support lock mechanism
+
+Here, I am also not sure if this is a bugfix.
+
+Thanks for the update,
+
+   Wolfram
 
 
-On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
+--7Ba7C5FXgFqMN/r8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Hello,
-> 
-> 
-> In short, I'd like to start an open, regular, and informal virtual bi-weekly
-> meeting series for DAMON community.
-> 
-> Important links and dates
-> -------------------------
-> 
-> Location: https://meet.google.com/ndx-evoc-gbu
-> Agenda: https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
-> 
-> First instance: 2022-08-15 18:00 PDT
-> Second instance: 2022-08-30 09:00 PDT
+-----BEGIN PGP SIGNATURE-----
 
-I just wanted to remind you the second instance of this chat series that
-mentioned above will happen tomorrow morning (PDT).
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMNHzUACgkQFA3kzBSg
+KbaOng/+ImN7GRwp7C2SQyYFsjDX0RUTohS2gENjCPiLlss5aDAbyrEazQxNSEQN
+lecyEn7Nj6szbnfUAc/VspcUXLmOEEywGLBoMPkmnKrSefeUnE33ONO71+gTkrOx
+Liq+ceKWHn6d/W6qZPKj2JGdETMo1UWtnhuD31Jw1sCNfogiLuX36w6Qgij9vFKN
+30zjs9KZkd5ViZbyfs5S3yc0OxI7YMvuWWa8JCbiqgWUutsfRbYl1JjoqFuBY/RF
+822lxwLCPt2R7JEMwjtPJ3nh6mmX6yihxXLXIkSAEsCTI884BsKsMqg5qWGEBhuV
+HMTwC1y9+DcjDoPs4BoYbb0ZkzfiWNNV61DPFFWpXnp1zSQbwBQMvdSl9Wl+nNQm
+SHhHgN0nshIvubZC6cFydocBUPNpH5NxsgxOvdRFvI47K5SzJqMXpsoPhgJX0fvD
+LoarAytnyVPDUGEBqnJH2YTrUZFYBdBrXH5oPBrvyo0rhpeEJWAdkI8iMQQoOTFV
+ZTnqIOzjd5zSqrZL1TAquM+3n3tkUmiycqkZaPdt2RANECgjKmSZS7kWERckqORO
+flUXYEczRdt5W3CMuH8L1txVVEfOnRWq1oM0sPdUAXf4OlaX0tqxccMy+/aiN/cJ
+4HttwLKPirVi7Vi0Hjg2aWvyK1KMIunFsTL6ACLHNmAUUQE07XU=
+=JJtI
+-----END PGP SIGNATURE-----
 
-Looking forward to see you there!
-
-
-Thanks,
-SJ
-
-[...]
+--7Ba7C5FXgFqMN/r8--

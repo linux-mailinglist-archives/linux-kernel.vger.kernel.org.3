@@ -2,157 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6904C5A455B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762435A455E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiH2InH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S229701AbiH2Io3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiH2InE (ORCPT
+        with ESMTP id S229535AbiH2Io1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:43:04 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2373158B5C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:43:02 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvmsQfAxjg8cLAA--.40214S2;
-        Mon, 29 Aug 2022 16:42:56 +0800 (CST)
-From:   Mao Bibo <maobibo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Add safer signal handler for TLS access
-Date:   Mon, 29 Aug 2022 16:42:56 +0800
-Message-Id: <20220829084256.3453391-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Mon, 29 Aug 2022 04:44:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AC42DA87
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661762665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vPEg5v/H0IBgzngITeel1OJt2CG88lxD/qPQRp0fsMA=;
+        b=O6PCDsxefRksLG1eZnl+3j9pUcn54ufw9HKjamyfbCpdf62ed54tKaYXWYO88HFfuay+Nb
+        GdlQ4a1o1wjIQTwhudnmn6Y+MNfarpWNUBawCwJn7cm0cT/Dd30T92ZFashZ/D6YES2N46
+        Eba7iYeRe/LykqgdBqVPG+pmcBbC45U=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-30-wjai7g9bOB6incqijwkcBA-1; Mon, 29 Aug 2022 04:44:24 -0400
+X-MC-Unique: wjai7g9bOB6incqijwkcBA-1
+Received: by mail-wr1-f72.google.com with SMTP id j22-20020adfb316000000b00226cf7eddeeso818731wrd.23
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:44:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=vPEg5v/H0IBgzngITeel1OJt2CG88lxD/qPQRp0fsMA=;
+        b=KjxUZ/MzkJ5rKjj6JyglH0HutXPiGs4BHyOzZtTuSLRhopYSL9uvhHXOiAylzi0DLW
+         l9XoMX0fD2CjaH3n5ZOMFJSNCY6A4qr9VRr21yqJR4vD4Qi+curmb2da393WtjVwcXeN
+         dSTzi5Lyu+V664s6RqDh5hjCRc0dUc2dFistp5yIj2aVeDd/gU5L6R+4Bt7wztuVNnlh
+         HJo6vpFgKZC4oGi/lfWagaOqkjO3Q8nc/ZGSokw6AQ99vOBcC7j9Jr+ru0y4OmlRuWzQ
+         kiqiAv4c5f3hJez9uQWrIdLwmhDxcy5J3X98Wi1G7Kll4Gxr3DCaEeHVdkkjNdPCWoND
+         NsSg==
+X-Gm-Message-State: ACgBeo0xh9H6iwGoD3R9cqpvl9L6HaLFRMSG6lCQPz7TyHIn3NAyShEj
+        YpHJ5frEsACBDREeDw9OG5laBEvibXHI+8rj37Dl/NVGId3hVmd1vF9daW7+gf9ZSz8GuUmOKSQ
+        cVNeGDLA0fOyP8Kx4yVcXvEY9
+X-Received: by 2002:a05:600c:3c96:b0:3a6:58b2:a98 with SMTP id bg22-20020a05600c3c9600b003a658b20a98mr6350287wmb.43.1661762662974;
+        Mon, 29 Aug 2022 01:44:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6c1LM+DxjJvvwYlIG2gEu159GGRwHgGF9FOKgQMdRa/igmdp6O6MHWsDvlzNRJvTHJLqlTwg==
+X-Received: by 2002:a05:600c:3c96:b0:3a6:58b2:a98 with SMTP id bg22-20020a05600c3c9600b003a658b20a98mr6350269wmb.43.1661762662680;
+        Mon, 29 Aug 2022 01:44:22 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:3900:658b:bed0:4260:4c25? (p200300cbc7073900658bbed042604c25.dip0.t-ipconnect.de. [2003:cb:c707:3900:658b:bed0:4260:4c25])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05600c190900b003a2e92edeccsm9148897wmq.46.2022.08.29.01.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 01:44:22 -0700 (PDT)
+Message-ID: <acd6cd81-d2fd-70bb-0cc4-9a63b71c51eb@redhat.com>
+Date:   Mon, 29 Aug 2022 10:44:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxvmsQfAxjg8cLAA--.40214S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCryxKFW5Xw1fZryfGr4xCrg_yoWrXrWDpF
-        9rAw1DJrWUWr1kZryqva4DurykJ3s7Cw429ayaka4fAa1Iq3WrXr1vqFyDZF1Yya1kGFW0
-        qasYg3sxta1jqaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07beJ5wUUUUU=
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Young <dyoung@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        kexec@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Stephen Johnston <sjohnsto@redhat.com>,
+        Prarit Bhargava <prarit@redhat.com>
+References: <20220824163100.224449-1-david@redhat.com>
+ <20220824163100.224449-2-david@redhat.com>
+ <0db131cf-013e-6f0e-c90b-5c1e840d869c@nvidia.com>
+ <ea380cf0-acda-aaba-fb63-2834da91b66b@redhat.com>
+ <CALu+AoThhou7z+JCyv44AxGWDLDt2b7h0W6wcKRsJyLvSR1iQA@mail.gmail.com>
+ <fe7aee66-d9f7-e472-a13f-e4c5aa176cca@redhat.com>
+ <CALu+AoRwVfr=9KabOLUQigWwCtP5RLQ1YaKbG75ZVM9E-bW2ZQ@mail.gmail.com>
+ <CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 1/2] coding-style.rst: document BUG() and WARN() rules
+ ("do not crash the kernel")
+In-Reply-To: <CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LoongArch uses general purpose register R2 as thread pointer(TP)
-register, signal hanlder also uses TP register to access variables
-in TLS area, such as errno and variable in TLS.
+On 29.08.22 05:07, Linus Torvalds wrote:
+> On Sun, Aug 28, 2022 at 6:56 PM Dave Young <dyoung@redhat.com> wrote:
+>>
+>>> John mentioned PANIC_ON().
+>>
+>> I would vote for PANIC_ON(), it sounds like a good idea, because
+>> BUG_ON() is not obvious and, PANIC_ON() can alert the code author that
+>> this will cause a kernel panic and one will be more careful before
+>> using it.
+> 
+> People, NO.
+> 
+> We're trying to get rid of BUG_ON() because it kills the machine.
+> 
+> Not replace it with another bogus thing that kills a machine.
+> 
+> So no PANIC_ON(). We used to have "panic()" many many years ago, we
+> got rid of it. We're not re-introducing it.
+> 
+> People who want to panic on warnings can do so. WARN_ON() _becomes_
+> PANIC for those people. But those people are the "we have a million
+> machines, we want to just fail things on any sign of trouble, and we
+> have MIS people who can look at the logs".
+> 
+> And it's not like we need to get rid of _all_ BUG_ON() cases. If you
+> have a "this is major internal corruption, there's no way we can
+> continue", then BUG_ON() is appropriate. It will try to kill that
+> process and try to keep the machine running, and again, the kind of
+> people who don't care about one machine (because - again - they have
+> millions of them) can just turn that into a panic-and-reboot
+> situation.
+> 
+> But the kind of people for whom the machine they are on IS THEIR ONLY
+> MACHINE - whether it be a workstation, a laptop, or a cellphone -
+> there is absolutely zero situation where "let's just kill the machine"
+> is *EVER* approproate. Even a BUG_ON() will try to continue as well as
+> it can after killing the current thread, but it's going to be iffy,
+> because locking etc.
+> 
+> So WARN_ON_ONCE() is the thing to aim for. BUG_ON() is the thing for
+> "oops, I really don't know what to do, and I physically *cannot*
+> continue" (and that is *not* "I'm too lazy to do error handling").
+> 
+> There is no room for PANIC. None. Ever.
 
-If GPR R2 is modified with wrong value, signal handler still uses
-the wrong TP register, so signal hanlder is insafe to access TLS
-variable.
+Let me clearer what I had in mind, avoiding the PANIC_ON terminology
+John raised. I was wondering if it would make sense to
 
-This patch adds one arch specific syscall set_thread_area, and
-restore previoud TP value before signal handler, so that signal
-handler is safe to access TLS variable.
+1) Be able to specify a severity for WARN (developer decision)
 
-Signed-off-by: Mao Bibo <maobibo@loongson.cn>
----
- arch/loongarch/include/asm/unistd.h      |  1 +
- arch/loongarch/include/uapi/asm/unistd.h |  2 ++
- arch/loongarch/kernel/process.c          |  5 ++++-
- arch/loongarch/kernel/signal.c           |  2 ++
- arch/loongarch/kernel/syscall.c          | 10 ++++++++++
- 5 files changed, 19 insertions(+), 1 deletion(-)
+2) Be able to specify a severity for panic_on_warn (admin decision)
 
-diff --git a/arch/loongarch/include/asm/unistd.h b/arch/loongarch/include/asm/unistd.h
-index cfddb0116a8c..1581624f0115 100644
---- a/arch/loongarch/include/asm/unistd.h
-+++ b/arch/loongarch/include/asm/unistd.h
-@@ -9,3 +9,4 @@
- #include <uapi/asm/unistd.h>
- 
- #define NR_syscalls (__NR_syscalls)
-+__SYSCALL(__NR_set_thread_area, sys_set_thread_area)
-diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-index fcb668984f03..b47f26b5307b 100644
---- a/arch/loongarch/include/uapi/asm/unistd.h
-+++ b/arch/loongarch/include/uapi/asm/unistd.h
-@@ -3,3 +3,5 @@
- #define __ARCH_WANT_SYS_CLONE3
- 
- #include <asm-generic/unistd.h>
-+
-+#define __NR_set_thread_area	(__NR_arch_specific_syscall + 0)
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 660492f064e7..9f512c91320e 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -88,6 +88,7 @@ void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long sp)
- 	clear_used_math();
- 	regs->csr_era = pc;
- 	regs->regs[3] = sp;
-+	task_thread_info(current)->tp_value = 0;
- }
- 
- void exit_thread(struct task_struct *tsk)
-@@ -176,8 +177,10 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	clear_tsk_thread_flag(p, TIF_LSX_CTX_LIVE);
- 	clear_tsk_thread_flag(p, TIF_LASX_CTX_LIVE);
- 
--	if (clone_flags & CLONE_SETTLS)
-+	if (clone_flags & CLONE_SETTLS) {
- 		childregs->regs[2] = tls;
-+		task_thread_info(p)->tp_value = tls;
-+	}
- 
- 	return 0;
- }
-diff --git a/arch/loongarch/kernel/signal.c b/arch/loongarch/kernel/signal.c
-index 7f4889df4a17..2eca555fd4a6 100644
---- a/arch/loongarch/kernel/signal.c
-+++ b/arch/loongarch/kernel/signal.c
-@@ -487,6 +487,8 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
- 	regs->regs[3] = (unsigned long) frame;
- 	regs->regs[1] = (unsigned long) sig_return;
- 	regs->csr_era = (unsigned long) ksig->ka.sa.sa_handler;
-+	if (task_thread_info(current)->tp_value)
-+		regs->regs[2] = task_thread_info(current)->tp_value;
- 
- 	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
- 	       current->comm, current->pid,
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-index 3fc4211db989..b62560d8fe24 100644
---- a/arch/loongarch/kernel/syscall.c
-+++ b/arch/loongarch/kernel/syscall.c
-@@ -29,6 +29,16 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len, unsigned long,
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset >> PAGE_SHIFT);
- }
- 
-+SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
-+{
-+	struct thread_info *ti   = task_thread_info(current);
-+	struct pt_regs     *regs = current_pt_regs();
-+
-+	regs->regs[2] = addr;
-+	ti->tp_value  = addr;
-+	return 0;
-+}
-+
- void *sys_call_table[__NR_syscalls] = {
- 	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
- #include <asm/unistd.h>
+Distributions with kdump could keep a mode whereby severe warnings
+(e.g., former BUG_ON) would properly kdump+reboot and harmless warnings
+(e.g., clean recovery path) would WARN once + continue.
+
+I agree that whether to panic should in most cases be a decision of the
+admin, not the developer.
+
+
+Now, that's a different discussion then the documentation update at
+hand, and I primary wanted to raise awareness for the kdump people, and
+ask them if a stronger move towards WARN_ON_ONCE will affect
+them/customer expectations.
+
+I'll work with John to document the current rules to reflect everything
+you said here.
+
 -- 
-2.27.0
+Thanks,
+
+David / dhildenb
 

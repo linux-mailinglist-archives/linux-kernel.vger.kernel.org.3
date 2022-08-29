@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C5A5A4FBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A6F5A4FC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiH2PCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
+        id S229726AbiH2PCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiH2PC3 (ORCPT
+        with ESMTP id S229484AbiH2PCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:02:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65634D823
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:02:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C5ACB810E0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33987C43470
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661785346;
-        bh=kJG/7aTj0oZ7inQXeN+vvAWhGoNLtuV0VgGx9YK/F1Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qwTedLpcbtX68HpODlOI9Th47SBtQnTT70x/e372jq+zQR9P9AnHKmR18dALyIy+2
-         ZuJ7R4LKB+Pgz1hyzS38KjpPlxG2ZWYXvNC49g4D8Nr2puPL03FQtaPBD4LQ36J4oq
-         5zRFN/ns5fYnBJW0+r28LRqVtUA3lSwqPx74wYIyyTJVo1Z26dho7lM1W+tyrTdpbz
-         5RMrfB4dm4rdfjk3OjV89miz/00JAoMQUySC4sgRv6MnsrUNPxnEY1YdOcGqKP6lMh
-         a68ihoSITk5UOam5YOTvCOkegpyX9In+DZ3p+SglF1dkUVvPoiTG9DJyi/YEqMj19J
-         GV5/tBu7zSnyg==
-Received: by mail-vs1-f47.google.com with SMTP id n125so8593861vsc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:02:26 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3nXHrekg7BxkIqyDw3NHZJS6geDwrPMkR6q2rYXxeKSJf1TmnG
-        5Up4BgbKYDBbpi7Emj2r9FyD2uFG8JqZfjHzlSQ=
-X-Google-Smtp-Source: AA6agR69vhjFtQy6s4ccKzcNJx4rM1utGHj6QpZNEsBqhjefXI0muh6lrLxvTxmBL1N12wUD3p3MaXcuVA8PbMHL+J4=
-X-Received: by 2002:a67:d582:0:b0:390:d6dd:5612 with SMTP id
- m2-20020a67d582000000b00390d6dd5612mr2189677vsj.78.1661785345136; Mon, 29 Aug
- 2022 08:02:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829133146.15236-1-xry111@xry111.site> <e0629567084ae5c1bab880b34b417256ea23f604.camel@xry111.site>
-In-Reply-To: <e0629567084ae5c1bab880b34b417256ea23f604.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 29 Aug 2022 23:02:11 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H67C=Cv8ok6oGe=YMS=U39N7ZKfdsSmGPc2gGpxbmU+cw@mail.gmail.com>
-Message-ID: <CAAhV-H67C=Cv8ok6oGe=YMS=U39N7ZKfdsSmGPc2gGpxbmU+cw@mail.gmail.com>
-Subject: Re: [PATCH v6 0/6] LoongArch: Support toolchain with new relocation types
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
+        Mon, 29 Aug 2022 11:02:48 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C0485A9C
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1661785363;
+        bh=P0So/d1QHvZh/G4+ijTFNIkaXwtW+51RX8yFY1F9e6Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=SNXxaCpVH8BLpiKMYNfVMPX5HvyElAUAwMtcmZu+HwbE9GvPxhY4zfKNj8bUsS1mp
+         wcaJ9lbFKot2YOykwAPcPcp9EsvTkJnNAXPmsp5bmPbjNNfFohHlF4ZpHESvi2IH8e
+         B6ZK9xOP0qQ5U4biZl12cXlO6f9kHChQInPCLmww=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 34143667AA;
+        Mon, 29 Aug 2022 11:02:42 -0400 (EDT)
+Message-ID: <5f9d3aa5fad957dae2f14e483b3b79dbcf9e794d.camel@xry111.site>
+Subject: Re: [PATCH v6 3/6] LoongArch: Use model("extreme") attribute for
+ per-CPU variables in module if CONFIG_AS_HAS_EXPLICIT_RELOCS
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Youling Tang <tangyouling@loongson.cn>,
         Jinyang He <hejinyang@loongson.cn>
+Date:   Mon, 29 Aug 2022 23:02:40 +0800
+In-Reply-To: <20220829133146.15236-4-xry111@xry111.site>
+References: <20220829133146.15236-1-xry111@xry111.site>
+         <20220829133146.15236-4-xry111@xry111.site>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.2 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao,
+On Mon, 2022-08-29 at 21:31 +0800, Xi Ruoyao wrote:
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 1563747c4fa8..593818a61741 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -53,6 +53,9 @@ LDFLAGS_vmlinux=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0+=3D -G0 -static -n -nostdlib
+> =C2=A0# combination of a "new" assembler and "old" compiler is not suppor=
+ted.=C2=A0 Either
+> =C2=A0# upgrade the compiler or downgrade the assembler.
+> =C2=A0ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+> +ifeq ($(shell echo '__has_attribute(model)' | $(CC) -E -P - 2> /dev/null=
+), 0)
+> +$(error "C compiler must support model attribute if using explicit reloc=
+s")
+> +endif
 
-This version looks good to me, only some small issues. Thank you very much.
+Self review:
 
-Huacai
+I'm wondering if we really need this thing...  There won't be a GCC
+version released with explicit relocation but without model attribute
+(GCC 13 starts to support them both).
 
-On Mon, Aug 29, 2022 at 10:57 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Mon, 2022-08-29 at 21:31 +0800, Xi Ruoyao wrote:
->
-> > Changes from v5 to v6:
-> >
-> > - Restore version number.
-> > - Rename CONFIG_CC_HAS_EXPLICIT_RELOCS to
-> > CONFIG_AS_HAS_EXPLICIT_RELOCS.
-> >   It now only checks assembler.
-> > - No longer support "old GCC with new Binutils", so R_LARCH_ABS* is
-> >   dropped.
-> >   - "Old GCC with old Binutils" is still supported until Arnd ack.
->
-> >     longer support it.
-> ^^^^
-> This line should be removed :(.
->
-> >   - "New GCC with old Binutils" is still supported as it does not
-> >     require additional code.
-> > - Remove "cc-option" around "-mexplicit-relocs".  For unsupported
-> >   "old GCC with new Binutils" combination, forcing -mexplicit-relocs
-> >   makes assembling fail, instead of silently producing unloadable
-> >   modules.
-> > - Move the error report for "lacking model attribute" into Makefile.
-> > - Squash the two patches for R_LARCH_B26 and R_LARCH_PCALA* into one.
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
+But without a check, if someone uses an early GCC 13 snapshot and
+ignores the -Wattributes warning, the system will suddenly blow up
+loading a module with per-CPU variable defined.
+
+Maybe "-Werror=3Dattributes" is better, but is it OK to add a -Werror=3D
+option for entire Linux tree?
+
+> =C2=A0cflags-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0+=3D -mexplicit-relocs
+> =C2=A0else
+> =C2=A0cflags-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0+=3D $(call cc-option,-mno-explicit-relocs)
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

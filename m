@@ -2,80 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31AE5A577C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3705A5781
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiH2XPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S229647AbiH2XSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiH2XPM (ORCPT
+        with ESMTP id S229535AbiH2XSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:15:12 -0400
-Received: from home.bethel-hill.org (home.bethel-hill.org [63.228.164.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAB5186F2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:15:11 -0700 (PDT)
-Received: by home.bethel-hill.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <sjhill@realitydiluted.com>)
-        id 1oSnyH-0003rj-Ph
-        for linux-kernel@vger.kernel.org; Mon, 29 Aug 2022 23:15:09 +0000
-Message-ID: <2764207a-7770-e299-40fb-3f0b3f57d048@realitydiluted.com>
-Date:   Mon, 29 Aug 2022 18:15:09 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Collecting Abatron BDI firmware files.
-Content-Language: en-US
-From:   "Steven J. Hill" <sjhill@realitydiluted.com>
-To:     linux-kernel@vger.kernel.org
-References: <8fbbda98-0abb-409f-2705-82fc79b5a14a@realitydiluted.com>
-In-Reply-To: <8fbbda98-0abb-409f-2705-82fc79b5a14a@realitydiluted.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------bTnTqBvFwRQJIPZjVnkyuuwm"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 19:18:34 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C71C7FE6A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:18:33 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-340e618b145so82181277b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=0lhafXj2iVGO0xHQkpT9DZ5Z9AK3RgqVp2dka9M0juU=;
+        b=X6QrVWknF21loz5DsyEEHlL9TrT4PTGpWOX7oyi4kYvKaRKJJ0N7PSqk69cFjbIrsF
+         ZSiloccWVc8EAwuuvR7o1+vATxAYqpraU2FJGv9yJSl/9in72zezG4RddKNK/w7tfled
+         dSvqtYpvz/w+/o8t7+7tZpjOScqnoT3KqIXsUaBlapICH/wfYOinQGVG8D10Q1kfS47c
+         iOkmioyaN9ls2NeNVRz6xsJfM5fGRfoKpGgLQigtk1F8fvSMMlGWXi36rGuSsqtdXgv6
+         wyFuzTmhSjcGJW0HJMsIQP68MBdzPm+vBgTuzVKLDL73JuFCJB/CEiDZ7mr079OoZagu
+         sAkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=0lhafXj2iVGO0xHQkpT9DZ5Z9AK3RgqVp2dka9M0juU=;
+        b=M+nXTzrxWvS9qp7jvvJUQ1yjJ0FE9zUxDiSiOdbF1HE/yggui6uMgCa1zlqt01hP5F
+         fP5VYbvmnsDHgQDv7loYxk4bWpJhhyKYcIRvTdAXaK+Y4u75ZGAqW7vATSmcKteY7+9P
+         CAzlg/nrq9q8okR+hQqqc14TxRhu6qAaaZaKVOMJ6H5UbW3O+5EJR9+VWHmYxlFeumJK
+         BdONHJVb3EAk/1EgYQCCL4DBo/wg85m1/3FOCNKpocxEhHYFa+dfvjZ7JazAI38oC+Qj
+         fbbesAUjTyaLoTuuBr+nHGiqtRiiYjIIjbZGLsIrqxxrQrFoq4NlaK/sFlVyVghXmVCn
+         4ACA==
+X-Gm-Message-State: ACgBeo1BgXt+XdzPhLi8ameCvGaLtUz6HOdoSJ8JQ7h4RnWkpPnTzAQz
+        UjETkFAvCxrYynn+nNQx55BXx33dBZ/4UiiTK4XOzr6opfpgleCZloy/+vwIYkIPsPGFXXJRI1k
+        v6RmJnV4PpKA8BHF0AdjRBXNhtk51r2+t8ZmcVfEY2s1u708wRdpXA0QJyBeBGxmZ4NRfhQ==
+X-Google-Smtp-Source: AA6agR5UJdH5HnV9NGjkFnupHjUrC1l+Gwz4Yi7D3ZklLgd6M0+8CTOt0eyZRsWeEl8mKfDkn9YMU4RhW3c=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:3698:5104:9e22:e494])
+ (user=haoluo job=sendgmr) by 2002:a0d:c1c4:0:b0:330:4891:be97 with SMTP id
+ c187-20020a0dc1c4000000b003304891be97mr11529426ywd.465.1661815112615; Mon, 29
+ Aug 2022 16:18:32 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 16:18:28 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220829231828.1016835-1-haoluo@google.com>
+Subject: [PATCH bpf-next v1] bpftool: Add support for querying cgroup_iter link
+From:   Hao Luo <haoluo@google.com>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------bTnTqBvFwRQJIPZjVnkyuuwm
-Content-Type: multipart/mixed; boundary="------------mVervoZRTp3HSoJEO00h4Akh";
- protected-headers="v1"
-From: "Steven J. Hill" <sjhill@realitydiluted.com>
-To: linux-kernel@vger.kernel.org
-Message-ID: <2764207a-7770-e299-40fb-3f0b3f57d048@realitydiluted.com>
-Subject: Re: Collecting Abatron BDI firmware files.
-References: <8fbbda98-0abb-409f-2705-82fc79b5a14a@realitydiluted.com>
-In-Reply-To: <8fbbda98-0abb-409f-2705-82fc79b5a14a@realitydiluted.com>
+Support dumping info of a cgroup_iter link. This includes
+showing the cgroup's id and the order for walking the cgroup
+hierarchy. Example output is as follows:
 
---------------mVervoZRTp3HSoJEO00h4Akh
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> bpftool link show
+1: iter  prog 2  target_name bpf_map
+2: iter  prog 3  target_name bpf_prog
+3: iter  prog 12  target_name cgroup  cgroup_id 72  order self_only
 
-VGhhbmsgeW91IHNvIG11Y2ggdG8gYWxsIG9mIHlvdSB3aG8gaGF2ZSBzaGFyZWQgeW91ciBC
-REkgZmlybXdhcmUgZmlsZXMhIA0KRmlsbGVkIGluIGEgbG90IG9mIGZpcm13YXJlIGZvciBQ
-b3dlclBDIGFuZCBBUk0uIENvdWxkIHVzZSBDb2xkZmlyZSwgTUlQUyANCmFuZCBYU2NhbGUg
-ZmlsZXMgaWYgcGVvcGxlIGhhdmUgdGhlbS4gVGhhbmtzIGFnYWluLg0KDQotU3RldmUNCg==
+> bpftool -p link show
+[{
+        "id": 1,
+        "type": "iter",
+        "prog_id": 2,
+        "target_name": "bpf_map"
+    },{
+        "id": 2,
+        "type": "iter",
+        "prog_id": 3,
+        "target_name": "bpf_prog"
+    },{
+        "id": 3,
+        "type": "iter",
+        "prog_id": 12,
+        "target_name": "cgroup",
+        "cgroup_id": 72,
+        "order": "self_only"
+    }
+]
 
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ tools/bpf/bpftool/link.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
---------------mVervoZRTp3HSoJEO00h4Akh--
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 7a20931c3250..9e8d14d0114d 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -83,6 +83,29 @@ static bool is_iter_map_target(const char *target_name)
+ 	       strcmp(target_name, "bpf_sk_storage_map") == 0;
+ }
+ 
++static bool is_iter_cgroup_target(const char *target_name)
++{
++	return strcmp(target_name, "cgroup") == 0;
++}
++
++static const char *cgroup_order_string(__u32 order)
++{
++	switch (order) {
++	case BPF_CGROUP_ITER_ORDER_UNSPEC:
++		return "order_unspec";
++	case BPF_CGROUP_ITER_SELF_ONLY:
++		return "self_only";
++	case BPF_CGROUP_ITER_DESCENDANTS_PRE:
++		return "descendants_pre";
++	case BPF_CGROUP_ITER_DESCENDANTS_POST:
++		return "descendants_post";
++	case BPF_CGROUP_ITER_ANCESTORS_UP:
++		return "ancestors_up";
++	default: /* won't happen */
++		return "";
++	}
++}
++
+ static void show_iter_json(struct bpf_link_info *info, json_writer_t *wtr)
+ {
+ 	const char *target_name = u64_to_ptr(info->iter.target_name);
+@@ -91,6 +114,12 @@ static void show_iter_json(struct bpf_link_info *info, json_writer_t *wtr)
+ 
+ 	if (is_iter_map_target(target_name))
+ 		jsonw_uint_field(wtr, "map_id", info->iter.map.map_id);
++
++	if (is_iter_cgroup_target(target_name)) {
++		jsonw_lluint_field(wtr, "cgroup_id", info->iter.cgroup.cgroup_id);
++		jsonw_string_field(wtr, "order",
++				   cgroup_order_string(info->iter.cgroup.order));
++	}
+ }
+ 
+ static int get_prog_info(int prog_id, struct bpf_prog_info *info)
+@@ -208,6 +237,12 @@ static void show_iter_plain(struct bpf_link_info *info)
+ 
+ 	if (is_iter_map_target(target_name))
+ 		printf("map_id %u  ", info->iter.map.map_id);
++
++	if (is_iter_cgroup_target(target_name)) {
++		printf("cgroup_id %llu  ", info->iter.cgroup.cgroup_id);
++		printf("order %s  ",
++		       cgroup_order_string(info->iter.cgroup.order));
++	}
+ }
+ 
+ static int show_link_close_plain(int fd, struct bpf_link_info *info)
+-- 
+2.37.2.672.g94769d06f0-goog
 
---------------bTnTqBvFwRQJIPZjVnkyuuwm
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wmMEABEIACMWIQQ7FeQaKpedass6DAiDIrkfYhzfpwUCYw1IfQUDAAAAAAAKCRCDIrkfYhzfp40L
-AKCA9i4VifBYNn6F4OahS8hXB1ZqUwCfcgVz4DxpbX5ypHvMsSkFZNB+9Q8=
-=24/a
------END PGP SIGNATURE-----
-
---------------bTnTqBvFwRQJIPZjVnkyuuwm--

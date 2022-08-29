@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADAE5A4D99
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A875A4D93
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiH2NR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S230098AbiH2NSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiH2NRJ (ORCPT
+        with ESMTP id S230142AbiH2NRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:17:09 -0400
+        Mon, 29 Aug 2022 09:17:16 -0400
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E611760D5;
-        Mon, 29 Aug 2022 06:16:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C778A1C939;
+        Mon, 29 Aug 2022 06:16:42 -0700 (PDT)
 Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TDCjKr025947;
-        Mon, 29 Aug 2022 09:15:16 -0400
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TCgHnP025952;
+        Mon, 29 Aug 2022 09:15:17 -0400
 Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3j7g673cex-1
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3j7g673cf5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 09:15:16 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 27TDFEYo019143
+        Mon, 29 Aug 2022 09:15:17 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 27TDFGck019146
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 Aug 2022 09:15:14 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 29 Aug 2022 09:15:16 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 29 Aug
- 2022 09:15:13 -0400
+ 2022 09:15:15 -0400
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
  (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 29 Aug 2022 09:15:13 -0400
+ Transport; Mon, 29 Aug 2022 09:15:15 -0400
 Received: from nsa.ad.analog.com ([10.44.3.68])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 27TDEeiT026449;
-        Mon, 29 Aug 2022 09:15:07 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 27TDEeiU026449;
+        Mon, 29 Aug 2022 09:15:08 -0400
 From:   =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
 To:     <linux-kernel@vger.kernel.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -48,9 +48,9 @@ CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Hennerich <michael.hennerich@analog.com>
-Subject: [PATCH v4 09/10] input: keyboard: adp5588-keys: add regulator support
-Date:   Mon, 29 Aug 2022 15:15:52 +0200
-Message-ID: <20220829131553.690063-10-nuno.sa@analog.com>
+Subject: [PATCH v4 10/10] input: keyboard: adp5588-keys: Use new PM macros
+Date:   Mon, 29 Aug 2022 15:15:53 +0200
+Message-ID: <20220829131553.690063-11-nuno.sa@analog.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829131553.690063-1-nuno.sa@analog.com>
 References: <20220829131553.690063-1-nuno.sa@analog.com>
@@ -58,8 +58,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: clsoeNKjQ21THGFVUMapKnKaSDBEQI4m
-X-Proofpoint-GUID: clsoeNKjQ21THGFVUMapKnKaSDBEQI4m
+X-Proofpoint-ORIG-GUID: HzHZf3F1q6vI2raEM49qHnp9POj5dtts
+X-Proofpoint-GUID: HzHZf3F1q6vI2raEM49qHnp9POj5dtts
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-29_07,2022-08-25_01,2022-06-22_01
@@ -77,64 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support feeding VCC through a regulator.
+With the new PM macros (DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()), the
+compiler has visibility to see that the functions are not used when
+!CONFIG_PM and hence, remove the dead code. As such, there's no need
+for '__maybe_unused'.
 
 Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- drivers/input/keyboard/adp5588-keys.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/input/keyboard/adp5588-keys.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/input/keyboard/adp5588-keys.c b/drivers/input/keyboard/adp5588-keys.c
-index b2bb7c6702e1..0e6f4a47bb9c 100644
+index 0e6f4a47bb9c..7cb120ad3a68 100644
 --- a/drivers/input/keyboard/adp5588-keys.c
 +++ b/drivers/input/keyboard/adp5588-keys.c
-@@ -24,6 +24,7 @@
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/timekeeping.h>
+@@ -825,7 +825,7 @@ static void adp5588_remove(struct i2c_client *client)
+ 	/* all resources will be freed by devm */
+ }
  
-@@ -711,12 +712,18 @@ static int adp5588_fw_parse(struct adp5588_kpad *kpad)
+-static int __maybe_unused adp5588_suspend(struct device *dev)
++static int adp5588_suspend(struct device *dev)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 
+@@ -834,7 +834,7 @@ static int __maybe_unused adp5588_suspend(struct device *dev)
  	return 0;
  }
  
-+static void adp5588_disable_regulator(void *reg)
-+{
-+	regulator_disable(reg);
-+}
-+
- static int adp5588_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
+-static int __maybe_unused adp5588_resume(struct device *dev)
++static int adp5588_resume(struct device *dev)
  {
- 	struct adp5588_kpad *kpad;
- 	struct input_dev *input;
- 	struct gpio_desc *gpio;
-+	struct regulator *vcc;
- 	unsigned int revid;
- 	int ret;
- 	int error;
-@@ -742,6 +749,18 @@ static int adp5588_probe(struct i2c_client *client,
- 	if (error)
- 		return error;
+ 	struct i2c_client *client = to_i2c_client(dev);
  
-+	vcc = devm_regulator_get(&client->dev, "vcc");
-+	if (IS_ERR(vcc))
-+		return PTR_ERR(vcc);
-+
-+	ret = regulator_enable(vcc);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_add_action_or_reset(&client->dev, adp5588_disable_regulator, vcc);
-+	if (ret)
-+		return ret;
-+
- 	gpio = devm_gpiod_get_optional(&client->dev, "reset", GPIOD_OUT_HIGH);
- 	if (IS_ERR(gpio))
- 		return PTR_ERR(gpio);
+@@ -843,7 +843,7 @@ static int __maybe_unused adp5588_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(adp5588_dev_pm_ops, adp5588_suspend, adp5588_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(adp5588_dev_pm_ops, adp5588_suspend, adp5588_resume);
+ 
+ static const struct i2c_device_id adp5588_id[] = {
+ 	{ "adp5588-keys", 0 },
+@@ -863,7 +863,7 @@ static struct i2c_driver adp5588_driver = {
+ 	.driver = {
+ 		.name = KBUILD_MODNAME,
+ 		.of_match_table = adp5588_of_match,
+-		.pm   = &adp5588_dev_pm_ops,
++		.pm   = pm_sleep_ptr(&adp5588_dev_pm_ops),
+ 	},
+ 	.probe    = adp5588_probe,
+ 	.remove   = adp5588_remove,
 -- 
 2.37.2
 

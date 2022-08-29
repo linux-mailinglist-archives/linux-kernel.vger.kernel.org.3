@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8955A4FC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCA35A4FC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiH2PDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S229897AbiH2PEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiH2PDO (ORCPT
+        with ESMTP id S229752AbiH2PEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:03:14 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD084EC8;
-        Mon, 29 Aug 2022 08:03:14 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h11-20020a17090a470b00b001fbc5ba5224so8871038pjg.2;
-        Mon, 29 Aug 2022 08:03:14 -0700 (PDT)
+        Mon, 29 Aug 2022 11:04:12 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE97A85A9F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:04:10 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id z20so8348950ljq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc;
-        bh=hl19yC27qvJPGzvVoFgwuG8P3RA3WT4VWzdG/9QIu5c=;
-        b=N1pIhGD3wyaigKJVuMP6jb4oj231Asc43jUz5tjVhjk5bTdEAAcjlu+xAvZU/qb9+m
-         1m5qLiwFAUAIcOjaHfMSChJoyufmA6Zxclf8RU9S0ixKv80UoHtL5WOqQbTrCT5xznXF
-         i/DS01nwtIF3d68Na5mCvQV6XHczdhOioi+X3kRLspOP22nPcUGEzf/BcTd2Wab9vPr2
-         Pb+N0BxHyJH2UG61ugOuyC7ND/2XO7a1AAvBqSddPCtxvGkFlyUweO+GxukeWHRkQLyG
-         GSzOxEhS5UmBsZtvXcWaPYZyMCdtpdX+51/lZH7B3YGIrlj1f6rRpOARqnvUSkOJO7lm
-         aX1A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=347LfAP44frQffdHJ/9JrhHkWnMPl3tC3TkZmIT/0NE=;
+        b=jWuBrwJQtN3vnRcvGuWYl6rCPZeeGWKfwekOKFMZAZJAopoRRDOSpGVrBSVgL3YUbn
+         Gts3fGDwlIff6pYoiRTaQeUDPYQy/fFV2eELp/KRKZf38hGTlpXdWvKeo/7NqeepsRWY
+         yTihnSYuAX6/QBE8kRmxAd7cenmDMHTrI0AnopDvWgtxw8iK8wa6HQqNq6swKQXf0iFx
+         JJlZL1+lvcdfk+VPOmCYMh10xZsleuo4sRPp/LiollY71hl18vvA4nnvM9vWXUM9noWS
+         2m0e7LLzx7ztw6ON3JCeH9Wyt0Y2/V+KYN+O7mttlB+64NztmemE1uUoqDFNJT0kY6KK
+         ZQqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=hl19yC27qvJPGzvVoFgwuG8P3RA3WT4VWzdG/9QIu5c=;
-        b=rf35cl/icSz8RACWLuwSlxSbtJ8o9MhKSCrZQZPMAkyBx/tD+3Z7sP+8lnusIC38C4
-         lutGgHNJ/Yj5o8l4LrjaPKXXnky/BP60O0Q+uApOOvO19XQI1yWFnipBeUl229H3afT0
-         CeEfZUmmiQqTK3u9Hi/knGBuImGPBNKJH6tNx0z4JvaG9ErDjH2jHiI9j70JIvIsO0tI
-         wc/3XCNRkxERAg14SJb1ZNIjJGSNXWe4RMgUpU8oCduZc3PiCAvlDkg94+FVYof6TFOj
-         53BQM2D5MO3iARwHghg7v5aMM5+oRUVeg2Nofc4xzJIzxyVCFlxTQ9MSngytfwyp7tRO
-         4DEw==
-X-Gm-Message-State: ACgBeo1tbX+YtxbkJc5iIc/GrysXJayUjvUGEd2Z1IA2SM94eUyDE6Ah
-        CBGIAUuDumpovalB3nTiZEhL9RSBaKTVXw==
-X-Google-Smtp-Source: AA6agR7OFBttzwRQAP0jnnmDnPAv1l0tyFU2JXitdpeRVfDA4S77kutEDWZof5n4mxHqPaLyKs4WNQ==
-X-Received: by 2002:a17:90b:2404:b0:1fc:b5d1:446f with SMTP id nr4-20020a17090b240400b001fcb5d1446fmr18494415pjb.58.1661785392095;
-        Mon, 29 Aug 2022 08:03:12 -0700 (PDT)
-Received: from Negi ([207.151.52.7])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902e80100b0016c4546fbf9sm6644546plg.128.2022.08.29.08.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 08:03:11 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 08:03:10 -0700
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Anton Altaparmakov <anton@tuxera.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] ntfs: Ensure $Extend is a directory
-Message-ID: <20220829150309.GA26122@Negi>
-References: <20220727001513.11902-1-soumya.negi97@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=347LfAP44frQffdHJ/9JrhHkWnMPl3tC3TkZmIT/0NE=;
+        b=74VAqm96nXPGSWx8F0kTaGxGcD4n3hyFYk0o14avuzyN/Or9q6ZgryNWrRMHZ1/9j8
+         YzEH4HBOAy0YjP8tiXqXp3lchgM0Gm41tKlyM2fQycxERp02ynEN7y82/nsOsZQgE52L
+         +i462lrNvSLtejZRdKenJDh7+WJXVKGtQmNeaMAoFj8ep3l4feTiU9U4zEUDxy2uY7hS
+         9R4pX+nMrEJDhs+FG+sBJec2DEjjbYP7SzNgP6ATQpwE/Lp6Fs5TWSpYXTls+kfcv4Wf
+         gJJAoRk4PfDvH5ZYMQR0Q3ojDlqrTPUusQQhC7vufuM7ijFZxCyFSIws0hS3M/bYdXVM
+         9Quw==
+X-Gm-Message-State: ACgBeo3Ke+8CJBPQa2PLCjXZYnpWymL3J+49+IQ7VPt9gJROb5Ppr8iT
+        L9LvAGE2/YRBWUlfVXvTC7GZb5dSUUE4UD7DwE4hKQD9ObJ9XA==
+X-Google-Smtp-Source: AA6agR4GKG6UxIBeSkOj9tZcipNHDDnq+j1l+bVcOZUPMOaA9GrHrvXDpw8gLBRsJuY++8TK/MQWsHwVNf9LJUS8rQ0=
+X-Received: by 2002:a17:906:d550:b0:733:8e1a:f7 with SMTP id
+ cr16-20020a170906d55000b007338e1a00f7mr14228340ejc.580.1661785438494; Mon, 29
+ Aug 2022 08:03:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727001513.11902-1-soumya.negi97@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220716081304.2762135-1-zheyuma97@gmail.com>
+In-Reply-To: <20220716081304.2762135-1-zheyuma97@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 29 Aug 2022 17:03:47 +0200
+Message-ID: <CAG3jFytOyhy_es2cULpp0TCdp70HTcqKo1hd-ZxVaC4O-vi-3w@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: megachips: Fix a null pointer dereference bug
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     peter.senna@gmail.com, martin.donnelly@ge.com,
+        martyn.welch@collabora.co.uk, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 05:15:13PM -0700, Soumya Negi wrote:
-> Fix Syzbot bug: kernel BUG in ntfs_lookup_inode_by_name
-> https://syzkaller.appspot.com/bug?id=32cf53b48c1846ffc25a185a2e92e170d1a95d71
-> 
-> Check whether $Extend is a directory or not( for NTFS3.0+) while
-> loading system files. If it isn't(as in the case of this bug where the
-> mft record for $Extend contains a regular file), load_system_files()
-> returns false.
-> 
-> Reported-by: syzbot+30b7f850c6d98ea461d2@syzkaller.appspotmail.com
-> CC: stable@vger.kernel.org # 4.9+
-> Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+On Sat, 16 Jul 2022 at 10:13, Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> When removing the module we will get the following warning:
+>
+> [   31.911505] i2c-core: driver [stdp2690-ge-b850v3-fw] unregistered
+> [   31.912484] general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN PTI
+> [   31.913338] KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+> [   31.915280] RIP: 0010:drm_bridge_remove+0x97/0x130
+> [   31.921825] Call Trace:
+> [   31.922533]  stdp4028_ge_b850v3_fw_remove+0x34/0x60 [megachips_stdpxxxx_ge_b850v3_fw]
+> [   31.923139]  i2c_device_remove+0x181/0x1f0
+>
+> The two bridges (stdp2690, stdp4028) do not probe at the same time, so
+> the driver does not call ge_b850v3_resgiter() when probing, causing the
+> driver to try to remove the object that has not been initialized.
+>
+> Fix this by checking whether both the bridges are probed.
+>
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 > ---
-> Changes since v1:
-> * Added CC tag for stable
-> * Formatted changelog to fit within 72 cols
-> 
-> ---
->  fs/ntfs/super.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
-> index 5ae8de09b271..18e2902531f9 100644
-> --- a/fs/ntfs/super.c
-> +++ b/fs/ntfs/super.c
-> @@ -2092,10 +2092,15 @@ static bool load_system_files(ntfs_volume *vol)
->  	// TODO: Initialize security.
->  	/* Get the extended system files' directory inode. */
->  	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
-> -	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
-> +	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
-> +	    !S_ISDIR(vol->extend_ino->i_mode)) {
-> +		static const char *es1 = "$Extend is not a directory";
-> +		static const char *es2 = "Failed to load $Extend";
-> +		const char *es = !S_ISDIR(vol->extend_ino->i_mode) ? es1 : es2;
-> +
->  		if (!IS_ERR(vol->extend_ino))
->  			iput(vol->extend_ino);
-> -		ntfs_error(sb, "Failed to load $Extend.");
-> +		ntfs_error(sb, "%s.", es);
->  		goto iput_sec_err_out;
->  	}
->  #ifdef NTFS_RW
-> -- 
-> 2.17.1
+>  drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> index cce98bf2a4e7..c68a4cdf4625 100644
+> --- a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> +++ b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> @@ -296,7 +296,9 @@ static void ge_b850v3_lvds_remove(void)
+>          * This check is to avoid both the drivers
+>          * removing the bridge in their remove() function
+>          */
+> -       if (!ge_b850v3_lvds_ptr)
+> +       if (!ge_b850v3_lvds_ptr ||
+> +               !ge_b850v3_lvds_ptr->stdp2690_i2c ||
+> +               !ge_b850v3_lvds_ptr->stdp4028_i2c)
 
-Hi Anton,
-Have you had a chance to look at this patch?
+This chunk fails checkpatch --strict.
 
-Thanks,
-Soumya
+Alignment should match open parenthesis
+#39: FILE: drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c:300:
 
+
+>                 goto out;
+>
+>         drm_bridge_remove(&ge_b850v3_lvds_ptr->bridge);
+> --
+> 2.25.1
+>

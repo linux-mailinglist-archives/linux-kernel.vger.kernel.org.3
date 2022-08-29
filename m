@@ -2,178 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09645A4FC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FC95A4FC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiH2PES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S229924AbiH2PEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiH2PEK (ORCPT
+        with ESMTP id S229906AbiH2PEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:04:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF48D3D8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:04:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 29 Aug 2022 11:04:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451458D3D8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:04:31 -0700 (PDT)
+Received: from [192.168.42.144] (mtl.collabora.ca [66.171.169.34])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF241B810A8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6457EC4347C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661785446;
-        bh=8eJuDB16eU5LU6ppquAMaWG5LuqKScHnNNnD8rj7QnQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=d6USsR6Gh8cg6sOFS0+b4JJfar1vV4T70orRmGfQTmfJe/gNOf4zByaRKAHSjUqMu
-         B8F4PukRkklZcbNa2AK/Kx2Un2HrUatGZa7Bp6c8ohqH3dtqik+XNVgXcnomKCkK77
-         2x9S/1fvJbryGS8x2CPnvsMdvZ3tIenCtnlbHuOh1t4UiWpgOd5zJE6CeNmR+Ee/59
-         g80C+NizjpBhpPRHixvkyBx4lzwNVpNzWu3Kyqs46c1liGQGu6/CxrLd3qs+gKrgrZ
-         EO3aTV1FJCAUKmazF7BCL7SuWA27wng3KUdFWCPsLxCAadGc1CMtOOa7KVbHryUgIh
-         YOdq3oO5numbA==
-Received: by mail-ua1-f53.google.com with SMTP id s5so3215477uar.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:04:06 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3UVAVAf7PQ6F30ELbezeWrjbZwxbHakGuJdemSyUHSym68YzTw
-        BAe7POPwLeg5Z/WI0gQ2WrtFbM9TEL4aF72z30c=
-X-Google-Smtp-Source: AA6agR5/eepFMoWVz2guDngMAWQmbG0so8ekrWz0Sbei/pkHEOeCwYpumRhlxi/cGs6K4I5qoW+oCD1FyTydBk7AuC8=
-X-Received: by 2002:a05:6130:c13:b0:39f:58bb:d51c with SMTP id
- cg19-20020a0561300c1300b0039f58bbd51cmr3700437uab.104.1661785445212; Mon, 29
- Aug 2022 08:04:05 -0700 (PDT)
+        (Authenticated sender: padovan)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A4BC660036C;
+        Mon, 29 Aug 2022 16:04:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661785470;
+        bh=zQrJBqu8D8yQ6EMK5HMuX9D6RuD9Hr5OLic3O4LfX+E=;
+        h=Date:Subject:From:To:Cc:Reply-To:References:In-Reply-To:From;
+        b=AE0JegUBQW9as0diIv4K376AHI9UFKcIKpZR5xdphx5y6Vahi+m7w4rFd2c6rSeKC
+         6TqmdsUPDMfwfsMGf+XgJWl2uFi3pcQNKWtHX4YOxN8BIpvjEKgdX9aBuH7SKfcTO+
+         6K79H58UApaw6K1Zkokk15dKQD9Tf7yfkWr+Pa/Ffqdh+wgWto9KeeQNoRSc3wXca3
+         a0BVpMbgVqxvEMpgbnwaPwqZpUZOt+zLcXJCaukMlNUMUZUEL5kEugbGpVlwO9FXjC
+         ZxXKV5i7NsDjQjKEKJeK4k0JNBCjy4G2+8/aB8w4g0DzT6cbxQ6QLonUtSeTheC4yj
+         xKyTDLqv5RCOA==
+Message-ID: <ce17e20b-b60d-baaf-15af-1e3c8157df7b@collabora.com>
+Date:   Mon, 29 Aug 2022 11:04:26 -0400
 MIME-Version: 1.0
-References: <20220829133146.15236-1-xry111@xry111.site> <20220829133146.15236-3-xry111@xry111.site>
-In-Reply-To: <20220829133146.15236-3-xry111@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 29 Aug 2022 23:03:51 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7V-gK+RQYKdhiukQ9BT0Yw5dDy9KEAqb5hWSjMfquQJQ@mail.gmail.com>
-Message-ID: <CAAhV-H7V-gK+RQYKdhiukQ9BT0Yw5dDy9KEAqb5hWSjMfquQJQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] LoongArch: Adjust CFLAGS for CONFIG_AS_HAS_EXPLICIT_RELOCS
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [kernelci-members] KernelCI working group: Web Dashboard
+Content-Language: en-US
+From:   Gustavo Padovan <gustavo.padovan@collabora.com>
+To:     kernelci-members@groups.io,
+        "kernelci@groups.io" <kernelci@groups.io>
+Cc:     automated-testing@lists.yoctoproject.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernelci-tsc@groups.io" <kernelci-tsc@groups.io>,
+        Simon Xiao <sixiao@microsoft.com>,
+        Carlos Cardenas <Carlos.Cardenas@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Sharath George John <sgeorgejohn@microsoft.com>,
+        "Alain Gefflaut (HE/HIM)" <agefflaut@microsoft.com>,
+        Johnson George <Johnson.George@microsoft.com>
+Reply-To: kernelci-members@groups.io
+References: <f3874e7d-ccfe-4a2d-d054-9b7bf9e8b44d@collabora.com>
+ <16F4479F76A8C807.11895@groups.io> <16F65ECD601264EC.15470@groups.io>
+ <1706557437ACCB9C.25939@groups.io>
+In-Reply-To: <1706557437ACCB9C.25939@groups.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao,
+Hello,
 
-On Mon, Aug 29, 2022 at 9:35 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> If explicit relocation hints is used by the toolchain, -Wa,-mla-*
-> options will be useless for C code.  Only use them for
-> !CONFIG_AS_HAS_EXPLICIT_RELOCS.
->
-> Replace "la" with "la.pcrel" in head.S to keep the semantic consistent
-> with new and old toolchains for the low level startup code.
->
-> Remove -fplt because it's the default for all known LoongArch C
-> compilers.
->
-> The behavior with different assemblers and compilers are summarized in
-> the following table:
->
-> AS has            CC has
-> explicit reloc    explicit reloc    Behavior
-> ==============================================================
-> No                No                Use la.* macros.
->                                     No change from Linux 6.0.
-> --------------------------------------------------------------
-> No                Yes               Disable explicit reloc.
->                                     No change from Linux 6.0.
-> --------------------------------------------------------------
-> Yes               No                Not supported.
-> --------------------------------------------------------------
-> Yes               Yes               Use explicit relocs.
->                                     No -Wa,-mla* options.
-> ==============================================================
->
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
-> ---
->  arch/loongarch/Makefile      | 19 ++++++++++++++++++-
->  arch/loongarch/kernel/head.S | 10 +++++-----
->  2 files changed, 23 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index 7051a95f7f31..1563747c4fa8 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -40,10 +40,27 @@ endif
->
->  cflags-y                       += -G0 -pipe -msoft-float
->  LDFLAGS_vmlinux                        += -G0 -static -n -nostdlib
-> +
-> +# When the assembler supports explicit relocation hint, we must use it.
-> +# GCC may have -mexplicit-relocs off by default if it was built with an old
-> +# assembler, so we force it via an option.
-> +#
-> +# When the assembler does not supports explicit relocation hint, we can't use
-> +# it.  Disable it if the compiler supports it.
-> +#
-> +# If you've seen "unknown reloc hint" message building the kernel and you are
-> +# now wondering why "-mexplicit-relocs" is not wrapped with cc-option: the
-> +# combination of a "new" assembler and "old" compiler is not supported.  Either
-> +# upgrade the compiler or downgrade the assembler.
-> +ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
-> +cflags-y                       += -mexplicit-relocs
-> +else
-> +cflags-y                       += $(call cc-option,-mno-explicit-relocs)
->  KBUILD_AFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
->  KBUILD_CFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
->  KBUILD_AFLAGS_MODULE           += -Wa,-mla-global-with-abs
-> -KBUILD_CFLAGS_MODULE           += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
-> +KBUILD_CFLAGS_MODULE           += -Wa,-mla-global-with-abs,-mla-local-with-abs
-Though -fplt is the default, keep it can make code clearer.
+The previous tentative below didn't work due to vacation season. Here's 
+a new pool with dates from 1st to 8th of September. Please answer it 
+until this Wednesday August 31th.
 
-Huacai
-> +endif
+https://doodle.com/meeting/participate/id/dG5v423a
+
+See the email below for meetings notes and current User Stories document.
+
+Regards,
+
+Gustavo
+
+On 7/18/22 10:17, Gustavo Padovan wrote:
+> Hi everyone,
 >
->  cflags-y += -ffreestanding
->  cflags-y += $(call cc-option, -mno-check-zero-division)
-> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> index 01bac62a6442..eb3f641d5915 100644
-> --- a/arch/loongarch/kernel/head.S
-> +++ b/arch/loongarch/kernel/head.S
-> @@ -55,17 +55,17 @@ SYM_CODE_START(kernel_entry)                        # kernel entry point
->         li.w            t0, 0x00                # FPE=0, SXE=0, ASXE=0, BTE=0
->         csrwr           t0, LOONGARCH_CSR_EUEN
+> In our last Web Dashboard meeting[1] where we reviewed the User 
+> Stories document[2]. Then, after that we worked offline to incorporate 
+> the feedback on doc, so it is time for our next meeting to further 
+> discuss. Please answer the poll with your time availability on the 
+> link below. I added dates from 21th to 28th of July.
 >
-> -       la              t0, __bss_start         # clear .bss
-> +       la.pcrel        t0, __bss_start         # clear .bss
->         st.d            zero, t0, 0
-> -       la              t1, __bss_stop - LONGSIZE
-> +       la.pcrel        t1, __bss_stop - LONGSIZE
->  1:
->         addi.d          t0, t0, LONGSIZE
->         st.d            zero, t0, 0
->         bne             t0, t1, 1b
+> https://doodle.com/meeting/participate/id/eX6vyY5b
 >
-> -       la              t0, fw_arg0
-> +       la.pcrel        t0, fw_arg0
->         st.d            a0, t0, 0               # firmware arguments
-> -       la              t0, fw_arg1
-> +       la.pcrel        t0, fw_arg1
->         st.d            a1, t0, 0
+> Thank you,
 >
->         /* KSave3 used for percpu base, initialized as 0 */
-> @@ -73,7 +73,7 @@ SYM_CODE_START(kernel_entry)                  # kernel entry point
->         /* GPR21 used for percpu base (runtime), initialized as 0 */
->         move            u0, zero
+> Gus
+> —
+> [1]https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit#bookmark=id.6ok0ufne9shj 
 >
-> -       la              tp, init_thread_union
-> +       la.pcrel        tp, init_thread_union
->         /* Set the SP after an empty pt_regs.  */
->         PTR_LI          sp, (_THREAD_SIZE - 32 - PT_SIZE)
->         PTR_ADD         sp, sp, tp
-> --
-> 2.37.0
+> [2]https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit#heading=h.wjoxi4s5pxzl 
 >
 >
+> On 6/7/22 10:46, Gustavo Padovan wrote:
+>>
+>> Hello,
+>>
+>> Our next meeting has been scheduled for this Thursday at 3pm UTC. 
+>> Invite was sent to the kernelci-members list, but here goes the 
+>> instructions to join as well:
+>>
+>> This event has a video call.
+>> Join: https://meet.google.com/yyz-jzjy-yfu
+>> (US) +1 254-227-6870 PIN: 188509910#
+>> View more phone numbers: 
+>> https://tel.meet/yyz-jzjy-yfu?pin=5882595078642&hs=7
+>>
+>> Regards,
+>>
+>> Gustavo
+>>
+>> Le 31/05/2022 à 15:34, Gustavo Padovan a écrit :
+>>>
+>>> Hello everyone,
+>>>
+>>> **
+>>>
+>>> *From our first meeting back in October[1], we took the action of 
+>>> organizing our user stories that you were spread as a comments in 
+>>> the the github issue{2} and, converting them into User Stories 
+>>> document[3].*
+>>>
+>>> *
+>>>
+>>> In the next meeting, we want to study the current User Stories and 
+>>> start discussions to progress on development. The proposed slots are 
+>>> for next week. Please answer the doodle by the end of this week:
+>>>
+>>> https://doodle.com/meeting/participate/id/egJ12A9d
+>>>
+>>> Best regards,
+>>>
+>>> Gustavo
+>>>
+>>> [1] 
+>>> https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit# 
+>>> <https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit#> 
+>>>
+>>>
+>>> [2] https://github.com/kernelci/kernelci-project/discussions/28 
+>>> <https://github.com/kernelci/kernelci-project/discussions/28>
+>>>
+>>> {3} 
+>>> https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit 
+>>> <https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit>* 
+>>>
+>>> Le 27/07/2021 à 11:54, Guillaume Tucker a écrit :
+>>>> Last year's KernelCI Community Survey[1] showed the importance of
+>>>> having a good web dashboard.  About 70% of respondents would use
+>>>> one if it provided the information they needed efficiently.
+>>>> While other things are arguably even more important, such as
+>>>> testing patches from mailing lists, replying to stable reviews
+>>>> and sending email reports directly to contributors in a "natural"
+>>>> workflow, the web dashboard has been a sticking point for a
+>>>> while.
+>>>>
+>>>> There have been several attempts at solving this problem, using
+>>>> Elastic Stack and Grafana among other things, but there isn't a
+>>>> single framework able to directly provide an off-the-shelf
+>>>> solution to the community's needs.  In fact, the first issue is
+>>>> the lack of understanding of these needs: who wants to use the
+>>>> web dashboard, and how?  Then, how does one translate those needs
+>>>> into a user interface?  Doing this requires skills that engineers
+>>>> who regularly contribute to KernelCI typically don't have. As
+>>>> such, a dedicated working group is being created in order to fill
+>>>> this gap.
+>>>>
+>>>> The aim is to coordinate efforts and try to follow best practices
+>>>> to make steady progress and avoid repeating the same mistakes.
+>>>> Most likely, we will need some help from proper web developers
+>>>> who aren't part of the usual KernelCI community.  This may be
+>>>> facilitated by the KernelCI LF project budget if approved by the
+>>>> governing board.
+>>>>
+>>>> In order to get started, we would need to have maybe 3 to 5
+>>>> people available to focus on this.  It doesn't necessarily mean a
+>>>> lot of hours spent but actions to be carried out on a daily or
+>>>> weekly basis.  So far we have Gustavo Padovan as our new KernelCI
+>>>> Project Manager and a few people have expressed interest but we
+>>>> still need formal confirmation.
+>>>>
+>>>>
+>>>> Here's a GitHub project dedicated to the new web dashboard:
+>>>>
+>>>>    https://github.com/orgs/kernelci/projects/4
+>>>>
+>>>> I've created a couple of issues to get started about user
+>>>> stories, and some initial milestones as a basic skeleton:
+>>>>
+>>>>    https://github.com/kernelci/kernelci-project/milestones
+>>>>
+>>>>
+>>>> This is ultimately a community-driven effort to address the needs
+>>>> of the kernel community.  Please share any thoughts you may have
+>>>> on this, whether you want to add some user stories, share some
+>>>> expertise, be officially in the working group or take part in
+>>>> this effort in any other way.
+>>>>
+>>>> Best wishes,
+>>>> Guillaume
+>>>>
+>>>> [1]https://foundation.kernelci.org/blog/2020/07/09/kernelci-community-survey-report/ 
+>>>>
+>>>>
+>>>>
+>>>>
+>>>>
+>>>>
+>>
+>
+
+-- 
+Gustavo Padovan
+
+Collabora Ltd.
+Platinum Building, St John's Innovation Park
+Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718
+

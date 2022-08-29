@@ -2,188 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF6A5A411F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 04:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55195A4120
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 04:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiH2Cob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 22:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S229662AbiH2Coi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 22:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiH2Co2 (ORCPT
+        with ESMTP id S229630AbiH2Coe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 22:44:28 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA083C8F0
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:44:27 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id cv9-20020a056a0044c900b00537c5841b0bso2468216pfb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
-        bh=qjyzIwXVkUkDf0UkZRUU6V68vw5g1IkZe/Jh8oGPdDI=;
-        b=U/94KM9NXpZmSc+hMYxHzYRtgMrfoxaVSJnIDlIjpVuok4Zafd/uo0FByTZzwm8ECh
-         cQeGCS7/yGLJTTEjsItsDQuL3o2E/KwhruL7/3LlOtt05TFeyj26v/ULKaaa4q/XuUVY
-         7Fhd2U5nFDMKGztQY9fys/FVlErdiHb8urBk4Ge5vbT8OfafJ4GhXK2nBS4E6nZl32TF
-         giOmkMrtFvFrd+97rdjYqU5TVZEXNoDj7vhJ0tKB/ZOgSlWanSlI0qyVMBkMe0e/t7H6
-         PKhGCjz4CpgJetSeM0BJCZoKrjCUFJYPRAbudlwYiTXei5veMJOuyvWl+sh5T56sOieD
-         nN8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc;
-        bh=qjyzIwXVkUkDf0UkZRUU6V68vw5g1IkZe/Jh8oGPdDI=;
-        b=SSyVe1o76o7DjU0RaCC0Qp7QEyyqu7v4FA8lA6n12FkaExl5GwINaZY2GxMFAIDrI4
-         arhhv87+kAmVa8wESNVgWTQ4/SG/lSxbAQahNVL8VJE3qRwvWyvFCGjwcEsr5j1py+TU
-         9TRsGY0Buejh2mFtkELg0TTuJVb3aGWfrtuEzA0NWYHg6d204uh4SZTUC3sn5zDhdlfS
-         aLhuUobGE928uaQPEOBkePNFGjc05v9QqxT4sMbvMwaYq4JLRAvU0cu+cik9q/fKMd6t
-         GOliSHDROIguo0CosnhCUpA2FxS68SNTyhRs2Zrpy0CusOauteLYjhxPwVnk1Hq983Lr
-         xhDQ==
-X-Gm-Message-State: ACgBeo3qavXoe1qCKcSbO/DPMCmZl/SwePtfIqDXKbbu+wf/mc59YYHM
-        GbFljDwy/VVyCCj5DewldG2ciOnv1vv8Pfjt7usC
-X-Google-Smtp-Source: AA6agR7r5/L5GlvHoc8ZBtvWtojvBBJBXTNkhaXq8PbOl5fMYh4tW7cqCJv7wXyaphWAu0fbcTKiq/EP9RYMga8xn02b
-X-Received: from jsl.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cdb])
- (user=justinledford job=sendgmr) by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with
- SMTP id h4-20020a056a001a4400b005286af7ff4amr14728709pfv.78.1661741066972;
- Sun, 28 Aug 2022 19:44:26 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 02:43:51 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829024351.2415147-1-justinledford@google.com>
-Subject: [PATCH] hwmon: (max31790) add fanN_enable
-From:   Justin Ledford <justinledford@google.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Justin Ledford <justinledford@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 28 Aug 2022 22:44:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECB73C8F5
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:44:32 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MGF6t09glz1N7ck;
+        Mon, 29 Aug 2022 10:40:54 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 29 Aug 2022 10:44:29 +0800
+Subject: Re: [PATCH 7/8] hugetlb: create hugetlb_unmap_file_folio to unmap
+ single file folio
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220824175757.20590-1-mike.kravetz@oracle.com>
+ <20220824175757.20590-8-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <0e31f9da-5953-2f44-1a59-888e3313e919@huawei.com>
+Date:   Mon, 29 Aug 2022 10:44:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220824175757.20590-8-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MAX31790 has a tach input enable bit in each fan's configuration
-register. This is only enabled by the driver if RPM mode is selected,
-but the driver doesn't provide a way to independently enable tachometer
-input regardless of the regulator mode.
+On 2022/8/25 1:57, Mike Kravetz wrote:
+> Create the new routine hugetlb_unmap_file_folio that will unmap a single
+> file folio.  This is refactored code from hugetlb_vmdelete_list.  It is
+> modified to do locking within the routine itself and check whether the
+> page is mapped within a specific vma before unmapping.
+> 
+> This refactoring will be put to use and expanded upon in a subsequent
+> patch adding vma specific locking.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  fs/hugetlbfs/inode.c | 123 +++++++++++++++++++++++++++++++++----------
+>  1 file changed, 94 insertions(+), 29 deletions(-)
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index e83fd31671b3..b93d131b0cb5 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -371,6 +371,94 @@ static void hugetlb_delete_from_page_cache(struct page *page)
+>  	delete_from_page_cache(page);
+>  }
+>  
+> +/*
+> + * Called with i_mmap_rwsem held for inode based vma maps.  This makes
+> + * sure vma (and vm_mm) will not go away.  We also hold the hugetlb fault
+> + * mutex for the page in the mapping.  So, we can not race with page being
+> + * faulted into the vma.
+> + */
+> +static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
+> +				unsigned long addr, struct page *page)
+> +{
+> +	pte_t *ptep, pte;
+> +
+> +	ptep = huge_pte_offset(vma->vm_mm, addr,
+> +			huge_page_size(hstate_vma(vma)));
+> +
+> +	if (!ptep)
+> +		return false;
+> +
+> +	pte = huge_ptep_get(ptep);
+> +	if (huge_pte_none(pte) || !pte_present(pte))
+> +		return false;
+> +
+> +	if (pte_page(pte) == page)
+> +		return true;
 
-By adding the fanN_enable sysfs files, we can decouple the tach input
-from the regulator mode. Also update the documentation.
+I'm thinking whether pte entry could change after we check it since huge_pte_lock is not held here.
+But I think holding i_mmap_rwsem in writelock mode should give us such a guarantee, e.g. migration
+entry is changed back to huge pte entry while holding i_mmap_rwsem in readlock mode.
+Or am I miss something?
 
-Signed-off-by: Justin Ledford <justinledford@google.com>
----
- Documentation/hwmon/max31790.rst |  1 +
- drivers/hwmon/max31790.c         | 44 +++++++++++++++++++++++++++-----
- 2 files changed, 38 insertions(+), 7 deletions(-)
+> +
+> +	return false;
+> +}
+> +
+> +/*
+> + * Can vma_offset_start/vma_offset_end overflow on 32-bit arches?
+> + * No, because the interval tree returns us only those vmas
+> + * which overlap the truncated area starting at pgoff,
+> + * and no vma on a 32-bit arch can span beyond the 4GB.
+> + */
+> +static unsigned long vma_offset_start(struct vm_area_struct *vma, pgoff_t start)
+> +{
+> +	if (vma->vm_pgoff < start)
+> +		return (start - vma->vm_pgoff) << PAGE_SHIFT;
+> +	else
+> +		return 0;
+> +}
+> +
+> +static unsigned long vma_offset_end(struct vm_area_struct *vma, pgoff_t end)
+> +{
+> +	unsigned long t_end;
+> +
+> +	if (!end)
+> +		return vma->vm_end;
+> +
+> +	t_end = ((end - vma->vm_pgoff) << PAGE_SHIFT) + vma->vm_start;
+> +	if (t_end > vma->vm_end)
+> +		t_end = vma->vm_end;
+> +	return t_end;
+> +}
+> +
+> +/*
+> + * Called with hugetlb fault mutex held.  Therefore, no more mappings to
+> + * this folio can be created while executing the routine.
+> + */
+> +static void hugetlb_unmap_file_folio(struct hstate *h,
+> +					struct address_space *mapping,
+> +					struct folio *folio, pgoff_t index)
+> +{
+> +	struct rb_root_cached *root = &mapping->i_mmap;
+> +	struct page *page = &folio->page;
+> +	struct vm_area_struct *vma;
+> +	unsigned long v_start;
+> +	unsigned long v_end;
+> +	pgoff_t start, end;
+> +
+> +	start = index * pages_per_huge_page(h);
+> +	end = ((index + 1) * pages_per_huge_page(h));
 
-diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-index 7b097c3b9b90..33c5c7330efc 100644
---- a/Documentation/hwmon/max31790.rst
-+++ b/Documentation/hwmon/max31790.rst
-@@ -38,6 +38,7 @@ Sysfs entries
- fan[1-12]_input    RO  fan tachometer speed in RPM
- fan[1-12]_fault    RO  fan experienced fault
- fan[1-6]_target    RW  desired fan speed in RPM
-+fan[1-6]_enable    RW  enable or disable the tachometer input
- pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
- pwm[1-6]           RW  read: current pwm duty cycle,
-                        write: target pwm duty cycle (0-255)
-diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 7e9362f6dc29..3ae02be4b41e 100644
---- a/drivers/hwmon/max31790.c
-+++ b/drivers/hwmon/max31790.c
-@@ -118,6 +118,12 @@ static struct max31790_data *max31790_update_device(struct device *dev)
- 					goto abort;
- 				data->target_count[i] = rv;
- 			}
-+
-+			rv = i2c_smbus_read_byte_data(client,
-+					MAX31790_REG_FAN_CONFIG(i));
-+			if (rv < 0)
-+				goto abort;
-+			data->fan_config[i] = rv;
- 		}
- 
- 		data->last_updated = jiffies;
-@@ -202,6 +208,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
- 		}
- 		mutex_unlock(&data->update_lock);
- 		return 0;
-+	case hwmon_fan_enable:
-+		*val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -214,7 +223,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
- 	struct i2c_client *client = data->client;
- 	int target_count;
- 	int err = 0;
--	u8 bits;
-+	u8 bits, fan_config;
- 	int sr;
- 
- 	mutex_lock(&data->update_lock);
-@@ -243,6 +252,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
- 					MAX31790_REG_TARGET_COUNT(channel),
- 					data->target_count[channel]);
- 		break;
-+	case hwmon_fan_enable:
-+		fan_config = data->fan_config[channel];
-+		if (val == 0) {
-+			fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
-+		} else if (val == 1) {
-+			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
-+		} else {
-+			err = -EINVAL;
-+			break;
-+		}
-+		if (fan_config != data->fan_config[channel]) {
-+			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
-+							fan_config);
-+			if (!err)
-+				data->fan_config[channel] = fan_config;
-+		}
-+		break;
- 	default:
- 		err = -EOPNOTSUPP;
- 		break;
-@@ -270,6 +296,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
- 		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
- 			return 0644;
- 		return 0;
-+	case hwmon_fan_enable:
-+		if (channel < NR_CHANNEL)
-+			return 0644;
-+		return 0;
- 	default:
- 		return 0;
- 	}
-@@ -423,12 +453,12 @@ static umode_t max31790_is_visible(const void *data,
- 
- static const struct hwmon_channel_info *max31790_info[] = {
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-+			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
--- 
-2.37.2.672.g94769d06f0-goog
+It seems the outer parentheses is unneeded?
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks,
+Miaohe Lin
+
 

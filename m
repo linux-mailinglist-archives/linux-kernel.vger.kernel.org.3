@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCE65A4E3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87DD5A4E3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiH2NfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S229953AbiH2NfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiH2NfK (ORCPT
+        with ESMTP id S229909AbiH2NfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:35:10 -0400
+        Mon, 29 Aug 2022 09:35:19 -0400
 Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7834F24081
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:35:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132904DB7A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:35:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661780108;
-        bh=kTsk985O1vybSmvpjcdvVMIIa8361S7JA67NI5+R/ZA=;
+        s=default; t=1661780115;
+        bh=TwdAnZTgoj4EYEJwsRSSBSF3le/kWOA9MA+6UkrMJuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g/JelLMDgQRXrAiP8mZoOABhFjUQAeubwe+WJazxHrnVrpLcNr4bwmH4m5cU0V3K2
-         ATqCp04y959YlUbxWF+wTeCPEgZrRcesVJZjUayTeIgpebrqQA7R2aaybkPcewgHCm
-         fh6mEh8YuEerzHNvn/xOx1G4hG1UlExZTkqWjsws=
+        b=gPriV1snZWAJnOMBQq3lW6JNaPqN66GxTiKaq8D6a7q+9clLZ+x/AOWezXdsBluAB
+         u7XrsElOvTmUXqxuDD4peuLrcadeobkIb2/ndMK8jwsUYSV9ksdsiVre8BEMEQuKo1
+         puenuWwYkUxIvNDjV66pnQGz7q79LpdYuHDIXIfg=
 Received: from xry111-x57s1.. (unknown [IPv6:240e:358:11dd:1900:dc73:854d:832e:5])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
         (Client did not present a certificate)
         (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 6BB3466904;
-        Mon, 29 Aug 2022 09:35:02 -0400 (EDT)
+        by xry111.site (Postfix) with ESMTPSA id A7BF866905;
+        Mon, 29 Aug 2022 09:35:09 -0400 (EDT)
 From:   Xi Ruoyao <xry111@xry111.site>
 To:     loongarch@lists.linux.dev
 Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
         Youling Tang <tangyouling@loongson.cn>,
         Jinyang He <hejinyang@loongson.cn>,
         Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v6 2/6] LoongArch: Adjust CFLAGS for CONFIG_AS_HAS_EXPLICIT_RELOCS
-Date:   Mon, 29 Aug 2022 21:31:42 +0800
-Message-Id: <20220829133146.15236-3-xry111@xry111.site>
+Subject: [PATCH v6 3/6] LoongArch: Use model("extreme") attribute for per-CPU variables in module if CONFIG_AS_HAS_EXPLICIT_RELOCS
+Date:   Mon, 29 Aug 2022 21:31:43 +0800
+Message-Id: <20220829133146.15236-4-xry111@xry111.site>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829133146.15236-1-xry111@xry111.site>
 References: <20220829133146.15236-1-xry111@xry111.site>
@@ -54,108 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If explicit relocation hints is used by the toolchain, -Wa,-mla-*
-options will be useless for C code.  Only use them for
-!CONFIG_AS_HAS_EXPLICIT_RELOCS.
+On LoongArch, The "address" of a per-CPU variable symbol is actually an
+offset from $r21.  The value is nearing the loading address of main
+kernel image, but far from the address of modules.  We need to tell the
+compiler that a PC-relative addressing with 32-bit offset is not
+sufficient for local per-CPU variables.
 
-Replace "la" with "la.pcrel" in head.S to keep the semantic consistent
-with new and old toolchains for the low level startup code.
+After some discussion with GCC maintainers, we implemented this
+attribute to indicate that a PC-relative addressing with 64-bit offset
+should be used.
 
-Remove -fplt because it's the default for all known LoongArch C
-compilers.
-
-The behavior with different assemblers and compilers are summarized in
-the following table:
-
-AS has            CC has
-explicit reloc    explicit reloc    Behavior
-==============================================================
-No                No                Use la.* macros.
-                                    No change from Linux 6.0.
---------------------------------------------------------------
-No                Yes               Disable explicit reloc.
-                                    No change from Linux 6.0.
---------------------------------------------------------------
-Yes               No                Not supported.
---------------------------------------------------------------
-Yes               Yes               Use explicit relocs.
-                                    No -Wa,-mla* options.
-==============================================================
+This attribute should be available in GCC 13 release.  Some early GCC 13
+snapshots may support -mexplicit-relocs but lack this attribute, we
+simply reject them.
 
 Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+Link: https://gcc.gnu.org/r13-2199
 ---
- arch/loongarch/Makefile      | 19 ++++++++++++++++++-
- arch/loongarch/kernel/head.S | 10 +++++-----
- 2 files changed, 23 insertions(+), 6 deletions(-)
+ arch/loongarch/Makefile             | 3 +++
+ arch/loongarch/include/asm/percpu.h | 8 ++++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index 7051a95f7f31..1563747c4fa8 100644
+index 1563747c4fa8..593818a61741 100644
 --- a/arch/loongarch/Makefile
 +++ b/arch/loongarch/Makefile
-@@ -40,10 +40,27 @@ endif
- 
- cflags-y			+= -G0 -pipe -msoft-float
- LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
-+
-+# When the assembler supports explicit relocation hint, we must use it.
-+# GCC may have -mexplicit-relocs off by default if it was built with an old
-+# assembler, so we force it via an option.
-+#
-+# When the assembler does not supports explicit relocation hint, we can't use
-+# it.  Disable it if the compiler supports it.
-+#
-+# If you've seen "unknown reloc hint" message building the kernel and you are
-+# now wondering why "-mexplicit-relocs" is not wrapped with cc-option: the
-+# combination of a "new" assembler and "old" compiler is not supported.  Either
-+# upgrade the compiler or downgrade the assembler.
-+ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
-+cflags-y			+= -mexplicit-relocs
-+else
-+cflags-y			+= $(call cc-option,-mno-explicit-relocs)
- KBUILD_AFLAGS_KERNEL		+= -Wa,-mla-global-with-pcrel
- KBUILD_CFLAGS_KERNEL		+= -Wa,-mla-global-with-pcrel
- KBUILD_AFLAGS_MODULE		+= -Wa,-mla-global-with-abs
--KBUILD_CFLAGS_MODULE		+= -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
-+KBUILD_CFLAGS_MODULE		+= -Wa,-mla-global-with-abs,-mla-local-with-abs
+@@ -53,6 +53,9 @@ LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
+ # combination of a "new" assembler and "old" compiler is not supported.  Either
+ # upgrade the compiler or downgrade the assembler.
+ ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
++ifeq ($(shell echo '__has_attribute(model)' | $(CC) -E -P - 2> /dev/null), 0)
++$(error "C compiler must support model attribute if using explicit relocs")
 +endif
+ cflags-y			+= -mexplicit-relocs
+ else
+ cflags-y			+= $(call cc-option,-mno-explicit-relocs)
+diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
+index 0bd6b0110198..dd7fcc553efa 100644
+--- a/arch/loongarch/include/asm/percpu.h
++++ b/arch/loongarch/include/asm/percpu.h
+@@ -8,6 +8,14 @@
+ #include <asm/cmpxchg.h>
+ #include <asm/loongarch.h>
  
- cflags-y += -ffreestanding
- cflags-y += $(call cc-option, -mno-check-zero-division)
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 01bac62a6442..eb3f641d5915 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -55,17 +55,17 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	li.w		t0, 0x00		# FPE=0, SXE=0, ASXE=0, BTE=0
- 	csrwr		t0, LOONGARCH_CSR_EUEN
++#if defined(MODULE) && defined(CONFIG_AS_HAS_EXPLICIT_RELOCS)
++/* The "address" (in fact, offset from $r21) of a per-CPU variable is close
++ * to the load address of main kernel image, but far from where the modules are
++ * loaded.  Tell the compiler this fact.
++ */
++# define PER_CPU_ATTRIBUTES __attribute__((model("extreme")))
++#endif
++
+ /* Use r21 for fast access */
+ register unsigned long __my_cpu_offset __asm__("$r21");
  
--	la		t0, __bss_start		# clear .bss
-+	la.pcrel	t0, __bss_start		# clear .bss
- 	st.d		zero, t0, 0
--	la		t1, __bss_stop - LONGSIZE
-+	la.pcrel	t1, __bss_stop - LONGSIZE
- 1:
- 	addi.d		t0, t0, LONGSIZE
- 	st.d		zero, t0, 0
- 	bne		t0, t1, 1b
- 
--	la		t0, fw_arg0
-+	la.pcrel	t0, fw_arg0
- 	st.d		a0, t0, 0		# firmware arguments
--	la		t0, fw_arg1
-+	la.pcrel	t0, fw_arg1
- 	st.d		a1, t0, 0
- 
- 	/* KSave3 used for percpu base, initialized as 0 */
-@@ -73,7 +73,7 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	/* GPR21 used for percpu base (runtime), initialized as 0 */
- 	move		u0, zero
- 
--	la		tp, init_thread_union
-+	la.pcrel	tp, init_thread_union
- 	/* Set the SP after an empty pt_regs.  */
- 	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
- 	PTR_ADD		sp, sp, tp
 -- 
 2.37.0
 

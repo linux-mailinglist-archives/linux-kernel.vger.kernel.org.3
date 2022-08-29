@@ -2,147 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42035A411A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 04:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF6A5A411F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 04:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiH2Chl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 22:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S229574AbiH2Cob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 22:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiH2Chj (ORCPT
+        with ESMTP id S229462AbiH2Co2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 22:37:39 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676CA3C8E6;
-        Sun, 28 Aug 2022 19:37:35 -0700 (PDT)
-X-UUID: 9f87e7b61458457d868f169ed8cc0cc4-20220829
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=pMxL4qDPpxQ5G6XsiawgSYIMi9de2EXDfLP+YzVPj3Q=;
-        b=AJYf630YX9H+iJkopq1LZhD1UEA2TWo6ZTeeH2y+KtBzvFqV/KmJ1HRzfMXAYFSn5hY4K6cT+qKEB8RXRjKu9dEgbhI6G6rqB47+bnRG1uWbE/netN40BmswAJ2ZBy/sVMWVXWlwZ52RrWm+WRyIvsvBfazcgMiUd4GUARsd/zE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:01446251-077a-4ceb-b61f-1c498d690dc6,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:44395d20-1c20-48a5-82a0-25f9c331906d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
-        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9f87e7b61458457d868f169ed8cc0cc4-20220829
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 289164118; Mon, 29 Aug 2022 10:37:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 29 Aug 2022 10:37:29 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 29 Aug 2022 10:37:28 +0800
-Message-ID: <114c357f8d7f049d21ede789a292a8e2d45f4c61.camel@mediatek.com>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: mediatek,tphy: add property to
- set pre-emphasis
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Mon, 29 Aug 2022 10:37:28 +0800
-In-Reply-To: <000babd8-5980-3d77-f156-324b3442cbe7@linaro.org>
-References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
-         <20220819091344.2274-2-chunfeng.yun@mediatek.com>
-         <438da392-f419-ad76-7e91-aa4aab36e12c@linaro.org>
-         <816ecf6287533137b750c8bde9de5830e4229c56.camel@mediatek.com>
-         <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
-         <1a16cce9fe164bafc06ae193310be71c6f645d75.camel@mediatek.com>
-         <000babd8-5980-3d77-f156-324b3442cbe7@linaro.org>
+        Sun, 28 Aug 2022 22:44:28 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA083C8F0
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:44:27 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id cv9-20020a056a0044c900b00537c5841b0bso2468216pfb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=qjyzIwXVkUkDf0UkZRUU6V68vw5g1IkZe/Jh8oGPdDI=;
+        b=U/94KM9NXpZmSc+hMYxHzYRtgMrfoxaVSJnIDlIjpVuok4Zafd/uo0FByTZzwm8ECh
+         cQeGCS7/yGLJTTEjsItsDQuL3o2E/KwhruL7/3LlOtt05TFeyj26v/ULKaaa4q/XuUVY
+         7Fhd2U5nFDMKGztQY9fys/FVlErdiHb8urBk4Ge5vbT8OfafJ4GhXK2nBS4E6nZl32TF
+         giOmkMrtFvFrd+97rdjYqU5TVZEXNoDj7vhJ0tKB/ZOgSlWanSlI0qyVMBkMe0e/t7H6
+         PKhGCjz4CpgJetSeM0BJCZoKrjCUFJYPRAbudlwYiTXei5veMJOuyvWl+sh5T56sOieD
+         nN8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=qjyzIwXVkUkDf0UkZRUU6V68vw5g1IkZe/Jh8oGPdDI=;
+        b=SSyVe1o76o7DjU0RaCC0Qp7QEyyqu7v4FA8lA6n12FkaExl5GwINaZY2GxMFAIDrI4
+         arhhv87+kAmVa8wESNVgWTQ4/SG/lSxbAQahNVL8VJE3qRwvWyvFCGjwcEsr5j1py+TU
+         9TRsGY0Buejh2mFtkELg0TTuJVb3aGWfrtuEzA0NWYHg6d204uh4SZTUC3sn5zDhdlfS
+         aLhuUobGE928uaQPEOBkePNFGjc05v9QqxT4sMbvMwaYq4JLRAvU0cu+cik9q/fKMd6t
+         GOliSHDROIguo0CosnhCUpA2FxS68SNTyhRs2Zrpy0CusOauteLYjhxPwVnk1Hq983Lr
+         xhDQ==
+X-Gm-Message-State: ACgBeo3qavXoe1qCKcSbO/DPMCmZl/SwePtfIqDXKbbu+wf/mc59YYHM
+        GbFljDwy/VVyCCj5DewldG2ciOnv1vv8Pfjt7usC
+X-Google-Smtp-Source: AA6agR7r5/L5GlvHoc8ZBtvWtojvBBJBXTNkhaXq8PbOl5fMYh4tW7cqCJv7wXyaphWAu0fbcTKiq/EP9RYMga8xn02b
+X-Received: from jsl.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cdb])
+ (user=justinledford job=sendgmr) by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with
+ SMTP id h4-20020a056a001a4400b005286af7ff4amr14728709pfv.78.1661741066972;
+ Sun, 28 Aug 2022 19:44:26 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 02:43:51 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220829024351.2415147-1-justinledford@google.com>
+Subject: [PATCH] hwmon: (max31790) add fanN_enable
+From:   Justin Ledford <justinledford@google.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Justin Ledford <justinledford@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-08-26 at 09:36 +0300, Krzysztof Kozlowski wrote:
-> On 26/08/2022 08:36, Chunfeng Yun wrote:
-> > On Tue, 2022-08-23 at 13:24 +0300, Krzysztof Kozlowski wrote:
-> > > On 22/08/2022 10:07, Chunfeng Yun wrote:
-> > > > On Fri, 2022-08-19 at 15:15 +0300, Krzysztof Kozlowski wrote:
-> > > > > On 19/08/2022 12:13, Chunfeng Yun wrote:
-> > > > > > Add a property to set usb2 phy's pre-emphasis.
-> > > > > > 
-> > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > > > ---
-> > > > > >  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml |
-> > > > > > 7
-> > > > > > +++++++
-> > > > > >  1 file changed, 7 insertions(+)
-> > > > > > 
-> > > > > > diff --git
-> > > > > > a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > > > b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > > > index 848edfb1f677..aee2f3027371 100644
-> > > > > > ---
-> > > > > > a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > > > +++
-> > > > > > b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > > > > > @@ -219,6 +219,13 @@ patternProperties:
-> > > > > >          minimum: 1
-> > > > > >          maximum: 15
-> > > > > >  
-> > > > > > +      mediatek,pre-emphasis:
-> > > > > > +        description:
-> > > > > > +          The selection of pre-emphasis (U2 phy)
-> > > > > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > > +        minimum: 1
-> > > > > > +        maximum: 3
-> > > > > 
-> > > > > Instead of hard-coding register values in bindings, you
-> > > > > should
-> > > > > rather
-> > > > > describe here feature/effect. If it is in units, use unit
-> > > > > suffixes.
-> > > > > If
-> > > > > it is some choice, usually string enum is appropriate.
-> > > > 
-> > > > How about changing description as bellow:
-> > > > 
-> > > > "The level of pre-emphasis, increases one level, boosts the
-> > > > relative
-> > > > amplitudes of signal's higher frequencies components about
-> > > > 4.16%
-> > > > (U2
-> > > > phy)"
-> > > > 
-> > > 
-> > > Still the question is what is the unit. 4.16%?
-> > 
-> > No unit, it's a level value, like an index of array.
-> > 
-> 
-> So a value from register/device programming? 
-Yes
-> Rather a regular units
-> should be used if that's possible. If not, this should be clearly
-> described here, not some magical number which you encode into DTS...
-Ok, I'll add more descriptions.
+The MAX31790 has a tach input enable bit in each fan's configuration
+register. This is only enabled by the driver if RPM mode is selected,
+but the driver doesn't provide a way to independently enable tachometer
+input regardless of the regulator mode.
 
-Thanks a lot
+By adding the fanN_enable sysfs files, we can decouple the tach input
+from the regulator mode. Also update the documentation.
 
-> 
-> Best regards,
-> Krzysztof
+Signed-off-by: Justin Ledford <justinledford@google.com>
+---
+ Documentation/hwmon/max31790.rst |  1 +
+ drivers/hwmon/max31790.c         | 44 +++++++++++++++++++++++++++-----
+ 2 files changed, 38 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
+index 7b097c3b9b90..33c5c7330efc 100644
+--- a/Documentation/hwmon/max31790.rst
++++ b/Documentation/hwmon/max31790.rst
+@@ -38,6 +38,7 @@ Sysfs entries
+ fan[1-12]_input    RO  fan tachometer speed in RPM
+ fan[1-12]_fault    RO  fan experienced fault
+ fan[1-6]_target    RW  desired fan speed in RPM
++fan[1-6]_enable    RW  enable or disable the tachometer input
+ pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
+ pwm[1-6]           RW  read: current pwm duty cycle,
+                        write: target pwm duty cycle (0-255)
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 7e9362f6dc29..3ae02be4b41e 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -118,6 +118,12 @@ static struct max31790_data *max31790_update_device(struct device *dev)
+ 					goto abort;
+ 				data->target_count[i] = rv;
+ 			}
++
++			rv = i2c_smbus_read_byte_data(client,
++					MAX31790_REG_FAN_CONFIG(i));
++			if (rv < 0)
++				goto abort;
++			data->fan_config[i] = rv;
+ 		}
+ 
+ 		data->last_updated = jiffies;
+@@ -202,6 +208,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+ 		}
+ 		mutex_unlock(&data->update_lock);
+ 		return 0;
++	case hwmon_fan_enable:
++		*val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
++		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -214,7 +223,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 	struct i2c_client *client = data->client;
+ 	int target_count;
+ 	int err = 0;
+-	u8 bits;
++	u8 bits, fan_config;
+ 	int sr;
+ 
+ 	mutex_lock(&data->update_lock);
+@@ -243,6 +252,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 					MAX31790_REG_TARGET_COUNT(channel),
+ 					data->target_count[channel]);
+ 		break;
++	case hwmon_fan_enable:
++		fan_config = data->fan_config[channel];
++		if (val == 0) {
++			fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
++		} else if (val == 1) {
++			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
++		} else {
++			err = -EINVAL;
++			break;
++		}
++		if (fan_config != data->fan_config[channel]) {
++			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
++							fan_config);
++			if (!err)
++				data->fan_config[channel] = fan_config;
++		}
++		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+ 		break;
+@@ -270,6 +296,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+ 		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+ 			return 0644;
+ 		return 0;
++	case hwmon_fan_enable:
++		if (channel < NR_CHANNEL)
++			return 0644;
++		return 0;
+ 	default:
+ 		return 0;
+ 	}
+@@ -423,12 +453,12 @@ static umode_t max31790_is_visible(const void *data,
+ 
+ static const struct hwmon_channel_info *max31790_info[] = {
+ 	HWMON_CHANNEL_INFO(fan,
+-			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+-			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+-			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+-			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+-			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+-			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
++			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
++			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
++			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
++			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
++			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+ 			   HWMON_F_INPUT | HWMON_F_FAULT,
+ 			   HWMON_F_INPUT | HWMON_F_FAULT,
+ 			   HWMON_F_INPUT | HWMON_F_FAULT,
+-- 
+2.37.2.672.g94769d06f0-goog
 

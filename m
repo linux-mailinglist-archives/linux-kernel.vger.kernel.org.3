@@ -2,147 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D9B5A56E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E707D5A56F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiH2WQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 18:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S230034AbiH2WQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 18:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiH2WP5 (ORCPT
+        with ESMTP id S230049AbiH2WQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 18:15:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ADD6B8D2;
-        Mon, 29 Aug 2022 15:15:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16E00B81366;
-        Mon, 29 Aug 2022 22:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03645C433C1;
-        Mon, 29 Aug 2022 22:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661811353;
-        bh=dpIHaDhHoFKo6/MX17tyLWkh2Hv4zXMxhNZYFsjlI8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T/ro6VFr/E6qnli6n/2RvedLyGFJYeUxe/qF8oNM8LibI3OHdZtf6Av34FZw9iu8U
-         /2bZ8AUNKcKTMHfsy7KVa541trWvPnJJlDOcMiXFMdfwT42MiDBqYlj2AyM8BScpHI
-         V49MSgwMv7BAmctKPdl+y60x2joaN//KD0AGXastMO+3pjgQGAic+fP7IBCBCCxab4
-         WCEiKsj4J/y5BxW312xEm5qgtzh+mG4g+/NlG9GEsjc9wafh4bOPWoV4Q8ZKToC1Ef
-         WjZ+kKT4Wg7wA2812ToPp0Id5dat8vHPhf80HmTznNlNSOX5SAKWUq8+2OtT/Mq3EX
-         qLQtQXsGibgWg==
-Date:   Mon, 29 Aug 2022 17:15:51 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: Re: [PATCH v3 1/4] firmware: qcom: scm: Add support for tsens reinit
- workaround
-Message-ID: <20220829221551.uch6jdtaglzebu23@builder.lan>
-References: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
- <20220804054638.3197294-2-bhupesh.sharma@linaro.org>
+        Mon, 29 Aug 2022 18:16:42 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6031A6ACC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:16:32 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso2645556wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=HD633EfbN3tb6uFCu45l1iRXG26ohor9loINMI5UFVU=;
+        b=SUtdpCu/SOcGU+qWxAFpyCReRSxrL/K6PFzJ+/br9oyXDpUkXwDACFm/6ovQltGWUO
+         XBOMhVQTIv8mu0iVlA9ww+iYaabHGloTy6maqou87zRcCNHTk4Z/XIa6lSFamNNHjGVK
+         Ru5pgBK29+Scxi+a+0gpuu1hS7KRPw1fxgJZPT40JSLE3HAQ4odX3g1cyXW0rW7PeZIY
+         AXfIO9HwuZY8P8gbV/Y+UTQKp/EMy0t0NQNKX7n2gWLPHvNNDVQYh7qOH2OSgHmCdPA9
+         yX0wuw95Jwu1z6HB5J1Pr1Y18Viec9NZp3PL8uGCbSNOvES7yoNsmBTOqKhWzPDJUknV
+         78Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=HD633EfbN3tb6uFCu45l1iRXG26ohor9loINMI5UFVU=;
+        b=gCZTjPGJQVQO6AnrRHTNk39S8LwKCfaS6LCPQ5rN05PDE7TZVnhs7Levp4+TEftJnJ
+         qYkJiZ2rwftln8eikUwN29WF64gGx2BpC93tW1ZDy++DP0Vat5L/M/i3WP8/xnAIkz2a
+         IwLS4IkGDJQTmvYlJ50JBgaNBTWVD2/fkuHjcWt3YrUqPKrftz1SluHdz4LKHocS+EA4
+         zE0ygWKU3OdWK864GVTKUdXNZxjsgNHGscjGYtPEggzG7TFVuCQilKP0P7osOQZxUHYE
+         WgmpFpYh+bjACIKn3O8n+iYSov3MdzFRg660Lj2E5s1r96E9qUY4gdGuEIunnEcnUOUC
+         Z2RA==
+X-Gm-Message-State: ACgBeo3vHg1hi1iySPwc0v+5bCaKHFkG7jgdxwzP5XVli2+fIHdxIBbD
+        tVaXEKlH5PA4SEn/wEETItwWZq9bbhKM+GH1FxgnyJrfncE=
+X-Google-Smtp-Source: AA6agR55y3N/Bia3lsmUgfym4cf6f/K7T33smt9ZGjVFVpWIKNnbjMr2sfb/9TUtY14Hh908C/LzkLs9pnrtbtTGwZU=
+X-Received: by 2002:a1c:7315:0:b0:3a5:ff61:4080 with SMTP id
+ d21-20020a1c7315000000b003a5ff614080mr7826816wmb.196.1661811390850; Mon, 29
+ Aug 2022 15:16:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804054638.3197294-2-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220826230639.1249436-1-yosryahmed@google.com> <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
+In-Reply-To: <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 29 Aug 2022 15:15:54 -0700
+Message-ID: <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
+To:     Hao Luo <haoluo@google.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 11:16:35AM +0530, Bhupesh Sharma wrote:
-> Some versions of Qualcomm tsens controller might enter a
-> 'bad state' while running stability tests causing sensor
-> temperatures/interrupts status to be in an 'invalid' state.
-> 
-> It is recommended to re-initialize the tsens controller
-> via trustzone (secure registers) using scm call(s) when that
-> happens.
-> 
-> Add support for the same in the qcom_scm driver.
-> 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/firmware/qcom_scm.c | 15 +++++++++++++++
->  drivers/firmware/qcom_scm.h |  4 ++++
->  include/linux/qcom_scm.h    |  2 ++
->  3 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index cdbfe54c8146..93adcc046a62 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -858,6 +858,21 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
->  }
->  EXPORT_SYMBOL(qcom_scm_mem_protect_video_var);
->  
-> +int qcom_scm_tsens_reinit(void)
-> +{
-> +	int ret;
-> +	const struct qcom_scm_desc desc = {
-> +		.svc = QCOM_SCM_SVC_TSENS,
-> +		.cmd = QCOM_SCM_TSENS_INIT_ID,
-> +	};
-> +	struct qcom_scm_res res;
-> +
-> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
-> +
-> +	return ret ? : res.result[0];
-> +}
-> +EXPORT_SYMBOL(qcom_scm_tsens_reinit);
-> +
->  static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
->  				 size_t mem_sz, phys_addr_t src, size_t src_sz,
->  				 phys_addr_t dest, size_t dest_sz)
-> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-> index 0d51eef2472f..495fa00230c7 100644
-> --- a/drivers/firmware/qcom_scm.h
-> +++ b/drivers/firmware/qcom_scm.h
-> @@ -94,6 +94,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
->  #define QCOM_SCM_PIL_PAS_IS_SUPPORTED	0x07
->  #define QCOM_SCM_PIL_PAS_MSS_RESET	0x0a
->  
-> +/* TSENS Services and Function IDs */
-> +#define QCOM_SCM_SVC_TSENS		0x1E
+Hi Hao,
 
-It would be nice if this 'E' was lowercase.
+Thanks for taking a look!
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+On Mon, Aug 29, 2022 at 1:08 PM Hao Luo <haoluo@google.com> wrote:
+>
+> On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > The cgroup_hierarchical_stats selftest is complicated. It has to be,
+> > because it tests an entire workflow of recording, aggregating, and
+> > dumping cgroup stats. However, some of the complexity is unnecessary.
+> > The test now enables the memory controller in a cgroup hierarchy, invokes
+> > reclaim, measure reclaim time, THEN uses that reclaim time to test the
+> > stats collection and aggregation. We don't need to use such a
+> > complicated stat, as the context in which the stat is collected is
+> > orthogonal.
+> >
+> > Simplify the test by using a simple stat instead of reclaim time, the
+> > total number of times a process has ever entered a cgroup. This makes
+> > the test simpler and removes the dependency on the memory controller and
+> > the memory reclaim interface.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+>
+> Yosry, please tag the patch with the repo it should be applied on:
+> bpf-next or bpf.
+>
 
-Thanks,
-Bjorn
+Will do for v2.
 
-> +#define QCOM_SCM_TSENS_INIT_ID		0x5
-> +
->  #define QCOM_SCM_SVC_IO			0x05
->  #define QCOM_SCM_IO_READ		0x01
->  #define QCOM_SCM_IO_WRITE		0x02
-> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-> index f8335644a01a..5c37e1658cef 100644
-> --- a/include/linux/qcom_scm.h
-> +++ b/include/linux/qcom_scm.h
-> @@ -124,4 +124,6 @@ extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
->  extern int qcom_scm_lmh_profile_change(u32 profile_id);
->  extern bool qcom_scm_lmh_dcvsh_available(void);
->  
-> +extern int qcom_scm_tsens_reinit(void);
-> +
->  #endif
-> -- 
-> 2.35.3
-> 
+> >
+> > When the test failed on Alexei's setup because the memory controller was
+> > not enabled I realized this is an unnecessary dependency for the test,
+> > which inspired this patch :) I am not sure if this prompt a Fixes tag as
+> > the test wasn't broken.
+> >
+> > ---
+> >  .../prog_tests/cgroup_hierarchical_stats.c    | 157 ++++++---------
+> >  .../bpf/progs/cgroup_hierarchical_stats.c     | 181 ++++++------------
+> >  2 files changed, 118 insertions(+), 220 deletions(-)
+> >
+> [...]
+> > diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> > index 8ab4253a1592..c74362854948 100644
+> > --- a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> > +++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> > @@ -1,7 +1,5 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  /*
+> > - * Functions to manage eBPF programs attached to cgroup subsystems
+> > - *
+>
+> Please also add comments here explaining what the programs in this file do.
+>
+
+Will do.
+
+> >   * Copyright 2022 Google LLC.
+> >   */
+> [...]
+> >
+> > -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
+> > -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
+> > +SEC("fentry/cgroup_attach_task")
+>
+> Can we select an attachpoint that is more stable? It seems
+> 'cgroup_attach_task' is an internal helper function in cgroup, and its
+> signature can change. I'd prefer using those commonly used tracepoints
+> and EXPORT'ed functions. IMHO their interfaces are more stable.
+>
+
+Will try to find a more stable attach point. Thanks!
+
+> > +int BPF_PROG(counter, struct cgroup *dst_cgrp, struct task_struct *leader,
+> > +            bool threadgroup)
+> >  {
+> > -       struct task_struct *task = bpf_get_current_task_btf();
+> > -       __u64 *start_time_ptr;
+> > -
+> > -       start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
+> > -                                             BPF_LOCAL_STORAGE_GET_F_CREATE);
+> > -       if (start_time_ptr)
+> > -               *start_time_ptr = bpf_ktime_get_ns();
+> > -       return 0;
+> > -}
+> [...]
+> >  }
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >

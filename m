@@ -2,63 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25505A51E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570405A51EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiH2Qeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S230166AbiH2Qgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiH2Qec (ORCPT
+        with ESMTP id S229469AbiH2Qgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:34:32 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A8E9A697;
-        Mon, 29 Aug 2022 09:34:30 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 396C62E0;
-        Mon, 29 Aug 2022 16:34:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 396C62E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1661790870; bh=Plhxlb0bFXzqfP7cISMMDniN9J37OEISFCRf7a0RZdE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VUT+PEWn3haBhNKQxGvBDjvz0tYPi9aKTvGQr5TObnscuhKGtMerXwlgJbGzdgauQ
-         /xec5O+yht9HRmYJ+UyQkm2ehM4RRw4vfMNh7d4ElLHgoEVWuCMmrIj1RoNVqoe+4E
-         YwfBoP1owQ1X5xQkMpuJ4+wNkhalCBbM+NoIq9BCHc51LJEjZ/ffT2IDkUdwa0jK4Z
-         6+4vT61pzu2w16NIju9Ka9VDYH/lRZ+e9fMauLI0XItk35VzcVvHJprHyytD71XFZd
-         a9XjJ7TUCXJi7yARC6FZgY05b5CMcs6CoJW82Aq3DwIUM22i/lH0mEh36JH3QY3n/3
-         apG7RInMzE2Qg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     siyanteng@loongson.cn, alexs@kernel.org, peterz@infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: scheduler: Update new path for the sysctl knobs
-In-Reply-To: <9fc3d98c-9262-e737-3bfa-ffd2c913428f@arm.com>
-References: <20220816121907.841-1-lukasz.luba@arm.com>
- <9fc3d98c-9262-e737-3bfa-ffd2c913428f@arm.com>
-Date:   Mon, 29 Aug 2022 10:34:29 -0600
-Message-ID: <87sflfovoq.fsf@meer.lwn.net>
+        Mon, 29 Aug 2022 12:36:35 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92D261D4D;
+        Mon, 29 Aug 2022 09:36:33 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 18:36:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661790992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jeqfda5hacfguvxdxE/9MUFoXxfI35ya4rVvOsObN+s=;
+        b=a7yF5LJQxTxV6xD2oelvbldJ9iRYG7Y71UfZJyea19oubR2bw0hYhCuFl80rNrX8+4i/uE
+        YugZvPHEnaBxwns8abNs2t53yD/rtCJIQO9jVOhUjFbY1EIyxEltK0rsau2midnNwGagoS
+        fmA4gqivlrX2V5eoCWdwVXs3ZLs/XuA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>,
+        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Colton Lewis <coltonlewis@google.com>,
+        Peter Gonda <pgonda@google.com>
+Subject: Re: [PATCH v5 7/7] KVM: selftests: Add ucall pool based
+ implementation
+Message-ID: <20220829163627.qbafyl4qz5cxxue5@kamzik>
+References: <20220825232522.3997340-1-seanjc@google.com>
+ <20220825232522.3997340-8-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825232522.3997340-8-seanjc@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lukasz Luba <lukasz.luba@arm.com> writes:
+On Thu, Aug 25, 2022 at 11:25:22PM +0000, Sean Christopherson wrote:
+> From: Peter Gonda <pgonda@google.com>
+> 
+> To play nice with guests whose stack memory is encrypted, e.g. AMD SEV,
+> introduce a new "ucall pool" implementation that passes the ucall struct
+> via dedicated memory (which can be mapped shared, a.k.a. as plain text).
+> 
+> Because not all architectures have access to the vCPU index in the guest,
+> use a bitmap with atomic accesses to track which entries in the pool are
+> free/used.  A list+lock could also work in theory, but synchronizing the
+> individual pointers to the guest would be a mess.
+> 
+> Note, there's no need to rewalk the bitmap to ensure success.  If all
+> vCPUs are simply allocating, success is guaranteed because there are
+> enough entries for all vCPUs.  If one or more vCPUs are freeing and then
+> reallocating, success is guaranteed because vCPUs _always_ walk the
+> bitmap from 0=>N; if vCPU frees an entry and then wins a race to
+> re-allocate, then either it will consume the entry it just freed (bit is
+> the first free bit), or the losing vCPU is guaranteed to see the freed
+> bit (winner consumes an earlier bit, which the loser hasn't yet visited).
+> 
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  .../selftests/kvm/include/ucall_common.h      |  9 ++-
+>  .../testing/selftests/kvm/lib/aarch64/ucall.c |  7 +-
+>  tools/testing/selftests/kvm/lib/riscv/ucall.c |  2 +-
+>  tools/testing/selftests/kvm/lib/s390x/ucall.c |  2 +-
+>  .../testing/selftests/kvm/lib/ucall_common.c  | 71 +++++++++++++++++--
+>  .../testing/selftests/kvm/lib/x86_64/ucall.c  |  2 +-
+>  6 files changed, 76 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+> index 2662a4352a8c..bdd373189a77 100644
+> --- a/tools/testing/selftests/kvm/include/ucall_common.h
+> +++ b/tools/testing/selftests/kvm/include/ucall_common.h
+> @@ -22,6 +22,9 @@ enum {
+>  struct ucall {
+>  	uint64_t cmd;
+>  	uint64_t args[UCALL_MAX_ARGS];
+> +
+> +	/* Host virtual address of this struct. */
+> +	struct ucall *hva;
+>  };
+>  
+>  void ucall_arch_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
+> @@ -30,11 +33,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
+>  
+>  void ucall(uint64_t cmd, int nargs, ...);
+>  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+> -
+> -static inline void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
+> -{
+> -	ucall_arch_init(vm, mmio_gpa);
+> -}
+> +void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
+>  
+>  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
+>  				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> index 21d73afcb14f..562c16dfbb00 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> @@ -32,12 +32,9 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+>  
+>  	if (run->exit_reason == KVM_EXIT_MMIO &&
+>  	    run->mmio.phys_addr == vcpu->vm->ucall_mmio_addr) {
+> -		vm_vaddr_t gva;
+> -
+> -		TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
+> +		TEST_ASSERT(run->mmio.is_write && run->mmio.len == sizeof(uint64_t),
+>  			    "Unexpected ucall exit mmio address access");
+> -		memcpy(&gva, run->mmio.data, sizeof(gva));
+> -		return addr_gva2hva(vcpu->vm, gva);
+> +		return (void *)(*((uint64_t *)run->mmio.data));
+>  	}
+>  
+>  	return NULL;
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> index 78acdb084ab0..9a3476a2dfca 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> @@ -55,7 +55,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+>  	    run->riscv_sbi.extension_id == KVM_RISCV_SELFTESTS_SBI_EXT) {
+>  		switch (run->riscv_sbi.function_id) {
+>  		case KVM_RISCV_SELFTESTS_SBI_UCALL:
+> -			return addr_gva2hva(vcpu->vm, run->riscv_sbi.args[0]);
+> +			return (void *)run->riscv_sbi.args[0];
+>  		case KVM_RISCV_SELFTESTS_SBI_UNEXP:
+>  			vcpu_dump(stderr, vcpu, 2);
+>  			TEST_ASSERT(0, "Unexpected trap taken by guest");
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> index cbee520a26f2..a7f02dc372cf 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> @@ -26,7 +26,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+>  	    (run->s390_sieic.ipb >> 16) == 0x501) {
+>  		int reg = run->s390_sieic.ipa & 0xf;
+>  
+> -		return addr_gva2hva(vcpu->vm, run->s.regs.gprs[reg]);
+> +		return (void *)run->s.regs.gprs[reg];
+>  	}
+>  	return NULL;
+>  }
+> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> index ced480860746..cc79d497b6b4 100644
+> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
+> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> @@ -1,22 +1,85 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  #include "kvm_util.h"
+> +#include "linux/types.h"
+> +#include "linux/bitmap.h"
+> +#include "linux/atomic.h"
+> +
+> +struct ucall_header {
+> +	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
+> +	struct ucall ucalls[KVM_MAX_VCPUS];
+> +};
+> +
+> +/*
+> + * ucall_pool holds per-VM values (global data is duplicated by each VM), it
+> + * must not be accessed from host code.
+> + */
+> +static struct ucall_header *ucall_pool;
+> +
+> +void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
+> +{
+> +	struct ucall_header *hdr;
+> +	struct ucall *uc;
+> +	vm_vaddr_t vaddr;
+> +	int i;
+> +
+> +	vaddr = vm_vaddr_alloc(vm, sizeof(*hdr), KVM_UTIL_MIN_VADDR);
+> +	hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
+> +	memset(hdr, 0, sizeof(*hdr));
+> +
+> +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> +		uc = &hdr->ucalls[i];
+> +		uc->hva = uc;
+> +	}
+> +
+> +	write_guest_global(vm, ucall_pool, (struct ucall_header *)vaddr);
+> +
+> +	ucall_arch_init(vm, mmio_gpa);
+> +}
+> +
+> +static struct ucall *ucall_alloc(void)
+> +{
+> +	struct ucall *uc;
+> +	int i;
+> +
+> +	GUEST_ASSERT(ucall_pool && ucall_pool->in_use);
 
-> Gentle ping. Could you take this patch, please?
+ucall_pool->in_use will never be null.
 
-I was hoping for an ack from the scheduler folks.  It seems correct,
-though, so I've applied it.
+> +
+> +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> +		if (!atomic_test_and_set_bit(i, ucall_pool->in_use)) {
+> +			uc = &ucall_pool->ucalls[i];
+> +			memset(uc->args, 0, sizeof(uc->args));
+> +			return uc;
+> +		}
+> +	}
 
-Thanks,
+nit: blank line
 
-jon
+> +	GUEST_ASSERT(0);
+> +	return NULL;
+> +}
+> +
+> +static void ucall_free(struct ucall *uc)
+> +{
+> +	/* Beware, here be pointer arithmetic.  */
+> +	clear_bit(uc - ucall_pool->ucalls, ucall_pool->in_use);
+> +}
+>  
+>  void ucall(uint64_t cmd, int nargs, ...)
+>  {
+> -	struct ucall uc = {};
+> +	struct ucall *uc;
+>  	va_list va;
+>  	int i;
+>  
+> -	WRITE_ONCE(uc.cmd, cmd);
+> +	uc = ucall_alloc();
+> +
+> +	WRITE_ONCE(uc->cmd, cmd);
+>  
+>  	nargs = min(nargs, UCALL_MAX_ARGS);
+>  
+>  	va_start(va, nargs);
+>  	for (i = 0; i < nargs; ++i)
+> -		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
+> +		WRITE_ONCE(uc->args[i], va_arg(va, uint64_t));
+>  	va_end(va);
+>  
+> -	ucall_arch_do_ucall((vm_vaddr_t)&uc);
+> +	ucall_arch_do_ucall((vm_vaddr_t)uc->hva);
+> +
+> +	ucall_free(uc);
+>  }
+>  
+>  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> index eb8bf55b359a..4d41dc63cc9e 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> @@ -26,7 +26,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+>  		struct kvm_regs regs;
+>  
+>  		vcpu_regs_get(vcpu, &regs);
+> -		return addr_gva2hva(vcpu->vm, regs.rdi);
+> +		return (void *)regs.rdi;
+>  	}
+>  	return NULL;
+>  }
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+
+Otherwise,
+
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>

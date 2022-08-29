@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390DB5A5560
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8C15A5563
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiH2UND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S230107AbiH2UNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiH2UM7 (ORCPT
+        with ESMTP id S230095AbiH2UNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:12:59 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8928695E7B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:12:58 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id r74-20020a632b4d000000b0041bc393913eso4514979pgr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:12:58 -0700 (PDT)
+        Mon, 29 Aug 2022 16:13:02 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995B17677D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:13:00 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so6782522plg.23
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc;
-        bh=uqHUoZfTdvbY1QkERHZdR/htcU1OMwPMgXPQ3z9IokU=;
-        b=O583rz8bjT46gbhtE7PR64LQzDsu+I5Jq9bPPo6SKcPZmSv0Y9Br4VWqKBqzkg6Mgu
-         2vP3wdsOIIocLncCVLR6A1b1CvhxKexkEKAKbKSbJpPGrvQ5x53/syel/n2CUaKYzFsy
-         Qn6Cgwq+ZR5afqZJykvAr8ActNXXkzQb9MI0TujSCzfL7GiSB/ND8F6SBugnPNwX0Hyo
-         uwoXF6U4Z7LMMFQMzvviCo/g38QckQ2vXg2H6ro66CcxYcfr7HyGrdwCOiA6xSVC57Fp
-         oyc+5RpxDesbKQqx8fsdGJdDlhfW0I8kwjQKaagST28HEu5c2B3MO2fy0to5waWyamtt
-         6htw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc;
+        bh=3+KFGw/lw7UFTEKp2QYuhuNuaZRNkMlHXcRjkBPuoco=;
+        b=KkqpTJCgR/OwOt0P10HqU41mOPMq7h05KJQ8hIf3ml9CTTVyKhnxqp/+m8DAOkaCY2
+         43sG7c898K8zn+G43oaYsEliwtvpg+P4fnkAoEiUqx5BgZ9x6ISVBEZBicoAQCPk0H8r
+         DUDcNwOUbmUkYWavjrhf9jBWCM9uOv2pswrNF2bzpzJ+g83AY2GcZbl57oxt71J+h1jk
+         gAUt97QPDVsv18kwENFVt23VNLI0umUyhF1C5qkb4IWNczrHytbnOvDdETBPkrQOYWY6
+         VrDWWPk6yN7wnHoRlYEy85WySxqh8vxZwD3AakRc/hpFn952UZ3bLASzTcsjcAhzQD9O
+         xH9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc;
-        bh=uqHUoZfTdvbY1QkERHZdR/htcU1OMwPMgXPQ3z9IokU=;
-        b=XjVI6eSPnc/cHVSJWtg1qAOj5C7Th9h0usgCoH1MVigojqy2V7N016vMzKoLDdGscU
-         Yce9yxjVlIHIrNeQ6z8GgvbWO5i/xyrK0B+JHAnRfRAEWN0VmF3y5AwdjRYE9nywrRN8
-         3WAs5SKCj9tLfn4e/3MsWwpgJuJHeZUtaw+qcKXOg3D5Cr4h5A7GfiQSLe9JVxxofwyJ
-         Zr8WNu3mdi0FocV28W7Pvg6MOCdLb8wBruzWUhYREknseRBr1n7ge2vUHeLYxBU/tw3Q
-         n83NzgKxk4/Zkv7IiIbh7sAstjKBujJWXuQHmfI203qIm8C8LqGjowxVvdVxxWLUjF2y
-         R8QA==
-X-Gm-Message-State: ACgBeo2TNtp67mew1SxWQQSItY3Fy58UvoKhUuLjDD6nxPebqbFSOktW
-        XBlwbxeNXT67og3J+dA33VxMz2AEhnj5LQ==
-X-Google-Smtp-Source: AA6agR6mW7YktKTVsQ/Ge/ABV3JL+tNitO3oXV+eC5HsZtDWgjZSvQ/lKm77/KB67vWiN56cyZl12V5IC18oww==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=3+KFGw/lw7UFTEKp2QYuhuNuaZRNkMlHXcRjkBPuoco=;
+        b=6+/32Qbl1ign1d2IBD5S/KZyk+WTCpjt/Fl75vhTe5ucKiT5Z09OJjo6EpS8CTuFLQ
+         8w7h4TIlmCp0ShBs6/clHM+MCSPXPuk0U3+cxCIyca5JnHWPS8i0PHWFKbeV5DnZ5xQq
+         X2nPMF3OxdrFFG+kOuZQ/+a+5GVYSxDdiLpN4OvFQljWA5G4GZ3F103PZqTkJu8bWZXf
+         jcFaIRI9EjtTIZ70e53OEhEsfRSfhC4OFyxW/Po4lYUD+YNef88fMrAcn6+ncrVUX7wP
+         4jh3EEU3WuceyZiZTEqxwb0kEn2HtveGQiJmlE7K6piIpw0x4K4kc6GyaL+/WtcUqI46
+         I+6w==
+X-Gm-Message-State: ACgBeo2elnkMffVgWTvvwN388kEQ58O7fYxbLMvJhuv1Y1OXO6fXUyG/
+        29hQYuMXUXuKoXcuFv9kSkmCFYR+kfd7iA==
+X-Google-Smtp-Source: AA6agR7q6tV50augbDBj5FI+PYqaTZLRyKhIvbXKaLDo74MAo4aCJqE/LL9Fp9trQj2FgsIlB5oC5YO5eTaJOA==
 X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:aa7:888d:0:b0:538:328b:2ffb with SMTP id
- z13-20020aa7888d000000b00538328b2ffbmr7159243pfe.82.1661803978001; Mon, 29
- Aug 2022 13:12:58 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 20:12:47 +0000
+ (user=cmllamas job=sendgmr) by 2002:a17:90b:3e8a:b0:1fb:27a0:c39b with SMTP
+ id rj10-20020a17090b3e8a00b001fb27a0c39bmr20500444pjb.155.1661803979977; Mon,
+ 29 Aug 2022 13:12:59 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 20:12:48 +0000
+In-Reply-To: <20220829201254.1814484-1-cmllamas@google.com>
 Mime-Version: 1.0
+References: <20220829201254.1814484-1-cmllamas@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829201254.1814484-1-cmllamas@google.com>
-Subject: [PATCH 0/7] fix null-ptr-deref in binder_alloc and others
+Message-ID: <20220829201254.1814484-2-cmllamas@google.com>
+Subject: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
 From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel-team@android.com, Carlos Llamas <cmllamas@google.com>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
         Todd Kjos <tkjos@android.com>,
         Martijn Coenen <maco@android.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
+        Liam Howlett <liam.howlett@oracle.com>
+Cc:     kernel-team@android.com,
+        syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com,
+        syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com,
+        stable@vger.kernel.org,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
@@ -75,40 +81,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series fixes primarily a null dereference of alloc->vma_vm_mm
-reported by syzbot which unfortunately is quite easy to reproduce. Also,
-included here are several other patches for more trivial things I found
-along the way.
+Syzbot reported a couple issues introduced by commit 44e602b4e52f
+("binder_alloc: add missing mmap_lock calls when using the VMA"), in
+which we attempt to acquire the mmap_lock when alloc->vma_vm_mm has not
+been initialized yet.
 
---
-Carlos Llamas
+This can happen if a binder_proc receives a transaction without having
+previously called mmap() to setup the binder_proc->alloc space in [1].
+Also, a similar issue occurs via binder_alloc_print_pages() when we try
+to dump the debugfs binder stats file in [2].
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Arve Hj=C3=B8nnev=C3=A5g" <arve@android.com>
-Cc: Todd Kjos <tkjos@android.com>
-Cc: Martijn Coenen <maco@android.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Liam Howlett <liam.howlett@oracle.com>
-Cc: kernel-team@android.com
-Cc: linux-kernel@vger.kernel.org
+Sample of syzbot's crash report:
+  ==================================================================
+  KASAN: null-ptr-deref in range [0x0000000000000128-0x000000000000012f]
+  CPU: 0 PID: 3755 Comm: syz-executor229 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+  syz-executor229[3755] cmdline: ./syz-executor2294415195
+  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+  RIP: 0010:__lock_acquire+0xd83/0x56d0 kernel/locking/lockdep.c:4923
+  [...]
+  Call Trace:
+   <TASK>
+   lock_acquire kernel/locking/lockdep.c:5666 [inline]
+   lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+   down_read+0x98/0x450 kernel/locking/rwsem.c:1499
+   mmap_read_lock include/linux/mmap_lock.h:117 [inline]
+   binder_alloc_new_buf_locked drivers/android/binder_alloc.c:405 [inline]
+   binder_alloc_new_buf+0xa5/0x19e0 drivers/android/binder_alloc.c:593
+   binder_transaction+0x242e/0x9a80 drivers/android/binder.c:3199
+   binder_thread_write+0x664/0x3220 drivers/android/binder.c:3986
+   binder_ioctl_write_read drivers/android/binder.c:5036 [inline]
+   binder_ioctl+0x3470/0x6d00 drivers/android/binder.c:5323
+   vfs_ioctl fs/ioctl.c:51 [inline]
+   __do_sys_ioctl fs/ioctl.c:870 [inline]
+   __se_sys_ioctl fs/ioctl.c:856 [inline]
+   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+   [...]
+  ==================================================================
 
-Carlos Llamas (7):
-  binder: fix alloc->vma_vm_mm null-ptr dereference
-  binder: fix trivial kernel-doc typo
-  binder: rename alloc->vma_vm_mm to alloc->mm
-  binder: remove binder_alloc_set_vma()
-  binder: remove unused binder_alloc->buffer_free
-  binder: fix binder_alloc kernel-doc warnings
-  binderfs: remove unused INTSTRLEN macro
+Fix these issues by setting up alloc->vma_vm_mm pointer during open()
+and caching directly from current->mm. This guarantees we have a valid
+reference to take the mmap_lock during scenarios described above.
 
- drivers/android/binder_alloc.c | 55 +++++++++++-----------------------
- drivers/android/binder_alloc.h | 12 ++++----
- drivers/android/binderfs.c     |  1 -
- 3 files changed, 22 insertions(+), 46 deletions(-)
+[1] https://syzkaller.appspot.com/bug?extid=f7dc54e5be28950ac459
+[2] https://syzkaller.appspot.com/bug?extid=a75ebe0452711c9e56d9
 
---=20
+Fixes: 44e602b4e52f ("binder_alloc: add missing mmap_lock calls when using the VMA")
+Reported-by: syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com
+Reported-by: syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com
+Cc: <stable@vger.kernel.org> # v5.15+
+Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ drivers/android/binder_alloc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 51f4e1c5cd01..9b1778c00610 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -322,7 +322,6 @@ static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
+ 	 */
+ 	if (vma) {
+ 		vm_start = vma->vm_start;
+-		alloc->vma_vm_mm = vma->vm_mm;
+ 		mmap_assert_write_locked(alloc->vma_vm_mm);
+ 	} else {
+ 		mmap_assert_locked(alloc->vma_vm_mm);
+@@ -795,7 +794,6 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+ 	binder_insert_free_buffer(alloc, buffer);
+ 	alloc->free_async_space = alloc->buffer_size / 2;
+ 	binder_alloc_set_vma(alloc, vma);
+-	mmgrab(alloc->vma_vm_mm);
+ 
+ 	return 0;
+ 
+@@ -1091,6 +1089,8 @@ static struct shrinker binder_shrinker = {
+ void binder_alloc_init(struct binder_alloc *alloc)
+ {
+ 	alloc->pid = current->group_leader->pid;
++	alloc->vma_vm_mm = current->mm;
++	mmgrab(alloc->vma_vm_mm);
+ 	mutex_init(&alloc->mutex);
+ 	INIT_LIST_HEAD(&alloc->buffers);
+ }
+-- 
 2.37.2.672.g94769d06f0-goog
 

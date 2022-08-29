@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAAB5A4A4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F135A4848
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiH2LhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S230463AbiH2LIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiH2LgI (ORCPT
+        with ESMTP id S230404AbiH2LHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:36:08 -0400
+        Mon, 29 Aug 2022 07:07:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1953B7D7BC;
-        Mon, 29 Aug 2022 04:20:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539FD10FE3;
+        Mon, 29 Aug 2022 04:04:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2688B80F3B;
-        Mon, 29 Aug 2022 11:05:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EFDC433C1;
-        Mon, 29 Aug 2022 11:05:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2137B80EF3;
+        Mon, 29 Aug 2022 11:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53300C433C1;
+        Mon, 29 Aug 2022 11:04:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771107;
-        bh=IAXDwtfFOmitaIKfjHPlHTXJpqG+oOz2KWYeG26f2ZM=;
+        s=korg; t=1661771095;
+        bh=0ueb1dFP4tHhZS/U5agUHIjvYCKjpIfxMbvS/5u0iLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sHRk26T30VgQYp8PHv14XxNkkFQXoenkAQaVRynMEQAl333u5U0A4lOLBnPKYCUe4
-         ckKRPS/k7fz3Zlmdo+whB1jlHHhC5W/q6buIRgeLEbdu8/2US3nA44G0+yExe2K0Bw
-         pdneKWEF4vPOYOLX6IP/MHZAO7BJP5bN/VKoLFwA=
+        b=h4w/eZH0y0bppUllspDDfzMIiUamzK/ZjS7cTlb8a14fOcCUw9fmvcH5ADBNXr/gq
+         N8sBnm9dOnCjTLZgRMM9ojHoQEKMHM3l1S9a5YY/GBicKZOluU5qsr81HzWOza6r9P
+         8GNMoO/iRFeUP6MM7V/kNst8KwXhyCElGwfKAS/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 22/86] nfc: pn533: Fix use-after-free bugs caused by pn532_cmd_timeout
+Subject: [PATCH 5.15 061/136] netfilter: nft_tunnel: restrict it to netdev family
 Date:   Mon, 29 Aug 2022 12:58:48 +0200
-Message-Id: <20220829105757.429379589@linuxfoundation.org>
+Message-Id: <20220829105807.133212941@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit f1e941dbf80a9b8bab0bffbc4cbe41cc7f4c6fb6 ]
+[ Upstream commit 01e4092d53bc4fe122a6e4b6d664adbd57528ca3 ]
 
-When the pn532 uart device is detaching, the pn532_uart_remove()
-is called. But there are no functions in pn532_uart_remove() that
-could delete the cmd_timeout timer, which will cause use-after-free
-bugs. The process is shown below:
+Only allow to use this expression from NFPROTO_NETDEV family.
 
-    (thread 1)                  |        (thread 2)
-                                |  pn532_uart_send_frame
-pn532_uart_remove               |    mod_timer(&pn532->cmd_timeout,...)
-  ...                           |    (wait a time)
-  kfree(pn532) //FREE           |    pn532_cmd_timeout
-                                |      pn532_uart_send_frame
-                                |        pn532->... //USE
-
-This patch adds del_timer_sync() in pn532_uart_remove() in order to
-prevent the use-after-free bugs. What's more, the pn53x_unregister_nfc()
-is well synchronized, it sets nfc_dev->shutting_down to true and there
-are no syscalls could restart the cmd_timeout timer.
-
-Fixes: c656aa4c27b1 ("nfc: pn533: add UART phy driver")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: af308b94a2a4 ("netfilter: nf_tables: add tunnel support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/pn533/uart.c | 1 +
+ net/netfilter/nft_tunnel.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/nfc/pn533/uart.c b/drivers/nfc/pn533/uart.c
-index a0665d8ea85bc..e92535ebb5287 100644
---- a/drivers/nfc/pn533/uart.c
-+++ b/drivers/nfc/pn533/uart.c
-@@ -310,6 +310,7 @@ static void pn532_uart_remove(struct serdev_device *serdev)
- 	pn53x_unregister_nfc(pn532->priv);
- 	serdev_device_close(serdev);
- 	pn53x_common_clean(pn532->priv);
-+	del_timer_sync(&pn532->cmd_timeout);
- 	kfree_skb(pn532->recv_skb);
- 	kfree(pn532);
- }
+diff --git a/net/netfilter/nft_tunnel.c b/net/netfilter/nft_tunnel.c
+index 3b27926d5382c..2ee50996da8cc 100644
+--- a/net/netfilter/nft_tunnel.c
++++ b/net/netfilter/nft_tunnel.c
+@@ -133,6 +133,7 @@ static const struct nft_expr_ops nft_tunnel_get_ops = {
+ 
+ static struct nft_expr_type nft_tunnel_type __read_mostly = {
+ 	.name		= "tunnel",
++	.family		= NFPROTO_NETDEV,
+ 	.ops		= &nft_tunnel_get_ops,
+ 	.policy		= nft_tunnel_policy,
+ 	.maxattr	= NFTA_TUNNEL_MAX,
 -- 
 2.35.1
 

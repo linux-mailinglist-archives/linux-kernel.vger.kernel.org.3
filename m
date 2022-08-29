@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E455A4A35
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0244E5A4AAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiH2Les (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S233050AbiH2Lqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiH2Ld1 (ORCPT
+        with ESMTP id S233020AbiH2LqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:33:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEB17C762;
-        Mon, 29 Aug 2022 04:19:21 -0700 (PDT)
+        Mon, 29 Aug 2022 07:46:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54E2786C1;
+        Mon, 29 Aug 2022 04:29:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56F9EB80FA8;
-        Mon, 29 Aug 2022 11:19:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA606C433C1;
-        Mon, 29 Aug 2022 11:19:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B1016120A;
+        Mon, 29 Aug 2022 11:10:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D34C433C1;
+        Mon, 29 Aug 2022 11:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771955;
-        bh=Jxix6kCwkiFkX3V8J1xFG7Lljl6Yd+X7PX6y7zWZUOQ=;
+        s=korg; t=1661771400;
+        bh=MfO06DdabSfW+lcqbBBnnNJSNAzT1VCcU04W7Qi6R48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fe2XzlJOHf6bVlXSosts/2DtRh81YEceL0sOJcyH0hbIVScLtkcXiw0wJnIJa0rKA
-         uCr36vmOipVTjsWJ8xnrkAc4HBrX/AxUHoblQyVv2MzypCZt0kySqeg6kgSYz4OtZk
-         AVGo14rCetyxEZhmS+/he4kJUNCnEbsa9FH1yzj8=
+        b=nTBB6ZBkOqS+hdNlJas2k4F+UrTNEt5Zn66r2TVaZq9MFiVPHtviv0gHIFgndeSD4
+         0ilFfppNILjYxBDglBDWkcvr8Wn7DnQ5K/15Pb2MCIciw8sp84RrF7DjL3chSH7DHk
+         uK223cmIwg27wcNxJ7SKrbFu8SQwstDvFkjwMCSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.19 119/158] cifs: skip extra NULL byte in filenames
+        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 63/86] ionic: fix up issues with handling EAGAIN on FW cmds
 Date:   Mon, 29 Aug 2022 12:59:29 +0200
-Message-Id: <20220829105814.102356825@linuxfoundation.org>
+Message-Id: <20220829105759.132113363@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paulo Alcantara <pc@cjr.nz>
+From: Shannon Nelson <snelson@pensando.io>
 
-commit a1d2eb51f0a33c28f5399a1610e66b3fbd24e884 upstream.
+[ Upstream commit 0fc4dd452d6c14828eed6369155c75c0ac15bab3 ]
 
-Since commit:
- cifs: alloc_path_with_tree_prefix: do not append sep. if the path is empty
-alloc_path_with_tree_prefix() function was no longer including the
-trailing separator when @path is empty, although @out_len was still
-assuming a path separator thus adding an extra byte to the final
-filename.
+In looping on FW update tests we occasionally see the
+FW_ACTIVATE_STATUS command fail while it is in its EAGAIN loop
+waiting for the FW activate step to finsh inside the FW.  The
+firmware is complaining that the done bit is set when a new
+dev_cmd is going to be processed.
 
-This has caused mount issues in some Synology servers due to the extra
-NULL byte in filenames when sending SMB2_CREATE requests with
-SMB2_FLAGS_DFS_OPERATIONS set.
+Doing a clean on the cmd registers and doorbell before exiting
+the wait-for-done and cleaning the done bit before the sleep
+prevents this from occurring.
 
-Fix this by checking if @path is not empty and then add extra byte for
-separator.  Also, do not include any trailing NULL bytes in filename
-as MS-SMB2 requires it to be 8-byte aligned and not NULL terminated.
-
-Cc: stable@vger.kernel.org
-Fixes: 7eacba3b00a3 ("cifs: alloc_path_with_tree_prefix: do not append sep. if the path is empty")
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fbfb8031533c ("ionic: Add hardware init and device commands")
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c |   16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -2571,19 +2571,15 @@ alloc_path_with_tree_prefix(__le16 **out
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+index e14869a2e24a5..f60ffef33e0ce 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
++++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+@@ -378,8 +378,8 @@ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
+ 				ionic_opcode_to_str(opcode), opcode,
+ 				ionic_error_to_str(err), err);
  
- 	path_len = UniStrnlen((wchar_t *)path, PATH_MAX);
+-			msleep(1000);
+ 			iowrite32(0, &idev->dev_cmd_regs->done);
++			msleep(1000);
+ 			iowrite32(1, &idev->dev_cmd_regs->doorbell);
+ 			goto try_again;
+ 		}
+@@ -392,6 +392,8 @@ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
+ 		return ionic_error_to_errno(err);
+ 	}
  
--	/*
--	 * make room for one path separator between the treename and
--	 * path
--	 */
--	*out_len = treename_len + 1 + path_len;
-+	/* make room for one path separator only if @path isn't empty */
-+	*out_len = treename_len + (path[0] ? 1 : 0) + path_len;
++	ionic_dev_cmd_clean(ionic);
++
+ 	return 0;
+ }
  
- 	/*
--	 * final path needs to be null-terminated UTF16 with a
--	 * size aligned to 8
-+	 * final path needs to be 8-byte aligned as specified in
-+	 * MS-SMB2 2.2.13 SMB2 CREATE Request.
- 	 */
--
--	*out_size = roundup((*out_len+1)*2, 8);
--	*out_path = kzalloc(*out_size, GFP_KERNEL);
-+	*out_size = roundup(*out_len * sizeof(__le16), 8);
-+	*out_path = kzalloc(*out_size + sizeof(__le16) /* null */, GFP_KERNEL);
- 	if (!*out_path)
- 		return -ENOMEM;
- 
+-- 
+2.35.1
+
 
 

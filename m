@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC1F5A407D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 02:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D215A4089
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 03:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiH2Avy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 20:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S229603AbiH2BHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 21:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiH2Avw (ORCPT
+        with ESMTP id S229447AbiH2BHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 20:51:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0732AA5;
-        Sun, 28 Aug 2022 17:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=VeyYToAsC3C3fbPamOCPxUTHQPeUF4DLHeo1aRUxSbo=; b=SMuuDvUUgTrexLVkIRh+xQN9tW
-        JMDZtIe00U80TtQtKFMSvMMmcBoW/HdXFc48QQHnlpDCX7UJ3O6Ve8zVMobYzFFqoY9Z2W0xMf0LQ
-        qIgYhSJ8MukHK+SmojJybKQmoVAftaDXxmOTE8ukzI5Vp0McmH0XUBDuJsV8ze4kUxAoKSirQ9EK1
-        UrAgv0GSpH12p+BhBE/ktLXQf0nWydUBurUlCJXDFQLUBQXoBV3rfhjxD3vPPYsDQRqm2dejsye2v
-        41ML1X4Qp7Ju1DFLsaBerCqvR5WV4HF7IeHVcGQATCgjTIIOivHLfgeBIHiHIhZyb0Ael2iWwtuty
-        cqvjTdMA==;
-Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oST0D-002eU7-GP; Mon, 29 Aug 2022 00:51:46 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org
-Subject: [PATCH v2] cpuidle: tegra: restrict to ARCH_SUSPEND_POSSIBLE
-Date:   Sun, 28 Aug 2022 17:51:37 -0700
-Message-Id: <20220829005137.27435-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.37.2
+        Sun, 28 Aug 2022 21:07:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2532B21258;
+        Sun, 28 Aug 2022 18:07:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5971B80BA6;
+        Mon, 29 Aug 2022 01:07:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70022C4347C;
+        Mon, 29 Aug 2022 01:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661735228;
+        bh=j8/zqgqNyC238z42ZPV1ON5xd+ITJAITq0g3ep8McsM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YRvCl4g4oGgxKzPA836qQYoF4bx5v6YEuiyvBYTijOE2fyi+U0il9dMvuXdDcWP7v
+         4n4ji8GRNc578a+4stpuFiEGdjwtxLqHiMWrptl87wx+L+2kVm3ZV5VO+qhpn/6ijD
+         Xd/3dc7nsKMmEEovFvTvhCmWNcn5DkHP+6KxxDWR4Sa7t4GyeaKFZNQleglq4rmTS4
+         cCprnhMPZsN7yur1bdLcrVo0npS6a7EqAv1tjeFpU/k0f9kAduLV72mY97+tnER1Lw
+         /DRz7/JPR/y5O0yn8asC04oRF/YA7GKiUIY9gTG3VuyIT98jJVNAxiKeHMnRuoZf6e
+         AUdEkc9OeAn8A==
+Received: by mail-vs1-f43.google.com with SMTP id m66so6898384vsm.12;
+        Sun, 28 Aug 2022 18:07:08 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3nJ3h48FAv1p16bcsh+mNAS3kX+BEfVyLM5XF9mbcsRUYHjsgi
+        YfZhHJdxkFAPANuVhVhKKnBmlArCtUVWWXhIOw==
+X-Google-Smtp-Source: AA6agR4fQb9xrIurzt54N3Y2edfUMuKjgVXXkR09se9ZwVek3NCyjgznD4ZHMdHxJO8T40Gr1zdCrEOKkKvjzLB8zP0=
+X-Received: by 2002:a05:6102:3353:b0:38c:9170:a96b with SMTP id
+ j19-20020a056102335300b0038c9170a96bmr2915159vse.26.1661735227313; Sun, 28
+ Aug 2022 18:07:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220824203934.2855320-1-robh@kernel.org> <CAK7LNAS8nH+9HnfhV8yEtxShBbSYGQdOyVxbNJmbQJjEiqHPzA@mail.gmail.com>
+In-Reply-To: <CAK7LNAS8nH+9HnfhV8yEtxShBbSYGQdOyVxbNJmbQJjEiqHPzA@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Sun, 28 Aug 2022 20:06:56 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKA7gLF=FkzMbiH6NyDo6M7=i2LLSAYFw5sETwszZY5zw@mail.gmail.com>
+Message-ID: <CAL_JsqKA7gLF=FkzMbiH6NyDo6M7=i2LLSAYFw5sETwszZY5zw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Split up DT binding build targets
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 'select' does not follow any dependency chain (ARM_CPU_SUSPEND
-in this case), make ARM_TEGRA_CPUIDLE depend on ARCH_SUSPEND_POSSIBLE,
-just as ARM_CPU_SUSPEND does.
+On Fri, Aug 26, 2022 at 2:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Thu, Aug 25, 2022 at 5:39 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > The DT binding validation target, dt_binding_check, is composed of
+> > multiple steps which can't be run individually. This resulted in
+> > the passing of make variables to control which steps were run for
+> > 'dtbs_check'. Some steps are also doing multiple things in a single rule
+> > which is error prone[1].
+> >
+> > Rework the build to split each of the steps into its own make target.
+> > This allows users more fine grained control over what's run and makes
+> > for easier make dependencies.
+>
+>
+> I do not think it makes the code easier.
+>
+>
+> A tricky case is that multiple targets run in parallel.
+>
+>
+> "make  -j$(nproc)  dtbs_check  dt_binding_examples"
+>
+>
+> Two different threads dive into Documentation/devicetree/bindings/Makefile,
+> and try to build the same file simultaneously.
+>
+> If you run the command above, you will see two lines of
+>
+>   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+>
+> processed-schema.json may result in a corrupted file.
 
-Fix this kconfig warning:
+Indeed... :(
 
-WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
-  Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
-  Selected by [y]:
-  - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+>
+> > The new targets are:
+> >
+> > dt_binding_lint - Runs yamllint on the bindings
+> > dt_binding_schemas - Validates the binding schemas
+> > dt_binding_examples - Builds and validates the binding examples
+>
+>
+> I still do not understand why so many phony targets are necessary.
 
-and subsequent build errors:
+I thought that's what you were suggesting, but I guess you meant just
+separate internal targets. Separate targets exposed to the user are
+useful as well. I've had some requests to be able to skip running
+yamllint for example. The processed schema can be used for a few other
+tools now, so being able to just build it is useful.
 
-arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
-(.text+0x68): undefined reference to `cpu_sa110_suspend_size'
-arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
-suspend.c:(.text+0x478): undefined reference to `cpu_sa110_do_suspend'
-arm-linux-gnueabi-ld: suspend.c:(.text+0x4e8): undefined reference to `cpu_sa110_do_resume'
-
-Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Dmitry Osipenko <digetx@gmail.com>
-Cc: Thierry Reding <treding@nvidia.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-pm@vger.kernel.org
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: add Arnd's Reviewed-by.
-
- drivers/cpuidle/Kconfig.arm |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -102,6 +102,7 @@ config ARM_MVEBU_V7_CPUIDLE
- config ARM_TEGRA_CPUIDLE
- 	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
- 	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
-+	depends on ARCH_SUSPEND_POSSIBLE
- 	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
- 	select ARM_CPU_SUSPEND
- 	help
+Rob

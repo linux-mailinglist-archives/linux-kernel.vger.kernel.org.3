@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0785A4A70
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C31B5A494D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiH2LiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S231844AbiH2LXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiH2LhD (ORCPT
+        with ESMTP id S231642AbiH2LVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:37:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD36461B3C;
-        Mon, 29 Aug 2022 04:21:31 -0700 (PDT)
+        Mon, 29 Aug 2022 07:21:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A701165;
+        Mon, 29 Aug 2022 04:14:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F0E561185;
-        Mon, 29 Aug 2022 11:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771CAC433C1;
-        Mon, 29 Aug 2022 11:19:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9964461214;
+        Mon, 29 Aug 2022 11:11:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2889DC433C1;
+        Mon, 29 Aug 2022 11:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771966;
-        bh=9TpFLjXDWWPGSkUHylnED8xi99Am0soBk1z8T1wdQ/I=;
+        s=korg; t=1661771474;
+        bh=VN7QLUM9u6R6IOVbvpnY/9cLJJiXJQxgKLVbZmB60TI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y21Qnk3E//3apmt8RiGP/5U+uWMfhdeGIQJJbzpKU1ZCNgo50Lk1faCmvr6/44Gkr
-         GhtHIf7W9/+AkQo5clbL/2MXCVRKMAeKIpJkzHiptRzPc+VB9IvjELKui1+2jmBojl
-         VbUxq1wgoNrM//Y1PyCLNHpziuh8H/CYsiaQOX2I=
+        b=bVaZDNlvo/t1l0Than623tRj/s0R1k8c5/53Qgg6sPT7HNfEtU6ev7TYvpsloSG/A
+         4p5Td4iZ1GjbRriz93f30orH47JnFuwv7OZmFipC9CKKQozPVAFqMjkW9xklNkF8cK
+         FGMRT11KSCOHsa9vBni5u00boDmVIeWDGTJwQ7ew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Hugh Dickins <hughd@google.com>,
+        Badari Pulavarty <badari.pulavarty@intel.com>,
+        SeongJae Park <sj@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.19 123/158] shmem: update folio if shmem_replace_page() updates the page
-Date:   Mon, 29 Aug 2022 12:59:33 +0200
-Message-Id: <20220829105814.269068045@linuxfoundation.org>
+Subject: [PATCH 5.15 107/136] mm/damon/dbgfs: avoid duplicate context directory creation
+Date:   Mon, 29 Aug 2022 12:59:34 +0200
+Message-Id: <20220829105809.108745359@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Badari Pulavarty <badari.pulavarty@intel.com>
 
-commit 9dfb3b8d655022760ca68af11821f1c63aa547c3 upstream.
+commit d26f60703606ab425eee9882b32a1781a8bed74d upstream.
 
-If we allocate a new page, we need to make sure that our folio matches
-that new page.
+When user tries to create a DAMON context via the DAMON debugfs interface
+with a name of an already existing context, the context directory creation
+fails but a new context is created and added in the internal data
+structure, due to absence of the directory creation success check.  As a
+result, memory could leak and DAMON cannot be turned on.  An example test
+case is as below:
 
-If we do end up in this code path, we store the wrong page in the shmem
-inode's page cache, and I would rather imagine that data corruption
-ensues.
+    # cd /sys/kernel/debug/damon/
+    # echo "off" >  monitor_on
+    # echo paddr > target_ids
+    # echo "abc" > mk_context
+    # echo "abc" > mk_context
+    # echo $$ > abc/target_ids
+    # echo "on" > monitor_on  <<< fails
 
-This will be solved by changing shmem_replace_page() to
-shmem_replace_folio(), but this is the minimal fix.
+Return value of 'debugfs_create_dir()' is expected to be ignored in
+general, but this is an exceptional case as DAMON feature is depending
+on the debugfs functionality and it has the potential duplicate name
+issue.  This commit therefore fixes the issue by checking the directory
+creation failure and immediately return the error in the case.
 
-Link: https://lkml.kernel.org/r/20220730042518.1264767-1-willy@infradead.org
-Fixes: da08e9b79323 ("mm/shmem: convert shmem_swapin_page() to shmem_swapin_folio()")
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Reviewed-by: William Kucharski <william.kucharski@oracle.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20220821180853.2400-1-sj@kernel.org
+Fixes: 75c1c2b53c78 ("mm/damon/dbgfs: support multiple contexts")
+Signed-off-by: Badari Pulavarty <badari.pulavarty@intel.com>
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Cc: <stable@vger.kernel.org>	[ 5.15.x]
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/shmem.c |    1 +
- 1 file changed, 1 insertion(+)
+ mm/damon/dbgfs.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1771,6 +1771,7 @@ static int shmem_swapin_folio(struct ino
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -376,6 +376,9 @@ static int dbgfs_mk_context(char *name)
+ 		return -ENOENT;
  
- 	if (shmem_should_replace_folio(folio, gfp)) {
- 		error = shmem_replace_page(&page, gfp, info, index);
-+		folio = page_folio(page);
- 		if (error)
- 			goto failed;
- 	}
+ 	new_dir = debugfs_create_dir(name, root);
++	/* Below check is required for a potential duplicated name case */
++	if (IS_ERR(new_dir))
++		return PTR_ERR(new_dir);
+ 	dbgfs_dirs[dbgfs_nr_ctxs] = new_dir;
+ 
+ 	new_ctx = dbgfs_new_ctx();
 
 

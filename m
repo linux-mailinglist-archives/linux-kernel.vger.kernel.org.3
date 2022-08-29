@@ -2,241 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60505A436C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B65D5A4365
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiH2GyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 02:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S229551AbiH2Gvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 02:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiH2GyK (ORCPT
+        with ESMTP id S229459AbiH2Gvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 02:54:10 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009E046D92
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 23:54:01 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v4so6874538pgi.10
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 23:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=u6R40n8MPoARVm3Mtks2apAeDMP4MZtDTuXM3b5bDPA=;
-        b=eWHaczqLrzgoEHImGmPZ94RG4Z6HNHjYySRyrtbvt+VMSj9GgY04Dxl3peOnUMbERM
-         T0wxrzo2EvmsBZmntKsbHO/63kZHcX4rpqsUn9G8neYsYGMct3J3ZO3lp6v5WspmCJFV
-         iD6CVqTySLQKsoHLzKglTu1dJKce/Jf7/baFS/3t+o1l3siQjN3AjG+dPZAaOfHGwS9V
-         E+Zxmy57ACr0LBFW1d2+WUw+CX0eo2CMWE3avHdyWM1+bPrqGX9PDJR/IxYGS3ZlsOY6
-         3NgVEEtXpguVkaN4/e8aii685vpB/rr5zZdaGprhqMQU/Z2n3gS81+htckrizvEXgTsa
-         4jpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=u6R40n8MPoARVm3Mtks2apAeDMP4MZtDTuXM3b5bDPA=;
-        b=GcYj6ALL2aBySx0JOYc3+cV7Sz9mi8sGCtD7KlEOAV86aeS3UABDTIrbior3S6SusI
-         HSNZJqcHrpFBcmYsW0q3oWVzzN9qK0SJ7YCIA+L4trfg1952QnxxH+i1LyM4wE/ORKwe
-         i96ZJ45u82eSJu/aLDp14aW/lpsvwocR2NlnRCCC4HoFTlOAOGeT5vRvgAFaaQqxE176
-         0h31DRMw8eU/3bKUvYfPEPr/aXmWhG1phNGX3SVX/qeoyv1Ctea63Yt/cMrcpRNraqzF
-         Tf1YNAKsVFur+H3BtQJK/VDqQQoB0/HoOKdLgtbBtVXMHur3Fk06Rw7ZLniX1W/tb8ix
-         W4pA==
-X-Gm-Message-State: ACgBeo2L5dgTsKZ+48c7ILDSB7GTGNLsTAzst5z/hsFowtf8JVso9v0D
-        Q3DVXpKhUSXo+LUsq1uxnDZDOw==
-X-Google-Smtp-Source: AA6agR50cryByjgHlJMx73H+k8NWoxtPwbincNgW2C4keQjTpRA+15aCO/PZwkF3DzqNIeBhukYV9g==
-X-Received: by 2002:a63:d00a:0:b0:42a:3d80:10a with SMTP id z10-20020a63d00a000000b0042a3d80010amr12459203pgf.288.1661756040268;
-        Sun, 28 Aug 2022 23:54:00 -0700 (PDT)
-Received: from archl-hc1b.. ([103.51.72.9])
-        by smtp.gmail.com with ESMTPSA id k3-20020aa79d03000000b00537d4a3aec9sm5687314pfp.104.2022.08.28.23.53.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 23:54:00 -0700 (PDT)
-From:   Anand Moon <anand@edgeble.ai>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     Sugar Zhang <sugar.zhang@rock-chips.com>,
-        David Wu <david.wu@rock-chips.com>,
-        Jagan Teki <jagan@edgeble.ai>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] net: ethernet: stmicro: stmmac: dwmac-rk: Add rv1126 support
-Date:   Mon, 29 Aug 2022 06:50:42 +0000
-Message-Id: <20220829065044.1736-2-anand@edgeble.ai>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829065044.1736-1-anand@edgeble.ai>
-References: <20220829065044.1736-1-anand@edgeble.ai>
+        Mon, 29 Aug 2022 02:51:47 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2475441D30
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 23:51:44 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by michel.telenet-ops.be with bizsmtp
+        id DJrh2800S4C55Sk06JrhWj; Mon, 29 Aug 2022 08:51:42 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oSYcX-0035OY-Jt
+        for linux-kernel@vger.kernel.org; Mon, 29 Aug 2022 08:51:41 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oSYcX-007ulX-01
+        for linux-kernel@vger.kernel.org; Mon, 29 Aug 2022 08:51:41 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.0-rc3
+Date:   Mon, 29 Aug 2022 08:51:40 +0200
+Message-Id: <20220829065140.1886301-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHk-=whaiqzB6a_daUpvGyDg-cvkXKwwfjwPKV4HQRcci+8BeA@mail.gmail.com>
+References: <CAHk-=whaiqzB6a_daUpvGyDg-cvkXKwwfjwPKV4HQRcci+8BeA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rockchip RV1126 has GMAC 10/100/1000M ethernet controller
-via RGMII and RMII interfaces are configured via M0 and M1 pinmux.
+Below is the list of build error/warning regressions/improvements in
+v6.0-rc3[1] compared to v5.19[2].
 
-This patch adds rv1126 support by adding delay lines of M0 and M1
-simultaneously.
+Summarized:
+  - build errors: +18/-16
+  - build warnings: +7/-28
 
-Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
-Signed-off-by: David Wu <david.wu@rock-chips.com>
-Signed-off-by: Anand Moon <anand@edgeble.ai>
-Signed-off-by: Jagan Teki <jagan@edgeble.ai>
----
- .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 125 ++++++++++++++++++
- 1 file changed, 125 insertions(+)
+JFYI, when comparing v6.0-rc3[1] to v6.0-rc2[3], the summaries are:
+  - build errors: +5/-5
+  - build warnings: +0/-1
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-index c469abc91fa1..93be3efb5fff 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-@@ -1153,6 +1153,130 @@ static const struct rk_gmac_ops rv1108_ops = {
- 	.set_rmii_speed = rv1108_set_rmii_speed,
- };
- 
-+#define RV1126_GRF_GMAC_CON0		0X0070
-+#define RV1126_GRF_GMAC_CON1		0X0074
-+#define RV1126_GRF_GMAC_CON2		0X0078
-+
-+/* RV1126_GRF_GMAC_CON0 */
-+#define RV1126_GMAC_PHY_INTF_SEL_RGMII	\
-+		(GRF_BIT(4) | GRF_CLR_BIT(5) | GRF_CLR_BIT(6))
-+#define RV1126_GMAC_PHY_INTF_SEL_RMII	\
-+		(GRF_CLR_BIT(4) | GRF_CLR_BIT(5) | GRF_BIT(6))
-+#define RV1126_GMAC_FLOW_CTRL			GRF_BIT(7)
-+#define RV1126_GMAC_FLOW_CTRL_CLR		GRF_CLR_BIT(7)
-+#define RV1126_GMAC_M0_RXCLK_DLY_ENABLE		GRF_BIT(1)
-+#define RV1126_GMAC_M0_RXCLK_DLY_DISABLE	GRF_CLR_BIT(1)
-+#define RV1126_GMAC_M0_TXCLK_DLY_ENABLE		GRF_BIT(0)
-+#define RV1126_GMAC_M0_TXCLK_DLY_DISABLE	GRF_CLR_BIT(0)
-+#define RV1126_GMAC_M1_RXCLK_DLY_ENABLE		GRF_BIT(3)
-+#define RV1126_GMAC_M1_RXCLK_DLY_DISABLE	GRF_CLR_BIT(3)
-+#define RV1126_GMAC_M1_TXCLK_DLY_ENABLE		GRF_BIT(2)
-+#define RV1126_GMAC_M1_TXCLK_DLY_DISABLE	GRF_CLR_BIT(2)
-+
-+/* RV1126_GRF_GMAC_CON1 */
-+#define RV1126_GMAC_M0_CLK_RX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 8)
-+#define RV1126_GMAC_M0_CLK_TX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 0)
-+/* RV1126_GRF_GMAC_CON2 */
-+#define RV1126_GMAC_M1_CLK_RX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 8)
-+#define RV1126_GMAC_M1_CLK_TX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 0)
-+
-+static void rv1126_set_to_rgmii(struct rk_priv_data *bsp_priv,
-+				int tx_delay, int rx_delay)
-+{
-+	struct device *dev = &bsp_priv->pdev->dev;
-+
-+	if (IS_ERR(bsp_priv->grf)) {
-+		dev_err(dev, "Missing rockchip,grf property\n");
-+		return;
-+	}
-+
-+	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON0,
-+		     RV1126_GMAC_PHY_INTF_SEL_RGMII |
-+		     RV1126_GMAC_M0_RXCLK_DLY_ENABLE |
-+		     RV1126_GMAC_M0_TXCLK_DLY_ENABLE |
-+		     RV1126_GMAC_M1_RXCLK_DLY_ENABLE |
-+		     RV1126_GMAC_M1_TXCLK_DLY_ENABLE);
-+
-+	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON1,
-+		     RV1126_GMAC_M0_CLK_RX_DL_CFG(rx_delay) |
-+		     RV1126_GMAC_M0_CLK_TX_DL_CFG(tx_delay));
-+
-+	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON2,
-+		     RV1126_GMAC_M1_CLK_RX_DL_CFG(rx_delay) |
-+		     RV1126_GMAC_M1_CLK_TX_DL_CFG(tx_delay));
-+}
-+
-+static void rv1126_set_to_rmii(struct rk_priv_data *bsp_priv)
-+{
-+	struct device *dev = &bsp_priv->pdev->dev;
-+
-+	if (IS_ERR(bsp_priv->grf)) {
-+		dev_err(dev, "%s: Missing rockchip,grf property\n", __func__);
-+		return;
-+	}
-+
-+	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON0,
-+		     RV1126_GMAC_PHY_INTF_SEL_RMII);
-+}
-+
-+static void rv1126_set_rgmii_speed(struct rk_priv_data *bsp_priv, int speed)
-+{
-+	struct device *dev = &bsp_priv->pdev->dev;
-+	unsigned long rate;
-+	int ret;
-+
-+	switch (speed) {
-+	case 10:
-+		rate = 2500000;
-+		break;
-+	case 100:
-+		rate = 25000000;
-+		break;
-+	case 1000:
-+		rate = 125000000;
-+		break;
-+	default:
-+		dev_err(dev, "unknown speed value for RGMII speed=%d", speed);
-+		return;
-+	}
-+
-+	ret = clk_set_rate(bsp_priv->clk_mac_speed, rate);
-+	if (ret)
-+		dev_err(dev, "%s: set clk_mac_speed rate %ld failed %d\n",
-+			__func__, rate, ret);
-+}
-+
-+static void rv1126_set_rmii_speed(struct rk_priv_data *bsp_priv, int speed)
-+{
-+	struct device *dev = &bsp_priv->pdev->dev;
-+	unsigned long rate;
-+	int ret;
-+
-+	switch (speed) {
-+	case 10:
-+		rate = 2500000;
-+		break;
-+	case 100:
-+		rate = 25000000;
-+		break;
-+	default:
-+		dev_err(dev, "unknown speed value for RGMII speed=%d", speed);
-+		return;
-+	}
-+
-+	ret = clk_set_rate(bsp_priv->clk_mac_speed, rate);
-+	if (ret)
-+		dev_err(dev, "%s: set clk_mac_speed rate %ld failed %d\n",
-+			__func__, rate, ret);
-+}
-+
-+static const struct rk_gmac_ops rv1126_ops = {
-+	.set_to_rgmii = rv1126_set_to_rgmii,
-+	.set_to_rmii = rv1126_set_to_rmii,
-+	.set_rgmii_speed = rv1126_set_rgmii_speed,
-+	.set_rmii_speed = rv1126_set_rmii_speed,
-+};
-+
- #define RK_GRF_MACPHY_CON0		0xb00
- #define RK_GRF_MACPHY_CON1		0xb04
- #define RK_GRF_MACPHY_CON2		0xb08
-@@ -1681,6 +1805,7 @@ static const struct of_device_id rk_gmac_dwmac_match[] = {
- 	{ .compatible = "rockchip,rk3399-gmac", .data = &rk3399_ops },
- 	{ .compatible = "rockchip,rk3568-gmac", .data = &rk3568_ops },
- 	{ .compatible = "rockchip,rv1108-gmac", .data = &rv1108_ops },
-+	{ .compatible = "rockchip,rv1126-gmac", .data = &rv1126_ops },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, rk_gmac_dwmac_match);
--- 
-2.37.2
+Happy fixing! ;-)
 
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/b90cb1053190353cc30f0fef0ef1f378ccc063c5/ (all 135 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/3d7cb6b04c3f3115719235cc6866b10326de34cd/ (all 135 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1c23f9e627a7b412978b4e852793c5e3c3efc555/ (all 135 configs)
+
+
+*** ERRORS ***
+
+18 error regressions:
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 46, 51
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 50, 45
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c: error: the frame size of 2096 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 6806:1
+  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
+
+16 error improvements:
+  - /kisskb/src/arch/sh/kernel/machvec.c: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]: 105:33 => 
+  - /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer: 103:18 => 
+  - /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 109:1 => 
+  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]: 1614:1 => 
+  - /kisskb/src/drivers/gpu/drm/r128/r128_cce.c: error: case label does not reduce to an integer constant: 418:2, 417:2 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - {standard input}: Error: displacement to undefined symbol .L271 overflows 12-bit field: 1625 => 
+  - {standard input}: Error: displacement to undefined symbol .L271 overflows 8-bit field : 1634 => 
+  - {standard input}: Error: displacement to undefined symbol .L318 overflows 8-bit field : 1693, 1711, 1665, 1681 => 
+  - {standard input}: Error: pcrel too far: 1649, 1656, 1702, 1705, 1684, 1655, 1660, 1686, 1635, 1644, 1632, 1618, 1685, 1673, 1657, 1670, 1700, 1695, 1698, 1629, 1667, 1672, 1609, 1676 => 
+  - {standard input}: Error: unknown opcode: 1713 => 
+
+
+*** WARNINGS ***
+
+7 warning regressions:
+  + /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 407:1
+  + /kisskb/src/fs/mpage.c: warning: the frame size of 1092 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 308:1
+  + /kisskb/src/fs/mpage.c: warning: the frame size of 1144 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 634:1
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata):  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata):  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o: section mismatch in reference: qede_forced_speed_maps (section: .data) -> qede_forced_speed_100000 (section: .init.rodata):  => N/A
+  + modpost: WARNING: modpost: vmlinux.o: section mismatch in reference: __trace_event_discard_commit (section: .text.unlikely) -> initcall_level_names (section: .init.data):  => N/A
+
+28 warning improvements:
+  - /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1136 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 407:1 => 
+  - /kisskb/src/fs/mpage.c: warning: the frame size of 1088 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 303:1 => 
+  - /kisskb/src/fs/mpage.c: warning: the frame size of 1148 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 638:1 => 
+  - arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL: 61 => 
+  - arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL: 37 => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14410): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14428): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14440): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14458): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14470): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14488): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144f0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14508): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14520): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14538): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14550): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14568): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14580): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14598): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47b0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47e0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4810): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4828): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4840): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x52bc): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745135A559A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97FE5A559E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiH2Ue7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S229652AbiH2Uf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiH2Ue5 (ORCPT
+        with ESMTP id S229556AbiH2UfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:34:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235591CB34;
-        Mon, 29 Aug 2022 13:34:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6561B81211;
-        Mon, 29 Aug 2022 20:34:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09EEAC433D6;
-        Mon, 29 Aug 2022 20:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661805293;
-        bh=JdpTsh0vpLzXYFuVgPaN22fxCzf3es58W6ZxtaLnGJo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W98aFR9L/yVMMf3iotWWAjyF8BnjSlCM3x5mH4GwSvEWlNp4ZivZ3+WKFui043hcI
-         f65XvSDXEL/OrQMwaFn6CnHqm4sw3BebP9jZfsM1NjloVIo666eZW3wkBIoKcHK2WG
-         qi0DsjDdyPw2OBNGUMxX3ddTC8XRZ8qJqx2S7Ax8=
-Date:   Mon, 29 Aug 2022 13:34:52 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?ISO-8859-1?Q? "Arve_?= =?ISO-8859-1?Q?Hj=F8nnev=E5g" ?= 
-        <arve@android.com>, Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        kernel-team@android.com,
-        syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com,
-        syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com,
-        stable@vger.kernel.org,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
-Message-Id: <20220829133452.cd4d9abe858c940126557c41@linux-foundation.org>
-In-Reply-To: <20220829201254.1814484-2-cmllamas@google.com>
-References: <20220829201254.1814484-1-cmllamas@google.com>
-        <20220829201254.1814484-2-cmllamas@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Mon, 29 Aug 2022 16:35:24 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396FD77EBD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:35:23 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-11ee4649dfcso5608298fac.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=TWr3TDm9avVPonPTqZ8cUHmP3gOyN78ms22mt44A4BA=;
+        b=Kcmk8a1VG0mh4MVJt1/BosKmHsd8u7eRp44VVAGwsoMWNpp7CysGzRWyiNC/8lJrSo
+         48GDKBnn0P/JJ/xyPgIavaeqckB2M7Dhfovv1DdouDJ0fXQksy93uOowjbUCvqx7v8J/
+         MKOZu4BwH/lHh5HigZqtIzBDvNYxWtelUKXwQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=TWr3TDm9avVPonPTqZ8cUHmP3gOyN78ms22mt44A4BA=;
+        b=dW+cJ0nIVs4Yt454QnBC/rI5RHPpNn2Hm/uloLUzct4qpU9Tblsc1eylLX8enf25Qa
+         IVV2Txk1zdCLmMXN+RObfjDFUDRNn0I0dZ9kyNaPI9HzLaEXVAZjT5yvpa37e2J5uVVA
+         EWAsv1W5z9m9WN1zMG7ms7dapOJbgw60jKoKNHy/7D5jzd9uytTbdB7t2YNK2NenjQLU
+         /xylE8KQn8B6qiXI5lO6jIsDVUSpciNEWT1ibPEJpUBHGzrZO6bTPeBC0kTZdF+ESNhy
+         fP65F8ZQkeXdAIOGIAYn5xzrKafj08N7ONuXCgGq+shOEozPo6pJK6tpDb51iWMitmx0
+         SY7Q==
+X-Gm-Message-State: ACgBeo1scxXPXF/UwEWo1KIoKczIkXBQw+4Ryn4jvm8k3kQ8wxfsaRkj
+        qW03Mf+FGminLtxBX264t3N446L/I19KtX3bqIUypQ==
+X-Google-Smtp-Source: AA6agR4Lu5UWdr0LmgmFR4I9mbK8Vk3GAncKRJqKl9w2iKJ8h1UMLCmJk/2ZASLN1J8YDCUQA9s95qmhETYrrzckAN4=
+X-Received: by 2002:a05:6808:bca:b0:344:ef42:930f with SMTP id
+ o10-20020a0568080bca00b00344ef42930fmr7779595oik.0.1661805322493; Mon, 29 Aug
+ 2022 13:35:22 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 29 Aug 2022 15:35:21 -0500
+MIME-Version: 1.0
+In-Reply-To: <1661754153-14813-3-git-send-email-quic_c_skakit@quicinc.com>
+References: <1661754153-14813-1-git-send-email-quic_c_skakit@quicinc.com> <1661754153-14813-3-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 29 Aug 2022 15:35:21 -0500
+Message-ID: <CAE-0n50oOi99jgL7Z=Dt784XEv-Q3O9TSDT4ZiRz8t_X8fV0ZQ@mail.gmail.com>
+Subject: Re: [PATCH V8 2/5] clk: qcom: lpass: Handle the regmap overlap of
+ lpasscc and lpass_aon
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,26 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 20:12:48 +0000 Carlos Llamas <cmllamas@google.com> wrote:
+Quoting Satya Priya (2022-08-28 23:22:30)
+> Move registration of lpass_q6ss_ahbm_clk and lpass_q6ss_ahbs_clk to
+> lpass_aon_cc_sc7280_probe and register them only if "qcom,adsp-pil-mode"
+> is enabled in the lpass_aon DT node.
+>
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 
-> Syzbot reported a couple issues introduced by commit 44e602b4e52f
-> ("binder_alloc: add missing mmap_lock calls when using the VMA"), in
-> which we attempt to acquire the mmap_lock when alloc->vma_vm_mm has not
-> been initialized yet.
-> 
-> This can happen if a binder_proc receives a transaction without having
-> previously called mmap() to setup the binder_proc->alloc space in [1].
-> Also, a similar issue occurs via binder_alloc_print_pages() when we try
-> to dump the debugfs binder stats file in [2].
+Your Signed-off-by should be last. If Taniya's SoB is present then I'd
+expect a Co-developed-by tag as well, or the author should be Taniya.
+Either way Taniya's SoB should be first.
 
-Thanks.  I assume you'll be merging all these into mainline?
-
-> 
-> Fixes: 44e602b4e52f ("binder_alloc: add missing mmap_lock calls when using the VMA")
-> Reported-by: syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com
-> Reported-by: syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com
-> Cc: <stable@vger.kernel.org> # v5.15+
-
-44e602b4e52f is only present in 6.0-rcX?
-
-
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>

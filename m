@@ -2,63 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E35A4349
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253475A4354
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiH2Gbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 02:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S229866AbiH2GfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 02:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH2Gbp (ORCPT
+        with ESMTP id S229843AbiH2GfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 02:31:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363FBBC97;
-        Sun, 28 Aug 2022 23:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661754702; x=1693290702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tBRThUyNOZ/khHKlmG0VTgZ6Qe5VMW4DNL2BjrSmuMM=;
-  b=DItL2JqEjw5vV9FAcwPZufH35fxzg8kRNrP5ykTVM3GW0/zUuSBldNeu
-   6fJp2UV8Y6L0uCLc1KY/D7pQN9Fy1OrdsSumvFGWjHVpQFuqYhS3iK+kD
-   /MYaXf2wInb9HPfoseGzzbjpIH84mRUKhKXpl6tTMtuf/UUueGYOu9GmO
-   wLWk+mc+DxYkUxEVYNM3NqTuF2Jetx4vTN+rUz8qZ//gE1IoK0pjDbmsD
-   o/HS0vTFIIbOUg0EBzvr0YEJDecLaueXXjc5yddBpjzn+dAxMyPebipXf
-   htsKXdqJ/AMJFCmFrk6K8oBJgNMcmbhQRSPxu4jmWu/AmV+5mTUWkKO0N
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="188432508"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Aug 2022 23:31:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sun, 28 Aug 2022 23:31:40 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Sun, 28 Aug 2022 23:31:40 -0700
-Date:   Mon, 29 Aug 2022 08:35:57 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: lan9662-otpc: document Lan9662 OTPC
-Message-ID: <20220829063557.3ntgt6uqblgew3r3@soft-dev3-1.localhost>
-References: <20220825204041.1485731-1-horatiu.vultur@microchip.com>
- <20220825204041.1485731-2-horatiu.vultur@microchip.com>
- <96da4897-7b55-84d5-8f1d-892e116153df@linaro.org>
- <20220826073103.kkotbaxc3latculo@soft-dev3-1.localhost>
- <bb0331e7-2203-e8cb-70b6-5d43bf6a0aaf@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <bb0331e7-2203-e8cb-70b6-5d43bf6a0aaf@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 29 Aug 2022 02:35:17 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA67B1275F
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 23:35:13 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:33464.1972940701
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 440CB1002B3;
+        Mon, 29 Aug 2022 14:35:11 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-84fc4d489d-ngzxf with ESMTP id f15f6262ff3f481d8b2da43890107d73 for karolinadrobnik@gmail.com;
+        Mon, 29 Aug 2022 14:35:12 CST
+X-Transaction-ID: f15f6262ff3f481d8b2da43890107d73
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     karolinadrobnik@gmail.com, rppt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Song Chen <chensong_2000@189.cn>
+Subject: [PATCH 1/2] tools/libs/slab.c: fix compiling mistakes of uatomic_inc/uatomic_dec
+Date:   Mon, 29 Aug 2022 14:38:41 +0800
+Message-Id: <1661755121-3286-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,65 +47,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 08/26/2022 20:37, Krzysztof Kozlowski wrote:
-> 
-> On 26/08/2022 10:31, Horatiu Vultur wrote:
-> > The 08/26/2022 09:42, Krzysztof Kozlowski wrote:
-> >
-> > Hi Krzysztof,
-> >
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    items:
-> >>> +      - const: microchip,lan9662-otpc
-> >>> +      - const: microchip,lan9668-otpc
-> >>
-> >> Does not look like you tested the bindings. Please run `make
-> >> dt_binding_check` (see
-> >> Documentation/devicetree/bindings/writing-schema.rst for instructions).
-> >>
-> >> This won't work...
-> >
-> > You are right. That was a silly mistake on my side.
-> >
-> > It should be:
-> > ---
-> > properties:
-> >   compatible:
-> >     enum:
-> >       - microchip,lan9662-otpc
-> >       - microchip,lan9668-otpc
-> > ---
-> > Because what I want to achive is to be able to use any of
-> > string(microchip,lan9662-otpc or microchip,lan9668-otpc) as compatible
-> > string.
-> >
-> > Or this is not the correct change?
-> > At least with this change dt_binding_check is happy.
-> 
-> This would be correct from syntax point of view, however maybe not the
-> best choice from functional point of view. How you wrote the driver and
-> bindings, these devices are compatible, so why this is not expressed as
-> compatible devices?
+I tried to build tools/test/memblock and got such message:
 
-OK, so then it should be something like this?
+/usr/bin/ld: slab.o: in function `kmalloc':
+slab.c:(.text+0x2b): undefined reference to `uatomic_inc'
+/usr/bin/ld: slab.o: in function `kfree':
+slab.c:(.text+0x97): undefined reference to `uatomic_dec'
+collect2: error: ld returned 1 exit status
+
+I could find any definition or inplememtation of uatomic_inc/uatomic_dec
+in anywhere of the code base. So I use atomic_inc/atomic_dec_and_test
+to replace like other tests underneath tools/test, it works.
+
+Signed-off-by: Song Chen <chensong_2000@189.cn>
 ---
-properties:
-  compatible:
-    items:
-       - const: microchip,lan9662-otpc
-       - const: microchip,lan9668-otpc
----
+ tools/lib/slab.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I have tried to look at the following yaml files[1],[2] to see how they
-have done it.
-
-[1] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-[2] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-
-> 
-> Best regards,
-> Krzysztof
-
+diff --git a/tools/lib/slab.c b/tools/lib/slab.c
+index 959997fb0652..8a5a8d536e35 100644
+--- a/tools/lib/slab.c
++++ b/tools/lib/slab.c
+@@ -3,7 +3,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
+-#include <urcu/uatomic.h>
++#include <linux/atomic.h>
+ #include <linux/slab.h>
+ #include <malloc.h>
+ #include <linux/gfp.h>
+@@ -19,7 +19,7 @@ void *kmalloc(size_t size, gfp_t gfp)
+ 		return NULL;
+ 
+ 	ret = malloc(size);
+-	uatomic_inc(&kmalloc_nr_allocated);
++	atomic_inc(&kmalloc_nr_allocated);
+ 	if (kmalloc_verbose)
+ 		printf("Allocating %p from malloc\n", ret);
+ 	if (gfp & __GFP_ZERO)
+@@ -31,7 +31,7 @@ void kfree(void *p)
+ {
+ 	if (!p)
+ 		return;
+-	uatomic_dec(&kmalloc_nr_allocated);
++	atomic_dec_and_test(&kmalloc_nr_allocated);
+ 	if (kmalloc_verbose)
+ 		printf("Freeing %p to malloc\n", p);
+ 	free(p);
 -- 
-/Horatiu
+2.25.1
+

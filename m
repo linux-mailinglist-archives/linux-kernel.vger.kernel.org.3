@@ -2,143 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0A65A4180
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 05:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD355A4185
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 05:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiH2DcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 23:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S229753AbiH2Dgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 23:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiH2DcU (ORCPT
+        with ESMTP id S229475AbiH2Dg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 23:32:20 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB5193E5;
-        Sun, 28 Aug 2022 20:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661743939; x=1693279939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZNxOoPeAHhN/1dtqMR/zUEqKl0gYFGInH11MuO8ZPZw=;
-  b=IMf4nPST4vRVS9x2lN9siwPlUoeI0r431TXhID+vGKeeqSTlLrP4K+cz
-   n3MclI3NhGeW3QOe4tKz2ksgrEK3jhO90vPLChF2R5mKxOZzSGl1BVxYh
-   NbgOr443CFuUZK8A5brf0NHWEkXhPnsju4Gbxql2FASZzfXS7hTqs+gfg
-   3+1QY0nOutXzTlUKqtK2wjPhI+5xHfmgLo9Xaomocy10d7dloHHmH06Ur
-   DsWegjQN3tMKbPdvrMN9wSdKuHSWCRPZMiL8A3fd9rSL9nqwudTJ2LTpj
-   y7z+UbKOwFniGtNyQSymHaMjBqoWd6VqD51adflhKuUhlYQhKs9VRnwEO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="292380499"
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="292380499"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 20:32:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="737196036"
-Received: from lkp-server01.sh.intel.com (HELO b2bbdd52f619) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Aug 2022 20:32:15 -0700
-Received: from kbuild by b2bbdd52f619 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSVVW-00008N-1w;
-        Mon, 29 Aug 2022 03:32:14 +0000
-Date:   Mon, 29 Aug 2022 11:31:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     oushixiong <oushixiong@kylinos.cn>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: Re: [PTACH v3] drm/ast: add dmabuf/prime buffer sharing support
-Message-ID: <202208291132.RQqpjzO1-lkp@intel.com>
-References: <20220827091030.496671-1-oushixiong@kylinos.cn>
+        Sun, 28 Aug 2022 23:36:29 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B4A2409E
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 20:36:28 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id x80so2991701pgx.0
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 20:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=ljjtZByavJYwGMqEDoi1bPqP2XeQlrKsYOp8SuafT3s=;
+        b=HtamZU/KSkrTmyaRvuvKRC9UPAqGxWwQyyA17LXAfvk3VVa6gKoDrunBsmYLksOlR7
+         mQzDr/6bOU7BKzc1aBvld38Dh9A1IR35flF+OjnlAOBN+kdvUsuw4J5WYXDBCDfj4s9U
+         HcSmp8t/oJnsAOKkdAn6bVmpyBjp6fi4wcpIMxtt6cphFjTxhPCGjqU/7wbrX5Gu/y3X
+         KvRUy/n67qLSXIcmILfPGwum+Rkb27eweGUmpOOlHNwKIRWojSdiIh70YLCvDk3FTf/s
+         gI41JutfQdauEo8Z/I6DOf7jZlKttiq75Ku2Gqw52fs7fzoww98h6T/HKVX1bcK39BQy
+         iKzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ljjtZByavJYwGMqEDoi1bPqP2XeQlrKsYOp8SuafT3s=;
+        b=mXBx+srBydGdBc+dS36xVaEhXvmPiFQITFGi/UxSdOrDnG0YW9Cqy80nOfyg13+DR1
+         lBtvYWI3EIXzftQrfohjJC7RuVhmL+RqG9QsxSc4ecfkzw+JlvkIRWjDdWOuRWVzpT9+
+         H0Z6sSl9B5nA/1ZLORW5TKQcyt1ioZdnhoec+nzHzAMDGM3LaPwaxBjOllvuds00TZii
+         T4JIMYTNF0/OtTPw6f2/2q09U9PWnL1fI7nr5+fxipuFbsS5lrRvbq2+f7EGgUrg2epd
+         mjhg5KjMz9n/RkGP+SP1maVe3mesThp7Ib8TjAjDeZtjRgbHFqnyI+gm0YvM9BMBX9YL
+         GkvA==
+X-Gm-Message-State: ACgBeo3bZXUU6LWlcwpS6QOTZMkEsajqA20pZ4djY0OR5i9XjHaKD2wb
+        DfQzJp8sbcn3N9MFycD6zh8=
+X-Google-Smtp-Source: AA6agR6OzuDiBM7qRdqVH+ICd/DRjA4Uq6NZFdt2kfY551/v+qpoPLOxfv1xBCB3g2KFyodyUvvE3Q==
+X-Received: by 2002:aa7:88c8:0:b0:536:926:700f with SMTP id k8-20020aa788c8000000b005360926700fmr14999577pff.72.1661744188074;
+        Sun, 28 Aug 2022 20:36:28 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id h193-20020a6283ca000000b0052e6d5ee183sm5972077pfe.129.2022.08.28.20.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 20:36:27 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 12:36:21 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Dawei Li <set_pte_at@outlook.com>, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: simplify size2index conversion of __kmalloc_index
+Message-ID: <Yww0NV54DXTzPG+R@hyeyoo>
+References: <TYCP286MB2323E622C54B765F087C073ECA779@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+ <YwwuSBAreqUk/jFq@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220827091030.496671-1-oushixiong@kylinos.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YwwuSBAreqUk/jFq@casper.infradead.org>
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi oushixiong,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm/drm-next drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.0-rc3 next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/oushixiong/drm-ast-add-dmabuf-prime-buffer-sharing-support/20220829-084713
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220829/202208291132.RQqpjzO1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/da31884b8b7e33af5cd8aa750dea30fde59d52aa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review oushixiong/drm-ast-add-dmabuf-prime-buffer-sharing-support/20220829-084713
-        git checkout da31884b8b7e33af5cd8aa750dea30fde59d52aa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/ast/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/ast/ast_drv.c:54:24: warning: no previous prototype for function 'ast_gem_prime_import' [-Wmissing-prototypes]
-   struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-                          ^
-   drivers/gpu/drm/ast/ast_drv.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-   ^
-   static 
-   1 warning generated.
+On Mon, Aug 29, 2022 at 04:11:04AM +0100, Matthew Wilcox wrote:
+> On Sun, Aug 28, 2022 at 11:14:48PM +0800, Dawei Li wrote:
+> > Current size2index is implemented by one to one hardcode mapping,
+> > which can be improved by order_base_2().
+> > Must be careful to not violate compile-time optimization rule.
+> 
+> This patch has been NACKed before (when submitted by other people).
 
 
-vim +/ast_gem_prime_import +54 drivers/gpu/drm/ast/ast_drv.c
+Hmm right.
+https://lkml.iu.edu/hypermail/linux/kernel/1606.2/05402.html
 
-    53	
-  > 54	struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-    55							struct dma_buf *dma_buf)
-    56	{
-    57		struct drm_gem_vram_object *gbo;
-    58	
-    59		gbo = drm_gem_vram_of_gem(dma_buf->priv);
-    60		if (gbo->bo.base.dev == dev) {
-    61			/*
-    62			* Importing dmabuf exported from out own gem increases
-    63			* refcount on gem itself instead of f_count of dmabuf.
-    64			*/
-    65			drm_gem_object_get(&gbo->bo.base);
-    66			return &gbo->bo.base;
-    67		}
-    68	
-    69		gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
-    70		if (IS_ERR(gbo))
-    71			return NULL;
-    72	
-    73		get_dma_buf(dma_buf);
-    74		return &gbo->bo.base;
-    75	}
-    76	
+Christoph Lameter wrote:
+> On Wed, 22 Jun 2016, Yury Norov wrote:
+> > There will be no fls() for constant at runtime because ilog2() calculates
+> > constant values at compile-time as well. From this point of view,
+> > this patch removes code duplication, as we already have compile-time
+> > log() calculation in kernel, and should re-use it whenever possible.\
+
+> The reason not to use ilog there was that the constant folding did not
+> work correctly with one or the other architectures/compilers. If you want
+> to do this then please verify that all arches reliably do produce a
+> constant there.
+
+Can we re-evaluate this?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Hyeonggon

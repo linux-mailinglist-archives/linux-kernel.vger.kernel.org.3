@@ -2,115 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D96A5A4635
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FA55A4639
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiH2Jhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S229525AbiH2JjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiH2Jhj (ORCPT
+        with ESMTP id S229475AbiH2JjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:37:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BC35B055
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661765858; x=1693301858;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BFtehnuFgv5fVu2/LkSmLdbdP0sndzL6Pbg/gWfp6/k=;
-  b=a7YGZTz7FvgO5LnwlHi9u5Q8T8ZLu+Y6+qS0nf06bUd6u+ft1mL8/kBn
-   NWn108zQBR8SU+0O9vWiVR6VsrjZKwbCxzYtEzTdI7LO0jhncNxGLsx94
-   Vj5onIqz6LX83ZWva07A/Ch+LvsDxnrfDuhB08yxaNZ2vezAgvvjyGNKq
-   DKtRrEXL+z0U8H76zlGpUO+bSc+uVvM04x7SL6+FrN/b5QeSA3LbLOFKq
-   DjuvHLE/dpCsRCCrkeLjMGUG4jPifc5CY28WzRuhpXrK1cYYayz8hVD8e
-   bGK+jOxqV7HNXsbOTB0NJ/c/k5QOqqdNglckUEUTy/j0AbjwrDeho6Z+V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="294863504"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="294863504"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 02:37:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="588105399"
-Received: from lkp-server01.sh.intel.com (HELO b2bbdd52f619) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Aug 2022 02:37:37 -0700
-Received: from kbuild by b2bbdd52f619 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSbD6-0000U6-2L;
-        Mon, 29 Aug 2022 09:37:36 +0000
-Date:   Mon, 29 Aug 2022 17:37:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-Subject: [steev:sc8280xp-6.0.0-rc3 124/167]
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c:867:27: error: conflicting types
- for 'qmp_phy_vreg_l'; have 'const char * const[]'
-Message-ID: <202208291702.B1RMW8LP-lkp@intel.com>
+        Mon, 29 Aug 2022 05:39:01 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D76D5C9DF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:38:59 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-334dc616f86so180893727b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GBvqua5cjMzjDQ/XgF9SZ1D4y+QsnVuyrt4amhV4btE=;
+        b=dx6bRQ4JN/hF+3326YxFT0DmQuGRpE34IYiS96EVX69SRQeKSaYPwt5CrXJyN5/6Jy
+         LU4sCb/nzEwY7rPM8KQoAIxIfvdbcNm2n40rDMqVfcTJScYRUNc6PFux701CkDOaVS3I
+         p/4Hy2JiSHOOSzChWW0xl4APo4fnylJHJ9WrJKbGlSalEnDMAaddVjR/x9qZqTHorbQN
+         oIVFtRs/0W/3z2F+EVui2fGdIizOdKUhrhCdwiHSyBf99GrsKuJ0tvJe2EHzoC0aQ+mz
+         vJQY/hFbVFBQcwbB98qVRudkPkSpWvK3LFGhdzSkhwWir2jt11UNBByAnC4HQL4DbNqN
+         Q4Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GBvqua5cjMzjDQ/XgF9SZ1D4y+QsnVuyrt4amhV4btE=;
+        b=1zQ50Xw2ViZaCEYh0JRQex2ZaJNzpepYM50ucZK4++F1gHYvi5bf7GXIf6I8v0YeLQ
+         WpGjYbqn92/+zBh+VY1AB4fYxELN2UmmLbMzPHNkpU3m2omr7DnHrPPtHN05YMpBbWI9
+         QZlWmh6jLKL86W4o2Bvdkpjm4cw7xSwEk6bkZtVY5kYoVz31ark9HAik4JeHmZF/I0pl
+         GW2om5PpHOA639xC+r2VFNteeZoPyWHCte/KUqTjrESBbgKy98yK63LCfHf0oQ+yf3UV
+         fUDBEvHFhmxSKw/acfurP8zSSwdk4FiOz066MyBOQjsjOWwIiHof+VG4+yTlUhnYNGsc
+         SKDw==
+X-Gm-Message-State: ACgBeo3BisO+tXKNRV26sbquHxBOkkhoZ1B2/dyeNt3Wn4k+7bTiWnxS
+        y/4s3L5oJSj3nf+tRLyXyvYt/WZBLvQY9I08UPuhoQ==
+X-Google-Smtp-Source: AA6agR6q7ad6sf4kgVlbFbNc5qY39/VlvvSlRemTzNOIPH7rueyubBC/OTF7pi8jTZlObaVAtjHrYIlq/M8iqBqxOiw=
+X-Received: by 2002:a81:4e04:0:b0:33d:c7dc:9e2b with SMTP id
+ c4-20020a814e04000000b0033dc7dc9e2bmr8959772ywb.4.1661765938626; Mon, 29 Aug
+ 2022 02:38:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-12-elver@google.com>
+ <YvznKYgRKjDRSMkT@worktop.programming.kicks-ass.net> <CANpmjNN1vv9oDpm1_c99tQKgWVVtXza++u1xcBVeb5mhx5eUHw@mail.gmail.com>
+ <Ywx7CmbG+f+wg04z@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ywx7CmbG+f+wg04z@hirez.programming.kicks-ass.net>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 29 Aug 2022 11:38:22 +0200
+Message-ID: <CANpmjNPFnV2novubKKVmC7zJ8qi72QuRY6bWBEi5jrO_kkRBag@mail.gmail.com>
+Subject: Re: [PATCH v3 11/14] perf/hw_breakpoint: Reduce contention with large
+ number of tasks
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/steev/linux sc8280xp-6.0.0-rc3
-head:   219615b30a2e783a7af7d39e20f9e0ce56ac082e
-commit: 6dbf5b92242217b22325c932d2b34689147e7398 [124/167] phy: qcom-qmp-combo: Parameterize swing and pre_emphasis tables
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220829/202208291702.B1RMW8LP-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/steev/linux/commit/6dbf5b92242217b22325c932d2b34689147e7398
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev sc8280xp-6.0.0-rc3
-        git checkout 6dbf5b92242217b22325c932d2b34689147e7398
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash
+On Mon, 29 Aug 2022 at 10:38, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Aug 17, 2022 at 03:14:54PM +0200, Marco Elver wrote:
+> > On Wed, 17 Aug 2022 at 15:03, Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Mon, Jul 04, 2022 at 05:05:11PM +0200, Marco Elver wrote:
+> > > > +static bool bp_constraints_is_locked(struct perf_event *bp)
+> > > > +{
+> > > > +     struct mutex *tsk_mtx = get_task_bps_mutex(bp);
+> > > > +
+> > > > +     return percpu_is_write_locked(&bp_cpuinfo_sem) ||
+> > > > +            (tsk_mtx ? mutex_is_locked(tsk_mtx) :
+> > > > +                       percpu_is_read_locked(&bp_cpuinfo_sem));
+> > > > +}
+> > >
+> > > > @@ -426,18 +521,28 @@ static int modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+> > > >   */
+> > > >  int dbg_reserve_bp_slot(struct perf_event *bp)
+> > > >  {
+> > > > -     if (mutex_is_locked(&nr_bp_mutex))
+> > > > +     int ret;
+> > > > +
+> > > > +     if (bp_constraints_is_locked(bp))
+> > > >               return -1;
+> > > >
+> > > > -     return __reserve_bp_slot(bp, bp->attr.bp_type);
+> > > > +     /* Locks aren't held; disable lockdep assert checking. */
+> > > > +     lockdep_off();
+> > > > +     ret = __reserve_bp_slot(bp, bp->attr.bp_type);
+> > > > +     lockdep_on();
+> > > > +
+> > > > +     return ret;
+> > > >  }
+> > > >
+> > > >  int dbg_release_bp_slot(struct perf_event *bp)
+> > > >  {
+> > > > -     if (mutex_is_locked(&nr_bp_mutex))
+> > > > +     if (bp_constraints_is_locked(bp))
+> > > >               return -1;
+> > > >
+> > > > +     /* Locks aren't held; disable lockdep assert checking. */
+> > > > +     lockdep_off();
+> > > >       __release_bp_slot(bp, bp->attr.bp_type);
+> > > > +     lockdep_on();
+> > > >
+> > > >       return 0;
+> > > >  }
+> > >
+> > > Urggghhhh... this is horrible crap. That is, the current code is that
+> > > and this makes it worse :/
+> >
+> > Heh, yes and when I looked at it I really wanted to see if it can
+> > change. But from what I can tell, when the kernel debugger is being
+> > attached, the kernel does stop everything it does and we need the
+> > horrible thing above to not deadlock. And these dbg_ functions are not
+> > normally used, so I decided to leave it as-is. Suggestions?
+>
+> What context is this ran in? NMI should already have lockdep disabled.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the steev/sc8280xp-6.0.0-rc3 HEAD 219615b30a2e783a7af7d39e20f9e0ce56ac082e builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
->> drivers/phy/qualcomm/phy-qcom-qmp-combo.c:867:27: error: conflicting types for 'qmp_phy_vreg_l'; have 'const char * const[]'
-     867 | static const char * const qmp_phy_vreg_l[] = {
-         |                           ^~~~~~~~~~~~~~
-   drivers/phy/qualcomm/phy-qcom-qmp-combo.c:616:34: note: previous definition of 'qmp_phy_vreg_l' with type 'struct qmp_regulator_data[2]'
-     616 | static struct qmp_regulator_data qmp_phy_vreg_l[] = {
-         |                                  ^~~~~~~~~~~~~~
-   drivers/phy/qualcomm/phy-qcom-qmp-combo.c:616:34: warning: 'qmp_phy_vreg_l' defined but not used [-Wunused-variable]
-
-
-vim +867 drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-
-94a407cc17a445 Dmitry Baryshkov 2022-06-08  865  
-ac462f2fb30368 Johan Hovold     2022-07-20  866  /* list of regulators */
-ac462f2fb30368 Johan Hovold     2022-07-20 @867  static const char * const qmp_phy_vreg_l[] = {
-ac462f2fb30368 Johan Hovold     2022-07-20  868  	"vdda-phy", "vdda-pll",
-ac462f2fb30368 Johan Hovold     2022-07-20  869  };
-ac462f2fb30368 Johan Hovold     2022-07-20  870  
-
-:::::: The code at line 867 was first introduced by commit
-:::::: ac462f2fb30368fdeb826d0b229bee046c5b7bfb phy: qcom-qmp-combo: drop regulator loads
-
-:::::: TO: Johan Hovold <johan+linaro@kernel.org>
-:::::: CC: Steev Klimaszewski <steev@kali.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+kgdb can enter via kgdb_nmicall*() but also via
+kgdb_handle_exception(), which isn't for NMI.

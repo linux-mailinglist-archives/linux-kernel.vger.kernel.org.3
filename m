@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDE75A5272
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0CD5A533E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiH2RAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S231459AbiH2Rey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiH2RAJ (ORCPT
+        with ESMTP id S230356AbiH2Rev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:00:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AF34A811;
-        Mon, 29 Aug 2022 10:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661792407; x=1693328407;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6nppHl6aPXqc0co9Epu68ExNtuFi/fpCELicTEOpI80=;
-  b=Qjw3/7BFfbUa9vcgckOXu9Opxf/g/G5pfRyCOf49MTRw1zBbjffsuEjE
-   Qx0C0jFPt2U/W5YCOWqLleRF09DtDymEztDQdn4sZUMcDuGI6ywtnKZ1v
-   NXUV/8yFggHf+SV4e2rv5H4JDd8PA4qLstAfPcZA3pNYnpfauS5xdP8Es
-   pilXT02Xkw8bIedF/AffvpXkp39K3ildMOmEB6F5DGtSWfHpkoOWgqLlp
-   P5hEDPOsDyQi08Dizo1/ACmAe1LfesqMFsiaEvXgi3Ae3vkx/WacqQgc+
-   wOaeoQbod8bXJj9AYGnLJ+hd5NldSckUYCVeVNQhAbbU1s9qNTKbrHQLP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="295724910"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="295724910"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:00:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="562295517"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:00:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oSi7F-005c6k-2I;
-        Mon, 29 Aug 2022 20:00:01 +0300
-Date:   Mon, 29 Aug 2022 20:00:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v1] ACPI: property: Use acpi_dev_parent()
-Message-ID: <YwzwkdAZwNTBQ3gh@smile.fi.intel.com>
-References: <4756666.GXAFRqVoOG@kreacher>
+        Mon, 29 Aug 2022 13:34:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868CA9C;
+        Mon, 29 Aug 2022 10:34:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EC04B8119D;
+        Mon, 29 Aug 2022 17:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5A4C433D7;
+        Mon, 29 Aug 2022 17:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661794481;
+        bh=gnf4Jlo1A0o7rUsp7O03aHFQN2TyPZez03WfQkmxHSs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ST3Da3EZaNBmtKV8anrXbMqMPWZjEhZf1rZXsTPeI6Ol6HCzQafhNJxg3yFfbBLWl
+         YWgpHzfWe7VrIkLPKrTXWmKHu8lxZJhx1GklCLlF2NOw1hY9XxOrP+qtd0hXugy4+C
+         uUqIl65z8IF6D630q/xhrxw4OMl4QI69HU7+opSDUXkefoWYqKefeAVFEiia6vuF2R
+         Y10aLyPS/ehmBFeatikwW4qCSJdatrWnLEhZ+XB6b8YMxWQCRiS8+Fip+3PqACYy/7
+         3PWSt3YlFnlaxDspvzGwFw6SmF8Fx5bRLDhvWyBp6d0yM4RrfbyguzE4+fm5ol/yaU
+         AOMIIG3wbLUvA==
+Date:   Mon, 29 Aug 2022 18:00:22 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jakob Hauser <jahau@rocketmail.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/4] iio: magnetometer: yamaha-yas530: Use pointers
+ as driver data
+Message-ID: <20220829180022.18dac46a@jic23-huawei>
+In-Reply-To: <20220829112407.74917-1-andriy.shevchenko@linux.intel.com>
+References: <20220829112407.74917-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4756666.GXAFRqVoOG@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 06:12:33PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, 29 Aug 2022 14:24:04 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> Unify ID tables to use pointers for driver data. It will allow
+> to simplify the driver later on.
 > 
-> After introducing acpi_dev_parent() in commit 62fcb99bdf10 ("ACPI: Drop
-> parent field from struct acpi_device"), it is better to use it instead
-> of accessing the dev.parent field in struct acpi_device directly.
-> 
-> Modify acpi_node_get_parent() accordingly.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Thanks!
-
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/acpi/property.c |    7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  drivers/iio/magnetometer/yamaha-yas530.c | 21 +++++++++++----------
+>  1 file changed, 11 insertions(+), 10 deletions(-)
 > 
-> Index: linux-pm/drivers/acpi/property.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/property.c
-> +++ linux-pm/drivers/acpi/property.c
-> @@ -1269,10 +1269,11 @@ acpi_node_get_parent(const struct fwnode
->  		return to_acpi_data_node(fwnode)->parent;
->  	}
->  	if (is_acpi_device_node(fwnode)) {
-> -		struct device *dev = to_acpi_device_node(fwnode)->dev.parent;
-> +		struct acpi_device *parent;
->  
-> -		if (dev)
-> -			return acpi_fwnode_handle(to_acpi_device(dev));
-> +		parent = acpi_dev_parent(to_acpi_device_node(fwnode));
-> +		if (parent)
-> +			return acpi_fwnode_handle(parent);
+> diff --git a/drivers/iio/magnetometer/yamaha-yas530.c b/drivers/iio/magnetometer/yamaha-yas530.c
+> index 026f71e524f3..03e0525e6364 100644
+> --- a/drivers/iio/magnetometer/yamaha-yas530.c
+> +++ b/drivers/iio/magnetometer/yamaha-yas530.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/mutex.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/random.h>
+> @@ -1437,8 +1438,8 @@ static int yas5xx_probe(struct i2c_client *i2c,
+>  		goto assert_reset;
 >  	}
 >  
->  	return NULL;
-> 
-> 
-> 
+> -	yas5xx->chip_info = &yas5xx_chip_info_tbl[id->driver_data];
+> -	ci = yas5xx->chip_info;
+> +	ci = device_get_match_data(dev);
+> +	yas5xx->chip_info = ci;
 
--- 
-With Best Regards,
-Andy Shevchenko
+Am I missing a path by which device_get_match_data() can use the i2c_device_id values?
+I'd expect to see a fallback to that if ci == NULL to cover the non firmware causes
+of probe().  I've seen a few patches without that fallback path recently so wondering
+if some magic has gotten hooked up and I've missed it (something to push that via
+a swnode perhaps?)
 
+
+>  
+>  	ret = regmap_read(yas5xx->map, YAS5XX_DEVICE_ID, &id_check);
+>  	if (ret)
+> @@ -1583,19 +1584,19 @@ static DEFINE_RUNTIME_DEV_PM_OPS(yas5xx_dev_pm_ops, yas5xx_runtime_suspend,
+>  				 yas5xx_runtime_resume, NULL);
+>  
+>  static const struct i2c_device_id yas5xx_id[] = {
+> -	{"yas530", yas530 },
+> -	{"yas532", yas532 },
+> -	{"yas533", yas533 },
+> -	{"yas537", yas537 },
+> +	{"yas530", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas530] },
+> +	{"yas532", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas532] },
+> +	{"yas533", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas533] },
+> +	{"yas537", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas537] },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(i2c, yas5xx_id);
+>  
+>  static const struct of_device_id yas5xx_of_match[] = {
+> -	{ .compatible = "yamaha,yas530", },
+> -	{ .compatible = "yamaha,yas532", },
+> -	{ .compatible = "yamaha,yas533", },
+> -	{ .compatible = "yamaha,yas537", },
+> +	{ .compatible = "yamaha,yas530", &yas5xx_chip_info_tbl[yas530] },
+> +	{ .compatible = "yamaha,yas532", &yas5xx_chip_info_tbl[yas532] },
+> +	{ .compatible = "yamaha,yas533", &yas5xx_chip_info_tbl[yas533] },
+> +	{ .compatible = "yamaha,yas537", &yas5xx_chip_info_tbl[yas537] },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, yas5xx_of_match);
 

@@ -2,134 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0038A5A4BBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C235A4BDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiH2M1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S229985AbiH2Man (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiH2M0m (ORCPT
+        with ESMTP id S230084AbiH2MaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:26:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3B191D1A;
-        Mon, 29 Aug 2022 05:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661775027; x=1693311027;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oxQnpIC7Es3fbk5Y7KL1o+zPbw4eWKeljrhF6pZeVsU=;
-  b=c9n04zJXK+ylVyxhfduX1T3vms3s2gxOxI0408bWObExuazE+SAa2Jg3
-   FFwzXdnNAlhynWoe7iGgJQ12tMKPG3+h4zCdiV+6u9HPR9nlofpBSEDge
-   /kvUtoVRPLSn4QrAePZMy4IKsfuuTuF+Z4yMSZDiFrhGAumz8FT8IChR8
-   PFDAZphQrY7wBjQEzDxjHt7mOtp3ZMXlteIqRDCCBZBiuEY9BcArQ553I
-   ImrvBevAP+JL5HNgWY2FoG9RQkQaZk8iI9nJYjfvkswQh5v+RQ5YMl04x
-   rJLwI0aBos8nIyNiCNkItqNTLTZ2F1/Qj6C2mhhOSCTOEMuk8iefO3ENA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="294886252"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="294886252"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 05:09:15 -0700
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="588142891"
-Received: from kvehmane-mobl1.ger.corp.intel.com ([10.251.220.41])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 05:09:08 -0700
-Date:   Mon, 29 Aug 2022 15:09:09 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: Re: [PATCH 3/3] serial: Add kserial_rs485 to avoid wasted space due
- to .padding
-In-Reply-To: <CAHp75Vc4NfZE6DxFnfeAS9fxnZHpxMjacHy1TsG8ib+FiCqFLQ@mail.gmail.com>
-Message-ID: <1712a4c5-638-4e63-af29-32bdcbaab443@linux.intel.com>
-References: <20220826144629.11507-1-ilpo.jarvinen@linux.intel.com> <20220826144629.11507-4-ilpo.jarvinen@linux.intel.com> <CAHp75Vc4NfZE6DxFnfeAS9fxnZHpxMjacHy1TsG8ib+FiCqFLQ@mail.gmail.com>
+        Mon, 29 Aug 2022 08:30:24 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A6372B66
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:14:34 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id z3-20020a17090abd8300b001fd803e34f1so5856571pjr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=JDJaZLLijcqBMwlRc9kgfCyfcSIJN0CihduhDouY51s=;
+        b=OKJiyNZjYzCoT7bMy8Fdnn8lp2fbY6FWngivXh3cy7DsGqJ2TU5Yd04nM507M9L7Sa
+         JdIlrgCJqpSmw4d7jcvBzU5hVsQoDW6A7PbY+wYuPxkXN5l9Jz4IyQL9sFK9bIpwN3hv
+         pFoRhQ59kAqAWKSqXiWd8CJfGqK8iYLt8gTu6dJRQde2CjidsWrG3Nb+VgzZJ+Gt86SH
+         SSCKJq51P1bQlkvQfQu58LCW5Cv4QGBK+Yz48EVlmufxpY6XqUnsUTaPoiVnLIP7y9Bs
+         TVOPuYwqSMZ7jh72S0yC6F7bn3haIlljJP8Li6loaMalOVqESYT1BXMyljbzEWSDAA8P
+         6/Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=JDJaZLLijcqBMwlRc9kgfCyfcSIJN0CihduhDouY51s=;
+        b=F2biM29t/HdukjXD1Yr/x1ZFkidtGaa+FBDZ4h51rl1CZ7l/om61QS3bm3pyiM6p8v
+         xQgf6AAUWt5fOZT+ltz8EUxi0+OYf3YGWmTaYn/0wI0HJFcPhO7YowalBs4YQE36wULQ
+         gv3bq5hemajMVBQImRniUHmjZ29+PsusXGAJhGfn9jHfuaXbdaj1ITnpK6G7BHC5LD8J
+         7znubdkuSFEvV82fm7egVCYTQhRYfRX6rOsvM8F08PlgPiftAqP2HXLf7TlHtY6AaHL7
+         i9aaigAPpmJd/S+eM5yLr1AcCw9C7VHDZ4N5NLxYJsjJDjUBI76mQ9Qs9BEwjTbmYLc3
+         mVKw==
+X-Gm-Message-State: ACgBeo2eVqG0Qn0oi0ZVya1YxIokghib+iSKZhmLkFatkLwsW9w4ki57
+        tJQYMw4jR1trpkGzdw7nuRB/DT+ssaA=
+X-Google-Smtp-Source: AA6agR6SkSObjijf9vIjaEd3qEzGK9u8YDkKPh5wnfACtNxhBX00XhsdDyJPTQIos9p3nqAyKJH1fQ==
+X-Received: by 2002:a17:90b:17ce:b0:1f4:d068:5722 with SMTP id me14-20020a17090b17ce00b001f4d0685722mr17863461pjb.28.1661775208159;
+        Mon, 29 Aug 2022 05:13:28 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id nt15-20020a17090b248f00b001fd84a8cfc6sm4504561pjb.39.2022.08.29.05.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 05:13:27 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, Anthony.Koo@amd.com, alex.hung@amd.com,
+        Roman.Li@amd.com, Yi-Ling.Chen2@amd.com, hanghong.ma@amd.com,
+        mwen@igalia.com, dingchen.zhang@amd.com
+Cc:     Jerry.Zuo@amd.com, agustin.gutierrez@amd.com, dale.zhao@amd.com,
+        isabbasso@riseup.net, Sungjoon.Kim@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] drm/amd/display: remove redundant vertical_line_start variable
+Date:   Mon, 29 Aug 2022 12:13:20 +0000
+Message-Id: <20220829121320.267892-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-174262208-1661774957=:1928"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
---8323329-174262208-1661774957=:1928
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Return value from expression directly instead of
+taking this in another redundant variable.
 
-On Fri, 26 Aug 2022, Andy Shevchenko wrote:
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> On Fri, Aug 26, 2022 at 5:51 PM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> 
-> > -static int user_rs485_to_kernel_serial_rs485(struct serial_rs485 *rs485,
-> > +static int user_rs485_to_kernel_serial_rs485(struct kserial_rs485 *rs485,
-> >                                              const struct serial_rs485 __user *rs485_user)
-> >  {
-> > -       if (copy_from_user(rs485, rs485_user, sizeof(*rs485)))
-> > +       struct serial_rs485 rs485_uapi;
-> > +
-> > +       if (copy_from_user(&rs485_uapi, rs485_user, sizeof(*rs485)))
-> >                 return -EFAULT;
-> 
-> > +       *rs485 = *((struct kserial_rs485 *)&rs485_uapi);
-> 
-> So with all assets we have we can be sure that on BE64 / BE32 machines
-> this will be flawless. Is this assumption correct?
-
-I think so. At worst it could trigger a build fail assuming the kernel 
-would do some really odd struct layout reordering (which, according to 
-the build bot, doesn't occur for any currently tested arch).
-
-Now that you highlighted this line though, I started to wonder if it would 
-be just better to use memcpy() instead as it would avoid those casts.
-
-> > + * padding.
-> > + */
-> > +struct kserial_rs485 {
-> > +       __u32   flags;                  /* RS485 feature flags */
-> > +       __u32   delay_rts_before_send;  /* Delay before send (milliseconds) */
-> > +       __u32   delay_rts_after_send;   /* Delay after send (milliseconds) */
-> > +       struct {
-> > +               __u8    addr_recv;
-> > +               __u8    addr_dest;
-> > +       };
-> 
-> Btw, can't we convert them to kernel doc?
-
-Yes, why not.
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+index 37246e965457..8f4f1ea447a7 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+@@ -3741,7 +3741,6 @@ int dcn10_get_vupdate_offset_from_vsync(struct pipe_ctx *pipe_ctx)
+ 	int vesa_sync_start;
+ 	int asic_blank_end;
+ 	int interlace_factor;
+-	int vertical_line_start;
+ 
+ 	patched_crtc_timing = *dc_crtc_timing;
+ 	apply_front_porch_workaround(&patched_crtc_timing);
+@@ -3757,10 +3756,8 @@ int dcn10_get_vupdate_offset_from_vsync(struct pipe_ctx *pipe_ctx)
+ 			patched_crtc_timing.v_border_top)
+ 			* interlace_factor;
+ 
+-	vertical_line_start = asic_blank_end -
++	return asic_blank_end -
+ 			pipe_ctx->pipe_dlg_param.vstartup_start + 1;
+-
+-	return vertical_line_start;
+ }
+ 
+ void dcn10_calc_vupdate_position(
 -- 
- i.
+2.25.1
 
---8323329-174262208-1661774957=:1928--

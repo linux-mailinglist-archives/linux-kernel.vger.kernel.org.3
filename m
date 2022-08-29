@@ -2,107 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01725A52FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63305A52FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiH2RUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S231452AbiH2RVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiH2RT7 (ORCPT
+        with ESMTP id S229682AbiH2RVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:19:59 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246BADF51;
-        Mon, 29 Aug 2022 10:19:56 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id h21so6665858qta.3;
-        Mon, 29 Aug 2022 10:19:56 -0700 (PDT)
+        Mon, 29 Aug 2022 13:21:11 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7055D6F271
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:21:05 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id c24so8256638pgg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=WVwojOfpbU3ZWFPUDfRDkq9+aL+8zLwFug1ZZrW5dX0=;
-        b=T8xFkLIDCeUPGDB+9bZRM3uJWq5YWPDImyfUhgmiUdsFSRtIIi/jz4INGslHyr2SHZ
-         T+/7NVW1FjnheAa/o+zYBnaIeAZgZJy2QxvNDNnb+dmncTcr87F8MF3mlIqd4rP3PGP8
-         J9LdQMNcPW+TasKZdGUA95cUP0Q+fqzjaf2sZw9Bz7RbI5X4stasGwBoqsZSfSZEZNHv
-         JP56OFXg1X/wUtASYSgtF8bk8xSc6fT8oPW3uV+4sNbjg63lrU1ZQe0/Ed8MKM6jPMBT
-         ZXw+ZWIxCs2FpaDBXzzg7B3SZIjqHXXm970eyXNYBFXlRedkceue3dqunzuxFMJqHeA5
-         yFlA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=N8v9XiNinBwgapG6G2g4Lw1ZeaB/KtBqvxLAMxYhJZ0=;
+        b=NfRnBVW89tj7Au3HywW16OEWiHNb4GaSjmEwi+NAYqoi4cwMah/XZ+pxiE6BS8poL0
+         UdYe4SvnI/d5a6fn/U641J7UGrFUDWekiE8WvIqGr3l7yoGjhl7gm72dVy6sdoRFh94q
+         f4HkXyu6iAPgnszZSoF+rlGzgjNO9e1M+Ibx53ObMMOboc3gEbUNQgvsg3JHyXuPgZyn
+         zJMFCtgsQcBDAxXnjn8bhI7UZnooOFoaMWgwsZ0IWOUTSEnRV2f6OFgerv4vtIFcn7L2
+         81VRdZ6M5MiDiQm6AgkLwtFaUIGoHu0cB47KIiWYfnZX4bDFK36L82NehZYsgO/aOq/M
+         YA8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WVwojOfpbU3ZWFPUDfRDkq9+aL+8zLwFug1ZZrW5dX0=;
-        b=SDAlNx7ZJE1sUsqYS2p2zPSrmZ3I2d2NiXTPOwoEIP5P2Pg97NyvvQf2ydP0JSofGo
-         O8AwtYv2cGqop6iEn0+xJS3Hva17HGIEgV2QtVMAfdtMfbhICv82+hP9ey/pCj7wyflQ
-         rtYm6F6JYfYrAtvJ0PWFHI9T4Vv27fLcil7eqx5ZG6R4eoJn3Z6joj4+a6zWaAAzgUMy
-         oPKJ1i7aQ/1KJZSo8A4+wsnjLZnDgfOWBh4k40owllEZl6BEO5ieGrFDXohmUhSxDC4p
-         8dVBNYwYRJefulkzV/EFxQP+naqbJf0jkXMOP5rrMwTxWqG3FmOXnnWLQk5XD4w8N1tH
-         jTPQ==
-X-Gm-Message-State: ACgBeo2hMUvPxaTUwT5p/aa2uHEjKwhCM/0aj+i+2S5qZcmceLy/TcUj
-        AF5aOqtBSrS3gpamgp0csJg=
-X-Google-Smtp-Source: AA6agR5DA85StQSxQRPWxX6B6a/OS9cpLxiZxUArgaPS5Qk97tH+FkkUKSN+RB9nMiZGKW0aIAjdXQ==
-X-Received: by 2002:ac8:5f10:0:b0:343:7a81:e89b with SMTP id x16-20020ac85f10000000b003437a81e89bmr10978565qta.527.1661793595210;
-        Mon, 29 Aug 2022 10:19:55 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id bm2-20020a05620a198200b006b5f06186aesm6348724qkb.65.2022.08.29.10.19.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 10:19:54 -0700 (PDT)
-Message-ID: <6f6eea4e-67c0-7410-4705-3fbe9c72ba9d@gmail.com>
-Date:   Mon, 29 Aug 2022 10:19:51 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=N8v9XiNinBwgapG6G2g4Lw1ZeaB/KtBqvxLAMxYhJZ0=;
+        b=BOY2EvcqZZUtRf/VomrWN/hs34AX68aJ3Uc5AypRmVmRxtgNd75uOe1mSWI+BZRxwS
+         gX7cRyqCamBdnLvbBbcSVjTUhvyq13SzLknjkLQYnab/JxA1AoFhcTWeuFs6JnKElTwC
+         unw6+Cs54gPTlsyTAnJU/OfbXlU9GWFAOg1HU2wPHMh8AyH5z7k8rSTRvSEu+zAqYD4Z
+         7syQWaAGWnZz8ACii7bAxOHV1vnHXnB+UfR4oGvM1/DTWSAtJQraFg7O3DaKb0zRR7OW
+         cfJmrpb3ypUvs7JYLBZhHuqRCZ2u6DEz68JF6sVYgqcQwsyjTuSkwlIvwiPx69XQoqVl
+         pLAw==
+X-Gm-Message-State: ACgBeo3jD1+i4sF8Y3Dx5MTWdBH0g0WA6HPdIP1ntp9BsYgjtoj3xXy5
+        bbHAiDdbtOcMXyDAgBrFSpEm/Q==
+X-Google-Smtp-Source: AA6agR7JVkZEqiHBQMT3/HK53IbqnS0HPUadhw2Pc+wlqYBU/5llkrjsnpQV1BRpTuK0X2jptbEaPQ==
+X-Received: by 2002:a05:6a00:21c2:b0:52b:ff44:6680 with SMTP id t2-20020a056a0021c200b0052bff446680mr17655948pfj.57.1661793664751;
+        Mon, 29 Aug 2022 10:21:04 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b00175111a277dsm136685plg.185.2022.08.29.10.21.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 10:21:04 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 17:21:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 4/4] KVM: selftests: Test if posted interrupt delivery
+ race with migration
+Message-ID: <Ywz1fJlkuhY/vMEU@google.com>
+References: <20220828222544.1964917-1-mizhang@google.com>
+ <20220828222544.1964917-5-mizhang@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 5.10 00/86] 5.10.140-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220829105756.500128871@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220828222544.1964917-5-mizhang@google.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/29/2022 3:58 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.140 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Aug 28, 2022, Mingwei Zhang wrote:
+> From: Jim Mattson <jmattson@google.com>
 > 
-> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> Anything received after that time might be too late.
+> Test if posted interrupt delivery race with migration. Add a selftest
+> to demonstrate a race condition between migration and posted
+> interrupt for a nested VM. The consequence of this race condition causes
+> the loss of a posted interrupt for a nested vCPU after migration and
+> triggers a warning for unpatched kernel.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.140-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> The selftest demonstrates that if a L2 vCPU is in halted state before
+> migration, then after migration, it is not able to receive a posted
+> interrupt from another vCPU within the same VM.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on 
-BMIPS_GENERIC:
+For tests, try to phrase the changelog in terms of what architectural behavior is
+being tested, as opposed to stating what exact KVM bug is being targeted.  It's
+definitely helpful to call out the KVM bug, but do that _after_ explaining the
+test itself.  The problem with talking about a specific KVM bug is that 
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+IIUC, this can be:
+
+  Add a test to verify that a posted interrupt wakes the target vCPU from
+  a halted state if the VM is migrated while the vCPU is halted.
+
+and then something like this to call out the known KVM bug
+
+  This test exposes a bug where KVM checks the vAPIC page before loading
+  nested pages when the vCPU is blocking.
+
+> The fundamental problem is deeply buried in the kernel logic where
+> vcpu_block() will directly check vmcs12 related mappings before having a
+> valid vmcs12 ready.  Because of that, it fails to process the posted
+> interrupt and triggers the warning in vmx_guest_apic_has_interrupt()
+> 
+> static bool vmx_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
+> {
+> 	...
+> 	if (WARN_ON_ONCE(!is_guest_mode(vcpu)) ||
+> 		!nested_cpu_has_vid(get_vmcs12(vcpu)) ||
+> 		WARN_ON_ONCE(!vmx->nested.virtual_apic_map.gfn)) <= HERE
+> 		return false;
+> 	...
+> }
+> +static void vcpu0_ipi_handler(struct ex_regs *regs)
+
+This needs to clarify that it's an L2 handler, that info is _extremely_ important
+to understanding this sequence.  And even if that info were superfluous, it's still
+a good habit to use consistent namespacing.
+
+> +{
+> +	 asm volatile("inb %%dx, %%al"
+> +		      : : [port] "d" (PORT_L0_EXIT) : "rax");
+
+Can't this use GUEST_SYNC()?
+
+> +	asm volatile("vmcall");
+
+A comment would be helpful, but not as necessary if this is vcpu0_l2_ipi_handler().
+
+> +}
+> +
+> +static void l2_vcpu0_guest_code(void)
+
+I have a slight preference for
+
+	vcpu0_l2_ipi_handler()
+	vcpu0_l2_guest_code()
+
+	vcpu1_l1_guest_code()
+
+because the "vcpu0 vs. vcpu1" is the broader scope, and then "l1 vs. l2" further
+clarifies the exact scope of the function.
+
+> +{
+> +	asm volatile("cli");
+> +	asm volatile("sti; nop; hlt");
+
+What is this code trying to do?  Assuming the intent is to ensure the posted IRQ
+arrives after "hlt", this needs to be:
+
+	GUEST_ASSERT(!irqs_enabled());
+	asm volatile("sti; hlt");
+
+because if interrupts are enabled when l2_vcpu0_guest_code() starts running, then
+the IRQ can arrive before CLI.  And the "nop" needs to go because the nop will
+consume the STI shadow, i.e. the IRQ can arrive before the "hlt".  irqs_enabled()
+needs to be defined, but it's fairly straightfoward; something like this:
+
+static __always_inline bool irqs_enabled(void)
+{
+	unsigned long flags;
+
+	asm volatile("pushf ; pop %0"
+		     : "=rm" (flags)
+		     :
+		     : "memory");
+
+	return flags & X86_EFLAGS_IF;
+}
+
+If my assuming is wrong, then this needs a very verbose comment.
+
+> +static void post_intr(u8 vector, void *pi_desc)
+> +{
+> +       set_bit(vector, pi_desc);
+> +       set_bit(PI_ON_BIT, pi_desc);
+> +}
+> +
+> +static void l1_vcpu1_guest_code(void *vcpu0_pi_desc)
+> +{
+> +       post_intr(L2_INTR, vcpu0_pi_desc);
+
+Open code post_intr() here.  I would expect a "post_intr()" helper to actually do
+the notification.  Separating the two things confused me.
+
+> +       x2apic_enable();
+
+Why take a dependency on x2APIC?  Either way, enable x2APIC, then post the
+interrupt.  Again, it's weird splitting "set info in PI descriptor" from the
+notification.
+
+> +       x2apic_write_reg(APIC_ICR, ((u64)VCPU_ID0 << 32) |
+> +                        APIC_DEST_PHYSICAL | APIC_DM_FIXED | PI_NV);
+> +       GUEST_DONE();
+> +}
+
+...
+
+> +void *create_and_run_vcpu1(void *arg)
+> +{
+> +	struct ucall uc;
+> +	struct kvm_run *run;
+> +	struct kvm_mp_state vcpu0_mp_state;
+> +
+> +	pthread_cpu1 = pthread_self();
+> +
+> +	/* Keep trying to kick out vcpu0 until it is in halted state. */
+> +	for (;;) {
+> +		WRITE_ONCE(vcpu0_can_run, true);
+> +		sleep(1);
+> +		WRITE_ONCE(vcpu0_can_run, false);
+> +		pthread_kill(pthread_cpu0, SIGUSR1);
+> +		printf("vcpu1: Sent SIGUSR1 to vcpu0\n");
+
+Use pr_debug(), this has the potential to spam the console.  And then probably use
+pr_info() for the other printfs so that they can be turned off via QUIET.
+
+> +
+> +		while (READ_ONCE(vcpu0_running))
+> +			;
+
+vcpu0_running is unnecessary.  KVM needs to acquire vcpu->mutex to do KVM_GET_MP_STATE,
+i.e. vcpu_mp_state_get() will block until KVM_RUN completes.  Nothing guarantees
+vcpu0_running will be set from main() before this gets to the while-loop, so
+vcpu_mp_state_get() racing with KVM_RUN is already possible.
+
+> +
+> +		vcpu_mp_state_get(vcpu0, &vcpu0_mp_state);
+> +		if (vcpu0_mp_state.mp_state == KVM_MP_STATE_HALTED)
+> +			break;
+> +	}
+> +
+> +	printf("vcpu1: Kicked out vcpu0 and ensure vcpu0 is halted\n");
+> +
+> +	/* Use save_restore_vm() to simulate a VM migration. */
+> +	save_restore_vm(vm);
+> +
+> +	printf("vcpu1: Finished save and restore vm.\n");
+
+Uber nit, be consistent on whether or not the test uses punctionation.
+
+> +	vcpu1 = vm_vcpu_add(vm, VCPU_ID1, l1_vcpu1_guest_code);
+> +	vcpu_args_set(vcpu1, 1, vmx->posted_intr_desc);
+> +
+> +	/* Start an L1 in vcpu1 and send a posted interrupt to halted L2 in vcpu0. */
+> +	for (;;) {
+> +		run = vcpu1->run;
+> +		vcpu_run(vcpu1);
+> +
+> +		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+> +			    "vcpu1: Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
+> +			    run->exit_reason,
+> +			    exit_reason_str(run->exit_reason));
+> +
+> +		switch (get_ucall(vcpu1, &uc)) {
+> +		case UCALL_ABORT:
+> +			TEST_FAIL("%s", (const char *)uc.args[0]);
+> +			/* NOT REACHED */
+
+			REPORT_GUEST_ASSERT(...)
+
+> +		case UCALL_DONE:
+> +			printf("vcpu1: Successfully send a posted interrupt to vcpu0\n");
+> +			goto done;
+> +		default:
+> +			TEST_FAIL("vcpu1: Unknown ucall %lu", uc.cmd);
+> +		}
+> +	}
+> +
+> +done:
+> +	/*
+> +	 * Allow vcpu0 resume execution from L0 userspace and check if the
+> +	 * posted interrupt get executed.
+> +	 */
+> +	WRITE_ONCE(vcpu0_can_run, true);
+> +	sleep(1);
+
+What guarantees that sleep(1) is sufficient for vCPU to get back into the guest?
+This might be a good candidate for a sempahore?
+
+> +	TEST_ASSERT(READ_ONCE(pi_executed),
+> +		    "vcpu0 did not execute the posted interrupt.\n");
+> +
+> +	return NULL;
+> +}
+
+...
+
+> +       TEST_REQUIRE(kvm_has_cap(KVM_CAP_NESTED_STATE));
+> +       TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
+
+This also requires APICv / posted interrupts, and x2APIC if that hardcoded behavior
+is kept.
+
+> +	for (;;) {
+> +		struct kvm_run *run = vcpu0->run;
+> +		struct ucall uc;
+> +		int rc;
+> +
+> +		while (!READ_ONCE(vcpu0_can_run))
+> +			;
+> +
+> +		WRITE_ONCE(vcpu0_running, true);
+> +
+> +		rc = __vcpu_run(vcpu0);
+> +
+> +		vcpu0->run->immediate_exit = 0;
+
+Why?  vcpu_run_complete_io() is the only thing that sets immediate_exit, and it
+clears the flag after doing __vcpu_run().
+
+> +
+> +		/*
+> +		 * When vCPU is kicked out by a signal, ensure a consistent vCPU
+> +		 * state to prepare for migration before setting the
+> +		 * vcpu_running flag to false.
+> +		 */
+> +		if (rc == -1 && run->exit_reason == KVM_EXIT_INTR) {
+> +			vcpu_run_complete_io(vcpu0);
+> +
+> +			WRITE_ONCE(vcpu0_running, false);
+> +
+> +			continue;
+> +		}
+> +
+> +		WRITE_ONCE(vcpu0_running, false);
+> +
+> +		if (run->io.port == PORT_L0_EXIT) {
+
+One of the motivations for using GUEST_SYNC() instead of PORT_L0_EXIT is that
+this test could (very theoretically) get a false pass if GUEST_DONE() is reached
+before PORT_L0_EXIT is encountered.
+
+> +			printf("vcpu0: Executed the posted interrupt\n");
+> +			WRITE_ONCE(pi_executed, true);
+> +			continue;
+> +		}
+> +
+> +		switch (get_ucall(vcpu0, &uc)) {
+> +		case UCALL_ABORT:
+> +			TEST_FAIL("%s", (const char *)uc.args[0]);
+
+			REPORT_GUEST_ASSERT(...)
+
+> +			/* NOT REACHED */
+> +		case UCALL_DONE:
+> +			goto done;
+
+Just break?
+
+> +		default:
+> +			TEST_FAIL("vcpu0: Unknown ucall %lu", uc.cmd);
+> +		}
+> +	}
+> +
+> +done:
+> +	kvm_vm_free(vm);
+> +	return 0;
+> +}
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 

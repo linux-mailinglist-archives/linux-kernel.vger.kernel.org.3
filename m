@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2AA5A555F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390DB5A5560
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiH2UMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S230073AbiH2UND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiH2UMv (ORCPT
+        with ESMTP id S229457AbiH2UM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:12:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614087677D;
-        Mon, 29 Aug 2022 13:12:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F372060F9D;
-        Mon, 29 Aug 2022 20:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8943CC433C1;
-        Mon, 29 Aug 2022 20:12:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661803970;
-        bh=IdZ+uoQ3EC8NwQGLKdf5Zi5eK3XOasnGV90en56Ucfw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mKC821qwvXEgbVk5A/LIR1+Wrufo92a6pb2mB7Ut1YC/T0ISSq4Ecf6CMmONuFiMW
-         2e+Azq80oG4accfETbXOH0bzUck80RDPrHu8TrQRkv2AXerpg9FkTYkNxm1I5DrrYR
-         Geu/EamXR9D0w9RMw/5EBsInZ39l1n5NnP0tFD0lAX5NT8uM1QCKIL8sy45T+39egx
-         sKkdq0P7RwisdnOhK9+VwJqepCYxlz9ufBPYjEZZCSNXkIAndEl1BnmXV8TG9z8gHn
-         V/PnHN2d2NduJXvzvrRh7XTvnd4y1zhSO79HV2YDXo9tlqyw+okczvDGdep61bxt7l
-         6mhO/92SdasaA==
-Date:   Mon, 29 Aug 2022 22:12:46 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     aisheng.dong@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 7/7] i2c: imx-lpi2c: use bulk clk API
-Message-ID: <Yw0dvtRTkW/ISgna@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, aisheng.dong@nxp.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220823030215.870414-1-peng.fan@oss.nxp.com>
- <20220823030215.870414-8-peng.fan@oss.nxp.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T0u3L3wlujZ6XOZ/"
-Content-Disposition: inline
-In-Reply-To: <20220823030215.870414-8-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 16:12:59 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8928695E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:12:58 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id r74-20020a632b4d000000b0041bc393913eso4514979pgr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc;
+        bh=uqHUoZfTdvbY1QkERHZdR/htcU1OMwPMgXPQ3z9IokU=;
+        b=O583rz8bjT46gbhtE7PR64LQzDsu+I5Jq9bPPo6SKcPZmSv0Y9Br4VWqKBqzkg6Mgu
+         2vP3wdsOIIocLncCVLR6A1b1CvhxKexkEKAKbKSbJpPGrvQ5x53/syel/n2CUaKYzFsy
+         Qn6Cgwq+ZR5afqZJykvAr8ActNXXkzQb9MI0TujSCzfL7GiSB/ND8F6SBugnPNwX0Hyo
+         uwoXF6U4Z7LMMFQMzvviCo/g38QckQ2vXg2H6ro66CcxYcfr7HyGrdwCOiA6xSVC57Fp
+         oyc+5RpxDesbKQqx8fsdGJdDlhfW0I8kwjQKaagST28HEu5c2B3MO2fy0to5waWyamtt
+         6htw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc;
+        bh=uqHUoZfTdvbY1QkERHZdR/htcU1OMwPMgXPQ3z9IokU=;
+        b=XjVI6eSPnc/cHVSJWtg1qAOj5C7Th9h0usgCoH1MVigojqy2V7N016vMzKoLDdGscU
+         Yce9yxjVlIHIrNeQ6z8GgvbWO5i/xyrK0B+JHAnRfRAEWN0VmF3y5AwdjRYE9nywrRN8
+         3WAs5SKCj9tLfn4e/3MsWwpgJuJHeZUtaw+qcKXOg3D5Cr4h5A7GfiQSLe9JVxxofwyJ
+         Zr8WNu3mdi0FocV28W7Pvg6MOCdLb8wBruzWUhYREknseRBr1n7ge2vUHeLYxBU/tw3Q
+         n83NzgKxk4/Zkv7IiIbh7sAstjKBujJWXuQHmfI203qIm8C8LqGjowxVvdVxxWLUjF2y
+         R8QA==
+X-Gm-Message-State: ACgBeo2TNtp67mew1SxWQQSItY3Fy58UvoKhUuLjDD6nxPebqbFSOktW
+        XBlwbxeNXT67og3J+dA33VxMz2AEhnj5LQ==
+X-Google-Smtp-Source: AA6agR6mW7YktKTVsQ/Ge/ABV3JL+tNitO3oXV+eC5HsZtDWgjZSvQ/lKm77/KB67vWiN56cyZl12V5IC18oww==
+X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
+ (user=cmllamas job=sendgmr) by 2002:aa7:888d:0:b0:538:328b:2ffb with SMTP id
+ z13-20020aa7888d000000b00538328b2ffbmr7159243pfe.82.1661803978001; Mon, 29
+ Aug 2022 13:12:58 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 20:12:47 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220829201254.1814484-1-cmllamas@google.com>
+Subject: [PATCH 0/7] fix null-ptr-deref in binder_alloc and others
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel-team@android.com, Carlos Llamas <cmllamas@google.com>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series fixes primarily a null dereference of alloc->vma_vm_mm
+reported by syzbot which unfortunately is quite easy to reproduce. Also,
+included here are several other patches for more trivial things I found
+along the way.
 
---T0u3L3wlujZ6XOZ/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--
+Carlos Llamas
 
-On Tue, Aug 23, 2022 at 11:02:15AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> The current driver only support one clock, however LPI2C requires
-> two clocks: PER and IPG.
->=20
-> To make sure old dts could work with newer kernel, use bulk clk
-> API.
->=20
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Arve Hj=C3=B8nnev=C3=A5g" <arve@android.com>
+Cc: Todd Kjos <tkjos@android.com>
+Cc: Martijn Coenen <maco@android.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Liam Howlett <liam.howlett@oracle.com>
+Cc: kernel-team@android.com
+Cc: linux-kernel@vger.kernel.org
 
-Applied to for-next, thanks!
+Carlos Llamas (7):
+  binder: fix alloc->vma_vm_mm null-ptr dereference
+  binder: fix trivial kernel-doc typo
+  binder: rename alloc->vma_vm_mm to alloc->mm
+  binder: remove binder_alloc_set_vma()
+  binder: remove unused binder_alloc->buffer_free
+  binder: fix binder_alloc kernel-doc warnings
+  binderfs: remove unused INTSTRLEN macro
 
+ drivers/android/binder_alloc.c | 55 +++++++++++-----------------------
+ drivers/android/binder_alloc.h | 12 ++++----
+ drivers/android/binderfs.c     |  1 -
+ 3 files changed, 22 insertions(+), 46 deletions(-)
 
---T0u3L3wlujZ6XOZ/
-Content-Type: application/pgp-signature; name="signature.asc"
+--=20
+2.37.2.672.g94769d06f0-goog
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMNHb0ACgkQFA3kzBSg
-Kbampg//XOxRtSBD8sZTgSXDMiiW5+y0Em8wGArEmm8E7MbTGYf/s9At7mZU6uKA
-nDHa5YbysOOgQxiLjsqGKD2pU741aym+wJxVgsxjcWLKCA1WaaZbwsXMS4n4tIKE
-B3IIizRGwPo/6DfDlb1+GMtbYJu2AKg06KIFMgHGZP8V5zuOpI9mXTUlRxUZVNAu
-RAwsbf3AO0+dxHyn8KBHh6DbC5g4be56VWAPaYXcjab0tWkbPX8TaWV8/Y0kKFns
-slKWOWoiPbf7UF5R72BlgOb6nVaQZLJgq8MvhWH8M5L+ZXP0yvCLQSjoY3n7J9zd
-LGJh91IBVPdQZWy5SpExa2dhnntDdhk69PQCY+ee9j0iwvOZ4UBvg1DSJLkVTEHG
-UJ8z2Ro3P7v7dnlZVWru8zsQfpmjHSXhxS6v6Uaz1ecVR7RxLfaAvtJHHcQ7Fa61
-PZ1Tf79095MClX4lgI0ws/ujXMeiPCaXhney7FlkUi6E6UmUe4EhHehiS0zDWHQS
-CUsHMr17+UZhT0V4H7LSpgowQ4vSsUhgHHi+n65vEbmbxxWannmL/OZa0QzlruWm
-HdDqqzsGyULLtwLVv0zfuFZh4pIeHZYKtleDl6jHDZqZ83PEmgUY4tngikkBxT7Q
-LEPrbyKptV+iKPU5k87YKipVPwVgObZs47rhaXMr8R38n96eRnc=
-=N3ek
------END PGP SIGNATURE-----
-
---T0u3L3wlujZ6XOZ/--

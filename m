@@ -2,299 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE16D5A4545
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01CE5A454A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiH2IiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
+        id S230062AbiH2IjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiH2IiN (ORCPT
+        with ESMTP id S230038AbiH2IjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:38:13 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA2F57E02
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:38:12 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3413ad0640dso22315197b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=mK4rg30aTYEASjNFzr6HKKVbPhWWXO7rNvgLsCU003E=;
-        b=PGNuleX37vDR6dOY0fMMebPTnPZ1XM8BvngSnofhx4oo7AfrJ8BCfLOiBV8TDw2TZP
-         cTH/rajG5+vCdjIsy+Ydpuf4qa9Hr502L0HZqHlRJT8qltGhZWPoxzzzdG3tzJ0dZGL+
-         QAm6/LbNOMZHQwf+AMrqWC07OgKKKIfTCaAZZ/SUCXm7/X4WmzUxj30QigHFBL4mKHGi
-         eDGSu9HbapVr6lx8UGADsY44ruVqs54cOMZEZ2i+xVYRpWON4c+zqedcMtIMSeuJb/vw
-         pXf+SjhCRQ+G0aSAuG6TEoMXWvzaOvTP7/77JUO3tjYfeKfDP0zVxN4xmO+L7cGEanNZ
-         i5+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=mK4rg30aTYEASjNFzr6HKKVbPhWWXO7rNvgLsCU003E=;
-        b=QmOZPLotOMO6oX1spfdxPJrQgrjBJ1QBRSC+jVO+lEuNFQORwzGtlATK8TatyAD+dG
-         q6zgHWC89CIDGxHrxFPX8S09K3W2lBdHd/G5wR5BKIoVO+GKWWfgKyGn424q8/NPSFjm
-         EciGWzZQ2HIHN9qZ1ESwVRcqGSfFo4mpgglijZcrI12wlA50Im/ZnkrAoGH6jjbmXNEi
-         5kfGIb/6Dt3yhn2L8+AhPaQ0K+4BS7I86YhGc4p+mV3oREl9A0Z8bV/CHwTd0LwkQ396
-         rbKexegutK4otgrYr/JfUb5RWEr5RVYQrSAaVoJqdKQB/f4zR2jNx1PEOHS6Oukx+L+v
-         CjWQ==
-X-Gm-Message-State: ACgBeo3lGQMsAt18IuZuo45NpsGvC5ZNv4iwJzq9NNxppEGICHEAptG7
-        s+BJsh/jDKmjIIfG+6I+1caIkLvUDB7Fl2Ah7nrpVg==
-X-Google-Smtp-Source: AA6agR6NdQQdI+j2k9zFaYZtFdhtE4xru7weApQHoj/gdV8ZfU2z17o0wqu4xl5EcEcB2xm1CEIvGYCG+IgANG2FVWM=
-X-Received: by 2002:a0d:ca90:0:b0:337:e1b4:93f7 with SMTP id
- m138-20020a0dca90000000b00337e1b493f7mr9143765ywd.153.1661762291640; Mon, 29
- Aug 2022 01:38:11 -0700 (PDT)
+        Mon, 29 Aug 2022 04:39:04 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9D58536;
+        Mon, 29 Aug 2022 01:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=enW5V6g2WX8qHIsfLn2eVhcqKoAKV5YXSn+3ybsOepY=; b=VnpBQLFtOs+d1Mk1xzNicv6GHH
+        1XXYkxcTGTMvu4i/PhfHDfa4gYaMWhytusRDeWmzGqwH510EOxaBr9SH448WYvQeRHaFYUSKtNJjy
+        k82tW1bgPcjCvPNQhrVMwsm6qzYkRJnJuuZ7JgFtkrrZbLzIcC0WC9okARak/SdAL6EBp0JxqWdZd
+        FyaEeAUG5zUTjLP1/+OrqfBF3TYy1hI109Xw3Fs0y6tFejWbLo/tSBVPLyS+9Okz/sMFHDJlEas3g
+        XjEhoohLZjsY0lWJnze9mBVJ3ZVpoBzdY8gz45bY79ukjf/c9sT17BGlINSzwu8OOt6c+7aSYeKFv
+        bc3iYkKw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSaI2-007RqX-4b; Mon, 29 Aug 2022 08:38:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 529D3300137;
+        Mon, 29 Aug 2022 10:38:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0F059202547D2; Mon, 29 Aug 2022 10:38:35 +0200 (CEST)
+Date:   Mon, 29 Aug 2022 10:38:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/14] perf/hw_breakpoint: Reduce contention with
+ large number of tasks
+Message-ID: <Ywx7CmbG+f+wg04z@hirez.programming.kicks-ass.net>
+References: <20220704150514.48816-1-elver@google.com>
+ <20220704150514.48816-12-elver@google.com>
+ <YvznKYgRKjDRSMkT@worktop.programming.kicks-ass.net>
+ <CANpmjNN1vv9oDpm1_c99tQKgWVVtXza++u1xcBVeb5mhx5eUHw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220819140250.3892995-1-ajones@ventanamicro.com> <20220819140250.3892995-4-ajones@ventanamicro.com>
-In-Reply-To: <20220819140250.3892995-4-ajones@ventanamicro.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 29 Aug 2022 14:07:59 +0530
-Message-ID: <CAAhSdy0d8mjr5-5Um2DpLgnhPb3UnGggXvbu_=oqEHWYzMP1SQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] riscv: KVM: Apply insn-def to hfence encodings
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        mchitale@ventanamicro.com, heiko@sntech.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNN1vv9oDpm1_c99tQKgWVVtXza++u1xcBVeb5mhx5eUHw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 7:32 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> Introduce hfence instruction encodings and apply them to KVM's use.
-> With the self-documenting nature of the instruction encoding macros,
-> and a spec always within arm's reach, it's safe to remove the
-> comments, so we do that too.
->
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/insn-def.h |   8 ++
->  arch/riscv/kvm/tlb.c              | 117 ++++--------------------------
->  2 files changed, 21 insertions(+), 104 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
-> index 4cd0208068dd..cd1c0d365f47 100644
-> --- a/arch/riscv/include/asm/insn-def.h
-> +++ b/arch/riscv/include/asm/insn-def.h
-> @@ -79,4 +79,12 @@
->  #define RS1(v)         __REG(v)
->  #define RS2(v)         __REG(v)
->
-> +#define OPCODE_SYSTEM  OPCODE(115)
-> +
-> +#define HFENCE_VVMA(vaddr, asid)       \
-> +       INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(17), RD(0), vaddr, asid)
-> +
-> +#define HFENCE_GVMA(gaddr, vmid)       \
-> +       INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(49), RD(0), gaddr, vmid)
-> +
->  #endif /* __ASM_INSN_DEF_H */
-> diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
-> index 1a76d0b1907d..f742a0d888e1 100644
-> --- a/arch/riscv/kvm/tlb.c
-> +++ b/arch/riscv/kvm/tlb.c
-> @@ -12,22 +12,7 @@
->  #include <linux/kvm_host.h>
->  #include <asm/cacheflush.h>
->  #include <asm/csr.h>
-> -
-> -/*
-> - * Instruction encoding of hfence.gvma is:
-> - * HFENCE.GVMA rs1, rs2
-> - * HFENCE.GVMA zero, rs2
-> - * HFENCE.GVMA rs1
-> - * HFENCE.GVMA
-> - *
-> - * rs1!=zero and rs2!=zero ==> HFENCE.GVMA rs1, rs2
-> - * rs1==zero and rs2!=zero ==> HFENCE.GVMA zero, rs2
-> - * rs1!=zero and rs2==zero ==> HFENCE.GVMA rs1
-> - * rs1==zero and rs2==zero ==> HFENCE.GVMA
-> - *
-> - * Instruction encoding of HFENCE.GVMA is:
-> - * 0110001 rs2(5) rs1(5) 000 00000 1110011
-> - */
-> +#include <asm/insn-def.h>
->
->  void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
->                                           gpa_t gpa, gpa_t gpsz,
-> @@ -41,31 +26,14 @@ void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
->         }
->
->         for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order)) {
-> -               /*
-> -                * rs1 = a0 (GPA >> 2)
-> -                * rs2 = a1 (VMID)
-> -                * HFENCE.GVMA a0, a1
-> -                * 0110001 01011 01010 000 00000 1110011
-> -                */
-> -               asm volatile ("srli a0, %0, 2\n"
-> -                             "add a1, %1, zero\n"
-> -                             ".word 0x62b50073\n"
-> -                             :: "r" (pos), "r" (vmid)
-> -                             : "a0", "a1", "memory");
-> +               asm volatile (HFENCE_GVMA("%0", "%1")
-> +               : : "r" (pos >> 2), "r" (vmid) : "memory");
+On Wed, Aug 17, 2022 at 03:14:54PM +0200, Marco Elver wrote:
+> On Wed, 17 Aug 2022 at 15:03, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Mon, Jul 04, 2022 at 05:05:11PM +0200, Marco Elver wrote:
+> > > +static bool bp_constraints_is_locked(struct perf_event *bp)
+> > > +{
+> > > +     struct mutex *tsk_mtx = get_task_bps_mutex(bp);
+> > > +
+> > > +     return percpu_is_write_locked(&bp_cpuinfo_sem) ||
+> > > +            (tsk_mtx ? mutex_is_locked(tsk_mtx) :
+> > > +                       percpu_is_read_locked(&bp_cpuinfo_sem));
+> > > +}
+> >
+> > > @@ -426,18 +521,28 @@ static int modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+> > >   */
+> > >  int dbg_reserve_bp_slot(struct perf_event *bp)
+> > >  {
+> > > -     if (mutex_is_locked(&nr_bp_mutex))
+> > > +     int ret;
+> > > +
+> > > +     if (bp_constraints_is_locked(bp))
+> > >               return -1;
+> > >
+> > > -     return __reserve_bp_slot(bp, bp->attr.bp_type);
+> > > +     /* Locks aren't held; disable lockdep assert checking. */
+> > > +     lockdep_off();
+> > > +     ret = __reserve_bp_slot(bp, bp->attr.bp_type);
+> > > +     lockdep_on();
+> > > +
+> > > +     return ret;
+> > >  }
+> > >
+> > >  int dbg_release_bp_slot(struct perf_event *bp)
+> > >  {
+> > > -     if (mutex_is_locked(&nr_bp_mutex))
+> > > +     if (bp_constraints_is_locked(bp))
+> > >               return -1;
+> > >
+> > > +     /* Locks aren't held; disable lockdep assert checking. */
+> > > +     lockdep_off();
+> > >       __release_bp_slot(bp, bp->attr.bp_type);
+> > > +     lockdep_on();
+> > >
+> > >       return 0;
+> > >  }
+> >
+> > Urggghhhh... this is horrible crap. That is, the current code is that
+> > and this makes it worse :/
+> 
+> Heh, yes and when I looked at it I really wanted to see if it can
+> change. But from what I can tell, when the kernel debugger is being
+> attached, the kernel does stop everything it does and we need the
+> horrible thing above to not deadlock. And these dbg_ functions are not
+> normally used, so I decided to leave it as-is. Suggestions?
 
-You can drop the for-loop braces "{ }"
-
->         }
->  }
->
->  void kvm_riscv_local_hfence_gvma_vmid_all(unsigned long vmid)
->  {
-> -       /*
-> -        * rs1 = zero
-> -        * rs2 = a0 (VMID)
-> -        * HFENCE.GVMA zero, a0
-> -        * 0110001 01010 00000 000 00000 1110011
-> -        */
-> -       asm volatile ("add a0, %0, zero\n"
-> -                     ".word 0x62a00073\n"
-> -                     :: "r" (vmid) : "a0", "memory");
-> +       asm volatile(HFENCE_GVMA("zero", "%0") : : "r" (vmid) : "memory");
->  }
->
->  void kvm_riscv_local_hfence_gvma_gpa(gpa_t gpa, gpa_t gpsz,
-> @@ -79,45 +47,16 @@ void kvm_riscv_local_hfence_gvma_gpa(gpa_t gpa, gpa_t gpsz,
->         }
->
->         for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order)) {
-> -               /*
-> -                * rs1 = a0 (GPA >> 2)
-> -                * rs2 = zero
-> -                * HFENCE.GVMA a0
-> -                * 0110001 00000 01010 000 00000 1110011
-> -                */
-> -               asm volatile ("srli a0, %0, 2\n"
-> -                             ".word 0x62050073\n"
-> -                             :: "r" (pos) : "a0", "memory");
-> +               asm volatile(HFENCE_GVMA("%0", "zero")
-> +               : : "r" (pos >> 2) : "memory");
-
-You can drop the for-loop braces "{ }"
-
->         }
->  }
->
->  void kvm_riscv_local_hfence_gvma_all(void)
->  {
-> -       /*
-> -        * rs1 = zero
-> -        * rs2 = zero
-> -        * HFENCE.GVMA
-> -        * 0110001 00000 00000 000 00000 1110011
-> -        */
-> -       asm volatile (".word 0x62000073" ::: "memory");
-> +       asm volatile(HFENCE_GVMA("zero", "zero") : : : "memory");
->  }
->
-> -/*
-> - * Instruction encoding of hfence.gvma is:
-> - * HFENCE.VVMA rs1, rs2
-> - * HFENCE.VVMA zero, rs2
-> - * HFENCE.VVMA rs1
-> - * HFENCE.VVMA
-> - *
-> - * rs1!=zero and rs2!=zero ==> HFENCE.VVMA rs1, rs2
-> - * rs1==zero and rs2!=zero ==> HFENCE.VVMA zero, rs2
-> - * rs1!=zero and rs2==zero ==> HFENCE.VVMA rs1
-> - * rs1==zero and rs2==zero ==> HFENCE.VVMA
-> - *
-> - * Instruction encoding of HFENCE.VVMA is:
-> - * 0010001 rs2(5) rs1(5) 000 00000 1110011
-> - */
-> -
->  void kvm_riscv_local_hfence_vvma_asid_gva(unsigned long vmid,
->                                           unsigned long asid,
->                                           unsigned long gva,
-> @@ -134,17 +73,8 @@ void kvm_riscv_local_hfence_vvma_asid_gva(unsigned long vmid,
->         hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
->
->         for (pos = gva; pos < (gva + gvsz); pos += BIT(order)) {
-> -               /*
-> -                * rs1 = a0 (GVA)
-> -                * rs2 = a1 (ASID)
-> -                * HFENCE.VVMA a0, a1
-> -                * 0010001 01011 01010 000 00000 1110011
-> -                */
-> -               asm volatile ("add a0, %0, zero\n"
-> -                             "add a1, %1, zero\n"
-> -                             ".word 0x22b50073\n"
-> -                             :: "r" (pos), "r" (asid)
-> -                             : "a0", "a1", "memory");
-> +               asm volatile(HFENCE_VVMA("%0", "%1")
-> +               : : "r" (pos), "r" (asid) : "memory");
-
-You can drop the for-loop braces "{ }"
-
->         }
->
->         csr_write(CSR_HGATP, hgatp);
-> @@ -157,15 +87,7 @@ void kvm_riscv_local_hfence_vvma_asid_all(unsigned long vmid,
->
->         hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
->
-> -       /*
-> -        * rs1 = zero
-> -        * rs2 = a0 (ASID)
-> -        * HFENCE.VVMA zero, a0
-> -        * 0010001 01010 00000 000 00000 1110011
-> -        */
-> -       asm volatile ("add a0, %0, zero\n"
-> -                     ".word 0x22a00073\n"
-> -                     :: "r" (asid) : "a0", "memory");
-> +       asm volatile(HFENCE_VVMA("zero", "%0") : : "r" (asid) : "memory");
->
->         csr_write(CSR_HGATP, hgatp);
->  }
-> @@ -184,15 +106,8 @@ void kvm_riscv_local_hfence_vvma_gva(unsigned long vmid,
->         hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
->
->         for (pos = gva; pos < (gva + gvsz); pos += BIT(order)) {
-> -               /*
-> -                * rs1 = a0 (GVA)
-> -                * rs2 = zero
-> -                * HFENCE.VVMA a0
-> -                * 0010001 00000 01010 000 00000 1110011
-> -                */
-> -               asm volatile ("add a0, %0, zero\n"
-> -                             ".word 0x22050073\n"
-> -                             :: "r" (pos) : "a0", "memory");
-> +               asm volatile(HFENCE_VVMA("%0", "zero")
-> +               : : "r" (pos) : "memory");
->         }
->
->         csr_write(CSR_HGATP, hgatp);
-> @@ -204,13 +119,7 @@ void kvm_riscv_local_hfence_vvma_all(unsigned long vmid)
->
->         hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
->
-> -       /*
-> -        * rs1 = zero
-> -        * rs2 = zero
-> -        * HFENCE.VVMA
-> -        * 0010001 00000 00000 000 00000 1110011
-> -        */
-> -       asm volatile (".word 0x22000073" ::: "memory");
-> +       asm volatile(HFENCE_VVMA("zero", "zero") : : : "memory");
->
->         csr_write(CSR_HGATP, hgatp);
->  }
-> --
-> 2.37.1
->
-
-Apart from a few nits above, this looks good to me.
-
-Reviewed-by: Anup Patel <anup@brainfault.org>
-
-Regards,
-Anup
+What context is this ran in? NMI should already have lockdep disabled.

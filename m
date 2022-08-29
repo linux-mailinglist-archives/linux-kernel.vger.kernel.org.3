@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C195A4759
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BD15A4756
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiH2Kjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
+        id S229913AbiH2KjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiH2Kjh (ORCPT
+        with ESMTP id S229536AbiH2KjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:39:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738785B050
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661769576; x=1693305576;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t7GuYZO5ulomC4Kc+Yn7T0tXmir/Uia8FcI8CB074ME=;
-  b=McB4oi2QN19hkvphbvWrByY9YvBcTZryAjl6sZa5GPOXef/DaBDT2AUu
-   GHuHQpDv+ELJEBFMLjxqpHz6ww83SWhkYvhn4mAACaDU7Vc3+WbZPchj4
-   Q3TYtQ0jjFYYMCa7EvIelv/86vE6rTPcJtdzEMicOxply3cYkhoCJmkMC
-   u5LH+z2h4V7fdmOkVgjE3pv4aaaqjE8WYoNSCaBgdjh/ZssabW8Tfj264
-   eMFUWg2wxA6861kRuVjKdtp3itstJXMs2uPQAHp9ZVIjlViC0l+6ZAsgM
-   xKHsLHurc7Nc1ag0Db/1qhOZwjP826B5CVx+lJsWkaaILxI3eLnvqPBlS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="296139038"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="296139038"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 03:39:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="679578366"
-Received: from lkp-server02.sh.intel.com (HELO a13edbbf6006) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Aug 2022 03:39:12 -0700
-Received: from kbuild by a13edbbf6006 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oScAi-00002f-0a;
-        Mon, 29 Aug 2022 10:39:12 +0000
-Date:   Mon, 29 Aug 2022 18:38:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-Subject: [steev:sc8280xp-6.0.0-rc3 156/167] undefined reference to
- `sdw_disable_stream'
-Message-ID: <202208291807.tyAnOYIv-lkp@intel.com>
+        Mon, 29 Aug 2022 06:39:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B599C5AC7B;
+        Mon, 29 Aug 2022 03:39:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 354146117D;
+        Mon, 29 Aug 2022 10:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BE1C433C1;
+        Mon, 29 Aug 2022 10:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661769547;
+        bh=V4aLsCPDGVtW//0i+K135v/Na+wqz9kBREO4TmBK1Rk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=vRxLMITbLt6tbQVwa55RNWcYCZgr55yM7X31fRcmA1RJlwZ1XT46NVb3MKfu8uEBR
+         yA6zT5xHb+8WQMHQvTlElrrvJLYH8Ce+sE4P45zgjCr3voS+DOcq7BPQvtksX9LcRv
+         ymywyxtw7EbGkukKphe35wK53Zr+Pi9nx7r8CYdh3u1qnHtc4+4JYTH8aLJZsKN4Yy
+         6/pSNfxOdi1fF43U66YbiQfk9pObDT1BQOYwyc7yf7j72qva902fg0RPP/i0GdX/4P
+         TDABo4YsesJU8HVVi+GaW23FS81aECaEhCl4BXOV18Y1G9XofVc1zkCizMmHyT2vdP
+         MdPY3xoGIvvFw==
+Message-ID: <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
+ updates
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ceph@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        Colin Walters <walters@verbum.org>
+Date:   Mon, 29 Aug 2022 06:39:04 -0400
+In-Reply-To: <20220829075651.GS3600936@dread.disaster.area>
+References: <20220826214703.134870-1-jlayton@kernel.org>
+         <20220826214703.134870-2-jlayton@kernel.org>
+         <20220829075651.GS3600936@dread.disaster.area>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,37 +65,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/steev/linux sc8280xp-6.0.0-rc3
-head:   219615b30a2e783a7af7d39e20f9e0ce56ac082e
-commit: 7b56a20a3a015c2ee678b6d593889ac33fc93627 [156/167] ASoC: qcom: sm8250: move some code to common
-config: microblaze-randconfig-r025-20220828 (https://download.01.org/0day-ci/archive/20220829/202208291807.tyAnOYIv-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/steev/linux/commit/7b56a20a3a015c2ee678b6d593889ac33fc93627
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev sc8280xp-6.0.0-rc3
-        git checkout 7b56a20a3a015c2ee678b6d593889ac33fc93627
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+On Mon, 2022-08-29 at 17:56 +1000, Dave Chinner wrote:
+> On Fri, Aug 26, 2022 at 05:46:57PM -0400, Jeff Layton wrote:
+> > The i_version field in the kernel has had different semantics over
+> > the decades, but we're now proposing to expose it to userland via
+> > statx. This means that we need a clear, consistent definition of
+> > what it means and when it should change.
+> >=20
+> > Update the comments in iversion.h to describe how a conformant
+> > i_version implementation is expected to behave. This definition
+> > suits the current users of i_version (NFSv4 and IMA), but is
+> > loose enough to allow for a wide range of possible implementations.
+> >=20
+> > Cc: Colin Walters <walters@verbum.org>
+> > Cc: NeilBrown <neilb@suse.de>
+> > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > Cc: Dave Chinner <david@fromorbit.com>
+> > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.1713471269496=
+1326033@noble.neil.brown.name/#t
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  include/linux/iversion.h | 23 +++++++++++++++++++++--
+> >  1 file changed, 21 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > index 3bfebde5a1a6..45e93e1b4edc 100644
+> > --- a/include/linux/iversion.h
+> > +++ b/include/linux/iversion.h
+> > @@ -9,8 +9,19 @@
+> >   * ---------------------------
+> >   * The change attribute (i_version) is mandated by NFSv4 and is mostly=
+ for
+> >   * knfsd, but is also used for other purposes (e.g. IMA). The i_versio=
+n must
+> > - * appear different to observers if there was a change to the inode's =
+data or
+> > - * metadata since it was last queried.
+> > + * appear different to observers if there was an explicit change to th=
+e inode's
+> > + * data or metadata since it was last queried.
+> > + *
+> > + * An explicit change is one that would ordinarily result in a change =
+to the
+> > + * inode status change time (aka ctime). The version must appear to ch=
+ange, even
+> > + * if the ctime does not (since the whole point is to avoid missing up=
+dates due
+> > + * to timestamp granularity). If POSIX mandates that the ctime must ch=
+ange due
+> > + * to an operation, then the i_version counter must be incremented as =
+well.
+> > + *
+> > + * A conformant implementation is allowed to increment the counter in =
+other
+> > + * cases, but this is not optimal. NFSv4 and IMA both use this value t=
+o determine
+> > + * whether caches are up to date. Spurious increments can cause false =
+cache
+> > + * invalidations.
+>=20
+> "not optimal", but never-the-less allowed - that's "unspecified
+> behaviour" if I've ever seen it. How is userspace supposed to
+> know/deal with this?
+>=20
+> Indeed, this loophole clause doesn't exist in the man pages that
+> define what statx.stx_ino_version means. The man pages explicitly
+> define that stx_ino_version only ever changes when stx_ctime
+> changes.
+>=20
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We can fix the manpage to make this more clear.
 
-All errors (new ones prefixed by >>):
+> IOWs, the behaviour userspace developers are going to expect *does
+> not include* stx_ino_version changing it more often than ctime is
+> changed. Hence a kernel iversion implementation that bumps the
+> counter more often than ctime changes *is not conformant with the
+> statx version counter specification*. IOWs, we can't export such
+> behaviour to userspace *ever* - it is a non-conformant
+> implementation.
+>=20
 
-   microblaze-linux-ld: sound/soc/qcom/common.o: in function `qcom_snd_sdw_prepare':
->> (.text+0x790): undefined reference to `sdw_disable_stream'
->> microblaze-linux-ld: (.text+0x79c): undefined reference to `sdw_deprepare_stream'
->> microblaze-linux-ld: (.text+0x7ac): undefined reference to `sdw_prepare_stream'
->> microblaze-linux-ld: (.text+0x7c0): undefined reference to `sdw_enable_stream'
-   microblaze-linux-ld: (.text+0x7d4): undefined reference to `sdw_deprepare_stream'
-   microblaze-linux-ld: sound/soc/qcom/common.o: in function `qcom_snd_sdw_hw_free':
-   (.text+0x9a8): undefined reference to `sdw_disable_stream'
-   microblaze-linux-ld: (.text+0x9b8): undefined reference to `sdw_deprepare_stream'
+Nonsense. The statx version counter specification is *whatever we decide
+to make it*. If we define it to allow for spurious version bumps, then
+these implementations would be conformant.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Given that you can't tell what or how much changed in the inode whenever
+the value changes, allowing it to be bumped on non-observable changes is
+ok and the counter is still useful. When you see it change you need to
+go stat/read/getxattr etc, to see what actually happened anyway.
+
+Most applications won't be interested in every possible explicit change
+that can happen to an inode. It's likely these applications would check
+the parts of the inode they're interested in, and then go back to
+waiting for the next bump if the change wasn't significant to them.
+
+
+> Hence I think anything that bumps iversion outside the bounds of the
+> statx definition should be declared as such:
+>=20
+> "Non-conformant iversion implementations:
+> 	- MUST NOT be exported by statx() to userspace
+> 	- MUST be -tolerated- by kernel internal applications that
+> 	  use iversion for their own purposes."
+>=20
+
+I think this is more strict than is needed. An implementation that bumps
+this value more often than is necessary is still useful. It's not
+_ideal_, but it still meets the needs of NFSv4, IMA and other potential
+users of it. After all, this is basically the definition of i_version
+today and it's still useful, even if atime update i_version bumps are
+currently harmful for performance.
+
+--=20
+Jeff Layton <jlayton@kernel.org>

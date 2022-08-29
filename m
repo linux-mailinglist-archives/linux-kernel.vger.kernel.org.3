@@ -2,244 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D5C5A4353
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405E35A4349
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiH2GfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 02:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
+        id S229766AbiH2Gbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 02:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiH2GfL (ORCPT
+        with ESMTP id S229446AbiH2Gbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 02:35:11 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EDE11839;
-        Sun, 28 Aug 2022 23:35:07 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MGLDw4fThz1N7cK;
-        Mon, 29 Aug 2022 14:31:28 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+        Mon, 29 Aug 2022 02:31:45 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363FBBC97;
+        Sun, 28 Aug 2022 23:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661754702; x=1693290702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tBRThUyNOZ/khHKlmG0VTgZ6Qe5VMW4DNL2BjrSmuMM=;
+  b=DItL2JqEjw5vV9FAcwPZufH35fxzg8kRNrP5ykTVM3GW0/zUuSBldNeu
+   6fJp2UV8Y6L0uCLc1KY/D7pQN9Fy1OrdsSumvFGWjHVpQFuqYhS3iK+kD
+   /MYaXf2wInb9HPfoseGzzbjpIH84mRUKhKXpl6tTMtuf/UUueGYOu9GmO
+   wLWk+mc+DxYkUxEVYNM3NqTuF2Jetx4vTN+rUz8qZ//gE1IoK0pjDbmsD
+   o/HS0vTFIIbOUg0EBzvr0YEJDecLaueXXjc5yddBpjzn+dAxMyPebipXf
+   htsKXdqJ/AMJFCmFrk6K8oBJgNMcmbhQRSPxu4jmWu/AmV+5mTUWkKO0N
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="188432508"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Aug 2022 23:31:41 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 29 Aug 2022 14:35:04 +0800
-Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
-From:   xiujianfeng <xiujianfeng@huawei.com>
-To:     <mic@digikod.net>, <paul@paul-moore.com>, <jmorris@namei.org>,
-        <serge@hallyn.com>, <shuah@kernel.org>, <corbet@lwn.net>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <20220827111215.131442-4-xiujianfeng@huawei.com>
-Message-ID: <1a6b3217-b709-f401-7007-5452648b70a1@huawei.com>
-Date:   Mon, 29 Aug 2022 14:35:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+ 15.1.2507.12; Sun, 28 Aug 2022 23:31:40 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Sun, 28 Aug 2022 23:31:40 -0700
+Date:   Mon, 29 Aug 2022 08:35:57 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: lan9662-otpc: document Lan9662 OTPC
+Message-ID: <20220829063557.3ntgt6uqblgew3r3@soft-dev3-1.localhost>
+References: <20220825204041.1485731-1-horatiu.vultur@microchip.com>
+ <20220825204041.1485731-2-horatiu.vultur@microchip.com>
+ <96da4897-7b55-84d5-8f1d-892e116153df@linaro.org>
+ <20220826073103.kkotbaxc3latculo@soft-dev3-1.localhost>
+ <bb0331e7-2203-e8cb-70b6-5d43bf6a0aaf@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220827111215.131442-4-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <bb0331e7-2203-e8cb-70b6-5d43bf6a0aaf@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The 08/26/2022 20:37, Krzysztof Kozlowski wrote:
+> 
+> On 26/08/2022 10:31, Horatiu Vultur wrote:
+> > The 08/26/2022 09:42, Krzysztof Kozlowski wrote:
+> >
+> > Hi Krzysztof,
+> >
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    items:
+> >>> +      - const: microchip,lan9662-otpc
+> >>> +      - const: microchip,lan9668-otpc
+> >>
+> >> Does not look like you tested the bindings. Please run `make
+> >> dt_binding_check` (see
+> >> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+> >>
+> >> This won't work...
+> >
+> > You are right. That was a silly mistake on my side.
+> >
+> > It should be:
+> > ---
+> > properties:
+> >   compatible:
+> >     enum:
+> >       - microchip,lan9662-otpc
+> >       - microchip,lan9668-otpc
+> > ---
+> > Because what I want to achive is to be able to use any of
+> > string(microchip,lan9662-otpc or microchip,lan9668-otpc) as compatible
+> > string.
+> >
+> > Or this is not the correct change?
+> > At least with this change dt_binding_check is happy.
+> 
+> This would be correct from syntax point of view, however maybe not the
+> best choice from functional point of view. How you wrote the driver and
+> bindings, these devices are compatible, so why this is not expressed as
+> compatible devices?
 
-ÔÚ 2022/8/27 19:12, Xiu Jianfeng Ð´µÀ:
-> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHGRP to
-> support restriction to chmod(2) and chown(2) with landlock.
-> 
-> If these two access rights are set on a directory, they only take effect
-> for its context, not the directory itself.
-> 
-> This patch also change the landlock ABI version from 3 to 4.
-> 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->   include/uapi/linux/landlock.h                | 10 +++--
->   security/landlock/fs.c                       | 43 +++++++++++++++++++-
->   security/landlock/limits.h                   |  2 +-
->   security/landlock/syscalls.c                 |  2 +-
->   tools/testing/selftests/landlock/base_test.c |  2 +-
->   tools/testing/selftests/landlock/fs_test.c   |  6 ++-
->   6 files changed, 56 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-> index 735b1fe8326e..07b73626ff20 100644
-> --- a/include/uapi/linux/landlock.h
-> +++ b/include/uapi/linux/landlock.h
-> @@ -141,14 +141,16 @@ struct landlock_path_beneath_attr {
->    *   directory) parent.  Otherwise, such actions are denied with errno set to
->    *   EACCES.  The EACCES errno prevails over EXDEV to let user space
->    *   efficiently deal with an unrecoverable error.
-> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
-> + * - %LANDLOCK_ACCESS_FS_CHGRP: Change the owner and/or group of a file.
->    *
->    * .. warning::
->    *
->    *   It is currently not possible to restrict some file-related actions
->    *   accessible through these syscall families: :manpage:`chdir(2)`,
-> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
-> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, :manpage:`utime(2)`,
-> - *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, :manpage:`access(2)`.
-> + *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`setxattr(2)`,
-> + *   :manpage:`utime(2)`,:manpage:`ioctl(2)`, :manpage:`fcntl(2)`,
-> + *   :manpage:`access(2)`.
->    *   Future Landlock evolutions will enable to restrict them.
->    */
->   /* clang-format off */
-> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
->   #define LANDLOCK_ACCESS_FS_MAKE_SYM			(1ULL << 12)
->   #define LANDLOCK_ACCESS_FS_REFER			(1ULL << 13)
->   #define LANDLOCK_ACCESS_FS_TRUNCATE			(1ULL << 14)
-> +#define LANDLOCK_ACCESS_FS_CHMOD			(1ULL << 15)
-> +#define LANDLOCK_ACCESS_FS_CHGRP			(1ULL << 16)
->   /* clang-format on */
->   
->   #endif /* _UAPI_LINUX_LANDLOCK_H */
-> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-> index 4ef614a4ea22..6ac83d96ada7 100644
-> --- a/security/landlock/fs.c
-> +++ b/security/landlock/fs.c
-> @@ -185,7 +185,9 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
->   	LANDLOCK_ACCESS_FS_EXECUTE | \
->   	LANDLOCK_ACCESS_FS_WRITE_FILE | \
->   	LANDLOCK_ACCESS_FS_READ_FILE | \
-> -	LANDLOCK_ACCESS_FS_TRUNCATE)
-> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
-> +	LANDLOCK_ACCESS_FS_CHMOD | \
-> +	LANDLOCK_ACCESS_FS_CHGRP)
->   /* clang-format on */
->   
->   /*
-> @@ -690,6 +692,31 @@ static inline int current_check_access_path(const struct path *const path,
->   	return check_access_path(dom, path, access_request);
->   }
->   
-> +static inline int
-> +current_check_access_path_context_only(const struct path *const path,
-> +				       const access_mask_t access_request)
-> +{
-> +	const struct landlock_ruleset *const dom =
-> +		landlock_get_current_domain();
-> +	struct path eff_path;
-> +	int ret;
-> +
-> +	if (!dom)
-> +		return 0;
-> +	eff_path = *path;
-> +	/* if it's dir, check its visible parent. */
-> +	if (d_is_dir(eff_path.dentry)) {
-> +		path_get(&eff_path);
-> +		/* dont care if reaches the root or not. */
+OK, so then it should be something like this?
+---
+properties:
+  compatible:
+    items:
+       - const: microchip,lan9662-otpc
+       - const: microchip,lan9668-otpc
+---
 
-I may made a mistake here, I think it should return -EACCES directly if 
-the walk result is not WALK_CONTINUE.
+I have tried to look at the following yaml files[1],[2] to see how they
+have done it.
 
-> +		walk_to_visible_parent(&eff_path);
-> +		ret = current_check_access_path(&eff_path, access_request);
-> +		path_put(&eff_path);
-> +	} else {
-> +		ret = current_check_access_path(&eff_path, access_request);
-> +	}
-> +	return ret;
-> +}
-> +
->   static inline access_mask_t get_mode_access(const umode_t mode)
->   {
->   	switch (mode & S_IFMT) {
-> @@ -1177,6 +1204,18 @@ static int hook_path_truncate(const struct path *const path)
->   	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
->   }
->   
-> +static int hook_path_chmod(const struct path *const path, umode_t mode)
-> +{
-> +	return current_check_access_path_context_only(path,
-> +					LANDLOCK_ACCESS_FS_CHMOD);
-> +}
-> +
-> +static int hook_path_chown(const struct path *const path, kuid_t uid, kgid_t gid)
-> +{
-> +	return current_check_access_path_context_only(path,
-> +					LANDLOCK_ACCESS_FS_CHGRP);
-> +}
-> +
->   /* File hooks */
->   
->   static inline access_mask_t get_file_access(const struct file *const file)
-> @@ -1230,6 +1269,8 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
->   	LSM_HOOK_INIT(path_unlink, hook_path_unlink),
->   	LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
->   	LSM_HOOK_INIT(path_truncate, hook_path_truncate),
-> +	LSM_HOOK_INIT(path_chmod, hook_path_chmod),
-> +	LSM_HOOK_INIT(path_chown, hook_path_chown),
->   
->   	LSM_HOOK_INIT(file_open, hook_file_open),
->   };
-> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
-> index 82288f0e9e5e..7cdd7d467d12 100644
-> --- a/security/landlock/limits.h
-> +++ b/security/landlock/limits.h
-> @@ -18,7 +18,7 @@
->   #define LANDLOCK_MAX_NUM_LAYERS		16
->   #define LANDLOCK_MAX_NUM_RULES		U32_MAX
->   
-> -#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_TRUNCATE
-> +#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_CHGRP
->   #define LANDLOCK_MASK_ACCESS_FS		((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
->   #define LANDLOCK_NUM_ACCESS_FS		__const_hweight64(LANDLOCK_MASK_ACCESS_FS)
->   
-> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-> index f4d6fc7ed17f..469e0e11735c 100644
-> --- a/security/landlock/syscalls.c
-> +++ b/security/landlock/syscalls.c
-> @@ -129,7 +129,7 @@ static const struct file_operations ruleset_fops = {
->   	.write = fop_dummy_write,
->   };
->   
-> -#define LANDLOCK_ABI_VERSION 3
-> +#define LANDLOCK_ABI_VERSION 4
->   
->   /**
->    * sys_landlock_create_ruleset - Create a new ruleset
-> diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
-> index 72cdae277b02..9f00582f639c 100644
-> --- a/tools/testing/selftests/landlock/base_test.c
-> +++ b/tools/testing/selftests/landlock/base_test.c
-> @@ -75,7 +75,7 @@ TEST(abi_version)
->   	const struct landlock_ruleset_attr ruleset_attr = {
->   		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
->   	};
-> -	ASSERT_EQ(3, landlock_create_ruleset(NULL, 0,
-> +	ASSERT_EQ(4, landlock_create_ruleset(NULL, 0,
->   					     LANDLOCK_CREATE_RULESET_VERSION));
->   
->   	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0,
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index debe2d9ea6cf..f513cd8d9d51 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -404,9 +404,11 @@ TEST_F_FORK(layout1, inval)
->   	LANDLOCK_ACCESS_FS_EXECUTE | \
->   	LANDLOCK_ACCESS_FS_WRITE_FILE | \
->   	LANDLOCK_ACCESS_FS_READ_FILE | \
-> -	LANDLOCK_ACCESS_FS_TRUNCATE)
-> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
-> +	LANDLOCK_ACCESS_FS_CHMOD | \
-> +	LANDLOCK_ACCESS_FS_CHGRP)
->   
-> -#define ACCESS_LAST LANDLOCK_ACCESS_FS_TRUNCATE
-> +#define ACCESS_LAST LANDLOCK_ACCESS_FS_CHGRP
->   
->   #define ACCESS_ALL ( \
->   	ACCESS_FILE | \
+[1] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+[2] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
+
 > 
+> Best regards,
+> Krzysztof
+
+-- 
+/Horatiu

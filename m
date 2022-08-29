@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAB55A478C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A73C5A4796
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiH2Kuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S229734AbiH2KwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiH2Kuf (ORCPT
+        with ESMTP id S229913AbiH2KwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:50:35 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ADB165AD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:50:34 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id fy31so14456781ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=po8eVdAenbpKrCkz4JKlV6W49Tq/nrJ3pgXdtpOZ1o0=;
-        b=xrNoYu+VINF91H9AcGTj7e9utA7xAjnGhepEh7Mum1XaILF5AyXQ5ibbuXhZWPEhq4
-         eK21KTbO7NqEhG09xLeHr2y8gUKn/YoaQEPPZ8yzvnUajc5sWnJRCYHqN5sFkDA/r4VO
-         B+a0My7gnXQxEvaLEsTVFINlKbj7KsTZQDUwQgr0VLDc3RVmKQr4YbIaZFFv43ZavPRV
-         CRI+PipDvyypVALt2/ie8L577D7XpAgwDDOb26a3pu3dvtWAogkH2GW5n08HdYRuQoLe
-         9GAsOI/NOCUAE1QkRs8ouS6/15+vFINI9KYBUv19Cj2LXPHSsJfa6gVwkGXN14zCvg7d
-         974Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=po8eVdAenbpKrCkz4JKlV6W49Tq/nrJ3pgXdtpOZ1o0=;
-        b=xfo7Sc26yaOHMqhqgwnhDPVlcRwmb+pVEHwI2y8Q8tzAMoIW3C4zAPWmbrbznVPw8b
-         xTKE3FjgKRyGqVTVw2P1/HnUDk0RvlNRfKYXDoM4SouLCPJJ3do4erZ4TnO6ajT6S4Aq
-         XZbhfv8YB3Xykuh995j/fC825A/cWzaMYj+PNh/1Fj/jaaZQZna04mMsjc2+kTU/LgwF
-         /Ew+oxEQZcHfKiEO5tTgtbn68zo8STVnidsR6tiozh9NdRTJCHLLGSqnXYFHHSlAhGcC
-         +tuP58n5UkhgJvRMlxibMxJ8b+4TPzdNca0u/lKhA+NJ4tGB6Yg7zM7tkJJYBald80hQ
-         JAFg==
-X-Gm-Message-State: ACgBeo178QD1KP9KImNaldD/0i+axkLZhK5+f7QHTDvwVlAXGSnxaZV0
-        7H3jg6jQUHg0CYELWYVzXrL+GebnI4lUvyxYuDbg
-X-Google-Smtp-Source: AA6agR4ymvkqcOZ9j7iYAyghFUODCCCv85OPNuQdzTC6bw8PTsEM9PkmApCUYbvWD8oPjyF+makg3fmbdFjfwXg7L9Q=
-X-Received: by 2002:a17:906:ee8e:b0:730:4a24:f311 with SMTP id
- wt14-20020a170906ee8e00b007304a24f311mr13688565ejb.420.1661770232677; Mon, 29
- Aug 2022 03:50:32 -0700 (PDT)
+        Mon, 29 Aug 2022 06:52:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802A35D0DC;
+        Mon, 29 Aug 2022 03:52:10 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 10:52:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661770328;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tbSjhvnS6cdpNMmBd981hbgoH/RUgplJxz8S/6mrE3Y=;
+        b=gfUT0OJp0aiUV9Gki/9cRBXX8bSxSrHQFrDc5jHJcs5qiWx3zUu964KODzXblTK8uBREip
+        O9zZKeDdzFp/HBA1CY8efs0dEO5SXfppOi/AMZzljYkTh7ObBM9RUagZei46rwORREyOsm
+        ZVGl+XtT6LFDvLDnoR3uJ3xXYQ+1pr/AUcb6G9kiCP4Bub944EmlgEIvV63PNdOtlmN8MC
+        5cy+uBoDBRFzvAeH45ifz+uGVLhX83+SEHhfYY0f+FIRdfDGMwtKx43pZzRZBX8TuxMQeZ
+        UhlmBDWC3fQzR0gZeHc7b087FzlmB7I6gfO1hp8SQ4bwteVaxIOqflGguHOlGw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661770328;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tbSjhvnS6cdpNMmBd981hbgoH/RUgplJxz8S/6mrE3Y=;
+        b=iI+564d2UlqeXAaItQybD2zw0pPWk+cceNI8wJdOFczpTXFPjjeXUQuIbxybwzjqZOy8iL
+        fYxAjyu9L9r5U3DA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/core] x86/earlyprintk: Clean up pciserial
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <YwdeyCEtW+wa+QhH@worktop.programming.kicks-ass.net>
+References: <YwdeyCEtW+wa+QhH@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220829073424.5677-1-maxime.coquelin@redhat.com>
-In-Reply-To: <20220829073424.5677-1-maxime.coquelin@redhat.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Mon, 29 Aug 2022 18:50:08 +0800
-Message-ID: <CACycT3vaeULPQ8qcz+-uOYxLcKN5zXJA7hs95CjBL6OjDCS7tA@mail.gmail.com>
-Subject: Re: [PATCH v2] vduse: prevent uninitialized memory accesses
-To:     Maxime Coquelin <maxime.coquelin@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Eli Cohen <elic@nvidia.com>, guanjun@linux.alibaba.com,
-        Parav Pandit <parav@nvidia.com>, gautam.dawar@xilinx.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Message-ID: <166177032651.401.449750645705530019.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +66,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 3:34 PM Maxime Coquelin
-<maxime.coquelin@redhat.com> wrote:
->
-> If the VDUSE application provides a smaller config space
-> than the driver expects, the driver may use uninitialized
-> memory from the stack.
->
-> This patch prevents it by initializing the buffer passed by
-> the driver to store the config value.
->
-> This fix addresses CVE-2022-2308.
->
-> Cc: xieyongji@bytedance.com
-> Cc: stable@vger.kernel.org # v5.15+
-> Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
->
-> Acked-by: Jason Wang <jasowang@redhat.com>
-> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
+The following commit has been merged into the x86/core branch of tip:
 
-Reviewed-by: Xie Yongji <xieyongji@bytedance.com>
+Commit-ID:     bc12b70f7d216b36bd87701349374a13e486f8eb
+Gitweb:        https://git.kernel.org/tip/bc12b70f7d216b36bd87701349374a13e486f8eb
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Thu, 25 Aug 2022 13:36:40 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Mon, 29 Aug 2022 12:19:25 +02:00
 
-Thanks,
-Yongji
+x86/earlyprintk: Clean up pciserial
+
+While working on a GRUB patch to support PCI-serial, a number of
+cleanups were suggested that apply to the code I took inspiration from.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>   # pci_ids.h
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/YwdeyCEtW+wa+QhH@worktop.programming.kicks-ass.net
+---
+ arch/x86/kernel/early_printk.c | 14 +++++++-------
+ include/linux/pci_ids.h        |  3 +++
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kernel/early_printk.c b/arch/x86/kernel/early_printk.c
+index 68b3892..44f9370 100644
+--- a/arch/x86/kernel/early_printk.c
++++ b/arch/x86/kernel/early_printk.c
+@@ -264,11 +264,11 @@ static __init void early_pci_serial_init(char *s)
+ 	bar0 = read_pci_config(bus, slot, func, PCI_BASE_ADDRESS_0);
+ 
+ 	/*
+-	 * Verify it is a UART type device
++	 * Verify it is a 16550-UART type device
+ 	 */
+ 	if (((classcode >> 16 != PCI_CLASS_COMMUNICATION_MODEM) &&
+ 	     (classcode >> 16 != PCI_CLASS_COMMUNICATION_SERIAL)) ||
+-	   (((classcode >> 8) & 0xff) != 0x02)) /* 16550 I/F at BAR0 */ {
++	    (((classcode >> 8) & 0xff) != PCI_SERIAL_16550_COMPATIBLE)) {
+ 		if (!force)
+ 			return;
+ 	}
+@@ -276,22 +276,22 @@ static __init void early_pci_serial_init(char *s)
+ 	/*
+ 	 * Determine if it is IO or memory mapped
+ 	 */
+-	if (bar0 & 0x01) {
++	if ((bar0 & PCI_BASE_ADDRESS_SPACE) == PCI_BASE_ADDRESS_SPACE_IO) {
+ 		/* it is IO mapped */
+ 		serial_in = io_serial_in;
+ 		serial_out = io_serial_out;
+-		early_serial_base = bar0&0xfffffffc;
++		early_serial_base = bar0 & PCI_BASE_ADDRESS_IO_MASK;
+ 		write_pci_config(bus, slot, func, PCI_COMMAND,
+-						cmdreg|PCI_COMMAND_IO);
++				 cmdreg|PCI_COMMAND_IO);
+ 	} else {
+ 		/* It is memory mapped - assume 32-bit alignment */
+ 		serial_in = mem32_serial_in;
+ 		serial_out = mem32_serial_out;
+ 		/* WARNING! assuming the address is always in the first 4G */
+ 		early_serial_base =
+-			(unsigned long)early_ioremap(bar0 & 0xfffffff0, 0x10);
++			(unsigned long)early_ioremap(bar0 & PCI_BASE_ADDRESS_MEM_MASK, 0x10);
+ 		write_pci_config(bus, slot, func, PCI_COMMAND,
+-						cmdreg|PCI_COMMAND_MEMORY);
++				 cmdreg|PCI_COMMAND_MEMORY);
+ 	}
+ 
+ 	/*
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 6feade6..41b3fff 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -75,6 +75,9 @@
+ #define PCI_CLASS_COMMUNICATION_MODEM	0x0703
+ #define PCI_CLASS_COMMUNICATION_OTHER	0x0780
+ 
++/* Interface for SERIAL/MODEM */
++#define PCI_SERIAL_16550_COMPATIBLE	0x02
++
+ #define PCI_BASE_CLASS_SYSTEM		0x08
+ #define PCI_CLASS_SYSTEM_PIC		0x0800
+ #define PCI_CLASS_SYSTEM_PIC_IOAPIC	0x080010

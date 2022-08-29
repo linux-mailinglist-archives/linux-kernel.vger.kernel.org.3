@@ -2,146 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2315A574B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C595A5753
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiH2W4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 18:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S229689AbiH2W6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 18:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiH2W4R (ORCPT
+        with ESMTP id S229457AbiH2W62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 18:56:17 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3C015FD5;
-        Mon, 29 Aug 2022 15:56:08 -0700 (PDT)
-X-UUID: 2fcd28232bc342e4a7afac1817c5ff61-20220830
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=+yvoj/4B+nCFvKI5wRjHfIXDDi4JJmZCKOW9oG2xHBA=;
-        b=eDmIOqdtxPrnokeJ0UUTtfdjLmWBJB5BzAwqI+1ZbtM0V3l9lniDRuPtaZ4r92nBOOst6uutgXvDOyokf/QAu3i8DbfvecACbbw7qHDHCUlDuuLmg94mWFmSsX18YRES3w/k620VU4+CkhGKllNtzWyu8gQyp6rX44vaCAHrxJQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:ea8ac647-6bd5-41f8-93fc-5feb191adc2f,OB:10,
-        LOB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Relea
-        se_Ham,ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.10,REQID:ea8ac647-6bd5-41f8-93fc-5feb191adc2f,OB:10,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS
-        981B3D,ACTION:quarantine,TS:100
-X-CID-META: VersionHash:84eae18,CLOUDID:30517720-1c20-48a5-82a0-25f9c331906d,C
-        OID:278089ba2d78,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 2fcd28232bc342e4a7afac1817c5ff61-20220830
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 973737403; Tue, 30 Aug 2022 06:56:02 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 30 Aug 2022 06:55:59 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Tue, 30 Aug 2022 06:55:59 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <abhishekpandit@google.com>,
-        <michaelfsun@google.com>, <mcchou@chromium.org>,
-        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "Chris Lu" <chris.lu@mediatek.com>
-Subject: [PATCH] Bluetooth: btusb: Add a new PID/VID 13d3/3578 for MT7921
-Date:   Tue, 30 Aug 2022 06:55:58 +0800
-Message-ID: <575471871695aaae73ebc15eee73411ee53f4bb4.1661596165.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Mon, 29 Aug 2022 18:58:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0C68672D;
+        Mon, 29 Aug 2022 15:58:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6EDE61F91B;
+        Mon, 29 Aug 2022 22:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661813905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Nh7JLxfon4+atbvUG155Svob5ValkyyKRW6pBz4oyQ=;
+        b=Sz2ZMz3YoSrAWwB4ylH2l7mfPjgXeUsF7Vfliei6AjTVQ1/uOvix13iR97dgDQuDUlyuD5
+        LZHWC3oQccvpl+MxqKAeJs1n1359Xbg8xv8mxY5rF2jydT5mLstdUdpg5QkmmTyfKlApCf
+        +esqUEBjGPYWxHPLzIQI//WfDwZh2sg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661813905;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Nh7JLxfon4+atbvUG155Svob5ValkyyKRW6pBz4oyQ=;
+        b=LOWfVmxR4+I1gwlrnu5py92Oqj9rRpwaWA8jtFry1OH67I5Baqy5ZvQxTZgpZnUDf9nvHV
+        Q8GV5aXa2PZgOvCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7ABE61352A;
+        Mon, 29 Aug 2022 22:58:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Sv+lDotEDWNcIQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 29 Aug 2022 22:58:19 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Dave Chinner" <david@fromorbit.com>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ceph@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        "Colin Walters" <walters@verbum.org>
+Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime updates
+In-reply-to: <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+References: <20220826214703.134870-1-jlayton@kernel.org>,
+ <20220826214703.134870-2-jlayton@kernel.org>,
+ <20220829075651.GS3600936@dread.disaster.area>,
+ <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+Date:   Tue, 30 Aug 2022 08:58:15 +1000
+Message-id: <166181389550.27490.8200873228292034867@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Lu <chris.lu@mediatek.com>
+On Mon, 29 Aug 2022, Jeff Layton wrote:
+> On Mon, 2022-08-29 at 17:56 +1000, Dave Chinner wrote:
+> > On Fri, Aug 26, 2022 at 05:46:57PM -0400, Jeff Layton wrote:
+> > > The i_version field in the kernel has had different semantics over
+> > > the decades, but we're now proposing to expose it to userland via
+> > > statx. This means that we need a clear, consistent definition of
+> > > what it means and when it should change.
+> > >=20
+> > > Update the comments in iversion.h to describe how a conformant
+> > > i_version implementation is expected to behave. This definition
+> > > suits the current users of i_version (NFSv4 and IMA), but is
+> > > loose enough to allow for a wide range of possible implementations.
+> > >=20
+> > > Cc: Colin Walters <walters@verbum.org>
+> > > Cc: NeilBrown <neilb@suse.de>
+> > > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > > Cc: Dave Chinner <david@fromorbit.com>
+> > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.1713471269496=
+1326033@noble.neil.brown.name/#t
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  include/linux/iversion.h | 23 +++++++++++++++++++++--
+> > >  1 file changed, 21 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > > index 3bfebde5a1a6..45e93e1b4edc 100644
+> > > --- a/include/linux/iversion.h
+> > > +++ b/include/linux/iversion.h
+> > > @@ -9,8 +9,19 @@
+> > >   * ---------------------------
+> > >   * The change attribute (i_version) is mandated by NFSv4 and is mostly=
+ for
+> > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_versio=
+n must
+> > > - * appear different to observers if there was a change to the inode's =
+data or
+> > > - * metadata since it was last queried.
+> > > + * appear different to observers if there was an explicit change to th=
+e inode's
+> > > + * data or metadata since it was last queried.
+> > > + *
+> > > + * An explicit change is one that would ordinarily result in a change =
+to the
+> > > + * inode status change time (aka ctime). The version must appear to ch=
+ange, even
+> > > + * if the ctime does not (since the whole point is to avoid missing up=
+dates due
+> > > + * to timestamp granularity). If POSIX mandates that the ctime must ch=
+ange due
+> > > + * to an operation, then the i_version counter must be incremented as =
+well.
+> > > + *
+> > > + * A conformant implementation is allowed to increment the counter in =
+other
+> > > + * cases, but this is not optimal. NFSv4 and IMA both use this value t=
+o determine
+> > > + * whether caches are up to date. Spurious increments can cause false =
+cache
+> > > + * invalidations.
+> >=20
+> > "not optimal", but never-the-less allowed - that's "unspecified
+> > behaviour" if I've ever seen it. How is userspace supposed to
+> > know/deal with this?
+> >=20
+> > Indeed, this loophole clause doesn't exist in the man pages that
+> > define what statx.stx_ino_version means. The man pages explicitly
+> > define that stx_ino_version only ever changes when stx_ctime
+> > changes.
+> >=20
+>=20
+> We can fix the manpage to make this more clear.
+>=20
+> > IOWs, the behaviour userspace developers are going to expect *does
+> > not include* stx_ino_version changing it more often than ctime is
+> > changed. Hence a kernel iversion implementation that bumps the
+> > counter more often than ctime changes *is not conformant with the
+> > statx version counter specification*. IOWs, we can't export such
+> > behaviour to userspace *ever* - it is a non-conformant
+> > implementation.
+> >=20
+>=20
+> Nonsense. The statx version counter specification is *whatever we decide
+> to make it*. If we define it to allow for spurious version bumps, then
+> these implementations would be conformant.
+>=20
+> Given that you can't tell what or how much changed in the inode whenever
+> the value changes, allowing it to be bumped on non-observable changes is
+> ok and the counter is still useful. When you see it change you need to
+> go stat/read/getxattr etc, to see what actually happened anyway.
+>=20
+> Most applications won't be interested in every possible explicit change
+> that can happen to an inode. It's likely these applications would check
+> the parts of the inode they're interested in, and then go back to
+> waiting for the next bump if the change wasn't significant to them.
+>=20
+>=20
+> > Hence I think anything that bumps iversion outside the bounds of the
+> > statx definition should be declared as such:
+> >=20
+> > "Non-conformant iversion implementations:
+> > 	- MUST NOT be exported by statx() to userspace
+> > 	- MUST be -tolerated- by kernel internal applications that
+> > 	  use iversion for their own purposes."
+> >=20
+>=20
+> I think this is more strict than is needed. An implementation that bumps
+> this value more often than is necessary is still useful. It's not
+> _ideal_, but it still meets the needs of NFSv4, IMA and other potential
+> users of it. After all, this is basically the definition of i_version
+> today and it's still useful, even if atime update i_version bumps are
+> currently harmful for performance.
 
-Add VID 13D3 & PID 3578 for MediaTek MT7921 USB Bluetooth chip.
+Why do you want to let it be OK?  Who is hurt by it being "more strict
+than needed"?  There is an obvious cost in not being strict as an
+implementation can be compliant but completely useless (increment every
+nanosecond).  So there needs to be a clear benefit to balance this.  Who
+benefits by not being strict?
 
-The information in /sys/kernel/debug/usb/devices about the Bluetooth
-device is listed as the below.
+Also: Your spec doesn't say it must increase, only it must be different.
+So would as hash of all data and metadata be allowed (sysfs might be
+able to provide that, but probably wouldn't bother).
 
-T:  Bus=03 Lev=01 Prnt=01 Port=07 Cnt=03 Dev#=  5 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=13d3 ProdID=3578 Rev= 1.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=000000000
-C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
+Also: if stray updates are still conformant, can occasional repeated
+values be still conformant?  I would like for a high-precision ctime
+timestamp to be acceptable, but as time can go backwards it is currently
+not conformant (even though the xfs iversion which is less useful is
+actually conformant).
 
-Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Chris Lu <chris.lu@mediatek.com>
----
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 30dd443f395f..20bd085664bf 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -481,6 +481,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x13d3, 0x3567), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x13d3, 0x3578), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
- 	{ USB_DEVICE(0x0489, 0xe0cd), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
--- 
-2.25.1
-
+NeilBrown

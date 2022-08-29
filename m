@@ -2,177 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16CD5A4E47
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297145A4E49
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiH2Ngo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S230176AbiH2Ng6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiH2Ng3 (ORCPT
+        with ESMTP id S230173AbiH2Ngp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:36:29 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1EF6D9DE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:36:27 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id r204-20020a1c44d5000000b003a84b160addso100750wma.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=5wpayB1lnaPj7/n3wK8pMtSfgarMRuAsk+PETC9WPK0=;
-        b=1oA2RIqXljlku7LpRGyd44Edx5qjba3TQf0Pzps65/nABAPw10GcN3vR8271f/yoVp
-         ZTEqKrfiC2kcHZNG3vPAvfIisARcwZZ9lsk2z6ra6uO1hFokLdkaet6Ftmublf2t7wiI
-         wviY2ik7gSpLKt53nL5/Y38Sqmy998v4yEJSIRXw+c2bP9Dd1XvL/d4BbqMQvjVlQ6Do
-         7UYgXxpl1wKmfcNLtV08ScYKc1NcfnrFjy1p75LyeWixlf/SnMcM6d6faWaWQCJY7N1S
-         APJCdNhmVdS90jz5hoNIOJrEDISBeJLxxaqG4+EnKRCX4DbO9ZSOEbEKgepgH2jBxY1g
-         7WTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=5wpayB1lnaPj7/n3wK8pMtSfgarMRuAsk+PETC9WPK0=;
-        b=I6YzsmTLWakwFsru1bsKfVf5WTp2no/9tLayvky1NAYknq4r7QETp6GcEOCDjBZsE6
-         G38IGSZ3VlRX6yM7CaunyCxlPGRs4jPIZ/AFRZxeR7hPUm03IeGGnNBlNVjvcF7HSaDf
-         d73GPDEeQCAgror41HuMGhxCbCzcN2/zZHVRcj2fi453Rca0ZXetTd8ukNA5XBWxIu62
-         M/71aKO7BBRzFq79eNh34JVboikVnCDSkyRVy6H0X1foPWwd/0lPUplemUmxQ5GhUo4T
-         ENKS0SrKWBLDv9gxE17vGaYM8aL7+B4Hkz6tFeQhUoo5+9XGNYiHVmVaVdXjHp+evVM5
-         OI2g==
-X-Gm-Message-State: ACgBeo2RrX2b3zNAiTBCtSOn9EM8pqoWL3MbJNEVme5PsNJy7SmRRD4W
-        8aUr6FJApo7BXrug2Jnjgw4YYw==
-X-Google-Smtp-Source: AA6agR75xkNCk8kso87faHXLBNb37bhe3tyW1t3yYkEPi9tT8/pXGbngK1coP7uxxneCA8pCId/oSQ==
-X-Received: by 2002:a05:600c:a02:b0:39d:bdf8:a4f4 with SMTP id z2-20020a05600c0a0200b0039dbdf8a4f4mr6847055wmp.201.1661780185608;
-        Mon, 29 Aug 2022 06:36:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:6124:6b74:2847:d37b? ([2a01:e0a:982:cbb0:6124:6b74:2847:d37b])
-        by smtp.gmail.com with ESMTPSA id q125-20020a1c4383000000b003a5f783abb8sm8990765wma.30.2022.08.29.06.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 06:36:25 -0700 (PDT)
-Message-ID: <d115ad6e-1c23-e7d9-dc9f-a12903782850@baylibre.com>
-Date:   Mon, 29 Aug 2022 15:36:24 +0200
+        Mon, 29 Aug 2022 09:36:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2946557E;
+        Mon, 29 Aug 2022 06:36:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F4A260B9A;
+        Mon, 29 Aug 2022 13:36:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4BEC433C1;
+        Mon, 29 Aug 2022 13:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661780203;
+        bh=Y7V8r6sKAbYpz0MLRTWg2oGd3TE6f80EOgHwCR0HEnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nURGRNq5QN8Oiqy5mUVr39TkEHoDgFPF9jYMYgHPBQAuMH+aVMe2lbtCbvUmhU5AX
+         ZU9xzlqhdyDOWLCWURlcNADzBi+NzvF6exfJaiOM/yBMntt4MOVRmljFQqtwkWLzJn
+         HchaxVr0n920bh+6nbbjZFLkxDtFGF3pcGWPa8Mvqrm0/opaKaBJFUWqWyIL/osyoj
+         6OnWUAwVCfRotSbap0elSzuKPjYW9/k0eXFNzJUDK7KiqfDQXrm0OaRAdvCPsb0Ng4
+         dbvxmc3Bz0aEptVqb0+0J+EvBWkPiYSVcjp3TAo5mJMUHzdaWgMTFtPjfsBLhERh7M
+         t2VWBVcBP0cKA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oSewc-0004gQ-Uh; Mon, 29 Aug 2022 15:36:51 +0200
+Date:   Mon, 29 Aug 2022 15:36:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add support for Cinterion
+ MV32-WA/WB RmNet mode
+Message-ID: <YwzA8kOf6AFECDuQ@hovoldconsulting.com>
+References: <20220810033050.3117-1-slark_xiao@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/bridge: sii902x: add support for
- DRM_BRIDGE_ATTACH_NO_CONNECTOR
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, andrzej.hajda@intel.com,
-        robert.foss@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        jernej.skrabec@gmail.com, jonas@kwiboo.se,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Laurent.pinchart@ideasonboard.com,
-        Sudeep Holla <Sudeep.Holla@arm.com>
-References: <20220113144305.1074389-1-narmstrong@baylibre.com>
- <25976b46-21b4-6e3f-0182-85dd4ca2b654@gmail.com>
- <a4a36360-3f77-17a0-9239-08cb8c08de74@baylibre.com>
- <13bd6440-9a61-d444-518c-f4e8cba0b825@baylibre.com>
- <5a1df5ce-a497-760b-8e2c-130a0e659c0b@gmail.com>
- <3725619d-72c5-5c9d-513b-80bbc727dd07@baylibre.com>
- <CACRpkdbucRqf80UB+AikYQGsHPiDJffP9dqkqx+RX8Nkdg3eaw@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <CACRpkdbucRqf80UB+AikYQGsHPiDJffP9dqkqx+RX8Nkdg3eaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220810033050.3117-1-slark_xiao@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/2022 14:48, Linus Walleij wrote:
-> On Wed, Aug 17, 2022 at 3:31 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->> On 15/08/2022 02:15, Dmitry Osipenko wrote:
->>> 08.08.2022 12:51, Neil Armstrong пишет:
->>>> On 08/08/2022 11:15, Neil Armstrong wrote:
-> 
->>>>>> This patch broke ARM/QEMU vexpress display because of_drm_find_bridge()
->>>>>> always fail with -EPROBE_DEFER. Reverting this patch returns display
->>>>>> back. Please fix or revert, thanks in advance.
->>>>>
->>>>> Can you share a QEMU cmdline to reproduce ?
->>>>
->>>> Actually the vexpress DT has multiple input ports instead of a single
->>>> input port at @0
->>>> and an output port at @1 like documented in the bindings:
->>>>
->>>> vexpress-v2m.dtsi#L303-L307:
->>>> ports {
->>>>       #address-cells = <1>;
->>>>       #size-cells = <0>;
->>>>
->>>>       /*
->>>>        * Both the core tile and the motherboard routes their output
->>>>        * pads to this transmitter. The motherboard system controller
->>>>        * can select one of them as input using a mux register in
->>>>        * "arm,vexpress-muxfpga". The Vexpress with the CA9 core tile is
->>>>        * the only platform with this specific set-up.
->>>>        */
->>>>       port@0 {
->>>>           reg = <0>;
->>>>           dvi_bridge_in_ct: endpoint {
->>>>               remote-endpoint = <&clcd_pads_ct>;
->>>>           };
->>>>       };
->>>>       port@1 {
->>>>           reg = <1>;
->>>>           dvi_bridge_in_mb: endpoint {
->>>>               remote-endpoint = <&clcd_pads_mb>;
->>>>           };
->>>>       };
->>>> };
->>>>
->>>> bindings:
->>>>     ports:
->>>>       $ref: /schemas/graph.yaml#/properties/ports
->>>>
->>>>       properties:
->>>>         port@0:
->>>>           $ref: /schemas/graph.yaml#/properties/port
->>>>           description: Parallel RGB input port
->>>>
->>>>         port@1:
->>>>           $ref: /schemas/graph.yaml#/properties/port
->>>>           description: HDMI output port
->>>>
->>>>         port@3:
->>>>           $ref: /schemas/graph.yaml#/properties/port
->>>>           description: Sound input port
->>>>
->>>> The patch is conform to the bindings, the DT was working but is actually
->>>> not valid.
->>>
->>> I haven't looked closely at how to fix this properly, but if we can fix
->>> it using of_machine_is_compatible("arm,vexpress") workaround in the
->>> driver, then it will be good enough at least as a temporal fix, IMO.
->>
->> If other maintainers are ok with that, it can be temporary fix until the DT gets fixed.
-> 
-> That's fine with me, will you send a patch?
+On Wed, Aug 10, 2022 at 11:30:50AM +0800, Slark Xiao wrote:
+> We added PIDs for MV32-WA/WB MBIM mode before, now we need to add
+> support for RmNet mode.
 
-Who, me ?
-
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> ---
+>  drivers/usb/serial/option.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> I don't know how you expect the DT to get "fixed" though.
-> 
-> The hardware looks like this, it's maybe not the most elegant
-> electronics design but it exists, so... I wrote this DT with two
-> inputs, see commit f1fe12c8bf332, the code handling this
-> awkward mux is part of the DRM driver, see
-> drivers/gpu/drm/pl111/pl111_versatile.c function
-> pl111_vexpress_clcd_init() for an idea of how it works.
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index de59fa919540..63af8b48831a 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -438,6 +438,8 @@ static void option_instat_callback(struct urb *urb);
+>  #define CINTERION_PRODUCT_MV31_2_RMNET		0x00b9
+>  #define CINTERION_PRODUCT_MV32_WA		0x00f1
+>  #define CINTERION_PRODUCT_MV32_WB		0x00f2
+> +#define CINTERION_PRODUCT_MV32_WA_RMNET		0x00f3
+> +#define CINTERION_PRODUCT_MV32_WB_RMNET		0x00f4
+>  
+>  /* Olivetti products */
+>  #define OLIVETTI_VENDOR_ID			0x0b3c
+> @@ -1995,6 +1997,10 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = RSVD(3)},
+>  	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
+>  	  .driver_info = RSVD(3)},
+> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA_RMNET, 0xff),
+> +	  .driver_info = RSVD(0)},
 
-The proper fix would be the other way around, adding a mux bridge before the sii902x
-returning the next bridge or nothing to the right controller.
+I moved this entry above CINTERION_PRODUCT_MV32_WB to the keep the
+entries sorted.
 
-> 
-> Yours,
-> Linus Walleij
+> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB_RMNET, 0xff),
+> +	  .driver_info = RSVD(0)},
+>  	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+>  	  .driver_info = RSVD(4) },
+>  	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
 
-Neil
+Now applied, thanks.
+
+Johan

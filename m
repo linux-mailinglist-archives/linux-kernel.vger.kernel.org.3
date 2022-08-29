@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FC45A5363
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E015A536A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiH2Rm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S229996AbiH2RnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiH2Rmy (ORCPT
+        with ESMTP id S229453AbiH2RnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:42:54 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F0A8E4E1;
-        Mon, 29 Aug 2022 10:42:54 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id j1so6848639qvv.8;
-        Mon, 29 Aug 2022 10:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=D7YBfDn19jiC0xJnDvQOZqSFAOKPjZ21gRIrdm5PTvg=;
-        b=Pje61Hblc4A0ZAkCSfhrDXhI3Qz5pEEgVbCDZKmSRVOXhd5BTwIdZ+5GA1SqxJ5o3u
-         DyFaaoDwr325cQ8zK04QD+hnZcP8bTZ7M+Li66s7rfvwN3d5aM3Xs97/ivFLbtGL1RYN
-         T7nGgD1eFqFG0NrEhPt4f2n2WxV3Bx5KVKqWGevgNCLgz9LW08VVvHnNuyY2CdIG/Vla
-         H7bEX8Q3OqczZyU18h4V8kG/oSmlaLlZQ38bydISjbpoNra3zpbWcdGzCidCX7A1wlIZ
-         ZQ/V7h1+NMg/qbQQra5LngN006X2HMilErfML7teuEePEVwKEg4TmCZdR9rI/pzbMc1l
-         RUFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=D7YBfDn19jiC0xJnDvQOZqSFAOKPjZ21gRIrdm5PTvg=;
-        b=WFLijen9QKaa09uXqDGhesdVnDdzFNZOFc1Bcc2F1TWF+nQxlHA4xZCKN2woQnTduO
-         LttR7Rz1N5hxDQfDYfMPN7Hxj9aEbA1u1ihPyY1tHi8at/pULUlEpEgx1F73ILIhSzy0
-         cNVcya3memT4Jvo7r2be5GBI2Sgcob+YXaFKPQ8wrW00qjpIEM5buXqw3CqS/BoXMCcH
-         VZ0h9FUjQUBiCTGhpUVPcxvaMxEAFIX2C1Ew/TuDY/v+/0iuuTxzhnvlNtvgAFLP33jM
-         6OWEysTSvjJiE8UoVXDOIh1TehaW3cjc3e+o9u/Y5sEMFQwdmKgYK2aOyvPCOQdLPuWY
-         GJXQ==
-X-Gm-Message-State: ACgBeo0E8y6+XPGwESHraH9DL1PsS7BFXyZHTaZN80rKKD7890rBHt2h
-        kdvzGZwBqH9y+nr71bY1fdaHGKO+aCk=
-X-Google-Smtp-Source: AA6agR66XAl8gXHXe1QnFuUirNoRYtwq0QlnLnttiDHMJqWyc9uWjVuIqtKCCmTpQDr+wDQ0fGGIPw==
-X-Received: by 2002:a05:6214:d04:b0:498:f0ed:fa0c with SMTP id 4-20020a0562140d0400b00498f0edfa0cmr11400930qvh.104.1661794973141;
-        Mon, 29 Aug 2022 10:42:53 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id h1-20020a05620a400100b006bbe7ded98csm6605707qko.112.2022.08.29.10.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 10:42:52 -0700 (PDT)
-Message-ID: <d8b9d8e4-6b46-9c63-2663-f548d10a0701@gmail.com>
-Date:   Mon, 29 Aug 2022 10:42:49 -0700
+        Mon, 29 Aug 2022 13:43:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E420B99B69;
+        Mon, 29 Aug 2022 10:43:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 806C76130F;
+        Mon, 29 Aug 2022 17:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9874AC433C1;
+        Mon, 29 Aug 2022 17:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661794986;
+        bh=cxPPEBu+h0eaOoH6XNEDFwMgVRSEBxa1GviI21BIVfs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C7UlN/rxD1A07hajY7oNwvf4lBdkN65KxQB1PgDkV11i2ewgJZBMX2GpgYHrDAsTy
+         Oln4C1jZ/ElA2r8VlroJ3K03byLr/6Am5E58SrcKgBrWqbzl70Gns18A6A38kusjJv
+         6TxtKkFiWv2KEifYCjR7FYeB3c+69CN7AwLymixPQ/MDrVmUKfE7Aij5o89rj+NRG9
+         Si3LhZdBnIymBkFvxm/nm/0b6yK3L+URLZaYy/jBTOo8RtodYDoOC3yFMeWb11eTac
+         wu3UH/FJDlPjhCmTOCt/B8QvlZq5enC/ZWKX/3pvfn9OVCww54CR/COe0N8aRbvF/P
+         LI7nY9FXequHw==
+Date:   Mon, 29 Aug 2022 10:43:04 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v5 7/8] f2fs: support STATX_DIOALIGN
+Message-ID: <Ywz6qH51lzdYy717@google.com>
+References: <20220827065851.135710-1-ebiggers@kernel.org>
+ <20220827065851.135710-8-ebiggers@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220829105804.609007228@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220827065851.135710-8-ebiggers@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/29/2022 3:57 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.64 release.
-> There are 136 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 08/26, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
 > 
-> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> Anything received after that time might be too late.
+> Add support for STATX_DIOALIGN to f2fs, so that direct I/O alignment
+> restrictions are exposed to userspace in a generic way.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.64-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on 
-BMIPS_GENERIC:
+Acked-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> ---
+>  fs/f2fs/file.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 8e11311db21060..79177050732803 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -847,6 +847,24 @@ int f2fs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+>  		stat->btime.tv_nsec = fi->i_crtime.tv_nsec;
+>  	}
+>  
+> +	/*
+> +	 * Return the DIO alignment restrictions if requested.  We only return
+> +	 * this information when requested, since on encrypted files it might
+> +	 * take a fair bit of work to get if the file wasn't opened recently.
+> +	 *
+> +	 * f2fs sometimes supports DIO reads but not DIO writes.  STATX_DIOALIGN
+> +	 * cannot represent that, so in that case we report no DIO support.
+> +	 */
+> +	if ((request_mask & STATX_DIOALIGN) && S_ISREG(inode->i_mode)) {
+> +		unsigned int bsize = i_blocksize(inode);
+> +
+> +		stat->result_mask |= STATX_DIOALIGN;
+> +		if (!f2fs_force_buffered_io(inode, WRITE)) {
+> +			stat->dio_mem_align = bsize;
+> +			stat->dio_offset_align = bsize;
+> +		}
+> +	}
+> +
+>  	flags = fi->i_flags;
+>  	if (flags & F2FS_COMPR_FL)
+>  		stat->attributes |= STATX_ATTR_COMPRESSED;
+> -- 
+> 2.37.2

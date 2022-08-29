@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC635A48E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6385A49F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiH2LQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S232475AbiH2Lb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiH2LOu (ORCPT
+        with ESMTP id S232594AbiH2L3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:14:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C8F72EE6;
-        Mon, 29 Aug 2022 04:10:59 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62EA7AC03;
+        Mon, 29 Aug 2022 04:17:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C30F5611F4;
-        Mon, 29 Aug 2022 11:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB49C433C1;
-        Mon, 29 Aug 2022 11:10:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9957661200;
+        Mon, 29 Aug 2022 11:09:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A66C433C1;
+        Mon, 29 Aug 2022 11:09:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771459;
-        bh=W44FEAb37n7Wy9RGxWFSblgq5CDx+4dVjGZlb+fJRmQ=;
+        s=korg; t=1661771377;
+        bh=SNbqdDvO4C3RnGT26RP42Bqyg58JufuWY1q4hM5xNks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ekrhZt4SYiM/rO6nnmLrOGilA37DU3blHqvIqSKay9CTiExoRribJPclHxFdjTqRi
-         1uv2NoJT1XxDuTnF/lZJnD2OrnS7WZagwo4uH/0q8helKG0ctHPA6E4BCpLHpMEzl8
-         JKiFzOcnqeQ3LomrpX8LNKNmIrWoTHuU4rmAlm3k=
+        b=EU35eAUNfbgtlOmT9nyux5fSpe5hvi6XMVeV0hWArXNXqTwxXYduYl7vJgpKu3qOs
+         UPKBmJ7ar+yVxz/iWxsPmOaWfCMnQLZ/Toe2hFcru/w/Nhcb6B7Te8hTWgKUabe0d1
+         t1lgQNmx4nOgB0L6ju9P/+00aLRbVWy+dAWtmw+I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 57/86] net: Fix a data-race around netdev_budget_usecs.
-Date:   Mon, 29 Aug 2022 12:59:23 +0200
-Message-Id: <20220829105758.885353984@linuxfoundation.org>
+        stable@vger.kernel.org, Samuel Greiner <samuel@balkonien.org>,
+        Anand Jain <anand.jain@oracle.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 097/136] btrfs: add info when mount fails due to stale replace target
+Date:   Mon, 29 Aug 2022 12:59:24 +0200
+Message-Id: <20220829105808.652303504@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Anand Jain <anand.jain@oracle.com>
 
-[ Upstream commit fa45d484c52c73f79db2c23b0cdfc6c6455093ad ]
+commit f2c3bec215694fb8bc0ef5010f2a758d1906fc2d upstream.
 
-While reading netdev_budget_usecs, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+If the replace target device reappears after the suspended replace is
+cancelled, it blocks the mount operation as it can't find the matching
+replace-item in the metadata. As shown below,
 
-Fixes: 7acf8a1e8a28 ("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+   BTRFS error (device sda5): replace devid present without an active replace item
+
+To overcome this situation, the user can run the command
+
+   btrfs device scan --forget <replace target device>
+
+and try the mount command again. And also, to avoid repeating the issue,
+superblock on the devid=0 must be wiped.
+
+   wipefs -a device-path-to-devid=0.
+
+This patch adds some info when this situation occurs.
+
+Reported-by: Samuel Greiner <samuel@balkonien.org>
+Link: https://lore.kernel.org/linux-btrfs/b4f62b10-b295-26ea-71f9-9a5c9299d42c@balkonien.org/T/
+CC: stable@vger.kernel.org # 5.0+
+Signed-off-by: Anand Jain <anand.jain@oracle.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/dev.c | 2 +-
+ fs/btrfs/dev-replace.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index c4eb1b666a21c..8355cc5e11a98 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6879,7 +6879,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- {
- 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
- 	unsigned long time_limit = jiffies +
--		usecs_to_jiffies(netdev_budget_usecs);
-+		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
- 	int budget = READ_ONCE(netdev_budget);
- 	LIST_HEAD(list);
- 	LIST_HEAD(repoll);
--- 
-2.35.1
-
+--- a/fs/btrfs/dev-replace.c
++++ b/fs/btrfs/dev-replace.c
+@@ -165,7 +165,7 @@ no_valid_dev_replace_entry_found:
+ 		 */
+ 		if (btrfs_find_device(fs_info->fs_devices, &args)) {
+ 			btrfs_err(fs_info,
+-			"replace devid present without an active replace item");
++"replace without active item, run 'device scan --forget' on the target device");
+ 			ret = -EUCLEAN;
+ 		} else {
+ 			dev_replace->srcdev = NULL;
 
 

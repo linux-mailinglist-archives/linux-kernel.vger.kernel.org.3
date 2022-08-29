@@ -2,132 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E0C5A4050
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 02:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CE55A4054
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 02:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiH2ASs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 20:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S229553AbiH2ATh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 20:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH2ASp (ORCPT
+        with ESMTP id S229446AbiH2ATf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 20:18:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9E1E0EF;
-        Sun, 28 Aug 2022 17:18:44 -0700 (PDT)
+        Sun, 28 Aug 2022 20:19:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4210E0EF;
+        Sun, 28 Aug 2022 17:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661732324; x=1693268324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VkVo2KDkqcPeWUpG5RCjP+0wRvccIebUsn6wx9dVc4g=;
-  b=fYPejCHOcBHmdZOqvxWW0ritR7On9rQx32QpMVBKgBsRBXBW8e4is31B
-   DUu8qZyJlKDvQDo+es4fgfAh9XxT7seRDX++hYOj6UvNPZAj6Fh0GKqnP
-   MTFQSERwLGJsD4oJ5Klje09xxPVGKLeWrbtD44t+3NOLrGtfXW+725C8E
-   9MQoC2H/x13lpsUIM92vK0GwlyanRyhKQoy+wDEOWbaBeVCCk+VbykrY+
-   Ty+Mb/iuY+YkIhyHa5zpXOGpYgdORczJnnknIz5NpDno3h7cSeGs2C4U4
-   KZTfOYUCaZb6q5zPamKAuTzoHlLOi/Ah/sgcLCiBxbIk+k7YoJs9XG+2Y
+  t=1661732374; x=1693268374;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=B3Tev0VS3yC7o6xOlmRPAwSGDbYmtAKTYEpG1iByLA8=;
+  b=Jke/eLSHQGlxEBlKr4emyWcg48DRePofsRal4SFnpXXXssS7nFIOgxYe
+   zQ7h5G+umYoJ4BtNnTdSZQG+tDroT6Pw7ke2b0KUUfmhSm2dMGA81ce/S
+   PmrgXklv5ulm6S6iigKzxNWeakhpBUBEXxY+Q3qJEaEk268w60sLmazR7
+   0IjfeVDgDdkr9oOuTDCdeHU7WEmLWvgiEMDWIOoSYCD/1RIS8BbxgVCwZ
+   ildieXL6ZX0iqOUpi1a+U5Ht1obzKA5YIpZiuACAQzR6Gt/obxV/6RbyC
+   NtkaFVbBmtVQ1CRZbeq49QqCMWxlUSErwmxmWiwRLbdtPyqrLMDNEg7Ru
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="320897820"
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="293523827"
 X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="320897820"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 17:18:44 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="293523827"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 17:19:34 -0700
 X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="786912671"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Aug 2022 17:18:42 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSSUD-0001lk-1c;
-        Mon, 29 Aug 2022 00:18:41 +0000
-Date:   Mon, 29 Aug 2022 08:18:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li Zhong <floridsleeves@gmail.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        lily <floridsleeves@gmail.com>
-Subject: Re: [PATCH v1] drivers/clk/clk: check return value of
- clk_pm_runtime_get()
-Message-ID: <202208290820.mUMIcCS2-lkp@intel.com>
-References: <20220828202025.1948848-1-floridsleeves@gmail.com>
+   d="scan'208";a="587962411"
+Received: from nehluza-mobl.amr.corp.intel.com (HELO [10.209.6.250]) ([10.209.6.250])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 17:19:33 -0700
+Message-ID: <c6ccbcac-c5b1-f460-01e2-e1b6684b6e65@linux.intel.com>
+Date:   Sun, 28 Aug 2022 17:19:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220828202025.1948848-1-floridsleeves@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <dcf53e6b-d60f-5d6b-029a-38df68d66302@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <dcf53e6b-d60f-5d6b-029a-38df68d66302@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+On 8/28/22 1:14 PM, Dave Hansen wrote:
+> On 8/26/22 08:06, Kuppuswamy Sathyanarayanan wrote:
+>> +struct tdx_report_req {
+>> +	__u8  subtype;
+>> +	__u64 reportdata;
+>> +	__u32 rpd_len;
+>> +	__u64 tdreport;
+>> +	__u32 tdr_len;
+>> +};
+> 
+> Please do take a look at how the compiler ends up building that structure.
+> 
+> If you sized things to "save space", the way the compiler treats that
+> structure may surprise you.  You might also want to look at how a 32-bit
+> compile deals with it versus a 64-bit one.
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on linus/master v6.0-rc3 next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Since it is only used in user/kernel ABI, I did not consider the size
+issue. But I understand your point. The size of this struct in a 64-bit
+system is 40 bytes. So we did not gain anything with using different member
+sizes. In a 32-bit system, size due to padding is less compared to 64-bit.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhong/drivers-clk-clk-check-return-value-of-clk_pm_runtime_get/20220829-042043
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: arm-randconfig-r034-20220829 (https://download.01.org/0day-ci/archive/20220829/202208290820.mUMIcCS2-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/26ebbe49c7b40cb8465ed2bba4e4e62c3a55bb93
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Li-Zhong/drivers-clk-clk-check-return-value-of-clk_pm_runtime_get/20220829-042043
-        git checkout 26ebbe49c7b40cb8465ed2bba4e4e62c3a55bb93
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+I will re-arrange the struct as below. With this change, the size will come
+down to 32 bytes.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/clk/clk.c:3016:2: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-           clk_summary_show_one(s, c, level);
-           ^
-   drivers/clk/clk.c:3014:5: note: previous statement is here
-       if (ret)
-       ^
-   1 warning generated.
+struct tdx_report_req {
+        __u64 reportdata;;
+        __u64 tdreport;
+        __u32 rpd_len
+        __u32 tdr_len;
+        __u8 subtype;
+};
 
 
-vim +/if +3016 drivers/clk/clk.c
-
-89ac8d7ae1cde0 Mike Turquette 2013-08-21  3006  
-4dff95dc9477a3 Stephen Boyd   2015-04-30  3007  static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
-4dff95dc9477a3 Stephen Boyd   2015-04-30  3008  				     int level)
-4dff95dc9477a3 Stephen Boyd   2015-04-30  3009  {
-4dff95dc9477a3 Stephen Boyd   2015-04-30  3010  	struct clk_core *child;
-26ebbe49c7b40c lily           2022-08-28  3011  	int ret;
-b2476490ef1113 Mike Turquette 2012-03-15  3012  	
-26ebbe49c7b40c lily           2022-08-28  3013  	ret = clk_pm_runtime_get(c);
-26ebbe49c7b40c lily           2022-08-28  3014      if (ret)
-26ebbe49c7b40c lily           2022-08-28  3015          return;
-4dff95dc9477a3 Stephen Boyd   2015-04-30 @3016  	clk_summary_show_one(s, c, level);
-1bb294a7981c73 Taniya Das     2021-12-20  3017  	clk_pm_runtime_put(c);
-0e1c03017549a9 Viresh Kumar   2012-04-11  3018  
-4dff95dc9477a3 Stephen Boyd   2015-04-30  3019  	hlist_for_each_entry(child, &c->children, child_node)
-4dff95dc9477a3 Stephen Boyd   2015-04-30  3020  		clk_summary_show_subtree(s, child, level + 1);
-b2476490ef1113 Mike Turquette 2012-03-15  3021  }
-b2476490ef1113 Mike Turquette 2012-03-15  3022  
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

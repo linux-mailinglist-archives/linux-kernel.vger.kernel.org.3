@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7904B5A57C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 109875A57CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiH2XqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S229716AbiH2XqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH2XqU (ORCPT
+        with ESMTP id S229490AbiH2XqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:46:20 -0400
+        Mon, 29 Aug 2022 19:46:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9F598588;
-        Mon, 29 Aug 2022 16:46:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9155B9858D;
+        Mon, 29 Aug 2022 16:46:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FEB1B815A1;
-        Mon, 29 Aug 2022 23:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E13DC433D6;
-        Mon, 29 Aug 2022 23:46:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E638B815CE;
+        Mon, 29 Aug 2022 23:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E16DC43141;
+        Mon, 29 Aug 2022 23:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816777;
-        bh=+VvePBFLp/LWmK5hX6RIjAP6zHRRsMudqWZ6EI8ufAk=;
+        s=k20201202; t=1661816778;
+        bh=6or2s+dA/8Q1RzW4e/ykDjpQoz2SuAMa/l45LoY/gBg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BEUFplEohMizRY5cMmxOHX5fEqyEQp1OOmKmxtPpmCx/tDNAJRtzpsc3cnZ6Zz9nt
-         NFeXcVoAOSpjyB3BN4Tn669fMPUe7CRfsrTq0EJglgoSO8V1UJce1rc5QTl2d0YEik
-         1cxbbMZ1dm16q+rZzR7k+izR1LqEi5aTHvPx3E7Tu8fFfAgv7xOEVCBYPHFgLG4yPC
-         xlI66+r26noL8Wo9denx0EXkWNsVPwfg1gNf5O8cv/lmzktFdH9lccrcTwX9ipbRoA
-         LMa3PIaOd+stnvWxcLv8shrEP3l31Wu1lBl2AalOkd70k0dWRxnFgVL6M2dMwlhkSq
-         cY7NJzt/xL3jw==
+        b=XY2EbDgtwZyjq1cIr65d+PTx5hzYJwcLhQMq3yb4d9LL/vbQH7WlzS2I05Vkuxvik
+         Rr9BnNuJXuNxA2Eds7EJPnEKM7x6QUdXYXi8Spt2Wmn2mHCEdKOGlou7YWii8CXo6M
+         7S+91hhxylVIoHBsQXDPBSO9sQAS0PDVzSCPheDwBki2xpJeOXwrd+0gRU4LNoXgaQ
+         gH0q8ymG3IAklUH0LLrWGN1yHVOsWxA30VXYkxrj76mrYZ4WXRuhMmGilmB0xmvS7I
+         BNmisbrl4Qq20jjXBup4Mp9y3mtzMXhFcYEPMbRL2tMKWYoqjIGFFJncHvAV0+vawq
+         ehmo5XveeF6Ig==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     a39.skl@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        vkoul@kernel.org, linux-arm-msm@vger.kernel.org, will@kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, iommu@lists.linux.dev,
-        konrad.dybcio@somainline.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        linux-arm-kernel@lists.infradead.org, robdclark@chromium.org,
-        loic.poulain@linaro.org, rafael@kernel.org,
-        dmaengine@vger.kernel.org, bhupesh.sharma@linaro.org,
-        phone-devel@vger.kernel.org, robin.murphy@arm.com,
-        Viresh Kumar <viresh.kumar@linaro.org>, ulf.hansson@linaro.org,
-        emma@anholt.net, robh+dt@kernel.org, joro@8bytes.org,
-        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com
-Subject: Re: (subset) [PATCH 0/7] Compatibles for SM6115
-Date:   Mon, 29 Aug 2022 18:45:38 -0500
-Message-Id: <166181675976.322065.5888575144597732401.b4-ty@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>, quic_mkshah@quicinc.com,
+        konrad.dybcio@somainline.org, abel.vesa@linaro.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 1/4] arm64: dts: qcom: sdm845: Reduce reg size for aoss_qmp
+Date:   Mon, 29 Aug 2022 18:45:39 -0500
+Message-Id: <166181675978.322065.7678166957797997840.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220815100952.23795-1-a39.skl@gmail.com>
-References: <20220815100952.23795-1-a39.skl@gmail.com>
+In-Reply-To: <20220812101240.1869605-1-abel.vesa@linaro.org>
+References: <20220812101240.1869605-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,25 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 12:09:38 +0200, Adam Skladowski wrote:
-> This patch series add bunch of compatibles in preparation
-> for sending device tree patches for Snapdragon 662 SoC
+On Fri, 12 Aug 2022 13:12:37 +0300, Abel Vesa wrote:
+> Like on the other platforms that provide RPMh stats, on SDM845, the
+> aoss_qmp reg size needs to be reduced to its actual size of 0x400,
+> otherwise it will overlap with the RPMh stats reg base, node that will
+> be added later on.
 > 
-> Adam Skladowski (7):
->   dt-bindings: dmaengine: qcom: gpi: add compatible for SM6115
->   dmaengine: qcom: gpi: Add SM6115 support
->   dt-bindings: mmc: sdhci-msm: Document the SM6115 compatible
->   cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
->   dt-bindings: arm-smmu: Add compatible for Qualcomm SM6115
->   iommu/arm-smmu-qcom: Add SM6115 support
->   dt-bindings: firmware: document Qualcomm SM6115 SCM
 > 
-> [...]
 
 Applied, thanks!
 
-[7/7] dt-bindings: firmware: document Qualcomm SM6115 SCM
-      commit: f2567b732b0aa2160228a956e0c2007feaeb4b64
+[1/4] arm64: dts: qcom: sdm845: Reduce reg size for aoss_qmp
+      commit: b0f8e8a38a010999f7b07617d874e3eb594a0a3e
+[3/4] arm64: dts: qcom: sdm845: Add the RPMh stats node
+      commit: 528dc60f9e5eadcfde651b1458da2b8d008a2cf0
 
 Best regards,
 -- 

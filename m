@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF445A5527
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA265A552A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiH2T6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S229560AbiH2T7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiH2T5r (ORCPT
+        with ESMTP id S230215AbiH2T6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:57:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D696755;
-        Mon, 29 Aug 2022 12:57:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EF2460F3C;
-        Mon, 29 Aug 2022 19:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB43C433D6;
-        Mon, 29 Aug 2022 19:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661803050;
-        bh=UYkByX5TAD0Q+gWL2Ar4FVNX6MK35uEWPg68J9wSghs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=untBbCvCejdyNLQ+0FsDp9MgY0UCogWqvmlODiSMPk/WiAhJ7TLqd3EgoGM0Z76wR
-         7SgygwNJCkHMr3rmp4anAvASrtZVRozg9gadBpCTBmWFMPqF39Fen+EJYWi4rhLqkl
-         44fMFopHS5+tmZLMIj0ospVErbIzLj2R6454KBXRR15tNLNow9rsk/6gZjzdQp4DLh
-         j40FREYBKgUdKGGZ4F63NOYgIzoLVZhqImzkj+zOjztMkaUX9mg2bfNKWoj164TaSf
-         7Ft8qeqYhNO/WE04Cqubff70kRa3pVCH8FEptRH5WVEovTtJx+wk1uvmehGD/MhJ4z
-         IARFANmYH9vlA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 53A145C055D; Mon, 29 Aug 2022 12:57:30 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 12:57:30 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>, vineeth@bitbyteword.org
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220829195730.GO6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220819204857.3066329-1-joel@joelfernandes.org>
- <20220829134045.GA54589@lothringen>
- <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
+        Mon, 29 Aug 2022 15:58:46 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D49C93217
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:58:25 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id cu2so17937012ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:58:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0eUgge8fObALLT/oqBDxAAESIQTQekgE8ipOFO6AlCI=;
+        b=JGCxuLMtkRolR1OzKajXocleDKOPt/436jX49HdwYFYr2FL2ojT+fNDM5y+XdgLRPc
+         RtDJEMfyJocFjJ2r0m6EziquAKD94A56xPLlm2DSOWMGtfyj7x9//iNNIrSrOl0UpeGq
+         +La41ZM5eqd1yB+LDqXoxIMVS+ixOKSGtRUHQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0eUgge8fObALLT/oqBDxAAESIQTQekgE8ipOFO6AlCI=;
+        b=J3yw4fZsF78mAbngz8BkMkcs8khnK1FVG8Kmmh3QBeh/zGCoJ16LqS52BQyXCuKjwG
+         KQCU440WEmNR/bRIkDUikPE9n9w7DsqYtZ7e25prZDi3JLbWiNwT4P7xP2dbXaNbJAf9
+         tsNS9JMfSisTvD/AXxkw+iyk2VWTejrA/9G14anh3zxSIylacjf7mSQdTQEslezwHjE/
+         NQihq3RoAkK5yBPZcMyGSXOjIElC4HHYAg58B0qvP6wVyciqcopf1FxNRr9srDsDBoIT
+         5cXjtC4P96tC5u1i9bJhT8VQSsvwE3B9P4oQO+bhRxJyPw1sTryWGIDl6+hr38B1t3rY
+         Dcog==
+X-Gm-Message-State: ACgBeo3XpSp2GNPw2ZugkW7O3lupDRNle021F17XkI4xf0TUjf7BBUQd
+        zlKFROgWh1IUWiI2w736FT2wBZSzFpPy5bsTHo3EMg==
+X-Google-Smtp-Source: AA6agR7maY2CqZI8ejdFf4IrwNzOu6f6hhmOH5OOdBnO2J7WwjsccLB0lPk9J5l3KWYPWy/cx1dvFJ/TgCu0Slm1/zc=
+X-Received: by 2002:a17:907:2d92:b0:731:3310:418d with SMTP id
+ gt18-20020a1709072d9200b007313310418dmr14540772ejc.379.1661803103860; Mon, 29
+ Aug 2022 12:58:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220829030521.3373516-1-ammar.faizi@intel.com> <20220829030521.3373516-5-ammar.faizi@intel.com>
+In-Reply-To: <20220829030521.3373516-5-ammar.faizi@intel.com>
+From:   Caleb Sander <csander@purestorage.com>
+Date:   Mon, 29 Aug 2022 12:58:12 -0700
+Message-ID: <CADUfDZqbbhhaR0NFepHxMt3TnxRTYOgTZCFe1A2PRSY7z9jCRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH liburing v1 4/4] test/io_uring_{enter,setup,register}:
+ Use the exported syscall functions
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Muhammad Rizki <kiizuha@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,188 +67,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 12:45:40PM -0400, Joel Fernandes wrote:
-> Hi Frederick,
-> 
-> On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
-> > On Fri, Aug 19, 2022 at 08:48:43PM +0000, Joel Fernandes (Google) wrote:
-> >> Refresh tested on real ChromeOS userspace and hardware, passes boot time tests
-> >> and rcuscale tests.
-> >>
-> >> Fixes on top of v3:
-> >> - Fix boot issues due to a race in the lazy RCU logic which caused a missed
-> >>   wakeup of the RCU GP thread, causing synchronize_rcu() to stall.
-> >> - Fixed trace_rcu_callback tracepoint
-> >>
-> >> I tested power previously [1], I am in the process of testing power again but I
-> >> wanted share my latest code as others who are testing power as well could use
-> >> the above fixes.
-> > 
-> > Your patch is very likely to be _generally_ useful and therefore,
-> > the more I look into this, the more I wonder if it is a good idea to rely on
-> > bypass at all, let alone NOCB. Of course in the long term the goal is to have
-> > bypass working without NOCB but why even bothering implementing it for nocb
-> > in the first place?
-> 
-> This was discussed with Paul [1]. Quoting:
-> 
-> ----
-> Joel:
-> >> Also, does doing so not prevent usage of lazy CBs on systems without
-> >> NOCB? So if we want to future-proof this, I guess that might not be a
-> >> good decision.
-> >
-> Paul:
-> > True enough, but would this future actually arrive?  After all, if
-> > someone cared enough about energy efficiency to use call_rcu_lazy(),
-> > why wouldn't they also offload callbacks?
-> 
-> Joel: I am not sure, but I also don't mind making it depend on NOCB for now
-> (see below).
-> 
-> [1] https://www.spinics.net/lists/rcu/msg07908.html
-> ----
-> 
-> While I agree with you that perhaps making it more generic is better, this did
-> take a significant amount of time, testing and corner case hunting to come up
-> with, and v5 is also in the works so I'd appreciate if we can do it the
-> bypass-way and optimize later. Arguably the bypass way is quite simple and
-> allows us to leverage its effects of rcu_barrier and such. And the API will not
-> change.
+Reviewed-by: Caleb Sander <csander@purestorage.com>
 
-Just confirming this conversation, on the hopefully unlikely off-chance
-that there is any doubt.  ;-)
-
-That said, if there is some compelling use case that is not addressed
-by rcu_nocbs, keeping in mind that these can now be made dynamic, then
-some adjustment will of course be needed.
-
-> > Several highlights:
-> > 
-> > 1) NOCB is most often needed for nohz_full and the latter has terrible power
-> > management. The CPU 0 is active all the time there.
-> 
-> I see. We don't use nohz_full much. NOCB itself gives good power improvement.
-> 
-> > 2) NOCB without nohz_full has extremely rare usecase (RT niche:
-> > https://lore.kernel.org/lkml/CAFzL-7vqTX-y06Kc3HaLqRWAYE0d=ms3TzVtZLn0c6ATrKD+Qw@mail.gmail.com/
-> > )
-> 
-> Really? Android has been using it for a long time. It seems to be quite popular
-> in the battery-powered space.
-> 
-> > 2) NOCB implies performance issues.
-> 
-> Which kinds of? There is slightly worse boot times, but I'm guessing that's do
-> with the extra scheduling overhead of the extra threads which is usually not a
-> problem except that RCU is used in the critical path of boot up (on ChromeOS).
-
-Back in 2010, Rik van Riel reported significant slowdowns for some types
-of Java workloads, but for normal servers, not Android or ChromeOS.
-I have no idea whether similar slowdowns exist today.  But if there is
-no performance advantage to non-offloaded callbacks, we should first make
-offloading the default, and if there are no complaints after a few years,
-remove the non-offloaded case completely.
-
-My guess is that at the very least, scheduler corner cases will force
-us to keep non-offloaded callbacks, but you never know.  In any case,
-a wakeup is considerably more expensive than a non-atomic OR of a bit
-in a per-CPU variable, so there is some chance that offloading causes
-some important workloads considerable performance degradation.
-
-> > 3) We are mixing up two very different things in a single list of callbacks:
-> >    lazy callbacks and flooding callbacks, as a result we are adding lots of
-> >    off-topic corner cases all around:
-> >      * a seperate lazy len field to struct rcu_cblist whose purpose is much more
-> >        general than just bypass/lazy
-> >      * "lazy" specialized parameters to general purpose cblist management
-> >        functions
-> 
-> I think just 1 or 2 functions have a new lazy param. It didn't seem too
-> intrusive to me.
-
-It has been getting simpler!  ;-)
-
-I bet that the lazy_len field can be a boolean and independent of
-->cblist, and that doing that would simplify things at least a little bit.
-But, yes, an all-lazy indicator of some sort would still need to exist.
-
-> > 4) This is further complexifying bypass core code, nocb timer management, core
-> >    nocb group management, all of which being already very complicated.
-> 
-> True, I agree, a few more cases to handle for sure, but I think I got them all
-> now (hopefully).
-
-If we do need lazy callbacks on non-offloaded CPUs, there will need to
-be changes to both the bypass logic (possibly just those changes that
-Joel already has, but Murphy might disagree) and to the ->cblist logic.
-At the very least, the wakeup logic would need adjustment from current
--rcu and there would still need to be some way of tracking whether or
-not all the callbacks in the bypass list are lazy.
-
-> > 5) The !NOCB implementation is going to be very different
-> > 
-> > Ok I can admit one counter argument in favour of using NO_CB:
-> > 
-> > -1) The scheduler can benefit from a wake CPU to run the callbacks on behalf of a bunch
-> > of idle CPUs, instead of waking up that bunch of CPUs. But still we are dealing
-> > with callbacks that can actually wait...
-
-You lost me on this one.  Having a callback invoked on a non-idle CPU
-should save significant power without significant delay in callback
-invocation.  What am I missing here?
-
-> Yeah that's huge. Significant amount of power improvement seems to come from
-> idle CPUs not being disturbed and their corresponding timer ticks turned off for
-> longer periods. That's experimentally confirmed (NO_CB giving significant power
-> improvement on battery-power systems as compared to !NO_CB).
-> 
-> > So here is a proposal: how about forgetting NOCB for now and instead add a new
-> > RCU_LAZY_TAIL segment in the struct rcu_segcblist right after RCU_NEXT_TAIL?
-> > Then ignore that segment until some timer expiry has been met or the CPU is
-> > known to be busy? Probably some tiny bits need to be tweaked in segcblist
-> > management functions but probably not that much. And also make sure that entrain()
-> > queues to RCU_LAZY_TAIL.
-> > 
-> > Then the only difference in the case of NOCB is that we add a new timer to the
-> > nocb group leader instead of a local timer in !NOCB.
-
-It is certainly good to look into alternatives!  Especially if this has
-somehow broken (de)offloading.  (Not seeing it in my testing, but then
-again, I have not yet tested this series all that much.)
-
-How does the separate RCU_LAZY_TAIL segment help?  I would think
-that you would instead want an all-lazy flag on each of the existing
-RCU_NEXT_READY_TAIL and RCU_NEXT_TAIL segments.  After all, if there is
-even one non-lazy callback in either segment, we need the corresponding
-grace period to run sooner rather than later.  And if we are running a
-given grace period anyway, it costs little to handle the lazy callbacks
-while we are at it.
-
-Or is there a use case where it helps a lot to defer lazy callbacks that
-could have been handled by a grace period that needed to happen anyway,
-due to the presence of non-lazy callbacks?  I am having a hard time coming
-up with one, but perhaps that is a failure of imagination on my part.
-
-There would still need to be changes to the bypass code because NOCB is
-what gets both Android and ChromeOS big power savings.
-
-And yes, no matter what, rcu_barrier_entrain() needs to motivate any lazy
-callbacks.  Currently, this falls out from the flushing of the bypass.
-Presumably, offloading and deoffloading could also take advantage of
-bypass flushing.
-
-And I have no idea whether it would make sense for the NOCB and !NOCB
-case to share a laziness-motivation timer.
-
-> It sounds reasonable, but I'll go with Paul on the usecase argument - who would
-> actually care about lazy CBs outside of power, and would those guys ever use
-> !NO_CB if they cared about power / battery?
-
-And if they are not using NOCB, does call_rcu_lazy() actually help?
-
-But again, if call_rcu_lazy() needs to handle the !NOCB case, then it
-needs to handle the !NOCB case.  However, given ChromeOS and Android,
-we know that it call_rcu_lazy() needs to handle the NOCB case regardless.
-
-						Thanx, Paul
+On Sun, Aug 28, 2022 at 8:08 PM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+>
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>
+> These tests use the internal definition of __sys_io_uring* functions.
+> A previous commit exported new functions that do the same thing with
+> those __sys_io_uring* functions. Test the exported functions instead of
+> the internal functions.
+>
+> No functional change is intended.
+>
+> Cc: Caleb Sander <csander@purestorage.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+>  test/io_uring_enter.c    | 10 +++++-----
+>  test/io_uring_register.c | 34 ++++++++++++++++------------------
+>  test/io_uring_setup.c    |  4 ++--
+>  3 files changed, 23 insertions(+), 25 deletions(-)
+>
+> diff --git a/test/io_uring_enter.c b/test/io_uring_enter.c
+> index 67cc8c5..ecd54ff 100644
+> --- a/test/io_uring_enter.c
+> +++ b/test/io_uring_enter.c
+> @@ -38,7 +38,7 @@ static int expect_fail(int fd, unsigned int to_submit,
+>  {
+>         int ret;
+>
+> -       ret = __sys_io_uring_enter(fd, to_submit, min_complete, flags, sig);
+> +       ret = io_uring_enter(fd, to_submit, min_complete, flags, sig);
+>         if (ret >= 0) {
+>                 fprintf(stderr, "expected %s, but call succeeded\n", strerror(-error));
+>                 return 1;
+> @@ -62,7 +62,7 @@ static int try_io_uring_enter(int fd, unsigned int to_submit,
+>                 return expect_fail(fd, to_submit, min_complete, flags, sig,
+>                                    expect);
+>
+> -       ret = __sys_io_uring_enter(fd, to_submit, min_complete, flags, sig);
+> +       ret = io_uring_enter(fd, to_submit, min_complete, flags, sig);
+>         if (ret != expect) {
+>                 fprintf(stderr, "Expected %d, got %d\n", expect, ret);
+>                 return 1;
+> @@ -211,8 +211,8 @@ int main(int argc, char **argv)
+>         /* fill the sq ring */
+>         sq_entries = ring.sq.ring_entries;
+>         submit_io(&ring, sq_entries);
+> -       ret = __sys_io_uring_enter(ring.ring_fd, 0, sq_entries,
+> -                                       IORING_ENTER_GETEVENTS, NULL);
+> +       ret = io_uring_enter(ring.ring_fd, 0, sq_entries,
+> +                            IORING_ENTER_GETEVENTS, NULL);
+>         if (ret < 0) {
+>                 fprintf(stderr, "io_uring_enter: %s\n", strerror(-ret));
+>                 status = 1;
+> @@ -246,7 +246,7 @@ int main(int argc, char **argv)
+>          */
+>         io_uring_smp_store_release(sq->ktail, ktail);
+>
+> -       ret = __sys_io_uring_enter(ring.ring_fd, 1, 0, 0, NULL);
+> +       ret = io_uring_enter(ring.ring_fd, 1, 0, 0, NULL);
+>         /* now check to see if our sqe was dropped */
+>         if (*sq->kdropped == dropped) {
+>                 fprintf(stderr, "dropped counter did not increase\n");
+> diff --git a/test/io_uring_register.c b/test/io_uring_register.c
+> index 4609354..dd4af7c 100644
+> --- a/test/io_uring_register.c
+> +++ b/test/io_uring_register.c
+> @@ -36,17 +36,17 @@ static int expect_fail(int fd, unsigned int opcode, void *arg,
+>  {
+>         int ret;
+>
+> -       ret = __sys_io_uring_register(fd, opcode, arg, nr_args);
+> +       ret = io_uring_register(fd, opcode, arg, nr_args);
+>         if (ret >= 0) {
+>                 int ret2 = 0;
+>
+>                 fprintf(stderr, "expected %s, but call succeeded\n", strerror(error));
+>                 if (opcode == IORING_REGISTER_BUFFERS) {
+> -                       ret2 = __sys_io_uring_register(fd,
+> -                                       IORING_UNREGISTER_BUFFERS, 0, 0);
+> +                       ret2 = io_uring_register(fd, IORING_UNREGISTER_BUFFERS,
+> +                                                0, 0);
+>                 } else if (opcode == IORING_REGISTER_FILES) {
+> -                       ret2 = __sys_io_uring_register(fd,
+> -                                       IORING_UNREGISTER_FILES, 0, 0);
+> +                       ret2 = io_uring_register(fd, IORING_UNREGISTER_FILES, 0,
+> +                                                0);
+>                 }
+>                 if (ret2) {
+>                         fprintf(stderr, "internal error: failed to unregister\n");
+> @@ -66,7 +66,7 @@ static int new_io_uring(int entries, struct io_uring_params *p)
+>  {
+>         int fd;
+>
+> -       fd = __sys_io_uring_setup(entries, p);
+> +       fd = io_uring_setup(entries, p);
+>         if (fd < 0) {
+>                 perror("io_uring_setup");
+>                 exit(1);
+> @@ -186,15 +186,14 @@ static int test_max_fds(int uring_fd)
+>          */
+>         nr_fds = UINT_MAX;
+>         while (nr_fds) {
+> -               ret = __sys_io_uring_register(uring_fd, IORING_REGISTER_FILES,
+> -                                               fd_as, nr_fds);
+> +               ret = io_uring_register(uring_fd, IORING_REGISTER_FILES, fd_as,
+> +                                       nr_fds);
+>                 if (ret != 0) {
+>                         nr_fds /= 2;
+>                         continue;
+>                 }
+>                 status = 0;
+> -               ret = __sys_io_uring_register(uring_fd, IORING_UNREGISTER_FILES,
+> -                                               0, 0);
+> +               ret = io_uring_register(uring_fd, IORING_UNREGISTER_FILES, 0, 0);
+>                 if (ret < 0) {
+>                         ret = errno;
+>                         errno = ret;
+> @@ -230,7 +229,7 @@ static int test_memlock_exceeded(int fd)
+>         iov.iov_base = buf;
+>
+>         while (iov.iov_len) {
+> -               ret = __sys_io_uring_register(fd, IORING_REGISTER_BUFFERS, &iov, 1);
+> +               ret = io_uring_register(fd, IORING_REGISTER_BUFFERS, &iov, 1);
+>                 if (ret < 0) {
+>                         if (errno == ENOMEM) {
+>                                 iov.iov_len /= 2;
+> @@ -244,8 +243,7 @@ static int test_memlock_exceeded(int fd)
+>                         free(buf);
+>                         return 1;
+>                 }
+> -               ret = __sys_io_uring_register(fd, IORING_UNREGISTER_BUFFERS,
+> -                                               NULL, 0);
+> +               ret = io_uring_register(fd, IORING_UNREGISTER_BUFFERS, NULL, 0);
+>                 if (ret != 0) {
+>                         fprintf(stderr, "error: unregister failed with %d\n", errno);
+>                         free(buf);
+> @@ -283,14 +281,14 @@ static int test_iovec_nr(int fd)
+>
+>         /* reduce to UIO_MAXIOV */
+>         nr = UIO_MAXIOV;
+> -       ret = __sys_io_uring_register(fd, IORING_REGISTER_BUFFERS, iovs, nr);
+> +       ret = io_uring_register(fd, IORING_REGISTER_BUFFERS, iovs, nr);
+>         if (ret && (errno == ENOMEM || errno == EPERM) && geteuid()) {
+>                 fprintf(stderr, "can't register large iovec for regular users, skip\n");
+>         } else if (ret != 0) {
+>                 fprintf(stderr, "expected success, got %d\n", errno);
+>                 status = 1;
+>         } else {
+> -               __sys_io_uring_register(fd, IORING_UNREGISTER_BUFFERS, 0, 0);
+> +               io_uring_register(fd, IORING_UNREGISTER_BUFFERS, 0, 0);
+>         }
+>         free(buf);
+>         free(iovs);
+> @@ -344,7 +342,7 @@ static int test_iovec_size(int fd)
+>                  */
+>                 iov.iov_base = buf;
+>                 iov.iov_len = 2*1024*1024;
+> -               ret = __sys_io_uring_register(fd, IORING_REGISTER_BUFFERS, &iov, 1);
+> +               ret = io_uring_register(fd, IORING_REGISTER_BUFFERS, &iov, 1);
+>                 if (ret < 0) {
+>                         if (ret == -ENOMEM)
+>                                 printf("Unable to test registering of a huge "
+> @@ -356,8 +354,8 @@ static int test_iovec_size(int fd)
+>                                 status = 1;
+>                         }
+>                 } else {
+> -                       ret = __sys_io_uring_register(fd,
+> -                                       IORING_UNREGISTER_BUFFERS, 0, 0);
+> +                       ret = io_uring_register(fd, IORING_UNREGISTER_BUFFERS,
+> +                                               0, 0);
+>                         if (ret < 0) {
+>                                 fprintf(stderr, "io_uring_unregister: %s\n",
+>                                         strerror(-ret));
+> diff --git a/test/io_uring_setup.c b/test/io_uring_setup.c
+> index 67d5f4f..d945421 100644
+> --- a/test/io_uring_setup.c
+> +++ b/test/io_uring_setup.c
+> @@ -102,7 +102,7 @@ try_io_uring_setup(unsigned entries, struct io_uring_params *p, int expect)
+>  {
+>         int ret;
+>
+> -       ret = __sys_io_uring_setup(entries, p);
+> +       ret = io_uring_setup(entries, p);
+>         if (ret != expect) {
+>                 fprintf(stderr, "expected %d, got %d\n", expect, ret);
+>                 /* if we got a valid uring, close it */
+> @@ -164,7 +164,7 @@ main(int argc, char **argv)
+>
+>         /* read/write on io_uring_fd */
+>         memset(&p, 0, sizeof(p));
+> -       fd = __sys_io_uring_setup(1, &p);
+> +       fd = io_uring_setup(1, &p);
+>         if (fd < 0) {
+>                 fprintf(stderr, "io_uring_setup failed with %d, expected success\n",
+>                        -fd);
+> --
+> Ammar Faizi
+>

@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB4E5A4BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237525A4BF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiH2Mb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S229953AbiH2Mci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiH2Mba (ORCPT
+        with ESMTP id S229748AbiH2McG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:31:30 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7283F1F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:15:30 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-        by gnuweeb.org (Postfix) with ESMTPSA id B1058809CF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:14:35 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1661775275;
-        bh=dq9i892mvDKO0rwREbf6FenovT7hGbfX3rv5JIV+Mc4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hb98i53R0IWBkJe8jDFqM7WVowG6yLL6b9RSJXMw9u2HfGlpRZuacbViLMoanZrGf
-         uBCqASRVcWqfvxUp1O5iC0eZo3Ko3w3GK8FUAt2hMe0pYw8igs0lTCOYPuIBoD2MID
-         ScBuQqYZxygIK3mmroiKofaYFKusGdmkIb3X7ml05LdZYW5ZJkJ8+R6fakkxWdAMcQ
-         iKQ8wgs5JbtVwNCf3N+uhtjug5dYFyf0F9u+0KX/1rTguNCSLlZsxwfNUs8+FMbflR
-         xHKH+v+n1280RSfZs4JAC0dhgixPVKcjZTQz3Xdg4fzX1BZaHO70WNT8KVDzWqY9dt
-         rafIr6oprN7wA==
-Received: by mail-lf1-f47.google.com with SMTP id br21so5093340lfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:14:35 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2fG8aZAEoz4t5SCTc9KklorvKeZmB9F3LAxRZa0RBBUi92VakU
-        Fmmjbq51I59a7xEl858LbAC5cNE8/QquoXEjJ7XWag==
-X-Google-Smtp-Source: AA6agR7PccLuelx3iLdiC/EP4JwkX0TBM1sDVbNjzbUjuX9RrKIr21p2EUxQfcp1Dy/zeEOSLIdmaBQ56wd+eFhm2T8=
-X-Received: by 2002:a05:6512:3501:b0:48a:ef16:2b5d with SMTP id
- h1-20020a056512350100b0048aef162b5dmr5848742lfs.186.1661775273773; Mon, 29
- Aug 2022 05:14:33 -0700 (PDT)
+        Mon, 29 Aug 2022 08:32:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A3A8C036;
+        Mon, 29 Aug 2022 05:15:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50F4961199;
+        Mon, 29 Aug 2022 12:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BB2C433D7;
+        Mon, 29 Aug 2022 12:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661775338;
+        bh=7Urql1E5XDxhVb8MTBNbpYyK+YMAUNovIVIRoaYnK5U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ovf4b4rrY7jDp4P2Fo6D6lw72zZM8qV/FkZnvS3c+EPLkH6Upxl2k3Boaw1OGZafX
+         oSevbWijQv4eAHsPzvMT2Wv0FuxY7r0Yz+l+lVDBezjhxHaAwkNBbHQZVmrnDXcxmA
+         JOGqm//Y8feSgrrSeSmeYLfm0CxTOX5xR7OhV5xG7Z8677Xdhj4IaWXACwK4HlT3Nz
+         SmdGf1lOzr7egQD9EZzXJi9U+yzxGJdky6e6VgPKRI3LfuXnbpM+PvdGKXD33Q/EAT
+         jwBJQOAEaQwrR7/pF8sKN/9GOeSjtJITK7+rrKfm5oV9T7rNcvEWL2/D9jGYtwtQy2
+         e97CBc2s57N1g==
+Date:   Mon, 29 Aug 2022 15:15:30 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dhanuka Warusadura <wdnuka@gmail.com>
+Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for
+ ERR_get_error_line
+Message-ID: <Ywyt4tvHrK4r48RK@kernel.org>
+References: <20220828061859.181061-1-wdnuka@gmail.com>
 MIME-Version: 1.0
-References: <20220829105454.266509-1-cui.jinpeng2@zte.com.cn>
-In-Reply-To: <20220829105454.266509-1-cui.jinpeng2@zte.com.cn>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Date:   Mon, 29 Aug 2022 19:14:22 +0700
-X-Gmail-Original-Message-ID: <CAGzmLMX4vB=t_7ncjA4BmAEkd+OhKkEP9JLDCO9SxnEgUTn2fg@mail.gmail.com>
-Message-ID: <CAGzmLMX4vB=t_7ncjA4BmAEkd+OhKkEP9JLDCO9SxnEgUTn2fg@mail.gmail.com>
-Subject: Re: [PATCH linux-next] mlxsw: remove redundant err variable
-To:     cgel.zte@gmail.com
-Cc:     idosch@nvidia.com, petrm@nvidia.com,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220828061859.181061-1-wdnuka@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 5:56 PM wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
->
-> Return value from mlxsw_core_bus_device_register() directly
-> instead of taking this in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Sun, Aug 28, 2022 at 11:48:59AM +0530, Dhanuka Warusadura wrote:
+> These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
+> Since OpenSSL 3.0" warning.
+> 
+> Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
+> ---
+>  tools/testing/selftests/sgx/sigstruct.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> index 50c5ab1aa6fa..671d9b58e274 100644
+> --- a/tools/testing/selftests/sgx/sigstruct.c
+> +++ b/tools/testing/selftests/sgx/sigstruct.c
+> @@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
+>  			break;
+>  
+>  		had_errors = true;
+> -		err = ERR_get_error_line(&filename, &line);
+> +		err = ERR_peek_last_error_line(&filename, &line);
+>  		ERR_error_string_n(err, str, sizeof(str));
+>  		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
+>  	}
+> -- 
+> 2.37.2
+> 
 
-Reviewed-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko

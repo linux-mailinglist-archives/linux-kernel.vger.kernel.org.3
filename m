@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245415A4A90
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1686E5A4A98
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbiH2LnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S233030AbiH2Lnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiH2Lmk (ORCPT
+        with ESMTP id S232912AbiH2LnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:42:40 -0400
+        Mon, 29 Aug 2022 07:43:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30783F13;
-        Mon, 29 Aug 2022 04:26:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B736C85AA7;
+        Mon, 29 Aug 2022 04:27:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B64E61239;
-        Mon, 29 Aug 2022 11:19:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B57C433C1;
-        Mon, 29 Aug 2022 11:19:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DCEC611D7;
+        Mon, 29 Aug 2022 11:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4535FC433C1;
+        Mon, 29 Aug 2022 11:19:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771976;
-        bh=igaDsgfaPIIrkWz0bd7Wrd2v/jVr1iT8zorHbcK2NPI=;
+        s=korg; t=1661771979;
+        bh=4WjlWH8J126wrlHjO6n2BS/x3Mg6Ty1H/2N1ZLuMDIQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z8X0S3jg8OvJ+X1hR5TpftWVAhj2wh1NXT+lpqIrNLA0QSZ1crfjumhct+ibFyY1Z
-         V/be3HPQ4myPdj3+M6mgK5khQpoatI7eg+32qKVywv/Ezwqv2Z4/qpUnGf0BwTDBG3
-         53tLgBC4vh2Zv8P5a447l8xg8TaI2ymrQu999Weg=
+        b=WZe8b8D08L8p0Z2p/UJLqWX1znryL83L+08TK4qCzrqQYTdECCPQy2xHF6uDBpP1j
+         Hr0GctG3vcdrjolTOgp8wiQkrT0ntcz3LQ8a+5TklyZDrA+Hr44tO4KLgozeBbJk1B
+         ix6jeXP+5lRN8ndq8qxuz6KW02zS3saF72zfOKpE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Mike Christie <michael.christie@oracle.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.19 152/158] scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
-Date:   Mon, 29 Aug 2022 13:00:02 +0200
-Message-Id: <20220829105815.486637627@linuxfoundation.org>
+Subject: [PATCH 5.19 153/158] scsi: core: Fix passthrough retry counter handling
+Date:   Mon, 29 Aug 2022 13:00:03 +0200
+Message-Id: <20220829105815.534215031@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -47,7 +47,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-commit d957e7ffb2c72410bcc1a514153a46719255a5da upstream.
+commit fac8e558da9485e13a0ae0488aa0b8a8c307cd34 upstream.
 
-storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM as it
-doesn't need to make forward progress under memory pressure.  Marking this
-workqueue as WQ_MEM_RECLAIM may cause deadlock while flushing a
-non-WQ_MEM_RECLAIM workqueue.  In the current state it causes the following
-warning:
+Passthrough users will set the scsi_cmnd->allowed value and were expecting
+up to $allowed retries. The problem is that before:
 
-[   14.506347] ------------[ cut here ]------------
-[   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remove_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workfn
-[   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 check_flush_dependency+0xb5/0x130
-[   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-azure #91~18.04.1-Ubuntu
-[   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
-[   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
-[   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
-		<-snip->
-[   14.506408] Call Trace:
-[   14.506412]  __flush_work+0xf1/0x1c0
-[   14.506414]  __cancel_work_timer+0x12f/0x1b0
-[   14.506417]  ? kernfs_put+0xf0/0x190
-[   14.506418]  cancel_delayed_work_sync+0x13/0x20
-[   14.506420]  disk_block_events+0x78/0x80
-[   14.506421]  del_gendisk+0x3d/0x2f0
-[   14.506423]  sr_remove+0x28/0x70
-[   14.506427]  device_release_driver_internal+0xef/0x1c0
-[   14.506428]  device_release_driver+0x12/0x20
-[   14.506429]  bus_remove_device+0xe1/0x150
-[   14.506431]  device_del+0x167/0x380
-[   14.506432]  __scsi_remove_device+0x11d/0x150
-[   14.506433]  scsi_remove_device+0x26/0x40
-[   14.506434]  storvsc_remove_lun+0x40/0x60
-[   14.506436]  process_one_work+0x209/0x400
-[   14.506437]  worker_thread+0x34/0x400
-[   14.506439]  kthread+0x121/0x140
-[   14.506440]  ? process_one_work+0x400/0x400
-[   14.506441]  ? kthread_park+0x90/0x90
-[   14.506443]  ret_from_fork+0x35/0x40
-[   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
+commit 6aded12b10e0 ("scsi: core: Remove struct scsi_request")
 
-Link: https://lore.kernel.org/r/1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com
-Fixes: 436ad9413353 ("scsi: storvsc: Allow only one remove lun work item to be issued per lun")
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+we used to set the retries on the scsi_request then copy them over to
+scsi_cmnd->allowed in scsi_setup_scsi_cmnd. With that patch we now set
+scsi_cmnd->allowed to 0 in scsi_prepare_cmd and overwrite what the
+passthrough user set.
+
+This moves the allowed initialization to after the blk_rq_is_passthrough()
+check so it's only done for the non-passthrough path where the ULD
+init_command will normally set an allowed value it prefers.
+
+Link: https://lore.kernel.org/r/20220812011206.9157-1-michael.christie@oracle.com
+Fixes: 6aded12b10e0 ("scsi: core: Remove struct scsi_request")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/storvsc_drv.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/scsi_lib.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -2012,7 +2012,7 @@ static int storvsc_probe(struct hv_devic
- 	 */
- 	host_dev->handle_error_wq =
- 			alloc_ordered_workqueue("storvsc_error_wq_%d",
--						WQ_MEM_RECLAIM,
-+						0,
- 						host->host_no);
- 	if (!host_dev->handle_error_wq) {
- 		ret = -ENOMEM;
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1549,7 +1549,6 @@ static blk_status_t scsi_prepare_cmd(str
+ 	scsi_init_command(sdev, cmd);
+ 
+ 	cmd->eh_eflags = 0;
+-	cmd->allowed = 0;
+ 	cmd->prot_type = 0;
+ 	cmd->prot_flags = 0;
+ 	cmd->submitter = 0;
+@@ -1600,6 +1599,8 @@ static blk_status_t scsi_prepare_cmd(str
+ 			return ret;
+ 	}
+ 
++	/* Usually overridden by the ULP */
++	cmd->allowed = 0;
+ 	memset(cmd->cmnd, 0, sizeof(cmd->cmnd));
+ 	return scsi_cmd_to_driver(cmd)->init_command(cmd);
+ }
 
 

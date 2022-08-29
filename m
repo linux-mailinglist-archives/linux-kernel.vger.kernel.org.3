@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77B25A4833
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF935A4984
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiH2LHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S231588AbiH2LZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiH2LG0 (ORCPT
+        with ESMTP id S231989AbiH2LXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:06:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770AD2AC7A;
-        Mon, 29 Aug 2022 04:04:34 -0700 (PDT)
+        Mon, 29 Aug 2022 07:23:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE811260D;
+        Mon, 29 Aug 2022 04:15:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6959B80EF3;
-        Mon, 29 Aug 2022 11:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EF2C433D7;
-        Mon, 29 Aug 2022 11:04:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5642B80F03;
+        Mon, 29 Aug 2022 11:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4AAC433C1;
+        Mon, 29 Aug 2022 11:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771072;
-        bh=g4WLSj1TONbIglnTksYB7pqrvJ3K6NIWi6cf4DY+HP4=;
+        s=korg; t=1661771081;
+        bh=/2TgZp9/QnELkEnYvXdcofmDRuWGi0Sg490D9xcwBWI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tkD31EpOISLYgmgqqqjTployNH8A8vBNPHsLjj9f04hNtLUO4fhoeheZYSomnzDMn
-         G4u9v9O/xgJF0EwKc3Cg/ZGG8lkiL0FSrGu5YXay4ZIB4zRH9KE+PPd2DEQzOQQK5b
-         5CG5BXXSrM1+/yCQISlHA0oF024qBiqtA+z1mWok=
+        b=AdYMmUww0Kg/LyiS6AslzoMbp2EpywNReTzrZyK3qPcQKGkpBrY/rVSfszJKjlMjI
+         5wAcLsFGzUjrcNgOtrnh3u6BkcHf7lLIbIV9fAqkFEJ2/YDRRoui2+pSx0lbPDov4S
+         SQaWKt2oa0ZyQ8T8+w+jz0tn8gB9Tmc19M1BZtu8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 057/136] netfilter: nft_payload: report ERANGE for too long offset and length
+Subject: [PATCH 5.10 18/86] SUNRPC: RPC level errors should set task->tk_rpc_status
 Date:   Mon, 29 Aug 2022 12:58:44 +0200
-Message-Id: <20220829105806.961172269@linuxfoundation.org>
+Message-Id: <20220829105757.266541903@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 94254f990c07e9ddf1634e0b727fab821c3b5bf9 ]
+[ Upstream commit ed06fce0b034b2e25bd93430f5c4cbb28036cc1a ]
 
-Instead of offset and length are truncation to u8, report ERANGE.
+Fix up a case in call_encode() where we're failing to set
+task->tk_rpc_status when an RPC level error occurred.
 
-Fixes: 96518518cc41 ("netfilter: add nftables")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 9c5948c24869 ("SUNRPC: task should be exit if encode return EKEYEXPIRED more times")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_payload.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ net/sunrpc/clnt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nft_payload.c b/net/netfilter/nft_payload.c
-index b46e01365bd96..da0ed3430bb9d 100644
---- a/net/netfilter/nft_payload.c
-+++ b/net/netfilter/nft_payload.c
-@@ -785,6 +785,7 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- {
- 	enum nft_payload_bases base;
- 	unsigned int offset, len;
-+	int err;
- 
- 	if (tb[NFTA_PAYLOAD_BASE] == NULL ||
- 	    tb[NFTA_PAYLOAD_OFFSET] == NULL ||
-@@ -811,8 +812,13 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- 	if (tb[NFTA_PAYLOAD_DREG] == NULL)
- 		return ERR_PTR(-EINVAL);
- 
--	offset = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_OFFSET]));
--	len    = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_LEN]));
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_OFFSET], U8_MAX, &offset);
-+	if (err < 0)
-+		return ERR_PTR(err);
-+
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_LEN], U8_MAX, &len);
-+	if (err < 0)
-+		return ERR_PTR(err);
- 
- 	if (len <= 4 && is_power_of_2(len) && IS_ALIGNED(offset, len) &&
- 	    base != NFT_PAYLOAD_LL_HEADER && base != NFT_PAYLOAD_INNER_HEADER)
+diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
+index c5af31312e0cf..78c6648af7827 100644
+--- a/net/sunrpc/clnt.c
++++ b/net/sunrpc/clnt.c
+@@ -1867,7 +1867,7 @@ call_encode(struct rpc_task *task)
+ 			break;
+ 		case -EKEYEXPIRED:
+ 			if (!task->tk_cred_retry) {
+-				rpc_exit(task, task->tk_status);
++				rpc_call_rpcerror(task, task->tk_status);
+ 			} else {
+ 				task->tk_action = call_refresh;
+ 				task->tk_cred_retry--;
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08ED5A49FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35745A49EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbiH2Lbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S232435AbiH2LbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbiH2L3Y (ORCPT
+        with ESMTP id S232512AbiH2L3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:29:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000E86C740;
-        Mon, 29 Aug 2022 04:17:50 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F8378BEA;
+        Mon, 29 Aug 2022 04:17:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66119B80FA8;
-        Mon, 29 Aug 2022 11:17:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B004AC433B5;
-        Mon, 29 Aug 2022 11:17:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6AA7611EC;
+        Mon, 29 Aug 2022 11:09:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8617C433C1;
+        Mon, 29 Aug 2022 11:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771851;
-        bh=fu51cPml/zweYYB/F7Mk2HqtdVHoi5XycmFY9Fmsyqo=;
+        s=korg; t=1661771353;
+        bh=GJ8Q2ujZ/fb5V4i0pn6mI3oB5p53qRjHiTACpQSU2p4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iVh0YsVQ9P2K/kgPm9Q+PV53Xcn0b6CQ99dgRbZx3GBIjFCek6SEWytRDUlMuAVw+
-         Jio4KsSBtbpwba675Lir+9FqMtm2DQMIGAspEKEyWd9f4WJ6vy4FB39+HHti2hobG9
-         wOAtzgBy7A1oT9nD3vjPIHJjqwryrL9KdQqfIBNk=
+        b=EJZ5eUeicej3Wgj9esJsVmOc/K+RvvTLlPy3PT6i6algA+HvmYF8bmfybf31QFUat
+         2yFj0o0/7C78qaB3HP8l83tx1YZi/2gIpYm5EcFEbrH9cCleXEg7F6uBB4G+JDIIyo
+         PxWUlSw4eyADz+OpTFVCKzpc1jJyVSSKsOvwyj8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        stable@vger.kernel.org, Jonathan Toppins <jtoppins@redhat.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 084/158] net: ethernet: mtk_eth_soc: enable rx cksum offload for MTK_NETSYS_V2
+Subject: [PATCH 5.10 28/86] bonding: 802.3ad: fix no transmission of LACPDUs
 Date:   Mon, 29 Aug 2022 12:58:54 +0200
-Message-Id: <20220829105812.576260888@linuxfoundation.org>
+Message-Id: <20220829105757.689974700@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +56,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Jonathan Toppins <jtoppins@redhat.com>
 
-[ Upstream commit da6e113ff010815fdd21ee1e9af2e8d179a2680f ]
+[ Upstream commit d745b5062ad2b5da90a5e728d7ca884fc07315fd ]
 
-Enable rx checksum offload for mt7986 chipset.
+This is caused by the global variable ad_ticks_per_sec being zero as
+demonstrated by the reproducer script discussed below. This causes
+all timer values in __ad_timer_to_ticks to be zero, resulting
+in the periodic timer to never fire.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Link: https://lore.kernel.org/r/c8699805c18f7fd38315fcb8da2787676d83a32c.1654544585.git.lorenzo@kernel.org
+To reproduce:
+Run the script in
+`tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh` which
+puts bonding into a state where it never transmits LACPDUs.
+
+line 44: ip link add fbond type bond mode 4 miimon 200 \
+            xmit_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
+setting bond param: ad_actor_sys_prio
+given:
+    params.ad_actor_system = 0
+call stack:
+    bond_option_ad_actor_sys_prio()
+    -> bond_3ad_update_ad_actor_settings()
+       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+            params.ad_actor_system == 0
+results:
+     ad.system.sys_mac_addr = bond->dev->dev_addr
+
+line 48: ip link set fbond address 52:54:00:3B:7C:A6
+setting bond MAC addr
+call stack:
+    bond->dev->dev_addr = new_mac
+
+line 52: ip link set fbond type bond ad_actor_sys_prio 65535
+setting bond param: ad_actor_sys_prio
+given:
+    params.ad_actor_system = 0
+call stack:
+    bond_option_ad_actor_sys_prio()
+    -> bond_3ad_update_ad_actor_settings()
+       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+            params.ad_actor_system == 0
+results:
+     ad.system.sys_mac_addr = bond->dev->dev_addr
+
+line 60: ip link set veth1-bond down master fbond
+given:
+    params.ad_actor_system = 0
+    params.mode = BOND_MODE_8023AD
+    ad.system.sys_mac_addr == bond->dev->dev_addr
+call stack:
+    bond_enslave
+    -> bond_3ad_initialize(); because first slave
+       -> if ad.system.sys_mac_addr != bond->dev->dev_addr
+          return
+results:
+     Nothing is run in bond_3ad_initialize() because dev_addr equals
+     sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
+     never initialized anywhere else.
+
+The if check around the contents of bond_3ad_initialize() is no longer
+needed due to commit 5ee14e6d336f ("bonding: 3ad: apply ad_actor settings
+changes immediately") which sets ad.system.sys_mac_addr if any one of
+the bonding parameters whos set function calls
+bond_3ad_update_ad_actor_settings(). This is because if
+ad.system.sys_mac_addr is zero it will be set to the current bond mac
+address, this causes the if check to never be true.
+
+Fixes: 5ee14e6d336f ("bonding: 3ad: apply ad_actor settings changes immediately")
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_3ad.c | 38 ++++++++++++++--------------------
+ 1 file changed, 16 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 59c9a10f83ba5..6beb3d4873a37 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -1444,8 +1444,8 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 	int done = 0, bytes = 0;
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index 325b20729d8ba..b0f8d551b61db 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -1988,30 +1988,24 @@ void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
+  */
+ void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution)
+ {
+-	/* check that the bond is not initialized yet */
+-	if (!MAC_ADDRESS_EQUAL(&(BOND_AD_INFO(bond).system.sys_mac_addr),
+-				bond->dev->dev_addr)) {
+-
+-		BOND_AD_INFO(bond).aggregator_identifier = 0;
+-
+-		BOND_AD_INFO(bond).system.sys_priority =
+-			bond->params.ad_actor_sys_prio;
+-		if (is_zero_ether_addr(bond->params.ad_actor_system))
+-			BOND_AD_INFO(bond).system.sys_mac_addr =
+-			    *((struct mac_addr *)bond->dev->dev_addr);
+-		else
+-			BOND_AD_INFO(bond).system.sys_mac_addr =
+-			    *((struct mac_addr *)bond->params.ad_actor_system);
++	BOND_AD_INFO(bond).aggregator_identifier = 0;
++	BOND_AD_INFO(bond).system.sys_priority =
++		bond->params.ad_actor_sys_prio;
++	if (is_zero_ether_addr(bond->params.ad_actor_system))
++		BOND_AD_INFO(bond).system.sys_mac_addr =
++		    *((struct mac_addr *)bond->dev->dev_addr);
++	else
++		BOND_AD_INFO(bond).system.sys_mac_addr =
++		    *((struct mac_addr *)bond->params.ad_actor_system);
  
- 	while (done < budget) {
-+		unsigned int pktlen, *rxdcsum;
- 		struct net_device *netdev;
--		unsigned int pktlen;
- 		dma_addr_t dma_addr;
- 		u32 hash, reason;
- 		int mac = 0;
-@@ -1512,7 +1512,13 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 		pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
- 		skb->dev = netdev;
- 		skb_put(skb, pktlen);
--		if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
-+
-+		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+			rxdcsum = &trxd.rxd3;
-+		else
-+			rxdcsum = &trxd.rxd4;
-+
-+		if (*rxdcsum & eth->soc->txrx.rx_dma_l4_valid)
- 			skb->ip_summed = CHECKSUM_UNNECESSARY;
- 		else
- 			skb_checksum_none_assert(skb);
-@@ -3761,6 +3767,7 @@ static const struct mtk_soc_data mt7986_data = {
- 		.txd_size = sizeof(struct mtk_tx_dma_v2),
- 		.rxd_size = sizeof(struct mtk_rx_dma_v2),
- 		.rx_irq_done_mask = MTK_RX_DONE_INT_V2,
-+		.rx_dma_l4_valid = RX_DMA_L4_VALID_V2,
- 		.dma_max_len = MTK_TX_DMA_BUF_LEN_V2,
- 		.dma_len_offset = 8,
- 	},
+-		/* initialize how many times this module is called in one
+-		 * second (should be about every 100ms)
+-		 */
+-		ad_ticks_per_sec = tick_resolution;
++	/* initialize how many times this module is called in one
++	 * second (should be about every 100ms)
++	 */
++	ad_ticks_per_sec = tick_resolution;
+ 
+-		bond_3ad_initiate_agg_selection(bond,
+-						AD_AGGREGATOR_SELECTION_TIMER *
+-						ad_ticks_per_sec);
+-	}
++	bond_3ad_initiate_agg_selection(bond,
++					AD_AGGREGATOR_SELECTION_TIMER *
++					ad_ticks_per_sec);
+ }
+ 
+ /**
 -- 
 2.35.1
 

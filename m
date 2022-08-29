@@ -2,124 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC395A55DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176445A55E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiH2VCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
+        id S229692AbiH2VEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiH2VCn (ORCPT
+        with ESMTP id S229490AbiH2VEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:02:43 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5210E7F0BD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:02:41 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bq23so12861934lfb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=Y0O6W1EIFYUAhWdC9TPBVXlgaxDiB7GTNtP+edapuQo=;
-        b=z1OikuueYS/w0Ms/g7l8XX6nantHAtBYuktlpYNed16wdBkvtNYhV/2T37j9OnvEGV
-         62aCxWPpRQ0M9/SHtnEOWLqp5cbpAMwuzazHYhP492gVBhJe6a10j2aO8dC88chrH4qL
-         2c6itrZ3HONN0732sHty7A8HNTLifQEHne3XXeFn1sP+mPq4HPC4W6rPeQyWpeu1D7fT
-         R470oPcWzvXdrerftAyvbtERdONXBDRAU7RgNu+FhLKoCgtkuBb4LVEOFeWSQi5IuS4O
-         ZojnVDCCxdj6VuamYqz65Cz+gnzt+Q249o+EohlopMTY79KHsxxlILesdw8wSrXyl5Cc
-         WI0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=Y0O6W1EIFYUAhWdC9TPBVXlgaxDiB7GTNtP+edapuQo=;
-        b=MuBVgA55RoVQpE9HkQCQncMUTMOmdFyGmPGf+XhrY6IM91ZiFlKywlkljorSkF0ual
-         jIKPmF996fAArcrZXEkiqFw0ReVD7z4m5Sv4MPw8Duewc3yc7K/Gjlv/U3eQl/tn/aGp
-         YG/Mq+/kIu+xrIXEKPN8RtTtGPKYQH5k/GT8aBMODHWchIl6NAVFALjzc+T+1gNY6j4A
-         Sq+GNXoEjm9gIUaOIhVof5P3eEFZHCUIsJ9Pp11SG/NTyu9Bxdu/GY87xeSn0phLyjbQ
-         GTewWvi/of26UdtBkaoIg5CKXKFwivvuFZ9h5qiicUOZFinIJBv1yBky+uAd9xW9WfaG
-         IoAg==
-X-Gm-Message-State: ACgBeo2LY5qUGGI7B3Pl9XoIsS1VuxKaOSg4H7iKfP909cjQYT0ZDilc
-        VI0SeVI/7OOdFGH8J0GaCfh6+65+lEbEdofutycz
-X-Google-Smtp-Source: AA6agR4AO1xvVTU52DvWOJGOcBJoURJDMNN0z6GXu4M3uNgUvRBfyu8JFpUs7A2QRuiTLLbJaIKbdwTImgBctS9F57g=
-X-Received: by 2002:a05:6512:b1c:b0:492:8835:1e4c with SMTP id
- w28-20020a0565120b1c00b0049288351e4cmr6444944lfu.442.1661806959576; Mon, 29
- Aug 2022 14:02:39 -0700 (PDT)
+        Mon, 29 Aug 2022 17:04:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EBD7E31C;
+        Mon, 29 Aug 2022 14:04:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 645AF611F8;
+        Mon, 29 Aug 2022 21:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8FCC433D7;
+        Mon, 29 Aug 2022 21:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661807051;
+        bh=BDArk8/2LJG4f0JlM21frot7U4ElFgCGdWkTcw+GNrI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hLNBIu9Td+/t9fmiuV63RFNrmX+4JMVfBhrmcGSE96BFapYdzIYYh8RcQphz7k1iz
+         CZ3SuEm/suUhALwjEkfNYk9eCIsLfXy4Z2dWolV85Hdm5M71fCn0NyWZ2iu46Gaygp
+         N+AmdNp/oPGjTH5H4w1n9rLNe5wGuXKrANyj0EOcypNEG33T6SfexYjsbR4iItQjUc
+         mbtefgnDmoBjH0sa46lAl5qiOPupyhdF+SOqlIFBkSg9EiMTWPcJfU3sBcuYHKia/e
+         HN/kvHCZFfXusXi+zMjQ0mOxvlZlXq0gk9kCHX01FYPSnIOb3EA1jYxNTFqUwBwlIb
+         gaiGx0dDJ8f1A==
+Date:   Mon, 29 Aug 2022 16:04:08 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: clock: qcom,rpmcc: Add compatible for
+ SM6375
+Message-ID: <20220829210408.gxbv6szxfwiiwrbv@builder.lan>
+References: <20220716192714.454031-1-konrad.dybcio@somainline.org>
+ <991f085e-ae79-bf67-d063-51484a0ba344@linaro.org>
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 29 Aug 2022 17:02:28 -0400
-Message-ID: <CAHC9VhQu7vuXMqpTzdZp2+M4pBZXDdWs7FtWdEt_3abW-ArUDA@mail.gmail.com>
-Subject: [GIT PULL] LSM fixes for v6.0 (#1)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-security-module@vger.kernel.org, io-uring@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <991f085e-ae79-bf67-d063-51484a0ba344@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Wed, Jul 20, 2022 at 08:30:13AM +0200, Krzysztof Kozlowski wrote:
+> On 16/07/2022 21:27, Konrad Dybcio wrote:
+> > Add a compatible for RPMCC on SM6375.
+> > 
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > ---
+> >  Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+> > index 9d296b89a8d0..f22febdfdce7 100644
+> > --- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+> > +++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+> > @@ -43,6 +43,7 @@ properties:
+> >            - qcom,rpmcc-sdm660
+> >            - qcom,rpmcc-sm6115
+> >            - qcom,rpmcc-sm6125
+> > +          - qcom,sm6375-rpmcc
+> 
+> I am fine with it, although this contradicts a bit
+> https://lore.kernel.org/all/20220705161301.493364-1-krzysztof.kozlowski@linaro.org/
+> 
+> Would be nice to get Bjorn's opinion/preference on this.
+> 
 
-Four patches to add SELinux and Smack controls to the io_uring
-IORING_OP_URING_CMD.  Three of these patches are necessary as without
-them the IORING_OP_URING_CMD remains outside the purview of the LSMs
-(Luis' LSM patch, Casey's Smack patch, and my SELinux patch).  These
-patches have been discussed at length with the io_uring folks, and
-Jens has given his thumbs-up on the relevant patches (see the commit
-descriptions).  There is one patch that is not strictly necessary, but
-it makes testing much easier and is very trivial: the /dev/null
-IORING_OP_URING_CMD patch.  If you have a problem accepting the
-/dev/null patch in a rcX release, let me know and I'll remove it.
+While global consistency is nice, I think we should just stick with
+qcom,rpmcc-<soc>, to keep this binding nice and tidy.
 
-As of earlier today the tag merged cleanly with your tree, so there
-should be no surprises.  Please merge for v6.0.
+Regards,
+Bjorn
 
--Paul
-
---
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
- Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
-   tags/lsm-pr-20220829
-
-for you to fetch changes up to dd9373402280cf4715fdc8fd5070f7d039e43511:
-
- Smack: Provide read control for io_uring_cmd
-   (2022-08-26 14:56:35 -0400)
-
-----------------------------------------------------------------
-lsm/stable-6.0 PR 20220829
-
-----------------------------------------------------------------
-Casey Schaufler (1):
-     Smack: Provide read control for io_uring_cmd
-
-Luis Chamberlain (1):
-     lsm,io_uring: add LSM hooks for the new uring_cmd file op
-
-Paul Moore (2):
-     selinux: implement the security_uring_cmd() LSM hook
-     /dev/null: add IORING_OP_URING_CMD support
-
-drivers/char/mem.c                  |  6 ++++++
-include/linux/lsm_hook_defs.h       |  1 +
-include/linux/lsm_hooks.h           |  3 +++
-include/linux/security.h            |  5 +++++
-io_uring/uring_cmd.c                |  5 +++++
-security/security.c                 |  4 ++++
-security/selinux/hooks.c            | 24 ++++++++++++++++++++++
-security/selinux/include/classmap.h |  2 +-
-security/smack/smack_lsm.c          | 32 ++++++++++++++++++++++++++++++
-9 files changed, 81 insertions(+), 1 deletion(-)
-
--- 
-paul-moore.com
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> Best regards,
+> Krzysztof

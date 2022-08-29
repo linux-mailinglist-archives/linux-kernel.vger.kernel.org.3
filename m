@@ -2,117 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870AC5A5465
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD855A5469
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiH2TRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S229761AbiH2TUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiH2TR3 (ORCPT
+        with ESMTP id S229453AbiH2TUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:17:29 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A62F861C8;
-        Mon, 29 Aug 2022 12:17:29 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r22so8556984pgm.5;
-        Mon, 29 Aug 2022 12:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=e2Bgm9OtspYaGEdpfofzm7dZotUv9cfpH7zxqDCD4ds=;
-        b=OKWUpvZGFX+3jTt6Li+A6q0QWx3+2HS81EOL3EhXEGT/Lx3y1h9lzpBCifPfT37i17
-         L5dF6lw7mRzFeRj5MJhpzPtb6zi+Gvevx53R5mHTfDj1U8+9IKXuWZB/E0l2yp2O7yoM
-         hrzshvD405lCpuxYTicSIMMMiX7g5u9uXGC8kPSTAPQ1FyZE5qmy0h51t73m2GpQpeiX
-         7x+Cgfr9vSH5CbiGmDWVIV+HmYdHt+R3HlAYmoPdOK+ZFbybAGJ5wVRqZIn9IGgFvq8p
-         ZlVrbEX31yEM40EdDDNckmDO7rtUS4JktD3oVu3eJr74D2xQOr5Tyb/d5QD3Ec0Y5r7Z
-         0+mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=e2Bgm9OtspYaGEdpfofzm7dZotUv9cfpH7zxqDCD4ds=;
-        b=lLAVFJ3rJh5FotwCsuO2w9WxXpivIKqHmHJR0JRdct9Y23r8wNedvFxBMQjbYMJYfn
-         p56G6WeMden1Yz0vSruj89wK/cBAtL9AZoZh5T10xjA4OmZW9dLWov5DGIxj0B1aY4Ks
-         Kdx4JRh9e103v4uyCP4Obec9Cuj9YWLlMBfL5Net51SJBrfnOkBemJ+s84xbXUgE94Xs
-         vD3Ht4tJ8U/gNYVJNwlOcLm43ktJLZ/aUERGG2p7Ox5K54X60LztTP9cXprqG0a2VInW
-         48epejIJuSdMjp8o2ewbRVvg96eZxheajZAnLjFC1Eul6uJn/pQqoxtezcK2z45TUK+m
-         xFtA==
-X-Gm-Message-State: ACgBeo1MNSzEoWcC91+7Fh1QmFaXRawDLPwLMNGER67bEvEURf4dKBTz
-        b9C9QdCdXGiMJ0PmkLclYmw=
-X-Google-Smtp-Source: AA6agR6Pq4CucQC/1Cj7srmpABJxDCvT2wwVFQ8PT+/642ImG6XOY0ZsQaZkZejqyXl88FSec/nWnw==
-X-Received: by 2002:a63:8a44:0:b0:42b:351d:e309 with SMTP id y65-20020a638a44000000b0042b351de309mr14741408pgd.426.1661800648462;
-        Mon, 29 Aug 2022 12:17:28 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id 199-20020a6300d0000000b00419ab8f8d2csm53107pga.20.2022.08.29.12.17.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 12:17:27 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 12:17:26 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v8 022/103] KVM: TDX: Add place holder for TDX VM
- specific mem_enc_op ioctl
-Message-ID: <20220829191726.GB2700446@ls.amr.corp.intel.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <2d65bd56a7ab8c0776f5c6b7c8481dd45ad96794.1659854790.git.isaku.yamahata@intel.com>
- <25e3ecd2-7038-5e3b-b826-0366aea899c9@linux.intel.com>
+        Mon, 29 Aug 2022 15:20:44 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2156E2CA;
+        Mon, 29 Aug 2022 12:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=pc0wLZlozQihEHAnbmXgpg/tgBsnYovxYc8EA7xIwkY=; b=Dbys/SM9U3H1kdLBaiRbBxOZpN
+        /yxlUeV67c+OSKGxd4fXR9kByDvWq5gzTu+oKKS1HinnxiEFCvh87kr0wamnbsh2SIDA9FMy4KKPD
+        iBWB69vytO3qlfyMVhGN9ec+JAxA1XJGeuM+TND0Px/jvqJsk+Ua1wbqEjOlCTA/uD8w=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oSkJB-00EzsU-Sl; Mon, 29 Aug 2022 21:20:29 +0200
+Date:   Mon, 29 Aug 2022 21:20:29 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jerry Ray <jerry.ray@microchip.com>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH 2/2] net: dsa: LAN9303: Add basic support for LAN9354
+Message-ID: <Yw0RfRXGZKl+ZwOi@lunn.ch>
+References: <20220829180037.31078-1-jerry.ray@microchip.com>
+ <20220829180037.31078-2-jerry.ray@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <25e3ecd2-7038-5e3b-b826-0366aea899c9@linux.intel.com>
+In-Reply-To: <20220829180037.31078-2-jerry.ray@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 12:07:55PM +0800,
-Binbin Wu <binbin.wu@linux.intel.com> wrote:
+> -	if ((reg >> 16) != LAN9303_CHIP_ID) {
+> -		dev_err(chip->dev, "expecting LAN9303 chip, but found: %X\n",
+> +	if (((reg >> 16) != LAN9303_CHIP_ID) &&
+> +	    ((reg >> 16) != LAN9354_CHIP_ID)) {
+> +		dev_err(chip->dev, "unexpected device found: LAN%4.4X\n",
+>  			reg >> 16);
+>  		return -ENODEV;
+>  	}
+> @@ -884,7 +889,7 @@ static int lan9303_check_device(struct lan9303 *chip)
+>  	if (ret)
+>  		dev_warn(chip->dev, "failed to disable switching %d\n", ret);
+>  
+> -	dev_info(chip->dev, "Found LAN9303 rev. %u\n", reg & 0xffff);
+> +	dev_info(chip->dev, "Found LAN%4.4X rev. %u\n", (reg >> 16), reg & 0xffff);
+>  
+>  	ret = lan9303_detect_phy_setup(chip);
+>  	if (ret) {
+> diff --git a/drivers/net/dsa/lan9303_mdio.c b/drivers/net/dsa/lan9303_mdio.c
+> index bbb7032409ba..d12c55fdc811 100644
+> --- a/drivers/net/dsa/lan9303_mdio.c
+> +++ b/drivers/net/dsa/lan9303_mdio.c
+> @@ -158,6 +158,7 @@ static void lan9303_mdio_shutdown(struct mdio_device *mdiodev)
+>  
+>  static const struct of_device_id lan9303_mdio_of_match[] = {
+>  	{ .compatible = "smsc,lan9303-mdio" },
+> +	{ .compatible = "microchip,lan9354-mdio" },
 
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index 7b497ed1f21c..067f5de56c53 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -73,6 +73,14 @@ static void vt_vm_free(struct kvm *kvm)
-> >   		return tdx_vm_free(kvm);
-> >   }
-> > +static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
-> > +{
-> > +	if (!is_td(kvm))
-> > +		return -ENOTTY;
-> > +
-> > +	return tdx_vm_ioctl(kvm, argp);
-> > +}
-> > +
-> >   struct kvm_x86_ops vt_x86_ops __initdata = {
-> >   	.name = "kvm_intel",
-> > @@ -214,6 +222,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
-> >   	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
-> >   	.dev_mem_enc_ioctl = tdx_dev_ioctl,
-> > +	.mem_enc_ioctl = vt_mem_enc_ioctl,
-> 
-> suggeust to align the interafce/function name style with the scop.
-> 
-> patch 21 and 27 have the scope in interafce names(dev / vcpu), may be
-> clearer to use  vcpu_mem_enc_ioctl?
+Please validate that what you find on the board actually is what the
+compatible says it should be. If you don't validate it, there will be
+some DT blobs that have the wrong value, but probe fine. But then you
+cannot actually make use of the compatible string in the driver to do
+something different between the 9303 and the 9354 because some boards
+have the wrong compatible....
 
-This is a matter of preference.  I intentionally chose to drop mem_enc part
-because actually KVM_MEMORY_ENCRYPT_OP is abused for TDX or SEV(-SNP) specific
-operation.  Subcommand for KVM_MEMORY_ENCRYPT_OP is not directly related to
-memory encryption.  It should be KVM_CONFIDENTIAL_OP or something.
-Unfortunately it's too late to rename it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+     Andrew

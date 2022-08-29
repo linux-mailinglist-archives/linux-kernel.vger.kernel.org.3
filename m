@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514315A4A83
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC625A4A62
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiH2LlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S232805AbiH2Lht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbiH2Lkv (ORCPT
+        with ESMTP id S232786AbiH2Lg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:40:51 -0400
+        Mon, 29 Aug 2022 07:36:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356406555C;
-        Mon, 29 Aug 2022 04:24:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A307E808;
+        Mon, 29 Aug 2022 04:20:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E3CCB80EB8;
-        Mon, 29 Aug 2022 11:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF75C433D6;
-        Mon, 29 Aug 2022 11:17:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBC33B80EFC;
+        Mon, 29 Aug 2022 11:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B5AC433D6;
+        Mon, 29 Aug 2022 11:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771845;
-        bh=CrR8uZ9q1pmhgQX9lW9hiAzAFZMyb3XBJwrjhsOyE8o=;
+        s=korg; t=1661771196;
+        bh=9lKmQ4xpbaH/kiIBphliHlC8DuK9HVV8jG2rFnCjuO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bq6vBsZZ9HsCETDPjMCmt2zvyLQ6YX4n2kFVArv3bUmfN6nXiKkbK6Uw+WbPppTJH
-         VM6bqDlzJqt6d+gJQmWARpdyFly7GE3IiSNVV5WRsH3EnMjIsVJsXmHtYU7xojinsN
-         YB17b4O059EL39jJDWVRPuTN0z/waaEmQo2snEm4=
+        b=U5YhCXufmx05uWNV9FEC6U7RRAseJ8N6e8ZdRpyDDkafoeGrZwhv12Q9S51MI1EOV
+         5nQV030jaYfNijrB15u2Ue2l7jAzQqvzC3Mf9WWQPXUduQmzDz3Dib+JMiZI3rhYqJ
+         mUyH5wv0nsx25HoXqm2xKTDtpiNkDLWQm5lUizPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steve Payne <spayne@aurora.tech>,
-        Ilya Evenbach <ievenbach@aurora.tech>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.19 082/158] ixgbe: stop resetting SYSTIME in ixgbe_ptp_start_cyclecounter
-Date:   Mon, 29 Aug 2022 12:58:52 +0200
-Message-Id: <20220829105812.483435129@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 066/136] netfilter: nf_tables: disallow jump to implicit chain from set element
+Date:   Mon, 29 Aug 2022 12:58:53 +0200
+Message-Id: <20220829105807.331264599@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,135 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacob Keller <jacob.e.keller@intel.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 25d7a5f5a6bb15a2dae0a3f39ea5dda215024726 ]
+[ Upstream commit f323ef3a0d49e147365284bc1f02212e617b7f09 ]
 
-The ixgbe_ptp_start_cyclecounter is intended to be called whenever the
-cyclecounter parameters need to be changed.
+Extend struct nft_data_desc to add a flag field that specifies
+nft_data_init() is being called for set element data.
 
-Since commit a9763f3cb54c ("ixgbe: Update PTP to support X550EM_x
-devices"), this function has cleared the SYSTIME registers and reset the
-TSAUXC DISABLE_SYSTIME bit.
+Use it to disallow jump to implicit chain from set element, only jump
+to chain via immediate expression is allowed.
 
-While these need to be cleared during ixgbe_ptp_reset, it is wrong to clear
-them during ixgbe_ptp_start_cyclecounter. This function may be called
-during both reset and link status change. When link changes, the SYSTIME
-counter is still operating normally, but the cyclecounter should be updated
-to account for the possibly changed parameters.
-
-Clearing SYSTIME when link changes causes the timecounter to jump because
-the cycle counter now reads zero.
-
-Extract the SYSTIME initialization out to a new function and call this
-during ixgbe_ptp_reset. This prevents the timecounter adjustment and avoids
-an unnecessary reset of the current time.
-
-This also restores the original SYSTIME clearing that occurred during
-ixgbe_ptp_reset before the commit above.
-
-Reported-by: Steve Payne <spayne@aurora.tech>
-Reported-by: Ilya Evenbach <ievenbach@aurora.tech>
-Fixes: a9763f3cb54c ("ixgbe: Update PTP to support X550EM_x devices")
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c | 59 +++++++++++++++-----
- 1 file changed, 46 insertions(+), 13 deletions(-)
+ include/net/netfilter/nf_tables.h | 5 +++++
+ net/netfilter/nf_tables_api.c     | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c
-index 336426a67ac1b..38cda659f65f4 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c
-@@ -1208,7 +1208,6 @@ void ixgbe_ptp_start_cyclecounter(struct ixgbe_adapter *adapter)
- 	struct cyclecounter cc;
- 	unsigned long flags;
- 	u32 incval = 0;
--	u32 tsauxc = 0;
- 	u32 fuse0 = 0;
+diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
+index 6a38bf8538f1e..53746494eb846 100644
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -193,10 +193,15 @@ struct nft_ctx {
+ 	bool				report;
+ };
  
- 	/* For some of the boards below this mask is technically incorrect.
-@@ -1243,18 +1242,6 @@ void ixgbe_ptp_start_cyclecounter(struct ixgbe_adapter *adapter)
- 	case ixgbe_mac_x550em_a:
- 	case ixgbe_mac_X550:
- 		cc.read = ixgbe_ptp_read_X550;
--
--		/* enable SYSTIME counter */
--		IXGBE_WRITE_REG(hw, IXGBE_SYSTIMR, 0);
--		IXGBE_WRITE_REG(hw, IXGBE_SYSTIML, 0);
--		IXGBE_WRITE_REG(hw, IXGBE_SYSTIMH, 0);
--		tsauxc = IXGBE_READ_REG(hw, IXGBE_TSAUXC);
--		IXGBE_WRITE_REG(hw, IXGBE_TSAUXC,
--				tsauxc & ~IXGBE_TSAUXC_DISABLE_SYSTIME);
--		IXGBE_WRITE_REG(hw, IXGBE_TSIM, IXGBE_TSIM_TXTS);
--		IXGBE_WRITE_REG(hw, IXGBE_EIMS, IXGBE_EIMS_TIMESYNC);
--
--		IXGBE_WRITE_FLUSH(hw);
- 		break;
- 	case ixgbe_mac_X540:
- 		cc.read = ixgbe_ptp_read_82599;
-@@ -1286,6 +1273,50 @@ void ixgbe_ptp_start_cyclecounter(struct ixgbe_adapter *adapter)
- 	spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
++enum nft_data_desc_flags {
++	NFT_DATA_DESC_SETELEM	= (1 << 0),
++};
++
+ struct nft_data_desc {
+ 	enum nft_data_types		type;
+ 	unsigned int			size;
+ 	unsigned int			len;
++	unsigned int			flags;
+ };
+ 
+ int nft_data_init(const struct nft_ctx *ctx, struct nft_data *data,
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index b19f4255b9018..8bc4460b627ae 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -5144,6 +5144,7 @@ static int nft_setelem_parse_data(struct nft_ctx *ctx, struct nft_set *set,
+ 	desc->type = dtype;
+ 	desc->size = NFT_DATA_VALUE_MAXLEN;
+ 	desc->len = set->dlen;
++	desc->flags = NFT_DATA_DESC_SETELEM;
+ 
+ 	return nft_data_init(ctx, data, desc, attr);
  }
+@@ -9504,6 +9505,9 @@ static int nft_verdict_init(const struct nft_ctx *ctx, struct nft_data *data,
+ 			return PTR_ERR(chain);
+ 		if (nft_is_base_chain(chain))
+ 			return -EOPNOTSUPP;
++		if (desc->flags & NFT_DATA_DESC_SETELEM &&
++		    chain->flags & NFT_CHAIN_BINDING)
++			return -EINVAL;
  
-+/**
-+ * ixgbe_ptp_init_systime - Initialize SYSTIME registers
-+ * @adapter: the ixgbe private board structure
-+ *
-+ * Initialize and start the SYSTIME registers.
-+ */
-+static void ixgbe_ptp_init_systime(struct ixgbe_adapter *adapter)
-+{
-+	struct ixgbe_hw *hw = &adapter->hw;
-+	u32 tsauxc;
-+
-+	switch (hw->mac.type) {
-+	case ixgbe_mac_X550EM_x:
-+	case ixgbe_mac_x550em_a:
-+	case ixgbe_mac_X550:
-+		tsauxc = IXGBE_READ_REG(hw, IXGBE_TSAUXC);
-+
-+		/* Reset SYSTIME registers to 0 */
-+		IXGBE_WRITE_REG(hw, IXGBE_SYSTIMR, 0);
-+		IXGBE_WRITE_REG(hw, IXGBE_SYSTIML, 0);
-+		IXGBE_WRITE_REG(hw, IXGBE_SYSTIMH, 0);
-+
-+		/* Reset interrupt settings */
-+		IXGBE_WRITE_REG(hw, IXGBE_TSIM, IXGBE_TSIM_TXTS);
-+		IXGBE_WRITE_REG(hw, IXGBE_EIMS, IXGBE_EIMS_TIMESYNC);
-+
-+		/* Activate the SYSTIME counter */
-+		IXGBE_WRITE_REG(hw, IXGBE_TSAUXC,
-+				tsauxc & ~IXGBE_TSAUXC_DISABLE_SYSTIME);
-+		break;
-+	case ixgbe_mac_X540:
-+	case ixgbe_mac_82599EB:
-+		/* Reset SYSTIME registers to 0 */
-+		IXGBE_WRITE_REG(hw, IXGBE_SYSTIML, 0);
-+		IXGBE_WRITE_REG(hw, IXGBE_SYSTIMH, 0);
-+		break;
-+	default:
-+		/* Other devices aren't supported */
-+		return;
-+	};
-+
-+	IXGBE_WRITE_FLUSH(hw);
-+}
-+
- /**
-  * ixgbe_ptp_reset
-  * @adapter: the ixgbe private board structure
-@@ -1312,6 +1343,8 @@ void ixgbe_ptp_reset(struct ixgbe_adapter *adapter)
- 
- 	ixgbe_ptp_start_cyclecounter(adapter);
- 
-+	ixgbe_ptp_init_systime(adapter);
-+
- 	spin_lock_irqsave(&adapter->tmreg_lock, flags);
- 	timecounter_init(&adapter->hw_tc, &adapter->hw_cc,
- 			 ktime_to_ns(ktime_get_real()));
+ 		chain->use++;
+ 		data->verdict.chain = chain;
 -- 
 2.35.1
 

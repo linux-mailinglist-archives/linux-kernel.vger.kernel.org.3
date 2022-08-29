@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F965A4937
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E10D5A4A32
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbiH2LVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S232647AbiH2Lep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiH2LT7 (ORCPT
+        with ESMTP id S232588AbiH2Lck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:19:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00480647C1;
-        Mon, 29 Aug 2022 04:13:37 -0700 (PDT)
+        Mon, 29 Aug 2022 07:32:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AB36D9EC;
+        Mon, 29 Aug 2022 04:19:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80AEA611DD;
-        Mon, 29 Aug 2022 11:13:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2CDC433D7;
-        Mon, 29 Aug 2022 11:13:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8307B80FAB;
+        Mon, 29 Aug 2022 11:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432DBC433C1;
+        Mon, 29 Aug 2022 11:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771616;
-        bh=SjK8YthD50v9y6edsXYSTabrhgyU4hJiAfB4Nscbk8A=;
+        s=korg; t=1661771936;
+        bh=yT8I2W7hVd5VWJwSU0eAde5EYlxeabIKbfgthzQcvL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aAQhlbQm4dEgun9mBy4VuEsVIhXkG9VfqDwbMVtgbRIRrBke00fbgeq4adTE+0pXZ
-         twPYbgthUWsjwxJZFaWb3qqZFbpJJNQaEiRwiDGvdvv6czyH8iPQ0ft9oDNAfE5Lxi
-         XCCM6YQ98mhRWWTjczr6PADp+iCpfnSrEaj6Lck0=
+        b=BrmYiMBNLrt5678ibNBDx8iE/old+9jGZT0wqX0MEXr9Yw/Yc+hLOBnn3y2r5GrKv
+         07ZI6046Uhk7Bj9Hc7nrrPCpkkwIHkmoQvUzZhQu04IrePA5OEHChVkxaj2uzoyrs6
+         oY5YD9RnFzBppXYKrqCmNGuGVUr1RzA79PrTpIZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        stable@vger.kernel.org, Stephane Eranian <eranian@google.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.15 127/136] x86/nospec: Fix i386 RSB stuffing
-Date:   Mon, 29 Aug 2022 12:59:54 +0200
-Message-Id: <20220829105809.901244306@linuxfoundation.org>
+Subject: [PATCH 5.19 145/158] perf/x86/intel/ds: Fix precise store latency handling
+Date:   Mon, 29 Aug 2022 12:59:55 +0200
+Message-Id: <20220829105815.183935667@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Stephane Eranian <eranian@google.com>
 
-commit 332924973725e8cdcc783c175f68cf7e162cb9e5 upstream.
+commit d4bdb0bebc5ba3299d74f123c782d99cd4e25c49 upstream.
 
-Turns out that i386 doesn't unconditionally have LFENCE, as such the
-loop in __FILL_RETURN_BUFFER isn't actually speculation safe on such
-chips.
+With the existing code in store_latency_data(), the memory operation (mem_op)
+returned to the user is always OP_LOAD where in fact, it should be OP_STORE.
+This comes from the fact that the function is simply grabbing the information
+from a data source map which covers only load accesses. Intel 12th gen CPU
+offers precise store sampling that captures both the data source and latency.
+Therefore it can use the data source mapping table but must override the
+memory operation to reflect stores instead of loads.
 
-Fixes: ba6e31af2be9 ("x86/speculation: Add LFENCE to RSB fill sequence")
-Reported-by: Ben Hutchings <ben@decadent.org.uk>
+Fixes: 61b985e3e775 ("perf/x86/intel: Add perf core PMU support for Sapphire Rapids")
+Signed-off-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net
+Link: https://lkml.kernel.org/r/20220818054613.1548130-1-eranian@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/nospec-branch.h |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/x86/events/intel/ds.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -50,6 +50,7 @@
-  * the optimal version - two calls, each with their own speculation
-  * trap should their return address end up getting used, in a loop.
-  */
-+#ifdef CONFIG_X86_64
- #define __FILL_RETURN_BUFFER(reg, nr)			\
- 	mov	$(nr/2), reg;				\
- 771:							\
-@@ -60,6 +61,17 @@
- 	jnz	771b;					\
- 	/* barrier for jnz misprediction */		\
- 	lfence;
-+#else
-+/*
-+ * i386 doesn't unconditionally have LFENCE, as such it can't
-+ * do a loop.
-+ */
-+#define __FILL_RETURN_BUFFER(reg, nr)			\
-+	.rept nr;					\
-+	__FILL_RETURN_SLOT;				\
-+	.endr;						\
-+	add	$(BITS_PER_LONG/8) * nr, %_ASM_SP;
-+#endif
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -291,6 +291,7 @@ static u64 load_latency_data(struct perf
+ static u64 store_latency_data(struct perf_event *event, u64 status)
+ {
+ 	union intel_x86_pebs_dse dse;
++	union perf_mem_data_src src;
+ 	u64 val;
  
- /*
-  * Stuff a single RSB slot.
+ 	dse.val = status;
+@@ -304,7 +305,14 @@ static u64 store_latency_data(struct per
+ 
+ 	val |= P(BLK, NA);
+ 
+-	return val;
++	/*
++	 * the pebs_data_source table is only for loads
++	 * so override the mem_op to say STORE instead
++	 */
++	src.val = val;
++	src.mem_op = P(OP,STORE);
++
++	return src.val;
+ }
+ 
+ struct pebs_record_core {
 
 

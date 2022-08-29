@@ -2,92 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F06E5A567E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49795A5682
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiH2VvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S229769AbiH2Vvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiH2VvI (ORCPT
+        with ESMTP id S229536AbiH2Vvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:51:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418A37CB49;
-        Mon, 29 Aug 2022 14:51:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3A96611B8;
-        Mon, 29 Aug 2022 21:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4834C433D7;
-        Mon, 29 Aug 2022 21:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661809865;
-        bh=fXRYrMEM8Kk9+epg4G5pFtUERqSSGU8XuYoO6vErhkM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SWAzvLQHq6MKKoZVJQRmwywvjem5AjdbGmOtmsa8n4SdUSrwzoKWS04r1Q7uzGnAp
-         e2Nocsr45XUJtOl78NNUowJa74WDxeB242k9Sx2Unu76qCw1sDOHMpirZWfXRaGaBT
-         mkXvf1D4Hw/Yjyz5WRG394hiET42VHptEduU+2UokaFstMkjo84qCBT/AyeiJ0Osa/
-         oPZzRWiI3ZQHnUoDC57GZw9AP1xmgUAPPwFB5nfg1zV6zUftGjHgXfDBzTm4KlWCPQ
-         4IRP51HBalW+LP0mnJ6G1TFTzGkpNs9vuZcO/VEzTAoJdSgS5KOHPG3Zw4ggPjlWq5
-         b2aFUnLyiL+dQ==
-Date:   Mon, 29 Aug 2022 16:50:59 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Mon, 29 Aug 2022 17:51:37 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64ABC9E8B9;
+        Mon, 29 Aug 2022 14:51:36 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,273,1654527600"; 
+   d="scan'208";a="130995492"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 30 Aug 2022 06:51:35 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D394C40EB267;
+        Tue, 30 Aug 2022 06:51:32 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] can: etas_es58x: Replace zero-length array with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Yw00w6XRcq7B6ub6@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] arm64: dts: renesas: Drop clock-names property from RPC node
+Date:   Mon, 29 Aug 2022 22:51:28 +0100
+Message-Id: <20220829215128.5983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated and we are moving towards adopting
-C99 flexible-array members, instead. So, replace zero-length array
-declaration in union es58x_urb_cmd with the new DECLARE_FLEX_ARRAY()
-helper macro.
+With 'unevaluatedProperties' support implemented, there's a number of
+warnings when running dtbs_check:
 
-This helper allows for a flexible-array member in a union.
+arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-ex-idk-1110wr.dtb: spi@ee200000: Unevaluated properties are not allowed ('clock-names' was unexpected)
+	From schema: Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
 
-Link: https://github.com/KSPP/linux/issues/193
-Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+The main problem is that SoC DTSI's are including clock-names, whereas the
+renesas,rpc-if.yaml has 'unevaluatedProperties: false'. So just drop
+clock-names property from the SoC DTSI's.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/net/can/usb/etas_es58x/es58x_core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/renesas/r8a774a1.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/r8a774b1.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/r8a774c0.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/r8a774e1.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/r8a77970.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/r8a77980.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi | 1 -
+ 7 files changed, 7 deletions(-)
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index d769bdf740b7..640fe0a1df63 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -222,7 +222,7 @@ union es58x_urb_cmd {
- 		u8 cmd_type;
- 		u8 cmd_id;
- 	} __packed;
--	u8 raw_cmd[0];
-+	DECLARE_FLEX_ARRAY(u8, raw_cmd);
- };
- 
- /**
+diff --git a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
+index e7d17776624d..fdd6d16cb1c1 100644
+--- a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
+@@ -2334,7 +2334,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 917>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A774A1_PD_ALWAYS_ON>;
+ 			resets = <&cpg 917>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/renesas/r8a774b1.dtsi b/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
+index f62d95760e82..d541b48c7e38 100644
+--- a/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
+@@ -2191,7 +2191,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 917>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A774B1_PD_ALWAYS_ON>;
+ 			resets = <&cpg 917>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/renesas/r8a774c0.dtsi b/arch/arm64/boot/dts/renesas/r8a774c0.dtsi
+index c563d26a7a71..151e32ac0368 100644
+--- a/arch/arm64/boot/dts/renesas/r8a774c0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a774c0.dtsi
+@@ -1671,7 +1671,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 917>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A774C0_PD_ALWAYS_ON>;
+ 			resets = <&cpg 917>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
+index 8ec59094882b..5c6cc586e9e2 100644
+--- a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
+@@ -2423,7 +2423,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 917>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
+ 			resets = <&cpg 917>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/renesas/r8a77970.dtsi b/arch/arm64/boot/dts/renesas/r8a77970.dtsi
+index 2703ef3a38c2..49a738b6034c 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77970.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77970.dtsi
+@@ -1053,7 +1053,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 917>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A77970_PD_ALWAYS_ON>;
+ 			resets = <&cpg 917>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/renesas/r8a77980.dtsi b/arch/arm64/boot/dts/renesas/r8a77980.dtsi
+index 8594be72f221..bb9777258174 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77980.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77980.dtsi
+@@ -1359,7 +1359,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 917>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A77980_PD_ALWAYS_ON>;
+ 			resets = <&cpg 917>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+index c6360470eeb5..a1e8f6fe3139 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+@@ -2096,7 +2096,6 @@ rpc: spi@ee200000 {
+ 			reg-names = "regs", "dirmap", "wbuf";
+ 			interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cpg CPG_MOD 629>;
+-			clock-names = "rpc";
+ 			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
+ 			resets = <&cpg 629>;
+ 			#address-cells = <1>;
 -- 
-2.34.1
+2.25.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AFE5A4AB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580725A4880
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiH2Lto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        id S230382AbiH2LLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiH2LtH (ORCPT
+        with ESMTP id S231157AbiH2LJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:49:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521978A1EA;
-        Mon, 29 Aug 2022 04:32:28 -0700 (PDT)
+        Mon, 29 Aug 2022 07:09:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BA46B8D0;
+        Mon, 29 Aug 2022 04:06:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 246B7B80EF1;
-        Mon, 29 Aug 2022 11:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA95C433D7;
-        Mon, 29 Aug 2022 11:16:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 613646119C;
+        Mon, 29 Aug 2022 11:06:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD97C433D6;
+        Mon, 29 Aug 2022 11:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771777;
-        bh=Hm7ck0pyFkIzWB8bOJExwUSf4WH/YCxW04iZeChVs9k=;
+        s=korg; t=1661771193;
+        bh=YvQTDZ2LaFckt1CYRqE5G5/auWDjJFOYRMGfOcY4TCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cvz8Ir8BhHIUrfAcwYqMqZjfe2fNxFVeSaO1k1aAp5lk5o3Chc+C3DlCgiMz0VIOu
-         7rVmL66btoeBaX4ENkfXp0ef1awamWzyCnE+b66P9wu2Spkmj3yD6oQCS5qDfPc6ua
-         1IV75AJK80XuEQHFm3B4sk81s8dZt9lTJpNXmJ3c=
+        b=ZZ1475ycfQ7LaaOHdqGi3BPK1QdLxpzT50tkasHaqiXPfPSKcrxO/Klk3xDoip3Hl
+         lpOUTnn6JQ9XuyW2DcPb7TcY0hdCPOu+4CjoqRUeOtJYTiUgiDR3To5bKIaluQRo9D
+         i2MxHaN24fjSjk6OSWYB/NzyJdUK471Pi6jXfLtQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anand Jain <anand.jain@oracle.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.19 095/158] btrfs: replace: drop assert for suspended replace
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 078/136] net: Fix a data-race around sysctl_net_busy_read.
 Date:   Mon, 29 Aug 2022 12:59:05 +0200
-Message-Id: <20220829105813.046797635@linuxfoundation.org>
+Message-Id: <20220829105807.831443739@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anand Jain <anand.jain@oracle.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 59a3991984dbc1fc47e5651a265c5200bd85464e upstream.
+[ Upstream commit e59ef36f0795696ab229569c153936bfd068d21c ]
 
-If the filesystem mounts with the replace-operation in a suspended state
-and try to cancel the suspended replace-operation, we hit the assert. The
-assert came from the commit fe97e2e173af ("btrfs: dev-replace: replace's
-scrub must not be running in suspended state") that was actually not
-required. So just remove it.
+While reading sysctl_net_busy_read, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
- $ mount /dev/sda5 /btrfs
-
-    BTRFS info (device sda5): cannot continue dev_replace, tgtdev is missing
-    BTRFS info (device sda5): you may cancel the operation after 'mount -o degraded'
-
- $ mount -o degraded /dev/sda5 /btrfs <-- success.
-
- $ btrfs replace cancel /btrfs
-
-    kernel: assertion failed: ret != -ENOTCONN, in fs/btrfs/dev-replace.c:1131
-    kernel: ------------[ cut here ]------------
-    kernel: kernel BUG at fs/btrfs/ctree.h:3750!
-
-After the patch:
-
- $ btrfs replace cancel /btrfs
-
-    BTRFS info (device sda5): suspended dev_replace from /dev/sda5 (devid 1) to <missing disk> canceled
-
-Fixes: fe97e2e173af ("btrfs: dev-replace: replace's scrub must not be running in suspended state")
-CC: stable@vger.kernel.org # 5.0+
-Signed-off-by: Anand Jain <anand.jain@oracle.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2d48d67fa8cd ("net: poll/select low latency socket support")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/dev-replace.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/core/sock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/btrfs/dev-replace.c
-+++ b/fs/btrfs/dev-replace.c
-@@ -1128,8 +1128,7 @@ int btrfs_dev_replace_cancel(struct btrf
- 		up_write(&dev_replace->rwsem);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 5ab7b59cdab83..9bcffe1d5332a 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -3182,7 +3182,7 @@ void sock_init_data(struct socket *sock, struct sock *sk)
  
- 		/* Scrub for replace must not be running in suspended state */
--		ret = btrfs_scrub_cancel(fs_info);
--		ASSERT(ret != -ENOTCONN);
-+		btrfs_scrub_cancel(fs_info);
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ 	sk->sk_napi_id		=	0;
+-	sk->sk_ll_usec		=	sysctl_net_busy_read;
++	sk->sk_ll_usec		=	READ_ONCE(sysctl_net_busy_read);
+ #endif
  
- 		trans = btrfs_start_transaction(root, 0);
- 		if (IS_ERR(trans)) {
+ 	sk->sk_max_pacing_rate = ~0UL;
+-- 
+2.35.1
+
 
 

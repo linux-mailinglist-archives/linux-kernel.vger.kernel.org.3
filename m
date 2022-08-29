@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AEC5A51DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDE85A50E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiH2QeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S229937AbiH2QCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiH2QeR (ORCPT
+        with ESMTP id S229619AbiH2QCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:34:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A7A8F97A;
-        Mon, 29 Aug 2022 09:34:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FEC3B81160;
-        Mon, 29 Aug 2022 16:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BADC433C1;
-        Mon, 29 Aug 2022 16:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661790853;
-        bh=EHNP4RzQnuQOX+7RxLEAqc1syZDl49UGa8ehhKTXRQg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cDp7X8gBmpAOAKJ8Rlu6UmYCh/TwfAd+Jwhm1G1Jt0ADl/0+xpDQqwt1xfPELrpMx
-         ldgBmtZYVf7Ppsyy3Pytt6xBmXCK6ejuba3d7PxD8NolqsJPBsZepd0w9dBLtnRFfV
-         ONSDgqTK/PV84hBTcRtABTBs1RaIeKNRoOpAa3CJOPACNNqoRQ8KCvkDNT7jCAuU0S
-         kb2ekjtAWyRQD1WjoPZRpVw+FP+Oe+/QVHD6QAmMR/6FyMdCw2MqByS5BbA8lB9y4G
-         04a3AvVZ9ZNMS6LkZqYUQinoBzbvgdpDDaze8B1XDISXxfQSH8AviJsLmWtCdeHzfX
-         fOJH30FPzz/NQ==
-Date:   Mon, 29 Aug 2022 16:59:50 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: iio: Add missing
- (unevaluated|additional)Properties on child nodes
-Message-ID: <20220829165950.268433ca@jic23-huawei>
-In-Reply-To: <20220829141029.GA1470207-robh@kernel.org>
-References: <20220823145649.3118479-2-robh@kernel.org>
-        <99dfcc39-ab1b-1b24-c6b2-67de5509f5ac@linaro.org>
-        <20220828180050.51c3e857@jic23-huawei>
-        <20220829141029.GA1470207-robh@kernel.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 29 Aug 2022 12:02:31 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8DC75FDE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:02:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id cu2so16703746ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=PWMBMRMPN5GhvCOAnnAdFknz4G+9De4RqcsPk0Z1BG4=;
+        b=NYJnIKLUJrUZStzT8ciuU41oE7tVij2lLq+s+AiEcOqIZwRO2tVIvUmDN2h0h+krqo
+         d1IzFfocFezhlX9U9fk02nHKFeBuuQqrjG5Yixliri9tUNIVf5qacBQipFaZczv6jP4A
+         vq9KS79+uIf3t1gDDWkMp9aXUQtbyAvr3/NdRmEG/UJ5blaAxBSEHgjSQRSS2N2TYk0R
+         0Yn8HMa9dyg/hOoPn2qBkP1VxMq4+A4RxXM4M9k2ohO+Nup6xhbaGD+0qpjE9I1Pn/gg
+         Na7hh1ha8jwnRIXebmeJHDx33e6q7F7H9UpnJ9dQ+Imp4gxiyNPLG8V+wCLbY0aU2FcE
+         Mk6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=PWMBMRMPN5GhvCOAnnAdFknz4G+9De4RqcsPk0Z1BG4=;
+        b=VgbZMGoisQRB68Ng7Pi1NDrct+h8jXcG+5OYv1R6TRsxAk40hqhVqfWQtRUJtNojoI
+         +fVdCLzFDStVtUA9EhENhrKS75sCGP06Z1GkGPoCHzodOACgjKPj0Ar4RCz+fy9TaEdj
+         c3vQxCTturKZ9XTJmpPJQIxHn4XroOfs0m3jT5SPW4mIxQ0F0Ye64d2pFN4XyHwGeE5o
+         uH4BDBvSRrFwOcHb+rcagSc7vfrkZNpSsyxpMs0dLzdDV3aUNgXV0XK8BLOE1/udh1aa
+         AXjwdF/TcpIA3P6ZYRUHvj7xBT8xQBjVSmYqiMy5YzqrdXz26t3aLdglGtf5xi9bsn4v
+         dXbQ==
+X-Gm-Message-State: ACgBeo0m5T5z+NMbYXP69nElbufVQh7BGUi0DQukFp6gGTftcWn/VHVP
+        u6fmA41P3git0diyhra8hWG5dI2obEexwX1wsGXozGvMPfg=
+X-Google-Smtp-Source: AA6agR6el4xi1uh8MNRyeKzalfI37Tyvgw01vmh8rhtJ4CKqz7iElZwCgeZkvXcMx5FicxZX67QbZ1VGJh0PgF+k3xo=
+X-Received: by 2002:a17:907:743:b0:740:ef93:2ffc with SMTP id
+ xc3-20020a170907074300b00740ef932ffcmr10122140ejb.514.1661788948001; Mon, 29
+ Aug 2022 09:02:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220319151016.983348-1-alvin@pqrs.dk>
+In-Reply-To: <20220319151016.983348-1-alvin@pqrs.dk>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 29 Aug 2022 18:02:17 +0200
+Message-ID: <CAG3jFyvqPFL4d=s6DsbVZOzkuMwwi-GUZwFYyeajr=jLqmdm4Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] drm: bridge: adv7511: CEC support for ADV7535
+To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,42 +74,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 09:10:29 -0500
-Rob Herring <robh@kernel.org> wrote:
+Hi Alvin,
 
-> On Sun, Aug 28, 2022 at 06:01:41PM +0100, Jonathan Cameron wrote:
-> > On Thu, 25 Aug 2022 15:04:33 +0300
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >   
-> > > On 23/08/2022 17:56, Rob Herring wrote:  
-> > > > In order to ensure only documented properties are present, node schemas
-> > > > must have unevaluatedProperties or additionalProperties set to false
-> > > > (typically).
-> > > >     
-> > > 
-> > > 
-> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>  
-> > 
-> > Applied to the togreg branch of iio.git and pushed out as testing for 0-day
-> > to poke at it before I push out as togreg for linux-next to pick up.  
-> 
-> Thanks.
-> 
-> > Side note. Some odd entries in your cc list...  alsa-devel?  
-> 
-> Blame MAINTAINERS:
-> 
-> STM32 AUDIO (ASoC) DRIVERS
-> M:      Olivier Moysan <olivier.moysan@foss.st.com>
-> M:      Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> L:      alsa-devel@alsa-project.org (moderated for non-subscribers)
-> S:      Maintained
-> F:      Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> F:      Documentation/devicetree/bindings/sound/st,stm32-*.yaml
-> F:      sound/soc/stm/
+Sorry about being slow to get to this series.
 
-There is some logic to that entry I suppose.
+Can you rebase it on drm-misc-next and send out the next version?
 
-Thanks for explanation!
-
-Jonathan
+On Sat, 19 Mar 2022 at 16:10, Alvin =C5=A0ipraga <alvin@pqrs.dk> wrote:
+>
+> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>
+> We have an ADV7535 which is nominally supported by this driver. These
+> two patches fix up the driver to get CEC working too.
+>
+> The first adds the basic support by correcting some register offsets.
+>
+> The second addresses an issue we saw with CEC RX on the ADV7535. It
+> hasn't been tested with the other chips (e.g. ADV7533), although it
+> should be compatible. I'm sending it against drm-misc-next because the
+> issue wasn't reported for other chips, and ADV7535 didn't have CEC
+> support before. But feel free to take it into -fixes instead.
+>
+> Alvin =C5=A0ipraga (2):
+>   drm: bridge: adv7511: enable CEC support for ADV7535
+>   drm: bridge: adv7511: use non-legacy mode for CEC RX
+>
+>  drivers/gpu/drm/bridge/adv7511/adv7511.h     |  27 ++++-
+>  drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 116 +++++++++++++------
+>  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c |  22 +++-
+>  3 files changed, 119 insertions(+), 46 deletions(-)
+>
+> --
+> 2.35.1
+>

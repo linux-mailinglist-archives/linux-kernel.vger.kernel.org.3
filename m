@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2225A48CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46955A4AAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiH2LPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S232481AbiH2Lqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiH2LNe (ORCPT
+        with ESMTP id S232803AbiH2Lqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:13:34 -0400
+        Mon, 29 Aug 2022 07:46:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72E46EF11;
-        Mon, 29 Aug 2022 04:09:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D255A7;
+        Mon, 29 Aug 2022 04:29:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68F836119A;
-        Mon, 29 Aug 2022 11:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C724C433D7;
-        Mon, 29 Aug 2022 11:09:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8747C6124C;
+        Mon, 29 Aug 2022 11:17:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90ACBC433B5;
+        Mon, 29 Aug 2022 11:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771361;
-        bh=d0jzzWeYwW6y3dWo8vEIEcbUQKTc2Bx34MAZ6E9eQhM=;
+        s=korg; t=1661771836;
+        bh=3ZJ55aFjljXhDNzP5PC35zGb7thw45TdC+48KtP1bZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pl6it1ZKIBA8Yaa/rifKi4YbM9E0Ppr01LtAsRI08FclA1HC4slb7diQ6fGa2W0XW
-         eIywYmu/hIQOEm90Mtp7f5pmzXp+bT4BllDPqQrJMwZPcrK/JnzMdCfaAhY+v/dzha
-         Q3vlvfWGrR1nZJ/1wfiMO0K5x2GbkdvSDhlT1QYk=
+        b=N+YdrDVJZ/FQL2QtGzZfMpTUPf2QQmhExb+LbU6s4GVTDIFnq60et9YFLo61WU8lv
+         yi0CdqwTiGml7LSZCRtnnE1Zak6Nj0mGWnKm+PCX8hS5/xcDjq3+hSDhZSbX0+PuXF
+         mtg5iQ5VdFAUyijoAI0oaOgw/c8KVEhdxGj/5LJk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 55/86] net: Fix a data-race around sysctl_net_busy_read.
-Date:   Mon, 29 Aug 2022 12:59:21 +0200
-Message-Id: <20220829105758.787792768@linuxfoundation.org>
+        stable@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 5.19 112/158] audit: move audit_return_fixup before the filters
+Date:   Mon, 29 Aug 2022 12:59:22 +0200
+Message-Id: <20220829105813.797371125@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Richard Guy Briggs <rgb@redhat.com>
 
-[ Upstream commit e59ef36f0795696ab229569c153936bfd068d21c ]
+commit d4fefa4801a1c2f9c0c7a48fbb0fdf384e89a4ab upstream.
 
-While reading sysctl_net_busy_read, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+The success and return_code are needed by the filters.  Move
+audit_return_fixup() before the filters.  This was causing syscall
+auditing events to be missed.
 
-Fixes: 2d48d67fa8cd ("net: poll/select low latency socket support")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://github.com/linux-audit/audit-kernel/issues/138
+Cc: stable@vger.kernel.org
+Fixes: 12c5e81d3fd0 ("audit: prepare audit_context for use in calling contexts beyond syscalls")
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+[PM: manual merge required]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/sock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/auditsc.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index f01e71c98d5be..1bb6a003323b3 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -3032,7 +3032,7 @@ void sock_init_data(struct socket *sock, struct sock *sk)
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -1965,6 +1965,7 @@ void __audit_uring_exit(int success, lon
+ 		goto out;
+ 	}
  
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 	sk->sk_napi_id		=	0;
--	sk->sk_ll_usec		=	sysctl_net_busy_read;
-+	sk->sk_ll_usec		=	READ_ONCE(sysctl_net_busy_read);
- #endif
++	audit_return_fixup(ctx, success, code);
+ 	if (ctx->context == AUDIT_CTX_SYSCALL) {
+ 		/*
+ 		 * NOTE: See the note in __audit_uring_entry() about the case
+@@ -2006,7 +2007,6 @@ void __audit_uring_exit(int success, lon
+ 	audit_filter_inodes(current, ctx);
+ 	if (ctx->current_state != AUDIT_STATE_RECORD)
+ 		goto out;
+-	audit_return_fixup(ctx, success, code);
+ 	audit_log_exit();
  
- 	sk->sk_max_pacing_rate = ~0UL;
--- 
-2.35.1
-
+ out:
+@@ -2090,13 +2090,13 @@ void __audit_syscall_exit(int success, l
+ 	if (!list_empty(&context->killed_trees))
+ 		audit_kill_trees(context);
+ 
++	audit_return_fixup(context, success, return_code);
+ 	/* run through both filters to ensure we set the filterkey properly */
+ 	audit_filter_syscall(current, context);
+ 	audit_filter_inodes(current, context);
+ 	if (context->current_state < AUDIT_STATE_RECORD)
+ 		goto out;
+ 
+-	audit_return_fixup(context, success, return_code);
+ 	audit_log_exit();
+ 
+ out:
 
 

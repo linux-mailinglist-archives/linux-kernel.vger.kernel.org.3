@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB215A5319
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935845A5238
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiH2RZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
+        id S230501AbiH2QwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiH2RZg (ORCPT
+        with ESMTP id S230463AbiH2Qvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:25:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEAD4C608;
-        Mon, 29 Aug 2022 10:25:32 -0700 (PDT)
+        Mon, 29 Aug 2022 12:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FA89BB4D;
+        Mon, 29 Aug 2022 09:51:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7FA8B8119D;
-        Mon, 29 Aug 2022 17:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB40BC433C1;
-        Mon, 29 Aug 2022 17:25:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27B506111F;
+        Mon, 29 Aug 2022 16:51:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B4CC433C1;
+        Mon, 29 Aug 2022 16:51:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661793929;
-        bh=9OEgeUDCfTi9FzYK0R6gTerji4mpgeD8bhEZsF5KzR8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=afDem3itAZHSy7KJzrY90B4UEoilNN1Lctj4Zaur3HrwS2OLzyWjBIt2tsylnVhFZ
-         8QLmkL4dNJ4h4xbsS7tOMe5VRpMcMt31J4PkN53EqaLNNmftKgPqeBXA9XsqvsPpLC
-         xH6+R61FfqyhRwRNJ7ALvFFYoN7C3wY2wQ7iuXjnUOrPGKck0Wa/kGUEGhodRRTP48
-         vmMbZ5klkGXBQhJTWKLwhAOzplrYTIy9f/eObujF3P4xZvG7H1Wews8Xv528HbBcz1
-         Juq1teDCxB89eHFPy8wIngG3+MGJ0HRZZhds5tqsfaEhv/3qVDjs434l412tjjqEIk
-         LTRKpAt1ryj3Q==
-Date:   Mon, 29 Aug 2022 17:51:09 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     andy.shevchenko@gmail.com, hadess@hadess.net, hdegoede@redhat.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] iio: Add new event type gesture and use
- direction for single and double tap
-Message-ID: <20220829175109.7e0544ee@jic23-huawei>
-In-Reply-To: <20220825194604.15645-2-jagathjog1996@gmail.com>
-References: <20220825194604.15645-1-jagathjog1996@gmail.com>
-        <20220825194604.15645-2-jagathjog1996@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1661791872;
+        bh=0oX+Br/2G9BuezF1HwwTWZg3k/n+2W2ihM7lEGTPdBA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TnD3HkUyPwEacvZ+lLBe5G3UQnoq7J5t2W0reDWzZ9ZiV8LVf70WrhwjquLrkDv4u
+         Nm8ZKG3/43PcxZTEtbZ73loyQg/sNEPqhz9xLckPQwnvI92AHuEQk+VB0pQcU9vOye
+         oZcwvRgMUTjfzzSOJRR4SRIMPl4h/s91I5/kumEzz6dAv6gttq9WtsMhucEyEdOKSI
+         8DR8+rKe0wJT+aGyygqTDBJcaeXsotp/rHQdAyuIeoK1TdIvRbGVyXtqCvncmFhWYL
+         trQgw8YHrz1l/q38BmYPBTOWtw1NvnVGY9qCDfU2XMBTq6s4PXs1G/YzjXe00J5inX
+         5PJ81kWAigq0Q==
+Received: by pali.im (Postfix)
+        id 7190E7DE; Mon, 29 Aug 2022 18:51:09 +0200 (CEST)
+Date:   Mon, 29 Aug 2022 18:51:09 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <20220829165109.fzrgguchg4otbbab@pali>
+References: <20220709143151.qhoa7vjcidxadrvt@pali>
+ <20220709234430.GA489657@bhelgaas>
+ <20220710000659.vxmlsvoin26tdiqw@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220710000659.vxmlsvoin26tdiqw@pali>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,205 +66,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 01:16:03 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
-
-> Add new event type for tap called gesture and the direction can be used
-> to differentiate single and double tap. This may be used by accelerometer
-> sensors to express single and double tap events. For directional tap,
-> modifiers like IIO_MOD_(X/Y/Z) can be used along with singletap and
-> doubletap direction.
+On Sunday 10 July 2022 02:06:59 Pali Rohár wrote:
+> On Saturday 09 July 2022 18:44:30 Bjorn Helgaas wrote:
+> > [+cc Marc, since he commented on this]
+> > 
+> > On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
+> > > On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
+> > > > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
+> > > > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
+> > > > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> > > > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> > > > > > instead of chained IRQ handler in pci-mvebu.c driver.
+> > > > > >
+> > > > > > This change fixes affinity support and allows to pin interrupts from
+> > > > > > different PCIe controllers to different CPU cores.
+> > > > > 
+> > > > > Several other drivers use irq_set_chained_handler_and_data().  Do any
+> > > > > of them need similar changes?  The commit log suggests that using
+> > > > > chained IRQ handlers breaks affinity support.  But perhaps that's not
+> > > > > the case and the real culprit is some other difference between mvebu
+> > > > > and the other drivers.
+> > > > 
+> > > > And there is another reason to not use irq_set_chained_handler_and_data
+> > > > and instead use devm_request_irq(). Armada XP has some interrupts
+> > > > shared and it looks like that irq_set_chained_handler_and_data() API
+> > > > does not handle shared interrupt sources too.
+> > > > 
+> > > > I can update commit message to mention also this fact.
+> > > 
+> > > Anything needed from me to improve this fix?
+> > 
+> > My impression from Marc's response [1] was that this patch would
+> > "break the contract the kernel has with userspace" and he didn't think
+> > this was acceptable.  But maybe I'm not understanding it correctly.
 > 
-> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-LGTM though I'm still keen for more review on this, particularly with an
-eye on generality.
-
-J
-> ---
->  Documentation/ABI/testing/sysfs-bus-iio | 69 +++++++++++++++++++++++++
->  drivers/iio/industrialio-event.c        |  7 ++-
->  include/linux/iio/types.h               |  2 +
->  include/uapi/linux/iio/types.h          |  3 ++
->  tools/iio/iio_event_monitor.c           |  8 ++-
->  5 files changed, 87 insertions(+), 2 deletions(-)
+> This is argument which Marc use when he does not have any argument.
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
-> index e81ba6f5e1c8..4035173030b7 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio
-> @@ -2038,3 +2038,72 @@ Description:
->  		Available range for the forced calibration value, expressed as:
->  
->  		- a range specified as "[min step max]"
-> +
-> +What:		/sys/.../events/in_accel_gesture_singletap_en
-> +What:		/sys/.../events/in_accel_gesture_doubletap_en
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Device generates an event on a single or double tap.
-> +
-> +What:		/sys/.../events/in_accel_gesture_singletap_value
-> +What:		/sys/.../events/in_accel_gesture_doubletap_value
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Specifies the threshold value that the device is comparing
-> +		against to generate the tap gesture event. The lower
-> +		threshold value increases the sensitivity of tap detection.
-> +		Units and the exact meaning of value are device-specific.
-> +
-> +What:		/sys/.../events/in_accel_gesture_tap_value_available
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Lists all available threshold values which can be used to
-> +		modify the sensitivity of the tap detection.
-> +
-> +What:		/sys/.../events/in_accel_gesture_singletap_reset_timeout
-> +What:		/sys/.../events/in_accel_gesture_doubletap_reset_timeout
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Specifies the timeout value in seconds for the tap detector
-> +		to not to look for another tap event after the event as
-> +		occurred. Basically the minimum quiet time between the two
-> +		single-tap's or two double-tap's.
-> +
-> +What:		/sys/.../events/in_accel_gesture_tap_reset_timeout_available
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Lists all available tap reset timeout values. Units in seconds.
-> +
-> +What:		/sys/.../events/in_accel_gesture_doubletap_tap2_min_delay
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Specifies the minimum quiet time in seconds between the two
-> +		taps of a double tap.
-> +
-> +What:		/sys/.../events/in_accel_gesture_doubletap_tap2_min_delay_available
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Lists all available delay values between two taps in the double
-> +		tap. Units in seconds.
-> +
-> +What:		/sys/.../events/in_accel_gesture_tap_maxtomin_time
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Specifies the maximum time difference allowed between upper
-> +		and lower peak of tap to consider it as the valid tap event.
-> +		Units in seconds.
-> +
-> +What:		/sys/.../events/in_accel_gesture_tap_maxtomin_time_available
-> +KernelVersion:	6.1
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Lists all available time values between upper peak to lower
-> +		peak. Units in seconds.
-> diff --git a/drivers/iio/industrialio-event.c b/drivers/iio/industrialio-event.c
-> index b5e059e15b0a..65ef0fc3be23 100644
-> --- a/drivers/iio/industrialio-event.c
-> +++ b/drivers/iio/industrialio-event.c
-> @@ -231,12 +231,15 @@ static const char * const iio_ev_type_text[] = {
->  	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
->  	[IIO_EV_TYPE_CHANGE] = "change",
->  	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
-> +	[IIO_EV_TYPE_GESTURE] = "gesture",
->  };
->  
->  static const char * const iio_ev_dir_text[] = {
->  	[IIO_EV_DIR_EITHER] = "either",
->  	[IIO_EV_DIR_RISING] = "rising",
-> -	[IIO_EV_DIR_FALLING] = "falling"
-> +	[IIO_EV_DIR_FALLING] = "falling",
-> +	[IIO_EV_DIR_SINGLETAP] = "singletap",
-> +	[IIO_EV_DIR_DOUBLETAP] = "doubletap",
->  };
->  
->  static const char * const iio_ev_info_text[] = {
-> @@ -247,6 +250,8 @@ static const char * const iio_ev_info_text[] = {
->  	[IIO_EV_INFO_HIGH_PASS_FILTER_3DB] = "high_pass_filter_3db",
->  	[IIO_EV_INFO_LOW_PASS_FILTER_3DB] = "low_pass_filter_3db",
->  	[IIO_EV_INFO_TIMEOUT] = "timeout",
-> +	[IIO_EV_INFO_RESET_TIMEOUT] = "reset_timeout",
-> +	[IIO_EV_INFO_TAP2_MIN_DELAY] = "tap2_min_delay",
->  };
->  
->  static enum iio_event_direction iio_ev_attr_dir(struct iio_dev_attr *attr)
-> diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
-> index a7aa91f3a8dc..4716a4b3d614 100644
-> --- a/include/linux/iio/types.h
-> +++ b/include/linux/iio/types.h
-> @@ -17,6 +17,8 @@ enum iio_event_info {
->  	IIO_EV_INFO_HIGH_PASS_FILTER_3DB,
->  	IIO_EV_INFO_LOW_PASS_FILTER_3DB,
->  	IIO_EV_INFO_TIMEOUT,
-> +	IIO_EV_INFO_RESET_TIMEOUT,
-> +	IIO_EV_INFO_TAP2_MIN_DELAY,
->  };
->  
->  #define IIO_VAL_INT 1
-> diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
-> index 472cead10d8d..913864221ac4 100644
-> --- a/include/uapi/linux/iio/types.h
-> +++ b/include/uapi/linux/iio/types.h
-> @@ -105,6 +105,7 @@ enum iio_event_type {
->  	IIO_EV_TYPE_MAG_ADAPTIVE,
->  	IIO_EV_TYPE_CHANGE,
->  	IIO_EV_TYPE_MAG_REFERENCED,
-> +	IIO_EV_TYPE_GESTURE,
->  };
->  
->  enum iio_event_direction {
-> @@ -112,6 +113,8 @@ enum iio_event_direction {
->  	IIO_EV_DIR_RISING,
->  	IIO_EV_DIR_FALLING,
->  	IIO_EV_DIR_NONE,
-> +	IIO_EV_DIR_SINGLETAP,
-> +	IIO_EV_DIR_DOUBLETAP,
->  };
->  
->  #endif /* _UAPI_IIO_TYPES_H_ */
-> diff --git a/tools/iio/iio_event_monitor.c b/tools/iio/iio_event_monitor.c
-> index 2f4581658859..b3b3ea399f67 100644
-> --- a/tools/iio/iio_event_monitor.c
-> +++ b/tools/iio/iio_event_monitor.c
-> @@ -69,12 +69,15 @@ static const char * const iio_ev_type_text[] = {
->  	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
->  	[IIO_EV_TYPE_CHANGE] = "change",
->  	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
-> +	[IIO_EV_TYPE_GESTURE] = "gesture",
->  };
->  
->  static const char * const iio_ev_dir_text[] = {
->  	[IIO_EV_DIR_EITHER] = "either",
->  	[IIO_EV_DIR_RISING] = "rising",
-> -	[IIO_EV_DIR_FALLING] = "falling"
-> +	[IIO_EV_DIR_FALLING] = "falling",
-> +	[IIO_EV_DIR_SINGLETAP] = "singletap",
-> +	[IIO_EV_DIR_DOUBLETAP] = "doubletap",
->  };
->  
->  static const char * const iio_modifier_names[] = {
-> @@ -227,6 +230,7 @@ static bool event_is_known(struct iio_event_data *event)
->  	case IIO_EV_TYPE_THRESH_ADAPTIVE:
->  	case IIO_EV_TYPE_MAG_ADAPTIVE:
->  	case IIO_EV_TYPE_CHANGE:
-> +	case IIO_EV_TYPE_GESTURE:
->  		break;
->  	default:
->  		return false;
-> @@ -236,6 +240,8 @@ static bool event_is_known(struct iio_event_data *event)
->  	case IIO_EV_DIR_EITHER:
->  	case IIO_EV_DIR_RISING:
->  	case IIO_EV_DIR_FALLING:
-> +	case IIO_EV_DIR_SINGLETAP:
-> +	case IIO_EV_DIR_DOUBLETAP:
->  	case IIO_EV_DIR_NONE:
->  		break;
->  	default:
+> Support for dedicated INTx into pci-mvebu.c was introduced just recently
+> and I used irq_set_chained_handler_and_data() just because I thought it
+> is a good idea and did not know about all those issues with it. So there
+> cannot be any breakage by this patch.
+> 
+> I already converted other pci-aardvark.c driver to use
+> irq_set_chained_handler_and_data() API because wanted it... But at the
+> end _that conversion_ caused breakage of afinity support and so this
+> conversion had to be reverted:
+> https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> 
+> Based on his past decisions, above suggestions which cause _real_
+> breakage and his expressions like mvebu should be put into the trash,
+> I'm not going to listen him anymore. The only breaking is done by him.
+> 
+> 
+> There are two arguments why to not use irq_set_chained_handler_and_data:
+> 
+> 1) It does not support afinity and therefore has negative performance
+>    impact on Armada platforms with more CPUs and more PCIe ports.
+> 
+> 2) It does not support shared interrupts and therefore it will break
+>    hardware on which interrupt lines are shares (mostly Armada XP).
+> 
+> So these issues have to be fixed and currently I see only option to
+> switch irq_set_chained_handler_and_data() to devm_request_irq() which I
+> did in this fixup patch.
 
+Any progress here? This patch is waiting here since end of May and if
+something is going to be broken then it is this fact of ignoring reported
+issues and proposed patch. Do you better solution how to fix commit
+ec075262648f?
+
+> > In any event, I'm waiting for you to continue that discussion.  Maybe
+> > there's an argument for doing this even though it breaks some
+> > userspace expectations.  If so, that should be acknowledged and
+> > explained.  Or maybe there's an alternative implementation.  Marc
+> > gave a link to some suggestions [2], which I haven't looked into, but
+> > maybe you could.
+> 
+> Once Marc fix/implement that alternative implementation in his codebase
+> then we can continue discuss this direction. Until that happens I think
+> there is no other way, at least I do not see them.
+> 
+> And I'm not going to work again any patch for him and his codebase as he
+> explicitly expressed that is against any improvements in mvebu drivers
+> and is rejecting (my) patches. This is just waste of my time. So sorry.
+> 
+> > [1] https://lore.kernel.org/r/874k0bf7f7.wl-maz@kernel.org
+> > [2] https://lore.kernel.org/all/20220502102137.764606ee@thinkpad/
+> > 
+> > > > > > Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
+> > > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > > > ---
+> > > > > > Hello Bjorn! This is basically same issue as for pci-aardvark.c:
+> > > > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> > > > > > 
+> > > > > > I tested this patch with pci=nomsi in cmdline (to force kernel to use
+> > > > > > legacy intx instead of MSI) on A385 and checked that I can set affinity
+> > > > > > via /proc/irq/XX/smp_affinity file for every mvebu pcie controller to
+> > > > > > different CPU and legacy interrupts from different cards/controllers
+> > > > > > were handled by different CPUs.
+> > > > > > 
+> > > > > > I think that this is important on Armada XP platforms which have many
+> > > > > > independent PCIe controllers (IIRC up to 10) and many cores (up to 4).
+> > > > > > ---
+> > > > > >  drivers/pci/controller/pci-mvebu.c | 30 +++++++++++++++++-------------
+> > > > > >  1 file changed, 17 insertions(+), 13 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > > > > index 8f76d4bda356..de67ea39fea5 100644
+> > > > > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > > > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > > > > @@ -1017,16 +1017,13 @@ static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
+> > > > > >  	return 0;
+> > > > > >  }
+> > > > > >  
+> > > > > > -static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+> > > > > > +static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+> > > > > >  {
+> > > > > > -	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
+> > > > > > -	struct irq_chip *chip = irq_desc_get_chip(desc);
+> > > > > > +	struct mvebu_pcie_port *port = arg;
+> > > > > >  	struct device *dev = &port->pcie->pdev->dev;
+> > > > > >  	u32 cause, unmask, status;
+> > > > > >  	int i;
+> > > > > >  
+> > > > > > -	chained_irq_enter(chip, desc);
+> > > > > > -
+> > > > > >  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+> > > > > >  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > > > > >  	status = cause & unmask;
+> > > > > > @@ -1040,7 +1037,7 @@ static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+> > > > > >  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
+> > > > > >  	}
+> > > > > >  
+> > > > > > -	chained_irq_exit(chip, desc);
+> > > > > > +	return status ? IRQ_HANDLED : IRQ_NONE;
+> > > > > >  }
+> > > > > >  
+> > > > > >  static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> > > > > > @@ -1490,9 +1487,20 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
+> > > > > >  				mvebu_pcie_powerdown(port);
+> > > > > >  				continue;
+> > > > > >  			}
+> > > > > > -			irq_set_chained_handler_and_data(irq,
+> > > > > > -							 mvebu_pcie_irq_handler,
+> > > > > > -							 port);
+> > > > > > +
+> > > > > > +			ret = devm_request_irq(dev, irq, mvebu_pcie_irq_handler,
+> > > > > > +					       IRQF_SHARED | IRQF_NO_THREAD,
+> > > > > > +					       port->name, port);
+> > > > > > +			if (ret) {
+> > > > > > +				dev_err(dev, "%s: cannot register interrupt handler: %d\n",
+> > > > > > +					port->name, ret);
+> > > > > > +				irq_domain_remove(port->intx_irq_domain);
+> > > > > > +				pci_bridge_emul_cleanup(&port->bridge);
+> > > > > > +				devm_iounmap(dev, port->base);
+> > > > > > +				port->base = NULL;
+> > > > > > +				mvebu_pcie_powerdown(port);
+> > > > > > +				continue;
+> > > > > > +			}
+> > > > > >  		}
+> > > > > >  
+> > > > > >  		/*
+> > > > > > @@ -1599,7 +1607,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+> > > > > >  
+> > > > > >  	for (i = 0; i < pcie->nports; i++) {
+> > > > > >  		struct mvebu_pcie_port *port = &pcie->ports[i];
+> > > > > > -		int irq = port->intx_irq;
+> > > > > >  
+> > > > > >  		if (!port->base)
+> > > > > >  			continue;
+> > > > > > @@ -1615,9 +1622,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+> > > > > >  		/* Clear all interrupt causes. */
+> > > > > >  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > > > > >  
+> > > > > > -		if (irq > 0)
+> > > > > > -			irq_set_chained_handler_and_data(irq, NULL, NULL);
+> > > > > > -
+> > > > > >  		/* Remove IRQ domains. */
+> > > > > >  		if (port->intx_irq_domain)
+> > > > > >  			irq_domain_remove(port->intx_irq_domain);
+> > > > > > -- 
+> > > > > > 2.20.1
+> > > > > > 

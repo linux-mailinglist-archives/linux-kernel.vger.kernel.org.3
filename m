@@ -2,76 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D2F5A5630
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1CF5A5645
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiH2V2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S229715AbiH2Vhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiH2V1P (ORCPT
+        with ESMTP id S229512AbiH2Vhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:27:15 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA079C50A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:26 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id c142-20020a621c94000000b005324991c5b8so3612270pfc.15
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc;
-        bh=T8fB8hXi5puWeYGLUKktDcvprMtt+Dm3Upe4kr4atwA=;
-        b=YPMK3AJpw0lWwzYZfDLzh3K7/2W07auDNNnlJ3qDkZJloq+AWVG8rnBi3EjSTi8Sdc
-         7WJv0veKl0lZAyzfelPpHbd7cV4CAy5dCoMcdYFQ7CqbidAfsv5F6022/J5YgvQf67DO
-         L1YTRMppSCyvCaIew0iiAysCdKjsWOFUDjcZZGzRH+sdcxnSvug7vs9F56KVsee2c0Zo
-         YLbMsX94AWYL+h4w9bE7JCdOjOkowcodvSgMnxQ2NHaXBQhv7Fitxu5qAmsw46U72GSa
-         SpD2ueQh2UQYjoAvP3IZCnzfNryUU6OHaypVe7QLBtTEl+UaqGMhHtnVjouLDn/cSCG8
-         82Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=T8fB8hXi5puWeYGLUKktDcvprMtt+Dm3Upe4kr4atwA=;
-        b=StG2vmGlfbVf2Q/ZJf8V5mQ7Z75uDI9ME1QdTReuiFIxCeKGdKCbPmhJzu+HBVOG4k
-         /DMgbT9Hs0SlHKqJAJy9Hoo59PWihcxFFVwgovlDX6MvWMFTgh9cd76YsFRCT7k34EV5
-         GcqAxKmwqAw4Ear9qob5CsgfqXG/CTG3oZoaSvyMTB7hp9tdcejW2Xets+SyYt1fjFjO
-         Fhj4tPfWzqO0w/3JGpS26IQlLqK6r2Xxwr1XEm+towvv32UwnK7c7JImMTCZguFETAYz
-         qUpyWTvFAGAOdG0w6110/0N8sSB8ienZpoywk6R108c+mDO3H+wv/hDjbhA9C97ICCaD
-         /wKg==
-X-Gm-Message-State: ACgBeo0fxwgBnCAS87aW3R8SV/TqBsR6pfuyhyy/Wt4ZKojjAyW5P7rY
-        aosh3o16xa5ilmyoTb6pD/NfCNcuYbI=
-X-Google-Smtp-Source: AA6agR5dzmEiiCM1ZfmS4IP8jubPYXR49V7KmmeKiHJ1f+/Bhg9nkxqem44jNkystynSPzi1e7aYTBBx0e8=
-X-Received: from surenb-spec.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e30])
- (user=surenb job=sendgmr) by 2002:aa7:8b44:0:b0:537:a35d:3c11 with SMTP id
- i4-20020aa78b44000000b00537a35d3c11mr18188023pfd.76.1661808384779; Mon, 29
- Aug 2022 14:26:24 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 21:25:31 +0000
-In-Reply-To: <20220829212531.3184856-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20220829212531.3184856-1-surenb@google.com>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829212531.3184856-29-surenb@google.com>
-Subject: [RFC PATCH 28/28] kernel/fork: throttle call_rcu() calls in vm_area_free
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, riel@surriel.com,
-        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
-        david@redhat.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
-        minchan@google.com, surenb@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Mon, 29 Aug 2022 17:37:36 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E32280F50;
+        Mon, 29 Aug 2022 14:37:34 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 9F8EB8211EE;
+        Mon, 29 Aug 2022 21:29:22 +0000 (UTC)
+Received: from pdx1-sub0-mail-a210 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 1830E8214F4;
+        Mon, 29 Aug 2022 21:29:22 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661808562; a=rsa-sha256;
+        cv=none;
+        b=889wU+ypFOzUxMo8tE7wsNg3AIyIc/z3cecJyw1ISG+NPwtjl+h/wTnEd5K2TzIi0NMf5a
+        B3OnPpWSdDJsv8NGNvKvgsjALhGxAdwJtoXP2pkRTPmZZpxTKB/1MbtMb+hNnViynGXU1a
+        FhZG3r1VNOeQEvplpdBV53hf5Ak9tS7fvqEARbZMSk3UHCXNFTgGrnvz6L4/8/DjL9UQfG
+        U+TVlYpfFHU96osU991mXYk2xQSC0yu0wkFJTqRfkjZ0BQW9V1OkjrCQg/5C7b6P4zXxVr
+        cItJfpBehRIE+hmPetg1eWyH/C4AtxZOpf6OPa7InPlouRnp3aFlIpT4pSJC4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661808562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:dkim-signature;
+        bh=wPrGN55jL4h8TZE8TdRCRKUBj7LPUTZEAsucC9jQbN4=;
+        b=fHIx0ajVzaapgHX+wHAy9i3SSOOpjYSGaygTwB1lTiPccD0mI/aSoFb49HaJxbSX/j1ISg
+        V1/rvlDaEZvUnFRxs2yB9+gkc4ylnB5uk3Tz5zANwIzCyrkjSbeqQY0EXYL1i6GBYBwcit
+        GFXQ8kdR8pyuZ1LxShT2ILU95KNjLN1mJVGjedzVaRmUg5YaycMchDtaEFUYbpR1FmkwVm
+        7BQ1ulyvigt4GoHxBoKAMN66oedQaegs6reEa1C89qBIbEez6jgsHyKgyTEzc3YhC6C+ey
+        /Us23SboeeHKM8d/LsCrNUf22DL7tPZmLVQdyJh8uPf0Cuztdn0Ns7b4Tq/NAQ==
+ARC-Authentication-Results: i=1;
+        rspamd-75b4464bd-sv695;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Descriptive-Arithmetic: 79cfb0b32f60848c_1661808562489_673253421
+X-MC-Loop-Signature: 1661808562489:2375646447
+X-MC-Ingress-Time: 1661808562489
+Received: from pdx1-sub0-mail-a210 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.123.39.217 (trex/6.7.1);
+        Mon, 29 Aug 2022 21:29:22 +0000
+Received: from offworld.. (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a210 (Postfix) with ESMTPSA id 4MGk8x0m25zPZ;
+        Mon, 29 Aug 2022 14:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661808561;
+        bh=wPrGN55jL4h8TZE8TdRCRKUBj7LPUTZEAsucC9jQbN4=;
+        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
+        b=VrOY05yZROs1ioLx4CRmSRE9GcO9LhV1i39YKM/9L2L7CgMCeigurV/Za/8wK+sF1
+         gD/yJ7XqCeqQ8ao12sQa9O4nfu7CVsCIR7Yjgo9kVQC0lAv5YRClls7fEjsO6lu7QH
+         K64O2ulQfuRhkMaN314IyQII0OfEgrQkzODS6h8wtc8CobKDrdZwrKMKak95QI7ixc
+         o7caov7A0AVGadItP313BMl75g2keZxcPYDElQJWus2X55LE3hHGI0fW0ATZkoCR1e
+         qb8Uk/uewGrNKhNrLQoGi2jC4+YX/qtepWMwRXcY9Y7d53Rt7qh9YMLiQ2gug5Im9X
+         7IysfS+wHKuPw==
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     dan.j.williams@intel.com
+Cc:     x86@kernel.org, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
+        peterz@infradead.org, bp@alien8.de, akpm@linux-foundation.org,
+        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com,
+        a.manzanares@samsung.com, linux-kernel@vger.kernel.org,
+        dave@stgolabs.net
+Subject: [PATCH -next] memregion: Add arch_flush_memregion() interface
+Date:   Mon, 29 Aug 2022 14:29:18 -0700
+Message-Id: <20220829212918.4039240-1-dave@stgolabs.net>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,185 +97,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-call_rcu() can take a long time when callback offloading is enabled.
-Its use in the vm_area_free can cause regressions in the exit path when
-multiple VMAs are being freed. To minimize that impact, place VMAs into
-a list and free them in groups using one call_rcu() call per group.
+With CXL security features, global CPU cache flushing nvdimm requirements
+are no longer specific to that subsystem, even beyond the scope of
+security_ops. CXL will need such semantics for features not necessarily
+limited to persistent memory.
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+The functionality this is enabling is to be able to instantaneously
+secure erase potentially terabytes of memory at once and the kernel
+needs to be sure that none of the data from before the secure is still
+present in the cache. It is also used when unlocking a memory device
+where speculative reads and firmware accesses could have cached poison
+from before the device was unlocked.
+
+This capability is typically only used once per-boot (for unlock), or
+once per bare metal provisioning event (secure erase), like when handing
+off the system to another tenant or decommissioning a device.
+
+Users must first call arch_has_flush_memregion() to know whether this
+functionality is available on the architecture. Only enable it on x86-64
+via the wbinvd() hammer.
+
+Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 ---
- include/linux/mm.h       |  1 +
- include/linux/mm_types.h | 11 ++++++-
- kernel/fork.c            | 68 +++++++++++++++++++++++++++++++++++-----
- mm/init-mm.c             |  3 ++
- mm/mmap.c                |  1 +
- 5 files changed, 75 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a3cbaa7b9119..81dff694ac14 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -249,6 +249,7 @@ void setup_initial_init_mm(void *start_code, void *end_code,
- struct vm_area_struct *vm_area_alloc(struct mm_struct *);
- struct vm_area_struct *vm_area_dup(struct vm_area_struct *);
- void vm_area_free(struct vm_area_struct *);
-+void drain_free_vmas(struct mm_struct *mm);
- 
- #ifndef CONFIG_MMU
- extern struct rb_root nommu_region_tree;
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 36562e702baf..6f3effc493b1 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -412,7 +412,11 @@ struct vm_area_struct {
- 			struct vm_area_struct *vm_next, *vm_prev;
- 		};
- #ifdef CONFIG_PER_VMA_LOCK
--		struct rcu_head vm_rcu;	/* Used for deferred freeing. */
-+		struct {
-+			struct list_head vm_free_list;
-+			/* Used for deferred freeing. */
-+			struct rcu_head vm_rcu;
-+		};
- #endif
- 	};
- 
-@@ -573,6 +577,11 @@ struct mm_struct {
- 					  */
- #ifdef CONFIG_PER_VMA_LOCK
- 		int mm_lock_seq;
-+		struct {
-+			struct list_head head;
-+			spinlock_t lock;
-+			int size;
-+		} vma_free_list;
+Changes from v2 (https://lore.kernel.org/all/20220819171024.1766857-1-dave@stgolabs.net/):
+- Redid to use memregion based interfaces + VMM check on x86 (Dan)
+- Restricted the flushing to x86-64.
+
+Note: Since we still are dealing with a physical "range" at this level,
+added the spa range for nfit even though this is unused.
+
+ arch/x86/Kconfig             |  1 +
+ arch/x86/mm/pat/set_memory.c | 14 +++++++++++
+ drivers/acpi/nfit/intel.c    | 45 ++++++++++++++++++------------------
+ include/linux/memregion.h    | 25 ++++++++++++++++++++
+ lib/Kconfig                  |  3 +++
+ 5 files changed, 65 insertions(+), 23 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..594e6b6a4925 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -81,6 +81,7 @@ config X86
+ 	select ARCH_HAS_KCOV			if X86_64
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
++	select ARCH_HAS_MEMREGION_INVALIDATE    if X86_64
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PMEM_API		if X86_64
+ 	select ARCH_HAS_PTE_DEVMAP		if X86_64
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 1abd5438f126..18463cb704fb 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -330,6 +330,20 @@ void arch_invalidate_pmem(void *addr, size_t size)
+ EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
  #endif
  
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index b443ba3a247a..7c88710aed72 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -483,26 +483,75 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
- }
- 
- #ifdef CONFIG_PER_VMA_LOCK
--static void __vm_area_free(struct rcu_head *head)
-+static inline void __vm_area_free(struct vm_area_struct *vma)
- {
--	struct vm_area_struct *vma = container_of(head, struct vm_area_struct,
--						  vm_rcu);
- 	/* The vma should either have no lock holders or be write-locked. */
- 	vma_assert_no_reader(vma);
- 	kmem_cache_free(vm_area_cachep, vma);
- }
--#endif
-+
-+static void vma_free_rcu_callback(struct rcu_head *head)
++#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
++bool arch_has_flush_memregion(void)
 +{
-+	struct vm_area_struct *first_vma;
-+	struct vm_area_struct *vma, *vma2;
-+
-+	first_vma = container_of(head, struct vm_area_struct, vm_rcu);
-+	list_for_each_entry_safe(vma, vma2, &first_vma->vm_free_list, vm_free_list)
-+		__vm_area_free(vma);
-+	__vm_area_free(first_vma);
++	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
 +}
++EXPORT_SYMBOL(arch_has_flush_memregion);
 +
-+void drain_free_vmas(struct mm_struct *mm)
++void arch_flush_memregion(phys_addr_t phys, resource_size_t size)
 +{
-+	struct vm_area_struct *first_vma;
-+	LIST_HEAD(to_destroy);
-+
-+	spin_lock(&mm->vma_free_list.lock);
-+	list_splice_init(&mm->vma_free_list.head, &to_destroy);
-+	mm->vma_free_list.size = 0;
-+	spin_unlock(&mm->vma_free_list.lock);
-+
-+	if (list_empty(&to_destroy))
-+		return;
-+
-+	first_vma = list_first_entry(&to_destroy, struct vm_area_struct, vm_free_list);
-+	/* Remove the head which is allocated on the stack */
-+	list_del(&to_destroy);
-+
-+	call_rcu(&first_vma->vm_rcu, vma_free_rcu_callback);
++	wbinvd_on_all_cpus();
 +}
++EXPORT_SYMBOL(arch_flush_memregion);
++#endif
 +
-+#define VM_AREA_FREE_LIST_MAX	32
-+
-+void vm_area_free(struct vm_area_struct *vma)
-+{
-+	struct mm_struct *mm = vma->vm_mm;
-+	bool drain;
-+
-+	free_anon_vma_name(vma);
-+
-+	spin_lock(&mm->vma_free_list.lock);
-+	list_add(&vma->vm_free_list, &mm->vma_free_list.head);
-+	mm->vma_free_list.size++;
-+	drain = mm->vma_free_list.size > VM_AREA_FREE_LIST_MAX;
-+	spin_unlock(&mm->vma_free_list.lock);
-+
-+	if (drain)
-+		drain_free_vmas(mm);
-+}
-+
-+#else /* CONFIG_PER_VMA_LOCK */
-+
-+void drain_free_vmas(struct mm_struct *mm) {}
- 
- void vm_area_free(struct vm_area_struct *vma)
+ static void __cpa_flush_all(void *arg)
  {
- 	free_anon_vma_name(vma);
--#ifdef CONFIG_PER_VMA_LOCK
--	call_rcu(&vma->vm_rcu, __vm_area_free);
--#else
- 	kmem_cache_free(vm_area_cachep, vma);
--#endif
- }
- 
-+#endif /* CONFIG_PER_VMA_LOCK */
-+
- static void account_kernel_stack(struct task_struct *tsk, int account)
- {
- 	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-@@ -1137,6 +1186,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 	INIT_LIST_HEAD(&mm->mmlist);
- #ifdef CONFIG_PER_VMA_LOCK
- 	WRITE_ONCE(mm->mm_lock_seq, 0);
-+	INIT_LIST_HEAD(&mm->vma_free_list.head);
-+	spin_lock_init(&mm->vma_free_list.lock);
-+	mm->vma_free_list.size = 0;
- #endif
- 	mm_pgtables_bytes_init(mm);
- 	mm->map_count = 0;
-diff --git a/mm/init-mm.c b/mm/init-mm.c
-index 8399f90d631c..7b6d2460545f 100644
---- a/mm/init-mm.c
-+++ b/mm/init-mm.c
-@@ -39,6 +39,9 @@ struct mm_struct init_mm = {
- 	.mmlist		= LIST_HEAD_INIT(init_mm.mmlist),
- #ifdef CONFIG_PER_VMA_LOCK
- 	.mm_lock_seq	= 0,
-+	.vma_free_list.head = LIST_HEAD_INIT(init_mm.vma_free_list.head),
-+	.vma_free_list.lock =  __SPIN_LOCK_UNLOCKED(init_mm.vma_free_list.lock),
-+	.vma_free_list.size = 0,
- #endif
- 	.user_ns	= &init_user_ns,
- 	.cpu_bitmap	= CPU_BITS_NONE,
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 1edfcd384f5e..d61b7ef84ba6 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3149,6 +3149,7 @@ void exit_mmap(struct mm_struct *mm)
+ 	unsigned long cache = (unsigned long)arg;
+diff --git a/drivers/acpi/nfit/intel.c b/drivers/acpi/nfit/intel.c
+index 8dd792a55730..32e622f51cde 100644
+--- a/drivers/acpi/nfit/intel.c
++++ b/drivers/acpi/nfit/intel.c
+@@ -3,6 +3,7 @@
+ #include <linux/libnvdimm.h>
+ #include <linux/ndctl.h>
+ #include <linux/acpi.h>
++#include <linux/memregion.h>
+ #include <asm/smp.h>
+ #include "intel.h"
+ #include "nfit.h"
+@@ -190,12 +191,11 @@ static int intel_security_change_key(struct nvdimm *nvdimm,
  	}
- 	mm->mmap = NULL;
- 	mmap_write_unlock(mm);
-+	drain_free_vmas(mm);
- 	vm_unacct_memory(nr_accounted);
  }
+ 
+-static void nvdimm_invalidate_cache(void);
+-
+ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
+ 		const struct nvdimm_key_data *key_data)
+ {
+ 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
++	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
+ 	struct {
+ 		struct nd_cmd_pkg pkg;
+ 		struct nd_intel_unlock_unit cmd;
+@@ -213,6 +213,9 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
+ 	if (!test_bit(NVDIMM_INTEL_UNLOCK_UNIT, &nfit_mem->dsm_mask))
+ 		return -ENOTTY;
+ 
++	if (!arch_has_flush_memregion())
++		return -EINVAL;
++
+ 	memcpy(nd_cmd.cmd.passphrase, key_data->data,
+ 			sizeof(nd_cmd.cmd.passphrase));
+ 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
+@@ -228,7 +231,7 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
+ 	}
+ 
+ 	/* DIMM unlocked, invalidate all CPU caches before we read it */
+-	nvdimm_invalidate_cache();
++	arch_flush_memregion(spa->address, spa->length);
+ 
+ 	return 0;
+ }
+@@ -279,6 +282,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
+ {
+ 	int rc;
+ 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
++	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
+ 	unsigned int cmd = ptype == NVDIMM_MASTER ?
+ 		NVDIMM_INTEL_MASTER_SECURE_ERASE : NVDIMM_INTEL_SECURE_ERASE;
+ 	struct {
+@@ -297,8 +301,11 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
+ 	if (!test_bit(cmd, &nfit_mem->dsm_mask))
+ 		return -ENOTTY;
+ 
++	if (!arch_has_flush_memregion())
++		return -EINVAL;
++
+ 	/* flush all cache before we erase DIMM */
+-	nvdimm_invalidate_cache();
++	arch_flush_memregion(spa->address, spa->length);
+ 	memcpy(nd_cmd.cmd.passphrase, key->data,
+ 			sizeof(nd_cmd.cmd.passphrase));
+ 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
+@@ -318,7 +325,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
+ 	}
+ 
+ 	/* DIMM erased, invalidate all CPU caches before we read it */
+-	nvdimm_invalidate_cache();
++	arch_flush_memregion(spa->address, spa->length);
+ 	return 0;
+ }
+ 
+@@ -326,6 +333,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
+ {
+ 	int rc;
+ 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
++	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
+ 	struct {
+ 		struct nd_cmd_pkg pkg;
+ 		struct nd_intel_query_overwrite cmd;
+@@ -341,6 +349,9 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
+ 	if (!test_bit(NVDIMM_INTEL_QUERY_OVERWRITE, &nfit_mem->dsm_mask))
+ 		return -ENOTTY;
+ 
++	if (!arch_has_flush_memregion())
++		return -EINVAL;
++
+ 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
+ 	if (rc < 0)
+ 		return rc;
+@@ -355,7 +366,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
+ 	}
+ 
+ 	/* flush all cache before we make the nvdimms available */
+-	nvdimm_invalidate_cache();
++	arch_flush_memregion(spa->address, spa->length);
+ 	return 0;
+ }
+ 
+@@ -364,6 +375,7 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
+ {
+ 	int rc;
+ 	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
++	struct acpi_nfit_system_address *spa = nfit_mem->spa_dcr;
+ 	struct {
+ 		struct nd_cmd_pkg pkg;
+ 		struct nd_intel_overwrite cmd;
+@@ -380,8 +392,11 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
+ 	if (!test_bit(NVDIMM_INTEL_OVERWRITE, &nfit_mem->dsm_mask))
+ 		return -ENOTTY;
+ 
++	if (!arch_has_flush_memregion())
++		return -EINVAL;
++
+ 	/* flush all cache before we erase DIMM */
+-	nvdimm_invalidate_cache();
++	arch_flush_memregion(spa->address, spa->length);
+ 	memcpy(nd_cmd.cmd.passphrase, nkey->data,
+ 			sizeof(nd_cmd.cmd.passphrase));
+ 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
+@@ -401,22 +416,6 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
+ 	}
+ }
+ 
+-/*
+- * TODO: define a cross arch wbinvd equivalent when/if
+- * NVDIMM_FAMILY_INTEL command support arrives on another arch.
+- */
+-#ifdef CONFIG_X86
+-static void nvdimm_invalidate_cache(void)
+-{
+-	wbinvd_on_all_cpus();
+-}
+-#else
+-static void nvdimm_invalidate_cache(void)
+-{
+-	WARN_ON_ONCE("cache invalidation required after unlock\n");
+-}
+-#endif
+-
+ static const struct nvdimm_security_ops __intel_security_ops = {
+ 	.get_flags = intel_security_flags,
+ 	.freeze = intel_security_freeze,
+diff --git a/include/linux/memregion.h b/include/linux/memregion.h
+index c04c4fd2e209..c35201c0696f 100644
+--- a/include/linux/memregion.h
++++ b/include/linux/memregion.h
+@@ -20,4 +20,29 @@ static inline void memregion_free(int id)
+ {
+ }
+ #endif
++
++/*
++ * Device memory technologies like NVDIMM and CXL have events like
++ * secure erase and dynamic region provision that can invalidate an
++ * entire physical memory address range at once. Limit that
++ * functionality to architectures that have an efficient way to
++ * writeback and invalidate potentially terabytes of memory at once.
++ *
++ * To ensure this, users must first call arch_has_flush_memregion()
++ * before anything, to verify the operation is feasible.
++ */
++#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
++void arch_flush_memregion(phys_addr_t phys, resource_size_t size);
++bool arch_has_flush_memregion(void);
++#else
++static inline bool arch_has_flush_memregion(void)
++{
++       return false;
++}
++static inline void arch_flush_memregion(phys_addr_t phys, resource_size_t size)
++{
++	WARN_ON_ONCE("cache invalidation required");
++}
++#endif
++
+ #endif /* _MEMREGION_H_ */
+diff --git a/lib/Kconfig b/lib/Kconfig
+index dc1ab2ed1dc6..8319e7731e7b 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -662,6 +662,9 @@ config ARCH_HAS_PMEM_API
+ config MEMREGION
+ 	bool
+ 
++config ARCH_HAS_MEMREGION_INVALIDATE
++       bool
++
+ config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
+ 	bool
  
 -- 
-2.37.2.672.g94769d06f0-goog
+2.37.2
 

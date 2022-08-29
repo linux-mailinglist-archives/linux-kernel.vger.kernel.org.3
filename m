@@ -2,124 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A405A462E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3ED5A4630
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiH2Jev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S229954AbiH2Jga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiH2Jen (ORCPT
+        with ESMTP id S229671AbiH2Jg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:34:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60BF5C977;
-        Mon, 29 Aug 2022 02:34:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E42A60F61;
-        Mon, 29 Aug 2022 09:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0E6C433C1;
-        Mon, 29 Aug 2022 09:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661765672;
-        bh=Ha7dPQQt8ROs3mVSwSdR/iJAj2vnJKDi274nVUfFx2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ShdId/P+BPxRRnzSDYp5021K7jSBepOheJ/pdQpDzhMHQ32qy9qvSSLsJCHViqOq3
-         XX7WezEX/OF5wV62UETeyglC2ZTASTy8+MU/4/Odt6mrcmc0DMQaQmMJDo5rRryRwK
-         4f+o88jXTy7AgDvOIhQHe7MC09u2giYqUYlBFXlsXOVdUXHJ4cDNwkIrv17kC9Oi7E
-         gWbbJ0uxZsG9V9zFi0pe/3lp8vxS2zVaGkxJ5PKp2PSMOLHi7NF593NVbx9zbQLIsa
-         4jUXJbT705B3r7ynAHDZ6CYO5GonMavGdhrVIuWDS56pTiBjv+BEybs6qiX5pcnnE9
-         FCk4vNLB1QQQw==
-Received: by pali.im (Postfix)
-        id 12D687DE; Mon, 29 Aug 2022 11:34:29 +0200 (CEST)
-Date:   Mon, 29 Aug 2022 11:34:28 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: aardvark: Add support for PCI Bridge Subsystem
- Vendor ID on emulated bridge
-Message-ID: <20220829093428.4danatwennps55dr@pali>
-References: <20220711221823.12154-1-pali@kernel.org>
- <20220711225915.13896-1-pali@kernel.org>
- <YwyHdMv1JsQNuVGS@lpieralisi>
+        Mon, 29 Aug 2022 05:36:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07025C97B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661765786; x=1693301786;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=grH/4J/cN7Mpd+sfgzlCpokTKZ4Un8uHFmFcQI849BE=;
+  b=GrYEtnOP5B9IYtCPL/TcugvC44k/Ko245AhCx1jFQpcC7rBaWbKjfb0F
+   aOTw8bOvkUjIq56mk0JPHh1tPZ78YvqMkA5VRpBqXzZ7brHSt/smL/ANu
+   KdV3QO86BVhGFpKu7H72hNmKQ7U9/vuKhaBgY+yuw5J6Hi7ZXXCP+1mOv
+   cNFUPiLVaCelrwqIrAh0k67pillp3e02GbqkEwmuL0W4x743VisEhhSTx
+   U0mUoYJ/m613taGp2tkMHjBDzXEtr+Pyx+FVCkqWdRwXdxPKByFWw4d9Y
+   2WdVxQwKZ8QVu4iGFQYmFt7nNVUNFZQpSz4n8S5+wuD0iAzRFpOUNq4jO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="294863184"
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="294863184"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 02:36:26 -0700
+X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
+   d="scan'208";a="672313597"
+Received: from kvehmane-mobl1.ger.corp.intel.com ([10.251.220.41])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 02:36:24 -0700
+Date:   Mon, 29 Aug 2022 12:36:24 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: 6.0 tty regression, NULL pointer deref in flush_to_ldisc
+In-Reply-To: <4b4bba5d-d291-d9fa-8382-cdc197b7ed35@redhat.com>
+Message-ID: <e8d67c78-751e-2c44-edff-e7e441c3302d@linux.intel.com>
+References: <4b4bba5d-d291-d9fa-8382-cdc197b7ed35@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YwyHdMv1JsQNuVGS@lpieralisi>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 29 August 2022 11:31:32 Lorenzo Pieralisi wrote:
-> On Tue, Jul 12, 2022 at 12:59:15AM +0200, Pali Rohár wrote:
-> > Register with Subsystem Device/Vendor ID is at offset 0x2c. Export is via
-> > emulated bridge.
+On Mon, 29 Aug 2022, Hans de Goede wrote:
+
+> Hi All,
 > 
-> "Export it..." I suppose.
-
-Yes, it is a typo :-(
-
-> So in short, this patch enables support for the Subsystem Device/Vendor
-> ID - by reading it in the PCI controller config space and storing it
-> in the emulated bridge control structures, so that it is exposed in
-> the respective PCI capability.
-
-Yes, it reads it from internal aardvark registers and stores it into the
-emulated bridge config space.
-
-> Correct ?
+> This weekend I noticed that on various Bay Trail based systems which have
+> their bluetooth HCI connected over an uart (using hci_uart driver /
+> using the drivers/tty/serial bus) there is a NULL pointer deref in
+> flush_to_ldisc, see below for the full backtrace.
 > 
-> Thanks,
-> Lorenzo
+> I *suspect* that this is caused by commit 6bb6fa6908eb
+> ("tty: Implement lookahead to process XON/XOFF timely").
 > 
-> > After this change Subsystem ID is visible in lspci output at line:
-> > 
-> >   Capabilities: [40] Subsystem
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > 
-> > ---
-> > Changes in v2:
-> > * Fix wrong rebase, do not add PCIE_CORE_EXP_ROM_BAR_REG
-> > ---
-> >  drivers/pci/controller/pci-aardvark.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> > index 74511f015168..060936ef01fe 100644
-> > --- a/drivers/pci/controller/pci-aardvark.c
-> > +++ b/drivers/pci/controller/pci-aardvark.c
-> > @@ -32,6 +32,7 @@
-> >  #define PCIE_CORE_DEV_ID_REG					0x0
-> >  #define PCIE_CORE_CMD_STATUS_REG				0x4
-> >  #define PCIE_CORE_DEV_REV_REG					0x8
-> > +#define PCIE_CORE_SSDEV_ID_REG					0x2c
-> >  #define PCIE_CORE_PCIEXP_CAP					0xc0
-> >  #define PCIE_CORE_ERR_CAPCTL_REG				0x118
-> >  #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHK_TX			BIT(5)
-> > @@ -982,6 +983,8 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
-> >  	/* Indicates supports for Completion Retry Status */
-> >  	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
-> >  
-> > +	bridge->subsystem_vendor_id = advk_readl(pcie, PCIE_CORE_SSDEV_ID_REG) & 0xffff;
-> > +	bridge->subsystem_id = advk_readl(pcie, PCIE_CORE_SSDEV_ID_REG) >> 16;
-> >  	bridge->has_pcie = true;
-> >  	bridge->data = pcie;
-> >  	bridge->ops = &advk_pci_bridge_emul_ops;
-> > -- 
-> > 2.20.1
-> > 
+> I can cleanly revert this by reverting the following commits:
+> 
+> ab24a01b2765 ("tty: Add closing marker into comment in tty_ldisc.h")
+> 65534736d9a5 ("tty: Use flow-control char function on closing path")
+> 6bb6fa6908eb ("tty: Implement lookahead to process XON/XOFF timely")
+> 
+> ATM I don't have one of the affected systems handy. I will give
+> a 6.0-rc3 kernel with these 3 commits reverted a try tonight (CEST)
+> and I'll let you know the results.
+> 
+> Note I can NOT confirm yet that these reverts fix things, so please
+> don't revert anything yet. I just wanted to give people a headsup
+> about this issue.
+> 
+> Also maybe we can fix the new lookahead code instead of reverting.
+> I would be happy to add a patch adding some debugging prints the
+> systems run fine after the backtrace as long as I don't suspend them
+> so gathering logs is easy.
+
+I guess this will help:
+
+https://lore.kernel.org/linux-kernel/20220818115026.2237893-1-vincent.whitchurch@axis.com/
+
+-- 
+ i.
+

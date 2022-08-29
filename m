@@ -2,161 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC835A5384
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F785A5389
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiH2RxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S230121AbiH2Ryo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiH2RxC (ORCPT
+        with ESMTP id S229690AbiH2Ryl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:53:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FEA7C1DB;
-        Mon, 29 Aug 2022 10:53:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC72B8119D;
-        Mon, 29 Aug 2022 17:53:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B1AC433C1;
-        Mon, 29 Aug 2022 17:52:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661795579;
-        bh=OFiWblrTg9bVEo5nez7Fqe6Tqh+QPil6BbmjGo6KOkM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DydfPj8kqb2FrPMQSHDQR+tY4HvQuBtkf/2gHK1w/rMaTBaIkmxOfErDaa0xz1rT9
-         b/pLRm9I4ztj3xfQY568OitsI7tGVsljUWKf7Y219wS1Alot7Kd6YVWzy0iqxk+Gmt
-         iDeiNnR12RC47dbLqhDgcmzaWolz08krb2CwYYjrCGCEqa4joplMcb6CMSlpQmPbiv
-         7kDGwEAyj0M0X/153MYRjgr0zg89o399RuL+gxvMNs+u9dmp3ZxY6ux8KmMEItHlCv
-         W6+5tG9O/HaCVoQizduc0t3TUC103fLaszHg9Ajiko/JugH0+NTzMvF54MF4LCa6Io
-         dFlBuF5GYYqcA==
-Date:   Mon, 29 Aug 2022 10:52:57 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
- in set_page_dirty
-Message-ID: <Ywz8+WUhypEiUfvk@google.com>
-References: <000000000000d5b4fe05e7127662@google.com>
- <20220825183734.0b08ae10a2e9e1bd156a19cd@linux-foundation.org>
-MIME-Version: 1.0
+        Mon, 29 Aug 2022 13:54:41 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965367DF63;
+        Mon, 29 Aug 2022 10:54:40 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27THg77d025816;
+        Mon, 29 Aug 2022 10:54:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=/pdVDPhY96mMMN97cGa+Y4Pf8LI/M4/5VbwGCG8qeGU=;
+ b=gE2GtaHC+QTCygm3o9GMVtanP7L09xP10g9/iaSDHzp2dWWeyWYgXGuCWvyAqutdE+An
+ vBLmqR1KWvPJ+DjTNVsUGbM/zgQFxBMeA5xiDTHN1ISLe+hzSkOU67E42KXsy98IM+ig
+ qq6LKQCXtUHutZRBGODWq273zoQalUa0p58= 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7ekn3khk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 10:54:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lvDLDxAD6GZwCo5lsjyHoB6CEaLNAR9mucoEVwk+YtHMDJIEjwq06mQZsFQW7gsYEdB92MXYmu2YpL26bMcjju6FuU142jkDNBF0lVLiwthBjmL+upBXXYVJ/KgMUa48OHmWkgyUD/Qb3OS4tdO01tDaPVpnTh0qd/lu/KITJkX8v0F05asXtv+a9+yFIrM6VeG4HXYOq9La1KwLQn3VOD1FDysdDb5xd8UGLE/lkMQMHtqs/SqYIZFM7AWwMpzM6s9fy9ei07OQUwlyg6vsVbGaCfuxNLoD3jdtnij5blIDtDf2GY4gqV4+AEyONqC50aogmlp+bDvkrbt2DeHwvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/pdVDPhY96mMMN97cGa+Y4Pf8LI/M4/5VbwGCG8qeGU=;
+ b=b8qOCJV+0L8h4Un8W1JpJ0i0EiZsTiPpHDB2mpHi5006vw7s135l4YUJav8cehyIqWGyYPsuFCJGiuR6Mcw0BU+lA23zHFH0hzmdHYwqGsZ8uwFYM3foUMNGmpF1IYAP1PwnJmJD7UwK4k5Ll5nS0uOj2cw5Vf+1LF/08Bjqi7WMh1Ydi2r6MPGbo6O3YkUszhaNXue5+PAx2jxD3PXz2LMtTxxnfqx0CTzESGvi6NBfBzcd6HfYajDM4ZAYEr428fs8oBybf0pssHmxjmuvqNUubJ4hHKcV2mPKllsEAOatHvOl9yv60Xx3LmayoG2dFYthre9sb2i6bjOVsxzLRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
+ by DM6PR15MB2730.namprd15.prod.outlook.com (2603:10b6:5:1b1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 29 Aug
+ 2022 17:54:17 +0000
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::1858:f420:93d2:4b5e]) by MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::1858:f420:93d2:4b5e%4]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
+ 17:54:17 +0000
+Date:   Mon, 29 Aug 2022 10:54:13 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc:     James Hilliard <james.hilliard1@gmail.com>, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type
+ conflict
+Message-ID: <20220829175413.h2335oivqcg34pw3@kafai-mbp.dhcp.thefacebook.com>
+References: <20220825221751.258958-1-james.hilliard1@gmail.com>
+ <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com>
+ <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com>
+ <20220826171741.pdiqa4n4mls56bw3@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4qg6R9udazmGFoFhn9pXN6HOqLGEsQOhCAELi1LxzoTmw@mail.gmail.com>
+ <20220826212550.mgugz6fomoqpgdbb@kafai-mbp.dhcp.thefacebook.com>
+ <87k06ubi9m.fsf@oracle.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220825183734.0b08ae10a2e9e1bd156a19cd@linux-foundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87k06ubi9m.fsf@oracle.com>
+X-ClientProxiedBy: SJ0PR03CA0173.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::28) To MW4PR15MB4475.namprd15.prod.outlook.com
+ (2603:10b6:303:104::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a3edeb90-0c8b-400d-e8d7-08da89e77dd8
+X-MS-TrafficTypeDiagnostic: DM6PR15MB2730:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vGk3Qrk1/WpDHgQTc1XB9tuiuiIQHYZXLLsLV2jZPnVmTjxCZVS4Jv9nDj5QNo3Paz52C2i0fbb7mWwWyaJ7flfus3HhhY00Opoqbrhlxk4iBancjT/4sgj9YmGqUGCbqoQKaofNZXeGZM/Lg15cjO+LGNnaiGXggSshUJXjuozHB0sqSz8YqKgQoCwGNQGgGwO02QJZ/bIK+JjikNzRMWvidJcXzTujWIcxzztMF7Qyn8HeopkgVK9w+xnv0B0/ZFRzJCTcufa5gvt7v1JZ+dpssIyOrn5YtmZ12mzqlO0A2+l4QItzelQAgNia5hmxY57PUz98KBmBadk/P/jnyO1nCKEH/iRztDt7fqjl/xeyz/hg7gfqP6IcPH3KMwALoHrhuwWHs1BCcnuYZ+7aJeE2/ZkPl0CRozcb7btZYxkYlHLUwKtEdZNnJeezFqksTZimL36rZ37dOyJ99WNppflwCuZwq+yFWnIcNnWpcqbbLW0qFIQX2vSCl8Xp+fDoV/K3SOnPUmrECD5TOzOsz1uOPf/fbs/zD6/rQpTu0rtaO49ulQJavF5T8mPZrHYHv4oJWEohAcHOVADexHzWFNKCXwlaeblSe9wYUfaBAUdFHqaTHeoB+XpdDEXg3/pPFVUSW6IFV35JHyCyIKlPmHErTICPmLChI9oMmK07BmFOo9qc4rfwDJ/nqNjBQAg59eO0Yt6LGWAfIyDyoBA83A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(54906003)(2906002)(66476007)(6486002)(8676002)(6506007)(52116002)(66556008)(66946007)(1076003)(83380400001)(6916009)(4326008)(186003)(316002)(38100700002)(6512007)(5660300002)(9686003)(86362001)(8936002)(478600001)(41300700001)(7416002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xp+QCuOoWyw3bZWMRn0ECqqI+s7cOQebx1Zrjl1orWnS8e+zVmQfGVMb2tt2?=
+ =?us-ascii?Q?buxxgZkhff1+Gxg6sIVIuCd8WootHL9tIgmnPWROh9EOormMXPVIBYCagsJP?=
+ =?us-ascii?Q?SIiIeQWY1HHGcjzsECL5M7bETwuaMDqFU0Hhl9cijaiK7sODgH1Y7ReN10Cu?=
+ =?us-ascii?Q?QEFL+aMf7Gp6uVtVC+3kQTn2lpTmmg7JtI84fjlqvJLqjQERC3TKoCKvPFvD?=
+ =?us-ascii?Q?shB8n2uJjgDxcS0PEkOgI8jxEzq8kAyHozf8cU0qekmu0W/9z3ydn//bg0Yd?=
+ =?us-ascii?Q?BElz9eyH5txQmH4ddOX4jZFlLo5cRKt5lHBKATCsiUB2WIplwroYoEm+eXV8?=
+ =?us-ascii?Q?tEr9Ih69zJfU8V1qKKuVcPgfsu+zgytKC9m3+Sg+CgsivHrdT+ecn9fv8jpN?=
+ =?us-ascii?Q?GMfVSHkK0Scmfx2sq08vwO0iSmklO0mnsDvlFJDANDnlxc6nHFK1y1vLqWld?=
+ =?us-ascii?Q?E/2r/ROH1sFdXPmkF8OPYWOqXgZwFPqaJRicEXqeiIlYDYo3xqH7BU3BNTvD?=
+ =?us-ascii?Q?HpPMDPkNPyrCtDqhIEaZ+1RjtbvXDbiylCHOD2K+BppDN8pHjewBO6ypiLgm?=
+ =?us-ascii?Q?8piWtHAz79xxVZocNRoQFYuGZX3dSjmvWqtFxRBy43Te4hZilb+QB3neh3Jb?=
+ =?us-ascii?Q?DvCT8s609X/JUCuh0xiAYlDPmla4GL15dEcVJ0r2z2dggUymMXoWxLs4Krc4?=
+ =?us-ascii?Q?E7ijIIXU+IFieaZrfqxg7lLo0KjwHhWJJXaBBil0x4WwAShCalUK6DBKxbgB?=
+ =?us-ascii?Q?JOFPClPdKZ0/rKoc0XDbvinK3ME7nqZnEGzxbsMgxvuicLpikBVmIHM7ZZXG?=
+ =?us-ascii?Q?ix15r6lW+2rMGxw6KAzMP0CVm3nmaRPSA94t83agpf8BfkN7XnXsc4bblHqw?=
+ =?us-ascii?Q?jbSsRS4ip1A+JnnTh/sjemhmnug9i+yyzsgk8xt7F9IZLm9yIMK0JT7AY2xq?=
+ =?us-ascii?Q?VbD77ro7n1z9ynV0c+yuTAg9BD2/VmrlPYVN9ZlQ7PUC309nEir9yLUUJemQ?=
+ =?us-ascii?Q?mpEvOrcdVig33rvvEXNs3dRIEV+qo7oYpUsnHsAL84+nL2T+Jdx6LKVf9bkd?=
+ =?us-ascii?Q?+YGB28/xmRFYWi2xgQbrPxpwv7NsiTN8ElXVwcD946CE0CrA5JmqqUzzJPfc?=
+ =?us-ascii?Q?DnpoOTTPX8I1u13UUXAXrNQ/wVrlX59+pWeYXTt7ou+hIRysotLqJZ7vPOEB?=
+ =?us-ascii?Q?Wr0lglJ2EvGzvC/xwbr9C1rmX3zfAkou8G278W+2IKpT7bfBlRrkkyKtcO69?=
+ =?us-ascii?Q?LWpId+sD8RrE0ZpPo9rxmSlFCTTo98Y9uU/BI5OIspxX8m5QrncZIFQCnguQ?=
+ =?us-ascii?Q?HLdDrznphGbDCTuRGUMvujiZfNsXSu1esfYR2ea3wZYChHxwvuqEK8IOeXfN?=
+ =?us-ascii?Q?jvA5V4J257ZBxMUZYoSjeDsPbmySWgGCFkmj6s1e3WUBGY3oVhCW0k69d8U1?=
+ =?us-ascii?Q?Ac6xpXUG5+Mp3iZX5h+pZutWM9k15+ElyXZ8hyjy3QpKI3qsMAY2LVeoH87h?=
+ =?us-ascii?Q?ljjc9lPwalznkToVAQlznlC2xlqZhezsACxnsef7hjKQKrOviIU/IFATZVCR?=
+ =?us-ascii?Q?bpLo2YIlQWpuBiyIQjBieh/R3w4UFHbb3Hsgs+5hQKd1bSPr784bZ/UG0pOt?=
+ =?us-ascii?Q?ug=3D=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3edeb90-0c8b-400d-e8d7-08da89e77dd8
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 17:54:17.0365
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YnuDIdlNjYtUfn/7MG37Tb62Ru0tFMMS5wHbbxe2fBsmAdOV+igvJaM1i4G60SQT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2730
+X-Proofpoint-ORIG-GUID: f8JOkGPfsmNU8oFMGHoBKTuMKkhX2J8i
+X-Proofpoint-GUID: f8JOkGPfsmNU8oFMGHoBKTuMKkhX2J8i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_09,2022-08-25_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/25, Andrew Morton wrote:
-> (cc fsf2 developers)
+On Sat, Aug 27, 2022 at 03:13:41AM +0200, Jose E. Marchesi wrote:
+> >> Users can migrate away from libc headers over time, migrating away
+> > imo, not without a good reason.
 > 
-> On Thu, 25 Aug 2022 08:29:32 -0700 syzbot <syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com> wrote:
+> Something that may be a good reason is that there is no BPF port of
+> glibc (nor of musl, nor of newlib.)  And given BPF's restrictions as an
+> architecture (no more than 5 arguments supported in function calls, etc)
+> it is very unlikely that there will ever be one.
 > 
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
-> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=175def47080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=775a3440817f74fddb8c
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
-> > 
-> > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> > Mem abort info:
-> >   ESR = 0x0000000086000005
-> >   EC = 0x21: IABT (current EL), IL = 32 bits
-> >   SET = 0, FnV = 0
-> >   EA = 0, S1PTW = 0
-> >   FSC = 0x05: level 1 translation fault
-> > user pgtable: 4k pages, 48-bit VAs, pgdp=00000001249cc000
-> > [0000000000000000] pgd=080000012ee65003, p4d=080000012ee65003, pud=0000000000000000
-> > Internal error: Oops: 86000005 [#1] PREEMPT SMP
-> > Modules linked in:
-> > CPU: 0 PID: 3044 Comm: syz-executor.0 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
-> > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > pc : 0x0
-> > lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
-> > sp : ffff800012803830
-> > x29: ffff800012803830 x28: ffff0000d02c8000 x27: 0000000000000009
-> > x26: 0000000000000001 x25: 0000000000000a00 x24: 0000000000000080
-> > x23: 0000000000000000 x22: ffff0000ef276c00 x21: 05ffc00000000007
-> > x20: ffff0000f14b83b8 x19: fffffc00036409c0 x18: fffffffffffffff5
-> > x17: ffff80000dd7a698 x16: ffff80000dbb8658 x15: 0000000000000000
-> > x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> > x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
-> > x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
-> > x5 : ffff0000d9028000 x4 : ffff0000d5c31000 x3 : ffff0000d9027f80
-> > x2 : fffffffffffffff0 x1 : fffffc00036409c0 x0 : ffff0000f14b83b8
-> > Call trace:
-> >  0x0
-> >  set_page_dirty+0x38/0xbc mm/folio-compat.c:62
+> Including certain libc headers may work well enough, but in general when
+> including libc headers you risk dragging in x86, or aarch64, or whatever
+> architecture-specific headers as well, directly or indirectly.  C
+> libraries (and system libraries in general) are targetted at particular
+> architectures/ABIs/OSes.
+> 
+> This means that the same BPF program may be using different data
+> structures depending on the system where you build it.
+Note that the data structure difference is not unique to
+different arch.  A more common case can already happen across
+different kernel versions or different kconfig of the same arch.
+BPF CO-RE is there to handle this case.
 
-2363 void f2fs_update_meta_page(struct f2fs_sb_info *sbi,
-2364                                         void *src, block_t blk_addr)
-2365 {       
-2366         struct page *page = f2fs_grab_meta_page(sbi, blk_addr);
+> In the worst
+> case, it may choke on assembler snippets.
+> 
+> Thats why the GCC port offers certain headers to provide standard C,
+> like stdint.h.  That's the usual way to go for bare-metal targets where
+> no libc is available.
+> 
+> Again, we will be happy to change that if that's what you want.  In that
+> case, it will be up to the user to provide the standard definitions, be
+> it by including glibc headers targetted at some other architecture, or
+> by some other mean.  Not that I would personally recommend that, but it
+> is up to you.
+Not sure if the user can always stay with vmlinux.h + a few bpf_tracing_*.h
+and if that is enough to avoid knowing this difference between GCC
+and LLVM bpf on libc-vs-gcc stdint...etc.
 
---> f2fs_grab_meta_page() gives a locked page by grab_cache_page().
+The header changes is hard to swim through to make it compile
+in GCC BPF.  In this case, it is because netinet/tcp.h brought in a
+different int8_t from gcc than the sys/socket.h.  My preference is
+not to have to dive into this kind of header details.
+I would like to hear how others think about it.
 
-2367                                                         
-2368         memcpy(page_address(page), src, PAGE_SIZE);
-2369         set_page_dirty(page);
-2370         f2fs_put_page(page, 1);
-2371 } 
-
-Is there a change in folio?
-
-> >  get_next_nat_page+0x198/0x300 fs/f2fs/node.c:154
-> >  __flush_nat_entry_set fs/f2fs/node.c:3005 [inline]
-> >  f2fs_flush_nat_entries+0x354/0x988 fs/f2fs/node.c:3109
-> >  f2fs_write_checkpoint+0x350/0x568 fs/f2fs/checkpoint.c:1667
-> >  f2fs_issue_checkpoint+0x1b0/0x234
-> >  f2fs_sync_fs+0x8c/0xc8 fs/f2fs/super.c:1651
-> >  sync_filesystem+0xe0/0x134 fs/sync.c:66
-> >  generic_shutdown_super+0x38/0x190 fs/super.c:474
-> >  kill_block_super+0x30/0x78 fs/super.c:1427
-> >  kill_f2fs_super+0x140/0x184 fs/f2fs/super.c:4544
-> >  deactivate_locked_super+0x70/0xd4 fs/super.c:332
-> >  deactivate_super+0xb8/0xbc fs/super.c:363
-> >  cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
-> >  __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
-> >  task_work_run+0xc4/0x208 kernel/task_work.c:177
-> >  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-> >  do_notify_resume+0x174/0x1d0 arch/arm64/kernel/signal.c:1127
-> >  prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
-> >  exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
-> >  el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
-> >  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
-> >  el0t_64_sync+0x18c/0x190
-> > Code: bad PC value
-> > ---[ end trace 0000000000000000 ]---
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> >
+> >> shouldn't cause regressions and should improve reliability.
+> > May be I am missing something.  I also don't understand the reliability
+> > part.
+> >
+> > In this sys/socket.h as an example, what is wrong in using
+> > "'int8_t' {aka 'signed char'}" from libc and the one from
+> > gcc "'int8_t'; have 'char'" must be used instead.
+> >
+> > Why LLVM bpf does not have issue ?
+> >
+> >> 
+> >> > The solution should be on the GCC-BPF side instead of changing
+> >> > all bpf progs.
+> >> 
+> >> I mean, GCC doesn't really control which libc is available, it seems to
+> >> be a bad idea to use libc headers in general as they are developed
+> >> separately from GCC and the kernel/libbpf.
+> >> 
+> >> I'm not really sure how one would fix this on the GCC-BPF side without
+> >> introducing more potential header conflicts.

@@ -2,187 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45495A57B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484F45A57BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiH2Xl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S229717AbiH2XmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiH2Xlz (ORCPT
+        with ESMTP id S229594AbiH2XmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:41:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A8383F26
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661816514; x=1693352514;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dkq5UtYy4xUBzFDduq4KV07qdX5OwWvQfB0gtW1Awcc=;
-  b=IZ1Nw30SZvXEkLWzI3c9QvG8bS2RHqI4u1uhMRuckP7rqPRkPv43lCH1
-   oBrZ8wLg4eYO3rHBZeP6zqay9zF3kdlKHnXJL+aqhAkE/+yKyhpC4d62J
-   5j9h8lbtc31B9+0B4f+w//kmMLo30pJZ92ibjwu63YTicTL7xNRMsqAfW
-   pRkJwkNBkhvKGu/JLLlB5L6lKhskTIoSrYZCSbsD8lChUPtAtUndJG0Of
-   Cnih9uMzff0iC96hSvFrAIp2c2wtkdRd4Ec5CYN+3DquD+/nlKlL7Z58u
-   G1zHzcQvYEA3veeY0H8G9ah9Lxy82qFgDclO5DsI6puY6ZYytVml0yBS5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="296303898"
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="296303898"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 16:41:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="679809161"
-Received: from lkp-server02.sh.intel.com (HELO e45bc14ccf4d) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Aug 2022 16:41:52 -0700
-Received: from kbuild by e45bc14ccf4d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSoO8-0000Od-0Y;
-        Mon, 29 Aug 2022 23:41:52 +0000
-Date:   Tue, 30 Aug 2022 07:41:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/core] BUILD SUCCESS
- bc12b70f7d216b36bd87701349374a13e486f8eb
-Message-ID: <630d4eb4.I7T0kMrX48AGjQIN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 29 Aug 2022 19:42:19 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E249832DE;
+        Mon, 29 Aug 2022 16:42:18 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7E947481;
+        Tue, 30 Aug 2022 01:42:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661816536;
+        bh=ngFFZ6dOmWMcFpZ3IKwPW1v4ZbMsWtMoV3OBJVEtv+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rlno3YaeDukmu2MSL5qYBY5uEvaJGMEG8W580K5sxVOZ7LhvaH7XvzImKh2oPLLq0
+         uP/2NXzr1IKTDAbY1TQlFJOlSUEmJnD1sY6+u2A8sFrlcBThNbE+e0AR8QF7kVvZrw
+         OiJohc4h23aFg/LbadFnqPnNeOT9QVUY/nc/g8bk=
+Date:   Tue, 30 Aug 2022 02:42:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 2/4] media: dt-bindings: media: Document RZ/G2L CRU
+Message-ID: <Yw1Oz5Zcwgig8/Xy@pendragon.ideasonboard.com>
+References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
-branch HEAD: bc12b70f7d216b36bd87701349374a13e486f8eb  x86/earlyprintk: Clean up pciserial
+Hi Prabhakar,
 
-elapsed time: 725m
+Thank you for the patch.
 
-configs tested: 105
-configs skipped: 2
+On Mon, Aug 01, 2022 at 10:47:16PM +0100, Lad Prabhakar wrote:
+> Document the CRU block found on Renesas RZ/G2L SoC's.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> RFC v2 -> v1
+> * Dropped endpoint stuff from port1 as suggested by Rob
+> * Updated description for endpoint
+> 
+> RFC v1 -> RFC v2
+> * Dropped CSI
+> ---
+>  .../bindings/media/renesas,rzg2l-cru.yaml     | 142 ++++++++++++++++++
+>  1 file changed, 142 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> new file mode 100644
+> index 000000000000..d7389693dae9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Renesas Electronics Corp.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/G2L (and alike SoC's) Camera Data Receiving Unit (CRU) Image processing
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +description:
+> +  The CRU image processing module is a data conversion module equipped with pixel
+> +  color space conversion, LUT, pixel format conversion, etc. An MIPI CSI-2 input and
+> +  parallel (including ITU-R BT.656) input are provided as the image sensor interface.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+No oneOf here either.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-m68k                             allyesconfig
-xtensa                           alldefconfig
-sh                            migor_defconfig
-sh                      rts7751r2d1_defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-m68k                        m5407c3_defconfig
-sh                          r7780mp_defconfig
-m68k                          multi_defconfig
-sh                                  defconfig
-i386                             allyesconfig
-i386                                defconfig
-sh                          r7785rp_defconfig
-sh                             shx3_defconfig
-mips                       bmips_be_defconfig
-arc                  randconfig-r043-20220829
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arm                           h5000_defconfig
-arm                        keystone_defconfig
-arm64                            alldefconfig
-arc                          axs103_defconfig
-sh                          lboxre2_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64               randconfig-a002-20220829
-x86_64               randconfig-a005-20220829
-x86_64               randconfig-a006-20220829
-x86_64               randconfig-a003-20220829
-x86_64               randconfig-a001-20220829
-x86_64               randconfig-a004-20220829
-loongarch                           defconfig
-loongarch                         allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                 randconfig-a002-20220829
-i386                 randconfig-a005-20220829
-i386                 randconfig-a001-20220829
-i386                 randconfig-a006-20220829
-i386                 randconfig-a003-20220829
-i386                 randconfig-a004-20220829
-arm                         axm55xx_defconfig
-sh                           se7343_defconfig
-sh                        edosk7705_defconfig
-ia64                             allmodconfig
-i386                 randconfig-c001-20220829
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-arm                         s3c6400_defconfig
-powerpc                      tqm8xx_defconfig
-arm                         vf610m4_defconfig
-powerpc                     tqm8548_defconfig
-arm                  randconfig-c002-20220829
-x86_64               randconfig-c001-20220829
-sh                             sh03_defconfig
-powerpc                      makalu_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sh                        sh7763rdp_defconfig
-m68k                          atari_defconfig
-mips                  decstation_64_defconfig
-m68k                        m5307c3_defconfig
-powerpc                         wii_defconfig
-powerpc                        cell_defconfig
-xtensa                    xip_kc705_defconfig
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a07g044-cru     # RZ/G2{L,LC}
+> +              - renesas,r9a07g054-cru     # RZ/V2L
+> +          - const: renesas,rzg2l-cru
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 3
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: image_conv
+> +      - const: image_conv_err
+> +      - const: axi_mst_err
+> +
+> +  clocks:
+> +    items:
+> +      - description: CRU Main clock
+> +      - description: CPU Register access clock
+> +      - description: CRU image transfer clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: vclk
+> +      - const: pclk
+> +      - const: aclk
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    items:
+> +      - description: CRU_PRESETN reset terminal
+> +      - description: CRU_ARESETN reset terminal
+> +
+> +  reset-names:
+> +    items:
+> +      - const: presetn
+> +      - const: aresetn
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port node, single endpoint describing a parallel input source.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              hsync-active: true
+> +              vsync-active: true
+> +              bus-width: true
+> +              data-shift: true
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Input port node, describing the Image Processing module connected to the
+> +          CSI-2 receiver.
 
-clang tested configs:
-i386                 randconfig-a016-20220829
-i386                 randconfig-a015-20220829
-i386                 randconfig-a011-20220829
-i386                 randconfig-a013-20220829
-i386                 randconfig-a014-20220829
-i386                 randconfig-a012-20220829
-hexagon              randconfig-r045-20220829
-riscv                randconfig-r042-20220829
-hexagon              randconfig-r041-20220829
-s390                 randconfig-r044-20220829
-x86_64               randconfig-a013-20220829
-x86_64               randconfig-a014-20220829
-x86_64               randconfig-a011-20220829
-x86_64               randconfig-a016-20220829
-x86_64               randconfig-a012-20220829
-x86_64               randconfig-a015-20220829
-arm                        mvebu_v5_defconfig
-powerpc                     kilauea_defconfig
+Both ports should be mandatory as they exist at the hardware level.
+Connections (through endpoints) are optional.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - power-domains
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Device node example with CSI-2
+> +  - |
+> +    #include <dt-bindings/clock/r9a07g044-cpg.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    cru: video@10830000 {
+> +            compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
+> +            reg = <0x10830000 0x400>;
+> +            interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+> +            interrupt-names = "image_conv", "image_conv_err", "axi_mst_err";
+> +            clocks = <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
+> +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>,
+> +                     <&cpg CPG_MOD R9A07G044_CRU_ACLK>;
+> +            clock-names = "vclk", "pclk", "aclk";
+> +            power-domains = <&cpg>;
+> +            resets = <&cpg R9A07G044_CRU_PRESETN>,
+> +                     <&cpg R9A07G044_CRU_ARESETN>;
+> +            reset-names = "presetn", "aresetn";
+> +
+> +            ports {
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +
+> +                    port@1 {
+> +                            #address-cells = <1>;
+> +                            #size-cells = <0>;
+> +
+> +                            reg = <1>;
+> +
+> +                            crucsi2: endpoint@0 {
+> +                                    reg = <0>;
+> +                                    remote-endpoint= <&csi2cru>;
+> +                            };
+> +                    };
+> +            };
+> +    };
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+
+Laurent Pinchart

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34135A4A19
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E815A4882
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiH2LdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S229828AbiH2LLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbiH2LaL (ORCPT
+        with ESMTP id S230383AbiH2LKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:30:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464D97C1EC;
-        Mon, 29 Aug 2022 04:18:20 -0700 (PDT)
+        Mon, 29 Aug 2022 07:10:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7936BD69;
+        Mon, 29 Aug 2022 04:07:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87D64611DA;
-        Mon, 29 Aug 2022 11:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 797C4C433D6;
-        Mon, 29 Aug 2022 11:15:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62FEDB80F2B;
+        Mon, 29 Aug 2022 11:05:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC08C433C1;
+        Mon, 29 Aug 2022 11:05:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771750;
-        bh=F9CMrlLKuDuW/PSzOwejgDCrb0NKteycphC9H61ILMM=;
+        s=korg; t=1661771113;
+        bh=+4r3UTh/FQZrfa0D6k8HNCbCbuz+D5Brv71ASRXX8q4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WOG/fpWB173qNRMcFFWSVPCzZ3PIPi0bvKapyDCKqfCqmoIhH4gPPsEntHBfBHK3k
-         /3DVgB3XlbK6BdOgTvLTKlY+s8XA1ZDnNcxV7Rxf+53IyiEOCscJPHV6DfbmnhNxqA
-         pNeZjkhZHJYUWZsoQYHAn5j4vFJiUwVhTh70eDuw=
+        b=RGnBSUqf+iWByJ7dehRyqkWLimVdSCTMuglcEet7W/GLv6+oW6W2JSRsziOwMwTVz
+         CDBONJjpSXjl7ZmpaQ788L5c62CIu0sMWAF9tP/B5r15Uqin0a9KqoUBkpKThbI3sP
+         7b+WCC5oJGFCsqsi5s5gm4JuGBZefSUS/JGxb1Bs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 078/158] net: Fix data-races around sysctl_devconf_inherit_init_net.
-Date:   Mon, 29 Aug 2022 12:58:48 +0200
-Message-Id: <20220829105812.310428515@linuxfoundation.org>
+Subject: [PATCH 5.10 23/86] ice: xsk: Force rings to be sized to power of 2
+Date:   Mon, 29 Aug 2022 12:58:49 +0200
+Message-Id: <20220829105757.479967257@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit a5612ca10d1aa05624ebe72633e0c8c792970833 ]
+[ Upstream commit 296f13ff3854535009a185aaf8e3603266d39d94 ]
 
-While reading sysctl_devconf_inherit_init_net, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its readers.
+With the upcoming introduction of batching to XSK data path,
+performance wise it will be the best to have the ring descriptor count
+to be aligned to power of 2.
 
-Fixes: 856c395cfa63 ("net: introduce a knob to control whether to inherit devconf config")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Check if ring sizes that user is going to attach the XSK socket fulfill
+the condition above. For Tx side, although check is being done against
+the Tx queue and in the end the socket will be attached to the XDP
+queue, it is fine since XDP queues get the ring->count setting from Tx
+queues.
+
+Suggested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Link: https://lore.kernel.org/bpf/20220125160446.78976-3-maciej.fijalkowski@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netdevice.h |  9 +++++++++
- net/ipv4/devinet.c        | 16 ++++++++++------
- net/ipv6/addrconf.c       |  5 ++---
- 3 files changed, 21 insertions(+), 9 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 78dd63a5c7c80..db40bc62213bd 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -650,6 +650,15 @@ static inline bool net_has_fallback_tunnels(const struct net *net)
- #endif
- }
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 5733526fa245c..4bb62950d92de 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -371,6 +371,13 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+ 	bool if_running, pool_present = !!pool;
+ 	int ret = 0, pool_failure = 0;
  
-+static inline int net_inherit_devconf(void)
-+{
-+#if IS_ENABLED(CONFIG_SYSCTL)
-+	return READ_ONCE(sysctl_devconf_inherit_init_net);
-+#else
-+	return 0;
-+#endif
-+}
++	if (!is_power_of_2(vsi->rx_rings[qid]->count) ||
++	    !is_power_of_2(vsi->tx_rings[qid]->count)) {
++		netdev_err(vsi->netdev, "Please align ring sizes to power of 2\n");
++		pool_failure = -EINVAL;
++		goto failure;
++	}
 +
- static inline int netdev_queue_numa_node_read(const struct netdev_queue *q)
- {
- #if defined(CONFIG_XPS) && defined(CONFIG_NUMA)
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index b2366ad540e62..787a44e3222db 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2682,23 +2682,27 @@ static __net_init int devinet_init_net(struct net *net)
- #endif
+ 	if_running = netif_running(vsi->netdev) && ice_is_xdp_ena_vsi(vsi);
  
- 	if (!net_eq(net, &init_net)) {
--		if (IS_ENABLED(CONFIG_SYSCTL) &&
--		    sysctl_devconf_inherit_init_net == 3) {
-+		switch (net_inherit_devconf()) {
-+		case 3:
- 			/* copy from the current netns */
- 			memcpy(all, current->nsproxy->net_ns->ipv4.devconf_all,
- 			       sizeof(ipv4_devconf));
- 			memcpy(dflt,
- 			       current->nsproxy->net_ns->ipv4.devconf_dflt,
- 			       sizeof(ipv4_devconf_dflt));
--		} else if (!IS_ENABLED(CONFIG_SYSCTL) ||
--			   sysctl_devconf_inherit_init_net != 2) {
--			/* inherit == 0 or 1: copy from init_net */
-+			break;
-+		case 0:
-+		case 1:
-+			/* copy from init_net */
- 			memcpy(all, init_net.ipv4.devconf_all,
- 			       sizeof(ipv4_devconf));
- 			memcpy(dflt, init_net.ipv4.devconf_dflt,
- 			       sizeof(ipv4_devconf_dflt));
-+			break;
-+		case 2:
-+			/* use compiled values */
-+			break;
- 		}
--		/* else inherit == 2: use compiled values */
+ 	if (if_running) {
+@@ -393,6 +400,7 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+ 			netdev_err(vsi->netdev, "ice_qp_ena error = %d\n", ret);
  	}
  
- #ifdef CONFIG_SYSCTL
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 49cc6587dd771..b738eb7e1cae8 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -7158,9 +7158,8 @@ static int __net_init addrconf_init_net(struct net *net)
- 	if (!dflt)
- 		goto err_alloc_dflt;
- 
--	if (IS_ENABLED(CONFIG_SYSCTL) &&
--	    !net_eq(net, &init_net)) {
--		switch (sysctl_devconf_inherit_init_net) {
-+	if (!net_eq(net, &init_net)) {
-+		switch (net_inherit_devconf()) {
- 		case 1:  /* copy from init_net */
- 			memcpy(all, init_net.ipv6.devconf_all,
- 			       sizeof(ipv6_devconf));
++failure:
+ 	if (pool_failure) {
+ 		netdev_err(vsi->netdev, "Could not %sable buffer pool, error = %d\n",
+ 			   pool_present ? "en" : "dis", pool_failure);
 -- 
 2.35.1
 

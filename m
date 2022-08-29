@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C173D5A483C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF725A499F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiH2LHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S232000AbiH2L1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiH2LGx (ORCPT
+        with ESMTP id S231646AbiH2LXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:06:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750D011177;
-        Mon, 29 Aug 2022 04:04:58 -0700 (PDT)
+        Mon, 29 Aug 2022 07:23:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8637B1EA;
+        Mon, 29 Aug 2022 04:14:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C349611BD;
-        Mon, 29 Aug 2022 11:03:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB4FC433C1;
-        Mon, 29 Aug 2022 11:03:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 544BDB80EB8;
+        Mon, 29 Aug 2022 11:14:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A05FDC433C1;
+        Mon, 29 Aug 2022 11:14:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661770997;
-        bh=mJwK8c6C68zneecaNx23HbUHfdyLR1wIDgrBIkJKT3E=;
+        s=korg; t=1661771680;
+        bh=8FkDwLZrpoSuvjoJww+KkBs/L9j41Rsp290Zc/VDYCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q2sJF/PwmQV9Gr6ooXOEGNgxpFtQ2HzYZuAtvxYuaWg08T5FWFJ1Qvw+4SeBRx5EY
-         JTpICqDbWUtoM1lGCv7Pm3pS3SXY5DRXzwA9/KMCoyQtsbBJVlvaariQP66EDDCL5z
-         lrw72fGkh/6xeOEenTOlSuWoIRFtd5H2gaUeo3Yk=
+        b=l84mFPBUDFZPYe7laJG7uzsZyOiAcGWZhUzT6E6AeexTwGaqLIoHj/5EmTRRFGy0e
+         a0k8HDw01I8J4xfDicfE28tUeLCKAINSF0Y/NV2H4B1YNXGfk5RXeKUjQDcEX7Oocm
+         8ZXEzVrGxQpYIbpF7JMR6FqeWl1vLWKzYnKTQfTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 05/86] xfs: prevent a WARN_ONCE() in xfs_ioc_attr_list()
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 061/158] netfilter: nft_tunnel: restrict it to netdev family
 Date:   Mon, 29 Aug 2022 12:58:31 +0200
-Message-Id: <20220829105756.743714196@linuxfoundation.org>
+Message-Id: <20220829105811.267293432@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 6ed6356b07714e0198be3bc3ecccc8b40a212de4 upstream.
+[ Upstream commit 01e4092d53bc4fe122a6e4b6d664adbd57528ca3 ]
 
-The "bufsize" comes from the root user.  If "bufsize" is negative then,
-because of type promotion, neither of the validation checks at the start
-of the function are able to catch it:
+Only allow to use this expression from NFPROTO_NETDEV family.
 
-	if (bufsize < sizeof(struct xfs_attrlist) ||
-	    bufsize > XFS_XATTR_LIST_MAX)
-		return -EINVAL;
-
-This means "bufsize" will trigger (WARN_ON_ONCE(size > INT_MAX)) in
-kvmalloc_node().  Fix this by changing the type from int to size_t.
-
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: af308b94a2a4 ("netfilter: nf_tables: add tunnel support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/xfs/xfs_ioctl.c |    2 +-
- fs/xfs/xfs_ioctl.h |    5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ net/netfilter/nft_tunnel.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/xfs/xfs_ioctl.c
-+++ b/fs/xfs/xfs_ioctl.c
-@@ -371,7 +371,7 @@ int
- xfs_ioc_attr_list(
- 	struct xfs_inode		*dp,
- 	void __user			*ubuf,
--	int				bufsize,
-+	size_t				bufsize,
- 	int				flags,
- 	struct xfs_attrlist_cursor __user *ucursor)
- {
---- a/fs/xfs/xfs_ioctl.h
-+++ b/fs/xfs/xfs_ioctl.h
-@@ -38,8 +38,9 @@ xfs_readlink_by_handle(
- int xfs_ioc_attrmulti_one(struct file *parfilp, struct inode *inode,
- 		uint32_t opcode, void __user *uname, void __user *value,
- 		uint32_t *len, uint32_t flags);
--int xfs_ioc_attr_list(struct xfs_inode *dp, void __user *ubuf, int bufsize,
--	int flags, struct xfs_attrlist_cursor __user *ucursor);
-+int xfs_ioc_attr_list(struct xfs_inode *dp, void __user *ubuf,
-+		      size_t bufsize, int flags,
-+		      struct xfs_attrlist_cursor __user *ucursor);
+diff --git a/net/netfilter/nft_tunnel.c b/net/netfilter/nft_tunnel.c
+index d0f9b1d51b0e9..96b03e0bf74ff 100644
+--- a/net/netfilter/nft_tunnel.c
++++ b/net/netfilter/nft_tunnel.c
+@@ -161,6 +161,7 @@ static const struct nft_expr_ops nft_tunnel_get_ops = {
  
- extern struct dentry *
- xfs_handle_to_dentry(
+ static struct nft_expr_type nft_tunnel_type __read_mostly = {
+ 	.name		= "tunnel",
++	.family		= NFPROTO_NETDEV,
+ 	.ops		= &nft_tunnel_get_ops,
+ 	.policy		= nft_tunnel_policy,
+ 	.maxattr	= NFTA_TUNNEL_MAX,
+-- 
+2.35.1
+
 
 

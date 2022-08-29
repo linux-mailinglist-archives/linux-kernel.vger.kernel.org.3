@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A9A5A47B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CFF5A4899
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiH2LA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S231235AbiH2LMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiH2LAV (ORCPT
+        with ESMTP id S231210AbiH2LMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:00:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27518186E2;
-        Mon, 29 Aug 2022 04:00:20 -0700 (PDT)
+        Mon, 29 Aug 2022 07:12:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9EA2D1F0;
+        Mon, 29 Aug 2022 04:08:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B053C61199;
-        Mon, 29 Aug 2022 11:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D00C433D6;
-        Mon, 29 Aug 2022 11:00:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44208611AE;
+        Mon, 29 Aug 2022 11:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B6FC433D6;
+        Mon, 29 Aug 2022 11:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661770819;
-        bh=CJRQTFu+wUrdMa03M09XgGm0xY+TyLR5hIcc/xMR2wQ=;
+        s=korg; t=1661771127;
+        bh=5evvKa0ibcXrhe03cHc2iqp6IdeF8JtPIUga+w+ZHoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jYA8rIPxxysZBwVxGDtPEIJvVqCVJfnAm1zNYt/wuOvM/1GPkVEP8zS6HJQB2w5fQ
-         27JwQqi+UDJkoNC4DR2KhLJe6x0xwebsO3lm2WRfOXT8DhJlc58BhuzjsbvTSHVXYJ
-         lPnpqj9AKkA8WnE4WaFABcxneBfFct0U7MwQFEec=
+        b=CwX5uykwp4Q/lmTCMV3lhbrPAIs/uQ+9HzyqXtbfnpTVekiwwY9R79L11N5TOGy1e
+         BzVQywpD7rsQJQcU/crocnXJRACz6datAlnkI58zZyGAK6cypsEjQyAPU9hUg6d/q5
+         OEI/WBBp3VE/oWaSOvcpZXbjrV+m45tGkzwU9f7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Jan Kara <jack@suse.cz>, Paul Moore <paul@paul-moore.com>
-Subject: [PATCH 5.10 01/86] audit: fix potential double free on error path from fsnotify_add_inode_mark
+        stable@vger.kernel.org,
+        Mark Blakeney <mark.blakeney@bullet-systems.net>,
+        Hayes Wang <hayeswang@realtek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 040/136] r8152: fix the RX FIFO settings when suspending
 Date:   Mon, 29 Aug 2022 12:58:27 +0200
-Message-Id: <20220829105756.569539357@linuxfoundation.org>
+Message-Id: <20220829105806.244387840@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,37 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gaosheng Cui <cuigaosheng1@huawei.com>
+From: Hayes Wang <hayeswang@realtek.com>
 
-commit ad982c3be4e60c7d39c03f782733503cbd88fd2a upstream.
+[ Upstream commit b75d612014447e04abdf0e37ffb8f2fd8b0b49d6 ]
 
-Audit_alloc_mark() assign pathname to audit_mark->path, on error path
-from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
-of audit_mark->path, but the caller of audit_alloc_mark will free
-the pathname again, so there will be double free problem.
+The RX FIFO would be changed when suspending, so the related settings
+have to be modified, too. Otherwise, the flow control would work
+abnormally.
 
-Fix this by resetting audit_mark->path to NULL pointer on error path
-from fsnotify_add_inode_mark().
-
-Cc: stable@vger.kernel.org
-Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216333
+Reported-by: Mark Blakeney <mark.blakeney@bullet-systems.net>
+Fixes: cdf0b86b250f ("r8152: fix a WOL issue")
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/audit_fsnotify.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/r8152.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/kernel/audit_fsnotify.c
-+++ b/kernel/audit_fsnotify.c
-@@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index d18627a8539a4..7e821bed91ce5 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -5904,6 +5904,11 @@ static void r8153_enter_oob(struct r8152 *tp)
+ 	ocp_data &= ~NOW_IS_OOB;
+ 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
  
- 	ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, true);
- 	if (ret < 0) {
-+		audit_mark->path = NULL;
- 		fsnotify_put_mark(&audit_mark->mark);
- 		audit_mark = ERR_PTR(ret);
- 	}
++	/* RX FIFO settings for OOB */
++	ocp_write_dword(tp, MCU_TYPE_PLA, PLA_RXFIFO_CTRL0, RXFIFO_THR1_OOB);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RXFIFO_CTRL1, RXFIFO_THR2_OOB);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RXFIFO_CTRL2, RXFIFO_THR3_OOB);
++
+ 	rtl_disable(tp);
+ 	rtl_reset_bmu(tp);
+ 
+@@ -6542,6 +6547,11 @@ static void rtl8156_down(struct r8152 *tp)
+ 	ocp_data &= ~NOW_IS_OOB;
+ 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
+ 
++	/* RX FIFO settings for OOB */
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RXFIFO_FULL, 64 / 16);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RX_FIFO_FULL, 1024 / 16);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RX_FIFO_EMPTY, 4096 / 16);
++
+ 	rtl_disable(tp);
+ 	rtl_reset_bmu(tp);
+ 
+-- 
+2.35.1
+
 
 

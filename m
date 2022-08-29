@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6CF5A4E7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2976E5A4E82
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiH2Nsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S230292AbiH2NtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiH2Nse (ORCPT
+        with ESMTP id S229558AbiH2Ns7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:48:34 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBFF95ADD;
-        Mon, 29 Aug 2022 06:48:32 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3CA3D60005;
-        Mon, 29 Aug 2022 13:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661780911;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z2m4rearj/dPqMVh35stfnUCu34jNVDpj9BgSbwCobk=;
-        b=cpXFf8wJUloAz4AAGoNGaIWIp4VrUAQGNigvSUVKi3Vwf/94zpYwHxmhp/61KGjFgxcoYV
-        7uZoBBYgyMgYT6OzhdOECeGJy+sgLNoguJFXkxPJ7XZJBHDVqQuX91BDgxIlnjutlPt2xC
-        VGfxDbpcsVXKujKBs21hYFcnHpuKNAJmq9tQ08qIPmOMALcx41guL3kNadh6bvKeyJYe/W
-        HNfJTEPLh51zonCCa3oDKwCRRzrCgYP+VermwY7uKrkPX376W1TnVEA4rHvyk7xanzMF3H
-        R1uQtiwjdvhOT4u7Xoh9V7CqTmbJFdQjd/rCJFc80tewzac7kvU+bH6Bw6A1gw==
-Date:   Mon, 29 Aug 2022 15:48:26 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v3 1/5] net: ipqess: introduce the Qualcomm
- IPQESS driver
-Message-ID: <20220829154826.270b693e@pc-10.home>
-In-Reply-To: <YwpwVd+qgM+RR8nh@lunn.ch>
-References: <20220826154650.615582-1-maxime.chevallier@bootlin.com>
-        <20220826154650.615582-2-maxime.chevallier@bootlin.com>
-        <YwpwVd+qgM+RR8nh@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 29 Aug 2022 09:48:59 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5102F956A5;
+        Mon, 29 Aug 2022 06:48:58 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id E5605E000E;
+        Mon, 29 Aug 2022 13:48:52 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Subject: [RFC v1 1/2] HID: logitech-hidpp: Fix "Sw. Id." for HID++ 2.0 commands
+Date:   Mon, 29 Aug 2022 15:48:51 +0200
+Message-Id: <20220829134852.312548-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andrew, and thanks for the review
+Always set a non-zero "Sw. Id." in the lower nibble of the Function/ASE
+and Software Identifier byte in HID++ 2.0 commands.
 
-On Sat, 27 Aug 2022 21:28:21 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+As per the "Protocol HID++2.0 essential features" section in
+https://lekensteyn.nl/files/logitech/logitech_hidpp_2.0_specification_draft_2012-06-04.pdf
+"
+Software identifier (4 bits, unsigned)
 
-> > +static void ipqess_get_strings(struct net_device *netdev, u32
-> > stringset,
-> > +			       u8 *data)
-> > +{
-> > +	u8 *p = data;
-> > +	u32 i;
-> > +
-> > +	switch (stringset) {
-> > +	case ETH_SS_STATS:
-> > +		for (i = 0; i < ARRAY_SIZE(ipqess_stats); i++) {
-> > +			memcpy(p, ipqess_stats[i].string,
-> > +			       min((size_t)ETH_GSTRING_LEN,
-> > +				   strlen(ipqess_stats[i].string)
-> > + 1));  
-> 
-> That looks pretty similar to strlcpy().
+A number uniquely defining the software that sends a request. The
+firmware must copy the software identifier in the response but does
+not use it in any other ways.
 
-Indeed... and after digging I even found ethtool_sprintf() which seems
-to fit even better :)
+0 Do not use (allows to distinguish a notification from a response).
+"
 
-> > +static int ipqess_get_settings(struct net_device *netdev,
-> > +			       struct ethtool_link_ksettings *cmd)
-> >  
-> 
-> It would be traditional to have the k in the name.
-> 
-> > +{
-> > +	struct ipqess *ess = netdev_priv(netdev);
-> > +
-> > +	return phylink_ethtool_ksettings_get(ess->phylink, cmd);
-> > +}
-> > +
-> > +static int ipqess_set_settings(struct net_device *netdev,
-> > +			       const struct ethtool_link_ksettings
-> > *cmd) +{  
-> 
-> Here too.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215699
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/hid/hid-logitech-hidpp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Agreed, I'll address that. Thanks !
-
-Maxime
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 86e7a38d8a9a..02f8c99672c7 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -41,6 +41,9 @@ module_param(disable_tap_to_click, bool, 0644);
+ MODULE_PARM_DESC(disable_tap_to_click,
+ 	"Disable Tap-To-Click mode reporting for touchpads (only on the K400 currently).");
  
->      Andrew
++/* Define a non-zero software ID to identify our own requests */
++#define LINUX_KERNEL_SW_ID			0x06
++
+ #define REPORT_ID_HIDPP_SHORT			0x10
+ #define REPORT_ID_HIDPP_LONG			0x11
+ #define REPORT_ID_HIDPP_VERY_LONG		0x12
+@@ -343,7 +346,7 @@ static int hidpp_send_fap_command_sync(struct hidpp_device *hidpp,
+ 	else
+ 		message->report_id = REPORT_ID_HIDPP_LONG;
+ 	message->fap.feature_index = feat_index;
+-	message->fap.funcindex_clientid = funcindex_clientid;
++	message->fap.funcindex_clientid = funcindex_clientid | LINUX_KERNEL_SW_ID;
+ 	memcpy(&message->fap.params, params, param_count);
+ 
+ 	ret = hidpp_send_message_sync(hidpp, message, response);
+-- 
+2.37.2
 

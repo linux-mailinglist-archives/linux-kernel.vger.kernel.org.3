@@ -2,123 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FB65A44E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237315A44E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiH2IS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
+        id S229989AbiH2IUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiH2ISw (ORCPT
+        with ESMTP id S229912AbiH2IT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:18:52 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11985722A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:18:50 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x23so7253312pll.7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:18:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=2QZKujPjtkBWYkXnUOgTQaHomGYPSRRsNUAaVRPYFmo=;
-        b=XjlvkNLxJIBSm9qs1DUSUgMuMgLILSs0DYrRUK/HoUSesO2OeX0vjKMsXT7Ep7aY8P
-         nNt3CWi8bV1m9XVoRZJVEEU2ZEydvzZ4V3FtktM0AkRXo492mcsf+sAszwHd7sXwz6ks
-         jB36bF29x75eB3gA5nxbdfHRCj+CSwBBd5H+bxH0JSAvW853GJn7ktenqrr3uNFD4+hp
-         5NPVt3OQlfY3+/8bq+H41sglPpQDcsHW97cnzNHnRbDwQtvozasufBLP040is7XxjQUY
-         VPnGDti7mEnuDzQfDoE2tdZSSrj+f/LpTqZpdHUTOjYpapeYsFCvivbAWzbJU0GgJs/Y
-         o77A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=2QZKujPjtkBWYkXnUOgTQaHomGYPSRRsNUAaVRPYFmo=;
-        b=4XptiE1xMRIpmhdd44QBdBmj72Rf5qvwNWK+aFlnUsw9yqW1q5Vb+H9NtqD9BKMSo5
-         cUJAwb+vCHMxF78Xv0gA0aydFtrVicQhau9z2LEz8zCoV1G7SoLkanmprUYvRalgKXsN
-         OmeMMe5O2S85d/JNetqBe3lQ5x2lPHr/TTyfJtmcSh9/irTD+2FSg9zs06jAXvsqtxMZ
-         +ZUObDsHCO8Ld5NyjDr7htEMp1VWlQuAiDfdSItzNtLm0pYRVJYiNufcyjXWXSXwMrq/
-         nStCTE6R72LHLV1FUHTxefvnXqUX6evm10yDaKmf0gPhNfM/yu9MrpyEqalcnnmIn69f
-         LUhw==
-X-Gm-Message-State: ACgBeo1A+gvljAeMVV6XkJnvvxYbWt1QpS2N+DDqSBdGTl/qNZBZMR9q
-        iAXWESaQVhVRSiybF8JNJiI2rg==
-X-Google-Smtp-Source: AA6agR7xWObiHeZvPXlzNdhLaj3EUEIrEQSpFNVFbH0mh4Xc+UmHlLobw2C9t4ZEXaTuKG0H+6vkrg==
-X-Received: by 2002:a17:90b:c18:b0:1fd:b908:7a43 with SMTP id bp24-20020a17090b0c1800b001fdb9087a43mr5866952pjb.218.1661761130345;
-        Mon, 29 Aug 2022 01:18:50 -0700 (PDT)
-Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b0016cb873fe6fsm4829587pln.183.2022.08.29.01.18.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Aug 2022 01:18:49 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     vbabka@suse.cz
-Cc:     Jason@zx2c4.com, akpm@linux-foundation.org, corbet@lwn.net,
-        keescook@chromium.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com, lizhe.67@bytedance.com,
-        mark-pk.tsai@mediatek.com, mhiramat@kernel.org, mhocko@suse.com,
-        rostedt@goodmis.org
-Subject: Re: [PATCH v4] page_ext: introduce boot parameter 'early_page_ext'
-Date:   Mon, 29 Aug 2022 16:18:37 +0800
-Message-Id: <20220829081837.38225-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <68133fc4-7034-c07b-f14b-5b4e73e04d2c@suse.cz>
-References: <68133fc4-7034-c07b-f14b-5b4e73e04d2c@suse.cz>
+        Mon, 29 Aug 2022 04:19:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13256E080
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661761195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F7P/ZjAfkCSPemarCbD5q5Qjvl0zNrpaxHX3SmkPK3U=;
+        b=P6vsQvE8B3dXjanrm6+f1DEllvQZNz4+A1tOA1dyno2syTuukcpTYGzL27pyQLQGzwYL+O
+        U2C0wRLT/suxFPocniQ1hKp/4c7osHlDRBWgpQeXzCNDoo2b73yxDHTLZ/YvbkpjmomFBy
+        ObU3VMvTa2PClNcJbWdRymQxeIAx160=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-3mWRC6R1Nvum5zgvcutp-A-1; Mon, 29 Aug 2022 04:19:50 -0400
+X-MC-Unique: 3mWRC6R1Nvum5zgvcutp-A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8357B29ABA1B;
+        Mon, 29 Aug 2022 08:19:49 +0000 (UTC)
+Received: from localhost (ovpn-12-153.pek2.redhat.com [10.72.12.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AB8781121314;
+        Mon, 29 Aug 2022 08:19:48 +0000 (UTC)
+Date:   Mon, 29 Aug 2022 16:19:44 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        linux-arm-kernel@lists.infradead.org,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org
+Subject: Re: [PATCH v2 07/11] openrisc: mm: Convert to GENERIC_IOREMAP
+Message-ID: <Ywx2oNXOeFUZ8MPy@MiWiFi-R3L-srv>
+References: <20220820003125.353570-1-bhe@redhat.com>
+ <20220820003125.353570-8-bhe@redhat.com>
+ <Ywxdfs4t1fB1EYec@oscomms1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ywxdfs4t1fB1EYec@oscomms1>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26 Aug 2022 12:49:25 +0200, vbabka@suse.cz wrote:
->On 8/26/22 06:23, Andrew Morton wrote:
->> On Thu, 25 Aug 2022 18:27:14 +0800 lizhe.67@bytedance.com wrote:
->> 
->>> From: Li Zhe <lizhe.67@bytedance.com>
->>> 
->>> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
->>> we call page_ext_init() after page_alloc_init_late() to avoid some panic
->>> problem. It seems that we cannot track early page allocations in current
->>> kernel even if page structure has been initialized early.
->>> 
->>> This patch introduce a new boot parameter 'early_page_ext' to resolve this
->>> problem. If we pass it to kernel, function page_ext_init() will be moved
->>> up and feature 'deferred initialization of struct pages' will be disabled
->>> to initialize the page allocator early and prevent from the panic problem
->>> above. It can help us to catch early page allocations. This is useful
->>> especially when we find that the free memory value is not the same right
->>> after different kernel booting.
->>> 
->> 
->> WARNING: modpost: vmlinux.o: section mismatch in reference: early_page_ext_enabled (section: .text.unlikely) -> early_page_ext (section: .meminit.data)
->> WARNING: modpost: vmlinux.o: section mismatch in reference: early_page_ext_enabled (section: .text.unlikely) -> early_page_ext (section: .meminit.data)
->
->Hm it's a very small static inline, shouldn't exist separately anywhere.
->Maybe it's due to that new debug info level thing?
->
->Would this work instead?
->
->----8<----
->diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
->index 884282a7f03a..4bf4e58cf2d4 100644
->--- a/include/linux/page_ext.h
->+++ b/include/linux/page_ext.h
->@@ -40,7 +40,7 @@ extern bool early_page_ext;
-> extern unsigned long page_ext_size;
-> extern void pgdat_page_ext_init(struct pglist_data *pgdat);
+On 08/29/22 at 06:32am, Stafford Horne wrote:
+> On Sat, Aug 20, 2022 at 08:31:21AM +0800, Baoquan He wrote:
+> > Add hooks arch_ioremap() and arch_iounmap() for operisc's special
+> > operation when ioremap() and iounmap.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: openrisc@lists.librecores.org
+> > ---
+> >  arch/openrisc/Kconfig          |  1 +
+> >  arch/openrisc/include/asm/io.h | 16 ++++++++---
+> >  arch/openrisc/mm/ioremap.c     | 51 +++++++++++-----------------------
+> >  3 files changed, 29 insertions(+), 39 deletions(-)
+> > 
+> > diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+> > index c7f282f60f64..fd9bb76a610b 100644
+> > --- a/arch/openrisc/Kconfig
+> > +++ b/arch/openrisc/Kconfig
+> > @@ -21,6 +21,7 @@ config OPENRISC
+> >  	select GENERIC_IRQ_PROBE
+> >  	select GENERIC_IRQ_SHOW
+> >  	select GENERIC_PCI_IOMAP
+> > +	select GENERIC_IOREMAP
+> >  	select GENERIC_CPU_DEVICES
+> >  	select HAVE_PCI
+> >  	select HAVE_UID16
+> > diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
+> > index ee6043a03173..9db67938bfc4 100644
+> > --- a/arch/openrisc/include/asm/io.h
+> > +++ b/arch/openrisc/include/asm/io.h
+> > @@ -15,6 +15,8 @@
+> >  #define __ASM_OPENRISC_IO_H
+> >  
+> >  #include <linux/types.h>
+> > +#include <asm/pgtable.h>
+> > +#include <asm/pgalloc.h>
 > 
->-static inline bool early_page_ext_enabled(void)
->+static inline bool __meminit early_page_ext_enabled(void)
-> {
-> 	return early_page_ext;
-> }
+> This seems to cause a compilation issue when building virt_defconig:
+> 
+>       CC      kernel/irq/generic-chip.o
+>     In file included from ./include/asm-generic/pgtable-nopud.h:7,
+> 		     from ./include/asm-generic/pgtable-nopmd.h:7,
+> 		     from ./arch/openrisc/include/asm/pgtable.h:24,
+> 		     from ./arch/openrisc/include/asm/io.h:18,
+> 		     from ./include/linux/io.h:13,
+> 		     from kernel/irq/generic-chip.c:7:
+>     ./include/asm-generic/pgtable-nop4d.h:9:18: error: unknown type name 'pgd_t'
+> 	9 | typedef struct { pgd_t pgd; } p4d_t;
+> 	  |                  ^~~~~
+> 
+> It works if we swap the order arround:
+> 
+>     +#include <asm/pgalloc.h>
+>     +#include <asm/pgtable.h>
 
-I think this is also a method to solve this problem.
-Due to '__meminit', early_page_ext_enabled() can not be an inline function
-now. So if we finally choose this method, I suggest we put function
-early_page_ext_enabled() into page_ext.c if CONFIG_PAGE_EXTENSION=y, and
-we can make 'early_page_ext' a static variable.
+Thanks a lot, add this change to patch.
+
+> 
+> Otherwise we need to add an asm/page.h include to asm/pgtable.h (which is more
+> correct) but means you would touch more files.
+> 
+> >  /*
+> >   * PCI: We do not use IO ports in OpenRISC
+> > @@ -27,11 +29,17 @@
+> >  #define PIO_OFFSET		0
+> >  #define PIO_MASK		0
+> >  
+> > -#define ioremap ioremap
+> > -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
+> > +/*
+> > + * I/O memory mapping functions.
+> > + */
+> > +void __iomem *
+> > +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val);
+> > +#define arch_ioremap arch_ioremap
+> > +
+> > +int arch_iounmap(void __iomem *addr);
+> > +#define arch_iounmap arch_iounmap
+> >  
+> > -#define iounmap iounmap
+> > -extern void iounmap(volatile void __iomem *addr);
+> > +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
+> >  
+> >  #include <asm-generic/io.h>
+> >  
+> > diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
+> > index 8ec0dafecf25..bc41660e1fb0 100644
+> > --- a/arch/openrisc/mm/ioremap.c
+> > +++ b/arch/openrisc/mm/ioremap.c
+> > @@ -24,26 +24,18 @@ extern int mem_init_done;
+> >  
+> >  static unsigned int fixmaps_used __initdata;
+> >  
+> > -/*
+> > - * Remap an arbitrary physical address space into the kernel virtual
+> > - * address space. Needed when the kernel wants to access high addresses
+> > - * directly.
+> > - *
+> > - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
+> > - * have to convert them into an offset in a page-aligned mapping, but the
+> > - * caller shouldn't need to know that small detail.
+> > - */
+> > -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+> > +void __iomem *
+> > +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
+> >  {
+> >  	phys_addr_t p;
+> >  	unsigned long v;
+> > -	unsigned long offset, last_addr;
+> > -	struct vm_struct *area = NULL;
+> > +	unsigned long offset, last_addr, addr = *paddr;
+> > +	int ret = -EINVAL;
+> >  
+> >  	/* Don't allow wraparound or zero size */
+> >  	last_addr = addr + size - 1;
+> >  	if (!size || last_addr < addr)
+> > -		return NULL;
+> > +		return IOMEM_ERR_PTR(ret);
+> >  
+> >  	/*
+> >  	 * Mappings have to be page-aligned
+> > @@ -52,32 +44,24 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+> >  	p = addr & PAGE_MASK;
+> >  	size = PAGE_ALIGN(last_addr + 1) - p;
+> >  
+> > -	if (likely(mem_init_done)) {
+> > -		area = get_vm_area(size, VM_IOREMAP);
+> > -		if (!area)
+> > -			return NULL;
+> > -		v = (unsigned long)area->addr;
+> > -	} else {
+> > +	if (unlikely(!mem_init_done)) {
+> >  		if ((fixmaps_used + (size >> PAGE_SHIFT)) > FIX_N_IOREMAPS)
+> > -			return NULL;
+> > +			return IOMEM_ERR_PTR(ret);
+> >  		v = fix_to_virt(FIX_IOREMAP_BEGIN + fixmaps_used);
+> >  		fixmaps_used += (size >> PAGE_SHIFT);
+> > -	}
+> >  
+> > -	if (ioremap_page_range(v, v + size, p,
+> > -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
+> > -		if (likely(mem_init_done))
+> > -			vfree(area->addr);
+> > -		else
+> > +		if (ioremap_page_range(v, v + size, p, __pgprot(*prot_val))) {
+> >  			fixmaps_used -= (size >> PAGE_SHIFT);
+> > -		return NULL;
+> > +			return IOMEM_ERR_PTR(ret);
+> > +		}
+> > +
+> > +		return (void __iomem *)(offset + (char *)v);
+> >  	}
+> >  
+> > -	return (void __iomem *)(offset + (char *)v);
+> > +	return NULL;
+> >  }
+> > -EXPORT_SYMBOL(ioremap);
+> >  
+> > -void iounmap(volatile void __iomem *addr)
+> > +int arch_iounmap(void __iomem *addr)
+> >  {
+> >  	/* If the page is from the fixmap pool then we just clear out
+> >  	 * the fixmap mapping.
+> > @@ -97,13 +81,10 @@ void iounmap(volatile void __iomem *addr)
+> >  		 *   ii) invalid accesses to the freed areas aren't made
+> >  		 */
+> >  		flush_tlb_all();
+> > -		return;
+> > +		return -EINVAL;
+> >  	}
+> > -
+> > -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
+> > +	return 0;
+> >  }
+> > -EXPORT_SYMBOL(iounmap);
+> > -
+> >  /**
+> >   * OK, this one's a bit tricky... ioremap can get called before memory is
+> >   * initialized (early serial console does this) and will want to alloc a page
+> > -- 
+> > 2.34.1
+> 
+> Other than that compiler issue, I fixed it and test booted this and it works
+> well.
+> 
+> Acked-by: Stafford Horne <shorne@gmail.com>
+
+Thanks, will add this tag when repost.
+

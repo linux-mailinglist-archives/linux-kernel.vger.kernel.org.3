@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC745A489C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9844B5A4A15
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiH2LM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S232623AbiH2Lc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiH2LMO (ORCPT
+        with ESMTP id S231991AbiH2L3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:12:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF6F61D84;
-        Mon, 29 Aug 2022 04:08:37 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344D679606;
+        Mon, 29 Aug 2022 04:17:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70B2CB80F98;
-        Mon, 29 Aug 2022 11:07:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2ADC433C1;
-        Mon, 29 Aug 2022 11:07:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4AC6122E;
+        Mon, 29 Aug 2022 11:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96EB5C433C1;
+        Mon, 29 Aug 2022 11:16:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771264;
-        bh=uMRB23unHmTqcawSbCqlYIwEgqixTCYXTgtjzWJQvl4=;
+        s=korg; t=1661771802;
+        bh=DvKoNBXZQ3lSMZDV8guVSXKw8UBkl1O4MYqLwlKmqCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MCScNTAgtv09GjiaJAi67LvAtQJUpv5wTh2w6T4OMCD42vdYXUu2Y57aGsI/WpB7G
-         jRNnsajHoksVkUpKyrfLGYeSp0zcnuu2z7knPPq6qeptqfBvXrHbP6hniJ5FQGynbj
-         f+sCbnSW7dxHVClyllUJIwswIdLsl2gXL7RZEyQM=
+        b=FRp+CzJXHV8zYKSBRlJdC8n2AUHDVjPoW6348Y9kB1iE4unt1ZIXyH9L7AvLcVtlf
+         pezWNi6JncCnLfI0w7+a7uI3aQsaFz52aAYOPVTnsQ8EHCxsuCrlQ6bHJ13s/N2juJ
+         m65RK+fiQSJoHxuzRA7nTQDL6asqIj4k0SL/GMQU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 085/136] net: Fix data-races around sysctl_devconf_inherit_init_net.
+        stable@vger.kernel.org, Ammy Yi <ammy.yi@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.19 102/158] perf/x86/intel: Fix pebs event constraints for ADL
 Date:   Mon, 29 Aug 2022 12:59:12 +0200
-Message-Id: <20220829105808.143229770@linuxfoundation.org>
+Message-Id: <20220829105813.372152512@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,99 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Kan Liang <kan.liang@linux.intel.com>
 
-[ Upstream commit a5612ca10d1aa05624ebe72633e0c8c792970833 ]
+commit cde643ff75bc20c538dfae787ca3b587bab16b50 upstream.
 
-While reading sysctl_devconf_inherit_init_net, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its readers.
+According to the latest event list, the LOAD_LATENCY PEBS event only
+works on the GP counter 0 and 1 for ADL and RPL.
 
-Fixes: 856c395cfa63 ("net: introduce a knob to control whether to inherit devconf config")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Update the pebs event constraints table.
+
+Fixes: f83d2f91d259 ("perf/x86/intel: Add Alder Lake Hybrid support")
+Reported-by: Ammy Yi <ammy.yi@intel.com>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/20220818184429.2355857-1-kan.liang@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/netdevice.h |  9 +++++++++
- net/ipv4/devinet.c        | 16 ++++++++++------
- net/ipv6/addrconf.c       |  5 ++---
- 3 files changed, 21 insertions(+), 9 deletions(-)
+ arch/x86/events/intel/ds.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index f9ed41ca7ac6d..3b97438afe3e2 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -636,6 +636,15 @@ static inline bool net_has_fallback_tunnels(const struct net *net)
- #endif
- }
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -822,7 +822,7 @@ struct event_constraint intel_glm_pebs_e
  
-+static inline int net_inherit_devconf(void)
-+{
-+#if IS_ENABLED(CONFIG_SYSCTL)
-+	return READ_ONCE(sysctl_devconf_inherit_init_net);
-+#else
-+	return 0;
-+#endif
-+}
-+
- static inline int netdev_queue_numa_node_read(const struct netdev_queue *q)
- {
- #if defined(CONFIG_XPS) && defined(CONFIG_NUMA)
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 4744c7839de53..9ac41ffdc6344 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2673,23 +2673,27 @@ static __net_init int devinet_init_net(struct net *net)
- #endif
- 
- 	if (!net_eq(net, &init_net)) {
--		if (IS_ENABLED(CONFIG_SYSCTL) &&
--		    sysctl_devconf_inherit_init_net == 3) {
-+		switch (net_inherit_devconf()) {
-+		case 3:
- 			/* copy from the current netns */
- 			memcpy(all, current->nsproxy->net_ns->ipv4.devconf_all,
- 			       sizeof(ipv4_devconf));
- 			memcpy(dflt,
- 			       current->nsproxy->net_ns->ipv4.devconf_dflt,
- 			       sizeof(ipv4_devconf_dflt));
--		} else if (!IS_ENABLED(CONFIG_SYSCTL) ||
--			   sysctl_devconf_inherit_init_net != 2) {
--			/* inherit == 0 or 1: copy from init_net */
-+			break;
-+		case 0:
-+		case 1:
-+			/* copy from init_net */
- 			memcpy(all, init_net.ipv4.devconf_all,
- 			       sizeof(ipv4_devconf));
- 			memcpy(dflt, init_net.ipv4.devconf_dflt,
- 			       sizeof(ipv4_devconf_dflt));
-+			break;
-+		case 2:
-+			/* use compiled values */
-+			break;
- 		}
--		/* else inherit == 2: use compiled values */
- 	}
- 
- #ifdef CONFIG_SYSCTL
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 6dcf034835ecd..8800987fdb402 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -7128,9 +7128,8 @@ static int __net_init addrconf_init_net(struct net *net)
- 	if (!dflt)
- 		goto err_alloc_dflt;
- 
--	if (IS_ENABLED(CONFIG_SYSCTL) &&
--	    !net_eq(net, &init_net)) {
--		switch (sysctl_devconf_inherit_init_net) {
-+	if (!net_eq(net, &init_net)) {
-+		switch (net_inherit_devconf()) {
- 		case 1:  /* copy from init_net */
- 			memcpy(all, init_net.ipv6.devconf_all,
- 			       sizeof(ipv6_devconf));
--- 
-2.35.1
-
+ struct event_constraint intel_grt_pebs_event_constraints[] = {
+ 	/* Allow all events as PEBS with no flags */
+-	INTEL_HYBRID_LAT_CONSTRAINT(0x5d0, 0xf),
++	INTEL_HYBRID_LAT_CONSTRAINT(0x5d0, 0x3),
+ 	INTEL_HYBRID_LAT_CONSTRAINT(0x6d0, 0xf),
+ 	EVENT_CONSTRAINT_END
+ };
 
 

@@ -2,113 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91D95A4E94
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FF95A4E96
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiH2Nvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
+        id S229888AbiH2NwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiH2Nvf (ORCPT
+        with ESMTP id S229523AbiH2NwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:51:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659A194EEB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:51:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id gb36so15803851ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:51:33 -0700 (PDT)
+        Mon, 29 Aug 2022 09:52:10 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F18D93515;
+        Mon, 29 Aug 2022 06:52:08 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id x80so4175844pgx.0;
+        Mon, 29 Aug 2022 06:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=C2AjxMNWtzIecaqFsK7iRg4ch6dPyQx/KkfOOxiXtYg=;
-        b=j6qW4o3z3baEDyFDKHuHqekQwtXbltPLi5duAgmuHm6bFSRWytH3Cvnp3br51bwDZ4
-         iVeXMqGEjF3Arg4umGGmkAMgblbqyT1rPNHDTd/JtXOmZQY+oh+D+vQfQ96oJjXfabMf
-         Up0NNnhMjRuILZTQlIw+zD4iRQdRSr85aTK2z06BHQxdOkV4p+oYwQzyHDVDHJw/SPyW
-         gY5r/Vt54KS8CkPBfrnbtkEOXPKenXrmWJRNBpWvfo8FfVVj+tEppY6T0djYnhnbMfdV
-         yWkbnXT1O7sCPmgsWAL3MfAiuqwE76UIs3Uu+BBvWdr/zrA4srpuWhnss1pf4EZHhLEe
-         uGig==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=CizzwTQDrBW1pzG8I/tvVZktSfPvWVpP3oiGosqePuM=;
+        b=BFuBmpziPrpH+ToBnbBzhKoGCsrxb5bIPLToAdEtGFxp4a2CJe0pbvHqdAKBBI/To+
+         3Vz/oanucLjuB0IB1SG7/tWbb9Jr6dnVvg5ZiQoM81uV0T8vvkqpyIIz/ukBGyvwz8ll
+         TvQdHS3f0E2qE7qgyjRj4N46lzcrK+b+uCf5PnCnzxG6bxXzca5VEobpq1zCvtArYCXX
+         wL6udQc9MKcF434cBqGqg00hTZ51j6JzrjDXACQ/TMp0Pq2maYUcKkykod2dBeMWqUBF
+         7EFlG2kKKwgJcvBLvcxj3hSwr6X3KwYIAdxmM15EyIwQEoiRBQN337W/dO5F1bu4YlNC
+         Re1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=C2AjxMNWtzIecaqFsK7iRg4ch6dPyQx/KkfOOxiXtYg=;
-        b=cap1q0WYABmIKCOHQ54iqRsmEW+moh5ew3iUYRGdsZWUGEI3luVTojt+6wpczxzYCa
-         +BQv0dwtxJGpJbyt2IVPHs3tWw85DMgjXtnuDr41V54d7sPaEFSAP6x87vq8d16L7Gjj
-         DMK5h1OJBN0xS6nZY411cJ9IWrSPzINHz/IFJPZrf3wkjy8exyA8X60Ho5wxkW30aAZL
-         vxq9Osd93LxyyM2wCERlEsMMxl0OuYyOSr6zvz2FZc3csEapCaBZuGEA/0cRvQfCajxf
-         o0vHWhkoEDp++Sh9kElLo51t4gxturpvHHsJ264w91h/vGub4C/DCrkNI+fITxDAjCj4
-         /BPg==
-X-Gm-Message-State: ACgBeo0nvqoTFsNaRHHi89TMCswsKJwcYvpCdCHdI0tpyatBgBOWWLUV
-        1MKpLF6grxPtNiXYxu5oB4Dmmtkjn2GiKzdAEkem5w==
-X-Google-Smtp-Source: AA6agR5N6OvgYRnL1gCQiIwUvNMBbnV9YYUPJqU898krDerbnUiyVa4rqTO2acXLCLQG7084iwFQay5QIxtE8nAp1tY=
-X-Received: by 2002:a17:906:cc5d:b0:73d:c534:1aaa with SMTP id
- mm29-20020a170906cc5d00b0073dc5341aaamr13534876ejb.626.1661781091816; Mon, 29
- Aug 2022 06:51:31 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=CizzwTQDrBW1pzG8I/tvVZktSfPvWVpP3oiGosqePuM=;
+        b=j4T7bX1DXJzKwrjYdry7inlq4pyHXDKnqgCdnGubg92HvdUmripEkVcypnVFahJqgf
+         1Uxmba0Zjy9KezNVwEE/0p1Negi73g00/RvPPHi3+IaIUzTjaIpV11M0Sqn7S3e7F1U3
+         CCYxsh3FqQ/xHfGfGus4oMmpHHs89XDsqqn/NFgMbZ4CwOgej++NEgsbr+wYe9VoIO62
+         AmnHlf1I6K+s7eaeYKF70GnQOArRG4NWM7temGEBKxQXvfsNBCBRFEXDJbT9vR2BlorZ
+         zatHvOkeaPvfdsKnRz9enODri5+Cec1cQXPJK1VeudsL4y/C+4/qIBV7X7ChaVS+s7+2
+         6WNg==
+X-Gm-Message-State: ACgBeo3HwPVe3mwPIj1bvKd15ht4yM4Lqn4ye+/N78FwMOXFS0YT4yuj
+        MA8bGZTUh6E2Md87AmUjadU=
+X-Google-Smtp-Source: AA6agR6vjOINy9txTO5/r6fE4Ijqn5Ri8OWcJpnMGkzgilblB4k6WB0TZJhDvhXb8ECFZ+XSVmqt5w==
+X-Received: by 2002:a05:6a00:1a93:b0:536:5dca:a685 with SMTP id e19-20020a056a001a9300b005365dcaa685mr16842223pfv.13.1661781127607;
+        Mon, 29 Aug 2022 06:52:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id md10-20020a17090b23ca00b001f24c08c3fesm6852746pjb.1.2022.08.29.06.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 06:52:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 Aug 2022 06:52:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: (dell-smm) Improve warning messages
+Message-ID: <20220829135206.GA168015@roeck-us.net>
+References: <20220822174053.8750-1-W_Armin@gmx.de>
+ <20220822174053.8750-3-W_Armin@gmx.de>
 MIME-Version: 1.0
-References: <20220812205746.609107-1-mairacanal@riseup.net> <20220812205746.609107-2-mairacanal@riseup.net>
-In-Reply-To: <20220812205746.609107-2-mairacanal@riseup.net>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 29 Aug 2022 15:51:20 +0200
-Message-ID: <CAG3jFyuMF4+Zfu2eDrE96nO7EWfhhQE8a+VQ=HhJ+iLYaX8HZg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] drm/bridge: anx7625: Drop of_gpio header
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822174053.8750-3-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maira,
+On Mon, Aug 22, 2022 at 07:40:53PM +0200, Armin Wolf wrote:
+> When dell-smm-hwmon is loaded on a machine with a buggy BIOS
+> with the option "force" being enabled, it wrongly prints
+> that the buggy features where disabled. This may cause
+> users to wrongly assume that the driver still protects them
+> from these BIOS bugs even with "force" being enabled.
+> 
+> Replace the messages with two messages each which are depending
+> on the value of the "force" parameter. The messages which are
+> being printed when "force" is not set use dev_notice() instead
+> of dev_warn() since they only serve as a notice.
+> 
+> Tested on a Dell Inspiron 3505.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-On Fri, 12 Aug 2022 at 22:58, Ma=C3=ADra Canal <mairacanal@riseup.net> wrot=
-e:
->
-> This driver includes the deprecated OF GPIO header <linux/of_gpio.h>
-> yet fail to use symbols from it, so drop the include.
->
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Robert Foss <robert.foss@linaro.org>
-> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> Cc: Jonas Karlman <jonas@kwiboo.se>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/=
-bridge/analogix/anx7625.c
-> index 79fc7a50b497..d7d4ca1c8b30 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -17,7 +17,6 @@
->  #include <linux/types.h>
->  #include <linux/workqueue.h>
->
-> -#include <linux/of_gpio.h>
->  #include <linux/of_graph.h>
->  #include <linux/of_platform.h>
->
+>  drivers/hwmon/dell-smm-hwmon.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
 > --
-> 2.37.1
->
-
-This cleanup looks good to me.
-
-Reviewed-by: Robert Foss <robert.foss@linar.org>
+> 2.30.2
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 9cac80358072..01a94b62c2ab 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1356,15 +1356,21 @@ static int __init dell_smm_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, data);
+> 
+>  	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+> -		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan support\n");
+> -		if (!force)
+> +		if (!force) {
+> +			dev_notice(&pdev->dev, "Disabling fan support due to BIOS bugs\n");
+>  			data->disallow_fan_support = true;
+> +		} else {
+> +			dev_warn(&pdev->dev, "Enabling fan support despite BIOS bugs\n");
+> +		}
+>  	}
+> 
+>  	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
+> -		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan type call\n");
+> -		if (!force)
+> +		if (!force) {
+> +			dev_notice(&pdev->dev, "Disabling fan type call due to BIOS bugs\n");
+>  			data->disallow_fan_type_call = true;
+> +		} else {
+> +			dev_warn(&pdev->dev, "Enabling fan type call despite BIOS bugs\n");
+> +		}
+>  	}
+> 
+>  	strscpy(data->bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),

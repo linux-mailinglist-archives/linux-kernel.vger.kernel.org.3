@@ -2,260 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BECD5A438C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E655A4392
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiH2HJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 03:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S229559AbiH2HMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 03:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiH2HJy (ORCPT
+        with ESMTP id S229447AbiH2HMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 03:09:54 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E41BC26;
-        Mon, 29 Aug 2022 00:09:51 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MGM385cHZzGptL;
-        Mon, 29 Aug 2022 15:08:04 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 29 Aug
- 2022 15:09:49 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <toke@toke.dk>, <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>,
-        <jiri@resnulli.us>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <stephen@networkplumber.org>
-CC:     <cake@lists.bufferbloat.net>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2] net: sched: remove redundant NULL check in change hook function
-Date:   Mon, 29 Aug 2022 15:12:19 +0800
-Message-ID: <20220829071219.208646-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 29 Aug 2022 03:12:43 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187B04D804;
+        Mon, 29 Aug 2022 00:12:42 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id y3so13894044ejc.1;
+        Mon, 29 Aug 2022 00:12:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=MSqMM4aEnjO/gK78QtEwWeffAOcbFLWjzfFBsK77XPc=;
+        b=fSEA3+BluCBkEjbtx62cdgcmujmAs6z97n0YKM/CMUdaXaOPRMVDOe+lr+1AOkY8lE
+         bIN7YoJ8RxEunJRQQmMzHD36W3sdzXomJf3P0X6oXM+tUO2wOgL4o77X1agsqbJInU2d
+         V8DPDVJWsCxW9qr+LT7IzbPkbcKtb00k46eeavztxW15QS2UElfvCpHapKH60PikMj86
+         gJtL+l0Z8W5BYPonUCJqIE+QVSuJVG651sERNvB3IkLT67YsqCj/82qJcMzra+HT2hvl
+         8RBbdq9uVMST1/xvvVWI49SW5hV03tf6fpzbgJBI5WnSCxkpPClB1+HtPFeCh57oNAQA
+         BXQA==
+X-Gm-Message-State: ACgBeo1i9eKTkMYlxAPAgVvGTnGEErUei28SqS5xArvm/J4nMv4E5lej
+        e+sp+UXYaiqo2SzNY7zFiQ4=
+X-Google-Smtp-Source: AA6agR4ol21KX2mKJiXGb6L9rLzNUeTO+E03VzEAMfYBHtubtcipcN9LN7sMgqVAWuiQLVj4cJrEew==
+X-Received: by 2002:a17:907:75c6:b0:741:75a0:b82b with SMTP id jl6-20020a17090775c600b0074175a0b82bmr3780766ejc.465.1661757160605;
+        Mon, 29 Aug 2022 00:12:40 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b007413dde3151sm3304316ejn.130.2022.08.29.00.12.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 00:12:40 -0700 (PDT)
+Message-ID: <71dbe196-a3d4-41f4-a00c-24f8b0222288@kernel.org>
+Date:   Mon, 29 Aug 2022 09:12:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 5.19 145/365] kbuild: dummy-tools: avoid tmpdir leak in
+ dummy gcc
+Content-Language: en-US
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        Linux Stable maillist <stable@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+References: <20220823080118.128342613@linuxfoundation.org>
+ <20220823080124.294570326@linuxfoundation.org>
+ <9996285f-5a50-e56a-eb1c-645598381a20@kernel.org>
+ <CAFqZXNv2OvNu7BctW=csNLevgGWyoT1R81ypH8pGoAeo3vd4=w@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAFqZXNv2OvNu7BctW=csNLevgGWyoT1R81ypH8pGoAeo3vd4=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the change function can be called by two ways. The one way is
-that qdisc_change() will call it. Before calling change function,
-qdisc_change() ensures tca[TCA_OPTIONS] is not empty. The other way is
-that .init() will call it. The opt parameter is also checked before
-calling change function in .init(). Therefore, it's no need to check the
-input parameter opt in change function.
+On 27. 08. 22, 10:34, Ondrej Mosnacek wrote:
+> On Sat, Aug 27, 2022 at 9:51 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>> On 23. 08. 22, 10:00, Greg Kroah-Hartman wrote:
+>>> From: Ondrej Mosnacek <omosnace@redhat.com>
+>>>
+>>> commit aac289653fa5adf9e9985e4912c1d24a3e8cbab2 upstream.
+>>>
+>>> When passed -print-file-name=plugin, the dummy gcc script creates a
+>>> temporary directory that is never cleaned up. To avoid cluttering
+>>> $TMPDIR, instead use a static directory included in the source tree.
+>>
+>> This breaks our (SUSE) use of dummy tools (GCC_PLUGINS became =n). I
+>> will investigate whether this is stable-only and the root cause later.
+> 
+> It looks like both the Greg's generated patch and the final stable
+> commit (d7e676b7dc6a) are missing the addition of the empty
+> plugin-version.h file. It appears in the patch's diffstat, but not in
+> the actual diff. The mainline commit does include the empty file
+> correctly, so it's likely a bug in the stable cherry pick automation.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- net/sched/sch_cake.c     | 3 ---
- net/sched/sch_codel.c    | 3 ---
- net/sched/sch_ets.c      | 5 -----
- net/sched/sch_fq.c       | 3 ---
- net/sched/sch_fq_codel.c | 3 ---
- net/sched/sch_fq_pie.c   | 3 ---
- net/sched/sch_gred.c     | 3 ---
- net/sched/sch_hfsc.c     | 2 +-
- net/sched/sch_hhf.c      | 3 ---
- net/sched/sch_netem.c    | 3 ---
- net/sched/sch_pie.c      | 3 ---
- net/sched/sch_plug.c     | 3 ---
- net/sched/sch_red.c      | 3 ---
- 13 files changed, 1 insertion(+), 39 deletions(-)
+Right, this fixed the issue for me:
+--- 
+a/patches.kernel.org/5.19.4-144-kbuild-dummy-tools-avoid-tmpdir-leak-in-dummy-.patch
++++ 
+b/patches.kernel.org/5.19.4-144-kbuild-dummy-tools-avoid-tmpdir-leak-in-dummy-.patch
+@@ -20,6 +20,8 @@ Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+   scripts/dummy-tools/gcc | 8 ++------
+   1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
-index a43a58a73d09..36acc95d611e 100644
---- a/net/sched/sch_cake.c
-+++ b/net/sched/sch_cake.c
-@@ -2569,9 +2569,6 @@ static int cake_change(struct Qdisc *sch, struct nlattr *opt,
- 	struct nlattr *tb[TCA_CAKE_MAX + 1];
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_CAKE_MAX, opt, cake_policy,
- 					  extack);
- 	if (err < 0)
-diff --git a/net/sched/sch_codel.c b/net/sched/sch_codel.c
-index 30169b3adbbb..d7a4874543de 100644
---- a/net/sched/sch_codel.c
-+++ b/net/sched/sch_codel.c
-@@ -138,9 +138,6 @@ static int codel_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int qlen, dropped = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_CODEL_MAX, opt,
- 					  codel_policy, NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
-index 8de4365886e8..a3aea22ef09d 100644
---- a/net/sched/sch_ets.c
-+++ b/net/sched/sch_ets.c
-@@ -594,11 +594,6 @@ static int ets_qdisc_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int i;
- 	int err;
- 
--	if (!opt) {
--		NL_SET_ERR_MSG(extack, "ETS options are required for this operation");
--		return -EINVAL;
--	}
--
- 	err = nla_parse_nested(tb, TCA_ETS_MAX, opt, ets_policy, extack);
- 	if (err < 0)
- 		return err;
-diff --git a/net/sched/sch_fq.c b/net/sched/sch_fq.c
-index 2fb76fc0cc31..48d14fb90ba0 100644
---- a/net/sched/sch_fq.c
-+++ b/net/sched/sch_fq.c
-@@ -808,9 +808,6 @@ static int fq_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned drop_len = 0;
- 	u32 fq_log;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_FQ_MAX, opt, fq_policy,
- 					  NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-index 23a042adb74d..f16f471daa81 100644
---- a/net/sched/sch_fq_codel.c
-+++ b/net/sched/sch_fq_codel.c
-@@ -372,9 +372,6 @@ static int fq_codel_change(struct Qdisc *sch, struct nlattr *opt,
- 	u32 quantum = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_FQ_CODEL_MAX, opt,
- 					  fq_codel_policy, NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
-index 35c35465226b..6980796d435d 100644
---- a/net/sched/sch_fq_pie.c
-+++ b/net/sched/sch_fq_pie.c
-@@ -283,9 +283,6 @@ static int fq_pie_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int num_dropped = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested(tb, TCA_FQ_PIE_MAX, opt, fq_pie_policy, extack);
- 	if (err < 0)
- 		return err;
-diff --git a/net/sched/sch_gred.c b/net/sched/sch_gred.c
-index 1073c76d05c4..b52b9ef5a347 100644
---- a/net/sched/sch_gred.c
-+++ b/net/sched/sch_gred.c
-@@ -648,9 +648,6 @@ static int gred_change(struct Qdisc *sch, struct nlattr *opt,
- 	u32 max_P;
- 	struct gred_sched_data *prealloc;
- 
--	if (opt == NULL)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_GRED_MAX, opt, gred_policy,
- 					  extack);
- 	if (err < 0)
-diff --git a/net/sched/sch_hfsc.c b/net/sched/sch_hfsc.c
-index 03efc40e42fc..c8bef923c79c 100644
---- a/net/sched/sch_hfsc.c
-+++ b/net/sched/sch_hfsc.c
-@@ -1430,7 +1430,7 @@ hfsc_change_qdisc(struct Qdisc *sch, struct nlattr *opt,
- 	struct hfsc_sched *q = qdisc_priv(sch);
- 	struct tc_hfsc_qopt *qopt;
- 
--	if (opt == NULL || nla_len(opt) < sizeof(*qopt))
-+	if (nla_len(opt) < sizeof(*qopt))
- 		return -EINVAL;
- 	qopt = nla_data(opt);
- 
-diff --git a/net/sched/sch_hhf.c b/net/sched/sch_hhf.c
-index 420ede875322..d26cd436cbe3 100644
---- a/net/sched/sch_hhf.c
-+++ b/net/sched/sch_hhf.c
-@@ -516,9 +516,6 @@ static int hhf_change(struct Qdisc *sch, struct nlattr *opt,
- 	u32 new_quantum = q->quantum;
- 	u32 new_hhf_non_hh_weight = q->hhf_non_hh_weight;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_HHF_MAX, opt, hhf_policy,
- 					  NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
-index 5449ed114e40..b70ac04110dd 100644
---- a/net/sched/sch_netem.c
-+++ b/net/sched/sch_netem.c
-@@ -961,9 +961,6 @@ static int netem_change(struct Qdisc *sch, struct nlattr *opt,
- 	int old_loss_model = CLG_RANDOM;
- 	int ret;
- 
--	if (opt == NULL)
--		return -EINVAL;
--
- 	qopt = nla_data(opt);
- 	ret = parse_attr(tb, TCA_NETEM_MAX, opt, netem_policy, sizeof(*qopt));
- 	if (ret < 0)
-diff --git a/net/sched/sch_pie.c b/net/sched/sch_pie.c
-index 5a457ff61acd..974038ba6c7b 100644
---- a/net/sched/sch_pie.c
-+++ b/net/sched/sch_pie.c
-@@ -143,9 +143,6 @@ static int pie_change(struct Qdisc *sch, struct nlattr *opt,
- 	unsigned int qlen, dropped = 0;
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_PIE_MAX, opt, pie_policy,
- 					  NULL);
- 	if (err < 0)
-diff --git a/net/sched/sch_plug.c b/net/sched/sch_plug.c
-index cbc2ebca4548..ea8c4a7174bb 100644
---- a/net/sched/sch_plug.c
-+++ b/net/sched/sch_plug.c
-@@ -161,9 +161,6 @@ static int plug_change(struct Qdisc *sch, struct nlattr *opt,
- 	struct plug_sched_data *q = qdisc_priv(sch);
- 	struct tc_plug_qopt *msg;
- 
--	if (opt == NULL)
--		return -EINVAL;
--
- 	msg = nla_data(opt);
- 	if (nla_len(opt) < sizeof(*msg))
- 		return -EINVAL;
-diff --git a/net/sched/sch_red.c b/net/sched/sch_red.c
-index f1e013e3f04a..2439d2718429 100644
---- a/net/sched/sch_red.c
-+++ b/net/sched/sch_red.c
-@@ -368,9 +368,6 @@ static int red_change(struct Qdisc *sch, struct nlattr *opt,
- 	struct nlattr *tb[TCA_RED_MAX + 1];
- 	int err;
- 
--	if (!opt)
--		return -EINVAL;
--
- 	err = nla_parse_nested_deprecated(tb, TCA_RED_MAX, opt, red_policy,
- 					  extack);
- 	if (err < 0)
++diff --git 
+a/scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h 
+b/scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h
++new file mode 100644
+  diff --git a/scripts/dummy-tools/gcc b/scripts/dummy-tools/gcc
+  index b2483149bbe5..7db825843435 100755
+  --- a/scripts/dummy-tools/gcc
+
+>>> Fixes: 76426e238834 ("kbuild: add dummy toolchains to enable all cc-option etc. in Kconfig")
+>>> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+>>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> ---
+>>>    .../dummy-tools/dummy-plugin-dir/include/plugin-version.h | 0
+>>>    scripts/dummy-tools/gcc |    8 ++------
+>>>    1 file changed, 2 insertions(+), 6 deletions(-)
+>>>    create mode 100644 scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h
+>>>
+>>> --- a/scripts/dummy-tools/gcc
+>>> +++ b/scripts/dummy-tools/gcc
+>>> @@ -96,12 +96,8 @@ fi
+>>>
+>>>    # To set GCC_PLUGINS
+>>>    if arg_contain -print-file-name=plugin "$@"; then
+>>> -     plugin_dir=$(mktemp -d)
+>>> -
+>>> -     mkdir -p $plugin_dir/include
+>>> -     touch $plugin_dir/include/plugin-version.h
+>>> -
+>>> -     echo $plugin_dir
+>>> +     # Use $0 to find the in-tree dummy directory
+>>> +     echo "$(dirname "$(readlink -f "$0")")/dummy-plugin-dir"
+>>>        exit 0
+>>>    fi
+
+thanks,
 -- 
-2.17.1
+js
+suse labs
 

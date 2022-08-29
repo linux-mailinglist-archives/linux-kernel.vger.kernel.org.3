@@ -2,96 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA09C5A46AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5047E5A46AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiH2KAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S229910AbiH2KAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiH2KAn (ORCPT
+        with ESMTP id S229926AbiH2KAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:00:43 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967DDDFDB;
-        Mon, 29 Aug 2022 03:00:42 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id az27so9486417wrb.6;
-        Mon, 29 Aug 2022 03:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=l0dd8ecbpZnuzsCu5JGEpd3FIwlZH2NjRr90vsXjRJU=;
-        b=Vxenx/x3aciurxig2M6JStt1bFKy9byWFgerDbAaMMmGHP5hv1Zv4mhoRvPo+RU0rj
-         3xUO7ahTZi2vegvvvjlSv+HbTYM4nUGlWqK1jJD/n00UYVtxad9hsM3DtjjLw+gV8HII
-         2c1EFG3PGwSwVukbr1Ma3AGbzLEh+dAhUN6XeLsfBhp7ce/2WFobApiKPQsXw12wBh7e
-         2vaHtkJYxTMzCIvoK4I9rwI6A+2hGzMpYu3mv6UC28SvgrhGOIcnr4EU3Aelhl6yoEXK
-         jwfMbaYzS54AfqgtbevJedt76ZY24iaACODyX/I0ysJIUBzqf0ws+wRJL1xp4MDHMwjp
-         DcUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=l0dd8ecbpZnuzsCu5JGEpd3FIwlZH2NjRr90vsXjRJU=;
-        b=IGK1QKwPK4bH4/QiUU27iwyA956SfJ3wqcB0DKT3HTW0lg6OjQrgqXf95MSqy9/dkT
-         ELthYP30l1PMbMiqzYlOfKiw8U8dUFwSmBNeMVGI7HkQ69dndArHOiGWsd8Ny/MCkWlz
-         v2ffTkay8z+CE+Q9tylCPFkvZHhLwjfTjhsvg2tBF13FS8O8sTa9JrsAclhKAaW819BJ
-         +TwYX+VtRDtWuXZCkwq+yZ6dFnWHqfSdd5HZATVTkKYH/TH+2p8veRoO/ZUs+W7FLlWi
-         b6Lk6diNpZK1MIjSo7+dcHMYAOe67lf/wRX2v+T69azYZx3MbliS61zWNvR3lk0hpehZ
-         w1+Q==
-X-Gm-Message-State: ACgBeo0cHQYRv4WyO8U6KPbNwlOyJh5SBWeCWEna1Cwq2HAAqpsUtmwT
-        UcNWaBDYeLAp4InuXiNJPtGNkVBDOVE=
-X-Google-Smtp-Source: AA6agR7p1BSAyfx0TInY5Ker3Q46WxaH2F9v+jEvrWs9zSmBL9VOugQdt15Cdyt5riIsyGP3mdmBrA==
-X-Received: by 2002:a5d:4082:0:b0:226:d019:c91e with SMTP id o2-20020a5d4082000000b00226d019c91emr5941444wrp.557.1661767241168;
-        Mon, 29 Aug 2022 03:00:41 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id c21-20020a7bc015000000b003a5c999cd1asm8881424wmb.14.2022.08.29.03.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 03:00:40 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 11:00:38 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Johnny Huang <johnny_huang@aspeedtech.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220829 due to 108713a713c7 ("crypto: aspeed
- - Add HACE hash driver")
-Message-ID: <YwyORp72cuDrVYdA@debian>
+        Mon, 29 Aug 2022 06:00:46 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B781E0C5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:00:44 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by xavier.telenet-ops.be with bizsmtp
+        id DN0h2800E4C55Sk01N0iWy; Mon, 29 Aug 2022 12:00:42 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oSbZR-0036s9-I1; Mon, 29 Aug 2022 12:00:41 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oSbZQ-000IaT-VG; Mon, 29 Aug 2022 12:00:40 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-m68k@lists.linux-m68k.org
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] m68k: defconfig: Update defconfigs for v6.0-rc2
+Date:   Mon, 29 Aug 2022 12:00:39 +0200
+Message-Id: <1fbe623e5d69bdce0352445c06e1b2c9fb8d123e.1661767119.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+  - Drop CONFIG_NF_CONNTRACK_PROCFS=n (no longer auto-enabled since
+    commit aa5762c34213aba7 ("netfilter: conntrack: NF_CONNTRACK_PROCFS
+    should no longer default to y").
 
-The builds of arm allmodconfig have failed to build next-20220829 with
-the error:
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+To be combined with "m68k: defconfig: Update defconfigs for v6.0-rc1".
+---
+ arch/m68k/configs/amiga_defconfig    | 1 -
+ arch/m68k/configs/apollo_defconfig   | 1 -
+ arch/m68k/configs/atari_defconfig    | 1 -
+ arch/m68k/configs/bvme6000_defconfig | 1 -
+ arch/m68k/configs/hp300_defconfig    | 1 -
+ arch/m68k/configs/mac_defconfig      | 1 -
+ arch/m68k/configs/multi_defconfig    | 1 -
+ arch/m68k/configs/mvme147_defconfig  | 1 -
+ arch/m68k/configs/mvme16x_defconfig  | 1 -
+ arch/m68k/configs/q40_defconfig      | 1 -
+ arch/m68k/configs/sun3_defconfig     | 1 -
+ arch/m68k/configs/sun3x_defconfig    | 1 -
+ 12 files changed, 12 deletions(-)
 
-ERROR: modpost: "aspeed_register_hace_hash_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_unregister_hace_crypto_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_register_hace_crypto_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_unregister_hace_hash_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
+index 1e545592ece66309..e2038d9499e479cd 100644
+--- a/arch/m68k/configs/amiga_defconfig
++++ b/arch/m68k/configs/amiga_defconfig
+@@ -84,7 +84,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
+index 8b3c02455f13e1c3..ddd201259e43a95a 100644
+--- a/arch/m68k/configs/apollo_defconfig
++++ b/arch/m68k/configs/apollo_defconfig
+@@ -80,7 +80,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
+index 217e286c2a760607..66a5dbd8bd428a33 100644
+--- a/arch/m68k/configs/atari_defconfig
++++ b/arch/m68k/configs/atari_defconfig
+@@ -87,7 +87,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
+index 083cbb179e708e1b..68957c6bcff1a1be 100644
+--- a/arch/m68k/configs/bvme6000_defconfig
++++ b/arch/m68k/configs/bvme6000_defconfig
+@@ -77,7 +77,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
+index 291e250d843deefe..825c6a02fa9d102f 100644
+--- a/arch/m68k/configs/hp300_defconfig
++++ b/arch/m68k/configs/hp300_defconfig
+@@ -79,7 +79,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
+index 815ff8d9a65e4240..17f64c562bf119e8 100644
+--- a/arch/m68k/configs/mac_defconfig
++++ b/arch/m68k/configs/mac_defconfig
+@@ -78,7 +78,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
+index 5c84db94f9e11153..f5f4c572b6949698 100644
+--- a/arch/m68k/configs/multi_defconfig
++++ b/arch/m68k/configs/multi_defconfig
+@@ -98,7 +98,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
+index 0a2df9102b8e8404..b4a0bbef7e39b490 100644
+--- a/arch/m68k/configs/mvme147_defconfig
++++ b/arch/m68k/configs/mvme147_defconfig
+@@ -76,7 +76,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
+index 951d37effb0cedff..c6a6d59267934021 100644
+--- a/arch/m68k/configs/mvme16x_defconfig
++++ b/arch/m68k/configs/mvme16x_defconfig
+@@ -77,7 +77,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
+index 258001e059baac3a..49c9c89f0caf76ee 100644
+--- a/arch/m68k/configs/q40_defconfig
++++ b/arch/m68k/configs/q40_defconfig
+@@ -78,7 +78,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
+index eea582f0e4dc57f1..9b44eeb9c07f7aa9 100644
+--- a/arch/m68k/configs/sun3_defconfig
++++ b/arch/m68k/configs/sun3_defconfig
+@@ -74,7 +74,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
+index d2c857cf74b8c99f..d2ffb0a65b44ac47 100644
+--- a/arch/m68k/configs/sun3x_defconfig
++++ b/arch/m68k/configs/sun3x_defconfig
+@@ -74,7 +74,6 @@ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_NETLINK_HOOK=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_NF_CONNTRACK_ZONES=y
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+ # CONFIG_NF_CT_PROTO_DCCP is not set
+ CONFIG_NF_CONNTRACK_AMANDA=m
+ CONFIG_NF_CONNTRACK_FTP=m
+-- 
+2.25.1
 
-
-git bisect pointed to 108713a713c7 ("crypto: aspeed - Add HACE hash driver")
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
---
-Regards
-Sudip

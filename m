@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454E45A4580
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A697F5A4583
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiH2IxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
+        id S229776AbiH2Ix6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiH2IxM (ORCPT
+        with ESMTP id S229619AbiH2Ixz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:53:12 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D77C5A158;
-        Mon, 29 Aug 2022 01:53:10 -0700 (PDT)
-Received: from mail-ed1-f54.google.com ([209.85.208.54]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M6UuX-1oV2QG0qU5-006wee; Mon, 29 Aug 2022 10:53:09 +0200
-Received: by mail-ed1-f54.google.com with SMTP id a36so5416614edf.5;
-        Mon, 29 Aug 2022 01:53:09 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2riAW7/qNEOVTnGTC4bJx4eLD7rRPQaKHwQ9R+wfTY2TVVgwC9
-        DObtGsbBLXYfNIVtoa43tqmLRSARv0mGrZIUMwM=
-X-Google-Smtp-Source: AA6agR4dO9Qog99EOhFMYD2/TUvDUFPeLAFKpCKJySAtY2CWxJsmH8fvbDozC2seipJY5siIbg1N/2rhc6q5GDAswIQ=
-X-Received: by 2002:a17:907:d0b:b0:741:7ca6:a2b with SMTP id
- gn11-20020a1709070d0b00b007417ca60a2bmr3580848ejc.654.1661763177783; Mon, 29
- Aug 2022 01:52:57 -0700 (PDT)
+        Mon, 29 Aug 2022 04:53:55 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859E05A165
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:53:53 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id q3so4095966pjg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=sQndcbd/4ZYZe6Nc6MH5lVEISrMVYZdfCyCWIbSeX1Q=;
+        b=IhDVnYT4ZAF5L+N1nyfslPMCUlyBgmIPIwxsA1mxHly1boJSkIDRAQz4yNvmdp3cki
+         vlK6sOljnAEi9KVsac5CaNSZoMcb2tqKz8Ky6zPwa6I00iAZkrWbkLIn3rmu/fYgqguo
+         GRAhK0x2Zkr8Zjb3QinLM75UjCRhvkPei5xrscLVvEz3WODT6m3hyjsXN2q5okuwUGbv
+         1NQocxfblQ86+8i68V4G6Cer+YPMklpLu67COzVGKimwIf6IK6CoLyzKXSY4edgg15jF
+         /ESF5v2Kb+awn4L1GpsHrZ4e5pYcO1u+lQKy2t/Mbd/4azEflTuWIagAF7GQeSmHisM4
+         DVWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=sQndcbd/4ZYZe6Nc6MH5lVEISrMVYZdfCyCWIbSeX1Q=;
+        b=uyfnhPNn63XLnLoyIvrjs/A3VZ5vgzc1AoZeRj90JZmDy3KCQwe4bJoCtKYbEv2/7V
+         277F2FyNSaVinDh82adhfEOhj88x9OpZLnUR0a1SCII1EWV/eDqpzS1sZG0Lj9S6OIMD
+         EQDUTN41G2722FCBkgPvijv1vGsLOA1ysGKJolh0G4Fxjz/nwM2ijYtVfhbJ3YIev+wi
+         /gQ5cylBrZoWgHDvWqggHm9bMHdAGbKCy3HcfSK9mc684WRjOPiPQa4RcJ7XOhuJP0AQ
+         JkqoRfDQYx0PGOJpmmobDeMPm6KubB3O0XOWq6zq1mgHtKJRoV4TWwBQIcCu72hEW863
+         phuA==
+X-Gm-Message-State: ACgBeo1qv0Pt4SCA0/C2PbqF1vZxJX0rqvB6M25mqRDT0xGRweJqUnfx
+        KX7lkoUXugSJwNSPvwObGSM=
+X-Google-Smtp-Source: AA6agR4ZQpBcinBoxMBDp+mBq2ssCJ+m5Kni0tbvDpvnToLjLBNVJ4NIfsAELN1luUpYNnlakxiP7w==
+X-Received: by 2002:a17:90b:4c08:b0:1fb:66d3:79c with SMTP id na8-20020a17090b4c0800b001fb66d3079cmr17210223pjb.121.1661763233010;
+        Mon, 29 Aug 2022 01:53:53 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-33.three.co.id. [116.206.12.33])
+        by smtp.gmail.com with ESMTPSA id b67-20020a62cf46000000b005364e0ec330sm6686498pfg.59.2022.08.29.01.53.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 01:53:52 -0700 (PDT)
+Message-ID: <abb075b7-ae5b-f4e7-7a77-cbfd7788406a@gmail.com>
+Date:   Mon, 29 Aug 2022 15:53:46 +0700
 MIME-Version: 1.0
-References: <20220818135522.3143514-1-arnd@kernel.org>
-In-Reply-To: <20220818135522.3143514-1-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Aug 2022 10:52:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1tsby7+xfKTQaaBQZ4t-=uWG5Dtbcn_jPEsSMG_YVHgA@mail.gmail.com>
-Message-ID: <CAK8P3a1tsby7+xfKTQaaBQZ4t-=uWG5Dtbcn_jPEsSMG_YVHgA@mail.gmail.com>
-Subject: Re: [PATCH 00/11] ARM: defconfig cleanup
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Peter Chen <peter.chen@nxp.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Felipe Balbi <balbi@ti.com>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/EcVK/F1GzKJg7nI3gnx3l2/fiz8nAQrDCtoD8KunxCnbGLi+7x
- wou1KG1wFlZgmfaKCW3Y/bWTNMRPmBIhC8qgdkgfK74v6HyrxWjhFowjUEZVuhv7YUyczz/
- W9gU4s3/TJuGjFMxEADckk9m11NT1n8B8Seif14yMZ5BZHAY2y0RlIFTzOTuqtmLt47IlSQ
- 5FiFQ4K612imzNyrfXpTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hyZpA9LylN8=:QfBKmGOitqo2UKo5+9ZcPQ
- /dNHHwc6qA1RDTSwmbtZ744H4HTnJFbfDY134iuzwdf/80vl11WliIqpIWQfbOy3i9C9SCF47
- KGxIzGjq/HAc3+QeB8rOyNjEWu6kH0CFMGw09O4Vs5O2AXFFkbex37kSJoHwagvvos77pSiY6
- SRjqxCeP2LHkuHuUZM2vjAKqe8W88N9TvmjGJwJ9LxDVDwLanPhF/7APq+atg1KuLUpIUnW3a
- J+WFRj/ugCVlpQo4bY4xWkwjmnBQDq3IbI+JWU9MOlixgyZ3IE6nYzkbuDDzY7oG4w2Af0gZ/
- nuz0eMLlhFzvBRsXFrZgtDkw6R1xGEGt6+nW8/WtnNwgHBzk2Wp9c7OFmjziLAmCNw9fKLJcY
- spO+KPsES8yAD3WTRrFPKzJO1V80GcapY7YGRnGfdlVILmL/8Ud6V/p5c7NDsxflgj1vmxExu
- mFNOkFqd7XHbbp2UUjQJJ7Utgfvtqx9p/rzDMBRiiskgUPwkTs8El/Wswt5tWNgqtNpQFg43l
- 0TZfScNgjdg51VaEbhFjxPjL70orSb7ll5pdwU9+QiejRCi8E8bNFKx1azdHUZrXCPPdYOW5b
- KdFQ4N3xICd7ihSYqJGDE98V6LCBYLexLDLVe6NZ3HOhZddx66iC2nW0RV4Ens1CwkDCNwMgX
- MNsuy4rFYYK5OtBYXG1ar+VvDX0pOihL+w0Dzh43cHd7kITxV0wxHEBoN/WJwLuqeYArZFx9j
- 6/fZHZXyJFR/vgEKUMk56njnC+iB/GceKR0V7ef4BrLooLZjh1rFOl8FKautDgyaXcKZqLHWg
- MUDSQR1mo94DzpsbNIJ4b39+sjUpcf246Vl1p7S0m/jNS916t1KFHnYeDWThoB/qMJwxDc9bi
- Vt/hVEaJMQe1HlxV1nHw==
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: One of reviewers and maintainers for checkpatch is inactive
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM and miscellaneous subsystems list 
+        <linux-mm@kvack.org>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <YwwiP7Erud6Ns9mu@debian.me>
+ <2a870057af3d5c3b0fa6256fbc67c32e1055df06.camel@perches.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <2a870057af3d5c3b0fa6256fbc67c32e1055df06.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 3:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> I have continued the cleanup of the multi_*_defconfig files, and
-> reordered the other files according to the 'make savedefconfig'
-> output as before.
->
-> I would like to queue these up for 6.1, though the last two
-> should probably be considered bugfixes and merged for 6.0.
->
-> Since a third of the defconfig files are for machines that
-> are now marked as unused, I skipped those files. There are still
-> a few things that get removed by 'make savedefconfig' as they
-> now get selected by some driver:
->
-> -CONFIG_SERIAL_BCM63XX=y
-> -CONFIG_SND_AUDIO_GRAPH_CARD=m
-> -CONFIG_NEW_LEDS=y
-> -CONFIG_LEDS_TRIGGERS=y
-> -CONFIG_TEGRA20_APB_DMA=y
->
-> I think for those we should follow up with patches to remove the
-> 'select' statements.
+On 8/29/22 13:01, Joe Perches wrote:
+> On Mon, 2022-08-29 at 09:19 +0700, Bagas Sanjaya wrote:
+>> Hi,
+> 	> 
+>> It seems like one of reviewers for checkpatch subsystem, Dwaipayan Ray
+>> <dwaipayanray1@gmail.com>, is apparently inactive with his last post
+>> about a year ago ([1]). Maybe remove him from MAINTAINERS?
+>>
+>> [1]: https://lore.kernel.org/lkml/CABJPP5Bpc_0c=b8kymo0fgXZARNZJ8EM5F=Gpx1=y+vOfPWM8Q@mail.gmail.com/
+> 
+> Too early.
+> 
 
-I dropped the last patch that Greg has already picked up, and merged the
-rest into the arm/defconfig branch of the soc tree.
+Maybe we can try pinging him (off-list) to see if he's still have interest
+on patch reviewing.
 
-Thanks for the Acks.
-
-        Arnd
+-- 
+An old man doll... just what I always wanted! - Clara

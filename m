@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6905A54D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E21E5A54D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiH2TyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
+        id S229823AbiH2TyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiH2TyA (ORCPT
+        with ESMTP id S229894AbiH2TyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:54:00 -0400
-Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E4E80524;
-        Mon, 29 Aug 2022 12:53:59 -0700 (PDT)
-Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.stoffel.org (Postfix) with ESMTPSA id 85A4E2172C;
-        Mon, 29 Aug 2022 15:53:58 -0400 (EDT)
-Received: by quad.stoffel.org (Postfix, from userid 1000)
-        id A805FA7E37; Mon, 29 Aug 2022 15:53:57 -0400 (EDT)
+        Mon, 29 Aug 2022 15:54:06 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901F38287C;
+        Mon, 29 Aug 2022 12:54:05 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-11c4d7d4683so11754552fac.8;
+        Mon, 29 Aug 2022 12:54:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=V7u+Bh9RpSlaYJuPHwhUdmvGa0EBqCLrlN332Ycl1Pc=;
+        b=J7sHkwyowc4ZyMpR82OHKXOsOuerrsJ5O8n8RRmfycGgCS6JyVS1p5+Wlmc1s/aJuV
+         61Wo1vfBxiOvb4vbfYyOqGNjjlHfqqiKypsAIsTvQxlXzSqPVYB6yvqautcw7eJ7z/Vp
+         YLvlSRP9FHZUuaIibu60DYtJ96cGgV+KZjeJLE4g2xm8i+ZgqfmzlU80OtV+McPohbsP
+         imJBSXOFjhxANW3se7mnIap5wlc6AGIGA709VwiR2ta1s40Y3bcnKSMbISh6om3km7Ol
+         LjPey71DSnH9shK8WMxwd9MWauTW3GKELf4M+rWMIseEyg/T/lyivknpPDb7ISeBrLEa
+         pNtQ==
+X-Gm-Message-State: ACgBeo14KSKiPWAkAakWOIW9HT71u9DintZm+8kev0XPxIokfxR0K1BW
+        5AA4QwgC+L6tvuIXe/LZM0xf386vOA==
+X-Google-Smtp-Source: AA6agR78KtmMgJ+uUQLn+hXNfUXmQ3ezT1EjeM7ZMnQtrI9HbezgSzrt6/Pv05xZgGUy/Vh7E7lVkQ==
+X-Received: by 2002:a05:6870:ec94:b0:11e:c890:64b8 with SMTP id eo20-20020a056870ec9400b0011ec89064b8mr5049422oab.14.1661802844464;
+        Mon, 29 Aug 2022 12:54:04 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v188-20020acadec5000000b00342eade43d4sm5226612oig.13.2022.08.29.12.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 12:54:04 -0700 (PDT)
+Received: (nullmailer pid 2307888 invoked by uid 1000);
+        Mon, 29 Aug 2022 19:54:03 -0000
+Date:   Mon, 29 Aug 2022 14:54:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: serial: samsung_uart: drop ref from
+ reg-io-width
+Message-ID: <20220829195403.GA2307840-robh@kernel.org>
+References: <20220823101000.386927-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <25357.6485.659159.476926@quad.stoffel.home>
-Date:   Mon, 29 Aug 2022 15:53:57 -0400
-From:   "John Stoffel" <john@stoffel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next 1/3] md/raid10: fix improper BUG_ON() in raise_barrier()
-In-Reply-To: <20220829131502.165356-2-yukuai1@huaweicloud.com>
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
-        <20220829131502.165356-2-yukuai1@huaweicloud.com>
-X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220823101000.386927-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Yu" == Yu Kuai <yukuai1@huaweicloud.com> writes:
+On Tue, 23 Aug 2022 13:10:00 +0300, Krzysztof Kozlowski wrote:
+> reg-io-width is a standard property, so no need for defining its type
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+> 
 
-Yu> From: Yu Kuai <yukuai3@huawei.com>
-Yu> 'conf->barrier' is protected by 'conf->resync_lock', reading
-Yu> 'conf->barrier' without holding the lock is wrong.
-
-Yu> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Yu> ---
-Yu>  drivers/md/raid10.c | 2 +-
-Yu>  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Yu> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-Yu> index 9117fcdee1be..b70c207f7932 100644
-Yu> --- a/drivers/md/raid10.c
-Yu> +++ b/drivers/md/raid10.c
-Yu> @@ -930,8 +930,8 @@ static void flush_pending_writes(struct r10conf *conf)
- 
-Yu>  static void raise_barrier(struct r10conf *conf, int force)
-Yu>  {
-Yu> -	BUG_ON(force && !conf->barrier);
-Yu>  	spin_lock_irq(&conf->resync_lock);
-Yu> +	BUG_ON(force && !conf->barrier);
-
-I don't like this BUG_ON() at all, why are you crashing the system
-here instead of just doing a simple WARN_ONCE() instead?  Is there
-anything the user can do to get into this situation on their own, or
-does it really signify a logic error in the code?  If so, why are you
-killing the system?
-
-
- 
-Yu>  	/* Wait until no block IO is waiting (unless 'force') */
-Yu>  	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
-Yu> -- 
-Yu> 2.31.1
-
+Acked-by: Rob Herring <robh@kernel.org>

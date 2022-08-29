@@ -2,170 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7A95A4417
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492605A4419
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiH2Hoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 03:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S229612AbiH2HpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 03:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiH2Hoi (ORCPT
+        with ESMTP id S229653AbiH2HpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 03:44:38 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ED74F1B7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 00:44:31 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id c7so2395177wrp.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 00:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc;
-        bh=QjEcd75RqT3WIgUp2pbtkalTMer+nFUQbbPAvaSW25U=;
-        b=VUiIlhoZuw+u+tFb6JwkhBtkBhQutnnVLYzhx28QiSHqKDIy073Pl3gg6hbx25hxiU
-         NpQbV39LEsHQPIYG5NIjf/zpr2i/EoKjMZR/u4mlHC1gIsH98yxq6j3YA9ro3cl89W75
-         VE+9R7XjbrC3t5w3C9txQ9wO/MCDF/7Av2T2alAyhRJkeOC+u+XEv/cB/dLtNpOv/F9P
-         XCbetVBFMArzO8UXwsfEn/L1BJYp1177u9GHxccLXiUb4j+WH0fWWrfgoqfZH71We7sK
-         Frt6Yb5jjZsGjKVa/BwlHizl5JEqH4ftCYFwMtZ9ls2XAJ2SUOmya77P3Zncwz9KCoWp
-         +YIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=QjEcd75RqT3WIgUp2pbtkalTMer+nFUQbbPAvaSW25U=;
-        b=AhsawMXVH9ahS0GU9ycWEFqTHgQ2Zw6BuQjBd1Iedn9kyMbBLKAt8a4uCWSDAYcslv
-         wRRo3bZyGCcrn86tSEEVxRrWGjrstGfFHm7tUCW/Y0uizf4lks1y0K/Nb/PXA2Hon53X
-         8/gvuKEyjZZWsF4Tol7AQW8Jma2GwzS9jAIPMCgp7ouDW2PrY+XEsGKWSE3MUnB78+J5
-         ObkGU0DXAPjykMfCLNIJVHD6z4SjWFywnweDWNs4cxgMImjbH3d4UXimEKxc+qTIjY/O
-         qzlm6ZEiK4cmxSApfMN3WZQIhrwh2i98AtBtWkBjkgw2knImnwtRUhhPkC3HAvc9/uYo
-         vKpg==
-X-Gm-Message-State: ACgBeo09TU1jk2qyrslNZCnc8vJlsOCLtQvuvgrwo0gNHo7HY7p/pSX1
-        OchuvJHEumibdA4vBHmDR+HOQA==
-X-Google-Smtp-Source: AA6agR6/W5X5eALXzIWGgg5gZJiu0WA3BEvbZhHKVoGSnQpMk97J1Zsl0Ln0n+YGVwhaoFPX4wTETA==
-X-Received: by 2002:a5d:4a01:0:b0:21d:8ce1:8b6d with SMTP id m1-20020a5d4a01000000b0021d8ce18b6dmr5606743wrq.718.1661759069804;
-        Mon, 29 Aug 2022 00:44:29 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:6124:6b74:2847:d37b? ([2a01:e0a:982:cbb0:6124:6b74:2847:d37b])
-        by smtp.gmail.com with ESMTPSA id i12-20020a1c540c000000b003a2f2bb72d5sm8939722wmb.45.2022.08.29.00.44.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 00:44:29 -0700 (PDT)
-Message-ID: <f14d517b-90c9-3741-6f41-6c82a7521f46@baylibre.com>
-Date:   Mon, 29 Aug 2022 09:44:28 +0200
+        Mon, 29 Aug 2022 03:45:06 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD85E48;
+        Mon, 29 Aug 2022 00:45:01 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27T7is2k019624;
+        Mon, 29 Aug 2022 02:44:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661759094;
+        bh=aqlO4eqxCjb6AOPSzVJvOKRmmcq5exBzCetqn0YT1G4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=CfBjkdIxg1tkyVAQDSbx81vAT+E++0uo4RAgA6K9uRAedfE651jYSV4uwCk1z10cV
+         mdYPSpLPFQg1Fxh0YryI+Ha4XUMCggec3Ws1/UeTdBQJ1E42OyLNo1xuIdhkwu3Uvd
+         0EnWCSzqRZgriuNRGl0gFOURvjyN3wmtNMlXq2Q4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27T7ishn083636
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 29 Aug 2022 02:44:54 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 29
+ Aug 2022 02:44:54 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 29 Aug 2022 02:44:54 -0500
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27T7ipU5008798;
+        Mon, 29 Aug 2022 02:44:52 -0500
+Message-ID: <fe5315cb-94f9-2fc4-86f6-848953884101@ti.com>
+Date:   Mon, 29 Aug 2022 13:14:50 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] tty: serial: meson: Use devm_clk_get_enabled() helper
+Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-j721e-main: fix RNG node clock id
 Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-References: <3f18638cb3cf08ed8817addca1402ed5e3bd3602.1661328361.git.christophe.jaillet@wanadoo.fr>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <3f18638cb3cf08ed8817addca1402ed5e3bd3602.1661328361.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <f29e2c65dc7310a926af8a676651592afac04b03.1659981162.git.danielrparks@ti.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <f29e2c65dc7310a926af8a676651592afac04b03.1659981162.git.danielrparks@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 10:06, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->     - calls devm_clk_get()
->     - calls clk_prepare_enable() and registers what is needed in order to
->       call clk_disable_unprepare() when needed, as a managed resource.
+
+
+On 09/08/22 00:02, Daniel Parks wrote:
+> The RNG node for this platform claims pka_in_clk. Change it to claim the
+> correct clock x1_clk. [1]
 > 
-> This simplifies the code, the error handling paths and avoid the need of
-> a dedicated function used with devm_add_action_or_reset().
+> [1]: https://downloads.ti.com/tisci/esd/latest/5_soc_doc/j721e/clocks.html#clocks-for-sa2-ul0-device
 > 
-> That said, meson_uart_probe_clock() is now more or less the same as
-> devm_clk_get_enabled(), so use this function directly instead.
-> 
-> This also fixes an (unlikely) unchecked devm_add_action_or_reset() error.
-> 
-> Based on my test with allyesconfig, this reduces the .o size from:
->     text	   data	    bss	    dec	    hex	filename
->     16350	   5016	    128	  21494	   53f6	drivers/tty/serial/meson_uart.o
-> down to:
->     15415	   4784	    128	  20327	   4f67	drivers/tty/serial/meson_uart.o
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Daniel Parks <danielrparks@ti.com>
 > ---
-> devm_clk_get_enabled() is new and is part of 6.0-rc1
+>   arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> If the message "couldn't enable clk\n" is of any use, it could be added
-> in meson_uart_probe_clocks() with a dev_err_probe() call. It wouldn't be
-> exactly the same meaning, but at least something would be logged.
-> ---
->   drivers/tty/serial/meson_uart.c | 29 +++--------------------------
->   1 file changed, 3 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 6c8db19fd572..26de08bf181e 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -667,29 +667,6 @@ static struct uart_driver meson_uart_driver = {
->   	.cons		= MESON_SERIAL_CONSOLE,
->   };
->   
-> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
-> -						 const char *id)
-> -{
-> -	struct clk *clk = NULL;
-> -	int ret;
-> -
-> -	clk = devm_clk_get(dev, id);
-> -	if (IS_ERR(clk))
-> -		return clk;
-> -
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "couldn't enable clk\n");
-> -		return ERR_PTR(ret);
-> -	}
-> -
-> -	devm_add_action_or_reset(dev,
-> -			(void(*)(void *))clk_disable_unprepare,
-> -			clk);
-> -
-> -	return clk;
-> -}
-> -
->   static int meson_uart_probe_clocks(struct platform_device *pdev,
->   				   struct uart_port *port)
->   {
-> @@ -697,15 +674,15 @@ static int meson_uart_probe_clocks(struct platform_device *pdev,
->   	struct clk *clk_pclk = NULL;
->   	struct clk *clk_baud = NULL;
->   
-> -	clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> +	clk_pclk = devm_clk_get_enabled(&pdev->dev, "pclk");
->   	if (IS_ERR(clk_pclk))
->   		return PTR_ERR(clk_pclk);
->   
-> -	clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> +	clk_xtal = devm_clk_get_enabled(&pdev->dev, "xtal");
->   	if (IS_ERR(clk_xtal))
->   		return PTR_ERR(clk_xtal);
->   
-> -	clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> +	clk_baud = devm_clk_get_enabled(&pdev->dev, "baud");
->   	if (IS_ERR(clk_baud))
->   		return PTR_ERR(clk_baud);
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> index 43b6cf5791ee..917c9dc99efa 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> @@ -343,7 +343,7 @@
+>   			compatible = "inside-secure,safexcel-eip76";
+>   			reg = <0x0 0x4e10000 0x0 0x7d>;
+>   			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&k3_clks 264 1>;
+> +			clocks = <&k3_clks 264 2>;
+>   		};
+>   	};
 >   
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>

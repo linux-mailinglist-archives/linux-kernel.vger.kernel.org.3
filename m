@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739F55A5003
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2205A500D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiH2PQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S230013AbiH2PSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiH2PQo (ORCPT
+        with ESMTP id S229972AbiH2PRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:16:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906A97B1F1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:16:43 -0700 (PDT)
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oSgUz-0006bl-QP; Mon, 29 Aug 2022 17:16:25 +0200
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     p.zabel@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, shawnguo@kernel.org,
-        vkoul@kernel.org, alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [PATCH 2/2] fixup! phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY support
-Date:   Mon, 29 Aug 2022 17:16:23 +0200
-Message-Id: <20220829151623.808344-2-l.stach@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220829151623.808344-1-l.stach@pengutronix.de>
-References: <1661760917-9558-1-git-send-email-hongxing.zhu@nxp.com>
- <20220829151623.808344-1-l.stach@pengutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 11:17:55 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403E83051;
+        Mon, 29 Aug 2022 08:17:53 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q9so7976661pgq.6;
+        Mon, 29 Aug 2022 08:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=4S4aGCSHz4Vj3kjY4xlroZ+QjJu7qG4QBgfFBofR0ts=;
+        b=JoRczjGA3zzSk5TZIELeyYloCSmHhwFfAPIygEhaYOnBbROWLsCRTyFxEBbfaziVMa
+         0Y4Y77U1wlXpIqHC9RL7lAXt5yNFBy1u+xcfKXurOLsyB8hAPGVbDw9/MCPK1yv+CZpk
+         zAX4l+VB/ptzOHy3x//ZOp6tUrLXoqoPPqvqhxzTZkMPtfDkewsceDNjCgfhZ3wMDBQA
+         2GQ+P7gFs5aazOhz2M1gejXib7f4lGXcTD66ze38i/hWSJhbdUbB10yLUORXooAKSx5U
+         KgL9XspHkYdC1PQ97Skmjcbe29NQ1f9pwvZzRUVT0HPKbILNVNGUQwE3nlK6M6Ie14rg
+         zrGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=4S4aGCSHz4Vj3kjY4xlroZ+QjJu7qG4QBgfFBofR0ts=;
+        b=K60KZqgwINqJhvHjIMSR9HGAeomY+UHXdQl9fEahOZqtUtmhZEMuOHnuLp0TiWMiYp
+         abFPVqG9MRsIsl63o0ghBlnu0XNTjLGGuZwFNCsYkbm9TQUsHSUPcoPlHyaWy1i2YDjh
+         QOF/Ln+5aOAN2IqnqzqJWBB6jyXgZrk7vSSC0kYL60UsAe7m9QgpBLtssqHJUsikLB87
+         SrG5nX3mbl3rG9PTn7g1sS5P48BKzlbpVG0gR/EXus4Z9Ir/dDycirWLW5WS1SAzb1zL
+         jTuzdhxhlzahyHwi/GCNF3nROr1ksto/4dc/SaflgiemysVqjWceCehxawEtRS7gENFC
+         ErDA==
+X-Gm-Message-State: ACgBeo0CHOFdhFXuHVvIvIShZ/ZGl0PwxKe2yKFDYO67tlXoQVRcBSg/
+        o4N6QqtzhJSP0OuwoP5wlcQ=
+X-Google-Smtp-Source: AA6agR5vifeItEAfN0UZDd0WAe9m4uHYdSPgZeCJrcltqBgUdjQC7kVm47B8ZrzYzmR1KtI2xKehZg==
+X-Received: by 2002:a63:d84f:0:b0:428:ee87:3769 with SMTP id k15-20020a63d84f000000b00428ee873769mr14551052pgj.212.1661786272995;
+        Mon, 29 Aug 2022 08:17:52 -0700 (PDT)
+Received: from localhost.localdomain ([182.160.5.243])
+        by smtp.gmail.com with ESMTPSA id cp10-20020a170902e78a00b001750361f42dsm611279plb.125.2022.08.29.08.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 08:17:52 -0700 (PDT)
+From:   Tuo Cao <91tuocao@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, vkoul@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 91tuocao@gmail.com
+Subject: [RESEND] dmaengine: qcom: gpi: move read_lock_bh to read_lock in tasklet
+Date:   Mon, 29 Aug 2022 23:16:59 +0800
+Message-Id: <20220829151659.6071-1-91tuocao@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 31 +++-------------------
- 1 file changed, 3 insertions(+), 28 deletions(-)
+It has already disabled softirq in a tasklet,so it is unnecessary to
+call read_lock_bh in a tasklet.
 
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index 3463b4299f2f..f714f419b91f 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/of_device.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-@@ -47,10 +48,6 @@
- #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
- #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
- 
--#define IMX8MP_GPR_REG0			0x0
--#define IMX8MP_GPR_PHY_APB_RST		BIT(4)
--#define IMX8MP_GPR_PHY_INIT_RST		BIT(5)
--
- enum imx8_pcie_phy_type {
- 	IMX8MM,
- 	IMX8MP,
-@@ -58,10 +55,8 @@ enum imx8_pcie_phy_type {
- 
- struct imx8_pcie_phy {
- 	void __iomem		*base;
--	struct device		*dev;
- 	struct clk		*clk;
- 	struct phy		*phy;
--	struct regmap		*hsio_blk_ctrl;
- 	struct regmap		*iomuxc_gpr;
- 	struct reset_control	*reset;
- 	struct reset_control	*perst;
-@@ -93,13 +88,6 @@ static int imx8_pcie_phy_init(struct phy *phy)
- 		break;
- 	case IMX8MP:
- 		reset_control_assert(imx8_phy->perst);
--
--		/* release pcie_phy_apb_reset and pcie_phy_init_resetn */
--		regmap_update_bits(imx8_phy->hsio_blk_ctrl, IMX8MP_GPR_REG0,
--				   IMX8MP_GPR_PHY_APB_RST |
--				   IMX8MP_GPR_PHY_INIT_RST,
--				   IMX8MP_GPR_PHY_APB_RST |
--				   IMX8MP_GPR_PHY_INIT_RST);
- 		break;
- 	}
- 
-@@ -204,21 +192,16 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+Signed-off-by: Tuo Cao <91tuocao@gmail.com>
+---
+ drivers/dma/qcom/gpi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+index 8f0c9c4e2efd..236005f7dd30 100644
+--- a/drivers/dma/qcom/gpi.c
++++ b/drivers/dma/qcom/gpi.c
+@@ -1150,9 +1150,9 @@ static void gpi_ev_tasklet(unsigned long data)
  {
- 	struct phy_provider *phy_provider;
- 	struct device *dev = &pdev->dev;
--	const struct of_device_id *of_id;
- 	struct device_node *np = dev->of_node;
- 	struct imx8_pcie_phy *imx8_phy;
- 	struct resource *res;
+ 	struct gpii *gpii = (struct gpii *)data;
  
--	of_id = of_match_device(imx8_pcie_phy_of_match, dev);
--	if (!of_id)
--		return -EINVAL;
--
- 	imx8_phy = devm_kzalloc(dev, sizeof(*imx8_phy), GFP_KERNEL);
- 	if (!imx8_phy)
- 		return -ENOMEM;
+-	read_lock_bh(&gpii->pm_lock);
++	read_lock(&gpii->pm_lock);
+ 	if (!REG_ACCESS_VALID(gpii->pm_state)) {
+-		read_unlock_bh(&gpii->pm_lock);
++		read_unlock(&gpii->pm_lock);
+ 		dev_err(gpii->gpi_dev->dev, "not processing any events, pm_state:%s\n",
+ 			TO_GPI_PM_STR(gpii->pm_state));
+ 		return;
+@@ -1163,7 +1163,7 @@ static void gpi_ev_tasklet(unsigned long data)
  
--	imx8_phy->dev = dev;
--	imx8_phy->variant = (enum imx8_pcie_phy_type)of_id->data;
-+	imx8_phy->variant =
-+		(enum imx8_pcie_phy_type)of_device_get_match_data(dev);
+ 	/* enable IEOB, switching back to interrupts */
+ 	gpi_config_interrupts(gpii, MASK_IEOB_SETTINGS, 1);
+-	read_unlock_bh(&gpii->pm_lock);
++	read_unlock(&gpii->pm_lock);
+ }
  
- 	/* get PHY refclk pad mode */
- 	of_property_read_u32(np, "fsl,refclk-pad-mode",
-@@ -257,14 +240,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(imx8_phy->reset);
- 	}
- 	if (imx8_phy->variant == IMX8MP) {
--		/* Grab HSIO MIX config register range */
--		imx8_phy->hsio_blk_ctrl =
--			 syscon_regmap_lookup_by_compatible("fsl,imx8mp-hsio-blk-ctrl");
--		if (IS_ERR(imx8_phy->hsio_blk_ctrl)) {
--			dev_err(dev, "Unable to find HSIO MIX registers\n");
--			return PTR_ERR(imx8_phy->hsio_blk_ctrl);
--		}
--
- 		imx8_phy->perst =
- 			devm_reset_control_get_exclusive(dev, "perst");
- 		if (IS_ERR(imx8_phy->perst)) {
+ /* marks all pending events for the channel as stale */
 -- 
-2.30.2
+2.17.1
 

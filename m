@@ -2,268 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B9F5A456F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919EF5A4573
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiH2ItY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S229820AbiH2Iut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiH2ItW (ORCPT
+        with ESMTP id S229617AbiH2Iup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:49:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8557A59272;
-        Mon, 29 Aug 2022 01:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661762961; x=1693298961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2ObKuzaqIZ1Rg14Vzt9ik07/GpOD7ZdWW5+fcgog20c=;
-  b=EZG/hZ/4HYM19byzXo0NngN5vUkHi9v9NLYnTSJI8EDUN4HvSrPeiGJn
-   5DKQYyKFQWJv0fQVuhdCP8kaUzwY2PH9rUT4fN44YyPI6WMoRzClZY2o7
-   Bswm0tV7JPfWVx2CcsJG6yeOKPyjgELX/rSr9UB2EN4JifmJepv9lmCiI
-   famW8Zl8w1xwvv8DdTvUuYM7f/RbAgmfD8EVRBaMYSqne97fEidahNH+Q
-   gUz2MGmDx/pV/Zqi9d5SzC8L3rty3S0uqqi8OA+/qs8NZnwkgZM9nXhPn
-   n+KKlz+TbSQj8KJBc3zX0Zqz9XQjLM5dVoPyc66s73rWjVEtr2ixwXb0Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="274595491"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="274595491"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 01:49:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="640858509"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga008.jf.intel.com with ESMTP; 29 Aug 2022 01:49:18 -0700
-Date:   Mon, 29 Aug 2022 16:49:18 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v8 008/103] x86/virt/tdx: Add a helper function to return
- system wide info about TDX module
-Message-ID: <20220829084918.cjut472qelst7zkh@yy-desk-7060>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <27ed4f21b23b9679919f2941ed50a4a55a76c3ad.1659854790.git.isaku.yamahata@intel.com>
+        Mon, 29 Aug 2022 04:50:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319F913F9B;
+        Mon, 29 Aug 2022 01:50:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D35A7B80D85;
+        Mon, 29 Aug 2022 08:50:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49EF0C433D6;
+        Mon, 29 Aug 2022 08:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661763040;
+        bh=RjnPCuRTzjQD0nHdYRw7Zc90H9msuTPEGQ6Kegg8IkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fE9vrp2sEYOAVmi5eV51nA98d2CLU2EPmC2mLxLSiy425vKYeyF5t6E4mGDPy30/X
+         edtXJ2SKa/3hV71LWf+rn4O1kyJ+iUh7ztSzr8KbQq4b2X0or4ZwZqXyjVXVINTvcM
+         kJ+bkniH0OOg3QVjygs/bFsUzSBEK6t0B1u1a+aJkFgPF5XpSEmaxOynPaonZdtfPt
+         CHdMY0ZXbe1TrTMFc7FlO/LbXaMDSBNrT2RV6UP3x3G8EqTMdXJx1kTJ4e4AHT9/y+
+         OLWs4eCVRLGKy8jA8IMMYrV8awWYQudE2DS0pCPOtbvnmtxG3uRhOvwhlA1iQDYus0
+         4WGyqKIIkvXHg==
+Received: by pali.im (Postfix)
+        id 96A247DE; Mon, 29 Aug 2022 10:50:37 +0200 (CEST)
+Date:   Mon, 29 Aug 2022 10:50:37 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH 3/3] tty: serial: use uart_port_tx_limit() helper
+Message-ID: <20220829085037.ec6qdrklgy4cbmym@pali>
+References: <20220411105405.9519-1-jslaby@suse.cz>
+ <20220411105405.9519-4-jslaby@suse.cz>
+ <20220411115141.o2i3rlfcyzg6qlnz@pali>
+ <0a1f4ce9-4158-b8ab-1837-68da06f20407@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <27ed4f21b23b9679919f2941ed50a4a55a76c3ad.1659854790.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0a1f4ce9-4158-b8ab-1837-68da06f20407@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 03:00:53PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> TDX KVM needs system-wide information about the TDX module, struct
-> tdsysinfo_struct.  Add a helper function tdx_get_sysinfo() to return it
-> instead of KVM getting it with various error checks.  Move out the struct
-> definition about it to common place arch/x86/include/asm/tdx.h.
+On Monday 29 August 2022 09:27:01 Jiri Slaby wrote:
+> On 11. 04. 22, 13:51, Pali Rohár wrote:
+> > On Monday 11 April 2022 12:54:05 Jiri Slaby wrote:
+> > > uart_port_tx_limit() is a new helper to send characters to the device.
+> > > Use it in these drivers.
+> > > 
+> > > It means we have to define two new uart hooks: tx_ready() and put_char()
+> > > to do the real job now.
+> > > 
+> > > And mux.c also needs to define tx_done(). But I'm not sure if the driver
+> > > really wants to wait for all the characters to dismiss from the HW fifo
+> > > at this code point. Hence I marked this as FIXME.
+> > > 
+> > > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> > > Cc: Russell King <linux@armlinux.org.uk>
+> > > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > > Cc: bcm-kernel-feedback-list@broadcom.com
+> > > Cc: "Pali Rohár" <pali@kernel.org>
+> > > Cc: Kevin Cernekee <cernekee@gmail.com>
+> > > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > > Cc: Orson Zhai <orsonzhai@gmail.com>
+> > > Cc: Baolin Wang <baolin.wang7@gmail.com>
+> > > Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> > > Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> > > Cc: linux-riscv@lists.infradead.org
+> > > ---
+> > >   drivers/tty/serial/21285.c           | 40 +++++++--------------
+> > >   drivers/tty/serial/altera_jtaguart.c | 43 ++++++----------------
+> > >   drivers/tty/serial/amba-pl010.c      | 40 ++++-----------------
+> > >   drivers/tty/serial/apbuart.c         | 37 ++++---------------
+> > >   drivers/tty/serial/bcm63xx_uart.c    | 48 ++++++-------------------
+> > >   drivers/tty/serial/mux.c             | 48 ++++++++-----------------
+> > >   drivers/tty/serial/mvebu-uart.c      | 47 +++++++-----------------
+> > >   drivers/tty/serial/omap-serial.c     | 53 +++++++---------------------
+> > >   drivers/tty/serial/pxa.c             | 43 +++++-----------------
+> > >   drivers/tty/serial/rp2.c             | 36 ++++++-------------
+> > >   drivers/tty/serial/serial_txx9.c     | 40 ++++-----------------
+> > >   drivers/tty/serial/sifive.c          | 48 ++++---------------------
+> > >   drivers/tty/serial/sprd_serial.c     | 41 ++++-----------------
+> > >   drivers/tty/serial/st-asc.c          | 51 ++++----------------------
+> > >   drivers/tty/serial/vr41xx_siu.c      | 42 ++++------------------
+> > >   15 files changed, 143 insertions(+), 514 deletions(-)
+> > ...
+> > > diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
+> > > index 0429c2a54290..3d07ab9eb15e 100644
+> > > --- a/drivers/tty/serial/mvebu-uart.c
+> > > +++ b/drivers/tty/serial/mvebu-uart.c
+> > > @@ -194,6 +194,16 @@ static unsigned int mvebu_uart_tx_empty(struct uart_port *port)
+> > >   	return (st & STAT_TX_EMP) ? TIOCSER_TEMT : 0;
+> > >   }
+> > > +static bool mvebu_uart_tx_ready(struct uart_port *port)
+> > > +{
+> > > +	return !(readl(port->membase + UART_STAT) & STAT_TX_FIFO_FUL);
+> > 
+> > mvebu-uart.c driver in its tx_ready function should probably use
+> > STAT_TX_RDY macro (access to STAT_TX_RDY bit in register).
+> > 
+> > Documentation for UART1 (STD) about this bit says:
+> > 
+> > This bit is set when TRANS_HLD (our UART_TSH macro) is empty and ready
+> > for the CPU to write the next character to be transmitted out. The TSR
+> > can still shift out the previous character when this bit is set. This
+> > bit is cleared when the CPU writes to TRANS_HLD.
+> > 
+> > For UART2 (EXT) there is just information: UART Tx Ready for 1 Byte
+> > Write. UART2 (EXT) has also bit (bit 5) which indicates that CPU can
+> > load 4 bytes, but seems that this is not used by mvebu-uart.c driver.
+> > 
+> > Macro STAT_TX_RDY() is polled also in wait_for_xmitr() function.
+> 
+> Hi,
+> so care to send fixes for the two issues :)? The series is not meant to
+> change behavior...
 
-Will this be one of TDX's host patch set? The changes for
-arch/x86/include/asm/tdx.h looks like exposing some struct definitaion
-as part of API to user of TDX (now it's KVM).
-
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/include/asm/tdx.h  | 55 +++++++++++++++++++++++++++++++++++++
->  arch/x86/virt/vmx/tdx/tdx.c | 20 +++++++++++---
->  arch/x86/virt/vmx/tdx/tdx.h | 52 -----------------------------------
->  3 files changed, 71 insertions(+), 56 deletions(-)
->
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 801f6e10b2db..dfea0dd71bc1 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -89,11 +89,66 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
->  #endif /* CONFIG_INTEL_TDX_GUEST && CONFIG_KVM_GUEST */
->
->  #ifdef CONFIG_INTEL_TDX_HOST
-> +struct tdx_cpuid_config {
-> +	u32	leaf;
-> +	u32	sub_leaf;
-> +	u32	eax;
-> +	u32	ebx;
-> +	u32	ecx;
-> +	u32	edx;
-> +} __packed;
-> +
-> +#define TDSYSINFO_STRUCT_SIZE		1024
-> +#define TDSYSINFO_STRUCT_ALIGNMENT	1024
-> +
-> +struct tdsysinfo_struct {
-> +	/* TDX-SEAM Module Info */
-> +	u32	attributes;
-> +	u32	vendor_id;
-> +	u32	build_date;
-> +	u16	build_num;
-> +	u16	minor_version;
-> +	u16	major_version;
-> +	u8	reserved0[14];
-> +	/* Memory Info */
-> +	u16	max_tdmrs;
-> +	u16	max_reserved_per_tdmr;
-> +	u16	pamt_entry_size;
-> +	u8	reserved1[10];
-> +	/* Control Struct Info */
-> +	u16	tdcs_base_size;
-> +	u8	reserved2[2];
-> +	u16	tdvps_base_size;
-> +	u8	tdvps_xfam_dependent_size;
-> +	u8	reserved3[9];
-> +	/* TD Capabilities */
-> +	u64	attributes_fixed0;
-> +	u64	attributes_fixed1;
-> +	u64	xfam_fixed0;
-> +	u64	xfam_fixed1;
-> +	u8	reserved4[32];
-> +	u32	num_cpuid_config;
-> +	/*
-> +	 * The actual number of CPUID_CONFIG depends on above
-> +	 * 'num_cpuid_config'.  The size of 'struct tdsysinfo_struct'
-> +	 * is 1024B defined by TDX architecture.  Use a union with
-> +	 * specific padding to make 'sizeof(struct tdsysinfo_struct)'
-> +	 * equal to 1024.
-> +	 */
-> +	union {
-> +		struct tdx_cpuid_config	cpuid_configs[0];
-> +		u8			reserved5[892];
-> +	};
-> +} __packed __aligned(TDSYSINFO_STRUCT_ALIGNMENT);
-> +
->  bool platform_tdx_enabled(void);
->  int tdx_init(void);
-> +const struct tdsysinfo_struct *tdx_get_sysinfo(void);
->  #else	/* !CONFIG_INTEL_TDX_HOST */
->  static inline bool platform_tdx_enabled(void) { return false; }
->  static inline int tdx_init(void)  { return -ENODEV; }
-> +struct tdsysinfo_struct;
-> +static inline const struct tdsysinfo_struct *tdx_get_sysinfo(void) { return NULL; }
->  #endif	/* CONFIG_INTEL_TDX_HOST */
->
->  #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 787b26de8f53..b9567a2217df 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -354,9 +354,9 @@ static int check_cmrs(struct cmr_info *cmr_array, int *actual_cmr_num)
->  	return 0;
->  }
->
-> -static int tdx_get_sysinfo(struct tdsysinfo_struct *tdsysinfo,
-> -			   struct cmr_info *cmr_array,
-> -			   int *actual_cmr_num)
-> +static int __tdx_get_sysinfo(struct tdsysinfo_struct *tdsysinfo,
-> +			     struct cmr_info *cmr_array,
-> +			     int *actual_cmr_num)
->  {
->  	struct tdx_module_output out;
->  	u64 ret;
-> @@ -383,6 +383,18 @@ static int tdx_get_sysinfo(struct tdsysinfo_struct *tdsysinfo,
->  	return check_cmrs(cmr_array, actual_cmr_num);
->  }
->
-> +const struct tdsysinfo_struct *tdx_get_sysinfo(void)
-> +{
-> +       const struct tdsysinfo_struct *r = NULL;
-> +
-> +       mutex_lock(&tdx_module_lock);
-> +       if (tdx_module_status == TDX_MODULE_INITIALIZED)
-> +	       r = &tdx_sysinfo;
-> +       mutex_unlock(&tdx_module_lock);
-> +       return r;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_get_sysinfo);
-> +
->  /*
->   * Skip the memory region below 1MB.  Return true if the entire
->   * region is skipped.  Otherwise, the updated range is returned.
-> @@ -1106,7 +1118,7 @@ static int init_tdx_module(void)
->  	if (ret)
->  		goto out;
->
-> -	ret = tdx_get_sysinfo(&tdx_sysinfo, tdx_cmr_array, &tdx_cmr_num);
-> +	ret = __tdx_get_sysinfo(&tdx_sysinfo, tdx_cmr_array, &tdx_cmr_num);
->  	if (ret)
->  		goto out;
->
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index e0309558be13..c08e4ee2d0bf 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -65,58 +65,6 @@ struct cmr_info {
->  #define MAX_CMRS			32
->  #define CMR_INFO_ARRAY_ALIGNMENT	512
->
-> -struct cpuid_config {
-> -	u32	leaf;
-> -	u32	sub_leaf;
-> -	u32	eax;
-> -	u32	ebx;
-> -	u32	ecx;
-> -	u32	edx;
-> -} __packed;
-> -
-> -#define TDSYSINFO_STRUCT_SIZE		1024
-> -#define TDSYSINFO_STRUCT_ALIGNMENT	1024
-> -
-> -struct tdsysinfo_struct {
-> -	/* TDX-SEAM Module Info */
-> -	u32	attributes;
-> -	u32	vendor_id;
-> -	u32	build_date;
-> -	u16	build_num;
-> -	u16	minor_version;
-> -	u16	major_version;
-> -	u8	reserved0[14];
-> -	/* Memory Info */
-> -	u16	max_tdmrs;
-> -	u16	max_reserved_per_tdmr;
-> -	u16	pamt_entry_size;
-> -	u8	reserved1[10];
-> -	/* Control Struct Info */
-> -	u16	tdcs_base_size;
-> -	u8	reserved2[2];
-> -	u16	tdvps_base_size;
-> -	u8	tdvps_xfam_dependent_size;
-> -	u8	reserved3[9];
-> -	/* TD Capabilities */
-> -	u64	attributes_fixed0;
-> -	u64	attributes_fixed1;
-> -	u64	xfam_fixed0;
-> -	u64	xfam_fixed1;
-> -	u8	reserved4[32];
-> -	u32	num_cpuid_config;
-> -	/*
-> -	 * The actual number of CPUID_CONFIG depends on above
-> -	 * 'num_cpuid_config'.  The size of 'struct tdsysinfo_struct'
-> -	 * is 1024B defined by TDX architecture.  Use a union with
-> -	 * specific padding to make 'sizeof(struct tdsysinfo_struct)'
-> -	 * equal to 1024.
-> -	 */
-> -	union {
-> -		struct cpuid_config	cpuid_configs[0];
-> -		u8			reserved5[892];
-> -	};
-> -} __packed __aligned(TDSYSINFO_STRUCT_ALIGNMENT);
-> -
->  struct tdmr_reserved_area {
->  	u64 offset;
->  	u64 size;
-> --
-> 2.25.1
->
+Ok, I will look at it after your patches are merged to prevent merge conflicts.

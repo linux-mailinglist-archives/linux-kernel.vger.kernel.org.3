@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0244E5A4AAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB775A48FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233050AbiH2Lqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S230089AbiH2LTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiH2LqO (ORCPT
+        with ESMTP id S231526AbiH2LRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:46:14 -0400
+        Mon, 29 Aug 2022 07:17:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54E2786C1;
-        Mon, 29 Aug 2022 04:29:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F26CD07;
+        Mon, 29 Aug 2022 04:11:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B1016120A;
-        Mon, 29 Aug 2022 11:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D34C433C1;
-        Mon, 29 Aug 2022 11:10:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B41D611F6;
+        Mon, 29 Aug 2022 11:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F0CC433B5;
+        Mon, 29 Aug 2022 11:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771400;
-        bh=MfO06DdabSfW+lcqbBBnnNJSNAzT1VCcU04W7Qi6R48=;
+        s=korg; t=1661771410;
+        bh=7UuEqefdwYEn11rNs3iQTPMDUVdZcXGP+H423jBrBT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTBB6ZBkOqS+hdNlJas2k4F+UrTNEt5Zn66r2TVaZq9MFiVPHtviv0gHIFgndeSD4
-         0ilFfppNILjYxBDglBDWkcvr8Wn7DnQ5K/15Pb2MCIciw8sp84RrF7DjL3chSH7DHk
-         uK223cmIwg27wcNxJ7SKrbFu8SQwstDvFkjwMCSU=
+        b=xt1a9xSrRTaCMAMMsg2/KyTWWP59nFhbsD1HiFhIQClrcn5vUbO/Fm+0oNV18IBVy
+         4N0ui6ntMN5Sk1RiNUfhXR0msrRPXtPN52ztUfxq+5nCRmlAeJjYQ6d4QI8B0+w7eg
+         Hf6imUoiQHJ2CXyd504hFogOvtGwZOp+TGMJAVHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 63/86] ionic: fix up issues with handling EAGAIN on FW cmds
-Date:   Mon, 29 Aug 2022 12:59:29 +0200
-Message-Id: <20220829105759.132113363@linuxfoundation.org>
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 64/86] btrfs: fix silent failure when deleting root reference
+Date:   Mon, 29 Aug 2022 12:59:30 +0200
+Message-Id: <20220829105759.164105549@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
 References: <20220829105756.500128871@linuxfoundation.org>
@@ -55,53 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shannon Nelson <snelson@pensando.io>
+From: Filipe Manana <fdmanana@suse.com>
 
-[ Upstream commit 0fc4dd452d6c14828eed6369155c75c0ac15bab3 ]
+commit 47bf225a8d2cccb15f7e8d4a1ed9b757dd86afd7 upstream.
 
-In looping on FW update tests we occasionally see the
-FW_ACTIVATE_STATUS command fail while it is in its EAGAIN loop
-waiting for the FW activate step to finsh inside the FW.  The
-firmware is complaining that the done bit is set when a new
-dev_cmd is going to be processed.
+At btrfs_del_root_ref(), if btrfs_search_slot() returns an error, we end
+up returning from the function with a value of 0 (success). This happens
+because the function returns the value stored in the variable 'err',
+which is 0, while the error value we got from btrfs_search_slot() is
+stored in the 'ret' variable.
 
-Doing a clean on the cmd registers and doorbell before exiting
-the wait-for-done and cleaning the done bit before the sleep
-prevents this from occurring.
+So fix it by setting 'err' with the error value.
 
-Fixes: fbfb8031533c ("ionic: Add hardware init and device commands")
-Signed-off-by: Shannon Nelson <snelson@pensando.io>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8289ed9f93bef2 ("btrfs: replace the BUG_ON in btrfs_del_root_ref with proper error handling")
+CC: stable@vger.kernel.org # 5.16+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/btrfs/root-tree.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-index e14869a2e24a5..f60ffef33e0ce 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-@@ -378,8 +378,8 @@ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
- 				ionic_opcode_to_str(opcode), opcode,
- 				ionic_error_to_str(err), err);
- 
--			msleep(1000);
- 			iowrite32(0, &idev->dev_cmd_regs->done);
-+			msleep(1000);
- 			iowrite32(1, &idev->dev_cmd_regs->doorbell);
- 			goto try_again;
- 		}
-@@ -392,6 +392,8 @@ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
- 		return ionic_error_to_errno(err);
- 	}
- 
-+	ionic_dev_cmd_clean(ionic);
-+
- 	return 0;
- }
- 
--- 
-2.35.1
-
+--- a/fs/btrfs/root-tree.c
++++ b/fs/btrfs/root-tree.c
+@@ -336,9 +336,10 @@ int btrfs_del_root_ref(struct btrfs_tran
+ 	key.offset = ref_id;
+ again:
+ 	ret = btrfs_search_slot(trans, tree_root, &key, path, -1, 1);
+-	if (ret < 0)
++	if (ret < 0) {
++		err = ret;
+ 		goto out;
+-	if (ret == 0) {
++	} else if (ret == 0) {
+ 		leaf = path->nodes[0];
+ 		ref = btrfs_item_ptr(leaf, path->slots[0],
+ 				     struct btrfs_root_ref);
 
 

@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BEA5A44B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076CA5A44C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiH2IOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S229970AbiH2IPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiH2IOF (ORCPT
+        with ESMTP id S229955AbiH2IOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:14:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC78253015;
-        Mon, 29 Aug 2022 01:14:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3716B80D64;
-        Mon, 29 Aug 2022 08:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1128C433C1;
-        Mon, 29 Aug 2022 08:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661760842;
-        bh=YTySXLUW0r8T5ka2X3JesPLIYBGBWpbu34uaAUBqL3I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gsaKAICYviLDNLjnlk6drKvJhFVdTkvpRNblGH+9qt+30dv+mVgEpN7sG/xDWPlav
-         6XjTsoasLcarlpik8rP04xa0Es7Wz7LAEaSiu8PTQ5Hsa4JC0FY+IKtc8L+pv1lTRO
-         fta4NRE/GB5KNRSp5ACFsfK/7/o3uzDWML4Y3xkY=
-Date:   Mon, 29 Aug 2022 10:13:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Cyrill Gorcunov <gorcunov@openvz.org>,
-        Pavel Emelyanov <xemul@parallels.com>,
-        Jamie Liu <jamieliu@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 4.9-stable -- 5.19-stable] mm/hugetlb: fix hugetlb not
- supporting softdirty tracking
-Message-ID: <Ywx1R+FhHTNIKdoo@kroah.com>
-References: <1661424546448@kroah.com>
- <20220825143258.36151-1-david@redhat.com>
+        Mon, 29 Aug 2022 04:14:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1BD10548;
+        Mon, 29 Aug 2022 01:14:43 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27T7KXR6031734;
+        Mon, 29 Aug 2022 08:14:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zJjzDt7XPu/PMn4l+tK2qZnVJ2yvHbcPZMeuF+7G6Es=;
+ b=HrnvxxfhYTEXo/YLpEPxwcnL6HLwlOIEEcCm+JHYR5KJpf4EJYQRJGpvho/40sPP1u2M
+ A7lg2XKXMIAU2vvi39V3Z5x0uMK7bdc/Ub94gnR9d1DSD6kix4ujrGdke9KkwfOIs1g2
+ TQ3zpqx/epznQyGcBJzD140cKo1vTgIQYyZQ4/A7f84gdj2hwoM9ZebGNyxLB+ccz65G
+ 2kZM4fcdrkDQAR9T11QZOvOqxuqP+SXQwCpmxc2SGXKAs2QMgSoMCWtEfrjRSgkpzoiS
+ RuY4LaJ1KPy49kMBenG7z0D/QG8/LAFt4a9dxqvTej4ATVFv+cFcge2l3N9EV3UfqOWr ZQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j7av7ccns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 08:14:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27T8EVXm022379
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 08:14:31 GMT
+Received: from [10.216.51.151] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 29 Aug
+ 2022 01:14:25 -0700
+Message-ID: <b5675a83-c12c-1f10-2ca2-66e4ee672fe6@quicinc.com>
+Date:   Mon, 29 Aug 2022 13:44:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825143258.36151-1-david@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6] PCI/ASPM: Update LTR threshold based upon reported max
+ latencies
+Content-Language: en-US
+To:     Bjorn Helgaas <bhelgaas@google.com>
+CC:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <swboyd@chromium.org>,
+        <dmitry.baryshkov@linaro.org>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rajat Jain <rajatja@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+References: <1657886421-779-1-git-send-email-quic_krichai@quicinc.com>
+ <20220726074954.GB5522@workstation> <YwctiEJpydiFdIds@google.com>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <YwctiEJpydiFdIds@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gDLqpx1QvbBQ9M6aVXu9UPgSvaQzLPZ8
+X-Proofpoint-ORIG-GUID: gDLqpx1QvbBQ9M6aVXu9UPgSvaQzLPZ8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_03,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208290040
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,144 +91,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 04:32:58PM +0200, David Hildenbrand wrote:
-> commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
-> 
-> Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
-> 
-> I observed that hugetlb does not support/expect write-faults in shared
-> mappings that would have to map the R/O-mapped page writable -- and I
-> found two case where we could currently get such faults and would
-> erroneously map an anon page into a shared mapping.
-> 
-> Reproducers part of the patches.
-> 
-> I propose to backport both fixes to stable trees.  The first fix needs a
-> small adjustment.
-> 
-> This patch (of 2):
-> 
-> Staring at hugetlb_wp(), one might wonder where all the logic for shared
-> mappings is when stumbling over a write-protected page in a shared
-> mapping.  In fact, there is none, and so far we thought we could get away
-> with that because e.g., mprotect() should always do the right thing and
-> map all pages directly writable.
-> 
-> Looks like we were wrong:
-> 
-> --------------------------------------------------------------------------
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <fcntl.h>
->  #include <unistd.h>
->  #include <errno.h>
->  #include <sys/mman.h>
-> 
->  #define HUGETLB_SIZE (2 * 1024 * 1024u)
-> 
->  static void clear_softdirty(void)
->  {
->          int fd = open("/proc/self/clear_refs", O_WRONLY);
->          const char *ctrl = "4";
->          int ret;
-> 
->          if (fd < 0) {
->                  fprintf(stderr, "open(clear_refs) failed\n");
->                  exit(1);
->          }
->          ret = write(fd, ctrl, strlen(ctrl));
->          if (ret != strlen(ctrl)) {
->                  fprintf(stderr, "write(clear_refs) failed\n");
->                  exit(1);
->          }
->          close(fd);
->  }
-> 
->  int main(int argc, char **argv)
->  {
->          char *map;
->          int fd;
-> 
->          fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
->          if (!fd) {
->                  fprintf(stderr, "open() failed\n");
->                  return -errno;
->          }
->          if (ftruncate(fd, HUGETLB_SIZE)) {
->                  fprintf(stderr, "ftruncate() failed\n");
->                  return -errno;
->          }
-> 
->          map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
->          if (map == MAP_FAILED) {
->                  fprintf(stderr, "mmap() failed\n");
->                  return -errno;
->          }
-> 
->          *map = 0;
-> 
->          if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
->                  fprintf(stderr, "mmprotect() failed\n");
->                  return -errno;
->          }
-> 
->          clear_softdirty();
-> 
->          if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
->                  fprintf(stderr, "mmprotect() failed\n");
->                  return -errno;
->          }
-> 
->          *map = 0;
-> 
->          return 0;
->  }
-> --------------------------------------------------------------------------
-> 
-> Above test fails with SIGBUS when there is only a single free hugetlb page.
->  # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
->  # ./test
->  Bus error (core dumped)
-> 
-> And worse, with sufficient free hugetlb pages it will map an anonymous page
-> into a shared mapping, for example, messing up accounting during unmap
-> and breaking MAP_SHARED semantics:
->  # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
->  # ./test
->  # cat /proc/meminfo | grep HugePages_
->  HugePages_Total:       2
->  HugePages_Free:        1
->  HugePages_Rsvd:    18446744073709551615
->  HugePages_Surp:        0
-> 
-> Reason in this particular case is that vma_wants_writenotify() will
-> return "true", removing VM_SHARED in vma_set_page_prot() to map pages
-> write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
-> support softdirty tracking.
-> 
-> Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
-> Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
-> Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Peter Feiner <pfeiner@google.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Cyrill Gorcunov <gorcunov@openvz.org>
-> Cc: Pavel Emelyanov <xemul@parallels.com>
-> Cc: Jamie Liu <jamieliu@google.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Muchun Song <songmuchun@bytedance.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: <stable@vger.kernel.org>	[3.18+]
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  mm/mmap.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
 
-Now queued up, thanks.
+On 8/25/2022 1:36 PM, Matthias Kaehlcke wrote:
+> On Tue, Jul 26, 2022 at 01:19:54PM +0530, Manivannan Sadhasivam wrote:
+>> On Fri, Jul 15, 2022 at 05:30:12PM +0530, Krishna chaitanya chundru wrote:
+>>> In ASPM driver, LTR threshold scale and value are updated based on
+>>> tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
+>>> LTR threshold scale and value are greater values than max snoop/non-snoop
+>>> value.
+>>>
+>>> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+>>> reported snoop/no-snoop values is greather than or equal to
+>>> LTR_L1.2_THRESHOLD value.
+>>>
+>>> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+>>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>>> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>> Bjorn, any update on this patch?
+> ping: can this be landed or are any further changes needed?
 
-greg k-h
+Hi Bjorn,
+
+Can you help us to review this patch. It was untouched from july 15. If 
+you have
+
+any comments we will try to address them.
+
+
+Thanks & Regards,
+
+Krishna Chaitanya.
+
+>> Thanks,
+>> Mani
+>>
+>>> ---
+>>>
+>>> I am taking this patch forward as prasad is no more working with our org.
+>>> changes since v5:
+>>> 	- no changes, just reposting as standalone patch instead of reply to
+>>> 	  previous patch.
+>>> Changes since v4:
+>>> 	- Replaced conditional statements with min and max.
+>>> changes since v3:
+>>> 	- Changed the logic to include this condition "snoop/nosnoop
+>>> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+>>> Changes since v2:
+>>> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+>>> Changes since v1:
+>>> 	- Added missing variable declaration in v1 patch
+>>> ---
+>>>   drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+>>>   1 file changed, 30 insertions(+)
+>>>
+>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+>>> index a96b742..676c03e 100644
+>>> --- a/drivers/pci/pcie/aspm.c
+>>> +++ b/drivers/pci/pcie/aspm.c
+>>> @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>>>   {
+>>>   	struct pci_dev *child = link->downstream, *parent = link->pdev;
+>>>   	u32 val1, val2, scale1, scale2;
+>>> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+>>>   	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+>>>   	u32 ctl1 = 0, ctl2 = 0;
+>>>   	u32 pctl1, pctl2, cctl1, cctl2;
+>>>   	u32 pl1_2_enables, cl1_2_enables;
+>>> +	u16 ltr;
+>>> +	u16 max_snoop_lat, max_nosnoop_lat;
+>>>   
+>>>   	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+>>>   		return;
+>>>   
+>>> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+>>> +	if (!ltr)
+>>> +		return;
+>>> +
+>>> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+>>> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+>>> +
+>>> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+>>> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+>>> +
+>>> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+>>> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+>>> +
+>>> +	/* choose the greater max scale value between snoop and no snoop value*/
+>>> +	max_scale = max(max_snp_scale, max_nsnp_scale);
+>>> +
+>>> +	/* choose the greater max value between snoop and no snoop scales */
+>>> +	max_val = max(max_snp_val, max_nsnp_val);
+>>> +
+>>>   	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+>>>   	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+>>>   	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+>>> @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>>>   	 */
+>>>   	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+>>>   	encode_l12_threshold(l1_2_threshold, &scale, &value);
+>>> +
+>>> +	/*
+>>> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+>>> +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
+>>> +	 */
+>>> +	scale = min(scale, max_scale);
+>>> +	value = min(value, max_val);
+>>> +
+>>>   	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+>>>   
+>>>   	/* Some broken devices only support dword access to L1 SS */
+>>> -- 
+>>> 2.7.4
+>>>

@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A685A4E63
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B09C5A4E6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiH2NmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S229846AbiH2NpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiH2NmU (ORCPT
+        with ESMTP id S229696AbiH2NpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:42:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C57F8FD50;
-        Mon, 29 Aug 2022 06:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661780537; x=1693316537;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Dm77TZdDOsxyEUyf3mIDyCgCwIVjRlmyzDrQ7gf/weQ=;
-  b=syv2Uck76t7FxDhBNmfPDEbPS08tHJ5EcpFUYNvzdbo7hmlH9OeulUve
-   eKcyEBwbNlQ2Uwef3d+A2mog2JkdnBiCprgLBvHYpbHiITn1nKwISPGgw
-   THgNxicjc3jzPaCTNsa+yJtv0NC2MUZNR9otA3c8kw+G4PwLtgkkUCvqF
-   Fp4TGNwIOLKwCvqAxAxBSYhfkZZDD4/TPYQBUxUdqaTPHlVVngkl7aByt
-   Clr6SbUM/bOIhiDa9JbhoOah6Z+ErZ1sC18ajisT9Z46721WghO1ZeppY
-   LCwTmTbWR5iq/n4UE3DSFUEhdHdyUWNruzFa/u2N/kM4RFh6g2IKyi68+
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="174633417"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Aug 2022 06:42:16 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 29 Aug 2022 06:42:16 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Mon, 29 Aug 2022 06:42:13 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     Cyril Jean <cyril.jean@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] dt-bindings: riscv: update microchip.yaml's maintainership
-Date:   Mon, 29 Aug 2022 14:41:04 +0100
-Message-ID: <20220829134102.1248504-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 29 Aug 2022 09:45:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9313D75;
+        Mon, 29 Aug 2022 06:45:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3584760E74;
+        Mon, 29 Aug 2022 13:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C23C433C1;
+        Mon, 29 Aug 2022 13:45:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661780707;
+        bh=LONhSjhioPpIGkPhDqeNiVnudsZxe58m+isbUyEv7O0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQ90tDo6HDoMD75jr6PWzAL/zAGSGfjhEqOa9lQtC/CpioFABRMhXsWPAVSEJ+yaG
+         KKbofGAyw/tBUqYMgAPYqdIxHZ4E2hi1xpc6rI2PmQw03cRlxfHT+qGZw22AUrNwY0
+         QwXMPWzCtqBP43ELOIl6zEj8v8HZpKOipp8/y5H+lfcuH0UWAbyTxe86o1Yj7fUkcO
+         eqVvnTS7UCHGxVnQk9TxRNb+7c385AbuR6S0nsdx/74Jz8oUUvCoFiIV5TrR+DHIS+
+         LlFDVWCtX6sa+wTBWu6INeEyjKs7WmcyPyU4iDKokp1xJQG/sQa6N3HgxeUhAHm1J/
+         ssF49b2pqJWKA==
+Date:   Mon, 29 Aug 2022 16:44:51 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     vbendel@redhat.com
+Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, trivial@kernel.org,
+        Jozef Bacik <jobacik@redhat.com>
+Subject: Re: [PATCH] docs: mm: fix vm overcommit documentation for
+ OVERCOMMIT_GUESS
+Message-ID: <YwzC01N62rtDvzQV@kernel.org>
+References: <20220829124638.63748-1-vbendel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829124638.63748-1-vbendel@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,47 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daire and I are the platform maintainers for Microchip's RISC-V
-FPGAs. Update the maintainers in microchip.yaml to reflect this and
-explicitly add the binding to the SoC's MAINTAINERS entry.
+On Mon, Aug 29, 2022 at 02:46:38PM +0200, vbendel@redhat.com wrote:
+> From: Vratislav Bendel <vbendel@redhat.com>
+> 
+> Commit 8c7829b04c52 "mm: fix false-positive OVERCOMMIT_GUESS failures"
+> changed the behavior of the default OVERCOMMIT_GUESS setting.
+> Reflect the change also in the Documentation, namely files:
+>     Documentation/admin-guide/sysctl/vm.rst
+>     Documentation/mm/overcommit-accounting.rst
+> 
+> Reported-by: Jozef Bacik <jobacik@redhat.com>
+> Signed-off-by: Vratislav Bendel <vbendel@redhat.com>
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Two patches seemed overkill for this, but scream and I will split them.
-I figured I would take this for 6.1 myself on top of my other changes
-to microchip.yaml.
----
- Documentation/devicetree/bindings/riscv/microchip.yaml | 4 ++--
- MAINTAINERS                                            | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
-index 37f97ee4fe46..9eaa21769457 100644
---- a/Documentation/devicetree/bindings/riscv/microchip.yaml
-+++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
-@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Microchip PolarFire SoC-based boards
- 
- maintainers:
--  - Cyril Jean <Cyril.Jean@microchip.com>
--  - Lewis Hanly <lewis.hanly@microchip.com>
-+  - Conor Dooley <conor.dooley@microchip.com>
-+  - Daire McNamara <daire.mcnamara@microchip.com>
- 
- description:
-   Microchip PolarFire SoC-based boards
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cc549debe20c..7d788e064390 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17572,6 +17572,7 @@ F:	Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml
- F:	Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
- F:	Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
- F:	Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
-+F:	Documentation/devicetree/bindings/riscv/microchip.yaml
- F:	Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
- F:	Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
- F:	Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+> ---
+>  Documentation/admin-guide/sysctl/vm.rst    | 4 ++--
+>  Documentation/mm/overcommit-accounting.rst | 3 +--
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> index 9b833e439f09..351443427360 100644
+> --- a/Documentation/admin-guide/sysctl/vm.rst
+> +++ b/Documentation/admin-guide/sysctl/vm.rst
+> @@ -742,8 +742,8 @@ overcommit_memory
+>  
+>  This value contains a flag that enables memory overcommitment.
+>  
+> -When this flag is 0, the kernel attempts to estimate the amount
+> -of free memory left when userspace requests more memory.
+> +When this flag is 0, the kernel compares the userspace memory request
+> +size against total memory plus swap and rejects obvious overcommits.
+>  
+>  When this flag is 1, the kernel pretends there is always enough
+>  memory until it actually runs out.
+> diff --git a/Documentation/mm/overcommit-accounting.rst b/Documentation/mm/overcommit-accounting.rst
+> index a4895d6fc1c2..e2263477f6d5 100644
+> --- a/Documentation/mm/overcommit-accounting.rst
+> +++ b/Documentation/mm/overcommit-accounting.rst
+> @@ -8,8 +8,7 @@ The Linux kernel supports the following overcommit handling modes
+>  	Heuristic overcommit handling. Obvious overcommits of address
+>  	space are refused. Used for a typical system. It ensures a
+>  	seriously wild allocation fails while allowing overcommit to
+> -	reduce swap usage.  root is allowed to allocate slightly more
+> -	memory in this mode. This is the default.
+> +	reduce swap usage. This is the default.
+>  
+>  1
+>  	Always overcommit. Appropriate for some scientific
+> -- 
+> 2.26.3
+> 
+
 -- 
-2.36.1
-
+Sincerely yours,
+Mike.

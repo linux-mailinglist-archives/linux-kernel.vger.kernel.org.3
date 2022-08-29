@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2995A5486
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F805A5489
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 21:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiH2T0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 15:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S229681AbiH2T0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 15:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiH2T0F (ORCPT
+        with ESMTP id S229845AbiH2T0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:26:05 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3448A7C6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:26:02 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id l3so8942604plb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=VhWA9zltNIvjVh8Z8DuaAQPbsy5x2B8HO8rAH51nZcs=;
-        b=eJWdBVSqu/L3b4Gx52Gb4jKAo92U2TKDhf7bztvP63HYkGxkmA2CVM9dFnWwHtbxyi
-         /oqM5qROQsahReI/SrXkrJbmthPE66kBHogzexruiDDXvtE1a30nJPJFmAlle+/lnR0z
-         /2BBq6o/dTJ7AVRL7iOu8FeE1wwhMaUGWML4E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=VhWA9zltNIvjVh8Z8DuaAQPbsy5x2B8HO8rAH51nZcs=;
-        b=Tzm47BJnfUXj9ZuhE1GKIgl/mM+h62CfbOt9wsC6z7ChzoBd6YWTGEmJns2cylWvay
-         LZXOyTM4er6rn8h8I5oUPVZ8ifnYtIJe5somMiE6IYYk02ye7TS3uVTGYo5FCXfHVEg2
-         cxE8jKwrZfd2X1B6ccySX0vx2+P83VdYCrmaB0z4DPv/HgPH/+iEZFZI+/kzExeD5yxL
-         FM7vlaxcAH/+AkkDiA9t7HV5sxeytdlpiF6BxnmKrvkX7U3W8Ig6Iw0UaPJSBklC/6Fp
-         qfUExik9pWfbEHB3+N7519pkZmCuB4WSjWhH0X9l/fpUEaHEV3LsVBVbuLWKhJMVfzUU
-         eQbw==
-X-Gm-Message-State: ACgBeo2IECUbENUkZ3knwUmGoDi2FtObYW+TxJaUZLi7WXKTjE7A5t3i
-        0q10Q9rBBHbUKly7mnlDW9HjVA==
-X-Google-Smtp-Source: AA6agR7u3y84UCyhfAk1IOVCe6FUtEm4rdvgw806xCycjSX/X3gzP52Q1hWrrhqe4GxNhc/peNJs5A==
-X-Received: by 2002:a17:902:7003:b0:172:cbb0:9af8 with SMTP id y3-20020a170902700300b00172cbb09af8mr18161965plk.57.1661801161717;
-        Mon, 29 Aug 2022 12:26:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t17-20020a170902e85100b00172e6c66f84sm7901946plg.148.2022.08.29.12.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 12:26:00 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 12:25:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     mpe@ellerman.id.au, nanya@linux.vnet.ibm.com, asahiroy@kernel.org,
-        michal.lkml@markovi.net, corbet@lwn.net, ndesaulniers@google.com,
-        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs/core-api: expand Fedora instructions for GCC plugins
-Message-ID: <202208291225.A0D3FAFC@keescook>
-References: <20220827193836.2582079-1-elliott@hpe.com>
+        Mon, 29 Aug 2022 15:26:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9D88A7C6;
+        Mon, 29 Aug 2022 12:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661801166; x=1693337166;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PtLKBNgjh+ULawwAW9/eSjnSKuCcdBTI5zbDgdybVL4=;
+  b=lqteU+jaYYacIoIikUCDnhdreq2m1h5Vevv0u3m0XGa6Ul+FtCgCvDDt
+   eVircrwFHwPorE4xZ+Dgtu/iUZSy6XXB2By/BvxXavHL/IlYq7LltmE4p
+   t0J0rUXguHwQtlire/kUoWrEydRnVZjEXwWXRQoZT12dorFT02ZLRLT1W
+   5fW/QfLaJKodDpsYi3AsZ8U7vW8g6HjDdHZlKmmzTS1zdOolH/TCZn+W2
+   +60uLlg6kkTpJzwi19L1szhIx7h+JaMBm02tYC560EoD2ZdV58LCm3Dnf
+   X1x2/XHcz2zmtK/NK+9pr6hmtpxDfKSzAON+cysl9sWkE4YDfweR/CKqV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="292558633"
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="292558633"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 12:26:06 -0700
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="679742081"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 12:26:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oSkOW-005ep2-2a;
+        Mon, 29 Aug 2022 22:26:00 +0300
+Date:   Mon, 29 Aug 2022 22:26:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] gpiolib: acpi: Add support to ignore programming
+ an interrupt
+Message-ID: <Yw0SyH9nwpk6Ymsw@smile.fi.intel.com>
+References: <20220803042501.515-1-mario.limonciello@amd.com>
+ <efb83a0c-7617-894e-a34d-37280238d5aa@redhat.com>
+ <YwkDd+mAhyoSwVeq@smile.fi.intel.com>
+ <MN0PR12MB610137D56D08C873C7647A9CE2769@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220827193836.2582079-1-elliott@hpe.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <MN0PR12MB610137D56D08C873C7647A9CE2769@MN0PR12MB6101.namprd12.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 02:38:36PM -0500, Robert Elliott wrote:
-> In Fedora 36, cross-compiling an allmodconfig configuration
-> for other architectures on x86 fails with this problem:
-> 
-> In file included from ../scripts/gcc-plugins/gcc-common.h:95,
->                  from ../scripts/gcc-plugins/latent_entropy_plugin.c:78:
-> /usr/lib/gcc/aarch64-linux-gnu/12/plugin/include/builtins.h:23:10: fatal
-> error: mpc.h: No such file or directory
->    23 | #include <mpc.h>
->       |          ^~~~~~~
-> compilation terminated.
-> 
-> In that distro, that header file is available in the separate
-> libmpc-devel package.
-> 
-> Although future versions of Fedora might correctly mark
-> that dependency, mention this additional package.
-> 
-> To help detect such problems ahead of time, describe the
->     gcc -print-file-name=plugin
-> command that is used by scripts/gcc-plugins/Kconfig to detect
-> plugins [1].
-> 
-> [1] https://lore.kernel.org/lkml/CAHk-=wjjiYjCp61gdAMpDOsUBU-A2hFFKJoVx5VAC7yV4K6WYg@xxxxxxxxxxxxxx/
-> 
-> Fixes: 43e96ef8b70c50f ("docs/core-api: Add Fedora instructions for GCC plugins");
-> Signed-off-by: Robert Elliott <elliott@hpe.com>
+On Mon, Aug 29, 2022 at 06:16:45PM +0000, Limonciello, Mario wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Friday, August 26, 2022 12:32
+> > On Wed, Aug 03, 2022 at 05:07:15PM +0200, Hans de Goede wrote:
+> > > On 8/3/22 06:24, Mario Limonciello wrote:
 
-Thanks!
+...
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > Thanks, patch looks good to me:
+> > >
+> > > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > 
+> > Pushed to my review and testing queue, thanks!
 
-Jon, do you want to take this since it's entirely in the .rst file?
+> Just to double check, you meant you took both patches, not just the first right?
+
+Yes, I took 2 patches. To reduce a confusion I highly recommend to send a
+series with a cover letter, so the answer to it will definitely be equal to
+"yes, I have took all of them" if nothing else specified.
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
+
+

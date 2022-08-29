@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F565A4476
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B455A447A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiH2IDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S229798AbiH2IEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiH2IDw (ORCPT
+        with ESMTP id S229478AbiH2IE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:03:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E0151A36;
-        Mon, 29 Aug 2022 01:03:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEFA3B80D44;
-        Mon, 29 Aug 2022 08:03:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14257C433D6;
-        Mon, 29 Aug 2022 08:03:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661760227;
-        bh=Lhj0RHh8rNggcWDmxJyAYJ5b4fh7OxH73G3h9VdQhJ0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t4bHkwddQL+VkPeOBO6eyTCFDarD3uvRNlu/PgH3EEV+iALlXBwyxo6yx5/Kuhoxb
-         gcm6dIF6+zh2Imy6cmfljhY3E3PxRAfygoFT97w4ajDExkqUcLnhQUwtAgFiGu0Hs2
-         Q2S5lXbTmDIjZYKIa2A25kWw39ZrR5yVqwmzMAHTwWRH1A+fFh3YSNPhIuiFHJCXDV
-         31tlN4iE90xv0XMjrB7z9xBL/VYTwIh7Gbu/1je+samGOz51/TO9ns7nVnGZl1hW1x
-         FrcDIkHEBJno1lyn6ev0v2h0rEm71IrjTkrNxqNJYFFe7jbkE33kHDJZsTOBucMyKg
-         SOlXcZin7Cdpw==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, kernel-team@android.com,
-        Vidya Sagar <vidyas@nvidia.com>, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target addresses
-Date:   Mon, 29 Aug 2022 10:03:37 +0200
-Message-Id: <166176019992.171538.122989473473924869.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220825235404.4132818-1-willmcvicker@google.com>
-References: <20220825235404.4132818-1-willmcvicker@google.com>
+        Mon, 29 Aug 2022 04:04:28 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308F64F654;
+        Mon, 29 Aug 2022 01:04:27 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 8D99C1883996;
+        Mon, 29 Aug 2022 08:04:25 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 82C7625032B7;
+        Mon, 29 Aug 2022 08:04:25 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 72B209EC0004; Mon, 29 Aug 2022 08:04:25 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Mon, 29 Aug 2022 10:04:25 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <YwxwPJOx/n5SHZM5@shredder>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <Ywo16vHMqxxszWzX@shredder>
+ <dd9a4156fe421f6be3a49f5b928ef77e@kapio-technology.com>
+ <YwxwPJOx/n5SHZM5@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <7e4b58a75ece9cce4c841c33d7d66265@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,26 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 23:54:01 +0000, Will McVicker wrote:
-> I've update patch 2/2 to address Robin's suggestions. This includes:
+On 2022-08-29 09:52, Ido Schimmel wrote:
+> On Sun, Aug 28, 2022 at 12:23:30PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-08-27 17:19, Ido Schimmel wrote:
+>> > On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
+>> > >
+>> > >  	nbp_switchdev_frame_mark(p, skb);
+>> > > @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port
+>> > > *p, struct nlattr *tb[],
+>> > >  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS,
+>> > > BR_NEIGH_SUPPRESS);
+>> > >  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+>> > >  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+>> > > +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
+>> > > +
+>> > > +	if (!(p->flags & BR_PORT_LOCKED))
+>> > > +		p->flags &= ~BR_PORT_MAB;
+>> 
+>> The reason for this is that I wanted it to be so that if you have MAB
+>> enabled (and locked of course) and unlock the port, it will 
+>> automatically
+>> clear both flags instead of having to first disable MAB and then 
+>> unlock the
+>> port.
 > 
->  * Dropping the while-loop for retrying with a 64-bit mask in favor of
->    retrying within the error if-statement.
->  * Using an int for the DMA mask instead of a bool and ternary operation.
+> User space can just do:
 > 
-> Thanks again for the reviews and sorry for the extra revision today!
-> Hopefully this is the last one :) If not, I'd be fine to submit patch 1/2
-> without 2/2 to avoid resending patch 1/2 for future revisions of patch 2/2
-> (unless I don't need to do that anyway).
+> # bridge link set dev swp1 locked off mab off
 > 
-> [...]
+> I prefer not to push such logic into the kernel and instead fail
+> explicitly. I won't argue if more people are in favor.
 
-Applied to pci/dwc, thanks!
-
-[1/2] PCI: dwc: Drop dependency on ZONE_DMA32
-      https://git.kernel.org/lpieralisi/pci/c/423511ec23e2
-[2/2] PCI: dwc: Add support for 64-bit MSI target address
-      https://git.kernel.org/lpieralisi/pci/c/e99d8c5e803b
-
-Thanks,
-Lorenzo
+I shall do it as you suggest. It sounds fair. :-)

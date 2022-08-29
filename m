@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BB95A45FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D5F5A45FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiH2JX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S229808AbiH2JXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiH2JXF (ORCPT
+        with ESMTP id S229820AbiH2JXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Aug 2022 05:23:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E15AC45
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:23:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FF35AA1A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:23:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 237CB60FA6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7053C433D6;
-        Mon, 29 Aug 2022 09:23:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87A1960F9E
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A211C433C1;
+        Mon, 29 Aug 2022 09:23:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661764982;
-        bh=i+TyAJcdH1xZxAk1Jhglvj9cFowqOJEpcp1jx3o52pM=;
+        s=k20201202; t=1661764984;
+        bh=SP6FO5OVX0W3tqYYHyor3Axas/34MtKo+fTrqAskab4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dvWiaJgvo9W5H06bfBC4s3dAnWrSm8Qtv2WR2g/UbpwfRP9VipgyU9Sb8V7ZvgCed
-         amDh+c9SBerMcmQjyJ110s4grO/60sqjYmWyk+8OTjv4dyBZmIOgwAl7/Fstscolyt
-         1IlJ/vr1rIXgfTgL7+65EwU4a4TybLQ8HHvjBHJ87Ah3PdD2LXX0c4U0CnYp44Sc6a
-         j/xSOaT1JDX85N5+HVPm3uyCZaebGuH04NpNQMWquFilc1MLgim0gA14cZFumjhKr+
-         neFTsZ+xuciqHm9NMAK+NFhR8HK4XJDr3yGRd66N8BQLXKnI5d4aRHt04JlQRg9QxS
-         kRRENNvcJhYqQ==
+        b=FJKVc9l8KE28b12hq8Sb8gZ9pGgt1iR1C7hngDVoYimmS6ZrJC3A+VVz2zNpzNpqy
+         1H7jgTFoXVnQJl0i9yCzQW1Mszg+lHluu+hhEziQEWhcv6QSEZMMoqkDES6R5k0roR
+         9LFl+nvtq/b3nZoZlZdnWMWCIdQvKhkXdb4wSTfA8slYESBmtUZd9nBS7qiIFwnVIg
+         HWbY2ylr7G8HPZ9AKU6mJS4ywUqChFH4mSxWJR6KsJyUHERYdxXMa+COGvdQ1ZKc2x
+         pldVVzua3bqk5AFTs8hxJdOyRlpsL41SXudzzucg8EI8xKuVYeYtaC40GTSpmt4pRC
+         09dL6odI/mOOA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 3/7] habanalabs: ignore EEPROM errors during boot
-Date:   Mon, 29 Aug 2022 12:22:50 +0300
-Message-Id: <20220829092254.930753-3-ogabbay@kernel.org>
+Cc:     farah kassabri <fkassabri@habana.ai>
+Subject: [PATCH 4/7] habanalabs/gaudi2: log critical events with no rate limit
+Date:   Mon, 29 Aug 2022 12:22:51 +0300
+Message-Id: <20220829092254.930753-4-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220829092254.930753-1-ogabbay@kernel.org>
 References: <20220829092254.930753-1-ogabbay@kernel.org>
@@ -53,69 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: farah kassabri <fkassabri@habana.ai>
 
-EEPROM errors reported by firmware are basically warnings and
-should not fail the boot process.
+When we have a storm of errors of HBM ECC SERR we can reach a situation
+where driver start hard reset flow without logging the error cause
+that caused the hard reset due to logs rate limiting.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Signed-off-by: farah kassabri <fkassabri@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/firmware_if.c        | 9 +++++++++
- drivers/misc/habanalabs/include/common/hl_boot_if.h | 5 +++++
- 2 files changed, 14 insertions(+)
+ drivers/misc/habanalabs/gaudi2/gaudi2.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
-index 12d0f18c1f6c..4ede4bb03e8e 100644
---- a/drivers/misc/habanalabs/common/firmware_if.c
-+++ b/drivers/misc/habanalabs/common/firmware_if.c
-@@ -573,6 +573,15 @@ static bool fw_report_boot_dev0(struct hl_device *hdev, u32 err_val,
- 		dev_dbg(hdev->dev, "Device status0 %#x\n", sts_val);
+diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
+index ff0f9e9db1b5..6bebd5eb0294 100644
+--- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
++++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
+@@ -8200,10 +8200,17 @@ static bool gaudi2_handle_hbm_mc_sei_err(struct hl_device *hdev, u16 event_type,
+ 		return true;
+ 	}
  
- 	/* All warnings should go here in order not to reach the unknown error validation */
-+	if (err_val & CPU_BOOT_ERR0_EEPROM_FAIL) {
-+		dev_warn(hdev->dev,
-+			"Device boot warning - EEPROM failure detected, default settings applied\n");
-+		/* This is a warning so we don't want it to disable the
-+		 * device
-+		 */
-+		err_val &= ~CPU_BOOT_ERR0_EEPROM_FAIL;
-+	}
+-	dev_err_ratelimited(hdev->dev,
+-		"System Error Interrupt - HBM(%u) MC(%u) MC_CH(%u) MC_PC(%u). Critical(%u). Error cause: %s\n",
+-		hbm_id, mc_id, sei_data->hdr.mc_channel, sei_data->hdr.mc_pseudo_channel,
+-		sei_data->hdr.is_critical, hbm_mc_sei_cause[cause_idx]);
++	if (sei_data->hdr.is_critical)
++		dev_err(hdev->dev,
++			"System Critical Error Interrupt - HBM(%u) MC(%u) MC_CH(%u) MC_PC(%u). Error cause: %s\n",
++			hbm_id, mc_id, sei_data->hdr.mc_channel, sei_data->hdr.mc_pseudo_channel,
++			hbm_mc_sei_cause[cause_idx]);
 +
- 	if (err_val & CPU_BOOT_ERR0_DRAM_SKIPPED) {
- 		dev_warn(hdev->dev,
- 			"Device boot warning - Skipped DRAM initialization\n");
-diff --git a/drivers/misc/habanalabs/include/common/hl_boot_if.h b/drivers/misc/habanalabs/include/common/hl_boot_if.h
-index f2f6488de625..2e45be5de4fe 100644
---- a/drivers/misc/habanalabs/include/common/hl_boot_if.h
-+++ b/drivers/misc/habanalabs/include/common/hl_boot_if.h
-@@ -34,6 +34,7 @@ enum cpu_boot_err {
- 	CPU_BOOT_ERR_BINNING_FAIL = 19,
- 	CPU_BOOT_ERR_TPM_FAIL = 20,
- 	CPU_BOOT_ERR_TMP_THRESH_INIT_FAIL = 21,
-+	CPU_BOOT_ERR_EEPROM_FAIL = 22,
- 	CPU_BOOT_ERR_ENABLED = 31,
- 	CPU_BOOT_ERR_SCND_EN = 63,
- 	CPU_BOOT_ERR_LAST = 64 /* we have 2 registers of 32 bits */
-@@ -115,6 +116,9 @@ enum cpu_boot_err {
-  * CPU_BOOT_ERR0_TMP_THRESH_INIT_FAIL	Failed to set threshold for tmperature
-  *					sensor.
-  *
-+ * CPU_BOOT_ERR_EEPROM_FAIL		Failed reading EEPROM data. Defaults
-+ *					are used.
-+ *
-  * CPU_BOOT_ERR0_ENABLED		Error registers enabled.
-  *					This is a main indication that the
-  *					running FW populates the error
-@@ -139,6 +143,7 @@ enum cpu_boot_err {
- #define CPU_BOOT_ERR0_BINNING_FAIL		(1 << CPU_BOOT_ERR_BINNING_FAIL)
- #define CPU_BOOT_ERR0_TPM_FAIL			(1 << CPU_BOOT_ERR_TPM_FAIL)
- #define CPU_BOOT_ERR0_TMP_THRESH_INIT_FAIL	(1 << CPU_BOOT_ERR_TMP_THRESH_INIT_FAIL)
-+#define CPU_BOOT_ERR0_EEPROM_FAIL		(1 << CPU_BOOT_ERR_EEPROM_FAIL)
- #define CPU_BOOT_ERR0_ENABLED			(1 << CPU_BOOT_ERR_ENABLED)
- #define CPU_BOOT_ERR1_ENABLED			(1 << CPU_BOOT_ERR_ENABLED)
++	else
++		dev_err_ratelimited(hdev->dev,
++			"System Non-Critical Error Interrupt - HBM(%u) MC(%u) MC_CH(%u) MC_PC(%u). Error cause: %s\n",
++			hbm_id, mc_id, sei_data->hdr.mc_channel, sei_data->hdr.mc_pseudo_channel,
++			hbm_mc_sei_cause[cause_idx]);
  
+ 	/* Print error-specific info */
+ 	switch (cause_idx) {
 -- 
 2.25.1
 

@@ -2,148 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E6E5A55E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26205A55EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiH2VF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S229541AbiH2VGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiH2VFz (ORCPT
+        with ESMTP id S229508AbiH2VGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:05:55 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289EF74BAC;
-        Mon, 29 Aug 2022 14:05:54 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id s11so3359583ilt.7;
-        Mon, 29 Aug 2022 14:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=iMrKlQSZZ8llMPUpcA2wkZ6GcnRo6xzhVqACLMFFoSU=;
-        b=bIW6nMBxac3oWFkumBvaLSV52Vt9AeCRygcLmOsPHX3jxbSjnojDVwFhOJ+HdvtNze
-         P5zhXtolNVwIHZN7XcUwe1zJrKI2XrmMAu/zmRaAWnLuaYhEHl0IoKa1FDsaqgZcLN15
-         nuNIOP2iyiCM8TAajoSkPoq4YTwvWn1nHPORFWJHRReuqt4cmS0BLBSutK+PQiK1xooh
-         I01m9MfCQNmjywINSvWr/UDdKuHJaic4oPimpSMBerCIbw72oCkbyV46uzYJxlgUPrMR
-         1C7D9HO1qaYDIMcsx5dcIeGsHqc59tfavyXoPhuKRjIoT5/1gzONB/ltMwVs7+ipAbAJ
-         CS0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=iMrKlQSZZ8llMPUpcA2wkZ6GcnRo6xzhVqACLMFFoSU=;
-        b=ya5NiYLqm5+vdcZXg52d9HqsAYaM9a+8NxbzFNrTZojCdeFS2iChpPob6ZshG2NrpB
-         Xh+dc40JoFRswXtKA9RMNJnTWJow+3iA4zw/P51gPN03yuoWCq6ua2syzC1QL0A+ujpZ
-         nQ4rI5E8DyIf+Kxl0x+ynEiuDM6RwyoEGoTfgGRe2R92xNfEcTb7U5jM0VSUAvLhECqY
-         ZhWP9UZnlBvriu9P1VCt1rVCGi8NSGYPciC9i1+QfbNnlpcHsU/c47gBwSQWlGOAmF5S
-         KMg9Gi/Hg48Rk8QvlbVfkhzc5BzywRKMCLX84ktFkdOoP97ShL0QKuCx6w9xFnFFdB7E
-         cusg==
-X-Gm-Message-State: ACgBeo1LJaNitOeUmP2Wo7Sx1gGwo5SP8/XW8Zz2ha9EbkCP2d3+UXc+
-        UYrDblIwbsmGDjJfWPtmReeNZFWefCu99A==
-X-Google-Smtp-Source: AA6agR6HwPl7lcId2NQFwlhhy8MwBh/S/oUdT5J+eVfJVXe2bjQjiGZUk/XL01VRi41cBEqKLyL9xA==
-X-Received: by 2002:a92:130f:0:b0:2e4:22c9:7721 with SMTP id 15-20020a92130f000000b002e422c97721mr11343828ilt.34.1661807152810;
-        Mon, 29 Aug 2022 14:05:52 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id p6-20020a022906000000b00349dccb3855sm4638981jap.72.2022.08.29.14.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 14:05:52 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v2] libbpf: add GCC support for bpf_tail_call_static
-Date:   Mon, 29 Aug 2022 15:05:46 -0600
-Message-Id: <20220829210546.755377-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 17:06:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3FF7B2B9;
+        Mon, 29 Aug 2022 14:06:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B198B81162;
+        Mon, 29 Aug 2022 21:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED93C433D6;
+        Mon, 29 Aug 2022 21:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1661807172;
+        bh=0mcDMWOHxrfD5Tv/P4qNMYR0C9A+FHsaDwMm2tRHyOM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=0HTX24J+z5lpQJxLBuCvnFqrtnc+m7Vi5tt1i5mJZT0I+7158lB99II5Lb+fqWnKr
+         wemh3r02eTFtMPMyWI74fu2J49hU+J4ADZfvOZrxYCukzVsSF7oAVrHOeYfZ4ZqALt
+         m6c9b/ZJo4L8YJUrb1AJUqcUG0YzBhKk9Tw/htqA=
+Date:   Mon, 29 Aug 2022 14:06:11 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "lucas.demarchi@intel.com" <lucas.demarchi@intel.com>,
+        "jani.nikula@intel.com" <jani.nikula@intel.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/7] units: complement the set of Hz units
+Message-Id: <20220829140611.5816d090c4505740a97b8918@linux-foundation.org>
+In-Reply-To: <20220828165541.2cd81c97@jic23-huawei>
+References: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
+        <20220812165243.22177-3-ddrokosov@sberdevices.ru>
+        <20220828165541.2cd81c97@jic23-huawei>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bpf_tail_call_static function is currently not defined unless
-using clang >= 8.
+On Sun, 28 Aug 2022 16:55:41 +0100 Jonathan Cameron <jic23@kernel.org> wrote:
 
-To support bpf_tail_call_static on GCC we can check if __clang__ is
-not defined to enable bpf_tail_call_static.
-
-We need to use GCC assembly syntax when the compiler does not define
-__clang__ as LLVM inline assembly is not fully compatible with GCC.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - drop __BPF__ check as GCC now defines __bpf__
----
- tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 7349b16b8e2f..867b734839dd 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -131,7 +131,7 @@
- /*
-  * Helper function to perform a tail call with a constant/immediate map slot.
-  */
--#if __clang_major__ >= 8 && defined(__bpf__)
-+#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
- static __always_inline void
- bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- {
-@@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- 		__bpf_unreachable();
- 
- 	/*
--	 * Provide a hard guarantee that LLVM won't optimize setting r2 (map
--	 * pointer) and r3 (constant map index) from _different paths_ ending
-+	 * Provide a hard guarantee that the compiler won't optimize setting r2
-+	 * (map pointer) and r3 (constant map index) from _different paths_ ending
- 	 * up at the _same_ call insn as otherwise we won't be able to use the
- 	 * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
- 	 * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-@@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- 	 *
- 	 * Note on clobber list: we need to stay in-line with BPF calling
- 	 * convention, so even if we don't end up using r0, r4, r5, we need
--	 * to mark them as clobber so that LLVM doesn't end up using them
--	 * before / after the call.
-+	 * to mark them as clobber so that the compiler doesn't end up using
-+	 * them before / after the call.
- 	 */
--	asm volatile("r1 = %[ctx]\n\t"
-+	asm volatile(
-+#ifdef __clang__
-+		     "r1 = %[ctx]\n\t"
- 		     "r2 = %[map]\n\t"
- 		     "r3 = %[slot]\n\t"
-+#else
-+		     "mov %%r1,%[ctx]\n\t"
-+		     "mov %%r2,%[map]\n\t"
-+		     "mov %%r3,%[slot]\n\t"
-+#endif
- 		     "call 12"
- 		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
- 		     : "r0", "r1", "r2", "r3", "r4", "r5");
--- 
-2.34.1
-
+> On Fri, 12 Aug 2022 16:52:26 +0000
+> Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+> 
+> > Currently, Hz units do not have milli, micro and nano Hz coefficients.
+> > Some drivers (IIO especially) use their analogues to calculate
+> > appropriate Hz values. This patch includes them to units.h definitions,
+> > so they can be used from different kernel places.
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> I'm not really sure why Andrew Morton picked these up as no obviously
+> dependencies outside of IIO and we have other patches under review that
+> need these.
+> 
+> Anyhow, I see they are still in Andrew's nonmm-unstable tree, so
+> assuming he won't mind me picking them up through IIO instead / as well.
+> If nothing else git will sort this out when the two trees reach
+> linux-next or upstream anyway.
+> 
+> +Cc Andrew Morton.
+> 
+> this and next two patches applied to the togreg branch of iio.git.
+> I'll push that out as testing for 0-day to do it's sanity checks then
+> it'll go out as iio.git / togreg and get picked up by linux-next.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> > ---
+> >  include/linux/units.h | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/include/linux/units.h b/include/linux/units.h
+> > index 681fc652e3d7..2793a41e73a2 100644
+> > --- a/include/linux/units.h
+> > +++ b/include/linux/units.h
+> > @@ -20,6 +20,9 @@
+> >  #define PICO	1000000000000ULL
+> >  #define FEMTO	1000000000000000ULL
+> >  
+> > +#define NANOHZ_PER_HZ		1000000000UL
+> > +#define MICROHZ_PER_HZ		1000000UL
+> > +#define MILLIHZ_PER_HZ		1000UL
+> >  #define HZ_PER_KHZ		1000UL
+> >  #define KHZ_PER_MHZ		1000UL
+> >  #define HZ_PER_MHZ		1000000UL

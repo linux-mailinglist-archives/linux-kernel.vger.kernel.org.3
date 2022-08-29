@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277655A53C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA555A53CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiH2SJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 14:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S229989AbiH2SKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 14:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiH2SI4 (ORCPT
+        with ESMTP id S229530AbiH2SKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 14:08:56 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667929A69D;
-        Mon, 29 Aug 2022 11:08:54 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id f9so3251376qvw.11;
-        Mon, 29 Aug 2022 11:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=gGq+deMz270tnEWl6wH8JezG1EwchVeq4/WCswdrxxQ=;
-        b=nW2H68kg6NzNVJL0xmqzRV4nZRGpzI3s7v2HsmfI3FkDVeijUr722oYbhb5xEnRAiH
-         xb4TWYrAnY8tAlwg+GnzIixAW3WqIR8CXRIn5F/qG1aMgDYHy3EqarKPQMYKhz7u8JCo
-         T+4Bxj2pyYVHzzI2IV3PTnvm2h82aTBDoGWxlezReBqDPcc7DtoI2s5XlEKkxFf54whZ
-         Femgp1bRVxQ6vmEjEqAqg5lqodlLZNSVFCEo6RVIhX8rUaK5H4Dwt5isDKm77wrN9mw/
-         sfnfuMNWXbfFr4tlzS3w+9XOHkxLn9Jdipm11/npOqg6tymE2CgzUDSjJaRQGMKUm5To
-         CTqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=gGq+deMz270tnEWl6wH8JezG1EwchVeq4/WCswdrxxQ=;
-        b=tz9Unis1dVfRtNqShU4xiCHJ62UsC4XeIQEoAONesL96Fw/GnkFz9+OTwxQVToiOmO
-         dKP2Ehbbj+tPSPqtwzLm/cZUSYMOgfVftyMQS7bV8gwe/U+MJOK0aacrMFmm01anIogs
-         +EEy8llkTFs4YzHMVf5kT84dNAn8ieHJMcGBvhQUGC0U2J3XbDn7s80eSgKE40HtOJvu
-         egmOCawMBfOlu7lQEk7xxJoHVPZPRw5ivwImxB86LxaZKCE3ZEs4rcAK5wGJqV8xHD1U
-         do9S41KdCfd3s6I/KSeKEkk2rgP3lHCYZ9YQsXaIWxQJV26DJcN60nQoW9H32dG+y7Cb
-         MKNw==
-X-Gm-Message-State: ACgBeo13hEKOABtakBbxUwYszyxXhCNlaqsahlFlfQqVV6eyqGYK9P8N
-        hlKClUqSvNQcQ+DA1FukxRA=
-X-Google-Smtp-Source: AA6agR6NFx9ldpsbzMhN89Y0I0mHvUPay/JV2bGIOkkFojDDUF1xleFlfYcS7ntlH/AeG9dZvJ0MAw==
-X-Received: by 2002:ad4:5dc5:0:b0:499:d93:df65 with SMTP id m5-20020ad45dc5000000b004990d93df65mr894205qvh.109.1661796533515;
-        Mon, 29 Aug 2022 11:08:53 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id az11-20020a05620a170b00b006bbd0ae9c05sm6630839qkb.130.2022.08.29.11.08.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 11:08:52 -0700 (PDT)
-Message-ID: <d63a86a0-616c-d6b4-b85c-f4372d0a8590@gmail.com>
-Date:   Mon, 29 Aug 2022 11:08:50 -0700
+        Mon, 29 Aug 2022 14:10:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBB57392D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661796641; x=1693332641;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w3FQog0TbfF6FSRjBPM0YwFMbUuW2xTLlJneCsIaVC0=;
+  b=d2D+MfBbMiT6uMXXiUJE9l82pWBzQRkfQjzZrBiyo9SI5Z77aNo1c7Ot
+   UQnE4ok6vFR1BNoq45YPnVgXtKIrPEjupcwG8uWvU7DPvJyX4/2QQlgtO
+   wALnQZ2zjwMPivTwe2ff+nfDduVqgpHYNnuQA5PgxLuFEXWy3cyx+IUg5
+   ojXuSdCdopjtrF4jSmVhPg3genP7ulm+Jf1soIAYPznCCqsk/rADmZnSn
+   ZSWBrO/k8GJVWWiiP1WB/xfGlg4ksF9zm48vt1w+bewytITWPukudy00/
+   LyXOsmEj+Gxrz47FGKkPzWoemi347U0NJcLS6OHjqzlG5ehwGNC/7hKZn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="296241565"
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="296241565"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 11:10:41 -0700
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="562325638"
+Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 11:10:36 -0700
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Ashok Raj" <ashok.raj@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] x86/microcode: Print previous version of microcode after reload
+Date:   Mon, 29 Aug 2022 18:10:30 +0000
+Message-Id: <20220829181030.722891-1-ashok.raj@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220829105808.828227973@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It will be useful to print both old and new versions of microcode after a
+reload is complete.
 
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+---
+ arch/x86/kernel/cpu/microcode/core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-On 8/29/2022 3:57 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.6 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index ad57e0e4d674..6a41cee242f6 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -491,7 +491,7 @@ static int __reload_late(void *info)
+  */
+ static int microcode_reload_late(void)
+ {
+-	int ret;
++	int old = boot_cpu_data.microcode, ret;
+ 
+ 	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
+ 	pr_err("You should switch to early loading, if possible.\n");
+@@ -503,7 +503,8 @@ static int microcode_reload_late(void)
+ 	if (ret == 0)
+ 		microcode_check();
+ 
+-	pr_info("Reload completed, microcode revision: 0x%x\n", boot_cpu_data.microcode);
++	pr_info("Reload completed, microcode revision: 0x%x -> 0x%x\n",
++		old, boot_cpu_data.microcode);
+ 
+ 	return ret;
+ }
 -- 
-Florian
+2.32.0
+

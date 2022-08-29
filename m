@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D4D5A49E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA03D5A4863
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiH2Lad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S230511AbiH2LJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiH2L3B (ORCPT
+        with ESMTP id S230509AbiH2LI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:29:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1144679EEC;
-        Mon, 29 Aug 2022 04:17:22 -0700 (PDT)
+        Mon, 29 Aug 2022 07:08:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79E767457;
+        Mon, 29 Aug 2022 04:05:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A46EA61239;
-        Mon, 29 Aug 2022 11:15:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AADC433D6;
-        Mon, 29 Aug 2022 11:15:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0AC4B80EF6;
+        Mon, 29 Aug 2022 11:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B25C433C1;
+        Mon, 29 Aug 2022 11:04:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771716;
-        bh=bGnwbFAYIoG1XzBZhEeiYHiXx8ZOhGl8KOE1yi58ZZw=;
+        s=korg; t=1661771075;
+        bh=jk/U9yqftALlcHtMMTeFmMseUiD4o7QesRU+OAonEdY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l2fOEXSiyH+K3g8ZDsL7I/4TGAe7O6tNY8YOnYAt2CcMYc0SOcBhWrO5F5/FG7oMI
-         CPx1aorSI5E7tMM+D++tSNkc1QcrG8p98kIgXbPm80XrQmDXFU0ohJELUDEKQsgwJk
-         QakRR1pD3uQW/e3hMs7Z36kZim4d+egRRuYrYEws=
+        b=WB7iPpguWY68sR9SGH9vDSH1KAIWz3Eb3iGCFeCpgt5iasnzDknFqwqZkD/J6gbd1
+         IDWx1oEzIdjkG2HViA7TASCHsdJDWfyL54x535V+POduaBn345M4zRiElpzb1EodPs
+         tAt45E7j/MCeMIqInHc+8qWWBmIpErKO0UAR7l6o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 072/158] net: Fix a data-race around sysctl_net_busy_poll.
-Date:   Mon, 29 Aug 2022 12:58:42 +0200
-Message-Id: <20220829105812.038796291@linuxfoundation.org>
+Subject: [PATCH 5.10 17/86] NFSv4.2 fix problems with __nfs42_ssc_open
+Date:   Mon, 29 Aug 2022 12:58:43 +0200
+Message-Id: <20220829105757.226673734@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit c42b7cddea47503411bfb5f2f93a4154aaffa2d9 ]
+[ Upstream commit fcfc8be1e9cf2f12b50dce8b579b3ae54443a014 ]
 
-While reading sysctl_net_busy_poll, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+A destination server while doing a COPY shouldn't accept using the
+passed in filehandle if its not a regular filehandle.
 
-Fixes: 060212928670 ("net: add low latency socket poll")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+If alloc_file_pseudo() has failed, we need to decrement a reference
+on the newly created inode, otherwise it leaks.
+
+Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: ec4b092508982 ("NFS: inter ssc open")
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/busy_poll.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfs/nfs4file.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
-index c4898fcbf923b..f90f0021f5f2d 100644
---- a/include/net/busy_poll.h
-+++ b/include/net/busy_poll.h
-@@ -33,7 +33,7 @@ extern unsigned int sysctl_net_busy_poll __read_mostly;
+diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
+index 4928eaa0d4c02..70cd0d764c447 100644
+--- a/fs/nfs/nfs4file.c
++++ b/fs/nfs/nfs4file.c
+@@ -341,6 +341,11 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
+ 		goto out;
+ 	}
  
- static inline bool net_busy_loop_on(void)
- {
--	return sysctl_net_busy_poll;
-+	return READ_ONCE(sysctl_net_busy_poll);
- }
- 
- static inline bool sk_can_busy_loop(const struct sock *sk)
++	if (!S_ISREG(fattr->mode)) {
++		res = ERR_PTR(-EBADF);
++		goto out;
++	}
++
+ 	res = ERR_PTR(-ENOMEM);
+ 	len = strlen(SSC_READ_NAME_BODY) + 16;
+ 	read_name = kzalloc(len, GFP_NOFS);
+@@ -359,6 +364,7 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
+ 				     r_ino->i_fop);
+ 	if (IS_ERR(filep)) {
+ 		res = ERR_CAST(filep);
++		iput(r_ino);
+ 		goto out_free_name;
+ 	}
+ 	filep->f_mode |= FMODE_READ;
 -- 
 2.35.1
 

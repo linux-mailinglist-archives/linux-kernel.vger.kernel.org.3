@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA4E5A4225
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F35C5A4229
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiH2FN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 01:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S229521AbiH2FUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 01:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiH2FNv (ORCPT
+        with ESMTP id S229453AbiH2FUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 01:13:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E963422F5;
-        Sun, 28 Aug 2022 22:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661750030; x=1693286030;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tfTTN8fVVmqUhF1jQjcmRJRxUTSzT6rPsDhYFizdeYE=;
-  b=mnPOzLekELSKI91CFFZA86EJUW93Gt+m9E97YW5a0ghsasqi2eRJWJIZ
-   abdmHscEd4/mBWFO26xhoVAwfksJGbuNzXt+FALlcJmACjFqvxK3Ibb9G
-   Vt/ZArtxTb7v7aUeQj7cJheVbFPEFteTyE0jfIAvhrsfhl7c/kFuLHhLz
-   7blUfZ3j4SzVUxqLdh7Gjrzz/tjzwF4NxvR5sAsoTuzUl3S8qNeMoR2Qy
-   ECaLJNK6STJCcrXYrFY3BSjuOfcXAQrOCGzq1p11afvZyRX7u6TQ1ISa0
-   P7qrou6TDomPTHon7rKQtTwIqq3wJckLuqzz6kF4a/doxRChB0UkUmk6R
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="274558757"
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="274558757"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 22:13:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="939443235"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Aug 2022 22:13:32 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id EC602AD; Mon, 29 Aug 2022 08:13:46 +0300 (EEST)
-Date:   Mon, 29 Aug 2022 08:13:46 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rafael@kernel.org, lenb@kernel.org, mario.limonciello@amd.com,
-        hdegoede@redhat.com, Shyam-sundar.S-k@amd.com, nakato@nakato.io
-Subject: Re: [PATCH v1] drivers/acpi/x86: check return null pointer from
- acpi_evaluate_dsm()
-Message-ID: <YwxLCtMCncW3j7iE@black.fi.intel.com>
-References: <20220828205120.1956222-1-floridsleeves@gmail.com>
+        Mon, 29 Aug 2022 01:20:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C664FEE0A
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 22:20:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E93161000
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E43C433D6;
+        Mon, 29 Aug 2022 05:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661750428;
+        bh=klNFK0zlZI++873Czf0Md6dHlhc5Jg4+H48SL864YBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aZiJTXhA02tvA/MjrTiDITvQT/PQPFiKGpYIuPZ8f4GdTNPj+rTuxO3A3jujJA9GY
+         h1Fnq3NIs0hzy46FCz3lRz/tbGeQSUb+Iws1s/t5siZUJwiLVU1b9qHWgYsxyNmgiz
+         kDMNwP22DqJW2gqKvtPTZpWPAK8H5tx1LYy4QeD8=
+Date:   Mon, 29 Aug 2022 07:20:42 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: Linux regressions report for mainline [2022-08-28]
+Message-ID: <YwxMqn6FbFmdKKFv@kroah.com>
+References: <166170992386.1651569.17504808724724706636@leemhuis.info>
+ <CAHk-=wjn-GVDLEN0F+WT0PWysqH7HMD+mBjKUr65DEhav47u3w@mail.gmail.com>
+ <9ec7563f-906f-2e72-73ae-6f373b9445d0@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220828205120.1956222-1-floridsleeves@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9ec7563f-906f-2e72-73ae-6f373b9445d0@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, Aug 28, 2022 at 01:51:20PM -0700, Li Zhong wrote:
-> From: lily <floridsleeves@gmail.com>
+On Sun, Aug 28, 2022 at 09:08:12PM +0200, Thorsten Leemhuis wrote:
 > 
-> Check return value from acpi_evaluate_dsm(). Only do ACPI_FREE() when
-> out_obj is not NULL pointers.
+> 
+> On 28.08.22 20:41, Linus Torvalds wrote:
+> > On Sun, Aug 28, 2022 at 11:23 AM Regzbot (on behalf of Thorsten
+> > Leemhuis) <regressions@leemhuis.info> wrote:
+> >>
+> >> Not sure, maybe it would have been good if the following fix would have
+> >> found the way into rc3, as it seems more than just one or two people
+> >> already stumbled over the regression fixed by it:
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id a8e0f6b01b14b2e28ba144e112c883f03a3db2
+> >> https://lore.kernel.org/all/?qœbffc7*
+> > 
+> > Neither of those links are valid for me.
+> > 
+> > "a8e0f6b01b14b2e28ba144e112c883f03a3db2" doesn't exist in linux-next.
+> > never mind that that isn't valid link syntax anyway.
+> > 
+> > The lore.kernel.org link is also just random noise.
+> > 
+> > So I'm not actually sure what you are trying to say...
+> 
+> Sorry, you are right, I did something really stupid when preparing the
+> mail (I manually modified one that was ready so send and already
+> encoded...). Here are the links:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=13a8e0f6b01b14b2e28ba144e112c883f03a3db2
+> https://lore.kernel.org/all/?q=9cbffc7*
+> 
+> But I just noticed that's not the only stupid thing I did, as the linked
+> commit in next (13a8e0f6b01b) is part of a series:
+> 
+> https://lore.kernel.org/all/20220819221616.2107893-1-saravanak@google.com/
+> 
+> The series fixes the regression "Regression: PM: domains: Delete usage
+> of driver_deferred_probe_check_state" that is in the list from regzbot:
+> https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+> 
+> But there are more reports, for example:
+> https://lore.kernel.org/all/YvrkjH6%2FFpIzyAv+@euler/
+> 
+> Not sure if Greg didn't sent them to you because he think they need more
+> time or because he's simply afk/busy and didn't manage to send pull
+> requests.
 
-ACPI_FREE() expands to kfree() and that allows NULL pointers so I don't
-think this patch is necessary.
+I was busy, will get these out to Linus in the next few days.
+
+thanks,
+
+greg k-h

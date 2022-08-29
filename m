@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F61D5A42CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F42B5A42D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiH2F61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 01:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S229691AbiH2F7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 01:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiH2F6Y (ORCPT
+        with ESMTP id S229455AbiH2F7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 01:58:24 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2052.outbound.protection.outlook.com [40.107.100.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B0CBFC;
-        Sun, 28 Aug 2022 22:58:22 -0700 (PDT)
+        Mon, 29 Aug 2022 01:59:40 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3172E22B1D;
+        Sun, 28 Aug 2022 22:59:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oN0weiwhJhKdSwicYc+WvUkn2JhOCVfRZPypa4zdYaFK8nUsGcCU0Lnoy1MY+/j8gOmnpIZvUlxcXC5nRHGME054l+5OPbRCPenPrhDgZ1yY7O3Sqita9y7kX/xHJPpq0ETbNn07tf00DkN6pb18NXlg15sDhLoo/X+r67Z5mYUz6fXzNtqkSWvDv5ADhfd0Wf1IsyH3bDwn5y1yQU4wTD6/YGP71JrPceHuev57F2Tn3gGpCZGGraUyzYnmur2zx2EEfIlFJWGr5aba+a+8t1cfJFYcLNucRr114NlOpTWbWaR1Up4zXPolXWdu9QyAeR+8uDgbHfpS/hhCM5oRMw==
+ b=XqUe7Gc/5Vtvf4WoYRHvZv3NrmsmQqJjFfTHqckD2w6UIPcXFqG0hqHTRfzCPFnUwZ9mfF73k22aV1y8sCDNHjm+m6068OL1Kd7wrHtraYYrAogEDc7NtwATC4eGbK8diN48VhXSUy3LlemXCupiKSG/3ZTVz270IAWQhxxlB2Sy8NNahHVnMl6QSLedUrk0/11hFzo+4n41zUyVxeFG2LO8uHGAhoNN3d3okvrsuiYCj3K+XJtWgKhjJHHivlpQ9tp1XRMbGMKm/yWyze0qFxCipyDEbaawJJ7bnaQXD0kSnk37Yy+xExpNv+0UCrcTmS1Wl53giJOC87e5XTx8sQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cTGHZkuwUO1QTa4W1T3PxT1vwiZmcn+6Hc5XWzlXrGA=;
- b=Rxg2Hs5DK8KkjANgntpfv/ctwkwgG8ekg4c4amcHKEaS8fCkqnafVqdCQJClgxZ762RRvrr6cj/LHU/oh80xO7xD4yGSnqCcW1y244Xtnaa1h8zrgGSKpIfuAHANmFkhm7q/fwx5JPngqReHQ62tSr1WZCRSusn/ivnT9xwdF6OcvHHfUsV+G60m7AFcHAGxJ+yLdW7R62CjFnF0Dq+edjekE78LsI+JIDDBGrnSUPWLgJQ4vKTG3BRQ6FFr5m7HqqzOZ3S5jHFzodw1pJT01K15G/KTd78H2f2dDYeWw0pzse3Ufp/xQ8gSQ5ukDe6x9Gd1owAPLOjeMhT72HaFCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=+scjsiX664wyq5ZEUKjsz1yHeoIahnpddeJCtxAkTO8=;
+ b=cvaLKVOW6au4HroE0mdryVmHkZzGRjKbB8GPWzZd8N5jIkQZQxWMeXgf25dyFDFG4UwUbQfYucLIqzqlxeSNTpngln9CC36SFu02bTeM5fUF+aAB9uLLumUuTPf9cqrzRQu9I26k+CspNEx3YeCIjvqsEMRPFVf+US1hnRNSSXNTWae3FZqI3FltlGtZJ+pLUkTtUBAMOxbuRD0cBOZDQSYOZEwzGx/ndMeMOTSjImYnk95R6kV14Ef1y4F+pqtbi8xGwVOWx4oGjHw6xyhuxik0qIPnMS8LR43MMFEAsd/ugsUiaZZbfjqO8vakN1E7EPBX8uY7jUobPwxrRnIMwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cTGHZkuwUO1QTa4W1T3PxT1vwiZmcn+6Hc5XWzlXrGA=;
- b=x5Yp6rQiDIP0ivrQRydAnkKUNZyB0xXN7h+p4PQWiAtkZ8ibW8aW+iYM3NEK3EHk6Pq7T9q2BSCjpJfCo7U7tt628pVf6p/ruGeSH1WrqH8XbIUg6GfKI/CwcJHPQQwFm7+NchUwho60+4zIzJk2X6ezzw0Z6N4xaAkqNxlnHr4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BL1PR12MB5301.namprd12.prod.outlook.com (2603:10b6:208:31f::13) with
+ bh=+scjsiX664wyq5ZEUKjsz1yHeoIahnpddeJCtxAkTO8=;
+ b=fblSg2c4TIJzLuWKX7stY3RqpxFm9KWoKL5c5Y58RqUcOCf+FNLryUbeQkAzlgYFlgvp0dHPgf0lbBl56QxaGe5VMbanDjGWwM2MpuunEE5DEHnze+ip/8FqsBs/iKtWvGLelYNo8uGePRQ5R4FvRdBo7PR1GuOATG68dxKjCvo=
+Received: from MW4PR04CA0283.namprd04.prod.outlook.com (2603:10b6:303:89::18)
+ by BN6PR1201MB0163.namprd12.prod.outlook.com (2603:10b6:405:56::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Mon, 29 Aug
- 2022 05:58:20 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
- 05:58:17 +0000
-Message-ID: <732919ef-c8b8-159b-6f69-e95eea710680@amd.com>
-Date:   Mon, 29 Aug 2022 07:58:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PTACH v3] drm/ast: add dmabuf/prime buffer sharing support
-Content-Language: en-US
-To:     oushixiong <oushixiong@kylinos.cn>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20220827091030.496671-1-oushixiong@kylinos.cn>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220827091030.496671-1-oushixiong@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS8PR04CA0190.eurprd04.prod.outlook.com
- (2603:10a6:20b:2f3::15) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 29 Aug
+ 2022 05:59:35 +0000
+Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:89::4) by MW4PR04CA0283.outlook.office365.com
+ (2603:10b6:303:89::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16 via Frontend
+ Transport; Mon, 29 Aug 2022 05:59:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5566.15 via Frontend Transport; Mon, 29 Aug 2022 05:59:34 +0000
+Received: from aerithdevpyuan.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 29 Aug
+ 2022 00:59:29 -0500
+From:   Perry Yuan <Perry.Yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>
+CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
+        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
+        <Jinzhou.Su@amd.com>, <Shimmer.Huang@amd.com>,
+        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>
+Subject: [PATCH v2] cpufreq: amd_pstate: Fix initial highest_perf value
+Date:   Mon, 29 Aug 2022 13:59:01 +0800
+Message-ID: <20220829055901.24593-1-Perry.Yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe909fb5-68ae-4e35-7210-08da898377f4
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5301:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1ac5674-4fb3-4fd3-d83c-08da8983a5eb
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0163:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XIdoh75OqVIHX4FCit/2u3kMKC3UOAHTVjE6MjzPrqsFQSzgVBM79VqNHuKowmz3RPHsbqLz1NTnVibMp3HlgFlbCdabcmHh/J4lVXZosybghqzYU5JDePJK6WXHcNIqNelwKNRXN6nMhX2ZlMYaJrexjcQISML3sZQnXOgr9NNWAdnnblOXBSXJOxGsCjesz3sfT+p/eNLDXVI63zNyKvzhBrWVj8xaoTFkMTubmqY9362rVDMZ8QUm2zlyAhYB8G9RWXOBg3Z7qN0tI7TKgnm64TwrxTulVR/vbvN5IoQtN7sAMJ+pDuqZx/4T5TNwU7xxXaARs0HjBADHZDrqgSwg1gaP2RU+Wm3cmuhcGjyV7MIDsCVXjWAGlLNUv8aR5rK+P7AfiVY8o0cRJCa9elYbwgCa417N6dv2y8W9/a3C7Qh7URXj/9mni57bw6RiVXs6aPhDmIbONPn/zjwgPLG8s1fdOgwPs9+PgfyTkrDEoiaTVRf+2P0r1jzJ3wnU3RFMYUZt9zBBJwp2reSpAmoMg/eRio8LITJz5omkmsOP0bf+ROP5Qp5Y+rY+f08gV1aQd3Oz3I4epDjCjpTPMikbwu0n+78BgEGXW5vrC4cw0MpzNBvVZZ33y8tMmD9ll7lrKT7UZ+InKJWkjFyZF44Ehf6FX8F/tYwoJ45dUUyzqr/PXEl/yxnQYRvdGvLyKacYzpvpy4igSpYIVeVMACHyn6YDkAKtoXw+a0UktWnM0sj0yRFAJyVxgSpbpL2iDzwCcyeTA5TyktWZjfNTArJZJfABgTEDg83ovOWUqBI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(38100700002)(2906002)(6512007)(26005)(6666004)(6506007)(2616005)(66574015)(186003)(83380400001)(316002)(110136005)(8676002)(4326008)(66476007)(66556008)(66946007)(31696002)(6486002)(54906003)(31686004)(7416002)(41300700001)(86362001)(8936002)(5660300002)(36756003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1RCNlBvVGcydGRMNFRrdW1wV2RpLzZoZmMzRzc1VzN3YW9YRGVJMWlFVWVk?=
- =?utf-8?B?YkhJN1hNNUo5UW1JSmF1cnB3bXAyaVFTNmhUc004QlhUUHpqbmVIamdGOTBL?=
- =?utf-8?B?c3BldUNGZGFLT3RjNEN5ZmVvNUVnMVN5ZDZpeTR3ZUpmMFhjRmlPQ1BtOERk?=
- =?utf-8?B?ZWQyWTQ3UGthRHJwZUFBTUl4SER0NHNLMW02d2E3a25JVVV0d2YrRUhYdWhM?=
- =?utf-8?B?UEJFY2svbjZOZHVGRm5ackdzN2xkWGI4OXBkMjFiMWhRRHBzYnF6dVhjR2ZG?=
- =?utf-8?B?bEwra0MyR0tDRUVFSko0RE5NZ2xwcUlmV0oxQThFMWs0b0ZHdmE4S3hSZ0hz?=
- =?utf-8?B?TDIvcHFLQndQaTJLMzhac3JmQi9BaE5pMWQrMXJ4YnFLOWVOZG9YYlhQWDlt?=
- =?utf-8?B?eFphVitmK0xXaHQ1MVR3Q0srTW15ODF5Z3Vqbk5LK2oxVlk4eVZQbmQ2ZUc2?=
- =?utf-8?B?ZWZ6RjV6cnVNeVpXRVZrY0VUWk5zTEQ2d095cmM3ZVZNalNtR0xkaEZuaU9t?=
- =?utf-8?B?MU1rbUJlUmx5cXVURGtMRGZSQWZrYUx3SnNQZ2Vpa0lPRnk1WkhDaDJTRW9X?=
- =?utf-8?B?YWVCODRncWNNcUZGWWZUWEkrTW1VclFacXRib3EwWituQTBVRUxyTWdsY2hq?=
- =?utf-8?B?Q3Z0WnJKNVNNT0pCVEVNUTcraHl5WFZaZFdHNEZ3Nmd1TUFuOWZoeFdmWlov?=
- =?utf-8?B?K0pobEZRSXhqRDdTZHBINkpKRUZqdjRQOVRRTWw5cmJSS3B1MTNmS25UZHNv?=
- =?utf-8?B?M1hhdlg0Y3pMTTVRVFh3ZGtFSkF3WUYvQ2s1ZW83WVB2VktDS0pRY2YvbUVH?=
- =?utf-8?B?OHFRLzNOb1ZTOXhmRW9rcWk0bjJYbmJXaEk2ZEZZb0hTbGpydEM2SzUzMHBv?=
- =?utf-8?B?bHA5VEovdkIwRmVqR204cnp4NHdmNE1Ma1lsNHl6ZDhqN0h5WnE4NjV6bThp?=
- =?utf-8?B?TnVVUlpLUVRIdm1ISFpvaUs4eW1lVjVUd1lFZHhScGdnZDMxTHQ3QUJjZGx0?=
- =?utf-8?B?dkoxV1Y5dkFZNlBNRjB3UGcxek1CaDJ3cnN0cFdKdWI3aVJFb0JHNGk2OS9T?=
- =?utf-8?B?clhqNFRXcUlmK0hHKzdEL056eE5MaDJYYkRJa0ZDb2w2NTRqcm84dWR1UFYz?=
- =?utf-8?B?TXFKSUIzZkNHQnNiY1FjaDJra0NlRk5aV1k4eEN5VENPK09pL0FCc05GRE1C?=
- =?utf-8?B?M09UZDl4WGl6aFdDQjNwUTFjN3BnZ05Pd1NMUFYrRlhSZW1QbEZqWU9lVWlO?=
- =?utf-8?B?Y1JYODRnM1JUSWxXUnFNc3JoUlR1c2ZYZnlKRFJuOE9nZUw3MlI4TWFCTnVZ?=
- =?utf-8?B?WnpDWk5aUFhiNGxNdXZ1NzZQWTZxWkxzeXJLNlJxeTZ4RVUySFVoWW1NYml6?=
- =?utf-8?B?L3dzNUZMRlRJUSt1cWtvR2NzK3NtbjMvRnQ4Zm4vRlNSeEd2MVZiUXc5R3lX?=
- =?utf-8?B?anZpL3NKaXRLQm1Ua1RsbW1FUzRzMjN5dHJnUEhDcGtaa2xMRWFMU0FQQ2pW?=
- =?utf-8?B?czJPUTJZUGd6dDdsWXFUMnpGemdKb1UrT2tFZk94MnRoaC9jQjQ2cFRCOWFC?=
- =?utf-8?B?ZW81S1ZPQ3N3OEloRG9TbDhxNmM4dHdsOEJwcnBIVVl3cW15ckVlSDVhNHJP?=
- =?utf-8?B?eitpVXNSdE9jLzAwa21lYlVSSFJ2eUZVN1JNUGJyZUxYU2k2WjQyd213Wnlw?=
- =?utf-8?B?MWJNVmpNL0xCTHpkZ3UrU3hmY0I2K244c2FzVk1XRk41OGU1aUtNUytRVFRs?=
- =?utf-8?B?WS9laTNrVDdBU0RPbmpRQyt0SG5kWC9FTXNwOU9QdUZNdGZPZnY3K3FIdjZx?=
- =?utf-8?B?aW9NUUlZTTJ1b0dxeVFHU0VMSDlhRWNXdkZMbi9NRUZLeXpuOS9GRHZ1ZmV6?=
- =?utf-8?B?bm52REVwZDVueHl2UjZNWVN4am1sMXZCelJTS0RjaENISGFuR3NLQWVxMTVU?=
- =?utf-8?B?SmJmWlRkYWV6U0pxd2pXRytiVFJQSXlZMkJUMmh6d09MM2kvZ1hXbkF1YkYx?=
- =?utf-8?B?Yjc0UTNmM2g5NzYvaHczZUg2MWdwYVV0YmQ4a3R5Wmk1QWtaa2gvcWpaUDhz?=
- =?utf-8?B?RVFvSzJ1WjAvNWdjQ2pmNitPUi9WUWNkTXJnNktiQVFYS2VDdFNvcExXeWhN?=
- =?utf-8?Q?E6PCsW5EWZ8XS/00BcAqbhKm+?=
+X-Microsoft-Antispam-Message-Info: PbSbSngI8MJkuffBLYjtTcdvtQsrzoaZhg0bofIm/VrZ+7sTh1iogXAcVCaSgRlzvKf8EtGvK8z7yy5O58GUkE41LC1AU9T7h5fGoFkdHmF/XdnkATcS+e7t+QNVANR/GBgHEz6CV+fB+FUpDUqRQK2dAykXcpMW69d1+KSsuCLPnzXV5oSFCUYc4HWSSmArOY09t84goGs2UAiGQwLl3IYOWNcOuiRsjkJhDFpCMG1M/quBAQmnRyoXOqWJF0UkcJtHoeNlufu4lvr/nnGPCLcxIxwYLfdL8vqrrlzOahq6f86DD9z501v/pxoCqlBCbh/5c/U4QW9tqogDh1w6KLMoy/SghSq+HmpUwuWL58BhPZBnP5Hh1a1iKvAEROSEfey8TOdoJjkzs2tqjAAwnQOJ+io+hSEe1tqVX9WBfKRdYaKw8Nfonrgqb1XKZbvCINFhLGyedDJ+/oSlGdZD/5qcgiA/7sw8giu+eZuIkCbWOGjNwT/gKmLE8c0kohmGZKJz+IMksynbQeAGAKcX+gxctW+gZyMlDkuD0UmX8gDXblaTjaKbB276TWqLhqmNLrimXzf6MFHH4SNRIClOZGJzudBOpYvtwNEJ2t1ZMSJW3pzWE2KQqXC7NBShlq3UOm/Nec4PAsKJP2eZE9ruCQMTNnrfCm2vNQYFGDth9tRI+ZRPco+h8ws4hzMyDsS4A0HERe7MB2UIznGW6SI45Rq2w8saWNqBxHME/3uhGwYslyZj/dXuLD2LLoJ8IOBOBdv8l9FGDlx46Sej872Cxn3wvVKGbuQ/yLjO3uvk5K0soByz4I12SZsiXvTiioDQdudR9aqbwhE3hIE13ndatg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(136003)(346002)(396003)(46966006)(40470700004)(36840700001)(41300700001)(8936002)(7696005)(6666004)(26005)(478600001)(40460700003)(86362001)(356005)(82740400003)(40480700001)(36756003)(82310400005)(81166007)(2906002)(83380400001)(47076005)(336012)(16526019)(36860700001)(2616005)(186003)(426003)(1076003)(8676002)(70586007)(70206006)(5660300002)(4326008)(110136005)(316002)(54906003)(36900700001)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe909fb5-68ae-4e35-7210-08da898377f4
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 05:58:17.4919
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 05:59:34.1889
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1ac5674-4fb3-4fd3-d83c-08da8983a5eb
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5HOF9GQB182lDeD7736crp7rMkHnxQAnLuqEFXrcBoLTvZoIVdichDhkPRB5t6Fd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5301
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0163
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -129,232 +102,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 27.08.22 um 11:10 schrieb oushixiong:
-> This patch adds ast specific codes for DRM prime feature, this is to
-> allow for offloading of rending in one direction and outputs in other.
->
-> This patch is designed to solve the problem that the AST is not displayed
-> when the server plug in a discrete graphics graphics card at the same time.
-> We call the dirty callback function to copy the rendering results of the
-> discrete graphics card to the ast side by dma-buf.
->
-> v1->v2:
->    - Fix the comment.
-> v2->v3:
->    - we remove the gem_prime_import_sg_table callback and use the gem_prime_import
->      callback, becuase it just map and access the buffer with the CPU. and do not
->      to pin the buffer.
->
-> Signed-off-by: oushixiong <oushixiong@kylinos.cn>
+To avoid some new AMD processors use wrong highest perf when amd pstate
+driver loaded, this fix will query the highest perf from MSR register
+MSR_AMD_CPPC_CAP1 and cppc_acpi interface firstly, then compare with the
+highest perf value got by calling amd_get_highest_perf() function.
 
-Thomas should probably comment as well, I think at least the memcpy_toio 
-usage can still be made cleaner.
+The lower value will be the correct highest perf we need to use.
+Otherwise the CPU max MHz will be incorrect if the
+amd_get_highest_perf() did not cover the new process family and model ID.
 
-But from the DMA-buf side I think that looks good now, feel free to add 
-an Acked-by: Christian König <christian.koenig@amd.com>
+Like this lscpu info, the max frequency is incorrect.
 
-Regards,
-Christian.
+Vendor ID:               AuthenticAMD
+    Socket(s):           1
+    Stepping:            2
+    CPU max MHz:         5410.0000
+    CPU min MHz:         400.0000
+    BogoMIPS:            5600.54
 
-> ---
->   drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
->   drivers/gpu/drm/ast/ast_mode.c | 125 ++++++++++++++++++++++++++++++++-
->   2 files changed, 151 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-> index 7465c4f0156a..107383a56ca7 100644
-> --- a/drivers/gpu/drm/ast/ast_drv.c
-> +++ b/drivers/gpu/drm/ast/ast_drv.c
-> @@ -28,6 +28,7 @@
->   
->   #include <linux/module.h>
->   #include <linux/pci.h>
-> +#include <linux/dma-buf.h>
->   
->   #include <drm/drm_aperture.h>
->   #include <drm/drm_atomic_helper.h>
-> @@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 0400);
->   
->   DEFINE_DRM_GEM_FOPS(ast_fops);
->   
-> +struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-> +						struct dma_buf *dma_buf)
-> +{
-> +	struct drm_gem_vram_object *gbo;
-> +
-> +	gbo = drm_gem_vram_of_gem(dma_buf->priv);
-> +	if (gbo->bo.base.dev == dev) {
-> +		/*
-> +		* Importing dmabuf exported from out own gem increases
-> +		* refcount on gem itself instead of f_count of dmabuf.
-> +		*/
-> +		drm_gem_object_get(&gbo->bo.base);
-> +		return &gbo->bo.base;
-> +	}
-> +
-> +	gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
-> +	if (IS_ERR(gbo))
-> +		return NULL;
-> +
-> +	get_dma_buf(dma_buf);
-> +	return &gbo->bo.base;
-> +}
-> +
->   static const struct drm_driver ast_driver = {
->   	.driver_features = DRIVER_ATOMIC |
->   			   DRIVER_GEM |
-> @@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
->   	.minor = DRIVER_MINOR,
->   	.patchlevel = DRIVER_PATCHLEVEL,
->   
-> +	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-> +	.gem_prime_import = ast_gem_prime_import,
-> +
->   	DRM_GEM_VRAM_DRIVER
->   };
->   
-> diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-> index 45b56b39ad47..65a4342c5622 100644
-> --- a/drivers/gpu/drm/ast/ast_mode.c
-> +++ b/drivers/gpu/drm/ast/ast_mode.c
-> @@ -48,6 +48,8 @@
->   #include "ast_drv.h"
->   #include "ast_tables.h"
->   
-> +MODULE_IMPORT_NS(DMA_BUF);
-> +
->   static inline void ast_load_palette_index(struct ast_private *ast,
->   				     u8 index, u8 red, u8 green,
->   				     u8 blue)
-> @@ -1535,8 +1537,129 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
->   	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
->   };
->   
-> +static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-> +					int width, int height)
-> +{
-> +	struct drm_gem_vram_object *dst_bo = NULL;
-> +	void *dst = NULL;
-> +	int ret = 0, i;
-> +	unsigned long offset = 0;
-> +	bool unmap = false;
-> +	unsigned int bytesPerPixel;
-> +	struct iosys_map map;
-> +	struct iosys_map dmabuf_map;
-> +
-> +	bytesPerPixel = fb->format->cpp[0];
-> +
-> +	if (!fb->obj[0]->dma_buf)
-> +		return -EINVAL;
-> +
-> +	if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
-> +		ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
-> +		if (ret)
-> +			return ret;
-> +	} else
-> +		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-> +
-> +	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-> +
-> +	ret = drm_gem_vram_pin(dst_bo, 0);
-> +	if (ret) {
-> +		DRM_ERROR("ast_bo_pin failed\n");
-> +		return ret;
-> +	}
-> +
-> +	if (!dst_bo->map.vaddr) {
-> +		ret = drm_gem_vram_vmap(dst_bo, &map);
-> +		if (ret) {
-> +			drm_gem_vram_unpin(dst_bo);
-> +			DRM_ERROR("failed to vmap fbcon\n");
-> +			return ret;
-> +		}
-> +		unmap = true;
-> +	}
-> +	dst = dst_bo->map.vaddr;
-> +
-> +	for (i = y; i < y + height; i++) {
-> +		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-> +		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-> +			width * bytesPerPixel);
-> +	}
-> +
-> +	if (unmap)
-> +		drm_gem_vram_vunmap(dst_bo, &map);
-> +
-> +	drm_gem_vram_unpin(dst_bo);
-> +
-> +	return 0;
-> +}
-> +
-> +
-> +static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-> +				struct drm_file *file,
-> +				unsigned int flags,
-> +				unsigned int color,
-> +				struct drm_clip_rect *clips,
-> +				unsigned int num_clips)
-> +{
-> +	int i, ret = 0;
-> +
-> +	drm_modeset_lock_all(fb->dev);
-> +	if (fb->obj[0]->dma_buf) {
-> +		ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
-> +				DMA_FROM_DEVICE);
-> +		if (ret)
-> +			goto unlock;
-> +	}
-> +
-> +	for (i = 0; i < num_clips; i++) {
-> +		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-> +				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	if (fb->obj[0]->dma_buf) {
-> +		dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
-> +				DMA_FROM_DEVICE);
-> +	}
-> +
-> +unlock:
-> +	drm_modeset_unlock_all(fb->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
-> +{
-> +	struct iosys_map dmabuf_map;
-> +
-> +	if (fb->obj[0]->dma_buf) {
-> +		dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
-> +		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-> +		if (dmabuf_map.vaddr)
-> +			dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
-> +	}
-> +
-> +	drm_gem_fb_destroy(fb);
-> +}
-> +
-> +static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-> +	.destroy	= ast_user_framebuffer_destroy,
-> +	.create_handle	= drm_gem_fb_create_handle,
-> +	.dirty		= ast_user_framebuffer_dirty,
-> +};
-> +
-> +static struct drm_framebuffer *
-> +ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-> +				const struct drm_mode_fb_cmd2 *mode_cmd)
-> +{
-> +	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-> +					&ast_gem_fb_funcs_dirtyfb);
-> +}
-> +
->   static const struct drm_mode_config_funcs ast_mode_config_funcs = {
-> -	.fb_create = drm_gem_fb_create,
-> +	.fb_create = ast_gem_fb_create_with_dirty,
->   	.mode_valid = drm_vram_helper_mode_valid,
->   	.atomic_check = drm_atomic_helper_check,
->   	.atomic_commit = drm_atomic_helper_commit,
+Fixes: 3743d55b289c2 (x86, sched: Fix the AMD CPPC maximum performance value on certain AMD Ryzen generations)
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+---
+ drivers/cpufreq/amd-pstate.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 9f4375f7ab46..30fbd30c0949 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -354,6 +354,7 @@ static inline int amd_pstate_enable(bool enable)
+ static int pstate_init_perf(struct amd_cpudata *cpudata)
+ {
+ 	u64 cap1;
++	u32 highest_perf;
+ 
+ 	int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+ 				     &cap1);
+@@ -365,7 +366,11 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+ 	 *
+ 	 * CPPC entry doesn't indicate the highest performance in some ASICs.
+ 	 */
+-	WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
++	highest_perf = amd_get_highest_perf();
++	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
++		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
++
++	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+ 
+ 	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+ 	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
+@@ -377,12 +382,17 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+ static int cppc_init_perf(struct amd_cpudata *cpudata)
+ {
+ 	struct cppc_perf_caps cppc_perf;
++	u32 highest_perf;
+ 
+ 	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+ 	if (ret)
+ 		return ret;
+ 
+-	WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
++	highest_perf = amd_get_highest_perf();
++	if (highest_perf > cppc_perf.highest_perf)
++		highest_perf = cppc_perf.highest_perf;
++
++	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+ 
+ 	WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+ 	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+-- 
+2.34.1
 

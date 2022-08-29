@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516D45A49FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EBA5A4862
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiH2Lbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S230496AbiH2LJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiH2L3Y (ORCPT
+        with ESMTP id S230078AbiH2LHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:29:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4017B285;
-        Mon, 29 Aug 2022 04:17:59 -0700 (PDT)
+        Mon, 29 Aug 2022 07:07:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCB665810;
+        Mon, 29 Aug 2022 04:05:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94884611B3;
-        Mon, 29 Aug 2022 11:17:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D09C433C1;
-        Mon, 29 Aug 2022 11:17:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C1F7B80EB8;
+        Mon, 29 Aug 2022 11:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED5C1C433C1;
+        Mon, 29 Aug 2022 11:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771854;
-        bh=wDuprk3n4tghTeDX1/zd+4mjM2RqdJsPsWxn4D6eU+Y=;
+        s=korg; t=1661771136;
+        bh=Sz3Q4UxT7dqoQblVzdJOQZ/hjUT/fosBNY6GHX19QdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pzi+zLEWfHuUnTvWMqsrPVRyvCTL4joOdBdIH0xfi/zp7ZiK3JVBl92TER8TMAWeB
-         o39lptsfy//CgPNr9++cVRxf85v5yNTzINaKUYCmfUA+ax6V0QU34mfJHbluBKbr9l
-         GM80lqlq1XLqpqX8fPe0/YtSIwhM60zvtiTzzdu8=
+        b=eijtqKUqxZkDqYA1TCGnDKIj9aE+SOTNi3rUzTIj1fpRiV/p7qVXRIXvSlmyF26sb
+         ooyZHuV5kDqqNFia9w3Zt1ee8wAgLVyWPFMxDTHL3sg0eeSDTX6ag8cCbohbVloVFq
+         qMiiYQxS3+E8THlGNuLZRck4Yi6G0bZOZZhjFNIE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
+        Sainath Grandhi <sainath.grandhi@intel.com>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 085/158] net: ethernet: mtk_eth_soc: fix hw hash reporting for MTK_NETSYS_V2
+Subject: [PATCH 5.10 29/86] net: ipvtap - add __init/__exit annotations to module init/exit funcs
 Date:   Mon, 29 Aug 2022 12:58:55 +0200
-Message-Id: <20220829105812.625880024@linuxfoundation.org>
+Message-Id: <20220829105757.739163259@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Maciej Żenczykowski <maze@google.com>
 
-[ Upstream commit 0cf731f9ebb5bf6f252055bebf4463a5c0bd490b ]
+[ Upstream commit 4b2e3a17e9f279325712b79fb01d1493f9e3e005 ]
 
-Properly report hw rx hash for mt7986 chipset accroding to the new dma
-descriptor layout.
+Looks to have been left out in an oversight.
 
-Fixes: 197c9e9b17b11 ("net: ethernet: mtk_eth_soc: introduce support for mt7986 chipset")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Link: https://lore.kernel.org/r/091394ea4e705fbb35f828011d98d0ba33808f69.1661257293.git.lorenzo@kernel.org
+Cc: Mahesh Bandewar <maheshb@google.com>
+Cc: Sainath Grandhi <sainath.grandhi@intel.com>
+Fixes: 235a9d89da97 ('ipvtap: IP-VLAN based tap driver')
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+Link: https://lore.kernel.org/r/20220821130808.12143-1-zenczykowski@gmail.com
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 22 +++++++++++----------
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  5 +++++
- 2 files changed, 17 insertions(+), 10 deletions(-)
+ drivers/net/ipvlan/ipvtap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 6beb3d4873a37..dcf0aac0aa65d 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -1513,10 +1513,19 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 		skb->dev = netdev;
- 		skb_put(skb, pktlen);
+diff --git a/drivers/net/ipvlan/ipvtap.c b/drivers/net/ipvlan/ipvtap.c
+index 1cedb634f4f7b..f01078b2581ce 100644
+--- a/drivers/net/ipvlan/ipvtap.c
++++ b/drivers/net/ipvlan/ipvtap.c
+@@ -194,7 +194,7 @@ static struct notifier_block ipvtap_notifier_block __read_mostly = {
+ 	.notifier_call	= ipvtap_device_event,
+ };
  
--		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+			hash = trxd.rxd5 & MTK_RXD5_FOE_ENTRY;
-+			if (hash != MTK_RXD5_FOE_ENTRY)
-+				skb_set_hash(skb, jhash_1word(hash, 0),
-+					     PKT_HASH_TYPE_L4);
- 			rxdcsum = &trxd.rxd3;
--		else
-+		} else {
-+			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
-+			if (hash != MTK_RXD4_FOE_ENTRY)
-+				skb_set_hash(skb, jhash_1word(hash, 0),
-+					     PKT_HASH_TYPE_L4);
- 			rxdcsum = &trxd.rxd4;
-+		}
+-static int ipvtap_init(void)
++static int __init ipvtap_init(void)
+ {
+ 	int err;
  
- 		if (*rxdcsum & eth->soc->txrx.rx_dma_l4_valid)
- 			skb->ip_summed = CHECKSUM_UNNECESSARY;
-@@ -1525,16 +1534,9 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 		skb->protocol = eth_type_trans(skb, netdev);
- 		bytes += pktlen;
+@@ -228,7 +228,7 @@ static int ipvtap_init(void)
+ }
+ module_init(ipvtap_init);
  
--		hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
--		if (hash != MTK_RXD4_FOE_ENTRY) {
--			hash = jhash_1word(hash, 0);
--			skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
--		}
--
- 		reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
- 		if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
--			mtk_ppe_check_skb(eth->ppe, skb,
--					  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
-+			mtk_ppe_check_skb(eth->ppe, skb, hash);
- 
- 		if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
- 			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 0a632896451a4..98d6a6d047e32 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -307,6 +307,11 @@
- #define RX_DMA_L4_VALID_PDMA	BIT(30)		/* when PDMA is used */
- #define RX_DMA_SPECIAL_TAG	BIT(22)
- 
-+/* PDMA descriptor rxd5 */
-+#define MTK_RXD5_FOE_ENTRY	GENMASK(14, 0)
-+#define MTK_RXD5_PPE_CPU_REASON	GENMASK(22, 18)
-+#define MTK_RXD5_SRC_PORT	GENMASK(29, 26)
-+
- #define RX_DMA_GET_SPORT(x)	(((x) >> 19) & 0xf)
- #define RX_DMA_GET_SPORT_V2(x)	(((x) >> 26) & 0x7)
- 
+-static void ipvtap_exit(void)
++static void __exit ipvtap_exit(void)
+ {
+ 	rtnl_link_unregister(&ipvtap_link_ops);
+ 	unregister_netdevice_notifier(&ipvtap_notifier_block);
 -- 
 2.35.1
 

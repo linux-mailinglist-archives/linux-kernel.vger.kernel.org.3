@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027385A5622
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75FB5A5626
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 23:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiH2V1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 17:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S230002AbiH2V11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 17:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiH2V0m (ORCPT
+        with ESMTP id S229800AbiH2V0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:26:42 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A886798588
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:02 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id k1-20020a17090a658100b001fb35f86ccdso10084925pjj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:02 -0700 (PDT)
+        Mon, 29 Aug 2022 17:26:48 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BC49E2D7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:12 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id q14-20020a6557ce000000b0041da9c3c244so4589013pgr.22
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:26:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=J1u/YkZ7r4U6qP3j3HXey3MGQlv66sCtBUAUQwGtkmo=;
-        b=bssUgHF5w47sbr7l7KTrCUB9BNCgN6M5weE9wkVgXyWLQuTUzyGpg0OJvcyz0sW5UD
-         jBcbuP4XXvP/J4pS6AqtYRXplk3ioZfRWOizdHfYubwqdaFV7iqu+wCAfN30wOXuSJR5
-         rOeSjLAnMTV/UMrEb+PillTsGibQBZHi92r8Zd7PRmmwTLk5upCdMt9/ApQU+Kr/zUNy
-         g3HC4+2oFiondWWpmL/CQDHhjiEfoJFEyDpo5hDjW6J9yE1A4zjv6LFdAo5+gh9e4xsA
-         3B8ihRdAo9AsX2EZ1zty6Setu8LqB98WdsMEL3dnRqIhFnd/9nqnY8Jcva4fprwPuNko
-         5pyg==
+        bh=KQbM9RENeAKpMamE0B+V4MUsqhzbhGXDlXXjmQQUA6A=;
+        b=B9JYMkX5xydBJOgcGzuYw+brQarCWmRWS+0/Aqinb/OY26MbR1xT5axtOfpYrKlmA6
+         qGVi7LP6LaJMDcQJmEECw3J6IqaSMiez5M7VUbq2lZEZKkVSQHjZtuqy9g7s10YpHljB
+         L9LJY/vXV43u8aIw7/j+LcG51+Bdx5jgIt7f2hLczg1JgYzlwTyYBe/lmm+nmwMuVZWc
+         thodE+2BI084oTXFC0MD73T0ggmHuAL+ik6FuitgxrIkPY+yM+/axTrbJYGoWGabXb1/
+         atpqGKZe5bOiVGcNY/fR8gQx2/9qiwRjzQjgpRwLojxFdTcGDVT+d94c/I/T/XPhcGEF
+         rEbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=J1u/YkZ7r4U6qP3j3HXey3MGQlv66sCtBUAUQwGtkmo=;
-        b=chesZP8fpu+lqS1YYS84XLjXNgxOzZ14Jb0YwZ8iRxjSwPVX0adPUfGp86rplQgHDo
-         vvXW7HO6NLGOaB53JTK9EEegCegFEnjdsWMjnrh1vF+XNaged6+cUMN/Es36O7/HAtik
-         oTPV1xlRo7WZPdamDPBEMZggDpSH7eea+RKyrS5pFi08pSikpZtvZIXCT2n3lq5WMUrU
-         PwzMhpsVEGtFEefDzY2CSt0tY+ipzhsEeKGA544B1p2ecRYFTUZE6aGgfGMupp29Fk6q
-         /VPWRIMUWqs+Zei8kQUKgIh90RnJPWp+QwkU9K2E2XUQDL/tDp3k9Jv4pbfnGpu6YuBc
-         cq0w==
-X-Gm-Message-State: ACgBeo2tip4lytpdthssvLFycjYafVVaC9G+hB2P3B2CAzdwHB70GyDx
-        SoZtb1uqFkViVw2fo3RPgAIOdfkuwuA=
-X-Google-Smtp-Source: AA6agR7FrxHuf3ebSGip6Dsrc2j7pCNXLJVmg+GJ9+F6P4LGjbGDMIiC+XxX5XFr/bvFDyLyzfk2y9GLnRc=
+        bh=KQbM9RENeAKpMamE0B+V4MUsqhzbhGXDlXXjmQQUA6A=;
+        b=RfwsNpyC3LqPhSXyAshMhZDi4oprDbnC90X+B8ciWreFBIwzFr+0vElvtUBl0la/9o
+         BjiFSdQc5ti8mt1NbmMa9XyctMt3zlh+6iUOnJfkNcGDkrnizi6xhtiVCErRk6pqEcao
+         wX0JcYTSHTi4Ihk+sQPfK9L59UPshNUA2BIcXfpU7kZpkA2hiNfccJn4OboZHHfEzmhQ
+         eh8h4GcokCImGl53P8gl0ESl0rVcnTHfv3Yn3l/yqIstz63M3yTIdN9pNiE9mN8PBP+W
+         yhbb8yg9Z8sN/bctryQ6uNxvKnRxFVPkvhGuD5TbILnuRcEhtLSecPy77+v12txyPwB3
+         QE+Q==
+X-Gm-Message-State: ACgBeo28Gq0uxKLao158logo/5iAqadwRQy2l4rb9dCepQkq9qwvAu3k
+        jc0dfOELacaKs9+7cVTwJDgpJdIS1NY=
+X-Google-Smtp-Source: AA6agR7f4s+E2TUUdzlInwBIWNCTTjaS2dHpmImL6O3kfzXJ6rCAm5H+xn8nFf0AEemGeSJLYPdhv1d/+n8=
 X-Received: from surenb-spec.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e30])
- (user=surenb job=sendgmr) by 2002:a17:903:248:b0:172:7520:db07 with SMTP id
- j8-20020a170903024800b001727520db07mr18052271plh.76.1661808361566; Mon, 29
- Aug 2022 14:26:01 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 21:25:17 +0000
+ (user=surenb job=sendgmr) by 2002:a05:6a00:b8a:b0:537:f81:203a with SMTP id
+ g10-20020a056a000b8a00b005370f81203amr18341111pfj.80.1661808363176; Mon, 29
+ Aug 2022 14:26:03 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 21:25:18 +0000
 In-Reply-To: <20220829212531.3184856-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220829212531.3184856-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829212531.3184856-15-surenb@google.com>
-Subject: [RFC PATCH 14/28] mm: mark VMAs as locked before isolating them
+Message-ID: <20220829212531.3184856-16-surenb@google.com>
+Subject: [RFC PATCH 15/28] mm/mmap: mark adjacent VMAs as locked if they can
+ grow into unmapped area
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -79,57 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark VMAs as locked before isolating them and clear their tree node so
-that isolated VMAs are easily identifiable. In the later patches page
-fault handlers will try locking the found VMA and will check whether
-the VMA was isolated. Locking VMAs before isolating them ensures that
-page fault handlers don't operate on isolated VMAs.
+While unmapping VMAs, adjacent VMAs might be able to grow into the area
+being unmapped. In such cases mark adjacent VMAs as locked to prevent
+this growth.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/mmap.c  | 2 ++
- mm/nommu.c | 2 ++
- 2 files changed, 4 insertions(+)
+ mm/mmap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 094678b4434b..b0d78bdc0de0 100644
+index b0d78bdc0de0..b31cc97c2803 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -421,12 +421,14 @@ static inline void vma_rb_insert(struct vm_area_struct *vma,
- 
- static void __vma_rb_erase(struct vm_area_struct *vma, struct rb_root *root)
- {
-+	vma_mark_locked(vma);
- 	/*
- 	 * Note rb_erase_augmented is a fairly large inline function,
- 	 * so make sure we instantiate it only once with our desired
- 	 * augmented rbtree callbacks.
+@@ -2680,10 +2680,14 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	 * VM_GROWSUP VMA. Such VMAs can change their size under
+ 	 * down_read(mmap_lock) and collide with the VMA we are about to unmap.
  	 */
- 	rb_erase_augmented(&vma->vm_rb, root, &vma_gap_callbacks);
-+	RB_CLEAR_NODE(&vma->vm_rb);
+-	if (vma && (vma->vm_flags & VM_GROWSDOWN))
++	if (vma && (vma->vm_flags & VM_GROWSDOWN)) {
++		vma_mark_locked(vma);
+ 		return false;
+-	if (prev && (prev->vm_flags & VM_GROWSUP))
++	}
++	if (prev && (prev->vm_flags & VM_GROWSUP)) {
++		vma_mark_locked(prev);
+ 		return false;
++	}
+ 	return true;
  }
  
- static __always_inline void vma_rb_erase_ignore(struct vm_area_struct *vma,
-diff --git a/mm/nommu.c b/mm/nommu.c
-index e819cbc21b39..ff9933e57501 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -622,6 +622,7 @@ static void delete_vma_from_mm(struct vm_area_struct *vma)
- 	struct mm_struct *mm = vma->vm_mm;
- 	struct task_struct *curr = current;
- 
-+	vma_mark_locked(vma);
- 	mm->map_count--;
- 	for (i = 0; i < VMACACHE_SIZE; i++) {
- 		/* if the vma is cached, invalidate the entire cache */
-@@ -644,6 +645,7 @@ static void delete_vma_from_mm(struct vm_area_struct *vma)
- 
- 	/* remove from the MM's tree and list */
- 	rb_erase(&vma->vm_rb, &mm->mm_rb);
-+	RB_CLEAR_NODE(&vma->vm_rb);
- 
- 	__vma_unlink_list(mm, vma);
- }
 -- 
 2.37.2.672.g94769d06f0-goog
 

@@ -2,140 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456A35A4AF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C615A4AEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiH2ME2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S230167AbiH2MEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiH2MEC (ORCPT
+        with ESMTP id S229509AbiH2MDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:04:02 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20611.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::611])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E7B9C1E0;
-        Mon, 29 Aug 2022 04:49:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a5Vag40Lz230W69eq53V4EJvs091tm5OIj5GN0cSKrKrLL/5j4hq06+81dfdz0kAfjC5oTuOBaNYKVkigRt7A23zUoP2xk1q07TZH30gbkA6JIx2w5oifpYKJeViAP3+MRJrQiIw+S0/u4PdftHKaBsSVdFuwQi5ITOanWyyTkY1H+bYiCHvcl++FJE3ey+Vkd4rEHdK9HVuVW6H45D78pKEmk/nHmcYffafNzoZFlUY8ScsSsUWhdAinTi8pVwGml90hpE2faReV4mPa9hi80BCeeyGckfoiaxoJppzhJZUDyHd7sJzAjbk3ULMShbeah/V5/7MAAQAx1EADSu9gQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nkGHmtUzmloTu2MJasQ4sGNQnbvxTpAUfn/QfMrFa88=;
- b=niGhmJQkH/vljcxpUol4FjfMD0MXvYLGMtok77clHKLhvBqN0f8d0AMy4Is8iLD3lYFKBhSkkWFe9yWSZRlfE2Y4UpZ2K5nLJUIN3c4hWFXE75Sk5GFMBd5wp0X7CbvBOudh414Bcr1dPuQDxxyirfWGlWRTtDJlpAzbfZz2GcrNKgDfzdCxHGfNsQbN4U7G5maO8ukVANZQnPx5gcG1OHqNZEHwgHtR4yoFsMwnovUS6cMsS99ZTR8SzN9TGaZeBI2kcFHIBi+Fi6+Ji4FqS4+ENEPC80KB+Fwyy8EEn4lJJOK+J7/hF1MVFgFljNdlDI3WGUpNPMlethkgNzye7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nkGHmtUzmloTu2MJasQ4sGNQnbvxTpAUfn/QfMrFa88=;
- b=UUCEo6wHUU7DLLXzGu6BoIIZgyQtluKKDoAwRPrzw5Kl3TBvqoWZGJOKzy83Fofk6r3DxG2pzHtdhRoRPrhS/UBdSI2B3SxNf7D4PGLbnifC7q0yVr4lVtXpOGxZgm+G4WEVrrIJukR1fwRjZ01n/mnmcIPycP8mIbUomIBm60d6vagke0BMF2pewr/jNeraPmrcjJh33yViFTNjB42OzovtzQ3E7I+vNzUiGBeQQu9YHT69zG7S+Uz2Op7G93MmD7AAEcL9dcuvw5rw9thEFrxAZQb3KFKev0JzNjba/HEAzsIpjUnWWgwhfKnut2OalZxcij4Ix4YyjqImRH7scA==
-Received: from MW3PR05CA0022.namprd05.prod.outlook.com (2603:10b6:303:2b::27)
- by BN8PR12MB3363.namprd12.prod.outlook.com (2603:10b6:408:48::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Mon, 29 Aug
- 2022 11:44:49 +0000
-Received: from CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::f7) by MW3PR05CA0022.outlook.office365.com
- (2603:10b6:303:2b::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.3 via Frontend
- Transport; Mon, 29 Aug 2022 11:44:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT084.mail.protection.outlook.com (10.13.174.194) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5566.15 via Frontend Transport; Mon, 29 Aug 2022 11:44:49 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.38; Mon, 29 Aug 2022 11:44:42 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 29 Aug 2022 04:44:41 -0700
-Received: from sandipan-pc.nvidia.com (10.127.8.12) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Mon, 29 Aug 2022 04:44:39 -0700
-From:   Sandipan Patra <spatra@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <bbasu@nvidia.com>, <kyarlagadda@nvidia.com>,
-        Sandipan Patra <spatra@nvidia.com>
-Subject: [PATCH 2/2] arm64: tegra: Add user PWM support on Jetson Orin
-Date:   Mon, 29 Aug 2022 17:14:32 +0530
-Message-ID: <20220829114432.19566-2-spatra@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220829114432.19566-1-spatra@nvidia.com>
-References: <20220829114432.19566-1-spatra@nvidia.com>
-X-NVConfidentiality: public
+        Mon, 29 Aug 2022 08:03:48 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1ED89810;
+        Mon, 29 Aug 2022 04:48:54 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id az27so9831033wrb.6;
+        Mon, 29 Aug 2022 04:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc;
+        bh=/Di7lkoE4PMDXxx+KkgEBZLTyvjkUh6iLYQL6rsJ/+4=;
+        b=kaLiTO3uz69oCN4+obPyA7IvFEwMUQt4ZXB/gpCbSytpTKaDsW0nIRGyUJlrfFsdvE
+         mTMdi/Z4w215r5xJBREm+A9DCZWdKMDh9eP4c8/x3R5xGY1Hj6pf8n0K/p2+vM2pyS5q
+         EH0TfHmeSyxe2CLjCBzM+P4TTrUSlSTU/5kLYioLrW6im0+coy5EfOhPV1wi9aFRYsKQ
+         hdcV+CcTtuR2pH8q0XIYhRZxh8JLh0rNtGd2NdQ2X3bDN1rkv3ZahAOHeRI+AXcweHvy
+         isZDOgf8r2OYCTu57efimyUr2retjmscs1Oo6dcHFsHyruJqIe81Jp4UvEJuyYovbuz2
+         4y9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc;
+        bh=/Di7lkoE4PMDXxx+KkgEBZLTyvjkUh6iLYQL6rsJ/+4=;
+        b=chtjH6W5gh6gGEp5VMHs68GGc3Nr+S0YFlEU2je8FdMhdQbHelfiKvHhH8GKOikjVf
+         QU7XLyuDHXLZUzPfNrSvWqlA6Vl6IZelO2BkJdTn4DQYry147GqCAbAh67vV5fEPdRqN
+         PJuaI/LH96yullbCgk6yYc2CY+cWL0IEMV658D6lia+VWJLuqLmIXC4Sx92UgXI86a0D
+         XksO4wJotQ5LsO2e0hdE/w62dUOm4IpufRH/ktdfyz/jSl/mE/ju+WAMRB+PDYetTXn2
+         LqG3JLyDH9NXsIc+SHIYedpPGSaMucumE2FB4K+OJdvEquQMnLBtT3k6ZswgGiSNQRi3
+         W6nQ==
+X-Gm-Message-State: ACgBeo2dGpJAmrz/DzEbvpwZVbkqKsImg1/+K8tQS117HBZBW6F+e7TU
+        Ooj9Jfufj9PjSWk5LeAOOEE=
+X-Google-Smtp-Source: AA6agR6Q8pcDSR2sGpo6Z+/Xk8vC5hvOIOH6YppdFlNOZIdRGVsL+2Mi1+jD+E1YNRyMMa7NoROLsA==
+X-Received: by 2002:a5d:64e9:0:b0:220:7dd7:63eb with SMTP id g9-20020a5d64e9000000b002207dd763ebmr6085539wri.590.1661773583790;
+        Mon, 29 Aug 2022 04:46:23 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id i13-20020a05600c354d00b003a5f4fccd4asm8896858wmq.35.2022.08.29.04.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 04:46:23 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 13:44:35 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, alex.aring@gmail.com,
+        stefan@datenfreihafen.org, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, kafai@fb.com,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: [PATCH 0/4] net-next: frags: add adaptive per-peer timeout under load
+Message-ID: <20220829114427.GA2311@debian>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2fbd424c-9e3f-4a92-16bc-08da89b3e0e2
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3363:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zRUeeXTxiuT1KIjr5Ri0tlvd8j399inUzvUnvpzQnJlwKIzrlqiXkjvxsaEwGM7XQtXDGhsPEPrIs8hDKFIznpMdDBKq0QO73uhitCZdhVDQuw+7dpoPS9rQJ8dpu2eaS8CYq5Cxcjt7IZWaAxTnp4jZmLYJ6U4upXjn8GlRygSQP135KKPUTwlbI6SEB+CNrSvZTqS6vsDsLB5X/9d5VnCzrLVRliN3iQopdpKBaPldKXl2rAOwENyXmBQj1ABkSgEdouF+vVoQbHxlBfDuWLbyeYT9J2ap7EsGMUPyMMFoY+MNw1611TIr5vNWKvk0zegs3W8w0cGGXcoolrhjHi4zv5y5NltSh914FIga5MU4eOv+AYBuXYmVpZCLkz2WQqCU40duVPErFsta2R+v5mANid9TTHLcPqOhfz8gtdRdTvs57mFk8YnFmbY0Lp8OimRDelOdBoOVygCWfEp7fqrCRoT2KWbB5fP91pj7lLRQVdKHqJIQonxPdkZoLSielVudfqBdI+4MhYkyBnZU+wDMGQH7Axv7FnhJZKV+FqVP+1DmfLFvoJ8ihybWfd7jvx861mTgLKaDQQX9lg8MGC1qiFYl6W4eQEBg2irnCs8RtLmyqKYyutt+DD7HULT/yP/V3Z2yP6DgPnBviZeWYsUf/Y+stmj01WXWxrED+CCb+0U0bwOBatgRqcTI55876xe3T2E9mdC4tLQxApVl55i65s1lIdI83GSXB4NFfv5YqViEJ0vez/kpUAEnx7/r9OQ1CWituO/iwBbhYeDsJz7HzJgKfXRsX6KGbGnworxIS3km+7sJP6OK3cwVURSSc3jldO+dR50AKhEVxN2S1Q==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(376002)(39860400002)(136003)(36840700001)(40470700004)(46966006)(7696005)(6666004)(86362001)(107886003)(26005)(1076003)(36756003)(426003)(336012)(2616005)(47076005)(478600001)(41300700001)(186003)(82310400005)(40460700003)(316002)(4326008)(54906003)(8676002)(70586007)(110136005)(70206006)(82740400003)(81166007)(356005)(5660300002)(4744005)(36860700001)(8936002)(40480700001)(2906002)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 11:44:49.0317
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fbd424c-9e3f-4a92-16bc-08da89b3e0e2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3363
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable in device tree and use it to drive the PWM controllers on
-40 pin header of Orin dev-kit.
+This patch series introduces an optimization of fragment queues under
+load.
 
-Signed-off-by: Sandipan Patra <spatra@nvidia.com>
----
-V2: Overriding by node label instead of node path.
+The goal is to improve upon the current approach of static timeouts
+(frag_timeout, 30 seconds by default) by implementing Eric's
+suggestion of reducing timeouts under load [1], with additional
+considerations for peer-specific load.
 
- arch/arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+The timeout reduction is done dynamically per peer, based on both
+global and peer-specific load. low_thresh is reintroduced and now acts 
+as a knob for adjusting per-peer memory limits.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi
-index a85993c85e45..5108013a18c6 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi
-@@ -3,3 +3,15 @@
- / {
- 	compatible = "nvidia,p3737-0000";
- };
-+
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+&pwm5 {
-+	status = "okay";
-+};
-+
-+&pwm8 {
-+	status = "okay";
-+};
+A comparison of netperf results before and after applying the patch:
+
+Before:
+    [vm1 ~]# ./super_netperf.sh 10 -H 172.16.43.3 -l 60 -t UDP_STREAM
+    103.23
+
+After:
+    [vm1 ~]# ./super_netperf.sh 10 -H 172.16.43.3 -l 60 -t UDP_STREAM
+    576.17
+
+And another benchmark of a more specific use case.
+One high-bandwidth memory-hogging peer (vm1), and another "average"
+client (vm2), attempting to communicate with the same server:
+
+Before:
+    [vm1 ~]# ./super_netperf.sh 10 -H 172.16.43.3 -l 60 -t UDP_STREAM
+	42.57
+	[vm2 ~]# ./super_netperf.sh 1 -H 172.16.43.3 -l 60 -t UDP_STREAM
+	50.93
+
+After:
+    [vm1 ~]# ./super_netperf.sh 10 -H 172.16.43.3 -l 60 -t UDP_STREAM
+	420.65
+	[vm2 ~]# ./super_netperf.sh 1 -H 172.16.43.3 -l 60 -t UDP_STREAM
+	624.79
+
+
+These benchmarks were done using the following configuration:
+
+[vm3 ~]# grep . /proc/sys/net/ipv4/ipfrag_*
+/proc/sys/net/ipv4/ipfrag_high_thresh:104857600
+/proc/sys/net/ipv4/ipfrag_low_thresh:78643200
+/proc/sys/net/ipv4/ipfrag_max_dist:64
+/proc/sys/net/ipv4/ipfrag_secret_interval:0
+/proc/sys/net/ipv4/ipfrag_time:30
+
+Regards,
+Richard
+
+[1] https://www.mail-archive.com/netdev@vger.kernel.org/msg242228.html
+
+Richard Gobert (4):
+  net-next: frags: move inetpeer from ip4 to inet
+  net-next: ip6: fetch inetpeer in ip6frag_init
+  net-next: frags: add inetpeer frag_mem tracking
+  net-next: frags: dynamic timeout under load
+
+ Documentation/networking/ip-sysctl.rst  |  3 +
+ include/net/inet_frag.h                 | 13 ++---
+ include/net/inetpeer.h                  |  1 +
+ include/net/ipv6_frag.h                 |  3 +
+ net/ieee802154/6lowpan/reassembly.c     |  2 +-
+ net/ipv4/inet_fragment.c                | 77 ++++++++++++++++++++++---
+ net/ipv4/inetpeer.c                     |  1 +
+ net/ipv4/ip_fragment.c                  | 25 ++------
+ net/ipv6/netfilter/nf_conntrack_reasm.c |  2 +-
+ net/ipv6/reassembly.c                   |  2 +-
+ 10 files changed, 89 insertions(+), 40 deletions(-)
+
 -- 
-2.17.1
+2.36.1
 

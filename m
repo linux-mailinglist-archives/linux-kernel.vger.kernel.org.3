@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6680A5A52F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6AD5A52F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiH2RQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S231205AbiH2RQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiH2RQK (ORCPT
+        with ESMTP id S231409AbiH2RQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:16:10 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD90E792EC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:16:07 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-33dc345ad78so212608757b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:16:07 -0700 (PDT)
+        Mon, 29 Aug 2022 13:16:14 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CEC7969E
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:16:11 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y3so17077427ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:16:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=Gx2HQD0tpQBbdWem1ACm9Xo5vyJERkm6qbJN/TC6ltY=;
-        b=B7Tf35tRw6Fx3gjD21CLlEspBY/2Z8HSGoqTK8Tg9huokbrUtPaH6Z/cspLcFc2SNf
-         3/3ARPjswphIwIvNvWYPPjCkREnm7BJPdfPKcyMIzqQDeD5Rt58E2HCCC6O5CdcJw7fx
-         3nVMdy7zdOP5tqdQ11duqwxnvNcgy4sMU6BEuaR9pH2DBqSd4YA5yPcZ5+k5aIeHuba3
-         /xYlUKvo8dzzt8BAFRJvUBh3ps/CzBBtVypB1yGWGzJniKIxqdbvZE2ma4XLkS1PBNGz
-         KPsAAwDHZFdr4fz3sWKY0C3m9nsSfdJOVcMi6nTm0ONhvfELwFicDBEENKmeoDNhs7+I
-         dMJw==
+        bh=j2z/n7eMw3f3j7EBd6Q4JVoMSwtLsVBiipYe75KuXHg=;
+        b=TKbYjetujPctiPYNjbkJ9aq8EL/rgg0D25oRV4c705d2jwFlUNO/wk19ajGMSNo2kw
+         8dycZyi9V+9vzrQURZiMwf+sb2PX62rESS1GXTknyDQeyrT2F5OuhWmYbp7Z4c22wCVf
+         1vUXRQ+2SR3kxT62M6Fpn7gn/0ZKbTLWESU0JvD76UPknnzefl3lKeHriXjdoavUAVD7
+         UChJhcg9PqFbrWkK/gzNRi6lcOlukmgk4Q3FTUDLOpNncjJDYn97S0vmiiaq+b835/Nj
+         Dlmym/55nlX5PdmBm6McpbjxtXq7ahtV5t162Zn57rjtzm+KkjAb+d8MG4OAqb8/mX1n
+         h7Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=Gx2HQD0tpQBbdWem1ACm9Xo5vyJERkm6qbJN/TC6ltY=;
-        b=Hh8TraLc3wLCHANrT/Zw8UaCvM6NpQGhuX+y7gYj9DPc0Xow+/+Ua1+3YDfv0C0rgj
-         m4/IOvw6T97FXfxQtM4WjmArBZywtK0/PfJTCn/6HWUrZR574KqJ1Qs+rrO7jamfW1Pm
-         PqKvtdZV2C9SyhBZTRDCMb1vYfv2hoJnuryG1j4vwWpjyIRRufnDM7v2wRsLZgTWREVw
-         512cMpfP6Gj7xKnZ9DEv49wvuylttOaa9HkSBnP8BepJcudUw9NPzw3oAvCp8S/u/auO
-         CQfuFeGPnrTOtEw650LAy5BBTszouy78RzfQIYw3UA3UgKUu+XShaDC/PpA+TbvyqZLJ
-         gBQQ==
-X-Gm-Message-State: ACgBeo1yzNc4ji08o9WdA/3D1dnplmNiB291+v3q35tPgAFpnpwbv/jO
-        cYzHS/bkmDmyYXNQCnc4JGZhpR4R+0Sg8FcmXVaxmQ==
-X-Google-Smtp-Source: AA6agR4s3M6fT1YIBYTzPwf5QgHCTKfc8Go4cV5CsmWe7M8dZfI4OnqvJFUMFUCnQ0aNZD5HzxPJuzguDe5979zEuYc=
-X-Received: by 2002:a0d:c681:0:b0:33c:2e21:4756 with SMTP id
- i123-20020a0dc681000000b0033c2e214756mr10499738ywd.467.1661793366537; Mon, 29
- Aug 2022 10:16:06 -0700 (PDT)
+        bh=j2z/n7eMw3f3j7EBd6Q4JVoMSwtLsVBiipYe75KuXHg=;
+        b=Lk0NjJbOLuaTJJd/OQZw4baVjW6OZo+SL8ZHk3u5lfOYpiCnZIAk1NaaGNog9NjXoP
+         7h4o6iU4pv0SFuG1dzTob27cfczuEWr+91P4ECFdTCT7wjcZB17Z8mbsBz7rnca/cLSm
+         fOuKLWTA0v74iPMeCKIVWQ95avHPIFB6QJAGLEJjA/3KKphS9HTQhH6KVc0s9Zvx6s2h
+         bAyY2zjApaxTgd15dNAjvLe3g17XePJ2qmdFJzhpugNLa+KsSQMSyKIkXHf/krzIgC88
+         TjIebb7hIjjlAjO/uZQ2/YZHc4Pfx0YFwgjrr7Qm82w5AaUHnkQFrgdO76OF2hWBFjT7
+         smSg==
+X-Gm-Message-State: ACgBeo3Jnk7aUmpgMc6tATOlL1Yr5Fv7nOvxEYy2OiTMSudk3YASc0Zt
+        4rhK1WrkVVfQd3JlUWGNdkETmBl+ogiDZLnhx1cFkA==
+X-Google-Smtp-Source: AA6agR5x6VZN3zVomElWr0Y4N4SPNr2IokZM89ZoLvJJ3bnv8SVxPEvKEdqtkCsXiLZxgIniRgJ3mxhx39JLn51f3Ks=
+X-Received: by 2002:a17:907:97cd:b0:731:5d0:4434 with SMTP id
+ js13-20020a17090797cd00b0073105d04434mr13484082ejc.603.1661793369740; Mon, 29
+ Aug 2022 10:16:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829114739.GA2436@debian>
-In-Reply-To: <20220829114739.GA2436@debian>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 29 Aug 2022 10:15:55 -0700
-Message-ID: <CANn89iL0hCwDKGquYyGvriPEc+GXSzf+UuZG4vb0Ah-NaVL7cA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] net-next: frags: dynamic timeout under load
-To:     Richard Gobert <richardbgobert@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-wpan@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+References: <20220829024351.2415147-1-justinledford@google.com>
+ <20220829132017.GA3039965@roeck-us.net> <CAHCvCEcGvrS=3p2Whj0Cmx9sx+aSzX2097LahQ=f3eRCCAN_bA@mail.gmail.com>
+ <20220829161135.GB1320973@roeck-us.net>
+In-Reply-To: <20220829161135.GB1320973@roeck-us.net>
+From:   Justin Ledford <justinledford@google.com>
+Date:   Mon, 29 Aug 2022 10:15:58 -0700
+Message-ID: <CAHCvCEc27ozgr6pthRZ84FzJnhM+X705RJpW4z4SB-P9dV_aSg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max31790) add fanN_enable
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -81,131 +70,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 4:49 AM Richard Gobert <richardbgobert@gmail.com> wrote:
+On Mon, Aug 29, 2022 at 9:11 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> Calculate a dynamic fragment reassembly timeout, taking into
-> consideration the current fqdir load and the load introduced by
-> the peer. Reintroduce low_thresh, which now acts as a knob for
-> adjusting per-peer memory limits.
+> On Mon, Aug 29, 2022 at 08:09:21AM -0700, Justin Ledford wrote:
+> > The tach input isn't enabled in the device by default. So the only way
+> > to start using the fan input sensors is to set the regulator mode
+> > through the driver to RPM mode and then back to whatever mode you
+> > actually want to use. The I2C interface to the device doesn't couple
+> > the tach input to the regulator mode so I don't think it makes sense
+> > for the driver to do this either.
+> >
+> Please don't top-post.
 >
-> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
-> ---
->  Documentation/networking/ip-sysctl.rst |  3 +++
->  include/net/inet_frag.h                |  1 +
->  net/ipv4/inet_fragment.c               | 30 +++++++++++++++++++++++++-
->  net/ipv4/ip_fragment.c                 |  2 +-
->  4 files changed, 34 insertions(+), 2 deletions(-)
+> The above does not answer my question why fan_config[] wound need to
+> be updated repeatedly.
 >
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 56cd4ea059b2..fb25aa6e22a2 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -247,6 +247,9 @@ ipfrag_low_thresh - LONG INTEGER
->         begins to remove incomplete fragment queues to free up resources.
->         The kernel still accepts new fragments for defragmentation.
+> Guenter
 >
-> +       (Since linux-6.1)
-> +       Maximum memory used to reassemble IP fragments sent by a single peer.
-> +
->  ipfrag_time - INTEGER
->         Time in seconds to keep an IP fragment in memory.
->
-> diff --git a/include/net/inet_frag.h b/include/net/inet_frag.h
-> index 077a0ec78a58..595a6db57a0e 100644
-> --- a/include/net/inet_frag.h
-> +++ b/include/net/inet_frag.h
-> @@ -99,6 +99,7 @@ struct inet_frag_queue {
->         u16                     max_size;
->         struct fqdir            *fqdir;
->         struct inet_peer        *peer;
-> +       u64                     timeout;
+> > On Mon, Aug 29, 2022 at 6:20 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 02:43:51AM +0000, Justin Ledford wrote:
+> > > > The MAX31790 has a tach input enable bit in each fan's configuration
+> > > > register. This is only enabled by the driver if RPM mode is selected,
+> > > > but the driver doesn't provide a way to independently enable tachometer
+> > > > input regardless of the regulator mode.
+> > > >
+> > > > By adding the fanN_enable sysfs files, we can decouple the tach input
+> > > > from the regulator mode. Also update the documentation.
+> > > >
+> > > > Signed-off-by: Justin Ledford <justinledford@google.com>
+> > > > ---
+> > > >  Documentation/hwmon/max31790.rst |  1 +
+> > > >  drivers/hwmon/max31790.c         | 44 +++++++++++++++++++++++++++-----
+> > > >  2 files changed, 38 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
+> > > > index 7b097c3b9b90..33c5c7330efc 100644
+> > > > --- a/Documentation/hwmon/max31790.rst
+> > > > +++ b/Documentation/hwmon/max31790.rst
+> > > > @@ -38,6 +38,7 @@ Sysfs entries
+> > > >  fan[1-12]_input    RO  fan tachometer speed in RPM
+> > > >  fan[1-12]_fault    RO  fan experienced fault
+> > > >  fan[1-6]_target    RW  desired fan speed in RPM
+> > > > +fan[1-6]_enable    RW  enable or disable the tachometer input
+> > > >  pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
+> > > >  pwm[1-6]           RW  read: current pwm duty cycle,
+> > > >                         write: target pwm duty cycle (0-255)
+> > > > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+> > > > index 7e9362f6dc29..3ae02be4b41e 100644
+> > > > --- a/drivers/hwmon/max31790.c
+> > > > +++ b/drivers/hwmon/max31790.c
+> > > > @@ -118,6 +118,12 @@ static struct max31790_data *max31790_update_device(struct device *dev)
+> > > >                                       goto abort;
+> > > >                               data->target_count[i] = rv;
+> > > >                       }
+> > > > +
+> > > > +                     rv = i2c_smbus_read_byte_data(client,
+> > > > +                                     MAX31790_REG_FAN_CONFIG(i));
+> > > > +                     if (rv < 0)
+> > > > +                             goto abort;
+> > > > +                     data->fan_config[i] = rv;
+> > >
+> > > Why is this needed ?
+> > >
+> > > Guenter
+> > >
 
-Why u64 ?
+This is needed in case the fan_config is changed outside the driver
+with something like i2ctransfer, so that the driver reports the actual
+state of the device, rather than the state at the time of the last
+write originating from the driver.
 
-This is not what the timer interface uses (look at mod_timer(), it
-uses "unsigned long")
-
->         struct rcu_head         rcu;
->  };
->
-> diff --git a/net/ipv4/inet_fragment.c b/net/ipv4/inet_fragment.c
-> index 8b8d77d548d4..34c5ebba4951 100644
-> --- a/net/ipv4/inet_fragment.c
-> +++ b/net/ipv4/inet_fragment.c
-> @@ -314,6 +314,30 @@ void inet_frag_free(struct inet_frag_queue *q)
->         call_rcu(&q->rcu, inet_frag_destroy_rcu);
->  }
->
-> +static int inet_frag_update_timeout(struct inet_frag_queue *q)
-> +{
-> +       u64 peer_timeout, inet_timeout;
-> +       long peer_mem, inet_mem;
-> +       long high_thresh = READ_ONCE(q->fqdir->high_thresh);
-> +       long low_thresh  = READ_ONCE(q->fqdir->low_thresh);
-> +       u64 base_timeout = READ_ONCE(q->fqdir->timeout);
-> +
-> +       peer_mem = low_thresh - peer_mem_limit(q);
-> +       inet_mem = high_thresh - frag_mem_limit(q->fqdir);
-> +
-> +       if (peer_mem <= 0 || inet_mem <= 0)
-> +               return -ENOMEM;
-> +
-> +       /* Timeout changes linearly with respect to the amount of free memory.
-> +        * Choose the more permissive of the two timeouts, to avoid limiting
-> +        * the system while there is still enough memory.
-> +        */
-> +       peer_timeout = div64_long(base_timeout * peer_mem, low_thresh);
-> +       inet_timeout = div64_long(base_timeout * inet_mem, high_thresh);
-> +       q->timeout = max_t(u64, peer_timeout, inet_timeout);
-
-If/when under load, timeout is close to zero,
-we would fire many timers (increased system load) and make impossible
-for datagrams to complete.
-
-In contrast, a reasonable timer and probabilistic drops of new datagrams
-when the queue is full lets some datagrams to complete.
-
-Make sure to test your change under a real DDOS, not only non malicious netperf
-
-> +       return 0;
-> +}
-> +
->  void inet_frag_destroy(struct inet_frag_queue *q)
->  {
->         struct fqdir *fqdir;
-> @@ -346,6 +370,10 @@ static struct inet_frag_queue *inet_frag_alloc(struct fqdir *fqdir,
->
->         q->fqdir = fqdir;
->         f->constructor(q, arg);
-> +       if (inet_frag_update_timeout(q)) {
-> +               inet_frag_free(q);
-> +               return NULL;
-> +       }
->         add_frag_mem_limit(q, f->qsize);
->
->         timer_setup(&q->timer, f->frag_expire, 0);
-> @@ -367,7 +395,7 @@ static struct inet_frag_queue *inet_frag_create(struct fqdir *fqdir,
->                 *prev = ERR_PTR(-ENOMEM);
->                 return NULL;
->         }
-> -       mod_timer(&q->timer, jiffies + fqdir->timeout);
-> +       mod_timer(&q->timer, jiffies + q->timeout);
->
->         *prev = rhashtable_lookup_get_insert_key(&fqdir->rhashtable, &q->key,
->                                                  &q->node, f->rhash_params);
-> diff --git a/net/ipv4/ip_fragment.c b/net/ipv4/ip_fragment.c
-> index e35061f6aadb..88a99242d721 100644
-> --- a/net/ipv4/ip_fragment.c
-> +++ b/net/ipv4/ip_fragment.c
-> @@ -236,7 +236,7 @@ static int ip_frag_reinit(struct ipq *qp)
->  {
->         unsigned int sum_truesize = 0;
->
-> -       if (!mod_timer(&qp->q.timer, jiffies + qp->q.fqdir->timeout)) {
-> +       if (!mod_timer(&qp->q.timer, jiffies + qp->q.timeout)) {
->                 refcount_inc(&qp->q.refcnt);
->                 return -ETIMEDOUT;
->         }
-> --
-> 2.36.1
->
+> > > >               }
+> > > >
+> > > >               data->last_updated = jiffies;
+> > > > @@ -202,6 +208,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+> > > >               }
+> > > >               mutex_unlock(&data->update_lock);
+> > > >               return 0;
+> > > > +     case hwmon_fan_enable:
+> > > > +             *val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
+> > > > +             return 0;
+> > > >       default:
+> > > >               return -EOPNOTSUPP;
+> > > >       }
+> > > > @@ -214,7 +223,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+> > > >       struct i2c_client *client = data->client;
+> > > >       int target_count;
+> > > >       int err = 0;
+> > > > -     u8 bits;
+> > > > +     u8 bits, fan_config;
+> > > >       int sr;
+> > > >
+> > > >       mutex_lock(&data->update_lock);
+> > > > @@ -243,6 +252,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+> > > >                                       MAX31790_REG_TARGET_COUNT(channel),
+> > > >                                       data->target_count[channel]);
+> > > >               break;
+> > > > +     case hwmon_fan_enable:
+> > > > +             fan_config = data->fan_config[channel];
+> > > > +             if (val == 0) {
+> > > > +                     fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
+> > > > +             } else if (val == 1) {
+> > > > +                     fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
+> > > > +             } else {
+> > > > +                     err = -EINVAL;
+> > > > +                     break;
+> > > > +             }
+> > > > +             if (fan_config != data->fan_config[channel]) {
+> > > > +                     err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
+> > > > +                                                     fan_config);
+> > > > +                     if (!err)
+> > > > +                             data->fan_config[channel] = fan_config;
+> > > > +             }
+> > > > +             break;
+> > > >       default:
+> > > >               err = -EOPNOTSUPP;
+> > > >               break;
+> > > > @@ -270,6 +296,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+> > > >                   !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+> > > >                       return 0644;
+> > > >               return 0;
+> > > > +     case hwmon_fan_enable:
+> > > > +             if (channel < NR_CHANNEL)
+> > > > +                     return 0644;
+> > > > +             return 0;
+> > > >       default:
+> > > >               return 0;
+> > > >       }
+> > > > @@ -423,12 +453,12 @@ static umode_t max31790_is_visible(const void *data,
+> > > >
+> > > >  static const struct hwmon_channel_info *max31790_info[] = {
+> > > >       HWMON_CHANNEL_INFO(fan,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
+> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
+> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
+> > > > --
+> > > > 2.37.2.672.g94769d06f0-goog
+> > > >

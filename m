@@ -2,103 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650D35A4A0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E275A49B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiH2Lcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S232277AbiH2L2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbiH2L3p (ORCPT
+        with ESMTP id S231991AbiH2L0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:29:45 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20616.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::616])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5061D7437D;
-        Mon, 29 Aug 2022 04:17:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kiBPSpahkAXKssEk2POI4wvpIJj2a8jdhCKowcSF9fqzUBNbiE8sEh6RqZL+capUhFEgkP0QF4ntyb4wEtP+zUi5c6ozU2Y7em+vNqIFtuDouO6ihPmJACUbkwXxHjCx8hoXQzIlIwR40KQT8+E1siNwPi09TYlO+b1axoanN7IWNJ4dFxXu+ujudxAQz2NiXxLV4uQWrnnulBrta/YSsNymyKxX1yGvcJKNp0lJGgd8J5aMLyHvzS22NB8PScwkPURyt2YDdbD7IRacTPSRCZZqUg3XrziBhZEqHUPBeeQ7uxOIg2mlbPq8G+nD4ofAFbqz8yLWSSYnqiicL/dLZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xlROFYK3+0EuvVBgXLR4y5Wwp9l0uJG6v0e/9cDU/5U=;
- b=eyvDurdqYiuYh6ev198sDXdVKS4VoNA0BT1rBnE9VRU4pO2xkUjkokg8rm4Vl3qs+z+8DcojefwkD8d7Up949CqKHj8ffApYA1jCsAieWhe4WDHZmySpr5rfduB2EnQcIaP/AeyAt0Fxs9N9G8H93fQy09m93ENHTZ/RJk3rWm8stMBk0dSL/QuXL377GqR4cYiFumpZvdPtAMVtaVef+WWH2BzbhrXpe88YLpE3amt/4x11c6lml6GrQ6XK0Y59MEVNWmOgHp/cw1YgANA7QGdbNULpkT49Cyrmd/C/vn7bMkTBPyhhuRhK0gSKQpU5J5cgIhKxKbymoHGVqn03PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xlROFYK3+0EuvVBgXLR4y5Wwp9l0uJG6v0e/9cDU/5U=;
- b=ciC76CLAGP/GmSadStEJW1qAsDE1JH9v3/Sx4HzJTL3y6zmgQPzOuUr9qd0pFG/TxPxI3DTqbam5Q5USH0e885bHlnItmL/i9/iq89zNmOVDQCPOv3zy888vvx8W4Y8CnFLeprCL4/ZJpAas86HEZLBZRpQvUu19H3xP/rsZje20Cp6nPYJsoaDHwYyknuvL1aSlu+f03KfpJ1FZ0mJz2x1MLAFJzs2CfX/9YXo4nnvKqY/TWjIjwCpKekol78DSHPdY2UTVyIkZwTLzqhvjL9e3DlV4I1lFmZ8qUd12VmqqKw/22tG1AAohWkGJKj8IB+RYDrh7RWyFiaiGsSWuxw==
-Received: from DS7PR03CA0220.namprd03.prod.outlook.com (2603:10b6:5:3ba::15)
- by DM6PR12MB3323.namprd12.prod.outlook.com (2603:10b6:5:11f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Mon, 29 Aug
- 2022 11:14:10 +0000
-Received: from DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ba:cafe::a7) by DS7PR03CA0220.outlook.office365.com
- (2603:10b6:5:3ba::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
- Transport; Mon, 29 Aug 2022 11:14:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT033.mail.protection.outlook.com (10.13.172.221) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5566.15 via Frontend Transport; Mon, 29 Aug 2022 11:14:10 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 29 Aug
- 2022 11:14:09 +0000
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 29 Aug
- 2022 04:14:06 -0700
-References: <20220829105454.266509-1-cui.jinpeng2@zte.com.cn>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     <cgel.zte@gmail.com>
-CC:     <idosch@nvidia.com>, <petrm@nvidia.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] mlxsw: remove redundant err variable
-Date:   Mon, 29 Aug 2022 13:11:38 +0200
-In-Reply-To: <20220829105454.266509-1-cui.jinpeng2@zte.com.cn>
-Message-ID: <87edwzi9ok.fsf@nvidia.com>
+        Mon, 29 Aug 2022 07:26:25 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BE778229;
+        Mon, 29 Aug 2022 04:16:16 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso7978421wmh.5;
+        Mon, 29 Aug 2022 04:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=lOhpCObqWHdCARz2NDIqCtnDWiHAAEeM53JGliLfbVs=;
+        b=lPGL8ZYWjAj7lle2UsdjAKp8K4qbyHtSf55Qa20c3HvaGTUBoTNNE3UbgpAQzUSdJ9
+         ScCRoCdu1b/tozGYB49Vrh6y22+ltPQmKoFzXnjAP0eRt9MgOtyhCAd7/zptlTRSuZCi
+         /ri+vo2WEQD3283UxpbIfrcLtUaV/d8oNSdkqRSM/2Ruya08cC9WnnUsE2ji6bI4u17V
+         iN6gRKwKEXi6I/BhxBOFIJpsAtiYkn3Yz/OWGaHZy0sMIzQ56ise+n4dZwylixG3w9bK
+         a8mB3KaYAA6kF4kPDdGk0WG25mg27N4E3Xn0ORxHPpWWRdkD2VR7Cl1HfkI0rrcyBWGb
+         Q4gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lOhpCObqWHdCARz2NDIqCtnDWiHAAEeM53JGliLfbVs=;
+        b=uVGuddQaLjarwyT0/c2+NLbFIljYVkA9Vt5h/mWF6h78pM689TYO/D/c6Iz2wDJjXS
+         AFkXSMNqn0YSeawmmxBL5mkSp1dkxNcecu7wzXfkUdFhXSYa6hWghWlZxOnjs5FtRfaz
+         i4m48i4fLUAxA5pWQa6z2P1p5ltayL8Yacr9O1WIKuUXsXalwLBtyC3AeYga3RO+Ko+y
+         1WWv2bVlYs6VNxulYQTS97uQsnucBSfbCv+dUiQ6Oawd+zoTMI4E5fx9r20Gg6aOhi+N
+         AqGW97odEw4pCK9R79bXhpyCg3CCSAT/kkScZtFijUpYuT3r34O8UerANV4gJbxM90P6
+         x4hg==
+X-Gm-Message-State: ACgBeo2yndI7IDJfHWMrlY+C4YVT6VYVmXzJSvCbnIU8nJcd4T8VbLUc
+        0x3qn+K5VMqfqO9G76suhUw=
+X-Google-Smtp-Source: AA6agR4qShWVRNC4Kl1p705Z5ez+1h9e3xNpc5r4siUX0qgzgQ1wfjL7bmInQOMaCVIxez4Wdyz4KA==
+X-Received: by 2002:a05:600c:198e:b0:3a5:d4a2:8896 with SMTP id t14-20020a05600c198e00b003a5d4a28896mr6318695wmq.140.1661771694406;
+        Mon, 29 Aug 2022 04:14:54 -0700 (PDT)
+Received: from [192.168.0.30] ([47.62.125.55])
+        by smtp.gmail.com with ESMTPSA id n8-20020adff088000000b002258235bda3sm6624936wro.61.2022.08.29.04.14.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 04:14:53 -0700 (PDT)
+Message-ID: <ae3523f9-6420-9413-30cf-ab6a081c8500@gmail.com>
+Date:   Mon, 29 Aug 2022 13:14:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 170f094b-20fd-47b9-ad1a-08da89af9928
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3323:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sZF0O/BYKYQo2B86Au4TXASZnOKoqYojwon4IawspaCa/xPSfltYrG+eTctm8y1of71fgVvUCGmrq371H+7znfLql/0keOzTtdluqG6Qux0rmjkY/Wac1hhXErKPxBku1HvtFoHA6rK0KL8sl82i53dLZLCnLQzv6YABhkuNq2GfBHibMKdLhGb4Rx6GPaJ5uqDmN71F5cdAagLlB+Xy9wQzx0NAAFXZA7lE6InathBKqwZW1nmDSbrNg8XEe5VGZ2fidXkmEi2hKQAfxOiuZ1arztMK1/Y0xtlBJc1suYDtVDiast9Nf19nw8mVMfpymwycMrYQwwZQtb5jkjm2Us/PXxlMcD+p2KN2DvQb8I6US4IAuLJynPKC91N+m17stgydZZ3hckFjc94wp+xl64vmIXecQUm9Lg4Wgj/0F2t9lE1fhSLm+CuBnrJ6FNVcr5ypW3IqPx/82LENgBnHafo8uaXtJ6U7CbRE0DGYXHro4DPiwcVoTwULsu/C2y4ykyVAaNRD7OEf9HnhTHIOTuTaH+vraAnevuTVpXgty+KToYeid/yTwVlhaeaQgkXGqmADH2x42dPgVXWqLj1hh4zKJz9twZYydZc35gOCA2Dna0MKTvxS+akU7s2caqskqpC4WAPQC2oW35o8oRlXCLh5tSyTz1VoCH0QjrA17A0EmNGLOmJD4TYAOujGhOC+w7bEiz4Wv7ZFtWsxhq43ZsqLRra9Vi6r8jrE2OkmMDBhyocKYValxSHtBNiU3+xVxka44p1YD8kJMY7h35xCsIVs6D1Wq5/GXjVMiHPtgzMl6NwAhmkpuzTIAwBVo/hX
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(376002)(346002)(40470700004)(46966006)(36840700001)(86362001)(8936002)(5660300002)(356005)(6666004)(82740400003)(2906002)(81166007)(82310400005)(478600001)(26005)(41300700001)(336012)(426003)(40460700003)(36756003)(186003)(6916009)(70586007)(4744005)(54906003)(316002)(40480700001)(70206006)(4326008)(47076005)(2616005)(16526019)(8676002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 11:14:10.4458
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 170f094b-20fd-47b9-ad1a-08da89af9928
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3323
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 2/4] spi: mt7621: Use the devm_clk_get_enabled() helper to
+ simplify error handling
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        broonie@kernel.org, gregkh@linuxfoundation.org, neil@brown.name,
+        blogic@openwrt.org
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
+ <05a7fd22719008c8a905d6328aa9548ce40f2a7a.1661599671.git.christophe.jaillet@wanadoo.fr>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <05a7fd22719008c8a905d6328aa9548ce40f2a7a.1661599671.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -106,16 +81,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-cgel.zte@gmail.com writes:
 
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
->
-> Return value from mlxsw_core_bus_device_register() directly
-> instead of taking this in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On 27/08/2022 13:42, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>     - calls devm_clk_get()
+>     - calls clk_prepare_enable() and registers what is needed in order to
+>       call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This helper is well suited for cases where the clock would be kept
+> prepared or enabled for the whole lifetime of the driver.
+> 
+> This simplifies the error handling a lot.
+> 
+> The order between spi_unregister_controller() (in the remove function) and
+> the clk_disable_unprepare() (now handle by a  managed resource) is kept
+> the same.
+> (see commit 46b5c4fb87ce ("spi: mt7621: Don't leak SPI master in probe
+> error path") to see why it matters)
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Thanks!
+> ---
+> The order with  devm_spi_release_controller() (which undoes
+> devm_spi_alloc_master()) is reversed, but I don't think it is an issue.
+> ---
+>   drivers/spi/spi-mt7621.c | 14 +-------------
+>   1 file changed, 1 insertion(+), 13 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
+> index 351b0ef52bbc..2580b28042be 100644
+> --- a/drivers/spi/spi-mt7621.c
+> +++ b/drivers/spi/spi-mt7621.c
+> @@ -327,7 +327,6 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   	struct spi_controller *master;
+>   	struct mt7621_spi *rs;
+>   	void __iomem *base;
+> -	int status = 0;
+>   	struct clk *clk;
+>   	int ret;
+>   
+> @@ -339,19 +338,14 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   	if (IS_ERR(base))
+>   		return PTR_ERR(base);
+>   
+> -	clk = devm_clk_get(&pdev->dev, NULL);
+> +	clk = devm_clk_get_enabled(&pdev->dev, NULL);
+>   	if (IS_ERR(clk))
+>   		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
+>   				     "unable to get SYS clock\n");
+>   
+> -	status = clk_prepare_enable(clk);
+> -	if (status)
+> -		return status;
+> -
+>   	master = devm_spi_alloc_master(&pdev->dev, sizeof(*rs));
+>   	if (!master) {
+>   		dev_info(&pdev->dev, "master allocation failed\n");
+> -		clk_disable_unprepare(clk);
+>   		return -ENOMEM;
+>   	}
+>   
+> @@ -376,13 +370,10 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   	ret = device_reset(&pdev->dev);
+>   	if (ret) {
+>   		dev_err(&pdev->dev, "SPI reset failed!\n");
+> -		clk_disable_unprepare(clk);
+>   		return ret;
+>   	}
+>   
+>   	ret = spi_register_controller(master);
+> -	if (ret)
+> -		clk_disable_unprepare(clk);
+>   
+>   	return ret;
+>   }
+> @@ -390,13 +381,10 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   static int mt7621_spi_remove(struct platform_device *pdev)
+>   {
+>   	struct spi_controller *master;
+> -	struct mt7621_spi *rs;
+>   
+>   	master = dev_get_drvdata(&pdev->dev);
+> -	rs = spi_controller_get_devdata(master);
+>   
+>   	spi_unregister_controller(master);
+> -	clk_disable_unprepare(rs->clk);
+>   
+>   	return 0;
+>   }

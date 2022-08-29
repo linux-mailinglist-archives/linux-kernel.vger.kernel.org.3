@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8335A50F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F775A5102
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiH2QGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S230185AbiH2QHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiH2QGu (ORCPT
+        with ESMTP id S229502AbiH2QHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:06:50 -0400
-Received: from sandeen.net (sandeen.net [63.231.237.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0638683075;
-        Mon, 29 Aug 2022 09:06:49 -0700 (PDT)
-Received: from [10.0.0.146] (liberator.sandeen.net [10.0.0.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Mon, 29 Aug 2022 12:07:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE628307A;
+        Mon, 29 Aug 2022 09:07:31 -0700 (PDT)
+Received: from notapiano (unknown [70.107.189.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sandeen.net (Postfix) with ESMTPSA id 0F348477556;
-        Mon, 29 Aug 2022 11:05:07 -0500 (CDT)
-Message-ID: <0ba12a13-6cc4-5f44-fa06-ead350f819d5@sandeen.net>
-Date:   Mon, 29 Aug 2022 11:06:48 -0500
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFD136601E65;
+        Mon, 29 Aug 2022 17:07:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661789250;
+        bh=HKidM7v19MiruZdK7/phGu4UFG+Bzp83idEhdT1R2Dg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OT2U9NQDjXeDnOkz1Z39vD5Nf+z4Z9jS1wx8h5+pT7NtcZvECNuxYrfd/voAgOgBZ
+         8I1z90Am4d6er5TdD6+T7ESofbmiBZJM9kUYeYtBr5bbzN6EwxPgg3kBoQhr3JAgRr
+         RC43KWcYUHdjpEmiCOSSrYsn+pUHNe0QRkNnAdv2Y93GiJ5Y7MJB5IjSyDzuZbNtUy
+         j52gPs7oLwmcnp2j6hWe1q0hbJRii70NAu9LINpDQGNFe5yncFdCLpaSoklawrApTO
+         Id2BObeIQHLkDYDkjaxmdbdzL1gIrcxWPb6/4ET2rGez3H5FuJZVqMgXQBb0z+/oyY
+         9oEnIWheuaJhQ==
+Date:   Mon, 29 Aug 2022 12:07:24 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>, hsinyi@chromium.org
+Subject: Re: [PATCH v15] arm64: dts: Add MediaTek MT8186 dts and evaluation
+ board and Makefile
+Message-ID: <20220829160724.xfbqxv7fs6ilr74u@notapiano>
+References: <20220825170448.17024-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Content-Language: en-US
-To:     Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     linfeilong <linfeilong@huawei.com>,
-        wuguanghao <wuguanghao3@huawei.com>
-References: <514e5e4b-e7c8-365f-8459-75974c067993@huawei.com>
-From:   Eric Sandeen <sandeen@sandeen.net>
-Subject: Re: [PATCH] xfs: donot need to check return value of xlog_kvmalloc()
-In-Reply-To: <514e5e4b-e7c8-365f-8459-75974c067993@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220825170448.17024-1-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/22/22 6:46 AM, Zhiqiang Liu wrote:
+On Fri, Aug 26, 2022 at 01:04:48AM +0800, Allen-KH Cheng wrote:
+> MT8186 is a SoC based on 64bit ARMv8 architecture. It contains 6 CA55
+> and 2 CA76 cores. MT8186 share many HW IP with MT65xx series.
 > 
-> In xfs_attri_log_nameval_alloc(), xlog_kvmalloc() is called
-> to alloc memory, which will always return
-> successfully, so we donot need to check return value.
+> We add basic chip support for MediaTek MT8186 on evaluation board.
 > 
-> Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 
-I think this is fine. xlog_kvmalloc loops until success, and its other
-caller does not check the return value.
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-This isn't really strictly a fix (it's harmless) but it "fixes"
-
-Fixes: commit 4183e4f27f402 ("xfs: share xattr name and value buffers when logging xattr updates")
-
-Reviewed-by: Eric Sandeen <sandeen@redhat.com>
-
-That said, I think that xfs_attri_log_nameval_alloc() also cannot fail, so
-perhaps its callers don't need checks either?
-
-> ---
->  fs/xfs/xfs_attr_item.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_attr_item.c b/fs/xfs/xfs_attr_item.c
-> index 5077a7ad5646..667e151a2bca 100644
-> --- a/fs/xfs/xfs_attr_item.c
-> +++ b/fs/xfs/xfs_attr_item.c
-> @@ -86,8 +86,6 @@ xfs_attri_log_nameval_alloc(
->  	 */
->  	nv = xlog_kvmalloc(sizeof(struct xfs_attri_log_nameval) +
->  					name_len + value_len);
-> -	if (!nv)
-> -		return nv;
-> 
->  	nv->name.i_addr = nv + 1;
->  	nv->name.i_len = name_len;
+Thanks,
+Nícolas

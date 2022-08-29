@@ -2,84 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65775A4D21
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC675A4D28
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiH2NLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        id S229662AbiH2NMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiH2NLM (ORCPT
+        with ESMTP id S229966AbiH2NMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:11:12 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B231096;
-        Mon, 29 Aug 2022 06:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yMN137tQOiEvCCugp8sfYuKyYpdctIsrHd3N7Y4xCc0=; b=HVYaRpe8Vtcbr+q8D2qz1UeUrA
-        ApHFNDSSLiZ2wHmuhVzqrwsX3/lNtzgjy/UfWdtupPVPxRrTOUiJuhkupRQLkVKQAn5caCje96480
-        Jt6vaOzi/UHjLAUwOE6YQS/xoYJS+7yuuGDVJzOZyCdBcqxdlgWItzVchN/4+JQlW3Y8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oSeWZ-00ExtK-M7; Mon, 29 Aug 2022 15:09:55 +0200
-Date:   Mon, 29 Aug 2022 15:09:55 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Anand Moon <anand@edgeble.ai>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        David Wu <david.wu@rock-chips.com>,
-        Jagan Teki <jagan@edgeble.ai>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: ethernet: stmicro: stmmac: dwmac-rk: Add rv1126
- support
-Message-ID: <Ywy6o2d9j4Z7+WYX@lunn.ch>
-References: <20220829065044.1736-1-anand@edgeble.ai>
- <20220829065044.1736-2-anand@edgeble.ai>
+        Mon, 29 Aug 2022 09:12:09 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB17113B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:12:07 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 56DDA2B05F99;
+        Mon, 29 Aug 2022 09:12:01 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 29 Aug 2022 09:12:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661778720; x=1661785920; bh=Gt3QdRBpDL
+        r3ksyKqNP7CtpGFcb0aPox+HlDnxbw8D0=; b=mNnmVQ1GDhKMjp+MGtQcms5wYE
+        pMjLcUarKmKj/5FleiIsYAMZc8IvGVUXs3FiVP3hzLEsnSW4omqr1uKeTCVj1aBb
+        lVo3g1QKkNZkOIoQkDSCSTYZlAVfLevqj7r04ntL4f2522G03G0VeUEVFza5QBz8
+        ++pCcnUAhQQ8vmOpSEq5rnX7WcwJ9X05lJm4nvoPpT/tBMOBZUTVRr84vFy2g4HK
+        99EbHru7tPRJ3V2TBxIZUTrtmFHsHB7ea/5fQdxaD0okmNbjpYJsUYIubX+/BNIl
+        QZhpXG45hNJJrFv3vId0cxgoaLE4AShBEwP1Fq+8tK5uKbe/+0nVqpg+ubWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1661778720; x=1661785920; bh=Gt3QdRBpDLr3k
+        syKqNP7CtpGFcb0aPox+HlDnxbw8D0=; b=Qz/z4QlR2w+X4vzoLj7wz6hFKIex/
+        4QejW6yPU5Qhy8vmPI/19tjYlYZZb04oICenR67hlDBrCCTqgmpK5qDLBiRZbWgv
+        0WjMvaPSiugNx/s6gtMojWpdmaA5vJ7xvbB7ITA2ea6XBryVX5nPjnWLFYZ3Zdgh
+        XArNojGgDglpKXVGvJkjtLObKW+v13ZZRdCBX4DugjPbUNzoPUTCIDdC7frAQBXE
+        ZqzpXHpGdbPGo5XH2jdUZyE4qH1rjUV/XRDWkQpv3OJbvBnmzuGA0bUDU2iWJOff
+        q3a16/Jlp5V1WJPY0szNcRqsSvYJGLhgToXIOJYEByLAaSFL6F087wBsA==
+X-ME-Sender: <xms:H7sMYyQ6so3iVzfxfI3TEWh6LqvE1u65VfMi86SiJM-ECgGTv5FB2w>
+    <xme:H7sMY3w1RY73zHca1p-BThlwrK1xDTkcR_Rx_I69zInglWiqpEZ8vx4VGM5FNmT4C
+    29GgRUru4flC9zGIUE>
+X-ME-Received: <xmr:H7sMY_2FNY_czGCvtiWDRmsDyZfNcfo3TqUOz7Eq6ALE1sRTe9k2uX2sacIx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekuddgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfogfesthhqredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpefhvdekffefkeehfeffjeefgeekgefhtddvudffgfefueffvdefueekvdek
+    teelteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:H7sMY-DGSkBIGvBBp2VZbnDCpERAGGK0I0lV8xfFhidVwv9IvAsHrQ>
+    <xmx:H7sMY7ixR2HIvyAoxrkONcClLdaGMBDQgNMOgeAEHL_8TtG7CqPU1A>
+    <xmx:H7sMY6qXuLund067dOcgOWCiVwSSOvUoxqvph7DFyteMkA2lHLU0Iw>
+    <xmx:ILsMY8b6kn6yWWLhiU6z6R90bSk0VCj7SB4HBA3MBuCc-O-hBgg-ObaaLsg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 29 Aug 2022 09:11:59 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v2 00/41] drm: Analog TV Improvements
+Date:   Mon, 29 Aug 2022 15:11:14 +0200
+Message-Id: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829065044.1736-2-anand@edgeble.ai>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.10.0-dev-65ba7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7147; i=maxime@cerno.tech; h=from:subject:message-id; bh=cqo2aafkzYcyJ3mBZFUeznciMg58A/nLuDpuY2DeYGU=; b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMk8u+S6rEyb1q243cVn8ZipLMlM+lNbWEtE5pEJtS8mZL9y yePoKGVhEONikBVTZIkRNl8Sd2rW6042vnkwc1iZQIYwcHEKwETq5jIyfF5y9+/aiecEO+awz1sQ9r 3E/qPsDOlzXOzOK7gau15Ev2L4wzU9dZ+UR0Pcs8Y/9zLPxTz6niexI/3Q/OO8usUbQi4ksAAA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp; fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 06:50:42AM +0000, Anand Moon wrote:
-> Rockchip RV1126 has GMAC 10/100/1000M ethernet controller
-> via RGMII and RMII interfaces are configured via M0 and M1 pinmux.
-> 
-> This patch adds rv1126 support by adding delay lines of M0 and M1
-> simultaneously.
-
-What does 'delay lines' mean with respect to RGMII?
-
-The RGMII signals need a 2ns delay between the clock and the data
-lines. There are three places this can happen:
-
-1) In the PHY
-2) Extra long lines on the PCB
-3) In the MAC
-
-Generally, 1) is used, and controlled via phy-mode. A value of
-PHY_INTERFACE_MODE_RGMII_ID passed to the PHY driver means it will add
-these delays.
-
-You don't want both the MAC and the PHY adding delays.
-
-    Andrew
+Hi,=0D
+=0D
+Here's a series aiming at improving the command line named modes support,=0D
+and more importantly how we deal with all the analog TV variants.=0D
+=0D
+The named modes support were initially introduced to allow to specify the=0D
+analog TV mode to be used.=0D
+=0D
+However, this was causing multiple issues:=0D
+=0D
+  * The mode name parsed on the command line was passed directly to the=0D
+    driver, which had to figure out which mode it was suppose to match;=0D
+=0D
+  * Figuring that out wasn't really easy, since the video=3D argument or wh=
+at=0D
+    the userspace might not even have a name in the first place, but=0D
+    instead could have passed a mode with the same timings;=0D
+=0D
+  * The fallback to matching on the timings was mostly working as long as=0D
+    we were supporting one 525 lines (most likely NSTC) and one 625 lines=0D
+    (PAL), but couldn't differentiate between two modes with the same=0D
+    timings (NTSC vs PAL-M vs NSTC-J for example);=0D
+=0D
+  * There was also some overlap with the tv mode property registered by=0D
+    drm_mode_create_tv_properties(), but named modes weren't interacting=0D
+    with that property at all.=0D
+=0D
+  * Even though that property was generic, its possible values were=0D
+    specific to each drivers, which made some generic support difficult.=0D
+=0D
+Thus, I chose to tackle in multiple steps:=0D
+=0D
+  * A new TV norm property was introduced, with generic values, each driver=
+=0D
+    reporting through a bitmask what standard it supports to the userspace;=
+=0D
+=0D
+  * This option was added to the command line parsing code to be able to=0D
+    specify it on the kernel command line, and new atomic_check and reset=0D
+    helpers were created to integrate properly into atomic KMS;=0D
+=0D
+  * The named mode parsing code is now creating a proper display mode for=0D
+    the given named mode, and the TV standard will thus be part of the=0D
+    connector state;=0D
+=0D
+  * Two drivers were converted and tested for now (vc4 and sun4i), with=0D
+    some backward compatibility code to translate the old TV mode to the=0D
+    new TV mode;=0D
+=0D
+Unit tests were created along the way.=0D
+=0D
+One can switch from NTSC to PAL now using (on vc4)=0D
+=0D
+modetest -M vc4  -s 53:720x480i -w 53:'tv norm':0=0D
+=0D
+modetest -M vc4 -s 53:720x480i -w 53:'tv norm':4=0D
+=0D
+Let me know what you think,=0D
+Maxime=0D
+=0D
+Changes from v1 (https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-p=
+roperties-v1-0-3d53ae722097@cerno.tech/):=0D
+  - Kept the older TV mode property as legacy so we can keep the old driver=
+s functional=0D
+  - Renamed the tv_norm property to tv_mode=0D
+  - Added a function to create PAL and NTSC compatible display modes=0D
+  - Added some helpers to instantiate a mock DRM device in Kunit=0D
+  - More Kunit tests=0D
+  - Removed the HD analog TV modes=0D
+  - Renamed some of the tests=0D
+  - Renamed some of the named modes=0D
+  - Fixed typos in commit logs=0D
+  - Added the various tags=0D
+=0D
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>=0D
+Cc: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>=0D
+Cc: "Noralf Tr=C3=B8nnes" <noralf@tronnes.org>=0D
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>=0D
+Cc: Dom Cobley <dom@raspberrypi.com>=0D
+Cc: Phil Elwell <phil@raspberrypi.com>=0D
+Cc: <dri-devel@lists.freedesktop.org>=0D
+=0D
+---=0D
+Geert Uytterhoeven (1):=0D
+      drm/modes: parse_cmdline: Add support for named modes containing dash=
+es=0D
+=0D
+Mateusz Kwiatkowski (5):=0D
+      drm/vc4: vec: Refactor VEC TV mode setting=0D
+      drm/vc4: vec: Remove redundant atomic_mode_set=0D
+      drm/vc4: vec: Fix timings for VEC modes=0D
+      drm/vc4: vec: Fix definition of PAL-M mode=0D
+      drm/vc4: vec: Add support for more analog TV standards=0D
+=0D
+Maxime Ripard (35):=0D
+      drm/tests: Order Kunit tests in Makefile=0D
+      drm/tests: Add Kunit Helpers=0D
+      drm/atomic-helper: Rename drm_atomic_helper_connector_tv_reset to avo=
+id ambiguity=0D
+      drm/connector: Rename subconnector state variable=0D
+      drm/atomic: Add TV subconnector property to get/set_property=0D
+      drm/connector: Rename legacy TV property=0D
+      drm/connector: Only register TV mode property if present=0D
+      drm/connector: Rename drm_mode_create_tv_properties=0D
+      drm/connector: Add TV standard property=0D
+      drm/modes: Add a function to generate analog display modes=0D
+      drm/modes: Only consider bpp and refresh before options=0D
+      drm/client: Add some tests for drm_connector_pick_cmdline_mode()=0D
+      drm/modes: Move named modes parsing to a separate function=0D
+      drm/modes: Switch to named mode descriptors=0D
+      drm/modes: Fill drm_cmdline mode from named modes=0D
+      drm/connector: Add pixel clock to cmdline mode=0D
+      drm/connector: Add a function to lookup a TV mode by its name=0D
+      drm/modes: Introduce the tv_mode property as a command-line option=0D
+      drm/modes: Properly generate a drm_display_mode from a named mode=0D
+      drm/modes: Introduce more named modes=0D
+      drm/atomic-helper: Add a TV properties reset helper=0D
+      drm/atomic-helper: Add an analog TV atomic_check implementation=0D
+      drm/vc4: vec: Remove empty mode_fixup=0D
+      drm/vc4: vec: Convert to atomic helpers=0D
+      drm/vc4: vec: Switch for common modes=0D
+      drm/vc4: vec: Use TV Reset implementation=0D
+      drm/vc4: vec: Convert to the new TV mode property=0D
+      drm/sun4i: tv: Remove unused mode_valid=0D
+      drm/sun4i: tv: Convert to atomic hooks=0D
+      drm/sun4i: tv: Merge mode_set into atomic_enable=0D
+      drm/sun4i: tv: Remove useless function=0D
+      drm/sun4i: tv: Remove useless destroy function=0D
+      drm/sun4i: tv: Rename error label=0D
+      drm/sun4i: tv: Add missing reset assertion=0D
+      drm/sun4i: tv: Convert to the new TV mode property=0D
+=0D
+ drivers/gpu/drm/drm_atomic_state_helper.c       | 115 ++++-=0D
+ drivers/gpu/drm/drm_atomic_uapi.c               |   8 +=0D
+ drivers/gpu/drm/drm_client_modeset.c            |   4 +=0D
+ drivers/gpu/drm/drm_connector.c                 | 119 ++++-=0D
+ drivers/gpu/drm/drm_modes.c                     | 638 ++++++++++++++++++++=
++++-=0D
+ drivers/gpu/drm/gud/gud_connector.c             |   8 +-=0D
+ drivers/gpu/drm/i2c/ch7006_drv.c                |   6 +-=0D
+ drivers/gpu/drm/i915/display/intel_tv.c         |   2 +-=0D
+ drivers/gpu/drm/nouveau/dispnv04/tvnv17.c       |   6 +-=0D
+ drivers/gpu/drm/sun4i/sun4i_tv.c                | 198 +++-----=0D
+ drivers/gpu/drm/tests/Makefile                  |  16 +-=0D
+ drivers/gpu/drm/tests/drm_client_modeset_test.c | 239 +++++++++=0D
+ drivers/gpu/drm/tests/drm_cmdline_parser_test.c | 216 ++++++++=0D
+ drivers/gpu/drm/tests/drm_kunit_helpers.c       |  54 ++=0D
+ drivers/gpu/drm/tests/drm_kunit_helpers.h       |   9 +=0D
+ drivers/gpu/drm/tests/drm_modes_test.c          | 131 +++++=0D
+ drivers/gpu/drm/vc4/vc4_hdmi.c                  |   2 +-=0D
+ drivers/gpu/drm/vc4/vc4_vec.c                   | 422 ++++++++++------=0D
+ include/drm/drm_atomic_state_helper.h           |   4 +=0D
+ include/drm/drm_connector.h                     | 165 +++++-=0D
+ include/drm/drm_mode_config.h                   |  12 +-=0D
+ include/drm/drm_modes.h                         |  17 +=0D
+ 22 files changed, 2057 insertions(+), 334 deletions(-)=0D
+---=0D
+base-commit: 8869fa666a9e6782c3c896c1fa57d65adca23249=0D
+change-id: 20220728-rpi-analog-tv-properties-0914dfcee460=0D
+=0D
+Best regards,=0D
+-- =0D
+Maxime Ripard <maxime@cerno.tech>=0D

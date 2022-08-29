@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF375A57EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE9E5A57EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiH2XrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S229917AbiH2XrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiH2Xqk (ORCPT
+        with ESMTP id S229833AbiH2Xql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:46:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322D7A2DB5;
-        Mon, 29 Aug 2022 16:46:33 -0700 (PDT)
+        Mon, 29 Aug 2022 19:46:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9ACA4058;
+        Mon, 29 Aug 2022 16:46:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C2E4B815DD;
-        Mon, 29 Aug 2022 23:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086DFC43148;
-        Mon, 29 Aug 2022 23:46:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9746EB815CE;
+        Mon, 29 Aug 2022 23:46:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E94C433D6;
+        Mon, 29 Aug 2022 23:46:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816790;
-        bh=MQxKOKIBts95P9DbjiHNKkmrVfq6Kli774rOeB7RZ54=;
+        s=k20201202; t=1661816791;
+        bh=5UxpWJxqZwILUXZUt1KNjnP6PxOHT95HX5+3o9Vcyko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FOLSmb+/Aey4/Uom62H1GtDKwQSkqs5sL6SpgNuFUimM2lvAS4Ki8Hrs98io/oajJ
-         4h0gRcIlyVUnH6B8Lr295kU46jFgtomu330S/nLbTrbQTuFbUPEaPWuWHKyzNc55RT
-         7GxapW6BRBK8vMFbI8laWJ9icnVZMx++EyxkzB5pq2vQUzvtalSwsaOiiEoSaLYvkl
-         M40aCPpZTPCL0A+b5QpEWdyUjJ8bf8bwM24jiOl9Kw1w8JxbJv46Nf2+HXmeO05dDL
-         MrnuHpEZJHCRZwdQ6JtDjGAivAbp7TPqcgoBEFYZidrrwC9TdoybhDKZ1vV9cHXPb0
-         xI/r+SKioD0Ww==
+        b=cFZzTO4Yta50VhXlW3JPq3Bl09BBtSCKdHw9N9JQRRZOAkb9RjJWuNpnBh4YVbf3x
+         tJnb4WWmskbKqfZDp881Cp6ecABp6vlVN595oxjkxcrA+Af9meKBVTjqQE5GVKd+px
+         Y4LIP6e3j00VkriLxDQvpbKCiRJ8NWOeVg+EP6eBj2WtWajbjNcSTLFWdIoNBN6swy
+         H2ai1hnSfoiZJittBqGsv8G4jW9qS1WQd8QHN7ukiCIqFji7cWXBsgxTZy2+sbgglP
+         XZ/wmRh/onvRi0TueuuxrhH9y/z6nkaK9+sUtTaJBXXTkDaIUZR6SmHHZYRV73vxLZ
+         nPtBC3Xa+LYMA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>, johan+linaro@kernel.org
-Cc:     quic_ppratap@quicinc.com, mka@chromium.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
-        quic_pkondeti@quicinc.com, quic_kriskura@quicinc.com,
-        linux-kernel@vger.kernel.org, quic_c_sanm@quicinc.com,
-        konrad.dybcio@somainline.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: move USB wakeup-source property
-Date:   Mon, 29 Aug 2022 18:45:52 -0500
-Message-Id: <166181675985.322065.9753158568799814599.b4-ty@kernel.org>
+To:     konrad.dybcio@somainline.org, ~postmarketos/upstreaming@lists.sr.ht
+Cc:     linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@codeaurora.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        martin.botka@somainline.org
+Subject: Re: (subset) [PATCH v2 1/5] dt-bindings: arm: qcom: Document Sony Xperia 1 IV (PDX223)
+Date:   Mon, 29 Aug 2022 18:45:53 -0500
+Message-Id: <166181675960.322065.16076194643868486800.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220802152642.2516-1-johan+linaro@kernel.org>
-References: <20220802152642.2516-1-johan+linaro@kernel.org>
+In-Reply-To: <20220714123406.1919836-1-konrad.dybcio@somainline.org>
+References: <20220714123406.1919836-1-konrad.dybcio@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -61,16 +60,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 Aug 2022 17:26:42 +0200, Johan Hovold wrote:
-> Move the USB-controller wakeup-source property to the dwc3 glue node to
-> match the updated binding.
+On Thu, 14 Jul 2022 14:34:02 +0200, Konrad Dybcio wrote:
+> Document the compatible for the PDX223 device.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc7280: move USB wakeup-source property
-      commit: d5089f79b1e4fad445daa48382380a7e584603e2
+[1/5] dt-bindings: arm: qcom: Document Sony Xperia 1 IV (PDX223)
+      commit: 4277c839a1395072f4c8fd07f9ca52b4f770068e
+[3/5] arm64: dts: qcom: sm8450: Adjust memory map
+      commit: 2fb19263442dda351e8bc2f6bd71f5a355971f1a
+[4/5] arm64: dts: qcom: sm8450: Add SDHCI2
+      commit: 20e8f1ee8d2729589cd2c0b4a13df753667d6930
+[5/5] arm64: dts: qcom: Add device tree for Sony Xperia 1 IV
+      commit: 0a631a36f7244d56fffcd0dd5bc473cf14571970
 
 Best regards,
 -- 

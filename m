@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAE55A4A07
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FF15A4887
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiH2LcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S230439AbiH2LMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbiH2L3h (ORCPT
+        with ESMTP id S229491AbiH2LLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:29:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E274E7A500;
-        Mon, 29 Aug 2022 04:18:00 -0700 (PDT)
+        Mon, 29 Aug 2022 07:11:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6527D6DAD1;
+        Mon, 29 Aug 2022 04:08:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5666061244;
-        Mon, 29 Aug 2022 11:16:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A1DC433C1;
-        Mon, 29 Aug 2022 11:16:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B01C0611D9;
+        Mon, 29 Aug 2022 11:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC8CC433D6;
+        Mon, 29 Aug 2022 11:05:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771762;
-        bh=WTVeAV7tZnRbkyjCffIL6VZA8oSDf9wCxoNB9vdIiAU=;
+        s=korg; t=1661771156;
+        bh=spsPPpX2HBUsUnlueS3BUehK5SGzWe+chz8JxgDmEko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJlF8mUxWzRXAWm+itcdgnWtMSqPFTGYhV8DYO/1jLRRuAiWmaCkRXRd1qpCGIUIa
-         s/tCt38Tff7WyT0LFGIJjvkgTSuBMSJDHfPvcL9B8RAvSkdEdKzgpxZeT5icbBVxV7
-         X9Plwa/Qbi9qv0S1XN7T0SlJ+IUqowLVMDwBTgBE=
+        b=eZdmd2aBemzf8M0UUBXVbo2umvXnalNrxeMVD+fOorxz6rsnV3QhaeaSr6mwI8NS+
+         JxD2tdxdroQpwV1hNTmWhOzXD6b9mf7mQXsFR+Aeb7XbKgwzfp246+SZVMt03MzGMH
+         KW4+YdgGe8AUQoD0OScOE9t1o8QoQeeg9iFhEnGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qi Duan <qi.duan@amlogic.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 090/158] net: stmmac: work around sporadic tx issue on link-up
+Subject: [PATCH 5.15 073/136] net: Fix data-races around netdev_tstamp_prequeue.
 Date:   Mon, 29 Aug 2022 12:59:00 +0200
-Message-Id: <20220829105812.843290760@linuxfoundation.org>
+Message-Id: <20220829105807.639482348@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,87 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit a3a57bf07de23fe1ff779e0fdf710aa581c3ff73 ]
+[ Upstream commit 61adf447e38664447526698872e21c04623afb8e ]
 
-This is a follow-up to the discussion in [0]. It seems to me that
-at least the IP version used on Amlogic SoC's sometimes has a problem
-if register MAC_CTRL_REG is written whilst the chip is still processing
-a previous write. But that's just a guess.
-Adding a delay between two writes to this register helps, but we can
-also simply omit the offending second write. This patch uses the second
-approach and is based on a suggestion from Qi Duan.
-Benefit of this approach is that we can save few register writes, also
-on not affected chip versions.
+While reading netdev_tstamp_prequeue, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-[0] https://www.spinics.net/lists/netdev/msg831526.html
-
-Fixes: bfab27a146ed ("stmmac: add the experimental PCI support")
-Suggested-by: Qi Duan <qi.duan@amlogic.com>
-Suggested-by: Jerome Brunet <jbrunet@baylibre.com>
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Link: https://lore.kernel.org/r/e99857ce-bd90-5093-ca8c-8cd480b5a0a2@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 3b098e2d7c69 ("net: Consistent skb timestamping")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c   | 8 ++++++--
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 9 +++++----
- 2 files changed, 11 insertions(+), 6 deletions(-)
+ net/core/dev.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c b/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
-index caa4bfc4c1d62..9b6138b117766 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
-@@ -258,14 +258,18 @@ EXPORT_SYMBOL_GPL(stmmac_set_mac_addr);
- /* Enable disable MAC RX/TX */
- void stmmac_set_mac(void __iomem *ioaddr, bool enable)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 87cf2e0d8f6f1..28f623628876c 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4893,7 +4893,7 @@ static int netif_rx_internal(struct sk_buff *skb)
  {
--	u32 value = readl(ioaddr + MAC_CTRL_REG);
-+	u32 old_val, value;
-+
-+	old_val = readl(ioaddr + MAC_CTRL_REG);
-+	value = old_val;
+ 	int ret;
  
- 	if (enable)
- 		value |= MAC_ENABLE_RX | MAC_ENABLE_TX;
- 	else
- 		value &= ~(MAC_ENABLE_TX | MAC_ENABLE_RX);
+-	net_timestamp_check(netdev_tstamp_prequeue, skb);
++	net_timestamp_check(READ_ONCE(netdev_tstamp_prequeue), skb);
  
--	writel(value, ioaddr + MAC_CTRL_REG);
-+	if (value != old_val)
-+		writel(value, ioaddr + MAC_CTRL_REG);
- }
+ 	trace_netif_rx(skb);
  
- void stmmac_get_mac_addr(void __iomem *ioaddr, unsigned char *addr,
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index c5f33630e7718..78f11dabca056 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -983,10 +983,10 @@ static void stmmac_mac_link_up(struct phylink_config *config,
- 			       bool tx_pause, bool rx_pause)
+@@ -5253,7 +5253,7 @@ static int __netif_receive_skb_core(struct sk_buff **pskb, bool pfmemalloc,
+ 	int ret = NET_RX_DROP;
+ 	__be16 type;
+ 
+-	net_timestamp_check(!netdev_tstamp_prequeue, skb);
++	net_timestamp_check(!READ_ONCE(netdev_tstamp_prequeue), skb);
+ 
+ 	trace_netif_receive_skb(skb);
+ 
+@@ -5634,7 +5634,7 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
  {
- 	struct stmmac_priv *priv = netdev_priv(to_net_dev(config->dev));
--	u32 ctrl;
-+	u32 old_ctrl, ctrl;
+ 	int ret;
  
--	ctrl = readl(priv->ioaddr + MAC_CTRL_REG);
--	ctrl &= ~priv->hw->link.speed_mask;
-+	old_ctrl = readl(priv->ioaddr + MAC_CTRL_REG);
-+	ctrl = old_ctrl & ~priv->hw->link.speed_mask;
+-	net_timestamp_check(netdev_tstamp_prequeue, skb);
++	net_timestamp_check(READ_ONCE(netdev_tstamp_prequeue), skb);
  
- 	if (interface == PHY_INTERFACE_MODE_USXGMII) {
- 		switch (speed) {
-@@ -1061,7 +1061,8 @@ static void stmmac_mac_link_up(struct phylink_config *config,
- 	if (tx_pause && rx_pause)
- 		stmmac_mac_flow_ctrl(priv, duplex);
+ 	if (skb_defer_rx_timestamp(skb))
+ 		return NET_RX_SUCCESS;
+@@ -5664,7 +5664,7 @@ static void netif_receive_skb_list_internal(struct list_head *head)
  
--	writel(ctrl, priv->ioaddr + MAC_CTRL_REG);
-+	if (ctrl != old_ctrl)
-+		writel(ctrl, priv->ioaddr + MAC_CTRL_REG);
- 
- 	stmmac_mac_set(priv, priv->ioaddr, true);
- 	if (phy && priv->dma_cap.eee) {
+ 	INIT_LIST_HEAD(&sublist);
+ 	list_for_each_entry_safe(skb, next, head, list) {
+-		net_timestamp_check(netdev_tstamp_prequeue, skb);
++		net_timestamp_check(READ_ONCE(netdev_tstamp_prequeue), skb);
+ 		skb_list_del_init(skb);
+ 		if (!skb_defer_rx_timestamp(skb))
+ 			list_add_tail(&skb->list, &sublist);
 -- 
 2.35.1
 

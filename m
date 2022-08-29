@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8055C5A4EDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A12A5A4F04
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiH2OKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S230360AbiH2OUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiH2OKi (ORCPT
+        with ESMTP id S230346AbiH2OUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:10:38 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9AF6BD69;
-        Mon, 29 Aug 2022 07:10:31 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id z22-20020a056830129600b0063711f456ceso5963602otp.7;
-        Mon, 29 Aug 2022 07:10:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=opbj1lT2rqww+Ko38iiUdytadU+k9CoQLS7KnrXSbyY=;
-        b=wbQbQl9+s2rVlBIofj2GiXT37b2zWTDhTmTcchKG7EIJvuRm4V0C23ExIvweNk/P5v
-         NM9DTrkW1fu7MSET6QkwIVaZfN06z5GYxSpAttJSoADwTaOH+vdNooBI4ZWNiUTAXCRe
-         T39xcUx0wox8tT+ggOuSHwuitD5C5kyPEF1rapK0qA+BssbcQc6rall9CN/lmDAZVG5S
-         QeCR0ZF4nGangKBkzpMi4rXLy93NWcrSLtdy/Rr5eJGqBRsjHLaifLpYf/zUZeQsWbQc
-         Z+raDVLMimDok94WonC107/7hGE4zgy+vXHXy+0Rt6+D8Lah7YKqmncpkIWtrx1Bh5Hg
-         Q2qA==
-X-Gm-Message-State: ACgBeo1gj1GxFjI8RC8StcDpqA7BjlP2Wvh0pAKmMX6PYlVNMOVkmsu/
-        i0jit8CUl1MsRFLozi+BQw==
-X-Google-Smtp-Source: AA6agR7WIHe/AiLYD102e5d5uKFjLIhVyxUpACShz6LmoyBGjUcs44MJ20snIPOKxNFUVwlVnmhpXw==
-X-Received: by 2002:a05:6830:3914:b0:638:f80c:e964 with SMTP id br20-20020a056830391400b00638f80ce964mr6530478otb.220.1661782231113;
-        Mon, 29 Aug 2022 07:10:31 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056830070500b0063b2875246dsm2805095ots.49.2022.08.29.07.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 07:10:30 -0700 (PDT)
-Received: (nullmailer pid 1485236 invoked by uid 1000);
-        Mon, 29 Aug 2022 14:10:29 -0000
-Date:   Mon, 29 Aug 2022 09:10:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: iio: Add missing
- (unevaluated|additional)Properties on child nodes
-Message-ID: <20220829141029.GA1470207-robh@kernel.org>
-References: <20220823145649.3118479-2-robh@kernel.org>
- <99dfcc39-ab1b-1b24-c6b2-67de5509f5ac@linaro.org>
- <20220828180050.51c3e857@jic23-huawei>
+        Mon, 29 Aug 2022 10:20:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D26B7CD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:20:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C500960F56
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 14:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300DEC433C1;
+        Mon, 29 Aug 2022 14:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661782809;
+        bh=5t9TYUD+7W9POaNmmtNmb01GYlGZ8fVGivHM4X+6f2M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NB0+0Mwkdgsa95TVX/0Jeji1znYOMzQXT1a70l9QbWiHgxF3iwBjcGJrprerId8tQ
+         n/1bto5FbCQflPk49KQ54vGgbaBr7HxI7334gQxZmoyQ72qgJjrIsETi6+mzbLdAQq
+         XDjmULvnzU433k8CSsBRjjNQAfkXzhPEV6shVbUeehBKPoqdSaF0xzr1X6fN6pzV1f
+         pJCnB+RCRRLcH3JPXLCD3DUig7LJxnnhFwZ1Q179TDxVn4rvuTFoF/W6ZWkQ+vsXA4
+         7v2OlutPDVQ8mJoUketumtAbUM15OQCw35WOTub+w5zZeP/3lOJD/CAaFS239UkCZ6
+         VNfrlhqHj95kg==
+Date:   Mon, 29 Aug 2022 22:10:53 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ajones@ventanamicro.com
+Subject: Re: [PATCH v2] riscv: enable THP_SWAP for RV64
+Message-ID: <YwzI7VmfFnOvYWgf@xhacker>
+References: <20220827095815.698-1-jszhang@kernel.org>
+ <0256a458-440c-171c-2a6f-e88a50c16f82@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220828180050.51c3e857@jic23-huawei>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <0256a458-440c-171c-2a6f-e88a50c16f82@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 06:01:41PM +0100, Jonathan Cameron wrote:
-> On Thu, 25 Aug 2022 15:04:33 +0300
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
-> > On 23/08/2022 17:56, Rob Herring wrote:
-> > > In order to ensure only documented properties are present, node schemas
-> > > must have unevaluatedProperties or additionalProperties set to false
-> > > (typically).
-> > >   
+On Sat, Aug 27, 2022 at 09:13:03PM +0000, Conor.Dooley@microchip.com wrote:
+> Hey Jisheng,
+
+Hi Conor,
+
+> On 27/08/2022 10:58, Jisheng Zhang wrote:
+> > I have a Sipeed Lichee RV dock board which only has 512MB DDR, so
+> > memory optimizations such as swap on zram are helpful. As is seen
+> > in commit d0637c505f8a ("arm64: enable THP_SWAP for arm64") and
+> > commit bd4c82c22c367e ("mm, THP, swap: delay splitting THP after
+> > swapped out"), THP_SWAP can improve the swap throughput significantly.
 > > 
+> > Enable THP_SWAP for RV64, testing the micro-benchmark which is
+> > introduced by commit d0637c505f8a ("arm64: enable THP_SWAP for arm64")
+> > shows below numbers on the Lichee RV dock board:
 > > 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > thp swp throughput w/o patch: 66908 bytes/ms (mean of 10 tests)
+> > thp swp throughput w/ patch: 322638 bytes/ms (mean of 10 tests)
 > 
-> Applied to the togreg branch of iio.git and pushed out as testing for 0-day
-> to poke at it before I push out as togreg for linux-next to pick up.
+> I know the original commit message contains this, but it's a little
+> odd. If the patch /enables/ THP then how would there be THP swap
+> prior to the patch?
 
-Thanks.
+hmm, it's swap I'll send a v3 to correct the description.
 
-> Side note. Some odd entries in your cc list...  alsa-devel?
+> 
+> > 
+> > Improved by 382%!
+> 
+> I could not replicate the after numbers on my nezha, so I suspect
+> I am missing something in my config/setup. zswap is enabled and is
 
-Blame MAINTAINERS:
+swap on zram rather than zswap ;)
 
-STM32 AUDIO (ASoC) DRIVERS
-M:      Olivier Moysan <olivier.moysan@foss.st.com>
-M:      Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-L:      alsa-devel@alsa-project.org (moderated for non-subscribers)
-S:      Maintained
-F:      Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-F:      Documentation/devicetree/bindings/sound/st,stm32-*.yaml
-F:      sound/soc/stm/
+> working, TRANSPARENT_HUGEPAGE is enabled etc. Not that it matters
+> for acceptance of the patch though.
+> 
+> I gave it a try and nothing went up in flames while using zswap so:
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> > Since v1:
+> >  - collect reviewed-by tag
+> >  - make ARCH_WANTS_THP_SWAP rely on HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> >    instead
+> > 
+> >  arch/riscv/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index ed66c31e4655..79e52441e18b 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -45,6 +45,7 @@ config RISCV
+> >  	select ARCH_WANT_FRAME_POINTERS
+> >  	select ARCH_WANT_GENERAL_HUGETLB
+> >  	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+> > +	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> >  	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
+> >  	select BUILDTIME_TABLE_SORT if MMU
+> >  	select CLONE_BACKWARDS

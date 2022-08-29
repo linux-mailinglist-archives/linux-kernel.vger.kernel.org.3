@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA825A53C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277655A53C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiH2SI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 14:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S231134AbiH2SJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 14:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiH2SIy (ORCPT
+        with ESMTP id S230503AbiH2SI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 14:08:54 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E01097EEA
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:08:52 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso6275705pjd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:08:52 -0700 (PDT)
+        Mon, 29 Aug 2022 14:08:56 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667929A69D;
+        Mon, 29 Aug 2022 11:08:54 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id f9so3251376qvw.11;
+        Mon, 29 Aug 2022 11:08:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1CjHaWXJyBHtPBi2K/FlVmBWu0GfOoz/im+WiYsLat0=;
-        b=rpiEl9LnKwpk4GzBzAdq6LK9zK4MnFYsWT11M+cVYWqPCxdG5YQr2OviS8EqENg0Tt
-         FlpjDkR1KPn+YEFYg4bQ3FcQ9+7BKkKqaV+hiRbooAmHvR6GqQ0cNZvWpaImjnew5Rc1
-         fPMZOoOY20EAn2A+kEasaSBp+y340h0xFcW96hkzzL7esuxWGAvyZ2z4n0aOkBPvlTX9
-         dLrrXfnB0Dfu8xOmv+9wuPQfEH5JJTChZY+jjbRDWqLawz65hV+vQJbGwr4HTShDDBKw
-         3HZL1ZzwrHJj1jK/Fd/zgYJ8nkFDtWWZ9vZG3Wv9wb9DAp/Hwuqlri2Jc32Mj7Ctzgnh
-         9pAA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gGq+deMz270tnEWl6wH8JezG1EwchVeq4/WCswdrxxQ=;
+        b=nW2H68kg6NzNVJL0xmqzRV4nZRGpzI3s7v2HsmfI3FkDVeijUr722oYbhb5xEnRAiH
+         xb4TWYrAnY8tAlwg+GnzIixAW3WqIR8CXRIn5F/qG1aMgDYHy3EqarKPQMYKhz7u8JCo
+         T+4Bxj2pyYVHzzI2IV3PTnvm2h82aTBDoGWxlezReBqDPcc7DtoI2s5XlEKkxFf54whZ
+         Femgp1bRVxQ6vmEjEqAqg5lqodlLZNSVFCEo6RVIhX8rUaK5H4Dwt5isDKm77wrN9mw/
+         sfnfuMNWXbfFr4tlzS3w+9XOHkxLn9Jdipm11/npOqg6tymE2CgzUDSjJaRQGMKUm5To
+         CTqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1CjHaWXJyBHtPBi2K/FlVmBWu0GfOoz/im+WiYsLat0=;
-        b=7gtAIDL6dR68dZQufg3IBjuCVghXmX/pbdVR7YlN6kUzFly3GK2g7flWJvpzjuqiaU
-         DUnuhZHPKPsJ56BBn6l9p57OZ7sw2S4pZm4mwJedtveqA5OMQrJ5hv12JZg+w2bMbzAk
-         QsX88QEBcB/KwRmABoTEQS+4URxl5fmDsnmFtO5xf7YeCZ2IC58yt0GmLmhCafRJ47/b
-         aXrhqLG9z7s08/vVWpFOPyrEDgE9SSvwFc/1ptCSYdaNundmWkvUPnu/deBRdcjVzFjk
-         9llZqtSs4MPjXNlXqbvXnuGpwZwuKc48XVU4FlJTAvt7k5ULmWGbAjGnwv0is284rbYI
-         ijfA==
-X-Gm-Message-State: ACgBeo2quj2wLIss3sUPDsx4p6ZQ2CbmG+K7h78MM9hMlfmtZVEamhWB
-        fQLZLuQEtgLnic4pqdTkIbFdgQ==
-X-Google-Smtp-Source: AA6agR736M5UZ+SEgVaavf+RxSstqF52isXKQJF2xEVMgKxGmu5LmJ4I/LbCGLii/UXmgY/mDMGWbQ==
-X-Received: by 2002:a17:902:da84:b0:173:195:5401 with SMTP id j4-20020a170902da8400b0017301955401mr17518320plx.28.1661796531789;
-        Mon, 29 Aug 2022 11:08:51 -0700 (PDT)
-Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
-        by smtp.gmail.com with ESMTPSA id v66-20020a622f45000000b00536f0370db8sm7172457pfv.212.2022.08.29.11.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 11:08:51 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 18:08:47 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     kernel-team@android.com, Sajid Dalvi <sdalvi@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI/PM: Switch D3Hot delay to also use usleep_range
-Message-ID: <Yw0Ar1DplE2h07gB@google.com>
-References: <20220817230821.47048-1-willmcvicker@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gGq+deMz270tnEWl6wH8JezG1EwchVeq4/WCswdrxxQ=;
+        b=tz9Unis1dVfRtNqShU4xiCHJ62UsC4XeIQEoAONesL96Fw/GnkFz9+OTwxQVToiOmO
+         dKP2Ehbbj+tPSPqtwzLm/cZUSYMOgfVftyMQS7bV8gwe/U+MJOK0aacrMFmm01anIogs
+         +EEy8llkTFs4YzHMVf5kT84dNAn8ieHJMcGBvhQUGC0U2J3XbDn7s80eSgKE40HtOJvu
+         egmOCawMBfOlu7lQEk7xxJoHVPZPRw5ivwImxB86LxaZKCE3ZEs4rcAK5wGJqV8xHD1U
+         do9S41KdCfd3s6I/KSeKEkk2rgP3lHCYZ9YQsXaIWxQJV26DJcN60nQoW9H32dG+y7Cb
+         MKNw==
+X-Gm-Message-State: ACgBeo13hEKOABtakBbxUwYszyxXhCNlaqsahlFlfQqVV6eyqGYK9P8N
+        hlKClUqSvNQcQ+DA1FukxRA=
+X-Google-Smtp-Source: AA6agR6NFx9ldpsbzMhN89Y0I0mHvUPay/JV2bGIOkkFojDDUF1xleFlfYcS7ntlH/AeG9dZvJ0MAw==
+X-Received: by 2002:ad4:5dc5:0:b0:499:d93:df65 with SMTP id m5-20020ad45dc5000000b004990d93df65mr894205qvh.109.1661796533515;
+        Mon, 29 Aug 2022 11:08:53 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id az11-20020a05620a170b00b006bbd0ae9c05sm6630839qkb.130.2022.08.29.11.08.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 11:08:52 -0700 (PDT)
+Message-ID: <d63a86a0-616c-d6b4-b85c-f4372d0a8590@gmail.com>
+Date:   Mon, 29 Aug 2022 11:08:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817230821.47048-1-willmcvicker@google.com>
-X-Spam-Status: No, score=-12.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220829105808.828227973@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/17/2022, Will McVicker wrote:
-> From: Sajid Dalvi <sdalvi@google.com>
-> 
-> Since the PCI spec requires a 10ms D3Hot delay (defined by
-> PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
-> to 120ms, let's add support for both usleep_range and msleep based on
-> the delay time to improve the delay accuracy.
-> 
-> This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
-> in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
-> 10ms delay for the Exynos PCIe device was on average delaying for 19ms
-> when the spec requires 10ms. Switching from msleep to uslseep_range
-> therefore decreases the resume time on a Pixel 6 on average by 9ms.
-> 
-> [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
-> 
-> Signed-off-by: Sajid Dalvi <sdalvi@google.com>
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> ---
->  drivers/pci/pci.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> v3:
->  * Use DIV_ROUND_CLOSEST instead of bit manipulation.
->  * Minor refactor to use max() where relavant.
-> 
-> v2:
->  * Update to use 20-25% upper bound
->  * Update to use usleep_range() for <=20ms, else use msleep()
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 95bc329e74c0..cfa8386314f2 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -66,13 +66,19 @@ struct pci_pme_device {
->  
->  static void pci_dev_d3_sleep(struct pci_dev *dev)
->  {
-> -	unsigned int delay = dev->d3hot_delay;
-> +	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
->  
-> -	if (delay < pci_pm_d3hot_delay)
-> -		delay = pci_pm_d3hot_delay;
-> +	if (delay_ms) {
-> +		if (delay_ms <= 20) {
-> +			/* Use a 20% upper bound with 1ms minimum */
-> +			unsigned int upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U);
->  
-> -	if (delay)
-> -		msleep(delay);
-> +			usleep_range(delay_ms * USEC_PER_MSEC,
-> +				     (delay_ms + upper) * USEC_PER_MSEC);
-> +		} else {
-> +			msleep(delay_ms);
-> +		}
-> +	}
->  }
->  
->  bool pci_reset_supported(struct pci_dev *dev)
-> 
-> base-commit: 274a2eebf80c60246f9edd6ef8e9a095ad121264
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
-> 
 
-Hi Bjorn,
 
-I'm just checking up on this patch in case it got lost in your inbox. Please
-take a look and let me know if you have any concerns.
+On 8/29/2022 3:57 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.6 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-And thanks again for the reviews Matthias!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on 
+BMIPS_GENERIC:
 
-Regards,
-Will
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

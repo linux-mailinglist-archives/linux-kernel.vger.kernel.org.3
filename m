@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203D95A47AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2966F5A488E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiH2K5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
+        id S231240AbiH2LMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiH2K5r (ORCPT
+        with ESMTP id S230252AbiH2LLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:57:47 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82795C9F0;
-        Mon, 29 Aug 2022 03:57:46 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MGS673bCszHnVN;
-        Mon, 29 Aug 2022 18:55:59 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 29 Aug 2022 18:57:44 +0800
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 29 Aug 2022 18:57:44 +0800
-From:   "yekai (A)" <yekai13@huawei.com>
-Subject: Re: [PATCH v7 0/3] crypto: hisilicon - supports device isolation
- feature
-To:     <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>
-References: <20220806022943.47292-1-yekai13@huawei.com>
- <cffec511-dff2-5951-264a-1e82bb71e183@huawei.com>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
-Message-ID: <3fd1c0be-71d1-2402-395f-2fbb85f0d8ec@huawei.com>
-Date:   Mon, 29 Aug 2022 18:57:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Mon, 29 Aug 2022 07:11:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD526CF66;
+        Mon, 29 Aug 2022 04:08:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A40361203;
+        Mon, 29 Aug 2022 11:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2C0C433C1;
+        Mon, 29 Aug 2022 11:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661771308;
+        bh=P3SlovIRutuA6JKfB9XCrc+B1Jw0/rqIXjtWcP45Iko=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1nQyGmDvlkraOiWBm7dE5lkCILoL6992hcxvJqvRrceJa15JKqPocxWLg+Dz4KSbK
+         C8GmgLy+oz5lHwehcVj2dV6jKYNSZ2MQs7uo65oaVzUVQ9fr4fVelKUUlBuKBkbBNS
+         NBY4T44V1AiuibRh+PRfY4LI3qzQjjg1c+t4eC0k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 015/158] af_key: Do not call xfrm_probe_algs in parallel
+Date:   Mon, 29 Aug 2022 12:57:45 +0200
+Message-Id: <20220829105809.458966859@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-In-Reply-To: <cffec511-dff2-5951-264a-1e82bb71e183@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Herbert Xu <herbert@gondor.apana.org.au>
+
+[ Upstream commit ba953a9d89a00c078b85f4b190bc1dde66fe16b5 ]
+
+When namespace support was added to xfrm/afkey, it caused the
+previously single-threaded call to xfrm_probe_algs to become
+multi-threaded.  This is buggy and needs to be fixed with a mutex.
+
+Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
+Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/key/af_key.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index fb16d7c4e1b8d..20e73643b9c89 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -1697,9 +1697,12 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
+ 		pfk->registered |= (1<<hdr->sadb_msg_satype);
+ 	}
+ 
++	mutex_lock(&pfkey_mutex);
+ 	xfrm_probe_algs();
+ 
+ 	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
++	mutex_unlock(&pfkey_mutex);
++
+ 	if (!supp_skb) {
+ 		if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
+ 			pfk->registered &= ~(1<<hdr->sadb_msg_satype);
+-- 
+2.35.1
 
 
-On 2022/8/22 11:38, yekai (A) wrote:
-> On 2022/8/6 10:29, Kai Ye wrote:
->> 1、Add the uacce hardware error isolation interface. Supports
->>    configures the hardware error isolation frequency.
->> 2、Defining the isolation strategy for ACC by uacce sysfs node. If the 
->>    number of hardware errors in a per hour exceeds the configured value,
->>    the device will not be available in user space. The VF device use the
->>    PF device isolation strategy.
->>    
->> changes v1->v2:
->> 	- deleted dev_to_uacce api.
->> 	- add vfs node doc. 
->> 	- move uacce->ref to driver.
->> changes v2->v3:
->> 	- deleted some redundant code.
->> 	- use qm state instead of reference count.
->> 	- add null pointer check.
->> 	- isolate_strategy_read() instead of a copy.
->> changes v3->v4:
->> 	- modify a comment
->> changes v4->v5:
->> 	- use bool instead of atomic.
->> 	- isolation frequency instead of isolation command.
->> changes v5->v6:
->> 	- add is_visible in uacce.
->> 	- add the description of the isolation strategy file node.
->> changes v6->v7
->> 	- add an example for isolate_strategy in Documentation.
->>
->> Kai Ye (3):
->>   uacce: supports device isolation feature
->>   Documentation: add a isolation strategy sysfs node for uacce
->>   crypto: hisilicon/qm - define the device isolation strategy
->>
->>  Documentation/ABI/testing/sysfs-driver-uacce |  26 +++
->>  drivers/crypto/hisilicon/qm.c                | 163 +++++++++++++++++--
->>  drivers/misc/uacce/uacce.c                   |  58 +++++++
->>  include/linux/hisi_acc_qm.h                  |   9 +
->>  include/linux/uacce.h                        |  11 ++
->>  5 files changed, 255 insertions(+), 12 deletions(-)
->>
-> Hi,
->
-> Just a friendly ping...
->
-> thanks
-> Kai
->
-> .
-Hi Greg KH
-
-Could you help me to apply this patchset?
-
-thanks
-Kai
 

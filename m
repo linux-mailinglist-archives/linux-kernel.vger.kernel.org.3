@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C7E5A48CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6308E5A49BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiH2LPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        id S231822AbiH2L3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiH2LN2 (ORCPT
+        with ESMTP id S231849AbiH2L2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:13:28 -0400
+        Mon, 29 Aug 2022 07:28:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469FC6744A;
-        Mon, 29 Aug 2022 04:09:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3619072EE6;
+        Mon, 29 Aug 2022 04:16:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E3F9B80F93;
-        Mon, 29 Aug 2022 11:09:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE6BC433D6;
-        Mon, 29 Aug 2022 11:09:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67E64B80E4C;
+        Mon, 29 Aug 2022 11:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0506C433D7;
+        Mon, 29 Aug 2022 11:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771371;
-        bh=3TMLBjX1pTq8JtFOlU5X42wHv7nZUO2ENTwMKcFrJKg=;
+        s=korg; t=1661771407;
+        bh=0RcrxzIq4WhOjo87Hq+HJS6+Nz8mi0V3Oos3YAzgquo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dxujgEaUJ9q8QWsS/7hr4tGBdAn4b7uXOhccds7kYmQ7LbJTta6ULrZ+RdkmGrySd
-         A+ulZNMNlwFc06HGeqzE6yHb6V4/zTofPzZB+vpntUC6Osc5ezk73AbzVk8hg9vzRG
-         4pMR8aEL/6NewHDPBBy9lcxwRpthKtR2byMDWdW8=
+        b=CNtY928bXkuK0ZYkAsuk+nRYQNCI2n8a8AKzjjryYsH7dfEzXNuXz2zBnWOYfw9fx
+         LiQCzW7rxQ/Kdp1KU/PIC5lGXaXxsixsm4cQXcnbJpn7+RlvVIfKhSR/UgF3ANGlFk
+         gdxPt/Z3nxqQmcBl+FeQc2jlKbQgCwsLf9JmkrMY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 60/86] net: Fix a data-race around sysctl_somaxconn.
-Date:   Mon, 29 Aug 2022 12:59:26 +0200
-Message-Id: <20220829105759.018736842@linuxfoundation.org>
+        stable@vger.kernel.org, Stephane Eranian <eranian@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.15 100/136] perf/x86/lbr: Enable the branch type for the Arch LBR by default
+Date:   Mon, 29 Aug 2022 12:59:27 +0200
+Message-Id: <20220829105808.788608261@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Kan Liang <kan.liang@linux.intel.com>
 
-[ Upstream commit 3c9ba81d72047f2e81bb535d42856517b613aba7 ]
+commit 32ba156df1b1c8804a4e5be5339616945eafea22 upstream.
 
-While reading sysctl_somaxconn, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+On the platform with Arch LBR, the HW raw branch type encoding may leak
+to the perf tool when the SAVE_TYPE option is not set.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In the intel_pmu_store_lbr(), the HW raw branch type is stored in
+lbr_entries[].type. If the SAVE_TYPE option is set, the
+lbr_entries[].type will be converted into the generic PERF_BR_* type
+in the intel_pmu_lbr_filter() and exposed to the user tools.
+But if the SAVE_TYPE option is NOT set by the user, the current perf
+kernel doesn't clear the field. The HW raw branch type leaks.
+
+There are two solutions to fix the issue for the Arch LBR.
+One is to clear the field if the SAVE_TYPE option is NOT set.
+The other solution is to unconditionally convert the branch type and
+expose the generic type to the user tools.
+
+The latter is implemented here, because
+- The branch type is valuable information. I don't see a case where
+  you would not benefit from the branch type. (Stephane Eranian)
+- Not having the branch type DOES NOT save any space in the
+  branch record (Stephane Eranian)
+- The Arch LBR HW can retrieve the common branch types from the
+  LBR_INFO. It doesn't require the high overhead SW disassemble.
+
+Fixes: 47125db27e47 ("perf/x86/intel/lbr: Support Architectural LBR")
+Reported-by: Stephane Eranian <eranian@google.com>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/20220816125612.2042397-1-kan.liang@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/socket.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/events/intel/lbr.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/net/socket.c b/net/socket.c
-index d52c265ad449b..bcf68b150fe29 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -1670,7 +1670,7 @@ int __sys_listen(int fd, int backlog)
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1114,6 +1114,14 @@ static int intel_pmu_setup_hw_lbr_filter
  
- 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
- 	if (sock) {
--		somaxconn = sock_net(sock->sk)->core.sysctl_somaxconn;
-+		somaxconn = READ_ONCE(sock_net(sock->sk)->core.sysctl_somaxconn);
- 		if ((unsigned int)backlog > somaxconn)
- 			backlog = somaxconn;
+ 	if (static_cpu_has(X86_FEATURE_ARCH_LBR)) {
+ 		reg->config = mask;
++
++		/*
++		 * The Arch LBR HW can retrieve the common branch types
++		 * from the LBR_INFO. It doesn't require the high overhead
++		 * SW disassemble.
++		 * Enable the branch type by default for the Arch LBR.
++		 */
++		reg->reg |= X86_BR_TYPE_SAVE;
+ 		return 0;
+ 	}
  
--- 
-2.35.1
-
 
 

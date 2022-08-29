@@ -2,83 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841CB5A421D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995BF5A4221
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 07:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiH2FEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 01:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S229568AbiH2FG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 01:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiH2FEG (ORCPT
+        with ESMTP id S229453AbiH2FGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 01:04:06 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C0E2C113
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 22:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661749441;
-        bh=Y2IBo/yl2C21cbNjWkR6HnBtpOv/rW+e5okc63SzE28=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=P3sv8B03EouV3Ol4B/8SyCFj9bDuGenC3FLHapba4ePX9gDXNlKUXa1RIxoS7cutG
-         np8fe//5yYYP/nuXnDl8V/knGoy6Q+puDybEF9QznTZhTNAC9AJIWxJgc49hM6QN/H
-         EiJDe8tPTYijqqqGrcdLlfw6R8On7gRaaQimjiok=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 4863A66817;
-        Mon, 29 Aug 2022 01:04:00 -0400 (EDT)
-Message-ID: <927f85844e31f0563523622134b5d01af6991e60.camel@xry111.site>
-Subject: Re: [PATCH 0/8] LoongArch: Support toolchain with new relocation
- types
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Huacai Chen <chenhuacai@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Date:   Mon, 29 Aug 2022 13:03:58 +0800
-In-Reply-To: <CAAhV-H5tB9nvD8Uufn5SQ1s0hzob4TuxRTaSri-cxHVqtRH6uw@mail.gmail.com>
-References: <20220827175436.156464-1-xry111@xry111.site>
-         <CAAhV-H4+=CqeRUUt+XPZ2Nf=1GRgHtTFyMuVu-y6QdgQgD4mog@mail.gmail.com>
-         <b681993ca92d5243a73e23303ff9386ad03cf05a.camel@xry111.site>
-         <CAAhV-H5tB9nvD8Uufn5SQ1s0hzob4TuxRTaSri-cxHVqtRH6uw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.45.2 
+        Mon, 29 Aug 2022 01:06:54 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E9341D28;
+        Sun, 28 Aug 2022 22:06:53 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id l20so940589vka.5;
+        Sun, 28 Aug 2022 22:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qDOlBO8M3knCdtBqq7VFSNn3zWVTBCbhwMXpQDGbaKs=;
+        b=JhSp8ZCo+u+70xYvY2SqqvQM3/P9g9rt/QRhkPlFs/LoMzTZCynWIQSkKKSukx0vS+
+         GRRbeRKut0oQs3veOJ9ZvYaD2/0z8nHbTMGLsM1spGRgkrGsvEzQMTJm7UbZMbBiC7NO
+         aSlQPpC8YxBzDTxy2ohnWGkVhuXfUgKEmhvBnzuRCgPOhTPG+cKlxuPjTEERIdy2E6xh
+         mWa4VtkkKAQX4YRRvM4uCHHxUYEfELg4OJVh/b4s7Ga9eMhFLpyo+sfzZvf2R+1bkX0k
+         SzYO8KJRiFHz8T1xe8kzKGSXeDQvVgDgpyhswzPB4pVCEq0N00Q5tFBnF9duLRMs0uDg
+         hKBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qDOlBO8M3knCdtBqq7VFSNn3zWVTBCbhwMXpQDGbaKs=;
+        b=CyvX7SzJ6X86UmlLO7KO4a3qK6mUN/Fh2qtFhN9+LfGoaCQncxK80aW01hiDY8bSaR
+         QpPio7ceKLFiA7jmH2qSoTnHx4hZGJKNVRizoge+Ap63uloHoAUtfn9y3CjmZqVfu7Qr
+         EXCSQUqNhC93TQF8rw23YBkP/2vrf/kTI67bxpKNPccXlDPSsJNWXe1XwJmIme2krjqC
+         XoOaeqVtwFgtj+2D3nbNMvA0pFlu9Hm1HyoE3bobqaMN4IhPnbsC6G2gny90J1y78RTt
+         cxVKGkpi8vQmtypUopGdwQ2nouch49mwlPZrKByfKQ+jLwqYnCwKF4OAhbfseX5GLj9V
+         kahA==
+X-Gm-Message-State: ACgBeo0Ns/YvNN3kPdmnGZFZ7rfkygnVkalrrub46e77vBRphGI+KTj+
+        M/gu5h7kzLH16XSKMaJsDFgh9xD61bMq9IpLV7S+OSW4it2+HQ==
+X-Google-Smtp-Source: AA6agR6bESZQgt0/NGDHgpqg2YlxlXfqv9MlFaFbcYHqbBuUnSse2j2x0UU6+2ThpJ/ZPE4VL1/WDlmd8KxaNM/eqrk=
+X-Received: by 2002:a1f:ab4e:0:b0:394:5af3:c490 with SMTP id
+ u75-20020a1fab4e000000b003945af3c490mr938940vke.24.1661749612187; Sun, 28 Aug
+ 2022 22:06:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk>
+ <166126004796.548536.8555773200873112505.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166126004796.548536.8555773200873112505.stgit@warthog.procyon.org.uk>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 29 Aug 2022 00:06:41 -0500
+Message-ID: <CAH2r5mt5iXtarkUAY7PSMGOLhkQd5LFcEz-rAnTkayxQMq_ppA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] smb3: Move the flush out of smb2_copychunk_range()
+ into its callers
+To:     David Howells <dhowells@redhat.com>
+Cc:     sfrench@samba.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, willy@infradead.org,
+        lsahlber@redhat.com, dchinner@redhat.com,
+        linux-fsdevel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000573bac05e75a3b91"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-29 at 12:33 +0800, Huacai Chen wrote:
-> > If we'll drop support for old GCC/Binutils, we can drop patch 5 (it's
-> > only needed for the combination of old GCC and new Binutils).=C2=A0 The=
-n
-> > squash 4 and 7.=C2=A0 8 should still be standalone IMO.
+--000000000000573bac05e75a3b91
+Content-Type: text/plain; charset="UTF-8"
 
-> Whether we can drop old toolchains depends on Arnd. :)
+Shouldn't this be using filemap_write_and_wait_range() not
+filemap_write_and_wait as we see in similar code in ext4 (and
+shouldn't it check rc in some of these cases)?   For example for the
+copychunk_range example shouldn't the patch be modified similar to the
+following:
 
-I'd like to prepare V6 after we can make a final decision.
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index e9fb338b8e7e..51963e83daf7 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1219,8 +1219,6 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
 
-> But even if we should support old toolchains, I think we only need to
-> consider new binutils + new gcc and old binutils + old gcc, I don't
-> think new binutils + old gcc and old binutils + new gcc can exist in
-> the real world.
+        cifs_dbg(FYI, "copychunk range\n");
 
-Generally, how do we report an unsupported configuration in kernel
-building system?  With a $(error, "message") in the Makefile, or in some
-header with a #error?  I don't want to leave an unsupported
-configuration silently generating modules which can't be loaded by the
-kernel.
+-       filemap_write_and_wait(src_inode->i_mapping);
+-
+        if (!src_file->private_data || !dst_file->private_data) {
+                rc = -EBADF;
+                cifs_dbg(VFS, "missing cifsFileInfo on copy range src file\n");
+@@ -1250,6 +1248,12 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
+        lock_two_nondirectories(target_inode, src_inode);
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+        cifs_dbg(FYI, "about to flush pages\n");
++
++       rc = filemap_write_and_wait_range(src_inode->i_mapping, off,
++                                         off + len - 1);
++        if (rc)
++               goto out;
++
+        /* should we flush first and last page first */
+        truncate_inode_pages(&target_inode->i_data, 0);
+
+On Tue, Aug 23, 2022 at 8:09 AM David Howells via samba-technical
+<samba-technical@lists.samba.org> wrote:
+>
+> Move the flush out of smb2_copychunk_range() into its callers.  This will
+> allow the pagecache to be invalidated between the flush and the operation
+> in smb3_collapse_range() and smb3_insert_range().
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <stfrench@microsoft.com>
+> cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> ---
+>
+>  fs/cifs/cifsfs.c  |    2 ++
+>  fs/cifs/smb2ops.c |   20 ++++++++------------
+>  2 files changed, 10 insertions(+), 12 deletions(-)
+>
+> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+> index f54d8bf2732a..e9fb338b8e7e 100644
+> --- a/fs/cifs/cifsfs.c
+> +++ b/fs/cifs/cifsfs.c
+> @@ -1219,6 +1219,8 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
+>
+>         cifs_dbg(FYI, "copychunk range\n");
+>
+> +       filemap_write_and_wait(src_inode->i_mapping);
+> +
+>         if (!src_file->private_data || !dst_file->private_data) {
+>                 rc = -EBADF;
+>                 cifs_dbg(VFS, "missing cifsFileInfo on copy range src file\n");
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index 96f3b0573606..7e3de6a0e1dc 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -1600,17 +1600,8 @@ smb2_copychunk_range(const unsigned int xid,
+>         int chunks_copied = 0;
+>         bool chunk_sizes_updated = false;
+>         ssize_t bytes_written, total_bytes_written = 0;
+> -       struct inode *inode;
+>
+>         pcchunk = kmalloc(sizeof(struct copychunk_ioctl), GFP_KERNEL);
+> -
+> -       /*
+> -        * We need to flush all unwritten data before we can send the
+> -        * copychunk ioctl to the server.
+> -        */
+> -       inode = d_inode(trgtfile->dentry);
+> -       filemap_write_and_wait(inode->i_mapping);
+> -
+>         if (pcchunk == NULL)
+>                 return -ENOMEM;
+>
+> @@ -3689,6 +3680,8 @@ static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
+>                 goto out;
+>         }
+>
+> +       filemap_write_and_wait(inode->i_mapping);
+> +
+>         rc = smb2_copychunk_range(xid, cfile, cfile, off + len,
+>                                   i_size_read(inode) - off - len, off);
+>         if (rc < 0)
+> @@ -3716,18 +3709,21 @@ static long smb3_insert_range(struct file *file, struct cifs_tcon *tcon,
+>         int rc;
+>         unsigned int xid;
+>         struct cifsFileInfo *cfile = file->private_data;
+> +       struct inode *inode = file_inode(file);
+>         __le64 eof;
+>         __u64  count;
+>
+>         xid = get_xid();
+>
+> -       if (off >= i_size_read(file->f_inode)) {
+> +       if (off >= i_size_read(inode)) {
+>                 rc = -EINVAL;
+>                 goto out;
+>         }
+>
+> -       count = i_size_read(file->f_inode) - off;
+> -       eof = cpu_to_le64(i_size_read(file->f_inode) + len);
+> +       count = i_size_read(inode) - off;
+> +       eof = cpu_to_le64(i_size_read(inode) + len);
+> +
+> +       filemap_write_and_wait(inode->i_mapping);
+>
+>         rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
+>                           cfile->fid.volatile_fid, cfile->pid, &eof);
+>
+>
+>
+
+
+-- 
+Thanks,
+
+Steve
+
+--000000000000573bac05e75a3b91
+Content-Type: text/x-patch; charset="US-ASCII"; name="use-filemap_write_and_wait_range.patch"
+Content-Disposition: attachment; 
+	filename="use-filemap_write_and_wait_range.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l7easojh0>
+X-Attachment-Id: f_l7easojh0
+
+ZGlmZiAtLWdpdCBhL2ZzL2NpZnMvY2lmc2ZzLmMgYi9mcy9jaWZzL2NpZnNmcy5jCmluZGV4IGU5
+ZmIzMzhiOGU3ZS4uNTE5NjNlODNkYWY3IDEwMDY0NAotLS0gYS9mcy9jaWZzL2NpZnNmcy5jCisr
+KyBiL2ZzL2NpZnMvY2lmc2ZzLmMKQEAgLTEyMTksOCArMTIxOSw2IEBAIHNzaXplX3QgY2lmc19m
+aWxlX2NvcHljaHVua19yYW5nZSh1bnNpZ25lZCBpbnQgeGlkLAogCiAJY2lmc19kYmcoRllJLCAi
+Y29weWNodW5rIHJhbmdlXG4iKTsKIAotCWZpbGVtYXBfd3JpdGVfYW5kX3dhaXQoc3JjX2lub2Rl
+LT5pX21hcHBpbmcpOwotCiAJaWYgKCFzcmNfZmlsZS0+cHJpdmF0ZV9kYXRhIHx8ICFkc3RfZmls
+ZS0+cHJpdmF0ZV9kYXRhKSB7CiAJCXJjID0gLUVCQURGOwogCQljaWZzX2RiZyhWRlMsICJtaXNz
+aW5nIGNpZnNGaWxlSW5mbyBvbiBjb3B5IHJhbmdlIHNyYyBmaWxlXG4iKTsKQEAgLTEyNTAsNiAr
+MTI0OCwxMiBAQCBzc2l6ZV90IGNpZnNfZmlsZV9jb3B5Y2h1bmtfcmFuZ2UodW5zaWduZWQgaW50
+IHhpZCwKIAlsb2NrX3R3b19ub25kaXJlY3Rvcmllcyh0YXJnZXRfaW5vZGUsIHNyY19pbm9kZSk7
+CiAKIAljaWZzX2RiZyhGWUksICJhYm91dCB0byBmbHVzaCBwYWdlc1xuIik7CisKKwlyYyA9IGZp
+bGVtYXBfd3JpdGVfYW5kX3dhaXRfcmFuZ2Uoc3JjX2lub2RlLT5pX21hcHBpbmcsIG9mZiwKKwkJ
+CQkJICBvZmYgKyBsZW4gLSAxKTsKKyAgICAgICAgaWYgKHJjKQorCQlnb3RvIG91dDsKKwogCS8q
+IHNob3VsZCB3ZSBmbHVzaCBmaXJzdCBhbmQgbGFzdCBwYWdlIGZpcnN0ICovCiAJdHJ1bmNhdGVf
+aW5vZGVfcGFnZXMoJnRhcmdldF9pbm9kZS0+aV9kYXRhLCAwKTsKIAo=
+--000000000000573bac05e75a3b91--

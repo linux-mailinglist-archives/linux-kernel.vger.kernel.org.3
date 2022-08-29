@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E505A4B50
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4935A4DD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiH2MPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S229838AbiH2NXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiH2MPT (ORCPT
+        with ESMTP id S230204AbiH2NW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:15:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB9AA00F4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B7n71/NkrtHYvF9gedtNk1oY9cS74shjCaQIwnnXV8Y=; b=fEUXVBk/2raflvOiZZ7QVgwExz
-        c6ElBLPEwxKEIBI2MKcCrp/8vlJRLsO2azx5vf2xEBCBRSE0PMqp1IrbCuQ1DfhD8t17Y8Jnb16xy
-        O0hccUeNwgUmT8u2EVeeR+guhFly0wsDlhJVVeyS5Hv85dBMoiFPJJ306VR4MzJ20HY9DyY+Csr5Q
-        BgzbajkgVVzQ3iETJpzajYNx+GF73DangpXA8midaIGww8iaQCTBEU9nRbQIZm/Klh9aYtd0NyrV0
-        CkyvxdkZOzkJjdQ1h/9maLPgq7vDMyOMl3x95PoNjkFBg2B3q6t0QZgGHZAQEtVDAFaKvpqj+QQd7
-        J7AZEePg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oSdPT-007U95-6Z; Mon, 29 Aug 2022 11:58:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB506300137;
-        Mon, 29 Aug 2022 13:58:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9452D2083F6F4; Mon, 29 Aug 2022 13:58:29 +0200 (CEST)
-Date:   Mon, 29 Aug 2022 13:58:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Message-ID: <Ywyp5XmDTJxmmKlN@hirez.programming.kicks-ass.net>
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
- <YqdL8LsOvxNqhz/v@hirez.programming.kicks-ass.net>
- <f994d403-df7b-d88e-8324-c29d0ef2034e@amd.com>
- <YwOgxhfS99Rquwct@worktop.programming.kicks-ass.net>
- <YwOkFqqxONtoGImZ@worktop.programming.kicks-ass.net>
- <fb28c31f-c531-4be3-e9c9-d324451d79d5@amd.com>
- <8d91528b-e830-6ad0-8a92-621ce9f944ca@amd.com>
+        Mon, 29 Aug 2022 09:22:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486B015A1A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:20:00 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGSgp4WfNznTrQ;
+        Mon, 29 Aug 2022 19:21:42 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 29 Aug 2022 19:24:07 +0800
+Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
+ (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 29 Aug
+ 2022 19:24:05 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH v2] sched/deadline: Skip meaningless bw updates in dl_task_offline_migration
+Date:   Mon, 29 Aug 2022 19:59:04 +0800
+Message-ID: <20220829115904.28560-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d91528b-e830-6ad0-8a92-621ce9f944ca@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 09:30:50AM +0530, Ravi Bangoria wrote:
-> > With this, I can run 'perf test' and perf_event_tests without any error in
-> > dmesg. I'll run perf fuzzer over night and see if it reports any issue.
-> 
-> I also ran fuzzer on Intel machine over the weekend. I see only one WARN_ON()
-> hit. Otherwise system is running normal. FWIW, I was running fuzzer as normal
-> user with perf_event_paranoid=0.
-> 
->   WARNING: CPU: 3 PID: 2840537 at arch/x86/events/core.c:1606 x86_pmu_stop+0xd0/0x100
+Skip meaningless bw updates on root domain if task still stay in same rd
+while calling dl_task_offline_migration.
 
-That's the WARN about PERF_HES_STOPPED already being set.
+Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+---
+changes in v2:
+- fix subject and comment message
+---
+ kernel/sched/deadline.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
->   Call Trace:
->    <TASK>
->    x86_pmu_del+0x8e/0x2d0
->    ? debug_smp_processor_id+0x17/0x20
->    event_sched_out+0x10b/0x2b0
->    ? x86_pmu_del+0x5c/0x2d0
->    merge_sched_in+0x39f/0x410
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 8e14dc21d829..9660e166c8ec 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -714,20 +714,22 @@ static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p
+ 		add_rq_bw(&p->dl, &later_rq->dl);
+ 	}
+ 
+-	/*
+-	 * And we finally need to fixup root_domain(s) bandwidth accounting,
+-	 * since p is still hanging out in the old (now moved to default) root
+-	 * domain.
+-	 */
+-	dl_b = &rq->rd->dl_bw;
+-	raw_spin_lock(&dl_b->lock);
+-	__dl_sub(dl_b, p->dl.dl_bw, cpumask_weight(rq->rd->span));
+-	raw_spin_unlock(&dl_b->lock);
++	if (&rq->rd != &later_rq->rd) {
++		/*
++		 * And we finally need to fixup root_domain(s) bandwidth accounting,
++		 * since p is still hanging out in the old (now moved to default) root
++		 * domain.
++		 */
++		dl_b = &rq->rd->dl_bw;
++		raw_spin_lock(&dl_b->lock);
++		__dl_sub(dl_b, p->dl.dl_bw, cpumask_weight(rq->rd->span));
++		raw_spin_unlock(&dl_b->lock);
+ 
+-	dl_b = &later_rq->rd->dl_bw;
+-	raw_spin_lock(&dl_b->lock);
+-	__dl_add(dl_b, p->dl.dl_bw, cpumask_weight(later_rq->rd->span));
+-	raw_spin_unlock(&dl_b->lock);
++		dl_b = &later_rq->rd->dl_bw;
++		raw_spin_lock(&dl_b->lock);
++		__dl_add(dl_b, p->dl.dl_bw, cpumask_weight(later_rq->rd->span));
++		raw_spin_unlock(&dl_b->lock);
++	}
+ 
+ 	set_task_cpu(p, later_rq->cpu);
+ 	double_unlock_balance(later_rq, rq);
+-- 
+2.17.1
 
-And this callchain suggests this is the group_error path.
-
-I can't immediately spot a fail there, but I'll try and stare at it
-some.

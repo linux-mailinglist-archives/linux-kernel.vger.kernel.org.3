@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F51D5A5207
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74415A520F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiH2Qn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S229893AbiH2Qoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiH2Qn0 (ORCPT
+        with ESMTP id S229456AbiH2Qon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:43:26 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B542273923
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:43:25 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id m2so8180723lfp.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:43:25 -0700 (PDT)
+        Mon, 29 Aug 2022 12:44:43 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501957EFF2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:44:42 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id f24so5800500plr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc;
-        bh=iV+tGHitMbQ1j6mk6mC7qK6hokt/utgy/q3ojU2z20Y=;
-        b=EpqGgeLHKyIlVbJrF/HZzM19cDYt12y6LDPlkVA0ceQW/55/dIz43fkTTmvCq0E9VD
-         d9/YlirE/dKo5n+Q1b1LBKvPh7HFhgDrFoANNXBDmMprT87ghTcJ6Lor0l5GeHDw5wT9
-         +FVORn5Eur/tBS0DtMEXy0E/xCqpiarpNzUeUxO9y7zDU6UgYm4xS9YIPOOzzK3AdWX9
-         8t/YlfNIruv3L17ObjBc/khlxdl+baufN2hVQayvTmrNuZ5C54/WYrkFbWvJfBIuO3Gi
-         4h588odRIf+BuV0wRgtYqu0SK+9H06c1aqGBb4zxu5z0kSRMB1oBoBY2vx3tzWdPtiKN
-         uv4w==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=qLN8fBo6PyBt7E99VZUSZQ3s6EIjif7d4pGqJZoTYK8=;
+        b=AWOO90lMcEYDvhomUOFe3IJEk9k7PehD16RoavUH+k3tVdP29oyJnKhNKlJeLpmH/G
+         N4adaaiJcJM9I5+1ZiAzIMcyrnSOQG5YjURrKnH6yFQb/ZXdSigPXVFZ3lIbwLcXODoD
+         3fTjkc/kk/K1Z8kMkpcCx3uWjP3ZyHBMSDK0I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iV+tGHitMbQ1j6mk6mC7qK6hokt/utgy/q3ojU2z20Y=;
-        b=C1FqNfD6JjLfK34H8BG4epSS6Osl7xvM0o92M/iFfC38+cdInMwXH4dqyqjeIaO6J6
-         VCTUvOniOhGx47MZoU9AFWhs8N2VK054JznCaTcSzKF/4zH31XQPAtcpdwHvoEgaA/RE
-         6vc6IAGDtHsoZJ0f7iwZ7vuxxDiQ+etpDILonI9rdCtwvkpVOBl80xbiWeMNm0Y4KkP8
-         Vdz1JhQ9E8pwRaqAM4aPqWWPJqLMajGDeGgb6GyxwQq8Ca5RMO++JfiZ2scKZil3CiiR
-         OB9SLBP5HRPbJv4Cx7JoJg7twSqS2poK/PbzumK7c47DlcWqHzaOCILUWFq+s0t6C9uM
-         EK6g==
-X-Gm-Message-State: ACgBeo3PYrNDcx76aZo23J2LwTlvMuCY5rR5J0Rq0A+sbN0b86b8DaSY
-        Ogv+4wIySNnICfKCEvfciPdQb97z/jdWuVh4f0w=
-X-Google-Smtp-Source: AA6agR7et66RhuJAIYMbh9EKJm8j+d6SlGeUlPK2j/v2mLcLry5f65sN+ZgyAect3BJwT7dszdIJH00zGvy4vm4RQOU=
-X-Received: by 2002:a19:dc4a:0:b0:493:e21:b77d with SMTP id
- f10-20020a19dc4a000000b004930e21b77dmr6297272lfj.580.1661791404129; Mon, 29
- Aug 2022 09:43:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=qLN8fBo6PyBt7E99VZUSZQ3s6EIjif7d4pGqJZoTYK8=;
+        b=LbsxbE8LSkBi+jiTSrvDKa3DA/MLhUwqYaFIVc7yIMhlnEbpi3n5EtXVKN1Rgesfpd
+         JDIz0AnFjytH1zNaZTB757zrd+kTkd6eDBGQHbvljJfDBxUJjmH2KODhVEI+G2th2nwa
+         iI1S/S6xA8qGtA4rtgiRkllfPwNCBNQ7VgU//gWcWEr3SP8APNajtgGAOxUZGnAokJxk
+         oufyV3Fj6bBMwBU3kynwRhFnRQTt3e5FT+ixGuwIWa3d2JI7ktS6MXSjr/Emmi5Ql/D4
+         askfjA6BJ9/j0SM5LTm5By/p8QpvCVD8f+wEmSQYGLaAiIAp4RZhOSsATftqZzlItcbU
+         Bu6A==
+X-Gm-Message-State: ACgBeo2CJJCKOiCNsq6eF4rdD+zviH0m+n+xF94ghIyWn1b3eVo3+rBz
+        iS+eJ+vIALouC/hJUq3smbwUcQ==
+X-Google-Smtp-Source: AA6agR4apsS+tj9IjFo34eaXpnXJQGrN7w2evDtE4E2ZScswf9Oeucx97W3O6v2+bP4nHo2MIiSYtg==
+X-Received: by 2002:a17:90b:35c5:b0:1fd:9087:6a70 with SMTP id nb5-20020a17090b35c500b001fd90876a70mr12414100pjb.158.1661791481886;
+        Mon, 29 Aug 2022 09:44:41 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:49ac:6e1:90a2:a0e0])
+        by smtp.gmail.com with UTF8SMTPSA id e8-20020a17090301c800b001729da53673sm7863682plh.14.2022.08.29.09.44.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 09:44:41 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH] arm64: dts: qcom: sc7280-qcard: Add alias 'wifi0'
+Date:   Mon, 29 Aug 2022 09:44:38 -0700
+Message-Id: <20220829094435.1.I4534cf408373478dd6e84dc8b9ddd0d4e1a3f143@changeid>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
 MIME-Version: 1.0
-Sender: adamn9496@gmail.com
-Received: by 2002:a05:6512:2810:0:0:0:0 with HTTP; Mon, 29 Aug 2022 09:43:23
- -0700 (PDT)
-From:   Miss marybeth <marybethmonson009@gmail.com>
-Date:   Mon, 29 Aug 2022 16:43:23 +0000
-X-Google-Sender-Auth: SsraYS3Q_Uz8x0v62ZGACVqYf-0
-Message-ID: <CAM5gNcVABE1fgHTr1gn_fEnrCtxkExqRveR59chPLJbq+Yki1w@mail.gmail.com>
-Subject: RE: HELLO DEAR
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Szia,
+Add the alias 'wifi0' for the WiFi interface on the Qcard. The alias
+is needed by the BIOS which patches the WiFi MAC address read from
+the VPD (Vital Product Data) into the device tree.
 
-Megkaptad az el=C5=91z=C5=91 =C3=BCzenetem? M=C3=A1r kor=C3=A1bban felvette=
-m =C3=96nnel a
-kapcsolatot, de az =C3=BCzenet nem siker=C3=BClt visszak=C3=BCldeni, ez=C3=
-=A9rt =C3=BAgy
-d=C3=B6nt=C3=B6ttem, hogy =C3=BAjra =C3=ADrok. K=C3=A9rem, er=C5=91s=C3=ADt=
-se meg, ha megkapja ezt, hogy
-folytathassam.
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-V=C3=A1rok a v=C3=A1laszodra.
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-=C3=9Cdv=C3=B6zlettel,
-Miss Marybeth
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+index 7adf31bb9827..7cd91df7a118 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+@@ -28,6 +28,7 @@ aliases {
+ 		bluetooth0 = &bluetooth;
+ 		serial0 = &uart5;
+ 		serial1 = &uart7;
++		wifi0 = &wifi;
+ 	};
+ 
+ 	pm8350c_pwm_backlight: backlight {
+-- 
+2.37.2.672.g94769d06f0-goog
+

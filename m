@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723C75A45FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37865A45FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiH2JXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S229905AbiH2JXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiH2JXD (ORCPT
+        with ESMTP id S229909AbiH2JXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:23:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0E55A803
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:23:00 -0700 (PDT)
+        Mon, 29 Aug 2022 05:23:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0C5AA13
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:23:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB0E60F9E
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:23:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD69C433D6;
-        Mon, 29 Aug 2022 09:22:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B458560BD4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:23:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40671C433C1;
+        Mon, 29 Aug 2022 09:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661764979;
-        bh=ZAzOvK4gC1xZVcDimGoSZTNJKR5HPaVPTF2VQEUcUTg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NmjGcfpnEZC7KbsnG8lLgckwIJZCktK/i5HX38SQ2IMFRtQXGftT+2tGgjdPseeC5
-         yC9IwTP1QG31evpiKVrL5B9cG9KAPsrXyMXZSf2HaLRJ2t0lb7LvEHBe+hauONMDC7
-         v3n7T/D8Du7LGz5IRrMNGYby96+P4QZRLk9GNobFoQpK6qNXNqfYt2xD4IJZacxLZd
-         ZlorA/oxTjrjjyLVzr2ByxnYmskz70LQ8lf2GKhx34r5HuGzbIT/QPGQptkB1D4byB
-         EIjfN+BzODz6U054sGtUD1g4mhJmu7551dv/9A2yI8rewc6iXEGfIUCHgYzg0FVMMM
-         Zrr2BoYj5fReA==
+        s=k20201202; t=1661764981;
+        bh=yP1OlOYlPsS4R7HoRks70kLjMnq7xl7j94ZgEpioAS0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=c2cdKIUO8LwjHfJvp39iphnr7WcoAu2Iv6RmKUyp9rMYA28dYGrTWyOpy+fOEr7IM
+         ooLVPeNDC6VQybHYHWS6bKv3TLt5e+eO96r7dHzGIOF2U7hG4u1s5JDUxAQ3ITHQ7t
+         TvFLRHKIiMkZPv4C/HUzEIKBTtoq+WGmpMFsPTwNWwXjboyTpYKDl89vYV9Ado/aJr
+         9/fOQgrkL4xaJrKMm5oiQh1XzF7kELHTSTZYgWZVRyrsr+ui1fGll8btQNbIqc5dVR
+         dj3jFUILGdM1cfGbKl9N9tNofOfRyBpQJGhEzPaqqzkD/8egjVP36ksLl5tKcb07Uq
+         EVf5yARugTGkA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Dafna Hirschfeld <dhirschfeld@habana.ai>
-Subject: [PATCH 1/7] habanalabs: set command buffer host VA dynamically
-Date:   Mon, 29 Aug 2022 12:22:48 +0300
-Message-Id: <20220829092254.930753-1-ogabbay@kernel.org>
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 2/7] habanalabs: perform context switch flow only if needed
+Date:   Mon, 29 Aug 2022 12:22:49 +0300
+Message-Id: <20220829092254.930753-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220829092254.930753-1-ogabbay@kernel.org>
+References: <20220829092254.930753-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -51,167 +53,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dafna Hirschfeld <dhirschfeld@habana.ai>
+From: Ofir Bitton <obitton@habana.ai>
 
-Set the addresses for userspace command buffer dynamically
-instead of hard-coded. There is no reason for it to
-be hard-coded.
+Except Goya, none of our ASICs require context switch flow, hence we
+enable this flow only where it is needed.
 
-Signed-off-by: Dafna Hirschfeld <dhirschfeld@habana.ai>
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../misc/habanalabs/common/command_buffer.c    | 18 ++++++++++++++----
- drivers/misc/habanalabs/common/habanalabs.h    | 10 +++-------
- drivers/misc/habanalabs/common/memory.c        |  2 +-
- drivers/misc/habanalabs/gaudi2/gaudi2.c        |  3 ---
- drivers/misc/habanalabs/gaudi2/gaudi2P.h       |  3 ---
- 5 files changed, 18 insertions(+), 18 deletions(-)
+ drivers/misc/habanalabs/common/command_submission.c | 10 ++++++----
+ drivers/misc/habanalabs/common/habanalabs.h         |  2 ++
+ drivers/misc/habanalabs/goya/goya.c                 |  1 +
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/command_buffer.c b/drivers/misc/habanalabs/common/command_buffer.c
-index b027f66f8bd4..c3e2568542a1 100644
---- a/drivers/misc/habanalabs/common/command_buffer.c
-+++ b/drivers/misc/habanalabs/common/command_buffer.c
-@@ -12,6 +12,8 @@
- #include <linux/slab.h>
- #include <linux/uaccess.h>
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index cf4118515678..746b688d34cf 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -1590,13 +1590,14 @@ static int hl_cs_ctx_switch(struct hl_fpriv *hpriv, union hl_cs_args *args,
+ 	struct hl_device *hdev = hpriv->hdev;
+ 	struct hl_ctx *ctx = hpriv->ctx;
+ 	bool need_soft_reset = false;
+-	int rc = 0, do_ctx_switch;
++	int rc = 0, do_ctx_switch = 0;
+ 	void __user *chunks;
+ 	u32 num_chunks, tmp;
+ 	u16 sob_count;
+ 	int ret;
  
-+#define CB_VA_POOL_SIZE		(4UL * SZ_1G)
-+
- static int cb_map_mem(struct hl_ctx *ctx, struct hl_cb *cb)
- {
- 	struct hl_device *hdev = ctx->hdev;
-@@ -25,7 +27,7 @@ static int cb_map_mem(struct hl_ctx *ctx, struct hl_cb *cb)
+-	do_ctx_switch = atomic_cmpxchg(&ctx->thread_ctx_switch_token, 1, 0);
++	if (hdev->supports_ctx_switch)
++		do_ctx_switch = atomic_cmpxchg(&ctx->thread_ctx_switch_token, 1, 0);
  
- 	if (!hdev->supports_cb_mapping) {
- 		dev_err_ratelimited(hdev->dev,
--				"Cannot map CB because no VA range is allocated for CB mapping\n");
-+				"Mapping a CB to the device's MMU is not supported\n");
- 		return -EINVAL;
- 	}
+ 	if (do_ctx_switch || (args->in.cs_flags & HL_CS_FLAGS_FORCE_RESTORE)) {
+ 		mutex_lock(&hpriv->restore_phase_mutex);
+@@ -1667,9 +1668,10 @@ static int hl_cs_ctx_switch(struct hl_fpriv *hpriv, union hl_cs_args *args,
+ 			}
+ 		}
  
-@@ -566,16 +568,23 @@ int hl_cb_va_pool_init(struct hl_ctx *ctx)
- 		return -ENOMEM;
- 	}
+-		ctx->thread_ctx_switch_wait_token = 1;
++		if (hdev->supports_ctx_switch)
++			ctx->thread_ctx_switch_wait_token = 1;
  
--	rc = gen_pool_add(ctx->cb_va_pool, prop->cb_va_start_addr,
--			prop->cb_va_end_addr - prop->cb_va_start_addr, -1);
-+	ctx->cb_va_pool_base = hl_reserve_va_block(hdev, ctx, HL_VA_RANGE_TYPE_HOST,
-+					CB_VA_POOL_SIZE, HL_MMU_VA_ALIGNMENT_NOT_NEEDED);
-+	if (!ctx->cb_va_pool_base) {
-+		rc = -ENOMEM;
-+		goto err_pool_destroy;
-+	}
-+	rc = gen_pool_add(ctx->cb_va_pool, ctx->cb_va_pool_base, CB_VA_POOL_SIZE, -1);
- 	if (rc) {
- 		dev_err(hdev->dev,
- 			"Failed to add memory to VA gen pool for CB mapping\n");
--		goto err_pool_destroy;
-+		goto err_unreserve_va_block;
- 	}
- 
- 	return 0;
- 
-+err_unreserve_va_block:
-+	hl_unreserve_va_block(hdev, ctx, ctx->cb_va_pool_base, CB_VA_POOL_SIZE);
- err_pool_destroy:
- 	gen_pool_destroy(ctx->cb_va_pool);
- 
-@@ -590,4 +599,5 @@ void hl_cb_va_pool_fini(struct hl_ctx *ctx)
- 		return;
- 
- 	gen_pool_destroy(ctx->cb_va_pool);
-+	hl_unreserve_va_block(hdev, ctx, ctx->cb_va_pool_base, CB_VA_POOL_SIZE);
- }
+-	} else if (!ctx->thread_ctx_switch_wait_token) {
++	} else if (hdev->supports_ctx_switch && !ctx->thread_ctx_switch_wait_token) {
+ 		rc = hl_poll_timeout_memory(hdev,
+ 			&ctx->thread_ctx_switch_wait_token, tmp, (tmp == 1),
+ 			100, jiffies_to_usecs(hdev->timeout_jiffies), false);
 diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 43b9427d9c97..d7fd4f57abf3 100644
+index d7fd4f57abf3..33c6476b60a9 100644
 --- a/drivers/misc/habanalabs/common/habanalabs.h
 +++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -567,10 +567,6 @@ struct hl_hints_range {
-  * @tpc_binning_mask: which TPCs are binned. 0 means usable and 1 means binned.
-  * @dram_enabled_mask: which DRAMs are enabled.
-  * @dram_binning_mask: which DRAMs are binned. 0 means usable, 1 means binned.
-- * @cb_va_start_addr: virtual start address of command buffers which are mapped
-- *                    to the device's MMU.
-- * @cb_va_end_addr: virtual end address of command buffers which are mapped to
-- *                  the device's MMU.
-  * @dram_hints_align_mask: dram va hint addresses alignment mask which is used
-  *                  for hints validity check.
-  * @cfg_base_address: config space base address.
-@@ -713,8 +709,6 @@ struct asic_fixed_properties {
- 	u64				tpc_binning_mask;
- 	u64				dram_enabled_mask;
- 	u64				dram_binning_mask;
--	u64				cb_va_start_addr;
--	u64				cb_va_end_addr;
- 	u64				dram_hints_align_mask;
- 	u64				cfg_base_address;
- 	u64				mmu_cache_mng_addr;
-@@ -1803,6 +1797,7 @@ struct hl_cs_outcome_store {
-  * @cb_va_pool: device VA pool for command buffers which are mapped to the
-  *              device's MMU.
-  * @sig_mgr: encaps signals handle manager.
-+ * @cb_va_pool_base: the base address for the device VA pool
-  * @cs_sequence: sequence number for CS. Value is assigned to a CS and passed
-  *			to user so user could inquire about CS. It is used as
-  *			index to cs_pending array.
-@@ -1838,6 +1833,7 @@ struct hl_ctx {
- 	struct hl_cs_counters_atomic	cs_counters;
- 	struct gen_pool			*cb_va_pool;
- 	struct hl_encaps_signals_mgr	sig_mgr;
-+	u64				cb_va_pool_base;
- 	u64				cs_sequence;
- 	u64				*dram_default_hops;
- 	spinlock_t			cs_lock;
-@@ -3600,7 +3596,7 @@ void hl_hw_block_mem_init(struct hl_ctx *ctx);
- void hl_hw_block_mem_fini(struct hl_ctx *ctx);
- 
- u64 hl_reserve_va_block(struct hl_device *hdev, struct hl_ctx *ctx,
--		enum hl_va_range_type type, u32 size, u32 alignment);
-+		enum hl_va_range_type type, u64 size, u32 alignment);
- int hl_unreserve_va_block(struct hl_device *hdev, struct hl_ctx *ctx,
- 		u64 start_addr, u64 size);
- int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index e3b40dbf154c..0a653fff08d4 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -755,7 +755,7 @@ static u64 get_va_block(struct hl_device *hdev,
-  * - Return the start address of the virtual block.
+@@ -3199,6 +3199,7 @@ struct hl_reset_info {
+  *                         Used only for testing.
+  * @heartbeat: Controls if we want to enable the heartbeat mechanism vs. the f/w, which verifies
+  *             that the f/w is always alive. Used only for testing.
++ * @supports_ctx_switch: true if a ctx switch is required upon first submission.
   */
- u64 hl_reserve_va_block(struct hl_device *hdev, struct hl_ctx *ctx,
--		enum hl_va_range_type type, u32 size, u32 alignment)
-+		enum hl_va_range_type type, u64 size, u32 alignment)
- {
- 	return get_va_block(hdev, ctx->va_range[type], size, 0,
- 			max(alignment, ctx->va_range[type]->page_size),
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index c907e0fbf182..ff0f9e9db1b5 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -2022,9 +2022,6 @@ static int gaudi2_set_fixed_properties(struct hl_device *hdev)
+ struct hl_device {
+ 	struct pci_dev			*pdev;
+@@ -3335,6 +3336,7 @@ struct hl_device {
+ 	u8				compute_ctx_in_release;
+ 	u8				supports_mmu_prefetch;
+ 	u8				reset_upon_device_release;
++	u8				supports_ctx_switch;
  
- 	prop->server_type = HL_SERVER_TYPE_UNKNOWN;
+ 	/* Parameters for bring-up */
+ 	u64				nic_ports_mask;
+diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
+index 87465a28af0d..d8fb91d257b9 100644
+--- a/drivers/misc/habanalabs/goya/goya.c
++++ b/drivers/misc/habanalabs/goya/goya.c
+@@ -1025,6 +1025,7 @@ static int goya_sw_init(struct hl_device *hdev)
+ 	hdev->asic_prop.supports_compute_reset = true;
+ 	hdev->asic_prop.allow_inference_soft_reset = true;
+ 	hdev->supports_wait_for_multi_cs = false;
++	hdev->supports_ctx_switch = true;
  
--	prop->cb_va_start_addr = VA_HOST_SPACE_USER_MAPPED_CB_START;
--	prop->cb_va_end_addr = VA_HOST_SPACE_USER_MAPPED_CB_END;
--
- 	prop->max_dec = NUMBER_OF_DEC;
- 
- 	prop->clk_pll_index = HL_GAUDI2_MME_PLL;
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2P.h b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-index 347ea1dd78e2..9094a702678d 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-@@ -139,9 +139,6 @@
- #define VA_HOST_SPACE_HPAGE_START		0xFFF0800000000000ull
- #define VA_HOST_SPACE_HPAGE_END			0xFFF1000000000000ull /* 140TB */
- 
--#define VA_HOST_SPACE_USER_MAPPED_CB_START	0xFFF1000000000000ull
--#define VA_HOST_SPACE_USER_MAPPED_CB_END	0xFFF1000100000000ull /* 4GB */
--
- /* 140TB */
- #define VA_HOST_SPACE_PAGE_SIZE		(VA_HOST_SPACE_PAGE_END - VA_HOST_SPACE_PAGE_START)
+ 	hdev->asic_funcs->set_pci_memory_regions(hdev);
  
 -- 
 2.25.1

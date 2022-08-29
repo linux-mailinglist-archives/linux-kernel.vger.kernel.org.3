@@ -2,216 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9A75A46F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943545A46DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiH2KPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S230054AbiH2KMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiH2KPC (ORCPT
+        with ESMTP id S229932AbiH2KLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:15:02 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37C2765F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=OQAAMSjRHuYgCLVl5R9t0nt04B2gvVrpsDsjFaKL1VI=; b=GoW94x/AMI1g98fioJPJuyHJF1
-        KdxLLlUDJNiygWcb/xx2+hyr/PLqQ3xsiFpfbmK9R7ThxZTqfcRXrRdieG7DuaHAiUk0j0F9uus7E
-        vGvIhj0nksX3GdH9NQeJUiTzaOlq+xvTt0f1yi1KKoKSIjGh0WMER0bdwAmpxiQ3htRkz30vyXxX4
-        Bekf/iMdZh7hE7f8VuxvTJcm5UrNn32qKmkCx0LHWnxTuCCDIRZFQg3dWtYH784xuqFpQuEjXGEjB
-        HQVQ/qLIqgyObVExFXCnOVxIkkt/vlv3POQBrMEZMawZ4haAI/fCaDXFQ+3EwhJMgc+Et+J3/S4wt
-        YP6tW28w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oSbn1-007SzK-J5; Mon, 29 Aug 2022 10:14:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D504B3006C4;
-        Mon, 29 Aug 2022 12:14:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id A48CD207F7FB4; Mon, 29 Aug 2022 12:14:41 +0200 (CEST)
-Message-ID: <20220829101321.971473694@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 29 Aug 2022 12:10:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, kan.liang@linux.intel.com, eranian@google.com,
-        ravi.bangoria@amd.com
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org
-Subject: [PATCH v2 9/9] perf/x86/intel: Optimize short PEBS counters
-References: <20220829100959.917169441@infradead.org>
+        Mon, 29 Aug 2022 06:11:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED8B4E636
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661767891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uiDEAc36fw1oVBz2RndBdLuRw9KgMIJyJTG6rMfsFiE=;
+        b=PzU2TQVvFPvSO9HNXEL/ln2rwSzIV6jfN0MhjQiIiiEJDy8XwOzSk+b4VYW3kKWpM8u7nz
+        gD07736G64Q+Fgwq9YT5e9YnzqFVfqdIHwXCcuUtEufadkx0lh6sOhfE9G4sAum+tf07/+
+        q7TONg9U0qhPziMUhI4tz42BU8/dARQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-1TV9i-VUOP2pUPoIQKPDyA-1; Mon, 29 Aug 2022 06:11:30 -0400
+X-MC-Unique: 1TV9i-VUOP2pUPoIQKPDyA-1
+Received: by mail-ej1-f71.google.com with SMTP id hr32-20020a1709073fa000b00730a39f36ddso2067905ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:11:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=uiDEAc36fw1oVBz2RndBdLuRw9KgMIJyJTG6rMfsFiE=;
+        b=UpMu3W35BEmhtqs4zYuMHSu/QqkOHZV40O3ipg2cAhD1sm+U1A1jA3Yucoo+r8V4Oj
+         l6C8DncBjdT/Qz02rfF0SFF/ZCG4sabMGbtCY8CXYxT/UK4mb0eWKufNWRqqMvTwD8gM
+         U8IIQS+wY9CEWROqQLMqNCrubkDkao/yMp0jcpDEok4J3MclNhXcwalvZYL7BaBXE2JJ
+         rKpzsMJBN/h+UZOJPj+7J50CaUKx5w9YVlck0O4EKCOCz45NnZwshdWlrRYeL9rbzI55
+         HIeTl9hV7ya+XvthxznybchbziYM58HCeGlVuCQUA9O15F71/pmKvebVGcgXNVUgnpkJ
+         jGcg==
+X-Gm-Message-State: ACgBeo06tRcJ4a9OtiqWaWy+Nx1/UC0Bf89m9DaTOd5eYUN3pMyOkkqY
+        MUrCQehkOz/UTmDlhhWil0ixSKAgYSSgK6KYVApGRJr5GZzZAgtDcVrf/SzqRz8o3Z/Z/3+lCXk
+        V/FPYwxjlKuuycKEgJe2O8Ihh
+X-Received: by 2002:a17:906:2245:b0:715:7c81:e39d with SMTP id 5-20020a170906224500b007157c81e39dmr13664981ejr.262.1661767888267;
+        Mon, 29 Aug 2022 03:11:28 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7M4/S/C3JxMIdV9wlV0VL4SAYsK3Ou30eFFHKFVgyE7NH7Ngn2CoK/Tp7ioWQhcY8xIdoyxw==
+X-Received: by 2002:a17:906:2245:b0:715:7c81:e39d with SMTP id 5-20020a170906224500b007157c81e39dmr13664973ejr.262.1661767888059;
+        Mon, 29 Aug 2022 03:11:28 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id ec14-20020a0564020d4e00b004483a543794sm3054189edb.96.2022.08.29.03.11.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 03:11:27 -0700 (PDT)
+Message-ID: <ad157199-5127-ba77-e127-61b5de88fb60@redhat.com>
+Date:   Mon, 29 Aug 2022 12:11:27 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: 6.0 tty regression, NULL pointer deref in flush_to_ldisc
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+References: <4b4bba5d-d291-d9fa-8382-cdc197b7ed35@redhat.com>
+ <e8d67c78-751e-2c44-edff-e7e441c3302d@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <e8d67c78-751e-2c44-edff-e7e441c3302d@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XXX: crazy idea; really not sure this is worth the extra complexity
+Hi,
 
-It is possible to have the counter programmed to a value smaller than
-the sampling period. In that case, the code suppresses the sample,
-recalculates the remaining events and reprograms the counter.
+On 8/29/22 11:36, Ilpo Järvinen wrote:
+> On Mon, 29 Aug 2022, Hans de Goede wrote:
+> 
+>> Hi All,
+>>
+>> This weekend I noticed that on various Bay Trail based systems which have
+>> their bluetooth HCI connected over an uart (using hci_uart driver /
+>> using the drivers/tty/serial bus) there is a NULL pointer deref in
+>> flush_to_ldisc, see below for the full backtrace.
+>>
+>> I *suspect* that this is caused by commit 6bb6fa6908eb
+>> ("tty: Implement lookahead to process XON/XOFF timely").
+>>
+>> I can cleanly revert this by reverting the following commits:
+>>
+>> ab24a01b2765 ("tty: Add closing marker into comment in tty_ldisc.h")
+>> 65534736d9a5 ("tty: Use flow-control char function on closing path")
+>> 6bb6fa6908eb ("tty: Implement lookahead to process XON/XOFF timely")
+>>
+>> ATM I don't have one of the affected systems handy. I will give
+>> a 6.0-rc3 kernel with these 3 commits reverted a try tonight (CEST)
+>> and I'll let you know the results.
+>>
+>> Note I can NOT confirm yet that these reverts fix things, so please
+>> don't revert anything yet. I just wanted to give people a headsup
+>> about this issue.
+>>
+>> Also maybe we can fix the new lookahead code instead of reverting.
+>> I would be happy to add a patch adding some debugging prints the
+>> systems run fine after the backtrace as long as I don't suspend them
+>> so gathering logs is easy.
+> 
+> I guess this will help:
+> 
+> https://lore.kernel.org/linux-kernel/20220818115026.2237893-1-vincent.whitchurch@axis.com/
 
-This should also work for PEBS counters (and it does); however
-triggering a full PEBS assist and parsing the event from the DS is
-more overhead than is required.
+Ah, yes that indeed looks like it should help. I'll give that a try tonight
+and report back the result.
 
-As such, detect this case and temporarily suppress PEBS. This will
-then trigger a regular PMI for the counter which will reprogram the
-event and re-enable PEBS once the target period is in reach.
+Regards,
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/events/intel/core.c |   80 ++++++++++++++++++++++++++++++++++++++-----
- arch/x86/events/perf_event.h |    9 ++++
- 2 files changed, 81 insertions(+), 8 deletions(-)
-
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2722,12 +2722,7 @@ static void intel_pmu_enable_fixed(struc
- 
- 	intel_set_masks(event, idx);
- 
--	/*
--	 * Enable IRQ generation (0x8), if not PEBS,
--	 * and enable ring-3 counting (0x2) and ring-0 counting (0x1)
--	 * if requested:
--	 */
--	if (!event->attr.precise_ip)
-+	if (hwc->config & ARCH_PERFMON_EVENTSEL_INT)
- 		bits |= 0x8;
- 	if (hwc->config & ARCH_PERFMON_EVENTSEL_USR)
- 		bits |= 0x2;
-@@ -2816,12 +2811,75 @@ int intel_pmu_save_and_restart(struct pe
- 	return static_call(x86_pmu_set_period)(event);
- }
- 
-+static void intel_pmu_update_config(struct perf_event *event)
-+{
-+	struct hw_perf_event *hwc = &event->hw;
-+	u64 config = hwc->config;
-+
-+	if (hwc->idx >= INTEL_PMC_IDX_FIXED) { /* PEBS is limited to real PMCs */
-+		u64 mask = 0xf, bits = 0;
-+
-+		if (config & ARCH_PERFMON_EVENTSEL_INT)
-+			bits |= 0x8;
-+		if (config & ARCH_PERFMON_EVENTSEL_USR)
-+			bits |= 0x2;
-+		if (config & ARCH_PERFMON_EVENTSEL_OS)
-+			bits |= 0x1;
-+
-+		bits <<= (hwc->idx * 4);
-+		mask <<= (hwc->idx * 4);
-+
-+		config = this_cpu_read(intel_fixed_ctrl);
-+		config &= ~mask;
-+		config |= bits;
-+		this_cpu_write(intel_fixed_ctrl, config);
-+	}
-+
-+	wrmsrl(hwc->config_base, config);
-+}
-+
-+static void intel_pmu_handle_short_pebs(struct perf_event *event)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	struct hw_perf_event *hwc = &event->hw;
-+
-+	/* if the event is not enabled; intel_pmu_pebs_enable() DTRT */
-+	if (!test_bit(hwc->idx, cpuc->active_mask))
-+		return;
-+
-+	WARN_ON_ONCE(cpuc->enabled);
-+
-+	if (intel_pmu_is_short_pebs(event)) {
-+
-+		/* stripped down intel_pmu_pebs_disable() */
-+		cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
-+		hwc->config |= ARCH_PERFMON_EVENTSEL_INT;
-+
-+		intel_pmu_update_config(event);
-+
-+	} else if (!(cpuc->pebs_enabled & (1ULL << hwc->idx))) {
-+
-+		/* stripped down intel_pmu_pebs_enable() */
-+		hwc->config &= ~ARCH_PERFMON_EVENTSEL_INT;
-+		cpuc->pebs_enabled |= (1ULL << hwc->idx);
-+
-+		intel_pmu_update_config(event);
-+	}
-+}
-+
- static int intel_pmu_set_period(struct perf_event *event)
- {
-+	int ret;
-+
- 	if (unlikely(is_topdown_count(event)))
- 		return static_call(intel_pmu_set_topdown_event_period)(event);
- 
--	return x86_perf_event_set_period(event);
-+	ret = x86_perf_event_set_period(event);
-+
-+	if (event->attr.precise_ip)
-+		intel_pmu_handle_short_pebs(event);
-+
-+	return ret;
- }
- 
- static u64 intel_pmu_update(struct perf_event *event)
-@@ -2975,6 +3033,9 @@ static int handle_pmi_common(struct pt_r
- 		 * MSR_IA32_PEBS_ENABLE is not updated. Because the
- 		 * cpuc->enabled has been forced to 0 in PMI.
- 		 * Update the MSR if pebs_enabled is changed.
-+		 *
-+		 * Also; short counters temporarily disable PEBS, see
-+		 * intel_pmu_set_period().
- 		 */
- 		if (pebs_enabled != cpuc->pebs_enabled)
- 			wrmsrl(MSR_IA32_PEBS_ENABLE, cpuc->pebs_enabled);
-@@ -3856,7 +3917,10 @@ static int intel_pmu_hw_config(struct pe
- 		if ((event->attr.config & INTEL_ARCH_EVENT_MASK) == INTEL_FIXED_VLBR_EVENT)
- 			return -EINVAL;
- 
--		if (!(event->attr.freq || (event->attr.wakeup_events && !event->attr.watermark))) {
-+		if (!(event->attr.freq ||
-+		      (event->attr.wakeup_events && !event->attr.watermark) ||
-+		      event->attr.sample_period > x86_pmu.max_period)) {
-+
- 			event->hw.flags |= PERF_X86_EVENT_AUTO_RELOAD;
- 			if (!(event->attr.sample_type &
- 			      ~intel_pmu_large_pebs_flags(event))) {
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1063,6 +1063,15 @@ static inline bool x86_pmu_has_lbr_calls
- DECLARE_PER_CPU(struct cpu_hw_events, cpu_hw_events);
- DECLARE_PER_CPU(u64 [X86_PMC_IDX_MAX], pmc_prev_left);
- 
-+static inline bool intel_pmu_is_short_pebs(struct perf_event *event)
-+{
-+	struct hw_perf_event *hwc = &event->hw;
-+	s64 counter = this_cpu_read(pmc_prev_left[hwc->idx]);
-+	s64 left = local64_read(&hwc->period_left);
-+
-+	return counter < left;
-+}
-+
- int x86_perf_event_set_period(struct perf_event *event);
- 
- /*
-
+Hans
 

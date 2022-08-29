@@ -2,558 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC0A5A4F99
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8FD5A4F9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiH2Otg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S230286AbiH2OuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiH2Ote (ORCPT
+        with ESMTP id S229899AbiH2OuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:49:34 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35958E4E1;
-        Mon, 29 Aug 2022 07:49:32 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27TEnHIi073878;
-        Mon, 29 Aug 2022 09:49:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661784557;
-        bh=FoXNyfRjgjyPoCNjOb/Mvqix4kUOCCWbuQiTqN/J5/o=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=hQS5gjFUO7rYtIP5lyWpka+V3Z+m0dtbnTx8wQoH+s2HCnEweeRsjyZK1QXmQIIx6
-         IPbh1ZHeLdfGw/8selep8Ock6BGHQHMrN4Elqa5pZe8JfIg5/WZ3aMTwmQPWL5B512
-         5xZ1Fw7HfZMFTDG1zJykq6M7Ib8olzzYFyHSW4FY=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27TEnHxX058414
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 Aug 2022 09:49:17 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 29
- Aug 2022 09:49:17 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 29 Aug 2022 09:49:17 -0500
-Received: from [10.250.32.193] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27TEnFqA017620;
-        Mon, 29 Aug 2022 09:49:16 -0500
-Message-ID: <f042acf5-aab3-5356-7656-2d55edfb29eb@ti.com>
-Date:   Mon, 29 Aug 2022 09:49:15 -0500
+        Mon, 29 Aug 2022 10:50:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDB114092;
+        Mon, 29 Aug 2022 07:49:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D5D6105C;
+        Mon, 29 Aug 2022 14:49:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E59DFC433C1;
+        Mon, 29 Aug 2022 14:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661784596;
+        bh=1uMmTJeyaDS2FOf4VxouNCYbBnfhrN1z1KkQuy5uQj8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XJRk6ZYCgSQvvWk8URrx6RJ6oV82AYJwt+/EXnZk3l9CBPJ1Cc2cedvM8lnX84VDB
+         JPlPDOjLBdofy4r6FWjvZLx722neGH/E0/siqa7H3FceqTWWN7D8FI4hRLz4No/Lg7
+         l8khPwDyO2GZCZvZIxG0f7Y7IYPhAR+5whqJKxJMS5hDjDCTn2L6pnlpEGNjSBX0ki
+         9lJMaYfTbyEf/qfFveknlmINrEGiDzXz79bsGnwcBpEyAqoWMQeAnxu/8QsQKnGeiR
+         K0kq4SsC3S6NSrIXu0iUEUkxhRr80OyMR1pJSXmJmXKAtu/w5X4yKHZi3wjw13ANvE
+         V5+ip6haOfpfA==
+Date:   Mon, 29 Aug 2022 07:49:55 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>
+Subject: Re: [PATCH v7] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Message-ID: <YwzSE2U8iYLRfyxf@magnolia>
+References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
+ <63093cbd43f67_259e5b2946d@dwillia2-xfh.jf.intel.com.notmuch>
+ <72fa9657-741a-e099-baf8-4615145d7bd1@fujitsu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 4/6] mfd: drivers: Add TI TPS65219 PMIC support
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>, Tony Lindgren <tony@atomide.com>,
-        <nm@ti.com>, <kristo@kernel.org>,
-        Jerome Neanne <jneanne@baylibre.com>, <khilman@baylibre.com>,
-        <narmstrong@baylibre.com>, <j-keerthy@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-input@vger.kernel.org>, <linux-omap@vger.kernel.org>
-References: <20220825150224.826258-1-msp@baylibre.com>
- <20220825150224.826258-5-msp@baylibre.com>
- <3c802196-bd18-7caa-0a26-d3e935325e50@ti.com>
- <20220829073940.g7weogfgh3zr3u24@blmsp>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20220829073940.g7weogfgh3zr3u24@blmsp>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <72fa9657-741a-e099-baf8-4615145d7bd1@fujitsu.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 2:39 AM, Markus Schneider-Pargmann wrote:
-> Hi Andrew,
+On Mon, Aug 29, 2022 at 06:02:11PM +0800, Shiyang Ruan wrote:
 > 
-> On Thu, Aug 25, 2022 at 12:14:41PM -0500, Andrew Davis wrote:
->> On 8/25/22 10:02 AM, Markus Schneider-Pargmann wrote:
 > 
-> ...
+> 在 2022/8/27 5:35, Dan Williams 写道:
+> > Shiyang Ruan wrote:
+> > > This patch is inspired by Dan's "mm, dax, pmem: Introduce
+> > > dev_pagemap_failure()"[1].  With the help of dax_holder and
+> > > ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+> > > (or mapped device) on it to unmap all files in use and notify processes
+> > > who are using those files.
+> > > 
+> > > Call trace:
+> > > trigger unbind
+> > >    -> unbind_store()
+> > >     -> ... (skip)
+> > >      -> devres_release_all()
+> > >       -> kill_dax()
+> > >        -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
+> > >         -> xfs_dax_notify_failure()
+> > > 
+> > > Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
+> > > event.  So do not shutdown filesystem directly if something not
+> > > supported, or if failure range includes metadata area.  Make sure all
+> > > files and processes are handled correctly.
+> > > 
+> > > ==
+> > > Changes since v6:
+> > >     1. Rebase on 6.0-rc2 and Darrick's patch[2].
+> > > 
+> > > Changes since v5:
+> > >     1. Renamed MF_MEM_REMOVE to MF_MEM_PRE_REMOVE
+> > >     2. hold s_umount before sync_filesystem()
+> > >     3. do sync_filesystem() after SB_BORN check
+> > >     4. Rebased on next-20220714
+> > > 
+> > > [1]:
+> > > https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+> > > [2]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
+> > > 
+> > > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> > > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> > > ---
+> > >    drivers/dax/super.c         |  3 ++-
+> > >    fs/xfs/xfs_notify_failure.c | 15 +++++++++++++++
+> > >    include/linux/mm.h          |  1 +
+> > >    3 files changed, 18 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> > > index 9b5e2a5eb0ae..cf9a64563fbe 100644
+> > > --- a/drivers/dax/super.c
+> > > +++ b/drivers/dax/super.c
+> > > @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
+> > >    		return;
+> > >     	if (dax_dev->holder_data != NULL)
+> > > -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+> > > +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
+> > > +				MF_MEM_PRE_REMOVE);
+> > >     	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+> > >    	synchronize_srcu(&dax_srcu);
+> > > diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> > > index 65d5eb20878e..a9769f17e998 100644
+> > > --- a/fs/xfs/xfs_notify_failure.c
+> > > +++ b/fs/xfs/xfs_notify_failure.c
+> > > @@ -77,6 +77,9 @@ xfs_dax_failure_fn(
+> > >     	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+> > >    	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+> > > +		/* Do not shutdown so early when device is to be removed */
+> > > +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
+> > > +			return 0;
+> > >    		notify->want_shutdown = true;
+> > >    		return 0;
+> > >    	}
+> > > @@ -182,12 +185,22 @@ xfs_dax_notify_failure(
+> > >    	struct xfs_mount	*mp = dax_holder(dax_dev);
+> > >    	u64			ddev_start;
+> > >    	u64			ddev_end;
+> > > +	int			error;
+> > >     	if (!(mp->m_sb.sb_flags & SB_BORN)) {
+> > 
+> > How are you testing the SB_BORN interactions? I have a fix for this
+> > pending here:
+> > 
+> > https://lore.kernel.org/nvdimm/166153428094.2758201.7936572520826540019.stgit@dwillia2-xfh.jf.intel.com/
 > 
->>> diff --git a/drivers/mfd/tps65219.c b/drivers/mfd/tps65219.c
->>> new file mode 100644
->>> index 000000000000..f3883911de37
->>> --- /dev/null
->>> +++ b/drivers/mfd/tps65219.c
+> That was my mistake.  Yes, it should be mp->m_super->s_flags.
 > 
-> ...
+> (I remember my testcase did pass in my dev version, but now that seems
+> impossible.  I think something was wrong when I did the test.)
 > 
->>> +
->>> +	sys_pwr = of_property_read_bool(tps->dev->of_node, "system-power-controller");
->>> +
->>> +	if (!sys_pwr)
->>> +		return 0;
->>
->>
->> I'm not liking these non-error short circut returns. Will lead to things getting
->> missed should they be added below this point. Prefer:
->>
->>
->> 	sys_pwr = of_property_read_bool(tps->dev->of_node, "system-power-controller");
->> 	if (sys_pwr) {
->> 		if (pm_power_off) {
->> 			dev_warn(tps->dev, "system-power-controller requested but pm_power_off function already registered\n");
->> 		} else {
->> 			tps65219_i2c_client = client;
->> 			pm_power_off = &tps65219_pm_power_off;
->> 		}
->> 	}
->>
->> 	tps65219_i2c_client = client;
->>
->> 	return 0;
->> }
+> > 
+> > >    		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+> > >    		return -EIO;
+> > >    	}
+> > >    +	if (mf_flags & MF_MEM_PRE_REMOVE) {
+> > 
+> > It appears this patch is corrupted here. I confirmed that b4 sees the
+> > same when trying to apply it.
 > 
-> Good point, I actually just changed it because of a review suggesting
-> this. I will change it back.
+> Can't this patch be applied?  It is based on 6.0-rc2 + Darrick's patch. It's
+> also ok to rebase on 6.0-rc3 + Darrick's patch.
 > 
->>
->> Or even better, just drop all this "system-power-controller" stuff until we figure
->> out how we will handle it. The systems today using this PMIC will have PSCI
->> being the pm_power_off controller, so we always go down the error/warn path here.
+> > 
+> > > +		xfs_info(mp, "device is about to be removed!");
+> > > +		down_write(&mp->m_super->s_umount);
+> > > +		error = sync_filesystem(mp->m_super);
+> > 
+> > This syncs to make data persistent, but for DAX this also needs to get
+> > invalidate all current DAX mappings. I do not see that in these changes.
 > 
-> I think I would prefer to keep the code. Once this is figured out all
-> the drivers using pm_power_off will need to be updated anyways so I
-> guess it's easy for this to be adjusted at that point IMHO.
-> 
+> I'll add it.
 
+Are you guys going to pick up [1]?
 
-It is already well figured out, ARM64 processors should use PSCI to handle powerdown.
-This code might be useful for other architectures sure, but this PMIC was designed
-specifically for powering ARM64 SoCs.
+--D
 
+[1] https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
 
-> I could make it an info message and rephrase it a bit so it's clear that
-> this is kind of expected to happen. What do you think?
 > 
-
-
-That's fine with me if you really want to keep this code, but I'd make
-the message even quieter, maybe even a debug message, since we will
-always go down this message path should we set "system-power-controller"
-in DT unless we do something hacky in our evil vendor tree.. For
-upstream I don't see the point.
-
-Andrew
-
-
+> --
 > Thanks,
-> Markus
+> Ruan.
 > 
->>
->> Andrew
->>
->>
->>> +
->>> +	if (pm_power_off) {
->>> +		dev_err(tps->dev, "system-power-controller requested but pm_power_off function already registered\n");
->>> +		return 0;
->>> +	}
->>> +
->>> +	tps65219_i2c_client = client;
->>> +	pm_power_off = &tps65219_pm_power_off;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int tps65219_remove(struct i2c_client *client)
->>> +{
->>> +	struct tps65219 *tps = i2c_get_clientdata(client);
->>> +
->>> +	if (tps65219_i2c_client == client) {
->>> +		pm_power_off = NULL;
->>> +		tps65219_i2c_client = NULL;
->>> +	}
->>> +
->>> +	return unregister_restart_handler(&tps->nb);
->>> +}
->>> +
->>> +static const struct of_device_id of_tps65219_match_table[] = {
->>> +	{ .compatible = "ti,tps65219", },
->>> +	{}
->>> +};
->>> +MODULE_DEVICE_TABLE(of, of_tps65219_match_table);
->>> +
->>> +static struct i2c_driver tps65219_driver = {
->>> +	.driver		= {
->>> +		.name	= "tps65219",
->>> +		.of_match_table = of_tps65219_match_table,
->>> +	},
->>> +	.probe_new	= tps65219_probe,
->>> +	.remove		= tps65219_remove,
->>> +};
->>> +module_i2c_driver(tps65219_driver);
->>> +
->>> +MODULE_AUTHOR("Jerome Neanne <jneanne@baylibre.com>");
->>> +MODULE_DESCRIPTION("TPS65219 power management IC driver");
->>> +MODULE_LICENSE("GPL");
->>> diff --git a/include/linux/mfd/tps65219.h b/include/linux/mfd/tps65219.h
->>> new file mode 100644
->>> index 000000000000..2c1cf92e92ac
->>> --- /dev/null
->>> +++ b/include/linux/mfd/tps65219.h
->>> @@ -0,0 +1,345 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +/*
->>> + * Functions to access TPS65219 power management IC.
->>> + *
->>> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
->>> + */
->>> +
->>> +#ifndef MFD_TPS65219_H
->>> +#define MFD_TPS65219_H
->>> +
->>> +#include <linux/bitops.h>
->>> +#include <linux/notifier.h>
->>> +#include <linux/regulator/driver.h>
->>> +
->>> +struct regmap;
->>> +struct regmap_irq_chip_data;
->>> +
->>> +#define TPS65219_1V35					1350000
->>> +#define TPS65219_1V8					1800000
->>> +
->>> +/* TPS chip id list */
->>> +#define TPS65219					0xF0
->>> +
->>> +/* I2C ID for TPS65219 part */
->>> +#define TPS65219_I2C_ID					0x24
->>> +
->>> +/* All register addresses */
->>> +#define TPS65219_REG_TI_DEV_ID				0x00
->>> +#define TPS65219_REG_NVM_ID				0x01
->>> +#define TPS65219_REG_ENABLE_CTRL			0x02
->>> +#define TPS65219_REG_BUCKS_CONFIG			0x03
->>> +#define TPS65219_REG_LDO4_VOUT				0x04
->>> +#define TPS65219_REG_LDO3_VOUT				0x05
->>> +#define TPS65219_REG_LDO2_VOUT				0x06
->>> +#define TPS65219_REG_LDO1_VOUT				0x07
->>> +#define TPS65219_REG_BUCK3_VOUT				0x8
->>> +#define TPS65219_REG_BUCK2_VOUT				0x9
->>> +#define TPS65219_REG_BUCK1_VOUT				0xA
->>> +#define TPS65219_REG_LDO4_SEQUENCE_SLOT			0xB
->>> +#define TPS65219_REG_LDO3_SEQUENCE_SLOT			0xC
->>> +#define TPS65219_REG_LDO2_SEQUENCE_SLOT			0xD
->>> +#define TPS65219_REG_LDO1_SEQUENCE_SLOT			0xE
->>> +#define TPS65219_REG_BUCK3_SEQUENCE_SLOT		0xF
->>> +#define TPS65219_REG_BUCK2_SEQUENCE_SLOT		0x10
->>> +#define TPS65219_REG_BUCK1_SEQUENCE_SLOT		0x11
->>> +#define TPS65219_REG_nRST_SEQUENCE_SLOT			0x12
->>> +#define TPS65219_REG_GPIO_SEQUENCE_SLOT			0x13
->>> +#define TPS65219_REG_GPO2_SEQUENCE_SLOT			0x14
->>> +#define TPS65219_REG_GPO1_SEQUENCE_SLOT			0x15
->>> +#define TPS65219_REG_POWER_UP_SLOT_DURATION_1		0x16
->>> +#define TPS65219_REG_POWER_UP_SLOT_DURATION_2		0x17
->>> +#define TPS65219_REG_POWER_UP_SLOT_DURATION_3		0x18
->>> +#define TPS65219_REG_POWER_UP_SLOT_DURATION_4		0x19
->>> +#define TPS65219_REG_POWER_DOWN_SLOT_DURATION_1		0x1A
->>> +#define TPS65219_REG_POWER_DOWN_SLOT_DURATION_2		0x1B
->>> +#define TPS65219_REG_POWER_DOWN_SLOT_DURATION_3		0x1C
->>> +#define TPS65219_REG_POWER_DOWN_SLOT_DURATION_4		0x1D
->>> +#define TPS65219_REG_GENERAL_CONFIG			0x1E
->>> +#define TPS65219_REG_MFP_1_CONFIG			0x1F
->>> +#define TPS65219_REG_MFP_2_CONFIG			0x20
->>> +#define TPS65219_REG_STBY_1_CONFIG			0x21
->>> +#define TPS65219_REG_STBY_2_CONFIG			0x22
->>> +#define TPS65219_REG_OC_DEGL_CONFIG			0x23
->>> +/* 'sub irq' MASK registers */
->>> +#define TPS65219_REG_INT_MASK_UV			0x24
->>> +#define TPS65219_REG_MASK_CONFIG			0x25
->>> +
->>> +#define TPS65219_REG_I2C_ADDRESS_REG			0x26
->>> +#define TPS65219_REG_USER_GENERAL_NVM_STORAGE		0x27
->>> +#define TPS65219_REG_MANUFACTURING_VER			0x28
->>> +#define TPS65219_REG_MFP_CTRL				0x29
->>> +#define TPS65219_REG_DISCHARGE_CONFIG			0x2A
->>> +/* main irq registers */
->>> +#define TPS65219_REG_INT_SOURCE				0x2B
->>> +/* 'sub irq' registers */
->>> +#define TPS65219_REG_INT_LDO_3_4			0x2C
->>> +#define TPS65219_REG_INT_LDO_1_2			0x2D
->>> +#define TPS65219_REG_INT_BUCK_3				0x2E
->>> +#define TPS65219_REG_INT_BUCK_1_2			0x2F
->>> +#define TPS65219_REG_INT_SYSTEM				0x30
->>> +#define TPS65219_REG_INT_RV				0x31
->>> +#define TPS65219_REG_INT_TIMEOUT_RV_SD			0x32
->>> +#define TPS65219_REG_INT_PB				0x33
->>> +
->>> +#define TPS65219_REG_INT_LDO_3_4_POS			0
->>> +#define TPS65219_REG_INT_LDO_1_2_POS			1
->>> +#define TPS65219_REG_INT_BUCK_3_POS			2
->>> +#define TPS65219_REG_INT_BUCK_1_2_POS			3
->>> +#define TPS65219_REG_INT_SYS_POS			4
->>> +#define TPS65219_REG_INT_RV_POS				5
->>> +#define TPS65219_REG_INT_TO_RV_POS			6
->>> +#define TPS65219_REG_INT_PB_POS				7
->>> +
->>> +#define TPS65219_REG_USER_NVM_CMD			0x34
->>> +#define TPS65219_REG_POWER_UP_STATUS			0x35
->>> +#define TPS65219_REG_SPARE_2				0x36
->>> +#define TPS65219_REG_SPARE_3				0x37
->>> +#define TPS65219_REG_FACTORY_CONFIG_2			0x41
->>> +
->>> +/* Register field definitions */
->>> +#define TPS65219_DEVID_REV_MASK				GENMASK(7, 0)
->>> +#define TPS65219_BUCKS_LDOS_VOUT_VSET_MASK		GENMASK(5, 0)
->>> +#define TPS65219_BUCKS_UV_THR_SEL_MASK			BIT(6)
->>> +#define TPS65219_BUCKS_BW_SEL_MASK			BIT(7)
->>> +#define LDO_BYP_SHIFT					6
->>> +#define TPS65219_LDOS_BYP_CONFIG_MASK			BIT(LDO_BYP_SHIFT)
->>> +#define TPS65219_LDOS_LSW_CONFIG_MASK			BIT(7)
->>> +/* Regulators enable control */
->>> +#define TPS65219_ENABLE_BUCK1_EN_MASK			BIT(0)
->>> +#define TPS65219_ENABLE_BUCK2_EN_MASK			BIT(1)
->>> +#define TPS65219_ENABLE_BUCK3_EN_MASK			BIT(2)
->>> +#define TPS65219_ENABLE_LDO1_EN_MASK			BIT(3)
->>> +#define TPS65219_ENABLE_LDO2_EN_MASK			BIT(4)
->>> +#define TPS65219_ENABLE_LDO3_EN_MASK			BIT(5)
->>> +#define TPS65219_ENABLE_LDO4_EN_MASK			BIT(6)
->>> +/* power ON-OFF sequence slot */
->>> +#define TPS65219_BUCKS_LDOS_SEQUENCE_OFF_SLOT_MASK	GENMASK(3, 0)
->>> +#define TPS65219_BUCKS_LDOS_SEQUENCE_ON_SLOT_MASK	GENMASK(7, 4)
->>> +/* TODO: Not needed, same mapping as TPS65219_ENABLE_REGNAME_EN, factorize */
->>> +#define TPS65219_STBY1_BUCK1_STBY_EN_MASK		BIT(0)
->>> +#define TPS65219_STBY1_BUCK2_STBY_EN_MASK		BIT(1)
->>> +#define TPS65219_STBY1_BUCK3_STBY_EN_MASK		BIT(2)
->>> +#define TPS65219_STBY1_LDO1_STBY_EN_MASK		BIT(3)
->>> +#define TPS65219_STBY1_LDO2_STBY_EN_MASK		BIT(4)
->>> +#define TPS65219_STBY1_LDO3_STBY_EN_MASK		BIT(5)
->>> +#define TPS65219_STBY1_LDO4_STBY_EN_MASK		BIT(6)
->>> +/* STBY_2 config */
->>> +#define TPS65219_STBY2_GPO1_STBY_EN_MASK		BIT(0)
->>> +#define TPS65219_STBY2_GPO2_STBY_EN_MASK		BIT(1)
->>> +#define TPS65219_STBY2_GPIO_STBY_EN_MASK		BIT(2)
->>> +/* MFP Control */
->>> +#define TPS65219_MFP_I2C_OFF_REQ_MASK			BIT(0)
->>> +#define TPS65219_MFP_STBY_I2C_CTRL_MASK			BIT(1)
->>> +#define TPS65219_MFP_COLD_RESET_I2C_CTRL_MASK		BIT(2)
->>> +#define TPS65219_MFP_WARM_RESET_I2C_CTRL_MASK		BIT(3)
->>> +#define TPS65219_MFP_GPIO_STATUS_MASK			BIT(4)
->>> +/* MFP_1 Config */
->>> +#define TPS65219_MFP_1_VSEL_DDR_SEL_MASK		BIT(0)
->>> +#define TPS65219_MFP_1_VSEL_SD_POL_MASK			BIT(1)
->>> +#define TPS65219_MFP_1_VSEL_RAIL_MASK			BIT(2)
->>> +/* MFP_2 Config */
->>> +#define TPS65219_MFP_2_MODE_STBY_MASK			GENMASK(1, 0)
->>> +#define TPS65219_MFP_2_MODE_RESET_MASK			BIT(2)
->>> +#define TPS65219_MFP_2_EN_PB_VSENSE_DEGL_MASK		BIT(3)
->>> +#define TPS65219_MFP_2_EN_PB_VSENSE_MASK		GENMASK(5, 4)
->>> +#define TPS65219_MFP_2_WARM_COLD_RESET_MASK		BIT(6)
->>> +#define TPS65219_MFP_2_PU_ON_FSD_MASK			BIT(7)
->>> +#define TPS65219_MFP_2_EN				0
->>> +#define TPS65219_MFP_2_PB				BIT(4)
->>> +#define TPS65219_MFP_2_VSENSE				BIT(5)
->>> +/* MASK_UV Config */
->>> +#define TPS65219_REG_MASK_UV_LDO1_UV_MASK		BIT(0)
->>> +#define TPS65219_REG_MASK_UV_LDO2_UV_MASK		BIT(1)
->>> +#define TPS65219_REG_MASK_UV_LDO3_UV_MASK		BIT(2)
->>> +#define TPS65219_REG_MASK_UV_LDO4_UV_MASK		BIT(3)
->>> +#define TPS65219_REG_MASK_UV_BUCK1_UV_MASK		BIT(4)
->>> +#define TPS65219_REG_MASK_UV_BUCK2_UV_MASK		BIT(5)
->>> +#define TPS65219_REG_MASK_UV_BUCK3_UV_MASK		BIT(6)
->>> +#define TPS65219_REG_MASK_UV_RETRY_MASK			BIT(7)
->>> +/* MASK Config */
->>> +// SENSOR_N_WARM_MASK already defined in Thermal
->>> +#define TPS65219_REG_MASK_INT_FOR_RV_MASK		BIT(4)
->>> +#define TPS65219_REG_MASK_EFFECT_MASK			GENMASK(2, 1)
->>> +#define TPS65219_REG_MASK_INT_FOR_PB_MASK		BIT(7)
->>> +/* UnderVoltage - Short to GND - OverCurrent*/
->>> +/* LDO3-4 */
->>> +#define TPS65219_INT_LDO3_SCG_MASK			BIT(0)
->>> +#define TPS65219_INT_LDO3_OC_MASK			BIT(1)
->>> +#define TPS65219_INT_LDO3_UV_MASK			BIT(2)
->>> +#define TPS65219_INT_LDO4_SCG_MASK			BIT(3)
->>> +#define TPS65219_INT_LDO4_OC_MASK			BIT(4)
->>> +#define TPS65219_INT_LDO4_UV_MASK			BIT(5)
->>> +/* LDO1-2 */
->>> +#define TPS65219_INT_LDO1_SCG_MASK			BIT(0)
->>> +#define TPS65219_INT_LDO1_OC_MASK			BIT(1)
->>> +#define TPS65219_INT_LDO1_UV_MASK			BIT(2)
->>> +#define TPS65219_INT_LDO2_SCG_MASK			BIT(3)
->>> +#define TPS65219_INT_LDO2_OC_MASK			BIT(4)
->>> +#define TPS65219_INT_LDO2_UV_MASK			BIT(5)
->>> +/* BUCK3 */
->>> +#define TPS65219_INT_BUCK3_SCG_MASK			BIT(0)
->>> +#define TPS65219_INT_BUCK3_OC_MASK			BIT(1)
->>> +#define TPS65219_INT_BUCK3_NEG_OC_MASK			BIT(2)
->>> +#define TPS65219_INT_BUCK3_UV_MASK			BIT(3)
->>> +/* BUCK1-2 */
->>> +#define TPS65219_INT_BUCK1_SCG_MASK			BIT(0)
->>> +#define TPS65219_INT_BUCK1_OC_MASK			BIT(1)
->>> +#define TPS65219_INT_BUCK1_NEG_OC_MASK			BIT(2)
->>> +#define TPS65219_INT_BUCK1_UV_MASK			BIT(3)
->>> +#define TPS65219_INT_BUCK2_SCG_MASK			BIT(4)
->>> +#define TPS65219_INT_BUCK2_OC_MASK			BIT(5)
->>> +#define TPS65219_INT_BUCK2_NEG_OC_MASK			BIT(6)
->>> +#define TPS65219_INT_BUCK2_UV_MASK			BIT(7)
->>> +/* Thermal Sensor  */
->>> +#define TPS65219_INT_SENSOR_3_WARM_MASK			BIT(0)
->>> +#define TPS65219_INT_SENSOR_2_WARM_MASK			BIT(1)
->>> +#define TPS65219_INT_SENSOR_1_WARM_MASK			BIT(2)
->>> +#define TPS65219_INT_SENSOR_0_WARM_MASK			BIT(3)
->>> +#define TPS65219_INT_SENSOR_3_HOT_MASK			BIT(4)
->>> +#define TPS65219_INT_SENSOR_2_HOT_MASK			BIT(5)
->>> +#define TPS65219_INT_SENSOR_1_HOT_MASK			BIT(6)
->>> +#define TPS65219_INT_SENSOR_0_HOT_MASK			BIT(7)
->>> +/* Residual Voltage */
->>> +#define TPS65219_INT_BUCK1_RV_MASK			BIT(0)
->>> +#define TPS65219_INT_BUCK2_RV_MASK			BIT(1)
->>> +#define TPS65219_INT_BUCK3_RV_MASK			BIT(2)
->>> +#define TPS65219_INT_LDO1_RV_MASK			BIT(3)
->>> +#define TPS65219_INT_LDO2_RV_MASK			BIT(4)
->>> +#define TPS65219_INT_LDO3_RV_MASK			BIT(5)
->>> +#define TPS65219_INT_LDO4_RV_MASK			BIT(6)
->>> +/* Residual Voltage ShutDown */
->>> +#define TPS65219_INT_BUCK1_RV_SD_MASK			BIT(0)
->>> +#define TPS65219_INT_BUCK2_RV_SD_MASK			BIT(1)
->>> +#define TPS65219_INT_BUCK3_RV_SD_MASK			BIT(2)
->>> +#define TPS65219_INT_LDO1_RV_SD_MASK			BIT(3)
->>> +#define TPS65219_INT_LDO2_RV_SD_MASK			BIT(4)
->>> +#define TPS65219_INT_LDO3_RV_SD_MASK			BIT(5)
->>> +#define TPS65219_INT_LDO4_RV_SD_MASK			BIT(6)
->>> +#define TPS65219_INT_TIMEOUT_MASK			BIT(7)
->>> +/* Power Button */
->>> +#define TPS65219_INT_PB_FALLING_EDGE_DETECT_MASK	BIT(0)
->>> +#define TPS65219_INT_PB_RISING_EDGE_DETECT_MASK		BIT(1)
->>> +#define TPS65219_INT_PB_REAL_TIME_STATUS_MASK		BIT(2)
->>> +
->>> +#define TPS65219_PB_POS					7
->>> +#define TPS65219_TO_RV_POS				6
->>> +#define TPS65219_RV_POS					5
->>> +#define TPS65219_SYS_POS				4
->>> +#define TPS65219_BUCK_1_2_POS				3
->>> +#define TPS65219_BUCK_3_POS				2
->>> +#define TPS65219_LDO_1_2_POS				1
->>> +#define TPS65219_LDO_3_4_POS				0
->>> +
->>> +/* IRQs */
->>> +enum {
->>> +	/* LDO3-4 register IRQs */
->>> +	TPS65219_INT_LDO3_SCG,
->>> +	TPS65219_INT_LDO3_OC,
->>> +	TPS65219_INT_LDO3_UV,
->>> +	TPS65219_INT_LDO4_SCG,
->>> +	TPS65219_INT_LDO4_OC,
->>> +	TPS65219_INT_LDO4_UV,
->>> +	/* LDO1-2 */
->>> +	TPS65219_INT_LDO1_SCG,
->>> +	TPS65219_INT_LDO1_OC,
->>> +	TPS65219_INT_LDO1_UV,
->>> +	TPS65219_INT_LDO2_SCG,
->>> +	TPS65219_INT_LDO2_OC,
->>> +	TPS65219_INT_LDO2_UV,
->>> +	/* BUCK3 */
->>> +	TPS65219_INT_BUCK3_SCG,
->>> +	TPS65219_INT_BUCK3_OC,
->>> +	TPS65219_INT_BUCK3_NEG_OC,
->>> +	TPS65219_INT_BUCK3_UV,
->>> +	/* BUCK1-2 */
->>> +	TPS65219_INT_BUCK1_SCG,
->>> +	TPS65219_INT_BUCK1_OC,
->>> +	TPS65219_INT_BUCK1_NEG_OC,
->>> +	TPS65219_INT_BUCK1_UV,
->>> +	TPS65219_INT_BUCK2_SCG,
->>> +	TPS65219_INT_BUCK2_OC,
->>> +	TPS65219_INT_BUCK2_NEG_OC,
->>> +	TPS65219_INT_BUCK2_UV,
->>> +	/* Thermal Sensor  */
->>> +	TPS65219_INT_SENSOR_3_WARM,
->>> +	TPS65219_INT_SENSOR_2_WARM,
->>> +	TPS65219_INT_SENSOR_1_WARM,
->>> +	TPS65219_INT_SENSOR_0_WARM,
->>> +	TPS65219_INT_SENSOR_3_HOT,
->>> +	TPS65219_INT_SENSOR_2_HOT,
->>> +	TPS65219_INT_SENSOR_1_HOT,
->>> +	TPS65219_INT_SENSOR_0_HOT,
->>> +	/* Residual Voltage */
->>> +	TPS65219_INT_BUCK1_RV,
->>> +	TPS65219_INT_BUCK2_RV,
->>> +	TPS65219_INT_BUCK3_RV,
->>> +	TPS65219_INT_LDO1_RV,
->>> +	TPS65219_INT_LDO2_RV,
->>> +	TPS65219_INT_LDO3_RV,
->>> +	TPS65219_INT_LDO4_RV,
->>> +	/* Residual Voltage ShutDown */
->>> +	TPS65219_INT_BUCK1_RV_SD,
->>> +	TPS65219_INT_BUCK2_RV_SD,
->>> +	TPS65219_INT_BUCK3_RV_SD,
->>> +	TPS65219_INT_LDO1_RV_SD,
->>> +	TPS65219_INT_LDO2_RV_SD,
->>> +	TPS65219_INT_LDO3_RV_SD,
->>> +	TPS65219_INT_LDO4_RV_SD,
->>> +	TPS65219_INT_TIMEOUT,
->>> +	/* Power Button */
->>> +	TPS65219_INT_PB_FALLING_EDGE_DETECT,
->>> +	TPS65219_INT_PB_RISING_EDGE_DETECT,
->>> +};
->>> +
->>> +enum tps65219_regulator_id {
->>> +	/* DCDC's */
->>> +	TPS65219_BUCK_1,
->>> +	TPS65219_BUCK_2,
->>> +	TPS65219_BUCK_3,
->>> +	/* LDOs */
->>> +	TPS65219_LDO_1,
->>> +	TPS65219_LDO_2,
->>> +	TPS65219_LDO_3,
->>> +	TPS65219_LDO_4,
->>> +};
->>> +
->>> +/* Number of step-down converters available */
->>> +#define TPS65219_NUM_DCDC		3
->>> +/* Number of LDO voltage regulators available */
->>> +#define TPS65219_NUM_LDO		4
->>> +/* Number of total regulators available */
->>> +#define TPS65219_NUM_REGULATOR		(TPS65219_NUM_DCDC + TPS65219_NUM_LDO)
->>> +
->>> +/* Define the TPS65219 IRQ numbers */
->>> +enum tps65219_irqs {
->>> +	/* INT source registers */
->>> +	TPS65219_TO_RV_SD_SET_IRQ,
->>> +	TPS65219_RV_SET_IRQ,
->>> +	TPS65219_SYS_SET_IRQ,
->>> +	TPS65219_BUCK_1_2_SET_IRQ,
->>> +	TPS65219_BUCK_3_SET_IRQ,
->>> +	TPS65219_LDO_1_2_SET_IRQ,
->>> +	TPS65219_LDO_3_4_SET_IRQ,
->>> +	TPS65219_PB_SET_IRQ,
->>> +};
->>> +
->>> +/**
->>> + * struct tps65219 - tps65219 sub-driver chip access routines
->>> + *
->>> + * Device data may be used to access the TPS65219 chip
->>> + *
->>> + * @dev MFD device
->>> + * @regmap Regmap for accessing the device registers
->>> + * @irq_data Regmap irq data used for the irq chip
->>> + * @nb notifier block for the restart handler
->>> + */
->>> +struct tps65219 {
->>> +	struct device *dev;
->>> +	struct regmap *regmap;
->>> +
->>> +	struct regmap_irq_chip_data *irq_data;
->>> +	struct notifier_block nb;
->>> +};
->>> +
->>> +#endif /*  MFD_TPS65219_H */
+> > 
+> > > +		up_write(&mp->m_super->s_umount);
+> > > +		if (error)
+> > > +			return error;
+> > > +	}
+> > > +
+> > >    	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
+> > >    		xfs_warn(mp,
+> > >    			 "notify_failure() not supported on realtime device!");
+> > > @@ -196,6 +209,8 @@ xfs_dax_notify_failure(
+> > >     	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+> > >    	    mp->m_logdev_targp != mp->m_ddev_targp) {
+> > > +		if (mf_flags & MF_MEM_PRE_REMOVE)
+> > > +			return 0;
+> > >    		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+> > >    		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+> > >    		return -EFSCORRUPTED;
+> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > > index 982f2607180b..2c7c132e6512 100644
+> > > --- a/include/linux/mm.h
+> > > +++ b/include/linux/mm.h
+> > > @@ -3176,6 +3176,7 @@ enum mf_flags {
+> > >    	MF_UNPOISON = 1 << 4,
+> > >    	MF_SW_SIMULATED = 1 << 5,
+> > >    	MF_NO_RETRY = 1 << 6,
+> > > +	MF_MEM_PRE_REMOVE = 1 << 7,
+> > >    };
+> > >    int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> > >    		      unsigned long count, int mf_flags);
+> > > -- 
+> > > 2.37.2
+> > > 
+> > > 
+> > 
+> > 

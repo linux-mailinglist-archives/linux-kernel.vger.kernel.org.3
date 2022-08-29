@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3473C5A4A33
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7495A4A12
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiH2Lez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S232630AbiH2LdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbiH2Ldw (ORCPT
+        with ESMTP id S231237AbiH2LaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:33:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E796DF8F;
-        Mon, 29 Aug 2022 04:19:35 -0700 (PDT)
+        Mon, 29 Aug 2022 07:30:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0C46BCEE;
+        Mon, 29 Aug 2022 04:18:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75566B80FAB;
-        Mon, 29 Aug 2022 11:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B104C433D6;
-        Mon, 29 Aug 2022 11:19:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A945361128;
+        Mon, 29 Aug 2022 11:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6285C433C1;
+        Mon, 29 Aug 2022 11:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771970;
-        bh=evU2Kna9ifw/gXx4du2NmnnysFwzHAvOA6q/RwqBm5c=;
+        s=korg; t=1661771863;
+        bh=9GGEEK+29rkGbgMDUIJYkfa5qhQ5CwqP81QP7W3+6jc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Mwfbu2u3b+zcM/NjWhRCYcDCRtmvl2YqPVHpdZAZXYLEETRDXRMVTwSzyD0tHdJ6
-         taJA98b5LyvujMPBWPSmZcoOoxLVmFD+VHq3lAFxG8Em/tSHkqHQUZmWex9D71+XXY
-         8MiWoCUnST7D9EJVpOAHnV1PkU2dYQ+kscpfjAbE=
+        b=jxfnSXOWwSB0yoI5ESkNciXrdC8oTQRWLc5ifir9Nfak0wNR3jYNO/isGkOIQKBPV
+         5/fV3v3Q+DIjkZK2EhBQTht+DtauK3ALJfny6+8LqMQI4uBqehhSPH4sspSMe9fYqT
+         6/X0rk+on0tRtXWJJv/s9Ujn1kNuG8YF6zTMQCww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Badari Pulavarty <badari.pulavarty@intel.com>,
-        SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.19 114/158] mm/damon/dbgfs: avoid duplicate context directory creation
-Date:   Mon, 29 Aug 2022 12:59:24 +0200
-Message-Id: <20220829105813.885649323@linuxfoundation.org>
+        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 5.19 115/158] s390/mm: do not trigger write fault when vma does not allow VM_WRITE
+Date:   Mon, 29 Aug 2022 12:59:25 +0200
+Message-Id: <20220829105813.924839469@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -56,53 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Badari Pulavarty <badari.pulavarty@intel.com>
+From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 
-commit d26f60703606ab425eee9882b32a1781a8bed74d upstream.
+commit 41ac42f137080bc230b5882e3c88c392ab7f2d32 upstream.
 
-When user tries to create a DAMON context via the DAMON debugfs interface
-with a name of an already existing context, the context directory creation
-fails but a new context is created and added in the internal data
-structure, due to absence of the directory creation success check.  As a
-result, memory could leak and DAMON cannot be turned on.  An example test
-case is as below:
+For non-protection pXd_none() page faults in do_dat_exception(), we
+call do_exception() with access == (VM_READ | VM_WRITE | VM_EXEC).
+In do_exception(), vma->vm_flags is checked against that before
+calling handle_mm_fault().
 
-    # cd /sys/kernel/debug/damon/
-    # echo "off" >  monitor_on
-    # echo paddr > target_ids
-    # echo "abc" > mk_context
-    # echo "abc" > mk_context
-    # echo $$ > abc/target_ids
-    # echo "on" > monitor_on  <<< fails
+Since commit 92f842eac7ee3 ("[S390] store indication fault optimization"),
+we call handle_mm_fault() with FAULT_FLAG_WRITE, when recognizing that
+it was a write access. However, the vma flags check is still only
+checking against (VM_READ | VM_WRITE | VM_EXEC), and therefore also
+calling handle_mm_fault() with FAULT_FLAG_WRITE in cases where the vma
+does not allow VM_WRITE.
 
-Return value of 'debugfs_create_dir()' is expected to be ignored in
-general, but this is an exceptional case as DAMON feature is depending
-on the debugfs functionality and it has the potential duplicate name
-issue.  This commit therefore fixes the issue by checking the directory
-creation failure and immediately return the error in the case.
+Fix this by changing access check in do_exception() to VM_WRITE only,
+when recognizing write access.
 
-Link: https://lkml.kernel.org/r/20220821180853.2400-1-sj@kernel.org
-Fixes: 75c1c2b53c78 ("mm/damon/dbgfs: support multiple contexts")
-Signed-off-by: Badari Pulavarty <badari.pulavarty@intel.com>
-Signed-off-by: SeongJae Park <sj@kernel.org>
-Cc: <stable@vger.kernel.org>	[ 5.15.x]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Link: https://lkml.kernel.org/r/20220811103435.188481-3-david@redhat.com
+Fixes: 92f842eac7ee3 ("[S390] store indication fault optimization")
+Cc: <stable@vger.kernel.org>
+Reported-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/damon/dbgfs.c |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/s390/mm/fault.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -787,6 +787,9 @@ static int dbgfs_mk_context(char *name)
- 		return -ENOENT;
+--- a/arch/s390/mm/fault.c
++++ b/arch/s390/mm/fault.c
+@@ -379,7 +379,9 @@ static inline vm_fault_t do_exception(st
+ 	flags = FAULT_FLAG_DEFAULT;
+ 	if (user_mode(regs))
+ 		flags |= FAULT_FLAG_USER;
+-	if (access == VM_WRITE || is_write)
++	if (is_write)
++		access = VM_WRITE;
++	if (access == VM_WRITE)
+ 		flags |= FAULT_FLAG_WRITE;
+ 	mmap_read_lock(mm);
  
- 	new_dir = debugfs_create_dir(name, root);
-+	/* Below check is required for a potential duplicated name case */
-+	if (IS_ERR(new_dir))
-+		return PTR_ERR(new_dir);
- 	dbgfs_dirs[dbgfs_nr_ctxs] = new_dir;
- 
- 	new_ctx = dbgfs_new_ctx();
 
 

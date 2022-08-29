@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394925A533B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84605A5347
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiH2Rep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S230438AbiH2RgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiH2Ren (ORCPT
+        with ESMTP id S229653AbiH2RgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:34:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E05497EDA;
-        Mon, 29 Aug 2022 10:34:42 -0700 (PDT)
+        Mon, 29 Aug 2022 13:36:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1921A74E26;
+        Mon, 29 Aug 2022 10:36:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FA0DB81199;
-        Mon, 29 Aug 2022 17:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B8074C433D6;
-        Mon, 29 Aug 2022 17:34:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A971612F3;
+        Mon, 29 Aug 2022 17:36:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862B4C433B5;
+        Mon, 29 Aug 2022 17:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661794479;
-        bh=LBDvS6XoZVRJEJmWa+ZXxNpovfkLbLIkGFHkPfJWv0c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CMLLzI7mtPYjexxfjl9CMmOKdfKn/MPGUOSvKL5GbOPE2NRRY70bQdMF+w/2yYpkV
-         DYJu42PZrnlPh31ZryyDcYEdmgg0mMT1vou5pLKfJ21Dgmf6O4cSAR46N0JEQ6zoLf
-         x2sfPJr1COu9J8sJm8hB9ltCRWiF/otr/BbM5zw2t3tIMEgQxB6P4QIYtvZocE3Nps
-         C3HkImZZsUDZl5HSrjp6JJ5fGo6vy3xJC9ubtdt5Meg79A5Sq0aQuLv8iLLgWBnar/
-         vG+qc20375xczOgrImEQ28J+kycaAJ796q30eBlr+t+bomaklzVbFxZYSC9mHz56W3
-         M5EdpekNR7tKQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A462EE924D6;
-        Mon, 29 Aug 2022 17:34:39 +0000 (UTC)
-Subject: Re: [GIT PULL] Documentation fixes for 6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <871qszrr9s.fsf@meer.lwn.net>
-References: <871qszrr9s.fsf@meer.lwn.net>
-X-PR-Tracked-List-Id: <linux-doc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <871qszrr9s.fsf@meer.lwn.net>
-X-PR-Tracked-Remote: git://git.lwn.net/linux.git tags/docs-6.0-fixes
-X-PR-Tracked-Commit-Id: 5479d6d4bf122d4b137659559a7bd17784b97b7e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d68d289fbec70b50a25f5818964b26349320ddb5
-Message-Id: <166179447966.12590.7460232277544887852.pr-tracker-bot@kernel.org>
-Date:   Mon, 29 Aug 2022 17:34:39 +0000
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+        s=k20201202; t=1661794572;
+        bh=rsrie5xAIPERRfy5hV2/lMm7+uIPsinOty7KExwvFfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OZI38IqpeQLjkNktjbjkZgbz8ZZ7HJoB8Tea+n9Y1xRKTO/HyDpMNuAzHVsLOMW75
+         y7XmNUll7k9IlOpkFVIKUPeVhQTzXE7bA7F3FiNVjDZAcG1AoivaphkxETl1B+Cq7x
+         T5mDVb1ehKN6HDtTLZKJjHI/j9A37GVoqSezA4k2ffmkzvg3U4x12+5R57HMHDPY+i
+         RgVGOf9pfgD26/6OJcurpLwBP4+nLfqbkfgUY7WkfyKsmiTThx7Bz4pfjhv7vKRD4v
+         8nwYlpYJ24uSsiO0U345SWUqnGRZDyIj60mpCctnusSQkdS30E1uNNDZILEC0ABtIk
+         xM/Sy+JrekpnA==
+Date:   Mon, 29 Aug 2022 10:36:10 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v5 6/8] f2fs: simplify f2fs_force_buffered_io()
+Message-ID: <Ywz5CrBg6udTMnW/@google.com>
+References: <20220827065851.135710-1-ebiggers@kernel.org>
+ <20220827065851.135710-7-ebiggers@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220827065851.135710-7-ebiggers@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,15 +58,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 29 Aug 2022 09:41:35 -0600:
+On 08/26, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> f2fs only allows direct I/O that is aligned to the filesystem block
+> size.  Given that fact, simplify f2fs_force_buffered_io() by removing
+> the redundant call to block_unaligned_IO().
+> 
+> This makes it easier to reuse this code for STATX_DIOALIGN.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-> git://git.lwn.net/linux.git tags/docs-6.0-fixes
+Acked-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d68d289fbec70b50a25f5818964b26349320ddb5
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> ---
+>  fs/f2fs/file.c | 27 +++++----------------------
+>  1 file changed, 5 insertions(+), 22 deletions(-)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 8a9455bf956f16..8e11311db21060 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -808,22 +808,9 @@ int f2fs_truncate(struct inode *inode)
+>  	return 0;
+>  }
+>  
+> -static int block_unaligned_IO(struct inode *inode, struct kiocb *iocb,
+> -			      struct iov_iter *iter)
+> -{
+> -	unsigned int i_blkbits = READ_ONCE(inode->i_blkbits);
+> -	unsigned int blocksize_mask = (1 << i_blkbits) - 1;
+> -	loff_t offset = iocb->ki_pos;
+> -	unsigned long align = offset | iov_iter_alignment(iter);
+> -
+> -	return align & blocksize_mask;
+> -}
+> -
+> -static bool f2fs_force_buffered_io(struct inode *inode,
+> -				   struct kiocb *iocb, struct iov_iter *iter)
+> +static bool f2fs_force_buffered_io(struct inode *inode, int rw)
+>  {
+>  	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> -	int rw = iov_iter_rw(iter);
+>  
+>  	if (!fscrypt_dio_supported(inode))
+>  		return true;
+> @@ -836,13 +823,9 @@ static bool f2fs_force_buffered_io(struct inode *inode,
+>  	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
+>  		return true;
+>  
+> -	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
+> -		if (block_unaligned_IO(inode, iocb, iter))
+> -			return true;
+> -		if (F2FS_IO_ALIGNED(sbi))
+> -			return true;
+> -	}
+> -	if (is_sbi_flag_set(F2FS_I_SB(inode), SBI_CP_DISABLED))
+> +	if (f2fs_lfs_mode(sbi) && rw == WRITE && F2FS_IO_ALIGNED(sbi))
+> +		return true;
+> +	if (is_sbi_flag_set(sbi, SBI_CP_DISABLED))
+>  		return true;
+>  
+>  	return false;
+> @@ -4222,7 +4205,7 @@ static bool f2fs_should_use_dio(struct inode *inode, struct kiocb *iocb,
+>  	if (!(iocb->ki_flags & IOCB_DIRECT))
+>  		return false;
+>  
+> -	if (f2fs_force_buffered_io(inode, iocb, iter))
+> +	if (f2fs_force_buffered_io(inode, iov_iter_rw(iter)))
+>  		return false;
+>  
+>  	/*
+> -- 
+> 2.37.2

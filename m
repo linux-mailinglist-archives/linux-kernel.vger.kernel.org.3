@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9803C5A482D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C2E5A482B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiH2LGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S230190AbiH2LGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiH2LGH (ORCPT
+        with ESMTP id S230320AbiH2LFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:06:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AFE6716A;
-        Mon, 29 Aug 2022 04:04:31 -0700 (PDT)
+        Mon, 29 Aug 2022 07:05:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E37642F3;
+        Mon, 29 Aug 2022 04:04:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1788B80EF1;
-        Mon, 29 Aug 2022 11:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CCC6C433C1;
-        Mon, 29 Aug 2022 11:04:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48855B80EF6;
+        Mon, 29 Aug 2022 11:04:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D004C433D6;
+        Mon, 29 Aug 2022 11:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771069;
-        bh=AXe2rJGHH3gbINqIp92wwAZPzyNJqtalEMvyoHzqLPk=;
+        s=korg; t=1661771058;
+        bh=J2SB5bmPljpkP9lpMCL8I+guc1tT+i/fXt5y9INNn24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SiZRQw2fJGQmhi/T+9YIVKv2gItFgjsowIbRR4kIM+KDp3Hn0QZMszSzjEuJqHXUH
-         FDVmBW0m/Iv8drd/kn64ClVR3IJx4Kxelk2lWHoB5RQuuISrAedGyIpnT4g6MAXmtT
-         rSovvYchUPwqx93hJ3j0byFmlusT/LDn1xw1ghr0=
+        b=ZKj0lzmY7Ap6c4tyY7S8G2GUdVO8X2Tx/vuPgiQgjthH1ZTG8M2cjYHTE341C6Q4M
+         M+Q6xuqT4tImxYgyMaSSXg/lnpNmjPZWbeokOift0KIlEczbdAyO2rXeBa3rMjSvG9
+         L88CmToM7zTDOHCcC7EiWHIL/m1p4mLhM1Z751F8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 16/86] NFS: Dont allocate nfs_fattr on the stack in __nfs42_ssc_open()
+Subject: [PATCH 5.15 055/136] netfilter: nf_tables: disallow updates of implicit chain
 Date:   Mon, 29 Aug 2022 12:58:42 +0200
-Message-Id: <20220829105757.186805285@linuxfoundation.org>
+Message-Id: <20220829105806.886843813@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 156cd28562a4e8ca454d11b234d9f634a45d6390 ]
+[ Upstream commit 5dc52d83baac30decf5f3b371d5eb41dfa1d1412 ]
 
-The preferred behaviour is always to allocate struct nfs_fattr from the
-slab.
+Updates on existing implicit chain make no sense, disallow this.
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4file.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ net/netfilter/nf_tables_api.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
-index 9fdecd9090493..4928eaa0d4c02 100644
---- a/fs/nfs/nfs4file.c
-+++ b/fs/nfs/nfs4file.c
-@@ -321,7 +321,7 @@ static int read_name_gen = 1;
- static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- 		struct nfs_fh *src_fh, nfs4_stateid *stateid)
- {
--	struct nfs_fattr fattr;
-+	struct nfs_fattr *fattr = nfs_alloc_fattr();
- 	struct file *filep, *res;
- 	struct nfs_server *server;
- 	struct inode *r_ino = NULL;
-@@ -332,9 +332,10 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 2f22a172a27e1..58f9513bd1419 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -2479,6 +2479,9 @@ static int nf_tables_newchain(struct sk_buff *skb, const struct nfnl_info *info,
+ 	nft_ctx_init(&ctx, net, skb, info->nlh, family, table, chain, nla);
  
- 	server = NFS_SERVER(ss_mnt->mnt_root->d_inode);
- 
--	nfs_fattr_init(&fattr);
-+	if (!fattr)
-+		return ERR_PTR(-ENOMEM);
- 
--	status = nfs4_proc_getattr(server, src_fh, &fattr, NULL, NULL);
-+	status = nfs4_proc_getattr(server, src_fh, fattr, NULL, NULL);
- 	if (status < 0) {
- 		res = ERR_PTR(status);
- 		goto out;
-@@ -347,7 +348,7 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- 		goto out;
- 	snprintf(read_name, len, SSC_READ_NAME_BODY, read_name_gen++);
- 
--	r_ino = nfs_fhget(ss_mnt->mnt_root->d_inode->i_sb, src_fh, &fattr,
-+	r_ino = nfs_fhget(ss_mnt->mnt_root->d_inode->i_sb, src_fh, fattr,
- 			NULL);
- 	if (IS_ERR(r_ino)) {
- 		res = ERR_CAST(r_ino);
-@@ -392,6 +393,7 @@ static struct file *__nfs42_ssc_open(struct vfsmount *ss_mnt,
- out_free_name:
- 	kfree(read_name);
- out:
-+	nfs_free_fattr(fattr);
- 	return res;
- out_stateowner:
- 	nfs4_put_state_owner(sp);
+ 	if (chain != NULL) {
++		if (chain->flags & NFT_CHAIN_BINDING)
++			return -EINVAL;
++
+ 		if (info->nlh->nlmsg_flags & NLM_F_EXCL) {
+ 			NL_SET_BAD_ATTR(extack, attr);
+ 			return -EEXIST;
 -- 
 2.35.1
 

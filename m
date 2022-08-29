@@ -2,104 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C52E5A56FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EF85A5704
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiH2WTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 18:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S229804AbiH2WVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 18:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiH2WTh (ORCPT
+        with ESMTP id S229572AbiH2WU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 18:19:37 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9737AC32
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:19:36 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id e195so1865901iof.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:19:36 -0700 (PDT)
+        Mon, 29 Aug 2022 18:20:58 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C067A508
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:20:56 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w2so9359327pld.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=z16LTytwree0PKSjWnzmVijEsQZawIjTScg5cLJbx4c=;
-        b=DAE/19mVHjTvFqLQc+TeszZ2qDTXRKh5npmLwg8DNKTiocc51bxxarD5Yk+8EZZ7m2
-         DhMYxP+pXYTrKEPkwNQ24xYWITPAwbHW/XrrL8uP0dhvx1UnJh9EDi8E2wY4OKmtBd/c
-         szJZ5Js98RStfj+ESiqFrIHLx3eFHP3K5+5hE=
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=GZQU1toz3ycN5Zt/1Eu0mxxDza6a6KDCxHuVJeEjjL8=;
+        b=MSyeXDHLV3z2ql45vC6CoxQPhs2hxu5q3AA/iykDc9FHnhfpIO2pUKfJLYcHwqxwUi
+         M9tVaeZaP4kNNHECZZ8wX6CmVRtYykgJFgD3SdUstjtKxomc1fNFfyRS9jcnZfxWYc9q
+         v+JR6id643YDf34sJ1S+DjakhAxGq6L7VFA5A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=z16LTytwree0PKSjWnzmVijEsQZawIjTScg5cLJbx4c=;
-        b=g5PKuYfvjI8qEUUVKxlIkiLx2//aIq9c0f0BZQcqT345yrgG6/z6TpRzPdz/0BsP9Z
-         SQhmiFs0pO9zBBF7OtKB20qh2ex/T3KqIKwLhajQ3vxdIfFVbquJpKqLg73sAw7SRBFk
-         NvA40GkAa6dikVkLm/n26ssoyyCCcNaxNhrjtxOZ+2ucQ2nHNL/XhnOnMsii5CqmsVVE
-         7HtV1CsZAjkIagPEuYOrgZA7HPa6NqB/1z7/eCnkNscH7Z9IyoqJVb7AGlKDCwDB9FVy
-         JHOtQdz0CVrdmGoWmfrO2MIijkH1anGAmNuVQTNqPXu3KMMsOPZgPztJ0tLEAiOsb3FE
-         eJbA==
-X-Gm-Message-State: ACgBeo0hmlT5y5nATKG/eEixmOAnGVytEbgM2bsxwcXcnaWFGnCk7FwO
-        9c9fHVzrLGhRdUr2sDUY+MTDfQ==
-X-Google-Smtp-Source: AA6agR5dRxu3/NWPGWPcf3nUkCF9fPzF4dQYdscjh+c/ZVPiRjnANruqP0m1k2RrYxBL/WrSucWDfw==
-X-Received: by 2002:a05:6638:1c17:b0:349:b6d3:c4bb with SMTP id ca23-20020a0566381c1700b00349b6d3c4bbmr10304187jab.222.1661811576137;
-        Mon, 29 Aug 2022 15:19:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id ca12-20020a0566381c0c00b0034a11fe7513sm4773814jab.125.2022.08.29.15.19.35
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=GZQU1toz3ycN5Zt/1Eu0mxxDza6a6KDCxHuVJeEjjL8=;
+        b=OJL9su0c6nNMTgLs22LlmVgU5LRODSMFcUXIp3us7AP8R4w4vccBkkx8TJkLkIryMU
+         PKapUbBaiwWLrHqqC5+5TbGHf4N2Tet2skLxOSoGg+vCoglaQP6X8BJKqx30KR/iRaxT
+         j9zbYjMe5LQPFKqueDs7IC7OcIlaNdFf0YC50o4qsnXGRz9pMmGKUY6hu77Z+JJxglMn
+         CDfAjp6FSCUJL0oUzIxF+tUo0P6TGWchuRiab8polsIwbVmBjTK7ROKPep/amnZYd8/2
+         bXs8q+7EfKoTX1ECWriw9rQaANxyWhWlnB5MisTTq/kdjHQQNWfndhez0iPKRNMI0Z/G
+         NfGQ==
+X-Gm-Message-State: ACgBeo0DMa6QoBWc4+/zIsnlNL3NP8YiHe96bKze5wObNlldNbh+jbKs
+        gVvqwN+FtSn8NNSw6oVZ3aPp3w==
+X-Google-Smtp-Source: AA6agR6c9g7Nyz6O6x1hoea9yovYOCtSBeyl9hnQDbWQrL3PikuXpJjslImkJiXbGqsIwuAcgPtbjw==
+X-Received: by 2002:a17:90b:1d89:b0:1f5:a59:46b1 with SMTP id pf9-20020a17090b1d8900b001f50a5946b1mr20255688pjb.173.1661811656285;
+        Mon, 29 Aug 2022 15:20:56 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:49ac:6e1:90a2:a0e0])
+        by smtp.gmail.com with UTF8SMTPSA id q4-20020a170902dac400b00174d4fabe76sm2565764plx.214.2022.08.29.15.20.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 15:19:35 -0700 (PDT)
-Message-ID: <41b97b77-1433-6cc6-90ed-c5227740f471@linuxfoundation.org>
-Date:   Mon, 29 Aug 2022 16:19:34 -0600
+        Mon, 29 Aug 2022 15:20:55 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 15:20:53 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Judy Hsiao <judyhsiao@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
+        Judy Hsiao <judyhsiao@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Fix Dmic no sound on
+ villager-r1
+Message-ID: <Yw07xSlVpQcXDqe7@google.com>
+References: <20220826065621.2255795-1-judyhsiao@chromium.org>
+ <CAD=FV=VrgrvJb_sJ8AO6pN8dRNXzzOJ9WvngeJrtVYw_wD1Akg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.10 00/86] 5.10.140-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220829105756.500128871@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VrgrvJb_sJ8AO6pN8dRNXzzOJ9WvngeJrtVYw_wD1Akg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 04:58, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.140 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Aug 26, 2022 at 10:14:58AM -0700, Doug Anderson wrote:
+> Hi,
 > 
-> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> Anything received after that time might be too late.
+> On Thu, Aug 25, 2022 at 11:56 PM Judy Hsiao <judyhsiao@chromium.org> wrote:
+> >
+> > Fix the DMIC no sound issue of villager-r1 by using "PP1800_L2C" as the
+> > DMIC power source to match the hardware schematic.
+> >
+> > This patch:
+> >    1. set vdd-micb-supply to PP1800_L2C as the MIC Bias voltage regulator.
+> >    2. In audio-routing, set VA DMIC01~VA DMIC03 to use the vdd-micb-supply
+> >       setting.
+> >
+> > Co-developed-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> > Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+> > ---
+> > Changes since V3:
+> >   -- Update the commit message and fix extra blank line.
+> > Changes since V2:
+> >   -- Update the commit message.
+> > Changes since V1:
+> >   -- Update the commit message.
+> >
+> > This patch depends on:
+> > arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
+> >
+> > [1] https://patchwork.kernel.org/patch/12929106
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.140-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> After applying your [1] then your patch applies without merge
+> conflicts. However, it still doesn't compile. You also depend on
+> whatever patch adds the nodes "lpass_va_macro" and "sound" since
+> you're referencing them in your patch. I haven't been keeping track of
+> the latest status of all the audio patches, so I myself can't point to
+> exactly what patches you depend on and whether those patches are ready
+> to land.
 > 
-> thanks,
+> In any case, the contents of this patch seem OK assuming the dependent
+> patches cause something that looks like the current (downstream)
+> chromeos-5.15 tree.
 > 
-> greg k-h
-> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Compiled and booted on my test system. No dmesg regressions.
+To my best knowledge the dependencies of the audio mess are (roughly in
+order):
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Add support for audio clock gating resets for SC7280 (v8)
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=671887
+  ready to land? (patch 2 has a minor comment about SoB tag)
 
-thanks,
--- Shuah
+Add DT support for audio clock gating resets for SC7280 (v4)
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=666480
+  ready to land after dependencies land
+
+Add soundcard support for sc7280 based platforms (v14)
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657417
+  ready to land after dependencies land
+
+Add dtsi for sc7280 herobrine boards that using rt5682 codec (v3)
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=644812
+  ready to land after dependencies land
+
+Add new board revision and LTE SKUs for sc7280-villager family (v8)
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=663014
+  ready to land after dependencies land
+
+arm64: dts: qcom: sc7280: Fix Dmic no sound on villager-r1 (v4)
+https://patchwork.kernel.org/project/linux-arm-msm/patch/20220826065621.2255795-1-judyhsiao@chromium.org/
+  ready to land after dependencies land
+
+So it looks like things are generally ready to land, unless [1] needs a
+re-spin to fix the SoB tag.
+
+m.
+
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1661754153-14813-3-git-send-email-quic_c_skakit@quicinc.com/

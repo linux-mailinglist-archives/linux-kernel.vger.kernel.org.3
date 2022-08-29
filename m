@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D9B5A48D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390295A48AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiH2LQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S231375AbiH2LNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiH2LNu (ORCPT
+        with ESMTP id S230039AbiH2LMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:13:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7EB6FA01;
-        Mon, 29 Aug 2022 04:09:30 -0700 (PDT)
+        Mon, 29 Aug 2022 07:12:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904D26D54D;
+        Mon, 29 Aug 2022 04:08:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82BDEB80EFE;
-        Mon, 29 Aug 2022 11:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0F7C433D6;
-        Mon, 29 Aug 2022 11:08:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF6FD6119A;
+        Mon, 29 Aug 2022 11:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF039C433D6;
+        Mon, 29 Aug 2022 11:08:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771320;
-        bh=wFpjLfV9gBXncn09G3X6TX3DyE8mR+F2aG30Cofdy/s=;
+        s=korg; t=1661771335;
+        bh=FBjnolGWm8I+ACwCNQKR8MFQwuJvon39dOzEFnY0FHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qs3JKFSl+5I/jYO8lxPUPEZhWTLtA9KGSoKyeMWPyx3+CX2E8P2e1ZpzF+M2TQBTH
-         HMVMNdclqcKuxmljeRp382c/bycDrR2Fd/wELBHGDsuq/BVEN8Lb7R9didpaO5pXK1
-         x7ezXGzwjHASEwhseniNCMo4rcp1MXq7yUDKlIno=
+        b=ARvdstuRp+zB2P5nQCIoMBlkn2qXn6nIrhKsG1peQxeJ62msYG7HZW+jJCehE74g4
+         vzBmjpdWQueMsBcAbXA3Tvkd4I6i2HLayrHGKheAsLguR/glzktyOeMNqLEFZLp2yq
+         955cqUQWLJChi9NpUWM+Q7u7nJoHg2+FuTz/8JMY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 091/136] ionic: clear broken state on generation change
+Subject: [PATCH 5.10 52/86] net: Fix data-races around sysctl_optmem_max.
 Date:   Mon, 29 Aug 2022 12:59:18 +0200
-Message-Id: <20220829105808.400509844@linuxfoundation.org>
+Message-Id: <20220829105758.668117902@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shannon Nelson <snelson@pensando.io>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 9cb9dadb8f45c67e4310e002c2f221b70312b293 ]
+[ Upstream commit 7de6d09f51917c829af2b835aba8bb5040f8e86a ]
 
-There is a case found in heavy testing where a link flap happens just
-before a firmware Recovery event and the driver gets stuck in the
-BROKEN state.  This comes from the driver getting interrupted by a FW
-generation change when coming back up from the link flap, and the call
-to ionic_start_queues() in ionic_link_status_check() fails.  This can be
-addressed by having the fw_up code clear the BROKEN bit if seen, rather
-than waiting for a user to manually force the interface down and then
-back up.
+While reading sysctl_optmem_max, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: 9e8eaf8427b6 ("ionic: stop watchdog when in broken state")
-Signed-off-by: Shannon Nelson <snelson@pensando.io>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_lif.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/core/bpf_sk_storage.c | 5 +++--
+ net/core/filter.c         | 9 +++++----
+ net/core/sock.c           | 8 +++++---
+ net/ipv4/ip_sockglue.c    | 6 +++---
+ net/ipv6/ipv6_sockglue.c  | 4 ++--
+ 5 files changed, 18 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_lif.c b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-index abfb5efc52b86..226867e65625e 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-@@ -3016,6 +3016,9 @@ static void ionic_lif_handle_fw_up(struct ionic_lif *lif)
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 39c5a059d1c2b..d67d06d6b817c 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -304,11 +304,12 @@ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, map, struct sock *, sk)
+ static int sk_storage_charge(struct bpf_local_storage_map *smap,
+ 			     void *owner, u32 size)
+ {
++	int optmem_max = READ_ONCE(sysctl_optmem_max);
+ 	struct sock *sk = (struct sock *)owner;
  
- 	mutex_lock(&lif->queue_lock);
+ 	/* same check as in sock_kmalloc() */
+-	if (size <= sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
++	if (size <= optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + size < optmem_max) {
+ 		atomic_add(size, &sk->sk_omem_alloc);
+ 		return 0;
+ 	}
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 6a90c1eb6f67e..4c22e6d1da746 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1212,10 +1212,11 @@ void sk_filter_uncharge(struct sock *sk, struct sk_filter *fp)
+ static bool __sk_filter_charge(struct sock *sk, struct sk_filter *fp)
+ {
+ 	u32 filter_size = bpf_prog_size(fp->prog->len);
++	int optmem_max = READ_ONCE(sysctl_optmem_max);
  
-+	if (test_and_clear_bit(IONIC_LIF_F_BROKEN, lif->state))
-+		dev_info(ionic->dev, "FW Up: clearing broken state\n");
+ 	/* same check as in sock_kmalloc() */
+-	if (filter_size <= sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + filter_size < sysctl_optmem_max) {
++	if (filter_size <= optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + filter_size < optmem_max) {
+ 		atomic_add(filter_size, &sk->sk_omem_alloc);
+ 		return true;
+ 	}
+@@ -1547,7 +1548,7 @@ int sk_reuseport_attach_filter(struct sock_fprog *fprog, struct sock *sk)
+ 	if (IS_ERR(prog))
+ 		return PTR_ERR(prog);
+ 
+-	if (bpf_prog_size(prog->len) > sysctl_optmem_max)
++	if (bpf_prog_size(prog->len) > READ_ONCE(sysctl_optmem_max))
+ 		err = -ENOMEM;
+ 	else
+ 		err = reuseport_attach_prog(sk, prog);
+@@ -1614,7 +1615,7 @@ int sk_reuseport_attach_bpf(u32 ufd, struct sock *sk)
+ 		}
+ 	} else {
+ 		/* BPF_PROG_TYPE_SOCKET_FILTER */
+-		if (bpf_prog_size(prog->len) > sysctl_optmem_max) {
++		if (bpf_prog_size(prog->len) > READ_ONCE(sysctl_optmem_max)) {
+ 			err = -ENOMEM;
+ 			goto err_prog_put;
+ 		}
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 25d25dcd0c3db..f01e71c98d5be 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2219,7 +2219,7 @@ struct sk_buff *sock_omalloc(struct sock *sk, unsigned long size,
+ 
+ 	/* small safe race: SKB_TRUESIZE may differ from final skb->truesize */
+ 	if (atomic_read(&sk->sk_omem_alloc) + SKB_TRUESIZE(size) >
+-	    sysctl_optmem_max)
++	    READ_ONCE(sysctl_optmem_max))
+ 		return NULL;
+ 
+ 	skb = alloc_skb(size, priority);
+@@ -2237,8 +2237,10 @@ struct sk_buff *sock_omalloc(struct sock *sk, unsigned long size,
+  */
+ void *sock_kmalloc(struct sock *sk, int size, gfp_t priority)
+ {
+-	if ((unsigned int)size <= sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
++	int optmem_max = READ_ONCE(sysctl_optmem_max);
 +
- 	err = ionic_qcqs_alloc(lif);
- 	if (err)
- 		goto err_unlock;
++	if ((unsigned int)size <= optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + size < optmem_max) {
+ 		void *mem;
+ 		/* First do the add, to avoid the race if kmalloc
+ 		 * might sleep.
+diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+index 22507a6a3f71c..4cc39c62af55d 100644
+--- a/net/ipv4/ip_sockglue.c
++++ b/net/ipv4/ip_sockglue.c
+@@ -773,7 +773,7 @@ static int ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval, int optlen)
+ 
+ 	if (optlen < GROUP_FILTER_SIZE(0))
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max)
++	if (optlen > READ_ONCE(sysctl_optmem_max))
+ 		return -ENOBUFS;
+ 
+ 	gsf = memdup_sockptr(optval, optlen);
+@@ -808,7 +808,7 @@ static int compat_ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
+ 
+ 	if (optlen < size0)
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max - 4)
++	if (optlen > READ_ONCE(sysctl_optmem_max) - 4)
+ 		return -ENOBUFS;
+ 
+ 	p = kmalloc(optlen + 4, GFP_KERNEL);
+@@ -1231,7 +1231,7 @@ static int do_ip_setsockopt(struct sock *sk, int level, int optname,
+ 
+ 		if (optlen < IP_MSFILTER_SIZE(0))
+ 			goto e_inval;
+-		if (optlen > sysctl_optmem_max) {
++		if (optlen > READ_ONCE(sysctl_optmem_max)) {
+ 			err = -ENOBUFS;
+ 			break;
+ 		}
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 43a894bf9a1be..6fa118bf40cdd 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -208,7 +208,7 @@ static int ipv6_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
+ 
+ 	if (optlen < GROUP_FILTER_SIZE(0))
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max)
++	if (optlen > READ_ONCE(sysctl_optmem_max))
+ 		return -ENOBUFS;
+ 
+ 	gsf = memdup_sockptr(optval, optlen);
+@@ -242,7 +242,7 @@ static int compat_ipv6_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
+ 
+ 	if (optlen < size0)
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max - 4)
++	if (optlen > READ_ONCE(sysctl_optmem_max) - 4)
+ 		return -ENOBUFS;
+ 
+ 	p = kmalloc(optlen + 4, GFP_KERNEL);
 -- 
 2.35.1
 

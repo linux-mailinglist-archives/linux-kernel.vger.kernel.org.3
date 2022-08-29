@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B465A4646
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9C35A4649
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiH2JlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S230032AbiH2Jl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiH2Jk5 (ORCPT
+        with ESMTP id S230072AbiH2JlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:40:57 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297752C656
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:40:53 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id cu2so14602919ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:40:52 -0700 (PDT)
+        Mon, 29 Aug 2022 05:41:06 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7E94505A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:40:54 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id c7so2752855wrp.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cxuF/ium3scKvYnBUMW/FtsmInIOSdhuZXM02yUsCjg=;
-        b=QXAoVw/zfOdmoFPJaZK/+4ItQKmIAcafmuOKpDk5xgbVxVHMGbUGsREiDwk9gLbJvp
-         +76cyZ9vxN308IRTBm40Pnmq5tH2cIuG54qJhRi/aUSbV5sRoIYxvu4FfQZnP5gHqxof
-         /C81T/946nQ6YkgMXc66eCDwlVFqpK+HIEp8Kv+LDvju2z4tv4+b/Y/+IBiNp4Nuecqb
-         zNARr8vXqc8MKfNWwOgsWA7uqyXdVClP7Iz+jDh0B0ST81EvbmPOoxoiRuUPT5smnXtx
-         0i9KRrg/16oa154kuErN80838lWTkm+N1FhhehluAl3iYtETP9I34wmsPsg3tfHuDG/H
-         dmEA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=FM+u/mT19a85swWLirrWas+cuEiZlUx6xGmwi5sOw9Q=;
+        b=CR/429N71yazrm5/GlvVbONcJoh6cPfXGYcwqJEQTMhYzAMFpXA+Pf13aXAA5ocPLQ
+         PyO7mI3WKEZbFSHVp8DN8HtyhahXiQ1vJQZoDmPmfpfUSUFNMk7llu6DyryxCtPx51QM
+         UggdjRr6OCpz2I1aB+YBSjdf7baBkWv2LNjU15dug5RLH3NaZuT1TGf4hhVoihKnyOrn
+         KS0aId49TCKXRZ+8As1clAfdlLcfqjkFqBKf6TJnPItx+8Wd42Cuzq29FQqGL0n0vdPc
+         MWlZHocaeL1NO/HzOZLtPJ3ZWcqMRTdFyyeXatsF/XKP99Km19neLAkjnP+4aVzKklhJ
+         Cigw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cxuF/ium3scKvYnBUMW/FtsmInIOSdhuZXM02yUsCjg=;
-        b=MgNkA2dHmUIbpLAUxQpjBaw96HQHhdCfT4LDUX2A/RWtnW6NCrdXaZICmN8iTazwuv
-         Y1+29pBIXfd+kG8Iba5HNAlyQMLDDJZtv/PCSBhW8Pgiwc+kqzJLXaL/NOzutdV4LYaX
-         2WkyAYGAxC15O4bcrXjlV/AZ0z2EtEymV9v5z1bdKolHoUvGkH+IvlF8WJ0JyN0tLxFx
-         TVXqzDBPjqFVK8FHtx7HAClTWnHYJ6bEuwYxeS36tq1ucjgpC4zQlQDTCBUNhVSXA4Ty
-         P+SJUP2muXqrta6gzzfWveNyh7ZDOSyFracBhOZrjzCQnTKb6tMEdNyO1C8wsYA/BE6r
-         0MHw==
-X-Gm-Message-State: ACgBeo22/fl53L4vk6390oh3SL6N8nUyT0lgX73Xnfi93HzJYtPTRwXc
-        1mYfNAAlpqv9XGjHTjFWIzgf+EJVBTldCIxSvGtiXjqTTYNbaA==
-X-Google-Smtp-Source: AA6agR7ylu3hD2hyA9Uv8Qh9utjTfaLfySCnAmTi/0o12556IHchh9nERJx9RuwbQJJB0FpGMXAqNilDzey2p0JsHK0=
-X-Received: by 2002:a17:907:6e21:b0:741:73f1:d19b with SMTP id
- sd33-20020a1709076e2100b0074173f1d19bmr3952539ejc.435.1661766050936; Mon, 29
- Aug 2022 02:40:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=FM+u/mT19a85swWLirrWas+cuEiZlUx6xGmwi5sOw9Q=;
+        b=fwoASjnrUpuO5Kiz70PmeSe/qkA1xCACzcwy+qjwPw7Onzn3QctkcGsWHNmaW4koef
+         yBbcPJOr4cgof5uoSaNqApCG0qO/2gdq9ZgEAIk+SyZaTap1vYbj6KKYO5RkwqWEBaLZ
+         vvXkfNUt0GZ11n7Ai7fAnvTPEzfpP3unVB+e1CmETlj+5oijzOI+nQbkfvk9POAt3jg4
+         y6p2BhkKwmN8dTVDjLNKQMvptaSHWjC3dtQD1hrw/oAWDKjdl6pqCZBGCQODzUwNh/jW
+         D2S7CB9JDnwwHl2QrraGyIMwa8d7hrsQ1JT35ogMmNo4Et6Y48o9ILs+9r0wdnpRRvYU
+         WjTQ==
+X-Gm-Message-State: ACgBeo0r+xwJcuq6lu0pGo5XaCc3aJyo67DHkxWSN9CiqzkO9TTYezsN
+        sbdIiNwkDw1GrkyMQrv5i+Hq8A==
+X-Google-Smtp-Source: AA6agR6yz+KetRQLU5z5+8USMBrJz6Xsi96fJACvOe/SZcUPY6d6c25Q1ykCxbsnofqIb7BISTZIQQ==
+X-Received: by 2002:a05:6000:1045:b0:226:df71:fd5e with SMTP id c5-20020a056000104500b00226df71fd5emr588745wrx.427.1661766053017;
+        Mon, 29 Aug 2022 02:40:53 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id k13-20020a7bc40d000000b003a83ac538a1sm7489435wmi.29.2022.08.29.02.40.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 02:40:52 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 12:40:50 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] clk: imx6sll: add proper spdx license identifier
+Message-ID: <YwyJorBWti0FTYg/@linaro.org>
+References: <20220826192252.794651-1-marcel@ziswiler.com>
+ <20220826192252.794651-5-marcel@ziswiler.com>
 MIME-Version: 1.0
-References: <20220826095615.74328-1-jinpu.wang@ionos.com> <20220826095615.74328-3-jinpu.wang@ionos.com>
- <YwtM+/nB1F6p1Ey3@unreal>
-In-Reply-To: <YwtM+/nB1F6p1Ey3@unreal>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Mon, 29 Aug 2022 11:40:40 +0200
-Message-ID: <CAMGffEmffkW0fHrjx84gQ6FnWuwriRUg=HSdwzU4W_sZLdiT7g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] RDMA: dma-mapping: Return an unsigned int from ib_dma_map_sg{,_attrs}
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826192252.794651-5-marcel@ziswiler.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,28 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 1:09 PM Leon Romanovsky <leon@kernel.org> wrote:
->
-> On Fri, Aug 26, 2022 at 11:56:15AM +0200, Jack Wang wrote:
-> > Following 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}")
-> > change the return value of ib_dma_map_sg{,attrs} to unsigned int.
-> >
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: Leon Romanovsky <leon@kernel.org>
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: linux-rdma@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> >
-> > Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-> > ---
-> >  drivers/infiniband/core/device.c | 2 +-
-> >  include/rdma/ib_verbs.h          | 6 +++---
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> You forgot to change ib_dma_map_sgtable_attrs() and various
-> ib_dma_map_sg*() callers.
-No, they are different.
-ib_dma_map_sgtable_attrs and dma_map_sgtable return negative on errors.
->
-> Thanks
-Thanks!
+On 22-08-26 21:22:51, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> This fixes the following error:
+> 
+> include/dt-bindings/clock/imx6sll-clock.h:1: warning: Improper SPDX
+>  comment style for 'include/dt-bindings/clock/imx6sll-clock.h', please
+>  use '/*' instead
+> include/dt-bindings/clock/imx6sll-clock.h:1: warning: Missing or
+>  malformed SPDX-License-Identifier tag in line 1
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
+> ---
+> 
+>  include/dt-bindings/clock/imx6sll-clock.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/dt-bindings/clock/imx6sll-clock.h b/include/dt-bindings/clock/imx6sll-clock.h
+> index f446710fe63d..494fd0c37fb5 100644
+> --- a/include/dt-bindings/clock/imx6sll-clock.h
+> +++ b/include/dt-bindings/clock/imx6sll-clock.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+>   * Copyright (C) 2016 Freescale Semiconductor, Inc.
+>   * Copyright 2017-2018 NXP.
+> -- 
+> 2.36.1
+> 

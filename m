@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC4E5A4608
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED565A460A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiH2JZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S229629AbiH2J0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiH2JZ1 (ORCPT
+        with ESMTP id S229510AbiH2J0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:25:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68BB4A812;
-        Mon, 29 Aug 2022 02:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661765122; x=1693301122;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=6bjFxwLEsKLZFX2cLm7NlJwmIJ4DJEjhNXC6KOzn034=;
-  b=nyjuoEazH8aUUwRUsqh4suVO1afz0fmuGY9alBp7zRXg5FO7FwsuYbyA
-   RqRLIxTesXpMfzORMHXEtJNq1jI/O2oLk3ncmGuLRCnB7gyU/NCG7UDr1
-   eeA0Sx2UHzeo1Vps1nr7puzRIiktzlypACFH96mYeXfyaRi0yxXmiU6AY
-   ot5ws1906Oz0cI5m8fnKnDwdh/lHElULZo/NRtlPI3VvtrDg5666DKQ9n
-   jkltnGTPXYjkBgryR+T+2XukZ/WCDlTCHROZQzKL9SYS42k3plLaZQc3i
-   76iLPVY95itR3vHn9c64ulGvhVsRMlaGe7DpnaBDP+MkbdF+x4Uw1e25x
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="292433488"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="292433488"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 02:25:22 -0700
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="640869351"
-Received: from idecesar-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.53.198])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 02:25:09 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Young <dyoung@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, kexec@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Stephen Johnston <sjohnsto@redhat.com>,
-        Prarit Bhargava <prarit@redhat.com>
-Subject: Re: [PATCH RFC 1/2] coding-style.rst: document BUG() and WARN()
- rules ("do not crash the kernel")
-In-Reply-To: <CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220824163100.224449-1-david@redhat.com>
- <20220824163100.224449-2-david@redhat.com>
- <0db131cf-013e-6f0e-c90b-5c1e840d869c@nvidia.com>
- <ea380cf0-acda-aaba-fb63-2834da91b66b@redhat.com>
- <CALu+AoThhou7z+JCyv44AxGWDLDt2b7h0W6wcKRsJyLvSR1iQA@mail.gmail.com>
- <fe7aee66-d9f7-e472-a13f-e4c5aa176cca@redhat.com>
- <CALu+AoRwVfr=9KabOLUQigWwCtP5RLQ1YaKbG75ZVM9E-bW2ZQ@mail.gmail.com>
- <CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com>
-Date:   Mon, 29 Aug 2022 12:25:02 +0300
-Message-ID: <87tu5vflld.fsf@intel.com>
+        Mon, 29 Aug 2022 05:26:45 -0400
+Received: from smtpout30.security-mail.net (smtpout30.security-mail.net [85.31.212.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FE2491C2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:26:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx306.security-mail.net (Postfix) with ESMTP id 6352F399566
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:26:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1661765200;
+        bh=ETqnylzhgvqnG9aezGh1//TYB5UoDpnh0z7oWAMoy7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=O6QU3r0aoz9OInH106mhWSWh08qfCYP04CV3Gck424JemDXvBKef7h7V9aMUPih4K
+         Vxy1lkpSHSXZI6MoX61t8vkf2UWiOg3GH2QGtq9M9wjFGgV/ohHLPj1YcuIBi2GqDu
+         O9nXkDvuydxBL3SVMwfxbmjfADWvTwfDUgrX2UeI=
+Received: from fx306 (localhost [127.0.0.1]) by fx306.security-mail.net
+ (Postfix) with ESMTP id 8E98A399568; Mon, 29 Aug 2022 11:26:39 +0200 (CEST)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx306.security-mail.net (Postfix) with ESMTPS id E3376399567; Mon, 29 Aug
+ 2022 11:26:38 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id C79E627E039C; Mon, 29 Aug 2022
+ 11:26:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id AF25027E039F; Mon, 29 Aug 2022 11:26:38 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ g8VGtsj8q8xr; Mon, 29 Aug 2022 11:26:38 +0200 (CEST)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 9B20627E039C; Mon, 29 Aug 2022
+ 11:26:38 +0200 (CEST)
+X-Virus-Scanned: E-securemail, by Secumail
+Secumail-id: <10774.630c864e.e2066.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu AF25027E039F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661765198;
+ bh=mkoOcxAELU1ZXdD765sD5k18u8GfbVW+FPpt8WMKsFg=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=eBUHh/M7Cji8/cCO+yv1whA26VEL1/fwhd7ec8iBBt2p82lUXqp/r2ZuOdOInJGZH
+ 5cjj9D8JxEBpwPZLjTfQw9pxwkjm0/hj2E511hLyQpuP7szJuFdJJWIEM1vEn67wvk
+ FZKTIAB4HBK1IsFSraJPFUuw3NY7S2ulyN06CRFM=
+Date:   Mon, 29 Aug 2022 11:26:37 +0200
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
+        Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4] Remove duplicated words across the whole
+ documentation
+Message-ID: <20220829092637.GF10294@tellis.lin.mbt.kalray.eu>
+References: <20220826163458.1142-1-jmaselbas@kalray.eu>
+ <20220826165634.5617-1-jmaselbas@kalray.eu>
+ <d785f8aa-5a41-006d-394c-2bba64047cb4@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Disposition: inline
+In-Reply-To: <d785f8aa-5a41-006d-394c-2bba64047cb4@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,19 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Aug 2022, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> So WARN_ON_ONCE() is the thing to aim for. BUG_ON() is the thing for
-> "oops, I really don't know what to do, and I physically *cannot*
-> continue" (and that is *not* "I'm too lazy to do error handling").
+Hi Randy,
 
-Any insight for the tradeoff between WARN_ON_ONCE() and WARN_ON(),
-i.e. wasting the static once variable per use site vs. littering the
-dmesg on every hit? I see there have been some improvements with the
-__WARN_FLAGS() stuff, but is the data use really neglible?
+On Fri, Aug 26, 2022 at 04:06:14PM -0700, Randy Dunlap wrote:
+> Hi Jules,
+> 
+> On 8/26/22 09:56, Jules Maselbas wrote:
+> > diff --git a/Documentation/networking/switchdev.rst b/Documentation/networking/switchdev.rst
+> > index f1f4e6a85a29..6a0c2cc722eb 100644
+> > --- a/Documentation/networking/switchdev.rst
+> > +++ b/Documentation/networking/switchdev.rst
+> > @@ -161,7 +161,7 @@ The switchdev driver can know a particular port's position in the topology by
+> >  monitoring NETDEV_CHANGEUPPER notifications.  For example, a port moved into a
+> >  bond will see it's upper master change.  If that bond is moved into a bridge,
+> >  the bond's upper master will change.  And so on.  The driver will track such
+> > -movements to know what position a port is in in the overall topology by
+> > +movements to know what position a port is in the overall topology by
+> 
+> I don't think any change is needed here.
+> The rest look good to me.
+You're right.
 
-BR,
-Jani.
+> 
+> >  registering for netdevice events and acting on NETDEV_CHANGEUPPER.
+> 
+> 
+> > There are likely more duplicated words.
+> 
+> /methinks that you have barely scratched the surface.  :)
+yeah... "am doing my part" ;)
+
+Thanks for your time, will send a v5 shortly
 
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+
+

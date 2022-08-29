@@ -2,185 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7A75A459F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE785A45BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiH2JC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S229671AbiH2JHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiH2JCS (ORCPT
+        with ESMTP id S229476AbiH2JHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:02:18 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9128859278
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1661763736; x=1693299736;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=sXvqC3NC0iezobq4/14TZ5yg0pzb4d7u51pWrLSx6MU=;
-  b=Qj7kwVpPNL/OORsdNvZJGUFFmqZkU3KYhkN/NNzA5R5Z5Jf2bSi0FEYn
-   7X3KZRByp+hd6OmeFK0uLrVOAin56UJIJV8Wltnm1A62AOe8+a6y1JVp9
-   MAKmNUDSP5cP4hwp8ffHYzS4kDB6pgsyHqHPQXcyPev9H3kHYlIoafGTV
-   oPvYBDXvtR99GmEQ4p8evNpVNRLEVlk30p4/h2dWRnmmn5GxldI/nq7zw
-   9xoiI5uvVT2DE5a7dgVayNwPmLKWvJeepcoozSC5XMHZ6KemDVJxFW5df
-   E0c4cmb4FCj5dKzgJOruhOf22id23oWlY8WzNNNxvBPPlvivxIRpnbaUw
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,272,1654531200"; 
-   d="scan'208";a="314195071"
-Received: from mail-dm6nam11lp2176.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.176])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Aug 2022 17:02:15 +0800
+        Mon, 29 Aug 2022 05:07:47 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D188057E38;
+        Mon, 29 Aug 2022 02:07:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A5evPOM01Rkl7SVho2tIERB0JKB2S2GbqthP+hvhpY1rSinJeJdN85eUph6QSP3Ci0raT1tlodg/BbOvfOqhpVLcqig6TgJ7TK0xZWraTBdmP3vtD+xrN3DoYQd043UQntA/S9R8uSPOMOkQlQUnKvCjl4sfsYKNjv9cuzGQAYMiH3OXOvFJIoFZ/0mxrT9/4NQcgHGo3KDUZfHvmiPkURA57nfcId3jrJhKhaL6BuykdYQ4fZKgXr++VvzI9SIl1EIXopNBoR1etpWLmsM+bR5oJo+GdAgG7n8gSNFxgAyYG6+SDqCb0I2Iy1z1abn0YRrJeOJc65wFUhS7UKb8Ww==
+ b=Pdlge78N6kJLaPg1BkduSl+O662qTopfuOyQiDFrih8fPUynVwS1gxhvYLbV35CXDPA7ExNcHfkky7Qh+S31m8TSWxVNp1Xu54t6MqkDwTQq0b/ZWjwfHWZfodlcNXe/ivusKDx1jwNyv/+jy6Ev0h8A25svK5PKiSKVyRB7NJjSQTVOho6WRekRVJ9snblBe2C8j7aXFwfTQnvVb1mGQ98hJmp8US6G0hKmNnR+GfoQS32rvjp3tEAmzpLsR2PrH7gRqAHyJKBdQL4h+2O2ogl+RMZ5FLoehzeGZ9Yi/coJdW3tToL7yrVPwPXIh0s1Emv665CB+xhUC5yrNSC6LQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sXvqC3NC0iezobq4/14TZ5yg0pzb4d7u51pWrLSx6MU=;
- b=JxIUVBCHysKU0+BcmORHx9AJ1Rh9R5XBECUGET6N/RHAqYFh51QEVUH40GbImn3fVnv23sc0g01PcBHOCv3qEdNzUYG93X4jzATlpsFhpSJvoJbmtm65D7DVxR84Jrz69Do3Nam8eZe58tFcrolRciQK/BedlioW8mQjNetFjUWtn8YuYjdNwug5F1tphXsk87oVbpFwFqt0jecSE1mI4IZpl6ctm3ONfuakE1GbU4XzSxL7xBzp0Yo+OKkkZr2N47nVdOTDcwOJm24SrCktzzZyX/jKptE1B8X7pHpNHoMu+BMsg44DcLSQe1t6sOHNdG6DkEqPUPWqv/xs5AHlBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ bh=uw+0Nn2VGw3BeggEgeupW1NyCVVLROEGuHfbR43+4yA=;
+ b=Ua4ljIMx0sdnGak3JwEX07z80YjJ7E9hCNLAym/biVgCOqIH8eackFYpd6dWOdB6WNserBvcireyoHJHig1FqWepZ5xMlSy3yfRVIZdSHWhtSiYPqUJFNc7ul0zz53ZDGfp+UDzbihzFre6cKh6zvUyRAA1LSzkn+6JcaWWBU8npjIN8lnu6T1C5QUU0yz4ctJdcCn5LugUMIEy9sJq2C0o7TpK97xU8D6tlPCmmeobdV+ueVCWQhPX2kiTQRaowf/WlocS7LaJaM8hBkUIV8F7VkHrXL434d1QMvXspQxf7HmXH0KgXXmU+6RSfD3E52TG9YrKzNaiUm+OtbgB7lA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=microchip.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sXvqC3NC0iezobq4/14TZ5yg0pzb4d7u51pWrLSx6MU=;
- b=aL+DD3/yKACAA5FzyHc6gZba1v4ZaEKFLrA0wv5VSBWRQdITRbhYSckclKukzGSuoREspqCKWJ13GkTl/Wkq21Y8vCLmqMs/7xw/dvSCajR7KRdvHSeK4QeV8hwB71KWyMWRM2Ljk/9uLdqIOcj4FQWWpE/+fzc0DDnMl7qeHwA=
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
- DM6PR04MB4844.namprd04.prod.outlook.com (2603:10b6:5:1f::33) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.21; Mon, 29 Aug 2022 09:02:13 +0000
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::c7e:a51:e59a:d633]) by DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::c7e:a51:e59a:d633%8]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
- 09:02:12 +0000
-From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     =?iso-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        =?iso-8859-1?Q?Marek_Beh=FAn?= <kabel@kernel.org>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset
- support
-Thread-Topic: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Remove broken
- reset support
-Thread-Index: AQHYu4HGRyRWgtKROkWypuXOBGqHXq3FlQkA
-Date:   Mon, 29 Aug 2022 09:02:12 +0000
-Message-ID: <20220829090212.vi3jgetghjp4dsga@shindev>
-References: <20220829083046.15082-1-pali@kernel.org>
-In-Reply-To: <20220829083046.15082-1-pali@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 97079b49-ee37-40ed-db4f-08da899d29b7
-x-ms-traffictypediagnostic: DM6PR04MB4844:EE_
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wLRE9NN6eS9G3dP/WGRkwCm793zOrExP6QuaKkBq+gVhG6WtZcc9Im2+sMrv6ABjcnLLl/zqW6Numlui3HYUChQyMeBTHPI3/zXjUHl+1Qaj4d9GUJapGhC/n/K1Ct+zAvLGZ364DHdTBin8NwhsBcLGzO4zZwlQDkRfp2qf5wgEFhS32+eyc2oNFhVTE83ghGpd2qGhltw/4YsSq9frdZjULf2i3zLJayBTYs/0r3z3/S0K3CLFABfXT3z+ykXbBMTUSaGmum9f6cNWbXkcsQ6gkV6CLanjk7MMWTeNISY79wd6UiIKWB1tDeydJnoP2nXyd7HoGtwoAhzYg/sYW4G3jcF0GVLODPxqwYNz0u0WzoNE7oFbSxWFi3elfqQ815rLIQBZoYIMePP0X0kalBLCYpZZHnlJwds+2pSgEE6oi+C/H4PPBZzo34T++C4MeTI08zmAwUq2jN3nah22j0Hr3Ul/ac0o26Y8SZmHrEQtyYIFhXFHXdQWbzvpx9EV7T6mOkwR2JqZ3YIr5V4Iuik5EZg8hXlZ22Aa607b4g/pkA++jnCtvZhSnPmBBIghXA66rF/Kr5GlEwsOjKQTsx+IygdyYYTCyK9jYpdFwsZ2qpf+sukHKXsr31LtyIzfwNT/1csrl+mxHKBzrMeaqjEWhG25FXAIlGcFU/WRv0TuuEgflyO+J7eSTbr4Oas6JhGNNRkslULI2avBHdCYNs0l9gpdiYqvOyJfYVIFod/VLUzIdWMptvsJCW353vAPLqlPpZSKP1hPsrIx3GEgn8Yl+vNRj71rZoKdStOK2SCTZ0sG/qSaW9ktOF+S66s7AACA3r7E3gAfFhX8ynnPzA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(39860400002)(366004)(376002)(136003)(346002)(396003)(478600001)(41300700001)(33716001)(6512007)(91956017)(38070700005)(66476007)(9686003)(6916009)(54906003)(86362001)(8936002)(26005)(6486002)(966005)(316002)(82960400001)(5660300002)(66446008)(4326008)(64756008)(8676002)(76116006)(66946007)(6506007)(66556008)(1076003)(186003)(71200400001)(83380400001)(122000001)(66574015)(44832011)(2906002)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?77OS0Clqm7BoXRYEXTkT/mRQgl0D1/mMrx14Lhm1bXoYLgVgz0yl4L3NTo?=
- =?iso-8859-1?Q?CTzD+D17RCG4xRGHvEwWdCczf+A/i4cU2F+c/RPlnVwmh/3VYSxL+BoeWq?=
- =?iso-8859-1?Q?EMLhbkkwNJCpTVceFUSqpM1cTFMEQ9dQVbfe2BlWOfjQDfOyBGo3Jt7LvU?=
- =?iso-8859-1?Q?p3TfqbsxkG+jorBgN4qTZvtlsbYeNHrhGlXo0Yr7SCgXaoQ6Qg1DkmPrCk?=
- =?iso-8859-1?Q?pwpJBtDWBbm6kQgvfDO4/OZRZbAXcYS0r821OcZ9Jlr+xCmq4MsAYrb4mj?=
- =?iso-8859-1?Q?MYv55ZHmTFE7trb3Tm5WGjfxIgMx9Jv2Y0IEkkQJSJ7IJf7ZYsV4ye8xHq?=
- =?iso-8859-1?Q?hE8YSvZvCfZ/yWJw7SGtNcGhEmNumpuFq6fWIgQ6dxNDV4h1YpdGU1Ogcy?=
- =?iso-8859-1?Q?vx13DYndF09BI5N3ZPNYHGW2AvkHavDbymRasL4q4w2pMTCTPzaCZCZqpg?=
- =?iso-8859-1?Q?wpPGnmAWF0VX2j3jjmRq4DpkZC//VbG6J6WyJbtSaSBcPSYQXP9IWo/zr2?=
- =?iso-8859-1?Q?ml3QfmYx3U8a/BsQRryd84RXhVajwSrJRUBCL24sRHsN8QuyAm+jXqugRg?=
- =?iso-8859-1?Q?m2YUS/3ADO7qCv5GCrZKKO5Acn6Z+gN28GYU1GeOeuV06MQqUir1L+WoBN?=
- =?iso-8859-1?Q?BWRdGQpNg6xtil4tIUcHgKX/Z+N3dxB4bZvzgrgnTQcUzEIJANz+4wZiCd?=
- =?iso-8859-1?Q?NEqAFttRXNfqPBmkhEaEMCC/tSvWzUOT0buzYd3tSe2NlIlQ3SDoOtiQgk?=
- =?iso-8859-1?Q?AEZeNy0i4MWlRSc20QBl9PcajRn7OQpTjO09aXlipZBFnjf6WutcyX//vU?=
- =?iso-8859-1?Q?R+EbGKmOwsq8FUmDDJrMZvvvwaKqZ9Mif+jRsRoLC6Gu7DblPsiEv0/KYa?=
- =?iso-8859-1?Q?nGyRBDm1de6JmjDP3k78fIwU9j+wmybYOCa/4vH7CpbUia/jLeLNA0kKCD?=
- =?iso-8859-1?Q?LHTZ4PZn4ufE96RccXFHzpv5/D2GRYOrh83cHq19cdQeoQCZ5TsVtQiFow?=
- =?iso-8859-1?Q?/GaA7Ae0O5XFkEUEotisg7/DfaijUX5HGjElSYR6cdETebKcc00dPwsohZ?=
- =?iso-8859-1?Q?zM9/w+bkBMjBisYOzU1dZpTkWSHN1mGLuof4mXP38flKyt50q9bQd225Rm?=
- =?iso-8859-1?Q?f5+HZDP+XXgfLsQJdbFe5G6E//DJSt2Ey812iWv9UyTNGeODoaZn47ldcv?=
- =?iso-8859-1?Q?xAJs7gfQJSc88q4q5cfHMBBJUAqn1v/SSL8HWZYv7Pcug+xtWwLyVxv3xj?=
- =?iso-8859-1?Q?qyZ+GXEimIAha2dwhZv/Tunz7IvwvOaMPW/8GjCElCh4CxgXK+c53lade2?=
- =?iso-8859-1?Q?ex6ug+9JMT5Wtg1SriC111P042++anQoZ64YdcTaL2Se5P6un/XplE3gw2?=
- =?iso-8859-1?Q?PbMZVXVW7lwuYIl3oiyA+nmWdUHTNPHgbAUMZixQcd3T0vprM5M1EWJ3XI?=
- =?iso-8859-1?Q?0Gzj0vM8eXYVuoTPGGThWl7D670RmvL5A2kVIVsReGzeEwTkVi+3pNm2wC?=
- =?iso-8859-1?Q?7eSlnArHMbrj2knOwIHu2ilsJBTEV2axCQ5VAkU7u4YP0Tj/EpksgfftlI?=
- =?iso-8859-1?Q?Av6k9Jy2sl6NumpAmEXmIeqNg8SmixFnF7gDWU4AAnOhQFe7gZlt/PEuF4?=
- =?iso-8859-1?Q?4H/mEs1aQmy9NPNErnEfQK4/arT5l3MUpDfYjcPPRP852lenWgPYujxjdw?=
- =?iso-8859-1?Q?wohTeVGHvO5qw+kOiHc=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <24D466551A84AD46924836D2D71AADC3@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ bh=uw+0Nn2VGw3BeggEgeupW1NyCVVLROEGuHfbR43+4yA=;
+ b=yQrxZCtEGVilPEQEaqbbRHi89f6hT81Txg7fTPhPfYwUntNudTmxYXXumk7rAy9SbbkJsm1sGC7FkVvXbeiNQ8VVW0U/l0vRYSe3sw/miPeVb5SzVlY5agCOX2N+FAgDfA6sJ54wz74Y/joi4hFdmWgTWYCVrnrFxzMFuLRISjk=
+Received: from DM6PR21CA0001.namprd21.prod.outlook.com (2603:10b6:5:174::11)
+ by SA1PR12MB6821.namprd12.prod.outlook.com (2603:10b6:806:25c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Mon, 29 Aug
+ 2022 09:07:40 +0000
+Received: from DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::4b) by DM6PR21CA0001.outlook.office365.com
+ (2603:10b6:5:174::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.2 via Frontend
+ Transport; Mon, 29 Aug 2022 09:07:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT104.mail.protection.outlook.com (10.13.173.232) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5566.15 via Frontend Transport; Mon, 29 Aug 2022 09:07:39 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 29 Aug
+ 2022 04:07:38 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 29 Aug
+ 2022 02:07:38 -0700
+Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Mon, 29 Aug 2022 04:07:34 -0500
+From:   Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <saikrishna12468@gmail.com>,
+        <git@amd.com>, Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH 0/2] mtd: spi-nor: Add flash device reset support
+Date:   Mon, 29 Aug 2022 14:35:26 +0530
+Message-ID: <20220829090528.21613-1-sai.krishna.potthuri@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97079b49-ee37-40ed-db4f-08da899d29b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Aug 2022 09:02:12.8663
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 15643229-f56c-46e0-ba38-08da899dec74
+X-MS-TrafficTypeDiagnostic: SA1PR12MB6821:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f420Ea2F7hWQbH4lXRIiVxcBEsUmAEhAK6/9cIKo0bubjljmgES9B4U24zQJ0l/CHNjiN/L9Blod/RWFJSpzl5ZmAc78W70DJ0vQ6Qi0LrHuYC7IyCWlF+BRGWvxcSWRSreQZf6ymgQbFfy4soDQ1kN4YKlKW5ejQClgldssanD1lsFfgaD2CmepVKLAyHu3KDAwe8l4NpB3rXyulf3T9JF2s6jQlNzChCHThO7RFhKqO3riKb8POsyr6WfOoRAAaUsaDPu/EzG1xRuuKs0xIGni9pvA4/js/8oQAdaPLlTF0JZiTIBWU/afmzEvJWBRLEEvZ/7jAsnRsyUFVLGRTB/v3Z4CRGK/lnJZ5oixffkwnfx3qbpkroAPMgF+K1lO8w3pg69Me9FBFRKRFFE5bju+tunLMECe+Xe1jM/9T2HdWOSHHou7s2UtMBlQoPzu9zXTGqjT6J2sgHjUmMXUncokUD/tkkAgszB5hcZOJF9pBpDtdhmZ4o4x2p/CUTla/gdXrCaXa5DpQWspw+LDdDv3YKQwxdfdS7hjKwOOYCkIm8Om6oCwXAOPAMEOXCCH5PPPFPacxImO7KOEOb1wq6F6z9TdZlcbqQVH9uY9oMeXzWqZjg61M1QGgM1hYtos9DT2+CRu+by1YHWOzIYjuKxuCsa1trpBH5BJhBYsRf1YgeJw1oVBYGiy6KzS8N6Pj3TKgLjmqZrMT1Hj8byHOq3oFB8fRs5yTSe0PYJP/V166vzcBlQVW+1RdxBZI1BMifpY0mz18iLlq7unrvhIszgvyuJx7upWFPSgSzasnAg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(136003)(346002)(376002)(46966006)(40470700004)(36840700001)(81166007)(186003)(82310400005)(86362001)(356005)(110136005)(47076005)(2616005)(82740400003)(316002)(40460700003)(54906003)(36756003)(1076003)(426003)(70206006)(5660300002)(26005)(36860700001)(70586007)(4744005)(478600001)(8936002)(4326008)(40480700001)(41300700001)(8676002)(336012)(7416002)(6666004)(103116003)(83380400001)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 09:07:39.5196
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m03+doDEsEsWWDLF/WNBeVpTmb4pXXwv0+UmnOuHaXt7cuClm+CyU8lAQ0dy+4gob33UMtsrOftHctazlyEthsdKv3XfV0ZQzIkvNtD+V4Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4844
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15643229-f56c-46e0-ba38-08da899dec74
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6821
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 29, 2022 / 10:30, Pali Roh=E1r wrote:
-> Reset support for SATA PHY is somehow broken and after calling it, kernel
-> is not able to detect and initialize SATA disk Samsung SSD 850 EMT0 [1].
->=20
-> Reset support was introduced in commit 934337080c6c ("phy: marvell:
-> phy-mvebu-a3700-comphy: Add native kernel implementation") as part of
-> complete rewrite of this driver. v1 patch series of that commit [2]=A0did
-> not contain reset support and was tested that is working fine with
-> Ethernet, SATA and USB PHYs without issues too.
->=20
-> So for now remove broken reset support and change implementation of
-> power_off callback to power off all functions on specified lane (and not
-> only selected function) because during startup kernel does not know which
-> function was selected and configured by bootloader. Same logic was used
-> also in v1 patch series of that commit.
->=20
-> This change fixes issues with initialization of SATA disk Samsung SSD 850
-> and disk is working again, like before mentioned commit.
->=20
-> Once problem with PHY reset callback is solved its functionality could be
-> re-introduced. But for now it is unknown why it does not work.
->=20
-> [1] - https://lore.kernel.org/r/20220531124159.3e4lgn2v462irbtz@shindev/
-> [2] - https://lore.kernel.org/r/20211028184242.22105-1-kabel@kernel.org/
->=20
-> Reported-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-> Fixes: 934337080c6c ("phy: marvell: phy-mvebu-a3700-comphy: Add native ke=
-rnel implementation")
-> Cc: stable@vger.kernel.org # v5.18+
-> Signed-off-by: Pali Roh=E1r <pali@kernel.org>
+This patch series update spi-nor dt-binding and spi-nor core to support
+flash device reset using reset-gpios property.
 
-Pali, thanks for your care. I confirmed that this patch avoids the error I
-reported in the reference [1], and my SSD was detected on my espressobin bo=
-ard.
-Looks good.
+Sai Krishna Potthuri (2):
+  dt-bindings: mtd: spi-nor: Add reset-gpios property
+  mtd: spi-nor: Add support for flash reset
 
-Tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+ .../bindings/mtd/jedec,spi-nor.yaml           |  6 +++
+ drivers/mtd/spi-nor/core.c                    | 50 +++++++++++++++++--
+ 2 files changed, 52 insertions(+), 4 deletions(-)
 
---=20
-Shin'ichiro Kawasaki=
+-- 
+2.17.1
+

@@ -2,97 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF8C5A573B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2467F5A573E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 00:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiH2Wnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 18:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S229625AbiH2Wpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 18:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiH2Wnx (ORCPT
+        with ESMTP id S229490AbiH2WpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 18:43:53 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6647A2633
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:43:52 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id lx1so18558949ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:43:52 -0700 (PDT)
+        Mon, 29 Aug 2022 18:45:25 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7AB5A8BE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:45:23 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id p7so2026059lfu.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 15:45:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YttqIt9CExtdFQlvDB+Yjrz6RLtUAVs/lok3iUCvXgk=;
-        b=TvOxjJPoxdlONYeZLIETDW9nEcHGTcecygTUTg2rp44cdh1HQbNR3kDnR8td6nIU4y
-         GZwt3x9ruPunX79ezxhj1n+o0IIR/G0mldDFUK18uTfNomtQgmf8AbUF8q/9gOpkX9tE
-         jR0ParRk30KwEegU2Vhs1snFmx4pC1GCU8b/tRkQ0Wbr9FKaePJJ2Dmsh/eJXMlPcssn
-         wm7U71hErwVLLJQHLEwtdxH34WeFO2uqVgavKRbUpNqUWNVN78CkFOnje5j70nKK3KpQ
-         UWu6vJWiYdErX+ecLR3sCHGxX8+lOTS4N747Y9MevomzF4IxI/mDK3UdSZ07dmqR3vgC
-         ESZQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=w8vHlMWoeAuOeDevoCzckAlsluuYN2+2EOqFRzUR6LQ=;
+        b=EgdVUtIaBz3PJrSEdW3ShS71l1g0wEde/cZ4LmI6/dqmBRlVRcKbt4hH6JPuKw3jOo
+         C5xR/TvroaRBUyygmn3XmMoFlE7/Co1prmfSsyjmq1qH73or1H6tTxB4rT38KyojLv/D
+         BDRD1aiHK3IMFNvZvMnRs42KFsvgUC91Mw9kFfSk/6jashPcqbX1Aowc/EHf/oX94FgU
+         MyOIOdFutFHoq/BBuppqcsdAD79JX/wNTpi+wedaS959KCevMPyoZChTxbpTuMzWhshz
+         N8sCQxLwRJ/B5TVsbOcfL/9JOVD7kbJysLpJBAXMpz3PgWhxD9WLDBqBEV6x8b+OQ533
+         hWIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YttqIt9CExtdFQlvDB+Yjrz6RLtUAVs/lok3iUCvXgk=;
-        b=rwQb2BM4yL8/fMWJnLdKl7mSAfY1nAgqQNDMGoheFm5NaCPN8TlwOGy+k5vSWxHdsF
-         R7wNLU4+O/Ppgf50tFox8lZkNDhrg4ljs4Y8XSZe1QWCvNaSNa1uSGev6lxG3NFxhcpA
-         KhmCfKxSgV6VYMyceiXj6Vybp7rijlqnL/zFqL6fwnXomokXu9HWIrHislJZozPDNgkn
-         1t+I3rVeASc+f4mR7JoV+fcxHwKX4lGJD5IDdZYJbaYspt2dn3a8LPCOFQgMhXA3AMM9
-         oOlMs3h9Xv2TRly7AnObSd9DwLt6/Sqzq3bpBMb4mmFEBq4toHzzkqxaviNBOpjbahcE
-         WEQw==
-X-Gm-Message-State: ACgBeo2K2iiRnltqgs5ENjFIOhh+zV12DioeYSJXxKq9V68hDOjAv5qF
-        n4z1KEMQ/17Mu0SGhQdRoXHzWbzAgilO68h5aUqryQ==
-X-Google-Smtp-Source: AA6agR6NCMcsht1FKyoLJs7naMjCZcuKElbuBtxR+Gc106l+TXdcFoyrlnsHsogokbnwEGmvUT9zeDhc8GxUTdCy9f0=
-X-Received: by 2002:a17:907:6d1d:b0:741:5b1b:5c9a with SMTP id
- sa29-20020a1709076d1d00b007415b1b5c9amr7297060ejc.642.1661813031275; Mon, 29
- Aug 2022 15:43:51 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=w8vHlMWoeAuOeDevoCzckAlsluuYN2+2EOqFRzUR6LQ=;
+        b=Z6tPXCZEX8xUieaDUlinn0ywYzIJ6nQb4EGsHqgYzs6smjZxv/WdZJoniqg059b02P
+         xhe4YrfkUr+j67FF8pgrUjtDT/DNu2iZAeDO6NX3Pc/SKnUxttbpwDXhHGZDFyp8Eued
+         YMTmH/0N8Fg03b/bF01UjWK/kPyE+59j1c7vrgRmuQpYAc5XREaK4YYWhFaOtjcvSS5/
+         V5GkSefKovClr6dRGvacEH8Y+bm8gW6b9db6yAFsd9tLOnU2so1l7sp3w0vvaONCv/FT
+         sqMVnYKthJRef92mFL/6dyllPo5BACOaI07S7fJQ9nASmyXe6FVhTfvKY5tCo3xzjvyq
+         rIkQ==
+X-Gm-Message-State: ACgBeo1wjkgtUr2m1f/l0PZKGq7ek8ZojKq0ISYE3ja80Jrj/9C0b8/i
+        gm+RDDSV6/J+DLCTFqRUkE0yKw==
+X-Google-Smtp-Source: AA6agR5lq3sYw8fJb8G908q8Sgl3+o1MpEj872+aoJcrZp2ill7/GcE0NAkRjIOiiR1wPSaoSkyB0g==
+X-Received: by 2002:a05:6512:3a87:b0:48b:16fb:79b8 with SMTP id q7-20020a0565123a8700b0048b16fb79b8mr7057682lfu.438.1661813122074;
+        Mon, 29 Aug 2022 15:45:22 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c9-20020a2e9d89000000b002655fb689a6sm534238ljj.139.2022.08.29.15.45.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 15:45:21 -0700 (PDT)
+Message-ID: <0ac86ecb-bff4-6f13-1109-0410c8050cab@linaro.org>
+Date:   Tue, 30 Aug 2022 01:45:20 +0300
 MIME-Version: 1.0
-References: <20220821150147.277753-1-sander@svanheule.net>
-In-Reply-To: <20220821150147.277753-1-sander@svanheule.net>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 29 Aug 2022 15:43:40 -0700
-Message-ID: <CAFd5g45puLJ3TV1_PBiTSnEc9Ad_kXAC7xRtU_nTzWz3rJHMpA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: fix assert_type for comparison macros
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3 2/2] spmi: pmic-arb: Add support for PMIC v7
+Content-Language: en-GB
+To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220201134108.2677578-1-vkoul@kernel.org>
+ <20220201134108.2677578-3-vkoul@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220201134108.2677578-3-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 8:02 AM Sander Vanheule <sander@svanheule.net> wrote:
->
-> When replacing KUNIT_BINARY_*_MSG_ASSERTION() macros with
-> KUNIT_BINARY_INT_ASSERTION(), the assert_type parameter was not always
-> correctly transferred.  Specifically, the following errors were
-> introduced:
->   - KUNIT_EXPECT_LE_MSG() uses KUNIT_ASSERTION
->   - KUNIT_ASSERT_LT_MSG() uses KUNIT_EXPECTATION
->   - KUNIT_ASSERT_GT_MSG() uses KUNIT_EXPECTATION
->
-> A failing KUNIT_EXPECT_LE_MSG() test thus prevents further tests from
-> running, while failing KUNIT_ASSERT_{LT,GT}_MSG() tests do not prevent
-> further tests from running.  This is contrary to the documentation,
-> which states that failing KUNIT_EXPECT_* macros allow further tests to
-> run, while failing KUNIT_ASSERT_* macros should prevent this.
->
-> Revert the KUNIT_{ASSERTION,EXPECTATION} switches to fix the behaviour
-> for the affected macros.
->
-> Fixes: 40f39777ce4f ("kunit: decrease macro layering for integer asserts")
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+On 01/02/2022 16:41, Vinod Koul wrote:
+> From: David Collins <collinsd@codeaurora.org>
+> 
+> PMIC v7 has different offset values and seqeunces, so add support for
+> this new version of PMIC
+> 
+> Signed-off-by: David Collins <collinsd@codeaurora.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>   drivers/spmi/spmi-pmic-arb.c | 233 ++++++++++++++++++++++++++++++++---
+>   1 file changed, 214 insertions(+), 19 deletions(-)
 
-Thanks for fixing this!
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+As I was asking Stephen about the fate of this patch series I could not 
+stop my self from noticing that one of his comments ([1]) from v1 was 
+ignored.
+Let me quote it here:
+
+ > The driver is already pretty hard to read because it combines so many
+ > generations of spmi arbiter hardware from qcom into one file. It would
+ > probably be better to start over and simplify the new version of the
+ > driver, possibly sharing code between the two files if possible, but
+ > otherwise dropping lots of cruft along the way and simplifying review
+ > burden.
+
+After taking a glance, I thought maybe we should really follow this 
+approach. And it also allows us to start with the new bindings:
+
+spmi@c400000 {
+    compatible = "qcom,spmi-pmic-arb-v7";
+
+    reg = <..... both arb registers as following....>;
+    reg-names = "core", "chnls", "observer", "cnfg0", "intr0", "cnfg1", 
+"intr1";
+
+    interrupts = <&pdc 1 HIGH>, <&pdc 3 HIGH>;
+    interrupt-names = "arb0", "arb1"; /* are the names necessary at all? */
+
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    spmi_bus: bus@0 {
+       reg = <0>;
+       #address-cells = <2>;
+       #size-cells = <0>;
+       #interrupt-cells = <4>;
+       interrupt-controller;
+
+       pmic@.... {
+           // etc.
+       };
+
+    };
+
+    spmi1_bus: bus@1 {
+       reg = <1>;
+       #address-cells = <2>;
+       #size-cells = <0>;
+       #interrupt-cells = <4>;
+       interrupt-controller;
+    };
+};
+
+Note, this drops the qcom,ee (which is always 0 for all devices I see in 
+mainline)) and qcom,channel (which if I understood correctly is used 
+only for pmic-arb-v1, ugh). It uses common reg = <N> property instead of
+cooked qcom,bus-id. And last, but not least, it save us from huuge 
+comments in the source code telling why devm_platform_ioremap_resource 
+can not be used.
+
+[1] 
+https://lore.kernel.org/linux-arm-msm/20211210020148.B2EA6C004DD@smtp.kernel.org/
+
+
+-- 
+With best wishes
+Dmitry
+

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C6E5A4ACA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E463A5A491D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbiH2LzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S230228AbiH2LUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiH2LyX (ORCPT
+        with ESMTP id S231642AbiH2LSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7CF93529;
-        Mon, 29 Aug 2022 04:38:31 -0700 (PDT)
+        Mon, 29 Aug 2022 07:18:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A276BCE5;
+        Mon, 29 Aug 2022 04:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DB3611F1;
-        Mon, 29 Aug 2022 11:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E77C433D6;
-        Mon, 29 Aug 2022 11:11:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E723161212;
+        Mon, 29 Aug 2022 11:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 054B3C433C1;
+        Mon, 29 Aug 2022 11:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771494;
-        bh=MWjADRMk2URAIFFTWgxZCUWXo7D4BssI/xnxSLMxXSU=;
+        s=korg; t=1661771502;
+        bh=qkwOKJi5gsnAyH0eidBUxLUMppPsZof6v77fr4sDNdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gYVpIknm8lpbgOPF3hIwNJ6hoDfOcC0PoDLgytMyj18GmGULCEuquPq/HDAXS3xh9
-         dZ9jHX3xuZZBB4s93kjt+878q/r58/4XMWAJahKoCPNm2mOrA8lw+D1zesMX1A46j9
-         5P7UfDZ140QdXIWiXYsJRZOLGfJwAuh9yO57W67M=
+        b=zTSK11GvJ9WSU48V6M9Mj5dhb6bgIWNbw1ncT7fWMg7fs6F91VBxeA6nM8ywdd2NJ
+         nmb4ofOnZSkYtCia6UHoQDHN3LAYUvbLrMFRsi0yEGoaY2LNq3ZBRZJFm58bblkfB4
+         4cWYEYBhhWgHv4nahXzftN1hx4gRdl9tHa4r5JtY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 109/136] bootmem: remove the vmemmap pages from kmemleak in put_page_bootmem
-Date:   Mon, 29 Aug 2022 12:59:36 +0200
-Message-Id: <20220829105809.193452766@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 5.15 110/136] s390: fix double free of GS and RI CBs on fork() failure
+Date:   Mon, 29 Aug 2022 12:59:37 +0200
+Message-Id: <20220829105809.224470741@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
 References: <20220829105804.609007228@linuxfoundation.org>
@@ -58,55 +56,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Shixin <liushixin2@huawei.com>
+From: Brian Foster <bfoster@redhat.com>
 
-commit dd0ff4d12dd284c334f7e9b07f8f335af856ac78 upstream.
+commit 13cccafe0edcd03bf1c841de8ab8a1c8e34f77d9 upstream.
 
-The vmemmap pages is marked by kmemleak when allocated from memblock.
-Remove it from kmemleak when freeing the page.  Otherwise, when we reuse
-the page, kmemleak may report such an error and then stop working.
+The pointers for guarded storage and runtime instrumentation control
+blocks are stored in the thread_struct of the associated task. These
+pointers are initially copied on fork() via arch_dup_task_struct()
+and then cleared via copy_thread() before fork() returns. If fork()
+happens to fail after the initial task dup and before copy_thread(),
+the newly allocated task and associated thread_struct memory are
+freed via free_task() -> arch_release_task_struct(). This results in
+a double free of the guarded storage and runtime info structs
+because the fields in the failed task still refer to memory
+associated with the source task.
 
- kmemleak: Cannot insert 0xffff98fb6eab3d40 into the object search tree (overlaps existing)
- kmemleak: Kernel memory leak detector disabled
- kmemleak: Object 0xffff98fb6be00000 (size 335544320):
- kmemleak:   comm "swapper", pid 0, jiffies 4294892296
- kmemleak:   min_count = 0
- kmemleak:   count = 0
- kmemleak:   flags = 0x1
- kmemleak:   checksum = 0
- kmemleak:   backtrace:
+This problem can manifest as a BUG_ON() in set_freepointer() (with
+CONFIG_SLAB_FREELIST_HARDENED enabled) or KASAN splat (if enabled)
+when running trinity syscall fuzz tests on s390x. To avoid this
+problem, clear the associated pointer fields in
+arch_dup_task_struct() immediately after the new task is copied.
+Note that the RI flag is still cleared in copy_thread() because it
+resides in thread stack memory and that is where stack info is
+copied.
 
-Link: https://lkml.kernel.org/r/20220819094005.2928241-1-liushixin2@huawei.com
-Fixes: f41f2ed43ca5 (mm: hugetlb: free the vmemmap pages associated with each HugeTLB page)
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Brian Foster <bfoster@redhat.com>
+Fixes: 8d9047f8b967c ("s390/runtime instrumentation: simplify task exit handling")
+Fixes: 7b83c6297d2fc ("s390/guarded storage: simplify task exit handling")
+Cc: <stable@vger.kernel.org> # 4.15
+Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220816155407.537372-1-bfoster@redhat.com
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/bootmem_info.c |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/s390/kernel/process.c |   22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
---- a/mm/bootmem_info.c
-+++ b/mm/bootmem_info.c
-@@ -12,6 +12,7 @@
- #include <linux/memblock.h>
- #include <linux/bootmem_info.h>
- #include <linux/memory_hotplug.h>
-+#include <linux/kmemleak.h>
+--- a/arch/s390/kernel/process.c
++++ b/arch/s390/kernel/process.c
+@@ -91,6 +91,18 @@ int arch_dup_task_struct(struct task_str
  
- void get_page_bootmem(unsigned long info, struct page *page, unsigned long type)
- {
-@@ -34,6 +35,7 @@ void put_page_bootmem(struct page *page)
- 		ClearPagePrivate(page);
- 		set_page_private(page, 0);
- 		INIT_LIST_HEAD(&page->lru);
-+		kmemleak_free_part(page_to_virt(page), PAGE_SIZE);
- 		free_reserved_page(page);
- 	}
+ 	memcpy(dst, src, arch_task_struct_size);
+ 	dst->thread.fpu.regs = dst->thread.fpu.fprs;
++
++	/*
++	 * Don't transfer over the runtime instrumentation or the guarded
++	 * storage control block pointers. These fields are cleared here instead
++	 * of in copy_thread() to avoid premature freeing of associated memory
++	 * on fork() failure. Wait to clear the RI flag because ->stack still
++	 * refers to the source thread.
++	 */
++	dst->thread.ri_cb = NULL;
++	dst->thread.gs_cb = NULL;
++	dst->thread.gs_bc_cb = NULL;
++
+ 	return 0;
  }
+ 
+@@ -149,13 +161,11 @@ int copy_thread(unsigned long clone_flag
+ 	frame->childregs.flags = 0;
+ 	if (new_stackp)
+ 		frame->childregs.gprs[15] = new_stackp;
+-
+-	/* Don't copy runtime instrumentation info */
+-	p->thread.ri_cb = NULL;
++	/*
++	 * Clear the runtime instrumentation flag after the above childregs
++	 * copy. The CB pointer was already cleared in arch_dup_task_struct().
++	 */
+ 	frame->childregs.psw.mask &= ~PSW_MASK_RI;
+-	/* Don't copy guarded storage control block */
+-	p->thread.gs_cb = NULL;
+-	p->thread.gs_bc_cb = NULL;
+ 
+ 	/* Set a new TLS ?  */
+ 	if (clone_flags & CLONE_SETTLS) {
 
 

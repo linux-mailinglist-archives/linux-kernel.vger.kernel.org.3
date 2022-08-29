@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2089C5A5190
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B997C5A5189
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiH2QWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S230454AbiH2QWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiH2QWO (ORCPT
+        with ESMTP id S230309AbiH2QWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:22:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BEB86716;
+        Mon, 29 Aug 2022 12:22:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99843E71;
         Mon, 29 Aug 2022 09:22:12 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:3d67:aec0:f788:1143])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EBC0D6601E7C;
-        Mon, 29 Aug 2022 17:22:09 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A0E7B6601EFE;
+        Mon, 29 Aug 2022 17:22:10 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661790130;
-        bh=K4PyGdMb0CLgAmgUHhcoL5Cwk7ELeeLgQQjYzbm0oOQ=;
+        s=mail; t=1661790131;
+        bh=1QjEDfeYtMg2LvAMK7jYApMsPkNYBRfLQFsRT9YF/R8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QPrmf7k7pnRT0uSB2TCW4M9K+AUwuPECBOHw00ZPBwLpJcLAMN8fcLZO8kUc4LuFL
-         cjK9QhrK+c8nlrQNWqhiqq5hhwc66/uz97UcZB32zQC1FswruLcE5S60bsBPjUGOxI
-         0plht1+Lm6stt/LfFfI/uewUbnrWhmVmJU1nP4wG/Z7h/sN9zSy0VYZCHrcmooq4ds
-         A/Vy5S3gA4liekF+BKYr8Qo+voAzOeVTscmPZXli+MniEcuCB3gsAg2kk/Un2EAXu5
-         3tUCoII88H2oxoMs6O8SIlepOWvJzO1wZiabMpSV8Uf+pclO/JggjahDFfsR0GE7sY
-         QWuQqvry3+3Kg==
+        b=VHIEPeN8LeBrF70kVPqEXxSeXnjS1QujvHicAi5AqDiw68GwAvEAjlWb6dpsRB3fO
+         WC+YNedLJmmy5fePlSezXbQua2cI4jSV90YjogB9N5tsOgMsx55kSyNld+0ZdHUAS1
+         /x/YfQ9n/DSh7Ox+5vBseQktvwwEbR2NyyS4KDqHb+64tLOSG55yO7IrtO4q7yiPRh
+         f8dV7Bp7qjtKV19vOiy7vpjh/fDwZQn3692GXGaKcSZbTZTNHhQmZqfKPC24bvB+RO
+         JRMNbCVbNYAH9BpwGlQG5CWbohacYpLuz9KHJ32lywSRNWJeYvwFBaFHrPjnEmzQth
+         8EX45HCDvxSLg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 3/7] media: hantro: HEVC: Fix chroma offset computation
-Date:   Mon, 29 Aug 2022 18:21:55 +0200
-Message-Id: <20220829162159.881588-4-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 4/7] media: hantro: postproc: Configure output regs to support 10bit
+Date:   Mon, 29 Aug 2022 18:21:56 +0200
+Message-Id: <20220829162159.881588-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220829162159.881588-1-benjamin.gaignard@collabora.com>
 References: <20220829162159.881588-1-benjamin.gaignard@collabora.com>
@@ -61,28 +61,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The chroma offset depends of the bitstream depth.
-Make sure that ctx->bit_depth is used to compute it.
+Move output format setting in postproc and make sure that
+8/10bit configuration is correctly set.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c | 2 --
+ drivers/media/platform/verisilicon/hantro_postproc.c    | 7 ++++++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c b/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c
-index 233ecd863d5f..a917079a6ed3 100644
+index a917079a6ed3..a9d4ac84a8d8 100644
 --- a/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c
-@@ -12,7 +12,7 @@
+@@ -167,8 +167,6 @@ static void set_params(struct hantro_ctx *ctx)
+ 	hantro_reg_write(vpu, &g2_bit_depth_y_minus8, sps->bit_depth_luma_minus8);
+ 	hantro_reg_write(vpu, &g2_bit_depth_c_minus8, sps->bit_depth_chroma_minus8);
  
- static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
- {
--	return ctx->dst_fmt.width * ctx->dst_fmt.height;
-+	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
+-	hantro_reg_write(vpu, &g2_output_8_bits, 0);
+-
+ 	hantro_reg_write(vpu, &g2_hdr_skip_length, compute_header_skip_length(ctx));
+ 
+ 	min_log2_cb_size = sps->log2_min_luma_coding_block_size_minus3 + 3;
+diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
+index a0928c508434..09d8cf942689 100644
+--- a/drivers/media/platform/verisilicon/hantro_postproc.c
++++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+@@ -114,6 +114,7 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	struct vb2_v4l2_buffer *dst_buf;
+ 	int down_scale = down_scale_factor(ctx);
++	int out_depth;
+ 	size_t chroma_offset;
+ 	dma_addr_t dst_dma;
+ 
+@@ -132,8 +133,9 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
+ 		hantro_write_addr(vpu, G2_RS_OUT_LUMA_ADDR, dst_dma);
+ 		hantro_write_addr(vpu, G2_RS_OUT_CHROMA_ADDR, dst_dma + chroma_offset);
+ 	}
++
++	out_depth = hantro_get_format_depth(ctx->dst_fmt.pixelformat);
+ 	if (ctx->dev->variant->legacy_regs) {
+-		int out_depth = hantro_get_format_depth(ctx->dst_fmt.pixelformat);
+ 		u8 pp_shift = 0;
+ 
+ 		if (out_depth > 8)
+@@ -141,6 +143,9 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
+ 
+ 		hantro_reg_write(ctx->dev, &g2_rs_out_bit_depth, out_depth);
+ 		hantro_reg_write(ctx->dev, &g2_pp_pix_shift, pp_shift);
++	} else {
++		hantro_reg_write(vpu, &g2_output_8_bits, out_depth > 8 ? 0 : 1);
++		hantro_reg_write(vpu, &g2_output_format, out_depth > 8 ? 1 : 0);
+ 	}
+ 	hantro_reg_write(vpu, &g2_out_rs_e, 1);
  }
- 
- static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
 -- 
 2.32.0
 

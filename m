@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688EC5A5191
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DA35A519D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiH2QWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S230432AbiH2QYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiH2QWQ (ORCPT
+        with ESMTP id S230445AbiH2QYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:22:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA7A8A7CB;
-        Mon, 29 Aug 2022 09:22:14 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:3d67:aec0:f788:1143])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 29 Aug 2022 12:24:10 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6208E9A1;
+        Mon, 29 Aug 2022 09:24:06 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC9776601F01;
-        Mon, 29 Aug 2022 17:22:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661790133;
-        bh=KNBM1Ycd4hgicIVPBAmq9OSHzMCSnL+16JukGewVOMo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L6KP9dbqiR2QXE3ioXkmpSrTTs+yLaskjMI+VkZTz7k6mJPXv7s79Kw0FMOEIADYm
-         fBrxFjWwqiN5tVgoUUNuFSREv2fOBm0B+0pOk0vN09BBa1CrTZkSpXfGnJGBs57dbY
-         9fNxfwGHE2TVfIqzpC6b6Fu2d4PnbNIErbopE5VvXLvzYaKuEhhJRFd1ZEtTLdZQI4
-         K9nv+Gc9VDlg/+4YzqSowQXWYiLHV+8f45im+K8xhmOPkN/3aCck3/d7mXO1Q9NWS+
-         IElQA3jcbDiU/2idfWfZhXe20KEIL15Unb+c5MAZGaQVbyqQTN/cXb9CjSj3M3HZhd
-         VcwrqzDUpVdDg==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 7/7] media: hantro: Allows luma and chroma depth to be different
-Date:   Mon, 29 Aug 2022 18:21:59 +0200
-Message-Id: <20220829162159.881588-8-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220829162159.881588-1-benjamin.gaignard@collabora.com>
-References: <20220829162159.881588-1-benjamin.gaignard@collabora.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id B5F392E0;
+        Mon, 29 Aug 2022 16:24:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B5F392E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1661790245; bh=XeyUldM2kmPjFp1Z0j6QSolrm05MZv8BAzINIRKoqEY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RnA5M4bH42RGLuL0ljDzYlRtDkw4JhryUnz2i2GYQpk8Wl5m+XidZYec3ADf7FH/i
+         NHkkMMg6VThGrpS0kyNDpugXnksCcR5Tf41LT5z41jq62QnaJKB+ArlyCEXX2L5xby
+         jRgs8t9PpxTzdovTgn2l9HjWD6G9HYmcWhfh9Sp5uSwtMNu32RylyZ9Vci4itsVmQV
+         d2gY2Cn7DGWxWGpCjNBtrWNCL7GRq57souTK4RuLHq91i2he3VvwNyXrkelsde2BhB
+         wJWaWDBIxbbyN3TwE78EsxsSrTmU9DoBFcREZH/6HmEOaUBqkeRpVNWKOeYxMcPcRz
+         b7uVGXjJoKeqg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     zhaomzhao@126.com, djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+Subject: Re: [PATCH v1] Documentation: filesystems: xfs: update pseudocode
+ and typo fixes
+In-Reply-To: <20220823013653.203469-1-zhaomzhao@126.com>
+References: <20220823013653.203469-1-zhaomzhao@126.com>
+Date:   Mon, 29 Aug 2022 10:24:04 -0600
+Message-ID: <87a67nqaqj.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,33 +52,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Luma and chroma depth are set on different hardware registers.
-Even if they aren't identical the bitstream can be compliant
-to HEVC specifications and decoded by the hardware.
+zhaomzhao@126.com writes:
 
-With this patch TSUNEQBD_A_MAIN10_Technicolor_2 conformance test
-is successfully decoded.
+> From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+>
+> According to the implementation of xfs_trans_roll(), it calls
+> xfs_trans_reserve(), which reserves not only log space, but also
+> free disk blocks. In short, the "transaction stuff". So change
+> xfs_log_reserve() to xfs_trans_reserve().
+>
+> Besides, fix several typo issues.
+>
+> Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+> ---
+>  .../filesystems/xfs-delayed-logging-design.rst       | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- drivers/media/platform/verisilicon/hantro_drv.c | 3 ---
- 1 file changed, 3 deletions(-)
+I've applied this to the docs tree, thanks.
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 7c75922e2e98..8cb4a68c9119 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -271,9 +271,6 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
- 	} else if (ctrl->id == V4L2_CID_STATELESS_HEVC_SPS) {
- 		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
- 
--		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
--			/* Luma and chroma bit depth mismatch */
--			return -EINVAL;
- 		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
- 			/* Only 8-bit and 10-bit are supported */
- 			return -EINVAL;
--- 
-2.32.0
-
+jon

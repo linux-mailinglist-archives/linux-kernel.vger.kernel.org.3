@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB015A542F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004915A5432
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiH2SrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 14:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S229942AbiH2Sr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 14:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiH2SrP (ORCPT
+        with ESMTP id S229551AbiH2Srz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 14:47:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C649785A98
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661798831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3SRr/ruP6S24ttwv/V3z+xdM2OxhFCLUfvkhaDf3xjo=;
-        b=DdDMvj7hM4JdBK1k9U2V1D3DcrOCCcrSDp/xnGP6C9a84pMv0RhsH2I5P2a5c7KZB+oDar
-        sTVEkkAyD78P4gbf3j1SJ+2b8X7M4vtlkiFmtdviWENNcZTiHJ9mwoh7g2Y8iCcLgd8UTR
-        gV9eS2RvMv1WeoJtCsFrNSklMbAAapU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-V5V5MiYtPn6SchxYTIkH3Q-1; Mon, 29 Aug 2022 14:47:05 -0400
-X-MC-Unique: V5V5MiYtPn6SchxYTIkH3Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7FF838005CB;
-        Mon, 29 Aug 2022 18:47:04 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F0F1401473;
-        Mon, 29 Aug 2022 18:47:04 +0000 (UTC)
-Message-ID: <05c68678-5bb3-a7fd-863d-d3e0cf11e914@redhat.com>
-Date:   Mon, 29 Aug 2022 14:47:04 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] mm/slab_common: Deleting kobject in
- kmem_cache_destroy() without holding slab_mutex/cpu_hotplug_lock
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220812183033.346425-1-longman@redhat.com>
- <093f6a32-40f8-78ea-0070-600cfe08a3dd@suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <093f6a32-40f8-78ea-0070-600cfe08a3dd@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mon, 29 Aug 2022 14:47:55 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E894483066
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:47:53 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dc888dc62so141770377b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=DbVqcIyW57dhZ/hIdLVFQvuYF0J4JrhZ5ni9wGMW9Ag=;
+        b=Bpxc99Cx8g1WNPGF3BCmC/VoPNs61HsTmERxtKm422RXkqlVULM/hKLNF0xNFuVNkN
+         1KToXtUUr11Elo915BICHTSM1qqOdvl9rvKkoR9SX9HF6XQf8bCRum9MXue3tHp73vLu
+         OrmpfFrPN9MRx8h4pqb1XbKVKoBPrLTM7eza7PaLJETy9bNwkXT+m6kSBSDIV/uaRTZW
+         s5s0kAyLwnJUoQJZvwAwbLrAuJ8jBPWku15FOyeod5W6QHlo9Lf2hGXeA1yfSkz+ando
+         oZzQ7i4T2D9zzNV8qtY9BglsiIxGQotK8D/K0lG7IynDaX8t/HiQhD6P2DXJmzEm3c8A
+         4lYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=DbVqcIyW57dhZ/hIdLVFQvuYF0J4JrhZ5ni9wGMW9Ag=;
+        b=qq1L8YThpsctHMFGOHk2gS1Pmeq3KAf1oPnf4R8I08ICepAu5UbWDYxT/lkbFNv3TE
+         Nw/tOAnASaiOWC3ld//PzmlGIqGKQjWe2z1oO3mtV6B5pAI+ytjVX47/8GM9bJxnCGp+
+         VoJMr7PABMOnZ92gwy0VuZ8HR8O6qC54yfQ6gtXtj1mCdist6VV0iMz2QFU4z52UcS/I
+         H+rYlOw53g06ZlG26zKpV1t3Ks5iTHQAHGq6F3LYH3fyn+1/xTU9RGUAOD0Tni2WbIUH
+         lUcTwbLVrUV5F5lFzGbsmyUjTz8wwE0kLxPrVpa0HxFg8WNqmMutv5Yaze1FgSm6iF62
+         4udQ==
+X-Gm-Message-State: ACgBeo2utk7+kuAlgbzVSyLdkXE2L+V/GEGeTE+/Kx+5yF7CjcmS6Bna
+        8iMf+vsD3mul7hW2hOjgrcZ68yFSITk0Rf1Wl/+I
+X-Google-Smtp-Source: AA6agR5kg/MwB86XKDmGJd6n/E1ekru+JbHqpyFoaEkO8JpFf0a5wh4HuiaimXQUqlMdzguadjYDNNcritMemD1bSrhw
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:3f93:1c9a:457e:d2d1])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:b8c6:0:b0:692:af14:6f99 with
+ SMTP id g6-20020a25b8c6000000b00692af146f99mr9874055ybm.197.1661798873239;
+ Mon, 29 Aug 2022 11:47:53 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 11:47:48 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220829184748.1535580-1-axelrasmussen@google.com>
+Subject: [PATCH] selftests: net: sort .gitignore file
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +70,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 07:33, Vlastimil Babka wrote:
-> On 8/12/22 20:30, Waiman Long wrote:
->> A circular locking problem is reported by lockdep due to the following
->> circular locking dependency.
->>
->>    +--> cpu_hotplug_lock --> slab_mutex --> kn->active --+
->>    |                                                     |
->>    +-----------------------------------------------------+
->>
->> The forward cpu_hotplug_lock ==> slab_mutex ==> kn->active dependency
->> happens in
->>
->>    kmem_cache_destroy():	cpus_read_lock(); mutex_lock(&slab_mutex);
->>    ==> sysfs_slab_unlink()
->>        ==> kobject_del()
->>            ==> kernfs_remove()
->> 	      ==> __kernfs_remove()
->> 	          ==> kernfs_drain(): rwsem_acquire(&kn->dep_map, ...);
->>
->> The backward kn->active ==> cpu_hotplug_lock dependency happens in
->>
->>    kernfs_fop_write_iter(): kernfs_get_active();
->>    ==> slab_attr_store()
->>        ==> cpu_partial_store()
->>            ==> flush_all(): cpus_read_lock()
->>
->> One way to break this circular locking chain is to avoid holding
->> cpu_hotplug_lock and slab_mutex while deleting the kobject in
->> sysfs_slab_unlink() which should be equivalent to doing a write_lock
->> and write_unlock pair of the kn->active virtual lock.
->>
->> Since the kobject structures are not protected by slab_mutex or the
->> cpu_hotplug_lock, we can certainly release those locks before doing
->> the delete operation.
->>
->> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
->> created kmem_cache_release() and call it outside the slab_mutex &
->> cpu_hotplug_lock critical sections. There will be a slight delay
->> in the deletion of sysfs files if kmem_cache_release() is called
->> indirectly from a work function.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
-> Thanks, added to slab.git for-6.0/fixes
+This is the result of `sort tools/testing/selftests/net/.gitignore`, but
+preserving the comment at the top.
 
-Thanks for taking it.
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/net/.gitignore | 52 +++++++++++++-------------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
-Cheers,
-Longman
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 02abf8fdfd3a..e64419c3fed8 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -1,43 +1,43 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++cmsg_sender
++fin_ack_lat
++gro
++hwtstamp_config
++ioam6_parser
++io_uring_zerocopy_tx
++ip_defrag
+ ipsec
++ipv6_flowlabel
++ipv6_flowlabel_mgr
+ msg_zerocopy
+-socket
++nettest
+ psock_fanout
+ psock_snd
+ psock_tpacket
+-stress_reuseport_listen
++reuseaddr_conflict
++reuseaddr_ports_exhausted
+ reuseport_addr_any
+ reuseport_bpf
+ reuseport_bpf_cpu
+ reuseport_bpf_numa
+ reuseport_dualstack
+-reuseaddr_conflict
+-tcp_mmap
+-udpgso
+-udpgso_bench_rx
+-udpgso_bench_tx
+-tcp_inq
+-tls
+-txring_overwrite
+-ip_defrag
+-ipv6_flowlabel
+-ipv6_flowlabel_mgr
+-so_txtime
+-tcp_fastopen_backup_key
+-nettest
+-fin_ack_lat
+-reuseaddr_ports_exhausted
+-hwtstamp_config
+ rxtimestamp
+-timestamping
+-txtimestamp
++socket
+ so_netns_cookie
++so_txtime
++stress_reuseport_listen
++tap
++tcp_fastopen_backup_key
++tcp_inq
++tcp_mmap
+ test_unix_oob
+-gro
+-ioam6_parser
++timestamping
++tls
+ toeplitz
+ tun
+-cmsg_sender
++txring_overwrite
++txtimestamp
++udpgso
++udpgso_bench_rx
++udpgso_bench_tx
+ unix_connect
+-tap
+-io_uring_zerocopy_tx
+-- 
+2.37.2.672.g94769d06f0-goog
 

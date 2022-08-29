@@ -2,108 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDE85A50E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DEA5A50E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiH2QCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S230136AbiH2QDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiH2QCb (ORCPT
+        with ESMTP id S229619AbiH2QC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:02:31 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8DC75FDE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:02:29 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id cu2so16703746ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:02:29 -0700 (PDT)
+        Mon, 29 Aug 2022 12:02:57 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A1589925
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:02:55 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-32a09b909f6so207991607b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=PWMBMRMPN5GhvCOAnnAdFknz4G+9De4RqcsPk0Z1BG4=;
-        b=NYJnIKLUJrUZStzT8ciuU41oE7tVij2lLq+s+AiEcOqIZwRO2tVIvUmDN2h0h+krqo
-         d1IzFfocFezhlX9U9fk02nHKFeBuuQqrjG5Yixliri9tUNIVf5qacBQipFaZczv6jP4A
-         vq9KS79+uIf3t1gDDWkMp9aXUQtbyAvr3/NdRmEG/UJ5blaAxBSEHgjSQRSS2N2TYk0R
-         0Yn8HMa9dyg/hOoPn2qBkP1VxMq4+A4RxXM4M9k2ohO+Nup6xhbaGD+0qpjE9I1Pn/gg
-         Na7hh1ha8jwnRIXebmeJHDx33e6q7F7H9UpnJ9dQ+Imp4gxiyNPLG8V+wCLbY0aU2FcE
-         Mk6w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8Usi9Hh1KvrJmXEusctcdOFszMM7+qvg9UBwUxClRh0=;
+        b=P63R/tJ1/yc2xe/SYPTrGdLCylhF8Yq/+kzrso3A2VDilTv0adUYIPWvD/PV8NImJF
+         rvP+8ZABp8nUF1fbgcAf4+5O5JPVD7egARXdeRN7M8thmFgzEEcGdam2RaoZaz7SHCPi
+         Ws92dnROdr+EUTrMzw6dPkZFbmHzFWZP6l+r1gQDVO3qkwLPGfevPjuOb+We6iXKTDYl
+         tNpS+apxMlkRoa1XuSVaEByTnXLeRgx4OwVpM1JcBEi/X1wA0qYpX2cVMjcn39Q+NLDe
+         OQeCLFZ+h7GW6hFG2icL9huyDGj4Dzmm6aqgWJYXAz1DCtPWiMwXFxvyVjtCuC4p+lge
+         NjuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=PWMBMRMPN5GhvCOAnnAdFknz4G+9De4RqcsPk0Z1BG4=;
-        b=VgbZMGoisQRB68Ng7Pi1NDrct+h8jXcG+5OYv1R6TRsxAk40hqhVqfWQtRUJtNojoI
-         +fVdCLzFDStVtUA9EhENhrKS75sCGP06Z1GkGPoCHzodOACgjKPj0Ar4RCz+fy9TaEdj
-         c3vQxCTturKZ9XTJmpPJQIxHn4XroOfs0m3jT5SPW4mIxQ0F0Ye64d2pFN4XyHwGeE5o
-         uH4BDBvSRrFwOcHb+rcagSc7vfrkZNpSsyxpMs0dLzdDV3aUNgXV0XK8BLOE1/udh1aa
-         AXjwdF/TcpIA3P6ZYRUHvj7xBT8xQBjVSmYqiMy5YzqrdXz26t3aLdglGtf5xi9bsn4v
-         dXbQ==
-X-Gm-Message-State: ACgBeo0m5T5z+NMbYXP69nElbufVQh7BGUi0DQukFp6gGTftcWn/VHVP
-        u6fmA41P3git0diyhra8hWG5dI2obEexwX1wsGXozGvMPfg=
-X-Google-Smtp-Source: AA6agR6el4xi1uh8MNRyeKzalfI37Tyvgw01vmh8rhtJ4CKqz7iElZwCgeZkvXcMx5FicxZX67QbZ1VGJh0PgF+k3xo=
-X-Received: by 2002:a17:907:743:b0:740:ef93:2ffc with SMTP id
- xc3-20020a170907074300b00740ef932ffcmr10122140ejb.514.1661788948001; Mon, 29
- Aug 2022 09:02:28 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8Usi9Hh1KvrJmXEusctcdOFszMM7+qvg9UBwUxClRh0=;
+        b=rc+PCJOm+HZXvCfUoBwU6EokzHvLUycIEC2UkFBb+bm3RlBnBpAh9dSYok/EwPWnER
+         utv4MtcpC8WMUHDl61SpA32y6cD6Web4sESsnfyV9drRplv476xlmjt3koi8lWFps8Ra
+         N1C1mZOmWHcu/DBHpU9PnmtjkO6cIjJAmhkrnaVaGcn1pWmXj3H3Tw5k9AlqgAKJi9Lp
+         1WHzpZPpoj6ScAAE6ftazVH2ChA0cnky5Iz0RtNjAj4czkrdkdRa15IS1faaS/W+OkKl
+         KLjioO6OXQnvkS2wKQyEV5vGsc7akSAhHzYFGzVYV8auR7zUKhvnQcUuPhZ5bxup72ic
+         7BjA==
+X-Gm-Message-State: ACgBeo24rCa8bnulfIfPbckYqNB3i/g4oblcAuE27Dznpvlvp66bDE/m
+        Gomaho8fyVlUrdfHrq+pd95afuGyqeGfEw+Qun+IZQ==
+X-Google-Smtp-Source: AA6agR7/KN4/eHAqKBzu8Y1ODKrUf87PVyGKXZruOIOILGQ04PmnXodL6U9rRi2s20C9/A8QbHpYKGVUuhl+ceHb/GM=
+X-Received: by 2002:a0d:da41:0:b0:329:91e7:fd06 with SMTP id
+ c62-20020a0dda41000000b0032991e7fd06mr10477748ywe.436.1661788974863; Mon, 29
+ Aug 2022 09:02:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220319151016.983348-1-alvin@pqrs.dk>
-In-Reply-To: <20220319151016.983348-1-alvin@pqrs.dk>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 29 Aug 2022 18:02:17 +0200
-Message-ID: <CAG3jFyvqPFL4d=s6DsbVZOzkuMwwi-GUZwFYyeajr=jLqmdm4Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] drm: bridge: adv7511: CEC support for ADV7535
-To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-3-kirill.shutemov@linux.intel.com> <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
+ <20220810141959.ictqchz7josyd7pt@techsingularity.net> <CAAH4kHa6s3sBRySNu-TZG_6vOaN4KheVy4kvxG5s=wOTDGy2=Q@mail.gmail.com>
+ <2981e25e-9cda-518a-9750-b8694f2356b5@amd.com>
+In-Reply-To: <2981e25e-9cda-518a-9750-b8694f2356b5@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Mon, 29 Aug 2022 09:02:43 -0700
+Message-ID: <CAAH4kHbcfnVWNQHf6Mrg__bSFT6196Sx4kno6o0Zo7hsgOgnNw@mail.gmail.com>
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alvin,
+> > The stack track is in mm/page_alloc.c. I've done a little
+> > investigation, but I can't account for why there's a hard cutoff of
+> > correctness at 256GB
+> >
+> > [    0.065563] RIP: 0010:memmap_init_range+0x108/0x173
+> > [    0.066309] Code: 77 16 f6 42 10 02 74 10 48 03 42 08 48 c1 e8 0c
+> > 48 89 c3 e9 3a ff ff ff 48 89 df 48 c1 e7 06 48 03 3d d9 a2 66 ff 48
+> > 8d 47 08 <c7> 47 34 01 00 00 00 48 c7 47 38 00 00 00 00 c7 47 30 ff ff
+> > ff ff
+> > [    0.069108] RSP: 0000:ffffffffad603dc8 EFLAGS: 00010082 ORIG_RAX:
+> > 0000000000000404
+> > [    0.070193] RAX: ffffdba740000048 RBX: 0000000000000001 RCX: 0000000000000000
+> > [    0.071170] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffdba740000040
+> > [    0.072224] RBP: 0000000000000000 R08: 0000000000001000 R09: 0000000000000000
+> > [    0.073283] R10: 0000000000000001 R11: ffffffffad645c60 R12: 0000000000000000
+> > [    0.074304] R13: 00000000000000a0 R14: 0000000000000000 R15: 0000000000000000
+> > [    0.075285] FS:  0000000000000000(0000) GS:ffffffffadd6c000(0000)
+> > knlGS:0000000000000000
+> > [    0.076365] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    0.077194] CR2: ffffdba740000074 CR3: 0008001ee3a0c000 CR4: 00000000000606b0
+> > [    0.078209] Call Trace:
+> > [    0.078524]  <TASK>
+> > [    0.078887]  ? free_area_init+0x5c1/0x66c
+> > [    0.079417]  ? zone_sizes_init+0x52/0x6c
+> > [    0.079934]  ? setup_arch+0xa55/0xb6d
+> > [    0.080417]  ? start_kernel+0x64/0x65a
+> > [    0.080897]  ? secondary_startup_64_no_verify+0xd6/0xdb
+> > [    0.081620]  </TASK>
+>
+> Note that there is a bug in Brijesh's version of the patch and it will
+> almost exclusively use the MSR protocol. Please try the version of the
+> patch that I recently sent up based on the current unaccepted memory tree
+> from Kirill.
+>
 
-Sorry about being slow to get to this series.
+I've now tested this patch set with Tom's new patch set, and it
+appears to be that the problem with 256GB is more likely to be due to
+this unaccepted memory patch set rather than something AMD-specific.
 
-Can you rebase it on drm-misc-next and send out the next version?
+Kirill, do you see any problems with 256GB on TDX? It seems there is
+some unaccepted memory getting touched in memmap_init_range when the
+VM's memory size is at least 256GB
 
-On Sat, 19 Mar 2022 at 16:10, Alvin =C5=A0ipraga <alvin@pqrs.dk> wrote:
->
-> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
->
-> We have an ADV7535 which is nominally supported by this driver. These
-> two patches fix up the driver to get CEC working too.
->
-> The first adds the basic support by correcting some register offsets.
->
-> The second addresses an issue we saw with CEC RX on the ADV7535. It
-> hasn't been tested with the other chips (e.g. ADV7533), although it
-> should be compatible. I'm sending it against drm-misc-next because the
-> issue wasn't reported for other chips, and ADV7535 didn't have CEC
-> support before. But feel free to take it into -fixes instead.
->
-> Alvin =C5=A0ipraga (2):
->   drm: bridge: adv7511: enable CEC support for ADV7535
->   drm: bridge: adv7511: use non-legacy mode for CEC RX
->
->  drivers/gpu/drm/bridge/adv7511/adv7511.h     |  27 ++++-
->  drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 116 +++++++++++++------
->  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c |  22 +++-
->  3 files changed, 119 insertions(+), 46 deletions(-)
->
-> --
-> 2.35.1
->
+-- 
+-Dionna Glaze, PhD (she/her)

@@ -2,596 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAC05A5331
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83075A5338
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiH2Rcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S231445AbiH2Rdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiH2Rcd (ORCPT
+        with ESMTP id S230077AbiH2Rdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:32:33 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABBD97EC4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:32:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id o4so8706797pjp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:32:32 -0700 (PDT)
+        Mon, 29 Aug 2022 13:33:49 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147AA97EDA
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:33:48 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id bh13so8309395pgb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=eplla/3TsPh9bHtBg3pkAMa+oDtxfhArNZX+yx7NqiU=;
-        b=mQP+TKag1QHY/MDMTVUlanJhZ2geUyjp2K+GwaPwum+nGl7uTEIgg2UL8PIfpfvDs8
-         wilq4qlHsuaUQpucdFfr7TAk+KYCxdZrFb6izlw407JEK3EX3QMw3c4xTvXAfvBaG9W8
-         JYzHvcwzoZXcD7e4296K9Tm5nF3CJwclPP4C+ypKtUwQMveua8nRFmJttaYGsUaDz5C7
-         QNqvHqEMYCCL/gALv2A/EbHQH6xi7/T1LvvHtbH7vXMUElfKqLblaw2SC0m6omO4Y8kY
-         /MsDX3k1Bamduvs/TzOmafNOK31nMKyCakJccqhoYzwrltRtsNbiCQmNLbj8oaX2arbg
-         sR3g==
+        bh=88XtoZzbZveGIe6W4F/YHkUpeXUSRoxhWtsQ1gJLO0Y=;
+        b=LJaqQyLKxs3mDeGI+elBZm8fcrM3+d/GXgdgigp63emskLM21WywFzIxpfkbNzbC3o
+         FRzay+TVzn8Cjiy4vOeVRnbGm1Gzfol1Ot+N1DHPmmcXwiPMhujmj2t1pHgn59u6TCeV
+         xSeIdUN0aD0RSqbzf+I3Zu1jGphrLU3Jltrr08erMtzDVSQk9eVn3YZCpmZ8Wq2nmLjC
+         HWo2WyeWeREOYPY4AnAhy7IHESg8Bb4YMydbQENy9XLXjSA+UvZxl3lL9aLxbJjhq/bU
+         sc7A4wHo/Z3npb0nGdYKfPWUKi3yqO1DOEFaleDRCqhWnMuLLMsXSBV0bGKa5Ywgts0d
+         IBBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=eplla/3TsPh9bHtBg3pkAMa+oDtxfhArNZX+yx7NqiU=;
-        b=T9uKtjZQxAKAIjHjBT62SQt2owLI9cMBHFmo/A9vSjKH9DmwvD9ix103mZsCFnkPhz
-         LQpARLRV43vKT3yW0l0406I973xKdkvznvUH7Dfibl8IGvjxVIp0YLwIdOZzu3N4Yku5
-         McZpsh5Pg3+KBniU3d3EK+If0bK8sANS56SdNjmaCVV602nH3niQESxvvF9dytqk6C2D
-         myCPK0h6JKqbWXdVs3HudDS0ymF3eEtrxxwXE0huIxpDdJ4dPgVL29GuKmDaATx2pfQG
-         gXBIp9ZgeZ4C8KseXgLxcyM6UBlyaGSgL/wJJ+iP0CM/y1+Pi15MEVctipefi9j4uH08
-         +zRw==
-X-Gm-Message-State: ACgBeo3vWug3VhpC0Ck6SMiRCoo8nnEispHGS7BaSHpgoyXEBDZiDR5K
-        52Faw2W7O7QD3URz7kOqQ8iwzg==
-X-Google-Smtp-Source: AA6agR6L5KaLkUSjFN8ltTh5g8lLAeRiEz+tM07tjqh/cBrCQ+3L2bkc7++r1yYumdHPX80HprnLiA==
-X-Received: by 2002:a17:90a:a882:b0:1fd:8bc5:7b1a with SMTP id h2-20020a17090aa88200b001fd8bc57b1amr12739215pjq.10.1661794349785;
-        Mon, 29 Aug 2022 10:32:29 -0700 (PDT)
-Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
-        by smtp.gmail.com with ESMTPSA id t13-20020a17090340cd00b00174923afa8asm4184090pld.3.2022.08.29.10.32.28
+        bh=88XtoZzbZveGIe6W4F/YHkUpeXUSRoxhWtsQ1gJLO0Y=;
+        b=A+pHSqLYt50Adp7o7OuUnnPaHr1V66+jaSMW/rDwbBb0W2t56wQVAKxkI0bX902z0F
+         O1CTBVpNF9RKeSG8VmWUAD5hyE3Bo3//L9SZjyRX9jN2546I0uDNk6ebkHJI25j0fZMK
+         ctWDn9ZIAdGGWnB/vhxR8G0v1ylE/4RR7bvxQunPMspLR4COGZgWfNQlB4OWlhZMls8D
+         D2eIdfOi/VDHsuiDzqG20CU9WrqCvlGwQh4NrRbmBl1LcU1EArSCpqCiuUEdRJpdTVRM
+         SuOQUXExtHY4Rbrl9lVFhSC4e80u9qa9MlVzpzq2qIR1aR6VYh6iB39UrUVIi9yD+m+s
+         9xsA==
+X-Gm-Message-State: ACgBeo17UT8qRgHowUJbzszezT3b8P52eLMFiCaFzYrsOJ7XdZ1pWr/U
+        Rg9Ve7kklYNcquhCqlHifqfWVA==
+X-Google-Smtp-Source: AA6agR7q8oP/7KryicESNNPbuoFC/Z6Q/8/57egou/NQwmyr6L/ZlgPZUyO3Dw4sca0Zgib8B5HGVg==
+X-Received: by 2002:a65:4c07:0:b0:427:bbde:99c with SMTP id u7-20020a654c07000000b00427bbde099cmr14892722pgq.390.1661794426448;
+        Mon, 29 Aug 2022 10:33:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001fd7e56da4csm5201876pjb.39.2022.08.29.10.33.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 10:32:28 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 17:32:24 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com
-Subject: Re: [PATCH v5 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
-Message-ID: <Ywz4KEkJwrE4yDBe@google.com>
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru>
- <YwzbARMkb/69+l2d@lpieralisi>
+        Mon, 29 Aug 2022 10:33:46 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 17:33:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/2] KVM: VMX: Fix VM entry failure on
+ PT_MODE_HOST_GUEST while host is using PT
+Message-ID: <Ywz4diMZBB7DdITb@google.com>
+References: <20220825085625.867763-1-xiaoyao.li@intel.com>
+ <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwzbARMkb/69+l2d@lpieralisi>
-X-Spam-Status: No, score=-12.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+In-Reply-To: <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/29/2022, Lorenzo Pieralisi wrote:
-> [+Robin, Will - please jump to DMA mask set-up]
+On Mon, Aug 29, 2022, Wang, Wei W wrote:
+> On Thursday, August 25, 2022 4:56 PM, Xiaoyao Li wrote:
+>  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index d7f8331d6f7e..195debc1bff1 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1125,37 +1125,29 @@ static inline void pt_save_msr(struct pt_ctx *ctx, u32 addr_range)
 > 
-> On Mon, Aug 22, 2022 at 09:47:01PM +0300, Serge Semin wrote:
-> > Baikal-T1 SoC is equipped with DWC PCIe v4.60a host controller. It can be
-> > trained to work up to Gen.3 speed over up to x4 lanes. The host controller
-> > is attached to the DW PCIe 3.0 PCS via the PIPE-4 interface, which in its
-> > turn is connected to the DWC 10G PHY. The whole system is supposed to be
-> > fed up with four clock sources: DBI peripheral clock, AXI application
-> > clocks and external PHY/core reference clock generating the 100MHz signal.
-> > In addition to that the platform provide a way to reset each part of the
-> > controller: sticky/non-sticky bits, host controller core, PIPE interface,
-> > PCS/PHY and Hot/Power reset signal. The driver also provides a way to
-> > handle the GPIO-based PERST# signal.
-> > 
-> > Note due to the Baikal-T1 MMIO peculiarity we have to implement the DBI
-> > interface accessors which make sure the IO operations are dword-aligned.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v2:
-> > - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> > 
-> > Changelog v3:
-> > - Use the clocks/resets handlers defined in the DW PCIe core descriptor.
-> >   (@Rob)
-> > - Redefine PCI host bridge config space accessors with the generic
-> >   pci_generic_config_read32() and pci_generic_config_write32() methods.
-> >   (@Rob)
-> > 
-> > Changelog v4:
-> > - Drop PCIBIOS_* macros usage. (@Rob)
-> > - Add "static const" to the dw_pcie_ops and dw_pcie_host_ops structure
-> >   instances. (@Bjorn)
-> > - Rename bt1_pcie_dw_ops to bt1_pcie_ops. (@Bjorn)
-> > - Rename bt1_pcie_ops to bt1_pci_ops. (@Bjorn)
-> > - Use start_link/stop_link suffixes in the corresponding callbacks.
-> >   (@Bjorn)
-> > - Change the get_res() method suffix to being get_resources(). (@Bjorn)
-> > - Change *_{add,del}_dw_port() method to *_{add,del}_port(). (@Bjorn)
-> > - Drop dma_coerce_mask_and_coherent() applied to the PCI host bridge
-> >   kernel device instance. (@Bjorn)
-> > - Add the comment above the dma_set_mask_and_coherent() method usage
-> >   regarding the controller eDMA feature. (@Bjorn)
-> > - Fix the comment above the core reset controls assertion. (@Bjorn)
-> > - Replace delays and timeout numeric literals with macros. (@Bjorn)
-> > ---
-> >  drivers/pci/controller/dwc/Kconfig    |   9 +
-> >  drivers/pci/controller/dwc/Makefile   |   1 +
-> >  drivers/pci/controller/dwc/pcie-bt1.c | 653 ++++++++++++++++++++++++++
-> >  3 files changed, 663 insertions(+)
-> >  create mode 100644 drivers/pci/controller/dwc/pcie-bt1.c
-> > 
-> > diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> > index 62ce3abf0f19..771b8b146623 100644
-> > --- a/drivers/pci/controller/dwc/Kconfig
-> > +++ b/drivers/pci/controller/dwc/Kconfig
-> > @@ -222,6 +222,15 @@ config PCIE_ARTPEC6_EP
-> >  	  Enables support for the PCIe controller in the ARTPEC-6 SoC to work in
-> >  	  endpoint mode. This uses the DesignWare core.
-> >  
-> > +config PCIE_BT1
-> > +	tristate "Baikal-T1 PCIe controller"
-> > +	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-> > +	depends on PCI_MSI_IRQ_DOMAIN
-> > +	select PCIE_DW_HOST
-> > +	help
-> > +	  Enables support for the PCIe controller in the Baikal-T1 SoC to work
-> > +	  in host mode. It's based on the Synopsys DWC PCIe v4.60a IP-core.
-> > +
-> >  config PCIE_ROCKCHIP_DW_HOST
-> >  	bool "Rockchip DesignWare PCIe controller"
-> >  	select PCIE_DW
-> > diff --git a/drivers/pci/controller/dwc/Makefile b/drivers/pci/controller/dwc/Makefile
-> > index 8ba7b67f5e50..bf5c311875a1 100644
-> > --- a/drivers/pci/controller/dwc/Makefile
-> > +++ b/drivers/pci/controller/dwc/Makefile
-> > @@ -3,6 +3,7 @@ obj-$(CONFIG_PCIE_DW) += pcie-designware.o
-> >  obj-$(CONFIG_PCIE_DW_HOST) += pcie-designware-host.o
-> >  obj-$(CONFIG_PCIE_DW_EP) += pcie-designware-ep.o
-> >  obj-$(CONFIG_PCIE_DW_PLAT) += pcie-designware-plat.o
-> > +obj-$(CONFIG_PCIE_BT1) += pcie-bt1.o
-> >  obj-$(CONFIG_PCI_DRA7XX) += pci-dra7xx.o
-> >  obj-$(CONFIG_PCI_EXYNOS) += pci-exynos.o
-> >  obj-$(CONFIG_PCIE_FU740) += pcie-fu740.o
-> > diff --git a/drivers/pci/controller/dwc/pcie-bt1.c b/drivers/pci/controller/dwc/pcie-bt1.c
-> > new file mode 100644
-> > index 000000000000..86b230575ddc
-> > --- /dev/null
-> > +++ b/drivers/pci/controller/dwc/pcie-bt1.c
-> > @@ -0,0 +1,653 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
-> > + *
-> > + * Authors:
-> > + *   Vadim Vlasov <Vadim.Vlasov@baikalelectronics.ru>
-> > + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > + *
-> > + * Baikal-T1 PCIe controller driver
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/bits.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mfd/syscon.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pci.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/reset.h>
-> > +#include <linux/types.h>
-> > +
-> > +#include "pcie-designware.h"
-> > +
-> > +/* Baikal-T1 System CCU control registers */
-> > +#define BT1_CCU_PCIE_CLKC			0x140
-> > +#define BT1_CCU_PCIE_REQ_PCS_CLK		BIT(16)
-> > +#define BT1_CCU_PCIE_REQ_MAC_CLK		BIT(17)
-> > +#define BT1_CCU_PCIE_REQ_PIPE_CLK		BIT(18)
-> > +
-> > +#define BT1_CCU_PCIE_RSTC			0x144
-> > +#define BT1_CCU_PCIE_REQ_LINK_RST		BIT(13)
-> > +#define BT1_CCU_PCIE_REQ_SMLH_RST		BIT(14)
-> > +#define BT1_CCU_PCIE_REQ_PHY_RST		BIT(16)
-> > +#define BT1_CCU_PCIE_REQ_CORE_RST		BIT(24)
-> > +#define BT1_CCU_PCIE_REQ_STICKY_RST		BIT(26)
-> > +#define BT1_CCU_PCIE_REQ_NSTICKY_RST		BIT(27)
-> > +
-> > +#define BT1_CCU_PCIE_PMSC			0x148
-> > +#define BT1_CCU_PCIE_LTSSM_STATE_MASK		GENMASK(5, 0)
-> > +#define BT1_CCU_PCIE_LTSSM_DET_QUIET		0x00
-> > +#define BT1_CCU_PCIE_LTSSM_DET_ACT		0x01
-> > +#define BT1_CCU_PCIE_LTSSM_POLL_ACT		0x02
-> > +#define BT1_CCU_PCIE_LTSSM_POLL_COMP		0x03
-> > +#define BT1_CCU_PCIE_LTSSM_POLL_CONF		0x04
-> > +#define BT1_CCU_PCIE_LTSSM_PRE_DET_QUIET	0x05
-> > +#define BT1_CCU_PCIE_LTSSM_DET_WAIT		0x06
-> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNKWD_START	0x07
-> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNKWD_ACEPT	0x08
-> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNNUM_WAIT	0x09
-> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNNUM_ACEPT	0x0a
-> > +#define BT1_CCU_PCIE_LTSSM_CFG_COMPLETE		0x0b
-> > +#define BT1_CCU_PCIE_LTSSM_CFG_IDLE		0x0c
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_LOCK		0x0d
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_SPEED		0x0e
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_RCVRCFG		0x0f
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_IDLE		0x10
-> > +#define BT1_CCU_PCIE_LTSSM_L0			0x11
-> > +#define BT1_CCU_PCIE_LTSSM_L0S			0x12
-> > +#define BT1_CCU_PCIE_LTSSM_L123_SEND_IDLE	0x13
-> > +#define BT1_CCU_PCIE_LTSSM_L1_IDLE		0x14
-> > +#define BT1_CCU_PCIE_LTSSM_L2_IDLE		0x15
-> > +#define BT1_CCU_PCIE_LTSSM_L2_WAKE		0x16
-> > +#define BT1_CCU_PCIE_LTSSM_DIS_ENTRY		0x17
-> > +#define BT1_CCU_PCIE_LTSSM_DIS_IDLE		0x18
-> > +#define BT1_CCU_PCIE_LTSSM_DISABLE		0x19
-> > +#define BT1_CCU_PCIE_LTSSM_LPBK_ENTRY		0x1a
-> > +#define BT1_CCU_PCIE_LTSSM_LPBK_ACTIVE		0x1b
-> > +#define BT1_CCU_PCIE_LTSSM_LPBK_EXIT		0x1c
-> > +#define BT1_CCU_PCIE_LTSSM_LPBK_EXIT_TOUT	0x1d
-> > +#define BT1_CCU_PCIE_LTSSM_HOT_RST_ENTRY	0x1e
-> > +#define BT1_CCU_PCIE_LTSSM_HOT_RST		0x1f
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ0		0x20
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ1		0x21
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ2		0x22
-> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ3		0x23
-> 
-> You could make this an enum and define only the states
-> that are actually used.
-> 
-> [...]
-> 
-> > +
-> > +/* Generic Baikal-T1 PCIe interface resources */
-> > +#define BT1_PCIE_NUM_APP_CLKS			ARRAY_SIZE(bt1_pcie_app_clks)
-> > +#define BT1_PCIE_NUM_CORE_CLKS			ARRAY_SIZE(bt1_pcie_core_clks)
-> > +#define BT1_PCIE_NUM_APP_RSTS			ARRAY_SIZE(bt1_pcie_app_rsts)
-> > +#define BT1_PCIE_NUM_CORE_RSTS			ARRAY_SIZE(bt1_pcie_core_rsts)
-> > +
-> > +/* PCIe bus setup delays and timeouts */
-> > +#define BT1_PCIE_RST_DELAY_MS			100
-> > +#define BT1_PCIE_RUN_DELAY_US			100
-> > +#define BT1_PCIE_REQ_DELAY_US			1
-> > +#define BT1_PCIE_REQ_TIMEOUT_US			1000
-> > +#define BT1_PCIE_LNK_DELAY_US			1000
-> > +#define BT1_PCIE_LNK_TIMEOUT_US			1000000
-> > +
-> > +static const enum dw_pcie_app_clk bt1_pcie_app_clks[] = {
-> > +	DW_PCIE_DBI_CLK, DW_PCIE_MSTR_CLK, DW_PCIE_SLV_CLK,
-> > +};
-> > +
-> > +static const enum dw_pcie_core_clk bt1_pcie_core_clks[] = {
-> > +	DW_PCIE_REF_CLK,
-> > +};
-> > +
-> > +static const enum dw_pcie_app_rst bt1_pcie_app_rsts[] = {
-> > +	DW_PCIE_MSTR_RST, DW_PCIE_SLV_RST,
-> > +};
-> > +
-> > +static const enum dw_pcie_core_rst bt1_pcie_core_rsts[] = {
-> > +	DW_PCIE_NON_STICKY_RST, DW_PCIE_STICKY_RST, DW_PCIE_CORE_RST,
-> > +	DW_PCIE_PIPE_RST, DW_PCIE_PHY_RST, DW_PCIE_HOT_RST, DW_PCIE_PWR_RST,
-> > +};
-> 
-> I wonder whether we could allocate the rst/clks in DWC dynamically,
-> by using these configuration arrays.
-> 
-> > +
-> > +struct bt1_pcie {
-> > +	struct dw_pcie dw;
-> > +	struct platform_device *pdev;
-> > +	struct regmap *sys_regs;
-> > +};
-> > +#define to_bt1_pcie(_dw) container_of(_dw, struct bt1_pcie, dw)
-> > +
-> > +/*
-> > + * Baikal-T1 MMIO space must be read/written by the dword-aligned
-> > + * instructions. Note the methods are optimized to have the dword operations
-> > + * performed with minimum overhead as the most frequently used ones.
-> > + */
-> > +static int bt1_pcie_read_mmio(void __iomem *addr, int size, u32 *val)
-> > +{
-> > +	unsigned int ofs = (uintptr_t)addr & 0x3;
-> > +
-> > +	if (!IS_ALIGNED((uintptr_t)addr, size))
-> > +		return -EINVAL;
-> > +
-> > +	*val = readl(addr - ofs) >> ofs * BITS_PER_BYTE;
-> 
-> Is it always safe to read more than requested ?
-> 
-> > +	if (size == 4) {
-> > +		return 0;
-> > +	} else if (size == 2) {
-> > +		*val &= 0xffff;
-> > +		return 0;
-> > +	} else if (size == 1) {
-> > +		*val &= 0xff;
-> > +		return 0;
-> > +	}
-> > +
-> > +	return -EINVAL;
-> > +}
-> > +
-> > +static int bt1_pcie_write_mmio(void __iomem *addr, int size, u32 val)
-> > +{
-> > +	unsigned int ofs = (uintptr_t)addr & 0x3;
-> > +	u32 tmp, mask;
-> > +
-> > +	if (!IS_ALIGNED((uintptr_t)addr, size))
-> > +		return -EINVAL;
-> > +
-> > +	if (size == 4) {
-> > +		writel(val, addr);
-> > +		return 0;
-> > +	} else if (size == 2 || size == 1) {
-> > +		mask = GENMASK(size * BITS_PER_BYTE - 1, 0);
-> > +		tmp = readl(addr - ofs) & ~(mask << ofs * BITS_PER_BYTE);
-> > +		tmp |= (val & mask) << ofs * BITS_PER_BYTE;
-> > +		writel(tmp, addr - ofs);
-> > +		return 0;
-> > +	}
-> 
-> Same question read/modify/write, is it always safe to do it
-> regardless of size ?
-> 
-> > +
-> > +	return -EINVAL;
-> > +}
-> > +
-> > +static u32 bt1_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base, u32 reg,
-> > +			     size_t size)
-> > +{
-> > +	int ret;
-> > +	u32 val;
-> > +
-> > +	ret = bt1_pcie_read_mmio(base + reg, size, &val);
-> > +	if (ret) {
-> > +		dev_err(pci->dev, "Read DBI address failed\n");
-> > +		return ~0U;
-> 
-> Is this a special magic value the DWC core is expecting ?
-> 
-> Does it clash with a _valid_ return value ?
-> 
-> > +	}
-> > +
-> > +	return val;
-> > +}
-> > +
-> > +static void bt1_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base, u32 reg,
-> > +			       size_t size, u32 val)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = bt1_pcie_write_mmio(base + reg, size, val);
-> > +	if (ret)
-> > +		dev_err(pci->dev, "Write DBI address failed\n");
-> > +}
-> > +
-> > +static void bt1_pcie_write_dbi2(struct dw_pcie *pci, void __iomem *base, u32 reg,
-> > +				size_t size, u32 val)
-> > +{
-> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-> > +	int ret;
-> > +
-> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-> > +			   BT1_CCU_PCIE_DBI2_MODE, BT1_CCU_PCIE_DBI2_MODE);
-> > +
-> > +	ret = bt1_pcie_write_mmio(base + reg, size, val);
-> > +	if (ret)
-> > +		dev_err(pci->dev, "Write DBI2 address failed\n");
-> > +
-> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-> > +			   BT1_CCU_PCIE_DBI2_MODE, 0);
-> 
-> IIUC the regmap_update_bits() set up decoding for DBI2. Hopefully the
-> DBI/DBI2 writes are sequentialized, this is a question valid also
-> for other DWC controllers.
-> 
-> What I want to say is, the regmap update in this function sets the
-> DWC HW in a way that can decode DBI2 (please correct me if I am wrong),
-> between the two _update_bits() no DBI access should happen because
-> it just would not work.
-> 
-> It is a question.
-> 
-> > +static int bt1_pcie_host_init(struct dw_pcie_rp *pp)
-> > +{
-> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-> > +	int ret;
-> > +
-> > +	ret = bt1_pcie_get_resources(btpci);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	bt1_pcie_full_stop_bus(btpci, true);
-> > +
-> > +	return bt1_pcie_cold_start_bus(btpci);
-> > +}
-> > +
-> > +static void bt1_pcie_host_deinit(struct dw_pcie_rp *pp)
-> > +{
-> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-> > +
-> > +	bt1_pcie_full_stop_bus(btpci, false);
-> > +}
-> > +
-> > +static const struct dw_pcie_host_ops bt1_pcie_host_ops = {
-> > +	.host_init = bt1_pcie_host_init,
-> > +	.host_deinit = bt1_pcie_host_deinit,
-> > +};
-> > +
-> > +static struct bt1_pcie *bt1_pcie_create_data(struct platform_device *pdev)
-> > +{
-> > +	struct bt1_pcie *btpci;
-> > +
-> > +	btpci = devm_kzalloc(&pdev->dev, sizeof(*btpci), GFP_KERNEL);
-> > +	if (!btpci)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	btpci->pdev = pdev;
-> > +
-> > +	platform_set_drvdata(pdev, btpci);
-> > +
-> > +	return btpci;
-> > +}
-> > +
-> > +static int bt1_pcie_add_port(struct bt1_pcie *btpci)
-> > +{
-> > +	struct device *dev = &btpci->pdev->dev;
-> > +	int ret;
-> > +
-> > +	/*
-> > +	 * DW PCIe Root Port controller is equipped with eDMA capable of
-> > +	 * working with the 64-bit memory addresses.
-> > +	 */
-> > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-> > +	if (ret)
-> > +		return ret;
-> 
-> Is this the right place to set the DMA mask for the host controller
-> embedded DMA controller (actually, the dev pointer is the _host_
-> controller device) ?
-> 
-> How this is going to play when combined with:
-> 
-> https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com
-> 
-> It is getting a bit confusing. I believe the code in the link
-> above sets the mask so that through the DMA API we are capable
-> of getting an MSI doorbell virtual address whose physical address
-> can be addressed by the endpoint; this through the DMA API.
-> 
-> This patch is setting the DMA mask for a different reason, namely
-> setting the host controller embedded DMA controller addressing
-> capabilities.
-> 
-> AFAICS - both approaches set the mask for the same device - now
-> the question is about which one is legitimate and how to handle
-> the other.
+>  static void pt_guest_enter(struct vcpu_vmx *vmx)
+>  {
+> -       if (vmx_pt_mode_is_system())
+> +       struct perf_event *event;
+> +
+> +       if (vmx_pt_mode_is_system() ||
+> +           !(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN))
 
-Since the mask is being set before calling dw_pcie_host_init() and the
-msi_host_init op is not set, setting the mask here won't have any affect due to
-the fact that dw_pcie_msi_host_init() unconditionally sets the DMA mask. AFAIK,
-you don't technically need a 64-bit address, right? If your platform disables
-32-bit allocations, then you'll need to set the MSI capabilities flag to
-support a 64-bit allocation for when the 32-bit allocation fails in the host
-controller driver.
+I don't think the host should trace the guest in the host/guest mode just because
+the guest isn't tracing itself.  I.e. the host still needs to turn off it's own
+tracing.
 
-Here is how I'm doing that with the Exynos PCIe driver during probe before
-calling dw_pcie_host_init():
-
-	dw_pcie_dbi_ro_wr_en(exynos_pcie->pci);
-	offset = dw_pcie_find_capability(exynos_pcie->pci, PCI_CAP_ID_MSI);
-	cap = dw_pcie_readw_dbi(exynos_pcie->pci, offset + PCI_MSI_FLAGS);
-
-	/* Enable MSI with 64-bit support */
-	cap |= PCI_MSI_FLAGS_ENABLE | PCI_MSI_FLAGS_64BIT;
-	dw_pcie_writew_dbi(exynos_pcie->pci, offset + PCI_MSI_FLAGS, cap);
-	dw_pcie_dbi_ro_wr_dis(exynos_pcie->pci);
-
-I hope that helps!
-
-Regards,
-Will
-
+>                 return;
 > 
-> > +
-> > +	btpci->dw.version = DW_PCIE_VER_460A;
-> > +	btpci->dw.dev = dev;
-> > +	btpci->dw.ops = &bt1_pcie_ops;
-> > +
-> > +	btpci->dw.pp.num_vectors = MAX_MSI_IRQS;
-> > +	btpci->dw.pp.ops = &bt1_pcie_host_ops;
-> > +
-> > +	dw_pcie_cap_set(&btpci->dw, REQ_RES);
-> > +
-> > +	ret = dw_pcie_host_init(&btpci->dw.pp);
-> > +	if (ret)
-> > +		dev_err_probe(dev, ret, "Failed to initialize DWC PCIe host\n");
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static void bt1_pcie_del_port(struct bt1_pcie *btpci)
-> > +{
-> > +	dw_pcie_host_deinit(&btpci->dw.pp);
-> > +}
-> > +
-> > +static int bt1_pcie_probe(struct platform_device *pdev)
-> > +{
-> > +	struct bt1_pcie *btpci;
-> > +
-> > +	btpci = bt1_pcie_create_data(pdev);
-> 
-> Do we really need a function for that ? I am not too
-> bothered but I think it is overkill.
-> 
-> Thanks,
-> Lorenzo
-> 
-> > +	if (IS_ERR(btpci))
-> > +		return PTR_ERR(btpci);
-> > +
-> > +	return bt1_pcie_add_port(btpci);
-> > +}
-> > +
-> > +static int bt1_pcie_remove(struct platform_device *pdev)
-> > +{
-> > +	struct bt1_pcie *btpci = platform_get_drvdata(pdev);
-> > +
-> > +	bt1_pcie_del_port(btpci);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct of_device_id bt1_pcie_of_match[] = {
-> > +	{ .compatible = "baikal,bt1-pcie" },
-> > +	{},
-> > +};
-> > +MODULE_DEVICE_TABLE(of, bt1_pcie_of_match);
-> > +
-> > +static struct platform_driver bt1_pcie_driver = {
-> > +	.probe = bt1_pcie_probe,
-> > +	.remove = bt1_pcie_remove,
-> > +	.driver = {
-> > +		.name	= "bt1-pcie",
-> > +		.of_match_table = bt1_pcie_of_match,
-> > +	},
-> > +};
-> > +module_platform_driver(bt1_pcie_driver);
-> > +
-> > +MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-> > +MODULE_DESCRIPTION("Baikal-T1 PCIe driver");
-> > +MODULE_LICENSE("GPL");
-> > -- 
-> > 2.35.1
-> > 
+> -       /*
+> -        * GUEST_IA32_RTIT_CTL is already set in the VMCS.
+> -        * Save host state before VM entry.
+> -        */
+> -       rdmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
+> -       if (vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN) {
+> -               wrmsrl(MSR_IA32_RTIT_CTL, 0);
+> -               pt_save_msr(&vmx->pt_desc.host, vmx->pt_desc.num_address_ranges);
+> -               pt_load_msr(&vmx->pt_desc.guest, vmx->pt_desc.num_address_ranges);
+> -       }
+> +       event = pt_get_curr_event();
+> +       perf_event_disable(event);
+> +       vmx->pt_desc.host_event = event;
+
+This is effectively what I suggested[*], the main difference being that my version
+adds dedicated enter/exit helpers so that perf can skip save/restore of the other
+MSRs.  It's easy to extend if perf needs to hand back an event to complete the "exit.
+
+	bool guest_trace_enabled = vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN;
+	
+	vmx->pt_desc.host_event = intel_pt_guest_enter(guest_trace_enabled);
+
+
+and then on exit
+
+	bool guest_trace_enabled = vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN;
+
+	intel_pt_guest_exit(vmx->pt_desc.host_event, guest_trace_enabled);
+
+[*] https://lore.kernel.org/all/YwecducnM%2FU6tqJT@google.com
+
+> +       pt_load_msr(&vmx->pt_desc.guest, vmx->pt_desc.num_address_ranges);
+> }

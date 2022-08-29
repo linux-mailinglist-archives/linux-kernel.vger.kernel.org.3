@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994615A4E42
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74C55A4E45
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiH2NgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
+        id S230078AbiH2Ngb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiH2Nfm (ORCPT
+        with ESMTP id S230341AbiH2NgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:35:42 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633395A80B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 06:35:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661780136;
-        bh=QpnAx1agWxMNXcmkHUBsqZ9806QkcAaunrOos31jXBE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A2Js9G1EA+PzLIhThjvAzyXPM2IwVMbxtaXmymHicXP4wCs9kzXRvWicsq1M8zo8q
-         V4iBTm0i2qhkVo0h2nAK9WEctw0iwcDq9X+swoDzfSF8JpJ9kZEdtN6Xim/aV56mVi
-         UEz4hKBcoXf0gSue6zS7hATm06Omorv7MQ+URqRk=
-Received: from xry111-x57s1.. (unknown [IPv6:240e:358:11dd:1900:dc73:854d:832e:5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 68D4666903;
-        Mon, 29 Aug 2022 09:35:30 -0400 (EDT)
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v6 6/6] LoongArch: Support R_LARCH_GOT_PC* in modules
-Date:   Mon, 29 Aug 2022 21:31:46 +0800
-Message-Id: <20220829133146.15236-7-xry111@xry111.site>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829133146.15236-1-xry111@xry111.site>
-References: <20220829133146.15236-1-xry111@xry111.site>
+        Mon, 29 Aug 2022 09:36:13 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224757E33E;
+        Mon, 29 Aug 2022 06:35:59 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 69so6064996pgb.13;
+        Mon, 29 Aug 2022 06:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=UVKTlnEIoldY+2ikvWrlNXqFFlr5euSvQ86GnWaZaho=;
+        b=YwxHVBDf26Yi73o5+r444WKY7QqwFOzTEnFjSo8Bow1lqIga+JCUW7EEEpDsZ6iPSK
+         Z04YZvt1Pt6J6R1j5ZWOXINdtvMh1pKvRTW8x5OhmpXBkvTcaZo99jG0R4UChrIVPpD/
+         GN3nf064cXJje0jWsQM+sFauz1vZ72PjZOG8m93aXj5VevRQMfTGagenqg8i79vq41t+
+         4EtR5LLe8uItIbwb9EYJ4VyQOrkBmI8ENvppF9JhEyUMFcTV0/F7ZyXRpsAeOX6AVX3f
+         CfKEhMu3GIXMTbOOXnQ5LfMsYV0Xsrua1peWIMOdlhxqLg+MBpyOigdEcuY+NT3ev+xs
+         cJSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=UVKTlnEIoldY+2ikvWrlNXqFFlr5euSvQ86GnWaZaho=;
+        b=r6XP28DAGdnVxZ1mFxBVXmqSpjnNAUPijebHWBFQGgZ+dwZt2Pcu4VT0TrZS4Yhw3s
+         VsyN5wfzxsQyCe8XuQgvQJ4OHOL4feq9UD+SzvzReI4EoQmTDCTiiUhsWSr4G9E5bZxk
+         5yNciwzEZ5bK73u/PdDeDzBAUaSKHjtX480SIZVoMHkh1dgV+vPxRfF9Ow8tlpbW6M2J
+         atLn9A3WpoGrg91vErzunusNwAE60HtaVlVeHHs/exqOBd7rNV8GE6BCroJlmCxXjGPE
+         68bIIF61OddUdjrWKZpkU+JdJMb9VmvJ6Fa9pLXGw5f55ZbQ7AurXzPB0BF4vkGwz6It
+         g/hQ==
+X-Gm-Message-State: ACgBeo2iHFwllIFAyUeeLn4M7QJh7tq2wS5/WSMuEJjj/tuUUMZ9vj/4
+        ykV+R2P2xB2po7UL0NuQAjY=
+X-Google-Smtp-Source: AA6agR4Cq2eaFxLjb3w99Ke4qD7S6eU85utxglvjTiCUilxN+MxnvuBKvF7gr8nmE7JBAiM3RRhaPA==
+X-Received: by 2002:a63:6cc1:0:b0:42b:d2c5:74a2 with SMTP id h184-20020a636cc1000000b0042bd2c574a2mr6952942pgc.420.1661780158463;
+        Mon, 29 Aug 2022 06:35:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 35-20020a630c63000000b0041c35462316sm6409401pgm.26.2022.08.29.06.35.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 06:35:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 Aug 2022 06:35:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     hdegoede@redhat.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        markgross@kernel.org
+Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
+Message-ID: <20220829133556.GA3766826@roeck-us.net>
+References: <20220828074638.5473-1-luke@ljones.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220828074638.5473-1-luke@ljones.dev>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,243 +73,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC >= 13 and GNU assembler >= 2.40 use these relocations to address
-external symbols, so we need to add them.
+On Sun, Aug 28, 2022 at 07:46:38PM +1200, Luke D. Jones wrote:
+> Fix for TUF laptops returning with an -ENOSPC on calling
+> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
+> requires at least 32 bytes space.
+> 
+> This also moves and changes the pr_debug() in fan_curve_check_present() to
+> pr_warn() in fan_curve_get_factory_default() so that there is at least some
+> indication in logs of why it fails.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> ---
+>  drivers/platform/x86/asus-wmi.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 3d9fd58573f9..11203213e00d 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
+>  #define WMI_EVENT_MASK			0xFFFF
+>  
+>  #define FAN_CURVE_POINTS		8
+> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
+> +#define FAN_CURVE_BUF_LEN		32
+>  #define FAN_CURVE_DEV_CPU		0x00
+>  #define FAN_CURVE_DEV_GPU		0x01
+>  /* Mask to determine if setting temperature or percentage */
+> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
+>  	curves = &asus->custom_fan_curves[fan_idx];
+>  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
+>  					   FAN_CURVE_BUF_LEN);
+> -	if (err)
+> +	if (err) {
+> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
+>  		return err;
+> +	}
+>  
+>  	fan_curve_copy_from_buf(curves, buf);
+>  	curves->device_id = fan_dev;
+> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
+>  
+>  	err = fan_curve_get_factory_default(asus, fan_dev);
+>  	if (err) {
+> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
+> -			 fan_dev, err);
+> -		/* Don't cause probe to fail on devices without fan-curves */
 
-Let the module loader emit GOT entries for data symbols so we would be
-able to handle GOT relocations.  The GOT entry is just the data symbol
-address.
+The pr_warn() should be here. If you want to have a message from the call
+in fan_curve_enable_store(), add dev_err() there.
 
-In module.lds, emit a stub .got section for a section header entry.
-The actual content of the entry will be filled at runtime by
-module_frob_arch_sections.
+Guenter
 
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
----
- arch/loongarch/include/asm/module.h     | 23 ++++++++++++
- arch/loongarch/include/asm/module.lds.h |  1 +
- arch/loongarch/kernel/module-sections.c | 49 +++++++++++++++++++++++--
- arch/loongarch/kernel/module.c          | 24 ++++++++++++
- 4 files changed, 94 insertions(+), 3 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
-index 9f6718df1854..76a98a0ab8a0 100644
---- a/arch/loongarch/include/asm/module.h
-+++ b/arch/loongarch/include/asm/module.h
-@@ -19,6 +19,7 @@ struct mod_section {
- struct mod_arch_specific {
- 	struct mod_section plt;
- 	struct mod_section plt_idx;
-+	struct mod_section got;
- };
- 
- struct plt_entry {
-@@ -28,11 +29,16 @@ struct plt_entry {
- 	u32 inst_jirl;
- };
- 
-+struct got_entry {
-+	Elf_Addr symbol_addr;
-+};
-+
- struct plt_idx_entry {
- 	unsigned long symbol_addr;
- };
- 
- Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val);
-+Elf_Addr module_emit_got_entry(struct module *mod, Elf_Addr val);
- 
- static inline struct plt_entry emit_plt_entry(unsigned long val)
- {
-@@ -51,6 +57,11 @@ static inline struct plt_idx_entry emit_plt_idx_entry(unsigned long val)
- 	return (struct plt_idx_entry) { val };
- }
- 
-+static inline struct got_entry emit_got_entry(Elf_Addr val)
-+{
-+	return (struct got_entry) { val };
-+}
-+
- static inline int get_plt_idx(unsigned long val, const struct mod_section *sec)
- {
- 	int i;
-@@ -77,4 +88,16 @@ static inline struct plt_entry *get_plt_entry(unsigned long val,
- 	return plt + plt_idx;
- }
- 
-+static inline struct got_entry *get_got_entry(Elf_Addr val,
-+					      const struct mod_section *sec)
-+{
-+	struct got_entry *got = (struct got_entry *)sec->shdr->sh_addr;
-+	int i;
-+
-+	for (i = 0; i < sec->num_entries; i++)
-+		if (got[i].symbol_addr == val)
-+			return &got[i];
-+	return NULL;
-+}
-+
- #endif /* _ASM_MODULE_H */
-diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/include/asm/module.lds.h
-index 31c1c0db11a3..57bbd0cedd26 100644
---- a/arch/loongarch/include/asm/module.lds.h
-+++ b/arch/loongarch/include/asm/module.lds.h
-@@ -4,4 +4,5 @@ SECTIONS {
- 	. = ALIGN(4);
- 	.plt : { BYTE(0) }
- 	.plt.idx : { BYTE(0) }
-+	.got : { BYTE(0) }
- }
-diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
-index c67b9cb220eb..4c99737cd8dc 100644
---- a/arch/loongarch/kernel/module-sections.c
-+++ b/arch/loongarch/kernel/module-sections.c
-@@ -33,6 +33,31 @@ Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val)
- 	return (Elf_Addr)&plt[nr];
- }
- 
-+Elf_Addr module_emit_got_entry(struct module *mod, Elf_Addr val)
-+{
-+	struct mod_section *got_sec = &mod->arch.got;
-+	int i = got_sec->num_entries;
-+	struct got_entry *got = get_got_entry(val, got_sec);
-+
-+	if (got)
-+		return (Elf_Addr)got;
-+
-+	/* There is no GOT entry existing for val yet.  Create a new one.  */
-+	got = (struct got_entry *)got_sec->shdr->sh_addr;
-+	got[i] = emit_got_entry(val);
-+
-+	got_sec->num_entries++;
-+	if (got_sec->num_entries > got_sec->max_entries) {
-+		/* This may happen when the module contains a GOT_HI20 without
-+		 * a paired GOT_LO12.  Such a module is broken, reject it.
-+		 */
-+		pr_err("%s: module contains bad GOT relocation\n", mod->name);
-+		return 0;
-+	}
-+
-+	return (Elf_Addr)&got[i];
-+}
-+
- static int is_rela_equal(const Elf_Rela *x, const Elf_Rela *y)
- {
- 	return x->r_info == y->r_info && x->r_addend == y->r_addend;
-@@ -50,7 +75,8 @@ static bool duplicate_rela(const Elf_Rela *rela, int idx)
- 	return false;
- }
- 
--static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
-+static void count_max_entries(Elf_Rela *relas, int num,
-+			      unsigned int *plts, unsigned int *gots)
- {
- 	unsigned int i, type;
- 
-@@ -62,6 +88,10 @@ static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
- 			if (!duplicate_rela(relas, i))
- 				(*plts)++;
- 			break;
-+		case R_LARCH_GOT_PC_HI20:
-+			if (!duplicate_rela(relas, i))
-+				(*gots)++;
-+			break;
- 		default:
- 			/* Do nothing. */
- 		}
-@@ -71,7 +101,7 @@ static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
- int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 			      char *secstrings, struct module *mod)
- {
--	unsigned int i, num_plts = 0;
-+	unsigned int i, num_plts = 0, num_gots = 0;
- 
- 	/*
- 	 * Find the empty .plt sections.
-@@ -81,6 +111,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 			mod->arch.plt.shdr = sechdrs + i;
- 		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
- 			mod->arch.plt_idx.shdr = sechdrs + i;
-+		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".got"))
-+			mod->arch.got.shdr = sechdrs + i;
- 	}
- 
- 	if (!mod->arch.plt.shdr) {
-@@ -91,6 +123,10 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 		pr_err("%s: module PLT.IDX section(s) missing\n", mod->name);
- 		return -ENOEXEC;
- 	}
-+	if (!mod->arch.got.shdr) {
-+		pr_err("%s: module GOT section(s) missing\n", mod->name);
-+		return -ENOEXEC;
-+	}
- 
- 	/* Calculate the maxinum number of entries */
- 	for (i = 0; i < ehdr->e_shnum; i++) {
-@@ -105,7 +141,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 		if (!(dst_sec->sh_flags & SHF_EXECINSTR))
- 			continue;
- 
--		count_max_entries(relas, num_rela, &num_plts);
-+		count_max_entries(relas, num_rela, &num_plts, &num_gots);
- 	}
- 
- 	mod->arch.plt.shdr->sh_type = SHT_NOBITS;
-@@ -122,5 +158,12 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 	mod->arch.plt_idx.num_entries = 0;
- 	mod->arch.plt_idx.max_entries = num_plts;
- 
-+	mod->arch.got.shdr->sh_type = SHT_NOBITS;
-+	mod->arch.got.shdr->sh_flags = SHF_ALLOC;
-+	mod->arch.got.shdr->sh_addralign = L1_CACHE_BYTES;
-+	mod->arch.got.shdr->sh_size = (num_gots + 1) * sizeof(struct got_entry);
-+	mod->arch.got.num_entries = 0;
-+	mod->arch.got.max_entries = num_gots;
-+
- 	return 0;
- }
-diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
-index 0024bc6c4af1..46f323845f29 100644
---- a/arch/loongarch/kernel/module.c
-+++ b/arch/loongarch/kernel/module.c
-@@ -354,6 +354,29 @@ static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
- 	return 0;
- }
- 
-+static int apply_r_larch_got_pc(struct module *mod, u32 *location, Elf_Addr v,
-+			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-+{
-+	Elf_Addr got = module_emit_got_entry(mod, v);
-+
-+	if (!got)
-+		return -EINVAL;
-+
-+	switch (type) {
-+	case R_LARCH_GOT_PC_LO12:
-+		type = R_LARCH_PCALA_LO12;
-+		break;
-+	case R_LARCH_GOT_PC_HI20:
-+		type = R_LARCH_PCALA_HI20;
-+		break;
-+	default:
-+		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
-+		return -EINVAL;
-+	}
-+
-+	return apply_r_larch_pcala(mod, location, got, rela_stack, rela_stack_top, type);
-+}
-+
- /*
-  * reloc_handlers_rela() - Apply a particular relocation to a module
-  * @mod: the module to apply the reloc to
-@@ -385,6 +408,7 @@ static reloc_rela_handler reloc_rela_handlers[] = {
- 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     = apply_r_larch_add_sub,
- 	[R_LARCH_B26]					     = apply_r_larch_b26,
- 	[R_LARCH_PCALA_HI20...R_LARCH_PCALA64_HI12]	     = apply_r_larch_pcala,
-+	[R_LARCH_GOT_PC_HI20...R_LARCH_GOT_PC_LO12]	     = apply_r_larch_got_pc,
- };
- 
- int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
--- 
-2.37.0
-
+>  		return 0;
+>  	}
+>  

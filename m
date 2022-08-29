@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C665A4AE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4342F5A4B7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiH2MCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S229716AbiH2MVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiH2MC1 (ORCPT
+        with ESMTP id S231240AbiH2MU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:02:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8A94F1B3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661773512;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/+ol45wcaykEdTNetUJWIBi1LCbfsk01RK0NNg2LzGI=;
-        b=MITaWDNOlKDyXq46BIo20QIes2EJjRw5XaAW0L/UzYY6JOvJV/sb4+T4vq1Ekha1S8n6W6
-        PNkixgGw+OYIsk+DWMMz1k6RMJw0hlK2g/AZnwZpSjqBvVL26cQZxtPvSDkOrPPqe/YIEx
-        Je71Eerd0kBAXoIlxYVTXuSF6BnkqDI=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-395-zcYQtRv7M1mfrvp45FmuNg-1; Mon, 29 Aug 2022 07:45:11 -0400
-X-MC-Unique: zcYQtRv7M1mfrvp45FmuNg-1
-Received: by mail-ej1-f71.google.com with SMTP id ga33-20020a1709070c2100b0074084f48b12so2126304ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:45:11 -0700 (PDT)
+        Mon, 29 Aug 2022 08:20:56 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B077A6C27;
+        Mon, 29 Aug 2022 05:04:19 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso4308443wmb.2;
+        Mon, 29 Aug 2022 05:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc;
+        bh=hxqAbFcpuVmdCzBbtEdTgdjeLFVRaXCJcGCpu8UlHog=;
+        b=iZzG6XdkeygsKjHjT6RHpXFX6DlmUVFzmovWRy8vNxWLeceNyeXYUKr7L2XB4+8AVq
+         aahDfhtahb9AAneV5jaW2aYoF+XY26cVuqyDoLP5zOeN57xcRIicsllLxN2YrHhBJWFF
+         f2+pHPwMdJOcfsrSB/qE2aIjOGfrwCYmc2X3awL4QPEeLhFp6eR2bQ7uhoxf15GL7Qcc
+         LmA8cXhgJ+zR9f3Bq6Nq7fyPEqxDBuHAEq0wuMSTFfURW3nElycUDfgfX6p1JCsdgyjf
+         XqSL+QnTp4e15Yz/u+jtPc+QXYOvwhTcnS8kLQvdI9J4qFa2KG4qj0bHUmYne1tcX+f4
+         rBFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/+ol45wcaykEdTNetUJWIBi1LCbfsk01RK0NNg2LzGI=;
-        b=pK0YSKDluEoGb0wAwFm8YbFR1QeEMtaezZTv2kulpC4ukTWnAeAE3BXPI/p0b7cTlI
-         IXg+UTy5qYxaDs+Y01dEgu/hr8UqgmPau5YTnKSC3IW0QLUCkYICXHrsUivEjaiizHIz
-         MidmPYHV4QDPeQkF5rZ2NPsRRdW73rFKxO5UMTydBdyADLesUXO8TuISpSMB3ErhlQ/A
-         TQC1Rr5q61gUynwIDL+BfQ1RrG1lmM/VSFMQIR3Xyklx48a90mn068TAsJM5eBfnxJuU
-         x+3dzDXvUHBvQL7M43BT3iKVnooDwM3eAd5pmS+TGlhnwBm8e1r16S0/YW2Ylcfvxvbu
-         D1PA==
-X-Gm-Message-State: ACgBeo1aDTILA7W7Usi2yqJZu2gn990tfsK46SBrdsajQtSog0ytKFuL
-        bQEYLDk0uPeXe2Wii8dO6ZDWhaqEPDoxWDjg4M9LbKM1/8csxo6kKrhbTCvRxIuj0kCQf4CxC/X
-        NWGtyYn+Ka2flfLqmy6zJg8/A
-X-Received: by 2002:aa7:cb06:0:b0:446:7668:2969 with SMTP id s6-20020aa7cb06000000b0044676682969mr16077830edt.206.1661773509847;
-        Mon, 29 Aug 2022 04:45:09 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5XXFYyq+Wc/2lY2uJUxzelUZ0ulUoBxQrTUQ0Y3wQ5QIKfuYa30lKSflrHf9tyAuMTb45U8A==
-X-Received: by 2002:aa7:cb06:0:b0:446:7668:2969 with SMTP id s6-20020aa7cb06000000b0044676682969mr16077817edt.206.1661773509660;
-        Mon, 29 Aug 2022 04:45:09 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id z14-20020a1709060ace00b0073d6d6e698bsm4345840ejf.187.2022.08.29.04.45.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 04:45:08 -0700 (PDT)
-Message-ID: <a547f88a-7ab2-e665-aa6d-d80ef74f4fd4@redhat.com>
-Date:   Mon, 29 Aug 2022 13:45:08 +0200
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc;
+        bh=hxqAbFcpuVmdCzBbtEdTgdjeLFVRaXCJcGCpu8UlHog=;
+        b=mJVvjSYyfFUjLfAS/mMZULatd0WHiDEke5qX1UD7NkofsY3tUKOaCykwteyT7ja6j8
+         L/WS8BlGK0cq91vZ/IafHDGGdIoFPe6hNmzt4zLZbZAhvIGZg4o41Oq5JetMmOEAg0zl
+         Ko/n7yLfTLm5/5ABxCStTnfG8ZzUw7NM/3TysTE2XivHSqHCBT2vZGrOuCACEK2Sgy5z
+         qpVNuC3Yxb1QtRmggRYOAlifj2otK/cy7lKICeC66PvdL98fNxswrzCaZwTnkMGeY0op
+         cIqFfWbaQKiY3e4azrXga9BE/htAsSv6ISdCXShC3u/yLR8t8uKr23+tf/20NjG3LnsW
+         rpeA==
+X-Gm-Message-State: ACgBeo0++LOYr2JpCMmdCAaXh6ItEkR0tFUnE/muF0rIPfpKIes5bwh6
+        gj7+cn4gqBmV/8d2eRFfDacmf/tAe5I=
+X-Google-Smtp-Source: AA6agR7YxhHVMj9XWpJVMLkVYl9/G+NCIxQVTy6U5aONCYYoP9w92jav+CBywTEPIw3JdyMrtVUZ+g==
+X-Received: by 2002:a05:600c:3b8c:b0:3a6:71a:f286 with SMTP id n12-20020a05600c3b8c00b003a6071af286mr6463379wms.120.1661773632330;
+        Mon, 29 Aug 2022 04:47:12 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id o7-20020adfeac7000000b00226332f9275sm6768446wrn.22.2022.08.29.04.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 04:47:12 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 13:45:20 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, alex.aring@gmail.com,
+        stefan@datenfreihafen.org, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, kafai@fb.com,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: [PATCH 1/4] net-next: frags: move inetpeer from ip4 to inet
+Message-ID: <20220829114507.GA2348@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] platform/x86: wmi: Lower verbosity of some duplicate GUID
- messages
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220826170053.2124-1-mario.limonciello@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220826170053.2124-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,101 +74,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+Move frags-related inetpeer logic from ip4 to inet. This allows us to
+access peer information inside inet_frag logic.
 
-On 8/26/22 19:00, Mario Limonciello wrote:
-> The WMI subsystem in the kernel currently tracks WMI devices by
-> a GUID string not by ACPI device.  The GUID used by the `wmi-bmof`
-> module however is available from many devices on nearly every machine.
-> 
-> This originally was though to be a bug, but as it happens on most
-> machines it is a design mistake.  As there isn't an active need to
-> get the binary from each of the `wmi-bmof` device, special case it
-> and lower the message to debugging.  This will help to identify if
-> there are other duplicate GUIDs in the wild.
-> 
-> If there are and the information contained in them is desirable it
-> may be worth considering a design change to the WMI subsystem to
-> access those.
-> 
-> Link: https://lkml.org/lkml/2017/12/8/913
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+---
+ include/net/inet_frag.h  |  1 +
+ net/ipv4/inet_fragment.c | 11 ++++++++++-
+ net/ipv4/ip_fragment.c   | 19 +++----------------
+ 3 files changed, 14 insertions(+), 17 deletions(-)
 
-I am a bit surprised by this patch. I though that there was
-consensus that the right thing to do here is actually create
-wmi-bus devices for the duplicate WMI-ids adding a numbered
-postfix to the extra devices (lets not add the postfix
-to the first device for each WMI GUID as some userspace
-code / scripts may depend on the sysfs paths not changing).
-
-IMHO registering wmi-bus devices for all the WMI devices
-in the ACPI table would be the right thing to do ?
-
-Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/platform/x86/wmi-bmof.c |  2 --
->  drivers/platform/x86/wmi.c      | 10 ++++++++--
->  include/linux/wmi.h             |  2 ++
->  3 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/wmi-bmof.c b/drivers/platform/x86/wmi-bmof.c
-> index 80137afb9753..af46e9e03376 100644
-> --- a/drivers/platform/x86/wmi-bmof.c
-> +++ b/drivers/platform/x86/wmi-bmof.c
-> @@ -18,8 +18,6 @@
->  #include <linux/types.h>
->  #include <linux/wmi.h>
->  
-> -#define WMI_BMOF_GUID "05901221-D566-11D1-B2F0-00A0C9062910"
-> -
->  struct bmof_priv {
->  	union acpi_object *bmofdata;
->  	struct bin_attribute bmof_bin_attr;
-> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-> index aed293b5af81..d7a1f4bf443b 100644
-> --- a/drivers/platform/x86/wmi.c
-> +++ b/drivers/platform/x86/wmi.c
-> @@ -1157,6 +1157,9 @@ static void wmi_free_devices(struct acpi_device *device)
->  static bool guid_already_parsed(struct acpi_device *device, const guid_t *guid)
->  {
->  	struct wmi_block *wblock;
-> +	guid_t guid_wmi_bmof;
-> +
-> +	guid_parse(WMI_BMOF_GUID, &guid_wmi_bmof);
->  
->  	list_for_each_entry(wblock, &wmi_block_list, list) {
->  		if (guid_equal(&wblock->gblock.guid, guid)) {
-> @@ -1166,8 +1169,11 @@ static bool guid_already_parsed(struct acpi_device *device, const guid_t *guid)
->  			 * we need to suppress GUIDs that are unique on a
->  			 * given node but duplicated across nodes.
->  			 */
-> -			dev_warn(&device->dev, "duplicate WMI GUID %pUL (first instance was on %s)\n",
-> -				 guid, dev_name(&wblock->acpi_device->dev));
-> +			if (guid_equal(guid, &guid_wmi_bmof))
-> +				dev_dbg(&device->dev, "duplicate WMI-BMOF GUID found\n");
-> +			else
-> +				dev_warn(&device->dev, "duplicate WMI GUID %pUL (first instance was on %s)\n",
-> +					 guid, dev_name(&wblock->acpi_device->dev));
->  			return true;
->  		}
->  	}
-> diff --git a/include/linux/wmi.h b/include/linux/wmi.h
-> index b88d7b58e61e..59acdceb4411 100644
-> --- a/include/linux/wmi.h
-> +++ b/include/linux/wmi.h
-> @@ -13,6 +13,8 @@
->  #include <linux/mod_devicetable.h>
->  #include <uapi/linux/wmi.h>
->  
-> +#define WMI_BMOF_GUID "05901221-D566-11D1-B2F0-00A0C9062910"
-> +
->  struct wmi_device {
->  	struct device dev;
->  
+diff --git a/include/net/inet_frag.h b/include/net/inet_frag.h
+index 0b0876610553..05d95fad8a1a 100644
+--- a/include/net/inet_frag.h
++++ b/include/net/inet_frag.h
+@@ -98,6 +98,7 @@ struct inet_frag_queue {
+ 	__u8			flags;
+ 	u16			max_size;
+ 	struct fqdir		*fqdir;
++	struct inet_peer	*peer;
+ 	struct rcu_head		rcu;
+ };
+ 
+diff --git a/net/ipv4/inet_fragment.c b/net/ipv4/inet_fragment.c
+index c9f9ac5013a7..c3ec1dbe7081 100644
+--- a/net/ipv4/inet_fragment.c
++++ b/net/ipv4/inet_fragment.c
+@@ -23,6 +23,7 @@
+ #include <net/inet_ecn.h>
+ #include <net/ip.h>
+ #include <net/ipv6.h>
++#include <net/inetpeer.h>
+ 
+ /* Use skb->cb to track consecutive/adjacent fragments coming at
+  * the end of the queue. Nodes in the rb-tree queue will
+@@ -282,6 +283,14 @@ unsigned int inet_frag_rbtree_purge(struct rb_root *root)
+ }
+ EXPORT_SYMBOL(inet_frag_rbtree_purge);
+ 
++void inet_frag_free(struct inet_frag_queue *q)
++{
++	if (q->peer)
++		inet_putpeer(q->peer);
++
++	call_rcu(&q->rcu, inet_frag_destroy_rcu);
++}
++
+ void inet_frag_destroy(struct inet_frag_queue *q)
+ {
+ 	struct fqdir *fqdir;
+@@ -297,7 +306,7 @@ void inet_frag_destroy(struct inet_frag_queue *q)
+ 	sum_truesize = inet_frag_rbtree_purge(&q->rb_fragments);
+ 	sum = sum_truesize + f->qsize;
+ 
+-	call_rcu(&q->rcu, inet_frag_destroy_rcu);
++	inet_frag_free(q);
+ 
+ 	sub_frag_mem_limit(fqdir, sum);
+ }
+diff --git a/net/ipv4/ip_fragment.c b/net/ipv4/ip_fragment.c
+index fb153569889e..d0c22c41cf26 100644
+--- a/net/ipv4/ip_fragment.c
++++ b/net/ipv4/ip_fragment.c
+@@ -65,7 +65,6 @@ struct ipq {
+ 	u16		max_df_size; /* largest frag with DF set seen */
+ 	int             iif;
+ 	unsigned int    rid;
+-	struct inet_peer *peer;
+ };
+ 
+ static u8 ip4_frag_ecn(u8 tos)
+@@ -88,21 +87,9 @@ static void ip4_frag_init(struct inet_frag_queue *q, const void *a)
+ 
+ 	q->key.v4 = *key;
+ 	qp->ecn = 0;
+-	qp->peer = q->fqdir->max_dist ?
+-		inet_getpeer_v4(net->ipv4.peers, key->saddr, key->vif, 1) :
+-		NULL;
++	q->peer = inet_getpeer_v4(net->ipv4.peers, key->saddr, key->vif, 1);
+ }
+ 
+-static void ip4_frag_free(struct inet_frag_queue *q)
+-{
+-	struct ipq *qp;
+-
+-	qp = container_of(q, struct ipq, q);
+-	if (qp->peer)
+-		inet_putpeer(qp->peer);
+-}
+-
+-
+ /* Destruction primitives. */
+ 
+ static void ipq_put(struct ipq *ipq)
+@@ -224,7 +211,7 @@ static struct ipq *ip_find(struct net *net, struct iphdr *iph,
+ /* Is the fragment too far ahead to be part of ipq? */
+ static int ip_frag_too_far(struct ipq *qp)
+ {
+-	struct inet_peer *peer = qp->peer;
++	struct inet_peer *peer = qp->q.peer;
+ 	unsigned int max = qp->q.fqdir->max_dist;
+ 	unsigned int start, end;
+ 
+@@ -741,7 +728,7 @@ static const struct rhashtable_params ip4_rhash_params = {
+ void __init ipfrag_init(void)
+ {
+ 	ip4_frags.constructor = ip4_frag_init;
+-	ip4_frags.destructor = ip4_frag_free;
++	ip4_frags.destructor = NULL;
+ 	ip4_frags.qsize = sizeof(struct ipq);
+ 	ip4_frags.frag_expire = ip_expire;
+ 	ip4_frags.frags_cache_name = ip_frag_cache_name;
+-- 
+2.36.1
 

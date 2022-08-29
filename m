@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037B85A448A
+	by mail.lfdr.de (Postfix) with ESMTP id 779835A448B
 	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiH2IGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S229463AbiH2IG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiH2IGs (ORCPT
+        with ESMTP id S229784AbiH2IGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Aug 2022 04:06:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9C252838;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6658A5282D;
         Mon, 29 Aug 2022 01:06:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8F3EB80D63;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6F69B80D64;
         Mon, 29 Aug 2022 08:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B999C43470;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82197C433B5;
         Mon, 29 Aug 2022 08:06:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661760404;
-        bh=vEVlgcvzHAGVREWl4JAo7TyUTWO2ajtrlaWpFndzrc0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S7iMWIDWo1Xza4W8WqTIfQiJg96PtyaAoQVcHlTa2Vf8jrMQssWnueb2urKUULkCA
-         kvZoNKbnAEroXKk3hFkwAYeUkW36/RX327Z39MQ+1zKYWG2KEDY2N4m7pLJ2Ag9Awh
-         1U/JZG6ao/FYetkUx9/Pv4sBeH8Fu/YCzudUcwLjYCMTkEVb4X3RYaoGH6MFvbYYH8
-         D+0pkwF4K9lhrF/Yx6R2hrLbpIy8sUV/A2Xd3vPmeXQpIEGxV7YE4T6j5CNH/iYhOC
-         glnZVwVG0tRqdAg+xQn5a5FqnTOfgiR+h8L1FN5nT3wdMaX8YmL3AFr9Kc3WiZWf0U
-         Gw6ZKd2rgcELg==
+        bh=EXEzU9O3c7+eI/vI4BoKI0XiPzlDZwpzrxTE7ddbiQw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CzNspwFPE/7c/OBlx2eljllkVfd5/QXZkYTL6C9GTwgUuMYMv8uDxsoGX0y0Fbfa2
+         lRHS1S8npu0BeAp7whjx8qyIRnwU/AN6bPC1leBrtVsB1ddYlgqgnzY29HZvzCU2Pq
+         TMb2yax8WZVKvTfuUIM5LsQkP9NuJ7GSukMjbkwrF3v/thxKEf2KFLYtiiLTy4QX4X
+         DfW9WuYeuKJ4fAkPk9qz1DkEyccme7x7vS24P4ujNJ5QtCdZa1sgYgcNXHsjNwzTZo
+         QzXW3kFeADFdceIO0L/gMjGxbVFeGby6huffKmlygICKA/wefC7pJLNDjs+4S7SEM1
+         FOo1gMkCK83Eg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oSZnH-0007jS-V2; Mon, 29 Aug 2022 10:06:51 +0200
+        id 1oSZnI-0007jU-19; Mon, 29 Aug 2022 10:06:52 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Amol Maheshwari <amahesh@qti.qualcomm.com>
@@ -43,11 +43,13 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 0/3] misc: fastrpc: fix memory corruption
-Date:   Mon, 29 Aug 2022 10:05:28 +0200
-Message-Id: <20220829080531.29681-1-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 1/3] misc: fastrpc: fix memory corruption on probe
+Date:   Mon, 29 Aug 2022 10:05:29 +0200
+Message-Id: <20220829080531.29681-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220829080531.29681-1-johan+linaro@kernel.org>
+References: <20220829080531.29681-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -60,26 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fastrpc driver uses a fixed-sized array to store its sessions but
-missing and broken sanity checks could lead to memory beyond the array
-being corrupted.
+Add the missing sanity check on the probed-session count to avoid
+corrupting memory beyond the fixed-size slab-allocated session array
+when there are more than FASTRPC_MAX_SESSIONS sessions defined in the
+devicetree.
 
-This specifically happens on SC8280XP platforms that use 14 sessions for
-the compute DSP.
+Fixes: f6f9279f2bf0 ("misc: fastrpc: Add Qualcomm fastrpc basic driver model")
+Cc: stable@vger.kernel.org      # 5.1
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/misc/fastrpc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-These are all needed for 6.0.
-
-Johan
-
-
-Johan Hovold (3):
-  misc: fastrpc: fix memory corruption on probe
-  misc: fastrpc: fix memory corruption on open
-  misc: fastrpc: increase maximum session count
-
- drivers/misc/fastrpc.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 93ebd174d848..88091778c1b8 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1943,6 +1943,11 @@ static int fastrpc_cb_probe(struct platform_device *pdev)
+ 	of_property_read_u32(dev->of_node, "qcom,nsessions", &sessions);
+ 
+ 	spin_lock_irqsave(&cctx->lock, flags);
++	if (cctx->sesscount >= FASTRPC_MAX_SESSIONS) {
++		dev_err(&pdev->dev, "too many sessions\n");
++		spin_unlock_irqrestore(&cctx->lock, flags);
++		return -ENOSPC;
++	}
+ 	sess = &cctx->session[cctx->sesscount];
+ 	sess->used = false;
+ 	sess->valid = true;
 -- 
 2.35.1
 

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D1D5A4A5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC73E5A48F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiH2Lhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
+        id S231533AbiH2LR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiH2Lgh (ORCPT
+        with ESMTP id S231408AbiH2LRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:36:37 -0400
+        Mon, 29 Aug 2022 07:17:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34655754BC;
-        Mon, 29 Aug 2022 04:21:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C96642DB;
+        Mon, 29 Aug 2022 04:11:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 272FFB80F62;
-        Mon, 29 Aug 2022 11:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D0EC433D6;
-        Mon, 29 Aug 2022 11:11:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D635CB80F79;
+        Mon, 29 Aug 2022 11:11:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412DCC433C1;
+        Mon, 29 Aug 2022 11:11:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771510;
-        bh=j0O6seP0hDl2M/tiFwyK3s5JdTNEVqLVc61BtKI2w4o=;
+        s=korg; t=1661771485;
+        bh=dwulq3C42+QL6V1OJqh9EVSXbXuaeZA6njsv2Gq/iEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gI8TUuW2M64dSMkGQ+5vKiW7AI0j+zMtq1PDg7XZw3TEgdyFNbzu/EL/0F/sgiJS9
-         OisIgRQhTU3hYHD/bRRyZDfDDVW9cudnu6z3qEOKgPnI/7s1LQCmXdByvCTYU36OFY
-         BM2Z8GfYdZ4w17ii2RQJJaKNyzt16aLSnz/5ElUA=
+        b=ibyYRb6zYigPflenIBlq1OYDhT3p+jsZqunJL+/v5qGRRb63Y8Sl7oOyfQhfzrgZB
+         7VNVNuI8Qv6RUoCoL+XslQWJKxHMWGOenmABagjwk5JKWDA2O8WcRC8E1KVf3V/NrT
+         I6ZCcQPDA9+cNdJy+slYyNKmjkhj8fS/O3DGsv50=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.15 111/136] fbdev: fbcon: Properly revert changes when vc_resize() failed
+        Quanyang Wang <quanyang.wang@windriver.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thierry Reding <treding@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.10 72/86] asm-generic: sections: refactor memory_intersects
 Date:   Mon, 29 Aug 2022 12:59:38 +0200
-Message-Id: <20220829105809.264085223@linuxfoundation.org>
+Message-Id: <20220829105759.484998195@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,88 +58,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shigeru Yoshida <syoshida@redhat.com>
+From: Quanyang Wang <quanyang.wang@windriver.com>
 
-commit a5a923038d70d2d4a86cb4e3f32625a5ee6e7e24 upstream.
+commit 0c7d7cc2b4fe2e74ef8728f030f0f1674f9f6aee upstream.
 
-fbcon_do_set_font() calls vc_resize() when font size is changed.
-However, if if vc_resize() failed, current implementation doesn't
-revert changes for font size, and this causes inconsistent state.
+There are two problems with the current code of memory_intersects:
 
-syzbot reported unable to handle page fault due to this issue [1].
-syzbot's repro uses fault injection which cause failure for memory
-allocation, so vc_resize() failed.
+First, it doesn't check whether the region (begin, end) falls inside the
+region (virt, vend), that is (virt < begin && vend > end).
 
-This patch fixes this issue by properly revert changes for font
-related date when vc_resize() failed.
+The second problem is if vend is equal to begin, it will return true but
+this is wrong since vend (virt + size) is not the last address of the
+memory region but (virt + size -1) is.  The wrong determination will
+trigger the misreporting when the function check_for_illegal_area calls
+memory_intersects to check if the dma region intersects with stext region.
 
-Link: https://syzkaller.appspot.com/bug?id=3443d3a1fa6d964dd7310a0cb1696d165a3e07c4 [1]
-Reported-by: syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-CC: stable@vger.kernel.org # 5.15+
+The misreporting is as below (stext is at 0x80100000):
+ WARNING: CPU: 0 PID: 77 at kernel/dma/debug.c:1073 check_for_illegal_area+0x130/0x168
+ DMA-API: chipidea-usb2 e0002000.usb: device driver maps memory from kernel text or rodata [addr=800f0000] [len=65536]
+ Modules linked in:
+ CPU: 1 PID: 77 Comm: usb-storage Not tainted 5.19.0-yocto-standard #5
+ Hardware name: Xilinx Zynq Platform
+  unwind_backtrace from show_stack+0x18/0x1c
+  show_stack from dump_stack_lvl+0x58/0x70
+  dump_stack_lvl from __warn+0xb0/0x198
+  __warn from warn_slowpath_fmt+0x80/0xb4
+  warn_slowpath_fmt from check_for_illegal_area+0x130/0x168
+  check_for_illegal_area from debug_dma_map_sg+0x94/0x368
+  debug_dma_map_sg from __dma_map_sg_attrs+0x114/0x128
+  __dma_map_sg_attrs from dma_map_sg_attrs+0x18/0x24
+  dma_map_sg_attrs from usb_hcd_map_urb_for_dma+0x250/0x3b4
+  usb_hcd_map_urb_for_dma from usb_hcd_submit_urb+0x194/0x214
+  usb_hcd_submit_urb from usb_sg_wait+0xa4/0x118
+  usb_sg_wait from usb_stor_bulk_transfer_sglist+0xa0/0xec
+  usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x38/0x70
+  usb_stor_bulk_srb from usb_stor_Bulk_transport+0x150/0x360
+  usb_stor_Bulk_transport from usb_stor_invoke_transport+0x38/0x440
+  usb_stor_invoke_transport from usb_stor_control_thread+0x1e0/0x238
+  usb_stor_control_thread from kthread+0xf8/0x104
+  kthread from ret_from_fork+0x14/0x2c
+
+Refactor memory_intersects to fix the two problems above.
+
+Before the 1d7db834a027e ("dma-debug: use memory_intersects()
+directly"), memory_intersects is called only by printk_late_init:
+
+printk_late_init -> init_section_intersects ->memory_intersects.
+
+There were few places where memory_intersects was called.
+
+When commit 1d7db834a027e ("dma-debug: use memory_intersects()
+directly") was merged and CONFIG_DMA_API_DEBUG is enabled, the DMA
+subsystem uses it to check for an illegal area and the calltrace above
+is triggered.
+
+[akpm@linux-foundation.org: fix nearby comment typo]
+Link: https://lkml.kernel.org/r/20220819081145.948016-1-quanyang.wang@windriver.com
+Fixes: 979559362516 ("asm/sections: add helpers to check for section data")
+Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbcon.c |   27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ include/asm-generic/sections.h |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -2413,15 +2413,21 @@ static int fbcon_do_set_font(struct vc_d
- 	struct fb_info *info = registered_fb[con2fb_map[vc->vc_num]];
- 	struct fbcon_ops *ops = info->fbcon_par;
- 	struct fbcon_display *p = &fb_display[vc->vc_num];
--	int resize;
-+	int resize, ret, old_userfont, old_width, old_height, old_charcount;
- 	char *old_data = NULL;
+--- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -114,7 +114,7 @@ static inline bool memory_contains(void
+ /**
+  * memory_intersects - checks if the region occupied by an object intersects
+  *                     with another memory region
+- * @begin: virtual address of the beginning of the memory regien
++ * @begin: virtual address of the beginning of the memory region
+  * @end: virtual address of the end of the memory region
+  * @virt: virtual address of the memory object
+  * @size: size of the memory object
+@@ -127,7 +127,10 @@ static inline bool memory_intersects(voi
+ {
+ 	void *vend = virt + size;
  
- 	resize = (w != vc->vc_font.width) || (h != vc->vc_font.height);
- 	if (p->userfont)
- 		old_data = vc->vc_font.data;
- 	vc->vc_font.data = (void *)(p->fontdata = data);
-+	old_userfont = p->userfont;
- 	if ((p->userfont = userfont))
- 		REFCOUNT(data)++;
+-	return (virt >= begin && virt < end) || (vend >= begin && vend < end);
++	if (virt < end && vend > begin)
++		return true;
 +
-+	old_width = vc->vc_font.width;
-+	old_height = vc->vc_font.height;
-+	old_charcount = vc->vc_font.charcount;
-+
- 	vc->vc_font.width = w;
- 	vc->vc_font.height = h;
- 	vc->vc_font.charcount = charcount;
-@@ -2437,7 +2443,9 @@ static int fbcon_do_set_font(struct vc_d
- 		rows = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
- 		cols /= w;
- 		rows /= h;
--		vc_resize(vc, cols, rows);
-+		ret = vc_resize(vc, cols, rows);
-+		if (ret)
-+			goto err_out;
- 	} else if (con_is_visible(vc)
- 		   && vc->vc_mode == KD_TEXT) {
- 		fbcon_clear_margins(vc, 0);
-@@ -2447,6 +2455,21 @@ static int fbcon_do_set_font(struct vc_d
- 	if (old_data && (--REFCOUNT(old_data) == 0))
- 		kfree(old_data - FONT_EXTRA_WORDS * sizeof(int));
- 	return 0;
-+
-+err_out:
-+	p->fontdata = old_data;
-+	vc->vc_font.data = (void *)old_data;
-+
-+	if (userfont) {
-+		p->userfont = old_userfont;
-+		REFCOUNT(data)--;
-+	}
-+
-+	vc->vc_font.width = old_width;
-+	vc->vc_font.height = old_height;
-+	vc->vc_font.charcount = old_charcount;
-+
-+	return ret;
++	return false;
  }
  
- /*
+ /**
 
 

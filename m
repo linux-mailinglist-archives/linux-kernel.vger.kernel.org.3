@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274E25A4860
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B570D5A49A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiH2LJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S232199AbiH2L1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiH2LHe (ORCPT
+        with ESMTP id S231828AbiH2LYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:07:34 -0400
+        Mon, 29 Aug 2022 07:24:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3C848EAC;
-        Mon, 29 Aug 2022 04:05:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB60276477;
+        Mon, 29 Aug 2022 04:15:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4F2BB80EF5;
-        Mon, 29 Aug 2022 11:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E794C433C1;
-        Mon, 29 Aug 2022 11:04:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57D30B80EF9;
+        Mon, 29 Aug 2022 11:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E69C433C1;
+        Mon, 29 Aug 2022 11:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771046;
-        bh=KL20WVIWi1PJCJaEc2TafejaDSA5XEZq6uU3sKE3Q20=;
+        s=korg; t=1661771710;
+        bh=te7sInvU0bTNWg5iIS7SawPRIw8wZSbSzzBDD6te5pU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tbmzRTVC1Qh2uEzdtXu8H2nJj5MgnYoIVbG5KgHKemrS1lywuvqsIyv/mbOBVIpro
-         lX7Eo22iTXpv1dA0kLgf6flfd/6MV2hR8GSsBDHmVPENIkmAYe0yoYm+33/3RxehRa
-         qopdxXLmLURoahHNSNlAHUayiH14CCaztHkmapeg=
+        b=D1stDIjmke8YpApMd0ZUzwrysECjL8l2ecR4qMn/rDvbllNYPFafUpum3NPnF4hUH
+         aeO9M9ee1qG1uqqXrJG4iC88JefdD1a7cqZ9Zd67urI+g6rQMszpXKK29DP26Dn2RY
+         DrsQJ2X/z8/KeITAleaVKOS3YoZegSKMSfsZyaNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 053/136] netfilter: ebtables: reject blobs that dont provide all entry points
+Subject: [PATCH 5.19 070/158] net: Fix data-races around sysctl_optmem_max.
 Date:   Mon, 29 Aug 2022 12:58:40 +0200
-Message-Id: <20220829105806.810560455@linuxfoundation.org>
+Message-Id: <20220829105811.938696175@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,163 +55,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 7997eff82828304b780dc0a39707e1946d6f1ebf ]
+[ Upstream commit 7de6d09f51917c829af2b835aba8bb5040f8e86a ]
 
-Harshit Mogalapalli says:
- In ebt_do_table() function dereferencing 'private->hook_entry[hook]'
- can lead to NULL pointer dereference. [..] Kernel panic:
-
-general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-[..]
-RIP: 0010:ebt_do_table+0x1dc/0x1ce0
-Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 5c 16 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 6c df 08 48 8d 7d 2c 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 88
-[..]
-Call Trace:
- nf_hook_slow+0xb1/0x170
- __br_forward+0x289/0x730
- maybe_deliver+0x24b/0x380
- br_flood+0xc6/0x390
- br_dev_xmit+0xa2e/0x12c0
-
-For some reason ebtables rejects blobs that provide entry points that are
-not supported by the table, but what it should instead reject is the
-opposite: blobs that DO NOT provide an entry point supported by the table.
-
-t->valid_hooks is the bitmask of hooks (input, forward ...) that will see
-packets.  Providing an entry point that is not support is harmless
-(never called/used), but the inverse isn't: it results in a crash
-because the ebtables traverser doesn't expect a NULL blob for a location
-its receiving packets for.
-
-Instead of fixing all the individual checks, do what iptables is doing and
-reject all blobs that differ from the expected hooks.
+While reading sysctl_optmem_max, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
 Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netfilter_bridge/ebtables.h | 4 ----
- net/bridge/netfilter/ebtable_broute.c     | 8 --------
- net/bridge/netfilter/ebtable_filter.c     | 8 --------
- net/bridge/netfilter/ebtable_nat.c        | 8 --------
- net/bridge/netfilter/ebtables.c           | 8 +-------
- 5 files changed, 1 insertion(+), 35 deletions(-)
+ net/core/bpf_sk_storage.c | 5 +++--
+ net/core/filter.c         | 9 +++++----
+ net/core/sock.c           | 8 +++++---
+ net/ipv4/ip_sockglue.c    | 6 +++---
+ net/ipv6/ipv6_sockglue.c  | 4 ++--
+ 5 files changed, 18 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/netfilter_bridge/ebtables.h b/include/linux/netfilter_bridge/ebtables.h
-index 10a01978bc0d3..bde9db771ae41 100644
---- a/include/linux/netfilter_bridge/ebtables.h
-+++ b/include/linux/netfilter_bridge/ebtables.h
-@@ -94,10 +94,6 @@ struct ebt_table {
- 	struct ebt_replace_kernel *table;
- 	unsigned int valid_hooks;
- 	rwlock_t lock;
--	/* e.g. could be the table explicitly only allows certain
--	 * matches, targets, ... 0 == let it in */
--	int (*check)(const struct ebt_table_info *info,
--	   unsigned int valid_hooks);
- 	/* the data used by the kernel */
- 	struct ebt_table_info *private;
- 	struct nf_hook_ops *ops;
-diff --git a/net/bridge/netfilter/ebtable_broute.c b/net/bridge/netfilter/ebtable_broute.c
-index a7af4eaff17d3..3d4ea774d7e8f 100644
---- a/net/bridge/netfilter/ebtable_broute.c
-+++ b/net/bridge/netfilter/ebtable_broute.c
-@@ -36,18 +36,10 @@ static struct ebt_replace_kernel initial_table = {
- 	.entries	= (char *)&initial_chain,
- };
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 1b7f385643b4c..94374d529ea42 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -310,11 +310,12 @@ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, map, struct sock *, sk)
+ static int bpf_sk_storage_charge(struct bpf_local_storage_map *smap,
+ 				 void *owner, u32 size)
+ {
++	int optmem_max = READ_ONCE(sysctl_optmem_max);
+ 	struct sock *sk = (struct sock *)owner;
  
--static int check(const struct ebt_table_info *info, unsigned int valid_hooks)
--{
--	if (valid_hooks & ~(1 << NF_BR_BROUTING))
--		return -EINVAL;
--	return 0;
--}
--
- static const struct ebt_table broute_table = {
- 	.name		= "broute",
- 	.table		= &initial_table,
- 	.valid_hooks	= 1 << NF_BR_BROUTING,
--	.check		= check,
- 	.me		= THIS_MODULE,
- };
- 
-diff --git a/net/bridge/netfilter/ebtable_filter.c b/net/bridge/netfilter/ebtable_filter.c
-index c0b121df4a9af..257d63b5dec16 100644
---- a/net/bridge/netfilter/ebtable_filter.c
-+++ b/net/bridge/netfilter/ebtable_filter.c
-@@ -43,18 +43,10 @@ static struct ebt_replace_kernel initial_table = {
- 	.entries	= (char *)initial_chains,
- };
- 
--static int check(const struct ebt_table_info *info, unsigned int valid_hooks)
--{
--	if (valid_hooks & ~FILTER_VALID_HOOKS)
--		return -EINVAL;
--	return 0;
--}
--
- static const struct ebt_table frame_filter = {
- 	.name		= "filter",
- 	.table		= &initial_table,
- 	.valid_hooks	= FILTER_VALID_HOOKS,
--	.check		= check,
- 	.me		= THIS_MODULE,
- };
- 
-diff --git a/net/bridge/netfilter/ebtable_nat.c b/net/bridge/netfilter/ebtable_nat.c
-index 4078151c224fb..39179c2cf87d2 100644
---- a/net/bridge/netfilter/ebtable_nat.c
-+++ b/net/bridge/netfilter/ebtable_nat.c
-@@ -43,18 +43,10 @@ static struct ebt_replace_kernel initial_table = {
- 	.entries	= (char *)initial_chains,
- };
- 
--static int check(const struct ebt_table_info *info, unsigned int valid_hooks)
--{
--	if (valid_hooks & ~NAT_VALID_HOOKS)
--		return -EINVAL;
--	return 0;
--}
--
- static const struct ebt_table frame_nat = {
- 	.name		= "nat",
- 	.table		= &initial_table,
- 	.valid_hooks	= NAT_VALID_HOOKS,
--	.check		= check,
- 	.me		= THIS_MODULE,
- };
- 
-diff --git a/net/bridge/netfilter/ebtables.c b/net/bridge/netfilter/ebtables.c
-index ba045f35114dd..8905fe2fe023d 100644
---- a/net/bridge/netfilter/ebtables.c
-+++ b/net/bridge/netfilter/ebtables.c
-@@ -1040,8 +1040,7 @@ static int do_replace_finish(struct net *net, struct ebt_replace *repl,
- 		goto free_iterate;
+ 	/* same check as in sock_kmalloc() */
+-	if (size <= sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
++	if (size <= optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + size < optmem_max) {
+ 		atomic_add(size, &sk->sk_omem_alloc);
+ 		return 0;
  	}
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 60c854e7d98ba..063176428086b 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1214,10 +1214,11 @@ void sk_filter_uncharge(struct sock *sk, struct sk_filter *fp)
+ static bool __sk_filter_charge(struct sock *sk, struct sk_filter *fp)
+ {
+ 	u32 filter_size = bpf_prog_size(fp->prog->len);
++	int optmem_max = READ_ONCE(sysctl_optmem_max);
  
--	/* the table doesn't like it */
--	if (t->check && (ret = t->check(newinfo, repl->valid_hooks)))
-+	if (repl->valid_hooks != t->valid_hooks)
- 		goto free_unlock;
+ 	/* same check as in sock_kmalloc() */
+-	if (filter_size <= sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + filter_size < sysctl_optmem_max) {
++	if (filter_size <= optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + filter_size < optmem_max) {
+ 		atomic_add(filter_size, &sk->sk_omem_alloc);
+ 		return true;
+ 	}
+@@ -1548,7 +1549,7 @@ int sk_reuseport_attach_filter(struct sock_fprog *fprog, struct sock *sk)
+ 	if (IS_ERR(prog))
+ 		return PTR_ERR(prog);
  
- 	if (repl->num_counters && repl->num_counters != t->private->nentries) {
-@@ -1231,11 +1230,6 @@ int ebt_register_table(struct net *net, const struct ebt_table *input_table,
- 	if (ret != 0)
- 		goto free_chainstack;
+-	if (bpf_prog_size(prog->len) > sysctl_optmem_max)
++	if (bpf_prog_size(prog->len) > READ_ONCE(sysctl_optmem_max))
+ 		err = -ENOMEM;
+ 	else
+ 		err = reuseport_attach_prog(sk, prog);
+@@ -1615,7 +1616,7 @@ int sk_reuseport_attach_bpf(u32 ufd, struct sock *sk)
+ 		}
+ 	} else {
+ 		/* BPF_PROG_TYPE_SOCKET_FILTER */
+-		if (bpf_prog_size(prog->len) > sysctl_optmem_max) {
++		if (bpf_prog_size(prog->len) > READ_ONCE(sysctl_optmem_max)) {
+ 			err = -ENOMEM;
+ 			goto err_prog_put;
+ 		}
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 62f69bc3a0e6e..d672e63a5c2d4 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2535,7 +2535,7 @@ struct sk_buff *sock_omalloc(struct sock *sk, unsigned long size,
  
--	if (table->check && table->check(newinfo, table->valid_hooks)) {
--		ret = -EINVAL;
--		goto free_chainstack;
--	}
--
- 	table->private = newinfo;
- 	rwlock_init(&table->lock);
- 	mutex_lock(&ebt_mutex);
+ 	/* small safe race: SKB_TRUESIZE may differ from final skb->truesize */
+ 	if (atomic_read(&sk->sk_omem_alloc) + SKB_TRUESIZE(size) >
+-	    sysctl_optmem_max)
++	    READ_ONCE(sysctl_optmem_max))
+ 		return NULL;
+ 
+ 	skb = alloc_skb(size, priority);
+@@ -2553,8 +2553,10 @@ struct sk_buff *sock_omalloc(struct sock *sk, unsigned long size,
+  */
+ void *sock_kmalloc(struct sock *sk, int size, gfp_t priority)
+ {
+-	if ((unsigned int)size <= sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
++	int optmem_max = READ_ONCE(sysctl_optmem_max);
++
++	if ((unsigned int)size <= optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + size < optmem_max) {
+ 		void *mem;
+ 		/* First do the add, to avoid the race if kmalloc
+ 		 * might sleep.
+diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+index a8a323ecbb54b..e49a61a053a68 100644
+--- a/net/ipv4/ip_sockglue.c
++++ b/net/ipv4/ip_sockglue.c
+@@ -772,7 +772,7 @@ static int ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval, int optlen)
+ 
+ 	if (optlen < GROUP_FILTER_SIZE(0))
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max)
++	if (optlen > READ_ONCE(sysctl_optmem_max))
+ 		return -ENOBUFS;
+ 
+ 	gsf = memdup_sockptr(optval, optlen);
+@@ -808,7 +808,7 @@ static int compat_ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
+ 
+ 	if (optlen < size0)
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max - 4)
++	if (optlen > READ_ONCE(sysctl_optmem_max) - 4)
+ 		return -ENOBUFS;
+ 
+ 	p = kmalloc(optlen + 4, GFP_KERNEL);
+@@ -1233,7 +1233,7 @@ static int do_ip_setsockopt(struct sock *sk, int level, int optname,
+ 
+ 		if (optlen < IP_MSFILTER_SIZE(0))
+ 			goto e_inval;
+-		if (optlen > sysctl_optmem_max) {
++		if (optlen > READ_ONCE(sysctl_optmem_max)) {
+ 			err = -ENOBUFS;
+ 			break;
+ 		}
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 222f6bf220ba0..e0dcc7a193df2 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -210,7 +210,7 @@ static int ipv6_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
+ 
+ 	if (optlen < GROUP_FILTER_SIZE(0))
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max)
++	if (optlen > READ_ONCE(sysctl_optmem_max))
+ 		return -ENOBUFS;
+ 
+ 	gsf = memdup_sockptr(optval, optlen);
+@@ -244,7 +244,7 @@ static int compat_ipv6_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
+ 
+ 	if (optlen < size0)
+ 		return -EINVAL;
+-	if (optlen > sysctl_optmem_max - 4)
++	if (optlen > READ_ONCE(sysctl_optmem_max) - 4)
+ 		return -ENOBUFS;
+ 
+ 	p = kmalloc(optlen + 4, GFP_KERNEL);
 -- 
 2.35.1
 

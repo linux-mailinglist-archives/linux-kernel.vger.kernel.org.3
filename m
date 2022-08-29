@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8C15A5563
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DB05A5565
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiH2UNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S230136AbiH2UNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiH2UNC (ORCPT
+        with ESMTP id S230096AbiH2UNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:13:02 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995B17677D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:13:00 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so6782522plg.23
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:13:00 -0700 (PDT)
+        Mon, 29 Aug 2022 16:13:04 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F23498A51
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:13:02 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id i25-20020a635859000000b0042bbb74be8bso2551804pgm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=3+KFGw/lw7UFTEKp2QYuhuNuaZRNkMlHXcRjkBPuoco=;
-        b=KkqpTJCgR/OwOt0P10HqU41mOPMq7h05KJQ8hIf3ml9CTTVyKhnxqp/+m8DAOkaCY2
-         43sG7c898K8zn+G43oaYsEliwtvpg+P4fnkAoEiUqx5BgZ9x6ISVBEZBicoAQCPk0H8r
-         DUDcNwOUbmUkYWavjrhf9jBWCM9uOv2pswrNF2bzpzJ+g83AY2GcZbl57oxt71J+h1jk
-         gAUt97QPDVsv18kwENFVt23VNLI0umUyhF1C5qkb4IWNczrHytbnOvDdETBPkrQOYWY6
-         VrDWWPk6yN7wnHoRlYEy85WySxqh8vxZwD3AakRc/hpFn952UZ3bLASzTcsjcAhzQD9O
-         xH9Q==
+        bh=c+V6ZZoSbyilAuCWrSUmpUH+8o9/Xyf5DRUIoUPm6XI=;
+        b=th/mrIVRwJZnvQWDY6W+eVycuyURZk0Sl/DjLPmvcO2BzkGBlZiaYmgNMHCqciDIBC
+         V7M8xdsyYeHngANpHKmlWYvdoHwzHDpr//zBG5r5kPHUUlXESeMRq4b24K5J7E2yCVoz
+         SJN6h+D1T04ZqWqYO/TLu+tpQ9CtmIp5ja2b6jxhfvSXJNlbnqO5uvM8jgEokHoBB18R
+         BQHQzBoVYIDu5NcHN3bYKiAnRjl1yRcPOT4HZLDwBK8rMPZflq/UENqZNFseuG9hZTQ8
+         5DzDl0s+12Qj4N9QzPk8rE/nuIn3Tz0f7w+C8XZmGCoK9cnQCtaMYnLQwg5e3KO6IyOo
+         EmIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=3+KFGw/lw7UFTEKp2QYuhuNuaZRNkMlHXcRjkBPuoco=;
-        b=6+/32Qbl1ign1d2IBD5S/KZyk+WTCpjt/Fl75vhTe5ucKiT5Z09OJjo6EpS8CTuFLQ
-         8w7h4TIlmCp0ShBs6/clHM+MCSPXPuk0U3+cxCIyca5JnHWPS8i0PHWFKbeV5DnZ5xQq
-         X2nPMF3OxdrFFG+kOuZQ/+a+5GVYSxDdiLpN4OvFQljWA5G4GZ3F103PZqTkJu8bWZXf
-         jcFaIRI9EjtTIZ70e53OEhEsfRSfhC4OFyxW/Po4lYUD+YNef88fMrAcn6+ncrVUX7wP
-         4jh3EEU3WuceyZiZTEqxwb0kEn2HtveGQiJmlE7K6piIpw0x4K4kc6GyaL+/WtcUqI46
-         I+6w==
-X-Gm-Message-State: ACgBeo2elnkMffVgWTvvwN388kEQ58O7fYxbLMvJhuv1Y1OXO6fXUyG/
-        29hQYuMXUXuKoXcuFv9kSkmCFYR+kfd7iA==
-X-Google-Smtp-Source: AA6agR7q6tV50augbDBj5FI+PYqaTZLRyKhIvbXKaLDo74MAo4aCJqE/LL9Fp9trQj2FgsIlB5oC5YO5eTaJOA==
+        bh=c+V6ZZoSbyilAuCWrSUmpUH+8o9/Xyf5DRUIoUPm6XI=;
+        b=Y76j4KihWbdsjT06bBC7awT3+dNPBE/BGY/wSjsfXcEpEdRp5bqgtTdi9HoZXso66X
+         OgZQC0L46kLLve4xcqIJMTNf3B/AyNWcp5Mph47F2dF7vomQYpflLxCuczd5haOjHmtK
+         yBDt92ldQbRhne0PhfiixaBgk12nWiDuGSFF/t5nIJlucyaOFcziR8HD1eVdRhJElmoT
+         Xr8FwxjF6XZf51wq/9OS2foSBvNC0Um+bwQwGmRejxCG8NIoktW0jGmYekaq66YkCzEU
+         aHJKpwntd60Im3JIe0SnXh35xxBHhuj+f36Pujn0n9/IJaBbtoav4SSh871yCqcLOBIv
+         LrqQ==
+X-Gm-Message-State: ACgBeo0OKiMEmkKX83UgZJweP/BH19QeJVk0DeEiKwJL+x4BTmsg95CC
+        aeBDoTUALtpa8d4hg6/Z0k9GnQMkUXmsvA==
+X-Google-Smtp-Source: AA6agR6256IN6UnhHmY7Mc33PGDMwJCHqWrhB3Iam39aDneViP7+0NCT5g95gwDa5PcKe+BSqZqdnVGMX0mbVg==
 X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a17:90b:3e8a:b0:1fb:27a0:c39b with SMTP
- id rj10-20020a17090b3e8a00b001fb27a0c39bmr20500444pjb.155.1661803979977; Mon,
- 29 Aug 2022 13:12:59 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 20:12:48 +0000
+ (user=cmllamas job=sendgmr) by 2002:a17:90b:d81:b0:1fd:7fed:4a9c with SMTP id
+ bg1-20020a17090b0d8100b001fd7fed4a9cmr14793656pjb.127.1661803982164; Mon, 29
+ Aug 2022 13:13:02 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 20:12:49 +0000
 In-Reply-To: <20220829201254.1814484-1-cmllamas@google.com>
 Mime-Version: 1.0
 References: <20220829201254.1814484-1-cmllamas@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829201254.1814484-2-cmllamas@google.com>
-Subject: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
+Message-ID: <20220829201254.1814484-3-cmllamas@google.com>
+Subject: [PATCH 2/7] binder: fix trivial kernel-doc typo
 From:   Carlos Llamas <cmllamas@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
@@ -61,15 +61,8 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joel Fernandes <joel@joelfernandes.org>,
         Christian Brauner <brauner@kernel.org>,
         Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Liam Howlett <liam.howlett@oracle.com>
-Cc:     kernel-team@android.com,
-        syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com,
-        syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com,
-        stable@vger.kernel.org,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -81,92 +74,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported a couple issues introduced by commit 44e602b4e52f
-("binder_alloc: add missing mmap_lock calls when using the VMA"), in
-which we attempt to acquire the mmap_lock when alloc->vma_vm_mm has not
-been initialized yet.
+Correct the misspelling of 'invariant' in kernel-doc section.
 
-This can happen if a binder_proc receives a transaction without having
-previously called mmap() to setup the binder_proc->alloc space in [1].
-Also, a similar issue occurs via binder_alloc_print_pages() when we try
-to dump the debugfs binder stats file in [2].
+No functional changes in this patch.
 
-Sample of syzbot's crash report:
-  ==================================================================
-  KASAN: null-ptr-deref in range [0x0000000000000128-0x000000000000012f]
-  CPU: 0 PID: 3755 Comm: syz-executor229 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
-  syz-executor229[3755] cmdline: ./syz-executor2294415195
-  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-  RIP: 0010:__lock_acquire+0xd83/0x56d0 kernel/locking/lockdep.c:4923
-  [...]
-  Call Trace:
-   <TASK>
-   lock_acquire kernel/locking/lockdep.c:5666 [inline]
-   lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
-   down_read+0x98/0x450 kernel/locking/rwsem.c:1499
-   mmap_read_lock include/linux/mmap_lock.h:117 [inline]
-   binder_alloc_new_buf_locked drivers/android/binder_alloc.c:405 [inline]
-   binder_alloc_new_buf+0xa5/0x19e0 drivers/android/binder_alloc.c:593
-   binder_transaction+0x242e/0x9a80 drivers/android/binder.c:3199
-   binder_thread_write+0x664/0x3220 drivers/android/binder.c:3986
-   binder_ioctl_write_read drivers/android/binder.c:5036 [inline]
-   binder_ioctl+0x3470/0x6d00 drivers/android/binder.c:5323
-   vfs_ioctl fs/ioctl.c:51 [inline]
-   __do_sys_ioctl fs/ioctl.c:870 [inline]
-   __se_sys_ioctl fs/ioctl.c:856 [inline]
-   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   [...]
-  ==================================================================
-
-Fix these issues by setting up alloc->vma_vm_mm pointer during open()
-and caching directly from current->mm. This guarantees we have a valid
-reference to take the mmap_lock during scenarios described above.
-
-[1] https://syzkaller.appspot.com/bug?extid=f7dc54e5be28950ac459
-[2] https://syzkaller.appspot.com/bug?extid=a75ebe0452711c9e56d9
-
-Fixes: 44e602b4e52f ("binder_alloc: add missing mmap_lock calls when using the VMA")
-Reported-by: syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com
-Reported-by: syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com
-Cc: <stable@vger.kernel.org> # v5.15+
-Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
 Signed-off-by: Carlos Llamas <cmllamas@google.com>
 ---
- drivers/android/binder_alloc.c | 4 ++--
+ drivers/android/binder_alloc.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index 51f4e1c5cd01..9b1778c00610 100644
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -322,7 +322,6 @@ static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
- 	 */
- 	if (vma) {
- 		vm_start = vma->vm_start;
--		alloc->vma_vm_mm = vma->vm_mm;
- 		mmap_assert_write_locked(alloc->vma_vm_mm);
- 	} else {
- 		mmap_assert_locked(alloc->vma_vm_mm);
-@@ -795,7 +794,6 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
- 	binder_insert_free_buffer(alloc, buffer);
- 	alloc->free_async_space = alloc->buffer_size / 2;
- 	binder_alloc_set_vma(alloc, vma);
--	mmgrab(alloc->vma_vm_mm);
- 
- 	return 0;
- 
-@@ -1091,6 +1089,8 @@ static struct shrinker binder_shrinker = {
- void binder_alloc_init(struct binder_alloc *alloc)
- {
- 	alloc->pid = current->group_leader->pid;
-+	alloc->vma_vm_mm = current->mm;
-+	mmgrab(alloc->vma_vm_mm);
- 	mutex_init(&alloc->mutex);
- 	INIT_LIST_HEAD(&alloc->buffers);
- }
+diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
+index 1e4fd37af5e0..0c37935ff7a2 100644
+--- a/drivers/android/binder_alloc.h
++++ b/drivers/android/binder_alloc.h
+@@ -75,10 +75,10 @@ struct binder_lru_page {
+ /**
+  * struct binder_alloc - per-binder proc state for binder allocator
+  * @vma:                vm_area_struct passed to mmap_handler
+- *                      (invarient after mmap)
++ *                      (invariant after mmap)
+  * @tsk:                tid for task that called init for this proc
+  *                      (invariant after init)
+- * @vma_vm_mm:          copy of vma->vm_mm (invarient after mmap)
++ * @vma_vm_mm:          copy of vma->vm_mm (invariant after mmap)
+  * @buffer:             base of per-proc address space mapped via mmap
+  * @buffers:            list of all buffers for this proc
+  * @free_buffers:       rb tree of buffers available for allocation
 -- 
 2.37.2.672.g94769d06f0-goog
 

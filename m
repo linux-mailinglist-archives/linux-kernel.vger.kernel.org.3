@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F245A581E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74FB5A5827
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiH2Xsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S230111AbiH2Xsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiH2Xrn (ORCPT
+        with ESMTP id S229446AbiH2Xrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:47:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149C1A6ADC;
-        Mon, 29 Aug 2022 16:46:57 -0700 (PDT)
+        Mon, 29 Aug 2022 19:47:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28032A7212;
+        Mon, 29 Aug 2022 16:46:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1AC99CE16AA;
-        Mon, 29 Aug 2022 23:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B024C43149;
-        Mon, 29 Aug 2022 23:46:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8B3261416;
+        Mon, 29 Aug 2022 23:46:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE16C433D6;
+        Mon, 29 Aug 2022 23:46:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816803;
-        bh=4CeSxgNNAqD4J8I2xDVasWksrY8dmv4iPF35HZ2Vs9c=;
+        s=k20201202; t=1661816804;
+        bh=ZrtJr9E9ZvaIDT6FyqnfqLvUkcXvV+S+53NObKdxVyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b+bIjLnAdz8YUnSAzi6vDFyEOd2FM55SLqtjwThWDGdUc56R/Sf2ZKhGhTYLjrpBt
-         dV4D4jR78zKI/YHpMnw/mSGa0+TeMxCJhIeEvFgjU8S6Fb+s31HWTTtVU4YQgnDQeY
-         Yq9HguLgDfOQT5moth4uhu5RyFOBLZlh7t+wo71eQBCR4TUZGOpIWKW8zZTFqD4971
-         qYizzeR1OhQjHN54UW8LnYtS/f/O4gyNDcDddGMU5gMfD6xnpZ5dIYYKVPAmDYM9W6
-         vnTtQ1/k8IURZusQu4937FV7QU4tb0KqxNdu1Cs3rOGsqCjIzuy/EuBpJaILYeJwj0
-         3N0UE+4BSbqDw==
+        b=HnzgB1XEBEwquGL+eMa3bkI50gTv0i4+iOe379TxI4R1Revnj0nzdindtINULHgpc
+         DY2599Puu41hWqcIV9zThx0vtKDmwUmqSosIG0p00dRsBYr+bXC7EzO3X+4AcBvvdx
+         SJ+gz9ZpFn+PAHBMYj7lpXyITnzD8+l8fow99BQ1LdlFfBLrPBubfr5fvGuRzMPOvD
+         uhcDT+R3PkLMsTsoUJyFmf9z9BR8mHSLDw7EcjTDrZ+OhvQLg5v41N8SkYcDjbT4Pp
+         Ghz2/gTVWxSrvVHcFZOIml+6CbxGFvCMCMWxVh24KejVjHqbojRUynzM9N+39TqU/h
+         tlIZ6FhNlBw9w==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     tdas@codeaurora.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, ~postmarketos/upstreaming@lists.sr.ht,
-        jami.kettunen@somainline.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, robh@kernel.org,
-        Martin Botka <martin.botka@somainline.org>,
-        ctatlor97@gmail.com, agross@kernel.org, sboyd@kernel.org
-Subject: Re: [PATCH] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
-Date:   Mon, 29 Aug 2022 18:46:05 -0500
-Message-Id: <166181675962.322065.7577270067001229984.b4-ty@kernel.org>
+To:     mka@chromium.org, Bjorn Andersson <andersson@kernel.org>,
+        robh+dt@kernel.org, konrad.dybcio@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org
+Cc:     dianders@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280-herobrine: Don't enable the USB 2.0 port
+Date:   Mon, 29 Aug 2022 18:46:06 -0500
+Message-Id: <166181675988.322065.1838980983190531415.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220714203822.186448-1-marijn.suijten@somainline.org>
-References: <20220714203822.186448-1-marijn.suijten@somainline.org>
+In-Reply-To: <20220826084813.1.I8c9a771fcf4d1cfb6e8e0ef17a153143af9a644d@changeid>
+References: <20220826084813.1.I8c9a771fcf4d1cfb6e8e0ef17a153143af9a644d@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,23 +57,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 22:38:22 +0200, Marijn Suijten wrote:
-> In commit 3f905469c8ce ("clk: qcom: gcc: Use floor ops for SDCC clocks")
-> floor ops were applied to SDCC2 only, but flooring is also required on
-> the SDCC1 apps clock which is used by the eMMC card on Sony's Nile
-> platform, and otherwise result in the typicial "Card appears
-> overclocked" warnings observed on many other platforms before:
+On Fri, 26 Aug 2022 08:48:27 -0700, Matthias Kaehlcke wrote:
+> The USB 2.0 port of sc7280 is currently not used by any herobrine
+> board. Delete the device tree entries that enable it.
 > 
->     mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
->     mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
->     mmc0: Card appears overclocked; req 104000000 Hz, actual 192000000 Hz
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
-      commit: 6956c18f4ad9200aa945f7ea37d65a05afc49d51
+[1/1] arm64: dts: qcom: sc7280-herobrine: Don't enable the USB 2.0 port
+      commit: 643d05163e3a18f224e4e1a80de09b2b74e1d249
 
 Best regards,
 -- 

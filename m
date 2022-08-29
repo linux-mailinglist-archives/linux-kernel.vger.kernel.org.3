@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794D55A4985
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08ED5A49FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiH2LZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
+        id S232317AbiH2Lbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiH2LXy (ORCPT
+        with ESMTP id S232608AbiH2L3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:23:54 -0400
+        Mon, 29 Aug 2022 07:29:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9972C67E;
-        Mon, 29 Aug 2022 04:15:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000E86C740;
+        Mon, 29 Aug 2022 04:17:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76389B80F91;
-        Mon, 29 Aug 2022 11:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B0CC433D6;
-        Mon, 29 Aug 2022 11:07:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66119B80FA8;
+        Mon, 29 Aug 2022 11:17:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B004AC433B5;
+        Mon, 29 Aug 2022 11:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771261;
-        bh=dYzrEy0JL2Yge+1xE4zJCRSulIl0IZUKNJKzOgvPSrc=;
+        s=korg; t=1661771851;
+        bh=fu51cPml/zweYYB/F7Mk2HqtdVHoi5XycmFY9Fmsyqo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YabyQDofyd1d7TH+BGAm3dIjIYtwKJFtA0wwGM80ZOA+1qFvpa5biWPOCcrXYREpD
-         IUA9NOqXVdUK+nzn+kjpcMdpyb/z8IpG9EsAiQC0u0HgiCGrhwlrQWc6mNbY0qFxDw
-         pWiJQiRYKxrWDuFfIuCYKLHSquXb4qGJmL7Xnhe8=
+        b=iVh0YsVQ9P2K/kgPm9Q+PV53Xcn0b6CQ99dgRbZx3GBIjFCek6SEWytRDUlMuAVw+
+         Jio4KsSBtbpwba675Lir+9FqMtm2DQMIGAspEKEyWd9f4WJ6vy4FB39+HHti2hobG9
+         wOAtzgBy7A1oT9nD3vjPIHJjqwryrL9KdQqfIBNk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gwangun Jung <exsociety@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 067/136] netfilter: nf_tables: disallow binding to already bound chain
+Subject: [PATCH 5.19 084/158] net: ethernet: mtk_eth_soc: enable rx cksum offload for MTK_NETSYS_V2
 Date:   Mon, 29 Aug 2022 12:58:54 +0200
-Message-Id: <20220829105807.382365862@linuxfoundation.org>
+Message-Id: <20220829105812.576260888@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit e02f0d3970404bfea385b6edb86f2d936db0ea2b ]
+[ Upstream commit da6e113ff010815fdd21ee1e9af2e8d179a2680f ]
 
-Update nft_data_init() to report EINVAL if chain is already bound.
+Enable rx checksum offload for mt7986 chipset.
 
-Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
-Reported-by: Gwangun Jung <exsociety@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Link: https://lore.kernel.org/r/c8699805c18f7fd38315fcb8da2787676d83a32c.1654544585.git.lorenzo@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 8bc4460b627ae..d8ca55d6be409 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -9505,6 +9505,8 @@ static int nft_verdict_init(const struct nft_ctx *ctx, struct nft_data *data,
- 			return PTR_ERR(chain);
- 		if (nft_is_base_chain(chain))
- 			return -EOPNOTSUPP;
-+		if (nft_chain_is_bound(chain))
-+			return -EINVAL;
- 		if (desc->flags & NFT_DATA_DESC_SETELEM &&
- 		    chain->flags & NFT_CHAIN_BINDING)
- 			return -EINVAL;
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 59c9a10f83ba5..6beb3d4873a37 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1444,8 +1444,8 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 	int done = 0, bytes = 0;
+ 
+ 	while (done < budget) {
++		unsigned int pktlen, *rxdcsum;
+ 		struct net_device *netdev;
+-		unsigned int pktlen;
+ 		dma_addr_t dma_addr;
+ 		u32 hash, reason;
+ 		int mac = 0;
+@@ -1512,7 +1512,13 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 		pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
+ 		skb->dev = netdev;
+ 		skb_put(skb, pktlen);
+-		if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
++
++		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
++			rxdcsum = &trxd.rxd3;
++		else
++			rxdcsum = &trxd.rxd4;
++
++		if (*rxdcsum & eth->soc->txrx.rx_dma_l4_valid)
+ 			skb->ip_summed = CHECKSUM_UNNECESSARY;
+ 		else
+ 			skb_checksum_none_assert(skb);
+@@ -3761,6 +3767,7 @@ static const struct mtk_soc_data mt7986_data = {
+ 		.txd_size = sizeof(struct mtk_tx_dma_v2),
+ 		.rxd_size = sizeof(struct mtk_rx_dma_v2),
+ 		.rx_irq_done_mask = MTK_RX_DONE_INT_V2,
++		.rx_dma_l4_valid = RX_DMA_L4_VALID_V2,
+ 		.dma_max_len = MTK_TX_DMA_BUF_LEN_V2,
+ 		.dma_len_offset = 8,
+ 	},
 -- 
 2.35.1
 

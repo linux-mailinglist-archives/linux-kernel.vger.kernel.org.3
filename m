@@ -2,85 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB505A44B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BEA5A44B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiH2IMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S229817AbiH2IOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiH2IMb (ORCPT
+        with ESMTP id S229530AbiH2IOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:12:31 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6164DB44;
-        Mon, 29 Aug 2022 01:12:29 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27T7Kcb4014864;
-        Mon, 29 Aug 2022 08:12:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rCGefT0iakgCy9h1CkWjMARQbxfbwXQAnAbhkNyxldY=;
- b=IOQTb9GAnEk2+L/bRdmhnPm8pO+DnccZ929bF4RDQiqLcLtOKdwBRYwcezFiSCs2W/Gk
- uvyowuofZgEmn4pLjBPa3nxcrlidiu+ZYZvSCN5U0oOmOJvOJl7wChgGlapYPeF3jmnk
- 4wFuIbjOcgLCvwNG1UAFhtxka9Tnk/TdcAvpA+/hGoKPJa1hEDkcXCB7hhyib0q/ciHv
- VLhPbAsfbyxE/bJh4Kg6W1dQ1Qhqwck2K9Otr+XjYLuC5Rfxb2yyA5oCNK7Gev3US9Is
- wLXvzoGyJ94EBGnGt4Vsh4vRP35HmCO9LaXqUN3fsw7q4vbC/3VMHfnTEGDUzC+Uu2Fn qw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j7a7ymkuu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 08:12:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27T8CJtl018796
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 08:12:19 GMT
-Received: from [10.79.136.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 29 Aug
- 2022 01:12:14 -0700
-Message-ID: <5ff21b1e-3af9-36ef-e13e-fa33f526d0e3@quicinc.com>
-Date:   Mon, 29 Aug 2022 13:42:02 +0530
+        Mon, 29 Aug 2022 04:14:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC78253015;
+        Mon, 29 Aug 2022 01:14:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3716B80D64;
+        Mon, 29 Aug 2022 08:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1128C433C1;
+        Mon, 29 Aug 2022 08:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661760842;
+        bh=YTySXLUW0r8T5ka2X3JesPLIYBGBWpbu34uaAUBqL3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gsaKAICYviLDNLjnlk6drKvJhFVdTkvpRNblGH+9qt+30dv+mVgEpN7sG/xDWPlav
+         6XjTsoasLcarlpik8rP04xa0Es7Wz7LAEaSiu8PTQ5Hsa4JC0FY+IKtc8L+pv1lTRO
+         fta4NRE/GB5KNRSp5ACFsfK/7/o3uzDWML4Y3xkY=
+Date:   Mon, 29 Aug 2022 10:13:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Feiner <pfeiner@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Cyrill Gorcunov <gorcunov@openvz.org>,
+        Pavel Emelyanov <xemul@parallels.com>,
+        Jamie Liu <jamieliu@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 4.9-stable -- 5.19-stable] mm/hugetlb: fix hugetlb not
+ supporting softdirty tracking
+Message-ID: <Ywx1R+FhHTNIKdoo@kroah.com>
+References: <1661424546448@kroah.com>
+ <20220825143258.36151-1-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] clk: qcom: gcc-sc7180: Keep the USB GDSC always on
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220825182152.v2.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
- <20220826024003.qpqtdmdohdmpcskt@baldur>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20220826024003.qpqtdmdohdmpcskt@baldur>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: v8V2nX2IKlQtRGg1kjfk78fM8O5JEf2f
-X-Proofpoint-GUID: v8V2nX2IKlQtRGg1kjfk78fM8O5JEf2f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_03,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 clxscore=1011 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208290040
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825143258.36151-1-david@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,110 +63,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 8/26/2022 8:10 AM, Bjorn Andersson wrote:
-> On Thu, Aug 25, 2022 at 06:21:58PM -0700, Matthias Kaehlcke wrote:
->> When the GDSC is disabled during system suspend USB is broken on
->> sc7180 when the system resumes. Mark the GDSC as always on to
->> make sure USB still works after system suspend.
->>
->> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+On Thu, Aug 25, 2022 at 04:32:58PM +0200, David Hildenbrand wrote:
+> commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
 > 
-> Rajendra, where you able to find some time to look into take the GDSC
-> into retention state? Do you suggest that I merge these two patches for
-> now?
+> Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
 > 
-
-Hi Bjorn, based on my experiments to support retention on sc7280 these are
-some of my findings
-
-On Platforms which support CX retention (for example sc7180/sc7280) instead of
-CX PowerCollapse (PC), We can leave the GDSC turned ON. When CX transitions to RET state
-the GDSC goes into retention too (some controller state is retained) and USB wakeups work.
-
-On platforms which support CX PC, just leaving the GDSC
-turned ON will not help since the GDSC will also transition to OFF state
-when we enter CX PC, hence wake-ups from USB won't work.
-For such platforms we need to make sure gdsc_force_mem_on() is called
-and cxcs (* @cxcs: offsets of branch registers to toggle mem/periph bits in)
-are populated correctly, while leaving the GDSC turned ON.
-This will make sure usb gdsc transitions from being powered by CX to MX
-when CX hits PC and we still get USB wakeups to work.
-So in short we could do the same thing that this patch does on those
-platforms too with additionally populating the right cxcs entries and it
-should just work fine.
-
-Now the problem that I see with this approach is not with getting USB wakeups
-to work in suspend, but with supporting performance state voting when
-USB is active.
-The last conclusion we had on that [1] was to model usb_gdsc as a subdomain of CX,
-so if we do that and we model usb_gdsc as something that supports ALWAYS_ON,
-we would _never_ drop the CX vote and prevent CX from going down (either to ret
-or pc)
-
-The only way I think we can solve both the USB wakeups and performance state
-needs (with usb_gdsc as a subdomain of CX) is if we can model a RET state for gdsc
-which sets the mem/periph bits while leaving the GDSC ON (Today the RET state sets
-the mem/periph bits but turns the GDSC OFF)
-
-That would mean a change in gdsc.c like this
----
-
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index d3244006c661..0fe017ba901b 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -368,6 +368,10 @@ static int _gdsc_disable(struct gdsc *sc)
-         if (sc->pwrsts & PWRSTS_OFF)
-                 gdsc_clear_mem_on(sc);
-
-+       /* If the GDSC supports RET, do not explicitly power it off */
-+       if (sc->pwrsts & PWRSTS_RET)
-+               return 0;
-+
-         ret = gdsc_toggle_logic(sc, GDSC_OFF);
-         if (ret)
-                 return ret;
-
-
-So with that change, we would then not need the ALWAYS_ON flag set for usb gdsc,
-instead we would update the .pwrsts to PWRSTS_RET_ON instead of PWRSTS_OFF_ON,
-and that should make both usb wake-ups to work and we can still have the usb_gdsc as
-a subdomain of CX for performance state voting.
-Does that sounds like a reasonable solution?
-
-Thanks,
-Rajendra
-
-[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1630346073-7099-2-git-send-email-sanm@codeaurora.org/
-
-> Thanks,
-> Bjorn
+> I observed that hugetlb does not support/expect write-faults in shared
+> mappings that would have to map the R/O-mapped page writable -- and I
+> found two case where we could currently get such faults and would
+> erroneously map an anon page into a shared mapping.
 > 
->> ---
->> I'm not entirely sure that this is the correct solution. What makes
->> me doubt is that only msm8953 sets ALWAYS_ON for the USB GDSC. Is USB
->> broken after suspend on all the other QC platforms?
->>
->> Changes in v2:
->> - set the flags of the GDSC not of the GDSC power domain
->> - updated commit message
->>
->>   drivers/clk/qcom/gcc-sc7180.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
->> index c2ea09945c47..c0d7509a782e 100644
->> --- a/drivers/clk/qcom/gcc-sc7180.c
->> +++ b/drivers/clk/qcom/gcc-sc7180.c
->> @@ -2225,6 +2225,7 @@ static struct gdsc usb30_prim_gdsc = {
->>   		.name = "usb30_prim_gdsc",
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->> +	.flags = ALWAYS_ON,
->>   };
->>   
->>   static struct gdsc hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc = {
->> -- 
->> 2.37.2.672.g94769d06f0-goog
->>
+> Reproducers part of the patches.
+> 
+> I propose to backport both fixes to stable trees.  The first fix needs a
+> small adjustment.
+> 
+> This patch (of 2):
+> 
+> Staring at hugetlb_wp(), one might wonder where all the logic for shared
+> mappings is when stumbling over a write-protected page in a shared
+> mapping.  In fact, there is none, and so far we thought we could get away
+> with that because e.g., mprotect() should always do the right thing and
+> map all pages directly writable.
+> 
+> Looks like we were wrong:
+> 
+> --------------------------------------------------------------------------
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <fcntl.h>
+>  #include <unistd.h>
+>  #include <errno.h>
+>  #include <sys/mman.h>
+> 
+>  #define HUGETLB_SIZE (2 * 1024 * 1024u)
+> 
+>  static void clear_softdirty(void)
+>  {
+>          int fd = open("/proc/self/clear_refs", O_WRONLY);
+>          const char *ctrl = "4";
+>          int ret;
+> 
+>          if (fd < 0) {
+>                  fprintf(stderr, "open(clear_refs) failed\n");
+>                  exit(1);
+>          }
+>          ret = write(fd, ctrl, strlen(ctrl));
+>          if (ret != strlen(ctrl)) {
+>                  fprintf(stderr, "write(clear_refs) failed\n");
+>                  exit(1);
+>          }
+>          close(fd);
+>  }
+> 
+>  int main(int argc, char **argv)
+>  {
+>          char *map;
+>          int fd;
+> 
+>          fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
+>          if (!fd) {
+>                  fprintf(stderr, "open() failed\n");
+>                  return -errno;
+>          }
+>          if (ftruncate(fd, HUGETLB_SIZE)) {
+>                  fprintf(stderr, "ftruncate() failed\n");
+>                  return -errno;
+>          }
+> 
+>          map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+>          if (map == MAP_FAILED) {
+>                  fprintf(stderr, "mmap() failed\n");
+>                  return -errno;
+>          }
+> 
+>          *map = 0;
+> 
+>          if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
+>                  fprintf(stderr, "mmprotect() failed\n");
+>                  return -errno;
+>          }
+> 
+>          clear_softdirty();
+> 
+>          if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
+>                  fprintf(stderr, "mmprotect() failed\n");
+>                  return -errno;
+>          }
+> 
+>          *map = 0;
+> 
+>          return 0;
+>  }
+> --------------------------------------------------------------------------
+> 
+> Above test fails with SIGBUS when there is only a single free hugetlb page.
+>  # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+>  # ./test
+>  Bus error (core dumped)
+> 
+> And worse, with sufficient free hugetlb pages it will map an anonymous page
+> into a shared mapping, for example, messing up accounting during unmap
+> and breaking MAP_SHARED semantics:
+>  # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+>  # ./test
+>  # cat /proc/meminfo | grep HugePages_
+>  HugePages_Total:       2
+>  HugePages_Free:        1
+>  HugePages_Rsvd:    18446744073709551615
+>  HugePages_Surp:        0
+> 
+> Reason in this particular case is that vma_wants_writenotify() will
+> return "true", removing VM_SHARED in vma_set_page_prot() to map pages
+> write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
+> support softdirty tracking.
+> 
+> Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
+> Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
+> Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Peter Feiner <pfeiner@google.com>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Cyrill Gorcunov <gorcunov@openvz.org>
+> Cc: Pavel Emelyanov <xemul@parallels.com>
+> Cc: Jamie Liu <jamieliu@google.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Muchun Song <songmuchun@bytedance.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: <stable@vger.kernel.org>	[3.18+]
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  mm/mmap.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+
+Now queued up, thanks.
+
+greg k-h

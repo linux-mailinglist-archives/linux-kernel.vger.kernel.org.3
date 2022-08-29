@@ -2,136 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147495A4677
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61FB5A45DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiH2JvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S229487AbiH2JRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiH2JvU (ORCPT
+        with ESMTP id S229447AbiH2JQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:51:20 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC2F58B57
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:51:18 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id y3so14615416ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=SlYMUlG2qSvFZB0N2mq5+Vuwq77kZgSrLYVLPhtOEnc=;
-        b=VA8mRlDIJuRpUjAr2wap2tw76G9iqQ95P1eKHRbi0MXQ+y5IRx86u42xLbqDa3N5Uw
-         WBpv8t9zipWs3CctFwvBsrOIu5XtbCOP1buoXyRAK4MLU31Yw5ngEBFKEMkK8zVonfRa
-         j0ONoFy8E5axclexgQI8Deix+KM6vUXYS29+vk/m2cgOGWRgF4irThnGgYZYmbUaOgFL
-         UAiaDDzB1hu/DAZMMj9RMnoiMeWabPFTFH2n9WQhu3VNwHXDNrCWsZF6emYbnh58OVDq
-         r+pUZaGHVx50qLZUXUjESZfGWi8gRrSNSOgOjZjybuBNJVt27lkMLyDAdhTM/SlwI1T9
-         rD/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=SlYMUlG2qSvFZB0N2mq5+Vuwq77kZgSrLYVLPhtOEnc=;
-        b=6MoqbnyKjjF4WVg05ZZhlAe18bHkQJh6miu/tFk1/IKF/bPv0ogyDLulqJ8N6/ieoE
-         8a64f+YsvPqYNHCidxK3nmI5wjI1ziK91K74KvjmSUijyxQHIbzVqdqiY5h7HO7U1pc8
-         gO4HFnip0VfYhrmKMqZfoPeGsAHgFPb/hYotuGx6Hx5nckWO8tI0ZhvsC8QcDEYBjcWF
-         lylGVEqS0iT41krfeHnY8KOax5dEwDe6/q9X+72upAUfU/ab1Gta/kysanvrZruU1moU
-         xqxg91LXZbvRjZ7FHE0YxJWyD9dNasC9VgTAByr/k4T3tTdwSk9Hcz0VeP3N3f0rD1ej
-         3zfw==
-X-Gm-Message-State: ACgBeo0RK9ljegHdff39K8X866Fc+mbQ4rYlv2nZ/D+KogLdVuPfP/kC
-        ImV943dctpZ75HmxGN7+8Gn2Xw==
-X-Google-Smtp-Source: AA6agR7M8nHmvMXeLrqK9slD36AnzRPtNtaEGwJrWTLaeYi3Ldj3MRdNNKrrHzv2HbakO0uElrxasg==
-X-Received: by 2002:a17:907:2d23:b0:730:acf0:4907 with SMTP id gs35-20020a1709072d2300b00730acf04907mr13239673ejc.700.1661766676786;
-        Mon, 29 Aug 2022 02:51:16 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id z2-20020a170906240200b0073c23616cb1sm4374177eja.12.2022.08.29.02.51.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 02:51:16 -0700 (PDT)
-Message-ID: <4749d6b6-c20c-fd20-f904-accee3f1947a@blackwall.org>
-Date:   Mon, 29 Aug 2022 12:51:14 +0300
+        Mon, 29 Aug 2022 05:16:58 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7165A2FD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:16:56 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MGPsn449zzHnWK;
+        Mon, 29 Aug 2022 17:15:09 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 29 Aug 2022 17:16:54 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 29 Aug
+ 2022 17:16:54 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] mm/thp: remove redundant CONFIG_TRANSPARENT_HUGEPAGE
+Date:   Mon, 29 Aug 2022 17:51:25 +0800
+Message-ID: <20220829095125.3284567-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
- extend locked port feature
-Content-Language: en-US
-To:     Ido Schimmel <idosch@nvidia.com>, netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-2-netdev@kapio-technology.com>
- <Ywo16vHMqxxszWzX@shredder>
- <dd9a4156fe421f6be3a49f5b928ef77e@kapio-technology.com>
- <YwxwPJOx/n5SHZM5@shredder>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <YwxwPJOx/n5SHZM5@shredder>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/08/2022 10:52, Ido Schimmel wrote:
-> On Sun, Aug 28, 2022 at 12:23:30PM +0200, netdev@kapio-technology.com wrote:
->> On 2022-08-27 17:19, Ido Schimmel wrote:
->>> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
->>>>
->>>>  	nbp_switchdev_frame_mark(p, skb);
->>>> @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port
->>>> *p, struct nlattr *tb[],
->>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS,
->>>> BR_NEIGH_SUPPRESS);
->>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
->>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
->>>> +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
->>>> +
->>>> +	if (!(p->flags & BR_PORT_LOCKED))
->>>> +		p->flags &= ~BR_PORT_MAB;
->>
->> The reason for this is that I wanted it to be so that if you have MAB
->> enabled (and locked of course) and unlock the port, it will automatically
->> clear both flags instead of having to first disable MAB and then unlock the
->> port.
-> 
-> User space can just do:
-> 
-> # bridge link set dev swp1 locked off mab off
-> 
-> I prefer not to push such logic into the kernel and instead fail
-> explicitly. I won't argue if more people are in favor.
+Simplify code by removing redundant CONFIG_TRANSPARENT_HUGEPAGE judgment.
 
-+1
+No functional change.
 
-I prefer to fail explicitly too, actually I also had a comment about this but
-somehow have managed to delete it before sending my review. :)
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ include/linux/pgtable.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index d9095251bffd..73fb1b2af795 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1289,8 +1289,7 @@ static inline int pgd_devmap(pgd_t pgd)
+ #endif
+ 
+ #if !defined(CONFIG_TRANSPARENT_HUGEPAGE) || \
+-	(defined(CONFIG_TRANSPARENT_HUGEPAGE) && \
+-	 !defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD))
++	!defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD)
+ static inline int pud_trans_huge(pud_t pud)
+ {
+ 	return 0;
+-- 
+2.25.1
+

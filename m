@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15815A517E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3AF5A5184
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiH2QUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S230290AbiH2QVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiH2QUX (ORCPT
+        with ESMTP id S230423AbiH2QVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:20:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1500E140BD;
-        Mon, 29 Aug 2022 09:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11A4061225;
-        Mon, 29 Aug 2022 16:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D25C433D6;
-        Mon, 29 Aug 2022 16:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661790018;
-        bh=rKldEn8GDoqan884Kl27KYDre5RSBwf1soWE1GqIuUI=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Jo27ES0wd1AvWThEa0nNWsF4/0g4E7h6fUZmtGF6fpqKxWQaGM2/7aSaVKcq9vxdz
-         75czUSVooDbVphf884bV11kfN5fPZPvAABfAlW+VFs8USi8AKPQe/brfzmnE7VN68u
-         qhuXnZbyhTKBgKL6ycWq4C7TKJy/ow/hplrFpoxrCBfTHkLX+1JBVzA71cwM3AHn9P
-         l449PrywaV5w/dgku2ObN6ZObfjcAywk7e+8HtteRg64LoBVhLyyXyMO7g5fORlPf1
-         m3JErPnp7uWjth4CxV5kg4QvVma2BsLqYIq5WrNDf2VjFKsPYpgkE7d0f/pr+fx/MI
-         4t1WqSnGXFa2Q==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Qiang Yu <quic_qianyu@quicinc.com>, quic_hemantk@quicinc.com,
-        loic.poulain@linaro.org, quic_jhugo@quicinc.com,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
-        ath11k@lists.infradead.org
-Subject: Re: [PATCH v3 1/1] bus: mhi: host: Fix up null pointer access in mhi_irq_handler
-References: <1658459838-30802-1-git-send-email-quic_qianyu@quicinc.com>
-        <20220726080636.GE5522@workstation> <87czdrrc95.fsf@kernel.org>
-        <20220729142221.GA9937@thinkpad>
-Date:   Mon, 29 Aug 2022 19:20:10 +0300
-In-Reply-To: <20220729142221.GA9937@thinkpad> (Manivannan Sadhasivam's message
-        of "Fri, 29 Jul 2022 19:52:21 +0530")
-Message-ID: <87h71vc98l.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 29 Aug 2022 12:21:17 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2A169F46;
+        Mon, 29 Aug 2022 09:21:14 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 18:21:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661790073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V84lDEZ16EblHvtM8fgyVev0owrVHxHzScy/ND3jaaQ=;
+        b=CaPKCCVzoPf4bcbSMTSpQx2lOZ5yESWOlPHBTiOGHy4YQpHkCtql8IPuRRpSByvC5hO8de
+        6xl8kO3jvz+Vdxt6cwkLhNUnQ9HU+hkqAyGXbfk+QrVReKpiqR0UixIQTF6rHD9/2AuqXA
+        G+ANmKWFLtjqyg/LGkmx1D+5lFNxgSE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>,
+        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Colton Lewis <coltonlewis@google.com>,
+        Peter Gonda <pgonda@google.com>
+Subject: Re: [PATCH v5 6/7] KVM: selftest: Drop now-unnecessary ucall_uninit()
+Message-ID: <20220829162111.wl65dxexk5qtrssf@kamzik>
+References: <20220825232522.3997340-1-seanjc@google.com>
+ <20220825232522.3997340-7-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825232522.3997340-7-seanjc@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Manivannan Sadhasivam <mani@kernel.org> writes:
-
-> On Tue, Jul 26, 2022 at 08:53:58PM +0300, Kalle Valo wrote:
->> Manivannan Sadhasivam <mani@kernel.org> writes:
->> 
->> > +ath11k, Kalle
->> >
->> > On Fri, Jul 22, 2022 at 11:17:18AM +0800, Qiang Yu wrote:
->> >> The irq handler for a shared IRQ ought to be prepared for running
->> >> even now it's being freed. So let's check the pointer used by
->> >> mhi_irq_handler to avoid null pointer access since it is probably
->> >> released before freeing IRQ.
->> >> 
->> >> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
->> >
->> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
->> 
->> This fixes the crash and my regression tests pass now, thanks. But
->> please see my question below.
->> 
->> Tested-by: Kalle Valo <kvalo@kernel.org>
->> 
+On Thu, Aug 25, 2022 at 11:25:21PM +0000, Sean Christopherson wrote:
+> Drop ucall_uninit() and ucall_arch_uninit() now that ARM doesn't modify
+> the host's copy of ucall_exit_mmio_addr, i.e. now that there's no need to
+> reset the pointer before potentially creating a new VM.  The few calls to
+> ucall_uninit() are all immediately followed by kvm_vm_free(), and that is
+> likely always going to hold true, i.e. it's extremely unlikely a test
+> will want to effectively disable ucall in the middle of a test.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/dirty_log_test.c       |  1 -
+>  tools/testing/selftests/kvm/include/ucall_common.h |  6 ------
+>  tools/testing/selftests/kvm/kvm_page_table_test.c  |  1 -
+>  tools/testing/selftests/kvm/lib/aarch64/ucall.c    | 14 ++------------
+>  tools/testing/selftests/kvm/lib/perf_test_util.c   |  1 -
+>  tools/testing/selftests/kvm/lib/riscv/ucall.c      |  4 ----
+>  tools/testing/selftests/kvm/lib/s390x/ucall.c      |  4 ----
+>  tools/testing/selftests/kvm/lib/x86_64/ucall.c     |  4 ----
+>  8 files changed, 2 insertions(+), 33 deletions(-)
 >
-> Thanks Kalle!
 
-I just tested v6.0-rc3 and it's still crashing. What's the plan to get
-this fix to Linus?
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>

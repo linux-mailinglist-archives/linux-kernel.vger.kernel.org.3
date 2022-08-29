@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1AD5A47D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD765A4817
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiH2LCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S230304AbiH2LFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiH2LBv (ORCPT
+        with ESMTP id S230200AbiH2LE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:01:51 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87CE1D0C1;
-        Mon, 29 Aug 2022 04:01:31 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 24F0C1884980;
-        Mon, 29 Aug 2022 11:01:29 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 0C5DA25032B7;
-        Mon, 29 Aug 2022 11:01:29 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id E0ADE9EC0003; Mon, 29 Aug 2022 11:01:28 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Mon, 29 Aug 2022 07:04:58 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1EE6567C
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:03:25 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id b5so9693004wrr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=CpaB3ddJEDe584NFMiOKZhHWMRiirLWO36hNiUSRyEA=;
+        b=MtFVRnlqvFCDp/2JPEM0WuYX9z4sAWXEySwkIEslskyWcWEwk7GwF7mPD8fnNCuka5
+         iZsdTIYsIIz0dJ8SR8H3+W0Q6U7aWML84pUi/t1/GkczgGtm/ASEyvZ2GqlwN6IemqCg
+         MEjwVu9pVjKpjdvaJBfkTI7vFEwtZe2OI9fpO0fPVHxlBbX6Ddw149ocyNxFAAYF+FEz
+         PBuog2YOfo9a95u4PxujzJ1yrwRpOqEXasge7p1iHCzFhINUeq8JLdF9iyBrK5/GboTo
+         +tKXTmep6l6NiakYLuT6k6P7ypdoPHTjvVyi6ADq0r6CGPvaUmuemFRpTkivQXXe2ksn
+         M2fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=CpaB3ddJEDe584NFMiOKZhHWMRiirLWO36hNiUSRyEA=;
+        b=N5TC2PbKwvaUiDWdhQbE2zqR8ZMlSXy7B8vdTw/nS0dRdi/82f3VoiiFAVpUkHdRNt
+         x3V1hCtI4N9qBXgmyiaIVIqcZAbuS7SExpx1P80E/pbr7JrkZNZQrrChk+9V4cDaEhVc
+         4SKfDoz/LWf0pBe++jW/3f+Xdhn1ESzuA4+bTM9vMzIo36+4W/48jTKHEczHJTIOh22r
+         6vKyxyTjD6FCnDU5t6Bc63gs+hVhLpmGYuwhJQS1hYVoHH4jICOiACU7BPZeAFWrcXJY
+         g9d9Dx+GefTaz+33l1fkdplud4cupWk6bnkdZJOFqpDaLoEkdOhTgrW1ZaZYttjuSq2z
+         4Ekg==
+X-Gm-Message-State: ACgBeo1c1TTNqwbct4KBQWHCnMpjgtrxk0IEMoEenUJc30XxDIaLzozX
+        wM9NMvLDnOqwCXgSWoqdwgA=
+X-Google-Smtp-Source: AA6agR6JDbKTJ7JqVUrNRRhnLjrcMSZrxoyQmDSWVWy3eJl6CWzFTpZag8RsDca0Ng4LaNIvdXqZhA==
+X-Received: by 2002:a05:6000:2cc:b0:225:6e25:a9f4 with SMTP id o12-20020a05600002cc00b002256e25a9f4mr6255619wry.330.1661770973922;
+        Mon, 29 Aug 2022 04:02:53 -0700 (PDT)
+Received: from [192.168.0.30] ([47.62.125.55])
+        by smtp.gmail.com with ESMTPSA id a11-20020a5d456b000000b0021f15514e7fsm8078909wrc.0.2022.08.29.04.02.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 04:02:52 -0700 (PDT)
+Message-ID: <2629f8ed-9ca5-3b37-3025-85262e5fe848@gmail.com>
+Date:   Mon, 29 Aug 2022 13:02:51 +0200
 MIME-Version: 1.0
-Date:   Mon, 29 Aug 2022 13:01:28 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
- extend locked port feature
-In-Reply-To: <Ywo16vHMqxxszWzX@shredder>
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-2-netdev@kapio-technology.com>
- <Ywo16vHMqxxszWzX@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <63c78aabe2683b9639717c1a74dbdacc@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 6/6] soc: mediatek: mtk-svs: Use bitfield access macros
+ where possible
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     roger.lu@mediatek.com, khilman@baylibre.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com, kernel@collabora.com
+References: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
+ <20220726141653.177948-7-angelogioacchino.delregno@collabora.com>
+ <fa5f9bc8-f087-02c6-dd31-efa33244bf1b@gmail.com>
+ <5ef83611-1649-c86b-abd8-dff617993580@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <5ef83611-1649-c86b-abd8-dff617993580@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-27 17:19, Ido Schimmel wrote:
-> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
+Hi Angelo,
 
-How about this?
+On 29/08/2022 11:33, AngeloGioacchino Del Regno wrote:
+> Il 25/08/22 15:29, Matthias Brugger ha scritto:
+>>
+>>
+>> On 26/07/2022 16:16, AngeloGioacchino Del Regno wrote:
+>>> In order to enhance readability and safety during registers setup
+>>> and value retrieval, redefine a few register related macros and
+>>> convert all open-coded instances of bitfield setting/retrieval
+>>> to use the FIELD_PREP() and FIELD_GET() macros.
+>>> While at it, some macros were renamed to further enhance readability.
+>>>
+>>> This commit brings no functional changes.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@collabora.com>
+>>
+>> Does not apply, would you mind to resend together with 1/6? Thanks!
+>>
+> 
+> Hey Matthias,
+> 
+> thanks for picking the ones that applied cleanly in the meanwhile.
+> 
+> I'll rebase this and 1/6 as soon as I can!
+> 
 
-diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-index 1064a5b2d478..82bb50851716 100644
---- a/net/bridge/br_input.c
-+++ b/net/bridge/br_input.c
-@@ -103,8 +103,19 @@ int br_handle_frame_finish(struct net *net, struct 
-sock *sk, struct sk_buff *skb
-                         br_fdb_find_rcu(br, eth_hdr(skb)->h_source, 
-vid);
+Nicolas did it already and both of them should be part of Linux next. Let me 
+know if there is anything missing.
 
-                 if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
--                   test_bit(BR_FDB_LOCAL, &fdb_src->flags))
-+                   test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
-+                   test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
-+                       if (!fdb_src || ((READ_ONCE(fdb_src->dst) != p) 
-&&
-+                                        
-(!unlikely(test_bit(BR_FDB_LOCAL, &fdb_src->flags))))) {
-+                               unsigned long flags = 0;
-+
-+                               if (p->flags & BR_PORT_MAB) {
-+                                       __set_bit(BR_FDB_ENTRY_LOCKED, 
-&flags);
-+                                       br_fdb_update(br, p, 
-eth_hdr(skb)->h_source, vid, flags);
-+                               }
-+                       }
-                         goto drop;
-+               }
-         }
-
-         nbp_switchdev_frame_mark(p, skb);
-
-It will allow roaming to a MAB enabled port (no roaming to a simply 
-locked port should be allowed of course), and it will not change a local 
-entry and not rely on 'learning on' on the locked port of course.
-Roaming to an unlocked port will also be allowed, and the locked flag 
-will be removed in this case according to code in br_fdb_update().
+Regards,
+Matthias

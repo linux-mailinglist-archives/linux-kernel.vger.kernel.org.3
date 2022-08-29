@@ -2,162 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CC35A5039
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD92E5A5044
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiH2Pbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S230124AbiH2PdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiH2Pbt (ORCPT
+        with ESMTP id S229566AbiH2PdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:31:49 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D57B28A;
-        Mon, 29 Aug 2022 08:31:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JgcgtidJwyElAY9D1kx1olEJD6/eyCgqn0o+3t1LQaDmKF6yZDkJjwE3pO7KbCYLLKV7m7pkHMnd/Mipaoz8QgftXp1qCewEXZ33jF0Sh8PY/W/o5pU1H+3n9D/aY55DzBErtRkS7PZvzCoI03panI0D8peE8BQmQRCfj+Eyio6BNiw4Nip73pfQjAYwB4PS7hpqw0G1LdMs+Mxpc9eN9Y0bhg7VuwCa/BkJQSuHuaun4rcZ9qmDfMj4//sqj81W2z3AZxnt8hfK0JRvkFk9Tm0cL46/9/E/YDPdkqq2BRKj/0YkmmBtubspoSG27C9CBbIM325Gk5ibacTcypwd+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ppye9aaNmVhn00F4831Q4UHRsnxuZjKUYm/8hll8VqE=;
- b=Y5AKR3M978/ygVocJs+hk2zvWT/Z66bu2vNEwWA+gYalj1qkvWHNf62dseznoiC6gvDRelEm5leqXI7t+e3b+K9uVhdn6kZ530RM6ecJtjWpXv51nW/rB6wdeP5phSoywAf3iGgWYPvsFzAim5d59Xu4WjezC0/HOtajrftKMFM+B2NLMBGGHtvZEwt+dn7TtQgXngR1pfpRA0Onck907Lu2xxR8Fd2y6hWxLVKh4kMG9IgKvk/E9YIC6oiH/9J2pw9+HZHXCAl5clVCe9ArbJwKMjlAJ2mPkZPC7P9cmUhuvrF1KyTjwnFoA7T8U2slbLA9Uc1erek70yIHKkDuzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ppye9aaNmVhn00F4831Q4UHRsnxuZjKUYm/8hll8VqE=;
- b=ZlxXQY8a2SMs7hMaCEHfLnvOhuCx2YG6gqF3+fQdxJ23QwC4QnMNJCRu1KDb5fYtJ4MeEA9j9LeFMA1FMY+ryDUfG4zF16IJKq8RAuPxSwcvKpfqRhNcy5Tmo6ESz5HWRIeIZBPRgGv4TyBMSiIA3SUEykRKCuAMcnNAAJtP9caG1Zs66PgcaM5eEeTEKY7mWu+tkUj58Gi5cJW+fZ44GvSa3QsQLApSYBwUDNQkW3WerKv+5S6VV3Cboe92ifDufBfga7X2Zj6xBZlJebF3UN7437J7ye/O2VpMi7EVn/cq5Wyb9EonQ8FtvhfPJmUDf4RLP3Q4vyy3fQ2aPzt5cA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CY4PR12MB1750.namprd12.prod.outlook.com (2603:10b6:903:11c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Mon, 29 Aug
- 2022 15:31:46 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
- 15:31:46 +0000
-Date:   Mon, 29 Aug 2022 12:31:45 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
-Message-ID: <Ywzb4RmbgbnQYTIl@nvidia.com>
-References: <20220817150542.483291-3-nipun.gupta@amd.com>
- <Yv0KHROjESUI59Pd@kroah.com>
- <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
- <YwOEv6107RfU5p+H@kroah.com>
- <DM6PR12MB3082B4BDD39632264E7532B8E8739@DM6PR12MB3082.namprd12.prod.outlook.com>
- <YwYVhJCSAuYcgj1/@kroah.com>
- <20220824233122.GA4068@nvidia.com>
- <CAGETcx846Pomh_DUToncbaOivHMhHrdt-MTVYqkfLUKvM8b=6w@mail.gmail.com>
- <a6ca5a5a-8424-c953-6f76-c9212db88485@arm.com>
- <DM6PR12MB30824C5129A7251C589F1461E8769@DM6PR12MB3082.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR12MB30824C5129A7251C589F1461E8769@DM6PR12MB3082.namprd12.prod.outlook.com>
-X-ClientProxiedBy: MN2PR20CA0058.namprd20.prod.outlook.com
- (2603:10b6:208:235::27) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 29 Aug 2022 11:33:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8987E001;
+        Mon, 29 Aug 2022 08:33:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D287B810E2;
+        Mon, 29 Aug 2022 15:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D37C433D7;
+        Mon, 29 Aug 2022 15:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661787194;
+        bh=jzNzgbkp8S7F5ShJoRQg4sI4IZkepolVYyaXxRiHuaU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ByRHXZZIPHw1GAtaglSfS40oiwbi3+y+Qo+KygaRYVKAAWamjVRSzpM0+P7rovGiV
+         W2dKwScf6KwNN7nKXRugLMCFD5/wZL8+FZHCOiM4wyFgkUlrxTr9XSWexM9LZ9nnTj
+         35ff9NAvlOEdAT6GycEsYNY9RV4kdgFVbkP9Ll6z1gPX1koy3JruNQFOWIU8LB8eo7
+         2FFQx9wTBfh2wWb4S/d8koZZyazHDPw2TRG36g+2Ckd5XNdf8mf0upqDTETfjFSWmc
+         2JUat1koBEYEk4LmBaJKAlI6K7KKDyGl92OI3/lwI8g4ZPPkwd9Y4zsnK3oDjTJF2u
+         gEhyxb0iFW/Bw==
+Date:   Mon, 29 Aug 2022 17:33:04 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Song Liu <songliubraving@fb.com>, Paul Moore <paul@paul-moore.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "eparis@parisplace.org" <eparis@parisplace.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
+        "cgzones@googlemail.com" <cgzones@googlemail.com>,
+        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
+        "tixxdz@gmail.com" <tixxdz@gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+Message-ID: <20220829153304.nvhakybpkj7erpuc@wittgenstein>
+References: <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com>
+ <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+ <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
+ <20220826152445.GB12466@mail.hallyn.com>
+ <25C89E75-A900-42C7-A8E4-2800AA2E3387@fb.com>
+ <20220826210039.GA15952@mail.hallyn.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6844f3c6-8fb7-49fe-35fe-08da89d3952c
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1750:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sNjs2qmSUZIjSHwe8RpzyYw4TollK0gBdOwA60mni12SMI87vyZD5UqagusYlF7/BQVRHVF+DWGqWaGe0zsZ4UObKRwTBL27Umq4Kp5fPSe9yDEA7lZ+12FVp/RuaFDm4mqZxgvgpifpMeYB/eyTnllM4XOzHwvaDp0ejN8Ec+aZmXyd43L0NvWmiGcqbAySjeboSSxoG641jbG0Sm8sbsx2YLYfasfq2zbNt1qLM7P5o+DP60guZA/VU0urs3hPIpU3e36PHWUkG8YVPLdyPi9bnoDbINrqPzC6rlsyYzt3ecvF/+lzcu8m0ZvW7MtCj2w5RU1gBXoJKr7Uho+G8WfMnW2LCOzh1S1DD3YfnWINpzz0E/HgnQXHx9JwwGazzkkNfFgBoKZixFjoEMl0wefgv14X9Q5ZGM0Ipa73j73Tzfe8+gNC2L74404y6pmVpmb3kw/ihJeElNc0GiTdyzOYu38Jxw1xNoL2JF9J0rnv04YmB5mIiSsi1mll3Agea4LQtWUWBCwi3230JBAJigmybYeXrKhhZyWgJIrQkzc2kXqfvel/y3uYHBdMkjYEorbH6NXQ18LhQl2vOR89Gdriuhh+homwyec4xz7rZaFRvxTGDrhchsN4tTnPKGwfD8Xc3M1kmD3t6fwK6TpXcKhuOaUobu2ohn2ixv8Ld1iD1M5Ou8kOI1Dz93EsW/Wgwc7Vds8akf73+tIkFU3rJw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(366004)(346002)(39860400002)(136003)(316002)(6916009)(54906003)(8676002)(86362001)(4326008)(6486002)(66946007)(66556008)(66476007)(478600001)(5660300002)(36756003)(41300700001)(8936002)(7416002)(4744005)(2616005)(6506007)(38100700002)(2906002)(26005)(6512007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9bkRGbJPxgfjbMDcdNxAuOPUxsRM0UhIRk0g01UaQb6nfbvvMhTHEJqsyHqO?=
- =?us-ascii?Q?h6Hw4wykvDLkoWrxYCFBaBaR7WjkCkOoGfhVlhowwYZd7BltNqObYOpHUeXC?=
- =?us-ascii?Q?ljAMhQg6Abf/CtcnwEyfpnx/FGmURVhe0J1WZ/bQ0A8cFcDP4RsvNjkTkAb9?=
- =?us-ascii?Q?QHzjkSZ6tJfVVWYct6vaUW7+kWJnU07nNPB35NaWgpDMHX+EttekyYUD4oMm?=
- =?us-ascii?Q?BTG+WhIupHr+57IKH1TeazSSEiLGJLTKGVdh2j5pHU6qiIeNsr0vBChZczqa?=
- =?us-ascii?Q?xBE6dKN9SGeI5oU06hWt7gXLipCL3aYOxA9RDWzCeFniKfaIrd4CqXrnVoq5?=
- =?us-ascii?Q?odANncBcAJNmP7wChwH/MukZPQVnipTRelVDZTJK6UqtG50w9ZVjuI43sF89?=
- =?us-ascii?Q?UFGdpB6g0LeAczKmbcxEhWFieptOkXTADPxSrI0CAH03TNZzFYNSwWGw4UII?=
- =?us-ascii?Q?GoLkTfSuNHTf0ssINVc7WZf09pxCyL5qiQvxVJY5BC3bkYwSSoEZsDL7Wuk5?=
- =?us-ascii?Q?3stFH2Vc/pFXixBb0Je7yfrXkpxMOGWDjaCt1RSn6mckKCtwVI7dr5z3wc0y?=
- =?us-ascii?Q?LOnvqC9ZvUkh16SFK7LbI/vcuW3BjKTLoa12KLylwSzuG8ugIS35OqrFsRqq?=
- =?us-ascii?Q?WEnQ0cI2PoMyw0dRiTr8ZSPjo6moky+ykru715Y+RrdLhLeOdRnCJmxpC8GI?=
- =?us-ascii?Q?y6KLj9ICxxTPLNzCO/+mX4dt7BSi+z6Oo119lnRIeTv+0sxPmFdaZecVOjHv?=
- =?us-ascii?Q?+J/ewURqAYJzllWBgp1MzKiuAQzaXmkSI5WnlxXZrjJWf61ZLbSEJbNqgPfp?=
- =?us-ascii?Q?LAXXE13TNNlhF9n6UhlZLtTXmosDrSiogMmDyrFtp0WrrDE2NfstnrMNCXTK?=
- =?us-ascii?Q?c0VImDxJ6CGs8k8WvnfW67/4VFZgoWAielrDnVPl/i7I5yAmPTbiFBKn8YDY?=
- =?us-ascii?Q?GZCqQrkri6Z6bAD50mIPpcxOk8oFxsWuXoGFKulzNG2xlC0/Dcs8nBeEs3EX?=
- =?us-ascii?Q?tl8yrc849gA9EKko5brKBH7NCyEAaIMDQ/CNPKK+EzBnHEAGhmNKhs1TSKP1?=
- =?us-ascii?Q?ogo0xr8owLaG7yKnsPC1ZTdbYiqUoFm+5TKMGt7BlwE6QsbRPcGZ0XCf3RL5?=
- =?us-ascii?Q?HNCzIUigspt94tXdHmXV8//u38Rfm+/C7g7OGxa1ZNiQmbJZv7rGZG9xGE+L?=
- =?us-ascii?Q?YB9ecNWHVLKeltFftOt+TH+OpZ0RMJkWCbgSp9faPCpLonjNiMoSh+K+2q17?=
- =?us-ascii?Q?Ad3bfteBCf6XSlCJxhblYRkjygZXB5oluDwzuS3fQdcouR3UM85tNPKmRnlZ?=
- =?us-ascii?Q?BIWe9ptcen2RnfDjab/fiis4NiMLlByrkEe9VoTymTGyFniYpBjGjqD3SMjM?=
- =?us-ascii?Q?zedy1R/gP0oN7ak4yf5UdE40/xK+L4mueFxc+cQLxzRwYRdonh5UH7lt/yFD?=
- =?us-ascii?Q?YZ+ltAh5/J6Wb8AEo42Pmn6l1hjZgVfQCb4rcQ0rYg9+Z8uDnqNXNVHujvu7?=
- =?us-ascii?Q?MeR8pmZYG5+t+WJcag1aiKEcgzaZF5zWz5rAn+RI6aMAxnwcx9saRtvH9AV3?=
- =?us-ascii?Q?a8I4IM4pKJbdCV4m8rl78AO/MrlvEJrPIF4mLgMl?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6844f3c6-8fb7-49fe-35fe-08da89d3952c
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 15:31:46.2965
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ItY5JfFvpl7l6i5tvWvD06aeZxtiDbDKGm2bgPP5nl11vn+4RZpoIECYjqMFXWbJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1750
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220826210039.GA15952@mail.hallyn.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 04:49:02AM +0000, Gupta, Nipun wrote:
+On Fri, Aug 26, 2022 at 04:00:39PM -0500, Serge Hallyn wrote:
+> On Fri, Aug 26, 2022 at 05:00:51PM +0000, Song Liu wrote:
+> > 
+> > 
+> > > On Aug 26, 2022, at 8:24 AM, Serge E. Hallyn <serge@hallyn.com> wrote:
+> > > 
+> > > On Thu, Aug 25, 2022 at 09:58:46PM +0000, Song Liu wrote:
+> > >> 
+> > >> 
+> > >>> On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
+> > >>> 
+> > >>> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > >>>> Paul Moore <paul@paul-moore.com> writes:
+> > >>>>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> > >>>>>> I am hoping we can come up with
+> > >>>>>> "something better" to address people's needs, make everyone happy, and
+> > >>>>>> bring forth world peace.  Which would stack just fine with what's here
+> > >>>>>> for defense in depth.
+> > >>>>>> 
+> > >>>>>> You may well not be interested in further work, and that's fine.  I need
+> > >>>>>> to set aside a few days to think on this.
+> > >>>>> 
+> > >>>>> I'm happy to continue the discussion as long as it's constructive; I
+> > >>>>> think we all are.  My gut feeling is that Frederick's approach falls
+> > >>>>> closest to the sweet spot of "workable without being overly offensive"
+> > >>>>> (*cough*), but if you've got an additional approach in mind, or an
+> > >>>>> alternative approach that solves the same use case problems, I think
+> > >>>>> we'd all love to hear about it.
+> > >>>> 
+> > >>>> I would love to actually hear the problems people are trying to solve so
+> > >>>> that we can have a sensible conversation about the trade offs.
+> > >>> 
+> > >>> Here are several taken from the previous threads, it's surely not a
+> > >>> complete list, but it should give you a good idea:
+> > >>> 
+> > >>> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+> > >>> 
+> > >>>> As best I can tell without more information people want to use
+> > >>>> the creation of a user namespace as a signal that the code is
+> > >>>> attempting an exploit.
+> > >>> 
+> > >>> Some use cases are like that, there are several other use cases that
+> > >>> go beyond this; see all of our previous discussions on this
+> > >>> topic/patchset.  As has been mentioned before, there are use cases
+> > >>> that require improved observability, access control, or both.
+> > >>> 
+> > >>>> As such let me propose instead of returning an error code which will let
+> > >>>> the exploit continue, have the security hook return a bool.  With true
+> > >>>> meaning the code can continue and on false it will trigger using SIGSYS
+> > >>>> to terminate the program like seccomp does.
+> > >>> 
+> > >>> Having the kernel forcibly exit the process isn't something that most
+> > >>> LSMs would likely want.  I suppose we could modify the hook/caller so
+> > >>> that *if* an LSM wanted to return SIGSYS the system would kill the
+> > >>> process, but I would want that to be something in addition to
+> > >>> returning an error code like LSMs normally do (e.g. EACCES).
+> > >> 
+> > >> I am new to user_namespace and security work, so please pardon me if
+> > >> anything below is very wrong. 
+> > >> 
+> > >> IIUC, user_namespace is a tool that enables trusted userspace code to 
+> > >> control the behavior of untrusted (or less trusted) userspace code. 
+> > > 
+> > > No.  user namespaces are not a way for more trusted code to control the
+> > > behavior of less trusted code.
+> > 
+> > Hmm.. In this case, I think I really need to learn more. 
+> > 
+> > Thanks for pointing out my misunderstanding.
+> 
+> (I thought maybe Eric would chime in with a better explanation, but I'll
+> fill it in for now :)
+> 
+> One of the main goals of user namespaces is to allow unprivileged users
+> to do things like chroot and mount, which are very useful development
+> tools, without needing admin privileges.  So it's almost the opposite
+> of what you said: rather than to enable trusted userspace code to control
+> the behavior of less trusted code, it's to allow less privileged code to
+> do things which do not affect other users, without having to assume *more*
+> privilege.
+> 
+> To be precise, the goals were:
+> 
+> 1. uid mapping - allow two users to both "use uid 500" without conflicting
+> 2. provide (unprivileged) users privilege over their own resources
+> 3. absolutely no extra privilege over other resources
+> 4. be able to nest
+> 
+> While (3) was technically achieved, the problem we have is that
+> (2) provides unprivileged users the ability to exercise kernel code
+> which they previously could not.
 
-> Devices are created in FPFGA with a CDX wrapper, and CDX controller(firmware)
-> reads that CDX wrapper to find out new devices. Host driver then interacts with
-> firmware to find newly discovered devices. This bus aligns with PCI infrastructure.
-> It happens to be an embedded interface as opposed to off-chip connection.
+The consequence of the refusal to give users any way to control whether
+or not user namespaces are available to unprivileged users is that a
+non-significant number of distros still carry the same patch for about
+10 years now that adds an unprivileged_userns_clone sysctl to restrict
+them to privileged users. That includes current Debian and Archlinux btw.
 
-Why do you need an FW in all of this?
+The LSM hook is a simple way to allow administrators to control this and
+will allow user namespaces to be enabled in scenarios where they
+would otherwise not be accepted precisely because they are available to
+unprivileged users.
 
-And why do you need DT at all?
+I fully understand the motivation and usefulness in unprivileged
+scenarios but it's an unfounded fear that giving users the ability to
+control user namespace creation via an LSM hook will cause proliferation
+of setuid binaries (Ignoring for a moment that any fully unprivileged
+container with useful idmappings has to rely on the new{g,u}idmap setuid
+binaries to setup useful mappings anyway.) or decrease system safety let
+alone cause regressions (Which I don't think is an applicable term here
+at all.). Distros that have unprivileged user namespaces turned on by
+default are extremely unlikely to switch to an LSM profile that turns
+them off and distros that already turn them off will continue to turn
+them off whether or not that LSM hook is available.
 
-It is still not clear
-
-Jason
+It's much more likely that workloads that want to minimize their attack
+surface while still getting the benefits of user namespaces for e.g.
+service isolation will feel comfortable enabling them for the first time
+since they can control them via an LSM profile.

@@ -2,148 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873EC5A5358
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD535A535D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiH2Riw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S229702AbiH2Rka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiH2Ris (ORCPT
+        with ESMTP id S229569AbiH2Rk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:38:48 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4424E9C21A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:38:43 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id j1so6838975qvv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:38:43 -0700 (PDT)
+        Mon, 29 Aug 2022 13:40:27 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA27D6B159
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:40:25 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso15417073pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=I/SAEi6d7MQzK2zmN3C2Xz2o5qThFKoSXxNju+OsJpA=;
-        b=ExueIjbnC8ELzM7W1vKR2FOynY1q8Fh3VZ5Wj1BktKSDzf7cIL8U2DbErh6JjFm6MI
-         +O+XGdOHlHUUoIQt8Ed8ALIq247yV826r/JIw6oQejjlRixuULEUd7wNvH/Ij6L62JDF
-         aOxGjuIyzSmlBO++pezTZa8cD0dvXrEZidJmxLXYXjvWRcdHdwSswjCBBi2nRcyGyLmf
-         VUUwbqgShkABLrpa8GQGbu6scME+aVXr2pBRp/NNYMPsxOaIwJwg/1QWOUXPtRjCXnCH
-         7kng41a0spVw6XAnlk7u1C39rsOZgQjbR6QflkHnAS7uxpPA5ePu606KFmGo1/89+u2r
-         uHiA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=s6bYNpML21qzhk9c6rS49HOi5hkJ5sJySwf5mxEe49g=;
+        b=rRgo00unpZZnp/iKatcDw2P9q6aBOTa3VIJ41hGdq2Ue/i2CtTN2avO+BGFzPm7ldJ
+         Q4fcuykOqMRAXY15s1bCTM3iY+m2zAG0mUi09ztJOxDuEVlbao5Vu0ZROdDmba5HZX9z
+         mHPC7Jp3kLqFIbD03qnGdPz08YXFSVzC23jN911UhzBB9JMn0vPw9BKRahCzStPcwpJL
+         vAL6DWNqiIGoRocETe742dBQeMUzBWmIX9gHDnCjreZ718lu4bVA8ktqsjs9QMNp8WVb
+         I3YkJ71m+b5yYqo/m3O5I9esu+OgU2Cw/ZIRjR2ssuxrgD3GVRjq6S7inlqGU5kDWqvQ
+         gd4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=I/SAEi6d7MQzK2zmN3C2Xz2o5qThFKoSXxNju+OsJpA=;
-        b=UR7h3IV6YNksf9dI1OhjYJtc1Ot05tk+/KKYxT0A6OCtNLklX/ZBHEAVtD54PbiNGM
-         pD+l61eeHGzJA8FppX0X1KiUA5Y8DBradrdmjXCWMGzLr+Lt6uaSxNcLD1hJsHfwgx3V
-         dq1Y8rDGEzLpmCQQNwwDYad8aRA3Ns5bZP+ToaG73pkaOBjloOAbTT+toIQg58+YgdV/
-         r7hSKY+UnnU+/73/O0pKL1pgMIWHGnPIpi8R1dVs6c8ipLtWrKrSEt0L/lOdP2UnSKQa
-         sSoYGeQHehpHw6XybFJOQgGrP19pSwQolqpX/bOKU/WLy0obYAVeW9L98qi98DB6JnRA
-         M4MQ==
-X-Gm-Message-State: ACgBeo11p25skmHLwmD8RL0w6E3m0T3gDhQBkbSCAFdiNeGcqD1LBQow
-        R8LOyDdX0dYsNAM3yGJe2Uc=
-X-Google-Smtp-Source: AA6agR7prCnqNNbI5hjcg/QnEFm4SxS15Vz1qgfQQyokaHeubUPKXPU9sds/jGpWQGwpQoMilmTTvQ==
-X-Received: by 2002:a0c:8e8d:0:b0:496:b53d:c775 with SMTP id x13-20020a0c8e8d000000b00496b53dc775mr11474870qvb.36.1661794721961;
-        Mon, 29 Aug 2022 10:38:41 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05620a288800b006bb7ccf6855sm6543583qkp.76.2022.08.29.10.38.40
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=s6bYNpML21qzhk9c6rS49HOi5hkJ5sJySwf5mxEe49g=;
+        b=i7thehAb5jb/hQ+bCzWiB7XvME9d0VpvuLLq8fVZDGlXMvmIJptsdrQul/8fx5vyYB
+         3xXkqlBWhxQC99T7Wjrvo51xXmg3SMPZwOXuCGQ3yIXWaCbtk3+AJBy98s9Psts+c3vK
+         i6vxrsGqk8lq3m71OkvAoXBu5ADa7bByjV1L1Aem/KhZxCmIehOcVhjRTsZKSUx+w0VR
+         w5P41B8WR6bvZHX5ElM6S0b8zsEf3Hhrd9oEud5PboH6fPeOXpeQxQ8Kkr8Sl05cKFX+
+         2j7OvcUkJZQ+OIxR2lk8VzFtXya7kteG2fXFsMnR6mXcGLZwP86LpRW1y+pbW5hGgg8V
+         vG5w==
+X-Gm-Message-State: ACgBeo209FwyXPVcXgAb0Y/U3ZDhkwkYD6rXDpT8gmjGNwEL8EU4gV9T
+        iJDAQc+Q/jeXvulLvmAwmj+3/w==
+X-Google-Smtp-Source: AA6agR5A1l3owXOrDlGd71lrBje/h4zCkOyCf84EtysjEUjXD5K1Zz+Ho52D2qgBJcB1fk3TqmErmw==
+X-Received: by 2002:a17:902:9b85:b0:16e:cc02:b9b2 with SMTP id y5-20020a1709029b8500b0016ecc02b9b2mr17622412plp.74.1661794824904;
+        Mon, 29 Aug 2022 10:40:24 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id r2-20020aa79882000000b0053826ec2a68sm3224505pfl.191.2022.08.29.10.40.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 10:38:41 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     soc@kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org (open list),
-        krzysztof.kozlowski@linaro.org, arnd@arndb.de,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        william.zhang@broadcom.com, anand.gore@broadcom.com
-Subject: [PATCH v2 2/2] arm64: Kconfig.platforms: Group NXP platforms together
-Date:   Mon, 29 Aug 2022 10:38:29 -0700
-Message-Id: <20220829173830.3567047-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220829173830.3567047-1-f.fainelli@gmail.com>
-References: <20220829173830.3567047-1-f.fainelli@gmail.com>
+        Mon, 29 Aug 2022 10:40:23 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 11:40:21 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        weishunc@google.com
+Subject: Re: [PATCH v2 2/9] remoteproc: mediatek: Support hanlding scp core 1
+ wdt timeout
+Message-ID: <20220829174021.GA2264818@p14s>
+References: <20220608083553.8697-1-tinghan.shen@mediatek.com>
+ <20220608083553.8697-3-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608083553.8697-3-tinghan.shen@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group the three NXP platforms under an ARCH_NXP menuconfig symbol to
-make make selection of similar vendor SoCs visually nicer.
+Hi Tinghan,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/arm64/Kconfig.platforms | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+I have started reviewing this set and I expect comments to be spread out over a few
+days.  I will tell you when I am done.
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 748f9ac4d775..61d946e092d3 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -143,12 +143,6 @@ config ARCH_K3
- 	  This enables support for Texas Instruments' K3 multicore SoC
- 	  architecture.
- 
--config ARCH_LAYERSCAPE
--	bool "ARMv8 based Freescale Layerscape SoC family"
--	select EDAC_SUPPORT
--	help
--	  This enables support for the Freescale Layerscape SoC family.
--
- config ARCH_LG1K
- 	bool "LG Electronics LG1K SoC Family"
- 	help
-@@ -207,6 +201,17 @@ config ARCH_MVEBU
- 	   - Armada 8K SoC Family
- 	   - 98DX2530 SoC Family
- 
-+menuconfig ARCH_NXP
-+	bool "NXP SoC support"
-+
-+if ARCH_NXP
-+
-+config ARCH_LAYERSCAPE
-+	bool "ARMv8 based Freescale Layerscape SoC family"
-+	select EDAC_SUPPORT
-+	help
-+	  This enables support for the Freescale Layerscape SoC family.
-+
- config ARCH_MXC
- 	bool "ARMv8 based NXP i.MX SoC family"
- 	select ARM64_ERRATUM_843419
-@@ -221,6 +226,13 @@ config ARCH_MXC
- 	  This enables support for the ARMv8 based SoCs in the
- 	  NXP i.MX family.
- 
-+config ARCH_S32
-+	bool "NXP S32 SoC Family"
-+	help
-+	  This enables support for the NXP S32 family of processors.
-+
-+endif
-+
- config ARCH_NPCM
- 	bool "Nuvoton NPCM Architecture"
- 	select PINCTRL
-@@ -264,11 +276,6 @@ config ARCH_ROCKCHIP
- 	  This enables support for the ARMv8 based Rockchip chipsets,
- 	  like the RK3368.
- 
--config ARCH_S32
--	bool "NXP S32 SoC Family"
--	help
--	  This enables support for the NXP S32 family of processors.
--
- config ARCH_SEATTLE
- 	bool "AMD Seattle SoC Family"
- 	help
--- 
-2.25.1
+Please see below for comments...
 
+On Wed, Jun 08, 2022 at 04:35:46PM +0800, Tinghan Shen wrote:
+> MT8195 SCP is a dual-core processor. The SCP core 1 watchdog timeout
+> interrupt uses the same interrupt line of SCP core 0 watchdog timeout
+> interrupt.
+> 
+> Add support for handling SCP core 1 watchdog timeout interrupt in the
+> SCP IRQ handler.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  drivers/remoteproc/mtk_common.h |  4 ++++
+>  drivers/remoteproc/mtk_scp.c    | 27 ++++++++++++++++++++++++++-
+>  2 files changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
+> index ea6fa1100a00..73e8adf00de3 100644
+> --- a/drivers/remoteproc/mtk_common.h
+> +++ b/drivers/remoteproc/mtk_common.h
+> @@ -54,6 +54,10 @@
+>  #define MT8192_CORE0_WDT_IRQ		0x10030
+>  #define MT8192_CORE0_WDT_CFG		0x10034
+>  
+> +#define MT8195_SYS_STATUS		0x4004
+> +#define MT8195_CORE0_WDT		BIT(16)
+> +#define MT8195_CORE1_WDT		BIT(17)
+> +
+>  #define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
+>  
+>  #define SCP_FW_VER_LEN			32
+> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> index 47b2a40e1b4a..3510c6d0bbc8 100644
+> --- a/drivers/remoteproc/mtk_scp.c
+> +++ b/drivers/remoteproc/mtk_scp.c
+> @@ -212,6 +212,31 @@ static void mt8192_scp_irq_handler(struct mtk_scp *scp)
+>  	}
+>  }
+>  
+> +static void mt8195_scp_irq_handler(struct mtk_scp *scp)
+> +{
+> +	u32 scp_to_host;
+> +
+> +	scp_to_host = readl(scp->reg_base + MT8192_SCP2APMCU_IPC_SET);
+> +
+> +	if (scp_to_host & MT8192_SCP_IPC_INT_BIT) {
+> +		scp_ipi_handler(scp);
+> +
+> +		/*
+> +		 * SCP won't send another interrupt until we clear
+> +		 * MT8192_SCP2APMCU_IPC.
+> +		 */
+> +		writel(MT8192_SCP_IPC_INT_BIT,
+> +		       scp->reg_base + MT8192_SCP2APMCU_IPC_CLR);
+> +	} else {
+> +		if (readl(scp->reg_base + MT8195_SYS_STATUS) & MT8195_CORE1_WDT) {
+> +			writel(1, scp->reg_base + MT8195_CORE1_WDT_IRQ);
+> +		} else {
+> +			writel(1, scp->reg_base + MT8192_CORE0_WDT_IRQ);
+> +			scp_wdt_handler(scp, scp_to_host);
+
+Why is scp_wdt_handler() not called when CORE1 signals a watchdog failure?  If
+this is the intended behaviour there is no way for anyone but you to know that
+it is the case.  
+
+> +		}
+> +	}
+> +}
+> +
+>  static irqreturn_t scp_irq_handler(int irq, void *priv)
+>  {
+>  	struct mtk_scp *scp = priv;
+> @@ -961,7 +986,7 @@ static const struct mtk_scp_of_data mt8192_of_data = {
+>  static const struct mtk_scp_of_data mt8195_of_data = {
+>  	.scp_clk_get = mt8195_scp_clk_get,
+>  	.scp_before_load = mt8195_scp_before_load,
+> -	.scp_irq_handler = mt8192_scp_irq_handler,
+> +	.scp_irq_handler = mt8195_scp_irq_handler,
+>  	.scp_reset_assert = mt8192_scp_reset_assert,
+>  	.scp_reset_deassert = mt8192_scp_reset_deassert,
+>  	.scp_stop = mt8195_scp_stop,
+> -- 
+> 2.18.0
+> 

@@ -2,82 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759425A4C29
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA0B5A4C2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiH2Mna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S229936AbiH2Moe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiH2MnC (ORCPT
+        with ESMTP id S229898AbiH2MoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:43:02 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78A19411A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:27:51 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by gnuweeb.org (Postfix) with ESMTPSA id 6E1F2809CF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 12:27:50 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1661776070;
-        bh=F3P0jtYe8nBBFXZxxubIcGD7PfjN1LKYQeyor8Ohfao=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hnHmjuybxncoUr/QXrr0zwmmO5H7sZXbDhSBkRu+5H95jeJ04EzsNX3c7JRgnrLxY
-         KeaMEGtVG+vnsLk+NqC5hsXtQBwB5mPkTbyJbE3tfqCf3rpgx0OUWQ2e4Q0ZNJGWPr
-         9r+XG0NfCAWDjrQ/ko9zbOZOUhFH7LUhQKeL+BgsEbjHh40/gZfCFATrRezTKm8UE4
-         HP6XSLI882kHdLmjrbid+PudCtjkOHCaATFEVrX5s5/Szfh5BaDVv1iMW0Bw7tK0zt
-         OtYTgde6RKHq/fr1R6lmTMxVdiUygm7A8OH0Bkj6OJxiLte7y1dNcGk8npnnu39nyl
-         r5om56wW1C+Tw==
-Received: by mail-ed1-f48.google.com with SMTP id b44so9879960edf.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:27:50 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0wjqyfqq0vdm/co0W+4Rx6If5lPhHqTODBUBgl0l96g/5I4+JB
-        xvH8BFYSFG+4Frfy9I5enksNfa/THuhH2twNPBI+3g==
-X-Google-Smtp-Source: AA6agR6/MaCwdTGYPhxBfRk9aiC96sUXc/nQmdHSZZRK4ihB3EWrLnr+Dp4zIwQ7qLnb+azquQLTlBSE8gM9pP+lBEM=
-X-Received: by 2002:a05:6512:2353:b0:492:db5e:775b with SMTP id
- p19-20020a056512235300b00492db5e775bmr5846597lfu.656.1661776058426; Mon, 29
- Aug 2022 05:27:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829115516.267647-1-cui.jinpeng2@zte.com.cn>
-In-Reply-To: <20220829115516.267647-1-cui.jinpeng2@zte.com.cn>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Date:   Mon, 29 Aug 2022 19:27:27 +0700
-X-Gmail-Original-Message-ID: <CAGzmLMV80OLRB+OA=SLk5fEvy2jecYogg636D_HijgzthUoqnQ@mail.gmail.com>
-Message-ID: <CAGzmLMV80OLRB+OA=SLk5fEvy2jecYogg636D_HijgzthUoqnQ@mail.gmail.com>
-Subject: Re: [PATCH linux-next] wifi: cfg80211: remove redundant err variable
-To:     cgel.zte@gmail.com
-Cc:     aspriel@gmail.com, franky.lin@broadcom.com,
-        hante.meuleman@broadcom.com, kvalo@kernel.org,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        johannes.berg@intel.com, a.fatoum@pengutronix.de,
-        quic_vjakkam@quicinc.com, loic.poulain@linaro.org,
-        hzamani.cs91@gmail.com, hdegoede@redhat.com, smoch@web.de,
-        prestwoj@gmail.com, Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mon, 29 Aug 2022 08:44:15 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556B79E881
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:29:21 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id n8-20020a17090a73c800b001fd832b54f6so5752871pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=CQmPQiZbqJl3F1hmW3HEOlbIzS9LIPFvPFvLkS4xj3A=;
+        b=OYKzSZaMCxX4OXsRl1egB+pH2XdaiGlHR5RdNXaCcpG2JWVN+/X1Gg4jhGTuCDsqS3
+         xQieVSf1ZVHuHezy46Pz4X+r+auMgAbjBZQqJIJUUjOFGfo9M/1BecpJdnVqVzJcQR+D
+         5zpoqRsdzwxL0jC6akJ2u4RWY514EZfImXJpiUfHPxD8xYpSL7RelRug948NB8icEPdU
+         h+9D5swl8uKtXhJfYIVoX01taLqe2M+7S8YYVOcxB2yXMSrKBBir5LhqjRq8b+spCs4S
+         okHtMa1GHZFw9vgDHKKnENsXw1j2uNmLPbCla5eOLzm56Wev5V7DrzTS5rWp51z6BaUh
+         Tbzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=CQmPQiZbqJl3F1hmW3HEOlbIzS9LIPFvPFvLkS4xj3A=;
+        b=VGKr5xCc+SI4AzUNRMMqErhNw5K0Zt9VTABAjfwedkjzCaKn9Lm4AOvW6gnrzEaVxw
+         behAWu0H4t7RPrIMQeuLK9YyrZR8EXcGPsdnMzxpJ6ytCKKgNh8lWqfWOIeo0i4tXHIP
+         54JxhNU48LC8H/S8IUqDTfQ1WgqIES94Q9KwPcLvcpLrNbul5kzPRIF9DlUj0cI4Zle/
+         i/dmHuhMSRPiWlmT+8cFf4cjH9veDkY+LTlKPdawtX998JQoDdkUBoxCr29UzVaA7gCd
+         iJMfxWI3caJFp3clTRDRcEEnMNuyoZs/5mhvDibX6EJUOUW8ecRVHIP/f3L+VQY2cLhE
+         JzQA==
+X-Gm-Message-State: ACgBeo0WUHP8G/Z0pvlDx1XMPNgSlnQqD2rbAKoQpMgyth+eBZpmddCQ
+        xHo5ejON+hAftvrSoWHqEfI=
+X-Google-Smtp-Source: AA6agR4ERp49BkEJRZeAPhtidKBWr2tA9X2Jqu9y5S2+tKQ9seYBETGT092ViFsKvqltgF+DFoNh7A==
+X-Received: by 2002:a17:902:be16:b0:170:8ebf:204c with SMTP id r22-20020a170902be1600b001708ebf204cmr17047264pls.47.1661776160098;
+        Mon, 29 Aug 2022 05:29:20 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b202-20020a621bd3000000b005377c854b50sm7109553pfb.1.2022.08.29.05.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 05:29:19 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com
+Cc:     airlied@linux.ie, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH linux-next] drm/amdkfd: remove redundant variables err and ret
+Date:   Mon, 29 Aug 2022 12:29:14 +0000
+Message-Id: <20220829122914.268251-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 7:12 PM wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
->
-> Return value from brcmf_fil_iovar_data_set() and
-> brcmf_config_ap_mgmt_ie() directly instead of
-> taking this in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Reviewed-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Return value from kfd_wait_on_events() and io_remap_pfn_range() directly
+instead of taking this in another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+index 664e8b5d82c0..84da1a9ce37c 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+@@ -876,14 +876,11 @@ static int kfd_ioctl_wait_events(struct file *filp, struct kfd_process *p,
+ 				void *data)
+ {
+ 	struct kfd_ioctl_wait_events_args *args = data;
+-	int err;
+ 
+-	err = kfd_wait_on_events(p, args->num_events,
++	return kfd_wait_on_events(p, args->num_events,
+ 			(void __user *)args->events_ptr,
+ 			(args->wait_for_all != 0),
+ 			&args->timeout, &args->wait_result);
+-
+-	return err;
+ }
+ static int kfd_ioctl_set_scratch_backing_va(struct file *filep,
+ 					struct kfd_process *p, void *data)
+@@ -2860,7 +2857,6 @@ static int kfd_mmio_mmap(struct kfd_dev *dev, struct kfd_process *process,
+ 		      struct vm_area_struct *vma)
+ {
+ 	phys_addr_t address;
+-	int ret;
+ 
+ 	if (vma->vm_end - vma->vm_start != PAGE_SIZE)
+ 		return -EINVAL;
+@@ -2880,12 +2876,11 @@ static int kfd_mmio_mmap(struct kfd_dev *dev, struct kfd_process *process,
+ 		 process->pasid, (unsigned long long) vma->vm_start,
+ 		 address, vma->vm_flags, PAGE_SIZE);
+ 
+-	ret = io_remap_pfn_range(vma,
++	return io_remap_pfn_range(vma,
+ 				vma->vm_start,
+ 				address >> PAGE_SHIFT,
+ 				PAGE_SIZE,
+ 				vma->vm_page_prot);
+-	return ret;
+ }
+ 
+ 
+-- 
+2.25.1
+

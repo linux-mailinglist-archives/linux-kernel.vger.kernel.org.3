@@ -2,217 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E166C5A40E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 04:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ED95A40E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 04:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiH2CI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 Aug 2022 22:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S229538AbiH2CKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 Aug 2022 22:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiH2CI0 (ORCPT
+        with ESMTP id S229447AbiH2CKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 Aug 2022 22:08:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED7E2F007
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661738903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KIRE7tLozpF13xOfhfNz9hpJ1HAcNIfOccgt3ayzJTM=;
-        b=Kzy3Tkh0Uslln9eDE9qe1jDF2ktNXVecV3nmLbo52J10gJ2io82P1mOyf9wV9K719FP2Eh
-        lNOQ+mPccJ6gysoyahqOyu8KcPxhMpF3NIyy6J7555lYOjfqejTDV5zNiWr1zEUCFTde0W
-        TUGU1kOiYbAOz/bwiV+bJfGPgst+EMw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-PO_VuX-wMBaFVBYLINPJrQ-1; Sun, 28 Aug 2022 22:08:22 -0400
-X-MC-Unique: PO_VuX-wMBaFVBYLINPJrQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D563B1C05136;
-        Mon, 29 Aug 2022 02:08:21 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 63B412026D64;
-        Mon, 29 Aug 2022 02:08:15 +0000 (UTC)
-Date:   Mon, 29 Aug 2022 10:08:11 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, ming.lei@redhat.com
-Subject: Re: [RFC PATCH 0/9] ublk_drv: add USER_RECOVERY support
-Message-ID: <Ywwfi7Dgi0JC2kQ/@T590>
-References: <20220824054744.77812-1-ZiyangZhang@linux.alibaba.com>
+        Sun, 28 Aug 2022 22:10:31 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7B1705C
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 19:10:30 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGDP02YkQznTd5;
+        Mon, 29 Aug 2022 10:08:04 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 29 Aug 2022 10:10:28 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 29 Aug 2022 10:10:27 +0800
+Subject: Re: [PATCH -next v3 1/5] frontswap: skip frontswap_ops init if zswap
+ init failed.
+To:     Vitaly Wool <vitaly.wool@konsulko.com>
+References: <20220827104600.1813214-1-liushixin2@huawei.com>
+ <20220827104600.1813214-2-liushixin2@huawei.com>
+ <CAM4kBB+z6jNKNOv9zK8qxku172abPmQ_XZ7YdyJyf=_NDjRVHA@mail.gmail.com>
+CC:     Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <06a79a47-727f-fae2-4620-dcf6703efacb@huawei.com>
+Date:   Mon, 29 Aug 2022 10:10:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824054744.77812-1-ZiyangZhang@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAM4kBB+z6jNKNOv9zK8qxku172abPmQ_XZ7YdyJyf=_NDjRVHA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 01:47:35PM +0800, ZiyangZhang wrote:
-> ublk_drv is a driver simply passes all blk-mq rqs to ublksrv[1] in
-> userspace. For each ublk queue, there is one ubq_daemon(pthread).
-> All ubq_daemons share the same process which opens /dev/ublkcX.
-> The ubq_daemon code infinitely loops on io_uring_enter() to
-> send/receive io_uring cmds which pass information of blk-mq
-> rqs.
-> 
-> Now, if one ubq_daemon(pthread) or the process crashes, ublk_drv
-> must abort the dying ubq, stop the device and release everything.
-> This is not a good choice in practice because users do not expect
-> aborted requests, I/O errors and a released device. They may want
-> a recovery machenism so that no requests are aborted and no I/O
-> error occurs. Anyway, users just want everything works as uaual.
-
-I understand the requirement is that both /dev/ublkbN and /dev/ublkcN
-won't be deleted & re-added from user viewpoint after user recovery,
-so the device context won't be lost.
-
-> 
-> This RFC patchset implements USER_RECOVERY support. If the process
-> crashes, we allow ublksrv to provide new process and ubq_daemons.
-> We do not support single ubq_daemon(pthread) recovery because a
-> pthread rarely crashes.
-> 
-> Recovery feature is quite useful for products do not expect to
-> return any I/O error to frontend users.
-
-That looks one very ideal requirement. To be honest, no any block driver
-can guarantee that 100%, so it is just one soft requirement?
-
-Cause memory allocation may fail, network may be disconnected,
-re-creating pthread or process may fail too, ...
-
-> In detail, we support
-> this scenario:
-> (1) The /dev/ublkc0 is opened by process 0;
-> (2) Fio is running on /dev/ublkb0 exposed by ublk_drv and all
->     rqs are handled by process 0.
-> (3) Process 0 suddenly crashes(e.g. segfault);
-> (4) Fio is still running and submit IOs(but these IOs cannot
->     complete now)
-> (5) User recovers with process 1 and attach it to /dev/ublkc0
-> (6) All rqs are handled by process 1 now and IOs can be
->     completed now.
-> 
-> Note: The backend must tolerate double-write because we re-issue
-> a rq sent to the old(dying) process before. We allow users to
-> choose whether re-issue these rqs or not, please see patch 7 for
-> more detail.
-> 
-> We provide a sample script here to simulate the above steps:
-> 
-> ***************************script***************************
-> LOOPS=10
-> 
-> __ublk_get_pid() {
-> 	pid=`./ublk list -n 0 | grep "pid" | awk '{print $7}'`
-> 	echo $pid
-> }
-> 
-> ublk_recover_kill()
-> {
-> 	for CNT in `seq $LOOPS`; do
-> 		dmesg -C
->                 pid=`__ublk_get_pid`
->                 echo -e "*** kill $pid now ***"
-> 		kill -9 $pid
-> 		sleep 2
->                 echo -e "*** recover now ***"
->                 ./ublk recover -n 0
-
-The current behavior is that /dev/ublkb* is removed after device is
-aborted because ubq daemon is killed.
-
-What if 'ublk recover' command isn't sent? So the current behavior
-without recovery is changed? Or just changed with this feature enabled?
-
-BTW, I do not mean the change isn't reasonable, but suggest to document
-the user visible change, so it can get reviewed from either user
-viewpoint and technical point.
-
-> 		sleep 4
-> 	done
-> }
-> 
-> ublk_test()
-> {
->         dmesg -C
->         echo -e "*** add ublk device ***"
->         ./ublk add -t null -d 4 -i 1
->         sleep 2
->         echo -e "*** start fio ***"
->         fio --bs=4k \
->             --filename=/dev/ublkb0 \
->             --runtime=100s \
->             --rw=read &
->         sleep 4
->         ublk_recover_kill
->         wait
->         echo -e "*** delete ublk device ***"
->         ./ublk del -n 0
-> }
-> 
-> for CNT in `seq 4`; do
->         modprobe -rv ublk_drv
->         modprobe ublk_drv
->         echo -e "************ round $CNT ************"
->         ublk_test
->         sleep 5
-> done
-> ***************************script***************************
-> 
-> You may run it with our modified ublksrv[3] which supports
-> recovey feature. No I/O error occurs and you can verify it
-> by typing
->     $ perf-tools/bin/tpoint block:block_rq_error
-> 
-> The basic idea of USER_RECOVERY is quite straightfoward:
-> 
-> (1) release/free everything belongs to the dying process.
-> 
->     Note: Since ublk_drv does save information about user process,
->     this work is important because we don't expect any resource
->     lekage. Particularly, ioucmds from the dying ubq_daemons
->     need to be completed(freed). Current ublk_drv code cannot satisfy
->     our need while considering USER_RECOVERY. So we refactor some code
->     shown in patch 1-5 to gracefully free all ioucmds.
-> 
-> (2) init ublk queues including requeuing/aborting rqs.
-> 
-> (3) allow new ubq_daemons issue FETCH_REQ.
-> 
-> Here is steps to reocver:
-> 
-> (1) For a user, after a process crash(how he detect a crash is not related
->     to this patchset), he sends START_USER_RECOVERY ctrl-cmd to
-
-I'd suggest to describe crash detector a bit at least, as one whole use case,
-crash detector should be the input of the use case of user recovery, which is
-usually one part of use case when modeling software requirement/design.
-
-Such as, crash is detected after the ubq daemon pthread/process is crashed?
-Will you consider io hang in the daemon pthread/process? IMO, long-term,
-the crash detector utility should be part of ublksrv.
-
-We don't implement ublk driver's IO timeout yet, but that implementation may be
-related with this recovery feature closely, such as, one simple approach is to
-kill ubq-daemon if we can't move on after retrying several times, then
-let userspace detect & recovery.
-
+On 2022/8/29 4:44, Vitaly Wool wrote:
+> On Sat, Aug 27, 2022 at 12:12 PM Liu Shixin <liushixin2@huawei.com> wrote:
+>> If zswap initial failed or has not been initial, frontswap_ops will be
+>> NULL. In such situation, swap device would enable failed with following
+>> stack trace:
+>>
+>>   Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000000
+>>   Mem abort info:
+>>     ESR = 0x0000000096000004
+>>     EC = 0x25: DABT (current EL), IL = 32 bits
+>>     SET = 0, FnV = 0
+>>     EA = 0, S1PTW = 0
+>>     FSC = 0x04: level 0 translation fault
+>>   Data abort info:
+>>     ISV = 0, ISS = 0x00000004
+>>     CM = 0, WnR = 0
+>>   user pgtable: 4k pages, 48-bit VAs, pgdp=00000020a4fab000
+>>   [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+>>   Internal error: Oops: 96000004 [#1] SMP
+>>   Modules linked in: zram fsl_dpaa2_eth pcs_lynx phylink ahci_qoriq crct10dif_ce ghash_ce sbsa_gwdt fsl_mc_dpio nvme lm90 nvme_core at803x xhci_plat_hcd rtc_fsl_ftm_alarm xgmac_mdio ahci_platform i2c_imx ip6_tables ip_tables fuse
+>>   Unloaded tainted modules: cppc_cpufreq():1
+>>   CPU: 10 PID: 761 Comm: swapon Not tainted 6.0.0-rc2-00454-g22100432cf14 #1
+>>   Hardware name: SolidRun Ltd. SolidRun CEX7 Platform, BIOS EDK II Jun 21 2022
+>>   pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>   pc : frontswap_init+0x38/0x60
+>>   lr : __do_sys_swapon+0x8a8/0x9f4
+>>   sp : ffff80000969bcf0
+>>   x29: ffff80000969bcf0 x28: ffff37bee0d8fc00 x27: ffff80000a7f5000
+>>   x26: fffffcdefb971e80 x25: ffffaba797453b90 x24: 0000000000000064
+>>   x23: ffff37c1f209d1a8 x22: ffff37bee880e000 x21: ffffaba797748560
+>>   x20: ffff37bee0d8fce4 x19: ffffaba797748488 x18: 0000000000000014
+>>   x17: 0000000030ec029a x16: ffffaba795a479b0 x15: 0000000000000000
+>>   x14: 0000000000000000 x13: 0000000000000030 x12: 0000000000000001
+>>   x11: ffff37c63c0aba18 x10: 0000000000000000 x9 : ffffaba7956b8c88
+>>   x8 : ffff80000969bcd0 x7 : 0000000000000000 x6 : 0000000000000000
+>>   x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffffaba79730f000
+>>   x2 : ffff37bee0d8fc00 x1 : 0000000000000000 x0 : 0000000000000000
+>>   Call trace:
+>>   frontswap_init+0x38/0x60
+>>   __do_sys_swapon+0x8a8/0x9f4
+>>   __arm64_sys_swapon+0x28/0x3c
+>>   invoke_syscall+0x78/0x100
+>>   el0_svc_common.constprop.0+0xd4/0xf4
+>>   do_el0_svc+0x38/0x4c
+>>   el0_svc+0x34/0x10c
+>>   el0t_64_sync_handler+0x11c/0x150
+>>   el0t_64_sync+0x190/0x194
+>>   Code: d000e283 910003fd f9006c41 f946d461 (f9400021)
+>>   ---[ end trace 0000000000000000 ]---
+>>
+> Well, this issue you are seeing is in fact introduced by the following patch:
+>
+> author Christoph Hellwig <hch@lst.de> 2022-01-21 22:15:10 -0800
+> frontswap: remove support for multiple ops
+>
+> So I would rather see that one reverted and fixed.
+>
+> Thanks,
+> Vitaly
+It is surely introduced by the previous patch ,but is it need to revert that patch? Do we have
+any plans to add new backend in the future?
 
 Thanks,
-Ming
+>
+>> Reported-by: Nathan Chancellor <nathan@kernel.org>
+>> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+>> ---
+>>  mm/frontswap.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/frontswap.c b/mm/frontswap.c
+>> index 1a97610308cb..620f95af81dd 100644
+>> --- a/mm/frontswap.c
+>> +++ b/mm/frontswap.c
+>> @@ -125,7 +125,8 @@ void frontswap_init(unsigned type, unsigned long *map)
+>>          * p->frontswap set to something valid to work properly.
+>>          */
+>>         frontswap_map_set(sis, map);
+>> -       frontswap_ops->init(type);
+>> +       if (frontswap_ops)
+>> +               frontswap_ops->init(type);
+>>  }
+>>
+>>  static bool __frontswap_test(struct swap_info_struct *sis,
+>> --
+>> 2.25.1
+>>
+> .
+>
 

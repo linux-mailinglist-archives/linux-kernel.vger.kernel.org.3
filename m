@@ -2,268 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9CE5A46B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969155A46B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiH2KCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
+        id S229811AbiH2KCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiH2KC1 (ORCPT
+        with ESMTP id S229679AbiH2KCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:02:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716C511803
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 03:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661767342;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wkKI/e1ijmRvMdolNAM15YHl9n1m93N5zsRwzW/IjhE=;
-        b=OpynaSou4qPUngFwCiW020OKWYkYOsPUa7zILo/MdJanQetz2Wewzx+XI9rhNVasOVR4bD
-        HyaaGoB4ODYEMFR3eRQXLrn9wuL7OYrKcrnxfsGosGqYPEYyJLtWc2schBGDnGtlDM9Iyi
-        UR7HoborbKTVIsSN9f+50KpKEo2gdiI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-gK4hssKFO-elgX9KUB9tkw-1; Mon, 29 Aug 2022 06:02:20 -0400
-X-MC-Unique: gK4hssKFO-elgX9KUB9tkw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 29 Aug 2022 06:02:30 -0400
+Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0AB5EDDF;
+        Mon, 29 Aug 2022 03:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1661767344; i=@fujitsu.com;
+        bh=dk7CW0RgFnm2w8LkfxMFDMaV4x7pu5LS2/dYqlV9UW0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=c7lnzBydVYjppzDwG7pfKqNrLrQ31NIF8tGahIPpT4RLFYSR9BOMsRktFxe/1IKxi
+         euXa/4ahDuYyEp7G2S2NIFm2nGoqCakoAsxCJJamgY29QJYV3U8HIGOohhLO3+BrwB
+         qIbvtHdHEHIO+B1BmdDnrZph/bDjXI0q7RxMSoDSl1EZsFCC59Ms9jYm8SK4MOmSMs
+         TtTU//lKxIP57hRdnRX9BCvhKY7O7bj4AzWd1PBIx0nvE9AHKeHAbS38APlW5j55O0
+         UI55jL2geilMTIB1fj9LnIv9zEcm4CcfEnY3pUi4y493uJ2hiVtQAgXLJ1Sd2U85m6
+         dLNX6+L/kXCVA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJKsWRWlGSWpSXmKPExsViZ8ORqLu+jyf
+  ZYP9RQYvpUy8wWmw5do/R4vITPovTExYxWex+fZPNYs/ekywWl3fNYbO4t+Y/q8WuPzvYLVb+
+  +MPqwOVxapGEx+YVWh6L97xk8ti0qpPNY9OnSeweLzbPZPT4+PQWi8fnTXIBHFGsmXlJ+RUJr
+  BmHH99nKzijUTHr4SrWBsZfCl2MXBxCAlsYJU6vb2GBcFYwSdz+tI8VwtnBKLHqxFS2LkZODl
+  4BO4nlS46yg9gsAqoSK+5eYYaIC0qcnPmEBcQWFUiWuHt4PZgtLOApcXDZO7BeEYFjTBKbLmq
+  BDGUW2MAocWL+REaQhJBArcT12xfAGtgEdCQuLPjLCmJzCnhJzPp3FmwZs4CFxOI3B6FseYnm
+  rbOBFnNwSAgoSczsjgcJSwhUSrR++MUCYatJXD23iXkCo9AsJOfNQjJpFpJJCxiZVzHaJBVlp
+  meU5CZm5ugaGhjoGhqa6lqa6RpaGuslVukm6qWW6ublF5Vk6BrqJZYX66UWF+sVV+Ym56To5a
+  WWbGIExmRKccLBHYwr9v3SO8QoycGkJMrblMuTLMSXlJ9SmZFYnBFfVJqTWnyIUYaDQ0mC17U
+  XKCdYlJqeWpGWmQNMDzBpCQ4eJRHeO91Aad7igsTc4sx0iNQpRkuOtQ0H9jJzLL56BUhOnf1v
+  P7MQS15+XqqUOO8EkHkCIA0ZpXlw42Ap7BKjrJQwLyMDA4MQT0FqUW5mCar8K0ZxDkYlYV4mY
+  EIU4snMK4Hb+groICaggx4u4QY5qCQRISXVwFQ08c+G+kzz+47xq8KeunrZBYjNvRXd0LysTV
+  hLKujm19fM7npaUq/rWBYEiV9STtR5GFKpVx/FpxcodMV81XPrRvuD+2w7vn44KN2dIWq7ZL3
+  /BrWrt+wF+pVfBHVWPL/1WYyP/c/O96bX9kWYL32S5KxXef1L4AauAHMmt0usFn9+On17mjWl
+  37w9eZKy/svXDEcfbIn+9sEo6pRGxCc/Y6a/N6sfC67ePfnavx8n7XayBmtw71p07Z9V6IfV0
+  00n3Zr1+ZFfQccFU4FZjLH5Uuo6AduTPC+bvHRtOlGu0Cy8w2/+/c88Kyabb5jKsuS7Ut2vDd
+  lhzR4S+36E/3jl+cclJqj6MtPjrEnGLUosxRmJhlrMRcWJAEX71nzcAwAA
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-15.tower-732.messagelabs.com!1661767342!161496!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 2046 invoked from network); 29 Aug 2022 10:02:23 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-15.tower-732.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Aug 2022 10:02:23 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 93EF210019E;
+        Mon, 29 Aug 2022 11:02:22 +0100 (BST)
+Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C6A8101AA6A;
-        Mon, 29 Aug 2022 10:02:20 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EB6CB4010FCC;
-        Mon, 29 Aug 2022 10:02:10 +0000 (UTC)
-Date:   Mon, 29 Aug 2022 18:02:07 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, ming.lei@redhat.com
-Subject: Re: [RFC PATCH 4/9] ublk_drv: refactor __ublk_rq_task_work() and
- aborting machenism
-Message-ID: <YwyOnybsIm2+muXE@T590>
-References: <20220824054744.77812-1-ZiyangZhang@linux.alibaba.com>
- <20220824054744.77812-5-ZiyangZhang@linux.alibaba.com>
- <YwxRVEQlIw3oWmwE@T590>
- <35dd7300-12ea-62ba-393e-145eae318944@linux.alibaba.com>
- <Ywx0oUcqvE9JcpnT@T590>
- <58f89905-b1a5-273b-58a8-ceba8aa7c1a7@linux.alibaba.com>
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 8591C10019B;
+        Mon, 29 Aug 2022 11:02:22 +0100 (BST)
+Received: from [192.168.22.78] (10.167.225.141) by
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Mon, 29 Aug 2022 11:02:17 +0100
+Message-ID: <72fa9657-741a-e099-baf8-4615145d7bd1@fujitsu.com>
+Date:   Mon, 29 Aug 2022 18:02:11 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58f89905-b1a5-273b-58a8-ceba8aa7c1a7@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v7] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+To:     Dan Williams <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+CC:     "djwong@kernel.org" <djwong@kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>
+References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
+ <63093cbd43f67_259e5b2946d@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <63093cbd43f67_259e5b2946d@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 05:09:45PM +0800, Ziyang Zhang wrote:
-> On 2022/8/29 16:11, Ming Lei wrote:
-> > On Mon, Aug 29, 2022 at 02:13:12PM +0800, Ziyang Zhang wrote:
-> >> On 2022/8/29 13:40, Ming Lei wrote:
-> >>> On Wed, Aug 24, 2022 at 01:47:39PM +0800, ZiyangZhang wrote:
-> >>>> If one rq is handled by io_uring_cmd_complete_in_task(), after a crash
-> >>>> this rq is actually handled by an io_uring fallback wq. We have to
-> >>>> end(abort) this rq since this fallback wq is a task other than the
-> >>>> crashed task. However, current code does not call io_uring_cmd_done()
-> >>>> at the same time but do it in ublk_cancel_queue(). With current design,
-> >>>> this does work because ublk_cancel_queue() is called AFTER del_gendisk(),
-> >>>> which waits for the rq ended(aborted) in fallback wq. This implies that
-> >>>> fallback wq on this rq is scheduled BEFORE calling io_uring_cmd_done()
-> >>>> on the corresponding ioucmd in ublk_cancel_queue().
-> >>>
-> >>> Right.
-> 
-> [1]
-> 
-> >>>
-> >>>>
-> >>>> However, while considering recovery feature, we cannot rely on
-> >>>> del_gendisk() or blk_mq_freeze_queue() to wait for completion of all
-> >>>> rqs because we may not want any aborted rq. Besides, io_uring does not
-> >>>> provide "flush fallback" machenism so we cannot trace this ioucmd.
-> >>>
-> >>> Why not?
-> >>>
-> >>> If user recovery is enabled, del_gendisk() can be replaced with
-> >>> blk_mq_quiesce_queue(), then let abort work function do:
-> >>>
-> >>> - cancel all in-flight requests by holding them into requeue list
-> >>>   instead of finishing them as before, and this way is safe because
-> >>>   abort worker does know the ubq daemon is dying
-> >>> - cancel pending commands as before, because the situation is same
-> >>>   with disk deleted or queue frozen
-> >>
-> >> The problem is: we cannot control when fallback wq is scheduled.
-> >> So we are unsafe to call io_uring_cmd_done() in another process.
-> > 
-> > What is the other process?
-> 
-> Hi Ming.
-> 
-> Actually patch 1-5 are all preparations for patch 6-9. So I suggest
-> you may read patch 6-9 at the same time if you are confused on why
-> I say there is a 'problem'. In current ublk_drv we really do not need
-> to consider it(As I have explained in [1] and you replied 'Right').
-> 
-> Answer your question now: in the patchset, it is START_RECOVERY process,
-> which calls ublk_recover_rq(). Please see patch 8.
-
-Why does START_RECOVERY process need to call io_uring_cmd_done()?
-
-As I mentioned, clean the old ubq_daemon by ublk_cancel_queue()
-just like before. Then the recovery handling can be simplified a lot.
-
-> 
-> > 
-> > It can't be fallback wq since any ublk request is aborted at the beginning
-> > of __ublk_rq_task_work().
-> 
-> With recovery feature enabled, we cannot abort the rq, but just let
-> __ublk_rq_task_work() return. We will requeue the rq soon.
-
-Yeah, the request is requeued, and the queue is quiesced during
-aborting in ublk_cancel_queue().
-
-> 
-> > 
-> > It shouldn't be the process calling ublk_cancel_dev(), since it is
-> > safe to call io_uring_cmd_done() if ubq->nr_io_ready > 0.
-> > 
-> > Or others?
-> It is START_RECOVERY process(or the 'abort_work' you proposed).
-> It is whatever that calls io_uring_cmd_done() on the old ioucmd
-> belonging to the dying ubq_daemon.
-> 
-> > 
-> >> Otherwise, there is a UAF, just as
-> >> (5804987b7272f437299011c76b7363b8df6f8515: ublk_drv: do not add a
-> >> re-issued request aborted previously to ioucmd's task_work).
-> > 
-> > As I mentioned, del_gendisk() can be replaced with
-> > blk_mq_quiesce_queue() in case of user recovery, then no any new
-> > request can be queued after blk_mq_quiesce_queue() returns.
-> 
-> For this, +1.
-> 
-> > 
-> >>
-> >> Yeah I know the answer is very simple: flush the fallback wq.
-> >> But here are two more questions:
-> > 
-> > I don't see why we need to flush fallback wq, care to provide some
-> > details?
-> 
-> Anyway, here is a case:
-> 
-> (1) Assume there is only one tag, only one ubq.
-> 
-> (2) The ublk_io is ACTIVE, which means an ioucmd(cmd_1) is sent from ublksrv
->     and ublk_drv has not completed it yet(no io_uring_cmd_done() is called).
-> 
-> (3) New rq is coming, and ublk_queue_rq() is called.
-> 
-> (4) The ublksrv process crashes(PF_EXITING).
-> 
-> (5) io_uring_cmd_complete_in_task(cmd_1) is called in ublk_queue_rq(), and
->     cmd_1 is put into a fallback_list.
-> 
-
-What I suggested is to abort ubq daemon in ublk_abort_device() like before,
-but without failing in-flight request, just quiesce queue and requeue all
-in-flight request.
-
-Specifically, you can wait until all in-flight requests are requeued,
-and the similar handling has been used by NVMe for long time, then
-fallback wq can be thought as being flushed here.
-
-There are two kinds of in-flight requests:
-
-1) UBLK_IO_FLAG_ACTIVE is set, that is what ublk_abort_queue() needs to
-wait until req->state becomes IDLE, which can be done via the change at
-the entry of __ublk_rq_task_work():
-
-	if (unlikely(task_exiting)) {
-          if (user_recovery)
-		  	blk_mq_requeue_request(req, false);
-		  else
-		    blk_mq_end_request(req, BLK_STS_IOERR);
-	}
-
-2) UBLK_IO_FLAG_ACTIVE is cleared
-  - no need to wait since io_uring_cmd_done() is called for this
-	request
 
 
-> (6) We want to re-attach a new process and assing a new ioucmd(cmd_2) to ublk_io.
+在 2022/8/27 5:35, Dan Williams 写道:
+> Shiyang Ruan wrote:
+>> This patch is inspired by Dan's "mm, dax, pmem: Introduce
+>> dev_pagemap_failure()"[1].  With the help of dax_holder and
+>> ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+>> (or mapped device) on it to unmap all files in use and notify processes
+>> who are using those files.
+>>
+>> Call trace:
+>> trigger unbind
+>>    -> unbind_store()
+>>     -> ... (skip)
+>>      -> devres_release_all()
+>>       -> kill_dax()
+>>        -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
+>>         -> xfs_dax_notify_failure()
+>>
+>> Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
+>> event.  So do not shutdown filesystem directly if something not
+>> supported, or if failure range includes metadata area.  Make sure all
+>> files and processes are handled correctly.
+>>
+>> ==
+>> Changes since v6:
+>>     1. Rebase on 6.0-rc2 and Darrick's patch[2].
+>>
+>> Changes since v5:
+>>     1. Renamed MF_MEM_REMOVE to MF_MEM_PRE_REMOVE
+>>     2. hold s_umount before sync_filesystem()
+>>     3. do sync_filesystem() after SB_BORN check
+>>     4. Rebased on next-20220714
+>>
+>> [1]:
+>> https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+>> [2]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
+>>
+>> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+>> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+>> ---
+>>    drivers/dax/super.c         |  3 ++-
+>>    fs/xfs/xfs_notify_failure.c | 15 +++++++++++++++
+>>    include/linux/mm.h          |  1 +
+>>    3 files changed, 18 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+>> index 9b5e2a5eb0ae..cf9a64563fbe 100644
+>> --- a/drivers/dax/super.c
+>> +++ b/drivers/dax/super.c
+>> @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
+>>    		return;
+>>     	if (dax_dev->holder_data != NULL)
+>> -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+>> +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
+>> +				MF_MEM_PRE_REMOVE);
+>>     	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+>>    	synchronize_srcu(&dax_srcu);
+>> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+>> index 65d5eb20878e..a9769f17e998 100644
+>> --- a/fs/xfs/xfs_notify_failure.c
+>> +++ b/fs/xfs/xfs_notify_failure.c
+>> @@ -77,6 +77,9 @@ xfs_dax_failure_fn(
+>>     	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+>>    	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+>> +		/* Do not shutdown so early when device is to be removed */
+>> +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
+>> +			return 0;
+>>    		notify->want_shutdown = true;
+>>    		return 0;
+>>    	}
+>> @@ -182,12 +185,22 @@ xfs_dax_notify_failure(
+>>    	struct xfs_mount	*mp = dax_holder(dax_dev);
+>>    	u64			ddev_start;
+>>    	u64			ddev_end;
+>> +	int			error;
+>>     	if (!(mp->m_sb.sb_flags & SB_BORN)) {
 > 
-> (7) We try to complete the old cmd_1 now by io_uring_cmd_done(cmd_1)...
+> How are you testing the SB_BORN interactions? I have a fix for this
+> pending here:
 > 
-> (8) Shortly after (7), io_uring exit work is scheduled and it finds that no
->     inflight iocumd exists, so it starts to release some resources
-> 
-> (9) Shortly after (8), in fallback wq, a null-deref on cmd_1 or ctx->refs may
->     happen, just like
->     (5804987b7272f437299011c76b7363b8df6f8515: ublk_drv: do not add a
->     re-issued request aborted previously to ioucmd's task_work).
-> 
-> If we flush fallback wq before (7), then everything is OKAY.
-> 
-> Why this happens? The root cause is that we do not ALWAYS complete io_uring cmd
-> in ublk_rq_task_work_cb(). The commit: "ublk_drv: do not add a re-issued request
-> aborted previously to ioucmd's task_work" does fix a problem. But I think we
-> really need to refactor ublk_rq_task_work_cb() which focuses on old ioucmd.
+> https://lore.kernel.org/nvdimm/166153428094.2758201.7936572520826540019.stgit@dwillia2-xfh.jf.intel.com/
 
-The race is because you drop the existed abort mechanism for user
-recovery. If existed abort is reused for recovery, no above race at all.
+That was my mistake.  Yes, it should be mp->m_super->s_flags.
+
+(I remember my testcase did pass in my dev version, but now that seems 
+impossible.  I think something was wrong when I did the test.)
 
 > 
-> > 
-> >>
-> >> (1) Should ublk_drv rely on the fallback wq machenism?
-> >>     IMO, ublk_drv should not know detail of io_uring_cmd_complete_in_task()
-> >>     because its implementation may change in the future.
-> >>     BTW, I think current ublk_rq_task_work_cb() is not correct because
-> >>     it does not always call io_uring_cmd_done() before returning.
-> >>     nvme_uring_cmd_end_io() always calls io_uring_cmd_done() for each ioucmd
-> >>     no matter the rq succeeds or fails.
-> >>
-> >> (2) Suppose io_uring does export the symbol 'flush_fallback_work', should we call
-> >>     it before starting a new process(recovery)?
-> >>     What if fallback wq is not scheduled immediately if there are many processes
-> >>     running and the system overhead is heavy. In this case the recovery process
-> >>     may wait for too long. Really we should not depend on fallback wq and please
-> >>     let the fallback wq complete the ioucmd itself.
-> >>
-> >>>
-> >>> With this way, the current abort logic won't be changed much.
-> >>>
-> >>> And user recovery should only be started _after_ ublk device is found
-> >>> as aborted.
-> >>
-> >> START_RECOVERY will check if all ubq_daemons(the process) are PF_EXITING.
-> > 
-> > That is different. If START_RECOVERY is only run on aborted device, the
-> > recovery handler could be simplified.
+>>    		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+>>    		return -EIO;
+>>    	}
+>>    +	if (mf_flags & MF_MEM_PRE_REMOVE) {
 > 
-> But stop_dev could become complicated since with recovery enabled, stop_dev
-> has to do different things. Please see patch 5. Really we do not have to
-> do anything after the crash until user sends START_RECOVERY or STOP_DEV.
+> It appears this patch is corrupted here. I confirmed that b4 sees the
+> same when trying to apply it.
 
-99% is same, the extra thing to just fail all in-queue requests by unquiesce queue
-before stopping one to-be-recovered device really.
+Can't this patch be applied?  It is based on 6.0-rc2 + Darrick's patch. 
+It's also ok to rebase on 6.0-rc3 + Darrick's patch.
+
+> 
+>> +		xfs_info(mp, "device is about to be removed!");
+>> +		down_write(&mp->m_super->s_umount);
+>> +		error = sync_filesystem(mp->m_super);
+> 
+> This syncs to make data persistent, but for DAX this also needs to get
+> invalidate all current DAX mappings. I do not see that in these changes.
+
+I'll add it.
 
 
-Thanks, 
-Ming
+--
+Thanks,
+Ruan.
 
+> 
+>> +		up_write(&mp->m_super->s_umount);
+>> +		if (error)
+>> +			return error;
+>> +	}
+>> +
+>>    	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
+>>    		xfs_warn(mp,
+>>    			 "notify_failure() not supported on realtime device!");
+>> @@ -196,6 +209,8 @@ xfs_dax_notify_failure(
+>>     	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+>>    	    mp->m_logdev_targp != mp->m_ddev_targp) {
+>> +		if (mf_flags & MF_MEM_PRE_REMOVE)
+>> +			return 0;
+>>    		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+>>    		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+>>    		return -EFSCORRUPTED;
+>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>> index 982f2607180b..2c7c132e6512 100644
+>> --- a/include/linux/mm.h
+>> +++ b/include/linux/mm.h
+>> @@ -3176,6 +3176,7 @@ enum mf_flags {
+>>    	MF_UNPOISON = 1 << 4,
+>>    	MF_SW_SIMULATED = 1 << 5,
+>>    	MF_NO_RETRY = 1 << 6,
+>> +	MF_MEM_PRE_REMOVE = 1 << 7,
+>>    };
+>>    int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+>>    		      unsigned long count, int mf_flags);
+>> -- 
+>> 2.37.2
+>>
+>>
+> 
+> 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C2E5A482B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D4D5A49E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiH2LGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S232389AbiH2Lad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiH2LFz (ORCPT
+        with ESMTP id S232449AbiH2L3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:05:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E37642F3;
-        Mon, 29 Aug 2022 04:04:19 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1144679EEC;
+        Mon, 29 Aug 2022 04:17:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48855B80EF6;
-        Mon, 29 Aug 2022 11:04:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D004C433D6;
-        Mon, 29 Aug 2022 11:04:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A46EA61239;
+        Mon, 29 Aug 2022 11:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AADC433D6;
+        Mon, 29 Aug 2022 11:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771058;
-        bh=J2SB5bmPljpkP9lpMCL8I+guc1tT+i/fXt5y9INNn24=;
+        s=korg; t=1661771716;
+        bh=bGnwbFAYIoG1XzBZhEeiYHiXx8ZOhGl8KOE1yi58ZZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZKj0lzmY7Ap6c4tyY7S8G2GUdVO8X2Tx/vuPgiQgjthH1ZTG8M2cjYHTE341C6Q4M
-         M+Q6xuqT4tImxYgyMaSSXg/lnpNmjPZWbeokOift0KIlEczbdAyO2rXeBa3rMjSvG9
-         L88CmToM7zTDOHCcC7EiWHIL/m1p4mLhM1Z751F8=
+        b=l2fOEXSiyH+K3g8ZDsL7I/4TGAe7O6tNY8YOnYAt2CcMYc0SOcBhWrO5F5/FG7oMI
+         CPx1aorSI5E7tMM+D++tSNkc1QcrG8p98kIgXbPm80XrQmDXFU0ohJELUDEKQsgwJk
+         QakRR1pD3uQW/e3hMs7Z36kZim4d+egRRuYrYEws=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 055/136] netfilter: nf_tables: disallow updates of implicit chain
+Subject: [PATCH 5.19 072/158] net: Fix a data-race around sysctl_net_busy_poll.
 Date:   Mon, 29 Aug 2022 12:58:42 +0200
-Message-Id: <20220829105806.886843813@linuxfoundation.org>
+Message-Id: <20220829105812.038796291@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+References: <20220829105808.828227973@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 5dc52d83baac30decf5f3b371d5eb41dfa1d1412 ]
+[ Upstream commit c42b7cddea47503411bfb5f2f93a4154aaffa2d9 ]
 
-Updates on existing implicit chain make no sense, disallow this.
+While reading sysctl_net_busy_poll, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 060212928670 ("net: add low latency socket poll")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/net/busy_poll.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 2f22a172a27e1..58f9513bd1419 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -2479,6 +2479,9 @@ static int nf_tables_newchain(struct sk_buff *skb, const struct nfnl_info *info,
- 	nft_ctx_init(&ctx, net, skb, info->nlh, family, table, chain, nla);
+diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+index c4898fcbf923b..f90f0021f5f2d 100644
+--- a/include/net/busy_poll.h
++++ b/include/net/busy_poll.h
+@@ -33,7 +33,7 @@ extern unsigned int sysctl_net_busy_poll __read_mostly;
  
- 	if (chain != NULL) {
-+		if (chain->flags & NFT_CHAIN_BINDING)
-+			return -EINVAL;
-+
- 		if (info->nlh->nlmsg_flags & NLM_F_EXCL) {
- 			NL_SET_BAD_ATTR(extack, attr);
- 			return -EEXIST;
+ static inline bool net_busy_loop_on(void)
+ {
+-	return sysctl_net_busy_poll;
++	return READ_ONCE(sysctl_net_busy_poll);
+ }
+ 
+ static inline bool sk_can_busy_loop(const struct sock *sk)
 -- 
 2.35.1
 

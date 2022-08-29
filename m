@@ -2,143 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FA55A4639
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751945A463F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiH2JjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S229974AbiH2Jkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiH2JjB (ORCPT
+        with ESMTP id S229475AbiH2Jka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:39:01 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D76D5C9DF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:38:59 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-334dc616f86so180893727b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:38:59 -0700 (PDT)
+        Mon, 29 Aug 2022 05:40:30 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D3E2AC7F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:40:27 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso4110817wmr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:40:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=GBvqua5cjMzjDQ/XgF9SZ1D4y+QsnVuyrt4amhV4btE=;
-        b=dx6bRQ4JN/hF+3326YxFT0DmQuGRpE34IYiS96EVX69SRQeKSaYPwt5CrXJyN5/6Jy
-         LU4sCb/nzEwY7rPM8KQoAIxIfvdbcNm2n40rDMqVfcTJScYRUNc6PFux701CkDOaVS3I
-         p/4Hy2JiSHOOSzChWW0xl4APo4fnylJHJ9WrJKbGlSalEnDMAaddVjR/x9qZqTHorbQN
-         oIVFtRs/0W/3z2F+EVui2fGdIizOdKUhrhCdwiHSyBf99GrsKuJ0tvJe2EHzoC0aQ+mz
-         vJQY/hFbVFBQcwbB98qVRudkPkSpWvK3LFGhdzSkhwWir2jt11UNBByAnC4HQL4DbNqN
-         Q4Wg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=ZxxiXzVw+g9I/rDVtfq444KFkssXZmUmV/pBYuPeyYU=;
+        b=cFWFB7uco2+eW3LXIvx6hGDwWkGvVZ6KeDvhLUh+KnPoXmP/XEcw7IV9AJu+GzWu4+
+         TpA6I4876GzgW8fI5yeFPWDV2ydSXQW3hyFqFU97uMWVXTlSKx1tMhuD8upyzhk36O94
+         F7Z4+6xxCJ7HeeYKe8zwPDKfIdCtgTpDQQ/nFiMAjBRr1FuhGHECkmiu8fX0XZtkTbeO
+         Q8IRg0RNaXOFKnhDeLi0BeB8os1PVxEZblH4+vDKPj9PQfEojD4gg1s1nFvJI46FNUQF
+         3u4mlSXi604Z+lmck+PYyWlJoSPPQJJm9hzS9QD/RFQRbkYtI4rCUuqk03cuQmW/XX+z
+         OZyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GBvqua5cjMzjDQ/XgF9SZ1D4y+QsnVuyrt4amhV4btE=;
-        b=1zQ50Xw2ViZaCEYh0JRQex2ZaJNzpepYM50ucZK4++F1gHYvi5bf7GXIf6I8v0YeLQ
-         WpGjYbqn92/+zBh+VY1AB4fYxELN2UmmLbMzPHNkpU3m2omr7DnHrPPtHN05YMpBbWI9
-         QZlWmh6jLKL86W4o2Bvdkpjm4cw7xSwEk6bkZtVY5kYoVz31ark9HAik4JeHmZF/I0pl
-         GW2om5PpHOA639xC+r2VFNteeZoPyWHCte/KUqTjrESBbgKy98yK63LCfHf0oQ+yf3UV
-         fUDBEvHFhmxSKw/acfurP8zSSwdk4FiOz066MyBOQjsjOWwIiHof+VG4+yTlUhnYNGsc
-         SKDw==
-X-Gm-Message-State: ACgBeo3BisO+tXKNRV26sbquHxBOkkhoZ1B2/dyeNt3Wn4k+7bTiWnxS
-        y/4s3L5oJSj3nf+tRLyXyvYt/WZBLvQY9I08UPuhoQ==
-X-Google-Smtp-Source: AA6agR6q7ad6sf4kgVlbFbNc5qY39/VlvvSlRemTzNOIPH7rueyubBC/OTF7pi8jTZlObaVAtjHrYIlq/M8iqBqxOiw=
-X-Received: by 2002:a81:4e04:0:b0:33d:c7dc:9e2b with SMTP id
- c4-20020a814e04000000b0033dc7dc9e2bmr8959772ywb.4.1661765938626; Mon, 29 Aug
- 2022 02:38:58 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ZxxiXzVw+g9I/rDVtfq444KFkssXZmUmV/pBYuPeyYU=;
+        b=xTF5v5sbUMha3ECk1j8QpTwcJ9p9Tbqgkk7LAU3u95AQ1LP8Q/g8Yu/QopvxwBFFx8
+         8S/JfrQaI0MPaQl/ejHGOf/iIUU2e8kQaREunP6ZzExFTEOnrJINXeCCYJ4sC6AIZFTX
+         A+3sdRq4zMIRECOJsUQlM52aVuOJGQHhy2spsriE7WJXysHPAMxFZhv+3fBE1Ry40mCG
+         f/aTJdz7HbDL8qMsrcbYYwZOv0jGt+rpPUxjaWZupLmhRnJ2STLjJ9FA8LXRC8VU2QlN
+         dJtqqueWntUhXMRS1pqb7qrPC/KhxV1ScRS8yUHWWYDGxzZWSe/ccvttY6zqXmImiGVl
+         f7kQ==
+X-Gm-Message-State: ACgBeo2NRTemyABxt0FZcM+80IFuhDGQOsTc138eLsPGLr3B7Wrft9Xg
+        aMMy927CoBxI/YmudLKIAhDKwA==
+X-Google-Smtp-Source: AA6agR4NYFt2n1937XpZi8/cdzn6JuTwO1cvz+JKiBMEnviLkY8V6Xe9OKRPv3ChViwWiZ7btRCBKg==
+X-Received: by 2002:a1c:3b04:0:b0:3a5:487c:6240 with SMTP id i4-20020a1c3b04000000b003a5487c6240mr6334328wma.152.1661766026306;
+        Mon, 29 Aug 2022 02:40:26 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id 14-20020a05600c020e00b003a3170a7af9sm8134846wmi.4.2022.08.29.02.40.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 02:40:23 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 12:40:22 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/5] dt-bindings: imx8ulp: clock: no spaces before tabs
+Message-ID: <YwyJhorMIju4Czr3@linaro.org>
+References: <20220826192252.794651-1-marcel@ziswiler.com>
+ <20220826192252.794651-6-marcel@ziswiler.com>
 MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-12-elver@google.com>
- <YvznKYgRKjDRSMkT@worktop.programming.kicks-ass.net> <CANpmjNN1vv9oDpm1_c99tQKgWVVtXza++u1xcBVeb5mhx5eUHw@mail.gmail.com>
- <Ywx7CmbG+f+wg04z@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ywx7CmbG+f+wg04z@hirez.programming.kicks-ass.net>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 29 Aug 2022 11:38:22 +0200
-Message-ID: <CANpmjNPFnV2novubKKVmC7zJ8qi72QuRY6bWBEi5jrO_kkRBag@mail.gmail.com>
-Subject: Re: [PATCH v3 11/14] perf/hw_breakpoint: Reduce contention with large
- number of tasks
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826192252.794651-6-marcel@ziswiler.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 at 10:38, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Aug 17, 2022 at 03:14:54PM +0200, Marco Elver wrote:
-> > On Wed, 17 Aug 2022 at 15:03, Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Mon, Jul 04, 2022 at 05:05:11PM +0200, Marco Elver wrote:
-> > > > +static bool bp_constraints_is_locked(struct perf_event *bp)
-> > > > +{
-> > > > +     struct mutex *tsk_mtx = get_task_bps_mutex(bp);
-> > > > +
-> > > > +     return percpu_is_write_locked(&bp_cpuinfo_sem) ||
-> > > > +            (tsk_mtx ? mutex_is_locked(tsk_mtx) :
-> > > > +                       percpu_is_read_locked(&bp_cpuinfo_sem));
-> > > > +}
-> > >
-> > > > @@ -426,18 +521,28 @@ static int modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
-> > > >   */
-> > > >  int dbg_reserve_bp_slot(struct perf_event *bp)
-> > > >  {
-> > > > -     if (mutex_is_locked(&nr_bp_mutex))
-> > > > +     int ret;
-> > > > +
-> > > > +     if (bp_constraints_is_locked(bp))
-> > > >               return -1;
-> > > >
-> > > > -     return __reserve_bp_slot(bp, bp->attr.bp_type);
-> > > > +     /* Locks aren't held; disable lockdep assert checking. */
-> > > > +     lockdep_off();
-> > > > +     ret = __reserve_bp_slot(bp, bp->attr.bp_type);
-> > > > +     lockdep_on();
-> > > > +
-> > > > +     return ret;
-> > > >  }
-> > > >
-> > > >  int dbg_release_bp_slot(struct perf_event *bp)
-> > > >  {
-> > > > -     if (mutex_is_locked(&nr_bp_mutex))
-> > > > +     if (bp_constraints_is_locked(bp))
-> > > >               return -1;
-> > > >
-> > > > +     /* Locks aren't held; disable lockdep assert checking. */
-> > > > +     lockdep_off();
-> > > >       __release_bp_slot(bp, bp->attr.bp_type);
-> > > > +     lockdep_on();
-> > > >
-> > > >       return 0;
-> > > >  }
-> > >
-> > > Urggghhhh... this is horrible crap. That is, the current code is that
-> > > and this makes it worse :/
-> >
-> > Heh, yes and when I looked at it I really wanted to see if it can
-> > change. But from what I can tell, when the kernel debugger is being
-> > attached, the kernel does stop everything it does and we need the
-> > horrible thing above to not deadlock. And these dbg_ functions are not
-> > normally used, so I decided to leave it as-is. Suggestions?
->
-> What context is this ran in? NMI should already have lockdep disabled.
+On 22-08-26 21:22:52, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> This fixes the following warnings:
+> 
+> include/dt-bindings/clock/imx8ulp-clock.h:204: warning: please, no space
+>  before tabs
+> include/dt-bindings/clock/imx8ulp-clock.h:215: warning: please, no space
+>  before tabs
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-kgdb can enter via kgdb_nmicall*() but also via
-kgdb_handle_exception(), which isn't for NMI.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
+> 
+> ---
+> 
+>  include/dt-bindings/clock/imx8ulp-clock.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/dt-bindings/clock/imx8ulp-clock.h b/include/dt-bindings/clock/imx8ulp-clock.h
+> index 953ecfe8ebcc..827404fadf5c 100644
+> --- a/include/dt-bindings/clock/imx8ulp-clock.h
+> +++ b/include/dt-bindings/clock/imx8ulp-clock.h
+> @@ -201,7 +201,7 @@
+>  #define IMX8ULP_CLK_SAI7		2
+>  #define IMX8ULP_CLK_SPDIF		3
+>  #define IMX8ULP_CLK_ISI			4
+> -#define IMX8ULP_CLK_CSI_REGS 		5
+> +#define IMX8ULP_CLK_CSI_REGS		5
+>  #define IMX8ULP_CLK_PCTLD		6
+>  #define IMX8ULP_CLK_CSI			7
+>  #define IMX8ULP_CLK_DSI			8
+> @@ -212,7 +212,7 @@
+>  #define IMX8ULP_CLK_GPU2D		13
+>  #define IMX8ULP_CLK_GPU3D		14
+>  #define IMX8ULP_CLK_DC_NANO		15
+> -#define IMX8ULP_CLK_CSI_CLK_UI 		16
+> +#define IMX8ULP_CLK_CSI_CLK_UI		16
+>  #define IMX8ULP_CLK_CSI_CLK_ESC		17
+>  #define IMX8ULP_CLK_RGPIOD		18
+>  #define IMX8ULP_CLK_DMA2_MP		19
+> -- 
+> 2.36.1
+> 

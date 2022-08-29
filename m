@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB665A43F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF89C5A4403
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 09:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiH2Hlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 03:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S229560AbiH2HmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 03:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiH2Hl2 (ORCPT
+        with ESMTP id S229563AbiH2HmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 03:41:28 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E314BD32
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 00:41:27 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bu22so8721690wrb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 00:41:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc;
-        bh=5up3cUBmqLmN/N4JsoGSCpsquDZUxfx3SQvM9VcSSqw=;
-        b=YuPbkZr0Ax4OGbfNlSy3XGJ1Ho31X7gBNQTXMazlCaETwKK9GDqXs3uG0+jn8EvRPP
-         GlaxYOmBEY9SC8WAs82C9ADhKCmlxGkRAbKCoG0btJPCcrdmzxZHHZvRT5EnZlxDJY4s
-         ic3WYpgsIDj/OS+VB3ynaAgYCvUeBZoVxXJCyHqmpXj17QPogEfJy+jXKCYh5W/U24E4
-         DLvW7XMoR5/2HRuSFCbeSgaiRZsEDu6hUxwytB89remwuL6kmT8yDGetlz4b9J0MgcNp
-         ZF5JMnCVdyQWwxwUELqxwh+ZM2ASzzCdSZgznsjuSxEh/oV6BQmUdV945DjSPU7D+F/O
-         omoQ==
+        Mon, 29 Aug 2022 03:42:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23B94F1B6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 00:42:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661758930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iqnlFO+78/vgxZVb4wxxYkdpdCrDcq7ztOpTYe2hVnY=;
+        b=BLX+uIqZEGbkJ2UU2jQJTUkftb/VmE/9m07nj9YfIzLkQ1C8NVpiuiZLx+9F1SpfQACXfc
+        W1UGPEzFj4mOrY9E+cwdgelcSuI21UGUFx9m0scmTaLbr8voWq1AO1kWNBRNyBS1fKzLFs
+        C4fGTQD1LgfdcVzeY8KEqAGLel6x6pA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-136-H2gGlcNKNPKdTt4WAGfuQA-1; Mon, 29 Aug 2022 03:42:08 -0400
+X-MC-Unique: H2gGlcNKNPKdTt4WAGfuQA-1
+Received: by mail-ej1-f71.google.com with SMTP id sb14-20020a1709076d8e00b0073d48a10e10so1931076ejc.16
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 00:42:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=5up3cUBmqLmN/N4JsoGSCpsquDZUxfx3SQvM9VcSSqw=;
-        b=h+qUCugUDbfZ8HAjM7pVCx7yqrsvc36t8MReXuE6lZR0AEjbIjvefV2+chT9ECcs1T
-         TWNrYHLKaqhMZzMJpt9qXJh2kTxvlM31N8lULzNrATbT2O18aVZl/FbD0rATrTUsm21/
-         yNKyt/w3SK21OuO5YHUAx6kFX5kPS+Rfu3/TunPXprFxaYIcrMd2tcD3AZw2ALdweo8C
-         BnaTEDm1ZFVCOB1y2UKSIGB6EQBhvwXDVTFop66+pAyeRwKDRBqBmAyutIplcV8mXlad
-         o6wvrbf76GFHSlOq/XQgbDyb+Cl6nCVJQ0EAvoellCIWcXTP++5D30IT7PYJHlrqmrch
-         ew/A==
-X-Gm-Message-State: ACgBeo0+8igcq3I6imb+ghOshP1OfsejKk82cyKtVdWMvR4zdYHGJjK3
-        kk5+SEVyepSUKSey/Q8Q4q9nKw==
-X-Google-Smtp-Source: AA6agR6NLCGeE1ZIf8UdYmeZQOwbczj92cej7w+PZTtWO71lnImArQKYk0kqLF1viANjjlBGYnQ4Ew==
-X-Received: by 2002:a5d:6b46:0:b0:225:3510:a130 with SMTP id x6-20020a5d6b46000000b002253510a130mr5446784wrw.46.1661758885778;
-        Mon, 29 Aug 2022 00:41:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:6124:6b74:2847:d37b? ([2a01:e0a:982:cbb0:6124:6b74:2847:d37b])
-        by smtp.gmail.com with ESMTPSA id q16-20020adff950000000b002251639bfd0sm6230191wrr.59.2022.08.29.00.41.24
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=iqnlFO+78/vgxZVb4wxxYkdpdCrDcq7ztOpTYe2hVnY=;
+        b=Lc9XSOcIibAmYyLRX6PmKspHBmS+dVoK8M24nIC2fQ3jrb7jD8AiAKuTHWJDPusZgD
+         XOj7ygk9jBFgVFtipxLNvBavmOsdtd160Z4dUsDM3RgjEDpabwdNCtDKol0kZUJckXE+
+         87by8NHazeWMPE4hDJn0ygYyqRqWBo/Gu37cA81R8qqI0j39zfLF/1XTvnmUQPwRkH/c
+         cVPP9paCfM/JHfC2LgzhYWIwjSWTTEQuwMipWy5HDdlFO9OZVYx/RIYt2sQwwuiqowxN
+         A9ydel8UDCObr7oNO1P01Z5CCXqVP9W/UuS6vl6/E0f2sUNGc2fqf81pttUya4/gbSde
+         Zp9g==
+X-Gm-Message-State: ACgBeo1xPA0uZdDCNC5ron7xCWdXSYVMIi7ZyJJhsOVAFmYmG1FGN4mI
+        Mt2EOJkmfF6Wtp1CatMicbclPa+82LnMTOvBLREjIZ7KHy/BIy7eTGvMSdQiGaA45HSbcbT7zZ4
+        IQYmApPykpRkioUG6IV3ydQnq
+X-Received: by 2002:a05:6402:34c6:b0:43d:8cea:76c0 with SMTP id w6-20020a05640234c600b0043d8cea76c0mr15959398edc.268.1661758927689;
+        Mon, 29 Aug 2022 00:42:07 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7ekwDPfgZKmb7fmWItdGyXBBlFTqii3LiOdilaa1BcYBiSDfub8XZ4UrO6NrFrkz8SDWqcgA==
+X-Received: by 2002:a05:6402:34c6:b0:43d:8cea:76c0 with SMTP id w6-20020a05640234c600b0043d8cea76c0mr15959379edc.268.1661758927464;
+        Mon, 29 Aug 2022 00:42:07 -0700 (PDT)
+Received: from [192.168.0.198] (host-87-8-60-205.retail.telecomitalia.it. [87.8.60.205])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906300400b00721d8e5bf0bsm4134102ejz.6.2022.08.29.00.42.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 00:41:25 -0700 (PDT)
-Message-ID: <a9072e3a-2ea5-9da0-a1ba-2be67857e1ba@baylibre.com>
-Date:   Mon, 29 Aug 2022 09:41:24 +0200
+        Mon, 29 Aug 2022 00:42:07 -0700 (PDT)
+Message-ID: <d35c5522-5e51-929c-61d5-cba02e3320ef@redhat.com>
+Date:   Mon, 29 Aug 2022 09:42:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: meson-s4: include meson-s4-gpio.h
+ Thunderbird/91.12.0
+Subject: Re: [PATCH -next v2] sched/deadline: Add replenish_dl_new_period
+ helper
 Content-Language: en-US
-To:     Huqiang Qin <huqiang.qin@amlogic.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <e32a8c39-1e47-cad1-e093-2cabb2dd37a4@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <e32a8c39-1e47-cad1-e093-2cabb2dd37a4@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Shang XiaoJing <shangxiaojing@huawei.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+References: <20220826100037.12146-1-shangxiaojing@huawei.com>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20220826100037.12146-1-shangxiaojing@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/08/2022 13:32, Huqiang Qin wrote:
-> Hi Krzysztof,
+On 8/26/22 12:00, Shang XiaoJing wrote:
+> Wrap repeated code in helper function replenish_dl_new_period, which set
+> the deadline and runtime of input dl_se based on pi_of(dl_se). Note that
+> setup_new_dl_entity originally set the deadline and runtime base on
+> dl_se, which should equals to pi_of(dl_se) for non-boosted task.
 > 
-> On 2022/8/25 20:02, Krzysztof Kozlowski wrote:
->> Why? We can see what you did here, but commit msg should explain why you
->> do it...
-> 
-> Sorry, I didn't describe this commit message clearly.
-> 
-> In the future, meson-s4.dtsi will have some nodes that need
-> to use the meson-s4-gpio.h file.
-> 
-> e.g.
->      (1) Bluetooth enable pin:
->          bt_en-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
->      (2) Audio mute pin:
->          spk_mute-gpios = <&gpio GPIOH_8 GPIO_ACTIVE_LOW>;
->      (3) ...
-> 
-> So, this patch was born.
+> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
 
-We understand, but since the Upstream linux codebase want to avoid dead code
-as much as possible, please defer this patch when node will actually use these gpio defines.
+Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-Neil
-
-> 
-> Best regards,
-> Huqiang
-> 
+-- Daniel
 

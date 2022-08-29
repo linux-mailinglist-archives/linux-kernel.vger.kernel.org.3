@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2D65A540E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16E45A5421
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiH2Slc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 14:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S229925AbiH2Smc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 14:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiH2Sl3 (ORCPT
+        with ESMTP id S229971AbiH2SmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 14:41:29 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E6C80522;
-        Mon, 29 Aug 2022 11:41:27 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 02C861C0001; Mon, 29 Aug 2022 20:41:25 +0200 (CEST)
-Date:   Mon, 29 Aug 2022 20:41:23 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/86] 5.10.140-rc1 review
-Message-ID: <20220829184123.GA26356@duo.ucw.cz>
-References: <20220829105756.500128871@linuxfoundation.org>
+        Mon, 29 Aug 2022 14:42:23 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A0832C2;
+        Mon, 29 Aug 2022 11:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661798542; x=1693334542;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=XTJr3HmYry0IYzQ6gYwbM4reF5LT9fKouCMQdpXCxXE=;
+  b=khEMP/ebZBUJBXAbY08HXUHq9mTr9HX5FzSWeViB9TEBaNRWgz0SVMNR
+   hMcS24J39a1a15PZsHC14+XcZpMiTlmXHf1+/vJlOaHIc7BJsXHt7rcLb
+   OyUU5YHcz5uNBFkPQaAFsVWlyZec6KrYuMRSQcIBx+6b2niY+Lrk7Pclp
+   M=;
+X-IronPort-AV: E=Sophos;i="5.93,273,1654560000"; 
+   d="scan'208";a="253995778"
+Subject: Re: [PATCH v2 16/16] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-72dc3927.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:42:05 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-72dc3927.us-west-2.amazon.com (Postfix) with ESMTPS id 41E2544F43;
+        Mon, 29 Aug 2022 18:42:05 +0000 (UTC)
+Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 29 Aug 2022 18:42:04 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Mon, 29 Aug 2022 18:42:04 +0000
+Received: from [192.168.93.244] (10.85.143.174) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Mon, 29 Aug 2022 18:41:59 +0000
+Message-ID: <d5ea08a4-9094-8a7a-093c-0e6459281c1d@amazon.com>
+Date:   Mon, 29 Aug 2022 21:41:58 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
-Content-Disposition: inline
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-17-farbere@amazon.com>
+ <20220818231106.GA3505191@roeck-us.net>
+ <75165e58-8601-1fe5-7bdb-98761a73701f@amazon.com>
+ <20220822162805.GD4098765@roeck-us.net>
+Content-Language: en-US
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220822162805.GD4098765@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/22/2022 7:28 PM, Guenter Roeck wrote:
+> There needs to be an overflow protection. I am quite sure that 0xffffffff
+> would result in overflows and thus in quite random reported values. 
+Added overflow protection.
+Will be part of v3.
 
---5vNYLRcllDrimb99
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> This is the start of the stable review cycle for the 5.10.140 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---5vNYLRcllDrimb99
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYw0IUwAKCRAw5/Bqldv6
-8m87AJ4hsnjDUcuTUQcuRdmLnstfLZPicwCgnQZuoxcWPplofy2/n6xL09lB/lA=
-=SysB
------END PGP SIGNATURE-----
-
---5vNYLRcllDrimb99--
+--
+Thanks, Eliav

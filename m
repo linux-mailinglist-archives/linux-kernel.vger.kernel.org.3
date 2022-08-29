@@ -2,210 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F335A4502
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B706A5A4516
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiH2I2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S229791AbiH2IcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiH2I2S (ORCPT
+        with ESMTP id S229787AbiH2Ib4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:28:18 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8126192BE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:28:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 21EDF58024B;
-        Mon, 29 Aug 2022 04:28:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 29 Aug 2022 04:28:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661761694; x=1661768894; bh=WyDZXkUvNq
-        q4D0ys6jWjIG48RlHKq49MwSu6MMSlx50=; b=pcgQG1ej6+y0m7r6DiMBbYPc08
-        6Tg1eOTSepyvQmZxCSlULRt2iHE7knKMWeZvGrun29ZniyukW65rq740Ny8rdnvP
-        wM7up1mWPM7KSoF6ECLVmizsIegz9xc/3oShVa7yGTzcvTEfmg1LB5nJ91Farpn8
-        3kFvaC7hRprWxqGT+KZ8O8GUqQ86LD9ibCIDHuETLiH3hSJ/8JnRXXjyI7DCtIH2
-        FoFhHwd9AXJgrSiTL2p02R6D1YFV57MTMuPsJ6+zmaDVCCUAnNajGLNiNIMwdYxs
-        dDCFrPrA2MBCLvSLE6NMrO0JbjKA0WyyP8lAnwG7k/NOxiDCExp3VO4Jhduw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661761694; x=1661768894; bh=WyDZXkUvNqq4D0ys6jWjIG48RlHK
-        q49MwSu6MMSlx50=; b=yH9L3dwU+BM7jqIUnUji3NTnNFQu0SshB8oh4lGV1/Qq
-        TDI1OhLZmFpTFW4X2DxH8tC66akwDO5+mf9GGIR0IWNq5I7WxVqQZd3U9dGOjAdH
-        yJS3gZzds7K6AtpJERpzRWG0sQ23BHyLauPzMWQAOCbe2zGYH/xuEjhQnZfT3HJ0
-        iIMOrzwHC06X83sO/b3RCOe4IUpL4Mvg82/gepUIdTIUad/Qxb0GBGu6XWNqC7gx
-        O2Lv5T/wRIFI+GKRoA6vDHl6NHbbHbgelR/zOXHNAnWBllu8ncLeb4rcIIMAmNgM
-        8jxbkr2jq+nGf7vAOyWZT6oIz90oHLSMSvzQ7CQHXg==
-X-ME-Sender: <xms:nHgMYxY2A4ykQGvsFzJnc35gPBn6FxisToBs3EdyCOE55OekURZCtA>
-    <xme:nHgMY4bnM7gY496bdnurVGht7a5AxE477IKpHVSnWAxEY1bX-xnPK2fm8BkaKzgD3
-    u2e2YG1Gi40zeacoXg>
-X-ME-Received: <xmr:nHgMYz9QBKsNgPrdI7VDRmqaBrhSGpHSbUXasZ593l-Zquaj1QqsLnn1F1ir>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekuddgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeljeeugfegveetleevkeetffegudevieetieeugeeugeeivddtjeejvdef
-    feetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:nHgMY_ow5pHV0rSxiGc4MvEbrbiAc7aHw8xiJIUsZYCUkUWxmjh7tw>
-    <xmx:nHgMY8o6vx0u6-toU5HvO0BEQdVthR3WUvyc3QiQ_VtSdoWUEeC1Kw>
-    <xmx:nHgMY1QgXFj6sK1CpnQpdrPeODRxNP79qhr4DjFjqrVAt20ECAiE_A>
-    <xmx:nngMY1YTK8jVd5f_LplnVCWLcQMSRvqd2B2zxST_G1IQeJWOpau9XQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 Aug 2022 04:28:11 -0400 (EDT)
-Date:   Mon, 29 Aug 2022 10:28:09 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220829082809.6xhd4zzs7ootax2z@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
- <20220825134408.dioj2lbycl7jm3ld@houat>
- <863beb42-1012-b38a-0c3d-89b7e035aa82@tronnes.org>
+        Mon, 29 Aug 2022 04:31:56 -0400
+X-Greylist: delayed 152617 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 Aug 2022 01:31:54 PDT
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F19A578A2;
+        Mon, 29 Aug 2022 01:31:54 -0700 (PDT)
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 27T8VQAf031749;
+        Mon, 29 Aug 2022 17:31:26 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 27T8VQAf031749
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1661761886;
+        bh=jM2GfWj0FdGrXTHGuEWcFJbYLhnDvtm2N6670C3hXuo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=z/rQq1fGXv/Wkc/66aeZM3GS06eTxP6v+3RwdXeNvpdyyFlwPdYcsg4yVq1wKIV36
+         U20bz5d3JYXVBcwShBsUoJsrhqB8n0xrDdDStzHVmRaCzBJ7nQNiblVY+CE7IEzpSK
+         Ua7IZiMsdGHOVTRegjb7j4Cv7/0lAghMN4imoNrILUhWuFmcZf4GaWWNmFqmP7Tnhv
+         rib9geJcQmtvRKqp3JenlMbxQ3NZD3n1UxE8MXNtycljQvGwyRO+AhLfE+bKUjRvBB
+         YKWRb+C8Rn4X3XVyvc0KbRy58tm4J//fxh5igSji8zQDWcTQ0zzkKlL6ZM3IeSLyJ7
+         VJD8iFYIomTQg==
+X-Nifty-SrcIP: [209.85.210.43]
+Received: by mail-ot1-f43.google.com with SMTP id v2-20020a056830090200b006397457afecso4753728ott.13;
+        Mon, 29 Aug 2022 01:31:26 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2mUMHDhDOhXQJKIPzyETdpbyaT+mKTPubmZxCdpUsIc7xTWTZZ
+        Ugymz09LqwBWohjssKIP5hC5rwM1dnU9bBHG99I=
+X-Google-Smtp-Source: AA6agR4Jk7pSX33ZfGLaJm23afhMJutz94PMIODqagwuZ5cSLveuwlw9UpXXXDz/3Hmv1zZA7JSjvkKHg2htYx6/8Fc=
+X-Received: by 2002:a9d:4806:0:b0:637:cdca:f8d3 with SMTP id
+ c6-20020a9d4806000000b00637cdcaf8d3mr6254060otf.225.1661761885384; Mon, 29
+ Aug 2022 01:31:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="75abns6ys2rry5o6"
-Content-Disposition: inline
-In-Reply-To: <863beb42-1012-b38a-0c3d-89b7e035aa82@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220825091517.30842-1-lukas.bulwahn@gmail.com>
+ <CAKwvOdkY=ye4PKi8KwP-ux73pwZs+J_Oq3wR7ep8S81=aCWtqA@mail.gmail.com> <384c1908-6602-1a07-875f-0b2e56a06707@kernel.org>
+In-Reply-To: <384c1908-6602-1a07-875f-0b2e56a06707@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 29 Aug 2022 17:30:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQSYHseN5n-WYKtBYHJCUJUquSbkq34WnuUO9q1geEDYQ@mail.gmail.com>
+Message-ID: <CAK7LNAQSYHseN5n-WYKtBYHJCUJUquSbkq34WnuUO9q1geEDYQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts: remove obsolete gcc-ld script
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "H . Peter Anvin" <hpa@linux.intel.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Martin Liska <martin.liska@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---75abns6ys2rry5o6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Aug 25, 2022 at 05:13:29PM +0200, Noralf Tr=F8nnes wrote:
->=20
->=20
-> Den 25.08.2022 15.44, skrev Maxime Ripard:
-> > Hi,
-> >=20
-> > On Sat, Aug 20, 2022 at 10:12:46PM +0200, Noralf Tr=F8nnes wrote:
-> >>> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> >>> index 1e9996b33cc8..78275e68ff66 100644
-> >>> --- a/include/drm/drm_connector.h
-> >>> +++ b/include/drm/drm_connector.h
-> >>> @@ -143,6 +143,32 @@ enum subpixel_order {
-> >>> =20
-> >>>  };
-> >>> =20
-> >>> +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
-> >>> +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
-> >>> +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
-> >>> +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
-> >>> +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
-> >>> +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
-> >>> +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
-> >>> +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
-> >>> +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
-> >>> +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
-> >>> +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
-> >>> +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
-> >>> +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
-> >>> +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
-> >>> +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
-> >>> +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
-> >>> +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
-> >>> +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
-> >>> +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
-> >>> +
+On Mon, Aug 29, 2022 at 4:08 PM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> On 25. 08. 22, 19:19, Nick Desaulniers wrote:
+> > + Jiri in case this needs to be carried downstream.
+>
+> Thanks.
+>
+> > On Thu, Aug 25, 2022 at 2:15 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 > >>
-> >> This is an area where DRM overlaps with v4l2, see:
-> >> - include/dt-bindings/display/sdtv-standards.h
-> >> - v4l2_norm_to_name()
+> >> Since commit 8564ed2b3888 ("Kbuild, lto: Add a gcc-ld script to let run gcc
+> >> as ld") in 2014, there was not specific work on this the gcc-ld script
+> >> other than treewide clean-ups.
 > >>
-> >> Maybe we should follow suit, but if we do our own thing please mention
-> >> why in the commit message.
-> >=20
-> > Are you suggesting that we'd share that definition with v4l2?
-> >=20
->=20
-> If possible, yes.
->=20
-> > I've tried to share some code in the past between v4l2 and DRM, and it
-> > got completely shut down so it's not something I'd like to try again, if
-> > possible.
-> >=20
->=20
-> But that is a good enough reason not to do so. I just got the impression
-> from some of Laurent's emails a while back that there was some
-> cooperativ atmosphere, but I might be mistaken in my reading/understandin=
-g.
+> >> There are no users within the kernel tree, and probably no out-of-tree
+> >> users either, and there is no dedicated maintainer in MAINTAINERS.
+>
+> There are out-of-tree users.
+>
+> >> Delete this obsolete gcc-ld script.
+> >>
+> >> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> >
+> > No callers in-tree; happy to bring it back though should there later
+> > be. Thanks for the patch.
+>
+> I agree to have this downstream-only for the time being. We have updates
+> for it queued, so we'd only start tracking the full content now...
+>
+> BTW the script is not nice at all. How do the clang people cope with the
+> issue? (Running gcc-ld instead of ld with proper arguments when linking
+> using (full) LTO. For example "-z now" -> "-Wl,-z,now".)
 
-Here's the original thread:
-https://lore.kernel.org/lkml/cover.8ec406bf8f4f097e9dc909d5aac466556822f592=
-=2E1555487650.git-series.maxime.ripard@bootlin.com/
 
-It ended up stalling completely, without any will from either DRM or
-v4l2 to get this through. So I will not work on anything like that until
-both maintainership teams have expressed that it's something they
-actually want.
 
-> It is ofc possible to just copy the values from sdtv-standards.h, but I
-> see that hd* is missing from that list, so not sure if there's much
-> point if it has to be extended without changing the source.
+This comes from the difference in which layer LTO is implemented.
 
-HD formats were dropped, so it's not a big deal. However, we are missing
-a few formats, but that were never used by either nouveau, i915 or any
-other driver. I'm not sure it's worth adding at that point, and we can
-always extend it later.
 
-Maxime
 
---75abns6ys2rry5o6
-Content-Type: application/pgp-signature; name="signature.asc"
+GCC LTO is a feature of the GCC compiler.
+GNU binutils is agnostic about LTO.
+So, you need to use $(CC) as the linker driver.
+scripts/gcc-ld adds the '-Wl,' prefix to linker options.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwx4mQAKCRDj7w1vZxhR
-xYZDAQCtPJtDdO69aAVR+V32mB49Ic+bSm58hf0Ef9S43x8CQQEA6046rKs4GgON
-IjqfdYygrMMKGLb9fH70LvlsWbizSgA=
-=ydq5
------END PGP SIGNATURE-----
 
---75abns6ys2rry5o6--
+
+Clang LTO works in cooperation with the LLD linker.
+So, the direct use of $(LD) works.
+scripts/gcc-ld is unneeded.
+
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3A65A493C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0DC5A49A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiH2LWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S232099AbiH2L1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiH2LUj (ORCPT
+        with ESMTP id S231996AbiH2LZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:20:39 -0400
+        Mon, 29 Aug 2022 07:25:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2184566A49;
-        Mon, 29 Aug 2022 04:14:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CA776960;
+        Mon, 29 Aug 2022 04:15:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85B9AB80FB3;
-        Mon, 29 Aug 2022 11:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD0BEC433D6;
-        Mon, 29 Aug 2022 11:13:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 044F1B80F92;
+        Mon, 29 Aug 2022 11:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F29C433D6;
+        Mon, 29 Aug 2022 11:15:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771585;
-        bh=gtulpLrNC9Vr2OGeOpWy446vUQ2NNprrFCbro7zgi+A=;
+        s=korg; t=1661771740;
+        bh=MSbtcP4DVTBwTKfXt/XLBcPj7KhlA006+k6U4WaCZTc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UgfCpt/49qwh7mvyiUVi9CxitNythR4hzuU39Ufi4Jl4zkXlx/6c7/UWMOdgYTx3r
-         yyvEM2gOh1+leFItfHjMVv498KEGXb3XML6xK9J8BvVJW+uNk9TRaZWexjMNEqe2Mv
-         gw49053ff4gAdohL7cK5D9xqCbxGlUtX6HkXB9FM=
+        b=cAk2zwprJyvy/KgIc8UR4eBgpmF8RDZaS/LgnzQuQOxE9ThXVl4dE0JdNAiD41d2l
+         qu8WGm4GtENRew9LhsGH9j7kdzLbED2JaOxy1BLwWxmQlSnQqpTRJQidrxATNqU6FD
+         Vk5XVLpfBg+ocH1lxEuwnTq8IHk8+ZGHOVyDxJfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergei Antonov <saproj@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jonathan Toppins <jtoppins@redhat.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 046/158] net: moxa: get rid of asymmetry in DMA mapping/unmapping
-Date:   Mon, 29 Aug 2022 12:58:16 +0200
-Message-Id: <20220829105810.698091357@linuxfoundation.org>
+Subject: [PATCH 5.19 047/158] bonding: 802.3ad: fix no transmission of LACPDUs
+Date:   Mon, 29 Aug 2022 12:58:17 +0200
+Message-Id: <20220829105810.727094410@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 References: <20220829105808.828227973@linuxfoundation.org>
@@ -55,102 +56,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Jonathan Toppins <jtoppins@redhat.com>
 
-[ Upstream commit 0ee7828dfc56e97d71e51e6374dc7b4eb2b6e081 ]
+[ Upstream commit d745b5062ad2b5da90a5e728d7ca884fc07315fd ]
 
-Since priv->rx_mapping[i] is maped in moxart_mac_open(), we
-should unmap it from moxart_mac_stop(). Fixes 2 warnings.
+This is caused by the global variable ad_ticks_per_sec being zero as
+demonstrated by the reproducer script discussed below. This causes
+all timer values in __ad_timer_to_ticks to be zero, resulting
+in the periodic timer to never fire.
 
-1. During error unwinding in moxart_mac_probe(): "goto init_fail;",
-then moxart_mac_free_memory() calls dma_unmap_single() with
-priv->rx_mapping[i] pointers zeroed.
+To reproduce:
+Run the script in
+`tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh` which
+puts bonding into a state where it never transmits LACPDUs.
 
-WARNING: CPU: 0 PID: 1 at kernel/dma/debug.c:963 check_unmap+0x704/0x980
-DMA-API: moxart-ethernet 92000000.mac: device driver tries to free DMA memory it has not allocated [device address=0x0000000000000000] [size=1600 bytes]
-CPU: 0 PID: 1 Comm: swapper Not tainted 5.19.0+ #60
-Hardware name: Generic DT based system
- unwind_backtrace from show_stack+0x10/0x14
- show_stack from dump_stack_lvl+0x34/0x44
- dump_stack_lvl from __warn+0xbc/0x1f0
- __warn from warn_slowpath_fmt+0x94/0xc8
- warn_slowpath_fmt from check_unmap+0x704/0x980
- check_unmap from debug_dma_unmap_page+0x8c/0x9c
- debug_dma_unmap_page from moxart_mac_free_memory+0x3c/0xa8
- moxart_mac_free_memory from moxart_mac_probe+0x190/0x218
- moxart_mac_probe from platform_probe+0x48/0x88
- platform_probe from really_probe+0xc0/0x2e4
+line 44: ip link add fbond type bond mode 4 miimon 200 \
+            xmit_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
+setting bond param: ad_actor_sys_prio
+given:
+    params.ad_actor_system = 0
+call stack:
+    bond_option_ad_actor_sys_prio()
+    -> bond_3ad_update_ad_actor_settings()
+       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+            params.ad_actor_system == 0
+results:
+     ad.system.sys_mac_addr = bond->dev->dev_addr
 
-2. After commands:
- ip link set dev eth0 down
- ip link set dev eth0 up
+line 48: ip link set fbond address 52:54:00:3B:7C:A6
+setting bond MAC addr
+call stack:
+    bond->dev->dev_addr = new_mac
 
-WARNING: CPU: 0 PID: 55 at kernel/dma/debug.c:570 add_dma_entry+0x204/0x2ec
-DMA-API: moxart-ethernet 92000000.mac: cacheline tracking EEXIST, overlapping mappings aren't supported
-CPU: 0 PID: 55 Comm: ip Not tainted 5.19.0+ #57
-Hardware name: Generic DT based system
- unwind_backtrace from show_stack+0x10/0x14
- show_stack from dump_stack_lvl+0x34/0x44
- dump_stack_lvl from __warn+0xbc/0x1f0
- __warn from warn_slowpath_fmt+0x94/0xc8
- warn_slowpath_fmt from add_dma_entry+0x204/0x2ec
- add_dma_entry from dma_map_page_attrs+0x110/0x328
- dma_map_page_attrs from moxart_mac_open+0x134/0x320
- moxart_mac_open from __dev_open+0x11c/0x1ec
- __dev_open from __dev_change_flags+0x194/0x22c
- __dev_change_flags from dev_change_flags+0x14/0x44
- dev_change_flags from devinet_ioctl+0x6d4/0x93c
- devinet_ioctl from inet_ioctl+0x1ac/0x25c
+line 52: ip link set fbond type bond ad_actor_sys_prio 65535
+setting bond param: ad_actor_sys_prio
+given:
+    params.ad_actor_system = 0
+call stack:
+    bond_option_ad_actor_sys_prio()
+    -> bond_3ad_update_ad_actor_settings()
+       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+            params.ad_actor_system == 0
+results:
+     ad.system.sys_mac_addr = bond->dev->dev_addr
 
-v1 -> v2:
-Extraneous change removed.
+line 60: ip link set veth1-bond down master fbond
+given:
+    params.ad_actor_system = 0
+    params.mode = BOND_MODE_8023AD
+    ad.system.sys_mac_addr == bond->dev->dev_addr
+call stack:
+    bond_enslave
+    -> bond_3ad_initialize(); because first slave
+       -> if ad.system.sys_mac_addr != bond->dev->dev_addr
+          return
+results:
+     Nothing is run in bond_3ad_initialize() because dev_addr equals
+     sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
+     never initialized anywhere else.
 
-Fixes: 6c821bd9edc9 ("net: Add MOXA ART SoCs ethernet driver")
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220819110519.1230877-1-saproj@gmail.com
+The if check around the contents of bond_3ad_initialize() is no longer
+needed due to commit 5ee14e6d336f ("bonding: 3ad: apply ad_actor settings
+changes immediately") which sets ad.system.sys_mac_addr if any one of
+the bonding parameters whos set function calls
+bond_3ad_update_ad_actor_settings(). This is because if
+ad.system.sys_mac_addr is zero it will be set to the current bond mac
+address, this causes the if check to never be true.
+
+Fixes: 5ee14e6d336f ("bonding: 3ad: apply ad_actor settings changes immediately")
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/moxa/moxart_ether.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/net/bonding/bond_3ad.c | 38 ++++++++++++++--------------------
+ 1 file changed, 16 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/ethernet/moxa/moxart_ether.c b/drivers/net/ethernet/moxa/moxart_ether.c
-index f11f1cb92025f..3b6beb96ca856 100644
---- a/drivers/net/ethernet/moxa/moxart_ether.c
-+++ b/drivers/net/ethernet/moxa/moxart_ether.c
-@@ -74,11 +74,6 @@ static int moxart_set_mac_address(struct net_device *ndev, void *addr)
- static void moxart_mac_free_memory(struct net_device *ndev)
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index d7fb33c078e81..1f0120cbe9e80 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -2007,30 +2007,24 @@ void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
+  */
+ void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution)
  {
- 	struct moxart_mac_priv_t *priv = netdev_priv(ndev);
--	int i;
+-	/* check that the bond is not initialized yet */
+-	if (!MAC_ADDRESS_EQUAL(&(BOND_AD_INFO(bond).system.sys_mac_addr),
+-				bond->dev->dev_addr)) {
 -
--	for (i = 0; i < RX_DESC_NUM; i++)
--		dma_unmap_single(&priv->pdev->dev, priv->rx_mapping[i],
--				 priv->rx_buf_size, DMA_FROM_DEVICE);
+-		BOND_AD_INFO(bond).aggregator_identifier = 0;
+-
+-		BOND_AD_INFO(bond).system.sys_priority =
+-			bond->params.ad_actor_sys_prio;
+-		if (is_zero_ether_addr(bond->params.ad_actor_system))
+-			BOND_AD_INFO(bond).system.sys_mac_addr =
+-			    *((struct mac_addr *)bond->dev->dev_addr);
+-		else
+-			BOND_AD_INFO(bond).system.sys_mac_addr =
+-			    *((struct mac_addr *)bond->params.ad_actor_system);
++	BOND_AD_INFO(bond).aggregator_identifier = 0;
++	BOND_AD_INFO(bond).system.sys_priority =
++		bond->params.ad_actor_sys_prio;
++	if (is_zero_ether_addr(bond->params.ad_actor_system))
++		BOND_AD_INFO(bond).system.sys_mac_addr =
++		    *((struct mac_addr *)bond->dev->dev_addr);
++	else
++		BOND_AD_INFO(bond).system.sys_mac_addr =
++		    *((struct mac_addr *)bond->params.ad_actor_system);
  
- 	if (priv->tx_desc_base)
- 		dma_free_coherent(&priv->pdev->dev,
-@@ -193,6 +188,7 @@ static int moxart_mac_open(struct net_device *ndev)
- static int moxart_mac_stop(struct net_device *ndev)
- {
- 	struct moxart_mac_priv_t *priv = netdev_priv(ndev);
-+	int i;
+-		/* initialize how many times this module is called in one
+-		 * second (should be about every 100ms)
+-		 */
+-		ad_ticks_per_sec = tick_resolution;
++	/* initialize how many times this module is called in one
++	 * second (should be about every 100ms)
++	 */
++	ad_ticks_per_sec = tick_resolution;
  
- 	napi_disable(&priv->napi);
- 
-@@ -204,6 +200,11 @@ static int moxart_mac_stop(struct net_device *ndev)
- 	/* disable all functions */
- 	writel(0, priv->base + REG_MAC_CTRL);
- 
-+	/* unmap areas mapped in moxart_mac_setup_desc_ring() */
-+	for (i = 0; i < RX_DESC_NUM; i++)
-+		dma_unmap_single(&priv->pdev->dev, priv->rx_mapping[i],
-+				 priv->rx_buf_size, DMA_FROM_DEVICE);
-+
- 	return 0;
+-		bond_3ad_initiate_agg_selection(bond,
+-						AD_AGGREGATOR_SELECTION_TIMER *
+-						ad_ticks_per_sec);
+-	}
++	bond_3ad_initiate_agg_selection(bond,
++					AD_AGGREGATOR_SELECTION_TIMER *
++					ad_ticks_per_sec);
  }
  
+ /**
 -- 
 2.35.1
 

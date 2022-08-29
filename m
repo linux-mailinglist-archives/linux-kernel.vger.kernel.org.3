@@ -2,45 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A26C5A49A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581195A4831
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiH2L1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S230224AbiH2LHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiH2LYw (ORCPT
+        with ESMTP id S229609AbiH2LGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:24:52 -0400
+        Mon, 29 Aug 2022 07:06:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC1F71BEE;
-        Mon, 29 Aug 2022 04:15:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2806B5FFD;
+        Mon, 29 Aug 2022 04:04:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DE70B80F03;
-        Mon, 29 Aug 2022 11:15:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E46C433D6;
-        Mon, 29 Aug 2022 11:15:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4604FB80F02;
+        Mon, 29 Aug 2022 11:04:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F53BC433C1;
+        Mon, 29 Aug 2022 11:04:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771721;
-        bh=KzwSRv61OBn3Nvt6TNRlZDd87GViEX11UlK3d83CzG0=;
+        s=korg; t=1661771087;
+        bh=VN+iYaWb+w8MGsuSajTySD23U8Ko9kaM1QBtPJH+5+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dTLt13AWZHt80c79AUhoAgjy2Hd1i2jn4PiDhRk3SPnhxzdTWui2oP2sUDV40QfkO
-         OElnctQkiWxFslEJ/RLySJxwdCxUGfGdwmrkkn2K9WaC8eAypy6XdNhf+Ck4BtaMD6
-         1QzcWQRljedK9H5H/PTMbiO8RbM0yj7jNILVZUbU=
+        b=sbgW4wCJPjH0fBqXM7pQ/7K1jylNtPXdXEv8toUk3yTfP2aHhSN1daUvSzXYI4Xju
+         KKn+n7Nu5yL/NUUfQ0oQ+o+tBszyx49d03OKwiABFuCqJ3mVr8PH9kRL4bgYGE3RwY
+         LApBnhAjHz2EZhWzdXN2Da5yGzlG0eSK+jqVdjaw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Peter Xu <peterx@redhat.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michel Lespinasse <walken@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        "Thomas Hellstrm (Intel)" <thomas_os@shipmail.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        yuleixzhang <yulei.kernel@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 074/158] net: Fix a data-race around netdev_budget.
-Date:   Mon, 29 Aug 2022 12:58:44 +0200
-Message-Id: <20220829105812.127136518@linuxfoundation.org>
+Subject: [PATCH 5.10 19/86] mm/huge_memory.c: use helper function migration_entry_to_page()
+Date:   Mon, 29 Aug 2022 12:58:45 +0200
+Message-Id: <20220829105757.304795655@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +67,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-[ Upstream commit 2e0c42374ee32e72948559d2ae2f7ba3dc6b977c ]
+[ Upstream commit a44f89dc6c5f8ba70240b81a570260d29d04bcb0 ]
 
-While reading netdev_budget, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+It's more recommended to use helper function migration_entry_to_page()
+to get the page via migration entry.  We can also enjoy the PageLocked()
+check there.
 
-Fixes: 51b0bdedb8e7 ("[NET]: Separate two usages of netdev_max_backlog.")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lkml.kernel.org/r/20210318122722.13135-7-linmiaohe@huawei.com
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Peter Xu <peterx@redhat.com>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Michel Lespinasse <walken@google.com>
+Cc: Ralph Campbell <rcampbell@nvidia.com>
+Cc: Thomas Hellstrm (Intel) <thomas_os@shipmail.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
+Cc: William Kucharski <william.kucharski@oracle.com>
+Cc: Yang Shi <yang.shi@linux.alibaba.com>
+Cc: yuleixzhang <yulei.kernel@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/huge_memory.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 34282b93c3f60..a330f93629314 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6647,7 +6647,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
- 	unsigned long time_limit = jiffies +
- 		usecs_to_jiffies(netdev_budget_usecs);
--	int budget = netdev_budget;
-+	int budget = READ_ONCE(netdev_budget);
- 	LIST_HEAD(list);
- 	LIST_HEAD(repoll);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 594368f6134f1..cb7b0aead7096 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1691,7 +1691,7 @@ int zap_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
  
+ 			VM_BUG_ON(!is_pmd_migration_entry(orig_pmd));
+ 			entry = pmd_to_swp_entry(orig_pmd);
+-			page = pfn_to_page(swp_offset(entry));
++			page = migration_entry_to_page(entry);
+ 			flush_needed = 0;
+ 		} else
+ 			WARN_ONCE(1, "Non present huge pmd without pmd migration enabled!");
+@@ -2110,7 +2110,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		swp_entry_t entry;
+ 
+ 		entry = pmd_to_swp_entry(old_pmd);
+-		page = pfn_to_page(swp_offset(entry));
++		page = migration_entry_to_page(entry);
+ 		write = is_write_migration_entry(entry);
+ 		young = false;
+ 		soft_dirty = pmd_swp_soft_dirty(old_pmd);
 -- 
 2.35.1
 

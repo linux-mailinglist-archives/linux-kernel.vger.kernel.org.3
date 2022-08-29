@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8035A4335
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112035A433C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 08:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiH2G0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 02:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S229648AbiH2G2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 02:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiH2G0H (ORCPT
+        with ESMTP id S229507AbiH2G2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 02:26:07 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FDC1F605
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 23:26:04 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oSYDh-0002hT-9s; Mon, 29 Aug 2022 08:26:01 +0200
-Message-ID: <1200fe58-72de-5372-a0f0-2ac93b6aeccc@pengutronix.de>
-Date:   Mon, 29 Aug 2022 08:25:58 +0200
+        Mon, 29 Aug 2022 02:28:53 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73A74B0FA;
+        Sun, 28 Aug 2022 23:28:52 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11f0fa892aeso1024415fac.7;
+        Sun, 28 Aug 2022 23:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=dHQJKSyHKH/RlxhxZ4Q/EKqTBZjMDarnF1XaHz0S2gU=;
+        b=XCdQxL63SAkWPhdSckr1KRYpMwuInjqA5hL6NqW7+L3ZU8SIYVCPCWIexWqvjsVnvt
+         Iw1hAANity4bXp7k2QT87/LpO5kWHKdqU4KLWmIt+f06LpNg2IW3BW2vlS7mAFYQv7XZ
+         oH8gSg6WccFk+ohOGZP5VXV9W7QBvGKkLu3SW88JpVcqOgcdOh1acG2M+9AN+ElLgnxd
+         4JC8o/Km51u5OeJWbEUeZEj65ca58ZuB7buySpzk9l+biB7HOimLrxOubfm20bMV5WQc
+         Go0cS7YfjPPH70E5EsVrZmaAHXPJjTQ6kfxiwvZoPWxGc+5zX/ffwpBLkBZJ5LeC0bLa
+         ccqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=dHQJKSyHKH/RlxhxZ4Q/EKqTBZjMDarnF1XaHz0S2gU=;
+        b=jd4woTRFtvXxjeBBFUCLO+kcZE+d1TaIkglz+zPxUYeHMAQk54VFohITVVfIQpbvPQ
+         yDg8PhAM4Qh703LVyIWFvDlw7vF1WctBHPKnhRdwHGZr7zc6ObX7Wk7h07nA3KLqrfOf
+         J6qIUMxXSEbyl5FsyeXaXmqhfOQH2KlWm9jNVQxLVXeJNctkdQq0rLTdiNpnYqRxlIuQ
+         Dm3DK6FxOz0+bMwCFZsm7+iVf5WEQAK6TPRevUfAySNePz/oNa12zaZBpdah6dox146X
+         haUC5ANbQqQLiNodRLytSWJOXGWaXTBOTwQi3HklE0HVjO5zbBWS0llyfuqSQ276LV9m
+         Ry/w==
+X-Gm-Message-State: ACgBeo3tzHo7w42/4p43viqjwnWP/mZjGvr9u8Lh7/ee0MVuxM4wBYfd
+        +lgqsQb5g1/jiZYYnxKIogto/du20O/LfxrLyh4=
+X-Google-Smtp-Source: AA6agR6QWzfrwtXmIwOND+BLUkGH9SQkq7gxiFCylMZ1UEuJJq+j0L10LQlJsHA29k0GcUzIkiAGwcJYBvz7BtMTv94=
+X-Received: by 2002:a05:6870:64a1:b0:11c:5ca9:e519 with SMTP id
+ cz33-20020a05687064a100b0011c5ca9e519mr7385632oab.4.1661754532245; Sun, 28
+ Aug 2022 23:28:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] nvmem: u-boot-env: fix crc32 casting type
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Tom Rini <trini@konsulko.com>,
-        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        kernel test robot <lkp@intel.com>
-References: <20220818043837.28698-1-zajec5@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220818043837.28698-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220825114018.1715-1-xuewen.yan@unisoc.com>
+In-Reply-To: <20220825114018.1715-1-xuewen.yan@unisoc.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Mon, 29 Aug 2022 14:28:41 +0800
+Message-ID: <CAB8ipk-su6DRo0DsgaY38Vf2AuxBuvG0GQ0xA22se7Wx5eH0Pg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Check the policy first in cpufreq_cooling_register
+To:     Xuewen Yan <xuewen.yan@unisoc.com>
+Cc:     viresh.kumar@linaro.org, lukasz.luba@arm.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rafał,
+Hi all,
 
-On 18.08.22 06:38, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> This fixes:
-> drivers/nvmem/u-boot-env.c:141:17: sparse: sparse: cast to restricted __le32
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment variables")
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Any comments?
+
+On Thu, Aug 25, 2022 at 7:42 PM Xuewen Yan <xuewen.yan@unisoc.com> wrote:
+>
+> Since the policy needs to be accessed first when obtaining cpu devices,
+> first check whether the policy is legal before this.
+>
+> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
 > ---
->  drivers/nvmem/u-boot-env.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
-> index 9b9abfb8f187..fb993ef4249f 100644
-> --- a/drivers/nvmem/u-boot-env.c
-> +++ b/drivers/nvmem/u-boot-env.c
-> @@ -138,7 +138,7 @@ static int u_boot_env_parse(struct u_boot_env *priv)
->  		data_offset = offsetof(struct u_boot_env_image_redundant, data);
->  		break;
->  	}
-> -	crc32 = le32_to_cpu(*(uint32_t *)(buf + crc32_offset));
-> +	crc32 = le32_to_cpu(*(__le32 *)(buf + crc32_offset));
+>  drivers/thermal/cpufreq_cooling.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index b76293cc989c..7838b6e2dba5 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -501,17 +501,17 @@ __cpufreq_cooling_register(struct device_node *np,
+>         struct thermal_cooling_device_ops *cooling_ops;
+>         char *name;
+>
+> +       if (IS_ERR_OR_NULL(policy)) {
+> +               pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
+> +               return ERR_PTR(-EINVAL);
+> +       }
+> +
+>         dev = get_cpu_device(policy->cpu);
+>         if (unlikely(!dev)) {
+>                 pr_warn("No cpu device for cpu %d\n", policy->cpu);
+>                 return ERR_PTR(-ENODEV);
+>         }
+>
+> -       if (IS_ERR_OR_NULL(policy)) {
+> -               pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
+> -               return ERR_PTR(-EINVAL);
+> -       }
+> -
+>         i = cpufreq_table_count_valid_entries(policy);
+>         if (!i) {
+>                 pr_debug("%s: CPUFreq table not found or has no valid entries\n",
+> --
+> 2.25.1
+>
 
-I had to do a double take to make sure alignment is not violated.
-It's not, because crc32_offset is always zero.
-
-How about rewriting this as
-
-  /* CRC32 is always at offset 0 */
-  crc32 = le32_to_cpup(buf);
-
-To make the alignment clear to the reader?
-
->  	crc32_data_len = priv->mtd->size - crc32_data_offset;
->  	data_len = priv->mtd->size - data_offset;
->  
-
-Cheers,
-Ahmad
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+THanks!

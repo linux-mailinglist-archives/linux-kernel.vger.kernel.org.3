@@ -2,42 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B163A5A46A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA09C5A46AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiH2KAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S229902AbiH2KAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 06:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiH2J75 (ORCPT
+        with ESMTP id S229622AbiH2KAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:59:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0895D5F84;
-        Mon, 29 Aug 2022 02:59:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00B3A23A;
-        Mon, 29 Aug 2022 02:59:59 -0700 (PDT)
-Received: from [10.57.14.18] (unknown [10.57.14.18])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C2A483F882;
-        Mon, 29 Aug 2022 02:59:51 -0700 (PDT)
-Message-ID: <9fc3d98c-9262-e737-3bfa-ffd2c913428f@arm.com>
-Date:   Mon, 29 Aug 2022 10:59:50 +0100
+        Mon, 29 Aug 2022 06:00:43 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967DDDFDB;
+        Mon, 29 Aug 2022 03:00:42 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id az27so9486417wrb.6;
+        Mon, 29 Aug 2022 03:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=l0dd8ecbpZnuzsCu5JGEpd3FIwlZH2NjRr90vsXjRJU=;
+        b=Vxenx/x3aciurxig2M6JStt1bFKy9byWFgerDbAaMMmGHP5hv1Zv4mhoRvPo+RU0rj
+         3xUO7ahTZi2vegvvvjlSv+HbTYM4nUGlWqK1jJD/n00UYVtxad9hsM3DtjjLw+gV8HII
+         2c1EFG3PGwSwVukbr1Ma3AGbzLEh+dAhUN6XeLsfBhp7ce/2WFobApiKPQsXw12wBh7e
+         2vaHtkJYxTMzCIvoK4I9rwI6A+2hGzMpYu3mv6UC28SvgrhGOIcnr4EU3Aelhl6yoEXK
+         jwfMbaYzS54AfqgtbevJedt76ZY24iaACODyX/I0ysJIUBzqf0ws+wRJL1xp4MDHMwjp
+         DcUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=l0dd8ecbpZnuzsCu5JGEpd3FIwlZH2NjRr90vsXjRJU=;
+        b=IGK1QKwPK4bH4/QiUU27iwyA956SfJ3wqcB0DKT3HTW0lg6OjQrgqXf95MSqy9/dkT
+         ELthYP30l1PMbMiqzYlOfKiw8U8dUFwSmBNeMVGI7HkQ69dndArHOiGWsd8Ny/MCkWlz
+         v2ffTkay8z+CE+Q9tylCPFkvZHhLwjfTjhsvg2tBF13FS8O8sTa9JrsAclhKAaW819BJ
+         +TwYX+VtRDtWuXZCkwq+yZ6dFnWHqfSdd5HZATVTkKYH/TH+2p8veRoO/ZUs+W7FLlWi
+         b6Lk6diNpZK1MIjSo7+dcHMYAOe67lf/wRX2v+T69azYZx3MbliS61zWNvR3lk0hpehZ
+         w1+Q==
+X-Gm-Message-State: ACgBeo0cHQYRv4WyO8U6KPbNwlOyJh5SBWeCWEna1Cwq2HAAqpsUtmwT
+        UcNWaBDYeLAp4InuXiNJPtGNkVBDOVE=
+X-Google-Smtp-Source: AA6agR7p1BSAyfx0TInY5Ker3Q46WxaH2F9v+jEvrWs9zSmBL9VOugQdt15Cdyt5riIsyGP3mdmBrA==
+X-Received: by 2002:a5d:4082:0:b0:226:d019:c91e with SMTP id o2-20020a5d4082000000b00226d019c91emr5941444wrp.557.1661767241168;
+        Mon, 29 Aug 2022 03:00:41 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id c21-20020a7bc015000000b003a5c999cd1asm8881424wmb.14.2022.08.29.03.00.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 03:00:40 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 11:00:38 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Johnny Huang <johnny_huang@aspeedtech.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220829 due to 108713a713c7 ("crypto: aspeed
+ - Add HACE hash driver")
+Message-ID: <YwyORp72cuDrVYdA@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] docs: scheduler: Update new path for the sysctl knobs
-Content-Language: en-US
-To:     corbet@lwn.net
-Cc:     siyanteng@loongson.cn, alexs@kernel.org, peterz@infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220816121907.841-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220816121907.841-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_50,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,48 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+Hi All,
+
+The builds of arm allmodconfig have failed to build next-20220829 with
+the error:
+
+ERROR: modpost: "aspeed_register_hace_hash_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+ERROR: modpost: "aspeed_unregister_hace_crypto_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+ERROR: modpost: "aspeed_register_hace_crypto_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
+ERROR: modpost: "aspeed_unregister_hace_hash_algs" [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
 
 
-On 8/16/22 13:19, Lukasz Luba wrote:
-> Add missing update for the documentation bit of some scheduler knob.
-> The knobs have been moved to /debug/sched/ location (with adjusted names).
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->   Documentation/scheduler/sched-design-CFS.rst                    | 2 +-
->   Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/scheduler/sched-design-CFS.rst b/Documentation/scheduler/sched-design-CFS.rst
-> index 59b2d1fb4dc4..03db55504515 100644
-> --- a/Documentation/scheduler/sched-design-CFS.rst
-> +++ b/Documentation/scheduler/sched-design-CFS.rst
-> @@ -94,7 +94,7 @@ other HZ detail.  Thus the CFS scheduler has no notion of "timeslices" in the
->   way the previous scheduler had, and has no heuristics whatsoever.  There is
->   only one central tunable (you have to switch on CONFIG_SCHED_DEBUG):
->   
-> -   /proc/sys/kernel/sched_min_granularity_ns
-> +   /sys/kernel/debug/sched/min_granularity_ns
->   
->   which can be used to tune the scheduler from "desktop" (i.e., low latencies) to
->   "server" (i.e., good batching) workloads.  It defaults to a setting suitable
-> diff --git a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-> index 26b0f36f793d..3076402406c4 100644
-> --- a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-> +++ b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-> @@ -80,7 +80,7 @@ p->se.vruntime。一旦p->se.vruntime变得足够大，其它的任务将成为
->   CFS使用纳秒粒度的计时，不依赖于任何jiffies或HZ的细节。因此CFS并不像之前的调度器那样
->   有“时间片”的概念，也没有任何启发式的设计。唯一可调的参数（你需要打开CONFIG_SCHED_DEBUG）是：
->   
-> -   /proc/sys/kernel/sched_min_granularity_ns
-> +   /sys/kernel/debug/sched/min_granularity_ns
->   
->   它可以用来将调度器从“桌面”模式（也就是低时延）调节为“服务器”（也就是高批处理）模式。
->   它的默认设置是适合桌面的工作负载。SCHED_BATCH也被CFS调度器模块处理。
+git bisect pointed to 108713a713c7 ("crypto: aspeed - Add HACE hash driver")
+
+I will be happy to test any patch or provide any extra log if needed.
 
 
-Gentle ping. Could you take this patch, please?
-
-Regards,
-Lukasz
+--
+Regards
+Sudip

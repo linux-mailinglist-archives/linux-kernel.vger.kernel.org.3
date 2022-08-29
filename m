@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6C35A4B07
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18B05A4BA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiH2MGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S232096AbiH2MZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiH2MGH (ORCPT
+        with ESMTP id S232013AbiH2MZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:06:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C85D2D1C8;
-        Mon, 29 Aug 2022 04:51:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 981BEB80DD5;
-        Mon, 29 Aug 2022 11:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5213C433D7;
-        Mon, 29 Aug 2022 11:42:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661773328;
-        bh=Xsfgl7e6NlVwn8xIM0IF5nw3L7EgSwgAuiqnYe1tzkI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=16Fq0dL8+o2ZaYkCq1aycTaOqpfU9fTuCjQKmqpC4HezWP1yTlAlkocvOvsSNtw9/
-         XrOuuclq6tGohTM4ktbEUeV8azFJFc6TRiOtraTUvFPv5UofX/+Q2scgNspLRjTHw2
-         ep2DZTx7wJBuZ//mNqOHPnk18dBebfoXwfFjw7Uo=
-Date:   Mon, 29 Aug 2022 13:42:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Szuying Chen <chensiying21@gmail.com>
-Cc:     mario.limonciello@amd.com, mika.westerberg@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
-        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: [PATCH v7 1/3] thunderbolt: Add vendor's specific operations of
- NVM
-Message-ID: <YwymDTBiG3oFWhni@kroah.com>
-References: <20220829111059.665305-1-chensiying21@gmail.com>
- <20220829111059.665305-2-chensiying21@gmail.com>
+        Mon, 29 Aug 2022 08:25:25 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1EB923F5;
+        Mon, 29 Aug 2022 05:09:16 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 5AC4E1884942;
+        Mon, 29 Aug 2022 11:43:18 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 4B03125032B7;
+        Mon, 29 Aug 2022 11:43:18 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 42CC79EC0001; Mon, 29 Aug 2022 11:43:18 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829111059.665305-2-chensiying21@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Mon, 29 Aug 2022 13:43:18 +0200
+From:   netdev@kapio-technology.com
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+User-Agent: Gigahost Webmail
+Message-ID: <e1e07c4ebdcc494d9a20d1a8ec398b48@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,15 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 07:10:57PM +0800, Szuying Chen wrote:
-> ---
-> Fix $subject and add part of kernel-doc.
+> On 2022-08-27 13:30, Nikolay Aleksandrov wrote:
+>> @@ -879,6 +888,10 @@ void br_fdb_update(struct net_bridge *br, struct 
+>> net_bridge_port *source,
+>>  						      &fdb->flags)))
+>>  					clear_bit(BR_FDB_ADDED_BY_EXT_LEARN,
+>>  						  &fdb->flags);
+>> +				if (source->flags & BR_PORT_MAB)
+>> +					set_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+>> +				else
+>> +					clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+> Please add a test for that bit and only then change it.
+> 
 
-Please read the documentation in the kernel for how to show this
-properly.  Please read the section entitled "The canonical patch format"
-in the kernel file, Documentation/SubmittingPatches for what needs to be
-done here to properly describe this.
+Okay, I have revised this part now. I hope that it is suitable?
 
-thanks,
+@@ -749,6 +756,10 @@ void br_fdb_update(struct net_bridge *br, struct 
+net_bridge_port *source,
+                                                       &fdb->flags)))
+                                         
+clear_bit(BR_FDB_ADDED_BY_EXT_LEARN,
+                                                   &fdb->flags);
++                               /* Allow roaming from an unauthorized 
+port to an
++                                * authorized port */
++                               if 
+(unlikely(test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags)))
++                                       clear_bit(BR_FDB_ENTRY_LOCKED, 
+&fdb->flags);
+                         }
 
-greg k-h
+                         if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, 
+&flags)))
+

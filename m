@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448E25A41F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 06:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFA65A41F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 06:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiH2Ebs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 00:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S229649AbiH2EdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 00:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiH2Ebp (ORCPT
+        with ESMTP id S229450AbiH2EdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 00:31:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883603DBFE
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 21:31:44 -0700 (PDT)
+        Mon, 29 Aug 2022 00:33:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680E3DF2C
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 21:33:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13EAA60FC5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7163BC433D6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:31:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E155AB80CAC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D36C433B5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 04:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661747503;
-        bh=Q5uwaCjtDZodNXDw9HyknG6gzbEe16cPiJSOg5tENmc=;
+        s=k20201202; t=1661747594;
+        bh=FZIj8P9sqaU3saI0TjpqLdjlB7rVqC9somVTZ/+UVes=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NHuBauu2FP+OcxS2EPGDkVr6rA8U6LMoQlOLsXoYLT69JDEWfXPXwr+SDDfefBX8R
-         jE8c0j4X1PgpujpUKq/wCgE/bLfOfVhxOAk8vBH1uhSKR+IndqAU/gJqAvOsB6hJeB
-         pk8PpiylYbjN9QR55v8vsLbPeGD8btv5i44CP9Utxi4waSEzYA43Seb/3fk+PXLlTk
-         rUxAGgwUEOSgz16hp9/2NCxTzj2UTATQ2kbyckfdqoIaZXfCWwHx9SsK4D+JNcyLqE
-         FNtFPLwrDqAO/6aS8lQ7BQGcTwoDdkTu3hs9En/ZUSSEsZBiKuo95U5hzk+hVgj096
-         Y30Niq58yNKOw==
-Received: by mail-vk1-f173.google.com with SMTP id c2so272842vkm.9
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 21:31:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1sPgnBJgkgZEUf+pdgnFnqRCGyelnR78/jsPyiwNC87Hu5klvi
-        eXFpnJjH4WpnPw92Kz8DCrwEOnHkrf6B5X/q/sM=
-X-Google-Smtp-Source: AA6agR4dmeOeOK0vxhiFuG208OrUj6NfbW7j6umrxJPeb6QxPEF1TTgdICNm31n02rks+npAxVttdG4VFIBUViZHmlU=
-X-Received: by 2002:a1f:9b90:0:b0:374:f09c:876f with SMTP id
- d138-20020a1f9b90000000b00374f09c876fmr2725218vke.12.1661747502405; Sun, 28
- Aug 2022 21:31:42 -0700 (PDT)
+        b=ARXhfbG9u/BL4VG+54Vxe8uP78eIBgkUZKo0rD1sP/uNSzbSWYQls7foWLX/Da6vA
+         bf0JAVknt40n5eUs25mih49FgJjWM7rovKNhVWr7yaM7o4UcKJVAptL9rOSs1blWpc
+         9l9QidyIJ2hQFKrLXuhBx7Sdl28rMP24zq3BsKEWTbmObsnclZ6wCHdoppTZnb5wZb
+         KWmXeCNUYDCr+12AVv4neIQgvPS8AvnC2cfWyQBGoMfoA0eHmqHyro06ibPlj66nen
+         ktosurthPE1fIjX6/+4+OI2wBQABOyTSQQzpy638p2/44IkUn/nVC81Jcw6xrBSQCV
+         8hU/tiTrEjdGg==
+Received: by mail-ua1-f41.google.com with SMTP id z14so2664889uam.10
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Aug 2022 21:33:14 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0QBmRM/EzTEMHZz1jyiMSOfz0CHht5dQIaJWZSrx9HR0OqFAKU
+        9fOSMNi/iaGrdpUzETRFuA8K3oLhC80tLdJKHu0=
+X-Google-Smtp-Source: AA6agR5nj5071CokDeGSMkEclFusZJ8UcJyUoNE//3Dz+nMZr2bpvAKxv6yDdm/ja+FraUobdgejdQir2brItPsSt68=
+X-Received: by 2002:ab0:2095:0:b0:39f:881e:51b6 with SMTP id
+ r21-20020ab02095000000b0039f881e51b6mr1195184uak.23.1661747593553; Sun, 28
+ Aug 2022 21:33:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220827175436.156464-1-xry111@xry111.site> <20220827175436.156464-2-xry111@xry111.site>
- <CAAhV-H7-MNd9WsnB3r2kxRN7LveixGwQZ=qTVHB_XvW+uU9q4Q@mail.gmail.com> <fbbcf45a1f54333e8abfea3c121f37ad56651dbc.camel@xry111.site>
-In-Reply-To: <fbbcf45a1f54333e8abfea3c121f37ad56651dbc.camel@xry111.site>
+References: <20220827175436.156464-1-xry111@xry111.site> <CAAhV-H4+=CqeRUUt+XPZ2Nf=1GRgHtTFyMuVu-y6QdgQgD4mog@mail.gmail.com>
+ <b681993ca92d5243a73e23303ff9386ad03cf05a.camel@xry111.site>
+In-Reply-To: <b681993ca92d5243a73e23303ff9386ad03cf05a.camel@xry111.site>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 29 Aug 2022 12:31:31 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Gz5pGO0-bRWu_x5TZrOX77_uJjfEQPGo+Fgyk7irRdA@mail.gmail.com>
-Message-ID: <CAAhV-H4Gz5pGO0-bRWu_x5TZrOX77_uJjfEQPGo+Fgyk7irRdA@mail.gmail.com>
-Subject: Re: [PATCH 1/8] LoongArch: Add CONFIG_CC_HAS_EXPLICIT_RELOCS
-To:     Xi Ruoyao <xry111@xry111.site>
+Date:   Mon, 29 Aug 2022 12:33:02 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5tB9nvD8Uufn5SQ1s0hzob4TuxRTaSri-cxHVqtRH6uw@mail.gmail.com>
+Message-ID: <CAAhV-H5tB9nvD8Uufn5SQ1s0hzob4TuxRTaSri-cxHVqtRH6uw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] LoongArch: Support toolchain with new relocation types
+To:     Xi Ruoyao <xry111@xry111.site>, Arnd Bergmann <arnd@arndb.de>
 Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
         Youling Tang <tangyouling@loongson.cn>,
@@ -65,23 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 12:20 AM Xi Ruoyao <xry111@xry111.site> wrote:
+Hi, Ruoyao,
+
+On Mon, Aug 29, 2022 at 12:17 AM Xi Ruoyao <xry111@xry111.site> wrote:
 >
 > On Sun, 2022-08-28 at 22:15 +0800, Huacai Chen wrote:
-> > > +config CC_HAS_EXPLICIT_RELOCS
-> > > +       def_bool $(cc-option,-mexplicit-relocs) && $(as-
-> > > instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
-> > Is it possible that we only change the Makefile and not touch Kconfig?
+> > 1, You can still call it v5, even if it has changed a lot;
 >
-> I guess we can, but if we'll introduce objtool we can
+> Ok, so should I call the next version v2 or v6?
+V6 is reasonable to me.
+
 >
->   select HAVE_OBJTOOL if CC_HAS_EXPLICIT_RELOCS
+> Sorry for introducing such a mess :(.
 >
-> then.
-OK, you can keep your way.
+> > 2, In my opinion, patch 4,5,7,8 can be combined, but I don't insist if
+> > you have a good reason to separate.
+>
+> If we'll drop support for old GCC/Binutils, we can drop patch 5 (it's
+> only needed for the combination of old GCC and new Binutils).  Then
+> squash 4 and 7.  8 should still be standalone IMO.
+Whether we can drop old toolchains depends on Arnd. :)
+But even if we should support old toolchains, I think we only need to
+consider new binutils + new gcc and old binutils + old gcc, I don't
+think new binutils + old gcc and old binutils + new gcc can exist in
+the real world.
+
+>
+> > 3, If possible, I still prefer to remove old relocation types support,
+> > in order to make life easier, especially for objtool that is queued
+> > for upstream.
+>
+> How about this?  I'm not sure if it's proper to invoke "error" in
+> Makefile.
+>
+> ifneq ($(shell $(CC) $(srctree)/arch/loongarch/scripts/toolchain-check.c &> /dev/null -o /dev/null && echo "ok"), ok)
+>   ifdef CONFIG_MODULES
+>     $(error "toolchain is too old for LoongArch modular kernel")
+>   endif
+> endif
+>
+> toolchain-check.c:
+>
+> #if !__has_attribute(model)
+> #error no model attribute
+> #endif
+>
+> int main()
+> {
+>         __asm__("x:pcalau12i $t0,%pc_hi20(x)");
+> }
+Compared to toolchain-check.c, I prefer to change Kconfig, so please
+keep the old way. But since new binutils + old gcc and old binutils +
+new gcc can hardly exist, can we only check the gcc features
+(explicit-relocs and has_attribute)?
+
 
 Huacai
->
 > --
 > Xi Ruoyao <xry111@xry111.site>
 > School of Aerospace Science and Technology, Xidian University

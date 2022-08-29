@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413D15A4A8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C775A48C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiH2Ll7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S231381AbiH2LP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiH2Ll1 (ORCPT
+        with ESMTP id S229849AbiH2LNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:41:27 -0400
+        Mon, 29 Aug 2022 07:13:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542326FA30;
-        Mon, 29 Aug 2022 04:25:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF56A487;
+        Mon, 29 Aug 2022 04:09:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BFE5B80F00;
-        Mon, 29 Aug 2022 11:16:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75306C433D7;
-        Mon, 29 Aug 2022 11:16:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31326B80F9A;
+        Mon, 29 Aug 2022 11:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B79CC433D6;
+        Mon, 29 Aug 2022 11:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771804;
-        bh=kCJJ0zEhqeKzejMCjY23kNjAuEHLY49pqrGAAhrL7AQ=;
+        s=korg; t=1661771296;
+        bh=AhGtrVBP7bDxvnER6WTSl2DiSMmDV+/B2DOAWezXJQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nnFD8i+NN4HszMpToMICFTbbtsG3g8NazuP/1iB/qwOt8UzYHS1JK1U5O8vmKVQfx
-         ZgJ3TtdCElh8xQAkJqv9WOwWdZ64ncBKgvAtW6rLUgOGNJDfosDDcQGdIbTx8EuSJf
-         mAxB+rLdqbVxsF6yCAtvI3anoldEpjQpztvkVB/g=
+        b=tytShonrGEv/w78+lLrtgpxvF/GM7Gb2kZdzAGe3U1F1P0uL6eLUoQ+7J1nI5Ycdw
+         4caGbvws91EyD8Jh0OzdKBhSbyhmEDm9VGMfMYnmw2Nr2P7wk13YkhGJl3ofTQ6w35
+         /WEjp6wDJkNHdO1BCJeJZLvj0SB6s5CoNf5u/rB0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephane Eranian <eranian@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.19 103/158] perf/x86/lbr: Enable the branch type for the Arch LBR by default
-Date:   Mon, 29 Aug 2022 12:59:13 +0200
-Message-Id: <20220829105813.414117464@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 48/86] net: Fix data-races around netdev_max_backlog.
+Date:   Mon, 29 Aug 2022 12:59:14 +0200
+Message-Id: <20220829105758.493453346@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
+References: <20220829105756.500128871@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 32ba156df1b1c8804a4e5be5339616945eafea22 upstream.
+[ Upstream commit 5dcd08cd19912892586c6082d56718333e2d19db ]
 
-On the platform with Arch LBR, the HW raw branch type encoding may leak
-to the perf tool when the SAVE_TYPE option is not set.
+While reading netdev_max_backlog, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-In the intel_pmu_store_lbr(), the HW raw branch type is stored in
-lbr_entries[].type. If the SAVE_TYPE option is set, the
-lbr_entries[].type will be converted into the generic PERF_BR_* type
-in the intel_pmu_lbr_filter() and exposed to the user tools.
-But if the SAVE_TYPE option is NOT set by the user, the current perf
-kernel doesn't clear the field. The HW raw branch type leaks.
+While at it, we remove the unnecessary spaces in the doc.
 
-There are two solutions to fix the issue for the Arch LBR.
-One is to clear the field if the SAVE_TYPE option is NOT set.
-The other solution is to unconditionally convert the branch type and
-expose the generic type to the user tools.
-
-The latter is implemented here, because
-- The branch type is valuable information. I don't see a case where
-  you would not benefit from the branch type. (Stephane Eranian)
-- Not having the branch type DOES NOT save any space in the
-  branch record (Stephane Eranian)
-- The Arch LBR HW can retrieve the common branch types from the
-  LBR_INFO. It doesn't require the high overhead SW disassemble.
-
-Fixes: 47125db27e47 ("perf/x86/intel/lbr: Support Architectural LBR")
-Reported-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20220816125612.2042397-1-kan.liang@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/intel/lbr.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/admin-guide/sysctl/net.rst | 2 +-
+ net/core/dev.c                           | 4 ++--
+ net/core/gro_cells.c                     | 2 +-
+ net/xfrm/espintcp.c                      | 2 +-
+ net/xfrm/xfrm_input.c                    | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1097,6 +1097,14 @@ static int intel_pmu_setup_hw_lbr_filter
+diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
+index f2ab8a5b6a4b8..7f553859dba82 100644
+--- a/Documentation/admin-guide/sysctl/net.rst
++++ b/Documentation/admin-guide/sysctl/net.rst
+@@ -271,7 +271,7 @@ poll cycle or the number of packets processed reaches netdev_budget.
+ netdev_max_backlog
+ ------------------
  
- 	if (static_cpu_has(X86_FEATURE_ARCH_LBR)) {
- 		reg->config = mask;
-+
-+		/*
-+		 * The Arch LBR HW can retrieve the common branch types
-+		 * from the LBR_INFO. It doesn't require the high overhead
-+		 * SW disassemble.
-+		 * Enable the branch type by default for the Arch LBR.
-+		 */
-+		reg->reg |= X86_BR_TYPE_SAVE;
- 		return 0;
- 	}
+-Maximum number  of  packets,  queued  on  the  INPUT  side, when the interface
++Maximum number of packets, queued on the INPUT side, when the interface
+ receives packets faster than kernel can process them.
  
+ netdev_rss_key
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 701a1afc91ff1..215c43aecc67e 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4516,7 +4516,7 @@ static bool skb_flow_limit(struct sk_buff *skb, unsigned int qlen)
+ 	struct softnet_data *sd;
+ 	unsigned int old_flow, new_flow;
+ 
+-	if (qlen < (netdev_max_backlog >> 1))
++	if (qlen < (READ_ONCE(netdev_max_backlog) >> 1))
+ 		return false;
+ 
+ 	sd = this_cpu_ptr(&softnet_data);
+@@ -4564,7 +4564,7 @@ static int enqueue_to_backlog(struct sk_buff *skb, int cpu,
+ 	if (!netif_running(skb->dev))
+ 		goto drop;
+ 	qlen = skb_queue_len(&sd->input_pkt_queue);
+-	if (qlen <= netdev_max_backlog && !skb_flow_limit(skb, qlen)) {
++	if (qlen <= READ_ONCE(netdev_max_backlog) && !skb_flow_limit(skb, qlen)) {
+ 		if (qlen) {
+ enqueue:
+ 			__skb_queue_tail(&sd->input_pkt_queue, skb);
+diff --git a/net/core/gro_cells.c b/net/core/gro_cells.c
+index 6eb2e5ec2c506..2f66f3f295630 100644
+--- a/net/core/gro_cells.c
++++ b/net/core/gro_cells.c
+@@ -26,7 +26,7 @@ int gro_cells_receive(struct gro_cells *gcells, struct sk_buff *skb)
+ 
+ 	cell = this_cpu_ptr(gcells->cells);
+ 
+-	if (skb_queue_len(&cell->napi_skbs) > netdev_max_backlog) {
++	if (skb_queue_len(&cell->napi_skbs) > READ_ONCE(netdev_max_backlog)) {
+ drop:
+ 		atomic_long_inc(&dev->rx_dropped);
+ 		kfree_skb(skb);
+diff --git a/net/xfrm/espintcp.c b/net/xfrm/espintcp.c
+index 1f08ebf7d80c5..24ca49ecebea3 100644
+--- a/net/xfrm/espintcp.c
++++ b/net/xfrm/espintcp.c
+@@ -170,7 +170,7 @@ int espintcp_queue_out(struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct espintcp_ctx *ctx = espintcp_getctx(sk);
+ 
+-	if (skb_queue_len(&ctx->out_queue) >= netdev_max_backlog)
++	if (skb_queue_len(&ctx->out_queue) >= READ_ONCE(netdev_max_backlog))
+ 		return -ENOBUFS;
+ 
+ 	__skb_queue_tail(&ctx->out_queue, skb);
+diff --git a/net/xfrm/xfrm_input.c b/net/xfrm/xfrm_input.c
+index 61e6220ddd5ae..77e82033ad700 100644
+--- a/net/xfrm/xfrm_input.c
++++ b/net/xfrm/xfrm_input.c
+@@ -782,7 +782,7 @@ int xfrm_trans_queue_net(struct net *net, struct sk_buff *skb,
+ 
+ 	trans = this_cpu_ptr(&xfrm_trans_tasklet);
+ 
+-	if (skb_queue_len(&trans->queue) >= netdev_max_backlog)
++	if (skb_queue_len(&trans->queue) >= READ_ONCE(netdev_max_backlog))
+ 		return -ENOBUFS;
+ 
+ 	BUILD_BUG_ON(sizeof(struct xfrm_trans_cb) > sizeof(skb->cb));
+-- 
+2.35.1
+
 
 

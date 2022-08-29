@@ -2,283 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C225A46AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 12:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A735A4474
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiH2KBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 06:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S229776AbiH2ID0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiH2KBH (ORCPT
+        with ESMTP id S229518AbiH2IDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:01:07 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813B92AC78;
-        Mon, 29 Aug 2022 03:00:55 -0700 (PDT)
-X-UUID: cf7f36dbf7294ea4b53f654fe2a6086c-20220829
-X-Spam-Fingerprint: 0
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 103
-        audit/email.address 2
-        dict/adv 1
-        dict/contack 1
-        dict/notice 1
-        dict/operate 1
-        meta/cnt.alert 1
-X-UUID: cf7f36dbf7294ea4b53f654fe2a6086c-20220829
-X-User: oushixiong@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 784702270; Mon, 29 Aug 2022 14:00:07 +0800
-From:   oushixiong <oushixiong@kylinos.cn>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
-        oushixiong <oushixiong@kylinos.cn>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v3] drm/ast: add dmabuf/prime buffer sharing support
-Date:   Mon, 29 Aug 2022 13:59:37 +0800
-Message-Id: <20220829055937.302377-1-oushixiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Mon, 29 Aug 2022 04:03:24 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150058.outbound.protection.outlook.com [40.107.15.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873C845992;
+        Mon, 29 Aug 2022 01:03:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F5v1WxGZY4pYxRlOVWVCZPtTD6ULjutWAuYzQ27XfRILGGeoAkWb1Oc8ZaBsHmX3VrKQa+5HrL2zcD8GD4jX/9+G/22Xs1f68El4c9RYpZFNtZLgKXPiToVPGARtyicxe1/msXTRQPwpfN4EudrZSt9P26fsi+JhqEwycILiYfGYfn9wh5/kunibRL7NRUaT+GjIYUrPptQ5pLmbV3A3ylZzh1zGgw5pzcCsZzCcUMrHVNGIeWwnkJjYy4tdJZjl293/NYw17KIdZQhFvfHGoS16UuMHXdxtoJ1TrjNgZ0xiyDTH3crgVm9dlIQsIG4M4wlWAIM6XNfv1/6KP4ksfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7DxuRSZd/TWS9kqIW8wL8qKJf3qezIaM46pfKUuJ6bY=;
+ b=PDDdYPT/gex+UjhaGGeAYi4g9x3U+emq3BTHk0lgcLUMYm8wpTXTHY7Iu4aREyQXQPWCMJZyGx5JxJIFh5pxF4qbtAPQK1AlvUEXFMNNZchC2azVN33vB4GUJPzbDJmHYhQMuhvTKHLavXStbrOYA8UDdOx5a1Wq9iWlHrpg5e+w1B7qOWckqCoJXQmQbzeGfVjqXPuSpx+txVrlrDPF9ziTMyJ2gG/feAQCN5lztqpkthmZXK3bA6lEGxY5Xras+uXh0yxNBj+Ym6baiXL5bl0FTqsYZu8b3pFHgyF38hQl67zBWnj/mKKVFXyVkRx8C6TF80tcb7Xfbv2Dumm7xA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
+ dkim=pass header.d=kunbus.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7DxuRSZd/TWS9kqIW8wL8qKJf3qezIaM46pfKUuJ6bY=;
+ b=GqxXiuojOaYjzEFLZwxTHjGl5t4XT47nu/4zjAA/kbWWbYbgvkGLwDD0/YbskwHPlhUPkroTlkKyJSIOuH8ipkFovlQREvKqYP7rVq2a5QNphDmtKzbzf2QEwvCVt1YlJRk19ZXBAyx5G6YNHrM23dRRbtMIBUf81cPzDr8mVwk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kunbus.com;
+Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
+ by PR3P193MB0912.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:97::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Mon, 29 Aug
+ 2022 08:03:16 +0000
+Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ ([fe80::c59f:e594:1134:eb56]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ ([fe80::c59f:e594:1134:eb56%7]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
+ 08:03:16 +0000
+Message-ID: <c9dffd4f-91f6-cf49-f88d-e099881fe102@kunbus.com>
+Date:   Mon, 29 Aug 2022 10:03:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 05/10] tpm, tpm_tis: Only handle supported interrupts
+Content-Language: en-US
+To:     Jason Andryuk <jandryuk@gmail.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+ <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
+ <CAKf6xpsc9KRUKo5Z-kPqDcSCdpf9-tjf+ZdREnEiJUdHwyDQcA@mail.gmail.com>
+From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
+In-Reply-To: <CAKf6xpsc9KRUKo5Z-kPqDcSCdpf9-tjf+ZdREnEiJUdHwyDQcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS9PR06CA0468.eurprd06.prod.outlook.com
+ (2603:10a6:20b:49a::23) To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:803:4e::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7fac2d1d-a385-4643-d914-08da8994ed43
+X-MS-TrafficTypeDiagnostic: PR3P193MB0912:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wQhHSaTDnlT5x5geYhSEmCn5N/MQOFG5cAtGU+SRLyuwy6w88KgMNmULAqFTHoXMejq32w4sSvY6fbOnsiGtlUp7AmWUvoNgwh3hfA+1wGWnRIbm3miG628tK9iWu+uKqeKJEmqwAbe3OsXGMZv7NWGtJZ14aigKwxtyg4z6aoCY1iKlRWtvxZmBbKFfgQqaRMwTVXeNzbjRjMu7aRXM1EUEtgd2SJe3vEEyfYpIR69buhYAxVFHbwXgcEnu/Ly98igq9yVIfY2FUBlx8A3NnQz9+CSIyaBtqdIluyDxG03G3hdPIEgSawfa8p9aEOrfdfI8vE3hX3ogdfzO1hSyJzy1LOErkQXIll7ViNVw5VZ+8wtNA3+fR/cEsM+BgfTg0o57cTXDdMA79ezatKvPDg8Rr0IphT3NYcRsEftXGs3AgbUb5AZZmuhRYLzwBc0x0nBdxr9VHH/I4TGp+HAEEBwgTKUwTLBNhpbH1xklUyjHf2YA0uDowOr3YBFWLTFHpX7yTCBzYW9YS2udRO7Yw3RsNDG1T0FBF+BmyBbKQlatFSDLF8FkkjTscyu7fROOrcd+1HNdiPGP7Brlip+CM58Lza20kA/Bd3ncUJoaQlHXXUtCCwCLujymq4WDMNAIPBsKCRhzaLmUXKZSd9CDcwrSUBncm1ilAGElcoUJVwmSgnsuv8gFf3uHRML9WVkAgiYuNlxX+elRBR83U6P5wii4uStvF49MpMrpKEmL/KV8HagaxpJ9jsnoqRlf8XeRCfywu+jlNMh9NxF1s6ePnTqJXvPynt6y0Wfwvr2DhoA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(39830400003)(396003)(376002)(366004)(53546011)(6666004)(6506007)(107886003)(6512007)(2616005)(6486002)(41300700001)(83380400001)(478600001)(2906002)(5660300002)(8936002)(7416002)(186003)(52116002)(6916009)(316002)(54906003)(4326008)(8676002)(66476007)(66556008)(66946007)(31686004)(38100700002)(36756003)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UXhKYURGNnhnZzdFWjBIQzlIaGJtRTdrdHhJQ0RPaWhSVTYwaXZ5V2ZjNXRD?=
+ =?utf-8?B?b1VJSjJueW1PSHNGYW5IN3M1c0NzSWNuL25Qa3dtcEs2TWtoL052Myt3Y0c2?=
+ =?utf-8?B?TFRMZUZPUUQwQzg3blhUeGVnUTVLaHErNk5FN2hid1pqZFpUY1pwdDhNQzVN?=
+ =?utf-8?B?NkU4cnNZQXBhUFhrSmxsR05ZSU0rcHUyYTZmaWFKZDlWUXRpNEtMbE8yTVF1?=
+ =?utf-8?B?TSswYTVMb3hJN1hvb0xXMXNSaHlHaU40T2N6Uk11ejRkVkRMRUNtWTRPOVgx?=
+ =?utf-8?B?MUgrOVA3alVlZXlNaDJUeGJpMnRYNGdIVWYvTVdYMWpzVFJMaXQ4NVRhSkdN?=
+ =?utf-8?B?azltc25lMm92bnBHL2FUTnQ0WE5BU0hFVUtMM0JoTTZ6dTZIcGJhOHM4K0ZW?=
+ =?utf-8?B?MEJjc1ZXZUlqbmk4R3o2REVFZnBBa1h4c2RORXRkREpKb0xSZ05jQ00yNWtk?=
+ =?utf-8?B?ZEJHOFhSVDNtWkM0VG5rbHNZdTJHZ0pWUTRwbTBpUUFHc2JLRDRTSVlhdWVu?=
+ =?utf-8?B?WmtPUU5hTWFrRUhXQ1NDR3QzVkFYNU1mTityYjgyMTFZMVBEalN0L05qVzZq?=
+ =?utf-8?B?d091aUdsZ0ZGcnI5VzQvNUxpOTcveS9tMWUyOFNwb2JobWZLVUFvVExzcGdH?=
+ =?utf-8?B?NXhvb3lxQzlwM2duUTl1ejM2WnVNSWd4UVVzWlJCdkpkL0tVeWppSERqSmhV?=
+ =?utf-8?B?eExTRTVqQ2pIWXVObWpucWFIMWluU3pLYXdPbE42U21xeVErcTFOUzZPVG1s?=
+ =?utf-8?B?R3hNa0w0WnM2UXFuMEgzKzgwSmNLNkJKTStrYVBmc2VycnlNdE1Fb1pYdFBz?=
+ =?utf-8?B?ZkdaOHRWU3V4RGlrNERUNlpuTTUybVIrV3BoaG9meWhERUI0bWZHNlovcGtB?=
+ =?utf-8?B?SHRDS0E0MTBEK2IxSlh1azA3REsycXFVeHpGQitIRzMycko2b0xNT05XbVl1?=
+ =?utf-8?B?ZTVqdERkT2txQUEzUFRrZlFMZG90ekI5WEJndmd5SjR0enJsSTIyaEF2bzlk?=
+ =?utf-8?B?SXlocGhrVDlRNXNzV2p4NGsyc2VLYnRMc3YwT1g0eVNRaEREOXU1TXBHWXJH?=
+ =?utf-8?B?eHc4ckhEZHRXQkVUUmRpa0s1SXI3WnNrRDFZZHJIQ3lYMk9EcldmWG00NGk3?=
+ =?utf-8?B?WjV4MS8wMXNZeU9NTy8wUGsyUlROOXFmR2pnODUrSHFvem8yN0J3SkZybTY3?=
+ =?utf-8?B?V0xHYWtobXdaZVh2bU1tVXMyMTJ2cmtMLy9PL0pNWWJ1cmdoTWJydW1QdkFO?=
+ =?utf-8?B?cE4xOTBWN1MrQ0NWb1VDUjJqVWZ6SkpDTVBLbWFTOStacGtrVWNYSFFMMHRE?=
+ =?utf-8?B?UTRmY3pNWU56UFBhYlh1NUZaNGowaDZodWZUTUZqSnYyUG5VR3ZzZjBjNXZH?=
+ =?utf-8?B?ajhBM25OOERPcnh2VzJDb2d4Wlpub0tOdUxQcG4raUlDeG8vM3JXVWNWWlJT?=
+ =?utf-8?B?SXFsdm00NmlZL2g2eFhhMGEzQ3NoZTBDM0RrUzM1ckYwSjdjQWJBZ253KzNn?=
+ =?utf-8?B?SktERWllcDJEKzRYNHhPU0o1TUxMTzRUeW9ydEJ4RkVJWnBIRklYMk5TaGg4?=
+ =?utf-8?B?STNoN3ZjZFdjNVYyOHNJVFc2KzFNWDI5eDhwbzNjeS9sOVdvTm9GMDZIUTlT?=
+ =?utf-8?B?SU03TzBmYmF1WkNYcllBN3JpRHFidUtnazEzTTRvcDFqeVIvblpzZHZ2L1cw?=
+ =?utf-8?B?cU9qeGpDbzBST3MxUC91UGFQVEtwbDNza0YwUm15YlpzT2MrbkxGZ21Fby80?=
+ =?utf-8?B?Z0R0cU5rTHVRQlF1VUhnL2NNeU5MckZuMlF3TmVnbW1mTTl0S080YlZ4UDBX?=
+ =?utf-8?B?NFB6aDNKbHpQL3hVaVh2MVVSajRnT2xxR1lBUlppUmJNQWVTTjd3eXhaeW1u?=
+ =?utf-8?B?UHIzZTY4cU9oeHpORXVVanA1MWRraGlmNktic2Iyang5L3NPU3lkbytrcVRS?=
+ =?utf-8?B?V3pmcE5IMyt5Z3haN2VSMkZNZFljWWFLWUt1VnlGa1R1MkRQS2ZWR3lHZExN?=
+ =?utf-8?B?RWRxdDdUYkx5TnNZWFpHeEdoRlZENzdvUjVvMGpvTEppUmNhQk5yOThhWlV5?=
+ =?utf-8?B?eG5EVGJrSnhHTGtDNkJINmVKRTRmSTVESTN6V0dZRWY5YXRTOGRTOXNTVi9n?=
+ =?utf-8?B?dEwydTJEcGdiakF5OHhUdkljUFlYTVVlNWdqK2RmSlRlSzlYUjVxMlVNOGls?=
+ =?utf-8?B?WXQ1RFVwV09HZDF0RUdLbjFnL0x3K1pLaU0zUVJCVXordVhLdU5QUjZCcDk0?=
+ =?utf-8?B?bDN4OXFnNHovQktabnA0ZlNsUGZBPT0=?=
+X-OriginatorOrg: kunbus.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fac2d1d-a385-4643-d914-08da8994ed43
+X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 08:03:15.9845
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: n0bXnEpmqGHoZHxPagaTI3c7IzJSeUDdy6nJRB3usHA4Q+zlCJ5OgvciuYNSnUvjk7PUNG3xMvMgd5Dt2DTf9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P193MB0912
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds ast specific codes for DRM prime feature, this is to
-allow for offloading of rending in one direction and outputs in other.
 
-This patch is designed to solve the problem that the AST is not displayed
-when the server plug in a discrete  graphics card at the same time.
-We call the dirty callback function to copy the rendering results of the
-discrete graphics card to the ast side by dma-buf.
+Hi Jason,
 
-v1->v2:
-  - Fix the comment.
-v2->v3:
-  - we remove the gem_prime_import_sg_table callback and use the
-    gem_prime_import callback, because it just map and access the buffer
-    with the CPU. and do not to pin the buffer.
+On 26.08.22 19:43, Jason Andryuk wrote:
+> On Wed, Jun 29, 2022 at 7:28 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
+> 
+>> @@ -1007,8 +1029,39 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>>         if (rc < 0)
+>>                 goto out_err;
+>>
+>> -       intmask |= TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
+>> -                  TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+>> +       /* Figure out the capabilities */
+>> +       rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+>> +       if (rc < 0)
+>> +               goto out_err;
+>> +
+>> +       dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+>> +               intfcaps);
+>> +       if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+>> +               dev_dbg(dev, "\tBurst Count Static\n");
+>> +       if (intfcaps & TPM_INTF_CMD_READY_INT) {
+>> +               intmask |= TPM_INTF_CMD_READY_INT;
+>> +               dev_dbg(dev, "\tCommand Ready Int Support\n");
+>> +       }
+>> +       if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+>> +               dev_dbg(dev, "\tInterrupt Edge Falling\n");
+>> +       if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+>> +               dev_dbg(dev, "\tInterrupt Edge Rising\n");
+>> +       if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+>> +               dev_dbg(dev, "\tInterrupt Level Low\n");
+>> +       if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+>> +               dev_dbg(dev, "\tInterrupt Level High\n");
+>> +       if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+> 
+> Hi, you may already have fixed this, but I just saw:
+> 
+> error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+>  1144 |         if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+>       |         ^~
+> 
+>> +               intmask |= TPM_INTF_LOCALITY_CHANGE_INT;
+>> +               dev_dbg(dev, "\tLocality Change Int Support\n");
+> 
+> You need { } for the block.
+> 
 
-Signed-off-by: oushixiong <oushixiong@kylinos.cn>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
- drivers/gpu/drm/ast/ast_mode.c | 125 ++++++++++++++++++++++++++++++++-
- 2 files changed, 151 insertions(+), 1 deletion(-)
+thanks for pointing at this, I will fix it in the next version of this series.
 
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index 7465c4f0156a..fd3c4bad2eb4 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -28,6 +28,7 @@
- 
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/dma-buf.h>
- 
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 0400);
- 
- DEFINE_DRM_GEM_FOPS(ast_fops);
- 
-+static struct drm_gem_object *ast_gem_prime_import(struct drm_device *dev,
-+						struct dma_buf *dma_buf)
-+{
-+	struct drm_gem_vram_object *gbo;
-+
-+	gbo = drm_gem_vram_of_gem(dma_buf->priv);
-+	if (gbo->bo.base.dev == dev) {
-+		/*
-+		 * Importing dmabuf exported from out own gem increases
-+		 * refcount on gem itself instead of f_count of dmabuf.
-+		 */
-+		drm_gem_object_get(&gbo->bo.base);
-+		return &gbo->bo.base;
-+	}
-+
-+	gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
-+	if (IS_ERR(gbo))
-+		return NULL;
-+
-+	get_dma_buf(dma_buf);
-+	return &gbo->bo.base;
-+}
-+
- static const struct drm_driver ast_driver = {
- 	.driver_features = DRIVER_ATOMIC |
- 			   DRIVER_GEM |
-@@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
- 	.minor = DRIVER_MINOR,
- 	.patchlevel = DRIVER_PATCHLEVEL,
- 
-+	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import = ast_gem_prime_import,
-+
- 	DRM_GEM_VRAM_DRIVER
- };
- 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 45b56b39ad47..65a4342c5622 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -48,6 +48,8 @@
- #include "ast_drv.h"
- #include "ast_tables.h"
- 
-+MODULE_IMPORT_NS(DMA_BUF);
-+
- static inline void ast_load_palette_index(struct ast_private *ast,
- 				     u8 index, u8 red, u8 green,
- 				     u8 blue)
-@@ -1535,8 +1537,129 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
- 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
- };
- 
-+static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-+					int width, int height)
-+{
-+	struct drm_gem_vram_object *dst_bo = NULL;
-+	void *dst = NULL;
-+	int ret = 0, i;
-+	unsigned long offset = 0;
-+	bool unmap = false;
-+	unsigned int bytesPerPixel;
-+	struct iosys_map map;
-+	struct iosys_map dmabuf_map;
-+
-+	bytesPerPixel = fb->format->cpp[0];
-+
-+	if (!fb->obj[0]->dma_buf)
-+		return -EINVAL;
-+
-+	if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
-+		ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
-+		if (ret)
-+			return ret;
-+	} else
-+		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-+
-+	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-+
-+	ret = drm_gem_vram_pin(dst_bo, 0);
-+	if (ret) {
-+		DRM_ERROR("ast_bo_pin failed\n");
-+		return ret;
-+	}
-+
-+	if (!dst_bo->map.vaddr) {
-+		ret = drm_gem_vram_vmap(dst_bo, &map);
-+		if (ret) {
-+			drm_gem_vram_unpin(dst_bo);
-+			DRM_ERROR("failed to vmap fbcon\n");
-+			return ret;
-+		}
-+		unmap = true;
-+	}
-+	dst = dst_bo->map.vaddr;
-+
-+	for (i = y; i < y + height; i++) {
-+		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-+		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-+			width * bytesPerPixel);
-+	}
-+
-+	if (unmap)
-+		drm_gem_vram_vunmap(dst_bo, &map);
-+
-+	drm_gem_vram_unpin(dst_bo);
-+
-+	return 0;
-+}
-+
-+
-+static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-+				struct drm_file *file,
-+				unsigned int flags,
-+				unsigned int color,
-+				struct drm_clip_rect *clips,
-+				unsigned int num_clips)
-+{
-+	int i, ret = 0;
-+
-+	drm_modeset_lock_all(fb->dev);
-+	if (fb->obj[0]->dma_buf) {
-+		ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
-+				DMA_FROM_DEVICE);
-+		if (ret)
-+			goto unlock;
-+	}
-+
-+	for (i = 0; i < num_clips; i++) {
-+		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-+				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-+		if (ret)
-+			break;
-+	}
-+
-+	if (fb->obj[0]->dma_buf) {
-+		dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
-+				DMA_FROM_DEVICE);
-+	}
-+
-+unlock:
-+	drm_modeset_unlock_all(fb->dev);
-+
-+	return ret;
-+}
-+
-+static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
-+{
-+	struct iosys_map dmabuf_map;
-+
-+	if (fb->obj[0]->dma_buf) {
-+		dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
-+		dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
-+		if (dmabuf_map.vaddr)
-+			dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
-+	}
-+
-+	drm_gem_fb_destroy(fb);
-+}
-+
-+static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-+	.destroy	= ast_user_framebuffer_destroy,
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.dirty		= ast_user_framebuffer_dirty,
-+};
-+
-+static struct drm_framebuffer *
-+ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-+				const struct drm_mode_fb_cmd2 *mode_cmd)
-+{
-+	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-+					&ast_gem_fb_funcs_dirtyfb);
-+}
-+
- static const struct drm_mode_config_funcs ast_mode_config_funcs = {
--	.fb_create = drm_gem_fb_create,
-+	.fb_create = ast_gem_fb_create_with_dirty,
- 	.mode_valid = drm_vram_helper_mode_valid,
- 	.atomic_check = drm_atomic_helper_check,
- 	.atomic_commit = drm_atomic_helper_commit,
--- 
-2.17.1
+Regards,
+Lino
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+> Regards,
+> Jason

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C6C5A4A45
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB115A4881
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiH2Lgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S229655AbiH2LLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232719AbiH2LfG (ORCPT
+        with ESMTP id S230381AbiH2LKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:35:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988CD4F64F;
-        Mon, 29 Aug 2022 04:20:19 -0700 (PDT)
+        Mon, 29 Aug 2022 07:10:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED06BCC2;
+        Mon, 29 Aug 2022 04:07:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C7C761240;
-        Mon, 29 Aug 2022 11:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BDDC433D6;
-        Mon, 29 Aug 2022 11:16:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB7D16119C;
+        Mon, 29 Aug 2022 11:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6527C433D6;
+        Mon, 29 Aug 2022 11:07:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771786;
-        bh=t1hJTFIGXq5oy40KwvL/I6TUZO6fKzYkPpyC0wiwcTE=;
+        s=korg; t=1661771223;
+        bh=c0e7JQJFNyi8POOyQW/ypX+2I8U4cIQRGhOCmmIg/fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SMfbROBEY4HI+A2n5Nc44c7035QQJsVQtBXmk6ZliMFIW+B4MiMCgfD9Vt16ZM3EW
-         cWCH+/YvzQYf7UX4txwwBXxyDUdkKq6oZl5VCbcWJV5veRJ4PDwzxlDqnHEEHP6EAM
-         iJkjknp4FSbHkWxvb9tVbN3Aj89CMPLWLmyGjRVY=
+        b=vOFy0UY+qgAPK/1XkpJcRSXSN4MYpZT/AAVTcxA2Ytga/ZQJSTIWCIqLUZyrxhM5f
+         oL5KkZrMu9sNR4VkUWXSh8YnPTuodwIPShCxsThdy7s0Zky/FYP1xeVUfpUyOCYZ1U
+         LzyCkUNRAPZEFsoJ8SBhAO+z8Goc5Hf+jgSPA2YI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Omar Sandoval <osandov@fb.com>, David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.19 097/158] btrfs: fix space cache corruption and potential double allocations
-Date:   Mon, 29 Aug 2022 12:59:07 +0200
-Message-Id: <20220829105813.149517679@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 081/136] mptcp: stop relying on tcp_tx_skb_cache
+Date:   Mon, 29 Aug 2022 12:59:08 +0200
+Message-Id: <20220829105807.972808753@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,304 +57,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Omar Sandoval <osandov@fb.com>
+From: Paolo Abeni <pabeni@redhat.com>
 
-commit ced8ecf026fd8084cf175530ff85c76d6085d715 upstream.
+[ Upstream commit f70cad1085d1e01d3ec73c1078405f906237feee ]
 
-When testing space_cache v2 on a large set of machines, we encountered a
-few symptoms:
+We want to revert the skb TX cache, but MPTCP is currently
+using it unconditionally.
 
-1. "unable to add free space :-17" (EEXIST) errors.
-2. Missing free space info items, sometimes caught with a "missing free
-   space info for X" error.
-3. Double-accounted space: ranges that were allocated in the extent tree
-   and also marked as free in the free space tree, ranges that were
-   marked as allocated twice in the extent tree, or ranges that were
-   marked as free twice in the free space tree. If the latter made it
-   onto disk, the next reboot would hit the BUG_ON() in
-   add_new_free_space().
-4. On some hosts with no on-disk corruption or error messages, the
-   in-memory space cache (dumped with drgn) disagreed with the free
-   space tree.
+Rework the MPTCP tx code, so that tcp_tx_skb_cache is not
+needed anymore: do the whole coalescing check, skb allocation
+skb initialization/update inside mptcp_sendmsg_frag(), quite
+alike the current TCP code.
 
-All of these symptoms have the same underlying cause: a race between
-caching the free space for a block group and returning free space to the
-in-memory space cache for pinned extents causes us to double-add a free
-range to the space cache. This race exists when free space is cached
-from the free space tree (space_cache=v2) or the extent tree
-(nospace_cache, or space_cache=v1 if the cache needs to be regenerated).
-struct btrfs_block_group::last_byte_to_unpin and struct
-btrfs_block_group::progress are supposed to protect against this race,
-but commit d0c2f4fa555e ("btrfs: make concurrent fsyncs wait less when
-waiting for a transaction commit") subtly broke this by allowing
-multiple transactions to be unpinning extents at the same time.
-
-Specifically, the race is as follows:
-
-1. An extent is deleted from an uncached block group in transaction A.
-2. btrfs_commit_transaction() is called for transaction A.
-3. btrfs_run_delayed_refs() -> __btrfs_free_extent() runs the delayed
-   ref for the deleted extent.
-4. __btrfs_free_extent() -> do_free_extent_accounting() ->
-   add_to_free_space_tree() adds the deleted extent back to the free
-   space tree.
-5. do_free_extent_accounting() -> btrfs_update_block_group() ->
-   btrfs_cache_block_group() queues up the block group to get cached.
-   block_group->progress is set to block_group->start.
-6. btrfs_commit_transaction() for transaction A calls
-   switch_commit_roots(). It sets block_group->last_byte_to_unpin to
-   block_group->progress, which is block_group->start because the block
-   group hasn't been cached yet.
-7. The caching thread gets to our block group. Since the commit roots
-   were already switched, load_free_space_tree() sees the deleted extent
-   as free and adds it to the space cache. It finishes caching and sets
-   block_group->progress to U64_MAX.
-8. btrfs_commit_transaction() advances transaction A to
-   TRANS_STATE_SUPER_COMMITTED.
-9. fsync calls btrfs_commit_transaction() for transaction B. Since
-   transaction A is already in TRANS_STATE_SUPER_COMMITTED and the
-   commit is for fsync, it advances.
-10. btrfs_commit_transaction() for transaction B calls
-    switch_commit_roots(). This time, the block group has already been
-    cached, so it sets block_group->last_byte_to_unpin to U64_MAX.
-11. btrfs_commit_transaction() for transaction A calls
-    btrfs_finish_extent_commit(), which calls unpin_extent_range() for
-    the deleted extent. It sees last_byte_to_unpin set to U64_MAX (by
-    transaction B!), so it adds the deleted extent to the space cache
-    again!
-
-This explains all of our symptoms above:
-
-* If the sequence of events is exactly as described above, when the free
-  space is re-added in step 11, it will fail with EEXIST.
-* If another thread reallocates the deleted extent in between steps 7
-  and 11, then step 11 will silently re-add that space to the space
-  cache as free even though it is actually allocated. Then, if that
-  space is allocated *again*, the free space tree will be corrupted
-  (namely, the wrong item will be deleted).
-* If we don't catch this free space tree corruption, it will continue
-  to get worse as extents are deleted and reallocated.
-
-The v1 space_cache is synchronously loaded when an extent is deleted
-(btrfs_update_block_group() with alloc=0 calls btrfs_cache_block_group()
-with load_cache_only=1), so it is not normally affected by this bug.
-However, as noted above, if we fail to load the space cache, we will
-fall back to caching from the extent tree and may hit this bug.
-
-The easiest fix for this race is to also make caching from the free
-space tree or extent tree synchronous. Josef tested this and found no
-performance regressions.
-
-A few extra changes fall out of this change. Namely, this fix does the
-following, with step 2 being the crucial fix:
-
-1. Factor btrfs_caching_ctl_wait_done() out of
-   btrfs_wait_block_group_cache_done() to allow waiting on a caching_ctl
-   that we already hold a reference to.
-2. Change the call in btrfs_cache_block_group() of
-   btrfs_wait_space_cache_v1_finished() to
-   btrfs_caching_ctl_wait_done(), which makes us wait regardless of the
-   space_cache option.
-3. Delete the now unused btrfs_wait_space_cache_v1_finished() and
-   space_cache_v1_done().
-4. Change btrfs_cache_block_group()'s `int load_cache_only` parameter to
-   `bool wait` to more accurately describe its new meaning.
-5. Change a few callers which had a separate call to
-   btrfs_wait_block_group_cache_done() to use wait = true instead.
-6. Make btrfs_wait_block_group_cache_done() static now that it's not
-   used outside of block-group.c anymore.
-
-Fixes: d0c2f4fa555e ("btrfs: make concurrent fsyncs wait less when waiting for a transaction commit")
-CC: stable@vger.kernel.org # 5.12+
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Omar Sandoval <osandov@fb.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/block-group.c |   47 +++++++++++++++--------------------------------
- fs/btrfs/block-group.h |    4 +---
- fs/btrfs/ctree.h       |    1 -
- fs/btrfs/extent-tree.c |   30 ++++++------------------------
- 4 files changed, 22 insertions(+), 60 deletions(-)
+ net/mptcp/protocol.c | 137 ++++++++++++++++++++++++-------------------
+ 1 file changed, 77 insertions(+), 60 deletions(-)
 
---- a/fs/btrfs/block-group.c
-+++ b/fs/btrfs/block-group.c
-@@ -440,39 +440,26 @@ void btrfs_wait_block_group_cache_progre
- 	btrfs_put_caching_control(caching_ctl);
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 7f96e0c42a090..a089791414bfb 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -1224,6 +1224,7 @@ static struct sk_buff *__mptcp_do_alloc_tx_skb(struct sock *sk, gfp_t gfp)
+ 		if (likely(__mptcp_add_ext(skb, gfp))) {
+ 			skb_reserve(skb, MAX_TCP_HEADER);
+ 			skb->reserved_tailroom = skb->end - skb->tail;
++			INIT_LIST_HEAD(&skb->tcp_tsorted_anchor);
+ 			return skb;
+ 		}
+ 		__kfree_skb(skb);
+@@ -1233,31 +1234,23 @@ static struct sk_buff *__mptcp_do_alloc_tx_skb(struct sock *sk, gfp_t gfp)
+ 	return NULL;
  }
  
--int btrfs_wait_block_group_cache_done(struct btrfs_block_group *cache)
-+static int btrfs_caching_ctl_wait_done(struct btrfs_block_group *cache,
-+				       struct btrfs_caching_control *caching_ctl)
-+{
-+	wait_event(caching_ctl->wait, btrfs_block_group_done(cache));
-+	return cache->cached == BTRFS_CACHE_ERROR ? -EIO : 0;
-+}
-+
-+static int btrfs_wait_block_group_cache_done(struct btrfs_block_group *cache)
+-static bool __mptcp_alloc_tx_skb(struct sock *sk, struct sock *ssk, gfp_t gfp)
++static struct sk_buff *__mptcp_alloc_tx_skb(struct sock *sk, struct sock *ssk, gfp_t gfp)
  {
- 	struct btrfs_caching_control *caching_ctl;
--	int ret = 0;
-+	int ret;
+ 	struct sk_buff *skb;
  
- 	caching_ctl = btrfs_get_caching_control(cache);
- 	if (!caching_ctl)
- 		return (cache->cached == BTRFS_CACHE_ERROR) ? -EIO : 0;
+-	if (ssk->sk_tx_skb_cache) {
+-		skb = ssk->sk_tx_skb_cache;
+-		if (unlikely(!skb_ext_find(skb, SKB_EXT_MPTCP) &&
+-			     !__mptcp_add_ext(skb, gfp)))
+-			return false;
+-		return true;
+-	}
 -
--	wait_event(caching_ctl->wait, btrfs_block_group_done(cache));
--	if (cache->cached == BTRFS_CACHE_ERROR)
--		ret = -EIO;
-+	ret = btrfs_caching_ctl_wait_done(cache, caching_ctl);
- 	btrfs_put_caching_control(caching_ctl);
- 	return ret;
- }
+ 	skb = __mptcp_do_alloc_tx_skb(sk, gfp);
+ 	if (!skb)
+-		return false;
++		return NULL;
  
--static bool space_cache_v1_done(struct btrfs_block_group *cache)
--{
--	bool ret;
--
--	spin_lock(&cache->lock);
--	ret = cache->cached != BTRFS_CACHE_FAST;
--	spin_unlock(&cache->lock);
--
--	return ret;
--}
--
--void btrfs_wait_space_cache_v1_finished(struct btrfs_block_group *cache,
--				struct btrfs_caching_control *caching_ctl)
--{
--	wait_event(caching_ctl->wait, space_cache_v1_done(cache));
--}
--
- #ifdef CONFIG_BTRFS_DEBUG
- static void fragment_free_space(struct btrfs_block_group *block_group)
- {
-@@ -750,9 +737,8 @@ done:
- 	btrfs_put_block_group(block_group);
- }
- 
--int btrfs_cache_block_group(struct btrfs_block_group *cache, int load_cache_only)
-+int btrfs_cache_block_group(struct btrfs_block_group *cache, bool wait)
- {
--	DEFINE_WAIT(wait);
- 	struct btrfs_fs_info *fs_info = cache->fs_info;
- 	struct btrfs_caching_control *caching_ctl = NULL;
- 	int ret = 0;
-@@ -785,10 +771,7 @@ int btrfs_cache_block_group(struct btrfs
+ 	if (likely(sk_wmem_schedule(ssk, skb->truesize))) {
+-		ssk->sk_tx_skb_cache = skb;
+-		return true;
++		tcp_skb_entail(ssk, skb);
++		return skb;
  	}
- 	WARN_ON(cache->caching_ctl);
- 	cache->caching_ctl = caching_ctl;
--	if (btrfs_test_opt(fs_info, SPACE_CACHE))
--		cache->cached = BTRFS_CACHE_FAST;
--	else
--		cache->cached = BTRFS_CACHE_STARTED;
-+	cache->cached = BTRFS_CACHE_STARTED;
- 	cache->has_caching_ctl = 1;
- 	spin_unlock(&cache->lock);
+ 	kfree_skb(skb);
+-	return false;
++	return NULL;
+ }
  
-@@ -801,8 +784,8 @@ int btrfs_cache_block_group(struct btrfs
+-static bool mptcp_alloc_tx_skb(struct sock *sk, struct sock *ssk, bool data_lock_held)
++static struct sk_buff *mptcp_alloc_tx_skb(struct sock *sk, struct sock *ssk, bool data_lock_held)
+ {
+ 	gfp_t gfp = data_lock_held ? GFP_ATOMIC : sk->sk_allocation;
  
- 	btrfs_queue_work(fs_info->caching_workers, &caching_ctl->work);
+@@ -1287,23 +1280,29 @@ static int mptcp_sendmsg_frag(struct sock *sk, struct sock *ssk,
+ 			      struct mptcp_sendmsg_info *info)
+ {
+ 	u64 data_seq = dfrag->data_seq + info->sent;
++	int offset = dfrag->offset + info->sent;
+ 	struct mptcp_sock *msk = mptcp_sk(sk);
+ 	bool zero_window_probe = false;
+ 	struct mptcp_ext *mpext = NULL;
+-	struct sk_buff *skb, *tail;
+-	bool must_collapse = false;
+-	int size_bias = 0;
+-	int avail_size;
+-	size_t ret = 0;
++	bool can_coalesce = false;
++	bool reuse_skb = true;
++	struct sk_buff *skb;
++	size_t copy;
++	int i;
+ 
+ 	pr_debug("msk=%p ssk=%p sending dfrag at seq=%llu len=%u already sent=%u",
+ 		 msk, ssk, dfrag->data_seq, dfrag->data_len, info->sent);
+ 
++	if (WARN_ON_ONCE(info->sent > info->limit ||
++			 info->limit > dfrag->data_len))
++		return 0;
++
+ 	/* compute send limit */
+ 	info->mss_now = tcp_send_mss(ssk, &info->size_goal, info->flags);
+-	avail_size = info->size_goal;
++	copy = info->size_goal;
++
+ 	skb = tcp_write_queue_tail(ssk);
+-	if (skb) {
++	if (skb && copy > skb->len) {
+ 		/* Limit the write to the size available in the
+ 		 * current skb, if any, so that we create at most a new skb.
+ 		 * Explicitly tells TCP internals to avoid collapsing on later
+@@ -1316,62 +1315,80 @@ static int mptcp_sendmsg_frag(struct sock *sk, struct sock *ssk,
+ 			goto alloc_skb;
+ 		}
+ 
+-		must_collapse = (info->size_goal > skb->len) &&
+-				(skb_shinfo(skb)->nr_frags < sysctl_max_skb_frags);
+-		if (must_collapse) {
+-			size_bias = skb->len;
+-			avail_size = info->size_goal - skb->len;
++		i = skb_shinfo(skb)->nr_frags;
++		can_coalesce = skb_can_coalesce(skb, i, dfrag->page, offset);
++		if (!can_coalesce && i >= sysctl_max_skb_frags) {
++			tcp_mark_push(tcp_sk(ssk), skb);
++			goto alloc_skb;
+ 		}
+-	}
+ 
++		copy -= skb->len;
++	} else {
+ alloc_skb:
+-	if (!must_collapse &&
+-	    !mptcp_alloc_tx_skb(sk, ssk, info->data_lock_held))
+-		return 0;
++		skb = mptcp_alloc_tx_skb(sk, ssk, info->data_lock_held);
++		if (!skb)
++			return -ENOMEM;
++
++		i = skb_shinfo(skb)->nr_frags;
++		reuse_skb = false;
++		mpext = skb_ext_find(skb, SKB_EXT_MPTCP);
++	}
+ 
+ 	/* Zero window and all data acked? Probe. */
+-	avail_size = mptcp_check_allowed_size(msk, data_seq, avail_size);
+-	if (avail_size == 0) {
++	copy = mptcp_check_allowed_size(msk, data_seq, copy);
++	if (copy == 0) {
+ 		u64 snd_una = READ_ONCE(msk->snd_una);
+ 
+-		if (skb || snd_una != msk->snd_nxt)
++		if (snd_una != msk->snd_nxt) {
++			tcp_remove_empty_skb(ssk, tcp_write_queue_tail(ssk));
+ 			return 0;
++		}
++
+ 		zero_window_probe = true;
+ 		data_seq = snd_una - 1;
+-		avail_size = 1;
+-	}
++		copy = 1;
+ 
+-	if (WARN_ON_ONCE(info->sent > info->limit ||
+-			 info->limit > dfrag->data_len))
+-		return 0;
++		/* all mptcp-level data is acked, no skbs should be present into the
++		 * ssk write queue
++		 */
++		WARN_ON_ONCE(reuse_skb);
++	}
+ 
+-	ret = info->limit - info->sent;
+-	tail = tcp_build_frag(ssk, avail_size + size_bias, info->flags,
+-			      dfrag->page, dfrag->offset + info->sent, &ret);
+-	if (!tail) {
+-		tcp_remove_empty_skb(sk, tcp_write_queue_tail(ssk));
++	copy = min_t(size_t, copy, info->limit - info->sent);
++	if (!sk_wmem_schedule(ssk, copy)) {
++		tcp_remove_empty_skb(ssk, tcp_write_queue_tail(ssk));
+ 		return -ENOMEM;
+ 	}
+ 
+-	/* if the tail skb is still the cached one, collapsing really happened.
+-	 */
+-	if (skb == tail) {
+-		TCP_SKB_CB(tail)->tcp_flags &= ~TCPHDR_PSH;
+-		mpext->data_len += ret;
++	if (can_coalesce) {
++		skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
++	} else {
++		get_page(dfrag->page);
++		skb_fill_page_desc(skb, i, dfrag->page, offset, copy);
++	}
++
++	skb->len += copy;
++	skb->data_len += copy;
++	skb->truesize += copy;
++	sk_wmem_queued_add(ssk, copy);
++	sk_mem_charge(ssk, copy);
++	skb->ip_summed = CHECKSUM_PARTIAL;
++	WRITE_ONCE(tcp_sk(ssk)->write_seq, tcp_sk(ssk)->write_seq + copy);
++	TCP_SKB_CB(skb)->end_seq += copy;
++	tcp_skb_pcount_set(skb, 0);
++
++	/* on skb reuse we just need to update the DSS len */
++	if (reuse_skb) {
++		TCP_SKB_CB(skb)->tcp_flags &= ~TCPHDR_PSH;
++		mpext->data_len += copy;
+ 		WARN_ON_ONCE(zero_window_probe);
+ 		goto out;
+ 	}
+ 
+-	mpext = skb_ext_find(tail, SKB_EXT_MPTCP);
+-	if (WARN_ON_ONCE(!mpext)) {
+-		/* should never reach here, stream corrupted */
+-		return -EINVAL;
+-	}
+-
+ 	memset(mpext, 0, sizeof(*mpext));
+ 	mpext->data_seq = data_seq;
+ 	mpext->subflow_seq = mptcp_subflow_ctx(ssk)->rel_write_seq;
+-	mpext->data_len = ret;
++	mpext->data_len = copy;
+ 	mpext->use_map = 1;
+ 	mpext->dsn64 = 1;
+ 
+@@ -1380,18 +1397,18 @@ static int mptcp_sendmsg_frag(struct sock *sk, struct sock *ssk,
+ 		 mpext->dsn64);
+ 
+ 	if (zero_window_probe) {
+-		mptcp_subflow_ctx(ssk)->rel_write_seq += ret;
++		mptcp_subflow_ctx(ssk)->rel_write_seq += copy;
+ 		mpext->frozen = 1;
+ 		if (READ_ONCE(msk->csum_enabled))
+-			mptcp_update_data_checksum(tail, ret);
++			mptcp_update_data_checksum(skb, copy);
+ 		tcp_push_pending_frames(ssk);
+ 		return 0;
+ 	}
  out:
--	if (load_cache_only && caching_ctl)
--		btrfs_wait_space_cache_v1_finished(cache, caching_ctl);
-+	if (wait && caching_ctl)
-+		ret = btrfs_caching_ctl_wait_done(cache, caching_ctl);
- 	if (caching_ctl)
- 		btrfs_put_caching_control(caching_ctl);
+ 	if (READ_ONCE(msk->csum_enabled))
+-		mptcp_update_data_checksum(tail, ret);
+-	mptcp_subflow_ctx(ssk)->rel_write_seq += ret;
+-	return ret;
++		mptcp_update_data_checksum(skb, copy);
++	mptcp_subflow_ctx(ssk)->rel_write_seq += copy;
++	return copy;
+ }
  
-@@ -3313,7 +3296,7 @@ int btrfs_update_block_group(struct btrf
- 		 * space back to the block group, otherwise we will leak space.
- 		 */
- 		if (!alloc && !btrfs_block_group_done(cache))
--			btrfs_cache_block_group(cache, 1);
-+			btrfs_cache_block_group(cache, true);
- 
- 		byte_in_group = bytenr - cache->start;
- 		WARN_ON(byte_in_group > cache->length);
---- a/fs/btrfs/block-group.h
-+++ b/fs/btrfs/block-group.h
-@@ -263,9 +263,7 @@ void btrfs_dec_nocow_writers(struct btrf
- void btrfs_wait_nocow_writers(struct btrfs_block_group *bg);
- void btrfs_wait_block_group_cache_progress(struct btrfs_block_group *cache,
- 				           u64 num_bytes);
--int btrfs_wait_block_group_cache_done(struct btrfs_block_group *cache);
--int btrfs_cache_block_group(struct btrfs_block_group *cache,
--			    int load_cache_only);
-+int btrfs_cache_block_group(struct btrfs_block_group *cache, bool wait);
- void btrfs_put_caching_control(struct btrfs_caching_control *ctl);
- struct btrfs_caching_control *btrfs_get_caching_control(
- 		struct btrfs_block_group *cache);
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-@@ -494,7 +494,6 @@ struct btrfs_free_cluster {
- enum btrfs_caching_type {
- 	BTRFS_CACHE_NO,
- 	BTRFS_CACHE_STARTED,
--	BTRFS_CACHE_FAST,
- 	BTRFS_CACHE_FINISHED,
- 	BTRFS_CACHE_ERROR,
- };
---- a/fs/btrfs/extent-tree.c
-+++ b/fs/btrfs/extent-tree.c
-@@ -2567,17 +2567,10 @@ int btrfs_pin_extent_for_log_replay(stru
- 		return -EINVAL;
- 
- 	/*
--	 * pull in the free space cache (if any) so that our pin
--	 * removes the free space from the cache.  We have load_only set
--	 * to one because the slow code to read in the free extents does check
--	 * the pinned extents.
-+	 * Fully cache the free space first so that our pin removes the free space
-+	 * from the cache.
- 	 */
--	btrfs_cache_block_group(cache, 1);
--	/*
--	 * Make sure we wait until the cache is completely built in case it is
--	 * missing or is invalid and therefore needs to be rebuilt.
--	 */
--	ret = btrfs_wait_block_group_cache_done(cache);
-+	ret = btrfs_cache_block_group(cache, true);
- 	if (ret)
- 		goto out;
- 
-@@ -2600,12 +2593,7 @@ static int __exclude_logged_extent(struc
- 	if (!block_group)
- 		return -EINVAL;
- 
--	btrfs_cache_block_group(block_group, 1);
--	/*
--	 * Make sure we wait until the cache is completely built in case it is
--	 * missing or is invalid and therefore needs to be rebuilt.
--	 */
--	ret = btrfs_wait_block_group_cache_done(block_group);
-+	ret = btrfs_cache_block_group(block_group, true);
- 	if (ret)
- 		goto out;
- 
-@@ -4415,7 +4403,7 @@ have_block_group:
- 		ffe_ctl->cached = btrfs_block_group_done(block_group);
- 		if (unlikely(!ffe_ctl->cached)) {
- 			ffe_ctl->have_caching_bg = true;
--			ret = btrfs_cache_block_group(block_group, 0);
-+			ret = btrfs_cache_block_group(block_group, false);
- 
- 			/*
- 			 * If we get ENOMEM here or something else we want to
-@@ -6169,13 +6157,7 @@ int btrfs_trim_fs(struct btrfs_fs_info *
- 
- 		if (end - start >= range->minlen) {
- 			if (!btrfs_block_group_done(cache)) {
--				ret = btrfs_cache_block_group(cache, 0);
--				if (ret) {
--					bg_failed++;
--					bg_ret = ret;
--					continue;
--				}
--				ret = btrfs_wait_block_group_cache_done(cache);
-+				ret = btrfs_cache_block_group(cache, true);
- 				if (ret) {
- 					bg_failed++;
- 					bg_ret = ret;
+ #define MPTCP_SEND_BURST_SIZE		((1 << 16) - \
+-- 
+2.35.1
+
 
 

@@ -2,153 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18D25A4F6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6813D5A4F71
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 16:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiH2Ojy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 10:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S230283AbiH2OkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 10:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiH2Ojw (ORCPT
+        with ESMTP id S229484AbiH2OkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:39:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66800B4BA
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 07:39:50 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TEPmcC025701;
-        Mon, 29 Aug 2022 14:39:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=SQVydA1k3U6kPp3G5IB0fmdL8RYgISwzJjiqljbfeqM=;
- b=P+fWNMsvM/ahzUYeS/Rr402Db3vJBBDLGVrzVL7WgbDCxP+1ZTs4ArPbvUKPd1ET1nb2
- 1SkEWrcYWhhPYESweVoBT3QqVdRJbAuOhfcQ+oI15J932TkPlzTJMRooHMdkQQjzxLXr
- f4fHLDBLomsiqDCj9B3Wd8kHhLz9WLdLLJyFmmIrKUHnjFFrlBVecXsMPmVFxOqHB2nt
- DQ5LbOtLLKIWlMarxk4hz0LeUsSmcJLM7lKa1gbhs8zql0nYAo6ZLHMxw6X5GHKy1vj5
- INVIrX93oPCQJyuXRLU5QBZCJ2c4AfMFhr1ywcKTl0VGuUMEqB2pNLKR2A4wik4l9Myp JQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j8y77gg5u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 14:39:19 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27TEa2fW004338;
-        Mon, 29 Aug 2022 14:39:18 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j8y77gg3t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 14:39:18 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27TEZqo8028038;
-        Mon, 29 Aug 2022 14:39:16 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3j7aw8sstc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 14:39:15 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27TEdZ6Z36176368
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Aug 2022 14:39:35 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4D2DA4054;
-        Mon, 29 Aug 2022 14:39:13 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77ECCA405C;
-        Mon, 29 Aug 2022 14:39:09 +0000 (GMT)
-Received: from [9.43.54.31] (unknown [9.43.54.31])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Aug 2022 14:39:09 +0000 (GMT)
-Message-ID: <14dbd6be-05be-e98c-3a2d-922fb0b8cb72@linux.vnet.ibm.com>
-Date:   Mon, 29 Aug 2022 20:09:08 +0530
+        Mon, 29 Aug 2022 10:40:14 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D49BC97;
+        Mon, 29 Aug 2022 07:40:13 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-324ec5a9e97so200578027b3.7;
+        Mon, 29 Aug 2022 07:40:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=cjFamu2LtRhqkp01LYuaZQzuMHrT2KduV8cRnDGNF3k=;
+        b=C+R3eqW3mgFzXdFbDzZd2bkTHiaKUv2Pr2wXuvlIo6BMqIoF8ry0rQvUTNt3/OL+jI
+         tG+SHLFT6+OGx6JLsoN+cFtVsVwnAbLE2QOOMeeKBiQ9vkwNPehuu7wNJGUxsx/+9aYV
+         kz9mqtLg2jExM8xmxdrQAsPtFfVZU4f1asUMnaLEF2OnKKvCzNvEpDSsGjALROHIhLAZ
+         vQWEcKVO8isl3RxsAP/eFECNAAjNCaJzhZiClgzK434VM6YBcSOoEjlNX3O0YNUEr6Es
+         Dt8PoI1WaiicmSabyz9m1QWRMR9Q5Wk0i7CFi6zjlP0T3dVE/uy/xGEqZVHuFbBuATuz
+         hbCQ==
+X-Gm-Message-State: ACgBeo1aDqO4sShMnq9MP0OdKVlzIp3y5JKY3aD3kADyZ1B6PXBZBjPb
+        Vd1rfahzEgsnzKWAJUGRj0e/p3BSD8qxhX3o7rc=
+X-Google-Smtp-Source: AA6agR4oDHCZz8Ism4HNCbd2jT2aS6K41HLZ2UnD7lhMwlqM6esztr9vLAxtISSqCNC8NsE8fZbxLhU5/0oBzER0D7Y=
+X-Received: by 2002:a0d:c841:0:b0:33d:bf96:f823 with SMTP id
+ k62-20020a0dc841000000b0033dbf96f823mr9801722ywd.326.1661784012769; Mon, 29
+ Aug 2022 07:40:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 02/16] powerpc: override __ALIGN() and __ALIGN_STR()
- macros
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-References: <20220829055223.24767-1-sv@linux.ibm.com>
- <20220829055223.24767-3-sv@linux.ibm.com>
- <7a56b125-86ec-e78a-9327-b523bc0239cf@csgroup.eu>
-From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-In-Reply-To: <7a56b125-86ec-e78a-9327-b523bc0239cf@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9n6QLa6oyDgWJy-ClNDxeIFMmLFXAUSz
-X-Proofpoint-ORIG-GUID: vtbFqzIZr8S30PD_KJAXLkyztU2Fql-c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_07,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- clxscore=1015 mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
- spamscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208290068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220829132908.5254-1-mario.limonciello@amd.com>
+ <20220829132908.5254-2-mario.limonciello@amd.com> <CAJZ5v0hfYhNLp+x9iFiqsQaL4XA8QdFhRK7Csgr8po8JPoimyQ@mail.gmail.com>
+ <a0a63b87-f1ec-03ce-0c3c-a66d7c8144b0@amd.com>
+In-Reply-To: <a0a63b87-f1ec-03ce-0c3c-a66d7c8144b0@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 29 Aug 2022 16:40:01 +0200
+Message-ID: <CAJZ5v0hauoY0xDJqDUQwbY3kz6o7irELtvbYs+ruyMu_MYQzdw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] ACPI: s2idle: Add a new ->enter() callback for platform_s2idle_ops
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
-
-On 29/08/22 18:56, Christophe Leroy wrote:
+On Mon, Aug 29, 2022 at 4:32 PM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
 >
-> Le 29/08/2022 à 07:52, Sathvika Vasireddy a écrit :
->> Powerpc instructions must be word-aligned. Currently,
->> there is an alignment of 16 bytes (by default), and it is
->> much more than what is required for powerpc (4 bytes).
->>
->> The default expansion of __ALIGN() macro is:
->> #define __ALIGN       .align 4,0x90
->>
->> Since Powerpc Linux does not require a 16 byte alignment,
->> override __ALIGN() and __ALIGN_STR() macros to use required
->> 4 byte alignment.
->>
->> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->> ---
->>    arch/powerpc/include/asm/linkage.h | 4 ++++
->>    1 file changed, 4 insertions(+)
->>
->> diff --git a/arch/powerpc/include/asm/linkage.h b/arch/powerpc/include/asm/linkage.h
->> index b71b9582e754..8df88fe61438 100644
->> --- a/arch/powerpc/include/asm/linkage.h
->> +++ b/arch/powerpc/include/asm/linkage.h
->> @@ -2,8 +2,12 @@
->>    #ifndef _ASM_POWERPC_LINKAGE_H
->>    #define _ASM_POWERPC_LINKAGE_H
->>    
->> +#include <linux/stringify.h>
->>    #include <asm/types.h>
->>    
->> +#define __ALIGN			.align 2
->> +#define __ALIGN_STR		__stringify(__ALIGN)
->> +
-> I still can't see the added value of using __stringify() macro here. In
-> order to use that macro you have to include linux/stringify.h . Usually
-> we try to minimise the amount of headers required by other headers.
-Oh ok, makes sense to me. I'll wait for a day to see if there are any
-other comments, and make this change as part of v3.
+> On 8/29/2022 09:20, Rafael J. Wysocki wrote:
+> > On Mon, Aug 29, 2022 at 3:29 PM Mario Limonciello
+> > <mario.limonciello@amd.com> wrote:
+> >>
+> >> On some platforms it is found that Linux more aggressively enters s2idle
+> >> than Windows enters Modern Standby and this uncovers some synchronization
+> >> issues for the platform.  To aid in debugging this class of problems in
+> >> the future, add support for an extra optional callback intended for
+> >> drivers to emit extra debugging.
+> >
+> > I'm not liking this.
+> >
+> > If you want debug, why not simply add it where it is needed?
+>
+> Actually this is exactly where it's needed.  The synchronization issue
+> is with what non-x86 is doing while x86 transitions into ACPI C3.
 
-Thanks for reviewing!
+I meant directly, without adding new driver callbacks.  Adding
+callbacks for debug only seems a bit excessive.
 
-- Sathvika
+But I guess the problem is that you need to ask the PMC about
+something then, don't you?
+
+> >
+> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> ---
+> >> v1->v2:
+> >>   * Add a prototype for `acpi_s2idle_enter`
+> >>
+> >>   drivers/acpi/sleep.h      |  1 +
+> >>   drivers/acpi/x86/s2idle.c | 14 ++++++++++++++
+> >>   include/linux/acpi.h      |  1 +
+> >>   include/linux/suspend.h   |  1 +
+> >>   kernel/power/suspend.c    |  3 +++
+> >>   5 files changed, 20 insertions(+)
+> >>
+> >> diff --git a/drivers/acpi/sleep.h b/drivers/acpi/sleep.h
+> >> index 7fe41ee489d6..7856930a7da9 100644
+> >> --- a/drivers/acpi/sleep.h
+> >> +++ b/drivers/acpi/sleep.h
+> >> @@ -18,6 +18,7 @@ static inline acpi_status acpi_set_waking_vector(u32 wakeup_address)
+> >>   extern int acpi_s2idle_begin(void);
+> >>   extern int acpi_s2idle_prepare(void);
+> >>   extern int acpi_s2idle_prepare_late(void);
+> >> +extern void acpi_s2idle_enter(void);
+> >
+> > And this name is confusing, because it suggests that the role of the
+> > callback is to make the platform enter s2idle which isn't the case.
+>
+> Can you propose another name?
+
+acpi_s2idle_check() or similar.
+
+> >
+> >>   extern bool acpi_s2idle_wake(void);
+> >>   extern void acpi_s2idle_restore_early(void);
+> >>   extern void acpi_s2idle_restore(void);
+> >> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
+> >> index f9ac12b778e6..c984093a3657 100644
+> >> --- a/drivers/acpi/x86/s2idle.c
+> >> +++ b/drivers/acpi/x86/s2idle.c
+> >> @@ -486,6 +486,19 @@ int acpi_s2idle_prepare_late(void)
+> >>          return 0;
+> >>   }
+> >>
+> >> +void acpi_s2idle_enter(void)
+> >> +{
+> >> +       struct acpi_s2idle_dev_ops *handler;
+> >> +
+> >> +       if (!lps0_device_handle || sleep_no_lps0)
+> >> +               return;
+> >> +
+> >> +       list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
+> >> +               if (handler->enter)
+> >> +                       handler->enter();
+> >> +       }
+> >> +}
+> >> +
+> >>   void acpi_s2idle_restore_early(void)
+> >>   {
+> >>          struct acpi_s2idle_dev_ops *handler;
+> >> @@ -527,6 +540,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
+> >>          .begin = acpi_s2idle_begin,
+> >>          .prepare = acpi_s2idle_prepare,
+> >>          .prepare_late = acpi_s2idle_prepare_late,
+> >> +       .enter = acpi_s2idle_enter,
+> >>          .wake = acpi_s2idle_wake,
+> >>          .restore_early = acpi_s2idle_restore_early,
+> >>          .restore = acpi_s2idle_restore,
+> >> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> >> index 6f64b2f3dc54..9df14b5a875c 100644
+> >> --- a/include/linux/acpi.h
+> >> +++ b/include/linux/acpi.h
+> >> @@ -1076,6 +1076,7 @@ struct acpi_s2idle_dev_ops {
+> >>          struct list_head list_node;
+> >>          void (*prepare)(void);
+> >>          void (*restore)(void);
+> >> +       void (*enter)(void);
+> >>   };
+> >>   int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+> >>   void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+> >> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> >> index 70f2921e2e70..5a3fdca0a628 100644
+> >> --- a/include/linux/suspend.h
+> >> +++ b/include/linux/suspend.h
+> >> @@ -191,6 +191,7 @@ struct platform_s2idle_ops {
+> >>          int (*begin)(void);
+> >>          int (*prepare)(void);
+> >>          int (*prepare_late)(void);
+> >> +       void (*enter)(void);
+> >>          bool (*wake)(void);
+> >>          void (*restore_early)(void);
+> >>          void (*restore)(void);
+> >> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> >> index 827075944d28..0c08032d6b50 100644
+> >> --- a/kernel/power/suspend.c
+> >> +++ b/kernel/power/suspend.c
+> >> @@ -136,6 +136,9 @@ static void s2idle_loop(void)
+> >>                          break;
+> >>                  }
+> >>
+> >> +               if (s2idle_ops && s2idle_ops->enter)
+> >> +                       s2idle_ops->enter();
+> >> +
+> >>                  s2idle_enter();
+> >>          }
+> >>
+> >> --

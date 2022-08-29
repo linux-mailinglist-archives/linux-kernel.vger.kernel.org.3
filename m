@@ -2,180 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F6D5A45CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA135A45D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 11:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiH2JOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 05:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S229628AbiH2JQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 05:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiH2JO0 (ORCPT
+        with ESMTP id S229447AbiH2JQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:14:26 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263395A888;
-        Mon, 29 Aug 2022 02:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661764463; x=1693300463;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=SkoUiCpoaLtos4E0x642lOYDy66PcPTByQrF05aPtKw=;
-  b=Hq6j4yBUoW5re95Oy4CzPcpTQ26RwbaAN99ZAf368XHSraEQBjc82fQW
-   5z2+tXlOshDZY1YXJqJ4U4h8dqaFoucL2Hvecno9LZ9lXV6Xk1Y2agrkI
-   Djn3uVDyi6KAQsNl9lBjsqxb83myxbr6PeNTV2yzgBjAA30hG0E3qWWUc
-   sG7VdFa3saONO7495pbbGjqqsb91V8WzivM5NVLA03b8B7rtnfrefXliO
-   PUEfEyyNHHzf4ZkNLTj7MxM9xfPvIvdisjRMc4UprBMpXxRiAxUjpZTj9
-   FLipomQBqa+EYvK7QAjdLX76QNKjdODrAFWB7jRhnmoe/5FVkRWa3BjMh
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="174590204"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Aug 2022 02:14:22 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 29 Aug 2022 02:14:22 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 29 Aug 2022 02:14:19 -0700
-Message-ID: <578bdccee9a92dd74bb6a1b87fb5011bf7279e57.camel@microchip.com>
-Subject: Re: [PATCH 1/3] reset: microchip-sparx5: issue a reset on startup
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Michael Walle <michael@walle.cc>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Mon, 29 Aug 2022 11:14:18 +0200
-In-Reply-To: <20220826115607.1148489-2-michael@walle.cc>
-References: <20220826115607.1148489-1-michael@walle.cc>
-         <20220826115607.1148489-2-michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Mon, 29 Aug 2022 05:16:38 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD915281A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:16:37 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id kk26so14379067ejc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 02:16:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=EZyAKGxDJWQWEgkfKzptYNGJYnD9auk8Xlm/WrZ7jdU=;
+        b=d1aqREwB7C2c1lguMj7cO3Fo+Im3ujyrobnrfIY2VqxxMGlcAxB0spySQteOm9fSsy
+         N/05PcdFeVMrlE5TLB9WRStdBWJCzHDyaC968vVKy98bi2YqLJMQ8DDi0kKW6z/fN7dw
+         HKZJ1UxGsRzqGfFzvPr7RA0o+e+UoXqitmpIiJb3nzPVnQlNNixVow3PWud3GQY4KW8u
+         2gpRJYTqQS6jFLOmBFrV2s8q9QdoljvkkeJ0/syk6IspnaOXeh8qWf5i1tzwSheeUWaT
+         ZQDvKuKpEX4ixAMpQTlUbqK9T+vi50HmL7Xl3VsUG9CF3H+HSIzqNNY7hUgD3lGxbCLz
+         BT0A==
+X-Gm-Message-State: ACgBeo0qMpu7qbB1gyGiqf2/jciwJnfcOtvvmDh+Qf884dogfwJs8OWU
+        /jDqgjI0ZCo1+/NdsPED4OkKqtsh0jA3yg==
+X-Google-Smtp-Source: AA6agR7L7Zo8+3boKcduPEH8hNCqgDk58TMtCsjz06qKSqqKWkUKDWoye5odSbnSHlehicIrNvED8g==
+X-Received: by 2002:a17:906:9752:b0:738:364a:4ac with SMTP id o18-20020a170906975200b00738364a04acmr13022013ejy.759.1661764596299;
+        Mon, 29 Aug 2022 02:16:36 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id c15-20020a056402120f00b0043bbb3535d6sm5398344edw.66.2022.08.29.02.16.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 02:16:35 -0700 (PDT)
+Message-ID: <b772c39f-c5ae-8f17-fe6e-6a2bc4d1f83b@kernel.org>
+Date:   Mon, 29 Aug 2022 11:16:34 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Weird RIP printed in BUGs [was: 6.0 tty regression, NULL pointer
+ deref in flush_to_ldisc]
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>, Oleg Nesterov <oleg@redhat.com>
+References: <4b4bba5d-d291-d9fa-8382-cdc197b7ed35@redhat.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <4b4bba5d-d291-d9fa-8382-cdc197b7ed35@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hi,
 
-On Fri, 2022-08-26 at 13:56 +0200, Michael Walle wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e content is safe
->=20
-> Originally this was used in by the switch core driver to issue a reset.
-> But it turns out, this isn't just a switch core reset but instead it
-> will reset almost the complete SoC.
->=20
-> Instead of adding almost all devices of the SoC a shared reset line,
-> issue the reset once early on startup. Keep the reset controller for
-> backwards compatibility, but make the actual reset a noop.
->=20
-> Suggested-by: Philipp Zabel <p.zabel@pengutronix.de>
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> =C2=A0drivers/reset/reset-microchip-sparx5.c | 22 +++++++++++++++++-----
-> =C2=A01 file changed, 17 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/reset/reset-microchip-sparx5.c b/drivers/reset/reset=
--microchip-sparx5.c
-> index 00b612a0effa..f3528dd1d084 100644
-> --- a/drivers/reset/reset-microchip-sparx5.c
-> +++ b/drivers/reset/reset-microchip-sparx5.c
-> @@ -33,11 +33,8 @@ static struct regmap_config sparx5_reset_regmap_config=
- =3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .reg_stride=C2=A0=C2=A0=C2=A0=
-=C2=A0 =3D 4,
-> =C2=A0};
->=20
-> -static int sparx5_switch_reset(struct reset_controller_dev *rcdev,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long id)
-> +static int sparx5_switch_reset(struct mchp_reset_context *ctx)
-> =C2=A0{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct mchp_reset_context *ctx =3D
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 container_of(rcdev, struct mchp_reset_context, rcdev);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 val;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Make sure the core is PROTE=
-CTED from reset */
-> @@ -54,8 +51,14 @@ static int sparx5_switch_reset(struct reset_controller=
-_dev *rcdev,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 1, 100);
-> =C2=A0}
->=20
-> +static int sparx5_reset_noop(struct reset_controller_dev *rcdev,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 unsigned long id)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> +}
-> +
-> =C2=A0static const struct reset_control_ops sparx5_reset_ops =3D {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .reset =3D sparx5_switch_reset,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .reset =3D sparx5_reset_noop,
-> =C2=A0};
->=20
-> =C2=A0static int mchp_sparx5_map_syscon(struct platform_device *pdev, cha=
-r *name,
-> @@ -122,6 +125,11 @@ static int mchp_sparx5_reset_probe(struct platform_d=
-evice *pdev)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ctx->rcdev.of_node =3D dn;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ctx->props =3D device_get_matc=
-h_data(&pdev->dev);
->=20
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Issue the reset very early, our =
-actual reset callback is a noop. */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D sparx5_switch_reset(ctx);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 return err;
-> +
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return devm_reset_controller_r=
-egister(&pdev->dev, &ctx->rcdev);
-> =C2=A0}
->=20
-> @@ -163,6 +171,10 @@ static int __init mchp_sparx5_reset_init(void)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return platform_driver_registe=
-r(&mchp_sparx5_reset_driver);
-> =C2=A0}
->=20
-> +/*
-> + * Because this is a global reset, keep this postcore_initcall() to issu=
-e the
-> + * reset as early as possible during the kernel startup.
-> + */
-> =C2=A0postcore_initcall(mchp_sparx5_reset_init);
->=20
-> =C2=A0MODULE_DESCRIPTION("Microchip Sparx5 switch reset driver");
-> --
-> 2.30.2
->=20
+On 29. 08. 22, 10:37, Hans de Goede wrote:
+> [   28.626537] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [   28.626555] #PF: supervisor instruction fetch in kernel mode
+> [   28.626563] #PF: error_code(0x0010) - not-present page
+> [   28.626569] PGD 0 P4D 0
+> [   28.626580] Oops: 0010 [#1] PREEMPT SMP PTI
+> [   28.626589] CPU: 2 PID: 8 Comm: kworker/u8:0 Tainted: G         C  E      6.0.0-rc2+ #102
+> [   28.626598] Hardware name: MPMAN Converter9/Converter9, BIOS 5.6.5 07/28/2015
+> [   28.626604] Workqueue: events_unbound flush_to_ldisc
+> [   28.626617] RIP: 0010:0x0
+> [   28.626633] Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
 
-Tested-by: Steen Hegelund <Steen.Hegelund@microchip.com> on Sparx5
+Irrelevant to the original report, this new message format (the old 
+being "Bad RIP value") confuses me. It always makes me think how can RIP 
+be -42. So can we either:
 
-BR
-Steen
+1) print regs->ip value (0x0000000000000000) instead of prologue value 
+(regs->ip - 42 = 0xffffffffffffffd6) here? Even though we really pass 
+"regs->ip - 42" to copy_code()), or
+
+2) don't print "RIP" in that message. So only "at 0xffffffffffffffd6"
+
+? (I can send a patch for whichever is preferred, if anything.)
+
+thanks,
+-- 
+js
+suse labs
+

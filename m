@@ -2,182 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FE35A5178
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15815A517E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiH2QUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        id S230456AbiH2QUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiH2QUN (ORCPT
+        with ESMTP id S230286AbiH2QUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:20:13 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6BD1AD9E
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:20:01 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id v5so2267910plo.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=FaF8cDfiIEJisn/AmWCWKjm0dO325nGwFjqll5mbmjA=;
-        b=OS6ic46l8D4uNiEVr/X8tV2FhAGXLD/f1tTZvMhzPTPjuzjkb6/kYWvQLqxgSuHgWo
-         BZLZB/qULOS2aXpqU6/Vge34NxesNVEAb+946u7Hw3LK8e2NwWtpxRo20syutwrguoy8
-         9/1TQ9QZLvNQqsFlionV3ONdolopTJYlEyyWyG56u/Y06TdiDssJgSpiwAsAs/KE+SAD
-         uUxwdJJVj6zJG0h4AaL6zOlEEvP2cuMpfdhOMxiF+RKZnWoM4dhq1beZCOwxx+urHWh9
-         Gp7q+mPTqhv3L8bisvKrqFHKXZyAB5PYcrckZa2QCDlAmarhG7tsEbkjES0A4Nr8zZwF
-         tjEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=FaF8cDfiIEJisn/AmWCWKjm0dO325nGwFjqll5mbmjA=;
-        b=rTmFGNw2tGMtIE/nAxLuhL2QfjFMJuzwFeDvkHoVZ5ZX9yNUFQQCByQXsOtgSo4FuL
-         XpkBAdDIzktXMDkuZRnnV4MEfi5cUvIcREDwh2ui+0Qv5JCo9fck4IEC3NaUdiXTlY6M
-         w3LU5LyIUVDSHyH9NX+s6mkwIUdXzGEDnlDcAAjqBhOzaBPi9bNvn4M4ad+sG6YBZMWW
-         928LwcyaBS2JoQEYuvujoc2oJM3NcCVe9/Wrlka5x5rj9XBf2pNRP3oGCPFyCV1blmvA
-         XHiX3lFsxtSRvyiMozyoSsYXr0BT/UtPbmAdMv7xvTC1v67GbFomtgmVlyZnk27lcbMw
-         E4DQ==
-X-Gm-Message-State: ACgBeo0oNbFRUKcmSbJrCQmLUmAdvXoGFCEeu+pOdj6hsOdx6lX91qzQ
-        X7QTijNv6PJtCJtSoVXMXuX7Pg==
-X-Google-Smtp-Source: AA6agR50y1NDfmhFc7eilJSiD4MLdOpCZAPKYRil0z/0Vc/bKiNB0fMw/YcHd4BiKuQtGehqKeo4Gg==
-X-Received: by 2002:a17:90b:2c11:b0:1fd:e56c:79de with SMTP id rv17-20020a17090b2c1100b001fde56c79demr3414927pjb.201.1661790001240;
-        Mon, 29 Aug 2022 09:20:01 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 195-20020a6217cc000000b005365aee486bsm7396796pfx.192.2022.08.29.09.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 09:20:00 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 16:19:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 3/4] KVM: selftests: Add support for posted interrupt
- handling in L2
-Message-ID: <YwznLAqRb2i4lHiH@google.com>
-References: <20220828222544.1964917-1-mizhang@google.com>
- <20220828222544.1964917-4-mizhang@google.com>
+        Mon, 29 Aug 2022 12:20:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1500E140BD;
+        Mon, 29 Aug 2022 09:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11A4061225;
+        Mon, 29 Aug 2022 16:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D25C433D6;
+        Mon, 29 Aug 2022 16:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661790018;
+        bh=rKldEn8GDoqan884Kl27KYDre5RSBwf1soWE1GqIuUI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Jo27ES0wd1AvWThEa0nNWsF4/0g4E7h6fUZmtGF6fpqKxWQaGM2/7aSaVKcq9vxdz
+         75czUSVooDbVphf884bV11kfN5fPZPvAABfAlW+VFs8USi8AKPQe/brfzmnE7VN68u
+         qhuXnZbyhTKBgKL6ycWq4C7TKJy/ow/hplrFpoxrCBfTHkLX+1JBVzA71cwM3AHn9P
+         l449PrywaV5w/dgku2ObN6ZObfjcAywk7e+8HtteRg64LoBVhLyyXyMO7g5fORlPf1
+         m3JErPnp7uWjth4CxV5kg4QvVma2BsLqYIq5WrNDf2VjFKsPYpgkE7d0f/pr+fx/MI
+         4t1WqSnGXFa2Q==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Qiang Yu <quic_qianyu@quicinc.com>, quic_hemantk@quicinc.com,
+        loic.poulain@linaro.org, quic_jhugo@quicinc.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
+        ath11k@lists.infradead.org
+Subject: Re: [PATCH v3 1/1] bus: mhi: host: Fix up null pointer access in mhi_irq_handler
+References: <1658459838-30802-1-git-send-email-quic_qianyu@quicinc.com>
+        <20220726080636.GE5522@workstation> <87czdrrc95.fsf@kernel.org>
+        <20220729142221.GA9937@thinkpad>
+Date:   Mon, 29 Aug 2022 19:20:10 +0300
+In-Reply-To: <20220729142221.GA9937@thinkpad> (Manivannan Sadhasivam's message
+        of "Fri, 29 Jul 2022 19:52:21 +0530")
+Message-ID: <87h71vc98l.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220828222544.1964917-4-mizhang@google.com>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022, Mingwei Zhang wrote:
-> Add support for posted interrupt handling in L2. This is done by adding
-> needed data structures in vmx_pages and APIs to allow an L2 receive posted
-> interrupts.
-> 
-> Cc: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  tools/testing/selftests/kvm/include/x86_64/vmx.h | 10 ++++++++++
->  tools/testing/selftests/kvm/lib/x86_64/vmx.c     | 14 ++++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-> index 99fa1410964c..69784fc71bce 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-> @@ -577,6 +577,14 @@ struct vmx_pages {
->  	void *apic_access_hva;
->  	uint64_t apic_access_gpa;
->  	void *apic_access;
-> +
-> +	void *virtual_apic_hva;
-> +	uint64_t virtual_apic_gpa;
-> +	void *virtual_apic;
-> +
-> +	void *posted_intr_desc_hva;
-> +	uint64_t posted_intr_desc_gpa;
-> +	void *posted_intr_desc;
+Manivannan Sadhasivam <mani@kernel.org> writes:
 
-Can you add a prep patch to dedup the absurd amount of copy-paste code related to
-vmx_pages?
+> On Tue, Jul 26, 2022 at 08:53:58PM +0300, Kalle Valo wrote:
+>> Manivannan Sadhasivam <mani@kernel.org> writes:
+>> 
+>> > +ath11k, Kalle
+>> >
+>> > On Fri, Jul 22, 2022 at 11:17:18AM +0800, Qiang Yu wrote:
+>> >> The irq handler for a shared IRQ ought to be prepared for running
+>> >> even now it's being freed. So let's check the pointer used by
+>> >> mhi_irq_handler to avoid null pointer access since it is probably
+>> >> released before freeing IRQ.
+>> >> 
+>> >> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+>> >
+>> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+>> 
+>> This fixes the crash and my regression tests pass now, thanks. But
+>> please see my question below.
+>> 
+>> Tested-by: Kalle Valo <kvalo@kernel.org>
+>> 
+>
+> Thanks Kalle!
 
-I.e. take this and give all the other triplets the same treatment.
+I just tested v6.0-rc3 and it's still crashing. What's the plan to get
+this fix to Linus?
 
----
- tools/testing/selftests/kvm/include/x86_64/vmx.h | 10 +++++++---
- tools/testing/selftests/kvm/lib/x86_64/vmx.c     | 15 ++++++++++-----
- 2 files changed, 17 insertions(+), 8 deletions(-)
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-index 99fa1410964c..ecc66d65acc1 100644
---- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-@@ -537,10 +537,14 @@ static inline uint32_t vmcs_revision(void)
- 	return rdmsr(MSR_IA32_VMX_BASIC);
- }
-
-+struct vmx_page {
-+	void *gva;
-+	uint64_t gpa;
-+	void *hva;
-+};
-+
- struct vmx_pages {
--	void *vmxon_hva;
--	uint64_t vmxon_gpa;
--	void *vmxon;
-+	struct vmx_page vmxon;
-
- 	void *vmcs_hva;
- 	uint64_t vmcs_gpa;
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-index 80a568c439b8..e4eeab85741a 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-@@ -58,6 +58,13 @@ int vcpu_enable_evmcs(struct kvm_vcpu *vcpu)
- 	return evmcs_ver;
- }
-
-+static void vcpu_alloc_vmx_page(struct kvm_vm *vm, struct vmx_page *page)
-+{
-+	page->gva = (void *)vm_vaddr_alloc_page(vm);
-+	page->hva = addr_gva2hva(vm, (uintptr_t)page->gva);
-+	page->gpa = addr_gva2gpa(vm, (uintptr_t)page->gva);
-+}
-+
- /* Allocate memory regions for nested VMX tests.
-  *
-  * Input Args:
-@@ -76,9 +83,7 @@ vcpu_alloc_vmx(struct kvm_vm *vm, vm_vaddr_t *p_vmx_gva)
- 	struct vmx_pages *vmx = addr_gva2hva(vm, vmx_gva);
-
- 	/* Setup of a region of guest memory for the vmxon region. */
--	vmx->vmxon = (void *)vm_vaddr_alloc_page(vm);
--	vmx->vmxon_hva = addr_gva2hva(vm, (uintptr_t)vmx->vmxon);
--	vmx->vmxon_gpa = addr_gva2gpa(vm, (uintptr_t)vmx->vmxon);
-+	vcpu_alloc_vmx_page(vm, &vmx->vmxon);
-
- 	/* Setup of a region of guest memory for a vmcs. */
- 	vmx->vmcs = (void *)vm_vaddr_alloc_page(vm);
-@@ -160,8 +165,8 @@ bool prepare_for_vmx_operation(struct vmx_pages *vmx)
- 		wrmsr(MSR_IA32_FEAT_CTL, feature_control | required);
-
- 	/* Enter VMX root operation. */
--	*(uint32_t *)(vmx->vmxon) = vmcs_revision();
--	if (vmxon(vmx->vmxon_gpa))
-+	*(uint32_t *)(vmx->vmxon.gva) = vmcs_revision();
-+	if (vmxon(vmx->vmxon.gpa))
- 		return false;
-
- 	return true;
-
-base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
---
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

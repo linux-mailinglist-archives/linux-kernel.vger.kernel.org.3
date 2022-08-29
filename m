@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92355A4A4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF365A49F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiH2Lgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S232068AbiH2LbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiH2Lf4 (ORCPT
+        with ESMTP id S232553AbiH2L3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:35:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2697E320;
-        Mon, 29 Aug 2022 04:20:51 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F171167168;
+        Mon, 29 Aug 2022 04:17:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9768BB80EFA;
-        Mon, 29 Aug 2022 11:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA9B8C433D6;
-        Mon, 29 Aug 2022 11:18:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C6776122B;
+        Mon, 29 Aug 2022 11:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67351C433C1;
+        Mon, 29 Aug 2022 11:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771906;
-        bh=pp1K60d+bAPmwzR6F+LVuC53PVa7MXLH3HOEvGhGyNI=;
+        s=korg; t=1661771746;
+        bh=Zbkptztkx3K6TXVOoXnL5C+7twSLxobqsqQ1ns/lazA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ujtZEH6GQbAsq2xk0AopW2CihNgDQh6OwP4ug5vPG/VwMiVuEg01MgJAMetgsuW4U
-         7fFkuAAHg6Oh8hZKK44I4v2gX9bkjWumjcGspDSqGxvo2IQODsxJ2t4y3wrU9SeWI7
-         57ieDg0dspG2Y/V507wuLhN2bys277uZK5WYAcYI=
+        b=iDXCFExXAiNYXpfr1O5wEushVfArj81CNUUIYJi5qONQ7Qz1bGdsiXNILar+A+w3D
+         C/fwdLvVR/kyuD5IT504afDyrxRl1mNlqCHv6I6VrrANt92GU1HcqxKQ8d8UxGkULQ
+         RxzueKfnEHLqRVSMRA/+HLTKMVm/cuONmbyN7ANM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH 5.19 136/158] md: call __md_stop_writes in md_stop
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ferry Toth <fntoth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andre Edich <andre.edich@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 119/136] Revert "usbnet: smsc95xx: Fix deadlock on runtime resume"
 Date:   Mon, 29 Aug 2022 12:59:46 +0200
-Message-Id: <20220829105814.778624942@linuxfoundation.org>
+Message-Id: <20220829105809.573320725@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-References: <20220829105808.828227973@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+References: <20220829105804.609007228@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +58,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guoqing Jiang <guoqing.jiang@linux.dev>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 0dd84b319352bb8ba64752d4e45396d8b13e6018 upstream.
+This reverts commit b574d1e3e9a2432b5acd9c4a9dc8d70b6a37aaf1 which is
+commit 7b960c967f2aa01ab8f45c5a0bd78e754cffdeee upstream.
 
->From the link [1], we can see raid1d was running even after the path
-raid_dtr -> md_stop -> __md_stop.
+It is reported to cause problems, so drop it from the 5.15.y tree until
+the root cause can be determined.
 
-Let's stop write first in destructor to align with normal md-raid to
-fix the KASAN issue.
-
-[1]. https://lore.kernel.org/linux-raid/CAPhsuW5gc4AakdGNdF8ubpezAuDLFOYUO_sfMZcec6hQFm8nhg@mail.gmail.com/T/#m7f12bf90481c02c6d2da68c64aeed4779b7df74a
-
-Fixes: 48df498daf62 ("md: move bitmap_destroy to the beginning of __md_stop")
-Reported-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Signed-off-by: Song Liu <song@kernel.org>
+Reported-by: Lukas Wunner <lukas@wunner.de>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Ferry Toth <fntoth@gmail.com>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Andre Edich <andre.edich@microchip.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220826132137.GA24932@wunner.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/smsc95xx.c |   26 ++++++--------------------
+ 1 file changed, 6 insertions(+), 20 deletions(-)
 
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -6266,6 +6266,7 @@ void md_stop(struct mddev *mddev)
- 	/* stop the array and free an attached data structures.
- 	 * This is called from dm-raid
- 	 */
-+	__md_stop_writes(mddev);
- 	__md_stop(mddev);
- 	bioset_exit(&mddev->bio_set);
- 	bioset_exit(&mddev->sync_set);
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -69,7 +69,6 @@ struct smsc95xx_priv {
+ 	struct fwnode_handle *irqfwnode;
+ 	struct mii_bus *mdiobus;
+ 	struct phy_device *phydev;
+-	struct task_struct *pm_task;
+ };
+ 
+ static bool turbo_mode = true;
+@@ -79,14 +78,13 @@ MODULE_PARM_DESC(turbo_mode, "Enable mul
+ static int __must_check __smsc95xx_read_reg(struct usbnet *dev, u32 index,
+ 					    u32 *data, int in_pm)
+ {
+-	struct smsc95xx_priv *pdata = dev->driver_priv;
+ 	u32 buf;
+ 	int ret;
+ 	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+ 
+ 	BUG_ON(!dev);
+ 
+-	if (current != pdata->pm_task)
++	if (!in_pm)
+ 		fn = usbnet_read_cmd;
+ 	else
+ 		fn = usbnet_read_cmd_nopm;
+@@ -110,14 +108,13 @@ static int __must_check __smsc95xx_read_
+ static int __must_check __smsc95xx_write_reg(struct usbnet *dev, u32 index,
+ 					     u32 data, int in_pm)
+ {
+-	struct smsc95xx_priv *pdata = dev->driver_priv;
+ 	u32 buf;
+ 	int ret;
+ 	int (*fn)(struct usbnet *, u8, u8, u16, u16, const void *, u16);
+ 
+ 	BUG_ON(!dev);
+ 
+-	if (current != pdata->pm_task)
++	if (!in_pm)
+ 		fn = usbnet_write_cmd;
+ 	else
+ 		fn = usbnet_write_cmd_nopm;
+@@ -1485,12 +1482,9 @@ static int smsc95xx_suspend(struct usb_i
+ 	u32 val, link_up;
+ 	int ret;
+ 
+-	pdata->pm_task = current;
+-
+ 	ret = usbnet_suspend(intf, message);
+ 	if (ret < 0) {
+ 		netdev_warn(dev->net, "usbnet_suspend error\n");
+-		pdata->pm_task = NULL;
+ 		return ret;
+ 	}
+ 
+@@ -1730,7 +1724,6 @@ done:
+ 	if (ret && PMSG_IS_AUTO(message))
+ 		usbnet_resume(intf);
+ 
+-	pdata->pm_task = NULL;
+ 	return ret;
+ }
+ 
+@@ -1751,31 +1744,29 @@ static int smsc95xx_resume(struct usb_in
+ 	/* do this first to ensure it's cleared even in error case */
+ 	pdata->suspend_flags = 0;
+ 
+-	pdata->pm_task = current;
+-
+ 	if (suspend_flags & SUSPEND_ALLMODES) {
+ 		/* clear wake-up sources */
+ 		ret = smsc95xx_read_reg_nopm(dev, WUCSR, &val);
+ 		if (ret < 0)
+-			goto done;
++			return ret;
+ 
+ 		val &= ~(WUCSR_WAKE_EN_ | WUCSR_MPEN_);
+ 
+ 		ret = smsc95xx_write_reg_nopm(dev, WUCSR, val);
+ 		if (ret < 0)
+-			goto done;
++			return ret;
+ 
+ 		/* clear wake-up status */
+ 		ret = smsc95xx_read_reg_nopm(dev, PM_CTRL, &val);
+ 		if (ret < 0)
+-			goto done;
++			return ret;
+ 
+ 		val &= ~PM_CTL_WOL_EN_;
+ 		val |= PM_CTL_WUPS_;
+ 
+ 		ret = smsc95xx_write_reg_nopm(dev, PM_CTRL, val);
+ 		if (ret < 0)
+-			goto done;
++			return ret;
+ 	}
+ 
+ 	phy_init_hw(pdata->phydev);
+@@ -1784,20 +1775,15 @@ static int smsc95xx_resume(struct usb_in
+ 	if (ret < 0)
+ 		netdev_warn(dev->net, "usbnet_resume error\n");
+ 
+-done:
+-	pdata->pm_task = NULL;
+ 	return ret;
+ }
+ 
+ static int smsc95xx_reset_resume(struct usb_interface *intf)
+ {
+ 	struct usbnet *dev = usb_get_intfdata(intf);
+-	struct smsc95xx_priv *pdata = dev->driver_priv;
+ 	int ret;
+ 
+-	pdata->pm_task = current;
+ 	ret = smsc95xx_reset(dev);
+-	pdata->pm_task = NULL;
+ 	if (ret < 0)
+ 		return ret;
+ 
 
 

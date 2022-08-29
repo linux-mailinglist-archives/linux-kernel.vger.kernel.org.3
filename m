@@ -2,139 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83075A5338
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394925A533B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiH2Rdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S230349AbiH2Rep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiH2Rdt (ORCPT
+        with ESMTP id S229965AbiH2Ren (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:33:49 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147AA97EDA
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:33:48 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id bh13so8309395pgb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=88XtoZzbZveGIe6W4F/YHkUpeXUSRoxhWtsQ1gJLO0Y=;
-        b=LJaqQyLKxs3mDeGI+elBZm8fcrM3+d/GXgdgigp63emskLM21WywFzIxpfkbNzbC3o
-         FRzay+TVzn8Cjiy4vOeVRnbGm1Gzfol1Ot+N1DHPmmcXwiPMhujmj2t1pHgn59u6TCeV
-         xSeIdUN0aD0RSqbzf+I3Zu1jGphrLU3Jltrr08erMtzDVSQk9eVn3YZCpmZ8Wq2nmLjC
-         HWo2WyeWeREOYPY4AnAhy7IHESg8Bb4YMydbQENy9XLXjSA+UvZxl3lL9aLxbJjhq/bU
-         sc7A4wHo/Z3npb0nGdYKfPWUKi3yqO1DOEFaleDRCqhWnMuLLMsXSBV0bGKa5Ywgts0d
-         IBBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=88XtoZzbZveGIe6W4F/YHkUpeXUSRoxhWtsQ1gJLO0Y=;
-        b=A+pHSqLYt50Adp7o7OuUnnPaHr1V66+jaSMW/rDwbBb0W2t56wQVAKxkI0bX902z0F
-         O1CTBVpNF9RKeSG8VmWUAD5hyE3Bo3//L9SZjyRX9jN2546I0uDNk6ebkHJI25j0fZMK
-         ctWDn9ZIAdGGWnB/vhxR8G0v1ylE/4RR7bvxQunPMspLR4COGZgWfNQlB4OWlhZMls8D
-         D2eIdfOi/VDHsuiDzqG20CU9WrqCvlGwQh4NrRbmBl1LcU1EArSCpqCiuUEdRJpdTVRM
-         SuOQUXExtHY4Rbrl9lVFhSC4e80u9qa9MlVzpzq2qIR1aR6VYh6iB39UrUVIi9yD+m+s
-         9xsA==
-X-Gm-Message-State: ACgBeo17UT8qRgHowUJbzszezT3b8P52eLMFiCaFzYrsOJ7XdZ1pWr/U
-        Rg9Ve7kklYNcquhCqlHifqfWVA==
-X-Google-Smtp-Source: AA6agR7q8oP/7KryicESNNPbuoFC/Z6Q/8/57egou/NQwmyr6L/ZlgPZUyO3Dw4sca0Zgib8B5HGVg==
-X-Received: by 2002:a65:4c07:0:b0:427:bbde:99c with SMTP id u7-20020a654c07000000b00427bbde099cmr14892722pgq.390.1661794426448;
-        Mon, 29 Aug 2022 10:33:46 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001fd7e56da4csm5201876pjb.39.2022.08.29.10.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 10:33:46 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 17:33:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/2] KVM: VMX: Fix VM entry failure on
- PT_MODE_HOST_GUEST while host is using PT
-Message-ID: <Ywz4diMZBB7DdITb@google.com>
-References: <20220825085625.867763-1-xiaoyao.li@intel.com>
- <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 13:34:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E05497EDA;
+        Mon, 29 Aug 2022 10:34:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FA0DB81199;
+        Mon, 29 Aug 2022 17:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8074C433D6;
+        Mon, 29 Aug 2022 17:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661794479;
+        bh=LBDvS6XoZVRJEJmWa+ZXxNpovfkLbLIkGFHkPfJWv0c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=CMLLzI7mtPYjexxfjl9CMmOKdfKn/MPGUOSvKL5GbOPE2NRRY70bQdMF+w/2yYpkV
+         DYJu42PZrnlPh31ZryyDcYEdmgg0mMT1vou5pLKfJ21Dgmf6O4cSAR46N0JEQ6zoLf
+         x2sfPJr1COu9J8sJm8hB9ltCRWiF/otr/BbM5zw2t3tIMEgQxB6P4QIYtvZocE3Nps
+         C3HkImZZsUDZl5HSrjp6JJ5fGo6vy3xJC9ubtdt5Meg79A5Sq0aQuLv8iLLgWBnar/
+         vG+qc20375xczOgrImEQ28J+kycaAJ796q30eBlr+t+bomaklzVbFxZYSC9mHz56W3
+         M5EdpekNR7tKQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A462EE924D6;
+        Mon, 29 Aug 2022 17:34:39 +0000 (UTC)
+Subject: Re: [GIT PULL] Documentation fixes for 6.0
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <871qszrr9s.fsf@meer.lwn.net>
+References: <871qszrr9s.fsf@meer.lwn.net>
+X-PR-Tracked-List-Id: <linux-doc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <871qszrr9s.fsf@meer.lwn.net>
+X-PR-Tracked-Remote: git://git.lwn.net/linux.git tags/docs-6.0-fixes
+X-PR-Tracked-Commit-Id: 5479d6d4bf122d4b137659559a7bd17784b97b7e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d68d289fbec70b50a25f5818964b26349320ddb5
+Message-Id: <166179447966.12590.7460232277544887852.pr-tracker-bot@kernel.org>
+Date:   Mon, 29 Aug 2022 17:34:39 +0000
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022, Wang, Wei W wrote:
-> On Thursday, August 25, 2022 4:56 PM, Xiaoyao Li wrote:
->  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d7f8331d6f7e..195debc1bff1 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1125,37 +1125,29 @@ static inline void pt_save_msr(struct pt_ctx *ctx, u32 addr_range)
-> 
->  static void pt_guest_enter(struct vcpu_vmx *vmx)
->  {
-> -       if (vmx_pt_mode_is_system())
-> +       struct perf_event *event;
-> +
-> +       if (vmx_pt_mode_is_system() ||
-> +           !(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN))
+The pull request you sent on Mon, 29 Aug 2022 09:41:35 -0600:
 
-I don't think the host should trace the guest in the host/guest mode just because
-the guest isn't tracing itself.  I.e. the host still needs to turn off it's own
-tracing.
+> git://git.lwn.net/linux.git tags/docs-6.0-fixes
 
->                 return;
-> 
-> -       /*
-> -        * GUEST_IA32_RTIT_CTL is already set in the VMCS.
-> -        * Save host state before VM entry.
-> -        */
-> -       rdmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
-> -       if (vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN) {
-> -               wrmsrl(MSR_IA32_RTIT_CTL, 0);
-> -               pt_save_msr(&vmx->pt_desc.host, vmx->pt_desc.num_address_ranges);
-> -               pt_load_msr(&vmx->pt_desc.guest, vmx->pt_desc.num_address_ranges);
-> -       }
-> +       event = pt_get_curr_event();
-> +       perf_event_disable(event);
-> +       vmx->pt_desc.host_event = event;
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d68d289fbec70b50a25f5818964b26349320ddb5
 
-This is effectively what I suggested[*], the main difference being that my version
-adds dedicated enter/exit helpers so that perf can skip save/restore of the other
-MSRs.  It's easy to extend if perf needs to hand back an event to complete the "exit.
+Thank you!
 
-	bool guest_trace_enabled = vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN;
-	
-	vmx->pt_desc.host_event = intel_pt_guest_enter(guest_trace_enabled);
-
-
-and then on exit
-
-	bool guest_trace_enabled = vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN;
-
-	intel_pt_guest_exit(vmx->pt_desc.host_event, guest_trace_enabled);
-
-[*] https://lore.kernel.org/all/YwecducnM%2FU6tqJT@google.com
-
-> +       pt_load_msr(&vmx->pt_desc.guest, vmx->pt_desc.num_address_ranges);
-> }
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

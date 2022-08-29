@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5C75A4CCC
+	by mail.lfdr.de (Postfix) with ESMTP id 587355A4CCD
 	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 15:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiH2NB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 09:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S229948AbiH2NCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 09:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiH2NBV (ORCPT
+        with ESMTP id S229768AbiH2NBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:01:21 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637EE2DC5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:53:03 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mj6so2873552pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:53:03 -0700 (PDT)
+        Mon, 29 Aug 2022 09:01:22 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9535F4BA6A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:53:07 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 69so5965397pgb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:53:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=XMoCsdNUCfWhBPID8WfmwBdQlNlnjab95bfwWj1Kd10=;
-        b=DY53GI5TAnAd0CsPwNi0mXXEFLioz8RUCQWfclNsemmIEoXDit4q8fe226V5e9n66T
-         ymNgRpgtzoZ67kEOIRa3hxXmfD+fTl7OEJKhylMwqu6tmaSUeKNIO/GDq6fOX4zn/AaT
-         yNPIV4K2SYBVbgHjH1vpuoOquPUSxJp7gnQZWKEim5K7/8UBrQYuAp5Nzj7iCi4wENRe
-         9a1c5135iN0Crz5jFUAGAKPa5kPn75dCP06cCG7Si0znL0Tax5+WlC2U42B1RXs4Xm8u
-         u0lM+CSOnLgcdAglCnrcAROqawX9s98jp/sQDsEbBA049PWUylpLPSHmeftcoAA4ttA3
-         C8JA==
+        bh=Z/mBY2jgNDkWQ3lEWcoeCOwOWescKqJwUlwqGO5KuJY=;
+        b=ZrXS+/PN7MjuqSu/+/xHyffxoijmukarDdtB/3TARKB7q3BLr1Vx7T/fs09i5kfugF
+         IG3pbHjIj1TI+B5S/YOQM445Su0v1nateqtk6N7kYtOhsP3V5tr1fuC+doi9JHoSs3ip
+         QKkcw0r9fSo7tD6i5+VV/UT9qzWyi4mPSrbcxqH2ufl8dvCiPGhUvpmgRKa6iB0pXDMj
+         wPAwssvvOlhxuGtBoT0Z3eXyd53o0ZUdJUVSVQ3ClJse3sXsB0IY+smFNWvdap+CgkGt
+         L4Tvs1C2aAVcXZTcyF1QbyeHX6DffONomhBO7oBimH0a3kUfzDwEM6K+5M6x7M5nKj6W
+         gVRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=XMoCsdNUCfWhBPID8WfmwBdQlNlnjab95bfwWj1Kd10=;
-        b=Cxaq2lD4W9KodZTr2Ce0U/2wUNhj6z3hfo3D59LJQm8ZGlxDpbglEYrQZmNcnkDxOo
-         EJXcdKYk/leByYetSqX1dL+3qqPSNtMtT/FTR9uh5HCVvsCPs/Z0UAs88HZx9ryr4bcQ
-         JuPUDT7/pmtR07jdqfyjvKEAuj57ckqoenZEYsIdnRNMl+wBBTdhxXCXhsB8kC4CxuVx
-         r8WWMhZu1sZJgQ2KisxPPyYAKkxzgh7PJQdmLOMokhN7OjiNUShtSNrsZ28Gi4vu8nF4
-         G+CrHsKe0R5E782C3M5Xw9i/lN8rF2VP9aSpo7HAbfXMM+k236ioNTM5pl5SXfGqtQpI
-         Iv1w==
-X-Gm-Message-State: ACgBeo3GxnE9WaLCcmezrEd7vZSLBInqx8zLeWgKFG6QOlR8QI7ZRjO+
-        hgfmdsxKhkJpUUHlBfU2DLRitQ==
-X-Google-Smtp-Source: AA6agR4bk82OZLIjKGxv61LXR9fE7Iqmvmc3giXZ2CUodzY2JdWIgqar/F3YzowFSpuFFbgRQ0T4tQ==
-X-Received: by 2002:a17:90b:35c8:b0:1fd:aef7:1ef6 with SMTP id nb8-20020a17090b35c800b001fdaef71ef6mr7851082pjb.60.1661777582743;
-        Mon, 29 Aug 2022 05:53:02 -0700 (PDT)
+        bh=Z/mBY2jgNDkWQ3lEWcoeCOwOWescKqJwUlwqGO5KuJY=;
+        b=mHccEuqtAX4qBuWBpvQy8TFqUpdUF6SZEPg3xt/yRb8xcZMCUA+9gzJB3iME5dMTWm
+         mIamnKPpb9wFpmfkdHPiZ7NBZO91BGj3OaPnZ6YlUmvBsts+62XlEto5aPnHJAIldCA9
+         OioIOJ3nUL9beak/SczCSlmETztiy36Ig4grQmW8NH5qCXy+AJDyM5x7XhfrZbrPjNnk
+         F5q54tqyMzMxLq2q17ajlpBTNi735kP/T0dqQBg3CHZijP57O/alyFQ5ebcBZ6MA10oO
+         jSFVVvuuoAC7dYXew8u571CTX1oPHFPwY6zgZvwguY01hDRJbCoSQg7Q3dT4Z5CpK4xn
+         WDKw==
+X-Gm-Message-State: ACgBeo0wvyITS6IPP57WsJaoBUS80QTubl3Kv/YhjBTGzbcQUYp2w0SM
+        9V6058s7F4AUyMBhGbU7XXq59w==
+X-Google-Smtp-Source: AA6agR7EiSZno8PJhvukHxS/VfWScLMZXn5Vlfkr+Zp9Me2vZrYE8Ww3BqQJI+4eSdeYl9Ih2996hA==
+X-Received: by 2002:a65:6d0b:0:b0:42a:19dc:e76e with SMTP id bf11-20020a656d0b000000b0042a19dce76emr13623850pgb.6.1661777587046;
+        Mon, 29 Aug 2022 05:53:07 -0700 (PDT)
 Received: from anup-ubuntu64-vm.. ([171.76.81.110])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016ed5266a5csm7517607plh.170.2022.08.29.05.52.59
+        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016ed5266a5csm7517607plh.170.2022.08.29.05.53.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 05:53:02 -0700 (PDT)
+        Mon, 29 Aug 2022 05:53:06 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>
@@ -57,9 +57,9 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>,
         Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: [PATCH 3/4] RISC-V: Implement arch specific PMEM APIs
-Date:   Mon, 29 Aug 2022 18:22:25 +0530
-Message-Id: <20220829125226.511564-4-apatel@ventanamicro.com>
+Subject: [PATCH 4/4] RISC-V: Enable PMEM drivers
+Date:   Mon, 29 Aug 2022 18:22:26 +0530
+Message-Id: <20220829125226.511564-5-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220829125226.511564-1-apatel@ventanamicro.com>
 References: <20220829125226.511564-1-apatel@ventanamicro.com>
@@ -75,73 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NVDIMM PMEM driver expects arch specific APIs for cache maintenance
-and if arch does not provide these APIs then NVDIMM PMEM driver will
-always use MEMREMAP_WT to map persistent memory which in-turn maps as
-UC memory type defined by the RISC-V Svpbmt specification.
-
-Now that the Svpbmt and Zicbom support is available in RISC-V kernel,
-we implement PMEM APIs using ALT_CMO_OP() macros so that the NVDIMM
-PMEM driver can use MEMREMAP_WB to map persistent memory.
+We now have PMEM arch support available in RISC-V kernel so let us
+enable relevant drivers in defconfig.
 
 Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
 Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/Kconfig     |  1 +
- arch/riscv/mm/Makefile |  1 +
- arch/riscv/mm/pmem.c   | 21 +++++++++++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 arch/riscv/mm/pmem.c
+ arch/riscv/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 0ebd8da388d8..37d6370d29c3 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -25,6 +25,7 @@ config RISCV
- 	select ARCH_HAS_GIGANTIC_PAGE
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_MMIOWB
-+	select ARCH_HAS_PMEM_API
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_HAS_SET_DIRECT_MAP if MMU
- 	select ARCH_HAS_SET_MEMORY if MMU
-diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
-index d76aabf4b94d..3b368e547f83 100644
---- a/arch/riscv/mm/Makefile
-+++ b/arch/riscv/mm/Makefile
-@@ -31,3 +31,4 @@ endif
- 
- obj-$(CONFIG_DEBUG_VIRTUAL) += physaddr.o
- obj-$(CONFIG_RISCV_DMA_NONCOHERENT) += dma-noncoherent.o
-+obj-$(CONFIG_ARCH_HAS_PMEM_API) += pmem.o
-diff --git a/arch/riscv/mm/pmem.c b/arch/riscv/mm/pmem.c
-new file mode 100644
-index 000000000000..089df92ae876
---- /dev/null
-+++ b/arch/riscv/mm/pmem.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Ventana Micro Systems Inc.
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/libnvdimm.h>
-+
-+#include <asm/cacheflush.h>
-+
-+void arch_wb_cache_pmem(void *addr, size_t size)
-+{
-+	ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
-+}
-+EXPORT_SYMBOL_GPL(arch_wb_cache_pmem);
-+
-+void arch_invalidate_pmem(void *addr, size_t size)
-+{
-+	ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
-+}
-+EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+index aed332a9d4ea..010b673ebd11 100644
+--- a/arch/riscv/configs/defconfig
++++ b/arch/riscv/configs/defconfig
+@@ -159,6 +159,7 @@ CONFIG_VIRTIO_MMIO=y
+ CONFIG_RPMSG_CHAR=y
+ CONFIG_RPMSG_CTRL=y
+ CONFIG_RPMSG_VIRTIO=y
++CONFIG_LIBNVDIMM=y
+ CONFIG_EXT4_FS=y
+ CONFIG_EXT4_FS_POSIX_ACL=y
+ CONFIG_EXT4_FS_SECURITY=y
 -- 
 2.34.1
 

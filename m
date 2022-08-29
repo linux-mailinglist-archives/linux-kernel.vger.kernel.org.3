@@ -2,100 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0B55A509D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D685A50A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiH2PtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        id S229798AbiH2PuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiH2Pss (ORCPT
+        with ESMTP id S229566AbiH2PuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:48:48 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7B095ADC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:48:43 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r4so10678645edi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 08:48:43 -0700 (PDT)
+        Mon, 29 Aug 2022 11:50:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77CD47B8C;
+        Mon, 29 Aug 2022 08:50:08 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h13-20020a17090a648d00b001fdb9003787so3657598pjj.4;
+        Mon, 29 Aug 2022 08:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=mHpjYI6QcaCSHOvbWt8Moq9oJMF1GJnVWRiLawfEmvo=;
-        b=fSfztW46mx7xfnjr/sbNt5AUq47NnMbc350DFDBjC7UfwCT6yMIUbi3yADdtDc0WDZ
-         +Ajn3EHfMJPZBSXH298Ab4y37Rh2GwUavapdnkTTite7EVYwHwXcORB8ldJ6DPdnWw99
-         IjpRJr/FkkU9nsG4jtHjEx6o0X0XyYKfjOs6q4b3QGsYl2Ru7o6HRgphEDb1hJPxFdn7
-         AHUh09YkdXOWOED6AuEFlqml4qdBnufqUaT3TjuTF1TVwcfxQPj1youLg+gySRB2U/2I
-         LgMR398ZPcYVbTplWviuxQMqiA4NA9KqbO4ZnVWeCJ3eljiC6jiI+eZf+0Q4u3pMypqE
-         5EZg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=taWUzi4UHNfxICa8CAve34OKJtJJKSkD21g1k9CF/lA=;
+        b=bnPj20mJnripHXQ/GXvCmT3YEOJYNbHJkMkHYD8cOZCdgZEOncfbxWW7i8XLvWPDT9
+         zo7UAer/yx8HxZEp6Ek/u3o1cgFe35r8AtlRmiq+gnwHIYY3ElFXHTfkh42rzH90I0gm
+         m/EMCBdk4lYUnl+11n2bG2S26YwT9UUc7clJqCaOcBVqBNXDfjqjBXSTIWzj+HCUqNRT
+         qNi5LZLElki9RY4b5b3yiHAvuR27ALlvvOYFsLNrMBm/IaeBjZTU0cbFAdz6Op1dbc5g
+         vR5QTAQp4RnYAWwNN5+5Z+fLbZcrIJeil/1JSrt4lN/ooVCdEX4XSMfU5YjzWrZSny/h
+         xGvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=mHpjYI6QcaCSHOvbWt8Moq9oJMF1GJnVWRiLawfEmvo=;
-        b=W7aNZOiRwPDILPG36XRgs0inUagK0G8nTWRnE6hGRHTmrkxdomkeVSdK+fCAimhAc7
-         yByxpbx1h7UfDLbTBtdpyqAjITMC+MF4le6jWjbPiVrF5x4z1gjBPOT8Ix/G+eRXiWtj
-         +YdD//UqrTAm5jK274q/RMzOyBVNhl1xIjPaBxRRpicF5D/E2cJMXkLzufwPRivYiAtt
-         CHuRvN3ARklmcA1twmkuWwc52cwiaxFiI5GEIq0Dwu8/3I2Y/vSdsWnNyolQCEqbouu/
-         zo+9KUf2s94vd8XxHG4gJRlxQ21h0WMu/Bhrt/SZFFk2PWu94a1M9s5drSgMIr5xQIPs
-         3Bng==
-X-Gm-Message-State: ACgBeo3M+XcbXQTWXBQ+36iXfh46RA6/Iaium+6YVDw5x9aIwtqEKuN1
-        1Eiy20OTUPMI+DK0/57X1e4NmA==
-X-Google-Smtp-Source: AA6agR722GIJV6NOompv1BqGkAy1eLk7wqlzKoIk5XqcAbc0U9DZJK1dL3XP1xuYogSMM+O5vTORAQ==
-X-Received: by 2002:a05:6402:1f06:b0:447:f6a0:2f71 with SMTP id b6-20020a0564021f0600b00447f6a02f71mr11933223edb.243.1661788120784;
-        Mon, 29 Aug 2022 08:48:40 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id p17-20020a056402501100b004481af6c760sm4276132eda.0.2022.08.29.08.48.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 08:48:40 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 15:48:37 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Jian-Min <Jian-Min.Liu@mediatek.com>,
-        Qais Yousef <qais.yousef@arm.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/1] sched/pelt: Introduce PELT multiplier
-Message-ID: <Ywzf1axLAnLIqRP0@google.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <20220829055450.1703092-2-dietmar.eggemann@arm.com>
- <Ywxz7cuR+/+1CFMR@hirez.programming.kicks-ass.net>
- <YwyOzgbbUbB+JmSH@hirez.programming.kicks-ass.net>
- <CAKfTPtAnC4escfufhjJkqsYyhDPzpmQH4xYT4nj=EjCP7gzifg@mail.gmail.com>
- <YwzL1eJUIReAEv0l@google.com>
- <YwzOf5WV5G8dQBGb@hirez.programming.kicks-ass.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=taWUzi4UHNfxICa8CAve34OKJtJJKSkD21g1k9CF/lA=;
+        b=XRGc0TwrOeazTzCvZoEERvnWxfW2/8pIxXS89pXdwulgIz6hcnl5WCL2thudximj4T
+         47Wbem/M6Rxh6sIijXz4RqLhmJo002pW5rIJPf6AVaMx8vgZkrpsf8aB4TzUm/E4iZI7
+         cMXJpQqx6HP7pMi7wsv5SHqSZkEtKap1hxALbiGRPdgHuwPX/67Ab8JOFJCHZO3fpGhj
+         UabpjeagJNcq8toFLKO68TlBhJFC+pZMnoGswnGdJc6tS4JJ25CRudEUAibhnNJMVEk5
+         c4wmI2B/aLo2Cj9VC24KRV7kx1tP0vjOPA3PmhAvMgM18ZeIHhb/Sci6bZoVHjnw3Qm+
+         fTVw==
+X-Gm-Message-State: ACgBeo3pQH9t4WZCT6ruaHKDIo3CNmHGGTgyFFp/Ccts/2o7utY80YmG
+        eJ+nEI5cwG0XbtgCyRkMm6ulmR0br4C0IBSGPFA=
+X-Google-Smtp-Source: AA6agR4Z7lZcBO08T5IU5jtduvQotk3IRF4XS9ujug0Qp2Q/1F53ezAKf+Bg8HsYE1WjtYp8IpfZMYcn4CE3dbBTQe8=
+X-Received: by 2002:a17:90a:d714:b0:1fd:ea53:b924 with SMTP id
+ y20-20020a17090ad71400b001fdea53b924mr2976795pju.70.1661788208072; Mon, 29
+ Aug 2022 08:50:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwzOf5WV5G8dQBGb@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220826055025.1018491-1-james.hilliard1@gmail.com> <e3d9f936-926c-8cd4-1a21-4c2894bf22b6@iogearbox.net>
+In-Reply-To: <e3d9f936-926c-8cd4-1a21-4c2894bf22b6@iogearbox.net>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Mon, 29 Aug 2022 09:49:55 -0600
+Message-ID: <CADvTj4qBmZyzoSsHVYcg1mLvBRqCr59dWJk2t_mf7njUesa+dA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 29 Aug 2022 at 16:34:39 (+0200), Peter Zijlstra wrote:
-> On Mon, Aug 29, 2022 at 02:23:17PM +0000, Quentin Perret wrote:
-> 
-> > I'll let folks in CC comment about their use-case in more details, but
-> > there's definitely been an interest in tuning this thing at run-time
-> 
-> An interest and it making sense are two very distinct things that bear
-> no relation to one another in any way.
+On Mon, Aug 29, 2022 at 9:11 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 8/26/22 7:50 AM, James Hilliard wrote:
+> [...]
+> > diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > index b241932911db..0f68b8d756b3 100644
+> > --- a/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > +++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > @@ -7,8 +7,7 @@
+> >   #include <linux/bpf.h>
+> >   #include <linux/in.h>
+> >   #include <linux/in6.h>
+> > -#include <sys/socket.h>
+> > -#include <netinet/tcp.h>
+> > +#include <linux/tcp.h>
+> >   #include <linux/if.h>
+> >   #include <errno.h>
+>
+> Can't we just add:
+>
+> #include "bpf_tcp_helpers.h"
 
-And just to clarify something here as my first message was misleading,
-the run-time tuning of PELT HLs has been used in some Android products
-for a little while already, so it's more than just a mere 'interest'.
+Yeah, that seems to work, changed in v2:
+https://lore.kernel.org/bpf/20220829154710.3870139-1-james.hilliard1@gmail.com/
 
-That doesn't close the debate on whether this makes any sense, but I
-figured this should be mentioned :-)
+>
+> It does define SOL_TCP already and is used also in other prog tests. I presume this
+> would avoid the need the change all the below.
+>
+> > @@ -52,7 +51,7 @@ static __inline int verify_cc(struct bpf_sock_addr *ctx,
+> >       char buf[TCP_CA_NAME_MAX];
+> >       int i;
+> >
+> > -     if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+> > +     if (bpf_getsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+> >               return 1;
+> >
+> >       for (i = 0; i < TCP_CA_NAME_MAX; i++) {
+> > @@ -70,12 +69,12 @@ static __inline int set_cc(struct bpf_sock_addr *ctx)
+> >       char reno[TCP_CA_NAME_MAX] = "reno";
+> >       char cubic[TCP_CA_NAME_MAX] = "cubic";
+> >
+> > -     if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
+> > +     if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
+> >               return 1;
+> >       if (verify_cc(ctx, reno))
+> >               return 1;
+> >
+> > -     if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
+> > +     if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
+> >               return 1;
+> >       if (verify_cc(ctx, cubic))
+> >               return 1;
+> > @@ -113,15 +112,15 @@ static __inline int set_keepalive(struct bpf_sock_addr *ctx)
+> >       if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof(one)))
+> >               return 1;
+> >       if (ctx->type == SOCK_STREAM) {
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPCNT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPCNT, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_SYNCNT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_SYNCNT, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
+> >                       return 1;
+> >       }
+> >       if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &zero, sizeof(zero)))
+> > @@ -135,7 +134,7 @@ static __inline int set_notsent_lowat(struct bpf_sock_addr *ctx)
+> >       int lowat = 65535;
+> >
+> >       if (ctx->type == SOCK_STREAM) {
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
+> >                       return 1;
+> >       }
+> >
+> >
+>

@@ -2,368 +2,465 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63305A52FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA75A530B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiH2RVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S230527AbiH2RXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiH2RVL (ORCPT
+        with ESMTP id S229682AbiH2RXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:21:11 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7055D6F271
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:21:05 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id c24so8256638pgg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:21:05 -0700 (PDT)
+        Mon, 29 Aug 2022 13:23:11 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74DD50731
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:23:08 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bu22so10722975wrb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:23:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=N8v9XiNinBwgapG6G2g4Lw1ZeaB/KtBqvxLAMxYhJZ0=;
-        b=NfRnBVW89tj7Au3HywW16OEWiHNb4GaSjmEwi+NAYqoi4cwMah/XZ+pxiE6BS8poL0
-         UdYe4SvnI/d5a6fn/U641J7UGrFUDWekiE8WvIqGr3l7yoGjhl7gm72dVy6sdoRFh94q
-         f4HkXyu6iAPgnszZSoF+rlGzgjNO9e1M+Ibx53ObMMOboc3gEbUNQgvsg3JHyXuPgZyn
-         zJMFCtgsQcBDAxXnjn8bhI7UZnooOFoaMWgwsZ0IWOUTSEnRV2f6OFgerv4vtIFcn7L2
-         81VRdZ6M5MiDiQm6AgkLwtFaUIGoHu0cB47KIiWYfnZX4bDFK36L82NehZYsgO/aOq/M
-         YA8g==
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ROXY/xQox8OqNuTJQ3y6eDkrd5/vObL/9ruPCF9KJhc=;
+        b=GPTh7pSppYKbIzxX9/3YX9sE937R2LpYvg8mw/wOK1ZzyqfxtN8ZOAp0PYReeFYHZz
+         IIExw5R0osm0CyCIvZaoDG0hqDP2Ctg11vcoV/ZOHWlOp7n27QwClS4v7ydHA3jNKI6n
+         /4k7yZZCY8E2uiTpT/9pJD7/ldWmN3PZXUbb4rkCrLNSqB8nTj033+vb5rGU+VjXI4QR
+         z+a7hKkLyhdXvIseRHcebsAs4OCFtUDYsGEA330DMt45p6rU1p6IIqMs1V7dv2uG4Rn7
+         VtNbNvO3Ixb6KYsjKIgNWq2ZMrKzzg+SvCTToaWL0O+9V5YDUGWWFq0KeuiTJB9nOfFI
+         AIDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=N8v9XiNinBwgapG6G2g4Lw1ZeaB/KtBqvxLAMxYhJZ0=;
-        b=BOY2EvcqZZUtRf/VomrWN/hs34AX68aJ3Uc5AypRmVmRxtgNd75uOe1mSWI+BZRxwS
-         gX7cRyqCamBdnLvbBbcSVjTUhvyq13SzLknjkLQYnab/JxA1AoFhcTWeuFs6JnKElTwC
-         unw6+Cs54gPTlsyTAnJU/OfbXlU9GWFAOg1HU2wPHMh8AyH5z7k8rSTRvSEu+zAqYD4Z
-         7syQWaAGWnZz8ACii7bAxOHV1vnHXnB+UfR4oGvM1/DTWSAtJQraFg7O3DaKb0zRR7OW
-         cfJmrpb3ypUvs7JYLBZhHuqRCZ2u6DEz68JF6sVYgqcQwsyjTuSkwlIvwiPx69XQoqVl
-         pLAw==
-X-Gm-Message-State: ACgBeo3jD1+i4sF8Y3Dx5MTWdBH0g0WA6HPdIP1ntp9BsYgjtoj3xXy5
-        bbHAiDdbtOcMXyDAgBrFSpEm/Q==
-X-Google-Smtp-Source: AA6agR7JVkZEqiHBQMT3/HK53IbqnS0HPUadhw2Pc+wlqYBU/5llkrjsnpQV1BRpTuK0X2jptbEaPQ==
-X-Received: by 2002:a05:6a00:21c2:b0:52b:ff44:6680 with SMTP id t2-20020a056a0021c200b0052bff446680mr17655948pfj.57.1661793664751;
-        Mon, 29 Aug 2022 10:21:04 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b00175111a277dsm136685plg.185.2022.08.29.10.21.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 10:21:04 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 17:21:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 4/4] KVM: selftests: Test if posted interrupt delivery
- race with migration
-Message-ID: <Ywz1fJlkuhY/vMEU@google.com>
-References: <20220828222544.1964917-1-mizhang@google.com>
- <20220828222544.1964917-5-mizhang@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ROXY/xQox8OqNuTJQ3y6eDkrd5/vObL/9ruPCF9KJhc=;
+        b=1hq9uwkXwSqvTYz0t9q4TQiWekNdxAnmID/9F6spbVvqRuY6SfVgBBMMmkh+MAd6b+
+         wP0p69k/atfX4/9In2KNDdLhhKKI+kqXHsc09Lgm1AhPuCPrbZ2rNsiCXzJ0LEEl6bPG
+         nN3oYZWIpGEI2ETyj/ulPYcpzFxPPcY95W7PtlBdyw0rFWi8ejuV/R8pNfSv/Wfkxzh2
+         wHDZxF7uq5vn2S6dzr6fBelwA9u9j2jnAUB8LzYTdsJh5FLeLi5Tr+/WK60qPq4QZyHx
+         vrkFpqKca68CLN1lY/lHwonFNaiSFEiQGqUV31WyaYCRpEP8zhXwiLsVlS+EAf7qx7q3
+         Q0NQ==
+X-Gm-Message-State: ACgBeo1RP23NgS4cF0Q+Us3qqE/Jio3NSCm4ncPIePYi/I2zbGVkQUpp
+        Zsklpq1cDqwq3bKQe7aVtjrRQ8NNfBHe012B
+X-Google-Smtp-Source: AA6agR6qERXecGefvattNTWo9v3TTFZE0mKqpbS89ELHPg9qbkLio16lNhQTkR4ObRAON1DzOiWNOg==
+X-Received: by 2002:a05:6000:1d82:b0:220:5f9b:9a77 with SMTP id bk2-20020a0560001d8200b002205f9b9a77mr6894102wrb.622.1661793787323;
+        Mon, 29 Aug 2022 10:23:07 -0700 (PDT)
+Received: from [192.168.2.222] ([51.37.149.245])
+        by smtp.gmail.com with ESMTPSA id l9-20020adfe9c9000000b0022586045c89sm7792594wrn.69.2022.08.29.10.23.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 10:23:06 -0700 (PDT)
+Message-ID: <3cd38c59-708e-76d3-52dc-2adf250c2d14@conchuod.ie>
+Date:   Mon, 29 Aug 2022 18:23:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220828222544.1964917-5-mizhang@google.com>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5] Remove duplicated words across the whole documentation
+Content-Language: en-US
+To:     Jules Maselbas <jmaselbas@kalray.eu>, linux-kernel@vger.kernel.org
+Cc:     Conor.Dooley@microchip.com, Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+References: <20220826165634.5617-1-jmaselbas@kalray.eu>
+ <20220829092910.12267-1-jmaselbas@kalray.eu>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220829092910.12267-1-jmaselbas@kalray.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022, Mingwei Zhang wrote:
-> From: Jim Mattson <jmattson@google.com>
+On 29/08/2022 10:29, Jules Maselbas wrote:
+> Remove duplicated words (the, at, be ...) across the whole documentation.
+> In some cases the duplicated words are replaced by something that makes
+> more sense, for instance: "be be" is replaced by "can be" when possible.
 > 
-> Test if posted interrupt delivery race with migration. Add a selftest
-> to demonstrate a race condition between migration and posted
-> interrupt for a nested VM. The consequence of this race condition causes
-> the loss of a posted interrupt for a nested vCPU after migration and
-> triggers a warning for unpatched kernel.
+> There are likely more duplicated words.
 > 
-> The selftest demonstrates that if a L2 vCPU is in halted state before
-> migration, then after migration, it is not able to receive a posted
-> interrupt from another vCPU within the same VM.
+> CC: Conor.Dooley@microchip.com
+> CC: Randy Dunlap <rdunlap@infradead.org>
+> CC: Bagas Sanjaya <bagasdotme@gmail.com>
+> CC: linux-doc@vger.kernel.org
+> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+> ---
+> in v5:
+>  - remove spurious changes reported by Randy Dunlap
+> in v4:
+>  - remove spurious changes reported by Conor Dooley
+> in v3:
+>  as suggested by Randy Dunlap:
+>  - remove duplicated 'The the '
+>  - remove duplicated 'at at ' (some are replaced by 'at a ')
+>  - remove duplicated be, is, to, we, on ...
+> in v2:
+>  - also remove the second 'the' in one sentence as suggested by
+>    Bagas Sanjaya
+> ---
+>  Documentation/RCU/checklist.rst                               | 2 +-
+>  Documentation/admin-guide/kdump/vmcoreinfo.rst                | 2 +-
+>  Documentation/bpf/instruction-set.rst                         | 2 +-
+>  Documentation/bpf/map_cgroup_storage.rst                      | 4 ++--
+>  Documentation/core-api/cpu_hotplug.rst                        | 3 +--
 
-For tests, try to phrase the changelog in terms of what architectural behavior is
-being tested, as opposed to stating what exact KVM bug is being targeted.  It's
-definitely helpful to call out the KVM bug, but do that _after_ explaining the
-test itself.  The problem with talking about a specific KVM bug is that 
+---8<---
+>  Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml  | 4 ++--
+>  .../devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt      | 2 +-
+>  Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt     | 2 +-
+>  Documentation/devicetree/bindings/fpga/fpga-region.txt        | 4 ++--
+>  Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml      | 2 +-
+>  Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml      | 2 +-
+>  Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml      | 2 +-
+>  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml          | 2 +-
+>  .../devicetree/bindings/net/can/microchip,mcp251xfd.yaml      | 2 +-
+---8<---
 
-IIUC, this can be:
+I think I saw Jon pointing out against the v3 that these are bindings
+and need to be sent separately via the subsystem trees rather than his
+docs tree.
 
-  Add a test to verify that a posted interrupt wakes the target vCPU from
-  a halted state if the VM is migrated while the vCPU is halted.
+Other than that, I read back through these and all seem correct now,
+so FWIW:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-and then something like this to call out the known KVM bug
+Thanks.
 
-  This test exposes a bug where KVM checks the vAPIC page before loading
-  nested pages when the vCPU is blocking.
-
-> The fundamental problem is deeply buried in the kernel logic where
-> vcpu_block() will directly check vmcs12 related mappings before having a
-> valid vmcs12 ready.  Because of that, it fails to process the posted
-> interrupt and triggers the warning in vmx_guest_apic_has_interrupt()
+>  Documentation/driver-api/isa.rst                              | 2 +-
+>  Documentation/filesystems/caching/backend-api.rst             | 2 +-
+>  Documentation/filesystems/journalling.rst                     | 2 +-
+>  Documentation/hwmon/f71882fg.rst                              | 2 +-
+>  Documentation/locking/seqlock.rst                             | 2 +-
+>  Documentation/sphinx/cdomain.py                               | 2 +-
+>  Documentation/trace/histogram.rst                             | 2 +-
+>  Documentation/userspace-api/media/dvb/dmx-reqbufs.rst         | 2 +-
+>  Documentation/userspace-api/media/dvb/frontend_f_open.rst     | 2 +-
+>  23 files changed, 26 insertions(+), 27 deletions(-)
 > 
-> static bool vmx_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
-> {
-> 	...
-> 	if (WARN_ON_ONCE(!is_guest_mode(vcpu)) ||
-> 		!nested_cpu_has_vid(get_vmcs12(vcpu)) ||
-> 		WARN_ON_ONCE(!vmx->nested.virtual_apic_map.gfn)) <= HERE
-> 		return false;
-> 	...
-> }
-> +static void vcpu0_ipi_handler(struct ex_regs *regs)
-
-This needs to clarify that it's an L2 handler, that info is _extremely_ important
-to understanding this sequence.  And even if that info were superfluous, it's still
-a good habit to use consistent namespacing.
-
-> +{
-> +	 asm volatile("inb %%dx, %%al"
-> +		      : : [port] "d" (PORT_L0_EXIT) : "rax");
-
-Can't this use GUEST_SYNC()?
-
-> +	asm volatile("vmcall");
-
-A comment would be helpful, but not as necessary if this is vcpu0_l2_ipi_handler().
-
-> +}
-> +
-> +static void l2_vcpu0_guest_code(void)
-
-I have a slight preference for
-
-	vcpu0_l2_ipi_handler()
-	vcpu0_l2_guest_code()
-
-	vcpu1_l1_guest_code()
-
-because the "vcpu0 vs. vcpu1" is the broader scope, and then "l1 vs. l2" further
-clarifies the exact scope of the function.
-
-> +{
-> +	asm volatile("cli");
-> +	asm volatile("sti; nop; hlt");
-
-What is this code trying to do?  Assuming the intent is to ensure the posted IRQ
-arrives after "hlt", this needs to be:
-
-	GUEST_ASSERT(!irqs_enabled());
-	asm volatile("sti; hlt");
-
-because if interrupts are enabled when l2_vcpu0_guest_code() starts running, then
-the IRQ can arrive before CLI.  And the "nop" needs to go because the nop will
-consume the STI shadow, i.e. the IRQ can arrive before the "hlt".  irqs_enabled()
-needs to be defined, but it's fairly straightfoward; something like this:
-
-static __always_inline bool irqs_enabled(void)
-{
-	unsigned long flags;
-
-	asm volatile("pushf ; pop %0"
-		     : "=rm" (flags)
-		     :
-		     : "memory");
-
-	return flags & X86_EFLAGS_IF;
-}
-
-If my assuming is wrong, then this needs a very verbose comment.
-
-> +static void post_intr(u8 vector, void *pi_desc)
-> +{
-> +       set_bit(vector, pi_desc);
-> +       set_bit(PI_ON_BIT, pi_desc);
-> +}
-> +
-> +static void l1_vcpu1_guest_code(void *vcpu0_pi_desc)
-> +{
-> +       post_intr(L2_INTR, vcpu0_pi_desc);
-
-Open code post_intr() here.  I would expect a "post_intr()" helper to actually do
-the notification.  Separating the two things confused me.
-
-> +       x2apic_enable();
-
-Why take a dependency on x2APIC?  Either way, enable x2APIC, then post the
-interrupt.  Again, it's weird splitting "set info in PI descriptor" from the
-notification.
-
-> +       x2apic_write_reg(APIC_ICR, ((u64)VCPU_ID0 << 32) |
-> +                        APIC_DEST_PHYSICAL | APIC_DM_FIXED | PI_NV);
-> +       GUEST_DONE();
-> +}
-
-...
-
-> +void *create_and_run_vcpu1(void *arg)
-> +{
-> +	struct ucall uc;
-> +	struct kvm_run *run;
-> +	struct kvm_mp_state vcpu0_mp_state;
-> +
-> +	pthread_cpu1 = pthread_self();
-> +
-> +	/* Keep trying to kick out vcpu0 until it is in halted state. */
-> +	for (;;) {
-> +		WRITE_ONCE(vcpu0_can_run, true);
-> +		sleep(1);
-> +		WRITE_ONCE(vcpu0_can_run, false);
-> +		pthread_kill(pthread_cpu0, SIGUSR1);
-> +		printf("vcpu1: Sent SIGUSR1 to vcpu0\n");
-
-Use pr_debug(), this has the potential to spam the console.  And then probably use
-pr_info() for the other printfs so that they can be turned off via QUIET.
-
-> +
-> +		while (READ_ONCE(vcpu0_running))
-> +			;
-
-vcpu0_running is unnecessary.  KVM needs to acquire vcpu->mutex to do KVM_GET_MP_STATE,
-i.e. vcpu_mp_state_get() will block until KVM_RUN completes.  Nothing guarantees
-vcpu0_running will be set from main() before this gets to the while-loop, so
-vcpu_mp_state_get() racing with KVM_RUN is already possible.
-
-> +
-> +		vcpu_mp_state_get(vcpu0, &vcpu0_mp_state);
-> +		if (vcpu0_mp_state.mp_state == KVM_MP_STATE_HALTED)
-> +			break;
-> +	}
-> +
-> +	printf("vcpu1: Kicked out vcpu0 and ensure vcpu0 is halted\n");
-> +
-> +	/* Use save_restore_vm() to simulate a VM migration. */
-> +	save_restore_vm(vm);
-> +
-> +	printf("vcpu1: Finished save and restore vm.\n");
-
-Uber nit, be consistent on whether or not the test uses punctionation.
-
-> +	vcpu1 = vm_vcpu_add(vm, VCPU_ID1, l1_vcpu1_guest_code);
-> +	vcpu_args_set(vcpu1, 1, vmx->posted_intr_desc);
-> +
-> +	/* Start an L1 in vcpu1 and send a posted interrupt to halted L2 in vcpu0. */
-> +	for (;;) {
-> +		run = vcpu1->run;
-> +		vcpu_run(vcpu1);
-> +
-> +		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-> +			    "vcpu1: Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
-> +			    run->exit_reason,
-> +			    exit_reason_str(run->exit_reason));
-> +
-> +		switch (get_ucall(vcpu1, &uc)) {
-> +		case UCALL_ABORT:
-> +			TEST_FAIL("%s", (const char *)uc.args[0]);
-> +			/* NOT REACHED */
-
-			REPORT_GUEST_ASSERT(...)
-
-> +		case UCALL_DONE:
-> +			printf("vcpu1: Successfully send a posted interrupt to vcpu0\n");
-> +			goto done;
-> +		default:
-> +			TEST_FAIL("vcpu1: Unknown ucall %lu", uc.cmd);
-> +		}
-> +	}
-> +
-> +done:
-> +	/*
-> +	 * Allow vcpu0 resume execution from L0 userspace and check if the
-> +	 * posted interrupt get executed.
-> +	 */
-> +	WRITE_ONCE(vcpu0_can_run, true);
-> +	sleep(1);
-
-What guarantees that sleep(1) is sufficient for vCPU to get back into the guest?
-This might be a good candidate for a sempahore?
-
-> +	TEST_ASSERT(READ_ONCE(pi_executed),
-> +		    "vcpu0 did not execute the posted interrupt.\n");
-> +
-> +	return NULL;
-> +}
-
-...
-
-> +       TEST_REQUIRE(kvm_has_cap(KVM_CAP_NESTED_STATE));
-> +       TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
-
-This also requires APICv / posted interrupts, and x2APIC if that hardcoded behavior
-is kept.
-
-> +	for (;;) {
-> +		struct kvm_run *run = vcpu0->run;
-> +		struct ucall uc;
-> +		int rc;
-> +
-> +		while (!READ_ONCE(vcpu0_can_run))
-> +			;
-> +
-> +		WRITE_ONCE(vcpu0_running, true);
-> +
-> +		rc = __vcpu_run(vcpu0);
-> +
-> +		vcpu0->run->immediate_exit = 0;
-
-Why?  vcpu_run_complete_io() is the only thing that sets immediate_exit, and it
-clears the flag after doing __vcpu_run().
-
-> +
-> +		/*
-> +		 * When vCPU is kicked out by a signal, ensure a consistent vCPU
-> +		 * state to prepare for migration before setting the
-> +		 * vcpu_running flag to false.
-> +		 */
-> +		if (rc == -1 && run->exit_reason == KVM_EXIT_INTR) {
-> +			vcpu_run_complete_io(vcpu0);
-> +
-> +			WRITE_ONCE(vcpu0_running, false);
-> +
-> +			continue;
-> +		}
-> +
-> +		WRITE_ONCE(vcpu0_running, false);
-> +
-> +		if (run->io.port == PORT_L0_EXIT) {
-
-One of the motivations for using GUEST_SYNC() instead of PORT_L0_EXIT is that
-this test could (very theoretically) get a false pass if GUEST_DONE() is reached
-before PORT_L0_EXIT is encountered.
-
-> +			printf("vcpu0: Executed the posted interrupt\n");
-> +			WRITE_ONCE(pi_executed, true);
-> +			continue;
-> +		}
-> +
-> +		switch (get_ucall(vcpu0, &uc)) {
-> +		case UCALL_ABORT:
-> +			TEST_FAIL("%s", (const char *)uc.args[0]);
-
-			REPORT_GUEST_ASSERT(...)
-
-> +			/* NOT REACHED */
-> +		case UCALL_DONE:
-> +			goto done;
-
-Just break?
-
-> +		default:
-> +			TEST_FAIL("vcpu0: Unknown ucall %lu", uc.cmd);
-> +		}
-> +	}
-> +
-> +done:
-> +	kvm_vm_free(vm);
-> +	return 0;
-> +}
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
+> diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
+> index 42cc5d891bd2..7b1c85a16dc3 100644
+> --- a/Documentation/RCU/checklist.rst
+> +++ b/Documentation/RCU/checklist.rst
+> @@ -477,6 +477,6 @@ over a rather long period of time, but improvements are always welcome!
+>  	So if you need to wait for both an RCU grace period and for
+>  	all pre-existing call_rcu() callbacks, you will need to execute
+>  	both rcu_barrier() and synchronize_rcu(), if necessary, using
+> -	something like workqueues to to execute them concurrently.
+> +	something like workqueues to execute them concurrently.
+>  
+>  	See rcubarrier.rst for more information.
+> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> index 8419019b6a88..6726f439958c 100644
+> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> @@ -200,7 +200,7 @@ prb
+>  
+>  A pointer to the printk ringbuffer (struct printk_ringbuffer). This
+>  may be pointing to the static boot ringbuffer or the dynamically
+> -allocated ringbuffer, depending on when the the core dump occurred.
+> +allocated ringbuffer, depending on when the core dump occurred.
+>  Used by user-space tools to read the active kernel log buffer.
+>  
+>  printk_rb_static
+> diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+> index 1b0e6711dec9..0ac7ae40be37 100644
+> --- a/Documentation/bpf/instruction-set.rst
+> +++ b/Documentation/bpf/instruction-set.rst
+> @@ -133,7 +133,7 @@ code field of ``BPF_END``.
+>  The byte swap instructions operate on the destination register
+>  only and do not use a separate source register or immediate value.
+>  
+> -The 1-bit source operand field in the opcode is used to to select what byte
+> +The 1-bit source operand field in the opcode is used to select what byte
+>  order the operation convert from or to:
+>  
+>    =========  =====  =================================================
+> diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
+> index cab9543017bf..8e5fe532c07e 100644
+> --- a/Documentation/bpf/map_cgroup_storage.rst
+> +++ b/Documentation/bpf/map_cgroup_storage.rst
+> @@ -31,7 +31,7 @@ The map uses key of type of either ``__u64 cgroup_inode_id`` or
+>      };
+>  
+>  ``cgroup_inode_id`` is the inode id of the cgroup directory.
+> -``attach_type`` is the the program's attach type.
+> +``attach_type`` is the program's attach type.
+>  
+>  Linux 5.9 added support for type ``__u64 cgroup_inode_id`` as the key type.
+>  When this key type is used, then all attach types of the particular cgroup and
+> @@ -155,7 +155,7 @@ However, the BPF program can still only associate with one map of each type
+>  ``BPF_MAP_TYPE_CGROUP_STORAGE`` or more than one
+>  ``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE``.
+>  
+> -In all versions, userspace may use the the attach parameters of cgroup and
+> +In all versions, userspace may use the attach parameters of cgroup and
+>  attach type pair in ``struct bpf_cgroup_storage_key`` as the key to the BPF map
+>  APIs to read or update the storage for a given attachment. For Linux 5.9
+>  attach type shared storages, only the first value in the struct, cgroup inode
+> diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
+> index c6f4ba2fb32d..c326f4a86d34 100644
+> --- a/Documentation/core-api/cpu_hotplug.rst
+> +++ b/Documentation/core-api/cpu_hotplug.rst
+> @@ -560,8 +560,7 @@ available:
+>    * cpuhp_state_remove_instance(state, node)
+>    * cpuhp_state_remove_instance_nocalls(state, node)
+>  
+> -The arguments are the same as for the the cpuhp_state_add_instance*()
+> -variants above.
+> +The arguments are the same as for cpuhp_state_add_instance*() variants above.
+>  
+>  The functions differ in the way how the installed callbacks are treated:
+>  
+> diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+> index a4b4452afc1d..e5b56ee500bc 100644
+> --- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+> +++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+> @@ -121,7 +121,7 @@ properties:
+>  
+>    arm,vexpress,position:
+>      description: When daughterboards are stacked on one site, their position
+> -      in the stack be be described this attribute.
+> +      in the stack can be described with this attribute.
+>      $ref: '/schemas/types.yaml#/definitions/uint32'
+>      minimum: 0
+>      maximum: 3
+> @@ -139,7 +139,7 @@ patternProperties:
+>        the connection between the motherboard and any tiles. Sometimes the
+>        compatible is placed directly under this node, sometimes it is placed
+>        in a subnode named "motherboard-bus". Sometimes the compatible includes
+> -      "arm,vexpress,v2?-p1" sometimes (on software models) is is just
+> +      "arm,vexpress,v2?-p1" sometimes (on software models) it is just
+>        "simple-bus". If the compatible is placed in the "motherboard-bus" node,
+>        it is stricter and always has two compatibles.
+>      type: object
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
+> index 9a4295b54539..b300c42c52d7 100644
+> --- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
+> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-ahb.txt
+> @@ -8,7 +8,7 @@ Required properties:
+>  - reg : Should contain 1 register ranges(address and length).  For
+>    Tegra20, Tegra30, and Tegra114 chips, the value must be <0x6000c004
+>    0x10c>.  For Tegra124, Tegra132 and Tegra210 chips, the value should
+> -  be be <0x6000c000 0x150>.
+> +  be <0x6000c000 0x150>.
+>  
+>  Example (for a Tegra20 chip):
+>  	ahb: ahb@6000c004 {
+> diff --git a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
+> index b849a1ed389d..47e477cce6d2 100644
+> --- a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
+> +++ b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
+> @@ -4,7 +4,7 @@ Required properties:
+>  - compatible:	"ti,dra7-dma-crossbar" for DRA7xx DMA crossbar
+>  		"ti,am335x-edma-crossbar" for AM335x and AM437x
+>  - reg:		Memory map for accessing module
+> -- #dma-cells:	Should be set to to match with the DMA controller's dma-cells
+> +- #dma-cells:	Should be set to match with the DMA controller's dma-cells
+>  		for ti,dra7-dma-crossbar and <3> for ti,am335x-edma-crossbar.
+>  - dma-requests:	Number of DMA requests the crossbar can receive
+>  - dma-masters:	phandle pointing to the DMA controller
+> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> index 6694ef29a267..095b5e728dff 100644
+> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> @@ -50,7 +50,7 @@ Partial Reconfiguration Region (PRR)
+>  Persona
+>   * Also called a "partial bit stream"
+>   * An FPGA image that is designed to be loaded into a PRR.  There may be
+> -   any number of personas designed to fit into a PRR, but only one at at time
+> +   any number of personas designed to fit into a PRR, but only one at a time
+>     may be loaded.
+>   * A persona may create more regions.
+>  
+> @@ -127,7 +127,7 @@ add the child devices:
+>  
+>   * FPGA Manager
+>   * FPGA Bridges
+> - * image-specific information needed to to the programming.
+> + * image-specific information needed to do the programming.
+>   * child nodes
+>  
+>  The intended use is that a Device Tree overlay (DTO) can be used to reprogram an
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
+> index f6cac4b1079c..3549a32452ec 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,lp87524-q1.yaml
+> @@ -26,7 +26,7 @@ properties:
+>    '#gpio-cells':
+>      description:
+>        The first cell is the pin number.
+> -      The second cell is is used to specify flags.
+> +      The second cell is used to specify flags.
+>        See ../gpio/gpio.txt for more information.
+>      const: 2
+>  
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
+> index dc5a29b5ef7d..43a3f7ccaf36 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,lp87561-q1.yaml
+> @@ -26,7 +26,7 @@ properties:
+>    '#gpio-cells':
+>      description:
+>        The first cell is the pin number.
+> -      The second cell is is used to specify flags.
+> +      The second cell is used to specify flags.
+>        See ../gpio/gpio.txt for more information.
+>      const: 2
+>  
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+> index 012d25111054..373c4f89c4ea 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+> @@ -28,7 +28,7 @@ properties:
+>    '#gpio-cells':
+>      description:
+>        The first cell is the pin number.
+> -      The second cell is is used to specify flags.
+> +      The second cell is used to specify flags.
+>        See ../gpio/gpio.txt for more information.
+>      const: 2
+>  
+> diff --git a/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml b/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
+> index 608e1d62bed5..3eb0513d824c 100644
+> --- a/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/amlogic,meson-dwmac.yaml
+> @@ -149,7 +149,7 @@ properties:
+>        - description:
+>            The first register range should be the one of the DWMAC controller
+>        - description:
+> -          The second range is is for the Amlogic specific configuration
+> +          The second range is for the Amlogic specific configuration
+>            (for example the PRG_ETHERNET register range on Meson8b and newer)
+>  
+>  required:
+> diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> index 7a73057707b4..0415c3a886ca 100644
+> --- a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> @@ -42,7 +42,7 @@ properties:
+>  
+>    microchip,rx-int-gpios:
+>      description:
+> -      GPIO phandle of GPIO connected to to INT1 pin of the MCP251XFD, which
+> +      GPIO phandle of GPIO connected to INT1 pin of the MCP251XFD, which
+>        signals a pending RX interrupt.
+>      maxItems: 1
+>  
+> diff --git a/Documentation/driver-api/isa.rst b/Documentation/driver-api/isa.rst
+> index def4a7b690b5..3df1b1696524 100644
+> --- a/Documentation/driver-api/isa.rst
+> +++ b/Documentation/driver-api/isa.rst
+> @@ -100,7 +100,7 @@ I believe platform_data is available for this, but if rather not, moving
+>  the isa_driver pointer to the private struct isa_dev is ofcourse fine as
+>  well.
+>  
+> -Then, if the the driver did not provide a .match, it matches. If it did,
+> +Then, if the driver did not provide a .match, it matches. If it did,
+>  the driver match() method is called to determine a match.
+>  
+>  If it did **not** match, dev->platform_data is reset to indicate this to
+> diff --git a/Documentation/filesystems/caching/backend-api.rst b/Documentation/filesystems/caching/backend-api.rst
+> index d7507becf674..3a199fc50828 100644
+> --- a/Documentation/filesystems/caching/backend-api.rst
+> +++ b/Documentation/filesystems/caching/backend-api.rst
+> @@ -122,7 +122,7 @@ volumes, calling::
+>  to tell fscache that a volume has been withdrawn.  This waits for all
+>  outstanding accesses on the volume to complete before returning.
+>  
+> -When the the cache is completely withdrawn, fscache should be notified by
+> +When the cache is completely withdrawn, fscache should be notified by
+>  calling::
+>  
+>  	void fscache_relinquish_cache(struct fscache_cache *cache);
+> diff --git a/Documentation/filesystems/journalling.rst b/Documentation/filesystems/journalling.rst
+> index e18f90ffc6fd..2a69bd2d95ed 100644
+> --- a/Documentation/filesystems/journalling.rst
+> +++ b/Documentation/filesystems/journalling.rst
+> @@ -93,7 +93,7 @@ easily as on jbd2_journal_start().
+>  
+>  Try to reserve the right number of blocks the first time. ;-). This will
+>  be the maximum number of blocks you are going to touch in this
+> -transaction. I advise having a look at at least ext4_jbd.h to see the
+> +transaction. I advise having at least a look at ext4_jbd.h to see the
+>  basis on which ext4 uses to make these decisions.
+>  
+>  Another wriggle to watch out for is your on-disk block allocation
+> diff --git a/Documentation/hwmon/f71882fg.rst b/Documentation/hwmon/f71882fg.rst
+> index 38e30fbd4806..ab83bc7bbbdf 100644
+> --- a/Documentation/hwmon/f71882fg.rst
+> +++ b/Documentation/hwmon/f71882fg.rst
+> @@ -179,7 +179,7 @@ Writing an unsupported mode will result in an invalid parameter error.
+>  
+>  * 2: Normal auto mode
+>    You can define a number of temperature/fan speed trip points, which % the
+> -  fan should run at at this temp and which temp a fan should follow using the
+> +  fan should run at this temp and which temp a fan should follow using the
+>    standard sysfs interface. The number and type of trip points is chip
+>    depended, see which files are available in sysfs.
+>    Fan/PWM channel 3 of the F8000 is always in this mode!
+> diff --git a/Documentation/locking/seqlock.rst b/Documentation/locking/seqlock.rst
+> index 64405e5da63e..bfda1a5fecad 100644
+> --- a/Documentation/locking/seqlock.rst
+> +++ b/Documentation/locking/seqlock.rst
+> @@ -39,7 +39,7 @@ as the writer can invalidate a pointer that the reader is following.
+>  Sequence counters (``seqcount_t``)
+>  ==================================
+>  
+> -This is the the raw counting mechanism, which does not protect against
+> +This is the raw counting mechanism, which does not protect against
+>  multiple writers.  Write side critical sections must thus be serialized
+>  by an external lock.
+>  
+> diff --git a/Documentation/sphinx/cdomain.py b/Documentation/sphinx/cdomain.py
+> index ca8ac9e59ded..a7d1866e72ff 100644
+> --- a/Documentation/sphinx/cdomain.py
+> +++ b/Documentation/sphinx/cdomain.py
+> @@ -151,7 +151,7 @@ class CObject(Base_CObject):
+>      def handle_func_like_macro(self, sig, signode):
+>          u"""Handles signatures of function-like macros.
+>  
+> -        If the objtype is 'function' and the the signature ``sig`` is a
+> +        If the objtype is 'function' and the signature ``sig`` is a
+>          function-like macro, the name of the macro is returned. Otherwise
+>          ``False`` is returned.  """
+>  
+> diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
+> index 859fd1b76c63..c1b685a38f6b 100644
+> --- a/Documentation/trace/histogram.rst
+> +++ b/Documentation/trace/histogram.rst
+> @@ -412,7 +412,7 @@ Extended error information
+>    Because the default sort key above is 'hitcount', the above shows a
+>    the list of call_sites by increasing hitcount, so that at the bottom
+>    we see the functions that made the most kmalloc calls during the
+> -  run.  If instead we we wanted to see the top kmalloc callers in
+> +  run.  If instead we wanted to see the top kmalloc callers in
+>    terms of the number of bytes requested rather than the number of
+>    calls, and we wanted the top caller to appear at the top, we can use
+>    the 'sort' parameter, along with the 'descending' modifier::
+> diff --git a/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst b/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
+> index d2bb1909ec98..18810f0bbca8 100644
+> --- a/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
+> +++ b/Documentation/userspace-api/media/dvb/dmx-reqbufs.rst
+> @@ -72,4 +72,4 @@ appropriately. The generic error codes are described at the
+>  :ref:`Generic Error Codes <gen-errors>` chapter.
+>  
+>  EOPNOTSUPP
+> -    The  the requested I/O method is not supported.
+> +    The requested I/O method is not supported.
+> diff --git a/Documentation/userspace-api/media/dvb/frontend_f_open.rst b/Documentation/userspace-api/media/dvb/frontend_f_open.rst
+> index bb37eded0870..70e169b8f601 100644
+> --- a/Documentation/userspace-api/media/dvb/frontend_f_open.rst
+> +++ b/Documentation/userspace-api/media/dvb/frontend_f_open.rst
+> @@ -91,7 +91,7 @@ appropriately.
+>         -  The caller has no permission to access the device.
+>  
+>      -  - ``EBUSY``
+> -       -  The the device driver is already in use.
+> +       -  The device driver is already in use.
+>  
+>      -  - ``EMFILE``
+>         -  The process already has the maximum number of files open.

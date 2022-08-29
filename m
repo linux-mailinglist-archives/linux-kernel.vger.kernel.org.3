@@ -2,198 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1210B5A5212
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E2F5A5216
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 18:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiH2Qpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 12:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S229829AbiH2QrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 12:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiH2Qpp (ORCPT
+        with ESMTP id S229602AbiH2QrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:45:45 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA902F671
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:45:43 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id x5so6567428qtv.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 09:45:42 -0700 (PDT)
+        Mon, 29 Aug 2022 12:47:04 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3923A7FE7A;
+        Mon, 29 Aug 2022 09:47:04 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id e28so6589615qts.1;
+        Mon, 29 Aug 2022 09:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=fDt4IBgtt5exwhmeKX+OT1Q9RovTLDUYtPqjcVD2JHU=;
-        b=iToL8uE5DE1tqOsdsobu/E8FmFht38INvZNaS1aWZFtpVp5DmnDAEIq4KnUs5zhAdu
-         uzaPlYoUTO5wAgOX5iwvOnsurmIfNdp4EPlpyhxA+CyEYkqONNXEkxac07Sqd0ePgqro
-         R+KOIrw/Oq10P3GNBl96SKl+ERU6Rqi/nmyZQ=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=mg3yPVsPGOhfl9KMQx8tsgwQDpIzz9xWYJXonPMJUFs=;
+        b=o6TmM7CHCBSDjCcnKBG4eTEjzl9WVs4/ZzwhpaLRdsaO/STEKItW+KoP+rvl6S3Fds
+         s6T4QM5w33Ds50owu6eyxbC0sdAYvBj1Tw3T+5OWJ6arRJ+wXD8pdMhg3NoEhOKBB7za
+         pllnYaCJSwwHUjIJAYrTy4TxPeRh7ckYiKp+kNjrAMuLizjHzt2W0mc1W0WTMjz8aFfJ
+         SkZ4lpZScSiamdQx0wYszmChvMEfdbr33ZpmqTzJ3EgbBBUt+HX7wHqt8+iQC0Rv8xJn
+         g2iIn/8buX2AXWxEdB3Ep8bbwj/Or8I6puvWOuKcQMXJGsxZCToPjO33KvSOBqx14Z1a
+         cnAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=fDt4IBgtt5exwhmeKX+OT1Q9RovTLDUYtPqjcVD2JHU=;
-        b=nMeuOWS5BhtKcb+3ATD8V2nEBHyioFlGx4N/r+voB1hoRfIzi6aZZgIAkcEwctIK2c
-         lUgbzwRl+1b9wGLnWgfUksfcXdBf5yCqsfgEzmrhSZSwA0L0YPzZQxEbWUvE8TvfyAeE
-         izQh2z0NIm9Kr09nz+Q+38QyUNcFYisooCCKHoVpbvCbZ5N01/4ZfYg6A81fueCbzhIy
-         XOlguZIMg6RP8zVzLpvugIVsXD3ZupXmer8v5l6DsU/rxq5r0lSSiaUuRDYX4FSlZVoR
-         A2QxrazMi648zJcTCsJ2h3/lktxaCbAkHE3a4MzRNR8VlzNXPvbVqsLKz1pZ2qpQAXmI
-         akrg==
-X-Gm-Message-State: ACgBeo3pPPy8IUQdAga3F6B9x1JHuhV5XtpHnAjTcyTmE6r41+3xI2Ix
-        BiLAIU71tOlj0uH5dSQQZ5j1fg==
-X-Google-Smtp-Source: AA6agR4+RWQgms3oFXpW5BnC2J62dhhNHmynoWse/Pah2gSlvOSjcovV9+ApiaFW1yRHX/Q8mt68hw==
-X-Received: by 2002:a05:622a:143:b0:344:95bf:8f02 with SMTP id v3-20020a05622a014300b0034495bf8f02mr10573138qtw.202.1661791541845;
-        Mon, 29 Aug 2022 09:45:41 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id s18-20020a05620a255200b006bbc09af9f5sm6516375qko.101.2022.08.29.09.45.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 09:45:41 -0700 (PDT)
-Message-ID: <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
-Date:   Mon, 29 Aug 2022 12:45:40 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=mg3yPVsPGOhfl9KMQx8tsgwQDpIzz9xWYJXonPMJUFs=;
+        b=WlcH7IREeBR90DFEMqLS81Fn3kY+FpEJYXJvq0IAVN8Tyb/QQHZymRxv9pdXj9avDw
+         p/K+iSjaXWh5muk7CI4badqQgZA38BpnnqtklP/GNPlFnjvXAmTb8zPLYLIEFzZYkA/l
+         XDozkCuejiBtC9GTLAzThHJ6+R6YMe8uWjB3FTmpfLdSn1liO5pkkgCYW2aRwgWJUZst
+         1YtNk+nEElmmWPDp2U8AF8fQzSNUVc+sDyW0m5ELVqGTIn1xgVBTEeArIwpsy+UvgxBU
+         0KXQcttLXfe4vyKakfcEn9m75w6dlO69QGoeBmwXcpYAn3sZsSmHd5YTauyVe01KYUNs
+         /ICQ==
+X-Gm-Message-State: ACgBeo02Jng6CPo3wcNFkU5815dy8G5P1bQg/XzoZtlrJeCIWzVlCQAZ
+        KwAQa7qbRdeROPh0GSBONK1tq+fDuEw=
+X-Google-Smtp-Source: AA6agR59SHEDezFzi8GE2jq6kZcQxO/Y370HQYjuJl5dH8YcX2/gMY9qp8J6bQkCKQ8zq+wjjjcbzg==
+X-Received: by 2002:ac8:5a01:0:b0:344:6aef:9a8d with SMTP id n1-20020ac85a01000000b003446aef9a8dmr10903344qta.131.1661791623337;
+        Mon, 29 Aug 2022 09:47:03 -0700 (PDT)
+Received: from localhost ([2600:1700:65a0:ab60:8fb6:8017:fac7:922b])
+        by smtp.gmail.com with ESMTPSA id bj15-20020a05620a190f00b006bbc3724affsm5881045qkb.45.2022.08.29.09.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 09:47:02 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 09:47:00 -0700
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Dave Taht <dave.taht@gmail.com>
+Subject: Re: [PATCH RFC v2 net-next 0/5] net: Qdisc backpressure
+ infrastructure
+Message-ID: <YwzthDleRuvyEsXC@pop-os.localdomain>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
+ <cover.1661158173.git.peilin.ye@bytedance.com>
+ <CANn89iJsOHK1qgudpfFW9poC4NRBZiob-ynTOuRBkuJTw6FaJw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>, vineeth@bitbyteword.org
-References: <20220819204857.3066329-1-joel@joelfernandes.org>
- <20220829134045.GA54589@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220829134045.GA54589@lothringen>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iJsOHK1qgudpfFW9poC4NRBZiob-ynTOuRBkuJTw6FaJw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederick,
-
-On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
-> On Fri, Aug 19, 2022 at 08:48:43PM +0000, Joel Fernandes (Google) wrote:
->> Refresh tested on real ChromeOS userspace and hardware, passes boot time tests
->> and rcuscale tests.
->>
->> Fixes on top of v3:
->> - Fix boot issues due to a race in the lazy RCU logic which caused a missed
->>   wakeup of the RCU GP thread, causing synchronize_rcu() to stall.
->> - Fixed trace_rcu_callback tracepoint
->>
->> I tested power previously [1], I am in the process of testing power again but I
->> wanted share my latest code as others who are testing power as well could use
->> the above fixes.
+On Mon, Aug 22, 2022 at 09:22:39AM -0700, Eric Dumazet wrote:
+> On Mon, Aug 22, 2022 at 2:10 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+> >
+> > From: Peilin Ye <peilin.ye@bytedance.com>
+> >
+> > Hi all,
+> >
+> > Currently sockets (especially UDP ones) can drop a lot of packets at TC
+> > egress when rate limited by shaper Qdiscs like HTB.  This patchset series
+> > tries to solve this by introducing a Qdisc backpressure mechanism.
+> >
+> > RFC v1 [1] used a throttle & unthrottle approach, which introduced several
+> > issues, including a thundering herd problem and a socket reference count
+> > issue [2].  This RFC v2 uses a different approach to avoid those issues:
+> >
+> >   1. When a shaper Qdisc drops a packet that belongs to a local socket due
+> >      to TC egress congestion, we make part of the socket's sndbuf
+> >      temporarily unavailable, so it sends slower.
+> >
+> >   2. Later, when TC egress becomes idle again, we gradually recover the
+> >      socket's sndbuf back to normal.  Patch 2 implements this step using a
+> >      timer for UDP sockets.
+> >
+> > The thundering herd problem is avoided, since we no longer wake up all
+> > throttled sockets at the same time in qdisc_watchdog().  The socket
+> > reference count issue is also avoided, since we no longer maintain socket
+> > list on Qdisc.
+> >
+> > Performance is better than RFC v1.  There is one concern about fairness
+> > between flows for TBF Qdisc, which could be solved by using a SFQ inner
+> > Qdisc.
+> >
+> > Please see the individual patches for details and numbers.  Any comments,
+> > suggestions would be much appreciated.  Thanks!
+> >
+> > [1] https://lore.kernel.org/netdev/cover.1651800598.git.peilin.ye@bytedance.com/
+> > [2] https://lore.kernel.org/netdev/20220506133111.1d4bebf3@hermes.local/
+> >
+> > Peilin Ye (5):
+> >   net: Introduce Qdisc backpressure infrastructure
+> >   net/udp: Implement Qdisc backpressure algorithm
+> >   net/sched: sch_tbf: Use Qdisc backpressure infrastructure
+> >   net/sched: sch_htb: Use Qdisc backpressure infrastructure
+> >   net/sched: sch_cbq: Use Qdisc backpressure infrastructure
+> >
 > 
-> Your patch is very likely to be _generally_ useful and therefore,
-> the more I look into this, the more I wonder if it is a good idea to rely on
-> bypass at all, let alone NOCB. Of course in the long term the goal is to have
-> bypass working without NOCB but why even bothering implementing it for nocb
-> in the first place?
-
-This was discussed with Paul [1]. Quoting:
-
-----
-Joel:
->> Also, does doing so not prevent usage of lazy CBs on systems without
->> NOCB? So if we want to future-proof this, I guess that might not be a
->> good decision.
->
-Paul:
-> True enough, but would this future actually arrive?  After all, if
-> someone cared enough about energy efficiency to use call_rcu_lazy(),
-> why wouldn't they also offload callbacks?
-
-Joel: I am not sure, but I also don't mind making it depend on NOCB for now
-(see below).
-
-[1] https://www.spinics.net/lists/rcu/msg07908.html
-----
-
-While I agree with you that perhaps making it more generic is better, this did
-take a significant amount of time, testing and corner case hunting to come up
-with, and v5 is also in the works so I'd appreciate if we can do it the
-bypass-way and optimize later. Arguably the bypass way is quite simple and
-allows us to leverage its effects of rcu_barrier and such. And the API will not
-change.
-
-> Several highlights:
+> I think the whole idea is wrong.
 > 
-> 1) NOCB is most often needed for nohz_full and the latter has terrible power
-> management. The CPU 0 is active all the time there.
 
-I see. We don't use nohz_full much. NOCB itself gives good power improvement.
+Be more specific?
 
-> 2) NOCB without nohz_full has extremely rare usecase (RT niche:
-> https://lore.kernel.org/lkml/CAFzL-7vqTX-y06Kc3HaLqRWAYE0d=ms3TzVtZLn0c6ATrKD+Qw@mail.gmail.com/
-> )
+> Packet schedulers can be remote (offloaded, or on another box)
 
-Really? Android has been using it for a long time. It seems to be quite popular
-in the battery-powered space.
-
-> 2) NOCB implies performance issues.
-
-Which kinds of? There is slightly worse boot times, but I'm guessing that's do
-with the extra scheduling overhead of the extra threads which is usually not a
-problem except that RCU is used in the critical path of boot up (on ChromeOS).
-
-> 3) We are mixing up two very different things in a single list of callbacks:
->    lazy callbacks and flooding callbacks, as a result we are adding lots of
->    off-topic corner cases all around:
->      * a seperate lazy len field to struct rcu_cblist whose purpose is much more
->        general than just bypass/lazy
->      * "lazy" specialized parameters to general purpose cblist management
->        functions
-
-I think just 1 or 2 functions have a new lazy param. It didn't seem too
-intrusive to me.
-
-> 4) This is further complexifying bypass core code, nocb timer management, core
->    nocb group management, all of which being already very complicated.
-
-True, I agree, a few more cases to handle for sure, but I think I got them all
-now (hopefully).
-
-> 5) The !NOCB implementation is going to be very different
-> 
-> Ok I can admit one counter argument in favour of using NO_CB:
-> 
-> -1) The scheduler can benefit from a wake CPU to run the callbacks on behalf of a bunch
-> of idle CPUs, instead of waking up that bunch of CPUs. But still we are dealing
-> with callbacks that can actually wait...
-
-Yeah that's huge. Significant amount of power improvement seems to come from
-idle CPUs not being disturbed and their corresponding timer ticks turned off for
-longer periods. That's experimentally confirmed (NO_CB giving significant power
-improvement on battery-power systems as compared to !NO_CB).
+This is not the case we are dealing with (yet).
 
 > 
-> So here is a proposal: how about forgetting NOCB for now and instead add a new
-> RCU_LAZY_TAIL segment in the struct rcu_segcblist right after RCU_NEXT_TAIL?
-> Then ignore that segment until some timer expiry has been met or the CPU is
-> known to be busy? Probably some tiny bits need to be tweaked in segcblist
-> management functions but probably not that much. And also make sure that entrain()
-> queues to RCU_LAZY_TAIL.
+> The idea of going back to socket level from a packet scheduler should
+> really be a last resort.
+
+I think it should be the first resort, as we should backpressure to the
+source, rather than anything in the middle.
+
 > 
-> Then the only difference in the case of NOCB is that we add a new timer to the
-> nocb group leader instead of a local timer in !NOCB.
+> Issue of having UDP sockets being able to flood a network is tough, I
+> am not sure the core networking stack
+> should pretend it can solve the issue.
 
-It sounds reasonable, but I'll go with Paul on the usecase argument - who would
-actually care about lazy CBs outside of power, and would those guys ever use
-!NO_CB if they cared about power / battery?
+It seems you misunderstand it here, we are not dealing with UDP on the
+network, just on an end host. The backpressure we are dealing with is
+from Qdisc to socket on _TX side_ and on one single host.
 
-Thanks,
+> 
+> Note that FQ based packet schedulers can also help already.
 
- - Joel
+It only helps TCP pacing.
 
-
-
+Thanks.

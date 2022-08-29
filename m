@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCA85A4FE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D755A4FEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 17:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiH2PKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 11:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S229903AbiH2PL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 11:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiH2PKR (ORCPT
+        with ESMTP id S229731AbiH2PLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:10:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027181C90A;
-        Mon, 29 Aug 2022 08:10:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C0A61124;
-        Mon, 29 Aug 2022 15:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DB7B6C433D7;
-        Mon, 29 Aug 2022 15:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661785813;
-        bh=8DV5Al8uoRA23fJEzAcTio890uhpNVpl6xlcOCvBmOk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WFM/Ps2NBtafeEoYeYpmBQHEE68FMJRCQRfmcUxLmd+UFR+tLTseqXe7oezu+7Emf
-         49O8nJxUTM5nF/wdgumB7C57b4ybNwnlRHSSpkyLnUi24TyJOTbbUEttLHCWhKTqas
-         8LHUdbSXXa3OoSG+pdXIWTjnZum4JNy/c/7MVC4eJYCTGwovm5dQJVF1rxMqq4AY5p
-         VcSyF7di044RkRrwXLy/enF9gn1dCfw8S2HJtywEkeRc3TCBzWbZZj8Zt/mAVXFYJC
-         mKsbFDFZHOfQ4kCJ4GhdypbfZhyB6uR8Cb4G/37EQ2KKiqfoGm0ayO1rvw7sVzm4Tj
-         ttmSULO+s18sA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B991DE924D4;
-        Mon, 29 Aug 2022 15:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 29 Aug 2022 11:11:53 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DCD7FE67;
+        Mon, 29 Aug 2022 08:11:50 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 9217B3200910;
+        Mon, 29 Aug 2022 11:11:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 29 Aug 2022 11:11:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661785905; x=1661872305; bh=6czT/Mr/tB
+        NII304BwOJWEFTmduamBRB/vYIYcaFWLM=; b=qapDGo5tcLVEKwppV3GTP6EJnZ
+        gHmNPPR7sQ1DR35PRGuSnxkoYc3bv+j1b+ie4fbxwRQmf7IongiXEgf23B9k2q6Y
+        SbvMaSyjOuLwujmuWugu4bZQ7AAHZRkMPm7Zp1GUYwc1FK9fzhcwz8gt18pzSPia
+        IYFweSWcONYHRAZ1vaxHPIWgsbnV20rx89rSt+7vTFMY1lMt13s2nHJVQZ/77AZ4
+        wavzxFURF0C/MgxM5y4ewzgVjKruwf6KYR4o5b+Izc7tmQrNapJt+3cg+Fs9mJFR
+        8vhfuogPeTckHcXRwz+cJtdSN7oPiQlUdGTuLp3MWBD54jG3pY/hmEo18vFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661785905; x=1661872305; bh=6czT/Mr/tBNII304BwOJWEFTmdua
+        mBRB/vYIYcaFWLM=; b=rvGLYeTjHIwCfhZSdGXvYnzOBJZXciZk0i9i2lc4xLQl
+        OMQxGc1kZrb7PQ7zyvdyRlaRdn/qpS8cZhFuGlSR7SW8FgTyW7gfzjWJsqcGf65v
+        asZmgcxybeKVE1SJ9fqZoxl7BDCIi94NfW2TOz8pNL3jg/OMJ6nCsHIPx+ZAsTEG
+        u0LzdJzuecFinO/cOX5Zau1XravGpjlCNVsKm46XHBvEaAaDcaPOOT6g0AYfTfk0
+        PZF5ZevXkl15rjUFeDFKxEEm9GcuWGc1MXoV12ed4Zm9rhhApbr0O/N9+Sm8s0BE
+        gntFDDxbMbh2ZTXErW5y4Uuo5DfY/XVBIDl5ceFJ9w==
+X-ME-Sender: <xms:MNcMY-oRFbsI2adoHwD29LDYENeXQqfHithXrfilhcnd_nE83tjZgw>
+    <xme:MNcMY8r4vk1gfZit61cCwxkmWeYshRDp5drYvaODatPBAdbO5G_tzg4-ycRT8bImu
+    QwPpgly5xtX9UufdY0>
+X-ME-Received: <xmr:MNcMYzPCbSuPplAsvs9r5M1MNud3sDnXWtOpDC6jGqhKYb13RMX4UyQ6qgH5>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekuddgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:MNcMY97tHKDVtpRPU9oyDXhNuUeIOfh7tsX0P_preM8t3zTTvbO2cg>
+    <xmx:MNcMY95_8jKcnlfyBoBgTZ9Rl_waMmQcJ7L2J6tH2U3lwNiUoRM4dQ>
+    <xmx:MNcMY9iBsHUlxvSd20CfSbC6e0vp2ulQ9PNonVPVvXfQyjZCU1162Q>
+    <xmx:MdcMY8JYAaBKq3ThYEoUTyiL9btvPk3zcJWW88Afsv0EDEVwrZKiPQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 29 Aug 2022 11:11:43 -0400 (EDT)
+Date:   Mon, 29 Aug 2022 17:11:41 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Scott Branden <sbranden@broadcom.com>,
+        Emma Anholt <emma@anholt.net>, Ray Jui <rjui@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/7] drm/vc4: Fix the core clock behaviour
+Message-ID: <20220829151141.jomryjqvn7i7a3jr@houat>
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] selftests/bpf: Fix bind{4,6} tcp/socket header type
- conflict
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166178581375.25237.2019041652775863863.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Aug 2022 15:10:13 +0000
-References: <20220826052925.980431-1-james.hilliard1@gmail.com>
-In-Reply-To: <20220826052925.980431-1-james.hilliard1@gmail.com>
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, mykolal@fb.com,
-        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dmvoqxtqdjvru6cj"
+Content-Disposition: inline
+In-Reply-To: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+--dmvoqxtqdjvru6cj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 25 Aug 2022 23:29:22 -0600 you wrote:
-> There is a potential for us to hit a type conflict when including
-> netinet/tcp.h with sys/socket.h, we can remove these as they are not
-> actually needed.
-> 
-> Fixes errors like:
-> In file included from /usr/include/netinet/tcp.h:91,
->                  from progs/bind4_prog.c:10:
-> /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
->    34 | typedef __INT8_TYPE__ int8_t;
->       |                       ^~~~~~
-> In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
->                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
->                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
->                  from progs/bind4_prog.c:9:
-> /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
->    24 | typedef __int8_t int8_t;
->       |                  ^~~~~~
-> /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
->    43 | typedef __INT64_TYPE__ int64_t;
->       |                        ^~~~~~~
-> /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
->    27 | typedef __int64_t int64_t;
->       |                   ^~~~~~~
-> make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
-> 
-> [...]
+Hi Stephen, Mike,
 
-Here is the summary with links:
-  - [v2] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
-    https://git.kernel.org/bpf/bpf-next/c/3721359d3907
+On Mon, Aug 15, 2022 at 05:31:22PM +0200, Maxime Ripard wrote:
+> Those patches used to be part of a larger clock fixes series:
+> https://lore.kernel.org/linux-clk/20220715160014.2623107-1-maxime@cerno.t=
+ech/
+>=20
+> However, that series doesn't seem to be getting anywhere, so I've split o=
+ut
+> these patches that fix a regression that has been there since 5.18 and th=
+at
+> prevents the 4k output from working on the RaspberryPi4.
+>=20
+> Hopefully, we will be able to merge those patches through the DRM tree to=
+ avoid
+> any further disruption.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I've ping'd Stephen privately on IRC multiple times, and it's basically
+a resend of the previous clock series linked above that has been around
+since almost a month and a half.
 
+Can you Ack the first three patches so we can merge those patches
+through the DRM tree and close this regression?
 
+Maxime
+
+--dmvoqxtqdjvru6cj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwzXLQAKCRDj7w1vZxhR
+xcvRAQC49KThyWL6K2eQpUaeK1sR8DbrsEuq4KorK0kwbmehxQEAtHKGmyKmHqVH
+spWXuwujJHmnrDGzoeUfncXXu6ybtwk=
+=aWzc
+-----END PGP SIGNATURE-----
+
+--dmvoqxtqdjvru6cj--

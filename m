@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B1D5A44F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0FA5A44F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiH2IWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S229969AbiH2IWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiH2IWf (ORCPT
+        with ESMTP id S229909AbiH2IWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Aug 2022 04:22:35 -0400
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC616564D9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1295723E;
         Mon, 29 Aug 2022 01:22:31 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27T8METC028605;
-        Mon, 29 Aug 2022 03:22:14 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27T8MIaU028612;
+        Mon, 29 Aug 2022 03:22:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661761334;
-        bh=hHNtX4mz4PdQnTJqnEIU/tI5UmQ6kCybnZ+iYb3Hzik=;
+        s=ti-com-17Q1; t=1661761338;
+        bh=0p631o+37+RBsDxNt/tvZKJK942T9FsIOH4T8evU86g=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=l5SIQgxJhXCzwwMDbO9IIW6l0xrYu6q9YBc7HiY3bJz/L6U+ZNvFwvCEOIkjA09f7
-         pz5DJJr+gFl4P+wzF4sD+/AqO6vR+G0yHM6nGgtjnNXFQIldHuTw7RcMrPvp4git48
-         EugeZukXqKfLc+EwByTdg/Mmx5Jx8QEgpevxjnvw=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27T8MEnx021433
+        b=XKfgwIvzyUNHzXLqmES5XQoJBW2h2rHJiHoEQGUfd7jVgWQilHKvrLg54Bpx6hYdC
+         3F4KunjzJawGeUIWPSAuCTOwwf2sWYqNkFJK1QB6LAd/NIDT7gUgS/wGC0GmSa4tY+
+         8/7qfB9MZ1OfAk54+xA1icuIVn+6U0Hl1FYuA/1o=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27T8MIPw029582
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 Aug 2022 03:22:14 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 29 Aug 2022 03:22:18 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 29
- Aug 2022 03:22:14 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2022 03:22:17 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 29 Aug 2022 03:22:14 -0500
+ Frontend Transport; Mon, 29 Aug 2022 03:22:17 -0500
 Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27T8M7Ya059309;
-        Mon, 29 Aug 2022 03:22:11 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27T8M7Yb059309;
+        Mon, 29 Aug 2022 03:22:14 -0500
 From:   Vignesh Raghavendra <vigneshr@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
@@ -49,9 +49,9 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-gpio@vger.kernel.org>, Bryan Brattlof <bb@ti.com>
-Subject: [PATCH 1/4] dt-bindings: arm: ti: Add bindings for AM62A7 SoC
-Date:   Mon, 29 Aug 2022 13:51:57 +0530
-Message-ID: <20220829082200.241653-2-vigneshr@ti.com>
+Subject: [PATCH 2/4] dt-bindings: pinctrl: k3: Introduce pinmux definitions for AM62A
+Date:   Mon, 29 Aug 2022 13:51:58 +0530
+Message-ID: <20220829082200.241653-3-vigneshr@ti.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829082200.241653-1-vigneshr@ti.com>
 References: <20220829082200.241653-1-vigneshr@ti.com>
@@ -69,30 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds bindings for TI's AM62A7 family of devices.
+Add pinctrl macros for AM62AX SoCs. These macro definitions are similar
+to that of previous platforms, but adding new definitions to avoid any
+naming confusions in the SoC dts files.
+
+checkpatch insists the following error exists:
+ERROR: Macros with complex values should be enclosed in parentheses
+
+However, we do not need parentheses enclosing the values for this
+macro as we do intend it to generate two separate values as has been
+done for other similar platforms.
 
 Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 ---
- Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/dt-bindings/pinctrl/k3.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
-index 61c6ab4f52e2..28f6ea4c007e 100644
---- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
-+++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
-@@ -65,6 +65,12 @@ properties:
-               - ti,j721s2-evm
-           - const: ti,j721s2
+diff --git a/include/dt-bindings/pinctrl/k3.h b/include/dt-bindings/pinctrl/k3.h
+index a5204ab91d3e..97cd2e39efa4 100644
+--- a/include/dt-bindings/pinctrl/k3.h
++++ b/include/dt-bindings/pinctrl/k3.h
+@@ -44,4 +44,6 @@
+ #define AM62X_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
+ #define AM62X_MCU_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
  
-+      - description: K3 AM62A7 SoC
-+        items:
-+          - enum:
-+              - ti,am62a7-sk
-+          - const: ti,am62a7
-+
- additionalProperties: true
- 
- ...
++#define AM62AX_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
++#define AM62AX_MCU_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
+ #endif
 -- 
 2.25.1
 

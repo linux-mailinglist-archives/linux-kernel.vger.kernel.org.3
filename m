@@ -2,153 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BE15A554C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B525A5551
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 22:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiH2UIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 16:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S230027AbiH2UJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 16:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiH2UIt (ORCPT
+        with ESMTP id S229468AbiH2UJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 16:08:49 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C1490C6F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:08:48 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id b2so6918310qkh.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 13:08:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=qbFnYh6+yxExljXv7kC6ED4iDTkPIabJD2w6r78FSkQ=;
-        b=Gtf1g/NXxYZTaLMDW1gcFmpDCBO7bmirrujsGt82JUvmWp7Y1l2zK7QOCmSZwnJcoY
-         bOfhEL5HKvYzYnSdH6PUx0/+IDQ5DnR5jCCdMCOc90OfqgE12xC7wOlWBiMxhT5xbTSA
-         kDz22UDaG0jqo5VhkBozq3hOuahHSOyrg5fDBJ5Y99esy/ZFF649pHGKRR0hQOLehzQh
-         Etmm7LtzVwr78luRpifIl/a6iDgAgxhP5dyBnXKjQbTOdU7tQJ5PqljPi3fBJSN5uS8Z
-         ZWa0GWtVL9/dRfVBpaWhEx8Y1qY7aBbnvmSQg5oK8oSEoeuZmVFZuTFhHJXGMonruDRG
-         b9qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=qbFnYh6+yxExljXv7kC6ED4iDTkPIabJD2w6r78FSkQ=;
-        b=vMjFXAu1h/FLYutmJQ2/RmB14cnEgTANKB0M+1pMAf/kZLOxVq5kYRdVHjjK4k62oE
-         8WHbX90ajPNK81Mx+H5GF7Ja0oWqBuv7YcHGupcHQwLUUIBBjCXZq1XNDksFaa/MvOZe
-         3ig34bE1TdqyWMQJ0XzoefpqNWhov1vaqWXwPxamlcrxj4mtGLE0UZkvj2jPUIxRo6wo
-         kCzS3CqPKI9FhE3MRTXIGG8cjY38Wissh0nXicmV3pnpFQ3R6By09L0j9FHX0yTsMnxh
-         hNuDO466oBHDzy5lfmbOmkMrqyBR9hsiYBOD0Uss1CMthL37WtVqbMMMk6neimWWk5bL
-         5WOQ==
-X-Gm-Message-State: ACgBeo0w6WdRTohD3aV347atC5WP+yr2mLLPFtKg7IGfI/v9RhFYnIRP
-        krZ2cdnV9tJObYmPM2lOmGgOylmkJ29GZt0uVe04mA==
-X-Google-Smtp-Source: AA6agR7AJf9AOAAtuDFL/SEeBpsglgsS3c78XCsHe+mZR6Ycv5JsqxwDnoulWonFip+nUJqMiv9nqp+8v3nbJaDxNwE=
-X-Received: by 2002:a37:e118:0:b0:6ba:e5ce:123b with SMTP id
- c24-20020a37e118000000b006bae5ce123bmr9555944qkm.221.1661803727353; Mon, 29
- Aug 2022 13:08:47 -0700 (PDT)
+        Mon, 29 Aug 2022 16:09:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E399915D6;
+        Mon, 29 Aug 2022 13:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661803777; x=1693339777;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4fOyKN+oJCqnDjdQygiqlfxvFPX6MNaZinYDHZZyt+0=;
+  b=mJbM17t2NX+x+LVkjGzP6xcsqnXk7vvPDy1GWwheAPVZSHktP5iL2o4g
+   PKOAA9e1noF94eGw0Ku9McBbexhXM0WW7iWKK8DsAjJ1QdHf3c7KR8L+D
+   pDq4kZQezba8tb1731E0z1PlrpZ+LJg7dK4tj2JVHTM2rhxnf6aZIuezR
+   JPZtFhG/QwuMzEyks3EvnAGbMxoxRojISRzF/7ryCQtCx5TAhPeYWK9Dy
+   oXgWX6kALl5fiK5QgCB9i+aAc6R/cYY2ajvu0wBy858xdNvLnnIvGRlPr
+   nLjBhgpmhKuLUDbKZ3ps3BcMptCctgEQtypN+R23lhMAPu431lYAX2ixU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="294992934"
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="294992934"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 13:09:37 -0700
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="679753559"
+Received: from sbhansal-mobl1.amr.corp.intel.com (HELO [10.251.30.71]) ([10.251.30.71])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 13:09:36 -0700
+Message-ID: <73b375c3-97a7-5f25-5abf-48d9ec6be2db@linux.intel.com>
+Date:   Mon, 29 Aug 2022 13:09:36 -0700
 MIME-Version: 1.0
-References: <20220826230639.1249436-1-yosryahmed@google.com>
-In-Reply-To: <20220826230639.1249436-1-yosryahmed@google.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 29 Aug 2022 13:08:36 -0700
-Message-ID: <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <dcf53e6b-d60f-5d6b-029a-38df68d66302@intel.com>
+ <c6ccbcac-c5b1-f460-01e2-e1b6684b6e65@linux.intel.com>
+ <YwxO2L/MtCw/OHGB@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <YwxO2L/MtCw/OHGB@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> The cgroup_hierarchical_stats selftest is complicated. It has to be,
-> because it tests an entire workflow of recording, aggregating, and
-> dumping cgroup stats. However, some of the complexity is unnecessary.
-> The test now enables the memory controller in a cgroup hierarchy, invokes
-> reclaim, measure reclaim time, THEN uses that reclaim time to test the
-> stats collection and aggregation. We don't need to use such a
-> complicated stat, as the context in which the stat is collected is
-> orthogonal.
->
-> Simplify the test by using a simple stat instead of reclaim time, the
-> total number of times a process has ever entered a cgroup. This makes
-> the test simpler and removes the dependency on the memory controller and
-> the memory reclaim interface.
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
+Hi,
 
-Yosry, please tag the patch with the repo it should be applied on:
-bpf-next or bpf.
+On 8/28/22 10:30 PM, Greg Kroah-Hartman wrote:
+>> struct tdx_report_req {
+>>         __u64 reportdata;;
+>>         __u64 tdreport;
+>>         __u32 rpd_len
+>>         __u32 tdr_len;
+>>         __u8 subtype;
+>> };
+> That's better, but again, please use pahole.
 
->
-> When the test failed on Alexei's setup because the memory controller was
-> not enabled I realized this is an unnecessary dependency for the test,
-> which inspired this patch :) I am not sure if this prompt a Fixes tag as
-> the test wasn't broken.
->
-> ---
->  .../prog_tests/cgroup_hierarchical_stats.c    | 157 ++++++---------
->  .../bpf/progs/cgroup_hierarchical_stats.c     | 181 ++++++------------
->  2 files changed, 118 insertions(+), 220 deletions(-)
->
-[...]
-> diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> index 8ab4253a1592..c74362854948 100644
-> --- a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> +++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> @@ -1,7 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Functions to manage eBPF programs attached to cgroup subsystems
-> - *
+Following are the pahole dump of both formats.
 
-Please also add comments here explaining what the programs in this file do.
+With previous format, compiler adds 11 bytes in holes and 4 bytes of
+padding.
 
->   * Copyright 2022 Google LLC.
->   */
-[...]
->
-> -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-> -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
-> +SEC("fentry/cgroup_attach_task")
+Total size of struct is 40 bytes.
 
-Can we select an attachpoint that is more stable? It seems
-'cgroup_attach_task' is an internal helper function in cgroup, and its
-signature can change. I'd prefer using those commonly used tracepoints
-and EXPORT'ed functions. IMHO their interfaces are more stable.
+struct tdx_report_req {
+	__u8                       subtype;              /*     0     1 */
 
-> +int BPF_PROG(counter, struct cgroup *dst_cgrp, struct task_struct *leader,
-> +            bool threadgroup)
->  {
-> -       struct task_struct *task = bpf_get_current_task_btf();
-> -       __u64 *start_time_ptr;
-> -
-> -       start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
-> -                                             BPF_LOCAL_STORAGE_GET_F_CREATE);
-> -       if (start_time_ptr)
-> -               *start_time_ptr = bpf_ktime_get_ns();
-> -       return 0;
-> -}
-[...]
->  }
-> --
-> 2.37.2.672.g94769d06f0-goog
->
+	/* XXX 7 bytes hole, try to pack */
+
+	__u64                      reportdata;           /*     8     8 */
+	__u32                      rpd_len;              /*    16     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	__u64                      tdreport;             /*    24     8 */
+	__u32                      tdr_len;              /*    32     4 */
+
+	/* size: 40, cachelines: 1, members: 5 */
+	/* sum members: 25, holes: 2, sum holes: 11 */
+	/* padding: 4 */
+	/* last cacheline: 40 bytes */
+};
+
+With the changed format, we avoided the holes, but it still adds 7 bytes of padding.
+
+Total size of struct is 32 bytes.
+
+struct tdx_report_req {
+	__u64                      reportdata;           /*     0     8 */
+	__u64                      tdreport;             /*     8     8 */
+	__u32                      rpd_len;              /*    16     4 */
+	__u32                      tdr_len;              /*    20     4 */
+	__u8                       subtype;              /*    24     1 */
+
+	/* size: 32, cachelines: 1, members: 5 */
+	/* padding: 7 */
+	/* last cacheline: 32 bytes */
+};
+
+
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

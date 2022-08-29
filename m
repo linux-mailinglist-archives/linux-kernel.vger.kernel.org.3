@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9974E5A4883
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4858B5A49F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiH2LLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S232354AbiH2LbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiH2LKR (ORCPT
+        with ESMTP id S232492AbiH2L3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:10:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632845F93;
-        Mon, 29 Aug 2022 04:07:20 -0700 (PDT)
+        Mon, 29 Aug 2022 07:29:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC8379EE5;
+        Mon, 29 Aug 2022 04:17:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9975BB80F2B;
-        Mon, 29 Aug 2022 11:07:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B7DC433C1;
-        Mon, 29 Aug 2022 11:07:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DE72611F3;
+        Mon, 29 Aug 2022 11:07:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EA2C433C1;
+        Mon, 29 Aug 2022 11:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771238;
-        bh=M+k41fySf9W9qlUWewRVNfAONOL7YWGUa52LoTBbASs=;
+        s=korg; t=1661771246;
+        bh=nBwKVtuE3HX+ZqecDlfmmiUBj5o2lt46TJHtL3RZv7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TptvsbQ0xjcBJmvQDlyzpnrgN77+HW1QCM3Ydx/5VplKQ2kYtd+qrUshE9ALnM65C
-         PSfJ9t6gN4JnJGkZ08X1XES14TH1/XLq6y2O9dQGkDtbJ+mbbEZoYFnRgB4+/o6yCS
-         gOlyUyjM0wI9cQaAJuUDf4s1TmtbqgngTHI/vZ4E=
+        b=ClkpduBsz32ynnRsIn/V03xoTWKCCGbVS4JiiZvJIBmy91pqEH8SZF9PmihfkS3ve
+         pg5nacr1IUsKeg+jotnCBp0B0cubZ7uHC0pMfcI9+HQkRVKlPZh61ekjT5w8PrcwgL
+         9kYSd8n7gnDzJecJz7Nf/iF+9Ft+EViaKeFmBBxo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Gwangun Jung <exsociety@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 42/86] netfilter: nf_tables: disallow jump to implicit chain from set element
-Date:   Mon, 29 Aug 2022 12:59:08 +0200
-Message-Id: <20220829105758.265637135@linuxfoundation.org>
+Subject: [PATCH 5.10 43/86] netfilter: nf_tables: disallow binding to already bound chain
+Date:   Mon, 29 Aug 2022 12:59:09 +0200
+Message-Id: <20220829105758.306654273@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
 References: <20220829105756.500128871@linuxfoundation.org>
@@ -56,64 +57,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit f323ef3a0d49e147365284bc1f02212e617b7f09 ]
+[ Upstream commit e02f0d3970404bfea385b6edb86f2d936db0ea2b ]
 
-Extend struct nft_data_desc to add a flag field that specifies
-nft_data_init() is being called for set element data.
-
-Use it to disallow jump to implicit chain from set element, only jump
-to chain via immediate expression is allowed.
+Update nft_data_init() to report EINVAL if chain is already bound.
 
 Fixes: d0e2c7de92c7 ("netfilter: nf_tables: add NFT_CHAIN_BINDING")
+Reported-by: Gwangun Jung <exsociety@gmail.com>
 Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/netfilter/nf_tables.h | 5 +++++
- net/netfilter/nf_tables_api.c     | 4 ++++
- 2 files changed, 9 insertions(+)
+ net/netfilter/nf_tables_api.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
-index 6c062b2509b9b..e66fee99ed3ea 100644
---- a/include/net/netfilter/nf_tables.h
-+++ b/include/net/netfilter/nf_tables.h
-@@ -176,10 +176,15 @@ struct nft_ctx {
- 	bool				report;
- };
- 
-+enum nft_data_desc_flags {
-+	NFT_DATA_DESC_SETELEM	= (1 << 0),
-+};
-+
- struct nft_data_desc {
- 	enum nft_data_types		type;
- 	unsigned int			size;
- 	unsigned int			len;
-+	unsigned int			flags;
- };
- 
- int nft_data_init(const struct nft_ctx *ctx, struct nft_data *data,
 diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index df79ea6004a59..b36728cfc5d81 100644
+index b36728cfc5d81..1b039476e4d6a 100644
 --- a/net/netfilter/nf_tables_api.c
 +++ b/net/netfilter/nf_tables_api.c
-@@ -4865,6 +4865,7 @@ static int nft_setelem_parse_data(struct nft_ctx *ctx, struct nft_set *set,
- 	desc->type = dtype;
- 	desc->size = NFT_DATA_VALUE_MAXLEN;
- 	desc->len = set->dlen;
-+	desc->flags = NFT_DATA_DESC_SETELEM;
- 
- 	return nft_data_init(ctx, data, desc, attr);
- }
-@@ -8677,6 +8678,9 @@ static int nft_verdict_init(const struct nft_ctx *ctx, struct nft_data *data,
+@@ -8678,6 +8678,8 @@ static int nft_verdict_init(const struct nft_ctx *ctx, struct nft_data *data,
  			return PTR_ERR(chain);
  		if (nft_is_base_chain(chain))
  			return -EOPNOTSUPP;
-+		if (desc->flags & NFT_DATA_DESC_SETELEM &&
-+		    chain->flags & NFT_CHAIN_BINDING)
++		if (nft_chain_is_bound(chain))
 +			return -EINVAL;
- 
- 		chain->use++;
- 		data->verdict.chain = chain;
+ 		if (desc->flags & NFT_DATA_DESC_SETELEM &&
+ 		    chain->flags & NFT_CHAIN_BINDING)
+ 			return -EINVAL;
 -- 
 2.35.1
 

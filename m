@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FDB5A5792
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253D15A5795
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiH2X3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S229682AbiH2XaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiH2X3i (ORCPT
+        with ESMTP id S229488AbiH2XaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:29:38 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE28895D6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:29:37 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33ef3e5faeeso144778527b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=j0gZBmzE7Sfjkj3fK19vZEmRLHOzPYXYudfu9W22ef0=;
-        b=bPb1auIgPo3/2J+mfMaXDZh871410KrBXJQKMytf0FgAgs/F+ya3O96wKhX6DhLaSr
-         K1HrNyGRVh9mjnzpRRE0QVld7uhji6zvmw9kPtVcYWV0J1WLkwMUSgLgH/+idRKwDGMu
-         WVZfVhWawN5TNKG4FdwdLTMjqIh43NhSGiCImZigj7H6xUm5tTtcvOz4e1r729TrUHci
-         3PrqorGayOVeVtdIiLLIw0S+u17p+j3HreT1kmnW41h1WNTIfC4M/GAlP8teQTYTjhSC
-         OkOvFiXEpkzFQw5ZcjmylMDAet9+rTxXgAUVysqhl1c/mnzag/9955zWGc3jwpIPF6av
-         2BFw==
+        Mon, 29 Aug 2022 19:30:21 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCF75925C
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:30:20 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id a21-20020a5d9815000000b006882e9be20aso5566518iol.17
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:30:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=j0gZBmzE7Sfjkj3fK19vZEmRLHOzPYXYudfu9W22ef0=;
-        b=mpJcQuhuivaAGLZnfmQXOhfyj3Lv+MrKOrsugzhNhSDVKaC5/LezirH+9FUhCmXdQO
-         PawiYfvdYp61TYqsbUPjPiCdy80OSpZkLHmquQhljKC165DKij4TIBz6NNZE7RdBCtdh
-         d8vMY530xTdGkLUdMoZQk4UDiUVSfxnSzsvkFau+22aV1CXsrdVUISTKyumME9UW1B9b
-         SUORqrdZoSkvWIeMBlhW9HAZiyOwzl586YSlOStENGGbSfOvThg9/39dumP+QrM9rfiI
-         Pn0Wh+ufVKdsJPP3QReEe9B7lR6PqyjwAIXU5fKtSAvzsuwc4rq1G9nYomCNpo6gtQnr
-         Pmrg==
-X-Gm-Message-State: ACgBeo2fVcnEeF9mREAteNVtWJwJuTJUjL7G3mRafDh5fVMk1DT8Gr7i
-        Dsm6wYucl0ojzI4IUqBk/OnAOe/6XII=
-X-Google-Smtp-Source: AA6agR57Qelr+wyNISYMYbU6D1FmO6PFtmVX7v1UCupeRr3ikw+DVEQhtxuiNuF/Y/wSno25spds6UFXDBk=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:3049:2153:3017:38c9])
- (user=yuzhao job=sendgmr) by 2002:a81:b04d:0:b0:340:b55c:9b1f with SMTP id
- x13-20020a81b04d000000b00340b55c9b1fmr10198796ywk.212.1661815777286; Mon, 29
- Aug 2022 16:29:37 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 17:29:34 -0600
-Message-Id: <20220829232934.3277747-1-yuzhao@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH] Revert "swiotlb: panic if nslabs is too small"
-From:   Yu Zhao <yuzhao@google.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Yu Zhao <yuzhao@google.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=2YEU8MGiYyA7ikKAvgdFuLoxWCy3ALSR6+S8uCZED4Q=;
+        b=Yo99CuMlinTSu4y3B4oaOiN7Q7jeqO4R/Ru6Tm/0+CnckWG9zuMElXSUXUe3tGyURb
+         KIvTpwagGIHcOv/MBWMGQW6tYahnBaya79SDwl+9JMvGDjHU7PV3wYg51Tkub/oeWR2S
+         h7jyTFzf9xp9q6qB9+5K9bFkYsUE4XiN9iudL1y6c3zi/3i1Zd0m+Gcai8PThy/+ERq/
+         OlD0J4aBObbixLk4C6M1C5r/ZSMs32e/5MHmI/7XOLBh6A2Wps7HhKyQFfD3xk1MMi8h
+         xESLNKYUfjcO8GJn36p0+Hm6HSRoDsQDjsM96ZMH7kUQ2DaMIMwQ6vbNWe3pxTJ0AIfI
+         tS+g==
+X-Gm-Message-State: ACgBeo3fi1wfHIDGnQ43AkKEt+4Rj/VHRbuuW5Tr4EKnJayxGO/kk+P2
+        wX2LadXmeXD5ooMdrlncMofsy50BMWIIQASDaU7sZFxuBlUT
+X-Google-Smtp-Source: AA6agR6xVVuoLZ6/rTXKMNjxQX7n3CTsaH4W4fuQFpeteUbda0GnuX//1nO3ExzfAKYk4br6zsttFv8iij72pEhhc3oQfbYm8Ggm
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:371f:b0:349:cfb0:89a9 with SMTP id
+ k31-20020a056638371f00b00349cfb089a9mr11317806jav.151.1661815819682; Mon, 29
+ Aug 2022 16:30:19 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 16:30:19 -0700
+In-Reply-To: <0000000000009a318805e6ff48a4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009d4ad705e769a5c3@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in ni_find_attr
+From:   syzbot <syzbot+69d15cab6309bffae739@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 0bf28fc40d89b1a3e00d1b79473bad4e9ca20ad1.
+syzbot has bisected this issue to:
 
-Reasons:
-  1. new panic()s shouldn't be added [1].
-  2. It does no "cleanup" but breaks MIPS [2].
+commit 6e5be40d32fb1907285277c02e74493ed43d77fe
+Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Date:   Fri Aug 13 14:21:30 2021 +0000
 
-[1]: https://lore.kernel.org/r/CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com/
-[2]: https://lore.kernel.org/r/20220820012031.1285979-1-yuzhao@google.com/
+    fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
 
-Fixes: 0bf28fc40d89b ("swiotlb: panic if nslabs is too small")
-Signed-off-by: Yu Zhao <yuzhao@google.com>
----
- kernel/dma/swiotlb.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1458787d080000
+start commit:   8379c0b31fbc Merge tag 'for-6.0-rc3-tag' of git://git.kern..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1658787d080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1258787d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=911efaff115942bb
+dashboard link: https://syzkaller.appspot.com/bug?extid=69d15cab6309bffae739
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110d306d080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17409333080000
 
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index c5a9190b218f..b3ede72eba5d 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -325,10 +325,6 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 	if (!default_nareas)
- 		swiotlb_adjust_nareas(num_possible_cpus());
- 
--	nslabs = default_nslabs;
--	if (nslabs < IO_TLB_MIN_SLABS)
--		panic("%s: nslabs = %lu too small\n", __func__, nslabs);
--
- 	/*
- 	 * By default allocate the bounce buffer memory from low memory, but
- 	 * allow to pick a location everywhere for hypervisors with guest
-@@ -341,8 +337,7 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 	else
- 		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
- 	if (!tlb) {
--		pr_warn("%s: Failed to allocate %zu bytes tlb structure\n",
--			__func__, bytes);
-+		pr_warn("%s: failed to allocate tlb structure\n", __func__);
- 		return;
- 	}
- 
+Reported-by: syzbot+69d15cab6309bffae739@syzkaller.appspotmail.com
+Fixes: 6e5be40d32fb ("fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile")
 
-base-commit: c40e8341e3b3bb27e3a65b06b5b454626234c4f0
--- 
-2.37.2.672.g94769d06f0-goog
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

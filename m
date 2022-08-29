@@ -2,72 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF1A5A52BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BED5A52C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 19:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiH2RHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 13:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S229959AbiH2RJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 13:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbiH2RFg (ORCPT
+        with ESMTP id S231451AbiH2RIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:05:36 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967356373;
-        Mon, 29 Aug 2022 10:04:52 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 971832E0;
-        Mon, 29 Aug 2022 17:04:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 971832E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1661792691; bh=FwzTMUO8YkpbGodTNGber4FhzAcRYx2EzQJl1HJ9Yno=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Ao6b32/u/EvHUvnG6dvW/UKe4ahvd95KeSq6TqzqXsyMU2lXFJek8q3blj1Vqp+eo
-         UAcNTfe4H7cQxUSOVlnmT5y3MjQ3Ig7UZiNxQM85rybocg+ou3AmEM5w78NjFV/CpG
-         7lt0Pxeo8+7Ffpe++RdgNCe5oMkkwAMkT3xN11VYK6bscPiUdoldUTDg9p7lX3dgak
-         pN6ihOUZs2GdrICG5cZqhiHVcaaODbeqJuvc+6whuGkAy0UgPVwy203rAip8/eYsdT
-         amUQAJqvHLTFJDlMxBwo1R+QzHbafn9nOOuQ2u6+qTzSJzwEmP9TfrGxNM7GIxmm8l
-         stuUH3IS6uDcw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] Documentation/ABI: correct possessive "its" typos
-In-Reply-To: <20220801025207.29971-1-rdunlap@infradead.org>
-References: <20220801025207.29971-1-rdunlap@infradead.org>
-Date:   Mon, 29 Aug 2022 11:04:51 -0600
-Message-ID: <875yiboua4.fsf@meer.lwn.net>
+        Mon, 29 Aug 2022 13:08:44 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885FA13D4D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:08:19 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-33dc345ad78so212066557b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 10:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xICyMVVdCsY5/fofBo/xR4lYqmLE701ZtHc0T6bkZNY=;
+        b=f2mnCMTUX8MUcwoig9BX5a/hSjp+haWVlmf/zgLb1ELSvOm4uiJPmBTdc9u7mpkywY
+         tRpcIfusLS82Y1a6vcFzbfzXwHeCu6PMEvaOgzBsxlccY1llfu5kN9XGPU0vpG3hhdnv
+         0yvXSMaUSu4L0cByn9rY8ZqMIk4O/F7PdjtWDnW3XyQouMtnpCqMGaMuRwCd39znHM2y
+         208DPvXLnpvYdHqfW5k8BN24f9Us8BGbwVErhbN9a3a4ELCIVR8T/EFvlrh1+787gf3/
+         FEr018E1RH9SPJIVg+pAs9j3RV+dyC0szpV28VCjQ5AbGBKiiFRGvieGmRgRr/I0Ue5r
+         ip4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xICyMVVdCsY5/fofBo/xR4lYqmLE701ZtHc0T6bkZNY=;
+        b=ChALv9COp04xfxxXVbWqqDaCHagQDqYar0cVCYRpmcYnPuTSmO+qx8JaEyVDSticI5
+         DVcJoad9op2vxCvm0mZljPL4VNKyctWzcX8y5tNQO6GLmpU4qdKCjczgUV7WvDGaC5F3
+         YGTg0lRJCLb9YI/le8cbk9nqNgszRtpwDNbM8C/w3OI+X71wexu+qUEIoXOlqG3aQaV8
+         VsY+UHzUjEFPB6iVmGrafrQuc+3eapeiKV7BX6zNCe/Ldyiy9EnpCv2qmpM9XnBhj1oD
+         Hnal21Z8ex++nCYM2nb4Pbn8w5DI8kmQQ+Mx7PoMzp7E6DhVdU04Cnc8z9t0J5ZemmrQ
+         gUUQ==
+X-Gm-Message-State: ACgBeo33ryfwTYEiS0jF4Qsb7/5VJeQvWCcHmLYxLIbaEcr+XY/JK8ix
+        zO78O4ef5DuXja0q3huWVWohsxERs0LukameN4CSNw==
+X-Google-Smtp-Source: AA6agR5yrPfoLQlXKTsr14uC5F5xcL/3RWe+3GyqlPJK4pfC0blNh/6a1jD6exelzaWA170WinDrqAKgH/iopkF9eN0=
+X-Received: by 2002:a25:7cc6:0:b0:67a:6a2e:3d42 with SMTP id
+ x189-20020a257cc6000000b0067a6a2e3d42mr9035859ybc.231.1661792898498; Mon, 29
+ Aug 2022 10:08:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220829081704.255235-1-shaozhengchao@huawei.com> <20220829081704.255235-2-shaozhengchao@huawei.com>
+In-Reply-To: <20220829081704.255235-2-shaozhengchao@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 29 Aug 2022 10:08:07 -0700
+Message-ID: <CANn89iLqXB-O7AP5qf+gGtK48fgYYxpciCyZa76jJNac9Bq1aQ@mail.gmail.com>
+Subject: Re: [PATCH net-next,v2 1/3] net: sched: choke: remove unused
+ variables in struct choke_sched_data
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, weiyongjun1@huawei.com,
+        YueHaibing <yuehaibing@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-
-> Correct all uses of "it's" that are meant to be possessive "its".
+On Mon, Aug 29, 2022 at 1:14 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
 >
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> The variable "other" in the struct choke_sched_data is not used. Remove it.
+>
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 > ---
->  Documentation/ABI/testing/sysfs-bus-bcma           |    2 +-
->  Documentation/ABI/testing/sysfs-bus-fcoe           |    2 +-
->  Documentation/ABI/testing/sysfs-bus-iio-proximity  |    2 +-
->  Documentation/ABI/testing/sysfs-devices-system-cpu |    2 +-
->  Documentation/ABI/testing/sysfs-power              |    2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+> v1: qdisc_drop() already counts drops, unnecessary to use "other" to duplicate the same information.
+> ---
+>  include/uapi/linux/pkt_sched.h | 1 -
+>  net/sched/sch_choke.c          | 2 --
+>  2 files changed, 3 deletions(-)
+>
+> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+> index f292b467b27f..32d49447cc7a 100644
+> --- a/include/uapi/linux/pkt_sched.h
+> +++ b/include/uapi/linux/pkt_sched.h
+> @@ -396,7 +396,6 @@ struct tc_choke_qopt {
+>  struct tc_choke_xstats {
+>         __u32           early;          /* Early drops */
+>         __u32           pdrop;          /* Drops due to queue limits */
+> -       __u32           other;          /* Drops due to drop() calls */
 
-I stumbled across this languishing in my docs folder.  Applied, now,
-thanks.
+You can not remove a field in UAPI.
 
-jon
+>         __u32           marked;         /* Marked packets */
+>         __u32           matched;        /* Drops due to flow match */
+>  };
+> diff --git a/net/sched/sch_choke.c b/net/sched/sch_choke.c
+> index 25d2daaa8122..3ac3e5c80b6f 100644
+> --- a/net/sched/sch_choke.c
+> +++ b/net/sched/sch_choke.c
+> @@ -60,7 +60,6 @@ struct choke_sched_data {
+>                 u32     forced_drop;    /* Forced drops, qavg > max_thresh */
+>                 u32     forced_mark;    /* Forced marks, qavg > max_thresh */
+>                 u32     pdrop;          /* Drops due to queue limits */
+> -               u32     other;          /* Drops due to drop() calls */
+>                 u32     matched;        /* Drops to flow match */
+>         } stats;
+>
+> @@ -464,7 +463,6 @@ static int choke_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
+>                 .early  = q->stats.prob_drop + q->stats.forced_drop,
+>                 .marked = q->stats.prob_mark + q->stats.forced_mark,
+>                 .pdrop  = q->stats.pdrop,
+> -               .other  = q->stats.other,
+>                 .matched = q->stats.matched,
+>         };
+>
+> --
+> 2.17.1
+>

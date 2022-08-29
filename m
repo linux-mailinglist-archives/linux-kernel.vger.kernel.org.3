@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397A55A4CB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B5A5A4CB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 14:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiH2M5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 08:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S230055AbiH2M5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 08:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiH2M4b (ORCPT
+        with ESMTP id S229873AbiH2M4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:56:31 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98930DFAE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:48:23 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33f8988daecso119250627b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:48:23 -0700 (PDT)
+        Mon, 29 Aug 2022 08:56:32 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F56E0A9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:48:27 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id hr32-20020a1709073fa000b00730a39f36ddso2230051ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 05:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=17GhIUVsdBD381xCSlsSf/bvMmuZOpgOvCsizfGJYww=;
-        b=CbUwP42fuhmKg7ri7biMklFhB21W8cZzoP21+kt7Lgj6pRAyQfpzbZRWFbKeP6coDy
-         AtkU/EIId8EZZt3IqUVsnXV5/PdeWQ/wbj3+W3aWt+UGVld9yGpyxTMNZ+LkqFqFDq4E
-         Eg6dryn4nCZzZyYEDkk4dENmaVGKAEjjahQAFSW9MrwIn2ia3Ddf8nIbwrLhCtzzbI6c
-         JLfLxik35LBKo1sshesg7tGD+yKVjyy6SkFYmLaXuEjFwS58Wn8DixsyUbFkK1+1u4L0
-         yG9CGURYktVy3sgJ3tVijbDxB25JjEwg6LeoC3rHTdBX+q3W9l3w84Qs4AN3cxM2jwfa
-         1Pqg==
+        bh=o7nFvD+bAzzd8hTxdy6J5SFI8QAvwQGuiGUQWboy0hk=;
+        b=DUROuHk1Z9qzwl+b2DTEg2S7HJMexhpmqANb/PJZ7O33R9XhSPct7AwehP14PQc/2o
+         wK/bi8a2CwUsCNYLZ60BVrbEBT9p31oxiK+AfnIEOciyJytERkocF14TQxcpALfKW3+m
+         b2Ub+eMgVCVEVNppFz86zBqIyKvR0lUxlYrSs0Pqqu53c88/O9WnN5AbglZY4E2lNY3X
+         UurK/UKzohtpKpt81PvQ4NXYcynS9qosWESRGDtGbt4p3CdpxU/ZwTvmCC71hiCrb5Iz
+         oBnMf/JVbgAxkVDKJuMfwanruY91nDmZy+mUGQ78tN/tN+0RJuWqqSZWWdmcn4+YhWS4
+         IZ8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=17GhIUVsdBD381xCSlsSf/bvMmuZOpgOvCsizfGJYww=;
-        b=HW9gH67GYGmOCajEMVBz+XXEUHKPOzsxKoIwdARpZrw8xePIV3sj3V7FJRkS6HLGDp
-         uMqiarQgC/R7v7qQU7x8BWxjVUpBAEntHyqz2bCtDDJ5OKYxGIoeBrbLfNlmdfw0uEWD
-         kFmO0jMT5y5+CMNEceFxRY4QGBWcq5ptbOC1+Dr2LlcmQ2rqoL83WSKiSV80waf9Ryrk
-         pwxeqMx77YrFGPxMaB7XVIwBv3IdF4vU2WxJluphCokhA9mAtZBTc1tj2Xof+k2/Cqh3
-         o60fokHz2vLisAwQW45lTnyxLVo6Gsv32nbbY3I8eNpT/6MzODCvgi0DcRcyyIawS2rW
-         hwAw==
-X-Gm-Message-State: ACgBeo2MIdCQHtUnCWh6MWkwDdkREN1/KYqHKcEQDYREBEXaTy/jI6hz
-        sWHTaG0tQR2JsWiem9QtWmVsOvqHRg==
-X-Google-Smtp-Source: AA6agR7saRNQPyfeUGNlvdKaMJxYtoC1JW5xi3rwIoqgRCRjBdEPFh2wH5NnVmpB77WBemcvNGm+4C/jLw==
+        bh=o7nFvD+bAzzd8hTxdy6J5SFI8QAvwQGuiGUQWboy0hk=;
+        b=cBAn06AKoe0c99jaYp80TY8fCexd7SlbPZ9+gEGmncmcPzVY6JtiiwHqnkWfZRVhPt
+         TgDsjmkqtPxnE6PhtxsIIitQUzlCFPxxAklRHPGIvBP1uyBw9QsVjDDLXkPPip+T3Vb3
+         SIloZVdbX5fN8ln9UOTldzqHi0SkncYDPwORGDbz26hZ0VTTBOLTsn/xzxAJpdN8zyjc
+         beEwhKUMqkcsRsnMHZKn6pXcUN0V5bGToCsoTvZ4cxseBlYVP2PEB8ywT4AZd5+L9lk3
+         9R3tDG9v16O3D7qPJimLbLL7OEbidiBdP93xX2jfHnBka5jft1TzCEeXysU6CyEJbJVk
+         ISKQ==
+X-Gm-Message-State: ACgBeo24Yc8H2WxdZtNAW1hfd9KeoZQSgZqe1bdDaP/i7XX1vq06epu6
+        gGD/8eX34e6i5ZdRI0TVI+gu+Jf3Ng==
+X-Google-Smtp-Source: AA6agR5wokwGhbG/dPuolBfo3Bpkl9cRXVj3x5ekleyIMoAvz+i6ptf2ezpCAANeuPi0p5VgMRtvOQZZzA==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:196d:4fc7:fa9c:62e3])
- (user=elver job=sendgmr) by 2002:a0d:f402:0:b0:33c:eda4:8557 with SMTP id
- d2-20020a0df402000000b0033ceda48557mr9486024ywf.183.1661777302876; Mon, 29
- Aug 2022 05:48:22 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 14:47:14 +0200
+ (user=elver job=sendgmr) by 2002:a17:907:75c6:b0:741:75a0:b82b with SMTP id
+ jl6-20020a17090775c600b0074175a0b82bmr4672915ejc.465.1661777305817; Mon, 29
+ Aug 2022 05:48:25 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 14:47:15 +0200
 In-Reply-To: <20220829124719.675715-1-elver@google.com>
 Mime-Version: 1.0
 References: <20220829124719.675715-1-elver@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220829124719.675715-10-elver@google.com>
-Subject: [PATCH v4 09/14] powerpc/hw_breakpoint: Avoid relying on caller synchronization
+Message-ID: <20220829124719.675715-11-elver@google.com>
+Subject: [PATCH v4 10/14] locking/percpu-rwsem: Add percpu_is_write_locked()
+ and percpu_is_read_locked()
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <frederic@kernel.org>,
@@ -80,184 +81,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Internal data structures (cpu_bps, task_bps) of powerpc's hw_breakpoint
-implementation have relied on nr_bp_mutex serializing access to them.
+Implement simple accessors to probe percpu-rwsem's locked state:
+percpu_is_write_locked(), percpu_is_read_locked().
 
-Before overhauling synchronization of kernel/events/hw_breakpoint.c,
-introduce 2 spinlocks to synchronize cpu_bps and task_bps respectively,
-thus avoiding reliance on callers synchronizing powerpc's hw_breakpoint.
-
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
 Signed-off-by: Marco Elver <elver@google.com>
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 Acked-by: Ian Rogers <irogers@google.com>
 ---
+v4:
+* Due to spurious read_count increments in __percpu_down_read_trylock()
+  if sem->block != 0, check that !sem->block (reported by Peter).
+
 v2:
 * New patch.
 ---
- arch/powerpc/kernel/hw_breakpoint.c | 53 ++++++++++++++++++++++-------
- 1 file changed, 40 insertions(+), 13 deletions(-)
+ include/linux/percpu-rwsem.h  | 6 ++++++
+ kernel/locking/percpu-rwsem.c | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/arch/powerpc/kernel/hw_breakpoint.c b/arch/powerpc/kernel/hw_breakpoint.c
-index 2669f80b3a49..8db1a15d7acb 100644
---- a/arch/powerpc/kernel/hw_breakpoint.c
-+++ b/arch/powerpc/kernel/hw_breakpoint.c
-@@ -15,6 +15,7 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/smp.h>
-+#include <linux/spinlock.h>
- #include <linux/debugfs.h>
- #include <linux/init.h>
- 
-@@ -129,7 +130,14 @@ struct breakpoint {
- 	bool ptrace_bp;
- };
- 
-+/*
-+ * While kernel/events/hw_breakpoint.c does its own synchronization, we cannot
-+ * rely on it safely synchronizing internals here; however, we can rely on it
-+ * not requesting more breakpoints than available.
-+ */
-+static DEFINE_SPINLOCK(cpu_bps_lock);
- static DEFINE_PER_CPU(struct breakpoint *, cpu_bps[HBP_NUM_MAX]);
-+static DEFINE_SPINLOCK(task_bps_lock);
- static LIST_HEAD(task_bps);
- 
- static struct breakpoint *alloc_breakpoint(struct perf_event *bp)
-@@ -174,7 +182,9 @@ static int task_bps_add(struct perf_event *bp)
- 	if (IS_ERR(tmp))
- 		return PTR_ERR(tmp);
- 
-+	spin_lock(&task_bps_lock);
- 	list_add(&tmp->list, &task_bps);
-+	spin_unlock(&task_bps_lock);
- 	return 0;
+diff --git a/include/linux/percpu-rwsem.h b/include/linux/percpu-rwsem.h
+index 5fda40f97fe9..36b942b67b7d 100644
+--- a/include/linux/percpu-rwsem.h
++++ b/include/linux/percpu-rwsem.h
+@@ -121,9 +121,15 @@ static inline void percpu_up_read(struct percpu_rw_semaphore *sem)
+ 	preempt_enable();
  }
  
-@@ -182,6 +192,7 @@ static void task_bps_remove(struct perf_event *bp)
- {
- 	struct list_head *pos, *q;
++extern bool percpu_is_read_locked(struct percpu_rw_semaphore *);
+ extern void percpu_down_write(struct percpu_rw_semaphore *);
+ extern void percpu_up_write(struct percpu_rw_semaphore *);
  
-+	spin_lock(&task_bps_lock);
- 	list_for_each_safe(pos, q, &task_bps) {
- 		struct breakpoint *tmp = list_entry(pos, struct breakpoint, list);
++static inline bool percpu_is_write_locked(struct percpu_rw_semaphore *sem)
++{
++	return atomic_read(&sem->block);
++}
++
+ extern int __percpu_init_rwsem(struct percpu_rw_semaphore *,
+ 				const char *, struct lock_class_key *);
  
-@@ -191,6 +202,7 @@ static void task_bps_remove(struct perf_event *bp)
- 			break;
- 		}
- 	}
-+	spin_unlock(&task_bps_lock);
- }
+diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
+index 5fe4c5495ba3..185bd1c906b0 100644
+--- a/kernel/locking/percpu-rwsem.c
++++ b/kernel/locking/percpu-rwsem.c
+@@ -192,6 +192,12 @@ EXPORT_SYMBOL_GPL(__percpu_down_read);
+ 	__sum;								\
+ })
  
++bool percpu_is_read_locked(struct percpu_rw_semaphore *sem)
++{
++	return per_cpu_sum(*sem->read_count) != 0 && !atomic_read(&sem->block);
++}
++EXPORT_SYMBOL_GPL(percpu_is_read_locked);
++
  /*
-@@ -200,12 +212,17 @@ static void task_bps_remove(struct perf_event *bp)
- static bool all_task_bps_check(struct perf_event *bp)
- {
- 	struct breakpoint *tmp;
-+	bool ret = false;
- 
-+	spin_lock(&task_bps_lock);
- 	list_for_each_entry(tmp, &task_bps, list) {
--		if (!can_co_exist(tmp, bp))
--			return true;
-+		if (!can_co_exist(tmp, bp)) {
-+			ret = true;
-+			break;
-+		}
- 	}
--	return false;
-+	spin_unlock(&task_bps_lock);
-+	return ret;
- }
- 
- /*
-@@ -215,13 +232,18 @@ static bool all_task_bps_check(struct perf_event *bp)
- static bool same_task_bps_check(struct perf_event *bp)
- {
- 	struct breakpoint *tmp;
-+	bool ret = false;
- 
-+	spin_lock(&task_bps_lock);
- 	list_for_each_entry(tmp, &task_bps, list) {
- 		if (tmp->bp->hw.target == bp->hw.target &&
--		    !can_co_exist(tmp, bp))
--			return true;
-+		    !can_co_exist(tmp, bp)) {
-+			ret = true;
-+			break;
-+		}
- 	}
--	return false;
-+	spin_unlock(&task_bps_lock);
-+	return ret;
- }
- 
- static int cpu_bps_add(struct perf_event *bp)
-@@ -234,6 +256,7 @@ static int cpu_bps_add(struct perf_event *bp)
- 	if (IS_ERR(tmp))
- 		return PTR_ERR(tmp);
- 
-+	spin_lock(&cpu_bps_lock);
- 	cpu_bp = per_cpu_ptr(cpu_bps, bp->cpu);
- 	for (i = 0; i < nr_wp_slots(); i++) {
- 		if (!cpu_bp[i]) {
-@@ -241,6 +264,7 @@ static int cpu_bps_add(struct perf_event *bp)
- 			break;
- 		}
- 	}
-+	spin_unlock(&cpu_bps_lock);
- 	return 0;
- }
- 
-@@ -249,6 +273,7 @@ static void cpu_bps_remove(struct perf_event *bp)
- 	struct breakpoint **cpu_bp;
- 	int i = 0;
- 
-+	spin_lock(&cpu_bps_lock);
- 	cpu_bp = per_cpu_ptr(cpu_bps, bp->cpu);
- 	for (i = 0; i < nr_wp_slots(); i++) {
- 		if (!cpu_bp[i])
-@@ -260,19 +285,25 @@ static void cpu_bps_remove(struct perf_event *bp)
- 			break;
- 		}
- 	}
-+	spin_unlock(&cpu_bps_lock);
- }
- 
- static bool cpu_bps_check(int cpu, struct perf_event *bp)
- {
- 	struct breakpoint **cpu_bp;
-+	bool ret = false;
- 	int i;
- 
-+	spin_lock(&cpu_bps_lock);
- 	cpu_bp = per_cpu_ptr(cpu_bps, cpu);
- 	for (i = 0; i < nr_wp_slots(); i++) {
--		if (cpu_bp[i] && !can_co_exist(cpu_bp[i], bp))
--			return true;
-+		if (cpu_bp[i] && !can_co_exist(cpu_bp[i], bp)) {
-+			ret = true;
-+			break;
-+		}
- 	}
--	return false;
-+	spin_unlock(&cpu_bps_lock);
-+	return ret;
- }
- 
- static bool all_cpu_bps_check(struct perf_event *bp)
-@@ -286,10 +317,6 @@ static bool all_cpu_bps_check(struct perf_event *bp)
- 	return false;
- }
- 
--/*
-- * We don't use any locks to serialize accesses to cpu_bps or task_bps
-- * because are already inside nr_bp_mutex.
-- */
- int arch_reserve_bp_slot(struct perf_event *bp)
- {
- 	int ret;
+  * Return true if the modular sum of the sem->read_count per-CPU variable is
+  * zero.  If this sum is zero, then it is stable due to the fact that if any
 -- 
 2.37.2.672.g94769d06f0-goog
 

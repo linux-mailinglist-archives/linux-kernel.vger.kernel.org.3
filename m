@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5515A57A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F60F5A57AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 01:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiH2Xdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 19:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S229737AbiH2XeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 19:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiH2Xde (ORCPT
+        with ESMTP id S229684AbiH2XeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 19:33:34 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0881382FA5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:33:33 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id l15-20020a0566022dcf00b00688e70a26deso5591643iow.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 16:33:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=pQsvM0lNlMEBpkZs+6Ir9JLbqpOTi5k2pYARw9hKdac=;
-        b=RebeTl0OU7/8cPVUh3Cden/BjA8Pk3ZpusNyvTdDWpLx2ZlBvSn6+OSSBWw4Xh+ZHB
-         KODKSll8FHUWzRba7UN+xtH9XYHOh14A6GSIypiN4uNnHcIjCb8hY0exrYCUfEa+v21t
-         1guLzbbgbMP9dke+DUgtbogVPoqDOlJm9BwaHjQ/7c9LR4qguCwuY62esMJ4jGDb97Ar
-         8sXyc3hEsvZok0G0hDVsuSWYpq8CyezkNT6VzFoysluUh/04O3OdE7li74YrzbhJsbGi
-         7snCSifGHbgpVhTNXZTLJPTe1kzLDI5yGhSrcsw07jBW4xGmNaY8JU1Xm4p5KMkM0BY/
-         z3FQ==
-X-Gm-Message-State: ACgBeo2bHccIDX0GuMsVqbpmDRs/hhB1W4+1TGw9L2Hz/PFe50EJyALA
-        PJmUOtgJhCIt17HPsBX8dg9qMCTY0RxIRaiL694ApxPQQo38
-X-Google-Smtp-Source: AA6agR5C6Qga/30TVGHv4ICPLSc92WhV+sBpWb2mo+IP20l01OrArs+sJYQqXxJXN4xomqaZsq9enJTHDKmB7j3DDMS+mDXr00nb
+        Mon, 29 Aug 2022 19:34:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1596B82851;
+        Mon, 29 Aug 2022 16:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=IijE9VZcXhpXniCU02k78oYykjK5r9X2XRaAc/GES+0=; b=z6n3ER6YRXgHRBBOldUxKdStbW
+        wnIBVoyKilC7jQUc13QrkMgupTpyDH1ajCQ+zGmn8aQLoFrtgsOytlYempys+vsO0T03nQ0RsPSCo
+        NEDOsHiCoFv8Pm1zwtB23gRp50d+sh+5C9/gh545dHNZLz15suiDFK77GJm3c17G1uUDT2+qdOwYw
+        sF9mQ8zZQLFWZG3+aFRHvWf/yVEU9JxdH6Yon7imngPh5U29DLkW1xkbIhoTRF+FfbdjqdsFAYeDO
+        VAfjgGzA4wlJpS7l/fBkcIDP53H12URSsjisQ5VTDuhZhlmyLl5oEZaYuhxJIAbZ8NJhev5+PHQ5o
+        6qQxACug==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSoGl-00DDPl-7L; Mon, 29 Aug 2022 23:34:15 +0000
+Message-ID: <1e80af02-ca1a-f320-bd3d-0ab674712da4@infradead.org>
+Date:   Mon, 29 Aug 2022 16:34:14 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3804:b0:349:881b:a4bc with SMTP id
- i4-20020a056638380400b00349881ba4bcmr10689708jav.313.1661816012409; Mon, 29
- Aug 2022 16:33:32 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 16:33:32 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001a12f105e769b1eb@google.com>
-Subject: [syzbot] memory leak in nft_chain_parse_hook
-From:   syzbot <syzbot+5fcdbfab6d6744c57418@syzkaller.appspotmail.com>
-To:     coreteam@netfilter.org, davem@davemloft.net, edumazet@google.com,
-        fw@strlen.de, kadlec@netfilter.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
-        pablo@netfilter.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 1/3] lib/time_stats: New library for statistics on events
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
+        colyli@suse.de
+References: <20220829165344.2958640-1-kent.overstreet@linux.dev>
+ <20220829165344.2958640-2-kent.overstreet@linux.dev>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220829165344.2958640-2-kent.overstreet@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,60 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    4c612826bec1 Merge tag 'net-6.0-rc3' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13db4765080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b1831d905b683446
-dashboard link: https://syzkaller.appspot.com/bug?extid=5fcdbfab6d6744c57418
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1263c283080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111b6545080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5fcdbfab6d6744c57418@syzkaller.appspotmail.com
-
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810180b100 (size 96):
-  comm "syz-executor133", pid 3619, jiffies 4294945714 (age 12.690s)
-  hex dump (first 32 bytes):
-    28 64 23 02 81 88 ff ff 28 64 23 02 81 88 ff ff  (d#.....(d#.....
-    90 a8 aa 83 ff ff ff ff 00 00 b5 0f 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff83a8c59b>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff83a8c59b>] nft_netdev_hook_alloc+0x3b/0xc0 net/netfilter/nf_tables_api.c:1901
-    [<ffffffff83a9239a>] nft_chain_parse_netdev net/netfilter/nf_tables_api.c:1998 [inline]
-    [<ffffffff83a9239a>] nft_chain_parse_hook+0x33a/0x530 net/netfilter/nf_tables_api.c:2073
-    [<ffffffff83a9b14b>] nf_tables_addchain.constprop.0+0x10b/0x950 net/netfilter/nf_tables_api.c:2218
-    [<ffffffff83a9c41b>] nf_tables_newchain+0xa8b/0xc60 net/netfilter/nf_tables_api.c:2593
-    [<ffffffff83a3d6a6>] nfnetlink_rcv_batch+0xa46/0xd20 net/netfilter/nfnetlink.c:517
-    [<ffffffff83a3db79>] nfnetlink_rcv_skb_batch net/netfilter/nfnetlink.c:638 [inline]
-    [<ffffffff83a3db79>] nfnetlink_rcv+0x1f9/0x220 net/netfilter/nfnetlink.c:656
-    [<ffffffff83a13b17>] netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-    [<ffffffff83a13b17>] netlink_unicast+0x397/0x4c0 net/netlink/af_netlink.c:1345
-    [<ffffffff83a13fd6>] netlink_sendmsg+0x396/0x710 net/netlink/af_netlink.c:1921
-    [<ffffffff83865ab6>] sock_sendmsg_nosec net/socket.c:714 [inline]
-    [<ffffffff83865ab6>] sock_sendmsg+0x56/0x80 net/socket.c:734
-    [<ffffffff8386601c>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2482
-    [<ffffffff8386a918>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2536
-    [<ffffffff8386aaa8>] __sys_sendmsg+0x88/0x100 net/socket.c:2565
-    [<ffffffff845e5955>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845e5955>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 
+On 8/29/22 09:53, Kent Overstreet wrote:
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index bbe3ef939c..bfb49505c9 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1728,6 +1728,9 @@ config LATENCYTOP
+>  	  Enable this option if you want to use the LatencyTOP tool
+>  	  to find out which userspace is blocking on what kernel operations.
+>  
+> +config TIME_STATS
+> +	bool
+> +
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Hi Kent,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Why not just in lib/Kconfig?
+
+thanks.
+-- 
+~Randy

@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59385A5400
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88DA5A5402
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 20:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiH2SgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 14:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S229611AbiH2SjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 14:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiH2SgP (ORCPT
+        with ESMTP id S229446AbiH2SjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 14:36:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9617A772
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661798174; x=1693334174;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=k2BmfC0sAJmubL13Fvo3U2D/VByPkcsTxGwgRVu4+mo=;
-  b=kbQoO9WsL4BCpBjZYmYkwYVERgHNIaN9qfkeVhVEl2UM0sKii7r2eJJm
-   qyddQ8omlm5Dq98qRAbxDuY4CvHotHEsVUxiaSRcFl2b5fuilfrXKfDRK
-   AJjuy0YjlCow3z8HEdzkL+eKOxA+lVVizRVDCIq/BTCV82Gj3nA+dgk32
-   kA/jPFVPeWwZBtT+vR+cXnMuDD1rcCgr2fIRzaAxJS7BxQdZ87wRL8G0B
-   YTfx4OQCQZOaiHHavkT5DKtFbWtJWo6yIpq+UTSzSSqUcCecLdHaiwQFq
-   wUT4dL/ZBAOCzp78LEMu4JsIX6wuxRN3uuwWBFChQMN9ha/APL9+gnM3I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293711355"
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="293711355"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 11:36:13 -0700
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="611399748"
-Received: from rlacadex-mobl.amr.corp.intel.com (HELO [10.209.116.122]) ([10.209.116.122])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 11:36:13 -0700
-Message-ID: <e46c20a5-9f43-6ec4-6c2e-ea6891a8ce0d@intel.com>
-Date:   Mon, 29 Aug 2022 11:36:12 -0700
+        Mon, 29 Aug 2022 14:39:09 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC2B7F0B5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 11:39:07 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 11137 invoked from network); 29 Aug 2022 20:39:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1661798341; bh=KYk0F5rL/05QNecCXVHTwCSPO4E26vN1t3B/MPgqtXU=;
+          h=From:To:Subject;
+          b=oCLypSCnPUWbNEt1vQo9pF0GQA8JSbAWHE6hp4muHV0TZx6fQaVATbRPkaqC8lpl3
+           2wkejebz78+YoJwbfNHewVfyuMA79hUu9XWis6T+usiLbLHtXniYrnAIEhpvjliCek
+           j5kazUWT3MK409iM+JVTt36t/wUL14KGFcoCpfxU=
+Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <robh+dt@kernel.org>; 29 Aug 2022 20:39:01 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tsbogend@alpha.franken.de, olek2@wp.pl, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: dts: lantiq: rename dts files with soc name being the prefix
+Date:   Mon, 29 Aug 2022 20:37:17 +0200
+Message-Id: <20220829183717.4394-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/microcode/intel: Allow late loading only if a min rev
- is specified
-Content-Language: en-US
-To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML Mailing List <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Luck <tony.luck@intel.com>
-References: <20220829180436.716672-1-ashok.raj@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220829180436.716672-1-ashok.raj@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: de3215a5c917005624290f2748c79044
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [4bOU]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 11:04, Ashok Raj wrote:
-> Any microcode that modifies the interface to an OS-visible feature
-> will set the min_version to itself. This will enforce this microcode is
-> not suitable for late loading unless the currently loaded revision is greater
-> or equal to the new microcode affecting the change.
+Rename lantiq dts files with soc name being the prefix, so that the
+board dts file can be located easily by soc name, and we also gain
+the consistency of naming.
 
-I know this hasn't quite made it into the normal Intel documentation
-channels.  But, it would be nice to make sure that we have a _really_
-solid description here of the architecture of min_rev which is *very*
-close to what the Intel folks building microcode images agreed to.
+This patch is a preparation for the addition of dts for newer SoCs
+(Lantiq ARX100, VRX200 and xRX330).
 
-This whole thing is useless if the architecture contract isn't ironclad
-and agreed to by both sides.
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ arch/mips/boot/dts/lantiq/Makefile                              | 2 +-
+ .../boot/dts/lantiq/{easy50712.dts => danube_easy50712.dts}     | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename arch/mips/boot/dts/lantiq/{easy50712.dts => danube_easy50712.dts} (100%)
 
-One other thing on that note...  The CPU itself authenticates the
-microcode.  The OS trusts that the CPU will verify the integrity of the
-image.
+diff --git a/arch/mips/boot/dts/lantiq/Makefile b/arch/mips/boot/dts/lantiq/Makefile
+index f5dfc06242b9..ae6e3e21ebeb 100644
+--- a/arch/mips/boot/dts/lantiq/Makefile
++++ b/arch/mips/boot/dts/lantiq/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_DT_EASY50712)	+= easy50712.dtb
++dtb-$(CONFIG_DT_EASY50712)	+= danube_easy50712.dtb
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/boot/dts/lantiq/easy50712.dts b/arch/mips/boot/dts/lantiq/danube_easy50712.dts
+similarity index 100%
+rename from arch/mips/boot/dts/lantiq/easy50712.dts
+rename to arch/mips/boot/dts/lantiq/danube_easy50712.dts
+-- 
+2.30.2
 
-But, this min_rev is not part of the image that the CPU verifies, right?
- If you get your microcode images out of the back of a van in the shady
-part of town, nobody can promise that min_rev in the header follows the
-rules.
-
-I don't think we need to defend against that.  I'm not sure we really
-even *can* defend against it.  It's probably good to note, though.

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2425A490E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB4E5A4824
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 13:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiH2LTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 07:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S230352AbiH2LGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 07:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbiH2LS1 (ORCPT
+        with ESMTP id S230255AbiH2LFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 07:18:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5893611177;
-        Mon, 29 Aug 2022 04:12:11 -0700 (PDT)
+        Mon, 29 Aug 2022 07:05:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FAD61D57;
+        Mon, 29 Aug 2022 04:04:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C83D611B3;
-        Mon, 29 Aug 2022 11:03:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5390C433C1;
-        Mon, 29 Aug 2022 11:03:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAFD9B80EF3;
+        Mon, 29 Aug 2022 11:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A534C433C1;
+        Mon, 29 Aug 2022 11:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661771038;
-        bh=CskFODK24XP61S8XHnOcBXRzfeS7HOnzRz69tyNccf8=;
+        s=korg; t=1661771043;
+        bh=Hg0iic/LV1UHfhKvfDy001aBE/HyLI2pbHSboJUYZH4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XYxqUugzBuXLOYj3etsZw2ngRiIIqIweZulrRXdXN49fYIAg2v/6DtbGfZ9sl26SN
-         eIZroEsjscrexESbb/ScWksKkUQ0vjbgN1zBRHl1E+c3u4d0GzVwIZcxFFSG3RpLuX
-         8Ote4JhkRNdzRF6f34er1gAD2lXT3zy2XKZq32tA=
+        b=GL0liS7EzVDUOmdEVm6Rg4cTdhJQDjnaTRbJPfJq4duLeWnceAgz7zruiNelTFo20
+         iwGu6EmwowB0PMH8MZRezg78Ob9Ngg4mU2oThHDjLMMsPb+gi8fqYEhMJPs6hD0iZa
+         p/xk/lwMpH5+tUCKm32FsDfpb7pBm5e5FRmlJY6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hui Su <suhui_kernel@163.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [PATCH 5.10 11/86] kernel/sched: Remove dl_boosted flag comment
-Date:   Mon, 29 Aug 2022 12:58:37 +0200
-Message-Id: <20220829105756.992352518@linuxfoundation.org>
+        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 12/86] xfrm: fix refcount leak in __xfrm_policy_check()
+Date:   Mon, 29 Aug 2022 12:58:38 +0200
+Message-Id: <20220829105757.031310925@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
 References: <20220829105756.500128871@linuxfoundation.org>
@@ -55,35 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hui Su <suhui_kernel@163.com>
+From: Xin Xiong <xiongx18@fudan.edu.cn>
 
-commit 0e3872499de1a1230cef5221607d71aa09264bd5 upstream.
+[ Upstream commit 9c9cb23e00ddf45679b21b4dacc11d1ae7961ebe ]
 
-since commit 2279f540ea7d ("sched/deadline: Fix priority
-inheritance with multiple scheduling classes"), we should not
-keep it here.
+The issue happens on an error path in __xfrm_policy_check(). When the
+fetching process of the object `pols[1]` fails, the function simply
+returns 0, forgetting to decrement the reference count of `pols[0]`,
+which is incremented earlier by either xfrm_sk_policy_lookup() or
+xfrm_policy_lookup(). This may result in memory leaks.
 
-Signed-off-by: Hui Su <suhui_kernel@163.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Daniel Bristot de Oliveira <bristot@redhat.com>
-Link: https://lore.kernel.org/r/20220107095254.GA49258@localhost.localdomain
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix it by decreasing the reference count of `pols[0]` in that path.
+
+Fixes: 134b0fc544ba ("IPsec: propagate security module errors up from flow_cache_lookup")
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched.h |    4 ----
- 1 file changed, 4 deletions(-)
+ net/xfrm/xfrm_policy.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -542,10 +542,6 @@ struct sched_dl_entity {
- 	 * task has to wait for a replenishment to be performed at the
- 	 * next firing of dl_timer.
- 	 *
--	 * @dl_boosted tells if we are boosted due to DI. If so we are
--	 * outside bandwidth enforcement mechanism (but only until we
--	 * exit the critical section);
--	 *
- 	 * @dl_yielded tells if task gave up the CPU before consuming
- 	 * all its available runtime during the last job.
- 	 *
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index 603b05ed7eb4c..2cd66f3e52386 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -3641,6 +3641,7 @@ int __xfrm_policy_check(struct sock *sk, int dir, struct sk_buff *skb,
+ 		if (pols[1]) {
+ 			if (IS_ERR(pols[1])) {
+ 				XFRM_INC_STATS(net, LINUX_MIB_XFRMINPOLERROR);
++				xfrm_pol_put(pols[0]);
+ 				return 0;
+ 			}
+ 			pols[1]->curlft.use_time = ktime_get_real_seconds();
+-- 
+2.35.1
+
 
 

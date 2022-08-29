@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E4D5A44FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9355A44FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Aug 2022 10:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiH2IYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 04:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S229521AbiH2IYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 04:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiH2IYe (ORCPT
+        with ESMTP id S229724AbiH2IYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:24:34 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB0A5754D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:24:30 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-33dc31f25f9so176843537b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:24:30 -0700 (PDT)
+        Mon, 29 Aug 2022 04:24:48 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901D257551
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:24:41 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id bq11so9168695wrb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 01:24:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=YPHIWOX2j4Thy92e9g+SOxrZzDKa/VoFDvQX9IM02Q0=;
-        b=LLJn43kPMQL6fuG/Un8h1/tyLwxfoVF3QhiRENBT6jcSfQH+1BwXrdv0POEAgfYrt8
-         TuvgZwLgODhG7/ZQZRYoPhqWSP4GBqf5A50NkGF18hurl8L1FAYXYzxa8YhSmwlY5lcP
-         A+7l20SkRb5V81m11RKjHtTbmoWam4n47PUJiXRjV6Q7bnCLpBqio6O1ixoZiVsY0nOT
-         1X+6ugXN9nVHs/iX4Rkw7InDhFIQeH/kgbwAba4iw7sibBxMnKclr4TEE5fJs9A+tBkJ
-         vApvxXKQYwJcZ8SfLsPyqXEIbdnYKz3LhJFnPZGXg9EbqPvL7Pmp4Lkd+3vUoysReO3L
-         Dt/Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uFRiffIvzQ9QFbO1m9r0+ADVKxOh8ctJA6Vb37LR4lM=;
+        b=DShOJXq5b87D/6GDp/67rnM6rxx9a26JTD4M6JJ98xkpuLmxEduKx+iN+vEG0rToOh
+         f1A87IWi5SID7QBCR9Ymnr192zeMv1P/HMm/TVQQbDNz0ZYdhOWObOrF0pO3Jd98OIvE
+         WYheNOU6zbenz7Wo+L4irgajhj+V5piQwtvO43VuNoOHZPVjPE0QxZwC3vXoVzBqQt7e
+         rgzSBO84hyT5YXV4mnIkm6mPMZsd3WZ1fpcFoidfUS+UAw9nhyAxb4dTzL3tP1Ho8Aex
+         9sPejLEeYKjuNBZDk6GxIxvNqtMmUPygZ5a/kOTvtN1bR/kWI+GbTtvqR8NoD/0211Il
+         PlAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=YPHIWOX2j4Thy92e9g+SOxrZzDKa/VoFDvQX9IM02Q0=;
-        b=MLuTo6pzi3wSpIt+Qqsogo7dYVcI4GPK9vPrT67E5Ao4z7BX58YymvRMFnaQVBxGxJ
-         AwnYUJHui+dFjeKipz01NPDmIERzc7wKEXLG4Zz49cVO7xbnab8jTRDxhdeWfGz9KqMV
-         EEv1NBl9V6Q8GJPxDCipxlBLE0f3xJy66oSMVPLUTZKw4h8dpRKHjxfecTJQXxwqZQJr
-         4FJzUKpU3vKIJ0SyK/DbjMJhEGKLsxpoKQDkxb0sphMpxxAjv8Saz3taNm9B3NWnPZRi
-         1MZfB3KPklXcrM48C2ckAvH6lib2sr8+8cKij3TCwTXgn6W5DxkhCJuU72rH/nP2RiaZ
-         MfZA==
-X-Gm-Message-State: ACgBeo1BcfRQdKGnppBzyOYp5MUpVFLIGnW85GHxeLWJyarcBRBvI8jF
-        J7YL8jAZiIuK2fMMehqTWb82+t9ha8iPtcLqEb6eNzug6oY=
-X-Google-Smtp-Source: AA6agR43iFuWAJqgEnfEHFE5RxxlI+v8+Y/+POQSHkEXBl+x+VKgeCZf6Tjz5wvhB9r7HOhttvi+oD+9H2c+86DlhcI=
-X-Received: by 2002:a25:d1c6:0:b0:695:d2c9:2ff0 with SMTP id
- i189-20020a25d1c6000000b00695d2c92ff0mr7237106ybg.442.1661761469116; Mon, 29
- Aug 2022 01:24:29 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uFRiffIvzQ9QFbO1m9r0+ADVKxOh8ctJA6Vb37LR4lM=;
+        b=a9msvnZP8FXeeNLPp812gMowlUQsaTRMwXGpUrtSsdFwEUUwZZ5iT7tQIhzcKX/Xqt
+         Pw1SIp4WgX/hqTBnkeKWXp7NNZWLtMvtZ9q0Rp5S1n2IXZ+BK/WWoNSgs7POh/CofdJf
+         +fMQFtpFfPjdbhjJ6Rl5287mNdzlER+gIzHB1bf9xpqKLY5fcTlw5hyLerMmZ7Ivfl/O
+         sWj7xd/MDCtcy3SiibWOiVNCoVbMYIAwMl9TarytLSeIfqcTQv3Em/vfH15eWd+RWmuf
+         P0wJXEZ/xgmYsg+n09zOACIAd48GkLa2r3ZlW+GpuYXAQRAEstEPEDB0Bn7jwquy50Ih
+         p7AA==
+X-Gm-Message-State: ACgBeo3hghYLQYq5PA4S14AhMw22ekSwR9qXf5HivFhWVzw/veOecScB
+        ZeFirPH4Bzo9D9DzglFI5c1hLg==
+X-Google-Smtp-Source: AA6agR6JS+DZb+wFfzIPJ1CsDKrTCDWPQF9AJL39E3gMEVQHkxXNrkWzYJYM1oTdX5JQaMuz8KWgmg==
+X-Received: by 2002:a05:6000:1c14:b0:226:deb1:d7cc with SMTP id ba20-20020a0560001c1400b00226deb1d7ccmr846314wrb.494.1661761479688;
+        Mon, 29 Aug 2022 01:24:39 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:8020:2658:1f7c:362:3e99])
+        by smtp.gmail.com with ESMTPSA id x18-20020a5d4452000000b00225307f43fbsm6283277wrr.44.2022.08.29.01.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 01:24:39 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 10:24:38 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fabien Parent <parent.f@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kbuild-all@lists.01.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] clk: mediatek: add driver for MT8365 SoC
+Message-ID: <20220829082438.ayz2qqav63odn3t6@blmsp>
+References: <20220822152652.3499972-5-msp@baylibre.com>
+ <202208241051.Xi9D8DaW-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220819140250.3892995-1-ajones@ventanamicro.com> <20220819140250.3892995-2-ajones@ventanamicro.com>
-In-Reply-To: <20220819140250.3892995-2-ajones@ventanamicro.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 29 Aug 2022 13:54:17 +0530
-Message-ID: <CAAhSdy3C_4tNQ42XEtc+cHW-ArubPxoSEmmBnj2mCdYi04JHjg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] riscv: Add X register names to gpr-nums
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        mchitale@ventanamicro.com, heiko@sntech.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202208241051.Xi9D8DaW-lkp@intel.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,51 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 7:32 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> When encoding instructions it's sometimes necessary to set a
-> register field to a precise number. This is easiest to do using
-> the x<num> naming.
->
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+Hi,
 
-Looks good to me.
+On Wed, Aug 24, 2022 at 10:57:12AM +0800, kernel test robot wrote:
+> Hi Markus,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on clk/clk-next]
+> [also build test ERROR on robh/for-next linus/master v6.0-rc2 next-20220823]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/clk-mediatek-Add-mt8365-support/20220822-233030
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+> config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220824/202208241051.Xi9D8DaW-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/51c1bac1ab0d284ab6c444966eee437c23095a85
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Markus-Schneider-Pargmann/clk-mediatek-Add-mt8365-support/20220822-233030
+>         git checkout 51c1bac1ab0d284ab6c444966eee437c23095a85
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> >> ERROR: modpost: "mtk_clk_register_gates_with_dev" [drivers/clk/mediatek/clk-mt8365-mm.ko] undefined!
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+This series is based on this patch
+https://lore.kernel.org/linux-mediatek/20220813083249.45427-1-y.oudjana@protonmail.com/
+which is not yet applied but adds the required EXPORT.
 
-Regards,
-Anup
-
-> ---
->  arch/riscv/include/asm/gpr-num.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/gpr-num.h b/arch/riscv/include/asm/gpr-num.h
-> index dfee2829fc7c..efeb5edf8a3a 100644
-> --- a/arch/riscv/include/asm/gpr-num.h
-> +++ b/arch/riscv/include/asm/gpr-num.h
-> @@ -3,6 +3,11 @@
->  #define __ASM_GPR_NUM_H
->
->  #ifdef __ASSEMBLY__
-> +
-> +       .irp    num,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
-> +       .equ    .L__gpr_num_x\num, \num
-> +       .endr
-> +
->         .equ    .L__gpr_num_zero,       0
->         .equ    .L__gpr_num_ra,         1
->         .equ    .L__gpr_num_sp,         2
-> @@ -39,6 +44,9 @@
->  #else /* __ASSEMBLY__ */
->
->  #define __DEFINE_ASM_GPR_NUMS                                  \
-> +"      .irp    num,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31\n" \
-> +"      .equ    .L__gpr_num_x\\num, \\num\n"                    \
-> +"      .endr\n"                                                \
->  "      .equ    .L__gpr_num_zero,       0\n"                    \
->  "      .equ    .L__gpr_num_ra,         1\n"                    \
->  "      .equ    .L__gpr_num_sp,         2\n"                    \
-> --
-> 2.37.1
->
+Best,
+Markus

@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924DA5A6498
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0635A64A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiH3NYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        id S230145AbiH3N0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiH3NYr (ORCPT
+        with ESMTP id S229959AbiH3NZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:24:47 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA0CF2;
-        Tue, 30 Aug 2022 06:24:44 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 279875FF7; Tue, 30 Aug 2022 09:24:43 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 279875FF7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1661865883;
-        bh=kiFZ7lPyA7HTC4vyRAxhN92WkWxK7wUpm+dV4qOIgZ8=;
-        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
-        b=Nf36xb9rXfFGjVLBbMApNpIsXTzE8YkdK1hXQKX0LIG4aE5uqu40B8r9SDNAy5zvl
-         yFkby6QMMofGlZI0ZzDu2/evtTnYejNDoCWY31ec7vxzAy36igLSpogZSRKZB5cvZA
-         AenBPsSONL821mtDhhLoo8b+qko91m9EJCxicWJA=
-Date:   Tue, 30 Aug 2022 09:24:43 -0400
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     NeilBrown <neilb@suse.de>, Dave Chinner <david@fromorbit.com>,
-        tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ceph@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        Colin Walters <walters@verbum.org>
-Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
- updates
-Message-ID: <20220830132443.GA26330@fieldses.org>
-References: <20220826214703.134870-1-jlayton@kernel.org>
- <20220826214703.134870-2-jlayton@kernel.org>
- <20220829075651.GS3600936@dread.disaster.area>
- <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
- <166181389550.27490.8200873228292034867@noble.neil.brown.name>
- <f5c42c0d87dfa45188c2109ccf9baeb7a42aa27e.camel@kernel.org>
+        Tue, 30 Aug 2022 09:25:54 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4265EDE2;
+        Tue, 30 Aug 2022 06:25:53 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id E203E2000C;
+        Tue, 30 Aug 2022 13:25:49 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Subject: [v4 1/5] HID: core: Export hid_match_id()
+Date:   Tue, 30 Aug 2022 15:25:45 +0200
+Message-Id: <20220830132549.7240-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5c42c0d87dfa45188c2109ccf9baeb7a42aa27e.camel@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:40:02AM -0400, Jeff Layton wrote:
-> Yes, saying only that it must be different is intentional. What we
-> really want is for consumers to treat this as an opaque value for the
-> most part [1]. Therefore an implementation based on hashing would
-> conform to the spec, I'd think, as long as all of the relevant info is
-> part of the hash.
+Export hid_match_id() so it can be used in device-specific drivers to
+implement their own matching with open-coding a match function.
 
-It'd conform, but it might not be as useful as an increasing value.
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/hid/hid-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-E.g. a client can use that to work out which of a series of reordered
-write replies is the most recent, and I seem to recall that can prevent
-unnecessary invalidations in some cases.
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index b7f5566e338d..72f8d8835b34 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2088,6 +2088,7 @@ const struct hid_device_id *hid_match_id(const struct hid_device *hdev,
+ 
+ 	return NULL;
+ }
++EXPORT_SYMBOL_GPL(hid_match_id);
+ 
+ static const struct hid_device_id hid_hiddev_list[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MGE, USB_DEVICE_ID_MGE_UPS) },
+-- 
+2.37.2
 
---b.
